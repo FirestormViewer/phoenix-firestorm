@@ -1966,8 +1966,8 @@ void LLManipTranslate::renderTranslationHandles()
                     // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                     //color1.setVec(0.f, 1.f, 0.f, 1.f);
                     //color2.setVec(0.f, 0.f, 1.f, 1.f);
-                    color1.setVec(getUserEditColor(VGREEN));
-                    color2.setVec(getUserEditColor(VBLUE));
+                    color1.setVec(getUserEditColor(VY));
+                    color2.setVec(getUserEditColor(VZ));
                     // </FS:AR> [FIRE-36909]
                 }
                 else
@@ -1975,8 +1975,8 @@ void LLManipTranslate::renderTranslationHandles()
                     // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                     //color1.setVec(0.f, 1.f, 0.f, 0.6f);
                     //color2.setVec(0.f, 0.f, 1.f, 0.6f);
-                    color1.setVec(getUserEditColor(VGREEN, 0.6f));
-                    color2.setVec(getUserEditColor(VBLUE, 0.6f));
+                    color1.setVec(getUserEditColor(VY, 0.6f));
+                    color2.setVec(getUserEditColor(VZ, 0.6f));
                     // </FS:AR> [FIRE-36909]
                 }
                 gGL.begin(LLRender::TRIANGLES);
@@ -2028,8 +2028,8 @@ void LLManipTranslate::renderTranslationHandles()
                     // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                     //color1.setVec(0.f, 0.f, 1.f, 1.f);
                     //color2.setVec(1.f, 0.f, 0.f, 1.f);
-                    color1.setVec(getUserEditColor(VBLUE));
-                    color2.setVec(getUserEditColor(VRED));
+                    color1.setVec(getUserEditColor(VZ));
+                    color2.setVec(getUserEditColor(VX));
                     // </FS:AR> [FIRE-36909]
                 }
                 else
@@ -2037,8 +2037,8 @@ void LLManipTranslate::renderTranslationHandles()
                     // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                     //color1.setVec(0.f, 0.f, 1.f, 0.6f);
                     //color2.setVec(1.f, 0.f, 0.f, 0.6f);
-                    color1.setVec(getUserEditColor(VBLUE, 0.6f));
-                    color2.setVec(getUserEditColor(VRED, 0.6f));
+                    color1.setVec(getUserEditColor(VZ, 0.6f));
+                    color2.setVec(getUserEditColor(VX, 0.6f));
                     // </FS:AR> [FIRE-36909]
                 }
 
@@ -2115,8 +2115,8 @@ void LLManipTranslate::renderTranslationHandles()
                         // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                         //color1.setVec(1.f, 0.f, 0.f, 1.f);
                         //color2.setVec(0.f, 1.f, 0.f, 1.f);
-                        color1.setVec(getUserEditColor(VRED));
-                        color2.setVec(getUserEditColor(VGREEN));
+                        color1.setVec(getUserEditColor(VX));
+                        color2.setVec(getUserEditColor(VY));
                         // </FS:AR> [FIRE-36909]
                     }
                     else
@@ -2124,8 +2124,8 @@ void LLManipTranslate::renderTranslationHandles()
                         // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                         //color1.setVec(0.8f, 0.f, 0.f, 0.6f);
                         //color2.setVec(0.f, 0.8f, 0.f, 0.6f);
-                        color1.setVec(getUserEditColor(VRED, 0.6f));
-                        color2.setVec(getUserEditColor(VGREEN, 0.6f));
+                        color1.setVec(getUserEditColor(VX, 0.6f));
+                        color2.setVec(getUserEditColor(VY, 0.6f));
                         // </FS:AR> [FIRE-36909]
                     }
 
@@ -2279,17 +2279,17 @@ void LLManipTranslate::renderArrow(S32 which_arrow, S32 selected_arrow, F32 box_
             if (pass == 2)
             {
                 color *= 0.5f;
-                color.mV[VALPHA] = 1.f;
+                color.mV[VW] = 1.f;
             }
         }
         else if (selected_arrow != LL_NO_PART)
         {
-            color.mV[VALPHA] = 0.f;
+            color.mV[VW] = 0.f;
         }
         else
         {
             color *= pass == 1 ? .8f : .35f;
-            color.mV[VALPHA] = 0.6f;
+            color.mV[VW] = 0.6f;
         }
         // </FS:AR> [FIRE-36909]
         gGL.color4fv( color.mV );

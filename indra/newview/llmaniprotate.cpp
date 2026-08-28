@@ -238,7 +238,7 @@ void LLManipRotate::render()
                 gGL.scalef(mManipulatorScales.mV[VZ], mManipulatorScales.mV[VZ], mManipulatorScales.mV[VZ]);
                 // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                 //renderActiveRing( mRadiusMeters, width_meters, LLColor4( 0.f, 0.f, 1.f, 1.f) , LLColor4( 0.f, 0.f, 1.f, 0.3f ));
-                renderActiveRing(mRadiusMeters, width_meters, getUserEditColor(VBLUE), getUserEditColor(VBLUE, 0.3f));
+                renderActiveRing(mRadiusMeters, width_meters, getUserEditColor(VZ), getUserEditColor(VZ, 0.3f));
                 // </FS:AR> [FIRE-36909]
             }
             gGL.popMatrix();
@@ -252,7 +252,7 @@ void LLManipRotate::render()
                 gGL.scalef(mManipulatorScales.mV[VY], mManipulatorScales.mV[VY], mManipulatorScales.mV[VY]);
                 // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                 //renderActiveRing( mRadiusMeters, width_meters, LLColor4( 0.f, 1.f, 0.f, 1.f), LLColor4( 0.f, 1.f, 0.f, 0.3f));
-                renderActiveRing(mRadiusMeters, width_meters, getUserEditColor(VGREEN), getUserEditColor(VGREEN, 0.3f));
+                renderActiveRing(mRadiusMeters, width_meters, getUserEditColor(VY), getUserEditColor(VY, 0.3f));
                 // </FS:AR> [FIRE-36909]
             }
             gGL.popMatrix();
@@ -266,7 +266,7 @@ void LLManipRotate::render()
                 gGL.scalef(mManipulatorScales.mV[VX], mManipulatorScales.mV[VX], mManipulatorScales.mV[VX]);
                 // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                 //renderActiveRing( mRadiusMeters, width_meters, LLColor4( 1.f, 0.f, 0.f, 1.f), LLColor4( 1.f, 0.f, 0.f, 0.3f));
-                renderActiveRing(mRadiusMeters, width_meters, getUserEditColor(VRED), getUserEditColor(VRED, 0.3f));
+                renderActiveRing(mRadiusMeters, width_meters, getUserEditColor(VX), getUserEditColor(VX, 0.3f));
                 // </FS:AR> [FIRE-36909]
             }
             gGL.popMatrix();
@@ -300,7 +300,7 @@ void LLManipRotate::render()
                         // hovering over part
                         // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                         //gl_ring( mRadiusMeters, width_meters, LLColor4( 0.f, 0.f, 1.f, 1.f ), LLColor4( 0.f, 0.f, 1.f, 0.5f ), CIRCLE_STEPS, i);
-                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VBLUE), getUserEditColor(VBLUE, 0.5f), CIRCLE_STEPS, i);
+                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VZ), getUserEditColor(VZ, 0.5f), CIRCLE_STEPS, i);
                         // </FS:AR> [FIRE-36909]
                     }
                     else
@@ -308,7 +308,7 @@ void LLManipRotate::render()
                         // default
                         // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                         //gl_ring( mRadiusMeters, width_meters, LLColor4( 0.f, 0.f, 0.8f, 0.8f ), LLColor4( 0.f, 0.f, 0.8f, 0.4f ), CIRCLE_STEPS, i);
-                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VBLUE, 0.8f), getUserEditColor(VBLUE, 0.4f), CIRCLE_STEPS, i);
+                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VZ, 0.8f), getUserEditColor(VZ, 0.4f), CIRCLE_STEPS, i);
                         // </FS:AR> [FIRE-36909]
                     }
                 }
@@ -324,7 +324,7 @@ void LLManipRotate::render()
                         // hovering over part
                         // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                         //gl_ring( mRadiusMeters, width_meters, LLColor4( 0.f, 1.f, 0.f, 1.f ), LLColor4( 0.f, 1.f, 0.f, 0.5f ), CIRCLE_STEPS, i);
-                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VGREEN), getUserEditColor(VGREEN, 0.5f), CIRCLE_STEPS, i);
+                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VY), getUserEditColor(VY, 0.5f), CIRCLE_STEPS, i);
                         // </FS:AR> [FIRE-36909]
                     }
                     else
@@ -332,7 +332,7 @@ void LLManipRotate::render()
                         // default
                         // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                         //gl_ring( mRadiusMeters, width_meters, LLColor4( 0.f, 0.8f, 0.f, 0.8f ), LLColor4( 0.f, 0.8f, 0.f, 0.4f ), CIRCLE_STEPS, i);
-                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VGREEN, 0.8f), getUserEditColor(VGREEN, 0.4f), CIRCLE_STEPS, i);
+                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VY, 0.8f), getUserEditColor(VY, 0.4f), CIRCLE_STEPS, i);
                         // </FS:AR> [FIRE-36909]
                     }
                 }
@@ -349,7 +349,7 @@ void LLManipRotate::render()
                         // hovering over part
                         // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                         //gl_ring( mRadiusMeters, width_meters, LLColor4( 1.f, 0.f, 0.f, 1.f ), LLColor4( 1.f, 0.f, 0.f, 0.5f ), CIRCLE_STEPS, i);
-                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VRED), getUserEditColor(VRED, 0.5f), CIRCLE_STEPS, i);
+                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VX), getUserEditColor(VX, 0.5f), CIRCLE_STEPS, i);
                         // </FS:AR> [FIRE-36909]
                     }
                     else
@@ -357,7 +357,7 @@ void LLManipRotate::render()
                         // default
                         // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
                         //gl_ring( mRadiusMeters, width_meters, LLColor4( 0.8f, 0.f, 0.f, 0.8f ), LLColor4( 0.8f, 0.f, 0.f, 0.4f ), CIRCLE_STEPS, i);
-                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VRED), getUserEditColor(VRED, 0.4f), CIRCLE_STEPS, i);
+                        gl_ring(mRadiusMeters, width_meters, getUserEditColor(VX), getUserEditColor(VX, 0.4f), CIRCLE_STEPS, i);
                         // </FS:AR> [FIRE-36909]
                     }
                 }

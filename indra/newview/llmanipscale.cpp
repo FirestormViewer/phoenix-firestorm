@@ -622,14 +622,13 @@ void LLManipScale::renderFaces( const LLBBox& bbox )
 
     //LLColor4 z_highlight_color( 0.2f, 0.2f, 1.f, 1.0f);
     //LLColor4 z_normal_color(    0.f, 0.f, 0.6f, 0.4f);
-    LLColor4 x_highlight_color(getUserEditColor(VRED));
-    LLColor4 x_normal_color(getUserEditColor(VRED, 0.4f));
+    LLColor4 x_highlight_color(getUserEditColor(VX));
+    LLColor4 x_normal_color(getUserEditColor(VX, 0.4f));
 
-    LLColor4 y_highlight_color(getUserEditColor(VGREEN));
-    LLColor4 y_normal_color(getUserEditColor(VGREEN, 0.4f));
-
-    LLColor4 z_highlight_color(getUserEditColor(VBLUE));
-    LLColor4 z_normal_color(getUserEditColor(VBLUE, 0.4f));
+    LLColor4 y_highlight_color(getUserEditColor(VY));
+    LLColor4 y_normal_color(getUserEditColor(VY, 0.4f));
+    LLColor4 z_highlight_color(getUserEditColor(VZ));
+    LLColor4 z_normal_color(getUserEditColor(VZ, 0.4f));
     // </FS:AR> [FIRE-36909]
     LLColor4 default_normal_color( 0.7f, 0.7f, 0.7f, 0.15f );
 

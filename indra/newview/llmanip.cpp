@@ -466,7 +466,7 @@ void LLManip::renderGuidelines(bool draw_x, bool draw_y, bool draw_z)
         {
             // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
             //gGL.color4f(1.f, 0.f, 0.f, LINE_ALPHA);
-            color.setVec(getUserEditColor(VRED, LINE_ALPHA));
+            color.setVec(getUserEditColor(VX, LINE_ALPHA));
             gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VW]);
             // </FS:AR> [FIRE-36909]
             gGL.begin(LLRender::LINES);
@@ -479,7 +479,7 @@ void LLManip::renderGuidelines(bool draw_x, bool draw_y, bool draw_z)
         {
             // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
             //gGL.color4f(0.f, 1.f, 0.f, LINE_ALPHA);
-            color.setVec(getUserEditColor(VGREEN, LINE_ALPHA));
+            color.setVec(getUserEditColor(VY, LINE_ALPHA));
             gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VW]);
             // </FS:AR> [FIRE-36909]
             gGL.begin(LLRender::LINES);
@@ -492,7 +492,7 @@ void LLManip::renderGuidelines(bool draw_x, bool draw_y, bool draw_z)
         {
             // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
             //gGL.color4f(0.f, 0.f, 1.f, LINE_ALPHA);
-            color.setVec(getUserEditColor(VBLUE, LINE_ALPHA));
+            color.setVec(getUserEditColor(VZ, LINE_ALPHA));
             gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VW]);
             // </FS:AR> [FIRE-36909]
             gGL.begin(LLRender::LINES);
@@ -520,7 +520,7 @@ void LLManip::renderXYZ(const LLVector3 &vec)
         gViewerWindow->setup2DRender();
         const LLVector2& display_scale = gViewerWindow->getDisplayScale();
         // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
-        LLColor4 backgroudColor = getUserEditColor(MIDDLE, 0.7f);
+        LLColor4 backgroudColor = getUserEditColor(VW, 0.7f);
 
         //gGL.color4f(0.f, 0.f, 0.f, 0.7f);
         gGL.color4f(backgroudColor.mV[VX], backgroudColor.mV[VY], backgroudColor.mV[VZ], backgroudColor.mV[VW]);
@@ -623,15 +623,15 @@ void LLManip::renderXYZ(const LLVector3 &vec)
         //    LLFontGL::LEFT, LLFontGL::BASELINE,
         //    LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, 1000, &right_x);
 
-        font->render(feedback_stringX, 0, window_center_x - 102.f, (F32)(window_center_y + vertical_offset), getUserEditColor(VRED),
+        font->render(feedback_stringX, 0, window_center_x - 102.f, (F32)(window_center_y + vertical_offset), getUserEditColor(VX),
             LLFontGL::LEFT, LLFontGL::BASELINE,
             LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, 1000, &right_x);
 
-        font->render(feedback_stringY, 0, window_center_x - 27.f, (F32)(window_center_y + vertical_offset), getUserEditColor(VGREEN),
+        font->render(feedback_stringY, 0, window_center_x - 27.f, (F32)(window_center_y + vertical_offset), getUserEditColor(VY),
             LLFontGL::LEFT, LLFontGL::BASELINE,
             LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, 1000, &right_x);
 
-        font->render(feedback_stringZ, 0, window_center_x + 48.f, (F32)(window_center_y + vertical_offset), getUserEditColor(VBLUE),
+        font->render(feedback_stringZ, 0, window_center_x + 48.f, (F32)(window_center_y + vertical_offset), getUserEditColor(VZ),
             LLFontGL::LEFT, LLFontGL::BASELINE,
             LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, 1000, &right_x);
         // </FS:AR> [FIRE-36909]
@@ -776,24 +776,24 @@ LLColor4 LLManip::setupSnapGuideRenderPass(S32 pass)
 // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
 LLColor4 LLManip::getUserEditColor(U32 axis, F32 alpha)
 {
-    static LLCachedControl<LLColor4> sRedAxisColor(gSavedSettings, "FSBuildPrefs_RedAxisColor");
-    static LLCachedControl<LLColor4> sGreenAxisColor(gSavedSettings, "FSBuildPrefs_GreenAxisColor");
-    static LLCachedControl<LLColor4> sBlueAxisColor(gSavedSettings, "FSBuildPrefs_BlueAxisColor");
-    static LLCachedControl<LLColor4> sTextRectBackgroundColor(gSavedSettings, "FSBuildPrefs_EditTextBackgroundColor");
+    static const auto sXAxisColor              = LLUIColorTable::instance().getColor("BuildToolsXAxisColor");
+    static const auto sYAxisColor              = LLUIColorTable::instance().getColor("BuildToolsYAxisColor");
+    static const auto sZAxisColor              = LLUIColorTable::instance().getColor("BuildToolsZAxisColor");
+    static const auto sTextRectBackgroundColor = LLUIColorTable::instance().getColor("BuildToolsTextBackgroundColor");
 
     LLColor4 color;
     switch (axis)
     {
-        case VRED:
-            color.setVec(sRedAxisColor);
+        case VX:
+            color.setVec(sXAxisColor);
             break;
-        case VGREEN:
-            color.setVec(sGreenAxisColor);
+        case VY:
+            color.setVec(sYAxisColor);
             break;
-        case VBLUE:
-            color.setVec(sBlueAxisColor);
+        case VZ:
+            color.setVec(sZAxisColor);
             break;
-        case MIDDLE:
+        case VW:
             color.setVec(sTextRectBackgroundColor);
             break;
 

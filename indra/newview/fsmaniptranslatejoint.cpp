@@ -860,13 +860,13 @@ void FSManipTranslateJoint::renderTranslationHandles()
                 gGL.scalef(mPlaneScales.mV[VX], mPlaneScales.mV[VX], mPlaneScales.mV[VX]);
                 if (mHighlightedPart == LL_YZ_PLANE)
                 {
-                    color1.setVec(getUserEditColor(VGREEN));
-                    color2.setVec(getUserEditColor(VBLUE));
+                    color1.setVec(getUserEditColor(VY));
+                    color2.setVec(getUserEditColor(VZ));
                 }
                 else
                 {
-                    color1.setVec(getUserEditColor(VGREEN, 0.6f));
-                    color2.setVec(getUserEditColor(VBLUE, 0.6f));
+                    color1.setVec(getUserEditColor(VY, 0.6f));
+                    color2.setVec(getUserEditColor(VZ, 0.6f));
                 }
                 gGL.begin(LLRender::TRIANGLES);
                 {
@@ -914,13 +914,13 @@ void FSManipTranslateJoint::renderTranslationHandles()
                 gGL.scalef(mPlaneScales.mV[VY], mPlaneScales.mV[VY], mPlaneScales.mV[VY]);
                 if (mHighlightedPart == LL_XZ_PLANE)
                 {
-                    color1.setVec(getUserEditColor(VBLUE));
-                    color2.setVec(getUserEditColor(VRED));
+                    color1.setVec(getUserEditColor(VZ));
+                    color2.setVec(getUserEditColor(VX));
                 }
                 else
                 {
-                    color1.setVec(getUserEditColor(VBLUE, 0.6f));
-                    color2.setVec(getUserEditColor(VRED, 0.6f));
+                    color1.setVec(getUserEditColor(VZ, 0.6f));
+                    color2.setVec(getUserEditColor(VX, 0.6f));
                 }
 
                 gGL.begin(LLRender::TRIANGLES);
@@ -985,13 +985,13 @@ void FSManipTranslateJoint::renderTranslationHandles()
                     gGL.scalef(mPlaneScales.mV[VZ], mPlaneScales.mV[VZ], mPlaneScales.mV[VZ]);
                     if (mHighlightedPart == LL_XY_PLANE)
                     {
-                        color1.setVec(getUserEditColor(VRED));
-                        color2.setVec(getUserEditColor(VGREEN));
+                        color1.setVec(getUserEditColor(VX));
+                        color2.setVec(getUserEditColor(VY));
                     }
                     else
                     {
-                        color1.setVec(getUserEditColor(VRED, 0.6f));
-                        color2.setVec(getUserEditColor(VGREEN, 0.6f));
+                        color1.setVec(getUserEditColor(VX, 0.6f));
+                        color2.setVec(getUserEditColor(VY, 0.6f));
                     }
 
                     gGL.begin(LLRender::TRIANGLES);

@@ -788,19 +788,19 @@ void FSManipRotateJoint::renderAxes(const LLVector3& agent_space_center, F32 siz
     gGL.begin(LLRender::LINES);
 
     // X-axis (Red)
-    LLColor4 color(getUserEditColor(VRED));
+    LLColor4 color(getUserEditColor(VX));
     gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VW]);
     gGL.vertex3f(-size, 0.0f, 0.0f);
     gGL.vertex3f(size, 0.0f, 0.0f);
 
     // Y-axis (Green)
-    color.setVec(getUserEditColor(VGREEN));
+    color.setVec(getUserEditColor(VY));
     gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VW]);
     gGL.vertex3f(0.0f, -size, 0.0f);
     gGL.vertex3f(0.0f, size, 0.0f);
 
     // Z-axis (Blue)
-    color.setVec(getUserEditColor(VBLUE));
+    color.setVec(getUserEditColor(VZ));
     gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VW]);
     gGL.vertex3f(0.0f, 0.0f, -size);
     gGL.vertex3f(0.0f, 0.0f, size);
@@ -897,7 +897,7 @@ void FSManipRotateJoint::renderNameXYZ(const LLQuaternion& rot)
         gViewerWindow->setup2DRender();
         const LLVector2& display_scale = gViewerWindow->getDisplayScale();
 
-        LLColor4 backgroudColor = getUserEditColor(MIDDLE, 0.7f);
+        LLColor4 backgroudColor = getUserEditColor(VW, 0.7f);
         gGL.color4f(backgroudColor.mV[VX], backgroudColor.mV[VY], backgroudColor.mV[VZ], backgroudColor.mV[VW]);
 
         imagep->draw(
@@ -966,9 +966,9 @@ void FSManipRotateJoint::renderNameXYZ(const LLQuaternion& rot)
                 LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, 1000, nullptr);
             };
 
-        renderTextWithShadow(current_eulerX_str, window_center_x - 122.f, base_y, getUserEditColor(VRED));
-        renderTextWithShadow(current_eulerY_str, window_center_x - 47.f, base_y, getUserEditColor(VGREEN));
-        renderTextWithShadow(current_eulerZ_str, window_center_x + 28.f, base_y, getUserEditColor(VBLUE));
+        renderTextWithShadow(current_eulerX_str, window_center_x - 122.f, base_y, getUserEditColor(VX));
+        renderTextWithShadow(current_eulerY_str, window_center_x - 47.f, base_y, getUserEditColor(VY));
+        renderTextWithShadow(current_eulerZ_str, window_center_x + 28.f, base_y, getUserEditColor(VZ));
         renderTextWithShadow(current_angle_str, window_center_x + 103.f, base_y, LLColor4(1.f, 0.65f, 0.f, 1.f));
         base_y += 20.f;
         renderTextWithShadow(current_joint_str, window_center_x - 130.f, base_y, LLColor4(1.f, 0.1f, 1.f, 1.f));
