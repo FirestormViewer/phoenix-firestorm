@@ -10123,8 +10123,12 @@ void LLVOAvatar::updateMeshTextures()
                                            (layerset?"*":"0"),
                                            layerset_invalid,
                                            is_ltda,
-                                           is_layer_baked[i],
-                                           use_lkg_baked_layer[i],
+                                           // <FS:TJ> Fix heap-buffer-overflow with varargs and using bools from std::vector<bool>
+                                           //is_layer_baked[i],
+                                           //use_lkg_baked_layer[i],
+                                           (int)is_layer_baked[i],
+                                           (int)use_lkg_baked_layer[i],
+                                           // </FS:TJ>
                                            last_id_string.c_str());
     }
     // <FS:Beq> BOM OS
