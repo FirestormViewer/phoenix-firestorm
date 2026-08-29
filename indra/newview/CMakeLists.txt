@@ -2831,7 +2831,7 @@ if (DARWIN)
     OUTPUT_NAME "${product}"
     # From Contents/MacOS/SecondLife, look in Contents/Frameworks
     BUILD_WITH_INSTALL_RPATH 1
-    INSTALL_RPATH "@executable_path/../Frameworks"
+    INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/../Resources"
     MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info-Firestorm.plist"
     XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${MACOSX_BUNDLE_GUI_IDENTIFIER}"
     )
