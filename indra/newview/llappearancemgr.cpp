@@ -4626,7 +4626,10 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, nul
     for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
     {
         const LLUUID& id_to_remove = *it;
-        const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
+        // <FS:TJ> Fix heap-use-after-free when linked_item_id is freed in removeCOFItemLinks then used in addDoomedTempAttachment
+        //const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
+        const LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
+        // </FS:TJ>
 
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
         if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item_id)) )
