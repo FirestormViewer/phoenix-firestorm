@@ -14,7 +14,7 @@
 #define AppVersion    "%%VERSION%%"
 #define AppExe        "%%FINAL_EXE%%"
 #define InstallerFile "%%INSTALLER_FILE%%"
-#define InstallerBase "%%INSTALLER_BASE%%"
+#define InstallerOut "%%INSTALLER_OUT%%"
 #define SourceDir     "%%SOURCE_DIR%%"
 #define LicenseFile   "%%LICENSE_FILE%%"
 #define SetupIcon     "%%SETUP_ICON%%"
@@ -38,7 +38,9 @@ ArchitecturesAllowed=x64
 ; Show the LGPL-2.1 license agreement before anything else
 LicenseFile={#LicenseFile}
 ; Offer "Launch Firestorm" on the finish page (see [Run] below)
-OutputBaseFilename={#InstallerBase}
+; OutputBaseFilename must NOT carry .exe (ISCC appends it). The manifest
+; passes InstallerOut = <base>_Setup so the result is <base>_Setup.exe.
+OutputBaseFilename={#InstallerOut}
 OutputDir={#SourceDir}
 SetupIconFile={#SetupIcon}
 UninstallDisplayIcon={app}\{#AppExe}
