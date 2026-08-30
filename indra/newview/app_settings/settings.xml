@@ -140,7 +140,7 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>0</integer>
+    <integer>1</integer>
   </map>
   <key>GridListDownload</key>
   <map>
@@ -1086,7 +1086,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
   <key>FSEnableRightclickMenuInMouselook</key>
     <map>
@@ -1264,7 +1264,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <boolean>0</boolean>
+      <boolean>1</boolean>
     </map>
     <key>RestrainedLoveDebug</key>
     <map>
@@ -3063,9 +3063,9 @@
       <string>Vector3</string>
       <key>Value</key>
       <array>
-        <real>-3.0</real>
         <real>0.0</real>
-        <real>0.75</real>
+        <real>0.0</real>
+        <real>-0.2</real>
       </array>
     </map>
     <key>CameraOffsetScale</key>
@@ -3077,7 +3077,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.0</real>
+      <real>0.75</real>
     </map>
     <key>CameraZoomFraction</key>
     <map>
@@ -3320,7 +3320,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>20.0</real>
+      <real>45.0</real>
     </map>
     <key>CheesyBeacon</key>
     <map>
@@ -3566,7 +3566,7 @@
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>40</integer>
+      <integer>12</integer>
     </map>
     <key>ContactsTornOff</key>
     <map>
@@ -5236,7 +5236,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>EnableGrab</key>
     <map>
@@ -5815,8 +5815,8 @@
       <key>Value</key>
       <array>
         <real>1.0</real>
-        <real>0.0</real>
         <real>1.0</real>
+        <real>0.2</real>
       </array>
     </map>
     <key>AvatarSitRotation</key>
@@ -9862,7 +9862,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>PlayTypingAnim</key>
     <map>
@@ -9873,7 +9873,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>PlaySoundFriendIM</key>
     <map>
@@ -23099,7 +23099,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>PlayModeUISndWindowClose</key>
     <map>
