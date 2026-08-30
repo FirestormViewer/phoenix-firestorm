@@ -952,6 +952,37 @@
      follows="all"
      label="Hardware Settings"
      name="Hardware Settings" >
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="render_backend_label"
+         top_pad="10"
+         width="308">
+            Renderer (requires shutdown and restart):
+        </text>
+        <combo_box
+         control_name="RenderBackendPending"
+         height="22"
+         follows="left|top"
+         layout="topleft"
+         left="10"
+         name="render_backend"
+         top_pad="8"
+         tool_tip="Selects the render backend used to draw the viewer. Changing the renderer requires shutting down and restarting the viewer."
+         width="130">
+            <combo_box.item
+             label="OpenGL"
+             name="OpenGL"
+             value="OpenGL" />
+            <combo_box.item
+             label="Vulkan"
+             name="Vulkan"
+             value="Vulkan" />
+        </combo_box>
         <check_box
          control_name="RenderAnisotropic"
          height="16"
@@ -960,7 +991,7 @@
          left="10"
          name="ani"
          tool_tip="This checkbox enables anisotropic filtering, which is a method to enhance the quality of textures when they are viewed at relatively large angles in relation to your camera position. Usually makes them look less blurry at greater distances."
-         top="20"
+         top_pad="10"
          width="256" />
         <check_box
          control_name="RenderCompressTextures"
@@ -1230,38 +1261,6 @@ If you do not understand the distinction then leave this control alone."
          width="100">
             Second(s)
         </text>
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         left="10"
-         name="render_backend_label"
-         top_pad="10"
-         width="308">
-            Renderer (requires shutdown and restart):
-        </text>
-        <combo_box
-         control_name="RenderBackendPending"
-         height="22"
-         follows="left|top"
-         layout="topleft"
-         left="10"
-         name="render_backend"
-         top_pad="8"
-         tool_tip="Selects the render backend used to draw the viewer. Changing the renderer requires shutting down and restarting the viewer."
-         width="130">
-            <combo_box.item
-             label="OpenGL"
-             name="OpenGL"
-             value="OpenGL" />
-            <combo_box.item
-             label="Vulkan"
-             name="Vulkan"
-             value="Vulkan" />
-        </combo_box>
     </panel>
 
 <!--Rendering-->
