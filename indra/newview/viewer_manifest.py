@@ -963,6 +963,12 @@ class Windows_x86_64_Manifest(ViewerManifest):
         
 
     def package_finish(self):
+        # <VulkanStorm> Inno Setup 7 packaging (opt-in via --inno / inno arg).
+        # Precedence: Inno > Velopack > NSIS (legacy default).
+        if self.args.get('inno', 'OFF') == 'ON':
+            self.inno_package_finish()
+            return
+        # </VulkanStorm>
         # Check if we should use Velopack instead of NSIS
         # Note: as of 2026.01's release, we will be building with Velopack's one click install.
         # We maintain the legacy NSIS packaging mainly for TPVs at this point.
@@ -972,6 +978,103 @@ class Windows_x86_64_Manifest(ViewerManifest):
 
         # NSIS packaging (legacy)
         self.nsis_package_finish()
+
+    def inno_package_finish(self):
+        """Package the viewer using Inno Setup 7 (replaces legacy NSIS).
+
+        Produces a modern installer that shows the LGPL-2.1 license agreement
+        up front and offers a "Launch Firestorm" option on the finish page.
+        """
+        import hashlib
+        import subprocess
+
+        installer_base = self.fs_installer_basename()
+        installer_file = installer_base + "_Setup.exe"
+        final_exe = self.final_exe()
+
+        # Sign the compiled binaries before they are packed into the installer.
+        self.fs_sign_win_binaries()
+
+        # Read the Inno template and substitute the tokens.
+        src_prefix = self.get_src_prefix()
+        template_path = os.path.join(src_prefix, 'installers', 'windows', 'installer_template.iss')
+        license_file = os.path.abspath(os.path.join(src_prefix, '..', '..', 'doc', 'LGPL-license.txt'))
+        icon_suffix = "_os" if self.fs_is_opensim() else ""
+        setup_icon = os.path.join(src_prefix, 'installers', 'windows', 'firestorm_icon%s.ico' % icon_suffix)
+
+        with open(template_path, 'r') as f:
+            script = f.read()
+
+        # Stable AppId so upgrades/reinstalls are detected (GUID derived from the
+        # fixed template GUID + app name, formatted as an Inno GUID constant).
+        app_name_oneword = self.app_name_oneword()
+
+        replacements = {
+            '%%APP_NAME%%': self.app_name(),
+            '%%APP_NAME_ONEWORD%%': app_name_oneword,
+            '%%VERSION%%': '.'.join(self.args['version']),
+            '%%FINAL_EXE%%': final_exe,
+            '%%INSTALLER_FILE%%': installer_file,
+            '%%INSTALLER_BASE%%': installer_base,
+            '%%SOURCE_DIR%%': self.get_dst_prefix(),
+            '%%LICENSE_FILE%%': license_file,
+            '%%SETUP_ICON%%': setup_icon,
+            '%%DL_URL%%': self.dl_url_from_channel(),
+        }
+        for token, value in replacements.items():
+            script = script.replace(token, str(value))
+
+        iss_file = "firestorm_setup.iss"
+        iss_path = self.dst_path_of(iss_file)
+        with open(iss_path, 'w') as f:
+            f.write(script)
+            f.flush()
+            os.fsync(f.fileno())
+
+        # Locate the Inno Setup compiler (ISCC.exe).
+        iscc = None
+        for candidate in (
+            os.path.expandvars(r'${ProgramFiles}\Inno Setup 7\ISCC.exe'),
+            os.path.expandvars(r'${ProgramFiles(x86)}\Inno Setup 7\ISCC.exe'),
+            os.path.expandvars(r'${ProgramFiles}\Inno Setup 6\ISCC.exe'),
+            os.path.expandvars(r'${ProgramFiles(x86)}\Inno Setup 6\ISCC.exe'),
+        ):
+            if os.path.exists(candidate):
+                iscc = candidate
+                break
+        if iscc is None:
+            raise ManifestError("Inno Setup compiler (ISCC.exe) not found; install Inno Setup 6/7 or do not use --inno")
+
+        # Remove any stale installer so the recursion guard and the result check
+        # below operate on a clean state. Match both "_Setup.exe" and bare-name
+        # installer outputs (e.g. from earlier/manual runs).
+        for stale in glob.glob(self.dst_path_of('Phoenix-*.exe')) + \
+                     glob.glob(self.dst_path_of(installer_base + '*.exe')):
+            try:
+                os.remove(stale)
+            except OSError:
+                pass
+
+        # Compile the installer. The .iss pins OutputDir to the dest prefix.
+        # Retry a few times: ISCC can briefly fail to open the just-written .iss
+        # if the OS/AV scanner has not released it yet.
+        last_err = None
+        for attempt in range(5):
+            try:
+                self.run_command([iscc, '/Q', iss_path])
+                last_err = None
+                break
+            except Exception as err:
+                last_err = err
+                time.sleep(2)
+        if last_err is not None:
+            raise last_err
+
+        # Sign the resulting installer.
+        self.sign(installer_file)
+
+        self.created_path(self.dst_path_of(installer_file))
+        self.package_file = installer_file
 
     def velopack_package_finish(self):
         # packId determines install folder: %LocalAppData%\{packId}
@@ -2515,6 +2618,7 @@ if __name__ == "__main__":
         dict(name='openal', description="""Indication openal libraries are needed""", default='OFF'),
         dict(name='tracy', description="""Indication tracy profiler is enabled""", default='OFF'),
         dict(name='velopack', description="""Use Velopack installer instead of NSIS""", default='OFF'),
+        dict(name='inno', description="""Use Inno Setup 7 installer instead of NSIS""", default='OFF'),
         dict(name='avx2', description="""Indication avx2 instruction set is enabled""", default='OFF'),
         ]
     try:
