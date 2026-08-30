@@ -40,7 +40,9 @@ WANTS_OPENSIM=$TRUE
 WANTS_SINGLEGRID=$FALSE
 WANTS_HAVOK=$FALSE
 WANTS_AVX=$FALSE
-WANTS_AVX2=$FALSE
+# <VulkanStorm> Default to AVX2-enabled builds. Use --no-avx2 to opt out.
+WANTS_AVX2=$TRUE
+# </VulkanStorm>
 WANTS_TESTBUILD=$FALSE
 WANTS_TRACY=$FALSE
 WANTS_LTO=$FALSE
@@ -84,7 +86,8 @@ showUsage()
     echo "  --singlegrid <login_uri> : Build for single grid usage (Requires --opensim)"
     echo "  --havok                  : Build with Havok support (Disables OpenSim support)"
     echo "  --avx                    : Build with Advanced Vector Extensions"
-    echo "  --avx2                   : Build with Advanced Vector Extensions 2"
+    echo "  --avx2                   : Build with Advanced Vector Extensions 2 (default; use --no-avx2 to opt out)"
+    echo "  --no-avx2                : Build without AVX2 (overrides the default)"
     echo "  --tracy                  : Build with Tracy Profiler support"
     echo "  --lto                    : Build with Link Time Optimization"
     echo "  --crashreporting         : Build with crash reporting enabled (Windows only)"
@@ -133,6 +136,7 @@ getArgs()
                           ;;
           avx)            WANTS_AVX=$TRUE;;
           avx2)           WANTS_AVX2=$TRUE;;
+          no-avx2)        WANTS_AVX2=$FALSE;;   # <VulkanStorm> opt out of the AVX2 default
           tracy)          WANTS_TRACY=$TRUE;;
           lto)            WANTS_LTO=$TRUE;;
           crashreporting) WANTS_CRASHREPORTING=$TRUE;;
