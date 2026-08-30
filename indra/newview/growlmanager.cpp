@@ -209,7 +209,7 @@ void GrowlManager::loadConfig()
         }
         configs.close();
 
-        this->mNotifier->registerApplication("Firestorm Viewer", notificationTypes);
+        this->mNotifier->registerApplication("Vulkanstorm", notificationTypes);
     }
     else
     {

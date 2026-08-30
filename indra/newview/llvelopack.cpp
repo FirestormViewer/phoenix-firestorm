@@ -306,7 +306,7 @@ static std::wstring get_app_name()
     //    channel.replace(channel.size() - release_suffix.size(), release_suffix.size(), L" Viewer");
     //}
     //return channel;
-    std::wstring prefix = L"Firestorm";
+    std::wstring prefix = L"Vulkanstorm";
     if (channel.starts_with(prefix))
         channel.erase(0, prefix.size());
 #ifdef OPENSIM

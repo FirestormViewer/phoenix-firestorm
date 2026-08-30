@@ -234,7 +234,7 @@ DesktopNotifierLinux::DesktopNotifierLinux()
     m_pLibNotify = new NDLibnotifyWrapper();
     m_pNotification = 0;
 
-    if ( m_pLibNotify->init() && m_pLibNotify->mInit( "Firestorm Viewer" ) )
+    if ( m_pLibNotify->init() && m_pLibNotify->mInit( "Vulkanstorm" ) )
     {
 
         LL_INFOS( "DesktopNotifierLinux" ) << "Linux desktop notifications initialized." << LL_ENDL;
@@ -264,7 +264,7 @@ DesktopNotifierLinux::DesktopNotifierLinux()
 
         LL_INFOS( "DesktopNotifierLinux" ) << "Linux desktop notification icon: " << m_strIcon << LL_ENDL;
 
-        m_pNotification = m_pLibNotify->mNotificationNew( "Firestorm", "Intializing", m_strIcon.c_str(), 0 );
+        m_pNotification = m_pLibNotify->mNotificationNew( "Vulkanstorm", "Intializing", m_strIcon.c_str(), 0 );
     }
     else
     {
