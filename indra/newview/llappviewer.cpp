@@ -3752,6 +3752,25 @@ bool LLAppViewer::initWindow()
     // always start windowed
     bool ignorePixelDepth = gSavedSettings.getBOOL("IgnorePixelDepth");
 
+    // <VulkanStorm> The render backend (OpenGL/Vulkan) is selected in
+    // Preferences > Graphics > Hardware Settings and is fixed for the
+    // lifetime of the process; switching it requires a viewer restart.
+    // Until the Vulkan pipeline is available, any Vulkan selection falls
+    // back to OpenGL for this session.
+    std::string render_backend = gSavedSettings.getString("RenderBackend");
+    if (render_backend == "Vulkan")
+    {
+        LL_WARNS("AppInit") << "RenderBackend=Vulkan requested, but the Vulkan render pipeline is not yet available in this build; falling back to OpenGL for this session." << LL_ENDL;
+        render_backend = "OpenGL";
+    }
+    else if (render_backend != "OpenGL")
+    {
+        LL_WARNS("AppInit") << "Unknown RenderBackend value '" << render_backend << "'; using OpenGL." << LL_ENDL;
+        render_backend = "OpenGL";
+    }
+    LL_INFOS("AppInit") << "Render backend: " << render_backend << LL_ENDL;
+    // </VulkanStorm>
+
     LLViewerWindow::Params window_params;
     window_params
         .title(gWindowTitle)
