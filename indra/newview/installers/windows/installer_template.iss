@@ -27,7 +27,7 @@ AppId={{7A4C2E91-3F5B-4D6A-9C1E-5E8F2A6B9D04}
 AppName={#AppName}
 AppVersion={#AppVersion}
 AppVerName={#AppName} {#AppVersion}
-AppPublisher=The Phoenix Firestorm Project
+AppPublisher=The Vulkanstorm Project
 AppPublisherURL={#AppURL}
 AppSupportURL={#AppURL}
 AppUpdatesURL={#AppURL}
@@ -37,7 +37,7 @@ DefaultGroupName={#AppName}
 ArchitecturesAllowed=x64
 ; Show the LGPL-2.1 license agreement before anything else
 LicenseFile={#LicenseFile}
-; Offer "Launch Firestorm" on the finish page (see [Run] below)
+; Offer "Launch Vulkanstorm" on the finish page (see [Run] below)
 ; OutputBaseFilename must NOT carry .exe (ISCC appends it). The manifest
 ; passes InstallerOut = <base>_Setup so the result is <base>_Setup.exe.
 OutputBaseFilename={#InstallerOut}
@@ -61,7 +61,7 @@ Name: "desktopicon"; Description: "Create a &desktop shortcut"; GroupDescription
 [Files]
 ; Ship the entire staged viewer tree (everything viewer_manifest.py copied).
 ; Exclude generated installer/script artifacts so the installer never packs itself.
-Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "Phoenix-*.exe,firestorm_setup.iss,firestorm_setup_tmp.nsi"
+Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*_Setup.exe,firestorm_setup.iss,firestorm_setup_tmp.nsi"
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExe}"
@@ -71,3 +71,29 @@ Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: desktopico
 [Run]
 ; "Launch Firestorm" checkbox on the successful-completion page.
 Filename: "{app}\{#AppExe}"; Description: "Launch {#AppName} now"; Flags: nowait postinstall skipifsilent
+[Registry]
+; URL protocol handlers (secondlife://, hypergrid, hop://).
+; The URL parameter is passed last; the viewer ignores subsequent params to
+; avoid parameter-injection attacks (MAIT-8305 semantics preserved).
+Root: HKCR; Subkey: "secondlife"; ValueType: string; ValueName: ""; ValueData: "URL:Second Life"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "secondlife"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""
+Root: HKCR; Subkey: "secondlife\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"""
+Root: HKCR; Subkey: "secondlife\shell\open"; ValueType: string; ValueName: "FriendlyAppName"; ValueData: "{#AppName}"
+Root: HKCR; Subkey: "secondlife\shell\open\command"; ValueType: expandsz; ValueName: ""; ValueData: """{app}\{#AppExe}"" -url ""%1"""
+Root: HKCR; Subkey: "x-grid-location-info"; ValueType: string; ValueName: ""; ValueData: "URL:Hypergrid"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "x-grid-location-info"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""
+Root: HKCR; Subkey: "x-grid-location-info\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"""
+Root: HKCR; Subkey: "x-grid-location-info\shell\open"; ValueType: string; ValueName: "FriendlyAppName"; ValueData: "{#AppName}"
+Root: HKCR; Subkey: "x-grid-location-info\shell\open\command"; ValueType: expandsz; ValueName: ""; ValueData: """{app}\{#AppExe}"" -url ""%1"""
+Root: HKCR; Subkey: "x-grid-info"; ValueType: string; ValueName: ""; ValueData: "URL:Hypergrid"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "x-grid-info"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""
+Root: HKCR; Subkey: "x-grid-info\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"""
+Root: HKCR; Subkey: "x-grid-info\shell\open"; ValueType: string; ValueName: "FriendlyAppName"; ValueData: "{#AppName}"
+Root: HKCR; Subkey: "x-grid-info\shell\open\command"; ValueType: expandsz; ValueName: ""; ValueData: """{app}\{#AppExe}"" -url ""%1"""
+; hop:// is registered only for OpenSim builds (see ISOPENSIM in the NSIS path);
+; the Inno template always registers it for parity with OS builds.
+Root: HKCR; Subkey: "hop"; ValueType: string; ValueName: ""; ValueData: "URL:Hypergrid"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "hop"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""
+Root: HKCR; Subkey: "hop\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"""
+Root: HKCR; Subkey: "hop\shell\open"; ValueType: string; ValueName: "FriendlyAppName"; ValueData: "{#AppName}"
+Root: HKCR; Subkey: "hop\shell\open\command"; ValueType: expandsz; ValueName: ""; ValueData: """{app}\{#AppExe}"" -url ""%1"""
