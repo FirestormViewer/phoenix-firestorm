@@ -1,0 +1,1055 @@
+diff --git a/indra/lib/python/indra/util/llmanifest.py b/indra/lib/python/indra/util/llmanifest.py
+index 4164cb41..e0839c22 100755
+--- a/indra/lib/python/indra/util/llmanifest.py
++++ b/indra/lib/python/indra/util/llmanifest.py
+@@ -94,7 +94,7 @@ def get_default_platform(dummy):
+             }[sys.platform]
+ 
+ DEFAULT_SRCTREE = os.path.dirname(sys.argv[0])
+-CHANNEL_VENDOR_BASE = 'Firestorm'
++CHANNEL_VENDOR_BASE = 'NewLifeItaly Viewer'
+ RELEASE_CHANNEL = CHANNEL_VENDOR_BASE + ' Development'
+ 
+ BASE_ARGUMENTS=[
+diff --git a/indra/llplugin/llpluginclassmedia.cpp b/indra/llplugin/llpluginclassmedia.cpp
+index 847095f0..fa7712b6 100644
+--- a/indra/llplugin/llpluginclassmedia.cpp
++++ b/indra/llplugin/llpluginclassmedia.cpp
+@@ -80,6 +80,7 @@ bool LLPluginClassMedia::init(const std::string &launcher_filename, const std::s
+     LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "init");
+     message.setValue("target", mTarget);
+     message.setValueReal("factor", mZoomFactor);
++    message.setValueBoolean("media_stream_enabled", mMediaStreamEnabled);
+     sendMessage(message);
+ 
+     mPlugin->init(launcher_filename, plugin_dir, plugin_filename, debug);
+@@ -142,6 +143,7 @@ void LLPluginClassMedia::reset()
+     mMediaName.clear();
+     mMediaDescription.clear();
+     mBackgroundColor = LLColor4(1.0f, 1.0f, 1.0f, 1.0f);
++    mMediaStreamEnabled = false;
+ 
+     // media_browser class
+     mNavigateURI.clear();
+diff --git a/indra/llplugin/llpluginclassmedia.h b/indra/llplugin/llpluginclassmedia.h
+index 2e1ad6d0..8c8044d4 100644
+--- a/indra/llplugin/llpluginclassmedia.h
++++ b/indra/llplugin/llpluginclassmedia.h
+@@ -230,6 +230,7 @@ public:
+     void    setJavascriptEnabled(const bool enabled);
+     void    setWebSecurityDisabled(const bool disabled);
+     void    setFileAccessFromFileUrlsEnabled(const bool enabled);
++    void    setMediaStreamEnabled(const bool enabled) { mMediaStreamEnabled = enabled; }
+     void    setTarget(const std::string &target);
+ 
+     ///////////////////////////////////
+@@ -446,6 +447,7 @@ protected:
+     LLColor4        mBackgroundColor;
+ 
+     std::string     mTarget;
++    bool            mMediaStreamEnabled;
+ 
+     /////////////////////////////////////////
+     // media_browser class
+diff --git a/indra/media_plugins/cef/media_plugin_cef.cpp b/indra/media_plugins/cef/media_plugin_cef.cpp
+index 4877a9ce..c175e0e7 100644
+--- a/indra/media_plugins/cef/media_plugin_cef.cpp
++++ b/indra/media_plugins/cef/media_plugin_cef.cpp
+@@ -712,7 +712,9 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
+                 settings.initial_width = 1024;
+                 settings.java_enabled = false;
+                 settings.javascript_enabled = mJavascriptEnabled;
+-                settings.media_stream_enabled = false; // MAINT-6060 - WebRTC media removed until we can add granularity/query UI
++                // Webcam/microphone access remains off for ordinary embedded
++                // browsers. Only a dedicated viewer instance may opt in.
++                settings.media_stream_enabled = message_in.getValueBoolean("media_stream_enabled");
+ 
+                 settings.user_agent_substring = mCEFLib->makeCompatibleUserAgentString(mUserAgentSubtring);
+                 settings.webgl_enabled = true;
+diff --git a/indra/newview/CMakeLists.txt b/indra/newview/CMakeLists.txt
+index 4015fbe5..09c7e1e9 100644
+--- a/indra/newview/CMakeLists.txt
++++ b/indra/newview/CMakeLists.txt
+@@ -394,6 +394,7 @@ set(viewer_SOURCE_FILES
+     llfloatermodeluploadbase.cpp
+     llfloatermyscripts.cpp
+     llfloatermyenvironment.cpp
++    llfloaternlimedia.cpp
+     llfloaternamedesc.cpp
+     llfloaternewfeaturenotification.cpp
+     llfloaternotificationsconsole.cpp
+@@ -1263,6 +1264,7 @@ set(viewer_HEADER_FILES
+     llfloatermodeluploadbase.h
+     llfloatermyscripts.h
+     llfloatermyenvironment.h
++    llfloaternlimedia.h
+     llfloaternamedesc.h
+     llfloaternewfeaturenotification.h
+     llfloaternotificationsconsole.h
+diff --git a/indra/newview/app_settings/commands.xml b/indra/newview/app_settings/commands.xml
+index 0553f62c..6ccd87d8 100644
+--- a/indra/newview/app_settings/commands.xml
++++ b/indra/newview/app_settings/commands.xml
+@@ -277,6 +277,35 @@
+            is_running_parameters="speak"
+            checkbox_control="PushToTalkToggle"
+            />
++  <command name="nli_camera"
++           available_in_toybox="true"
++           icon="Command_View_Icon"
++           label_ref="Command_NLI_Camera_Label"
++           tooltip_ref="Command_NLI_Camera_Tooltip"
++           execute_function="NLI.ToggleCamera"
++           is_enabled_function="NLI.MediaAvailable"
++           is_running_function="NLI.CameraOn"
++           />
++  <command name="nli_microphone"
++           available_in_toybox="true"
++           icon="Command_Speak_Icon"
++           label_ref="Command_NLI_Microphone_Label"
++           tooltip_ref="Command_NLI_Microphone_Tooltip"
++           execute_function="NLI.ToggleMicrophone"
++           is_enabled_function="NLI.MediaAvailable"
++           is_running_function="NLI.MicrophoneOn"
++           />
++  <command name="nli_multiview"
++           available_in_toybox="true"
++           icon="Command_People_Icon"
++           label_ref="Command_NLI_Multiview_Label"
++           tooltip_ref="Command_NLI_Multiview_Tooltip"
++           execute_function="Floater.Toggle"
++           execute_parameters="nli_media"
++           is_enabled_function="NLI.MediaAvailable"
++           is_running_function="Floater.IsOpen"
++           is_running_parameters="nli_media"
++           />
+   <command name="RFO"
+          available_in_toybox="true"
+          icon="Command_RFO_Icon"
+diff --git a/indra/newview/app_settings/settings.xml b/indra/newview/app_settings/settings.xml
+index adb70296..b6ff5451 100644
+--- a/indra/newview/app_settings/settings.xml
++++ b/indra/newview/app_settings/settings.xml
+@@ -6106,6 +6106,17 @@
+       <key>Value</key>
+       <string>http://guidebooks.secondlife.io/welcome/index.html</string>
+     </map>
++    <key>NewLifeItalyMediaURL</key>
++    <map>
++      <key>Comment</key>
++      <string>Fixed origin for the NewLifeItaly regional camera and microphone panel</string>
++      <key>Persist</key>
++      <integer>0</integer>
++      <key>Type</key>
++      <string>String</string>
++      <key>Value</key>
++      <string>https://newlifeitaly.com/viewer-media/</string>
++    </map>
+     <key>HighResSnapshot</key>
+     <map>
+       <key>Comment</key>
+diff --git a/indra/newview/fs_viewer_manifest.py b/indra/newview/fs_viewer_manifest.py
+index 1bff85c9..bbd7248f 100644
+--- a/indra/newview/fs_viewer_manifest.py
++++ b/indra/newview/fs_viewer_manifest.py
+@@ -17,7 +17,7 @@ class FSViewerManifest:
+             'app_name_oneword':self.app_name_oneword()
+             }
+ 
+-        return "Phoenix-%(app_name)s_%(optimized)s-%(version_dashes)s" % substitution_strings
++        return "NewLifeItaly_Viewer_Windows_x64-%(version_dashes)s" % substitution_strings
+ 
+     def fs_is_opensim(self):
+         return self.args['viewer_flavor'] == 'oss' #Havok would be hvk
+diff --git a/indra/newview/installers/windows/installer_template.nsi b/indra/newview/installers/windows/installer_template.nsi
+index 3d329cd0..a4c3307f 100644
+--- a/indra/newview/installers/windows/installer_template.nsi
++++ b/indra/newview/installers/windows/installer_template.nsi
+@@ -105,7 +105,7 @@ SetOverwrite on							# Overwrite files by default
+ #AutoCloseWindow true					# After all files install, close window
+ 
+ # Registry key paths, ours and Microsoft's
+-!define LINDEN_KEY      "SOFTWARE\The Phoenix Firestorm Project"
++!define LINDEN_KEY      "SOFTWARE\NewLifeItaly\Viewer"
+ !define INSTNAME_KEY    "${LINDEN_KEY}\${INSTNAME}"
+ !define MSCURRVER_KEY   "SOFTWARE\Microsoft\Windows\CurrentVersion"
+ !define MSNTCURRVER_KEY "SOFTWARE\Microsoft\Windows NT\CurrentVersion"
+@@ -664,10 +664,10 @@ WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "" "$INSTDIR"
+ WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "Version" "${VERSION_LONG}"
+ WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "Shortcut" "$INSTSHORTCUT"
+ WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "Exe" "$VIEWER_EXE"
+-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "Publisher" "The Phoenix Firestorm Project, Inc."
+-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLInfoAbout" "https://www.firestormviewer.org"
+-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLUpdateInfo" "https://www.firestormviewer.org/downloads"
+-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "HelpLink" "https://www.firestormviewer.org/support"
++WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "Publisher" "NewLifeItaly"
++WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLInfoAbout" "https://newlifeitaly.com"
++WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLUpdateInfo" "https://newlifeitaly.com/viewer-media/"
++WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "HelpLink" "https://newlifeitaly.com"
+ WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayName" "$INSTNAME"
+ WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "UninstallString" '"$INSTDIR\uninst.exe"'
+ WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayVersion" "${VERSION_LONG}"
+diff --git a/indra/newview/llfloaternlimedia.cpp b/indra/newview/llfloaternlimedia.cpp
+new file mode 100644
+index 00000000..8c295ddb
+--- /dev/null
++++ b/indra/newview/llfloaternlimedia.cpp
+@@ -0,0 +1,394 @@
++/**
++ * @file llfloaternlimedia.cpp
++ * @brief NewLifeItaly region-scoped camera and microphone panel.
++ */
++
++#include "llviewerprecompiledheaders.h"
++
++#include "llfloaternlimedia.h"
++
++#include "llagent.h"
++#include "llagentdata.h"
++#include "llbase64.h"
++#include "llbutton.h"
++#include "llcorehttputil.h"
++#include "llcoros.h"
++#include "llfloaterreg.h"
++#include "llmediactrl.h"
++#include "llpluginclassmedia.h"
++#include "lluri.h"
++#include "llviewercontrol.h"
++#include "llviewerregion.h"
++
++#include <boost/algorithm/string.hpp>
++
++bool LLFloaterNLIMedia::sCameraDesired = false;
++bool LLFloaterNLIMedia::sMicrophoneDesired = false;
++bool LLFloaterNLIMedia::sCameraOn = false;
++bool LLFloaterNLIMedia::sMicrophoneOn = false;
++
++LLFloaterNLIMedia::LLFloaterNLIMedia(const LLSD& key)
++: LLFloater(key)
++{
++}
++
++LLFloaterNLIMedia::~LLFloaterNLIMedia()
++{
++    if (mBrowser)
++    {
++        mBrowser->remObserver(this);
++    }
++}
++
++bool LLFloaterNLIMedia::postBuild()
++{
++    mBrowser = getChild<LLMediaCtrl>("media_browser");
++    mCameraButton = getChild<LLButton>("camera_btn");
++    mMicrophoneButton = getChild<LLButton>("microphone_btn");
++
++    mBrowser->addObserver(this);
++    mCameraButton->setCommitCallback(boost::bind(&LLFloaterNLIMedia::onCameraClicked, this));
++    mMicrophoneButton->setCommitCallback(boost::bind(&LLFloaterNLIMedia::onMicrophoneClicked, this));
++    getChild<LLButton>("retry_btn")->setCommitCallback(boost::bind(&LLFloaterNLIMedia::onRetryClicked, this));
++
++    updateControls();
++    return true;
++}
++
++void LLFloaterNLIMedia::onOpen(const LLSD& key)
++{
++    LLFloater::onOpen(key);
++    ensureLoaded();
++}
++
++void LLFloaterNLIMedia::draw()
++{
++    if (mRegionCheckTimer.hasExpired())
++    {
++        mRegionCheckTimer.setTimerExpirySec(1.0f);
++        const LLUUID current_region = gAgent.getRegion() ? gAgent.getRegion()->getRegionID() : LLUUID::null;
++        if (current_region != mRegionId)
++        {
++            // Never carry a publication from one region into another.
++            sCameraDesired = false;
++            sMicrophoneDesired = false;
++            sCameraOn = false;
++            sMicrophoneOn = false;
++            mCameraAllowed = false;
++            mMicrophoneAllowed = false;
++            mRegionId = current_region;
++            mBootstrapInFlight = false;
++            requestBootstrap();
++            updateControls();
++        }
++    }
++
++    LLFloater::draw();
++}
++
++void LLFloaterNLIMedia::toggleCamera(const LLSD& userdata)
++{
++    sCameraDesired = !sCameraDesired;
++    LLFloaterNLIMedia* floater = LLFloaterReg::showTypedInstance<LLFloaterNLIMedia>("nli_media");
++    if (floater)
++    {
++        floater->sendDesiredState();
++        floater->updateControls();
++    }
++}
++
++void LLFloaterNLIMedia::toggleMicrophone(const LLSD& userdata)
++{
++    sMicrophoneDesired = !sMicrophoneDesired;
++    LLFloaterNLIMedia* floater = LLFloaterReg::showTypedInstance<LLFloaterNLIMedia>("nli_media");
++    if (floater)
++    {
++        floater->sendDesiredState();
++        floater->updateControls();
++    }
++}
++
++bool LLFloaterNLIMedia::isCameraOn(const LLSD& userdata)
++{
++    return sCameraDesired;
++}
++
++bool LLFloaterNLIMedia::isMicrophoneOn(const LLSD& userdata)
++{
++    return sMicrophoneDesired;
++}
++
++bool LLFloaterNLIMedia::isMediaAvailable(const LLSD& userdata)
++{
++    return gAgent.isInitialized() && gAgent.getRegion() && !gSavedSettings.getString("NewLifeItalyMediaURL").empty();
++}
++
++void LLFloaterNLIMedia::onCameraClicked()
++{
++    sCameraDesired = !sCameraDesired;
++    sendDesiredState();
++    updateControls();
++}
++
++void LLFloaterNLIMedia::onMicrophoneClicked()
++{
++    sMicrophoneDesired = !sMicrophoneDesired;
++    sendDesiredState();
++    updateControls();
++}
++
++void LLFloaterNLIMedia::onRetryClicked()
++{
++    mPageReady = false;
++    mBootstrapInFlight = false;
++    mCameraAllowed = false;
++    mMicrophoneAllowed = false;
++    mBrowser->navigateTo(gSavedSettings.getString("NewLifeItalyMediaURL"), "text/html");
++    updateControls();
++}
++
++void LLFloaterNLIMedia::ensureLoaded()
++{
++    if (!mBrowser || !isMediaAvailable(LLSD()))
++    {
++        return;
++    }
++
++    mRegionId = gAgent.getRegion()->getRegionID();
++    const std::string media_url = gSavedSettings.getString("NewLifeItalyMediaURL");
++    if (mBrowser->getCurrentNavUrl().empty())
++    {
++        mBrowser->navigateTo(media_url, "text/html");
++    }
++}
++
++void LLFloaterNLIMedia::requestBootstrap()
++{
++    if (!mPageReady || !mBrowser || !gAgent.getRegion() || mBootstrapInFlight)
++    {
++        return;
++    }
++
++    std::string endpoint = gSavedSettings.getString("NewLifeItalyMediaURL");
++    while (!endpoint.empty() && endpoint.back() == '/')
++    {
++        endpoint.pop_back();
++    }
++    endpoint += "/api/native-bootstrap";
++
++    mBootstrapInFlight = true;
++    getChild<LLUICtrl>("status_text")->setValue(getString("authenticating_text"));
++    const LLUUID region_id = gAgent.getRegion()->getRegionID();
++    LLCoros::instance().launch(
++        "NewLifeItalyNativeBootstrap",
++        boost::bind(&LLFloaterNLIMedia::requestBootstrapCoro,
++                    gAgentID,
++                    gAgent.getSecureSessionID(),
++                    region_id,
++                    endpoint));
++}
++
++void LLFloaterNLIMedia::requestBootstrapCoro(const LLUUID& agent_id,
++                                             const LLUUID& secure_session_id,
++                                             const LLUUID& region_id,
++                                             const std::string& endpoint)
++{
++    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t http_adapter =
++        std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>(
++            "NewLifeItalyNativeBootstrap",
++            LLCore::HttpRequest::DEFAULT_POLICY_ID);
++    LLCore::HttpRequest::ptr_t http_request = std::make_shared<LLCore::HttpRequest>();
++    LLCore::HttpHeaders::ptr_t headers = std::make_shared<LLCore::HttpHeaders>();
++    headers->append("Accept", "application/json");
++    headers->append("Content-Type", "application/json");
++
++    LLSD body;
++    body["agent_id"] = agent_id;
++    body["secure_session_id"] = secure_session_id;
++    body["region_id"] = region_id;
++
++    LLSD result = http_adapter->postJsonAndSuspend(http_request, endpoint, body, headers);
++    const LLSD http_results = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
++    const LLCore::HttpStatus status =
++        LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(http_results);
++
++    std::string bootstrap_token;
++    std::string error_message;
++    if (status && result.has("bootstrapToken"))
++    {
++        bootstrap_token = result["bootstrapToken"].asString();
++    }
++    else
++    {
++        error_message = status.toString();
++        if (result.has("error"))
++        {
++            error_message = result["error"].asString();
++        }
++    }
++
++    LLFloaterNLIMedia* floater =
++        LLFloaterReg::findTypedInstance<LLFloaterNLIMedia>("nli_media");
++    if (floater)
++    {
++        floater->receiveBootstrap(region_id, bootstrap_token, error_message);
++    }
++}
++
++void LLFloaterNLIMedia::receiveBootstrap(const LLUUID& region_id,
++                                         const std::string& bootstrap_token,
++                                         const std::string& error_message)
++{
++    if (region_id != mRegionId)
++    {
++        return;
++    }
++
++    mBootstrapInFlight = false;
++    if (!error_message.empty() || bootstrap_token.empty())
++    {
++        getChild<LLUICtrl>("status_text")->setValue(getString("auth_error_text"));
++        updateControls();
++        return;
++    }
++
++    const std::string encoded = LLBase64::encode(
++        reinterpret_cast<const U8*>(bootstrap_token.data()),
++        bootstrap_token.size());
++    if (mBrowser && mPageReady)
++    {
++        if (LLPluginClassMedia* plugin = mBrowser->getMediaPlugin())
++        {
++            plugin->executeJavaScript(
++                "window.NewLifeItalyViewer&&window.NewLifeItalyViewer.bootstrapFromTokenBase64('" +
++                encoded + "'," +
++                (sCameraDesired ? "true" : "false") + "," +
++                (sMicrophoneDesired ? "true" : "false") + ");");
++        }
++    }
++}
++
++void LLFloaterNLIMedia::sendDesiredState()
++{
++    ensureLoaded();
++    if (!mPageReady || !mBrowser)
++    {
++        return;
++    }
++
++    if (LLPluginClassMedia* plugin = mBrowser->getMediaPlugin())
++    {
++        plugin->executeJavaScript(llformat(
++            "window.NewLifeItalyViewer&&window.NewLifeItalyViewer.setDesiredState(%s,%s);",
++            sCameraDesired ? "true" : "false",
++            sMicrophoneDesired ? "true" : "false"));
++    }
++}
++
++void LLFloaterNLIMedia::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event)
++{
++    switch (event)
++    {
++        case MEDIA_EVENT_LOCATION_CHANGED:
++            if (!isAllowedLocation(self->getLocation()))
++            {
++                mPageReady = false;
++                mBrowser->navigateStop();
++                mBrowser->navigateTo(gSavedSettings.getString("NewLifeItalyMediaURL"), "text/html");
++            }
++            break;
++
++        case MEDIA_EVENT_NAVIGATE_BEGIN:
++            mPageReady = false;
++            getChild<LLUICtrl>("status_text")->setValue(getString("loading_text"));
++            updateControls();
++            break;
++
++        case MEDIA_EVENT_NAVIGATE_COMPLETE:
++            if (isAllowedLocation(self->getNavigateURI()))
++            {
++                mPageReady = true;
++                getChild<LLUICtrl>("status_text")->setValue(getString("connected_text"));
++                requestBootstrap();
++            }
++            updateControls();
++            break;
++
++        case MEDIA_EVENT_NAME_CHANGED:
++            applyPageState(self->getMediaName());
++            break;
++
++        case MEDIA_EVENT_PLUGIN_FAILED:
++        case MEDIA_EVENT_PLUGIN_FAILED_LAUNCH:
++            mPageReady = false;
++            getChild<LLUICtrl>("status_text")->setValue(getString("error_text"));
++            updateControls();
++            break;
++
++        default:
++            break;
++    }
++}
++
++void LLFloaterNLIMedia::applyPageState(const std::string& title)
++{
++    if (!boost::algorithm::starts_with(title, "NLI_MEDIA|"))
++    {
++        return;
++    }
++
++    std::vector<std::string> fields;
++    boost::split(fields, title, boost::is_any_of("|"));
++    for (const std::string& field : fields)
++    {
++        const std::string::size_type separator = field.find('=');
++        if (separator == std::string::npos)
++        {
++            continue;
++        }
++        const std::string key = field.substr(0, separator);
++        const bool value = field.substr(separator + 1) == "1";
++        if (key == "cam") sCameraOn = value;
++        else if (key == "mic") sMicrophoneOn = value;
++        else if (key == "cam_allowed") mCameraAllowed = value;
++        else if (key == "mic_allowed") mMicrophoneAllowed = value;
++    }
++
++    sCameraDesired = sCameraOn;
++    sMicrophoneDesired = sMicrophoneOn;
++    updateControls();
++}
++
++void LLFloaterNLIMedia::updateControls()
++{
++    if (!mCameraButton || !mMicrophoneButton)
++    {
++        return;
++    }
++
++    mCameraButton->setEnabled(mPageReady && mCameraAllowed);
++    mMicrophoneButton->setEnabled(mPageReady && mMicrophoneAllowed);
++    mCameraButton->setToggleState(sCameraDesired);
++    mMicrophoneButton->setToggleState(sMicrophoneDesired);
++}
++
++bool LLFloaterNLIMedia::isAllowedLocation(const std::string& url) const
++{
++    if (url.empty() || url == "about:blank")
++    {
++        return true;
++    }
++
++    const LLURI expected(gSavedSettings.getString("NewLifeItalyMediaURL"));
++    const LLURI actual(url);
++    std::string allowed_path = expected.path();
++    if (allowed_path.empty() || allowed_path.back() != '/')
++    {
++        allowed_path += '/';
++    }
++    return actual.scheme() == "https" &&
++           actual.scheme() == expected.scheme() &&
++           actual.hostName() == expected.hostName() &&
++           actual.hostPort() == expected.hostPort() &&
++           boost::algorithm::starts_with(actual.path(), allowed_path);
++}
+diff --git a/indra/newview/llfloaternlimedia.h b/indra/newview/llfloaternlimedia.h
+new file mode 100644
+index 00000000..89ffc86a
+--- /dev/null
++++ b/indra/newview/llfloaternlimedia.h
+@@ -0,0 +1,67 @@
++/**
++ * @file llfloaternlimedia.h
++ * @brief NewLifeItaly region-scoped camera and microphone panel.
++ */
++
++#ifndef LL_LLFLOATERNLIMEDIA_H
++#define LL_LLFLOATERNLIMEDIA_H
++
++#include "llfloater.h"
++#include "llframetimer.h"
++#include "llviewermediaobserver.h"
++
++class LLButton;
++class LLMediaCtrl;
++
++class LLFloaterNLIMedia final : public LLFloater, public LLViewerMediaObserver
++{
++public:
++    LLFloaterNLIMedia(const LLSD& key);
++    ~LLFloaterNLIMedia() override;
++
++    bool postBuild() override;
++    void onOpen(const LLSD& key) override;
++    void draw() override;
++    void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event) override;
++
++    static void toggleCamera(const LLSD& userdata);
++    static void toggleMicrophone(const LLSD& userdata);
++    static bool isCameraOn(const LLSD& userdata);
++    static bool isMicrophoneOn(const LLSD& userdata);
++    static bool isMediaAvailable(const LLSD& userdata);
++
++private:
++    void onCameraClicked();
++    void onMicrophoneClicked();
++    void onRetryClicked();
++    void ensureLoaded();
++    void requestBootstrap();
++    static void requestBootstrapCoro(const LLUUID& agent_id,
++                                     const LLUUID& secure_session_id,
++                                     const LLUUID& region_id,
++                                     const std::string& endpoint);
++    void receiveBootstrap(const LLUUID& region_id,
++                          const std::string& bootstrap_token,
++                          const std::string& error_message);
++    void sendDesiredState();
++    void applyPageState(const std::string& title);
++    void updateControls();
++    bool isAllowedLocation(const std::string& url) const;
++
++    LLMediaCtrl* mBrowser = nullptr;
++    LLButton* mCameraButton = nullptr;
++    LLButton* mMicrophoneButton = nullptr;
++    LLUUID mRegionId;
++    LLFrameTimer mRegionCheckTimer;
++    bool mPageReady = false;
++    bool mBootstrapInFlight = false;
++    bool mCameraAllowed = false;
++    bool mMicrophoneAllowed = false;
++
++    static bool sCameraDesired;
++    static bool sMicrophoneDesired;
++    static bool sCameraOn;
++    static bool sMicrophoneOn;
++};
++
++#endif // LL_LLFLOATERNLIMEDIA_H
+diff --git a/indra/newview/llmediactrl.cpp b/indra/newview/llmediactrl.cpp
+index e7d28025..b59ff5d4 100644
+--- a/indra/newview/llmediactrl.cpp
++++ b/indra/newview/llmediactrl.cpp
+@@ -84,6 +84,7 @@ LLMediaCtrl::Params::Params()
+     error_page_url("error_page_url"),
+     media_id("media_id"),
+     trusted_content("trusted_content", false),
++    media_stream_enabled("media_stream_enabled", false),
+     focus_on_click("focus_on_click", true)
+ {
+ }
+@@ -110,6 +111,7 @@ LLMediaCtrl::LLMediaCtrl( const Params& p) :
+     mHomePageMimeType(p.initial_mime_type),
+     mErrorPageURL(p.error_page_url),
+     mTrusted(p.trusted_content),
++    mMediaStreamEnabled(p.media_stream_enabled),
+     mWindowShade(NULL),
+     mHoverTextChanged(false),
+     mAllowFileDownload(false)
+@@ -788,6 +790,7 @@ bool LLMediaCtrl::ensureMediaSourceExists()
+         if ( mMediaSource )
+         {
+             mMediaSource->setUsedInUI(true);
++            mMediaSource->setMediaStreamEnabled(mMediaStreamEnabled);
+             mMediaSource->setHomeURL(mHomePageUrl, mHomePageMimeType);
+             mMediaSource->setTarget(mTarget);
+             mMediaSource->setVisible( getVisible() );
+diff --git a/indra/newview/llmediactrl.h b/indra/newview/llmediactrl.h
+index a8eb5a74..c550fd68 100644
+--- a/indra/newview/llmediactrl.h
++++ b/indra/newview/llmediactrl.h
+@@ -56,6 +56,7 @@ public:
+                                 hide_loading,
+                                 decouple_texture_size,
+                                 trusted_content,
++                                media_stream_enabled,
+                                 focus_on_click;
+ 
+         Optional<S32>           texture_width,
+@@ -210,6 +211,8 @@ public:
+                 mUpdateScrolls,
+                 mAllowFileDownload;
+ 
++        bool    mMediaStreamEnabled;
++
+         std::string mHomePageUrl,
+                     mHomePageMimeType,
+                     mCurrentNavUrl,
+diff --git a/indra/newview/llviewerfloaterreg.cpp b/indra/newview/llviewerfloaterreg.cpp
+index 563a12e7..42e233db 100644
+--- a/indra/newview/llviewerfloaterreg.cpp
++++ b/indra/newview/llviewerfloaterreg.cpp
+@@ -107,6 +107,7 @@
+ #include "llfloatermodelpreview.h"
+ #include "llfloatermyscripts.h"
+ #include "llfloatermyenvironment.h"
++#include "llfloaternlimedia.h"
+ #include "llfloaternamedesc.h"
+ #include "llfloaternewfeaturenotification.h"
+ #include "llfloaternotificationsconsole.h"
+@@ -616,6 +617,7 @@ void LLViewerFloaterReg::registerFloaters()
+     LLFloaterReg::add("legacy_search", "floater_directory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDirectory>);
+     LLFloaterReg::add("profile", "floater_profile.xml",(LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterProfile>);
+     LLFloaterReg::add("guidebook", "floater_how_to.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterHowTo>);
++    LLFloaterReg::add("nli_media", "floater_nli_media.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterNLIMedia>);
+     LLFloaterReg::add("slapp_test", "floater_test_slapp.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSLappTest>);
+ 
+     LLFloaterReg::add("big_preview", "floater_big_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterBigPreview>);
+diff --git a/indra/newview/llviewermedia.cpp b/indra/newview/llviewermedia.cpp
+index c2b8fb91..1d8454df 100644
+--- a/indra/newview/llviewermedia.cpp
++++ b/indra/newview/llviewermedia.cpp
+@@ -1661,6 +1661,7 @@ LLViewerMediaImpl::LLViewerMediaImpl(     const LLUUID& texture_id,
+     mNavigateSuspendedDeferred(false),
+     mIsUpdated(false),
+     mTrustedBrowser(false),
++    mMediaStreamEnabled(false),
+     mZoomFactor(1.0),
+     mCleanBrowser(false),
+     mMimeProbe(),
+@@ -1793,7 +1794,7 @@ void LLViewerMediaImpl::setMediaType(const std::string& media_type)
+ 
+ //////////////////////////////////////////////////////////////////////////////////////////
+ /*static*/
+-LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_type, LLPluginClassMediaOwner *owner /* may be NULL */, S32 default_width, S32 default_height, F64 zoom_factor, const std::string target, bool clean_browser)
++LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_type, LLPluginClassMediaOwner *owner /* may be NULL */, S32 default_width, S32 default_height, F64 zoom_factor, const std::string target, bool clean_browser, bool media_stream_enabled)
+ {
+     if (gNonInteractive)
+     {
+@@ -1824,7 +1825,7 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
+     // If a spare was already created before PluginAttachDebuggerToPlugins was set, don't use it.
+     // Do not use a spare if launching with full viewer control (e.g. Twitter and few others)
+     if ((plugin_basename == "media_plugin_cef") &&
+-        !gSavedSettings.getBOOL("PluginAttachDebuggerToPlugins") && !clean_browser)
++        !gSavedSettings.getBOOL("PluginAttachDebuggerToPlugins") && !clean_browser && !media_stream_enabled)
+     {
+         media_source = LLViewerMedia::getInstance()->getSpareBrowserMediaSource();
+         if(media_source)
+@@ -1865,6 +1866,7 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
+         {
+             media_source = new LLPluginClassMedia(owner);
+             media_source->setSize(default_width, default_height);
++            media_source->setMediaStreamEnabled(media_stream_enabled);
+             std::string user_data_path_cef_log = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "cef.log");
+             media_source->setUserDataPath(user_data_path_cache, gDirUtilp->getUserName(), user_data_path_cef_log);
+             media_source->setLanguageCode(LLUI::getLanguage());
+@@ -1960,7 +1962,7 @@ bool LLViewerMediaImpl::initializePlugin(const std::string& media_type)
+     // Save the MIME type that really caused the plugin to load
+     mCurrentMimeType = mMimeType;
+ 
+-    LLPluginClassMedia* media_source = newSourceFromMediaType(mMimeType, this, mMediaWidth, mMediaHeight, mZoomFactor, mTarget, mCleanBrowser);
++    LLPluginClassMedia* media_source = newSourceFromMediaType(mMimeType, this, mMediaWidth, mMediaHeight, mZoomFactor, mTarget, mCleanBrowser, mMediaStreamEnabled);
+ 
+     if (media_source)
+     {
+diff --git a/indra/newview/llviewermedia.h b/indra/newview/llviewermedia.h
+index 1fc5bbc9..dd1d10af 100644
+--- a/indra/newview/llviewermedia.h
++++ b/indra/newview/llviewermedia.h
+@@ -309,7 +309,7 @@ public:
+     void setTarget(const std::string& target) { mTarget = target; }
+ 
+     // utility function to create a ready-to-use media instance from a desired media type.
+-    static LLPluginClassMedia* newSourceFromMediaType(std::string media_type, LLPluginClassMediaOwner *owner /* may be NULL */, S32 default_width, S32 default_height, F64 zoom_factor, const std::string target = LLStringUtil::null, bool clean_browser = false);
++    static LLPluginClassMedia* newSourceFromMediaType(std::string media_type, LLPluginClassMediaOwner *owner /* may be NULL */, S32 default_width, S32 default_height, F64 zoom_factor, const std::string target = LLStringUtil::null, bool clean_browser = false, bool media_stream_enabled = false);
+ 
+     // Internally set our desired browser user agent string, including
+     // the Second Life version and skin name.  Used because we can
+@@ -402,6 +402,8 @@ public:
+ 
+     bool isTrustedBrowser() { return mTrustedBrowser; }
+     void setTrustedBrowser(bool trusted) { mTrustedBrowser = trusted; }
++    void setMediaStreamEnabled(bool enabled) { mMediaStreamEnabled = enabled; }
++    bool isMediaStreamEnabled() const { return mMediaStreamEnabled; }
+ 
+     typedef enum
+     {
+@@ -499,6 +501,7 @@ private:
+     bool mNavigateSuspended;
+     bool mNavigateSuspendedDeferred;
+     bool mTrustedBrowser;
++    bool mMediaStreamEnabled;
+     std::string mTarget;
+     LLNotificationPtr mNotification;
+     bool mCleanBrowser;     // force the creation of a clean browsing target with full options enabled
+diff --git a/indra/newview/llviewermenu.cpp b/indra/newview/llviewermenu.cpp
+index 205a3694..b56de01b 100644
+--- a/indra/newview/llviewermenu.cpp
++++ b/indra/newview/llviewermenu.cpp
+@@ -38,6 +38,7 @@
+ #include "llcombobox.h"
+ #include "llcoros.h"
+ #include "llfloaterreg.h"
++#include "llfloaternlimedia.h"
+ #include "llfloatersidepanelcontainer.h"
+ #include "llinventorypanel.h"
+ #include "llnotifications.h"
+@@ -12702,6 +12703,14 @@ void initialize_menus()
+     enable.add("GridFeatureCheck", boost::bind(&isGridFeatureEnabled, _2));
+     commit.add("OpenGridStatus", boost::bind(&openGridStatus)); // <FS:Ansariel> FIRE-21236 - Help Menu - Check Grid Status doesn't open using External Browser
+ 
++    // NewLifeItaly region media. Policy is ultimately enforced by the
++    // NewLifeItaly service; these callbacks only control the local UI.
++    commit.add("NLI.ToggleCamera", boost::bind(&LLFloaterNLIMedia::toggleCamera, _2));
++    commit.add("NLI.ToggleMicrophone", boost::bind(&LLFloaterNLIMedia::toggleMicrophone, _2));
++    enable.add("NLI.MediaAvailable", boost::bind(&LLFloaterNLIMedia::isMediaAvailable, _2));
++    enable.add("NLI.CameraOn", boost::bind(&LLFloaterNLIMedia::isCameraOn, _2));
++    enable.add("NLI.MicrophoneOn", boost::bind(&LLFloaterNLIMedia::isMicrophoneOn, _2));
++
+     // Agent
+     commit.add("Agent.toggleFlying", boost::bind(&LLAgent::toggleFlying));
+     enable.add("Agent.enableFlyLand", boost::bind(&enable_fly_land));
+diff --git a/indra/newview/skins/default/toolbars.xml b/indra/newview/skins/default/toolbars.xml
+index 144281f6..dcce8b94 100644
+--- a/indra/newview/skins/default/toolbars.xml
++++ b/indra/newview/skins/default/toolbars.xml
+@@ -12,6 +12,9 @@
+      <command name="chat"/>
+      <command name="speak"/>
+      <command name="voice"/>
++     <command name="nli_camera"/>
++     <command name="nli_microphone"/>
++     <command name="nli_multiview"/>
+      <command name="facebook"/>
+      <command name="move"/>
+      <command name="view"/>`
+diff --git a/indra/newview/skins/default/xui/en/floater_nli_media.xml b/indra/newview/skins/default/xui/en/floater_nli_media.xml
+new file mode 100644
+index 00000000..a9655c70
+--- /dev/null
++++ b/indra/newview/skins/default/xui/en/floater_nli_media.xml
+@@ -0,0 +1,74 @@
++<?xml version="1.0" encoding="utf-8" standalone="yes"?>
++<floater
++ can_close="true"
++ can_minimize="true"
++ can_resize="true"
++ height="650"
++ min_height="420"
++ min_width="560"
++ name="nli_media"
++ save_rect="true"
++ title="NewLifeItaly Cam &amp; Microphone"
++ width="900">
++  <floater.string name="loading_text">Connecting to the regional media service…</floater.string>
++  <floater.string name="connected_text">Connected. Regional permissions are being checked…</floater.string>
++  <floater.string name="authenticating_text">Verifying the avatar session…</floater.string>
++  <floater.string name="auth_error_text">Avatar authentication failed. Select Retry.</floater.string>
++  <floater.string name="error_text">The media service is not available.</floater.string>
++
++  <text
++   follows="left|right|top"
++   height="22"
++   left="12"
++   name="status_text"
++   right="-104"
++   top="10"
++   value="Connecting to the regional media service…" />
++  <button
++   follows="right|top"
++   height="24"
++   label="Retry"
++   name="retry_btn"
++   right="-12"
++   top="8"
++   width="82" />
++  <button
++   follows="left|top"
++   height="30"
++   is_toggle="true"
++   label="Camera"
++   left="12"
++   name="camera_btn"
++   top="40"
++   width="120" />
++  <button
++   follows="left|top"
++   height="30"
++   is_toggle="true"
++   label="Microphone"
++   left_pad="8"
++   name="microphone_btn"
++   top_delta="0"
++   width="120" />
++  <text
++   follows="left|right|top"
++   height="30"
++   left_pad="14"
++   name="region_policy_hint"
++   right="-12"
++   top_delta="5"
++   value="The owner can disable camera or microphone for this region." />
++  <web_browser
++   border_visible="true"
++   bottom="-12"
++   follows="all"
++   focus_on_click="true"
++   initial_mime_type="text/html"
++   left="12"
++   media_stream_enabled="true"
++   name="media_browser"
++   right="-12"
++   start_url=""
++   top="80"
++   trusted_content="false" />
++</floater>
+diff --git a/indra/newview/skins/default/xui/en/strings.xml b/indra/newview/skins/default/xui/en/strings.xml
+index e80d2ae7..3bea064c 100644
+--- a/indra/newview/skins/default/xui/en/strings.xml
++++ b/indra/newview/skins/default/xui/en/strings.xml
+@@ -7,7 +7,7 @@
+ 
+ 	<!-- Default Args - these arguments will be replaced in all strings -->
+ 	<string name="SECOND_LIFE">[CURRENT_GRID]</string>
+-	<string name="APP_NAME">Firestorm</string>
++	<string name="APP_NAME">NewLifeItaly Viewer</string>
+ 	<string name="CAPITALIZED_APP_NAME">FIRESTORM</string>
+ 	<string name="SECOND_LIFE_GRID">Second Life Grid</string>
+ 	<string name="SUPPORT_SITE">Firestorm Support Portal</string>
+@@ -2744,6 +2744,9 @@ name="Command_360_Capture_Label">360° Snapshot</string>
+   <string name="Command_Search_Label">Search</string>
+   <string name="Command_Snapshot_Label">Snapshot</string>
+   <string name="Command_Speak_Label">Speak</string>
++  <string name="Command_NLI_Camera_Label">NewLifeItaly Cam</string>
++  <string name="Command_NLI_Microphone_Label">NewLifeItaly Microphone</string>
++  <string name="Command_NLI_Multiview_Label">NewLifeItaly Multiview</string>
+   <string name="Command_View_Label">Camera controls</string>
+ <!-- Ansariel: Renamed for FS (FIRE-5019)
+   <string name="Command_Voice_Label">Voice settings</string>-->
+@@ -2818,6 +2821,9 @@ name="Command_360_Capture_Label">360° Snapshot</string>
+   <string name="Command_Search_Tooltip">Find places, events, people (CTRL+F)</string>
+   <string name="Command_Snapshot_Tooltip">Take a picture (CTRL+SHIFT+S)</string>
+   <string name="Command_Speak_Tooltip">Speak with people nearby using your microphone</string>
++  <string name="Command_NLI_Camera_Tooltip">Turn your regional camera on or off</string>
++  <string name="Command_NLI_Microphone_Tooltip">Turn your regional microphone on or off</string>
++  <string name="Command_NLI_Multiview_Tooltip">Open the regional webcam grid</string>
+   <string name="Command_View_Tooltip">Changing camera angle</string>
+   <string name="Command_Voice_Tooltip">Volume controls for calls and people near you in world</string>
+ <!-- Firestorm commands -->
+diff --git a/indra/newview/skins/default/xui/it/floater_nli_media.xml b/indra/newview/skins/default/xui/it/floater_nli_media.xml
+new file mode 100644
+index 00000000..b0132bb1
+--- /dev/null
++++ b/indra/newview/skins/default/xui/it/floater_nli_media.xml
+@@ -0,0 +1,15 @@
++<?xml version="1.0" encoding="utf-8" standalone="yes"?>
++<floater
++ name="nli_media"
++ title="NewLifeItaly Cam e Microfono">
++  <floater.string name="loading_text">Connessione al servizio media regionale…</floater.string>
++  <floater.string name="connected_text">Connesso. Verifica dei permessi regionali…</floater.string>
++  <floater.string name="authenticating_text">Verifica della sessione avatar…</floater.string>
++  <floater.string name="auth_error_text">Autenticazione avatar non riuscita. Premi Riprova.</floater.string>
++  <floater.string name="error_text">Il servizio media non è disponibile.</floater.string>
++  <text name="status_text" value="Connessione al servizio media regionale…" />
++  <button label="Riprova" name="retry_btn" />
++  <button label="Cam" name="camera_btn" />
++  <button label="Microfono" name="microphone_btn" />
++  <text name="region_policy_hint" value="Il proprietario può disattivare cam o microfono in questa regione." />
++</floater>
+diff --git a/indra/newview/skins/default/xui/it/strings.xml b/indra/newview/skins/default/xui/it/strings.xml
+index 0146dfce..674286a6 100644
+--- a/indra/newview/skins/default/xui/it/strings.xml
++++ b/indra/newview/skins/default/xui/it/strings.xml
+@@ -5498,6 +5498,15 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
+ 	<string name="Command_Speak_Label">
+ 		Parla
+ 	</string>
++	<string name="Command_NLI_Camera_Label">
++		Cam NewLifeItaly
++	</string>
++	<string name="Command_NLI_Microphone_Label">
++		Microfono NewLifeItaly
++	</string>
++	<string name="Command_NLI_Multiview_Label">
++		Multiview NewLifeItaly
++	</string>
+ 	<string name="Command_View_Label">
+ 		Controlli Camera
+ 	</string>
+@@ -5687,6 +5696,15 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
+ 	<string name="Command_Speak_Tooltip">
+ 		Parla con persone vicine usando il microfono
+ 	</string>
++	<string name="Command_NLI_Camera_Tooltip">
++		Attiva o disattiva la cam nella regione
++	</string>
++	<string name="Command_NLI_Microphone_Tooltip">
++		Attiva o disattiva il microfono nella regione
++	</string>
++	<string name="Command_NLI_Multiview_Tooltip">
++		Apri la griglia delle webcam della regione
++	</string>
+ 	<string name="Command_View_Tooltip">
+ 		Modifica angolo della telecamera
+ 	</string>
+diff --git a/indra/newview/viewer_manifest.py b/indra/newview/viewer_manifest.py
+index f8d9af9b..8f712a6b 100755
+--- a/indra/newview/viewer_manifest.py
++++ b/indra/newview/viewer_manifest.py
+@@ -344,24 +344,11 @@ class ViewerManifest(LLManifest,FSViewerManifest):
+         return "%(channel_vendor_base)s%(channel_variant_underscores)s_%(version_underscores)s_universal" % substitution_strings
+ 
+     def app_name(self):
++        # NewLifeItaly distributes one OpenSim-only product. Keep the public
++        # application name stable instead of appending Firestorm's OS/channel
++        # suffixes to it.
+         global CHANNEL_VENDOR_BASE
+-        channel_type=self.channel_type()
+-        #<FS:TS> LL uses "Viewer" in the name of their release package. We use "Release".
+-        #if channel_type == 'release':
+-        #    app_suffix='Viewer'
+-        #else:
+-        #    app_suffix=self.channel_variant()
+-        app_suffix=self.channel_variant()
+-
+-        #<FS:ND> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
+-        if self.fs_is_opensim():
+-            app_suffix = "OS" + app_suffix
+-        #</FS:ND>
+-
+-        #<FS:ND> Don't separate name by whitespace. This break a lot of things in the old FS installer logic.
+-        #return CHANNEL_VENDOR_BASE + ' ' + app_suffix
+-        return CHANNEL_VENDOR_BASE + app_suffix
+-        #</FS:ND>
++        return CHANNEL_VENDOR_BASE
+ 
+     def exec_name(self):
+         # <FS:Ansariel> Same as app_name_oneword()
+

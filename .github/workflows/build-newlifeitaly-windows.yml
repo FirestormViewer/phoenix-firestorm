@@ -1,0 +1,96 @@
+name: Build NewLifeItaly Viewer for Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - newlifeitaly/viewer-1.0
+
+permissions:
+  contents: read
+
+env:
+  AUTOBUILD_VARIABLES_FILE: ${{ github.workspace }}/build-variables/variables
+  AUTOBUILD_VSVER: "170"
+  AUTOBUILD_BUILD_ID: ${{ github.run_number }}
+
+jobs:
+  windows-x64:
+    name: Windows 64-bit Setup
+    runs-on: windows-2022
+    timeout-minutes: 240
+
+    steps:
+      - name: Checkout NewLifeItaly Viewer
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout Firestorm build variables
+        uses: actions/checkout@v4
+        with:
+          repository: FirestormViewer/fs-build-variables
+          path: build-variables
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tools
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt "cmake>=4.1.2"
+          choco install nsis -y --no-progress
+          "C:\Program Files\Git\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          "C:\Program Files (x86)\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Apply NewLifeItaly source and branding
+        shell: pwsh
+        run: |
+          git apply --check newlifeitaly/patches/viewer.patch
+          git apply newlifeitaly/patches/viewer.patch
+
+          $parts = Get-ChildItem "newlifeitaly\branding\release-os.tar.gz.b64.part*" | Sort-Object Name
+          if (-not $parts) {
+            throw "NewLifeItaly branding archive parts are missing."
+          }
+          $encoded = ($parts | ForEach-Object { Get-Content $_.FullName -Raw }) -join ""
+          $archive = Join-Path $env:RUNNER_TEMP "newlifeitaly-release-os.tar.gz"
+          [IO.File]::WriteAllBytes($archive, [Convert]::FromBase64String($encoded))
+          tar -xzf $archive -C "indra\newview\icons\release-os"
+
+      - name: Configure official NewLifeItaly build
+        shell: pwsh
+        run: |
+          autobuild configure -A 64 -c ReleaseFS_open -- `
+            --package `
+            --chan "NewLifeItaly Viewer Release" `
+            --singlegrid "http://newlifeitaly.com:8002" `
+            --openal
+
+      - name: Compile and create Setup.exe
+        shell: pwsh
+        run: autobuild build -A 64 -c ReleaseFS_open
+
+      - name: Verify installer and create checksum
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem -Path "build-*\newview\Release\*Setup.exe" -File | Select-Object -First 1
+          if (-not $installer) {
+            throw "The Windows installer was not generated."
+          }
+          $hash = (Get-FileHash -Algorithm SHA256 $installer.FullName).Hash.ToLower()
+          "$hash  $($installer.Name)" | Set-Content -Encoding ascii "$($installer.FullName).sha256"
+          Write-Host "Created $($installer.Name)"
+
+      - name: Upload installable package
+        uses: actions/upload-artifact@v4
+        with:
+          name: NewLifeItaly-Viewer-Windows-x64
+          path: |
+            build-*/newview/Release/*Setup.exe
+            build-*/newview/Release/*Setup.exe.sha256
+          if-no-files-found: error
+          retention-days: 14
