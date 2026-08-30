@@ -3028,6 +3028,7 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="preset_combo_label">-Empty list-</string>
   <string name="Default">Default</string>
   <string name="none_paren_cap">(None)</string>
+  <string name="VulkanNotAvailableTooltip">Vulkan is not available on this system (no Vulkan driver/loader was found).</string>
   <string name="no_limit">No limit</string>
   
   <string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">

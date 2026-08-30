@@ -3970,6 +3970,30 @@ private:
 static LLPanelInjector<LLPanelPreferenceGraphics> t_pref_graph("panel_preference_graphics");
 static LLPanelInjector<LLPanelPreferencePrivacy> t_pref_privacy("panel_preference_privacy");
 
+// <VulkanStorm> Minimal Vulkan availability probe. Checks that the Vulkan loader
+// is present and exposes its entry points, without requiring Vulkan SDK headers.
+// Device enumeration arrives with the llvulkan backend library; until then this
+// gates whether the Vulkan item is offered in the renderer selector.
+static bool probe_vulkan_available()
+{
+#if LL_WINDOWS
+    HMODULE vulkan_loader = LoadLibraryA("vulkan-1.dll");
+    if (!vulkan_loader)
+    {
+        return false;
+    }
+    // vkEnumerateInstanceVersion requires a Vulkan 1.1+ loader; vkCreateInstance
+    // covers 1.0 loaders. Either one proves a working loader is installed.
+    bool available = (GetProcAddress(vulkan_loader, "vkEnumerateInstanceVersion") != nullptr) ||
+                     (GetProcAddress(vulkan_loader, "vkCreateInstance") != nullptr);
+    FreeLibrary(vulkan_loader);
+    return available;
+#else
+    // SDL2/macOS window backends do not create Vulkan surfaces yet.
+    return false;
+#endif
+}
+
 bool LLPanelPreferenceGraphics::postBuild()
 {
     // <FS:Ansariel> Improved graphics preferences
@@ -4015,8 +4039,81 @@ bool LLPanelPreferenceGraphics::postBuild()
 #endif // LL_DARWIN
 // </FS:CR>
 
+    // <VulkanStorm> Renderer backend selector
+    LLComboBox* backend_combo = getChild<LLComboBox>("render_backend");
+    if (backend_combo)
+    {
+        refreshRenderBackendSelector();
+        backend_combo->setCommitCallback(boost::bind(&LLPanelPreferenceGraphics::onRenderBackendCommit, this));
+        if (!probe_vulkan_available())
+        {
+            backend_combo->remove("Vulkan");
+            backend_combo->setToolTip(std::string("Selects the render backend used to draw the viewer. ") +
+                LLTrans::getString("VulkanNotAvailableTooltip"));
+        }
+    }
+    // </VulkanStorm>
+
     return LLPanelPreference::postBuild();
 }
+
+// <VulkanStorm>
+void LLPanelPreferenceGraphics::refreshRenderBackendSelector()
+{
+    LLComboBox* backend_combo = getChild<LLComboBox>("render_backend");
+    if (backend_combo)
+    {
+        std::string active_backend = gSavedSettings.getString("RenderBackend");
+        if (active_backend != "Vulkan")
+        {
+            active_backend = "OpenGL";
+        }
+        backend_combo->setValue(LLSD(active_backend));
+        backend_combo->resetDirty();
+    }
+}
+
+void LLPanelPreferenceGraphics::onRenderBackendCommit()
+{
+    std::string selected_backend = gSavedSettings.getString("RenderBackendPending");
+    std::string active_backend = gSavedSettings.getString("RenderBackend");
+    if (active_backend != "Vulkan")
+    {
+        active_backend = "OpenGL";
+    }
+    if (selected_backend == active_backend)
+    {
+        return;
+    }
+
+    LLSD args;
+    args["BACKEND"] = selected_backend;
+    LLNotificationsUtil::add("ChangeRenderBackend",
+                                args,
+                                LLSD(),
+                                boost::bind(&LLPanelPreferenceGraphics::callbackRenderBackendRestart, this, _1, _2));
+}
+
+void LLPanelPreferenceGraphics::callbackRenderBackendRestart(const LLSD& notification, const LLSD& response)
+{
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (0 == option) // Shutdown now
+    {
+        std::string selected_backend = gSavedSettings.getString("RenderBackendPending");
+        if (selected_backend != "Vulkan")
+        {
+            selected_backend = "OpenGL";
+        }
+        gSavedSettings.setString("RenderBackend", selected_backend);
+        LL_INFOS() << "User requested quit to switch render backend to " << selected_backend << LL_ENDL;
+        LLAppViewer::instance()->requestQuit();
+    }
+    else // Later: revert the selector to the active backend
+    {
+        refreshRenderBackendSelector();
+    }
+}
+// </VulkanStorm>
 void LLPanelPreferenceGraphics::draw()
 {
     LLPanelPreference::draw();
@@ -4157,6 +4254,8 @@ void LLPanelPreferenceGraphics::cancel(const std::vector<std::string> settings_t
     // <FS:Ansariel> Improved graphics preferences
     resetDirtyChilds();
     LLPanelPreference::cancel(settings_to_skip);
+    // <VulkanStorm> Always revert the renderer selector to the active backend on cancel
+    refreshRenderBackendSelector();
 }
 void LLPanelPreferenceGraphics::saveSettings()
 {

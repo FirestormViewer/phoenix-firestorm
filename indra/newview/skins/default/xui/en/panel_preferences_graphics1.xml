@@ -1230,6 +1230,38 @@ If you do not understand the distinction then leave this control alone."
          width="100">
             Second(s)
         </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="render_backend_label"
+         top_pad="10"
+         width="308">
+            Renderer (requires shutdown and restart):
+        </text>
+        <combo_box
+         control_name="RenderBackendPending"
+         height="22"
+         follows="left|top"
+         layout="topleft"
+         left="10"
+         name="render_backend"
+         top_pad="8"
+         tool_tip="Selects the render backend used to draw the viewer. Changing the renderer requires shutting down and restarting the viewer."
+         width="130">
+            <combo_box.item
+             label="OpenGL"
+             name="OpenGL"
+             value="OpenGL" />
+            <combo_box.item
+             label="Vulkan"
+             name="Vulkan"
+             value="Vulkan" />
+        </combo_box>
     </panel>
 
 <!--Rendering-->
