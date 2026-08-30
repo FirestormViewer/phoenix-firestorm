@@ -436,6 +436,13 @@ protected:
 private:
 
     void onPresetsListChange();
+
+    // <VulkanStorm> Renderer backend selector
+    void onRenderBackendCommit();
+    void callbackRenderBackendRestart(const LLSD& notification, const LLSD& response);
+    void refreshRenderBackendSelector();
+    // </VulkanStorm>
+
     LOG_CLASS(LLPanelPreferenceGraphics);
 };
 

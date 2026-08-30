@@ -12285,6 +12285,39 @@ Change of this parameter will affect the layout of buttons in notification toast
     <integer>0</integer>
   </map>
 
+  <key>RenderBackend</key>
+    <map>
+      <key>Comment</key>
+      <string>Render backend to use: OpenGL or Vulkan. Changing this requires a viewer restart to take effect.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>OpenGL</string>
+    </map>
+    <key>RenderBackendPending</key>
+    <map>
+      <key>Comment</key>
+      <string>Shadow control for the renderer selector in preferences. The selection is only written to RenderBackend after the restart prompt is confirmed.</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>OpenGL</string>
+    </map>
+    <key>RenderVulkanDebug</key>
+    <map>
+      <key>Comment</key>
+      <string>Enable Vulkan validation layers and debug markers when using the Vulkan render backend.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
   <key>RenderDynamicLOD</key>
     <map>
       <key>Comment</key>
