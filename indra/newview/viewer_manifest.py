@@ -1015,7 +1015,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
             '%%VERSION%%': '.'.join(self.args['version']),
             '%%FINAL_EXE%%': final_exe,
             '%%INSTALLER_FILE%%': installer_file,
-            '%%INSTALLER_BASE%%': installer_base,
+            '%%INSTALLER_OUT%%': installer_base + '_Setup',
             '%%SOURCE_DIR%%': self.get_dst_prefix(),
             '%%LICENSE_FILE%%': license_file,
             '%%SETUP_ICON%%': setup_icon,
