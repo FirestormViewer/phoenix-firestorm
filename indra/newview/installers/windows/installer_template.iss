@@ -61,7 +61,7 @@ Name: "desktopicon"; Description: "Create a &desktop shortcut"; GroupDescription
 [Files]
 ; Ship the entire staged viewer tree (everything viewer_manifest.py copied).
 ; Exclude generated installer/script artifacts so the installer never packs itself.
-Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*_Setup.exe,firestorm_setup.iss,firestorm_setup_tmp.nsi"
+Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*_Setup.exe,vulkanstorm_setup.iss,firestorm_setup_tmp.nsi"
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExe}"

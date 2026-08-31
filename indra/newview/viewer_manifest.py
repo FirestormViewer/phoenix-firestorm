@@ -625,8 +625,8 @@ class Windows_x86_64_Manifest(ViewerManifest):
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
         if self.is_packaging_viewer():
-            # Find firestorm-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
-            self.path(src='%s/firestorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
+            # Find vulkanstorm-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
+            self.path(src='%s/vulkanstorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
 
             # <FS:Ansariel> Undo Github-Build stuff - I don't think we need this
             # GITHUB_OUTPUT = os.getenv('GITHUB_OUTPUT')
@@ -1024,7 +1024,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
         for token, value in replacements.items():
             script = script.replace(token, str(value))
 
-        iss_file = "firestorm_setup.iss"
+        iss_file = "vulkanstorm_setup.iss"
         iss_path = self.dst_path_of(iss_file)
         with open(iss_path, 'w') as f:
             f.write(script)
@@ -1093,7 +1093,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
         #installer_base = self.installer_base_name()
         #exclude_pattern = r'.*\.pdb|.*\.map|.*\.bat|.*\.exp|.*\.lib|.*\.nsi|.*\.tar\.xz|secondlife-bin\..*|.*_Setup\.exe|.*-Setup\.exe'
         installer_base = self.fs_installer_basename()
-        exclude_pattern = r'.*\.pdb|.*\.map|.*\.bat|.*\.exp|.*\.lib|.*\.nsi|.*\.tar\.xz|firestorm-bin\..*|.*_Setup\.exe|.*-Setup\.exe'
+        exclude_pattern = r'.*\.pdb|.*\.map|.*\.bat|.*\.exp|.*\.lib|.*\.nsi|.*\.tar\.xz|vulkanstorm-bin\..*|.*_Setup\.exe|.*-Setup\.exe'
         # </FS:TJ>
 
         # Channel-specific icon for the Velopack installer.
