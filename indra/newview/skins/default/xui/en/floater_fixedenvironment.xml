@@ -98,10 +98,10 @@
                     layout="topleft"
                     mouse_opaque="false"
                     name="button_bar_ls"
-                    left="212"
+                    left="217"
                     orientation="horizontal"
                     top="0"
-                    width="313">
+                    width="294">
                 <layout_panel
                         follows="bottom|left|right"
                         height="23"
@@ -110,7 +110,7 @@
                         mouse_opaque="false"
                         name="save_btn_lp"
                         auto_resize="true"
-                        width="156">
+                        width="147">
                     <button
                             follows="bottom|left|right"
                             height="23"
@@ -119,14 +119,14 @@
                             layout="topleft"
                             name="btn_commit"
                             top="0"
-                            width="155" />
+                            width="127" />
                     <button
                             follows="bottom|right"
                             height="23"
                             name="btn_flyout"
                             label=""
                             layout="topleft"
-                            left_pad="-20"
+                            left_pad="0"
                             tab_stop="false"
                             top="0"
                             image_selected="ComboButton_Selected"
