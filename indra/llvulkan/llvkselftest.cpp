@@ -24,7 +24,7 @@ namespace
 {
     LLVKContext* g_ctx = nullptr;      // owned; deleted on shutdown
     int          g_frames_rendered = 0;
-    constexpr int kTargetFrames = 120; // ~2s at 60fps
+    constexpr int kTargetFrames = 300; // ~5s at 60fps
     bool         g_begun = false;
     bool         g_failed = false;
 
@@ -47,24 +47,29 @@ namespace
         HINSTANCE hinst = GetModuleHandle(NULL);
         out_instance = hinst;
 
-        const char* kClass = "VulkanstormVKSelfTest";
-        WNDCLASSA wc{};
+        // Use the wide (Unicode) Win32 entry points so the class/window title is
+        // codepage-independent (the ANSI variants mangled the title on some
+        // system locales).
+        const wchar_t* kClass = L"VulkanstormVKSelfTest";
+        WNDCLASSW wc{};
         wc.style = CS_OWNDC;
         wc.lpfnWndProc = SelfTestWndProc;
         wc.hInstance = hinst;
         wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
         wc.lpszClassName = kClass;
-        RegisterClassA(&wc);
+        RegisterClassW(&wc);
 
         int w = 640, h = 480;
         int x = (GetSystemMetrics(SM_CXSCREEN) - w) / 2;
         int y = (GetSystemMetrics(SM_CYSCREEN) - h) / 2;
-        HWND hwnd = CreateWindowExA(0, kClass, "Vulkanstorm Vulkan self-test",
+        HWND hwnd = CreateWindowExW(WS_EX_TOPMOST, kClass, L"Vulkanstorm Vulkan self-test",
                                     WS_OVERLAPPEDWINDOW | WS_VISIBLE,
                                     x, y, w, h, NULL, NULL, hinst, NULL);
         if (hwnd)
         {
             ShowWindow(hwnd, SW_SHOW);
+            SetForegroundWindow(hwnd);
+            BringWindowToTop(hwnd);
             UpdateWindow(hwnd);
         }
         return hwnd;
