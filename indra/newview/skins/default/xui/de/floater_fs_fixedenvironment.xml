@@ -15,10 +15,10 @@
 		<layout_panel name="button_panel">
 			<layout_stack name="button_bar_ls">
 				<layout_panel name="load_btn_lp">
-						<button label="Laden" name="btn_load" width="60" tool_tip="Einstellungen aus dem Inventar laden"/>
-						<button label="Import." name="btn_import" width="60" tool_tip="Alte Einstellungen von Datenträger importieren."/>
-						<button label="Speichern" name="btn_commit" width="70"/>
-					<button label="Abbrechen" name="btn_cancel" tool_tip="Zur zuletzt gespeicherten Version zurückkehren"/>
+					<button label="Laden" name="btn_load" width="60" tool_tip="Einstellungen aus dem Inventar laden"/>
+					<button label="Import." name="btn_import" width="60" tool_tip="Alte Einstellungen von Datenträger importieren."/>
+					<button label="Speichern" name="btn_commit" width="70"/>
+					<button label="Abbr." name="btn_cancel" tool_tip="Zur zuletzt gespeicherten Version zurückkehren"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

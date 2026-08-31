@@ -153,11 +153,8 @@
 						 top="0"
 						 left_pad="0"
 						 tab_stop="false"
-						 image_selected="SegmentedBtn_Right_Selected_Press"
-						 image_unselected="SegmentedBtn_Right_Off"
-						 image_pressed="SegmentedBtn_Right_Press"
-						 image_pressed_selected="SegmentedBtn_Right_Selected_Press"
-						 image_overlay="Arrow_Small_Up"
+						 image_selected="ComboButton_Selected"
+						 image_unselected="ComboButton_Off"
 						 width="20"/>
 						<button
 						 height="23"

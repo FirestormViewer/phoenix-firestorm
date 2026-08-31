@@ -12,7 +12,7 @@
 	<layout_stack name="main_ls">
 		<layout_panel name="top_lp">
 			<text name="ambient_color_label">
-				Farbe Umgebung:
+				Farbe Umgeb.:
 			</text>
 			<text name="blue_horizon_label">
 				Blauer Horizont:
@@ -56,11 +56,11 @@
 					<text name="probe_ambiance_label" tool_tip="Strahlungsintensität. Aktiviert HDR-Beleuchtungsmodell, falls nicht 0." width="120">
 						Umgeb. Reflexionst. (HDR):
 					</text>
-					<slider name="probe_ambiance" tool_tip="Intensität von umgebungsbasierter indirekter Beleuchtung. Bei 0 HDR wird die Skala zu Helligkeit." width="187"/>
+					<slider name="probe_ambiance" tool_tip="Intensität von umgebungsbasierter indirekter Beleuchtung. Bei 0 HDR wird die Skala zu Helligkeit." width="197"/>
 					<text name="scene_gamma_label" width="120">
 						Helligkeit:
 					</text>
-					<slider name="scene_gamma" width="187"/>
+					<slider name="scene_gamma" width="197"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
