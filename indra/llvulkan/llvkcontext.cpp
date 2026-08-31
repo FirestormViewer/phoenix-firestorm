@@ -468,6 +468,15 @@ bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t
         return false;
     }
 
+    // Per-swapchain-image present semaphores (see llvkcontext.h).
+    mImagePresentSem.resize(actual_count, VK_NULL_HANDLE);
+    VkSemaphoreCreateInfo sem_ci{};
+    sem_ci.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+    for (uint32_t i = 0; i < actual_count; ++i)
+    {
+        LL_VK_CHECK(vkCreateSemaphore(mDevice, &sem_ci, nullptr, &mImagePresentSem[i]), error, "vkCreateSemaphore (present) failed");
+    }
+
     return true;
 }
 
@@ -491,7 +500,6 @@ bool LLVKContext::createFrameResources()
         fence.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fence.flags = VK_FENCE_CREATE_SIGNALED_BIT;
         if (f.imageAvailable == VK_NULL_HANDLE && vkCreateSemaphore(mDevice, &sem, nullptr, &f.imageAvailable) != VK_SUCCESS) return false;
-        if (f.renderFinished == VK_NULL_HANDLE && vkCreateSemaphore(mDevice, &sem, nullptr, &f.renderFinished) != VK_SUCCESS) return false;
         if (f.inFlight == VK_NULL_HANDLE && vkCreateFence(mDevice, &fence, nullptr, &f.inFlight) != VK_SUCCESS) return false;
     }
     return true;
@@ -582,6 +590,11 @@ bool LLVKContext::renderClearFrame(float r, float g, float b, float a)
     vkEndCommandBuffer(f.cmd);
 
     VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+    // Signal the present semaphore that belongs to the acquired image (not a
+    // per-frame one), so a semaphore is never reused while its swapchain image
+    // is still being presented.
+    VkSemaphore present_sem = mImagePresentSem[image_index];
+
     VkSubmitInfo submit{};
     submit.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submit.waitSemaphoreCount = 1;
@@ -590,7 +603,7 @@ bool LLVKContext::renderClearFrame(float r, float g, float b, float a)
     submit.commandBufferCount = 1;
     submit.pCommandBuffers = &f.cmd;
     submit.signalSemaphoreCount = 1;
-    submit.pSignalSemaphores = &f.renderFinished;
+    submit.pSignalSemaphores = &present_sem;
     if (vkQueueSubmit(mGraphicsQueue, 1, &submit, f.inFlight) != VK_SUCCESS)
     {
         return false;
@@ -599,7 +612,7 @@ bool LLVKContext::renderClearFrame(float r, float g, float b, float a)
     VkPresentInfoKHR present{};
     present.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
     present.waitSemaphoreCount = 1;
-    present.pWaitSemaphores = &f.renderFinished;
+    present.pWaitSemaphores = &present_sem;
     present.swapchainCount = 1;
     present.pSwapchains = &mSwapchain;
     present.pImageIndices = &image_index;
@@ -611,6 +624,7 @@ bool LLVKContext::renderClearFrame(float r, float g, float b, float a)
 
 void LLVKContext::destroySwapchain()
 {
+    destroyImageSync();
     for (VkImageView v : mSwapchainViews)
     {
         if (v != VK_NULL_HANDLE) vkDestroyImageView(mDevice, v, nullptr);
@@ -624,6 +638,15 @@ void LLVKContext::destroySwapchain()
     }
 }
 
+void LLVKContext::destroyImageSync()
+{
+    for (VkSemaphore s : mImagePresentSem)
+    {
+        if (s != VK_NULL_HANDLE) vkDestroySemaphore(mDevice, s, nullptr);
+    }
+    mImagePresentSem.clear();
+}
+
 void LLVKContext::destroy()
 {
     if (mDevice != VK_NULL_HANDLE)
@@ -633,13 +656,20 @@ void LLVKContext::destroy()
 
     destroySwapchain();
 
+    // The surface was adopted by createSwapchain() (mSurface). It must outlive
+    // the swapchain but not the instance, so destroy it here.
+    if (mSurface != VK_NULL_HANDLE)
+    {
+        vkDestroySurfaceKHR(mInstance, mSurface, nullptr);
+        mSurface = VK_NULL_HANDLE;
+    }
+
     for (uint32_t i = 0; i < kFramesInFlight; ++i)
     {
         FrameSync& f = mFrames[i];
         if (mDevice != VK_NULL_HANDLE)
         {
             if (f.imageAvailable != VK_NULL_HANDLE) vkDestroySemaphore(mDevice, f.imageAvailable, nullptr);
-            if (f.renderFinished != VK_NULL_HANDLE) vkDestroySemaphore(mDevice, f.renderFinished, nullptr);
             if (f.inFlight != VK_NULL_HANDLE) vkDestroyFence(mDevice, f.inFlight, nullptr);
         }
         f = FrameSync{};

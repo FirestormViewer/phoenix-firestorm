@@ -48,6 +48,7 @@
 #include "llfloaterimcontainer.h"
 #include "llimprocessing.h"
 #include "llvkprobe.h"
+#include "llvksession.h"
 #include "llwindow.h"
 #include "llviewerstats.h"
 #include "llviewerstatsrecorder.h"
@@ -1221,19 +1222,26 @@ bool LLAppViewer::init()
 
     LLFolderViewItem::initClass(); // SJB: Needs to happen after initWindow(), not sure why but related to fonts
 
-    gGLManager.getGLInfo(gDebugInfo);
-    gGLManager.printGLInfoString();
-
-    // If we don't have the right GL requirements, exit.
-    // ? AG: It seems we never set mHasRequirements to false
-    if (!gGLManager.mHasRequirements)
+    if (!LLWindow::getSkipGLContext())
     {
-        // Already handled with a MBVideoDrvErr
-        LL_WARNS("InitInfo") << "gGLManager.mHasRequirements is false." << LL_ENDL;
-        // quit immediately
-        LL_PROFILER_FRAME_END;
-        return false;
+        gGLManager.getGLInfo(gDebugInfo);
+        gGLManager.printGLInfoString();
+
+        // If we don't have the right GL requirements, exit.
+        // ? AG: It seems we never set mHasRequirements to false
+        if (!gGLManager.mHasRequirements)
+        {
+            // Already handled with a MBVideoDrvErr
+            LL_WARNS("InitInfo") << "gGLManager.mHasRequirements is false." << LL_ENDL;
+            // quit immediately
+            LL_PROFILER_FRAME_END;
+            return false;
+        }
     }
+    // <VulkanStorm> No GL context on the Vulkan boot path: skip the GL info
+    // dump and the GL requirements gate (Vulkan capability was already probed
+    // in initWindow via LLVKProbe).
+    // </VulkanStorm>
 
 #if defined(LL_X86) || defined(LL_X86_64)
     // Without SSE2 support we will crash almost immediately, warn here.
@@ -2445,7 +2453,19 @@ bool LLAppViewer::cleanup()
     // Shut down OpenGL
     if (gViewerWindow)
     {
-        gViewerWindow->shutdownGL();
+#if LL_WINDOWS
+        // <VulkanStorm> Tear down the Vulkan session BEFORE the window is
+        // destroyed: the surface must not outlive the HWND, and the device
+        // must idle before teardown. No-op on the GL path.
+        LLVKSession::stop();
+        // </VulkanStorm>
+#endif
+        if (!LLWindow::getSkipGLContext())
+        {
+            gViewerWindow->shutdownGL();
+        }
+        // <VulkanStorm> else: GL was never initialized on the Vulkan boot
+        // path, so there is nothing to shut down.
 
         // Destroy window, and make sure we're not fullscreen
         // This may generate window reshape and activation events.
@@ -3784,6 +3804,16 @@ bool LLAppViewer::initWindow()
         render_backend = "OpenGL";
     }
     LL_INFOS("AppInit") << "Render backend: " << render_backend << LL_ENDL;
+
+    // With the Vulkan backend, the viewer window must be created WITHOUT a GL
+    // context: a window belongs to exactly one graphics API for its lifetime.
+    // LLWindowWin32 checks this process-wide flag in switchContext() and skips
+    // pixel-format/GL-context creation; LLVKSession then owns the pixels.
+    const bool vulkan_boot = (render_backend == "Vulkan");
+    if (vulkan_boot)
+    {
+        LLWindow::setSkipGLContext(true);
+    }
     // </VulkanStorm>
 
     LLViewerWindow::Params window_params;
@@ -3811,6 +3841,20 @@ bool LLAppViewer::initWindow()
     gViewerWindow = new LLViewerWindow(window_params);
 
     LL_INFOS("AppInit") << "gViewerwindow created." << LL_ENDL;
+
+#if LL_WINDOWS
+    if (vulkan_boot)
+    {
+        // <VulkanStorm> Bind the Vulkan backend to the (GL-free) viewer
+        // window: instance, surface, device, swapchain. On failure the window
+        // simply never presents (stays black) but the process stays alive.
+        if (!LLVKSession::start(gViewerWindow->getWindow(), gSavedSettings.getBOOL("RenderVulkanDebug")))
+        {
+            LL_WARNS("AppInit") << "Vulkan session failed to start; the window will not present frames." << LL_ENDL;
+        }
+        // </VulkanStorm>
+    }
+#endif
 
     // Need to load feature table before cheking to start watchdog.
     bool use_watchdog = false;
@@ -3912,11 +3956,21 @@ bool LLAppViewer::initWindow()
     gSavedSettings.setBOOL("RenderInitError", true);
     gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile"), true );
 
-    gPipeline.init();
-    LL_INFOS("AppInit") << "gPipeline Initialized" << LL_ENDL;
+    if (!vulkan_boot)
+    {
+        gPipeline.init();
+        LL_INFOS("AppInit") << "gPipeline Initialized" << LL_ENDL;
 
-    stop_glerror();
-    gViewerWindow->initGLDefaults();
+        stop_glerror();
+        gViewerWindow->initGLDefaults();
+    }
+    else
+    {
+        // <VulkanStorm> The GL pipeline is not initialized on the Vulkan boot
+        // path; the frame loop (llviewerdisplay) routes to LLVKSession instead.
+        LL_INFOS("AppInit") << "Skipping GL pipeline init (Vulkan backend)." << LL_ENDL;
+        // </VulkanStorm>
+    }
 
     gSavedSettings.setBOOL("RenderInitError", false);
     gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile"), true );

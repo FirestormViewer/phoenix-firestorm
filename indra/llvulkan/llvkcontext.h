@@ -69,12 +69,12 @@ private:
     {
         VkCommandBuffer cmd = VK_NULL_HANDLE;
         VkSemaphore imageAvailable = VK_NULL_HANDLE;
-        VkSemaphore renderFinished = VK_NULL_HANDLE;
         VkFence inFlight = VK_NULL_HANDLE;
     };
 
     void destroySwapchain();
     bool createFrameResources();
+    void destroyImageSync();
 
     VkInstance       mInstance = VK_NULL_HANDLE;
     VkPhysicalDevice mPhysicalDevice = VK_NULL_HANDLE;
@@ -98,6 +98,13 @@ private:
     static constexpr uint32_t kFramesInFlight = 2;
     FrameSync mFrames[kFramesInFlight];
     uint32_t  mFrameIndex = 0;
+
+    // Per-swapchain-image "present complete" semaphores. Signaled by the
+    // graphics submit and waited on by present for the SAME acquired image, so
+    // a semaphore is never reused while its swapchain image is still in flight
+    // (fixes the swapchain-semaphore-reuse validation warning). Sized to the
+    // swapchain image count; created/destroyed with the swapchain.
+    std::vector<VkSemaphore> mImagePresentSem;
 
     bool        mValidation = false;
     std::string mDeviceName;
