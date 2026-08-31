@@ -963,21 +963,18 @@ class Windows_x86_64_Manifest(ViewerManifest):
         
 
     def package_finish(self):
-        # <VulkanStorm> Inno Setup 7 packaging (opt-in via --inno / inno arg).
-        # Precedence: Inno > Velopack > NSIS (legacy default).
-        if self.args.get('inno', 'OFF') == 'ON':
-            self.inno_package_finish()
-            return
-        # </VulkanStorm>
-        # Check if we should use Velopack instead of NSIS
-        # Note: as of 2026.01's release, we will be building with Velopack's one click install.
-        # We maintain the legacy NSIS packaging mainly for TPVs at this point.
+        # <VulkanStorm> Inno Setup 7 is the default installer. Precedence:
+        # Velopack > NSIS (--nsis) > Inno (default). NSIS is the legacy opt-in.
         if self.args.get('velopack', 'OFF') == 'ON':
             self.velopack_package_finish()
             return
+        if self.args.get('nsis', 'OFF') == 'ON':
+            self.nsis_package_finish()
+            return
 
-        # NSIS packaging (legacy)
-        self.nsis_package_finish()
+        # Inno Setup 7 (default)
+        self.inno_package_finish()
+        # </VulkanStorm>
 
     def inno_package_finish(self):
         """Package the viewer using Inno Setup 7 (replaces legacy NSIS).
@@ -2620,6 +2617,7 @@ if __name__ == "__main__":
         dict(name='tracy', description="""Indication tracy profiler is enabled""", default='OFF'),
         dict(name='velopack', description="""Use Velopack installer instead of NSIS""", default='OFF'),
         dict(name='inno', description="""Use Inno Setup 7 installer instead of NSIS""", default='OFF'),
+        dict(name='nsis', description="""Use the legacy NSIS installer instead of Inno Setup""", default='OFF'),
         dict(name='avx2', description="""Indication avx2 instruction set is enabled""", default='OFF'),
         ]
     try:
