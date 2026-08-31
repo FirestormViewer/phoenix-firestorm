@@ -320,11 +320,13 @@ class ViewerManifest(LLManifest,FSViewerManifest):
     def installer_base_name(self):
         global CHANNEL_VENDOR_BASE
         # a standard map of strings for replacing in the templates
-        #<FS:TS> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
-        channel_base = "Phoenix-" + CHANNEL_VENDOR_BASE
+        # <VulkanStorm> The NSIS installer name uses the vendor base (no
+        # "Phoenix-" prefix) for consistency with the Inno installer name.
+        # The "OS" tag follows the vendor base for OpenSim builds.
+        channel_base = CHANNEL_VENDOR_BASE
         if self.fs_is_opensim():
             channel_base = channel_base + "OS"
-        #</FS:TS>
+        #</VulkanStorm>
         substitution_strings = {
             'channel_vendor_base' : '_'.join(channel_base.split()),
             'channel_variant_underscores':self.channel_variant_app_suffix(),
