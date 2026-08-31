@@ -47,6 +47,7 @@
 #include "lldirpicker.h"
 #include "llfloaterimcontainer.h"
 #include "llimprocessing.h"
+#include "llvkprobe.h"
 #include "llwindow.h"
 #include "llviewerstats.h"
 #include "llviewerstatsrecorder.h"
@@ -3755,13 +3756,27 @@ bool LLAppViewer::initWindow()
     // <VulkanStorm> The render backend (OpenGL/Vulkan) is selected in
     // Preferences > Graphics > Hardware Settings and is fixed for the
     // lifetime of the process; switching it requires a viewer restart.
-    // Until the Vulkan pipeline is available, any Vulkan selection falls
-    // back to OpenGL for this session.
+    // The selector is only offered when a Vulkan ICD is present. At startup we
+    // re-probe: if Vulkan was selected but no device is now available (e.g. the
+    // machine or driver changed since the setting was written), we run OpenGL
+    // for THIS session only and leave the persisted setting untouched.
     std::string render_backend = gSavedSettings.getString("RenderBackend");
     if (render_backend == "Vulkan")
     {
-        LL_WARNS("AppInit") << "RenderBackend=Vulkan requested, but the Vulkan render pipeline is not yet available in this build; falling back to OpenGL for this session." << LL_ENDL;
+#if LL_WINDOWS
+        if (!LLVKProbe::hasVulkanDevice())
+        {
+            LL_WARNS("AppInit") << "RenderBackend=Vulkan but no Vulkan device is available; using OpenGL for this session (setting unchanged)." << LL_ENDL;
+            render_backend = "OpenGL";
+        }
+        else
+        {
+            LL_INFOS("AppInit") << "Vulkan device available: " << LLVKProbe::firstDeviceName() << LL_ENDL;
+        }
+#else
+        LL_WARNS("AppInit") << "RenderBackend=Vulkan is not supported on this platform; using OpenGL for this session." << LL_ENDL;
         render_backend = "OpenGL";
+#endif
     }
     else if (render_backend != "OpenGL")
     {

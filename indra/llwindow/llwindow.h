@@ -87,7 +87,15 @@ public:
     //destroy the given context that was retrieved by createSharedContext()
     //Must be called on the same thread that called createSharedContext()
     virtual void destroySharedContext(void* context) = 0;
-
+    // <VulkanStorm> Vulkan surface support. The base class stays free of Vulkan
+    // headers/link deps: it only exposes the native window handles a backend
+    // needs to build a surface. The typed vkCreateWin32SurfaceKHR call lives in
+    // the llvulkan backend (which owns volk's loaded function table). On Win32,
+    // getNativeHandle returns the HWND and getNativeInstance the HINSTANCE
+    // (both nullptr where unsupported).
+    virtual void* getNativeHandle() const { return nullptr; }
+    virtual void* getNativeInstance() const { return nullptr; }
+    // </VulkanStorm>
     virtual void toggleVSync(bool enable_vsync) = 0;
 
     virtual bool setCursorPosition(LLCoordWindow position) = 0;

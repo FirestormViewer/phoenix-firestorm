@@ -28,6 +28,8 @@
 
 #include "llviewerdisplay.h"
 
+#include "llvkprobe.h"
+#include "llvkselftest.h"
 #include "fsyspath.h"
 #include "hexdump.h"
 #include "llagent.h"
@@ -210,6 +212,30 @@ void display_startup()
     LLVertexBuffer::unbind();
 
     LLGLState::checkStates();
+
+#if LL_WINDOWS
+    // <VulkanStorm> Phase-1 bring-up: isolated Vulkan self-test. Runs on the
+    // login/startup frame path (which swaps here, not via swap()). When the
+    // RenderVulkanSelfTest debug setting is on and a Vulkan device is present,
+    // drive the Vulkan surface/context/swapchain and clear a test frame for a
+    // few seconds, then return to the normal GL path. Diagnostic only.
+    static LLCachedControl<bool> sVulkanSelfTest(gSavedSettings, "RenderVulkanSelfTest", false);
+    static LLCachedControl<bool> sVulkanDebug(gSavedSettings, "RenderVulkanDebug", false);
+    static bool sSelfTestStarted = false;
+    if (sVulkanSelfTest && !LLVKSelfTest::finished())
+    {
+        if (!sSelfTestStarted)
+        {
+            sSelfTestStarted = true;
+            if (LLVKProbe::hasVulkanDevice())
+            {
+                LLVKSelfTest::begin(sVulkanDebug);
+            }
+        }
+        LLVKSelfTest::renderFrame();
+    }
+    // </VulkanStorm>
+#endif
 
     if (gViewerWindow && gViewerWindow->getWindow())
     gViewerWindow->getWindow()->swapBuffers();

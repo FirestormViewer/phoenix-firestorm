@@ -2887,6 +2887,40 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>name</key>
         <string>vlc-bin</string>
       </map>
+      <key>vulkan_sdk</key>
+      <map>
+        <key>platforms</key>
+        <map>
+          <key>common</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>3e218901df98257f93ca9ddb22c05ac0f396cbf7</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://github.com/anne-skydancer/3p-vulkan-sdk/releases/download/v1.4.350/vulkan_sdk-1.4.350-common-73f1373.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>common</string>
+          </map>
+        </map>
+        <key>license</key>
+        <string>Apache-2.0/MIT</string>
+        <key>license_file</key>
+        <string>LICENSES/Vulkan-Headers-Apache-2.0.txt</string>
+        <key>copyright</key>
+        <string>Vulkan-Headers (c) Khronos Group; volk (c) Arseny Kapoulkine; VMA (c) AMD</string>
+        <key>version</key>
+        <string>1.4.350</string>
+        <key>name</key>
+        <string>vulkan_sdk</string>
+        <key>canonical_repo</key>
+        <string>https://github.com/anne-skydancer/3p-vulkan-sdk</string>
+        <key>description</key>
+        <string>Vulkan SDK headers + volk meta-loader + Vulkan Memory Allocator (headers/source only)</string>
+      </map>
       <key>vulkan_gltf</key>
       <map>
         <key>platforms</key>
