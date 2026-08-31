@@ -50,11 +50,11 @@ namespace LLVKSelfTest
             return false;
         }
 
-        // Create the Win32 surface for the window.
-        VkSurfaceKHR surface = VK_NULL_HANDLE;
-        if (!window->createVulkanSurface((void*)ctx->instance(), (void*)&surface) || surface == VK_NULL_HANDLE)
+        // Create the platform surface from the window's native handles.
+        VkSurfaceKHR surface = ctx->createSurface(window->getNativeHandle(), window->getNativeInstance());
+        if (surface == VK_NULL_HANDLE)
         {
-            LL_WARNS("Vulkan") << "SelfTest: createVulkanSurface failed" << LL_ENDL;
+            LL_WARNS("Vulkan") << "SelfTest: surface creation failed" << LL_ENDL;
             delete ctx;
             g_failed = true;
             return false;

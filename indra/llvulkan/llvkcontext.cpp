@@ -233,6 +233,31 @@ bool LLVKContext::createDevice(VkSurfaceKHR surface, std::string& error)
     return true;
 }
 
+VkSurfaceKHR LLVKContext::createSurface(void* native_window, void* native_instance)
+{
+#if defined(VK_USE_PLATFORM_WIN32_KHR)
+    if (!native_window || mInstance == VK_NULL_HANDLE)
+    {
+        return VK_NULL_HANDLE;
+    }
+    VkWin32SurfaceCreateInfoKHR create_info{};
+    create_info.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+    create_info.hinstance = (HINSTANCE)native_instance;
+    create_info.hwnd = (HWND)native_window;
+    VkSurfaceKHR surface = VK_NULL_HANDLE;
+    if (vkCreateWin32SurfaceKHR(mInstance, &create_info, nullptr, &surface) != VK_SUCCESS)
+    {
+        LL_WARNS("Vulkan") << "vkCreateWin32SurfaceKHR failed" << LL_ENDL;
+        return VK_NULL_HANDLE;
+    }
+    LL_INFOS("Vulkan") << "Created Win32 Vulkan surface" << LL_ENDL;
+    return surface;
+#else
+    (void)native_window; (void)native_instance;
+    return VK_NULL_HANDLE;
+#endif
+}
+
 bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t height, std::string& error)
 {
     mSurface = surface;

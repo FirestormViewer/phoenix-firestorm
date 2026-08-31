@@ -43,6 +43,12 @@ public:
     bool createDevice(VkSurfaceKHR surface, std::string& error);
 
     // Attach the platform surface and (re)create the swapchain for the given
+    // Create the platform VkSurfaceKHR from the window's native handles
+    // (Win32: HWND + HINSTANCE). Typed here (llvulkan owns the volk table).
+    // Returns VK_NULL_HANDLE on failure.
+    VkSurfaceKHR createSurface(void* native_window, void* native_instance);
+
+    // Attach the platform surface and (re)create the swapchain for the given
     // extent. Call on window resize with the new extent.
     bool createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t height, std::string& error);
 

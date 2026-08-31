@@ -44,7 +44,11 @@ target_include_directories(llvulkan PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 set_property(TARGET llvulkan PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # volk requires VK_NO_PROTOTYPES so it owns all Vulkan function pointers.
+# VK_USE_PLATFORM_WIN32_KHR enables the Win32 surface extension declarations.
 target_compile_definitions(llvulkan PUBLIC VK_NO_PROTOTYPES)
+if (WINDOWS)
+    target_compile_definitions(llvulkan PUBLIC VK_USE_PLATFORM_WIN32_KHR)
+endif ()
 
 # VMA configuration, shared by every TU that includes vk_mem_alloc.h: dynamic
 # Vulkan functions come from volk's loaded table (set at allocator creation).
