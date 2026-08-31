@@ -10,6 +10,7 @@
 #include "llvkcontext.h"
 
 #include "llerror.h"
+#include "llformat.h"
 
 #include <cstring>
 #include <set>

@@ -16,7 +16,11 @@ use_prebuilt_binary(vulkan_sdk)
 #   include/volk/volk.h               -> volk/volk.h
 #   include/vma/vk_mem_alloc.h        -> vma/vk_mem_alloc.h
 add_library(ll::vulkan_sdk INTERFACE IMPORTED)
-target_include_directories(ll::vulkan_sdk SYSTEM INTERFACE ${LIBS_PREBUILT_DIR}/include)
+target_include_directories(ll::vulkan_sdk SYSTEM INTERFACE
+    ${LIBS_PREBUILT_DIR}/include
+    ${LIBS_PREBUILT_DIR}/include/volk   # volk.c does #include "volk.h"
+    ${LIBS_PREBUILT_DIR}/include/vma    # VMA: vk_mem_alloc.h
+    )
 
 # Absolute path to the volk source file, for the llvulkan library to compile.
 set(VULKAN_SDK_VOLK_SOURCE ${LIBS_PREBUILT_DIR}/source/volk/volk.c)

@@ -66,6 +66,9 @@ public:
     void* createSharedContext() override;
     void makeContextCurrent(void* context) override;
     void destroySharedContext(void* context) override;
+    // <VulkanStorm> Win32 Vulkan surface creation (vkCreateWin32SurfaceKHR).
+    bool createVulkanSurface(void* vk_instance, void* out_surface) override;
+    // </VulkanStorm>
     void toggleVSync(bool enable_vsync) override;
     bool setCursorPosition(LLCoordWindow position) override;
     bool getCursorPosition(LLCoordWindow *position) override;

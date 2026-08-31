@@ -87,7 +87,14 @@ public:
     //destroy the given context that was retrieved by createSharedContext()
     //Must be called on the same thread that called createSharedContext()
     virtual void destroySharedContext(void* context) = 0;
-
+    // <VulkanStorm> Create a platform Vulkan surface (VkSurfaceKHR) for this
+    // window. Opaque to keep Vulkan headers out of the GL-facing base class:
+    // `vk_instance` is a VkInstance and the result (a VkSurfaceKHR) is written
+    // to *out_surface; both are typed opaquely here and interpreted by the
+    // llvulkan backend. Returns true on success. Base implementation reports
+    // "unsupported"; the Win32 backend overrides it.
+    virtual bool createVulkanSurface(void* vk_instance, void* out_surface) { (void)vk_instance; (void)out_surface; return false; }
+    // </VulkanStorm>
     virtual void toggleVSync(bool enable_vsync) = 0;
 
     virtual bool setCursorPosition(LLCoordWindow position) = 0;
