@@ -520,10 +520,10 @@ void LLManip::renderXYZ(const LLVector3 &vec)
         gViewerWindow->setup2DRender();
         const LLVector2& display_scale = gViewerWindow->getDisplayScale();
         // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
-        LLColor4 backgroudColor = getUserEditColor(VW, 0.7f);
+        LLColor4 backgroudColor = getUserEditColor(VALPHA, 0.7f);
 
         //gGL.color4f(0.f, 0.f, 0.f, 0.7f);
-        gGL.color4f(backgroudColor.mV[VX], backgroudColor.mV[VY], backgroudColor.mV[VZ], backgroudColor.mV[VW]);
+        gGL.color4f(backgroudColor.mV[VX], backgroudColor.mV[VY], backgroudColor.mV[VZ], backgroudColor.mV[VALPHA]);
 
         //imagep->draw(
         //    (S32)((window_center_x - 115) * display_scale.mV[VX]),
@@ -793,7 +793,7 @@ LLColor4 LLManip::getUserEditColor(U32 axis, F32 alpha)
         case VZ:
             color.setVec(sZAxisColor);
             break;
-        case VW:
+        case VALPHA:
             color.setVec(sTextRectBackgroundColor);
             break;
 
@@ -801,7 +801,7 @@ LLColor4 LLManip::getUserEditColor(U32 axis, F32 alpha)
             break;
     }
 
-    color.mV[VW] *= alpha;
+    color.mV[VALPHA] *= alpha;
 
     return color;
 }

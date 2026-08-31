@@ -789,19 +789,19 @@ void FSManipRotateJoint::renderAxes(const LLVector3& agent_space_center, F32 siz
 
     // X-axis (Red)
     LLColor4 color(getUserEditColor(VX));
-    gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VW]);
+    gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VALPHA]);
     gGL.vertex3f(-size, 0.0f, 0.0f);
     gGL.vertex3f(size, 0.0f, 0.0f);
 
     // Y-axis (Green)
     color.setVec(getUserEditColor(VY));
-    gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VW]);
+    gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VALPHA]);
     gGL.vertex3f(0.0f, -size, 0.0f);
     gGL.vertex3f(0.0f, size, 0.0f);
 
     // Z-axis (Blue)
     color.setVec(getUserEditColor(VZ));
-    gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VW]);
+    gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VALPHA]);
     gGL.vertex3f(0.0f, 0.0f, -size);
     gGL.vertex3f(0.0f, 0.0f, size);
 
@@ -897,8 +897,8 @@ void FSManipRotateJoint::renderNameXYZ(const LLQuaternion& rot)
         gViewerWindow->setup2DRender();
         const LLVector2& display_scale = gViewerWindow->getDisplayScale();
 
-        LLColor4 backgroudColor = getUserEditColor(VW, 0.7f);
-        gGL.color4f(backgroudColor.mV[VX], backgroudColor.mV[VY], backgroudColor.mV[VZ], backgroudColor.mV[VW]);
+        LLColor4 backgroudColor = getUserEditColor(VALPHA, 0.7f);
+        gGL.color4f(backgroudColor.mV[VX], backgroudColor.mV[VY], backgroudColor.mV[VZ], backgroudColor.mV[VALPHA]);
 
         imagep->draw(
             (S32)((window_center_x - 150) * display_scale.mV[VX]),
