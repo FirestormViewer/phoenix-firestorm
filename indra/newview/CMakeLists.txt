@@ -47,6 +47,7 @@ include(Tracy)
 include(UI)
 include(Velopack)
 include(InnoSetup)
+include(NSIS)
 include(ViewerMiscLibs)
 #include(ViewerManager) # <FS:Ansariel> Remove VMP
 include(VisualLeakDetector)
@@ -939,7 +940,7 @@ else (OPENSIM)
         )
 endif (OPENSIM)
 
-set(VIEWER_BINARY_NAME "firestorm-bin" CACHE STRING
+set(VIEWER_BINARY_NAME "vulkanstorm-bin" CACHE STRING
     "The name of the viewer executable to create.")
 
 set(viewer_HEADER_FILES
@@ -2517,6 +2518,7 @@ if (WINDOWS)
               "--tracy=${USE_TRACY}"
               "--velopack=${USE_VELOPACK}"
               "--inno=${USE_INNOSETUP}"
+              "--nsis=${USE_NSIS}"
               "--avx2=${USE_AVX2_OPTIMIZATION}"
               --build=${CMAKE_CURRENT_BINARY_DIR}
               --buildtype=$<CONFIG>

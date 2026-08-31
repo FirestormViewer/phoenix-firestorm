@@ -320,11 +320,13 @@ class ViewerManifest(LLManifest,FSViewerManifest):
     def installer_base_name(self):
         global CHANNEL_VENDOR_BASE
         # a standard map of strings for replacing in the templates
-        #<FS:TS> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
-        channel_base = "Phoenix-" + CHANNEL_VENDOR_BASE
+        # <VulkanStorm> The NSIS installer name uses the vendor base (no
+        # "Phoenix-" prefix) for consistency with the Inno installer name.
+        # The "OS" tag follows the vendor base for OpenSim builds.
+        channel_base = CHANNEL_VENDOR_BASE
         if self.fs_is_opensim():
             channel_base = channel_base + "OS"
-        #</FS:TS>
+        #</VulkanStorm>
         substitution_strings = {
             'channel_vendor_base' : '_'.join(channel_base.split()),
             'channel_variant_underscores':self.channel_variant_app_suffix(),
@@ -625,8 +627,8 @@ class Windows_x86_64_Manifest(ViewerManifest):
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
         if self.is_packaging_viewer():
-            # Find firestorm-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
-            self.path(src='%s/firestorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
+            # Find vulkanstorm-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
+            self.path(src='%s/vulkanstorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
 
             # <FS:Ansariel> Undo Github-Build stuff - I don't think we need this
             # GITHUB_OUTPUT = os.getenv('GITHUB_OUTPUT')
@@ -963,21 +965,18 @@ class Windows_x86_64_Manifest(ViewerManifest):
         
 
     def package_finish(self):
-        # <VulkanStorm> Inno Setup 7 packaging (opt-in via --inno / inno arg).
-        # Precedence: Inno > Velopack > NSIS (legacy default).
-        if self.args.get('inno', 'OFF') == 'ON':
-            self.inno_package_finish()
-            return
-        # </VulkanStorm>
-        # Check if we should use Velopack instead of NSIS
-        # Note: as of 2026.01's release, we will be building with Velopack's one click install.
-        # We maintain the legacy NSIS packaging mainly for TPVs at this point.
+        # <VulkanStorm> Inno Setup 7 is the default installer. Precedence:
+        # Velopack > NSIS (--nsis) > Inno (default). NSIS is the legacy opt-in.
         if self.args.get('velopack', 'OFF') == 'ON':
             self.velopack_package_finish()
             return
+        if self.args.get('nsis', 'OFF') == 'ON':
+            self.nsis_package_finish()
+            return
 
-        # NSIS packaging (legacy)
-        self.nsis_package_finish()
+        # Inno Setup 7 (default)
+        self.inno_package_finish()
+        # </VulkanStorm>
 
     def inno_package_finish(self):
         """Package the viewer using Inno Setup 7 (replaces legacy NSIS).
@@ -1024,7 +1023,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
         for token, value in replacements.items():
             script = script.replace(token, str(value))
 
-        iss_file = "firestorm_setup.iss"
+        iss_file = "vulkanstorm_setup.iss"
         iss_path = self.dst_path_of(iss_file)
         with open(iss_path, 'w') as f:
             f.write(script)
@@ -1047,8 +1046,9 @@ class Windows_x86_64_Manifest(ViewerManifest):
 
         # Remove any stale installer so the recursion guard and the result check
         # below operate on a clean state. Match both "_Setup.exe" and bare-name
-        # installer outputs (e.g. from earlier/manual runs).
-        for stale in glob.glob(self.dst_path_of('Phoenix-*.exe')) + \
+        # installer outputs (e.g. from earlier/manual runs). The installer base
+        # is the app name (e.g. "Vulkanstorm-..."), so glob on that prefix.
+        for stale in glob.glob(self.dst_path_of('Vulkanstorm*.exe')) + \
                      glob.glob(self.dst_path_of(installer_base + '*.exe')):
             try:
                 os.remove(stale)
@@ -1092,7 +1092,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
         #installer_base = self.installer_base_name()
         #exclude_pattern = r'.*\.pdb|.*\.map|.*\.bat|.*\.exp|.*\.lib|.*\.nsi|.*\.tar\.xz|secondlife-bin\..*|.*_Setup\.exe|.*-Setup\.exe'
         installer_base = self.fs_installer_basename()
-        exclude_pattern = r'.*\.pdb|.*\.map|.*\.bat|.*\.exp|.*\.lib|.*\.nsi|.*\.tar\.xz|firestorm-bin\..*|.*_Setup\.exe|.*-Setup\.exe'
+        exclude_pattern = r'.*\.pdb|.*\.map|.*\.bat|.*\.exp|.*\.lib|.*\.nsi|.*\.tar\.xz|vulkanstorm-bin\..*|.*_Setup\.exe|.*-Setup\.exe'
         # </FS:TJ>
 
         # Channel-specific icon for the Velopack installer.
@@ -2619,6 +2619,7 @@ if __name__ == "__main__":
         dict(name='tracy', description="""Indication tracy profiler is enabled""", default='OFF'),
         dict(name='velopack', description="""Use Velopack installer instead of NSIS""", default='OFF'),
         dict(name='inno', description="""Use Inno Setup 7 installer instead of NSIS""", default='OFF'),
+        dict(name='nsis', description="""Use the legacy NSIS installer instead of Inno Setup""", default='OFF'),
         dict(name='avx2', description="""Indication avx2 instruction set is enabled""", default='OFF'),
         ]
     try:

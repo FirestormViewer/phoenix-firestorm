@@ -32,7 +32,9 @@ WANTS_CLEAN=$FALSE
 WANTS_CONFIG=$FALSE
 WANTS_PACKAGE=$FALSE
 WANTS_VELOPACK=$FALSE
-WANTS_INNO=$FALSE
+# <VulkanStorm> Inno Setup is the default installer; use --nsis to opt out to legacy NSIS.
+WANTS_INNO=$TRUE
+WANTS_NSIS=$FALSE
 WANTS_VERSION=$FALSE
 WANTS_KDU=$FALSE
 WANTS_FMODSTUDIO=$FALSE
@@ -81,7 +83,8 @@ showUsage()
     echo "  --kdu                    : Build with KDU"
     echo "  --package                : Build installer"
     echo "  --velopack               : Build with velopack (Overrides --package)"
-    echo "  --inno                   : Build installer with Inno Setup 7 (Overrides --package/NSIS)"
+    echo "  --inno                   : Build installer with Inno Setup 7 (default; Overrides --package)"
+    echo "  --nsis                   : Build installer with the legacy NSIS packager instead of Inno"
     echo "  --no-package             : Build without installer (Overrides --package)"
     echo "  --fmodstudio             : Build with FMOD Studio"
     echo "  --openal                 : Build with OpenAL"
@@ -110,7 +113,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package velopack inno no-package fmodstudio openal ninja vscode compiler-cache jobs: platform: kdu opensim no-opensim singlegrid: havok avx avx2 tracy lto crashreporting testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package velopack inno nsis no-package fmodstudio openal ninja vscode compiler-cache jobs: platform: kdu opensim no-opensim singlegrid: havok avx avx2 tracy lto crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -151,7 +154,11 @@ getArgs()
           velopack)       WANTS_PACKAGE=$TRUE
                           WANTS_VELOPACK=$TRUE;;
           inno)           WANTS_PACKAGE=$TRUE
-                          WANTS_INNO=$TRUE;;
+                          WANTS_INNO=$TRUE
+                          WANTS_NSIS=$FALSE;;
+          nsis)           WANTS_PACKAGE=$TRUE
+                          WANTS_INNO=$FALSE
+                          WANTS_NSIS=$TRUE;;
           no-package)     WANTS_PACKAGE=$FALSE;;
           build)          WANTS_BUILD=$TRUE;;
           platform)       TARGET_PLATFORM="$OPTARG";;
@@ -552,15 +559,19 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         else
             VELOPACK="-DUSE_VELOPACK:BOOL=OFF"
         fi
-        if [ $WANTS_INNO -eq $TRUE ] ; then
-            INNO="-DUSE_INNOSETUP:BOOL=ON"
-        else
+        # Inno is the default installer unless --nsis was given.
+        if [ $WANTS_NSIS -eq $TRUE ] ; then
             INNO="-DUSE_INNOSETUP:BOOL=OFF"
+            NSIS="-DUSE_NSIS:BOOL=ON"
+        else
+            INNO="-DUSE_INNOSETUP:BOOL=ON"
+            NSIS="-DUSE_NSIS:BOOL=OFF"
         fi
     else
         PACKAGE="-DPACKAGE:BOOL=OFF"
         VELOPACK="-DUSE_VELOPACK:BOOL=OFF"
         INNO="-DUSE_INNOSETUP:BOOL=OFF"
+        NSIS="-DUSE_NSIS:BOOL=OFF"
     fi
     if [ $WANTS_CRASHREPORTING -eq $TRUE ] ; then
         if [ $TARGET_PLATFORM == "windows" ] ; then
@@ -636,7 +647,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         fi
     fi
 
-    cmake -G "$TARGET" $CMAKE_ARCH ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $LTO $TESTBUILD $PACKAGE $VELOPACK $INNO \
+    cmake -G "$TARGET" $CMAKE_ARCH ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $LTO $TESTBUILD $PACKAGE $VELOPACK $INNO $NSIS \
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee "$LOG"
     configure_status=${PIPESTATUS[0]}
