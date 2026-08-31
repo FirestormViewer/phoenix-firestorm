@@ -626,13 +626,16 @@ class Windows_x86_64_Manifest(ViewerManifest):
         relpkgdir = os.path.join(pkgdir, "lib", "release")
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
-        # <VulkanStorm> Always stage the viewer binary into the dest dir, for both
-        # the 'copy' and 'package' actions. Previously this ran only when
-        # is_packaging_viewer() (the 'package' action), so a 'copy'-only run left
-        # the build tree without a runnable exe. path() copies (shutil.copy2); the
-        # original vulkanstorm-bin.exe stays in place, and the named final exe
+        # <VulkanStorm> Stage the viewer binary into the dest dir. The 'copy'
+        # step (copy_w_viewer_manifest) runs before the binary is linked, so stage
+        # only when the exe actually exists; the 'package' step (llpackage) runs
+        # after the link and always includes it. path() copies (shutil.copy2); the
+        # original vulkanstorm-bin.exe stays in place and the named final exe
         # (e.g. Vulkanstorm-Release.exe) is dropped beside it.
-        self.path(src='%s/vulkanstorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
+        bin_src = '%s/vulkanstorm-bin.exe' % self.args['configuration']
+        if os.path.exists(os.path.join(self.get_build_prefix(), bin_src)) or \
+           os.path.exists(os.path.join(self.get_src_prefix(), bin_src)):
+            self.path(src=bin_src, dst=self.final_exe())
         # </VulkanStorm>
 
         if self.is_packaging_viewer():
