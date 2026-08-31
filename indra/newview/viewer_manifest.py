@@ -626,10 +626,16 @@ class Windows_x86_64_Manifest(ViewerManifest):
         relpkgdir = os.path.join(pkgdir, "lib", "release")
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
-        if self.is_packaging_viewer():
-            # Find vulkanstorm-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
-            self.path(src='%s/vulkanstorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
+        # <VulkanStorm> Always stage the viewer binary into the dest dir, for both
+        # the 'copy' and 'package' actions. Previously this ran only when
+        # is_packaging_viewer() (the 'package' action), so a 'copy'-only run left
+        # the build tree without a runnable exe. path() copies (shutil.copy2); the
+        # original vulkanstorm-bin.exe stays in place, and the named final exe
+        # (e.g. Vulkanstorm-Release.exe) is dropped beside it.
+        self.path(src='%s/vulkanstorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
+        # </VulkanStorm>
 
+        if self.is_packaging_viewer():
             # <FS:Ansariel> Undo Github-Build stuff - I don't think we need this
             # GITHUB_OUTPUT = os.getenv('GITHUB_OUTPUT')
             # if GITHUB_OUTPUT:
@@ -659,6 +665,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
                                                 # '*.bat',
                                                 # '*.tar.xz')))
             # </FS:Ansariel>
+            pass
 
         # Plugin host application
         self.path2basename(os.path.join(os.pardir,
