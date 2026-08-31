@@ -2621,6 +2621,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         llplugin
         llprimitive
         llrender
+        llvulkan
         llui
         llfilesystem
         llwindow

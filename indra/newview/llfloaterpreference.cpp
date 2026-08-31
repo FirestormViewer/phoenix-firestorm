@@ -105,6 +105,7 @@
 #include "llui.h"
 #include "llviewerobjectlist.h"
 #include "llvovolume.h"
+#include "llvkprobe.h"
 #include "llwindow.h"
 #include "llworld.h"
 #include "lluictrlfactory.h"
@@ -3970,24 +3971,14 @@ private:
 static LLPanelInjector<LLPanelPreferenceGraphics> t_pref_graph("panel_preference_graphics");
 static LLPanelInjector<LLPanelPreferencePrivacy> t_pref_privacy("panel_preference_privacy");
 
-// <VulkanStorm> Minimal Vulkan availability probe. Checks that the Vulkan loader
-// is present and exposes its entry points, without requiring Vulkan SDK headers.
-// Device enumeration arrives with the llvulkan backend library; until then this
-// gates whether the Vulkan item is offered in the renderer selector.
+// <VulkanStorm> Vulkan availability probe. Delegates to the llvulkan backend's
+// real vkEnumeratePhysicalDevices probe (LLVKProbe), which loads vulkan-1.dll
+// via volk and reports whether a usable device is present. This gates whether
+// the Vulkan item is offered in the renderer selector.
 static bool probe_vulkan_available()
 {
 #if LL_WINDOWS
-    HMODULE vulkan_loader = LoadLibraryA("vulkan-1.dll");
-    if (!vulkan_loader)
-    {
-        return false;
-    }
-    // vkEnumerateInstanceVersion requires a Vulkan 1.1+ loader; vkCreateInstance
-    // covers 1.0 loaders. Either one proves a working loader is installed.
-    bool available = (GetProcAddress(vulkan_loader, "vkEnumerateInstanceVersion") != nullptr) ||
-                     (GetProcAddress(vulkan_loader, "vkCreateInstance") != nullptr);
-    FreeLibrary(vulkan_loader);
-    return available;
+    return LLVKProbe::hasVulkanDevice();
 #else
     // SDL2/macOS window backends do not create Vulkan surfaces yet.
     return false;
@@ -4045,11 +4036,17 @@ bool LLPanelPreferenceGraphics::postBuild()
     {
         refreshRenderBackendSelector();
         backend_combo->setCommitCallback(boost::bind(&LLPanelPreferenceGraphics::onRenderBackendCommit, this));
+        // <VulkanStorm> Only offer the renderer selector when a Vulkan ICD is
+        // actually present. Without one, Vulkan can never run, so hide the whole
+        // selector (label + combo) and stay on OpenGL.
         if (!probe_vulkan_available())
         {
-            backend_combo->remove("Vulkan");
-            backend_combo->setToolTip(std::string("Selects the render backend used to draw the viewer. ") +
-                LLTrans::getString("VulkanNotAvailableTooltip"));
+            backend_combo->setVisible(false);
+            LLTextBase* label = getChild<LLTextBase>("render_backend_label");
+            if (label)
+            {
+                label->setVisible(false);
+            }
         }
     }
     // </VulkanStorm>
