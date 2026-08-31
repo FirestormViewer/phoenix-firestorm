@@ -36,8 +36,11 @@ public:
 
     static const U32 SKY_VERTEX_DATA_MASK = LLVertexBuffer::MAP_VERTEX |
                             LLVertexBuffer::MAP_TEXCOORD0;
+    // <AP:WW> Add MAP_WEIGHT to carry the per-star intensity (F32) to the shader.
     static const U32 STAR_VERTEX_DATA_MASK =    LLVertexBuffer::MAP_VERTEX |
-        LLVertexBuffer::MAP_COLOR | LLVertexBuffer::MAP_TEXCOORD0;
+        LLVertexBuffer::MAP_COLOR | LLVertexBuffer::MAP_TEXCOORD0 |
+        LLVertexBuffer::MAP_WEIGHT;
+    // </AP:WW>
     static const U32 ADV_ATMO_SKY_VERTEX_DATA_MASK = LLVertexBuffer::MAP_VERTEX
                                                    | LLVertexBuffer::MAP_TEXCOORD0;
     LLDrawPoolWLSky(void);

@@ -46,6 +46,9 @@ public:
     /*virtual*/ LLDrawable * createDrawable(LLPipeline *pipeline);
     /*virtual*/ bool         updateGeometry(LLDrawable *drawable);
 
+    // <AP:WW> Procedural starfield: black-body color for a star temperature (Kelvin)
+    LLColor4 blackBodyColor(F32 temperature);
+
     void drawStars(void);
     void drawDome(void);
     void drawFsSky(void); // fullscreen sky for advanced atmo
@@ -81,6 +84,14 @@ private:
     LLPointer<LLVertexBuffer>                   mFsSkyVerts;
     std::vector< LLPointer<LLVertexBuffer> >    mStripsVerts;
     LLPointer<LLVertexBuffer>                   mStarsVerts;
+
+    // <AP:WW> Procedural starfield generator. Fills vertices/colors/intensities
+    // for `count` stars starting at `startIndex` (primary + dust layers).
+    void generateProceduralStars(
+        U32 count, U32 startIndex,
+        F32 min_intensity, F32 max_intensity, F32 brightness_exponent, F32 color_variation,
+        std::vector<LLVector3>& vertices, std::vector<LLColor4>& colors, std::vector<F32>& intensities);
+    // </AP:WW>
 
     std::vector<LLVector3>  mStarVertices;              // Star verticies
     std::vector<LLColor4>   mStarColors;                // Star colors
