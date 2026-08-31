@@ -1047,8 +1047,9 @@ class Windows_x86_64_Manifest(ViewerManifest):
 
         # Remove any stale installer so the recursion guard and the result check
         # below operate on a clean state. Match both "_Setup.exe" and bare-name
-        # installer outputs (e.g. from earlier/manual runs).
-        for stale in glob.glob(self.dst_path_of('Phoenix-*.exe')) + \
+        # installer outputs (e.g. from earlier/manual runs). The installer base
+        # is the app name (e.g. "Vulkanstorm-..."), so glob on that prefix.
+        for stale in glob.glob(self.dst_path_of('Vulkanstorm*.exe')) + \
                      glob.glob(self.dst_path_of(installer_base + '*.exe')):
             try:
                 os.remove(stale)
