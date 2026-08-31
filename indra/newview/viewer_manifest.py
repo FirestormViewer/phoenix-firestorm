@@ -1055,11 +1055,9 @@ class Windows_x86_64_Manifest(ViewerManifest):
             raise ManifestError("Inno Setup compiler (ISCC.exe) not found; install Inno Setup 6/7 or do not use --inno")
 
         # Remove any stale installer so the recursion guard and the result check
-        # below operate on a clean state. Match both "_Setup.exe" and bare-name
-        # installer outputs (e.g. from earlier/manual runs). The installer base
-        # is the app name (e.g. "Vulkanstorm-..."), so glob on that prefix.
-        for stale in glob.glob(self.dst_path_of('Vulkanstorm*.exe')) + \
-                     glob.glob(self.dst_path_of(installer_base + '*.exe')):
+        # below operate on a clean state. Match ONLY installer outputs
+        # ("*_Setup.exe"); never the staged viewer exe (Vulkanstorm-Release.exe).
+        for stale in glob.glob(self.dst_path_of(installer_base + '*_Setup.exe')):
             try:
                 os.remove(stale)
             except OSError:
