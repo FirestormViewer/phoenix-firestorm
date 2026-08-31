@@ -13,11 +13,14 @@ project(llvulkan)
 
 include(00-Common)
 include(LLCommon)
+include(LLWindow)
 include(VulkanSdk)
 
 set(llvulkan_SOURCE_FILES
+    llvk_vma_impl.cpp
     llvkcontext.cpp
     llvkprobe.cpp
+    llvkselftest.cpp
     ${VULKAN_SDK_VOLK_SOURCE}
     )
 
@@ -26,6 +29,7 @@ set(llvulkan_HEADER_FILES
 
     llvkcontext.h
     llvkprobe.h
+    llvkselftest.h
     )
 
 # volk.c is C; the rest is C++. Give volk its required define so it exposes the
@@ -42,7 +46,14 @@ set_property(TARGET llvulkan PROPERTY POSITION_INDEPENDENT_CODE ON)
 # volk requires VK_NO_PROTOTYPES so it owns all Vulkan function pointers.
 target_compile_definitions(llvulkan PUBLIC VK_NO_PROTOTYPES)
 
+# VMA configuration, shared by every TU that includes vk_mem_alloc.h: dynamic
+# Vulkan functions come from volk's loaded table (set at allocator creation).
+target_compile_definitions(llvulkan PUBLIC
+    VMA_STATIC_VULKAN_FUNCTIONS=0
+    VMA_DYNAMIC_VULKAN_FUNCTIONS=1)
+
 target_link_libraries(llvulkan
         llcommon
+        llwindow
         ll::vulkan_sdk
         )
