@@ -399,16 +399,30 @@ fi
 
 
 CHANNEL_SIMPLE="$CHANNEL"
+# <VulkanStorm> Channel naming follows the Firestorm schema:
+#   Vulkanstorm-<Type>        for Second Life (default) builds
+#   VulkanstormOS-<Type>      for OpenSim-enabled builds
+# where <Type> is Release (default), RelWithDebInfo, or Debug/Dev.
+# If the user passes --chan explicitly, that name is used verbatim as the
+# suffix; otherwise the build-type suffix is generated here.
 if [ -z $CHANNEL ] ; then
-    if [ $TARGET_PLATFORM == "darwin" ] ; then
-        CHANNEL="private-`hostname -s` "
+    if [ "$BTYPE" == "RelWithDebInfo" ] ; then
+        CHANNEL_SUFFIX="RelWithDebInfo"
+    elif [ "$BTYPE" == "Debug" ] ; then
+        CHANNEL_SUFFIX="Debug"
     else
-        CHANNEL="private-`hostname`"
+        CHANNEL_SUFFIX="Release"
     fi
 else
-    CHANNEL=`echo $CHANNEL | sed -e "s/[^a-zA-Z0-9\-]*//g"` # strip out difficult characters from channel
+    # Explicit --chan: strip difficult characters and use as the suffix.
+    CHANNEL_SUFFIX=`echo $CHANNEL | sed -e "s/[^a-zA-Z0-9\-]*//g"`
 fi
-CHANNEL="Vulkanstorm-$CHANNEL"
+if [ $WANTS_OPENSIM -eq $TRUE ] ; then
+    CHANNEL="VulkanstormOS-$CHANNEL_SUFFIX"
+else
+    CHANNEL="Vulkanstorm-$CHANNEL_SUFFIX"
+fi
+# </VulkanStorm>
 
 if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
     echo "Cleaning $TARGET_PLATFORM...."
