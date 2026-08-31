@@ -15,6 +15,28 @@
 #include <cstring>
 #include <set>
 
+namespace
+{
+    // Route validation-layer / debug-utils messages into the viewer log so we can
+    // see the driver's actual complaint (e.g. why a swapchain call fails).
+    VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugCallback(
+        VkDebugUtilsMessageSeverityFlagBitsEXT severity,
+        VkDebugUtilsMessageTypeFlagsEXT /*type*/,
+        const VkDebugUtilsMessengerCallbackDataEXT* data,
+        void* /*userData*/)
+    {
+        if (severity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
+        {
+            LL_WARNS("Vulkan") << "[VK] " << (data && data->pMessage ? data->pMessage : "") << LL_ENDL;
+        }
+        else
+        {
+            LL_INFOS("Vulkan") << "[VK] " << (data && data->pMessage ? data->pMessage : "") << LL_ENDL;
+        }
+        return VK_FALSE;
+    }
+}
+
 #define LL_VK_CHECK(expr, error, msg)                                      \
     do {                                                                   \
         VkResult _res = (expr);                                            \
@@ -47,7 +69,9 @@ bool LLVKContext::createInstance(bool enableValidation, std::string& error)
     app_info.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
     app_info.pEngineName = "Vulkanstorm";
     app_info.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-    app_info.apiVersion = VK_API_VERSION_1_2;
+    // Target Vulkan 1.3: dynamic rendering (used for the clear) is core, and the
+    // 1.3 WSI path is the well-exercised one on current drivers.
+    app_info.apiVersion = VK_API_VERSION_1_3;
 
     std::vector<const char*> extensions;
     extensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
@@ -63,14 +87,14 @@ bool LLVKContext::createInstance(bool enableValidation, std::string& error)
         std::vector<VkLayerProperties> available(layer_count);
         vkEnumerateInstanceLayerProperties(&layer_count, available.data());
         bool have_validation = false;
+        bool have_apidump = false;
         for (const auto& lp : available)
         {
-            if (std::strcmp(lp.layerName, "VK_LAYER_KHRONOS_validation") == 0)
-            {
-                have_validation = true;
-                break;
-            }
+            if (std::strcmp(lp.layerName, "VK_LAYER_KHRONOS_validation") == 0) have_validation = true;
+            if (std::strcmp(lp.layerName, "VK_LAYER_LUNARG_api_dump") == 0) have_apidump = true;
         }
+        // API dump first (outermost) so it records the raw calls, then validation.
+        if (have_apidump) layers.push_back("VK_LAYER_LUNARG_api_dump");
         if (have_validation)
         {
             layers.push_back("VK_LAYER_KHRONOS_validation");
@@ -91,9 +115,35 @@ bool LLVKContext::createInstance(bool enableValidation, std::string& error)
     create_info.enabledLayerCount = (uint32_t)layers.size();
     create_info.ppEnabledLayerNames = layers.data();
 
+    // When validation is on, also capture messages emitted during instance
+    // creation itself by chaining a debug-messenger create-info.
+    VkDebugUtilsMessengerCreateInfoEXT dbg_create{};
+    if (mValidation)
+    {
+        dbg_create.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+        dbg_create.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
+                                     VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
+                                     VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+                                     VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+        dbg_create.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+                                 VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+                                 VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        dbg_create.pfnUserCallback = vkDebugCallback;
+        create_info.pNext = &dbg_create;
+    }
+
     LL_VK_CHECK(vkCreateInstance(&create_info, nullptr, &mInstance), error, "vkCreateInstance failed");
 
     volkLoadInstance(mInstance);
+
+    // Persistent messenger for the instance lifetime.
+    if (mValidation && vkCreateDebugUtilsMessengerEXT)
+    {
+        if (vkCreateDebugUtilsMessengerEXT(mInstance, &dbg_create, nullptr, &mDebugMessenger) != VK_SUCCESS)
+        {
+            mDebugMessenger = VK_NULL_HANDLE;
+        }
+    }
     return true;
 }
 
@@ -138,14 +188,21 @@ bool LLVKContext::pickPhysicalDevice(VkSurfaceKHR surface, std::string& error)
                 if (gfx != UINT32_MAX && present != UINT32_MAX) break;
             }
         }
+
+        VkPhysicalDeviceProperties dprops{};
+        vkGetPhysicalDeviceProperties(dev, &dprops);
+        const char* dtype = dprops.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU ? "discrete" :
+                            dprops.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU ? "integrated" : "other";
+        LL_INFOS("Vulkan") << "  device '" << (dprops.deviceName ? dprops.deviceName : "?")
+                           << "' type=" << dtype << " gfxQueue=" << (gfx == UINT32_MAX ? -1 : (int)gfx)
+                           << " presentQueue=" << (present == UINT32_MAX ? -1 : (int)present) << LL_ENDL;
+
         if (gfx == UINT32_MAX) continue;
         if (surface != VK_NULL_HANDLE && present == UINT32_MAX) continue;
 
-        VkPhysicalDeviceProperties props{};
-        vkGetPhysicalDeviceProperties(dev, &props);
         int score = 0;
-        if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) score = 3;
-        else if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) score = 2;
+        if (dprops.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) score = 3;
+        else if (dprops.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) score = 2;
         else score = 1;
 
         if (score > best_score)
@@ -194,10 +251,18 @@ bool LLVKContext::createDevice(VkSurfaceKHR surface, std::string& error)
     if (surface != VK_NULL_HANDLE)
     {
         device_extensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+        // Dynamic rendering (render-pass-less clear) — core in Vulkan 1.3,
+        // extension in 1.2. Enable both the extension and its feature.
+        device_extensions.push_back(VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME);
     }
+
+    VkPhysicalDeviceDynamicRenderingFeatures dynamic_rendering{};
+    dynamic_rendering.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES;
+    dynamic_rendering.dynamicRendering = VK_TRUE;
 
     VkDeviceCreateInfo create_info{};
     create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    create_info.pNext = &dynamic_rendering;
     create_info.queueCreateInfoCount = (uint32_t)queue_infos.size();
     create_info.pQueueCreateInfos = queue_infos.data();
     create_info.enabledExtensionCount = (uint32_t)device_extensions.size();
@@ -217,7 +282,7 @@ bool LLVKContext::createDevice(VkSurfaceKHR surface, std::string& error)
 
     VmaAllocatorCreateInfo alloc_info{};
     alloc_info.flags = VMA_ALLOCATOR_CREATE_EXT_MEMORY_BUDGET_BIT;
-    alloc_info.vulkanApiVersion = VK_API_VERSION_1_2;
+    alloc_info.vulkanApiVersion = VK_API_VERSION_1_3;
     alloc_info.physicalDevice = mPhysicalDevice;
     alloc_info.device = mDevice;
     alloc_info.instance = mInstance;
@@ -271,6 +336,15 @@ bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t
     VkSurfaceCapabilitiesKHR caps{};
     LL_VK_CHECK(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(mPhysicalDevice, surface, &caps), error, "vkGetPhysicalDeviceSurfaceCapabilitiesKHR failed");
 
+    // Diagnostics: log what the driver reports so we can diagnose swapchain
+    // failures (VK_ERROR_UNKNOWN often means a degenerate extent or an
+    // unsupported format/present-mode combination).
+    LL_INFOS("Vulkan") << "Swapchain caps: currentExtent=" << caps.currentExtent.width << "x" << caps.currentExtent.height
+                       << " min=" << caps.minImageExtent.width << "x" << caps.minImageExtent.height
+                       << " max=" << caps.maxImageExtent.width << "x" << caps.maxImageExtent.height
+                       << " minImageCount=" << caps.minImageCount << " maxImageCount=" << caps.maxImageCount
+                       << " (requested " << width << "x" << height << ")" << LL_ENDL;
+
     // Choose a surface format: prefer B8G8R8A8_UNORM + SRGB nonlinear.
     uint32_t fmt_count = 0;
     vkGetPhysicalDeviceSurfaceFormatsKHR(mPhysicalDevice, surface, &fmt_count, nullptr);
@@ -285,6 +359,22 @@ bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t
             break;
         }
     }
+    LL_INFOS("Vulkan") << "Swapchain formats available=" << fmt_count << " chosen format=" << chosen_format.format << " colorspace=" << chosen_format.colorSpace << LL_ENDL;
+
+    // Present modes supported on this surface.
+    uint32_t pm_count = 0;
+    vkGetPhysicalDeviceSurfacePresentModesKHR(mPhysicalDevice, surface, &pm_count, nullptr);
+    std::vector<VkPresentModeKHR> pmodes(pm_count);
+    if (pm_count) vkGetPhysicalDeviceSurfacePresentModesKHR(mPhysicalDevice, surface, &pm_count, pmodes.data());
+    std::string pm_list;
+    for (auto m : pmodes) { pm_list += " " + std::to_string((int)m); }
+    LL_INFOS("Vulkan") << "Present modes (" << pm_count << "):" << pm_list << LL_ENDL;
+
+    // Confirm the chosen queue family actually supports present on this surface.
+    VkBool32 present_ok = VK_FALSE;
+    vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mPresentQueueFamily, surface, &present_ok);
+    LL_INFOS("Vulkan") << "Queue families: graphics=" << mGraphicsQueueFamily << " present=" << mPresentQueueFamily
+                       << " presentSupportedOnSurface=" << (present_ok ? "yes" : "no") << LL_ENDL;
 
     // Present mode: FIFO (vsync) is guaranteed; use it for Phase 1.
     VkPresentModeKHR present_mode = VK_PRESENT_MODE_FIFO_KHR;
@@ -315,7 +405,10 @@ bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t
     sci.imageColorSpace = chosen_format.colorSpace;
     sci.imageExtent = extent;
     sci.imageArrayLayers = 1;
-    sci.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+    // Minimal, universally-supported usage for a presented swapchain image. We
+    // clear via a render pass (not vkCmdClearColorImage), which only needs
+    // COLOR_ATTACHMENT — some drivers reject extra usage bits on swapchain images.
+    sci.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     uint32_t family_indices[] = { mGraphicsQueueFamily, mPresentQueueFamily };
     if (mGraphicsQueueFamily != mPresentQueueFamily)
     {
@@ -433,33 +526,48 @@ bool LLVKContext::renderClearFrame(float r, float g, float b, float a)
 
     VkImage image = mSwapchainImages[image_index];
 
-    // Transition to TRANSFER_DST for clearing.
-    VkImageMemoryBarrier to_clear{};
-    to_clear.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-    to_clear.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    to_clear.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-    to_clear.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    to_clear.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    to_clear.image = image;
-    to_clear.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    to_clear.subresourceRange.levelCount = 1;
-    to_clear.subresourceRange.layerCount = 1;
-    to_clear.srcAccessMask = 0;
-    to_clear.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-    vkCmdPipelineBarrier(f.cmd, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &to_clear);
+    // Transition UNDEFINED -> COLOR_ATTACHMENT_OPTIMAL for the render-pass clear.
+    VkImageMemoryBarrier to_attach{};
+    to_attach.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    to_attach.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    to_attach.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    to_attach.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    to_attach.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    to_attach.image = image;
+    to_attach.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    to_attach.subresourceRange.levelCount = 1;
+    to_attach.subresourceRange.layerCount = 1;
+    to_attach.srcAccessMask = 0;
+    to_attach.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    vkCmdPipelineBarrier(f.cmd, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, 0, 0, nullptr, 0, nullptr, 1, &to_attach);
 
+    // Clear via dynamic rendering: a single color attachment with loadOp=CLEAR.
     VkClearColorValue clear{};
     clear.float32[0] = r; clear.float32[1] = g; clear.float32[2] = b; clear.float32[3] = a;
-    VkImageSubresourceRange range{};
-    range.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    range.levelCount = 1;
-    range.layerCount = 1;
-    vkCmdClearColorImage(f.cmd, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clear, 1, &range);
 
-    // Transition to PRESENT.
+    VkRenderingAttachmentInfo color_attach{};
+    color_attach.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+    color_attach.imageView = mSwapchainViews[image_index];
+    color_attach.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    color_attach.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    color_attach.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    color_attach.clearValue.color = clear;
+
+    VkRenderingInfo rendering{};
+    rendering.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
+    rendering.renderArea.offset = { 0, 0 };
+    rendering.renderArea.extent = mSwapchainExtent;
+    rendering.layerCount = 1;
+    rendering.colorAttachmentCount = 1;
+    rendering.pColorAttachments = &color_attach;
+
+    vkCmdBeginRendering(f.cmd, &rendering);
+    vkCmdEndRendering(f.cmd);
+
+    // Transition COLOR_ATTACHMENT_OPTIMAL -> PRESENT_SRC.
     VkImageMemoryBarrier to_present{};
     to_present.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-    to_present.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+    to_present.oldLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
     to_present.newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     to_present.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
     to_present.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
@@ -467,9 +575,9 @@ bool LLVKContext::renderClearFrame(float r, float g, float b, float a)
     to_present.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     to_present.subresourceRange.levelCount = 1;
     to_present.subresourceRange.layerCount = 1;
-    to_present.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+    to_present.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
     to_present.dstAccessMask = 0;
-    vkCmdPipelineBarrier(f.cmd, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 1, &to_present);
+    vkCmdPipelineBarrier(f.cmd, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 1, &to_present);
 
     vkEndCommandBuffer(f.cmd);
 
@@ -540,6 +648,11 @@ void LLVKContext::destroy()
     if (mCommandPool != VK_NULL_HANDLE) { vkDestroyCommandPool(mDevice, mCommandPool, nullptr); mCommandPool = VK_NULL_HANDLE; }
     if (mAllocator != VK_NULL_HANDLE) { vmaDestroyAllocator(mAllocator); mAllocator = VK_NULL_HANDLE; }
     if (mDevice != VK_NULL_HANDLE) { vkDestroyDevice(mDevice, nullptr); mDevice = VK_NULL_HANDLE; }
+    if (mDebugMessenger != VK_NULL_HANDLE && vkDestroyDebugUtilsMessengerEXT)
+    {
+        vkDestroyDebugUtilsMessengerEXT(mInstance, mDebugMessenger, nullptr);
+        mDebugMessenger = VK_NULL_HANDLE;
+    }
     if (mInstance != VK_NULL_HANDLE) { vkDestroyInstance(mInstance, nullptr); mInstance = VK_NULL_HANDLE; }
 
     volkFinalize();

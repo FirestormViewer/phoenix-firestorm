@@ -80,6 +80,7 @@ private:
     VkPhysicalDevice mPhysicalDevice = VK_NULL_HANDLE;
     VkDevice         mDevice = VK_NULL_HANDLE;
     VmaAllocator     mAllocator = VK_NULL_HANDLE;
+    VkDebugUtilsMessengerEXT mDebugMessenger = VK_NULL_HANDLE;
 
     uint32_t  mGraphicsQueueFamily = UINT32_MAX;
     uint32_t  mPresentQueueFamily = UINT32_MAX;

@@ -24,10 +24,13 @@ class LLWindow;
 
 namespace LLVKSelfTest
 {
-    // Begin the self-test against the given window's Vulkan surface. Creates the
-    // LLVKContext (instance/device/queues/swapchain). Safe to call repeatedly;
+    // Begin the self-test. Creates its OWN dedicated native window (the viewer's
+    // window already has an OpenGL surface, which is mutually exclusive with a
+    // Vulkan swapchain), builds the LLVKContext (instance/device/queues/
+    // swapchain) on it, and renders clear-color frames. Safe to call repeatedly;
     // only the first call initializes. Returns true if the context came up.
-    bool begin(LLWindow* window);
+    // enableValidation turns on the Vulkan validation layer + debug messenger.
+    bool begin(bool enableValidation);
 
     // Render one clear-color frame and present it. No-op if not begun. Call once
     // per frame from the viewer's swap path while the self-test is active.

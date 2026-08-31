@@ -213,6 +213,30 @@ void display_startup()
 
     LLGLState::checkStates();
 
+#if LL_WINDOWS
+    // <VulkanStorm> Phase-1 bring-up: isolated Vulkan self-test. Runs on the
+    // login/startup frame path (which swaps here, not via swap()). When the
+    // RenderVulkanSelfTest debug setting is on and a Vulkan device is present,
+    // drive the Vulkan surface/context/swapchain and clear a test frame for a
+    // few seconds, then return to the normal GL path. Diagnostic only.
+    static LLCachedControl<bool> sVulkanSelfTest(gSavedSettings, "RenderVulkanSelfTest", false);
+    static LLCachedControl<bool> sVulkanDebug(gSavedSettings, "RenderVulkanDebug", false);
+    static bool sSelfTestStarted = false;
+    if (sVulkanSelfTest && !LLVKSelfTest::finished())
+    {
+        if (!sSelfTestStarted)
+        {
+            sSelfTestStarted = true;
+            if (LLVKProbe::hasVulkanDevice())
+            {
+                LLVKSelfTest::begin(sVulkanDebug);
+            }
+        }
+        LLVKSelfTest::renderFrame();
+    }
+    // </VulkanStorm>
+#endif
+
     if (gViewerWindow && gViewerWindow->getWindow())
     gViewerWindow->getWindow()->swapBuffers();
 
@@ -1716,30 +1740,6 @@ void swap()
     LLPerfStats::RecordSceneTime T ( LLPerfStats::StatType_t::RENDER_SWAP ); // render time capture - Swap buffer time - can signify excessive data transfer to/from GPU
     LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("Swap");
     LL_PROFILE_GPU_ZONE("swap");
-
-#if LL_WINDOWS
-    // <VulkanStorm> Phase-1 bring-up: isolated Vulkan self-test. When the
-    // RenderVulkanSelfTest debug setting is on and a Vulkan device is present,
-    // drive the Vulkan surface/context/swapchain and clear a test frame for a
-    // few seconds, then return to the normal GL path. Diagnostic only; it does
-    // not change the active render backend and leaves the GL path untouched.
-    static LLCachedControl<bool> sVulkanSelfTest(gSavedSettings, "RenderVulkanSelfTest", false);
-    static bool sSelfTestStarted = false;
-    if (sVulkanSelfTest && !LLVKSelfTest::finished())
-    {
-        if (!sSelfTestStarted)
-        {
-            sSelfTestStarted = true;
-            if (LLVKProbe::hasVulkanDevice())
-            {
-                LLVKSelfTest::begin(gViewerWindow->getWindow());
-            }
-        }
-        LLVKSelfTest::renderFrame();
-    }
-    // </VulkanStorm>
-#endif
-
     if (gDisplaySwapBuffers)
     {
         gViewerWindow->getWindow()->swapBuffers();

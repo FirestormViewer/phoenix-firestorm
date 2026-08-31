@@ -10,10 +10,15 @@
 #include "llvkselftest.h"
 
 #include "llvkcontext.h"
-#include "llvkprobe.h"
-#include "llwindow.h"
 
 #include "llerror.h"
+
+#if LL_WINDOWS
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#endif
 
 namespace
 {
@@ -22,27 +27,65 @@ namespace
     constexpr int kTargetFrames = 120; // ~2s at 60fps
     bool         g_begun = false;
     bool         g_failed = false;
+
+#if LL_WINDOWS
+    HWND         g_test_hwnd = NULL;
+    HINSTANCE    g_test_hinstance = NULL;
+    VkSurfaceKHR g_surface = VK_NULL_HANDLE;
+
+    LRESULT CALLBACK SelfTestWndProc(HWND hwnd, UINT msg, WPARAM w, LPARAM l)
+    {
+        return DefWindowProc(hwnd, msg, w, l);
+    }
+
+    // The self-test renders into its OWN window. The viewer's main window is
+    // unusable: it already has an OpenGL surface bound, and a window can be
+    // associated with only one graphics API at a time (vkCreateSwapchainKHR ->
+    // VK_ERROR_NATIVE_WINDOW_IN_USE_KHR on a GL-owned window).
+    HWND createTestWindow(HINSTANCE& out_instance)
+    {
+        HINSTANCE hinst = GetModuleHandle(NULL);
+        out_instance = hinst;
+
+        const char* kClass = "VulkanstormVKSelfTest";
+        WNDCLASSA wc{};
+        wc.style = CS_OWNDC;
+        wc.lpfnWndProc = SelfTestWndProc;
+        wc.hInstance = hinst;
+        wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+        wc.lpszClassName = kClass;
+        RegisterClassA(&wc);
+
+        int w = 640, h = 480;
+        int x = (GetSystemMetrics(SM_CXSCREEN) - w) / 2;
+        int y = (GetSystemMetrics(SM_CYSCREEN) - h) / 2;
+        HWND hwnd = CreateWindowExA(0, kClass, "Vulkanstorm Vulkan self-test",
+                                    WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+                                    x, y, w, h, NULL, NULL, hinst, NULL);
+        if (hwnd)
+        {
+            ShowWindow(hwnd, SW_SHOW);
+            UpdateWindow(hwnd);
+        }
+        return hwnd;
+    }
+#endif
 }
 
 namespace LLVKSelfTest
 {
-    bool begin(LLWindow* window)
+    bool begin(bool enableValidation)
     {
+#if LL_WINDOWS
         if (g_begun || g_failed)
         {
             return g_begun && !g_failed;
         }
 
-        if (!window)
-        {
-            g_failed = true;
-            return false;
-        }
-
         std::string error;
         LLVKContext* ctx = new LLVKContext();
 
-        if (!ctx->createInstance(false, error))
+        if (!ctx->createInstance(enableValidation, error))
         {
             LL_WARNS("Vulkan") << "SelfTest: createInstance failed: " << error << LL_ENDL;
             delete ctx;
@@ -50,9 +93,18 @@ namespace LLVKSelfTest
             return false;
         }
 
-        // Create the platform surface from the window's native handles.
-        VkSurfaceKHR surface = ctx->createSurface(window->getNativeHandle(), window->getNativeInstance());
-        if (surface == VK_NULL_HANDLE)
+        // Our own window — the viewer's window already has a GL surface.
+        g_test_hwnd = createTestWindow(g_test_hinstance);
+        if (!g_test_hwnd)
+        {
+            LL_WARNS("Vulkan") << "SelfTest: failed to create test window" << LL_ENDL;
+            delete ctx;
+            g_failed = true;
+            return false;
+        }
+
+        g_surface = ctx->createSurface((void*)g_test_hwnd, (void*)g_test_hinstance);
+        if (g_surface == VK_NULL_HANDLE)
         {
             LL_WARNS("Vulkan") << "SelfTest: surface creation failed" << LL_ENDL;
             delete ctx;
@@ -60,26 +112,27 @@ namespace LLVKSelfTest
             return false;
         }
 
-        if (!ctx->pickPhysicalDevice(surface, error) ||
-            !ctx->createDevice(surface, error))
+        if (!ctx->pickPhysicalDevice(g_surface, error) ||
+            !ctx->createDevice(g_surface, error))
         {
             LL_WARNS("Vulkan") << "SelfTest: device setup failed: " << error << LL_ENDL;
-            vkDestroySurfaceKHR(ctx->instance(), surface, nullptr);
+            vkDestroySurfaceKHR(ctx->instance(), g_surface, nullptr);
             delete ctx;
             g_failed = true;
             return false;
         }
 
-        // Size the swapchain to the window's client area.
-        LLCoordWindow size;
-        window->getSize(&size);
-        uint32_t w = size.mX > 0 ? (uint32_t)size.mX : 640;
-        uint32_t h = size.mY > 0 ? (uint32_t)size.mY : 480;
+        RECT rc;
+        GetClientRect(g_test_hwnd, &rc);
+        uint32_t w = (uint32_t)(rc.right - rc.left);
+        uint32_t h = (uint32_t)(rc.bottom - rc.top);
+        if (w == 0) w = 640;
+        if (h == 0) h = 480;
 
-        if (!ctx->createSwapchain(surface, w, h, error))
+        if (!ctx->createSwapchain(g_surface, w, h, error))
         {
             LL_WARNS("Vulkan") << "SelfTest: createSwapchain failed: " << error << LL_ENDL;
-            vkDestroySurfaceKHR(ctx->instance(), surface, nullptr);
+            vkDestroySurfaceKHR(ctx->instance(), g_surface, nullptr);
             delete ctx;
             g_failed = true;
             return false;
@@ -91,13 +144,26 @@ namespace LLVKSelfTest
         LL_INFOS("Vulkan") << "SelfTest: Vulkan context up on '" << ctx->deviceName()
                            << "', swapchain " << w << "x" << h << ". Rendering test frames." << LL_ENDL;
         return true;
+#else
+        (void)enableValidation;
+        return false;
+#endif
     }
 
     void renderFrame()
     {
+#if LL_WINDOWS
         if (!g_begun || g_failed || !g_ctx)
         {
             return;
+        }
+
+        // Pump the test window's messages so it stays responsive.
+        MSG msg;
+        while (PeekMessage(&msg, g_test_hwnd, 0, 0, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
         }
 
         // A recognizable clear color (a deep teal) so it's obvious on screen.
@@ -112,6 +178,7 @@ namespace LLVKSelfTest
                                << " frames; Vulkan chain validated. Shutting down test context." << LL_ENDL;
             shutdown();
         }
+#endif
     }
 
     bool finished()
@@ -121,13 +188,25 @@ namespace LLVKSelfTest
 
     void shutdown()
     {
+#if LL_WINDOWS
         if (g_ctx)
         {
-            // The surface is owned/destroyed alongside the context's swapchain
-            // reference; destroy the context (which destroys device + instance).
+            // Destroy the swapchain/surface before the context tears down the
+            // instance, then destroy the test window.
+            if (g_surface != VK_NULL_HANDLE)
+            {
+                vkDestroySurfaceKHR(g_ctx->instance(), g_surface, nullptr);
+                g_surface = VK_NULL_HANDLE;
+            }
             delete g_ctx;
             g_ctx = nullptr;
         }
+        if (g_test_hwnd)
+        {
+            DestroyWindow(g_test_hwnd);
+            g_test_hwnd = NULL;
+        }
+#endif
         g_begun = false;
         g_frames_rendered = 0;
     }
