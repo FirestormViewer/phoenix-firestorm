@@ -2054,9 +2054,10 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 #endif
         LLAppViewer::instance()->fastQuit(1);
     }
-    else if (!LLViewerShaderMgr::sInitialized)
+    else if (!LLViewerShaderMgr::sInitialized && !LLWindow::getSkipGLContext())
     {
         //immediately initialize shaders
+        // <VulkanStorm> skipped on the Vulkan boot path (no GL context).
         LLViewerShaderMgr::sInitialized = true;
         LLViewerShaderMgr::instance()->setShaders();
     }
@@ -2121,13 +2122,17 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     //
     LL_DEBUGS("Window") << "Loading feature tables." << LL_ENDL;
 
-    // Initialize OpenGL Renderer
-    LLVertexBuffer::initClass(mWindow);
-    LL_INFOS("RenderInit") << "LLVertexBuffer initialization done." << LL_ENDL ;
-    if (!gGL.init(true))
+    if (!LLWindow::getSkipGLContext())
     {
-        LLError::LLUserWarningMsg::show(LLTrans::getString("MBVideoDrvErr"));
-        LL_ERRS() << "gGL not initialized" << LL_ENDL;
+        // Initialize OpenGL Renderer
+        // <VulkanStorm> skipped on the Vulkan boot path (no GL context).
+        LLVertexBuffer::initClass(mWindow);
+        LL_INFOS("RenderInit") << "LLVertexBuffer initialization done." << LL_ENDL ;
+        if (!gGL.init(true))
+        {
+            LLError::LLUserWarningMsg::show(LLTrans::getString("MBVideoDrvErr"));
+            LL_ERRS() << "gGL not initialized" << LL_ENDL;
+        }
     }
     // <FS:Ansariel> Exodus vignette
 
@@ -2150,10 +2155,16 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 
     // Init the image list.  Must happen after GL is initialized and before the images that
     // LLViewerWindow needs are requested, as well as before LLViewerMedia starts updating images.
-    LLImageGL::initClass(mWindow, LLViewerTexture::MAX_GL_IMAGE_CATEGORY, false, gSavedSettings.getBOOL("RenderGLMultiThreadedTextures"), gSavedSettings.getBOOL("RenderGLMultiThreadedMedia"));
-    gTextureList.init();
-    LLViewerTextureManager::init() ;
-    gBumpImageList.init();
+    if (!LLWindow::getSkipGLContext())
+    {
+        // Init the image list.  Must happen after GL is initialized and before the images that
+        // LLViewerWindow needs are requested, as well as before LLViewerMedia starts updating images.
+        // <VulkanStorm> skipped on the Vulkan boot path (no GL context).
+        LLImageGL::initClass(mWindow, LLViewerTexture::MAX_GL_IMAGE_CATEGORY, false, gSavedSettings.getBOOL("RenderGLMultiThreadedTextures"), gSavedSettings.getBOOL("RenderGLMultiThreadedMedia"));
+        gTextureList.init();
+        LLViewerTextureManager::init() ;
+        gBumpImageList.init();
+    }
 
     // Create container for all sub-views
     LLView::Params rvp;

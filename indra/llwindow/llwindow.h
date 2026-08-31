@@ -96,6 +96,13 @@ public:
     virtual void* getNativeHandle() const { return nullptr; }
     virtual void* getNativeInstance() const { return nullptr; }
     // </VulkanStorm>
+    // <VulkanStorm> When set (before the window is created), the window is
+    // created WITHOUT an OpenGL context: an alternate render backend (Vulkan)
+    // owns the window's pixels for the process lifetime. Read by the platform
+    // window implementations (Win32: skips pixel format + GL context creation).
+    static void setSkipGLContext(bool skip);
+    static bool getSkipGLContext();
+    // </VulkanStorm>
     virtual void toggleVSync(bool enable_vsync) = 0;
 
     virtual bool setCursorPosition(LLCoordWindow position) = 0;

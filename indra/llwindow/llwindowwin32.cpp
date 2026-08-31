@@ -1393,6 +1393,16 @@ bool LLWindowWin32::switchContext(bool fullscreen, const LLCoordScreen& size, bo
         LL_WARNS("Window") << "Window creation failed, code: " << GetLastError() << LL_ENDL;
     }
 
+    if (LLWindow::getSkipGLContext())
+    {
+        // <VulkanStorm> A window is owned by exactly one graphics API for its
+        // lifetime. With a non-GL render backend selected, skip pixel-format
+        // selection and GL context creation entirely; the backend (LLVKSession)
+        // binds its own swapchain to this window instead.
+        LL_INFOS("Window") << "Skipping GL context creation (non-GL render backend owns the window)." << LL_ENDL;
+    }
+    else
+    {
     //-----------------------------------------------------------------------
     // Create GL drawing context
     //-----------------------------------------------------------------------
@@ -1800,6 +1810,7 @@ const   S32   max_format  = (S32)num_formats - 1;
 
     // Disable vertical sync for swap
     toggleVSync(enable_vsync);
+    } // <VulkanStorm> end GL-context block (skipped for non-GL backends)
 
     SetWindowLongPtr(mWindowHandle, GWLP_USERDATA, (LONG_PTR)this);
 
@@ -1824,9 +1835,12 @@ const   S32   max_format  = (S32)num_formats - 1;
     if (auto_show)
     {
         show();
-        glClearColor(0.0f, 0.0f, 0.0f, 0.f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        swapBuffers();
+        if (!LLWindow::getSkipGLContext())
+        {
+            glClearColor(0.0f, 0.0f, 0.0f, 0.f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            swapBuffers();
+        }
     }
 
     return true;
@@ -3960,6 +3974,13 @@ bool LLWindowWin32::resetDisplayResolution()
 
 void LLWindowWin32::swapBuffers()
 {
+    // <VulkanStorm> With a non-GL render backend there is no GL context to
+    // swap; the backend presents through its own swapchain (LLVKSession).
+    if (LLWindow::getSkipGLContext())
+    {
+        return;
+    }
+    // </VulkanStorm>
     {
         LL_PROFILE_ZONE_SCOPED_CATEGORY_WIN32;
         SwapBuffers(mhDC);

@@ -30,6 +30,7 @@
 
 #include "llvkprobe.h"
 #include "llvkselftest.h"
+#include "llvksession.h"
 #include "fsyspath.h"
 #include "hexdump.h"
 #include "llagent.h"
@@ -170,6 +171,18 @@ void display_startup()
     {
         return;
     }
+
+#if LL_WINDOWS
+    // <VulkanStorm> The Vulkan backend owns the frame end-to-end while the
+    // 2D/3D pipelines are being ported: clear + present, no GL calls.
+    if (LLVKSession::isRunning())
+    {
+        LLVKSession::resizeIfNeeded(gViewerWindow->getWindow());
+        LLVKSession::renderFrame();
+        return;
+    }
+    // </VulkanStorm>
+#endif
 
     gPipeline.updateGL();
 
@@ -510,6 +523,18 @@ static void update_tp_display(bool minimized)
 // Paint the display!
 void display(bool rebuild, F32 zoom_factor, int subfield, bool for_snapshot)
 {
+#if LL_WINDOWS
+    // <VulkanStorm> The Vulkan backend owns the frame end-to-end while the
+    // 2D/3D pipelines are being ported: clear + present, no GL calls.
+    if (LLVKSession::isRunning())
+    {
+        LLVKSession::resizeIfNeeded(gViewerWindow->getWindow());
+        LLVKSession::renderFrame();
+        return;
+    }
+    // </VulkanStorm>
+#endif
+
     LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("Render");
     LL_PROFILE_GPU_ZONE("Render");
 

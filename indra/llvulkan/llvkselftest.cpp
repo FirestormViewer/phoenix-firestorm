@@ -137,7 +137,7 @@ namespace LLVKSelfTest
         if (!ctx->createSwapchain(g_surface, w, h, error))
         {
             LL_WARNS("Vulkan") << "SelfTest: createSwapchain failed: " << error << LL_ENDL;
-            vkDestroySurfaceKHR(ctx->instance(), g_surface, nullptr);
+            // createSwapchain() adopts the surface; the context destroys it.
             delete ctx;
             g_failed = true;
             return false;
@@ -196,15 +196,11 @@ namespace LLVKSelfTest
 #if LL_WINDOWS
         if (g_ctx)
         {
-            // Destroy the swapchain/surface before the context tears down the
-            // instance, then destroy the test window.
-            if (g_surface != VK_NULL_HANDLE)
-            {
-                vkDestroySurfaceKHR(g_ctx->instance(), g_surface, nullptr);
-                g_surface = VK_NULL_HANDLE;
-            }
+            // The context owns and destroys the swapchain + surface, then the
+            // instance; we only need to destroy the test window after.
             delete g_ctx;
             g_ctx = nullptr;
+            g_surface = VK_NULL_HANDLE;
         }
         if (g_test_hwnd)
         {

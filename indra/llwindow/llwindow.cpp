@@ -400,6 +400,25 @@ void LLSplashScreen::hide()
     gSplashScreenp = NULL;
 }
 
+// <VulkanStorm>
+namespace
+{
+    bool sSkipGLContext = false;
+}
+
+//static
+void LLWindow::setSkipGLContext(bool skip)
+{
+    sSkipGLContext = skip;
+}
+
+//static
+bool LLWindow::getSkipGLContext()
+{
+    return sSkipGLContext;
+}
+// </VulkanStorm>
+
 //
 // LLWindowManager
 //
