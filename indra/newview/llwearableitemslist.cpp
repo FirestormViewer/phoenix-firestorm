@@ -28,12 +28,16 @@
 
 #include "llwearableitemslist.h"
 
+#include "fsfloaterwearablefavorites.h"
+
 #include "lliconctrl.h"
 #include "llmenugl.h" // for LLContextMenu
+#include "llnotificationsutil.h"
 
 #include "llagentwearables.h"
 #include "llappearancemgr.h"
 #include "llinventoryicon.h"
+#include "llinventoryfunctions.h"
 #include "llgesturemgr.h"
 #include "lltransutil.h"
 #include "llviewerattachmenu.h"
@@ -45,6 +49,7 @@
 // [/RLVa:KB]
 #include "lltextbox.h"
 #include "llresmgr.h"
+#include "llviewerinventory.h"
 
 bool LLFindOutfitItems::operator()(LLInventoryCategory* cat,
                                    LLInventoryItem* item)
@@ -1130,6 +1135,127 @@ void LLWearableItemsList::ContextMenu::show(LLView* spawning_view, LLWearableTyp
     mParent = NULL; // to avoid dereferencing an invalid pointer
 }
 
+// <FS:Amy> Favorite Wearables folder assignment
+static bool favorite_folder_contains_linked_item(const LLUUID& folder_id, const LLUUID& linked_id)
+{
+    LLInventoryModel::item_array_t* items = nullptr;
+    LLInventoryModel::cat_array_t* cats = nullptr;
+    gInventory.getDirectDescendentsOf(folder_id, cats, items);
+
+    if (!items)
+    {
+        return false;
+    }
+
+    for (const auto& item : *items)
+    {
+        if (!item)
+        {
+            continue;
+        }
+
+        if (item->getUUID() == linked_id || item->getLinkedUUID() == linked_id)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+static void assign_to_favorite_folder(const uuid_vec_t& ids, const LLSD& userdata)
+{
+    LLUUID target_folder(userdata.asString());
+    if (target_folder.isNull() || ids.empty())
+    {
+        return;
+    }
+
+    for (const LLUUID& id : ids)
+    {
+        LLViewerInventoryItem* item = gInventory.getItem(id);
+        if (!item)
+        {
+            continue;
+        }
+
+        LLUUID linked_id = item->getLinkedUUID();
+        if (linked_id.isNull())
+        {
+            linked_id = id;
+        }
+
+        if (favorite_folder_contains_linked_item(target_folder, linked_id))
+        {
+            continue;
+        }
+
+        LLPointer<LLInventoryCallback> cb;
+        link_inventory_object(target_folder, linked_id, cb);
+    }
+}
+
+static void populate_assign_to_folder_menu(LLContextMenu* menu)
+{
+    // Match the pattern used by LLViewerAttachMenu::populateMenus().
+    // Submenus from menu_wearable_list_item.xml are children of gMenuHolder,
+    // so looking only under the local menu can leave the submenu empty/disabled.
+    if (!menu || !gMenuHolder)
+    {
+        return;
+    }
+
+    LLContextMenu* assign_menu = gMenuHolder->getChild<LLContextMenu>("favorites_assign_folder");
+    if (!assign_menu)
+    {
+        return;
+    }
+
+    assign_menu->empty();
+
+    const LLUUID root_folder = FSFloaterWearableFavorites::getFavoritesFolder();
+    if (root_folder.isNull())
+    {
+        return;
+    }
+
+    LLInventoryModel::item_array_t* items = nullptr;
+    LLInventoryModel::cat_array_t* cats = nullptr;
+    gInventory.getDirectDescendentsOf(root_folder, cats, items);
+    if (!cats)
+    {
+        return;
+    }
+
+    std::vector<LLViewerInventoryCategory*> sorted_cats;
+    for (const auto& cat : *cats)
+    {
+        if (cat)
+        {
+            sorted_cats.push_back(cat);
+        }
+    }
+
+    std::sort(sorted_cats.begin(), sorted_cats.end(), [](const LLViewerInventoryCategory* lhs, const LLViewerInventoryCategory* rhs)
+    {
+        return LLStringUtil::compareDict(lhs->getName(), rhs->getName()) < 0;
+    });
+
+    for (const auto& cat : sorted_cats)
+    {
+        LLMenuItemCallGL::Params p;
+        p.name = "assign_to_folder_" + cat->getUUID().asString();
+        p.label = cat->getName();
+        p.on_click.function_name = "Attachment.AssignFolder";
+        p.on_click.parameter = LLSD(cat->getUUID().asString());
+        p.enabled.set(true);
+
+        LLMenuItemCallGL* item = LLUICtrlFactory::create<LLMenuItemCallGL>(p);
+        assign_menu->addChild(item);
+    }
+}
+// </FS:Amy>
+
 // virtual
 LLContextMenu* LLWearableItemsList::ContextMenu::createMenu()
 {
@@ -1161,12 +1287,14 @@ LLContextMenu* LLWearableItemsList::ContextMenu::createMenu()
                   //boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), ids, no_op)); // <FS:Ansariel> [SL:KB] - Patch: Appearance-Misc
                   boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), ids));
     registrar.add("Attachment.Favorite", boost::bind(toggle_favorites, ids));
+    registrar.add("Attachment.AssignFolder", boost::bind(assign_to_favorite_folder, ids, _2)); // </FS:Amy> Favorite Wearables folder assignment
     registrar.add("Attachment.Touch", boost::bind(handle_attachment_touch, selected_id));
     registrar.add("Attachment.Profile", boost::bind(show_item_profile, selected_id));
     registrar.add("Object.Attach", boost::bind(LLViewerAttachMenu::attachObjects, ids, _2));
 
     // Create the menu.
     LLContextMenu* menu = createFromFile("menu_wearable_list_item.xml");
+    populate_assign_to_folder_menu(menu); // </FS:Amy> Favorite Wearables folder assignment submenu
 
     // Determine which items should be visible/enabled.
     updateItemsVisibility(menu);
@@ -1331,6 +1459,8 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
     setMenuItemEnabled(menu, "delete_from_outfit", n_links > 0 && is_outfit_menu);
 // </AS:Chanayane>
     setMenuItemVisible(menu, "favorites_add",       can_favorite);
+    setMenuItemVisible(menu, "favorites_assign_folder", true); // </FS:Amy> Favorite Wearables folder assignment
+    setMenuItemEnabled(menu, "favorites_assign_folder", true); // </FS:Amy> Favorite Wearables folder assignment
     setMenuItemVisible(menu, "favorites_remove",    can_unfavorite);
     setMenuItemVisible(menu, "take_off",            mask == MASK_CLOTHING && n_worn == n_items);
     setMenuItemVisible(menu, "detach",              mask == MASK_ATTACHMENT && n_worn == n_items);
