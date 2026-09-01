@@ -91,7 +91,7 @@
 					</tab_container>
 				</layout_panel>
 				<layout_panel name="frame_settings_sky">
-					<tab_container name="sky_tabs" tab_width="165">
+					<tab_container name="sky_tabs" tab_width="185">
 						<panel label="Atmosphäre &amp; Beleuchtung" name="atmosphere_panel"/>
 						<panel label="Wolken" name="clouds_panel"/>
 						<panel label="Sonne und Mond" name="moon_panel"/>

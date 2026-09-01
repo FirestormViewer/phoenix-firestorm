@@ -1836,6 +1836,9 @@ support@secondlife.com.
 	<string name="InventoryNoTexture">
 		你的庫存中沒有這個紋理的副本。
 	</string>
+	<string name="InventoryNoMaterial">
+		你的庫存中沒有這個材質的副本。
+	</string>
 	<string name="InventoryInboxNoItems">
 		你在第二人生市場中購買的物件將會出現在這裡。你可以將其拖入庫存區使用。
 	</string>

@@ -40,15 +40,15 @@
 	</panel>
 
 	<panel name="P_Water_Reflection">
-		<text name="refraction_scale_above_label" width="165">
+		<text name="refraction_scale_above_label" width="175">
 			Skali. Lichtbrechung (oberh.):
 		</text>
 		<slider name="water_scale_above" width="105"/>
-		<text name="refraction_scale_below_label" width="165">
+		<text name="refraction_scale_below_label" width="175">
 			Skali. Lichtbrechung (unterh.):
 		</text>
 		<slider name="water_scale_below" width="105"/>
-		<text name="blur_multiplier_label" width="165">
+		<text name="blur_multiplier_label" width="175">
 			Unschärfe-Multiplikator:
 		</text>
 		<slider name="water_blur_multip" width="105"/>

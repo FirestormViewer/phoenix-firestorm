@@ -32,7 +32,7 @@
                     follows="left|top"
                     top_delta="30"
                     left_delta="10"
-                    width="35"
+                    width="45"
                     height="20"
                     name="info_panel_label"
                     font="SansSerif">
@@ -41,7 +41,7 @@
             <line_editor
                     follows="left|top"
                     top_delta="-2"
-                    left_delta="45"
+                    left_delta="50"
                     width="250"
                     name="settings_name"
                     prevalidator="ascii"
@@ -98,10 +98,10 @@
                     layout="topleft"
                     mouse_opaque="false"
                     name="button_bar_ls"
-                    left="212"
+                    left="217"
                     orientation="horizontal"
                     top="0"
-                    width="313">
+                    width="294">
                 <layout_panel
                         follows="bottom|left|right"
                         height="23"
@@ -110,7 +110,7 @@
                         mouse_opaque="false"
                         name="save_btn_lp"
                         auto_resize="true"
-                        width="156">
+                        width="147">
                     <button
                             follows="bottom|left|right"
                             height="23"
@@ -119,21 +119,18 @@
                             layout="topleft"
                             name="btn_commit"
                             top="0"
-                            width="155" />
+                            width="127" />
                     <button
                             follows="bottom|right"
                             height="23"
                             name="btn_flyout"
                             label=""
                             layout="topleft"
-                            left_pad="-20"
+                            left_pad="0"
                             tab_stop="false"
                             top="0"
-                            image_selected="SegmentedBtn_Right_Selected_Press"
-                            image_unselected="SegmentedBtn_Right_Off"
-                            image_pressed="SegmentedBtn_Right_Press"
-                            image_pressed_selected="SegmentedBtn_Right_Selected_Press"
-                            image_overlay="Arrow_Small_Up"
+                            image_selected="ComboButton_Selected"
+                            image_unselected="ComboButton_Off"
                             width="20"/>
                 </layout_panel>
                 <layout_panel

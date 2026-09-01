@@ -52,7 +52,7 @@ top="0">
 		layout="topleft"
 		left="5"
 		top_pad="10"
-		width="105">
+		width="110">
 		Ambient Color:
 		</text>
 
@@ -65,7 +65,7 @@ top="0">
 		left_pad="0"
 		name="ambient_light"
 		top_delta="-5"
-		width="178" />
+		width="173" />
 
 		<text
 		name="blue_horizon_label"
@@ -74,7 +74,7 @@ top="0">
 		layout="topleft"
 		left="5"
 		top_pad="7"
-		width="105">
+		width="110">
 		Blue Horizon:
 		</text>
 
@@ -87,7 +87,7 @@ top="0">
 		left_pad="0"
 		name="blue_horizon"
 		top_delta="-5"
-		width="178" />
+		width="173" />
 
 		<text
 		name="blue_density_label"
@@ -96,7 +96,7 @@ top="0">
 		layout="topleft"
 		left="5"
 		top_pad="7"
-		width="105">
+		width="110">
 		Blue Density:
 		</text>
 
@@ -109,7 +109,7 @@ top="0">
 		left_pad="0"
 		name="blue_density"
 		top_delta="-5"
-		width="178" />
+		width="173" />
 	</panel>
 
 	<panel

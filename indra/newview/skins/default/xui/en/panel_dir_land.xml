@@ -122,7 +122,7 @@
      left="5"
      mouse_opaque="true"
      name="pricecheck"
-     width="60" />
+     width="65" />
     <line_editor
      bevel_style="in"
      border_style="line"
