@@ -2354,6 +2354,10 @@ Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.
 		Wir konnten Ihre Einstellungen zur Anzeige von [PREFERRED_MATURITY]-Inhalten leider nicht ändern. Ihre Einstellungen wurden auf [ACTUAL_MATURITY]-Inhalte zurückgesetzt. Sie können erneut versuchen, Ihre Inhaltseinstellungen von der Menüleiste aus zu ändern („Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“).
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="RegionTPAccessBlocked_NotifyAdultsOnly">
+		Die Region, die Sie besuchen möchten, enthält [REGIONMATURITY_CAP]-Inhalte, die aufgrund Ihres Konto-Typs nicht verfügrbar sind.
+		<usetemplate name="okbutton" yestext="OK"/>
+  </notification>
 	<notification name="LandClaimAccessBlocked">
 		Die Alterseinstufung des Landes, das Sie in Besitz nehmen möchten, überschreitet Ihre aktuellen Einstellungen. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
 
