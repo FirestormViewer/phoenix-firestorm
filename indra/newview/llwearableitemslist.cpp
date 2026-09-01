@@ -1332,14 +1332,22 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
     bool rlvCanRemove = !RlvActions::isRlvEnabled();
 // [/RLVa:KB]
 
-// <FS:Trish> Fix for "Delete from outfit" context menu option showing in favorites window.
+    // <FS:Trish> Fix for "Delete from outfit" context menu option showing in favorites window.
     bool   is_outfit_menu   = false;
     LLUUID outfit_folder_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS);
     if (!ids.empty())
     {
         is_outfit_menu = gInventory.isObjectDescendentOf(ids.front(), outfit_folder_id);
     }
-// </FS:Trish>
+    // </FS:Trish>
+
+    // <FS:Ansariel> Favorite Wearables folder assignment
+    bool is_wearable_favorite{ false };
+    if (auto wearableFavoritesFolderId = FSFloaterWearableFavorites::getFavoritesFolder(); wearableFavoritesFolderId.notNull())
+    {
+        is_wearable_favorite = gInventory.isObjectDescendentOf(ids.front(), wearableFavoritesFolderId);
+    }
+    // </FS:Ansariel>
 
     for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
     {
@@ -1459,9 +1467,11 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
     setMenuItemEnabled(menu, "delete_from_outfit", n_links > 0 && is_outfit_menu);
 // </AS:Chanayane>
     setMenuItemVisible(menu, "favorites_add",       can_favorite);
-    setMenuItemVisible(menu, "favorites_assign_folder", true); // </FS:Amy> Favorite Wearables folder assignment
-    setMenuItemEnabled(menu, "favorites_assign_folder", true); // </FS:Amy> Favorite Wearables folder assignment
     setMenuItemVisible(menu, "favorites_remove",    can_unfavorite);
+    // <FS:Amy> Favorite Wearables folder assignment
+    setMenuItemVisible(menu, "favorites_assign_folder", is_wearable_favorite);
+    setMenuItemEnabled(menu, "favorites_assign_folder", is_wearable_favorite);
+    // </FS:Amy> Favorite Wearables folder assignment
     setMenuItemVisible(menu, "take_off",            mask == MASK_CLOTHING && n_worn == n_items);
     setMenuItemVisible(menu, "detach",              mask == MASK_ATTACHMENT && n_worn == n_items);
     setMenuItemVisible(menu, "take_off_or_detach",  mask == (MASK_ATTACHMENT|MASK_CLOTHING));
