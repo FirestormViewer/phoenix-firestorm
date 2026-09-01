@@ -34,16 +34,63 @@
          name="buttons_panel"
          right="-1"
          top="2">
+                <combo_box
+                 follows="left|top|right"
+                 height="25"
+                 layout="topleft"
+                 left="3"
+                 name="folder_combo"
+                 top="1"
+                 right="-103"/>
+                <button
+                 follows="right"
+                 height="25"
+                 image_hover_unselected="Toolbar_Middle_Over"
+                 image_overlay="AddItem_Off"
+                 image_selected="Toolbar_Middle_Selected"
+                 image_unselected="Toolbar_Middle_Off"
+                 layout="topleft"
+                 left_pad="2"
+                 name="new_folder_btn"
+                 tool_tip="Create new favorites folder"
+                 top_delta="0"
+                 width="31"/>
+                <button
+                 follows="right"
+                 height="25"
+                 image_hover_unselected="Toolbar_Middle_Over"
+                 image_overlay="Edit_Wrench"
+                 image_selected="Toolbar_Middle_Selected"
+                 image_unselected="Toolbar_Middle_Off"
+                 layout="topleft"
+                 left_pad="2"
+                 name="rename_folder_btn"
+                 tool_tip="Rename selected favorites folder"
+                 top_delta="0"
+                 width="31"/>
+                <button
+                 follows="right"
+                 height="25"
+                 image_hover_unselected="Toolbar_Middle_Over"
+                 image_overlay="TrashItem_Off"
+                 image_selected="Toolbar_Middle_Selected"
+                 image_unselected="Toolbar_Middle_Off"
+                 layout="topleft"
+                 left_pad="2"
+                 name="delete_folder_btn"
+                 tool_tip="Delete selected favorites folder"
+                 top_delta="0"
+                 width="31"/>
                 <filter_editor
                  follows="left|top|right"
-                 height="23"
+                 height="25"
                  layout="topleft"
                  left="3"
                  label="Filter Wearables"
                  max_length_chars="300"
                  name="wearable_filter_input"
-                 top="1"
-                 right="-171" />
+                 top_pad="5"
+                 right="-70" />
                 <menu_button
                  follows="right"
                  height="25"
@@ -61,7 +108,7 @@
                  follows="right"
                  height="25"
                  image_hover_unselected="Toolbar_Middle_Over"
-                 image_overlay="TrashItem_Off"
+                 image_overlay="Remove_Icon"
                  image_selected="Toolbar_Middle_Selected"
                  image_unselected="Toolbar_Middle_Off"
                  left_pad="2"
@@ -70,44 +117,6 @@
                  tool_tip="Remove wearable from favorites list"
                  top_delta="0"
                  width="31"/>
-                <button
-                 follows="right"
-                 height="25"
-                 label="+"
-                 layout="topleft"
-                 left_pad="2"
-                 name="new_folder_btn"
-                 tool_tip="Create new favorites folder"
-                 top_delta="0"
-                 width="31"/>
-                <button
-                 follows="right"
-                 height="25"
-                 label="R"
-                 layout="topleft"
-                 left_pad="2"
-                 name="rename_folder_btn"
-                 tool_tip="Rename selected favorites folder"
-                 top_delta="0"
-                 width="31"/>
-                <button
-                 follows="right"
-                 height="25"
-                 label="D"
-                 layout="topleft"
-                 left_pad="2"
-                 name="delete_folder_btn"
-                 tool_tip="Delete selected favorites folder"
-                 top_delta="0"
-                 width="31"/>
-                <combo_box
-                 follows="left|top|right"
-                 height="23"
-                 layout="topleft"
-                 left="3"
-                 name="folder_combo"
-                 top_pad="5"
-                 right="-4"/>
         </panel>
 
         <panel
