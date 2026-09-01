@@ -208,7 +208,6 @@ void FSFloaterWearableFavorites::initialize()
     category->fetch();
 
     mItemsList->setSortOrder((LLWearableItemsList::ESortOrder)gSavedSettings.getU32("FSWearableFavoritesSortOrder"));
-    mSelectedFolderID = sFolderID;
     refreshFolderCombo();
     mItemsList->setDADCallback(boost::bind(&FSFloaterWearableFavorites::onItemDAD, this, _1));
 
