@@ -10,15 +10,15 @@
 	</panel>
 
 	<panel name="P_Cloud_Density">
-		<text name="cloud_coverage_label" width="110">
+		<text name="cloud_coverage_label" width="120">
 			Wolkenbedeckung:
 		</text>
 		<slider name="cloud_coverage" width="161"/>
-		<text name="cloud_scale_label" width="110">
+		<text name="cloud_scale_label" width="120">
 			Wolken-Skalierung:
 		</text>
 		<slider name="cloud_scale" width="161"/>
-		<text name="cloud_variance_label" width="110">
+		<text name="cloud_variance_label" width="120">
 			Wolken-Varianz:
 		</text>
 		<slider name="cloud_variance" width="161"/>

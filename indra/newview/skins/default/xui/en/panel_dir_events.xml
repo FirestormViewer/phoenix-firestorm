@@ -210,7 +210,7 @@
      mouse_opaque="true"
      name="date_mode"
      initial_value="current"
-     width="200">
+     width="230">
         <radio_item
          layout="topleft"
          left="3"
@@ -226,10 +226,10 @@
          follows="left|top"
          height="20"
          top_delta="0"
-         left_delta="151"
+         left_pad="5"
          mouse_opaque="true"
          name="date"
-         width="56"
+         width="55"
          label="Date"/>
     </radio_group>
     <button

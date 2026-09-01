@@ -68,6 +68,10 @@
 #include "llmeshrepository.h"
 #include "u64.h"
 #include "llviewertexturelist.h"
+// <FS> FIRE-34340-1 PBR texture override for @setcam_textures
+#include "llfetchedgltfmaterial.h"
+#include "lltextureentry.h"
+// </FS>
 #include "lldatapacker.h"
 #ifdef LL_USESYSTEMLIBS
 #include <zlib.h>
@@ -836,6 +840,94 @@ void LLViewerObjectList::setAllObjectDefaultTextures(U32 nChannel, bool fShowDef
     }
 }
 // [/SL:KB]
+
+// <FS> FIRE-34340-1 PBR texture override for @setcam_textures
+static std::map<std::pair<LLUUID, S32>, LLUUID> sOrigPBRBaseColorIDs;
+static std::map<LLGLTFMaterial*, LLUUID> sOrigBaseMaterialColorIDs;
+
+void LLViewerObjectList::setAllObjectPBRDefaultTextures(const LLUUID& override_id, bool fShowDefault)
+{
+    for (LLViewerObject* pObj : mObjects)
+    {
+        LLDrawable* pDrawable = pObj->mDrawable;
+        if (!pDrawable || pDrawable->isDead())
+            continue;
+        if (pObj->isAttachment())
+            continue;
+        if (LL_PCODE_VOLUME != pObj->getPCode())
+            continue;
+
+        for (int idxFace = 0, cntFace = pDrawable->getNumFaces(); idxFace < cntFace; idxFace++)
+        {
+            LLFace* pFace = pDrawable->getFace(idxFace);
+            if (!pFace)
+                continue;
+
+            S32 te_idx = pFace->getTEOffset();
+            const LLTextureEntry* te = pObj->getTE(te_idx);
+            if (!te)
+                continue;
+
+            LLGLTFMaterial* render_mat_raw = te->getGLTFRenderMaterial();
+            if (!render_mat_raw)
+                continue;
+
+            if (render_mat_raw == te->getGLTFMaterial())
+            {
+                if (fShowDefault && override_id.notNull())
+                {
+                    if (sOrigBaseMaterialColorIDs.find(render_mat_raw) == sOrigBaseMaterialColorIDs.end())
+                        sOrigBaseMaterialColorIDs[render_mat_raw] = render_mat_raw->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR];
+                    render_mat_raw->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR] = override_id;
+                }
+                else if (!fShowDefault)
+                {
+                    auto it = sOrigBaseMaterialColorIDs.find(render_mat_raw);
+                    if (it != sOrigBaseMaterialColorIDs.end())
+                    {
+                        render_mat_raw->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR] = it->second;
+                        sOrigBaseMaterialColorIDs.erase(it);
+                    }
+                }
+            }
+            else
+            {
+                LLFetchedGLTFMaterial* render_mat = dynamic_cast<LLFetchedGLTFMaterial*>(render_mat_raw);
+                if (!render_mat)
+                    continue;
+
+                auto key = std::make_pair(pObj->getID(), te_idx);
+
+                if (fShowDefault && override_id.notNull())
+                {
+                    auto it = sOrigPBRBaseColorIDs.find(key);
+                    if (it == sOrigPBRBaseColorIDs.end())
+                        sOrigPBRBaseColorIDs[key] = render_mat->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR];
+                    render_mat->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR] = override_id;
+                }
+                else if (!fShowDefault)
+                {
+                    auto it = sOrigPBRBaseColorIDs.find(key);
+                    if (it != sOrigPBRBaseColorIDs.end())
+                    {
+                        render_mat->mTextureId[LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR] = it->second;
+                        sOrigPBRBaseColorIDs.erase(it);
+                    }
+                }
+            }
+        }
+
+        if (LLVOVolume* pVoVolume = pDrawable->getVOVolume())
+            pVoVolume->markForUpdate();
+    }
+
+    if (!fShowDefault)
+    {
+        sOrigPBRBaseColorIDs.clear();
+        sOrigBaseMaterialColorIDs.clear();
+    }
+}
+// </FS>
 
 void LLViewerObjectList::updateApparentAngles(LLAgent &agent)
 {

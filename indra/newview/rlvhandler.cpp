@@ -2416,11 +2416,13 @@ void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_TEXTURE>::onValueChange() c
             RLV_INFOS << "Toggling diffuse textures for @setcam_textures" << RLV_ENDL;
             LLViewerFetchedTexture::sDefaultDiffuseImagep = LLViewerTextureManager::getFetchedTexture(pBhvrModifier->getValue<LLUUID>(), FTT_DEFAULT, MIPMAP_YES, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
             gObjectList.setAllObjectDefaultTextures(LLRender::DIFFUSE_MAP, true);
+            gObjectList.setAllObjectPBRDefaultTextures(pBhvrModifier->getValue<LLUUID>(), true);
         }
         else
         {
             RLV_INFOS << "Restoring diffuse textures for @setcam_textures" << RLV_ENDL;
             gObjectList.setAllObjectDefaultTextures(LLRender::DIFFUSE_MAP, false);
+            gObjectList.setAllObjectPBRDefaultTextures(LLUUID::null, false);
             LLViewerFetchedTexture::sDefaultDiffuseImagep = nullptr;
         }
     }
@@ -2494,7 +2496,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-    const std::string strEnvFloaters[] = { "env_adjust_snapshot", "env_edit_extdaycycle", "env_fixed_environmentent_sky", "env_fixed_environmentent_water", "my_environments" };
+    const std::string strEnvFloaters[] = { "env_adjust_snapshot", "env_edit_extdaycycle", "env_fixed_environmentent_sky", "fs_env_fixed_environmentent_sky", "env_fixed_environmentent_water", "fs_env_fixed_environmentent_water", "my_environments" };
     for (int idxFloater = 0, cntFloater = sizeof(strEnvFloaters) / sizeof(std::string); idxFloater < cntFloater; idxFloater++)
     {
         if (fHasBhvr)

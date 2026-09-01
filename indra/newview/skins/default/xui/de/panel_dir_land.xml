@@ -24,7 +24,7 @@
     <text name="pricecheck_symbol">
         L$
     </text>
-    <check_box label="Größe &#8805; " name="areacheck" width="65"/>
+    <check_box label="Größe &#8805; " name="areacheck" width="70"/>
     <text name="areacheck_symbol">
         m²
     </text>

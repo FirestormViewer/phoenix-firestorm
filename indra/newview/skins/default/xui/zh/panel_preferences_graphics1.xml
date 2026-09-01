@@ -66,7 +66,6 @@
 				<combo_box.item label="減少" name="2" />
 				<combo_box.item label="僅太陽/月亮" name="1" />
 			</combo_box>
-			<!-- Mirror settings. -->
 			<text name="MirrorResolutionText">
 				鏡像解析度:
 			</text>
@@ -79,8 +78,6 @@
 				<combo_box.item label="高" name="1" />
 				<combo_box.item label="超高" name="0" />
 			</combo_box>
-			<!-- 映象設定結束 -->
-			<!--General選項卡第二列頂部-->
 			<check_box label="全螢幕模式" name="Fullscreen Mode" tool_tip="以全螢幕模式運行Firestorm。更改模式需要重新啟動。" />
 			<slider label="顯示距離" name="DrawDistance" />
 			<text name="DrawDistanceMeterText2">米</text>

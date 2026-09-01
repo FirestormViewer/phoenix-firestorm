@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="Sonne und Mond" name="panel_fs_settings_sky_hbodies">
+<panel label="Sonne &amp; Mond" name="panel_fs_settings_sky_hbodies">
 		<panel name="P_Sun_Color">
 			<text name="T_Sun_Header" value="Farbe Sonne und Mond"/>
 		</panel>
 
 		<panel name="P_SM_Color">
-			<text name="color_label" width="140">
+			<text name="color_label" width="145">
 					Farbe Sonne und Mond:
 				</text>
 		</panel>

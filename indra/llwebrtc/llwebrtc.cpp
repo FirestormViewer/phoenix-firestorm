@@ -324,9 +324,7 @@ void LLWebRTCImpl::init()
     //webrtc::LogMessage::LogToDebug(webrtc::LS_VERBOSE);
     // </FS:minerjr> [FIRE-36022]
     webrtc::LogMessage::SetLogToStderr(true);
-    // <FS:Ansariel> WebRTC logging is broken - ensure we get WebRTC warnings and errors
-    //webrtc::LogMessage::AddLogToStream(mLogSink, webrtc::LS_VERBOSE);
-    webrtc::LogMessage::AddLogToStream(mLogSink, webrtc::LS_WARNING);
+    webrtc::LogMessage::AddLogToStream(mLogSink, webrtc::LS_VERBOSE);
 
     // Create the native threads.
     mNetworkThread = webrtc::Thread::CreateWithSocketServer();
@@ -733,7 +731,10 @@ void LLWebRTCImpl::workerStartPlayout()
 {
     // Only run playout while voice is enabled and there's a connection to
     // render (running the output device otherwise is heard as a buzz).
-    if (!mDeviceModule || !mVoiceEnabled || mTuningMode || mDeviceModule->Playing() || mPeerConnections.empty())
+    // <FS:TJ> Fix default voice output device always being used instead of the chosen device
+    //if (!mDeviceModule || !mVoiceEnabled || mTuningMode || mDeviceModule->Playing() || mPeerConnections.empty())
+    if (!mDeviceModule || !mVoiceEnabled || mTuningMode || mPeerConnections.empty())
+    // </FS:TJ>
     {
         // <FS:minerjr> [FIRE-36022]
         // If the device is not avaiable, then make sure the flag for the WebRTC updated devices flag is turned off for the co-routine
@@ -763,6 +764,18 @@ void LLWebRTCImpl::workerStartPlayout()
             }
         }
     }
+
+    // <FS:TJ> Fix default voice output device always being used instead of the chosen device
+    if (mDeviceModule->Playing())
+    {
+        if (mDeviceModule->GetPlayoutDevice() == playoutDevice)
+        {
+            return;
+        }
+
+        mDeviceModule->StopPlayout();
+    }
+    // </FS:TJ>
 
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
     // Flag the device is being interacted with for the Co-routine in case something goes wrong.
@@ -1038,7 +1051,9 @@ void LLWebRTCImpl::updateDevices()
 
 void LLWebRTCImpl::OnDevicesUpdated()
 {
-    updateDevices();
+    // OnDevicesUpdated() is called on macOS CoreAudio's device-change callback
+    // thread.  Calling updateDevices() on that thread causes a deadlock.
+    mWorkerThread->PostTask([this] { updateDevices(); });
 }
 
 

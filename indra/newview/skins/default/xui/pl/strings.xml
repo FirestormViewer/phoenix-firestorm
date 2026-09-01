@@ -1728,6 +1728,9 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="InventoryNoTexture">
 		Nie posiadasz kopii tej tekstury w swojej Szafie.
 	</string>
+	<string name="InventoryNoMaterial">
+		Nie posiadasz kopii tego materiału w swojej Szafie.
+	</string>
 	<string name="Unconstrained">
 		Swobodny
 	</string>

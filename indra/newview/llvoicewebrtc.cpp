@@ -395,30 +395,25 @@ void LLWebRTCVoiceClient::cleanUp()
 
 void LLWebRTCVoiceClient::LogMessage(llwebrtc::LLWebRTCLogCallback::LogLevel level, const std::string& message)
 {
-    // <FS:Ansariel> WebRTC logging is broken - ensure we get WebRTC warnings and errors
-    //switch (level)
-    //{
-    //case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_VERBOSE:
-    //    LL_DEBUGS("Voice") << message << LL_ENDL;
-    //    break;
-    //case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_INFO:
-    //    LL_INFOS("Voice") << message << LL_ENDL;
-    //    break;
-    //case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_WARNING:
-    //    LL_WARNS("Voice") << message << LL_ENDL;
-    //    break;
-    //case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_ERROR:
-    //    // use WARN so that we don't crash on a webrtc error.
-    //    // webrtc will force a crash on a fatal error.
-    //    LL_WARNS("Voice") << message << LL_ENDL;
-    //    break;
-    //default:
-    //    break;
-    //}
-
-    LL_WARNS("Voice") << message << LL_ENDL;
-
-    // </FS:Ansariel>
+    switch (level)
+    {
+    case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_VERBOSE:
+        LL_DEBUGS("Voice") << message << LL_ENDL;
+        break;
+    case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_INFO:
+        LL_INFOS("Voice") << message << LL_ENDL;
+        break;
+    case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_WARNING:
+        LL_WARNS("Voice") << message << LL_ENDL;
+        break;
+    case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_ERROR:
+        // use WARN so that we don't crash on a webrtc error.
+        // webrtc will force a crash on a fatal error.
+        LL_WARNS("Voice") << message << LL_ENDL;
+        break;
+    default:
+        break;
+    }
 }
 
 // --------------------------------------------------

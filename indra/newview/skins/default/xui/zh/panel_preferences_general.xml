@@ -50,6 +50,11 @@
 	<text name="RenderNameShowTime_LabelSuffix">秒)</text>
 	<check_box label="我的名字" name="show_my_name_checkbox1" />
 	<check_box label="使用者名稱" name="show_slids" tool_tip="顯示使用者名稱，如 bobsmith123" />
+	<combo_box tool_tip="顯示群組頭銜，例如：軍官" name="group_title">
+		<combo_box.item label="無群組頭銜" name="no_tags" />
+		<combo_box.item label="僅我的群組頭銜" name="my_tag" />
+		<combo_box.item label="所有群組頭銜" name="all_tags" />
+	</combo_box>
 	<check_box label="群組頭銜" name="show_all_title_checkbox1" tool_tip="顯示群組頭銜，如 Officer 或 Member" />
 	<check_box label="隱藏我的群組頭銜" name="RenderHideGroupTitle" tool_tip="隱藏或顯示您自己和他人的群組頭銜。" />
 	<check_box label="顯示名" name="display_names_check" tool_tip="在聊天、私聊、標籤等中使用顯示名。" />

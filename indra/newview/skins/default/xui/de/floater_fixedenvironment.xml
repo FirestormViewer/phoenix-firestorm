@@ -15,7 +15,7 @@
 			<button label="Importieren" name="btn_import" tool_tip="Alte Einstellungen von Datenträger importieren."/>
 		</layout_panel>
 		<layout_panel name="tab_area">
-			<tab_container name="tab_settings" tab_width="165"/>
+			<tab_container name="tab_settings" tab_width="185"/>
 		</layout_panel>
 		<layout_panel name="button_panel">
 			<layout_stack name="button_bar_ls">
