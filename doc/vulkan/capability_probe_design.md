@@ -190,33 +190,46 @@ About.
    enumeration would add three platform-specific subsystems for information the
    driver already hands us. Avoid it.
 
-3. **Timing — DECIDED (2026-09-02): (i) populate-before-first-read, staged.**
-   Verified against the codebase: `LLVKProbe::hasVulkanDevice()` already creates
-   a minimal instance + enumerates physical devices at
-   [llappviewer.cpp:3787](../../../indra/newview/llappviewer.cpp) — **before**
-   `new LLViewerWindow` (3841), which is where `LLFeatureManager` first reads
-   ([llviewerwindow.cpp:2139]). So the early-probe infrastructure already runs at
-   the right time and already holds the physical-device handle. (i) fits without
-   re-ordering or a backdoor; (ii) would let the classifier persist settings
-   derived from the wrong (CLASS_0) class on first read, which then must be
-   detected and undone — a state-correction trap.
+3. **Timing — DECIDED (2026-09-02): (b) bounded-defer.** The class NUMBER cannot
+   be resolved until bandwidth runs at device-up, so on the Vulkan path we
+   **withhold the class-dependent feature application until the class is
+   known** — not "run it on a wrong class and fix later."
 
-   **Staged, because bandwidth needs a logical device:**
-   - **Stage 1 (early, in the existing `LLVKProbe` enumeration):** capture all
-     *static* facts — vendor/device IDs, deviceName, deviceType, VRAM,
-     `limits.*` (everything except bandwidth). This alone gets the classifier
-     off its zero-state before first read.
-   - **Stage 2 (at logical-device up, i.e. `LLVKSession::start()`):** run the
-     bandwidth micro-benchmark and resolve the *final* GPU class via a single,
-     immediate, one-time classification — before the 3D pipeline consumes any
-     feature settings. This is NOT (ii)'s "default-then-maybe-fix-later": the
-     static facts are correct at first read, and the bandwidth-dependent class
-     is resolved as soon as the device exists, not deferred.
+   **Why (b) over (a)/(c) — the persistence trap (subagent-verified):**
+   `LLFeatureManager` first reads during the `LLViewerWindow` constructor, and
+   `applyRecommendedSettings()` fires immediately at
+   [llviewerwindow.cpp:2144](../../../indra/newview/llviewerwindow.cpp) →
+   `applyFeatures()` writes **100+ render settings to `gSavedSettings`**. With no
+   GL context the class is CLASS_0, so it stamps *low-end everything* (no
+   deferred/SSAO/shadows/reflections/cube-maps, 64m draw distance, "Low"
+   quality), and [llstartup.cpp:832](../../../indra/newview/llstartup.cpp)
+   persists `LastGPUString`/`LastFeatureVersion`. On next launch the re-probe is
+   skipped if the strings match → **wrong-low settings persist forever.**
+   - (a) let-it-be-CLASS_0: persists broken-low. Rejected.
+   - (c) CLASS_1 floor: persists *wrong*-low (less broken, still wrong) — the
+     trap is that `applyRecommendedSettings` runs at all before the class is
+     known, not which wrong value it uses. Rejected.
+   - **(b) defer the settings application on the Vulkan path until the class is
+     resolved at device-up.** Only option that keeps GL byte-identical AND never
+     persists a wrong class.
 
-   Rationale: (i) writes nothing wrong on first read (every downstream setting
-   derives from real facts the first time); the only input not available at
-   first read is bandwidth (needs a logical device), and it is resolved
-   immediately at device-up rather than left at a wrong default.
+   **The mechanism (bounded):**
+   - **Static facts** still populate early in `LLVKProbe` (About panel, caps,
+     VRAM, limits) — they are NOT class-dependent and are unaffected.
+   - On the Vulkan path, the class is **"pending"** at first read; the
+     `applyRecommendedSettings()` / feature-mask application is **withheld** (not
+     run on CLASS_0).
+   - **Resolve at device-up:** `LLVKSession::start()` runs the bandwidth
+     benchmark → real class → run `applyBaseMasks()` + `applyRecommendedSettings()`
+     ONCE with the correct class, before the 3D pipeline and before settings
+     persist.
+   - **The one in-gap consumer:** `isFeatureAvailable("WatchdogDisabled")` at
+     [llappviewer.cpp:3864](../../../indra/newview/llappviewer.cpp) reads the
+     masked list ~13 lines BEFORE `LLVKSession::start()`. When the class is
+     pending it gets an explicit safe default (the watchdog decision is a debug
+     feature that does not depend on GPU tier). Handled explicitly.
+
+   GL path: byte-identical (no defer, runs exactly as today).
 4. **Bandwidth — DECIDED (2026-09-02): (A) Vulkan-native timestamped
    micro-benchmark, with (C) CLASS_3 fallback.** This is effectively the only
    route to a real number: Vulkan has no `VkPhysicalDevice` bandwidth field
