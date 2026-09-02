@@ -151,76 +151,104 @@ circle/arc/washer (rare, TRIANGLE_FAN/STRIP) · corner brackets · glyph quad.
 
 ## 3. Architecture — what we build
 
-All new code is Vulkan-native, lives under the established `llvulkan` module and
-a viewer-side Vulkan UI layer, and is reached through boundary seams only.
+**DECIDED (2026-09-02): fully-parallel `llvkrender`.** We do NOT introduce a
+single shared interface that both backends implement. Instead we build a
+**Vulkan-native 2D render layer — `llvkrender` — that is the counterpart of
+`llrender`'s 2D/UI role**, and we bind the Vulkan UI to it. The GL UI keeps
+binding to `llrender` (untouched reference). Two parallel renderers, selected at
+the backend seam, never sharing code — the purest reading of "results, not
+logic" and the two-executable end-state. This supersedes the earlier single-sink
+/ shared-interface framing.
 
 ```mermaid
 flowchart LR
-    subgraph PROD["Production (reused, backend-neutral)"]
-      W["widget tree draw()"] --> P1["transform/clip math"]
-      IMGDEC["image decode<br/>(LLImage)"] 
-      FT["FreeType raster"]
+    subgraph TREE["widget tree (llui / newview) — one draw()"]
+      D["2D draw calls resolve at the seam"]
     end
-    PROD --> SINK["LLVKUI2D sink<br/>(harvested from archive — VERIFIED<br/>contract-fit; rect, texturedQuad,<br/>lineStrip, dropShadow, per-topology<br/>pipelines + 5 gap additions)"]
-    subgraph VKOWN["Vulkan-owned (new)"]
-      LOADER["VK image loader<br/>fetch+decode → RGBA8<br/>exact content dims, no pad"]
-      STORE["VK pixel store / cache<br/>keyed by name/UUID"]
-      ATLAS["VK font atlas<br/>512² pages, RGBA8<br/>(Option A: glyph → white+alpha)"]
-      TEXC["LLVKUITextureCache<br/>staging + descriptors"]
+    D -->|"OpenGL backend"| GLR["llrender (gGL)<br/>UNTOUCHED reference"]
+    D -->|"Vulkan backend"| VKR["llvkrender<br/>Vulkan-native 2D render layer<br/>(NEW module)"]
+    subgraph VKR
+      SURF["widget-facing 2D surface<br/>color/transform/clip/blend<br/>rect/line/image/text/batch"]
+      SURF --> SINK["LLVKUI2D sink<br/>(harvested, batched)"]
+      LOADER["VK image loader<br/>+ pixel store (name/UUID)"]
+      ATLAS["VK font atlas<br/>RGBA8 (Option A)"]
+      LOADER --> TEXC["LLVKUITextureCache"]
+      ATLAS --> TEXC
+      TEXC --> SINK
     end
-    LOADER --> STORE --> TEXC
-    FT --> ATLAS --> TEXC
-    TEXC --> SINK
-    SINK --> CTX["LLVKContext 2D pipelines<br/>dynamic viewport/scissor,<br/>BT_ALPHA + ADD blend"]
+    SINK --> CTX["LLVKContext 2D pipelines<br/>dynamic viewport/scissor"]
     CTX --> SES["LLVKSession frame<br/>acquire → render → present"]
 ```
 
-**Components:**
-1. **`LLVKUI2D` sink** — *harvest from `vulkan-ui` archive.* **Contract-fit
-   VERIFIED (2026-09-02):** it correctly owns the two GL touchpoints (descriptor
-   upload, 2D-pipeline submission) and implements the ordering / scissor /
-   blend / transform semantics byte-exactly, with the M1 fixes baked in
-   (append-offset batching, pre-allocated buffer, deferred grow, per-topology
-   pipelines, flush-around-lineStrip). It has no GL coupling — policy-clean.
-   **Reuse approved, gated on closing the 5 vocabulary gaps** (each is an
-   additive emitter on the existing flush machinery, no core redesign):
-   - **9-slice textured quad** — add `texturedQuad9Slice()` emitting the 9
-     sub-quads with per-region UVs (54 verts). Reuses the textured run.
+**Three binding constraints keep fully-parallel honest:**
+1. **`llvkrender` never includes or links `llrender`** — no `gGL`, no `LLRender`,
+   no `LLImageGL`, no `LLVertexBuffer`. Physical module boundary + no include
+   path. The two share only the **documented result contracts** (§2), never
+   code. (This is the hard rule that prevents decay into wrapping GL.)
+2. **`llvkrender` is scoped to the 2D/UI subset the tree actually uses** — the
+   4 choke points (rect/line, image, text, scissor) plus a generic
+   pre-transformed tri-batch for the ~5 custom-draw widgets (llstatbar graphs,
+   llfloater cone, lltextbase selection, lllineeditor IME, llview debug). It is
+   NOT a re-implementation of `llrender`'s 3D/world surface.
+3. **Its submission core is the harvested `LLVKUI2D` sink** (batched, satisfies
+   the §5b submission-granularity invariant). `llvkrender` is the widget-facing
+   surface + production state; the sink is the GPU-submission engine beneath it.
+
+**Binding seam:** the tree's 2D calls today are static (`gGL.foo()`,
+`gl_rect_2d(...)`). The seam is a backend-conditional dispatch at the choke
+points that resolves those calls to `llrender` (GL) or `llvkrender` (Vulkan),
+chosen once per frame at `display_startup()` / `render_ui_2d()`. The Vulkan path
+never reads `gGL` — its production state (transform/color/clip) lives in
+`llvkrender`, not in GL.
+
+**Components (all Vulkan-owned unless noted):**
+1. **`llvkrender` module** — *new.* The Vulkan-native 2D render layer the Vulkan
+   UI binds to: the widget-facing surface (color/transform/clip/blend state +
+   rect/line/image/text/batch primitives) and the production-state owner. Sits
+   above the sink; owns no GL.
+2. **`LLVKUI2D` sink** — *harvest from `vulkan-ui` archive*; the GPU-submission
+   core. **Contract-fit VERIFIED (2026-09-02):** owns the two GL touchpoints
+   (descriptor upload, 2D-pipeline submission), implements ordering / scissor /
+   blend / transform byte-exactly, carries the M1 fixes (append-offset batching,
+   pre-allocated buffer, deferred grow, per-topology pipelines). No GL coupling.
+   **Reuse approved, gated on closing the 5 vocabulary gaps** (additive emitters
+   on the existing flush machinery, no core redesign):
+   - **9-slice textured quad** — `texturedQuad9Slice()` emitting the 9 sub-quads
+     with per-region UVs (54 verts).
    - **Glyph path** — emit glyph quads via the existing textured path; the
-     mask×tint result is achieved by the **Option-A atlas** (below), so no new
-     sink primitive is required — only correct UVs + the white+alpha texture.
-   - **Gradient rect** — per-vertex-color rect (2/4-corner), routed through
-     `rawTris`.
+     mask×tint result comes from the **Option-A atlas** (below), so no new sink
+     primitive — only correct UVs + the white+alpha texture.
+   - **Gradient rect** — per-vertex-color rect (2/4-corner) via `rawTris`.
    - **Rare prims** (circle/arc/washer/triangle/corner-brackets) — FAN/STRIP
      triangulated CPU-side into `rawTris`; outlines via `lineStrip`.
    - **Rotated textured quad** — caller bakes rotation into verts →
      `texturedBatchPreTransformed` (already present; confirm only).
-   Two plumbing details to preserve when re-wiring the seams: the **scissor
-   Y-flip** (GL bottom-left clip rects → Vulkan top-left scissor under the
-   negative-height viewport) lived in the archived funnel, not the sink — it
-   must be carried over; and the glyph atlas format decision (Option A).
-2. **VK image loader + pixel store** — *new.* Owns fetch (curl/file) → decode
-   (LLImage, backend-neutral) → RGBA8 at exact content dims → keyed store.
-   No `gTextureList`, no `LLViewerFetchedTexture` GL path, no discard levels,
-   no `mTexName`, no `onUIImageLoaded` GL callback.
-3. **`LLVKUITextureCache`** — staging upload + descriptor per resolved texture.
-   (Archive version exists; re-key it by name/UUID instead of opaque pointer.)
-4. **VK font atlas** — *new upload path around reused FreeType raster* (FreeType
-   is backend-neutral CPU). **Atlas format = Option A (decided 2026-09-02):**
-   grayscale glyph coverage is expanded to **RGBA8 (RGB=white, A=coverage)** at
-   upload, so the existing tint×texture multiply degenerates to the correct
-   `tint.rgb, tint.a × glyphAlpha` with **no second shader variant** — one
-   byte-exact multiply path for images and text. Color emoji stay BGRA
-   premultiplied. Own 512² pages as Vulkan textures; own descriptor-per-page.
-   (Memory cost is negligible at UI font sizes; correctness surface is the
-   priority.)
-5. **Frame seams** — `display_startup()` and `render_ui_2d()` choose the Vulkan
-   submission once per frame; the production traversal runs unchanged but emits
-   to the sink. **Full redraw; no `mUIScreen` FBO.**
+   Two plumbing details to preserve at the seam: the **scissor Y-flip** (GL
+   bottom-left clip rects → Vulkan top-left scissor under the negative-height
+   viewport) and the **transform feed** — both previously lived in the archived
+   funnel and now live in `llvkrender`, which owns the neutral production state
+   (it must NOT read them from `gGL`).
+3. **VK image loader + pixel store** — *new.* Fetch (curl/file) → decode
+   (LLImage, backend-neutral) → RGBA8 at exact content dims → store keyed by
+   name/UUID. No `gTextureList`, no `LLViewerFetchedTexture` GL path, no discard
+   levels, no `mTexName`, no `onUIImageLoaded` GL callback.
+4. **`LLVKUITextureCache`** — staging upload + descriptor per resolved texture
+   (archive version exists; re-key by name/UUID, not opaque pointer).
+5. **VK font atlas** — *new upload path around reused FreeType raster* (FreeType
+   is backend-neutral CPU). **Option A (decided 2026-09-02):** grayscale glyph
+   coverage → **RGBA8 (RGB=white, A=coverage)** at upload, so the existing
+   tint×texture multiply yields `tint.rgb, tint.a × glyphAlpha` with **no second
+   shader variant** — one byte-exact multiply path for images and text. Color
+   emoji stay BGRA premultiplied. Own 512² pages + descriptor-per-page.
+6. **Frame seams** — `display_startup()` / `render_ui_2d()` select the backend
+   once per frame; the production traversal runs once and its 2D calls resolve to
+   the chosen renderer. **Full redraw; no `mUIScreen` FBO.**
 
 **Explicitly not built:** `mUIScreen` dirty-rect FBO; any reuse of GL texture
-objects; any guard-inside-GL-function; GL matrix stack (transforms are already
-CPU-computed pre-transform — we consume the results).
+objects or GL state; any guard-inside-GL-function; any shared interface
+implemented by both backends (fully-parallel instead); GL matrix stack on the
+Vulkan path (transforms are CPU pre-transform — `llvkrender` consumes the
+results, never `gGL`).
 
 ---
 
