@@ -1375,7 +1375,7 @@ LLQuaternion FSManipRotateJoint::dragUnconstrained(S32 x, S32 y)
     }
     // If the mouse is still near the center of the manipulator in screen space,
     // simply return the computed sphere rotation.
-    else if (dist_from_sphere_center < RADIUS_PIXELS)
+    else if (dist_from_sphere_center < RADIUS_PIXELS * getUserEditHandleScaling())
     {
         return sphere_rot;
     }

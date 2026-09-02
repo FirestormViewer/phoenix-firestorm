@@ -1321,7 +1321,10 @@ LLQuaternion LLManipRotate::dragUnconstrained( S32 x, S32 y )
     {
         return LLQuaternion::DEFAULT;
     }
-    else if (dist_from_sphere_center < RADIUS_PIXELS)
+    // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+    // else if (dist_from_sphere_center < RADIUS_PIXELS)
+    else if (dist_from_sphere_center < RADIUS_PIXELS * getUserEditHandleScaling())
+    // </FS:AR> [FIRE-36909]
     {
         return sphere_rot;
     }
