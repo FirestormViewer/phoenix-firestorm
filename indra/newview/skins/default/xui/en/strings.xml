@@ -53,7 +53,6 @@ CPU: [CPU]
 Memory: [MEMORY_MB] MB (Used: [USED_RAM] MB)
 Concurrency: [CONCURRENCY]
 OS Version: [OS_VERSION]
-Graphics Card Vendor: [GRAPHICS_CARD_VENDOR]
 Graphics Card: [GRAPHICS_CARD]
 Graphics Card Memory: [GRAPHICS_CARD_MEMORY] MB
 Graphics Card Memory (Detected): [GRAPHICS_CARD_MEMORY_DETECTED] MB
@@ -61,6 +60,8 @@ Graphics Card Memory (Budget): [VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">Windows Graphics Driver Version: [GRAPHICS_DRIVER_VERSION]</string>
 	<string name="AboutOGL">OpenGL Version: [OPENGL_VERSION]</string>
+	<string name="AboutRenderer">Rendering API: [RENDERING_API]
+Version: [RENDERING_API_VERSION]</string>
 	<string name="AboutSettings">
 Settings mode: [MODE]
 Viewer Skin: [SKIN] ([THEME])

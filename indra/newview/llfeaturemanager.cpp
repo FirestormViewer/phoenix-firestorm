@@ -54,6 +54,8 @@
 #include "llstring.h"
 #include "stringize.h"
 #include "llcorehttputil.h"
+#include "llvkgpufacts.h"   // <VulkanStorm> backend-neutral GPU facts (Vulkan path)
+#include "llvksession.h"    // <VulkanStorm> session-running = device-up signal
 
 #if LL_WINDOWS
 #include "lldxhardware.h"
@@ -439,6 +441,32 @@ bool checkRDNA35()
 
 bool LLFeatureManager::loadGPUClass()
 {
+    // <VulkanStorm> Vulkan bounded-defer: on the Vulkan path there is no GL
+    // context, so the GL benchmark cannot run and gGLManager is uninitialized.
+    // Until the Stage-2 bandwidth micro-benchmark runs (at logical-device-up),
+    // the class is PENDING: publish the identity string from the Vulkan facts
+    // and withhold the class-dependent mapping/application (see
+    // applyRecommendedSettings). The GL path below is unchanged.
+    //
+    // "Pending" = Vulkan path AND the session has not started yet (device not
+    // up). Once the session IS running, the bandwidth probe has been attempted:
+    // fall through to classify with whatever we measured (invalid bandwidth
+    // resolves to the CLASS_3 fallback in the mapping below, never stuck pending).
+    if (LLWindow::getSkipGLContext() && !LLVKSession::isRunning())
+    {
+        const LLVKGpuFacts::Facts& f = LLVKGpuFacts::get();
+        mGPUClass = GPU_CLASS_UNKNOWN;   // pending until device-up
+        mGPUMemoryBandwidth = 0.f;
+        mGPUString = f.valid
+            ? (LLVKGpuFacts::vendorName() + " " + f.deviceName)
+            : std::string("Vulkan (device pending)");
+        mGPUSupported = true;
+        LL_INFOS("RenderInit") << "Vulkan backend: GPU class pending until the device-up bandwidth probe ("
+                               << mGPUString << ")" << LL_ENDL;
+        return true;
+    }
+    // </VulkanStorm>
+
     // This is a hack for certain AMD GPUs in newer driver versions on certain APUs.
     // These GPUs will show inconsistent freezes when attempting to run shader profiles against them.
     // This is extremely problematic as it can lead to:
@@ -448,7 +476,19 @@ bool LLFeatureManager::loadGPUClass()
     // As a result, we filter out these GPUs for shader profiling.
     // - Geenz 11/11/2025
 
-    if (gGLManager.getRawGLString().find("Radeon") != std::string::npos && checkRDNA35() && gGLManager.mDriverVersionVendorString.find("25.") != std::string::npos)
+    // <VulkanStorm> The RDNA3.5 bad-driver guard reads GL vendor strings; on the
+    // Vulkan path those are empty (no GL context). Source the equivalent from
+    // the Vulkan facts so the guard still works. GL path unchanged.
+    const bool vk_path = LLWindow::getSkipGLContext();
+    const std::string gpu_vendor_string = vk_path
+        ? (LLVKGpuFacts::vendorName() + " " + LLVKGpuFacts::get().deviceName)
+        : gGLManager.getRawGLString();
+    const bool is_apple_gpu = vk_path
+        ? (LLVKGpuFacts::vendor() == LLVKGpuFacts::Vendor::Apple)
+        : gGLManager.mIsApple;
+    // </VulkanStorm>
+
+    if (gpu_vendor_string.find("Radeon") != std::string::npos && checkRDNA35() && gGLManager.mDriverVersionVendorString.find("25.") != std::string::npos)
     {
         LL_WARNS("RenderInit") << "Detected AMD RDNA3.5 GPU on a known bad driver; disabling benchmark and occlusion culling to prevent freezes." << LL_ENDL;
         gSavedSettings.setBOOL("SkipBenchmark", true);
@@ -466,11 +506,22 @@ bool LLFeatureManager::loadGPUClass()
             // This can make sense for some Intel GPUs which can take 15+ Minutes or crash during gpu_benchmark
             gbps = -1.0f;
             if( !gSavedSettings.getBOOL( "NoHardwareProbe" ) )
+            {
+                // <VulkanStorm> On the Vulkan path the GL benchmark cannot run
+                // (no GL context); use the Stage-2 Vulkan bandwidth measurement
+                // instead. Reaching here implies bandwidthValid (the pending
+                // branch above returns early otherwise). GL path unchanged.
+                if (vk_path)
+                {
+                    gbps = LLVKGpuFacts::get().bandwidthGBps;
+                }
+                else
 #if LL_WINDOWS
                 gbps = logExceptionBenchmark();
 #else
                 gbps = gpu_benchmark();
 #endif
+            }
             // </FS:ND>
         }
         catch (const std::exception& e)
@@ -489,13 +540,22 @@ bool LLFeatureManager::loadGPUClass()
 
         if (gbps < 0.f)
         { //couldn't bench, default to Low
-    #if LL_DARWIN
-        //GLVersion is misleading on OSX, just default to class 3 if we can't bench
-        LL_WARNS("RenderInit") << "Unable to get an accurate benchmark; defaulting to class 3" << LL_ENDL;
+    // <VulkanStorm> On the Vulkan path a failed/unsupported bandwidth probe
+    // falls back to CLASS_3 (never CLASS_0) per the probe design. GL keeps its
+    // existing CLASS_0 (Windows) / CLASS_3 (Darwin) behavior.
+    if (vk_path)
+    {
+        LL_WARNS("RenderInit") << "Vulkan bandwidth probe unavailable; defaulting to class 3." << LL_ENDL;
         mGPUClass = GPU_CLASS_3;
-    #else
-            mGPUClass = GPU_CLASS_0;
-    #endif
+    }
+    else
+#if LL_DARWIN
+        //GLVersion is misleading on OSX, just default to class 3 if we can't bench
+        { LL_WARNS("RenderInit") << "Unable to get an accurate benchmark; defaulting to class 3" << LL_ENDL;
+        mGPUClass = GPU_CLASS_3; }
+#else
+        mGPUClass = GPU_CLASS_0;
+#endif
         }
         else if (gbps <= class1_gbps)
         {
@@ -507,7 +567,7 @@ bool LLFeatureManager::loadGPUClass()
         }
         else if ((gbps <= class1_gbps*4.f)
                  // Cap silicon's GPUs at med+ as they have high throughput, low capability
-                 || gGLManager.mIsApple)
+                 || is_apple_gpu)
         {
             mGPUClass = GPU_CLASS_3;
         }
@@ -541,11 +601,38 @@ bool LLFeatureManager::loadGPUClass()
     }
 
     // defaults
-    mGPUString = gGLManager.getRawGLString();
+    // <VulkanStorm> On the Vulkan path the identity string comes from the
+    // Vulkan facts (gGLManager is uninitialized). GL path unchanged.
+    mGPUString = vk_path ? gpu_vendor_string : gGLManager.getRawGLString();
+    // </VulkanStorm>
     mGPUSupported = true;
 
     return true; // indicates that a gpu value was established
 }
+
+// <VulkanStorm> Vulkan bounded-defer: true when the Vulkan backend owns the
+// window (no GL context) and the bandwidth micro-benchmark has not yet run.
+bool LLFeatureManager::isGPUClassPending() const
+{
+    return LLWindow::getSkipGLContext() && !LLVKSession::isRunning();
+}
+
+void LLFeatureManager::resolveGPUClassAndApply()
+{
+    // Only the Vulkan path defers classification; on GL the class + settings
+    // were already resolved/applied at window-init, so re-applying here would
+    // double-apply. Guard on the Vulkan path only.
+    if (!LLWindow::getSkipGLContext())
+    {
+        return;
+    }
+    // Re-run classification now that Stage-2 bandwidth is available, then apply
+    // the masks + recommended settings once, with the correct class.
+    loadGPUClass();
+    applyBaseMasks();
+    applyRecommendedSettings();
+}
+// </VulkanStorm>
 
 void LLFeatureManager::cleanupFeatureTables()
 {
@@ -567,6 +654,18 @@ void LLFeatureManager::initSingleton()
 
 void LLFeatureManager::applyRecommendedSettings()
 {
+    // <VulkanStorm> Bounded-defer: while the GPU class is pending on the Vulkan
+    // path, do NOT apply recommended settings — doing so would persist low-end
+    // CLASS_0 values for 100+ settings before the real class is known. The
+    // application runs once, with the correct class, via resolveGPUClassAndApply()
+    // at device-up. GL path unchanged.
+    if (isGPUClassPending())
+    {
+        LL_INFOS("RenderInit") << "Vulkan backend: deferring recommended-settings application until the GPU class is resolved." << LL_ENDL;
+        return;
+    }
+    // </VulkanStorm>
+
     // apply saved settings
     // cap the level at 2 (high)
     U32 level = llmax(GPU_CLASS_0, llmin(mGPUClass, GPU_CLASS_5));

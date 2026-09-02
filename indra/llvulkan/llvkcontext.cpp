@@ -622,6 +622,127 @@ bool LLVKContext::renderClearFrame(float r, float g, float b, float a)
     return (pres == VK_SUCCESS || pres == VK_SUBOPTIMAL_KHR);
 }
 
+// <VulkanStorm> Capability probe (Stage 2): Vulkan-native memory-bandwidth
+// micro-benchmark. Copies a large device-local buffer in a loop, timed with a
+// VK_QUERY_TYPE_TIMESTAMP pool. Returns GB/s, or a negative value on failure /
+// when timestamp queries are unsupported (caller falls back to a safe class).
+// One-shot, off the UI path; uses its own command buffer + fence, never the
+// in-flight frame resources.
+float LLVKContext::measureMemoryBandwidthGBps()
+{
+    if (mDevice == VK_NULL_HANDLE || mGraphicsQueue == VK_NULL_HANDLE ||
+        mCommandPool == VK_NULL_HANDLE || mAllocator == VK_NULL_HANDLE)
+    {
+        return -1.f;
+    }
+
+    // Timestamp queries must be supported on the graphics queue.
+    VkPhysicalDeviceProperties props{};
+    vkGetPhysicalDeviceProperties(mPhysicalDevice, &props);
+    if (!props.limits.timestampComputeAndGraphics || props.limits.timestampPeriod <= 0.f)
+    {
+        LL_WARNS("Vulkan") << "Bandwidth probe: timestamp queries unsupported; cannot measure." << LL_ENDL;
+        return -1.f;
+    }
+    const double ts_period_ns = (double)props.limits.timestampPeriod;
+
+    // Working set: 256 MiB device-local copy, large enough to exceed caches.
+    const VkDeviceSize kBytes = (VkDeviceSize)256 * 1024 * 1024;
+    const int kIterations = 8;
+
+    VkBuffer src = VK_NULL_HANDLE, dst = VK_NULL_HANDLE;
+    VmaAllocation srcAlloc = VK_NULL_HANDLE, dstAlloc = VK_NULL_HANDLE;
+    VkBufferCreateInfo bi{};
+    bi.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bi.size = kBytes;
+    bi.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+    bi.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    VmaAllocationCreateInfo ai{};
+    ai.usage = VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE; // device-local
+    if (vmaCreateBuffer(mAllocator, &bi, &ai, &src, &srcAlloc, nullptr) != VK_SUCCESS ||
+        vmaCreateBuffer(mAllocator, &bi, &ai, &dst, &dstAlloc, nullptr) != VK_SUCCESS)
+    {
+        LL_WARNS("Vulkan") << "Bandwidth probe: buffer allocation failed." << LL_ENDL;
+        if (src) vmaDestroyBuffer(mAllocator, src, srcAlloc);
+        if (dst) vmaDestroyBuffer(mAllocator, dst, dstAlloc);
+        return -1.f;
+    }
+
+    VkQueryPool queryPool = VK_NULL_HANDLE;
+    VkQueryPoolCreateInfo qi{};
+    qi.sType = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO;
+    qi.queryType = VK_QUERY_TYPE_TIMESTAMP;
+    qi.queryCount = 2;
+    if (vkCreateQueryPool(mDevice, &qi, nullptr, &queryPool) != VK_SUCCESS)
+    {
+        LL_WARNS("Vulkan") << "Bandwidth probe: query pool creation failed." << LL_ENDL;
+        vmaDestroyBuffer(mAllocator, src, srcAlloc);
+        vmaDestroyBuffer(mAllocator, dst, dstAlloc);
+        return -1.f;
+    }
+
+    VkCommandBuffer cmd = VK_NULL_HANDLE;
+    VkCommandBufferAllocateInfo cai{};
+    cai.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    cai.commandPool = mCommandPool;
+    cai.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    cai.commandBufferCount = 1;
+    VkFence fence = VK_NULL_HANDLE;
+    VkFenceCreateInfo fi{};
+    fi.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+
+    float result = -1.f;
+    if (vkAllocateCommandBuffers(mDevice, &cai, &cmd) == VK_SUCCESS &&
+        vkCreateFence(mDevice, &fi, nullptr, &fence) == VK_SUCCESS)
+    {
+        VkCommandBufferBeginInfo begin{};
+        begin.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        vkBeginCommandBuffer(cmd, &begin);
+        vkCmdResetQueryPool(cmd, queryPool, 0, 2);
+        vkCmdWriteTimestamp(cmd, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, queryPool, 0);
+        VkBufferCopy region{ 0, 0, kBytes };
+        for (int i = 0; i < kIterations; ++i)
+        {
+            vkCmdCopyBuffer(cmd, src, dst, 1, &region);
+        }
+        vkCmdWriteTimestamp(cmd, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, queryPool, 1);
+        vkEndCommandBuffer(cmd);
+
+        VkSubmitInfo submit{};
+        submit.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submit.commandBufferCount = 1;
+        submit.pCommandBuffers = &cmd;
+        if (vkQueueSubmit(mGraphicsQueue, 1, &submit, fence) == VK_SUCCESS &&
+            vkWaitForFences(mDevice, 1, &fence, VK_TRUE, UINT64_MAX) == VK_SUCCESS)
+        {
+            uint64_t ts[2] = { 0, 0 };
+            if (vkGetQueryPoolResults(mDevice, queryPool, 0, 2, sizeof(ts), ts,
+                                      sizeof(uint64_t), VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WAIT_BIT) == VK_SUCCESS)
+            {
+                const double seconds = (double)(ts[1] - ts[0]) * ts_period_ns * 1e-9;
+                if (seconds > 0.0)
+                {
+                    // A copy reads kBytes and writes kBytes per iteration.
+                    const double moved = (double)kBytes * 2.0 * (double)kIterations;
+                    result = (float)(moved / seconds / 1e9);
+                }
+            }
+        }
+    }
+
+    if (fence) vkDestroyFence(mDevice, fence, nullptr);
+    if (cmd) vkFreeCommandBuffers(mDevice, mCommandPool, 1, &cmd);
+    vkDestroyQueryPool(mDevice, queryPool, nullptr);
+    vmaDestroyBuffer(mAllocator, src, srcAlloc);
+    vmaDestroyBuffer(mAllocator, dst, dstAlloc);
+
+    LL_INFOS("Vulkan") << "Bandwidth probe: " << (result >= 0.f ? result : 0.f)
+                       << " GB/s" << (result >= 0.f ? "" : " (FAILED)") << LL_ENDL;
+    return result;
+}
+// </VulkanStorm>
+
 void LLVKContext::destroySwapchain()
 {
     destroyImageSync();

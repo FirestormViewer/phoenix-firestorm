@@ -49,6 +49,7 @@
 #include "llimprocessing.h"
 #include "llvkprobe.h"
 #include "llvksession.h"
+#include "llvkgpufacts.h"
 #include "llwindow.h"
 #include "llviewerstats.h"
 #include "llviewerstatsrecorder.h"
@@ -3852,6 +3853,13 @@ bool LLAppViewer::initWindow()
         {
             LL_WARNS("AppInit") << "Vulkan session failed to start; the window will not present frames." << LL_ENDL;
         }
+        // <VulkanStorm> Capability probe (bounded-defer): the session start ran
+        // the Stage-2 bandwidth benchmark and published it. Now resolve the GPU
+        // class and apply the recommended settings that were withheld at first
+        // read (the class was pending). Doing this HERE — before the watchdog
+        // feature read just below — means the watchdog sees the resolved class.
+        // No-op on the GL path (isGPUClassPending() is false there).
+        LLFeatureManager::getInstance()->resolveGPUClassAndApply();
         // </VulkanStorm>
     }
 #endif
@@ -4192,10 +4200,36 @@ LLSD LLAppViewer::getViewerInfo() const
     info["CONCURRENCY"] = LLSD::Integer(std::thread::hardware_concurrency());    // <FS:Beq> Add hardware concurrency to info
     // Moved hack adjustment to Windows memory size into llsys.cpp
     info["OS_VERSION"] = LLOSInfo::instance().getOSString();
-    info["GRAPHICS_CARD_VENDOR"] = ll_safe_string((const char*)(glGetString(GL_VENDOR)));
-    info["GRAPHICS_CARD"] = ll_safe_string((const char*)(glGetString(GL_RENDERER)));
-    info["GRAPHICS_CARD_MEMORY"] = LLSD::Integer(gGLManager.mVRAM);
-    info["GRAPHICS_CARD_MEMORY_DETECTED"] = gGLManager.mVRAMDetected; // <FS:Beq/> allow detected hardware to be overridden.
+    // <VulkanStorm> On the Vulkan path there is no GL context, so glGetString
+    // returns null and gGLManager is uninitialized. Source the graphics facts
+    // from the backend-neutral Vulkan GPU-facts snapshot instead. GL path is
+    // unchanged (still glGetString/gGLManager).
+    if (LLWindow::getSkipGLContext() && LLVKGpuFacts::get().valid)
+    {
+        const LLVKGpuFacts::Facts& gf = LLVKGpuFacts::get();
+        info["GRAPHICS_CARD_VENDOR"] = LLVKGpuFacts::vendorName();
+        info["GRAPHICS_CARD"] = gf.deviceName;
+        info["GRAPHICS_CARD_MEMORY"] = LLSD::Integer(LLVKGpuFacts::vramMB());
+        info["GRAPHICS_CARD_MEMORY_DETECTED"] = LLSD::Integer(LLVKGpuFacts::vramMB());
+        info["RENDERING_API"] = "Vulkan";
+        // Decode the packed Vulkan API version (VK_MAKE_API_VERSION layout:
+        // variant:3 | major:7 | minor:10 | patch:12) without Vulkan headers.
+        info["RENDERING_API_VERSION"] = llformat("%u.%u.%u",
+            (gf.apiVersion >> 22) & 0x7f, (gf.apiVersion >> 12) & 0x3ff,
+            (gf.apiVersion & 0xfff));
+    }
+    else
+    {
+        info["GRAPHICS_CARD_VENDOR"] = ll_safe_string((const char*)(glGetString(GL_VENDOR)));
+        info["GRAPHICS_CARD"] = ll_safe_string((const char*)(glGetString(GL_RENDERER)));
+        info["GRAPHICS_CARD_MEMORY"] = LLSD::Integer(gGLManager.mVRAM);
+        info["GRAPHICS_CARD_MEMORY_DETECTED"] = gGLManager.mVRAMDetected; // <FS:Beq/> allow detected hardware to be overridden.
+        info["RENDERING_API"] = "OpenGL";
+        // Full GL version string (e.g. "4.6.0 Core Profile Context ..."), the
+        // same string the old AboutOGL line reported.
+        info["RENDERING_API_VERSION"] = ll_safe_string((const char*)(glGetString(GL_VERSION)));
+    }
+    // </VulkanStorm>
 
 #if LL_WINDOWS
     std::string drvinfo;
@@ -4238,7 +4272,19 @@ LLSD LLAppViewer::getViewerInfo() const
 // [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0)
     info["RLV_VERSION"] = (rlv_handler_t::isEnabled()) ? RlvStrings::getVersionAbout() : LLTrans::getString("RLVaStatusDisabled");
 // [/RLVa:KB]
-    info["OPENGL_VERSION"] = ll_safe_string((const char*)(glGetString(GL_VERSION)));
+    // <VulkanStorm> OPENGL_VERSION via glGetString is null on the Vulkan path
+    // (no GL context). The RENDERING_API/VERSION facts were set above from the
+    // Vulkan snapshot; keep OPENGL_VERSION empty there so the GL path is
+    // unchanged and the Vulkan path reports its own API line.
+    if (LLWindow::getSkipGLContext())
+    {
+        info["OPENGL_VERSION"] = std::string();
+    }
+    else
+    {
+        info["OPENGL_VERSION"] = ll_safe_string((const char*)(glGetString(GL_VERSION)));
+    }
+    // </VulkanStorm>
     info["LIBCURL_VERSION"] = LLCore::LLHttp::getCURLVersion();
     // Settings
     // <FS:Beq> gViewerWindow can be null on shutdown. Crashes if bugsplatt uses the info
@@ -4485,7 +4531,12 @@ std::string LLAppViewer::getViewerInfoString(bool default_string) const
     {
         support << "\n" << LLTrans::getString("AboutDriver", args, default_string);
     }
-    support << "\n" << LLTrans::getString("AboutOGL", args, default_string);
+    // <VulkanStorm> Unified backend-neutral rendering line, replacing the
+    // GL-specific AboutOGL line on BOTH backends (matches the GHI model:
+    // one unconditional line; RENDERING_API / RENDERING_API_VERSION are
+    // populated for whichever backend is active). No backend branch here.
+    support << "\n" << LLTrans::getString("AboutRenderer", args, default_string);
+    // </VulkanStorm>
     //support << "\n\n" << LLTrans::getString("AboutSettings", args, default_string); // <FS> Custom sysinfo
 #if LL_DARWIN
     support << "\n" << LLTrans::getString("AboutOSXHiDPI", args, default_string);

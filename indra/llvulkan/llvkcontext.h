@@ -56,6 +56,15 @@ public:
     // color and presents it. Returns false on failure.
     bool renderClearFrame(float r, float g, float b, float a);
 
+    // <VulkanStorm> Capability probe (Stage 2): measure device memory bandwidth
+    // with a Vulkan-native timestamped copy loop, to feed the GPU-class
+    // thresholds (replacing the GL benchmark, which needs a GL context). Runs
+    // once, off the UI path, on a one-shot command buffer. Returns GB/s, or a
+    // negative value if timestamp queries are unsupported or the run fails
+    // (caller falls back to a safe GPU class). Call after createDevice().
+    float measureMemoryBandwidthGBps();
+    // </VulkanStorm>
+
     void destroy();
 
     bool isValid() const { return mDevice != VK_NULL_HANDLE; }

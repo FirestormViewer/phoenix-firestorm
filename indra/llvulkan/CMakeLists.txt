@@ -19,6 +19,7 @@ include(VulkanSdk)
 set(llvulkan_SOURCE_FILES
     llvk_vma_impl.cpp
     llvkcontext.cpp
+    llvkgpufacts.cpp
     llvkprobe.cpp
     llvkselftest.cpp
     llvksession.cpp
@@ -29,6 +30,7 @@ set(llvulkan_HEADER_FILES
     CMakeLists.txt
 
     llvkcontext.h
+    llvkgpufacts.h
     llvkprobe.h
     llvkselftest.h
     llvksession.h

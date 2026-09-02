@@ -14,6 +14,9 @@
 #include "volk/volk.h"
 
 #include "llerror.h"
+#include "llvkgpufacts.h"
+
+#include <vector>
 
 namespace
 {
@@ -66,18 +69,71 @@ namespace
         {
             g_has_device = true;
 
-            // Capture the first device's name for logging / UI.
-            VkPhysicalDevice first = VK_NULL_HANDLE;
-            uint32_t one = 1;
-            vkEnumeratePhysicalDevices(instance, &one, &first);
-            if (first != VK_NULL_HANDLE)
+            // <VulkanStorm> Prefer a discrete GPU for the facts snapshot (the
+            // viewer renders on the high-performance device). Fall back to the
+            // first device if none is discrete.
+            std::vector<VkPhysicalDevice> devices(device_count);
+            vkEnumeratePhysicalDevices(instance, &device_count, devices.data());
+            VkPhysicalDevice chosen = devices.front();
+            VkPhysicalDeviceProperties props{};
+            vkGetPhysicalDeviceProperties(chosen, &props);
+            for (VkPhysicalDevice dev : devices)
             {
-                VkPhysicalDeviceProperties props{};
-                vkGetPhysicalDeviceProperties(first, &props);
-                g_device_name = props.deviceName ? props.deviceName : "";
+                VkPhysicalDeviceProperties p{};
+                vkGetPhysicalDeviceProperties(dev, &p);
+                if (p.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+                {
+                    chosen = dev;
+                    props = p;
+                    break;
+                }
             }
+
+            g_device_name = props.deviceName ? props.deviceName : "";
+
+            // <VulkanStorm> Stage 1: capture the static GPU facts while the
+            // instance/device handle is live (this runs before LLFeatureManager
+            // first reads). Bandwidth is Stage 2 (needs a logical device).
+            {
+                LLVKGpuFacts::Facts facts;
+                facts.valid        = true;
+                facts.vendorID     = props.vendorID;
+                facts.deviceID     = props.deviceID;
+                facts.deviceName   = g_device_name;
+                facts.deviceType   = (uint32_t)props.deviceType;
+                facts.apiVersion   = props.apiVersion;
+                facts.maxImageDimension2D  = props.limits.maxImageDimension2D;
+                facts.maxSamplerAnisotropy = props.limits.maxSamplerAnisotropy;
+                const VkSampleCountFlags sc = props.limits.framebufferColorSampleCounts;
+                facts.maxSamples   = (sc & VK_SAMPLE_COUNT_64_BIT) ? 64
+                                   : (sc & VK_SAMPLE_COUNT_32_BIT) ? 32
+                                   : (sc & VK_SAMPLE_COUNT_16_BIT) ? 16
+                                   : (sc & VK_SAMPLE_COUNT_8_BIT)  ? 8
+                                   : (sc & VK_SAMPLE_COUNT_4_BIT)  ? 4
+                                   : (sc & VK_SAMPLE_COUNT_2_BIT)  ? 2 : 1;
+
+                VkPhysicalDeviceMemoryProperties mem{};
+                vkGetPhysicalDeviceMemoryProperties(chosen, &mem);
+                uint64_t vram = 0;
+                for (uint32_t i = 0; i < mem.memoryHeapCount; ++i)
+                {
+                    if (mem.memoryHeaps[i].flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT)
+                    {
+                        vram += (uint64_t)mem.memoryHeaps[i].size;
+                    }
+                }
+                facts.vramBytes = vram;
+
+                LLVKGpuFacts::setStaticFacts(facts);
+            }
+            // </VulkanStorm>
+
             LL_INFOS("Vulkan") << "Vulkan device detected: " << g_device_name
-                               << " (" << device_count << " device(s))" << LL_ENDL;
+                               << " (" << device_count << " device(s))"
+                               << " vendorID=0x" << std::hex << props.vendorID << std::dec
+                               << " VRAM=" << LLVKGpuFacts::vramMB() << "MB"
+                               << " maxTex=" << LLVKGpuFacts::get().maxImageDimension2D
+                               << LL_ENDL;
         }
         else
         {

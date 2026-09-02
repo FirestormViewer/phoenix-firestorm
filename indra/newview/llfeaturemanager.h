@@ -147,6 +147,17 @@ public:
     void applyBaseMasks();
     void applyRecommendedSettings();
 
+    // <VulkanStorm> Vulkan capability probe (bounded-defer). On the Vulkan path
+    // there is no GL context, so the GL benchmark cannot run at first read and
+    // the class would default to CLASS_0, persisting low-end settings. Instead
+    // the class is "pending" until the bandwidth micro-benchmark runs at
+    // logical-device-up; applyRecommendedSettings() is withheld until then.
+    // isGPUClassPending() is true on the Vulkan path before device-up.
+    // resolveGPUClassAndApply() is called once the real class is known.
+    bool isGPUClassPending() const;
+    void resolveGPUClassAndApply();
+    // </VulkanStorm>
+
     // apply the basic masks.  Also, skip one saved
     // in the skip list if true
     void applyFeatures(bool skipFeatures);
