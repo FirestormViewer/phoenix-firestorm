@@ -31,12 +31,24 @@ namespace
     uint32_t     s_width = 0;
     uint32_t     s_height = 0;
 
-    // Boot-path clear color. Matches the Phase-1 self-test teal so a Vulkan-
-    // owned frame is unmistakable during bring-up.
-    constexpr float kClearR = 0.0f;
-    constexpr float kClearG = 0.5f;
-    constexpr float kClearB = 0.5f;
-    constexpr float kClearA = 1.0f;
+    // Frame clear color. Matches the GL login path (transparent black) so
+    // byte-exact capture diffs compare like with like; VULKANSTORM_CLEAR_TEAL=1
+    // restores the bring-up teal so uncovered regions stay unmistakable while
+    // debugging.
+    bool tealClear()
+    {
+        static const bool s = getenv("VULKANSTORM_CLEAR_TEAL") != nullptr;
+        return s;
+    }
+    const float kClearR = 0.0f;
+    const float kClearG = tealClear() ? 0.5f : 0.0f;
+    const float kClearB = tealClear() ? 0.5f : 0.0f;
+    const float kClearA = tealClear() ? 1.0f : 0.0f;
+
+    // <VulkanStorm> One-shot capture arming (see header). Set by newview each
+    // frame based on the startup state.
+    bool s_capture_armed = false;
+    // </VulkanStorm>
 
     // <VulkanStorm> M0 capture harness: dump the presented frame to a raw RGBA8
     // file (8-byte LE width/height header + pixels) when VULKANSTORM_CAPTURE is
@@ -45,8 +57,9 @@ namespace
     {
         static const char* cap = getenv("VULKANSTORM_CAPTURE");
         if (!cap || !*cap) return;
+        if (!s_capture_armed) return;   // login UI not up yet (set by newview)
         static int s_frame = 0;
-        const int kSettleFrames = 30;   // let the UI settle before capturing
+        const int kSettleFrames = 90;   // let the UI settle before capturing
         if (++s_frame != kSettleFrames) return;
 
         std::vector<uint8_t> rgba;
@@ -173,6 +186,13 @@ bool LLVKSession::isRunning()
 {
     return s_context != nullptr;
 }
+
+// <VulkanStorm> Phase 3 v2 (M0 greenfield)
+void LLVKSession::armCapture(bool armed)
+{
+    s_capture_armed = armed;
+}
+// </VulkanStorm>
 
 void LLVKSession::renderFrame()
 {

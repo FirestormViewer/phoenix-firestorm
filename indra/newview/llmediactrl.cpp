@@ -832,6 +832,24 @@ LLPluginClassMedia* LLMediaCtrl::getMediaPlugin()
     return mMediaSource.isNull() ? NULL : mMediaSource->getMediaPlugin();
 }
 
+// <VulkanStorm> Read-only query for the independent Vulkan UI renderer (M0
+// greenfield): true exactly when draw() takes its media-texture branch.
+// Mirrors the draw_media condition so the Vulkan walker can reproduce the
+// no-media opaque-background result. No GL state is touched.
+bool LLMediaCtrl::hasDrawableMedia()
+{
+    if (mMediaSource && mMediaSource->hasMedia())
+    {
+        LLPluginClassMedia* media_plugin = mMediaSource->getMediaPlugin();
+        if (media_plugin && media_plugin->textureValid())
+        {
+            return LLViewerTextureManager::findMediaTexture(mMediaTextureID) != nullptr;
+        }
+    }
+    return false;
+}
+// </VulkanStorm>
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 void LLMediaCtrl::draw()

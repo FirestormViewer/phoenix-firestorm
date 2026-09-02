@@ -23,6 +23,11 @@
 #ifndef LLVKUIRENDER_H
 #define LLVKUIRENDER_H
 
+#include <typeinfo>
+
+#include "llrect.h"
+#include "v4color.h"
+
 class LLView;
 class LLVKContext;
 
@@ -36,6 +41,23 @@ namespace LLVKUIRender
     void renderFrame(LLVKContext* ctx, LLView* root,
                      unsigned device_width, unsigned device_height,
                      float ui_scale_x, float ui_scale_y);
+
+    // <VulkanStorm> Per-class render hooks. llvulkan must not depend on
+    // newview (where viewer-side widget classes like LLMediaCtrl live), so
+    // newview registers a hook per class; the walk calls it after the generic
+    // panel-background pass and before recursing into children. The hook reads
+    // the widget's state and emits Vulkan primitives via emitScreenRect /
+    // LLVKUI2DSink — never GL code.
+    typedef void (*ViewHook)(const LLView* view, unsigned device_height,
+                             float ui_scale_y, float alpha);
+    void registerViewHook(const std::type_info& type, ViewHook hook);
+
+    // Emit a screen-space rect (GL bottom-left origin, window pixels) into the
+    // sink with the standard GL->top-left conversion. Shared by the built-in
+    // passes and by registered hooks.
+    void emitScreenRect(const LLRect& gl_rect, unsigned device_height,
+                        float ui_scale_y, const LLColor4& color);
+    // </VulkanStorm>
 }
 
 #endif // LLVKUIRENDER_H

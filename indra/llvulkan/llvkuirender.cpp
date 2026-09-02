@@ -18,6 +18,9 @@
 #include "llerror.h"            // LL_INFOS (diagnostic)
 
 #include <cstdlib>              // getenv
+#include <map>
+#include <string>
+#include <typeinfo>             // typeid (tree dump)
 
 #include "v4color.h"           // LLColor4
 #include "llrect.h"
@@ -43,25 +46,23 @@ namespace
         int visible = 0;      // views passing getVisible()
         int panels  = 0;      // views that are LLPanel
         int emitted = 0;      // rects actually emitted
+        // <VulkanStorm> one-shot widget-tree dump (VULKANSTORM_TREE_DUMP=1):
+        // logs every visited view's class/name/screen rect so the chrome work
+        // can be planned from the real login-screen composition.
+        bool dump   = false;
+        int  depth  = 0;
     };
 
     // Convert a GL bottom-left-origin screen rect (from calcScreenRect, in
     // window pixels) into the sink's top-left-origin coordinate space, then
     // apply the UI scale. The sink's transform is left at identity; we bake the
     // absolute position here.
-    void emitRectGL(RenderCtx& rc, const LLRect& gl_rect, const LLColor4& color)
-    {
-        if (gl_rect.isEmpty()) return;
-        // GL bottom-left -> sink top-left: y_top_left = device_height - y_gl.
-        // In scaled UI space the device height is dev_h / ui_scale_y.
-        const F32 ui_h = (F32)rc.dev_h / rc.ui_scale_y;
-        const F32 left   = (F32)gl_rect.mLeft;
-        const F32 right  = (F32)gl_rect.mRight;
-        const F32 top    = ui_h - (F32)gl_rect.mTop;     // GL top -> smaller top-left y
-        const F32 bottom = ui_h - (F32)gl_rect.mBottom;  // GL bottom -> larger top-left y
-        LLVKUI2DSink::get().rect(left, top, right, bottom,
-                                 color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], color.mV[VALPHA]);
-    }
+    // NOTE: the public LLVKUIRender::emitScreenRect (below) is the shared
+    // implementation; passes + hooks both call it.
+
+    // <VulkanStorm> Registered per-class hooks (newview-side classes).
+    std::map<const std::type_info*, LLVKUIRender::ViewHook> s_hooks;
+    // </VulkanStorm>
 
     // Emit a panel/floater background (solid color; images land in M2).
     void renderPanelBackground(RenderCtx& rc, const LLPanel* panel)
@@ -89,7 +90,7 @@ namespace
                                << " empty=" << (screen.isEmpty() ? 1 : 0)
                                << " rgba=" << c.mV[0] << "," << c.mV[1] << "," << c.mV[2] << "," << c.mV[3] << LL_ENDL;
         }
-        emitRectGL(rc, screen, c);
+        LLVKUIRender::emitScreenRect(screen, rc.dev_h, rc.ui_scale_y, c);
     }
 
     // Read a widget's own chrome (background/border) and recurse into children.
@@ -98,6 +99,15 @@ namespace
     {
         if (!view) return;
         rc.visited++;
+        if (rc.dump)
+        {
+            const LLRect sr = view->calcScreenRect();
+            LL_INFOS("Vulkan") << "VULKTREE " << std::string(rc.depth * 2, ' ')
+                               << typeid(*view).name() << " '" << view->getName() << "'"
+                               << " vis=" << (view->getVisible() ? 1 : 0)
+                               << " rect=" << sr.mLeft << "," << sr.mBottom
+                               << "-" << sr.mRight << "," << sr.mTop << LL_ENDL;
+        }
         if (!view->getVisible()) return;
         rc.visible++;
 
@@ -112,18 +122,56 @@ namespace
             if (LLVKUI2DSink::get().pendingVerts() > vbefore) rc.emitted++;
         }
 
+        // <VulkanStorm> Registered per-class hooks (e.g. LLMediaCtrl's
+        // no-media backdrop), supplied by newview for classes llvulkan must
+        // not depend on.
+        if (!s_hooks.empty())
+        {
+            auto it = s_hooks.find(&typeid(*view));
+            if (it != s_hooks.end())
+            {
+                it->second(view, rc.dev_h, rc.ui_scale_y, rc.parent_alpha);
+            }
+        }
+        // </VulkanStorm>
+
         // Recurse children in painter's order. mChildList front = top-most, so
         // reverse iteration draws back-to-front (deepest first).
+        rc.depth++;
         for (LLView::child_list_const_reverse_iter_t it = view->getChildList()->rbegin();
              it != view->getChildList()->rend(); ++it)
         {
             renderView(rc, *it);
         }
+        rc.depth--;
     }
 }
 
 namespace LLVKUIRender
 {
+    void registerViewHook(const std::type_info& type, ViewHook hook)
+    {
+        if (hook)
+        {
+            s_hooks[&type] = hook;
+        }
+    }
+
+    void emitScreenRect(const LLRect& gl_rect, unsigned device_height,
+                        float ui_scale_y, const LLColor4& color)
+    {
+        if (gl_rect.isEmpty()) return;
+        // GL bottom-left -> sink top-left: y_top_left = device_height - y_gl.
+        // In scaled UI space the device height is device_height / ui_scale_y.
+        const F32 ui_h = (F32)device_height / ui_scale_y;
+        const F32 left   = (F32)gl_rect.mLeft;
+        const F32 right  = (F32)gl_rect.mRight;
+        const F32 top    = ui_h - (F32)gl_rect.mTop;     // GL top -> smaller top-left y
+        const F32 bottom = ui_h - (F32)gl_rect.mBottom;  // GL bottom -> larger top-left y
+        LLVKUI2DSink::get().rect(left, top, right, bottom,
+                                 color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], color.mV[VALPHA]);
+    }
+
     void renderFrame(LLVKContext* ctx, LLView* root,
                      unsigned device_width, unsigned device_height,
                      float ui_scale_x, float ui_scale_y)
@@ -142,7 +190,17 @@ namespace LLVKUIRender
         LLVKUI2DSink::get().setBlend(LLVKBlend::Alpha);
         LLVKUI2DSink::get().clearScissor();
 
+        // <VulkanStorm> one-shot widget-tree dump at frame 60
+        static bool s_treedump = getenv("VULKANSTORM_TREE_DUMP") != nullptr;
+        static int  s_dump_frame = 0;
+        rc.dump = s_treedump && (++s_dump_frame == 60);
+
         renderView(rc, root);
+
+        if (rc.dump)
+        {
+            LL_INFOS("Vulkan") << "VULKTREE dump complete (" << rc.visited << " views)" << LL_ENDL;
+        }
 
         // <VulkanStorm> M0 diagnostic: what did the walk find?
         static bool s_dbg = getenv("VULKANSTORM_UI_DEBUG") != nullptr;

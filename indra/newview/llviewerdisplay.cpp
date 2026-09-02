@@ -31,6 +31,7 @@
 #include "llvkprobe.h"
 #include "llvkselftest.h"
 #include "llvksession.h"
+#include "llvkuirender.h"
 #include "llrootview.h"
 #include "fsyspath.h"
 #include "hexdump.h"
@@ -48,6 +49,7 @@
 #include "llenvironment.h"
 #include "llfasttimer.h"
 #include "llfeaturemanager.h"
+#include "llfile.h"
 #include "llfloatertools.h"
 #include "llfocusmgr.h"
 #include "llgl.h"
@@ -56,6 +58,7 @@
 #include "llhudmanager.h"
 #include "llimagepng.h"
 #include "llmachineid.h"
+#include "llmediactrl.h"
 #include "llmemory.h"
 #include "llparcel.h"
 #include "llperfstats.h"
@@ -162,6 +165,79 @@ void render_disconnected_background();
 void getProfileStatsContext(boost::json::object& stats);
 std::string getProfileStatsFilename();
 
+// <VulkanStorm> GL reference capture (read-only diagnostic, env-gated): dump
+// the finished GL back buffer to the same .rgba format the Vulkan harness uses
+// (8-byte LE w/h header + RGBA8, bottom-origin like glReadPixels) when
+// VULKANSTORM_CAPTURE is set. Lets the diff harness compare the Vulkan frame
+// against the GL frame for the identical login state. No behavior change.
+static void gl_capture_frame_once()
+{
+    static const char* cap = getenv("VULKANSTORM_CAPTURE");
+    if (!cap || !*cap) return;
+    // Wait until the login UI is actually up, then let it settle: early-
+    // startup frames contain only the clear + stray toasts, not the chrome.
+    if (LLStartUp::getStartupState() < STATE_LOGIN_SHOW) return;
+    static int s_frame = 0;
+    const int kSettleFrames = 90;
+    if (++s_frame != kSettleFrames) return;
+
+    S32 w = gViewerWindow->getWindowWidthRaw();
+    S32 h = gViewerWindow->getWindowHeightRaw();
+    if (w <= 0 || h <= 0)
+    {
+        LL_WARNS("Window") << "GL reference capture: degenerate size " << w << "x" << h << LL_ENDL;
+        return;
+    }
+    std::vector<U8> rgba((size_t)w * (size_t)h * 4);
+    glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, rgba.data());
+    LLFILE* f = LLFile::fopen(cap, "wb");
+    if (f)
+    {
+        U32 header[2] = { (U32)w, (U32)h };
+        fwrite(header, sizeof(header), 1, f);
+        fwrite(rgba.data(), rgba.size(), 1, f);
+        LLFile::close(f);
+        LL_INFOS("Window") << "GL reference frame captured to " << cap << " (" << w << "x" << h << ")" << LL_ENDL;
+    }
+    else
+    {
+        LL_WARNS("Window") << "GL reference capture: fopen failed for " << cap << LL_ENDL;
+    }
+}
+// </VulkanStorm>
+
+#if LL_WINDOWS
+// <VulkanStorm> M0 greenfield: LLMediaCtrl view hook (registered with
+// LLVKUIRender; llvulkan itself must not depend on newview classes). Mirrors
+// the RESULT of LLMediaCtrl::draw()'s no-media branch, which forces an opaque
+// background draw over the rect — the black "Loading..." backdrop covering
+// most of the login screen. Media-texture emission lands with the image work.
+static void vk_render_media_ctrl(const LLView* view, unsigned device_height, float ui_scale_y, float alpha)
+{
+    const LLMediaCtrl* mc = static_cast<const LLMediaCtrl*>(view);
+    // const_cast: hasDrawableMedia() is read-only in effect but non-const
+    // because LLViewerMediaImpl::getMediaPlugin() is non-const.
+    if (!const_cast<LLMediaCtrl*>(mc)->hasDrawableMedia())
+    {
+        const LLRect screen = mc->calcScreenRect();
+        LLColor4 c = mc->getBackgroundColor();
+        c.mV[VALPHA] *= alpha;
+        LLVKUIRender::emitScreenRect(screen, device_height, ui_scale_y, c);
+    }
+}
+
+static void vk_register_ui_hooks()
+{
+    static bool s_registered = false;
+    if (!s_registered)
+    {
+        s_registered = true;
+        LLVKUIRender::registerViewHook(typeid(LLMediaCtrl), &vk_render_media_ctrl);
+    }
+}
+// </VulkanStorm>
+#endif
+
 void display_startup()
 {
     if (   !gViewerWindow
@@ -186,6 +262,8 @@ void display_startup()
         {
             return;
         }
+        LLVKSession::armCapture(LLStartUp::getStartupState() >= STATE_LOGIN_SHOW);
+        vk_register_ui_hooks();
         LLVKSession::resizeIfNeeded(gViewerWindow->getWindow());
         const LLVector2 ui_scale = LLUI::getScaleFactor();
         LLVKSession::renderUIFrame(gViewerWindow->getRootView(), ui_scale.mV[VX], ui_scale.mV[VY]);
@@ -253,6 +331,12 @@ void display_startup()
     LLVertexBuffer::unbind();
 
     LLGLState::checkStates();
+
+#if LL_WINDOWS
+    // <VulkanStorm> GL reference capture for the byte-exact harness (env-gated).
+    gl_capture_frame_once();
+    // </VulkanStorm>
+#endif
 
 #if LL_WINDOWS
     // <VulkanStorm> Phase-1 bring-up: isolated Vulkan self-test. Runs on the
@@ -558,6 +642,7 @@ void display(bool rebuild, F32 zoom_factor, int subfield, bool for_snapshot)
     // login (world): clear + present until the 3D pipeline lands. No GL calls.
     if (LLVKSession::isRunning())
     {
+        LLVKSession::armCapture(LLStartUp::getStartupState() >= STATE_LOGIN_SHOW);
         LLVKSession::resizeIfNeeded(gViewerWindow->getWindow());
         if (LLStartUp::getStartupState() < STATE_STARTED)
         {

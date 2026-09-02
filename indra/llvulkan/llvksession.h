@@ -49,6 +49,11 @@ public:
     // LLUI::getScaleFactor(); llvulkan does not depend on llui). No-op when not
     // running or when the swapchain is out of date (caller resizes).
     static void renderUIFrame(class LLView* root, float ui_scale_x, float ui_scale_y);
+
+    // Gate the one-shot frame capture: frames only count toward the capture
+    // settle delay while armed (newview arms once the login UI is showing, so
+    // early-startup clear-only frames don't burn the settle budget).
+    static void armCapture(bool armed);
     // </VulkanStorm>
 
     // Recreate the swapchain if the window's client size changed since the

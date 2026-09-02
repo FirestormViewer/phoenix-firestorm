@@ -23,6 +23,17 @@ namespace
 {
     LLVKUI2D s_ui;
 
+    // <VulkanStorm> Mirror LLRender::color4f's float->U8 TRUNCATION
+    // (llrender.cpp: GL converts via (GLubyte)(clamp(c)*255)) so vertex colors
+    // quantize byte-identically to the GL path on unorm8 targets — e.g. the
+    // login panel gray 0.16f lands as 40, not 41.
+    inline float qcol(float c)
+    {
+        c = c < 0.f ? 0.f : (c > 1.f ? 1.f : c);
+        return (float)(U8)(c * 255.f) / 255.f;
+    }
+    // </VulkanStorm>
+
     LLVKContext::Blend2D toContextBlend(LLVKBlend b)
     {
         switch (b)
@@ -158,7 +169,9 @@ void LLVKUI2D::rect(float left, float top, float right, float bottom,
     if (y0 > y1) { float t = y0; y0 = y1; y1 = t; }
 
     // Two triangles matching the harness pushRect winding (proven byte-exact):
-    // (x0,y0),(x1,y0),(x1,y1) / (x0,y0),(x1,y1),(x0,y1).
+    // (x0,y0),(x1,y0),(x1,y1) / (x0,y0),(x1,y1),(x0,y1). Colors quantized like
+    // LLRender::color4f (U8 truncation) for byte-exact unorm8 output.
+    r = qcol(r); g = qcol(g); b = qcol(b); a = qcol(a);
     mVerts.push_back({ x0, y0, 0, 0, r, g, b, a });
     mVerts.push_back({ x1, y0, 1, 0, r, g, b, a });
     mVerts.push_back({ x1, y1, 1, 1, r, g, b, a });

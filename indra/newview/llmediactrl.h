@@ -128,6 +128,16 @@ public:
         bool getFrequentUpdates() { return mFrequentUpdates; };
         void setFrequentUpdates( bool frequentUpdatesIn ) {  mFrequentUpdates = frequentUpdatesIn; };
 
+        // <VulkanStorm> Read-only state query for the independent Vulkan UI
+        // renderer (M0 greenfield): true exactly when LLMediaCtrl::draw()
+        // would take its media-texture branch (mirrors draw_media). Lets the
+        // Vulkan walker reproduce the no-media opaque-background RESULT
+        // without touching GL. No behavior change. (Non-const only because
+        // LLViewerMediaImpl::getMediaPlugin() is non-const; read-only in
+        // effect.)
+        bool hasDrawableMedia();
+        // </VulkanStorm>
+
         void setAlwaysRefresh(bool refresh) { mAlwaysRefresh = refresh; }
         bool getAlwaysRefresh() { return mAlwaysRefresh; }
 
