@@ -270,6 +270,48 @@ capture harness, per the parity policy: opaque = tol 0, alpha-blended = tol 1.
 
 ---
 
+## 5b. Performance guardrail — the GHI pitfall (BINDING invariant, NON-BINDING benchmark)
+
+**Hard-won lesson (archive `H:\VulkanStorm`, branch `vulkanstorm-ghi`):** a prior
+attempt routed the UI through a generic hardware interface (GHI) and FPS
+collapsed 60→3. Diagnosis from the archived code: the GHI made the **unit of
+GPU submission the individual widget draw** — per-batch pipeline lookup/creation
+on a `{blend, colorWriteMask}` key, per-batch uniform-buffer `writeBuffer`
+upload, per-batch scissor/render-pass management — so hundreds of UI elements
+became hundreds of state changes + uploads per frame. (A per-pixel validation
+digest in the qualification harness compounded it.) The abstraction was clean;
+the submission granularity was fatal.
+
+**BINDING architectural invariant (the guardrail that prevents repeating it):**
+
+> **The unit of GPU submission is the coalesced state-run, not the widget.** A
+> frame of UI yields a bounded number of draws — the count of distinct
+> blend/texture/scissor/topology *runs* in painter order — independent of how
+> many hundreds of primitives the widgets emit. The widget-facing interface may
+> be immediate-style, but the backend MUST accumulate the whole frame's geometry
+> into a frame-wide buffer and submit per state-run. **Forbidden in the frame
+> path:** per-primitive pipeline creation, per-primitive buffer upload,
+> per-primitive render-pass begin/end, per-primitive device/queue sync
+> (`vkDeviceWaitIdle`/`vkQueueWaitIdle`), per-primitive validation/readback.
+
+The harvested `LLVKUI2D` sink already satisfies this (single 1M-vert append
+buffer, flush per state-run, 2 blend × 2 topology pipelines created once, one
+ortho push-const per flush, one render pass per frame, no mid-pass sync). Any
+future backend behind the neutral interface must satisfy it too.
+
+**NON-BINDING benchmark (informational, not a gate):** raw FPS is
+**environment-dependent and must not be a blocker** — the old project saw
+hundreds of FPS on unthrottled native GL vs. 60–100 under Mesa+Zink for
+identical code. So we do NOT gate on an absolute FPS number. Instead, each
+milestone *records* (a) draw-call count per frame (must stay bounded and
+independent of primitive count), (b) per-frame submission cost trend, and
+(c) a raw FPS datapoint **annotated with the backend/environment** it was
+measured under. A regression in (a)/(b) — draws scaling with widget count, or
+per-frame submission cost climbing — is the real alarm and triggers
+investigation; the raw FPS number is context, not a verdict.
+
+---
+
 ## 6. What changed vs. the superseded plan
 
 | Superseded (`vulkan-ui`, funnel) | This plan (`vulkanui`, independent) |
