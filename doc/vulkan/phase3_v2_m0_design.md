@@ -1,211 +1,133 @@
-# Phase 3 v2 — M0 Design: Skeleton Frame + Chrome on `llvkrender`
+# Phase 3 v2 — M0 Design: Greenfield Vulkan UI renderer (state-reading)
 
-**Status:** DRAFT for review.
+**Status:** REVISED 2026-09-02 — supersedes the earlier router/funnel M0 design.
 **Branch:** `vulkanui`. **Parent plan:** [phase3_v2_ui_plan.md](phase3_v2_ui_plan.md).
-**Scope note (2026-09-02):** M1 (chrome primitives) is **folded into M0** — M0
-covers the full non-textured, non-text chrome vocabulary (solid + gradient
-rects, outlines, lines, drop-shadows, rare triangulated prims), so the M0 gate
-is the **whole login chrome**, not just solid regions.
-**Milestone goal:** the Vulkan session runs the *real* `LLViewerWindow::draw()`
-tree through `llvkrender` into the batched `LLVKUI2D` sink, with correct
-ortho/scale/clip, the full chrome primitive vocabulary live, and textures/text
-stubbed to safe no-ops. **Accept:** the login chrome byte-exact vs GL
-(opaque tol 0, alpha tol 1); no crash; clean `Goodbye!` + exit 0.
+**Text contract:** [llvktext_design.md](llvktext_design.md).
 
 ---
 
-## 0. What M0 must prove
+## 0. The pivot (user decision, 2026-09-02)
 
-The seam and the coordinate/clip pipeline, plus the **complete chrome primitive
-vocabulary** — not yet textures or text. M0 is correct when every non-textured,
-non-text pixel the login tree emits (fills, gradients, borders, focus lines,
-drop-shadows, and the rare circle/arc/triangle prims) lands exactly where GL
-puts it. The sink's core is byte-exact-verified; M0's work is the **seam** (how
-tree calls reach `llvkrender`), the **neutral state feed** (transform/clip/color
-without reading `gGL`), and **closing the sink's 5 vocabulary gaps** (9-slice,
-glyph-via-textured-path, gradient rect, triangulated rare prims, rotated-quad
-confirm) for the chrome subset.
+The viewer's UI is **deeply fused with OpenGL** — `LLFontGL` fuses layout with GL
+texture allocation; `LLViewerWindow::draw()` interleaves `gGL` with traversal;
+textures are a GL manager. There is no clean seam to "route," and intercepting or
+gating GL calls inside the tree is the contamination pattern the policy forbids
+(proven twice: the 2026-08-31 init crash, and the reverted LLFontAtlasSurface
+abstraction-layer attempt).
+
+So M0 is **greenfield plus cheat-sheet** (user directive): a Vulkan-native UI
+renderer that produces the *result* the GL UI produces, reading the same
+*inputs* but executing **none** of GL's draw code. The cheat sheet is the
+documented result contracts (the four UI contracts + the text contract).
+
+**Variant (a) (user-chosen):** read the live `LLView` tree's **layout state**
+(each widget's computed rect / visibility / colors / images / label) and render
+it Vulkan-native. We reuse the layout *data* (the tree's reshape/arrange result)
+but never call the GL-coupled `draw()` methods. This is greenfield rendering
+driven by readable state — not a fork of the draw logic, and not an interception
+of it.
+
+**Superseded:** the `llui2drouter` + funnel-gating approach (running
+`LLViewerWindow::draw()` and redirecting its GL calls). It kept hitting GL calls
+embedded in the tree (the `gUIProgram.bind` crash, the font-atlas crash) precisely
+because the tree *is* GL code. The harvested `LLVKUI2D` sink + 2D pipeline are
+kept (they are the policy-clean GPU-submission core); the router/funnel layer on
+top is replaced by the state-reading renderer.
 
 ---
 
-## 1. The neutral choke-point router (Design ii)
+## 1. The architecture
 
-One thin header declares the 2D routing surface — it is a **router**, not a
-renderer: it dispatches the tree's 2D calls to whichever backend is bound, and
-owns no drawing logic itself. Exactly one implementation is bound per backend;
-selection happens once at the frame seam. No runtime `if (backend)` inside
-shared TUs.
-
-New file: `indra/llrender/llui2drouter.h` — **declarations only, no GL, no Vulkan.**
-
-```cpp
-// Neutral 2D/UI drawing ROUTER. Routes the widget tree's 2D calls to the bound
-// backend; owns no rendering itself. Backend-agnostic: one implementation is
-// bound per render backend at the frame seam. The GL impl wraps the existing
-// gl_* helpers (GL reference stays byte-stable); the Vulkan impl is llvkrender.
-namespace LLUI2DRouter
-{
-    // --- transform traversal hooks (stack-based; the tree pushes/pops per
-    //     widget via LLRender2D::translate/pushMatrix/popMatrix — see §3) -----
-    void pushTransform();
-    void popTransform();
-    void translate(float x, float y);          // relative, accumulates
-    void loadIdentityTransform();
-
-    // --- production state (carried so the Vulkan impl never reads gGL) ------
-    void setColor(float r, float g, float b, float a);
-    void setBlend(int blend_type);            // LLRender::eBlendType values
-    void setScissor(int x, int y, int w, int h);  // GL bottom-left device px
-    void clearScissor();
-
-    // --- primitives (vocabulary subset M0 needs; see plan §2.4) --------------
-    void rect(float left, float top, float right, float bottom);      // filled
-    void outlineRect(float left, float top, float right, float bottom);
-    void line(float x1, float y1, float x2, float y2);
-
-    // M0 stubs (no-op on the Vulkan path until M2/M3; live on GL):
-    void image(/* LLTexture* + rects, per llrender2dutils signatures */ ...);
-    void text(/* LLFontGL render args */ ...);
-}
+```mermaid
+flowchart TD
+    TREE["LLView tree (live)<br/>layout state: rects, visibility,<br/>colors, images, labels"]
+    SKIN["LLUIColorTable<br/>(neutral color source)"]
+    FT["FreeType (neutral raster)"]
+    TREE --> R["LLVKUIRender<br/>(greenfield: reads state,<br/>emits primitives)"]
+    SKIN --> R
+    FT --> TEXT["llvktext<br/>(parallel text: own atlas + layout)"]
+    TEXT --> R
+    R --> SINK["LLVKUI2D sink<br/>(batched, byte-exact-verified)"]
+    SINK --> CTX["LLVKContext 2D pipeline"]
+    CTX --> SES["LLVKSession frame"]
 ```
 
-Note the transform surface is **stack-based relative** (`push/pop/translate`),
-mirroring how the tree actually accumulates offsets through
-`LLRender2D::translate/pushMatrix/popMatrix` — not a flat `setTransform`. Each
-backend maintains its own transform stack: GL impl forwards to `gGL`'s UI matrix
-stack; `llvkrender` keeps its own (§3).
-
-**Binding:** a single function-table (struct of function pointers) or a thin
-abstract base, bound once. `LLUI2DRouter::bindGL()` installs the GL impl;
-`LLUI2DRouter::bindVulkan()` installs `llvkrender`. The frame seam calls the
-appropriate bind when the backend is chosen (session start / first Vulkan
-frame), not per call.
-
-**Why a function-table over per-call virtuals:** one indirection at bind time,
-none per primitive; keeps the hot path free of vtable chases. (The heavy cost is
-GPU submission, which the sink batches — see the §5b invariant.)
+- **`LLVKUIRender`** — the greenfield renderer. Per frame: begin the 2D frame,
+  walk the `LLView` tree in painter's order (reverse child list), read each
+  widget's state via its public getters, and emit the equivalent primitives
+  (solid/gradient rects, borders, images, drop shadows, text) to the sink. It
+  never calls `draw()` on the Vulkan path and never reads `gGL`.
+- **`llvktext`** — the parallel text renderer (see llvktext_design.md): FreeType
+  raster → own Option-A atlas → glyph quads into the sink. Used exclusively by
+  the Vulkan path.
+- The GL path is **untouched** — it runs the tree's `draw()` as always (the
+  byte-exact reference we diff against).
 
 ---
 
-## 2. The two implementations
+## 2. The readable render-state contract (agent-verified)
 
-### 2a. GL impl — zero-change pass-through (reference stays byte-stable)
-`indra/llrender/llui2drouter_gl.cpp` (lives in `llrender`, may touch `gGL`):
+**Draw() is pure-output** (reads state, emits GL, never mutates layout) across
+LLView/LLPanel/LLButton/LLLineEditor — so reading state without drawing is safe
+and leaves the tree consistent.
 
-- `rect` → `gl_rect_2d(left, top, right, bottom, color, /*filled*/true)`
-- `outlineRect` → `gl_rect_2d(..., filled=false)` (the 1px outline)
-- `line` → `gl_line_2d(x1, y1, x2, y2, color)`
-- `setColor` → `gGL.color4f(...)`; `setBlend` → `gGL.setSceneBlendType(...)`
-- `pushTransform/popTransform/translate/loadIdentityTransform` → the existing
-  `gGL.pushUIMatrix/popUIMatrix/translateUI/loadUIIdentity` (i.e. forward to the
-  same `LLRender2D` bodies used today — unchanged)
-- `setScissor/clearScissor` → the existing `LLScreenClipRect`/`glScissor` path
-- `image`/`text` → the existing `gl_draw_scaled_image*` / `LLFontGL::render`
+**Geometry (computable without draw()):** `getRect()` (local), `calcScreenRect()`
+(absolute, walks parent chain), `getVisible()`, `isInVisibleChain()`,
+`getEnabled()`. Painter's order = reverse child list (`rbegin()`→`rend()`), so
+iterate **back-to-front**.
 
-**Invariant:** every GL impl body calls the *same* helper the tree calls today,
-in the same order, with the same args. The GL path's pixels cannot change.
+**Per-widget visual state (public getters):**
+- **LLPanel/LLFloater:** `isBackgroundVisible/Opaque`, `getBackgroundColor`/
+  `getTransparentColor`, `getBackgroundImage`/`Overlay`, `hasBorder`/`getBorder`
+  (LLViewBorder: `getBorderWidth/getBevel/getStyle/getHighlightLight/
+  getShadowDark`), `getLabel`, `getCurrentTitle`, `isMinimized/isShown`.
+- **LLButton:** `getCurrentLabel`/`getLabelUnselected/Selected`, `getFont`,
+  `getToggleState`, `getHAlign`, `getFlashing`, the image set
+  (`mImageUnselected/Selected/Hover*/Disabled*/Pressed*/Flash`, `getImageOverlay`),
+  label colors.
+- **LLTextBox/LLTextBase:** `getText()`, `getFont()`, LLStyle `getColor()/
+  getReadOnlyColor()/getSelectedColor()/getShadowType()/getAlpha()`.
+- **LLLineEditor:** `getText()`, `getCursor()`, `getSelectionRange()`, `getFont()`,
+  fg/cursor colors, bg images.
+- **LLCheckBoxCtrl/LLComboBox:** `get()`/`getValue()`, `getLabel()`,
+  `getSelectedItemLabel()`, colors.
 
-### 2b. Vulkan impl — `llvkrender` (independent, never reads `gGL`)
-`indra/llvulkan/llvkrender.cpp` (+ `llvkrender.h`), built on `LLVKUI2D`:
+**Colors:** `LLUIColorTable::instance().getColor(name)` — neutral, no GL.
+**Opacity:** `LLUICtrl::getCurrentTransparency()` + the draw-context alpha —
+readable without drawing.
 
-- Holds its **own** production state: current color, its own transform
-  (offset/scale) **stack**, current scissor, current blend. Set by the
-  `LLUI2DRouter` calls; consumed at emit. **No `gGL` access.**
-- `rect` → `LLVKUI2DSink::get().rect(...)` (applies its own transform at emit).
-- `outlineRect` → `lineStrip` (5-pt closed strip, matching GL's inset winding).
-- `line` → `lineStrip` (2 pts).
-- `pushTransform/popTransform/translate/loadIdentityTransform` → maintain
-  `llvkrender`'s own offset/scale stack (§3), then push the resulting flat
-  off/scale to the sink via `sink.setTransform(off, scale)` at emit.
-- `setScissor` → Y-flip then `sink.setScissor`; `clearScissor` → `sink.clearScissor`.
-- `image`/`text` → **M0 no-op** (emit nothing) until M2/M3.
-
----
-
-## 3. The critical piece: neutral transform/scissor feed (no `gGL` reads)
-
-This is where the archived funnel went wrong (it read `gGL.getUITranslation()`).
-M0 must source the transform and clip from **backend-neutral owners** the tree
-already maintains. Verified against the baseline (2026-09-02):
-
-- **The traversal hooks are the seam.** The widget tree accumulates per-widget
-  offsets through `LLRender2D::pushMatrix() / translate() / popMatrix()`, called
-  from `LLView::drawChildren()` ([llview.cpp:1315-1334]) and a few other spots.
-  These hooks are the neutral *call sites* — the tree just says "translate by
-  the child rect offset." Today their **bodies write to `gGL`**
-  ([llrender2dutils.cpp:1765-1797]): `translate` → `gGL.translateUI`, `pushMatrix`
-  → `gGL.pushUIMatrix`, etc. So the transform stack currently lives in `gGL`'s
-  UI matrix stack.
-- **The seam routes these hooks by backend.** `LLRender2D::translate/pushMatrix/
-  popMatrix/loadIdentity` become choke points too:
-  - **GL impl:** unchanged — drive `gGL`'s UI matrix stack exactly as today.
-  - **Vulkan impl:** accumulate the same offset/scale into `llvkrender`'s own
-    transform stack (never `gGL`).
-  These hooks *also* maintain the backend-neutral font origin state
-  (`LLFontGL::sCurOrigin`, `sOriginStack`) — that part is shared CPU state both
-  backends read; it is NOT GL-coupled and stays common.
-- **Scale:** `LLUI::getScaleFactor()` is neutral (not `gGL`). Combined with the
-  window's aspect-correction (`mDisplayScale`). The seam reads this.
-- **Scissor Y-flip:** the clip stack (`LLScreenClipRect`) computes GL
-  bottom-left device rects. `llvkrender::setScissor` converts to the sink's
-  top-left space: `vk_y = device_height - (y + h)` (device height from the
-  swapchain extent), then `sink.setScissor(x, vk_y, w, h)`; empty →
-  `clearScissor`. Driven by the neutral `LLScreenClipRect`, not `gGL`.
-- **Color:** rects/lines carry explicit `LLColor4` at the choke point. For the
-  rare ambient-color paths, `llvkrender` tracks its own current color via
-  `LLUI2DRouter::setColor` (the tree sets color per-draw; we mirror the setter,
-  we don't read `gGL`'s copy).
-
-**`llvkrender` transform model:** a small offset/scale stack mirroring the
-tree's push/pop, so that at emit time the accumulated `(off, scale)` equals what
-`gGL`'s matrix stack would have produced. The contract result is known (plan
-§2.1: widget px → logical px = Σ ancestors.mLeft/mBottom + local, × mDisplayScale);
-`llvkrender` reproduces that result in its own stack, fed by the same
-`LLRender2D` hook values, never by reading `gGL`.
+**Caveat to handle in implementation:** any widget whose appearance is computed
+*only* inside draw() (not stored in readable state) must be re-derived; the agent
+found none for the standard login chrome, but we verify per widget as we cover it.
 
 ---
 
-## 4. The frame seams
+## 3. M0 scope
 
-- **Pre-login** [`display_startup()`](../../../indra/newview/llviewerdisplay.cpp):
-  when `LLVKSession::isRunning()`, bind Vulkan impl, `LLVKSession::beginUIFrame()`,
-  run `gViewerWindow->draw()`, `LLVKSession::endUIFrame()`. (Replaces the
-  current teal-only `renderFrame()` branch.)
-- **Post-login** [`render_ui_2d()`](../../../indra/newview/llviewerdisplay.cpp):
-  same binding + bracket around `gViewerWindow->draw()`. **Full redraw; the
-  `RenderUIBuffer` dirty-rect FBO path is skipped on Vulkan** (pure optimization,
-  default off — plan §2.1).
+Render the **login screen** chrome + text from readable state:
+- Panel/floater backgrounds (solid + gradient + 9-slice images), borders,
+  drop shadows.
+- Buttons (image + label), line editors, checkboxes, combo boxes, text boxes,
+  labels.
+- Text via llvktext (FreeType raster + own atlas + sink).
 
-On the GL backend these seams are untouched (the existing GL path runs).
+The 3D world overlay (tool draw, HUD/mouselook) is NOT 2D UI and is out of scope
+for the Vulkan UI pass. Media (login_html) is M4.
+
+**Accept:** the login screen byte-exact vs GL (opaque tol 0, alpha tol 1) via the
+capture harness; no GL context; clean shutdown; harness scenes 0–4 stay
+byte-exact; non-binding benchmark recorded.
 
 ---
 
-## 5. Harvest + CMake
+## 4. What carries over vs. what's replaced
 
-- Bring `llvkui2d.{h,cpp}` (sink), `llvkcontext` 2D-pipeline additions, and the
-  compiled `ui2d.vert/frag.spv` from the archived `vulkan-ui` branch into
-  `indra/llvulkan/`. The sink is contract-verified; import unchanged.
-- New: `indra/llvulkan/llvkrender.{h,cpp}`, `indra/llrender/llui2drouter.h`,
-  `indra/llrender/llui2drouter_gl.cpp`.
-- CMake: add the new sources to `indra/llvulkan/CMakeLists.txt` and
-  `indra/llrender/CMakeLists.txt`. New files → requires a reconfigure (drop
-  `--no-configure` once).
+| Kept (policy-clean) | Replaced |
+|---|---|
+| `LLVKUI2D` sink + `LLVKContext` 2D pipeline (byte-exact-verified GPU submission) | The `llui2drouter` + funnel gating (running GL draw() and redirecting) |
+| FreeType rasterization (neutral) | GL font classes (LLFontGL/LLFontBitmapCache/LLImageGL) |
+| The capture/diff harness + byte-exact baselines | The sink's GL-funnel call sites |
+| `llvkrender` transform/scissor/batch math | `llvkrender` as a router backend (becomes the greenfield emit path) |
 
-## 6. M0 acceptance
-
-1. **Whole login chrome** (solid + gradient fills, borders/outlines, focus
-   lines, drop-shadows, rare prims) byte-exact vs GL — opaque tol 0, alpha tol 1
-   — via the capture harness.
-2. Textured/text primitives no-op cleanly on Vulkan (no crash, no GL touch);
-   they render normally on GL.
-3. Clean shutdown (`Goodbye!` + exit 0) per the testing protocol.
-4. **Benchmark (non-binding, §5b):** record draw-call count per frame (must be
-   bounded / independent of widget count) + an environment-annotated FPS
-   datapoint. No absolute FPS gate.
-5. Harness scenes 0–4 stay byte-exact (regression gate).
-
-## 7. Explicitly out of scope for M0
-
-Textures/images (M2), text/fonts (M3), media (M4), the 5 custom-draw widgets
-(tree-dispatched; GL-only for now), the capability probe (separate branch — see
-phase3_v2_capability_probe.md).
+`llvkrender`'s batched-submission core is reused as `LLVKUIRender`'s emit engine;
+its "router backend" role is dropped.
