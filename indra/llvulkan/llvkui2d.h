@@ -54,6 +54,11 @@ public:
 
     bool isActive() const { return mCmd != VK_NULL_HANDLE; }
 
+    // <VulkanStorm> M0 diagnostic: vertices emitted so far this frame.
+    size_t frameVertsEmitted() const { return mFrameVerts; }
+    int    frameFlushes() const { return mFrameFlushes; }
+    // </VulkanStorm>
+
     // --- State (read at flush; a change flushes the pending run first) ------
     void setBlend(LLVKBlend blend);
     void setTexture(VkDescriptorSet descriptor); // VK_NULL_HANDLE = solid/white

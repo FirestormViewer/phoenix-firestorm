@@ -31,6 +31,7 @@
 #include "llvkprobe.h"
 #include "llvkselftest.h"
 #include "llvksession.h"
+#include "llrootview.h"
 #include "fsyspath.h"
 #include "hexdump.h"
 #include "llagent.h"
@@ -173,12 +174,14 @@ void display_startup()
     }
 
 #if LL_WINDOWS
-    // <VulkanStorm> The Vulkan backend owns the frame end-to-end while the
-    // 2D/3D pipelines are being ported: clear + present, no GL calls.
+    // <VulkanStorm> The Vulkan backend owns the frame end-to-end. Phase 3 v2
+    // (M0 greenfield): render the 2D UI from the widget tree's readable state
+    // via LLVKUIRender into the sink — no GL draw() calls run on this path.
     if (LLVKSession::isRunning())
     {
         LLVKSession::resizeIfNeeded(gViewerWindow->getWindow());
-        LLVKSession::renderFrame();
+        const LLVector2 ui_scale = LLUI::getScaleFactor();
+        LLVKSession::renderUIFrame(gViewerWindow->getRootView(), ui_scale.mV[VX], ui_scale.mV[VY]);
         return;
     }
     // </VulkanStorm>

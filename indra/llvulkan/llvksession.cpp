@@ -13,10 +13,14 @@
 
 #include "llerror.h"
 
+#include <cstdlib>
+
 #if LL_WINDOWS
 
 #include "llvkcontext.h"
 #include "llvkgpufacts.h"
+#include "llvkui2d.h"
+#include "llvkuirender.h"
 #include "llwindow.h"
 
 namespace
@@ -144,6 +148,62 @@ void LLVKSession::renderFrame()
         LL_WARNS("Vulkan") << "Session: renderClearFrame failed" << LL_ENDL;
     }
 }
+
+// <VulkanStorm> Phase 3 v2 (M0 greenfield)
+void LLVKSession::renderUIFrame(LLView* root, float ui_scale_x, float ui_scale_y)
+{
+    if (!s_context)
+    {
+        return;
+    }
+
+    // Lazily create the 2D pipeline once the device exists (shaders load on
+    // first use; createSwapchain rebuilds the pipelines on resize).
+    if (s_context->pipeline2D(LLVKContext::Blend2D::Alpha) == VK_NULL_HANDLE)
+    {
+        std::string error;
+        if (!s_context->create2DPipeline(error))
+        {
+            LL_WARNS("Vulkan") << "Session: create2DPipeline failed: " << error << LL_ENDL;
+            return;
+        }
+    }
+
+    // Begin the 2D render pass (clears to the boot teal so any uncovered region
+    // is unmistakable during bring-up).
+    VkCommandBuffer cmd = s_context->begin2DFrame(kClearR, kClearG, kClearB, kClearA);
+    if (cmd == VK_NULL_HANDLE)
+    {
+        return; // swapchain out of date; the caller resizes next frame
+    }
+
+    // Begin the sink, render the widget tree from its readable state, flush.
+    LLVKUI2DSink::get().begin(s_context, cmd);
+    LLVKUIRender::renderFrame(s_context, root, s_width, s_height, ui_scale_x, ui_scale_y);
+    LLVKUI2DSink::get().end();
+
+    // <VulkanStorm> M0 diagnostic: log the emitted vertex count so we can tell
+    // whether the state-reading tree walk produced any geometry (teal = zero
+    // verts emitted or all off-screen). VULKANSTORM_UI_DEBUG=1 enables it.
+    static bool s_dbg = getenv("VULKANSTORM_UI_DEBUG") != nullptr;
+    if (s_dbg)
+    {
+        static int s_f = 0;
+        if ((s_f++ % 60) == 0)
+        {
+            LL_INFOS("Vulkan") << "renderUIFrame: vertsDrawn=" << LLVKUI2DSink::get().frameVertsEmitted()
+                               << " flushes=" << LLVKUI2DSink::get().frameFlushes()
+                               << " extent=" << s_width << "x" << s_height << LL_ENDL;
+        }
+    }
+    // </VulkanStorm>
+
+    if (!s_context->end2DFrame())
+    {
+        LL_WARNS("Vulkan") << "Session: end2DFrame failed" << LL_ENDL;
+    }
+}
+// </VulkanStorm>
 
 void LLVKSession::resizeIfNeeded(LLWindow* window)
 {

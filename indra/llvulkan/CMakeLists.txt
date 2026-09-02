@@ -14,6 +14,7 @@ project(llvulkan)
 include(00-Common)
 include(LLCommon)
 include(LLWindow)
+include(LLImage)
 include(VulkanSdk)
 
 set(llvulkan_SOURCE_FILES
@@ -24,6 +25,7 @@ set(llvulkan_SOURCE_FILES
     llvkselftest.cpp
     llvksession.cpp
     llvkui2d.cpp
+    llvkuirender.cpp
     ${VULKAN_SDK_VOLK_SOURCE}
     )
 
@@ -36,6 +38,7 @@ set(llvulkan_HEADER_FILES
     llvkselftest.h
     llvksession.h
     llvkui2d.h
+    llvkuirender.h
     )
 
 # volk.c is C; the rest is C++. Give volk its required define so it exposes the
@@ -64,6 +67,10 @@ target_compile_definitions(llvulkan PUBLIC
 
 target_link_libraries(llvulkan
         llcommon
+        llmath
         llwindow
+        llimage
+        llrender
+        llui
         ll::vulkan_sdk
         )

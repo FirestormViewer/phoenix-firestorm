@@ -42,6 +42,15 @@ public:
     // running.
     static void renderFrame();
 
+    // <VulkanStorm> Phase 3 v2 (M0 greenfield): render one 2D UI frame from the
+    // widget tree's current state. Begins the 2D render pass + the LLVKUI2D
+    // sink, runs LLVKUIRender over the root view, then closes + presents.
+    // ui_scale_x/y are the neutral UI scale factor (the caller reads
+    // LLUI::getScaleFactor(); llvulkan does not depend on llui). No-op when not
+    // running or when the swapchain is out of date (caller resizes).
+    static void renderUIFrame(class LLView* root, float ui_scale_x, float ui_scale_y);
+    // </VulkanStorm>
+
     // Recreate the swapchain if the window's client size changed since the
     // last frame. No-op when not running.
     static void resizeIfNeeded(LLWindow* window);
