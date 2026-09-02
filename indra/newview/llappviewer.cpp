@@ -4225,7 +4225,9 @@ LLSD LLAppViewer::getViewerInfo() const
         info["GRAPHICS_CARD_MEMORY"] = LLSD::Integer(gGLManager.mVRAM);
         info["GRAPHICS_CARD_MEMORY_DETECTED"] = gGLManager.mVRAMDetected; // <FS:Beq/> allow detected hardware to be overridden.
         info["RENDERING_API"] = "OpenGL";
-        info["RENDERING_API_VERSION"] = gGLManager.mGLVersionString;
+        // Full GL version string (e.g. "4.6.0 Core Profile Context ..."), the
+        // same string the old AboutOGL line reported.
+        info["RENDERING_API_VERSION"] = ll_safe_string((const char*)(glGetString(GL_VERSION)));
     }
     // </VulkanStorm>
 
@@ -4529,21 +4531,11 @@ std::string LLAppViewer::getViewerInfoString(bool default_string) const
     {
         support << "\n" << LLTrans::getString("AboutDriver", args, default_string);
     }
-    // <VulkanStorm> On the Vulkan path the GL version is empty (no GL context),
-    // so show the rendering-API line (from the Vulkan facts) and skip the empty
-    // AboutOGL line. The GL path is byte-identical: AboutOGL exactly as before,
-    // no extra line.
-    if (LLWindow::getSkipGLContext())
-    {
-        if (info.has("RENDERING_API"))
-        {
-            support << "\n" << LLTrans::getString("AboutRenderer", args, default_string);
-        }
-    }
-    else
-    {
-        support << "\n" << LLTrans::getString("AboutOGL", args, default_string);
-    }
+    // <VulkanStorm> Unified backend-neutral rendering line, replacing the
+    // GL-specific AboutOGL line on BOTH backends (matches the GHI model:
+    // one unconditional line; RENDERING_API / RENDERING_API_VERSION are
+    // populated for whichever backend is active). No backend branch here.
+    support << "\n" << LLTrans::getString("AboutRenderer", args, default_string);
     // </VulkanStorm>
     //support << "\n\n" << LLTrans::getString("AboutSettings", args, default_string); // <FS> Custom sysinfo
 #if LL_DARWIN
