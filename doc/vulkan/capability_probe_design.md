@@ -146,11 +146,31 @@ The UI/render pipeline (separate `vulkanui` effort); 3D rendering; actually
 *consuming* the GPU class for Vulkan render features (that comes with the 3D
 pipeline). This branch only gets the classification *correct*.
 
-## 6. Open questions for review
+## 6. Decisions & open questions
 
-1. **Facts landing:** (a) narrow `gGLManager` field-fill vs (b) backend-neutral
-   GPU-facts provider read by `LLFeatureManager`. I lean (b). Preference?
-2. **Timing:** (i) populate-before-first-read vs (ii) re-classify-after. I lean
-   (i). Preference?
-3. **Bandwidth:** Vulkan-native micro-benchmark (A) with CLASS_3 fallback (C) —
-   confirm, vs the heuristic table (B). I lean A+C.
+1. **Facts landing — DECIDED (2026-09-02): (b), backend-neutral GPU-facts
+   provider** read by `LLFeatureManager`. The Vulkan path does NOT poke
+   `gGLManager` fields. **This shape is a proven precedent in our own archive**:
+   the GHI effort (`H:\VulkanStorm`, `vulkanstorm-ghi`) built exactly this — a
+   backend-neutral `RendererIdentity`/`RendererSnapshot`
+   (`llrender/ghi/include/llghirendererinfo.h`) published once after device
+   creation and consumed by `LLFeatureManager` (`getRenderBackend`,
+   `getRenderGPUIdentity`, `getRenderDisplayName`). We adapt that *shape*; the
+   GHI's per-frame submission mistakes do not apply here (this is device-info,
+   read once — not per-frame drawing).
+
+2. **"PCI probe" — RESOLVED (2026-09-02): no separate PCI bus probe is needed.**
+   The vendor/device IDs come from the **Vulkan API itself**:
+   `vkGetPhysicalDeviceProperties` returns `vendorID` + `deviceID` (the same
+   numeric PCI IDs, reported by the driver) plus `deviceName`, and
+   `vkGetPhysicalDeviceMemoryProperties` returns the DEVICE_LOCAL heap sizes.
+   The archived GHI Vulkan backend did exactly this (its identity string was
+   `vendorID:deviceID:pipelineCacheUUID`). Reading IDs "from the hardware" IS
+   reading them via the Vulkan API — a literal PCI/SetupAPI/`/sys/bus/pci`/IOKit
+   enumeration would add three platform-specific subsystems for information the
+   driver already hands us. Avoid it.
+
+3. **Timing:** (i) populate-before-first-read vs (ii) re-classify-after. I lean
+   (i). **Open — confirm.**
+4. **Bandwidth:** Vulkan-native micro-benchmark (A) with CLASS_3 fallback (C) —
+   vs the heuristic table (B). I lean A+C. **Open — confirm.**
