@@ -3,5 +3,6 @@
 	<menu_item_check label="Ordenar por nome" name="sort_by_name"/>
 	<menu_item_check label="Ordenar por data" name="sort_by_date"/>
 	<menu_item_check label="Manter amigos no topo" name="sort_by_friends"/>
+	<menu_item_check label="Mostrar bloqueados" name="show_muted"/>
 	<menu_item_call label="Ver histórico do chat local..." name="view_nearby_chat_history"/>
 </toggleable_menu>
