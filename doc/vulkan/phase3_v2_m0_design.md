@@ -21,19 +21,22 @@ needs to do that is already built and byte-exact-verified; M0's work is the
 
 ---
 
-## 1. The neutral choke-point header (Design ii)
+## 1. The neutral choke-point router (Design ii)
 
-One thin header declares the 2D surface. Exactly one implementation is bound per
-backend; selection happens once at the frame seam. No runtime `if (backend)`
-inside shared TUs.
+One thin header declares the 2D routing surface — it is a **router**, not a
+renderer: it dispatches the tree's 2D calls to whichever backend is bound, and
+owns no drawing logic itself. Exactly one implementation is bound per backend;
+selection happens once at the frame seam. No runtime `if (backend)` inside
+shared TUs.
 
-New file: `indra/llrender/llui2d.h` — **declarations only, no GL, no Vulkan.**
+New file: `indra/llrender/llui2drouter.h` — **declarations only, no GL, no Vulkan.**
 
 ```cpp
-// Neutral 2D/UI drawing surface. Backend-agnostic: one implementation is bound
-// per render backend at the frame seam. The GL impl wraps the existing gl_*
-// helpers (GL reference stays byte-stable); the Vulkan impl is llvkrender.
-namespace LLUI2D
+// Neutral 2D/UI drawing ROUTER. Routes the widget tree's 2D calls to the bound
+// backend; owns no rendering itself. Backend-agnostic: one implementation is
+// bound per render backend at the frame seam. The GL impl wraps the existing
+// gl_* helpers (GL reference stays byte-stable); the Vulkan impl is llvkrender.
+namespace LLUI2DRouter
 {
     // --- transform traversal hooks (stack-based; the tree pushes/pops per
     //     widget via LLRender2D::translate/pushMatrix/popMatrix — see §3) -----
@@ -66,8 +69,8 @@ backend maintains its own transform stack: GL impl forwards to `gGL`'s UI matrix
 stack; `llvkrender` keeps its own (§3).
 
 **Binding:** a single function-table (struct of function pointers) or a thin
-abstract base, bound once. `LLUI2D::bindGL()` installs the GL impl;
-`LLUI2D::bindVulkan()` installs `llvkrender`. The frame seam calls the
+abstract base, bound once. `LLUI2DRouter::bindGL()` installs the GL impl;
+`LLUI2DRouter::bindVulkan()` installs `llvkrender`. The frame seam calls the
 appropriate bind when the backend is chosen (session start / first Vulkan
 frame), not per call.
 
@@ -80,7 +83,7 @@ GPU submission, which the sink batches — see the §5b invariant.)
 ## 2. The two implementations
 
 ### 2a. GL impl — zero-change pass-through (reference stays byte-stable)
-`indra/llrender/llui2d_gl.cpp` (lives in `llrender`, may touch `gGL`):
+`indra/llrender/llui2drouter_gl.cpp` (lives in `llrender`, may touch `gGL`):
 
 - `rect` → `gl_rect_2d(left, top, right, bottom, color, /*filled*/true)`
 - `outlineRect` → `gl_rect_2d(..., filled=false)` (the 1px outline)
@@ -99,8 +102,8 @@ in the same order, with the same args. The GL path's pixels cannot change.
 `indra/llvulkan/llvkrender.cpp` (+ `llvkrender.h`), built on `LLVKUI2D`:
 
 - Holds its **own** production state: current color, its own transform
-  (offset/scale) **stack**, current scissor, current blend. Set by the `LLUI2D`
-  calls; consumed at emit. **No `gGL` access.**
+  (offset/scale) **stack**, current scissor, current blend. Set by the
+  `LLUI2DRouter` calls; consumed at emit. **No `gGL` access.**
 - `rect` → `LLVKUI2DSink::get().rect(...)` (applies its own transform at emit).
 - `outlineRect` → `lineStrip` (5-pt closed strip, matching GL's inset winding).
 - `line` → `lineStrip` (2 pts).
@@ -143,8 +146,8 @@ already maintains. Verified against the baseline (2026-09-02):
   `clearScissor`. Driven by the neutral `LLScreenClipRect`, not `gGL`.
 - **Color:** rects/lines carry explicit `LLColor4` at the choke point. For the
   rare ambient-color paths, `llvkrender` tracks its own current color via
-  `LLUI2D::setColor` (the tree sets color per-draw; we mirror the setter, we
-  don't read `gGL`'s copy).
+  `LLUI2DRouter::setColor` (the tree sets color per-draw; we mirror the setter,
+  we don't read `gGL`'s copy).
 
 **`llvkrender` transform model:** a small offset/scale stack mirroring the
 tree's push/pop, so that at emit time the accumulated `(off, scale)` equals what
@@ -175,8 +178,8 @@ On the GL backend these seams are untouched (the existing GL path runs).
 - Bring `llvkui2d.{h,cpp}` (sink), `llvkcontext` 2D-pipeline additions, and the
   compiled `ui2d.vert/frag.spv` from the archived `vulkan-ui` branch into
   `indra/llvulkan/`. The sink is contract-verified; import unchanged.
-- New: `indra/llvulkan/llvkrender.{h,cpp}`, `indra/llrender/llui2d.h`,
-  `indra/llrender/llui2d_gl.cpp`.
+- New: `indra/llvulkan/llvkrender.{h,cpp}`, `indra/llrender/llui2drouter.h`,
+  `indra/llrender/llui2drouter_gl.cpp`.
 - CMake: add the new sources to `indra/llvulkan/CMakeLists.txt` and
   `indra/llrender/CMakeLists.txt`. New files → requires a reconfigure (drop
   `--no-configure` once).
