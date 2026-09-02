@@ -16,6 +16,7 @@
 #if LL_WINDOWS
 
 #include "llvkcontext.h"
+#include "llvkgpufacts.h"
 #include "llwindow.h"
 
 namespace
@@ -114,6 +115,16 @@ bool LLVKSession::start(LLWindow* window, bool enable_validation)
     LL_INFOS("Vulkan") << "Session: Vulkan owns the viewer window ("
                        << s_width << "x" << s_height << ", device: "
                        << ctx->deviceName() << ")" << LL_ENDL;
+
+    // <VulkanStorm> Capability probe Stage 2: now that a logical device exists,
+    // measure memory bandwidth and publish it to the facts snapshot. The static
+    // facts were captured in the early LLVKProbe enumeration (Stage 1). The
+    // class-dependent feature settings were withheld (bounded-defer); the
+    // caller (newview, llappviewer.cpp) resolves the GPU class right after this
+    // returns, since LLFeatureManager lives in newview and llvulkan must not
+    // depend on it (would be a circular newview<->llvulkan link).
+    LLVKGpuFacts::setBandwidth(ctx->measureMemoryBandwidthGBps());
+    // </VulkanStorm>
     return true;
 }
 
