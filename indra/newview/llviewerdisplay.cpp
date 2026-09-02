@@ -165,9 +165,6 @@ std::string getProfileStatsFilename();
 void display_startup()
 {
     if (   !gViewerWindow
-        || !gViewerWindow->getActive()
-        || !gViewerWindow->getWindow()->getVisible()
-        || gViewerWindow->getWindow()->getMinimized()
         || gNonInteractive)
     {
         return;
@@ -177,14 +174,42 @@ void display_startup()
     // <VulkanStorm> The Vulkan backend owns the frame end-to-end. Phase 3 v2
     // (M0 greenfield): render the 2D UI from the widget tree's readable state
     // via LLVKUIRender into the sink — no GL draw() calls run on this path.
+    // Unlike the GL path below, this does NOT gate on window focus/visibility:
+    // the GL early-out exists to save power when unfocused, but the Vulkan
+    // frame already handles degenerate extents (minimized) internally, and
+    // focus-independent rendering is required for automated frame-capture
+    // verification (the harness launches the viewer without foreground focus).
     if (LLVKSession::isRunning())
     {
+        if (   !gViewerWindow->getWindow()
+            || gViewerWindow->getWindow()->getMinimized())
+        {
+            return;
+        }
         LLVKSession::resizeIfNeeded(gViewerWindow->getWindow());
         const LLVector2 ui_scale = LLUI::getScaleFactor();
         LLVKSession::renderUIFrame(gViewerWindow->getRootView(), ui_scale.mV[VX], ui_scale.mV[VY]);
         return;
     }
     // </VulkanStorm>
+
+    if (   !gViewerWindow->getActive()
+        || !gViewerWindow->getWindow()->getVisible()
+        || gViewerWindow->getWindow()->getMinimized())
+    {
+        return;
+    }
+#endif
+
+#if !LL_WINDOWS
+    // <VulkanStorm> Non-Windows builds have no Vulkan path yet; preserve the
+    // original focus/visibility gates for the GL path on those platforms.
+    if (   !gViewerWindow->getActive()
+        || !gViewerWindow->getWindow()->getVisible()
+        || gViewerWindow->getWindow()->getMinimized())
+    {
+        return;
+    }
 #endif
 
     gPipeline.updateGL();
@@ -528,11 +553,21 @@ void display(bool rebuild, F32 zoom_factor, int subfield, bool for_snapshot)
 {
 #if LL_WINDOWS
     // <VulkanStorm> The Vulkan backend owns the frame end-to-end while the
-    // 2D/3D pipelines are being ported: clear + present, no GL calls.
+    // 2D/3D pipelines are being ported. Pre-STATE_STARTED (login/startup): the
+    // greenfield UI walker renders the widget tree from readable state. Post-
+    // login (world): clear + present until the 3D pipeline lands. No GL calls.
     if (LLVKSession::isRunning())
     {
         LLVKSession::resizeIfNeeded(gViewerWindow->getWindow());
-        LLVKSession::renderFrame();
+        if (LLStartUp::getStartupState() < STATE_STARTED)
+        {
+            const LLVector2 ui_scale = LLUI::getScaleFactor();
+            LLVKSession::renderUIFrame(gViewerWindow->getRootView(), ui_scale.mV[VX], ui_scale.mV[VY]);
+        }
+        else
+        {
+            LLVKSession::renderFrame();
+        }
         return;
     }
     // </VulkanStorm>

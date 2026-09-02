@@ -107,11 +107,9 @@ namespace
         if (panel)
         {
             rc.panels++;
-            int before = LLVKUI2DSink::get().frameFlushes();
-            (void)before;
-            size_t vbefore = LLVKUI2DSink::get().frameVertsEmitted();
+            size_t vbefore = LLVKUI2DSink::get().pendingVerts();
             renderPanelBackground(rc, panel);
-            if (LLVKUI2DSink::get().frameVertsEmitted() > vbefore) rc.emitted++;
+            if (LLVKUI2DSink::get().pendingVerts() > vbefore) rc.emitted++;
         }
 
         // Recurse children in painter's order. mChildList front = top-most, so

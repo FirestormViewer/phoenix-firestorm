@@ -12,6 +12,7 @@
 #include "llvksession.h"
 
 #include "llerror.h"
+#include "llfile.h"
 
 #include <cstdlib>
 
@@ -36,6 +37,42 @@ namespace
     constexpr float kClearG = 0.5f;
     constexpr float kClearB = 0.5f;
     constexpr float kClearA = 1.0f;
+
+    // <VulkanStorm> M0 capture harness: dump the presented frame to a raw RGBA8
+    // file (8-byte LE width/height header + pixels) when VULKANSTORM_CAPTURE is
+    // set. One-shot after a settle delay so the frame is stable.
+    void captureFrameOnce()
+    {
+        static const char* cap = getenv("VULKANSTORM_CAPTURE");
+        if (!cap || !*cap) return;
+        static int s_frame = 0;
+        const int kSettleFrames = 30;   // let the UI settle before capturing
+        if (++s_frame != kSettleFrames) return;
+
+        std::vector<uint8_t> rgba;
+        uint32_t w = 0, h = 0;
+        if (s_context && s_context->readbackSwapchain(rgba, w, h) && w > 0 && h > 0)
+        {
+            LLFILE* f = LLFile::fopen(cap, "wb");
+            if (f)
+            {
+                uint32_t header[2] = { w, h };
+                fwrite(header, sizeof(header), 1, f);
+                fwrite(rgba.data(), rgba.size(), 1, f);
+                LLFile::close(f);
+                LL_INFOS("Vulkan") << "Captured frame to " << cap << " (" << w << "x" << h << ")" << LL_ENDL;
+            }
+            else
+            {
+                LL_WARNS("Vulkan") << "captureFrameOnce: fopen failed for " << cap << LL_ENDL;
+            }
+        }
+        else
+        {
+            LL_WARNS("Vulkan") << "captureFrameOnce: readbackSwapchain failed (w=" << w << " h=" << h << ")" << LL_ENDL;
+        }
+    }
+    // </VulkanStorm>
 
     void queryClientSize(LLWindow* window, uint32_t& width, uint32_t& height)
     {
@@ -180,28 +217,31 @@ void LLVKSession::renderUIFrame(LLView* root, float ui_scale_x, float ui_scale_y
     // Begin the sink, render the widget tree from its readable state, flush.
     LLVKUI2DSink::get().begin(s_context, cmd);
     LLVKUIRender::renderFrame(s_context, root, s_width, s_height, ui_scale_x, ui_scale_y);
-    LLVKUI2DSink::get().end();
 
-    // <VulkanStorm> M0 diagnostic: log the emitted vertex count so we can tell
-    // whether the state-reading tree walk produced any geometry (teal = zero
-    // verts emitted or all off-screen). VULKANSTORM_UI_DEBUG=1 enables it.
+    // <VulkanStorm> M0 diagnostic: read the counters BEFORE end() zeroes them.
+    // VULKANSTORM_UI_DEBUG=1 enables it.
     static bool s_dbg = getenv("VULKANSTORM_UI_DEBUG") != nullptr;
     if (s_dbg)
     {
         static int s_f = 0;
         if ((s_f++ % 60) == 0)
         {
-            LL_INFOS("Vulkan") << "renderUIFrame: vertsDrawn=" << LLVKUI2DSink::get().frameVertsEmitted()
+            LL_INFOS("Vulkan") << "renderUIFrame: pendingVerts=" << LLVKUI2DSink::get().pendingVerts()
                                << " flushes=" << LLVKUI2DSink::get().frameFlushes()
+                               << " sinkActive=" << (LLVKUI2DSink::get().isActive() ? 1 : 0)
                                << " extent=" << s_width << "x" << s_height << LL_ENDL;
         }
     }
     // </VulkanStorm>
 
+    LLVKUI2DSink::get().end();
+
     if (!s_context->end2DFrame())
     {
         LL_WARNS("Vulkan") << "Session: end2DFrame failed" << LL_ENDL;
     }
+
+    captureFrameOnce();
 }
 // </VulkanStorm>
 

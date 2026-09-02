@@ -57,6 +57,7 @@ public:
     // <VulkanStorm> M0 diagnostic: vertices emitted so far this frame.
     size_t frameVertsEmitted() const { return mFrameVerts; }
     int    frameFlushes() const { return mFrameFlushes; }
+    size_t pendingVerts() const { return mVerts.size(); } // pending (pre-flush) geometry
     // </VulkanStorm>
 
     // --- State (read at flush; a change flushes the pending run first) ------
