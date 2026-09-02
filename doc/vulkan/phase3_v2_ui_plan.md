@@ -194,12 +194,46 @@ flowchart LR
    the §5b submission-granularity invariant). `llvkrender` is the widget-facing
    surface + production state; the sink is the GPU-submission engine beneath it.
 
-**Binding seam:** the tree's 2D calls today are static (`gGL.foo()`,
-`gl_rect_2d(...)`). The seam is a backend-conditional dispatch at the choke
-points that resolves those calls to `llrender` (GL) or `llvkrender` (Vulkan),
-chosen once per frame at `display_startup()` / `render_ui_2d()`. The Vulkan path
-never reads `gGL` — its production state (transform/color/clip) lives in
-`llvkrender`, not in GL.
+**Binding seam — DECIDED (2026-09-02): Design (ii), thin neutral header at the
+choke points.** The tree's 2D calls today are static (`gGL.foo()`,
+`gl_rect_2d(...)`). Under (ii) the 4 choke-point functions become a thin neutral
+header; **one implementation is bound per backend, selected once at
+`display_startup()` / `render_ui_2d()`** (NOT a scattered runtime `if (backend)`
+inside shared TUs — that would violate the module boundary). The **GL impl is a
+zero-change pass-through wrapper** calling the existing `gl_rect_2d` /
+`gl_draw_scaled_image_with_border` / `LLFontGL::render` / `LLScreenClipRect`
+code — so the GL reference stays **byte-stable by construction** (critical: we
+diff against it). The **Vulkan impl is the independent `llvkrender`** — its own
+transform/color/clip state, its own texture loader, its own atlas; it **never
+reads `gGL`**.
+
+Why (ii) over (i) (both-backends-behind-the-header): an engineering
+investigation (subagent, 2026-09-02) found the 2D **transform state
+(`mUIOffset`/`mUIScale`) is owned by `gGL`** ([llrender.cpp:1333]). Design (i)
+would force extracting that state to a neutral owner — invasive, and it perturbs
+the GL reference we must keep byte-exact. Design (ii) leaves GL's state
+untouched (GL impl wraps `gGL` directly) while the Vulkan impl holds its own —
+satisfying both hard constraints (Vulkan purity + GL immutability) at the lowest
+migration cost. The header carries the production state (setColor/setTransform/
+setScissor/setBlend) so the Vulkan impl is self-sufficient.
+
+Two threads pinned for the M0 design doc:
+- **Vulkan transform state** is fed from the *neutral owners* the tree already
+  uses (`LLUI::getScaleFactor()`, the `LLView` tree offsets) — NOT from
+  `gGL.getUITranslation()`. (This is the exact mistake the archived funnel
+  made.) The M0 doc specifies the neutral source per state piece.
+- **The 5 custom-draw widgets** (llstatbar, llfloater cone, lltextbase
+  selection, lllineeditor IME, llview debug) stay `gGL`-coupled and are
+  dispatched at the tree level: GL runs them as-is; the Vulkan path substitutes
+  the generic pre-transformed tri-batch in a later milestone (`llview` debug
+  borders may stay GL-only — off by default).
+
+**Considered and rejected (2026-09-02): OS-native UI.** Rendering the UI with
+the OS windowing system instead of the GPU was raised and set aside: the UI is
+world-integrated (nametags, HUDs, in-world text, build-tool overlays composite
+with 3D depth), `llui` is the viewer's whole front-end (skins, RLVa, hundreds
+of floaters), byte-exact GL↔Vulkan parity would be impossible by definition, and
+it triples the platform matrix (Win32/Cocoa/GTK). Not pursued.
 
 **Components (all Vulkan-owned unless noted):**
 1. **`llvkrender` module** — *new.* The Vulkan-native 2D render layer the Vulkan
