@@ -139,12 +139,32 @@ flowchart TD
 4. The GL path is **unchanged** (its facts still come from `gGLManager`; the
    classification result for GL is byte-identical to before).
 5. No GL context is created on the Vulkan path; clean shutdown.
+6. **About panel (Help → About)** shows the real Vulkan device on the Vulkan
+   path — rendering API = Vulkan, backend/provider, device name, and VRAM —
+   instead of blank/null (today `glGetString` returns null with no GL context).
+   On the GL path it is unchanged.
+
+## 4b. About panel (DECIDED 2026-09-02 — adopt, option A: folded into this branch)
+
+Adopt the GHI viewer's Help→About renderer display. The GHI made
+`LLAppViewer::getViewerInfo()` read the backend-neutral facts snapshot when
+present (vendor/name/VRAM/api/backend/provider) and fall back to
+`glGetString`/`gGLManager` otherwise, plus an About string (`AboutRenderer` in
+`strings.xml`) showing Rendering API / Backend / Provider. The About floater
+renders `getViewerInfo()`, so it surfaces automatically.
+
+This is the **consumer-facing proof** that the probe's facts provider works
+end-to-end: it reuses the SAME backend-neutral facts struct the probe populates
+(decision b), so it is nearly free once the provider exists, and it validates
+the provider without a second change. Folded into THIS branch (option A) so the
+probe is self-validating. Precedent: archived GHI commit f67d53f63f.
 
 ## 5. Explicitly out of scope
 
 The UI/render pipeline (separate `vulkanui` effort); 3D rendering; actually
 *consuming* the GPU class for Vulkan render features (that comes with the 3D
-pipeline). This branch only gets the classification *correct*.
+pipeline). This branch gets the classification *correct* and surfaces it in
+About.
 
 ## 6. Decisions & open questions
 
