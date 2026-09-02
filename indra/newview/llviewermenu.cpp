@@ -12096,7 +12096,9 @@ class LLWorldEnvSettings : public view_listener_t
     void defocusEnvFloaters()
     {
         //currently there is only one instance of each floater
-        std::vector<std::string> env_floaters_names = { "env_edit_extdaycycle", "env_fixed_environmentent_water", "env_fixed_environmentent_sky" };
+        // <FS:Ansariel> Compact environment edit floater option
+        //std::vector<std::string> env_floaters_names = { "env_edit_extdaycycle", "env_fixed_environmentent_water", "env_fixed_environmentent_sky" };
+        std::vector<std::string> env_floaters_names = { "env_edit_extdaycycle", "env_fixed_environmentent_water", "env_fixed_environmentent_sky", "fs_env_fixed_environmentent_water", "fs_env_fixed_environmentent_sky"};
         for (std::vector<std::string>::const_iterator it = env_floaters_names.begin(); it != env_floaters_names.end(); ++it)
         {
             LLFloater* env_floater = LLFloaterReg::findTypedInstance<LLFloater>(*it);
@@ -12300,19 +12302,27 @@ class LLWorldEnvPreset : public view_listener_t
 
         if (item == "new_water")
         {
-            LLFloaterReg::showInstance("env_fixed_environmentent_water", "new");
+            // <FS:Ansariel> Compact environment edit floater option
+            //LLFloaterReg::showInstance("env_fixed_environmentent_water", "new");
+            LLFloaterReg::showInstance(gSavedSettings.getBOOL("FSUseCompactEnvironmentFloaters") ? "fs_env_fixed_environmentent_water" : "env_fixed_environmentent_water", "new");
         }
         else if (item == "edit_water")
         {
-            LLFloaterReg::showInstance("env_fixed_environmentent_water", "edit");
+            // <FS:Ansariel> Compact environment edit floater option
+            //LLFloaterReg::showInstance("env_fixed_environmentent_water", "edit");
+            LLFloaterReg::showInstance(gSavedSettings.getBOOL("FSUseCompactEnvironmentFloaters") ? "fs_env_fixed_environmentent_water" : "env_fixed_environmentent_water", "edit");
         }
         else if (item == "new_sky")
         {
-            LLFloaterReg::showInstance("env_fixed_environmentent_sky", "new");
+            // <FS:Ansariel> Compact environment edit floater option
+            //LLFloaterReg::showInstance("env_fixed_environmentent_sky", "new");
+            LLFloaterReg::showInstance(gSavedSettings.getBOOL("FSUseCompactEnvironmentFloaters") ? "fs_env_fixed_environmentent_sky" : "env_fixed_environmentent_sky", "new");
         }
         else if (item == "edit_sky")
         {
-            LLFloaterReg::showInstance("env_fixed_environmentent_sky", "edit");
+            // <FS:Ansariel> Compact environment edit floater option
+            //LLFloaterReg::showInstance("env_fixed_environmentent_sky", "edit");
+            LLFloaterReg::showInstance(gSavedSettings.getBOOL("FSUseCompactEnvironmentFloaters") ? "fs_env_fixed_environmentent_sky" : "env_fixed_environmentent_sky", "edit");
         }
         else if (item == "new_day_cycle")
         {

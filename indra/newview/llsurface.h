@@ -160,7 +160,12 @@ public:
     // +---+---+---+
     // |SW | S | SE|
     // +---+---+---+
-    LLSurface *mNeighbors[8]={}; // Adjacent patches <FS:Beq/> ensure initialised.
+    // <FS:TJ> [FIRE-36100] Fix crash in OpenSim disconnecting neighboring var regions
+    // OpenSim has var regions so the above surface points example may not necessarily be true
+    // Such as a 512x512 region may have two 256x256 regions to the North, and also to the NW and NE
+    //LLSurface *mNeighbors[8]; // Adjacent patches
+    std::vector<LLSurface*> mNeighbors[8];
+    // </FS:TJ>
 
     U32 mType;              // Useful for identifying derived classes
 

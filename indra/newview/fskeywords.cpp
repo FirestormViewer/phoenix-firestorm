@@ -75,9 +75,8 @@ void FSKeywords::updateKeywords()
 
 bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
 {
-
-    // Don't check if message is from us - unless it's a radar notification
-    if (chat.mFromID == gAgentID && chat.mFromName != SYSTEM_FROM)
+    // Don't check if message is from us - unless it's a radar notification - or if it's on the debug channel
+    if ((chat.mFromID == gAgentID && chat.mFromName != SYSTEM_FROM) || chat.mChatType == CHAT_TYPE_DEBUG_MSG)
     {
         return false;
     }
@@ -93,9 +92,8 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
         return false;
     }
 
-    static LLCachedControl<bool> sFSKeywordSpeakersName(gSavedPerAccountSettings, "FSKeywordSpeakersName", false);
-
     std::string source;
+    static LLCachedControl<bool> sFSKeywordSpeakersName(gSavedPerAccountSettings, "FSKeywordSpeakersName", false);
     if (sFSKeywordSpeakersName)
     {
         source = chat.mFromName + " " + chat.mText;
@@ -106,14 +104,12 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
     }
 
     static LLCachedControl<bool> sFSKeywordCaseSensitive(gSavedPerAccountSettings, "FSKeywordCaseSensitive", false);
-
     if (!sFSKeywordCaseSensitive)
     {
         LLStringUtil::toLower(source);
     }
 
     static LLCachedControl<bool> sFSKeywordMatchWholeWords(gSavedPerAccountSettings, "FSKeywordMatchWholeWords", false);
-
     if (sFSKeywordMatchWholeWords)
     {
         for (const auto& word : mWordList)
@@ -138,7 +134,6 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
     return false;
 }
 
-// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 void FSKeywords::notify(const LLChat& chat)
 {
     if ((chat.mFromID != gAgentID || chat.mFromName == SYSTEM_FROM) && !chat.mMuted && !LLMuteList::getInstance()->isMuted(chat.mFromID))
@@ -165,4 +160,3 @@ void FSKeywords::notify(const LLChat& chat)
         }
     }
 }
-// </FS:PP>

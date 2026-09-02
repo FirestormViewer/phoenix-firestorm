@@ -4775,6 +4775,11 @@ bool LLVOAvatar::isRlvSilhouette() const
     if (!RlvActions::hasBehaviour(RLV_BHVR_SETCAM_AVDIST))
         return false;
 
+    // <FS> FIRE-34340-2 RLV silhouette should not override the user's complexity settings
+    if (isSelf() || isTooComplex() || isTooSlowWithoutShadows())
+        return false;
+    // </FS>
+
     static RlvCachedBehaviourModifier<float> s_nSetCamAvDist(RLV_MODIFIER_SETCAM_AVDIST);
 
     const F64 now = LLFrameTimer::getTotalSeconds();
@@ -9738,12 +9743,6 @@ bool LLVOAvatar::hasFirstFullAttachmentData() const
 
 bool LLVOAvatar::isTooComplex() const
 {
-    // [RLVa] FIRE-35778 @camavdist:1=n RLVa command turns avatars invisible in stead of a silhouette (fix from Ellie Sable)
-    if (isRlvSilhouette())
-    {
-        return true;
-    }
-    // [/RLVa]
     bool too_complex;
     static LLCachedControl<S32> complexity_render_mode(gSavedSettings, "RenderAvatarComplexityMode");
     bool render_friend =  (isBuddy() && complexity_render_mode > AV_RENDER_LIMIT_BY_COMPLEXITY);
@@ -10124,8 +10123,12 @@ void LLVOAvatar::updateMeshTextures()
                                            (layerset?"*":"0"),
                                            layerset_invalid,
                                            is_ltda,
-                                           is_layer_baked[i],
-                                           use_lkg_baked_layer[i],
+                                           // <FS:TJ> Fix heap-buffer-overflow with varargs and using bools from std::vector<bool>
+                                           //is_layer_baked[i],
+                                           //use_lkg_baked_layer[i],
+                                           (int)is_layer_baked[i],
+                                           (int)use_lkg_baked_layer[i],
+                                           // </FS:TJ>
                                            last_id_string.c_str());
     }
     // <FS:Beq> BOM OS
@@ -12213,6 +12216,9 @@ bool LLVOAvatar::isImpostor()
             // isVisuallyMuted() ||
             is_visual_muted || // Save from calling isVisuallyMuted a second time
             // </FS:minerjr> [FIRE-35735]
+            // <FS> FIRE-34340-2 RLV silhouettes must be impostored
+            isRlvSilhouette() ||
+            // </FS>
             isTooSlowWithoutShadows() ||
             (sLimitNonImpostors && (mUpdatePeriod > 1) )
     );

@@ -84,6 +84,9 @@ const std::string WEBRTC_VOICE_SERVER_TYPE = "webrtc";
 
 const F32 STATS_TIMER_DELAY = 2.0;
 
+// <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+using namespace std::chrono_literals; // Needed for shared timed mutex to use time
+// </FS:minerjr> [FIRE-36022]
 namespace {
 
     const F32      MAX_AUDIO_DIST           = 50.0f;
@@ -208,6 +211,7 @@ LLSD LLVoiceWebRTCStats::read()
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 bool LLWebRTCVoiceClient::sShuttingDown = false;
+bool LLWebRTCVoiceClient::sWebRTCTerminated = false;
 
 LLWebRTCVoiceClient::LLWebRTCVoiceClient() :
     mHidden(false),
@@ -233,6 +237,7 @@ LLWebRTCVoiceClient::LLWebRTCVoiceClient() :
     mWebRTCDeviceInterface(nullptr)
 {
     sShuttingDown = false;
+    sWebRTCTerminated = false;
 
     mSpeakerVolume = 0.0;
 
@@ -302,9 +307,79 @@ void LLWebRTCVoiceClient::terminate()
 
     mVoiceEnabled = false;
     sShuttingDown = true; // so that coroutines won't post more work.
+
+    drainConnections();
+
+    sWebRTCTerminated = true;
     llwebrtc::terminate();
 
     mWebRTCDeviceInterface = nullptr;
+}
+
+// Close the live peer connections before handing control to
+// llwebrtc::terminate().
+//
+// Anything still open when terminate() runs gets closed inline and serially on
+// the signaling thread, under a single 10s budget that is also paying for the
+// audio device shutdown.  An estate session can hold ten live connections --
+// the current region plus up to eight neighbours, plus any group or ad-hoc
+// session -- each needing a full DTLS/SCTP teardown, so that budget is not
+// generous.  Closing them here lets the teardown proceed asynchronously on the
+// signaling thread while this thread keeps pumping.
+//
+// It also quiets the per-connection stats poll before terminate() runs.  A
+// GetStats request left in flight makes PeerConnection::Close() block in
+// RTCStatsCollector::WaitForPendingRequest(), which waits on the network thread
+// with no timeout at all.
+//
+// Best effort: whatever hasn't closed by the deadline is left to
+// llwebrtc::terminate(), exactly as before.
+void LLWebRTCVoiceClient::drainConnections()
+{
+    // Marks every session and connection as shutting down.  This also stops
+    // estateSessionState::processConnectionStates() from spinning up
+    // replacement connections to neighbouring regions while we drain.
+    sessionState::for_each(boost::bind(predShutdownSession, _1));
+
+    // Long enough for a local close to complete, short enough that a wedged
+    // connection doesn't noticeably delay quitting.  The remaining budget in
+    // llwebrtc::terminate() is the real backstop.
+    constexpr F32 DRAIN_TIMEOUT_SECONDS = 3.0f;
+    constexpr U32 DRAIN_POLL_MS = 10;
+
+    // Wait on the peer connections being closed rather than on the sessions
+    // being reaped.  A connection that still has an HTTP coroutine in flight
+    // holds its session alive until mOutstandingRequests unwinds, and those
+    // coroutines don't run from here -- but its peer connection has already
+    // been closed by then, which is all terminate() cares about.
+    LLTimer timer;
+    while (!sessionState::allSessionsClosed() && timer.getElapsedTimeF32() < DRAIN_TIMEOUT_SECONDS)
+    {
+        // OnPeerConnectionClosed comes back through the main queue, so it has
+        // to be pumped or the state machines never see connections finish.
+        if (auto main_queue = mMainQueue.lock())
+        {
+            main_queue->runFor(std::chrono::milliseconds(DRAIN_POLL_MS));
+        }
+        sessionState::processSessionStates();
+
+        if (!sessionState::allSessionsClosed())
+        {
+            ms_sleep(DRAIN_POLL_MS);
+        }
+    }
+
+    if (!sessionState::allSessionsClosed())
+    {
+        LL_WARNS("Voice") << "Timed out draining voice connections after "
+                          << DRAIN_TIMEOUT_SECONDS
+                          << "s; leaving the rest to llwebrtc::terminate()." << LL_ENDL;
+    }
+    else
+    {
+        LL_INFOS("Voice") << "Voice connections drained in "
+                          << timer.getElapsedTimeF32() << "s." << LL_ENDL;
+    }
 }
 
 //---------------------------------------------------
@@ -320,30 +395,25 @@ void LLWebRTCVoiceClient::cleanUp()
 
 void LLWebRTCVoiceClient::LogMessage(llwebrtc::LLWebRTCLogCallback::LogLevel level, const std::string& message)
 {
-    // <FS:Ansariel> WebRTC logging is broken - ensure we get WebRTC warnings and errors
-    //switch (level)
-    //{
-    //case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_VERBOSE:
-    //    LL_DEBUGS("Voice") << message << LL_ENDL;
-    //    break;
-    //case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_INFO:
-    //    LL_INFOS("Voice") << message << LL_ENDL;
-    //    break;
-    //case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_WARNING:
-    //    LL_WARNS("Voice") << message << LL_ENDL;
-    //    break;
-    //case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_ERROR:
-    //    // use WARN so that we don't crash on a webrtc error.
-    //    // webrtc will force a crash on a fatal error.
-    //    LL_WARNS("Voice") << message << LL_ENDL;
-    //    break;
-    //default:
-    //    break;
-    //}
-
-    LL_WARNS("Voice") << message << LL_ENDL;
-
-    // </FS:Ansariel>
+    switch (level)
+    {
+    case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_VERBOSE:
+        LL_DEBUGS("Voice") << message << LL_ENDL;
+        break;
+    case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_INFO:
+        LL_INFOS("Voice") << message << LL_ENDL;
+        break;
+    case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_WARNING:
+        LL_WARNS("Voice") << message << LL_ENDL;
+        break;
+    case llwebrtc::LLWebRTCLogCallback::LOG_LEVEL_ERROR:
+        // use WARN so that we don't crash on a webrtc error.
+        // webrtc will force a crash on a fatal error.
+        LL_WARNS("Voice") << message << LL_ENDL;
+        break;
+    default:
+        break;
+    }
 }
 
 // --------------------------------------------------
@@ -555,6 +625,12 @@ void LLWebRTCVoiceClient::voiceConnectionCoro()
     try
     {
         LLMuteList::getInstance()->addObserver(this);
+        // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+        // Add a counter to check if the main thread locked up
+        // to prevent this thread/corutine form filling up
+        // the mMainQueue.
+        static U32 crash_check = 0;
+        // </FS:minerjr> [FIRE-36022]
         while (!sShuttingDown)
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_VOICE("voiceConnectionCoroLoop")
@@ -640,6 +716,26 @@ void LLWebRTCVoiceClient::voiceConnectionCoro()
                     // to send position updates.
                     updatePosition();
                 }
+                // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+                // If the device locked, count up by 1
+                if (gWebRTCUpdateDevices)
+                {
+                    crash_check++;
+                }
+                // Else if the device is not locked, then reset the counter back to 0
+                else
+                {
+                    crash_check = 0;
+                }
+                // If there are over 10 cycles of the devices being locked, there is a good
+                // chance that the thread failed due to hardware/audio engine issue.
+                if (crash_check > 10)
+                {
+                    LL_WARNS() << "WebRTC detected locked worker thread, will shutdown to prevent total viewer lockup." << LL_ENDL;
+                    // Exit out of the thread and flag WebRTC to shutdown, hopefully clearing the lock and allowing the viewer to continue.
+                    sShuttingDown = true;
+                }
+                // </FS:minerjr> [FIRE-36022]
             }
             LL::WorkQueue::postMaybe(mMainQueue,
                 [=, this] {
@@ -781,6 +877,19 @@ void LLWebRTCVoiceClient::OnDevicesChanged(const llwebrtc::LLWebRTCVoiceDeviceLi
 void LLWebRTCVoiceClient::OnDevicesChangedImpl(const llwebrtc::LLWebRTCVoiceDeviceList &render_devices,
                                                const llwebrtc::LLWebRTCVoiceDeviceList &capture_devices)
 {
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
+    {
+    // Attempt to lock the access to the audio device, wait up to 1 second for other threads to unlock.
+    std::unique_lock lock(gAudioDeviceMutex, 1s);
+    // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
+    // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
+    if (!lock.owns_lock())
+    {
+        LL_INFOS() << "Could not access the audio device mutex, trying again later" << LL_ENDL;
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
     if (sShuttingDown)
     {
         return;
@@ -827,6 +936,34 @@ void LLWebRTCVoiceClient::OnDevicesChangedImpl(const llwebrtc::LLWebRTCVoiceDevi
     }
 
     setDevicesListUpdated(true);
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    }
+    catch (const std::system_error& e)
+    {
+        if (e.code() == std::errc::resource_deadlock_would_occur)
+        {
+            // When trying to lock the same lock a second time
+            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+        else if (e.code() == std::errc::operation_not_permitted)
+        {
+            // When the mutex is invalid
+            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+        else
+        {
+            // Everything else
+            LL_WARNS() << "Exception WebRTC: " << e.code() << " " << e.what() << LL_ENDL;
+        }
+
+        return;
+    }
+    catch (const std::exception& e)
+    {
+        LL_WARNS() << "Exception WebRTC: " << " " << e.what() << LL_ENDL;
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
 }
 
 void LLWebRTCVoiceClient::clearRenderDevices()
@@ -1920,6 +2057,7 @@ void LLWebRTCVoiceClient::userAuthorized(const std::string& user_id, const LLUUI
     if (sShuttingDown)
     {
         sShuttingDown = false; // was terminated, restart
+        sWebRTCTerminated = false;
         initWebRTC();
     }
 }
@@ -2203,6 +2341,30 @@ void LLWebRTCVoiceClient::sessionState::processSessionStates()
     }
 }
 
+bool LLWebRTCVoiceClient::sessionState::allConnectionsClosed() const
+{
+    for (const auto &connection : mWebRTCConnections)
+    {
+        if (!connection->isClosed())
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool LLWebRTCVoiceClient::sessionState::allSessionsClosed()
+{
+    for (const auto &session : sSessions)
+    {
+        if (session.second && !session.second->allConnectionsClosed())
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 // process the states on each connection associated with a session.
 bool LLWebRTCVoiceClient::sessionState::processConnectionStates()
 {
@@ -2461,12 +2623,18 @@ LLVoiceWebRTCConnection::LLVoiceWebRTCConnection(const LLUUID &regionID, const s
 
 LLVoiceWebRTCConnection::~LLVoiceWebRTCConnection()
 {
-    if (LLWebRTCVoiceClient::isShuttingDown())
+    if (LLWebRTCVoiceClient::isWebRTCTerminated())
     {
-        // peer connection and observers will be cleaned up
-        // by llwebrtc::terminate() on shutdown.
+        // peer connection and observers have already been cleaned up
+        // by llwebrtc::terminate().
         return;
     }
+    // Note this is deliberately keyed off isWebRTCTerminated() rather than
+    // isShuttingDown(): connections drained by drainConnections() are destroyed
+    // while the webrtc library is still fully alive, and must unregister
+    // themselves and release the peer connection like any other close.  Leaving
+    // a freed observer registered would hand llwebrtc::terminate() a dangling
+    // pointer to call OnPeerConnectionClosed() on.
     mWebRTCPeerConnectionInterface->unsetSignalingObserver(this);
     llwebrtc::freePeerConnection(mWebRTCPeerConnectionInterface);
 }
@@ -3143,8 +3311,10 @@ bool LLVoiceWebRTCConnection::connectionStateMachine()
             }
             else
             {
-                // llwebrtc::terminate() is already shuting down the connection.
-                setVoiceConnectionState(VOICE_STATE_WAIT_FOR_CLOSE);
+                // Shutting down: skip the courtesy logout to the sim (the HTTP
+                // round trip would just delay quitting) and go straight to
+                // dropping the webrtc connection.
+                setVoiceConnectionState(VOICE_STATE_SESSION_EXIT);
             }
             break;
 
@@ -3155,11 +3325,10 @@ bool LLVoiceWebRTCConnection::connectionStateMachine()
         {
             setVoiceConnectionState(VOICE_STATE_WAIT_FOR_CLOSE);
             mOutstandingRequests++;
-            if (!LLWebRTCVoiceClient::isShuttingDown())
-            {
-                mWebRTCPeerConnectionInterface->shutdownConnection();
-            }
-            // else was already posted by llwebrtc::terminate().
+            // Always drop the connection ourselves, including during shutdown:
+            // drainConnections() runs before llwebrtc::terminate(), so nothing
+            // else has posted the close yet.
+            mWebRTCPeerConnectionInterface->shutdownConnection();
             break;
         }
 

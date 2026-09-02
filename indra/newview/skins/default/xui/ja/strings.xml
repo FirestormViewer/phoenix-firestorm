@@ -1653,6 +1653,9 @@ https://secondlife.com/viewer-access-faq
 	<string name="FSInventoryCustomTabDefaultName">
 		カスタム
 	</string>
+	<string name="FSInventoryCustomTabShowHidden">
+		隠されたタブを表示
+	</string>
 	<string name="InventoryNoMatchingRecentItems">
 		お探しのものは見つかりましたか？[secondlife:///app/inventory/filters フィルタを表示]をお試しください。
 	</string>

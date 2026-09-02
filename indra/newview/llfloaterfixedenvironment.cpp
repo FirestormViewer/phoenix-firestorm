@@ -493,8 +493,8 @@ bool LLFloaterFixedEnvironmentSky::postBuild() // <--- Corrected: Only one decla
     LLPanelSettingsSky * panel;
     panel = new LLPanelSettingsSkyAtmosTab;
     // <FS:William_W:PanelFileReplace> [PhotoTools] Use FS specific panel XML for Sky Atmosphere Settings
-    // panel->buildFromFile("panel_settings_sky_atmos.xml"); // Original LL line - using default panel XML
-    panel->buildFromFile("panel_fs_settings_sky_atmos.xml"); // Using FS specific panel XML
+    // panel->buildFromFile("panel_settings_sky_atmos.xml");
+    panel->buildFromFile(gSavedSettings.getBOOL("FSUseCompactEnvironmentFloaters") ? "panel_fs_settings_sky_atmos.xml" : "panel_settings_sky_atmos.xml");
     // </FS:William_W:PanelFileReplace>
     panel->setSky(std::static_pointer_cast<LLSettingsSky>(mSettings));
     panel->setOnDirtyFlagChanged([this](LLPanel *, bool value) { onPanelDirtyFlagChanged(value); });
@@ -502,8 +502,8 @@ bool LLFloaterFixedEnvironmentSky::postBuild() // <--- Corrected: Only one decla
 
     panel = new LLPanelSettingsSkyCloudTab;
     // <FS:William_W:PanelFileReplace> [PhotoTools] Use FS specific panel XML for Sky Cloud Settings
-    // panel->buildFromFile("panel_settings_sky_clouds.xml"); // Original LL line - using default panel XML
-    panel->buildFromFile("panel_fs_settings_sky_clouds.xml"); // Using FS specific panel XML
+    // panel->buildFromFile("panel_settings_sky_clouds.xml");
+    panel->buildFromFile(gSavedSettings.getBOOL("FSUseCompactEnvironmentFloaters") ? "panel_fs_settings_sky_clouds.xml" : "panel_settings_sky_clouds.xml");
     // </FS:William_W:PanelFileReplace>
     panel->setSky(std::static_pointer_cast<LLSettingsSky>(mSettings));
     panel->setOnDirtyFlagChanged([this](LLPanel *, bool value) { onPanelDirtyFlagChanged(value); });
@@ -511,8 +511,8 @@ bool LLFloaterFixedEnvironmentSky::postBuild() // <--- Corrected: Only one decla
 
     panel = new LLPanelSettingsSkySunMoonTab;
     // <FS:William_W:PanelFileReplace> [PhotoTools] Use FS specific panel XML for Sky Sun Moon Settings
-    // panel->buildFromFile("panel_settings_sky_sunmoon.xml"); // Original LL line - using default panel XML
-    panel->buildFromFile("panel_fs_settings_sky_sunmoon.xml"); // Using FS specific panel XML
+    // panel->buildFromFile("panel_settings_sky_sunmoon.xml");
+    panel->buildFromFile(gSavedSettings.getBOOL("FSUseCompactEnvironmentFloaters") ? "panel_fs_settings_sky_sunmoon.xml" : "panel_settings_sky_sunmoon.xml");
     // </FS:William_W:PanelFileReplace>
     panel->setSky(std::static_pointer_cast<LLSettingsSky>(mSettings));
     panel->setOnDirtyFlagChanged([this](LLPanel *, bool value) { onPanelDirtyFlagChanged(value); });

@@ -3,5 +3,6 @@
 	<menu_item_check label="按名稱排序" name="sort_by_name" />
 	<menu_item_check label="按時間排序" name="sort_by_date" />
 	<menu_item_check label="將朋友列在頂端" name="sort_by_friends" />
+	<menu_item_check label="顯示已封鎖" name="show_muted"/>
 	<menu_item_call label="檢查附近聊天歷史" name="view_nearby_chat_history" />
 </toggleable_menu>

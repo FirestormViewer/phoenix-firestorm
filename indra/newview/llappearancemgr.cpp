@@ -2746,18 +2746,14 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
     {
         //checking integrity of the COF in terms of ordering of wearables,
         //checking and updating links' descriptions of wearables in the COF (before analyzed for "dirty" state)
-// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
-        // Ordering information is pre-applied locally so no reason to reason to wait on the inventory backend
-        updateClothingOrderingInfo(LLUUID::null);
-// [/SL:KB]
 
-//      // As with enforce_item_restrictions handling above, we want
-//      // to wait for the update callbacks, then (finally!) call
-//      // updateAppearanceFromCOF() with no additional COF munging needed.
-//      LLPointer<LLInventoryCallback> cb(
-//          new LLUpdateAppearanceOnDestroy(false, false, post_update_func));
-//      updateClothingOrderingInfo(LLUUID::null, cb);
-//      return;
+        // As with enforce_item_restrictions handling above, we want
+        // to wait for the update callbacks, then (finally!) call
+        // updateAppearanceFromCOF() with no additional COF munging needed.
+        LLPointer<LLInventoryCallback> cb(
+            new LLUpdateAppearanceOnDestroy(false, false, post_update_func));
+        updateClothingOrderingInfo(LLUUID::null, cb);
+        return;
     }
 
     if (!validateClothingOrderingInfo())
@@ -4630,12 +4626,17 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, nul
     for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
     {
         const LLUUID& id_to_remove = *it;
-        const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
+        // <FS:TJ> Fix heap-use-after-free when linked_item_id is freed in removeCOFItemLinks then used in addDoomedTempAttachment
+        //const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
+        const LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
+        // </FS:TJ>
 
+// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
         if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item_id)) )
         {
             continue;
         }
+// [/RLVa:KB]
 
         // <FS:Ansariel> LSL Bridge
         if (FSLSLBridge::instance().canUseBridge() && linked_item_id == FSLSLBridge::instance().getBridge()->getUUID())
@@ -4654,33 +4655,15 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, nul
             continue;
         }
 
+// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
         if (!cb)
             cb = new LLUpdateAppearanceOnDestroy(true, true, post_update_func);
         removeCOFItemLinks(linked_item_id, cb, immediate_delete);
-// [SL:KB] - Appearance-Fixes
-        LLAttachmentsMgr::instance().clearPendingAttachmentLink(linked_item_id);
-// [/SL:KB]
+// [/RLVa:KB]
+//      removeCOFItemLinks(linked_item_id, cb);
         LLAttachmentsMgr::instance().clearPendingAttachmentLink(linked_item_id);
         addDoomedTempAttachment(linked_item_id);
     }
-// [/RLVa:KB]
-////    LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
-//// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
-//  if (!cb)
-//  {
-//      cb = new LLUpdateAppearanceOnDestroy;
-//  }
-//// [/SL:KB]
-//  for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
-//  {
-//      const LLUUID& id_to_remove = *it;
-//      const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
-//// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
-//      removeCOFItemLinks(linked_item_id, cb, immediate_delete);
-//// [/SL:KB]
-////        removeCOFItemLinks(linked_item_id, cb);
-//      addDoomedTempAttachment(linked_item_id);
-//  }
 }
 
 //void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove, nullary_func_t post_update_func)

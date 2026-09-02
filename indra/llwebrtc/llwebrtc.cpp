@@ -30,6 +30,12 @@
 #include <future>
 #include <thread>
 #include <string.h>
+// <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+// Needed for accessing the inline timed mutex for accessing audio hardware.
+#include <mutex>
+#include <chrono>
+// </FS:minerjr> [FIRE-36022]
+
 #include "api/audio/create_audio_device_module.h"
 #include "api/audio_codecs/audio_decoder_factory.h"
 #include "api/audio_codecs/audio_encoder_factory.h"
@@ -42,6 +48,14 @@
 #include "modules/audio_mixer/audio_mixer_impl.h"
 #include "api/environment/environment_factory.h"
 
+// <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+// Audio device mutex to be shared between audio engine and Voice systems to 
+// syncronize on when audio hardware accessed for disconnected/connecting hardware
+// Uses Timed Mutex so as to not lockup the threads forever.
+inline std::timed_mutex gAudioDeviceMutex;
+// Need to use to access the 3 second timeout for the lock.
+using namespace std::chrono_literals;
+// </FS:minerjr> [FIRE-36022]
 namespace llwebrtc
 {
 #if WEBRTC_WIN
@@ -304,11 +318,13 @@ void LLWebRTCImpl::init()
     webrtc::InitializeSSL();
 
     // Normal logging is rather spammy, so turn it off.
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // Turn on more verbose logging as we are looking for crashes.
     webrtc::LogMessage::LogToDebug(webrtc::LS_NONE);
+    //webrtc::LogMessage::LogToDebug(webrtc::LS_VERBOSE);
+    // </FS:minerjr> [FIRE-36022]
     webrtc::LogMessage::SetLogToStderr(true);
-    // <FS:Ansariel> WebRTC logging is broken - ensure we get WebRTC warnings and errors
-    //webrtc::LogMessage::AddLogToStream(mLogSink, webrtc::LS_VERBOSE);
-    webrtc::LogMessage::AddLogToStream(mLogSink, webrtc::LS_WARNING);
+    webrtc::LogMessage::AddLogToStream(mLogSink, webrtc::LS_VERBOSE);
 
     // Create the native threads.
     mNetworkThread = webrtc::Thread::CreateWithSocketServer();
@@ -398,7 +414,7 @@ void LLWebRTCImpl::init()
 
 }
 
-void LLWebRTCImpl::terminate()
+bool LLWebRTCImpl::terminate()
 {
     // Run all blocking WebRTC shutdown calls on a separate thread so that a
     // hung BlockingCall cannot block the viewer shutdown indefinitely.
@@ -412,16 +428,55 @@ void LLWebRTCImpl::terminate()
     std::vector<webrtc::scoped_refptr<LLWebRTCPeerConnectionImpl>> connections;
     connections.swap(mPeerConnections);
 
-    std::thread shutdown_thread(
-        [this, connections = std::move(connections), done_promise]() mutable
+    // Explicitely unregister observers before shutting down the threads.
+    // shutdown_thread, if detached, can outlive observer.
+    mWorkerThread->BlockingCall([this]()
     {
-        mWorkerThread->BlockingCall(
-            [this]()
+        if (mDeviceModule)
         {
-            if (mDeviceModule)
+            mDeviceModule->SetObserver(nullptr);
+        }
+    });
+    mVoiceDevicesObserverList.clear();
+
+    // shutdown_thread can be detached, then LLWebRTCImpl will be nulled out.
+    // Capture what's needed in lambda, don't rely on [this].
+    std::thread shutdown_thread(
+        [networkThread = std::move(mNetworkThread),
+        workerThread = std::move(mWorkerThread),
+        signalingThread = std::move(mSignalingThread),
+        deviceModule = std::move(mDeviceModule),
+        factory = std::move(mPeerConnectionFactory),
+        connections = std::move(connections),
+        done_promise]() mutable
+    {
+        // Stop the capture/render devices alongside the connection teardown
+        // below rather than ahead of it.  Both of these calls end in a
+        // WaitForSingleObject on a WASAPI thread with a 2s timeout apiece
+        // (AudioDeviceWindowsCore::StopRecording / StopPlayout), so blocking on
+        // them here can spend most of the shutdown budget before the
+        // connections have been touched at all -- and after an OS sleep they
+        // tend to hit the full timeout.
+        //
+        // This work has to stay on the worker thread: the device module was
+        // created there and its AudioDeviceBuffer is guarded by a sequence
+        // checker bound to that thread.  Posting instead of blocking lets the
+        // signaling close below get on with its network-thread work (data
+        // channel close, transport teardown) while the device stop is still
+        // waiting on WASAPI.
+        //
+        // No explicit join is needed: Thread's task queue is FIFO and
+        // BlockingCall posts through it, so the ForceTerminate call at the end
+        // of this lambda can't run until this task has finished.  Any
+        // worker-thread work the signaling close does is likewise ordered
+        // after it, so nothing sees the device module half torn down.
+        workerThread->PostTask(
+            [&deviceModule]()
+        {
+            if (deviceModule)
             {
-                mDeviceModule->ForceStopRecording();
-                mDeviceModule->StopPlayout();
+                deviceModule->ForceStopRecording();
+                deviceModule->StopPlayout();
             }
         });
 
@@ -436,7 +491,7 @@ void LLWebRTCImpl::terminate()
         // callback inline, and that callback calls back into the viewer's
         // signaling observers.  Those observers are only valid until
         // llwebrtc::terminate() returns.
-        mSignalingThread->BlockingCall(
+        signalingThread->BlockingCall(
             [&connections]()
             {
                 for (auto& connection : connections)
@@ -449,21 +504,28 @@ void LLWebRTCImpl::terminate()
             });
 
         // Drain anything the closes posted before dropping the factory.
-        mSignalingThread->BlockingCall([]() {});
+        signalingThread->BlockingCall([]() {});
 
-        mSignalingThread->BlockingCall([this]() {
-            mPeerConnectionFactory = nullptr;
+        signalingThread->BlockingCall([&factory]() {
+            factory = nullptr;
         });
 
-        mWorkerThread->BlockingCall(
-            [this]()
+        workerThread->BlockingCall(
+            [&deviceModule]()
         {
-            if (mDeviceModule)
+            if (deviceModule)
             {
-                mDeviceModule->ForceTerminate();
+                deviceModule->ForceTerminate();
             }
-            mDeviceModule = nullptr;
+            deviceModule = nullptr;
         });
+
+        // Explicitly clean WebRTC threads in dependency order before signalling completion.
+        // The connections were closed and destroyed on the signaling thread, so it's safe
+        // to clean.
+        signalingThread.reset();
+        workerThread.reset();
+        networkThread.reset();
 
         done_promise->set_value();
     });
@@ -476,29 +538,29 @@ void LLWebRTCImpl::terminate()
             " Detaching — some WebRTC resources will be leaked.";
         shutdown_thread.detach();
 
-        // Release the unique_ptrs WITHOUT joining/deleting: the detached thread
-        // may still be using these thread objects.
-        // The raw pointers are intentionally leaked — the process is exiting anyway
-        // and our priority is saving cache and personal data.
-        (void)mNetworkThread.release();
-        (void)mWorkerThread.release();
-        (void)mSignalingThread.release();
-
+        // Leave every member exactly as it is.  The detached thread is still
+        // running the lambda above, which reads mSignalingThread, mWorkerThread,
+        // mDeviceModule and mPeerConnectionFactory through `this` -- clearing or
+        // releasing them here would pull them out from under it mid-shutdown
+        // (a null mSignalingThread is an immediate segfault at the next
+        // BlockingCall).  Instead we report the failure so the caller leaks this
+        // object rather than deleting it; the process is exiting anyway and our
+        // priority is saving cache and personal data.
+        //
         // mPeerConnections is already empty -- the detached thread owns the
         // connections now and must be left to finish with them.
+        //
+        // The log sink is unhooked here (and deliberately not deleted, since the
+        // detached thread may still log) because the viewer-side log callback
+        // behind it doesn't outlive this call.
         webrtc::LogMessage::RemoveLogToStream(mLogSink);
-        return;
+        return false;
     }
 
     shutdown_thread.join();
 
-    // The connections were closed and destroyed on the signaling thread before
-    // the shutdown thread finished, so it's safe to drop the threads now.
-    mNetworkThread = nullptr;
-    mWorkerThread = nullptr;
-    mSignalingThread = nullptr;
-
     webrtc::LogMessage::RemoveLogToStream(mLogSink);
+    return true;
 }
 
 
@@ -605,6 +667,13 @@ void LLWebRTCImpl::workerStartRecording()
     // it's already running (that would cause the unmute hiss).
     if (!mDeviceModule || !mVoiceEnabled || mDeviceModule->Recording())
     {
+        // <FS:minerjr> [FIRE-36022]
+        // If the device is not avaiable, then make sure the flag for the WebRTC updated devices flag is turned off for the co-routine
+        if (!mDeviceModule)
+        {
+            gWebRTCUpdateDevices = false;
+        }
+        // </FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
         return;
     }
 
@@ -627,6 +696,10 @@ void LLWebRTCImpl::workerStartRecording()
         }
     }
 
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // Flag the device is being interacted with for the Co-routine in case something goes wrong.
+    gWebRTCUpdateDevices = true;
+    // </FS:minerjr> [FIRE-36022]
 #if WEBRTC_WIN
     if (recordingDevice < 0)
     {
@@ -658,8 +731,18 @@ void LLWebRTCImpl::workerStartPlayout()
 {
     // Only run playout while voice is enabled and there's a connection to
     // render (running the output device otherwise is heard as a buzz).
-    if (!mDeviceModule || !mVoiceEnabled || mTuningMode || mDeviceModule->Playing() || mPeerConnections.empty())
+    // <FS:TJ> Fix default voice output device always being used instead of the chosen device
+    //if (!mDeviceModule || !mVoiceEnabled || mTuningMode || mDeviceModule->Playing() || mPeerConnections.empty())
+    if (!mDeviceModule || !mVoiceEnabled || mTuningMode || mPeerConnections.empty())
+    // </FS:TJ>
     {
+        // <FS:minerjr> [FIRE-36022]
+        // If the device is not avaiable, then make sure the flag for the WebRTC updated devices flag is turned off for the co-routine
+        if (!mDeviceModule)
+        {
+            gWebRTCUpdateDevices = false;
+        }
+        // </FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
         return;
     }
 
@@ -682,6 +765,22 @@ void LLWebRTCImpl::workerStartPlayout()
         }
     }
 
+    // <FS:TJ> Fix default voice output device always being used instead of the chosen device
+    if (mDeviceModule->Playing())
+    {
+        if (mDeviceModule->GetPlayoutDevice() == playoutDevice)
+        {
+            return;
+        }
+
+        mDeviceModule->StopPlayout();
+    }
+    // </FS:TJ>
+
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // Flag the device is being interacted with for the Co-routine in case something goes wrong.
+    gWebRTCUpdateDevices = true;
+    // </FS:minerjr> [FIRE-36022]
 #if WEBRTC_WIN
     if (playoutDevice < 0)
     {
@@ -707,8 +806,24 @@ void LLWebRTCImpl::workerStartPlayout()
 // workerOpenPlayout() directly -- see startPlayout().
 void LLWebRTCImpl::workerDeployDevices()
 {
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
+    {
+    // Attempt to lock the access to the audio device, wait up to 1 second for other threads to unlock.
+    std::unique_lock lock(gAudioDeviceMutex, 1s);
+    // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
+    // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
+    if (!lock.owns_lock())
+    {
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
     if (!mDeviceModule)
     {
+        // <FS:minerjr> [FIRE-36022]
+        // If the device is not avaiable, then make sure the flag for the WebRTC updated devices flag is turned off for the co-routine
+        gWebRTCUpdateDevices = false;
+        // </FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
         return;
     }
 
@@ -720,6 +835,10 @@ void LLWebRTCImpl::workerDeployDevices()
     workerStartRecording();
     workerStartPlayout();
 
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // Finally signal to the co-routine everyting is OK.
+    gWebRTCUpdateDevices = false;
+    // </FS:minerjr> [FIRE-36022]
     mSignalingThread->PostTask(
         [this]
         {
@@ -740,6 +859,38 @@ void LLWebRTCImpl::workerDeployDevices()
                 mWorkerThread->PostTask([this] { workerDeployDevices(); });
             }
         });
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    }
+    // There are two exceptions that unique_lock can trigger, operation_not_permitted or resource_deadlock_would_occur
+    catch (const std::system_error& e)
+    {
+        if (e.code() == std::errc::resource_deadlock_would_occur)
+        {
+            // Another thead may have alreayd called this method
+            mLogSink->OnLogMessage(std::string("Excepton: WebRTC: ") + e.what());
+        }
+        else if (e.code() == std::errc::operation_not_permitted)
+        {
+            // This should not be reached
+            mLogSink->OnLogMessage(std::string("Excepton: WebRTC: ") + e.what());
+        }
+        else
+        {
+            // Log any other message
+            mLogSink->OnLogMessage(std::string("Excepton: WebRTC: ") + e.what());
+        }
+        // Device no longer being interacted with
+        gWebRTCUpdateDevices = false;
+        return;
+    }
+    catch (const std::exception& e)
+    {
+        mLogSink->OnLogMessage(std::string("Excepton: WebRTC: ") + e.what());
+        // Device no longer being interacted with
+        gWebRTCUpdateDevices = false;
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
 }
 
 void LLWebRTCImpl::setCaptureDevice(const std::string &id)
@@ -793,11 +944,27 @@ void LLWebRTCImpl::setVoiceEnabled(bool enable)
 // updateDevices needs to happen on the worker thread.
 void LLWebRTCImpl::updateDevices()
 {
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
+    {
+    // Attempt to lock the access to the audio device, wait up to 1 second for other threads to unlock.
+    std::unique_lock lock(gAudioDeviceMutex, 1s);
+    // If the lock could not be accessed, return as we don't have hardware access and will need to try again another pass.
+    // Prevents threads from interacting with the hardware at the same time as other audio/voice threads.
+    if (!lock.owns_lock())
+    {
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
     if (!mDeviceModule)
     {
         return;
     }
 
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // Flag the device is being interacted with for the Co-routine in case something goes wrong.
+    gWebRTCUpdateDevices = true;
+    // </FS:minerjr> [FIRE-36022]
     int16_t renderDeviceCount  = mDeviceModule->PlayoutDevices();
 
     mPlayoutDeviceList.clear();
@@ -838,17 +1005,55 @@ void LLWebRTCImpl::updateDevices()
 
     RTC_LOG(LS_INFO) << "updateDevices, playout count: " << renderDeviceCount << "; capture count: " << captureDeviceCount;
 
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    // Flag the device is no longer being interacted with for the Co-routine in case something goes wrong.
+    gWebRTCUpdateDevices = false;
+    // </FS:minerjr> [FIRE-36022]
     for (auto &observer : mVoiceDevicesObserverList)
     {
         observer->OnDevicesChanged(mPlayoutDeviceList, mRecordingDeviceList);
     }
+    // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    }
+    // There are two exceptions that unique_lock can trigger, operation_not_permitted or resource_deadlock_would_occur
+    catch (const std::system_error& e)
+    {
+        if (e.code() == std::errc::resource_deadlock_would_occur)
+        {
+            // Another thead may have alreayd called this method
+            mLogSink->OnLogMessage(std::string("Excepton: WebRTC: ") + e.what());
+        }
+        else if (e.code() == std::errc::operation_not_permitted)
+        {
+            // This should not be reached
+            mLogSink->OnLogMessage(std::string("Excepton: WebRTC: ") + e.what());
+        }
+        else
+        {
+            // Log any other message
+            mLogSink->OnLogMessage(std::string("Excepton: WebRTC: ") + e.what());
+        }
+        // Device no longer being interacted with
+        gWebRTCUpdateDevices = false;
+        return;
+    }
+    catch (const std::exception& e)
+    {
+        mLogSink->OnLogMessage(std::string("Excepton: WebRTC: ") + e.what());
+        // Device no longer being interacted with
+        gWebRTCUpdateDevices = false;
+        return;
+    }
+    // </FS:minerjr> [FIRE-36022]
 
     deployDevices();
 }
 
 void LLWebRTCImpl::OnDevicesUpdated()
 {
-    updateDevices();
+    // OnDevicesUpdated() is called on macOS CoreAudio's device-change callback
+    // thread.  Calling updateDevices() on that thread causes a deadlock.
+    mWorkerThread->PostTask([this] { updateDevices(); });
 }
 
 
@@ -1126,17 +1331,23 @@ void LLWebRTCPeerConnectionImpl::closeOnSignalingThread()
             mLocalStream = nullptr;
         }
         mPeerConnection = nullptr;
-
-        for (auto &observer : mSignalingObserverList)
-        {
-            observer->OnPeerConnectionClosed();
-        }
     }
 
-    // Nothing may call back into the viewer past this point.  On shutdown the
-    // viewer's connection objects are torn down as soon as llwebrtc::terminate()
-    // returns and they deliberately don't unset themselves as observers, so any
-    // late callback would be reaching into freed memory.
+    // Notify unconditionally, even if there was no peer connection to close --
+    // a connection can be shut down before it ever finished initializing, and
+    // the caller is still waiting to hear that the close is done.  Withholding
+    // this leaves the viewer's connection state machine parked in
+    // VOICE_STATE_WAIT_FOR_CLOSE, which has no timeout of its own.
+    for (auto &observer : mSignalingObserverList)
+    {
+        observer->OnPeerConnectionClosed();
+    }
+
+    // Nothing may call back into the viewer past this point.  Connections
+    // closed while the viewer is still running unset themselves as observers
+    // when they're destroyed, but any that are left for llwebrtc::terminate()
+    // to close deliberately don't -- they're torn down as soon as it returns,
+    // so a late callback would be reaching into freed memory.
     mSignalingObserverList.clear();
     mDataObserverList.clear();
 }
@@ -1761,20 +1972,20 @@ void LLWebRTCPeerConnectionImpl::OnStateChange()
     switch (mDataChannel->state())
     {
         case webrtc::DataChannelInterface::kOpen:
-            RTC_LOG(LS_INFO) << __FUNCTION__ << " Data Channel State Open";
+            RTC_LOG(LS_VERBOSE) << __FUNCTION__ << " Data Channel State Open";
             for (auto &observer : mSignalingObserverList)
             {
                 observer->OnDataChannelReady(this);
             }
             break;
         case webrtc::DataChannelInterface::kConnecting:
-            RTC_LOG(LS_INFO) << __FUNCTION__ << " Data Channel State Connecting";
+            RTC_LOG(LS_VERBOSE) << __FUNCTION__ << " Data Channel State Connecting";
             break;
         case webrtc::DataChannelInterface::kClosing:
-            RTC_LOG(LS_INFO) << __FUNCTION__ << " Data Channel State closing";
+            RTC_LOG(LS_VERBOSE) << __FUNCTION__ << " Data Channel State closing";
             break;
         case webrtc::DataChannelInterface::kClosed:
-            RTC_LOG(LS_INFO) << __FUNCTION__ << " Data Channel State closed";
+            RTC_LOG(LS_VERBOSE) << __FUNCTION__ << " Data Channel State closed";
             break;
         default:
             break;
@@ -1933,8 +2144,14 @@ void terminate()
 {
     if (gWebRTCImpl)
     {
-        gWebRTCImpl->terminate();
-        delete gWebRTCImpl;
+        if (gWebRTCImpl->terminate())
+        {
+            delete gWebRTCImpl;
+        }
+        // Otherwise shutdown timed out and was left to a detached thread that is
+        // still using this object -- and the webrtc threads it owns -- so it's
+        // intentionally leaked.  Deleting it would hand that thread a freed
+        // object to finish shutting down with.
         gWebRTCImpl = nullptr;
     }
 }
