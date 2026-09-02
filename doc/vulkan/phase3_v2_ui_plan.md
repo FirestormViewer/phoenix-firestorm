@@ -232,6 +232,14 @@ capture harness, per the parity policy: opaque = tol 0, alpha-blended = tol 1.
 - **M0 — Skeleton frame.** Vulkan session runs `LLViewerWindow::draw()` into the
   sink with the correct ortho/scale/clip; solid backgrounds only. *Accept:*
   solid-color regions byte-exact vs GL on the login screen.
+  - **M0 runs the REAL `LLViewerWindow::draw()` tree from day one** (decided
+    2026-09-02), not a synthetic proxy — it tests the actual result path.
+    Textured and text primitives are stubbed to **safe no-ops behind the sink**
+    until M2/M3 (they emit nothing rather than touching GL or crashing); solid
+    fills, outlines, lines, and scissor are live. This exercises the true seam +
+    ortho + clip before we invest in the loader/atlas.
+  - M0 must carry the **scissor Y-flip** and the `setTransform` wiring that the
+    archived funnel owned — the seam reproduces them, the sink does not.
 - **M1 — Chrome primitives.** rect/line/outline/gradient/drop-shadow through the
   sink. *Accept:* login window chrome + focus rings byte-exact.
 - **M2 — Images.** VK loader + store + cache live; named chrome art and
