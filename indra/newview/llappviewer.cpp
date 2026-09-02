@@ -3731,7 +3731,9 @@ bool LLAppViewer::initConfiguration()
     // This happens AFTER LLSplashScreen::show(). That may or may not be
     // important.
     //
-    if (mSecondInstance && !gSavedSettings.getBOOL("AllowMultipleViewers"))
+    if (mSecondInstance
+        && !gGPUBenchmarkMode
+        && !gSavedSettings.getBOOL("AllowMultipleViewers"))
     {
         OSMessageBox(
             LLTrans::getString("MBAlreadyRunning"),
