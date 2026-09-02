@@ -1437,4 +1437,18 @@
   <color
     name="HighlightPanelBackground"
     reference="EmphasisColor" />
+  <!-- <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config) -->
+  <color
+     name="BuildToolsTextBackgroundColor"
+     reference="SL-Titanium" />
+  <color
+     name="BuildToolsXAxisColor"
+     reference="Red" />
+  <color
+     name="BuildToolsYAxisColor"
+     reference="Green" />
+  <color
+     name="BuildToolsZAxisColor"
+     reference="Blue" />
+  <!-- </FS:AR> [FIRE-36909] -->
 </colors>
