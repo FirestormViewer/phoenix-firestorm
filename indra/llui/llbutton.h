@@ -219,6 +219,19 @@ public:
 
     bool            toggleState();
     bool            getToggleState() const;
+
+    // <VulkanStorm> Read-only query for the independent Vulkan UI renderer (M0
+    // greenfield): return the button image LLButton::draw() would pick for the
+    // current state (pressed/selected/hover/disabled precedence), plus the
+    // modulation color. Replicates the RESULT of the GL draw's image selection
+    // without executing GL. May be null (button has no image). No behavior
+    // change.
+    LLUIImage* getStateImage(LLColor4& out_color, F32 alpha) const;
+    // Name-keyed variant: returns the image NAME (registry key) from the raw
+    // XUI name (works even when the LLUIImage object is null on the Vulkan
+    // path). Empty = no image.
+    std::string getStateImageName(LLColor4& out_color, F32 alpha) const;
+    // </VulkanStorm>
     void            setToggleState(bool b);
 
     void            setHighlight(bool b);
@@ -375,6 +388,18 @@ protected:
     LLUIColor                   mFlashBgColor;
     // <FS:Ansariel> [FS communication UI]
     LLUIColor                   mFlashAltBgColor;
+
+    // <VulkanStorm> raw XUI image names (GL-free); the GL-coupled LLUIImage
+    // pointers stay null on the Vulkan path, so the renderer keys off these.
+    std::string                 mVkImgNameUnselected,
+                                mVkImgNameSelected,
+                                mVkImgNameHoverUnselected,
+                                mVkImgNameHoverSelected,
+                                mVkImgNameDisabled,
+                                mVkImgNameDisabledSelected,
+                                mVkImgNamePressed,
+                                mVkImgNamePressedSelected;
+    // </VulkanStorm>
 
     LLUIColor                   mImageColor;
     LLUIColor                   mDisabledImageColor;

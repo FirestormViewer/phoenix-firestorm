@@ -21,6 +21,7 @@
 #include "llvkcontext.h"
 #include "llvkgpufacts.h"
 #include "llvkui2d.h"
+#include "llvkuiimage.h"
 #include "llvkuirender.h"
 #include "llwindow.h"
 
@@ -224,6 +225,9 @@ void LLVKSession::renderUIFrame(LLView* root, float ui_scale_x, float ui_scale_y
             LL_WARNS("Vulkan") << "Session: create2DPipeline failed: " << error << LL_ENDL;
             return;
         }
+        // <VulkanStorm> M2: build the GL-free UI-image registry once the 2D
+        // pipeline (sampler/descriptor pool) exists.
+        LLVKUIImage::init(s_context);
     }
 
     // Begin the 2D render pass (clears to the boot teal so any uncovered region

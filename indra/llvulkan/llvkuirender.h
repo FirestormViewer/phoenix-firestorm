@@ -30,6 +30,7 @@
 
 class LLView;
 class LLVKContext;
+class LLUIImage;
 
 namespace LLVKUIRender
 {
@@ -57,6 +58,12 @@ namespace LLVKUIRender
     // passes and by registered hooks.
     void emitScreenRect(const LLRect& gl_rect, unsigned device_height,
                         float ui_scale_y, const LLColor4& color);
+
+    // Emit a screen-space rect filled with the named image (resolved through
+    // the GL-free LLVKUIImage registry by the LLUIImage's name), honoring
+    // clip + 9-slice regions. Modulated by color.
+    void emitScreenRect(const LLRect& gl_rect, unsigned device_height,
+                        float ui_scale_y, const LLUIImage* image, const LLColor4& color);
     // </VulkanStorm>
 }
 

@@ -153,6 +153,16 @@ LLButton::LLButton(const LLButton::Params& p)
     mImageFlash(p.image_flash),
     mImagePressed(p.image_pressed),
     mImagePressedSelected(p.image_pressed_selected),
+    // <VulkanStorm> raw XUI names for the GL-free Vulkan path
+    mVkImgNameUnselected(p.image_unselected.vk_image_name.isProvided() ? p.image_unselected.vk_image_name() : ""),
+    mVkImgNameSelected(p.image_selected.vk_image_name.isProvided() ? p.image_selected.vk_image_name() : ""),
+    mVkImgNameHoverUnselected(p.image_hover_unselected.vk_image_name.isProvided() ? p.image_hover_unselected.vk_image_name() : ""),
+    mVkImgNameHoverSelected(p.image_hover_selected.vk_image_name.isProvided() ? p.image_hover_selected.vk_image_name() : ""),
+    mVkImgNameDisabled(p.image_disabled.vk_image_name.isProvided() ? p.image_disabled.vk_image_name() : ""),
+    mVkImgNameDisabledSelected(p.image_disabled_selected.vk_image_name.isProvided() ? p.image_disabled_selected.vk_image_name() : ""),
+    mVkImgNamePressed(p.image_pressed.vk_image_name.isProvided() ? p.image_pressed.vk_image_name() : ""),
+    mVkImgNamePressedSelected(p.image_pressed_selected.vk_image_name.isProvided() ? p.image_pressed_selected.vk_image_name() : ""),
+    // </VulkanStorm>
     mImageHoverSelected(p.image_hover_selected),
     mImageHoverUnselected(p.image_hover_unselected),
     mUnselectedLabelColor(p.label_color()),
@@ -492,6 +502,94 @@ void LLButton::onVisibilityChange(bool new_visibility)
     mFontBuffer.reset();
     return LLUICtrl::onVisibilityChange(new_visibility);
 }
+
+// <VulkanStorm> Read-only image selection for the independent Vulkan UI
+// renderer (M0 greenfield). Replicates the imagep + modulation color that
+// LLButton::draw() computes, without running any GL code. Returns the selected
+// image (may be null) and its color (already modulated by alpha).
+LLUIImage* LLButton::getStateImage(LLColor4& out_color, F32 alpha) const
+{
+    // NOTE: hasFocus()/hasMouseCapture()/mMouseDownTimer are const-safe reads
+    // used by draw(); pressed/hover are normally false on a settled login
+    // screen, so this resolves to the selected/unselected state image.
+    const bool selected = getToggleState();
+    const bool enabled = isInEnabledChain();
+
+    LLUIImage* imagep = NULL;
+    if (mNeedsHighlight)
+    {
+        if (selected)
+        {
+            imagep = mImageHoverSelected ? mImageHoverSelected.get() : mImageSelected.get();
+        }
+        else
+        {
+            imagep = mImageHoverUnselected ? mImageHoverUnselected.get() : mImageUnselected.get();
+        }
+    }
+    else
+    {
+        imagep = selected ? mImageSelected.get() : mImageUnselected.get();
+    }
+
+    if (!mImageDisabledSelected.isNull()
+        && ((enabled && getTentative()) || (!enabled && selected)))
+    {
+        imagep = mImageDisabledSelected.get();
+    }
+    else if (!mImageDisabled.isNull() && !enabled && !selected)
+    {
+        imagep = mImageDisabled.get();
+    }
+
+    LLColor4 disabled_color = mFadeWhenDisabled ? mDisabledImageColor.get() % 0.5f : mDisabledImageColor.get();
+    out_color = (enabled ? mImageColor.get() : disabled_color) % alpha;
+    return imagep;
+}
+
+std::string LLButton::getStateImageName(LLColor4& out_color, F32 alpha) const
+{
+    const bool selected = getToggleState();
+    const bool enabled = isInEnabledChain();
+
+    // Constructor fallbacks (llbutton.cpp): pressed defaults to the selected
+    // image, pressed_selected to unselected, disabled to unselected (when a
+    // custom unselected was provided and no explicit disabled name).
+    std::string unsel = mVkImgNameUnselected;
+    std::string sel   = mVkImgNameSelected;
+    std::string hovU  = mVkImgNameHoverUnselected;
+    std::string hovS  = mVkImgNameHoverSelected;
+    std::string dis   = mVkImgNameDisabled.empty() && !unsel.empty() ? unsel : mVkImgNameDisabled;
+    std::string disSel= mVkImgNameDisabledSelected.empty() && !sel.empty() ? sel : mVkImgNameDisabledSelected;
+    std::string press = mVkImgNamePressed.empty() ? sel : mVkImgNamePressed;
+    std::string pressSel = mVkImgNamePressedSelected.empty() ? unsel : mVkImgNamePressedSelected;
+
+    std::string name;
+    if (mNeedsHighlight)
+    {
+        name = selected ? (hovS.empty() ? sel : hovS)
+                        : (hovU.empty() ? unsel : hovU);
+    }
+    else
+    {
+        name = selected ? sel : unsel;
+    }
+
+    if (!disSel.empty() && ((enabled && getTentative()) || (!enabled && selected)))
+    {
+        name = disSel;
+    }
+    else if (!dis.empty() && !enabled && !selected)
+    {
+        name = dis;
+    }
+    (void)press; (void)pressSel; // pressed/hover are transient; settled UI uses the above
+
+    LLColor4 disabled_color = mFadeWhenDisabled ? mDisabledImageColor.get() % 0.5f : mDisabledImageColor.get();
+    out_color = (enabled ? mImageColor.get() : disabled_color) % alpha;
+    return name;
+}
+// </VulkanStorm>
 
 void LLButton::dirtyRect()
 {

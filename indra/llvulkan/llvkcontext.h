@@ -95,7 +95,7 @@ public:
         VkImageView view = VK_NULL_HANDLE;
         VkDescriptorSet descriptor = VK_NULL_HANDLE;
     };
-    bool createTexture2D(const uint8_t* rgba, uint32_t w, uint32_t h, Texture2D& out, std::string& error);
+    bool createTexture2D(const uint8_t* rgba, uint32_t w, uint32_t h, Texture2D& out, std::string& error, bool useLinearFilter = false);
     void destroyTexture2D(Texture2D& tex);
     void bindTexture2D(VkCommandBuffer cmd, VkDescriptorSet descriptor);
     VkDescriptorSet whiteTextureDescriptor() const { return mWhiteTex.descriptor; }
@@ -167,7 +167,8 @@ private:
     VkShaderModule   mShader2DFrag = VK_NULL_HANDLE;
     VkDescriptorSetLayout mDescSetLayout2D = VK_NULL_HANDLE;
     VkDescriptorPool      mDescPool2D = VK_NULL_HANDLE;
-    VkSampler             mSampler2D = VK_NULL_HANDLE;
+    VkSampler             mSampler2D = VK_NULL_HANDLE;        // NEAREST (exact; default UI)
+    VkSampler             mSampler2DLinear = VK_NULL_HANDLE;  // LINEAR (GL TFO_NONE UI images)
     Texture2D             mWhiteTex;   // 1x1 white, bound for solid quads
     uint32_t         mAcquiredImageIndex = 0;
     uint32_t         mLastPresentedImageIndex = 0;

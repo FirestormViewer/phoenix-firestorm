@@ -915,6 +915,21 @@ bool LLVKContext::create2DPipeline(std::string& error)
         si.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
         LL_VK_CHECK(vkCreateSampler(mDevice, &si, nullptr, &mSampler2D), error, "vkCreateSampler (2D) failed");
     }
+    // GL-matched LINEAR sampler (UI images decoded with no mips + default
+    // filtering sample bilinear in GL). Nearest stays the default for exact
+    // (1:1) images.
+    if (mSampler2DLinear == VK_NULL_HANDLE)
+    {
+        VkSamplerCreateInfo si{};
+        si.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+        si.magFilter = VK_FILTER_LINEAR;
+        si.minFilter = VK_FILTER_LINEAR;
+        si.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+        si.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        si.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        si.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        LL_VK_CHECK(vkCreateSampler(mDevice, &si, nullptr, &mSampler2DLinear), error, "vkCreateSampler (2D linear) failed");
+    }
     if (mDescSetLayout2D == VK_NULL_HANDLE)
     {
         VkDescriptorSetLayoutBinding bind0{};
@@ -930,12 +945,16 @@ bool LLVKContext::create2DPipeline(std::string& error)
     }
     if (mDescPool2D == VK_NULL_HANDLE)
     {
+        // <VulkanStorm> M2: the UI-image registry uploads ~1k textures, each
+        // with its own descriptor set. Size the pool for the real count with
+        // generous headroom (was 64 — exhausted, dropping every image).
+        const uint32_t kMaxUISets = 4096;
         VkDescriptorPoolSize ps{};
         ps.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        ps.descriptorCount = 64;
+        ps.descriptorCount = kMaxUISets;
         VkDescriptorPoolCreateInfo pi{};
         pi.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-        pi.maxSets = 64;
+        pi.maxSets = kMaxUISets;
         pi.poolSizeCount = 1;
         pi.pPoolSizes = &ps;
         LL_VK_CHECK(vkCreateDescriptorPool(mDevice, &pi, nullptr, &mDescPool2D), error, "vkCreateDescriptorPool (2D) failed");
@@ -1377,7 +1396,7 @@ bool LLVKContext::readbackSwapchain(std::vector<uint8_t>& out_rgba, uint32_t& ou
 
 // --- Textures (Phase 3) ----------------------------------------------------
 
-bool LLVKContext::createTexture2D(const uint8_t* rgba, uint32_t w, uint32_t h, Texture2D& out, std::string& error)
+bool LLVKContext::createTexture2D(const uint8_t* rgba, uint32_t w, uint32_t h, Texture2D& out, std::string& error, bool useLinearFilter)
 {
     if (mDevice == VK_NULL_HANDLE || mDescPool2D == VK_NULL_HANDLE || !rgba || w == 0 || h == 0)
     {
@@ -1503,7 +1522,7 @@ bool LLVKContext::createTexture2D(const uint8_t* rgba, uint32_t w, uint32_t h, T
     LL_VK_CHECK(vkAllocateDescriptorSets(mDevice, &dai, &out.descriptor), error, "vkAllocateDescriptorSets failed");
 
     VkDescriptorImageInfo dii{};
-    dii.sampler = mSampler2D;
+    dii.sampler = useLinearFilter ? mSampler2DLinear : mSampler2D;
     dii.imageView = out.view;
     dii.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     VkWriteDescriptorSet write{};

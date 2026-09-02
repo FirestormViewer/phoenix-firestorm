@@ -28,8 +28,13 @@
 #include "lluicolortable.h"     // LLUIColor / LLUIColorTable (neutral)
 #include "llview.h"             // LLView
 #include "llpanel.h"            // LLPanel (background state)
+#include "llbutton.h"           // LLButton (state images)
+#include "lliconctrl.h"         // LLIconCtrl (icons)
+#include "lluicolor.h"          // LLUIColor
 #include "llvkcontext.h"
 #include "llvkui2d.h"
+#include "llvkuiimage.h"        // LLVKUIImage registry (GL-free)
+#include "lluiimage.h"          // LLUIImage (regions)
 
 namespace
 {
@@ -53,18 +58,25 @@ namespace
         int  depth  = 0;
     };
 
-    // Convert a GL bottom-left-origin screen rect (from calcScreenRect, in
-    // window pixels) into the sink's top-left-origin coordinate space, then
-    // apply the UI scale. The sink's transform is left at identity; we bake the
-    // absolute position here.
-    // NOTE: the public LLVKUIRender::emitScreenRect (below) is the shared
-    // implementation; passes + hooks both call it.
+    // Convert a GL bottom-left-origin screen rect (from calcScreenRect) into
+    // the sink's top-left-origin coordinate space.
+    void toSinkRect(const RenderCtx& rc, const LLRect& gl_rect,
+                    float& left, float& top, float& right, float& bottom)
+    {
+        const F32 ui_h = (F32)rc.dev_h / rc.ui_scale_y;
+        left   = (F32)gl_rect.mLeft;
+        right  = (F32)gl_rect.mRight;
+        top    = ui_h - (F32)gl_rect.mTop;
+        bottom = ui_h - (F32)gl_rect.mBottom;
+    }
 
     // <VulkanStorm> Registered per-class hooks (newview-side classes).
     std::map<const std::type_info*, LLVKUIRender::ViewHook> s_hooks;
     // </VulkanStorm>
 
-    // Emit a panel/floater background (solid color; images land in M2).
+    // Emit a panel/floater background. Mirrors LLPanel::draw(): prefer the
+    // background IMAGE (opaque/transparent variant) over the solid color; the
+    // image is modulated by its overlay color % draw alpha.
     void renderPanelBackground(RenderCtx& rc, const LLPanel* panel)
     {
         // <VulkanStorm> M0 diagnostic: log why a panel is skipped.
@@ -79,6 +91,34 @@ namespace
         LLRect local = panel->getLocalRect();
         LLRect screen;
         panel->localRectToScreen(local, &screen);
+
+        if (panel->isBackgroundOpaque())
+        {
+            LLPointer<LLUIImage> img = panel->getBackgroundImage();
+            if (img.notNull())
+            {
+                // getBackgroundImageOverlay() is non-const; read-only in effect.
+                const LLColor4& ov = const_cast<LLPanel*>(panel)->getBackgroundImageOverlay();
+                LLColor4 c = LLColor4(ov.mV[0] * rc.parent_alpha, ov.mV[1] * rc.parent_alpha,
+                                      ov.mV[2] * rc.parent_alpha, ov.mV[3] * rc.parent_alpha);
+                float l, t, r, b; toSinkRect(rc, screen, l, t, r, b);
+                LLVKUIImage::draw(img->getName(), l, t, r, b, c);
+                return;
+            }
+        }
+        else
+        {
+            LLPointer<LLUIImage> img = panel->getTransparentImage();
+            if (img.notNull())
+            {
+                const LLColor4& ov = const_cast<LLPanel*>(panel)->getTransparentImageOverlay();
+                LLColor4 c = LLColor4(ov.mV[0] * rc.parent_alpha, ov.mV[1] * rc.parent_alpha,
+                                      ov.mV[2] * rc.parent_alpha, ov.mV[3] * rc.parent_alpha);
+                float l, t, r, b; toSinkRect(rc, screen, l, t, r, b);
+                LLVKUIImage::draw(img->getName(), l, t, r, b, c);
+                return;
+            }
+        }
 
         LLColor4 c = panel->isBackgroundOpaque() ? panel->getBackgroundColor()
                                                  : panel->getTransparentColor();
@@ -121,6 +161,50 @@ namespace
             renderPanelBackground(rc, panel);
             if (LLVKUI2DSink::get().pendingVerts() > vbefore) rc.emitted++;
         }
+
+        // <VulkanStorm> M2: button + icon images. These read the widget's
+        // state and emit the same image LLButton::draw()/LLIconCtrl::draw()
+        // would, resolved by name through the GL-free LLVKUIImage registry.
+        if (LLVKUIImage::ready())
+        {
+            static bool s_dbg = getenv("VULKANSTORM_UI_DEBUG") != nullptr;
+            static int  s_dbg_n = 0;
+            const LLButton* button = dynamic_cast<const LLButton*>(view);
+            if (button)
+            {
+                LLColor4 imgc;
+                const std::string imgname = button->getStateImageName(imgc, rc.parent_alpha);
+                if (s_dbg && s_dbg_n < 12)
+                {
+                    ++s_dbg_n;
+                    LL_INFOS("Vulkan") << "VKBUTTON '" << view->getName() << "' img='" << imgname << "'"
+                                       << " empty=" << (imgname.empty() ? 1 : 0) << LL_ENDL;
+                }
+                if (!imgname.empty())
+                {
+                    const LLRect screen = view->calcScreenRect();
+                    float l, t, r, b; toSinkRect(rc, screen, l, t, r, b);
+                    LLVKUIImage::draw(imgname, l, t, r, b, imgc);
+                    rc.emitted++;
+                }
+            }
+            const LLIconCtrl* icon = dynamic_cast<const LLIconCtrl*>(view);
+            if (icon)
+            {
+                const std::string imgname = icon->getImageVkName();
+                if (!imgname.empty())
+                {
+                    const F32 a = icon->getUseDrawContextAlpha() ? rc.parent_alpha : 1.f;
+                    const LLColor4& ic = icon->getColor().get();
+                    LLColor4 c = LLColor4(ic.mV[0] * a, ic.mV[1] * a, ic.mV[2] * a, ic.mV[3] * a);
+                    const LLRect screen = view->calcScreenRect();
+                    float l, t, r, b; toSinkRect(rc, screen, l, t, r, b);
+                    LLVKUIImage::draw(imgname, l, t, r, b, c);
+                    rc.emitted++;
+                }
+            }
+        }
+        // </VulkanStorm>
 
         // <VulkanStorm> Registered per-class hooks (e.g. LLMediaCtrl's
         // no-media backdrop), supplied by newview for classes llvulkan must
@@ -170,6 +254,18 @@ namespace LLVKUIRender
         const F32 bottom = ui_h - (F32)gl_rect.mBottom;  // GL bottom -> larger top-left y
         LLVKUI2DSink::get().rect(left, top, right, bottom,
                                  color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], color.mV[VALPHA]);
+    }
+
+    void emitScreenRect(const LLRect& gl_rect, unsigned device_height,
+                        float ui_scale_y, const LLUIImage* image, const LLColor4& color)
+    {
+        if (gl_rect.isEmpty()) return;
+        const F32 ui_h = (F32)device_height / ui_scale_y;
+        const F32 left   = (F32)gl_rect.mLeft;
+        const F32 right  = (F32)gl_rect.mRight;
+        const F32 top    = ui_h - (F32)gl_rect.mTop;
+        const F32 bottom = ui_h - (F32)gl_rect.mBottom;
+        LLVKUIImage::draw(image ? image->getName() : std::string(), left, top, right, bottom, color);
     }
 
     void renderFrame(LLVKContext* ctx, LLView* root,
