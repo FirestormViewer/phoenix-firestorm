@@ -42,23 +42,6 @@ public:
     // running.
     static void renderFrame();
 
-    // <VulkanStorm> Phase 3 v2 (M0): begin a 2D UI frame. Starts the 2D render
-    // pass on the context, begins the LLVKUI2D sink, and begins llvkrender so
-    // the widget tree's 2D calls (routed via LLUI2DRouter, which the caller
-    // binds to the Vulkan backend) accumulate into the sink. ui_scale_x/y are
-    // the neutral UI scale factor (the caller reads LLUI::getScaleFactor();
-    // llvulkan does not depend on llui). Returns false if the frame could not
-    // begin (e.g. swapchain out of date — caller should recreate/resize).
-    // Between beginUIFrame and endUIFrame the tree draws.
-    static bool beginUIFrame(float ui_scale_x, float ui_scale_y);
-    // End the current 2D UI frame: flush the sink, close + present. No-op if
-    // no UI frame is active.
-    static void endUIFrame();
-    // The live Vulkan context (nullptr when not running). Used by the seam to
-    // size llvkrender's scissor Y-flip and bind textures.
-    static class LLVKContext* getContext();
-    // </VulkanStorm>
-
     // Recreate the swapchain if the window's client size changed since the
     // last frame. No-op when not running.
     static void resizeIfNeeded(LLWindow* window);

@@ -80,11 +80,6 @@
 #include "lluuid.h"
 #include "llview.h"
 #include "llxfermanager.h"
-
-// <VulkanStorm> M0: the 2D router seam + the Vulkan backend (for draw()).
-#include "llui2drouter.h"
-#include "llvkrender.h"
-// </VulkanStorm>
 #include "message.h"
 #include "object_flags.h"
 #include "lltimer.h"
@@ -2981,24 +2976,14 @@ void LLViewerWindow::draw()
 //#if LL_DEBUG
     LLView::sIsDrawing = true;
 //#endif
-    // <VulkanStorm> M0: on the Vulkan path the 2D UI is submitted by the sink
-    // (llvkrender) via the router, not by gGL. Detect it once for this draw.
-    const bool vk_ui = LLUI2DRouter::isBound() && LLUI2DRouter::activeIsVulkan();
-    // </VulkanStorm>
-    if (!vk_ui) { stop_glerror(); }
+    stop_glerror();
 
     LLUI::setLineWidth(1.f);
 
     // Reset any left-over transforms
-    if (!vk_ui)
-    {
-        gGL.matrixMode(LLRender::MM_MODELVIEW);
-        gGL.loadIdentity();
-    }
-    else
-    {
-        LLUI2DRouter::loadIdentityTransform();
-    }
+    gGL.matrixMode(LLRender::MM_MODELVIEW);
+
+    gGL.loadIdentity();
 
     //S32 screen_x, screen_y;
 
@@ -3010,7 +2995,7 @@ void LLViewerWindow::draw()
     // HACK for timecode debugging
     //if (gSavedSettings.getBOOL("DisplayTimecode"))
     static LLCachedControl<bool> displayTimecode(gSavedSettings, "DisplayTimecode");
-    if (displayTimecode && !vk_ui)  // <VulkanStorm> text is stubbed on the Vulkan path until M3
+    if (displayTimecode)
     {
         // draw timecode block
         std::string text;
@@ -3029,47 +3014,23 @@ void LLViewerWindow::draw()
     // Draw all nested UI views.
     // No translation needed, this view is glued to 0,0
 
-    // <VulkanStorm> M0: the GL UI prologue (bind UI shader, set white, push the
-    // UI matrix stack, apply the display scale) is GL submission state. On the
-    // Vulkan path the sink owns submission; route the equivalent through the
-    // router (white color, push, apply scale) and do NOT touch gUIProgram/gGL.
-    if (!vk_ui)
-    {
-        gUIProgram.bind();
-        gGL.color4f(1, 1, 1, 1);
-        gGL.pushMatrix();
-    }
-    else
-    {
-        LLUI2DRouter::setColor(1.f, 1.f, 1.f, 1.f);
-        LLUI2DRouter::pushTransform();
-    }
-    // </VulkanStorm>
+    gUIProgram.bind();
+    gGL.color4f(1, 1, 1, 1);
+
+    gGL.pushMatrix();
     LLUI::pushMatrix();
     {
         // <FS:Ansariel> Factor out instance() call
         LLViewerCamera& camera = LLViewerCamera::instance();
 
         // scale view by UI global scale factor and aspect ratio correction factor
-        if (!vk_ui)
-        {
-            gGL.scaleUI(mDisplayScale.mV[VX], mDisplayScale.mV[VY], 1.f);
-        }
-        else
-        {
-            // Fold the display scale (aspect correction x UI scale) into the
-            // Vulkan transform. llvkrender's base scale is the neutral UI scale;
-            // this multiplies in the same factor GL applies via gGL.scaleUI.
-            LLUI2DRouter::scale(mDisplayScale.mV[VX], mDisplayScale.mV[VY]);
-        }
+        gGL.scaleUI(mDisplayScale.mV[VX], mDisplayScale.mV[VY], 1.f);
 
         LLVector2 old_scale_factor = LLUI::getScaleFactor();
         // apply camera zoom transform (for high res screenshots)
         F32 zoom_factor = camera.getZoomFactor(); // <FS:Ansariel> Factor out instance() call
         S16 sub_region = camera.getZoomSubRegion(); // <FS:Ansariel> Factor out instance() call
-        // <VulkanStorm> zoom>1 is a high-res-screenshot path; the Vulkan UI pass
-        // renders the normal (unzoomed) frame. GL matrix ops are GL-only.
-        if (!vk_ui && zoom_factor > 1.f)
+        if (zoom_factor > 1.f)
         {
             //decompose subregion number to x and y values
             int pos_y = sub_region / llceil(zoom_factor);
@@ -3082,11 +3043,6 @@ void LLViewerWindow::draw()
             LLUI::getScaleFactor() *= zoom_factor;
         }
 
-        // <VulkanStorm> The tool overlay and HUD/mouselook sections draw 3D/world
-        // content, not 2D UI chrome. Skip them on the Vulkan path (M0 renders the
-        // 2D UI only).
-        if (!vk_ui)
-        {
         // Draw tool specific overlay on world
         LLToolMgr::getInstance()->getCurrentTool()->draw();
 
@@ -3185,11 +3141,10 @@ void LLViewerWindow::draw()
             }
         }
         // </exodus>
-        } // <VulkanStorm> end !vk_ui (tool overlay + HUD/mouselook)
 
         // Only show Mouselookinstructions if FSShowMouselookInstruction is true
         static LLCachedControl<bool> fsShowMouselookInstructions(gSavedSettings, "FSShowMouselookInstructions");
-        if( !vk_ui && fsShowMouselookInstructions && (gAgentCamera.cameraMouselook() || LLFloaterCamera::inFreeCameraMode()) )
+        if( fsShowMouselookInstructions && (gAgentCamera.cameraMouselook() || LLFloaterCamera::inFreeCameraMode()) )
         {
             drawMouselookInstructions();
             stop_glerror();
@@ -3211,7 +3166,7 @@ void LLViewerWindow::draw()
             S32 screen_x, screen_y;
             top_ctrl->localPointToScreen(0, 0, &screen_x, &screen_y);
 
-            if (!vk_ui) { gGL.matrixMode(LLRender::MM_MODELVIEW); }
+            gGL.matrixMode(LLRender::MM_MODELVIEW);
             LLUI::pushMatrix();
             LLUI::translate( (F32) screen_x, (F32) screen_y);
             top_ctrl->draw();
@@ -3219,8 +3174,7 @@ void LLViewerWindow::draw()
         }
 
 
-        // <VulkanStorm> text is stubbed on the Vulkan path until M3.
-        if( !vk_ui && gShowOverlayTitle && !mOverlayTitle.empty() )
+        if( gShowOverlayTitle && !mOverlayTitle.empty() )
         {
             // Used for special titles such as "Second Life - Special E3 2003 Beta"
             const S32 DIST_FROM_TOP = 20;
@@ -3235,20 +3189,9 @@ void LLViewerWindow::draw()
         LLUI::setScaleFactor(old_scale_factor);
     }
     LLUI::popMatrix();
+    gGL.popMatrix();
 
-    // <VulkanStorm> the GL epilogue (pop the UI matrix, unbind the UI shader) is
-    // GL submission state; on the Vulkan path the sink owns submission and the
-    // router's transform was pushed in the prologue, so pop it here.
-    if (!vk_ui)
-    {
-        gGL.popMatrix();
-        gUIProgram.unbind();
-    }
-    else
-    {
-        LLUI2DRouter::popTransform();
-    }
-    // </VulkanStorm>
+    gUIProgram.unbind();
 
     LLView::sIsDrawing = false;
 }

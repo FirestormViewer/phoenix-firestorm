@@ -21,7 +21,6 @@ set(llvulkan_SOURCE_FILES
     llvkcontext.cpp
     llvkgpufacts.cpp
     llvkprobe.cpp
-    llvkrender.cpp
     llvkselftest.cpp
     llvksession.cpp
     llvkui2d.cpp
@@ -34,7 +33,6 @@ set(llvulkan_HEADER_FILES
     llvkcontext.h
     llvkgpufacts.h
     llvkprobe.h
-    llvkrender.h
     llvkselftest.h
     llvksession.h
     llvkui2d.h

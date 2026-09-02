@@ -17,8 +17,6 @@
 
 #include "llvkcontext.h"
 #include "llvkgpufacts.h"
-#include "llvkrender.h"
-#include "llvkui2d.h"
 #include "llwindow.h"
 
 namespace
@@ -134,61 +132,6 @@ bool LLVKSession::isRunning()
 {
     return s_context != nullptr;
 }
-
-// <VulkanStorm> Phase 3 v2 (M0)
-LLVKContext* LLVKSession::getContext()
-{
-    return s_context;
-}
-
-bool LLVKSession::beginUIFrame(float ui_scale_x, float ui_scale_y)
-{
-    if (!s_context)
-    {
-        return false;
-    }
-
-    // Lazily create the 2D pipeline once the device exists (shaders load on
-    // first use; createSwapchain rebuilds the pipelines on resize).
-    if (s_context->pipeline2D(LLVKContext::Blend2D::Alpha) == VK_NULL_HANDLE)
-    {
-        std::string error;
-        if (!s_context->create2DPipeline(error))
-        {
-            LL_WARNS("Vulkan") << "Session: create2DPipeline failed: " << error << LL_ENDL;
-            return false;
-        }
-    }
-
-    // Begin the 2D render pass on the context (clears to the boot teal so any
-    // uncovered region is unmistakable during bring-up).
-    VkCommandBuffer cmd = s_context->begin2DFrame(kClearR, kClearG, kClearB, kClearA);
-    if (cmd == VK_NULL_HANDLE)
-    {
-        return false; // swapchain out of date; caller resizes
-    }
-
-    // Begin the sink on this command buffer, then begin llvkrender (which
-    // resets its own transform/color state for the frame).
-    LLVKUI2DSink::get().begin(s_context, cmd);
-    LLVKRender::get().beginFrame(s_context, s_height, ui_scale_x, ui_scale_y);
-    return true;
-}
-
-void LLVKSession::endUIFrame()
-{
-    if (!s_context)
-    {
-        return;
-    }
-    LLVKRender::get().endFrame();
-    LLVKUI2DSink::get().end();
-    if (!s_context->end2DFrame())
-    {
-        LL_WARNS("Vulkan") << "Session: end2DFrame failed" << LL_ENDL;
-    }
-}
-// </VulkanStorm>
 
 void LLVKSession::renderFrame()
 {

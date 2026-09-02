@@ -31,8 +31,6 @@ set(llrender_SOURCE_FILES
     llshadermgr.cpp
     lltexture.cpp
     lltexturemanagerbridge.cpp
-    llui2drouter.cpp
-    llui2drouter_gl.cpp
     lluiimage.cpp
     llvertexbuffer.cpp
     llglcommonfunc.cpp
@@ -41,7 +39,6 @@ set(llrender_SOURCE_FILES
 set(llrender_HEADER_FILES
     CMakeLists.txt
 
-    llui2drouter.h
     llcubemap.h
     llcubemaparray.h
     llfontgl.h
