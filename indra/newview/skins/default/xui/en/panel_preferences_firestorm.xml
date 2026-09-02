@@ -1640,6 +1640,9 @@
          name="colorswatchXaxis"
          tool_tip="Click to open Color Picker"
          width="64">
+			<color_swatch.init_callback
+			 function="Pref.getUIColor"
+			 parameter="BuildToolsXAxisColor" />
 			<color_swatch.commit_callback
 			 function="Pref.applyUIColor"
 			 parameter="BuildToolsXAxisColor" />
@@ -1656,6 +1659,9 @@
          name="colorswatchYaxis"
          tool_tip="Click to open Color Picker"
          width="64">
+			<color_swatch.init_callback
+			 function="Pref.getUIColor"
+			 parameter="BuildToolsYAxisColor" />
 			<color_swatch.commit_callback
 			 function="Pref.applyUIColor"
 			 parameter="BuildToolsYAxisColor" />
@@ -1672,6 +1678,9 @@
          name="colorswatchZaxis"
          tool_tip="Click to open Color Picker"
          width="64">
+			<color_swatch.init_callback
+			 function="Pref.getUIColor"
+			 parameter="BuildToolsZAxisColor" />
 			<color_swatch.commit_callback
 			 function="Pref.applyUIColor"
 			 parameter="BuildToolsZAxisColor" />
@@ -1688,6 +1697,9 @@
          name="colorswatchEditTextBackgroundColor"
          tool_tip="Click to open Color Picker"
          width="64">
+			<color_swatch.init_callback
+			 function="Pref.getUIColor"
+			 parameter="BuildToolsTextBackgroundColor" />
 			<color_swatch.commit_callback
 			 function="Pref.applyUIColor"
 			 parameter="BuildToolsTextBackgroundColor" />
