@@ -23,6 +23,7 @@ set(llvulkan_SOURCE_FILES
     llvkprobe.cpp
     llvkselftest.cpp
     llvksession.cpp
+    llvkui2d.cpp
     ${VULKAN_SDK_VOLK_SOURCE}
     )
 
@@ -34,6 +35,7 @@ set(llvulkan_HEADER_FILES
     llvkprobe.h
     llvkselftest.h
     llvksession.h
+    llvkui2d.h
     )
 
 # volk.c is C; the rest is C++. Give volk its required define so it exposes the
