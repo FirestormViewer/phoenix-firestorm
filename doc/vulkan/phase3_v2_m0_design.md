@@ -1,23 +1,30 @@
-# Phase 3 v2 — M0 Design: Skeleton Frame on `llvkrender`
+# Phase 3 v2 — M0 Design: Skeleton Frame + Chrome on `llvkrender`
 
 **Status:** DRAFT for review.
 **Branch:** `vulkanui`. **Parent plan:** [phase3_v2_ui_plan.md](phase3_v2_ui_plan.md).
+**Scope note (2026-09-02):** M1 (chrome primitives) is **folded into M0** — M0
+covers the full non-textured, non-text chrome vocabulary (solid + gradient
+rects, outlines, lines, drop-shadows, rare triangulated prims), so the M0 gate
+is the **whole login chrome**, not just solid regions.
 **Milestone goal:** the Vulkan session runs the *real* `LLViewerWindow::draw()`
 tree through `llvkrender` into the batched `LLVKUI2D` sink, with correct
-ortho/scale/clip, solid fills + outlines + lines live, textures and text stubbed
-to safe no-ops. **Accept:** solid-color regions of the login screen byte-exact
-vs GL; no crash; clean `Goodbye!` + exit 0.
+ortho/scale/clip, the full chrome primitive vocabulary live, and textures/text
+stubbed to safe no-ops. **Accept:** the login chrome byte-exact vs GL
+(opaque tol 0, alpha tol 1); no crash; clean `Goodbye!` + exit 0.
 
 ---
 
 ## 0. What M0 must prove
 
-The seam and the coordinate/clip pipeline — not yet textures or text. M0 is
-correct when the structural pixels (panel/background fills, borders, focus
-lines) the login tree emits land exactly where GL puts them. Everything the sink
-needs to do that is already built and byte-exact-verified; M0's work is the
-**seam** (how tree calls reach `llvkrender`) and the **neutral state feed**
-(transform/clip/color without reading `gGL`).
+The seam and the coordinate/clip pipeline, plus the **complete chrome primitive
+vocabulary** — not yet textures or text. M0 is correct when every non-textured,
+non-text pixel the login tree emits (fills, gradients, borders, focus lines,
+drop-shadows, and the rare circle/arc/triangle prims) lands exactly where GL
+puts it. The sink's core is byte-exact-verified; M0's work is the **seam** (how
+tree calls reach `llvkrender`), the **neutral state feed** (transform/clip/color
+without reading `gGL`), and **closing the sink's 5 vocabulary gaps** (9-slice,
+glyph-via-textured-path, gradient rect, triangulated rare prims, rotated-quad
+confirm) for the chrome subset.
 
 ---
 
@@ -186,8 +193,9 @@ On the GL backend these seams are untouched (the existing GL path runs).
 
 ## 6. M0 acceptance
 
-1. Login screen solid regions (panel/background fills, borders, focus lines)
-   byte-exact vs GL (opaque tol 0) via the capture harness.
+1. **Whole login chrome** (solid + gradient fills, borders/outlines, focus
+   lines, drop-shadows, rare prims) byte-exact vs GL — opaque tol 0, alpha tol 1
+   — via the capture harness.
 2. Textured/text primitives no-op cleanly on Vulkan (no crash, no GL touch);
    they render normally on GL.
 3. Clean shutdown (`Goodbye!` + exit 0) per the testing protocol.
@@ -199,4 +207,5 @@ On the GL backend these seams are untouched (the existing GL path runs).
 ## 7. Explicitly out of scope for M0
 
 Textures/images (M2), text/fonts (M3), media (M4), the 5 custom-draw widgets
-(tree-dispatched; GL-only for now), the capability probe (separate task).
+(tree-dispatched; GL-only for now), the capability probe (separate branch — see
+phase3_v2_capability_probe.md).
