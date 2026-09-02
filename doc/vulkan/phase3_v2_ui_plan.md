@@ -161,11 +161,11 @@ flowchart LR
       IMGDEC["image decode<br/>(LLImage)"] 
       FT["FreeType raster"]
     end
-    PROD --> SINK["LLVKUI2D sink<br/>(harvested from archive:<br/>rect, texturedQuad, 9-slice,<br/>lineStrip, dropShadow, glyph,<br/>per-topology pipelines)"]
+    PROD --> SINK["LLVKUI2D sink<br/>(harvested from archive — VERIFIED<br/>contract-fit; rect, texturedQuad,<br/>lineStrip, dropShadow, per-topology<br/>pipelines + 5 gap additions)"]
     subgraph VKOWN["Vulkan-owned (new)"]
       LOADER["VK image loader<br/>fetch+decode → RGBA8<br/>exact content dims, no pad"]
       STORE["VK pixel store / cache<br/>keyed by name/UUID"]
-      ATLAS["VK font atlas<br/>512² pages, LA + BGRA"]
+      ATLAS["VK font atlas<br/>512² pages, RGBA8<br/>(Option A: glyph → white+alpha)"]
       TEXC["LLVKUITextureCache<br/>staging + descriptors"]
     end
     LOADER --> STORE --> TEXC
@@ -176,19 +176,44 @@ flowchart LR
 ```
 
 **Components:**
-1. **`LLVKUI2D` sink** — *harvest from `vulkan-ui` archive* (it is already
-   byte-exact for the harness primitives). Extend to the full vocabulary: 9-slice
-   textured quad, drop-shadow (per-vertex alpha), glyph quad (mask×tint),
-   gradient rect, circle/arc/washer. Per-topology pipelines; append-offset
-   batching; deferred buffer growth.
+1. **`LLVKUI2D` sink** — *harvest from `vulkan-ui` archive.* **Contract-fit
+   VERIFIED (2026-09-02):** it correctly owns the two GL touchpoints (descriptor
+   upload, 2D-pipeline submission) and implements the ordering / scissor /
+   blend / transform semantics byte-exactly, with the M1 fixes baked in
+   (append-offset batching, pre-allocated buffer, deferred grow, per-topology
+   pipelines, flush-around-lineStrip). It has no GL coupling — policy-clean.
+   **Reuse approved, gated on closing the 5 vocabulary gaps** (each is an
+   additive emitter on the existing flush machinery, no core redesign):
+   - **9-slice textured quad** — add `texturedQuad9Slice()` emitting the 9
+     sub-quads with per-region UVs (54 verts). Reuses the textured run.
+   - **Glyph path** — emit glyph quads via the existing textured path; the
+     mask×tint result is achieved by the **Option-A atlas** (below), so no new
+     sink primitive is required — only correct UVs + the white+alpha texture.
+   - **Gradient rect** — per-vertex-color rect (2/4-corner), routed through
+     `rawTris`.
+   - **Rare prims** (circle/arc/washer/triangle/corner-brackets) — FAN/STRIP
+     triangulated CPU-side into `rawTris`; outlines via `lineStrip`.
+   - **Rotated textured quad** — caller bakes rotation into verts →
+     `texturedBatchPreTransformed` (already present; confirm only).
+   Two plumbing details to preserve when re-wiring the seams: the **scissor
+   Y-flip** (GL bottom-left clip rects → Vulkan top-left scissor under the
+   negative-height viewport) lived in the archived funnel, not the sink — it
+   must be carried over; and the glyph atlas format decision (Option A).
 2. **VK image loader + pixel store** — *new.* Owns fetch (curl/file) → decode
    (LLImage, backend-neutral) → RGBA8 at exact content dims → keyed store.
    No `gTextureList`, no `LLViewerFetchedTexture` GL path, no discard levels,
    no `mTexName`, no `onUIImageLoaded` GL callback.
 3. **`LLVKUITextureCache`** — staging upload + descriptor per resolved texture.
    (Archive version exists; re-key it by name/UUID instead of opaque pointer.)
-4. **VK font atlas** — *new upload path around reused FreeType raster.* Own
-   512² LA/BGRA pages as Vulkan textures; own descriptor-per-page.
+4. **VK font atlas** — *new upload path around reused FreeType raster* (FreeType
+   is backend-neutral CPU). **Atlas format = Option A (decided 2026-09-02):**
+   grayscale glyph coverage is expanded to **RGBA8 (RGB=white, A=coverage)** at
+   upload, so the existing tint×texture multiply degenerates to the correct
+   `tint.rgb, tint.a × glyphAlpha` with **no second shader variant** — one
+   byte-exact multiply path for images and text. Color emoji stay BGRA
+   premultiplied. Own 512² pages as Vulkan textures; own descriptor-per-page.
+   (Memory cost is negligible at UI font sizes; correctness surface is the
+   priority.)
 5. **Frame seams** — `display_startup()` and `render_ui_2d()` choose the Vulkan
    submission once per frame; the production traversal runs unchanged but emits
    to the sink. **Full redraw; no `mUIScreen` FBO.**
