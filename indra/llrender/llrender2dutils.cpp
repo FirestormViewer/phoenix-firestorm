@@ -40,6 +40,7 @@
 // Project includes
 #include "llrender2dutils.h"
 #include "lluiimage.h"
+#include "llui2drouter.h"   // <VulkanStorm> M0 backend routing seam
 
 
 //
@@ -117,6 +118,23 @@ void gl_rect_2d_offset_local( S32 left, S32 top, S32 right, S32 bottom, S32 pixe
 
 void gl_rect_2d(S32 left, S32 top, S32 right, S32 bottom, bool filled )
 {
+    // <VulkanStorm> Seam (M0): when the Vulkan 2D backend is bound, route to the
+    // router (which drives llvkrender/the sink) instead of the GL path below.
+    // The GL path is unchanged and runs when the GL backend (or none) is bound.
+    if (LLUI2DRouter::isBound() && LLUI2DRouter::activeIsVulkan())
+    {
+        if (filled)
+        {
+            LLUI2DRouter::rect((F32)left, (F32)top, (F32)right, (F32)bottom);
+        }
+        else
+        {
+            LLUI2DRouter::outlineRect((F32)left, (F32)top, (F32)right, (F32)bottom);
+        }
+        return;
+    }
+    // </VulkanStorm>
+
     gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
     // Counterclockwise quad will face the viewer
@@ -246,6 +264,14 @@ void gl_drop_shadow(S32 left, S32 top, S32 right, S32 bottom, const LLColor4 &st
 
 void gl_line_2d(S32 x1, S32 y1, S32 x2, S32 y2 )
 {
+    // <VulkanStorm> Seam (M0): route to the Vulkan backend when bound.
+    if (LLUI2DRouter::isBound() && LLUI2DRouter::activeIsVulkan())
+    {
+        LLUI2DRouter::line((F32)x1, (F32)y1, (F32)x2, (F32)y2);
+        return;
+    }
+    // </VulkanStorm>
+
     gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
     gGL.begin(LLRender::LINES);
@@ -256,6 +282,15 @@ void gl_line_2d(S32 x1, S32 y1, S32 x2, S32 y2 )
 
 void gl_line_2d(S32 x1, S32 y1, S32 x2, S32 y2, const LLColor4 &color )
 {
+    // <VulkanStorm> Seam (M0): route to the Vulkan backend when bound.
+    if (LLUI2DRouter::isBound() && LLUI2DRouter::activeIsVulkan())
+    {
+        LLUI2DRouter::setColor(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], color.mV[VALPHA]);
+        LLUI2DRouter::line((F32)x1, (F32)y1, (F32)x2, (F32)y2);
+        return;
+    }
+    // </VulkanStorm>
+
     gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
     gGL.color4fv( color.mV );
@@ -1764,7 +1799,18 @@ LLRender2D::~LLRender2D()
 // static
 void LLRender2D::translate(F32 x, F32 y, F32 z)
 {
-    gGL.translateUI(x,y,z);
+    // <VulkanStorm> Seam (M0): on the Vulkan path accumulate the offset in
+    // llvkrender's own transform stack (NOT gGL). The neutral font-origin state
+    // below is shared CPU state both backends need, so it updates on both.
+    if (LLUI2DRouter::isBound() && LLUI2DRouter::activeIsVulkan())
+    {
+        LLUI2DRouter::translate(x, y);
+    }
+    else
+    {
+        gGL.translateUI(x,y,z);
+    }
+    // </VulkanStorm>
     LLFontGL::sCurOrigin.mX += (S32) x;
     LLFontGL::sCurOrigin.mY += (S32) y;
     LLFontGL::sCurDepth += z;
@@ -1773,14 +1819,32 @@ void LLRender2D::translate(F32 x, F32 y, F32 z)
 // static
 void LLRender2D::pushMatrix()
 {
-    gGL.pushUIMatrix();
+    // <VulkanStorm> Seam (M0): Vulkan keeps its own transform stack.
+    if (LLUI2DRouter::isBound() && LLUI2DRouter::activeIsVulkan())
+    {
+        LLUI2DRouter::pushTransform();
+    }
+    else
+    {
+        gGL.pushUIMatrix();
+    }
+    // </VulkanStorm>
     LLFontGL::sOriginStack.push_back(std::make_pair(LLFontGL::sCurOrigin, LLFontGL::sCurDepth));
 }
 
 // static
 void LLRender2D::popMatrix()
 {
-    gGL.popUIMatrix();
+    // <VulkanStorm> Seam (M0): Vulkan keeps its own transform stack.
+    if (LLUI2DRouter::isBound() && LLUI2DRouter::activeIsVulkan())
+    {
+        LLUI2DRouter::popTransform();
+    }
+    else
+    {
+        gGL.popUIMatrix();
+    }
+    // </VulkanStorm>
     LLFontGL::sCurOrigin = LLFontGL::sOriginStack.back().first;
     LLFontGL::sCurDepth = LLFontGL::sOriginStack.back().second;
     LLFontGL::sOriginStack.pop_back();
@@ -1789,7 +1853,16 @@ void LLRender2D::popMatrix()
 // static
 void LLRender2D::loadIdentity()
 {
-    gGL.loadUIIdentity();
+    // <VulkanStorm> Seam (M0): Vulkan resets its own transform to identity.
+    if (LLUI2DRouter::isBound() && LLUI2DRouter::activeIsVulkan())
+    {
+        LLUI2DRouter::loadIdentityTransform();
+    }
+    else
+    {
+        gGL.loadUIIdentity();
+    }
+    // </VulkanStorm>
     LLFontGL::sCurOrigin.mX = 0;
     LLFontGL::sCurOrigin.mY = 0;
     LLFontGL::sCurDepth = 0.f;
