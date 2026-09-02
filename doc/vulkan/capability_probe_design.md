@@ -190,8 +190,33 @@ About.
    enumeration would add three platform-specific subsystems for information the
    driver already hands us. Avoid it.
 
-3. **Timing:** (i) populate-before-first-read vs (ii) re-classify-after. I lean
-   (i). **Open — confirm.**
+3. **Timing — DECIDED (2026-09-02): (i) populate-before-first-read, staged.**
+   Verified against the codebase: `LLVKProbe::hasVulkanDevice()` already creates
+   a minimal instance + enumerates physical devices at
+   [llappviewer.cpp:3787](../../../indra/newview/llappviewer.cpp) — **before**
+   `new LLViewerWindow` (3841), which is where `LLFeatureManager` first reads
+   ([llviewerwindow.cpp:2139]). So the early-probe infrastructure already runs at
+   the right time and already holds the physical-device handle. (i) fits without
+   re-ordering or a backdoor; (ii) would let the classifier persist settings
+   derived from the wrong (CLASS_0) class on first read, which then must be
+   detected and undone — a state-correction trap.
+
+   **Staged, because bandwidth needs a logical device:**
+   - **Stage 1 (early, in the existing `LLVKProbe` enumeration):** capture all
+     *static* facts — vendor/device IDs, deviceName, deviceType, VRAM,
+     `limits.*` (everything except bandwidth). This alone gets the classifier
+     off its zero-state before first read.
+   - **Stage 2 (at logical-device up, i.e. `LLVKSession::start()`):** run the
+     bandwidth micro-benchmark and resolve the *final* GPU class via a single,
+     immediate, one-time classification — before the 3D pipeline consumes any
+     feature settings. This is NOT (ii)'s "default-then-maybe-fix-later": the
+     static facts are correct at first read, and the bandwidth-dependent class
+     is resolved as soon as the device exists, not deferred.
+
+   Rationale: (i) writes nothing wrong on first read (every downstream setting
+   derives from real facts the first time); the only input not available at
+   first read is bandwidth (needs a logical device), and it is resolved
+   immediately at device-up rather than left at a wrong default.
 4. **Bandwidth — DECIDED (2026-09-02): (A) Vulkan-native timestamped
    micro-benchmark, with (C) CLASS_3 fallback.** This is effectively the only
    route to a real number: Vulkan has no `VkPhysicalDevice` bandwidth field
