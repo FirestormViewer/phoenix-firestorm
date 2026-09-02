@@ -108,16 +108,18 @@ namespace
     }
 
     // Emit one textured quad (top-left sink coords, 2 tris) into the sink.
+    // UV convention (top-left texture frame): v0 = the texture row at the
+    // quad's TOP edge, v1 = row at the quad's BOTTOM edge. The negative-height
+    // viewport flips v so v grows downward on screen; mapping top->v0/v1->bottom
+    // keeps the texture upright.
     void emitQuad(float x0, float y0, float x1, float y1,
                   float u0, float v0, float u1, float v1, const float c[4])
     {
-        // winding matches the GL 9-slice emission (each quad: TL,TR,BR / TL,BR,BL
-        // in top-left space). UVs map GL bottom-origin texture rows (v=0 bottom).
         float xy[12]; float uv[12]; float rgba[24];
         const float vx[6] = { x0, x1, x1, x0, x1, x0 };
         const float vy[6] = { y0, y0, y1, y0, y1, y1 };
         const float tu[6] = { u0, u1, u1, u0, u1, u0 };
-        const float tv[6] = { v1, v1, v0, v1, v0, v0 };
+        const float tv[6] = { v0, v0, v1, v0, v1, v1 };
         for (int i = 0; i < 6; ++i)
         {
             xy[i * 2] = vx[i]; xy[i * 2 + 1] = vy[i];
