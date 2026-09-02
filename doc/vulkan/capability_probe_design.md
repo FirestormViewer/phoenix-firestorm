@@ -172,5 +172,15 @@ pipeline). This branch only gets the classification *correct*.
 
 3. **Timing:** (i) populate-before-first-read vs (ii) re-classify-after. I lean
    (i). **Open — confirm.**
-4. **Bandwidth:** Vulkan-native micro-benchmark (A) with CLASS_3 fallback (C) —
-   vs the heuristic table (B). I lean A+C. **Open — confirm.**
+4. **Bandwidth — DECIDED (2026-09-02): (A) Vulkan-native timestamped
+   micro-benchmark, with (C) CLASS_3 fallback.** This is effectively the only
+   route to a real number: Vulkan has no `VkPhysicalDevice` bandwidth field
+   (bandwidth is measured, not reported) and the existing benchmark is
+   GL-specific (render loop + `ARB_timer_query`). The heuristic table (B) is
+   rejected — it mis-rates high-end hardware (e.g. RX 9070 XT) and is a
+   maintenance trap. The micro-benchmark mirrors the GL benchmark's *result*
+   (GB/s), not its GL logic: a device-local buffer + a simple copy/shader read
+   loop, timed with `VkQueryPool` (`VK_QUERY_TYPE_TIMESTAMP`, gated on
+   `limits.timestampComputeAndGraphics` / `timestampPeriod`), run once off the UI
+   path on the probe's own command buffer. If timestamp queries are unsupported
+   or the benchmark fails, fall back to CLASS_3 (never CLASS_0).
