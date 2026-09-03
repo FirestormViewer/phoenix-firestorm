@@ -145,6 +145,11 @@ protected:
     bool                getMousePointOnPlaneAgent(LLVector3& point, S32 x, S32 y, LLVector3 origin, LLVector3 normal);
     bool                nearestPointOnLineFromMouse( S32 x, S32 y, const LLVector3& b1, const LLVector3& b2, F32 &a_param, F32 &b_param );
     LLColor4            setupSnapGuideRenderPass(S32 pass);
+    // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+    static LLColor4     getUserEditColor(const U32 axis, F32 alpha = 1.f);
+    static F32          getUserEditHandleScaling();
+    static bool         getUserEditHintTextShadow();
+    // </FS:AR> [FIRE-36909]
 protected:
     LLFrameTimer        mHelpTextTimer;
     bool                mInSnapRegime;

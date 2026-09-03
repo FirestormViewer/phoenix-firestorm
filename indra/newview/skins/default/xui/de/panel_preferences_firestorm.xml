@@ -222,6 +222,15 @@
 		<check_box label="Erweiterte Skript-Informationen aktivieren" tool_tip="Falls aktiviert, werden die Skript-Informationen um weitergehende Details ergänzt." name="FSScriptInfoExtended"/>
 		<check_box label="Anhänge-Punkte in „Anhängen an“-Menüs alphabetisch sortieren (Erfordert Neustart)" tool_tip="Falls aktiviert, werden die Einträge in den „Anhängen an“-Menüs alphabetisch sortiert." name="FSSortAttachmentSpotsAlphabetically"/>
 		<check_box label="Neues [APP_NAME] Textur-Panel im Werkzeug-Fenster verwenden (Erforder Neustart)" tool_tip="Falls aktiviert, werden die Werkzeuge zum Bearbeiten von Texturen den von [APP_NAME] verbesserten Workflow benutzen und gleichzeitiges Bearbeiten von Blinn-Phong- und PBR-Texturen erlauben." name="FSUseNewTexturePanel"/>
+		<text name="buildaxiscolors_label">
+			Aussehen X/Y/Z-Achsen:
+		</text>
+		<color_swatch label="X-Achse" name="colorswatchXaxis" tool_tip="Klicken, um Farbauswahl zu öffnen"/>
+		<color_swatch label="Y-Achse" name="colorswatchYaxis" tool_tip="Klicken, um Farbauswahl zu öffnen"/>
+		<color_swatch label="Z-Achse" name="colorswatchZaxis" tool_tip="Klicken, um Farbauswahl zu öffnen"/>
+		<color_swatch label="Text-HG" name="colorswatchEditTextBackgroundColor" tool_tip="Klicken, um Farbauswahl zu öffnen"/>
+		<spinner label="Skalierung" name="editWidgetScaling" tool_tip="Skaliert die Größe der Kontrollen für das Editieren von Rotation/Skalierung/Position."/>
+		<check_box label="Text-Schattierung" tool_tip="Falls aktiviert, wird dem Hinweistext beim Editieren eine Hintergrund-Schattierung hinzugefügt." name="editTextDropShadow"/>
 	</panel>
 
 	<panel label="Script Editor" name="BuildTabScriptEditor">
