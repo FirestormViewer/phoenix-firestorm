@@ -174,6 +174,10 @@ public:
 
     void            createLineEditor(const Params&);
 
+    // Vulkan decodes the same skinned image independently of LLUIImage. Cache
+    // its intrinsic width so the normal combo layout formula remains valid.
+    void            setVkArrowImageWidth(S32 width);
+
     // <FS:Ansariel> For setting the focus to the LLLineEditor
     void            focusEditor();
 
@@ -262,6 +266,7 @@ private:
     commit_signal_t     mOnReturnSignal;
     S32                 mLastSelectedIndex;
     bool                mForceDisableFulltextSearch; // <FS:Ansariel> Allow fulltext search in comboboxes
+    S32                 mVkArrowImageWidth;
 };
 
 // A combo box with icons for the list of items.

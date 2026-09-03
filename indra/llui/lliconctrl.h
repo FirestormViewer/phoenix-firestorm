@@ -80,6 +80,11 @@ public:
     std::string getImageName() const;
 
     void            setColor(const LLUIColor& color) { mColor = color; }
+    // <VulkanStorm> read-only getters for the independent Vulkan UI renderer.
+    const LLUIColor& getColor() const { return mColor; }
+    bool             getUseDrawContextAlpha() const { return mUseDrawContextAlpha; }
+    std::string      getImageVkName() const { return mImagep.notNull() ? mImagep->getName() : mVkImgName; }
+    // </VulkanStorm>
     void            setImage(LLPointer<LLUIImage> image) { mImagep = image; }
     const LLPointer<LLUIImage> getImage() { return mImagep; }
 
@@ -102,6 +107,10 @@ private:
 
     LLUIColor mColor;
     LLPointer<LLUIImage> mImagep;
+    // <VulkanStorm> raw XUI image name (GL-free); mImagep is null on the
+    // Vulkan path, so the renderer resolves via this name.
+    std::string mVkImgName;
+    // </VulkanStorm>
 };
 
 #endif

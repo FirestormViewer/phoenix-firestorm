@@ -155,6 +155,8 @@ public:
 
     /*virtual*/ void reshape(S32 width, S32 height, bool called_from_parent = true);
     /*virtual*/ void draw();
+    // GL-free layout/state preparation used by the Vulkan view-tree walker.
+    void prepareVkDraw();
     /*virtual*/ bool handleMouseDown( S32 x, S32 y, MASK mask );
     /*virtual*/ bool handleHover( S32 x, S32 y, MASK mask );
     /*virtual*/ bool handleMouseUp( S32 x, S32 y, MASK mask );

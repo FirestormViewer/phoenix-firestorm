@@ -876,6 +876,22 @@ const LLFontDescriptor& LLFontGL::getFontDesc() const
     return mFontDescriptor;
 }
 
+// <VulkanStorm>
+bool LLFontGL::getVkFaceInfo(VkFaceInfo& out) const
+{
+    if (mFontFreetype.isNull())
+    {
+        return false;
+    }
+    out.filename = mFontFreetype->getName();
+    out.point_size = mFontFreetype->getPointSize();
+    out.weight = mFontFreetype->getFontWeight();
+    out.flags = mFontFreetype->getFontFlags();
+    out.hinting = static_cast<S32>(mFontFreetype->getHinting());
+    return !out.filename.empty() && out.point_size > 0.f;
+}
+// </VulkanStorm>
+
 // static
 void LLFontGL::initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::string& app_dir, const std::string& fonts_file, F32 size_mod, bool create_gl_textures)
 {

@@ -153,6 +153,17 @@ LLButton::LLButton(const LLButton::Params& p)
     mImageFlash(p.image_flash),
     mImagePressed(p.image_pressed),
     mImagePressedSelected(p.image_pressed_selected),
+    // <VulkanStorm> raw XUI names for the GL-free Vulkan path
+    mVkImgNameUnselected(p.image_unselected.vk_image_name.isProvided() ? p.image_unselected.vk_image_name() : ""),
+    mVkImgNameSelected(p.image_selected.vk_image_name.isProvided() ? p.image_selected.vk_image_name() : ""),
+    mVkImgNameHoverUnselected(p.image_hover_unselected.vk_image_name.isProvided() ? p.image_hover_unselected.vk_image_name() : ""),
+    mVkImgNameHoverSelected(p.image_hover_selected.vk_image_name.isProvided() ? p.image_hover_selected.vk_image_name() : ""),
+    mVkImgNameDisabled(p.image_disabled.vk_image_name.isProvided() ? p.image_disabled.vk_image_name() : ""),
+    mVkImgNameDisabledSelected(p.image_disabled_selected.vk_image_name.isProvided() ? p.image_disabled_selected.vk_image_name() : ""),
+    mVkImgNamePressed(p.image_pressed.vk_image_name.isProvided() ? p.image_pressed.vk_image_name() : ""),
+    mVkImgNamePressedSelected(p.image_pressed_selected.vk_image_name.isProvided() ? p.image_pressed_selected.vk_image_name() : ""),
+    mVkImgNameOverlay(p.image_overlay.vk_image_name.isProvided() ? p.image_overlay.vk_image_name() : ""),
+    // </VulkanStorm>
     mImageHoverSelected(p.image_hover_selected),
     mImageHoverUnselected(p.image_hover_unselected),
     mUnselectedLabelColor(p.label_color()),
@@ -492,6 +503,212 @@ void LLButton::onVisibilityChange(bool new_visibility)
     mFontBuffer.reset();
     return LLUICtrl::onVisibilityChange(new_visibility);
 }
+
+// <VulkanStorm> Read-only image selection for the independent Vulkan UI
+// renderer (M0 greenfield). Replicates the imagep + modulation color that
+// LLButton::draw() computes, without running any GL code. Returns the selected
+// image (may be null) and its color (already modulated by alpha).
+LLUIImage* LLButton::getStateImage(LLColor4& out_color, F32 alpha) const
+{
+    // NOTE: hasFocus()/hasMouseCapture()/mMouseDownTimer are const-safe reads
+    // used by draw(); pressed/hover are normally false on a settled login
+    // screen, so this resolves to the selected/unselected state image.
+    const bool selected = getToggleState();
+    const bool enabled = isInEnabledChain();
+
+    LLUIImage* imagep = NULL;
+    if (mNeedsHighlight)
+    {
+        if (selected)
+        {
+            imagep = mImageHoverSelected ? mImageHoverSelected.get() : mImageSelected.get();
+        }
+        else
+        {
+            imagep = mImageHoverUnselected ? mImageHoverUnselected.get() : mImageUnselected.get();
+        }
+    }
+    else
+    {
+        imagep = selected ? mImageSelected.get() : mImageUnselected.get();
+    }
+
+    if (!mImageDisabledSelected.isNull()
+        && ((enabled && getTentative()) || (!enabled && selected)))
+    {
+        imagep = mImageDisabledSelected.get();
+    }
+    else if (!mImageDisabled.isNull() && !enabled && !selected)
+    {
+        imagep = mImageDisabled.get();
+    }
+
+    LLColor4 disabled_color = mFadeWhenDisabled ? mDisabledImageColor.get() % 0.5f : mDisabledImageColor.get();
+    out_color = (enabled ? mImageColor.get() : disabled_color) % alpha;
+    return imagep;
+}
+
+std::string LLButton::getStateImageName(LLColor4& out_color, F32 alpha) const
+{
+    const bool selected = getToggleState();
+    const bool enabled = isInEnabledChain();
+
+    // Constructor fallbacks (llbutton.cpp): pressed defaults to the selected
+    // image, pressed_selected to unselected, disabled to unselected (when a
+    // custom unselected was provided and no explicit disabled name).
+    // Programmatic controls (notably floater close/minimize/help buttons) and
+    // LLTabContainer replace LLUIImage pointers after XUI parsing. Prefer the
+    // live pointer names so Vulkan sees the same active skin assets as GL.
+    const bool floater_title_button = getName().find("llfloater_") == 0;
+    const auto live_name = [floater_title_button](const LLPointer<LLUIImage>& image,
+                                                  const std::string& recorded)
+    {
+        // In GL-free startup, floater buttons later inherit the generic
+        // PushButton image even though buildButtons retained their real XUI
+        // icon name.  That generic pointer is not authoritative.
+        if (floater_title_button && !recorded.empty()) return recorded;
+        return image.notNull() ? image->getName() : recorded;
+    };
+    std::string unsel = live_name(mImageUnselected, mVkImgNameUnselected);
+    std::string sel   = live_name(mImageSelected, mVkImgNameSelected);
+    std::string hovU  = live_name(mImageHoverUnselected, mVkImgNameHoverUnselected);
+    std::string hovS  = live_name(mImageHoverSelected, mVkImgNameHoverSelected);
+    std::string liveDis = live_name(mImageDisabled, mVkImgNameDisabled);
+    std::string liveDisSel = live_name(mImageDisabledSelected, mVkImgNameDisabledSelected);
+    std::string livePress = live_name(mImagePressed, mVkImgNamePressed);
+    std::string livePressSel = live_name(mImagePressedSelected, mVkImgNamePressedSelected);
+    std::string dis   = liveDis.empty() && !unsel.empty() ? unsel : liveDis;
+    std::string disSel= liveDisSel.empty() && !sel.empty() ? sel : liveDisSel;
+    std::string press = livePress.empty() ? sel : livePress;
+    std::string pressSel = livePressSel.empty() ? unsel : livePressSel;
+
+    // LLUICtrlFactory reapplies the generic LLButton widget defaults after
+    // LLFloater builds its programmatic title controls, so even the retained
+    // parameter metadata can read PushButton_Off here.  Floater control names
+    // are a stable semantic contract; resolve them to the same logical image
+    // aliases as widgets/floater.xml. Themes remain free to remap the aliases.
+    if (floater_title_button)
+    {
+        std::string normal;
+        std::string pressed_icon;
+        if (getName() == "llfloater_close_btn")
+        {
+            normal = "Icon_Close_Foreground";
+            pressed_icon = "Icon_Close_Press";
+        }
+        else if (getName() == "llfloater_snooze_btn")
+        {
+            normal = "Icon_Snooze_Foreground";
+            pressed_icon = "Icon_Snooze_Press";
+        }
+        else if (getName() == "llfloater_restore_btn")
+        {
+            normal = "Icon_Restore_Foreground";
+            pressed_icon = "Icon_Restore_Press";
+        }
+        else if (getName() == "llfloater_minimize_btn")
+        {
+            normal = "Icon_Minimize_Foreground";
+            pressed_icon = "Icon_Minimize_Press";
+        }
+        else if (getName() == "llfloater_tear_off_btn")
+        {
+            normal = "tearoffbox.tga";
+            pressed_icon = "tearoff_pressed.tga";
+        }
+        else if (getName() == "llfloater_dock_btn")
+        {
+            normal = "Icon_Dock_Foreground";
+            pressed_icon = "Icon_Dock_Press";
+        }
+        else if (getName() == "llfloater_help_btn")
+        {
+            normal = "Icon_Help_Foreground";
+            pressed_icon = "Icon_Help_Press";
+        }
+        if (!normal.empty())
+        {
+            unsel = normal;
+            hovU = normal;
+            dis = normal;
+            sel = pressed_icon;
+            hovS = pressed_icon;
+            disSel = pressed_icon;
+            press = pressed_icon;
+            pressSel = normal;
+        }
+    }
+
+    std::string name;
+    if (mNeedsHighlight)
+    {
+        name = selected ? (hovS.empty() ? sel : hovS)
+                        : (hovU.empty() ? unsel : hovU);
+    }
+    else
+    {
+        name = selected ? sel : unsel;
+    }
+
+    if (!disSel.empty() && ((enabled && getTentative()) || (!enabled && selected)))
+    {
+        name = disSel;
+    }
+    else if (!dis.empty() && !enabled && !selected)
+    {
+        name = dis;
+    }
+    (void)press; (void)pressSel; // pressed/hover are transient; settled UI uses the above
+
+    LLColor4 disabled_color = mFadeWhenDisabled ? mDisabledImageColor.get() % 0.5f : mDisabledImageColor.get();
+    out_color = (enabled ? mImageColor.get() : disabled_color) % alpha;
+    return name;
+}
+
+F32 LLButton::updateVkGlowStrength()
+{
+    // Floater title controls use the hover-glow contract from floater.xml
+    // (hover_glow_amount = 0.33). Their semantic Vulkan image alias can be
+    // available even when the corresponding GL hover pointer is not.
+    const bool floater_title_button = getName().find("llfloater_") == 0;
+    const bool selected = getToggleState();
+    const bool missing_hover_image = selected ? mImageHoverSelected.isNull()
+                                               : mImageHoverUnselected.isNull();
+    const bool use_glow = mNeedsHighlight &&
+                          (floater_title_button || missing_hover_image);
+    const F32 target = use_glow ? mHoverGlowStrength : 0.f;
+    mCurGlowStrength = lerp(mCurGlowStrength, target,
+                            LLSmoothInterpolation::getInterpolant(0.05f));
+    return mCurGlowStrength;
+}
+
+LLButton::VkOverlayState LLButton::getVkOverlayState(F32 alpha) const
+{
+    VkOverlayState state;
+    state.name = mVkImgNameOverlay;
+    state.alignment = mImageOverlayAlignment;
+    state.right_delta = mImageOverlayRightDelta;
+    state.left_pad = mLeftHPad;
+    state.right_pad = mRightHPad;
+    state.top_pad = mImageOverlayTopPad;
+    state.bottom_pad = mImageOverlayBottomPad;
+
+    if (!isInEnabledChain())
+    {
+        state.color = mImageOverlayDisabledColor.get();
+    }
+    else if (getToggleState())
+    {
+        state.color = mImageOverlaySelectedColor.get();
+    }
+    else
+    {
+        state.color = mImageOverlayColor.get();
+    }
+    state.color.mV[VALPHA] *= alpha;
+    return state;
+}
+// </VulkanStorm>
 
 void LLButton::dirtyRect()
 {
@@ -1270,6 +1487,41 @@ const LLUIString& LLButton::getCurrentLabel() const
 {
     return getToggleState() ? mSelectedLabel : mUnselectedLabel;
 }
+
+// <VulkanStorm>
+LLButton::VkLabelState LLButton::getVkLabelState(F32 alpha) const
+{
+    VkLabelState out;
+    out.text = getCurrentLabel().getWString();
+    LLWStringUtil::trim(out.text);
+    out.font = mGLFont;
+    out.halign = mHAlign;
+    out.max_pixels = llmax(0, getRect().getWidth() - mLeftHPad - mRightHPad);
+    out.ellipses = mUseEllipses;
+    out.soft_shadow = mDropShadowedText;
+
+    const bool enabled = isInEnabledChain();
+    if (enabled)
+    {
+        out.color = getToggleState() ? mSelectedLabelColor.get() : mUnselectedLabelColor.get();
+    }
+    else
+    {
+        out.color = getToggleState() ? mDisabledSelectedLabelColor.get() : mDisabledLabelColor.get();
+    }
+    out.color.mV[VALPHA] *= alpha;
+
+    const LLRect screen = calcScreenRect();
+    const S32 text_left = mLeftHPad;
+    const S32 text_right = getRect().getWidth() - mRightHPad;
+    S32 x = text_left;
+    if (mHAlign == LLFontGL::RIGHT) x = text_right;
+    else if (mHAlign == LLFontGL::HCENTER) x = text_left + out.max_pixels / 2;
+    out.screen_x = (F32)(screen.mLeft + x);
+    out.screen_baseline = (F32)(screen.mBottom + getRect().getHeight() / 2 + mBottomVPad);
+    return out;
+}
+// </VulkanStorm>
 
 void LLButton::setDropShadowedText(bool b)
 {

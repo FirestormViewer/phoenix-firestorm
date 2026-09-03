@@ -99,7 +99,8 @@ LLComboBox::LLComboBox(const LLComboBox::Params& p)
     mTextChangedCallback(p.text_changed_callback()),
     mListPosition(p.list_position),
     mLastSelectedIndex(-1),
-    mLabel(p.label)
+    mLabel(p.label),
+    mVkArrowImageWidth(0)
 {
     // Text label button
 
@@ -521,7 +522,7 @@ void LLComboBox::setButtonVisible(bool visible)
         LLRect text_entry_rect(0, getRect().getHeight(), getRect().getWidth(), 0);
         if (visible)
         {
-            S32 arrow_width = mArrowImage ? mArrowImage->getWidth() : 0;
+            S32 arrow_width = mArrowImage ? mArrowImage->getWidth() : mVkArrowImageWidth;
             text_entry_rect.mRight -= llmax(8,arrow_width) + 2 * BTN_DROP_SHADOW;
         }
         //mTextEntry->setRect(text_entry_rect);
@@ -617,7 +618,7 @@ void LLComboBox::createLineEditor(const LLComboBox::Params& p)
     LLRect rect = getLocalRect();
     if (mAllowTextEntry)
     {
-        S32 arrow_width = mArrowImage ? mArrowImage->getWidth() : 0;
+        S32 arrow_width = mArrowImage ? mArrowImage->getWidth() : mVkArrowImageWidth;
         S32 shadow_size = BTN_DROP_SHADOW;
         mButton->setRect(LLRect( getRect().getWidth() - llmax(8,arrow_width) - 2 * shadow_size,
                                 rect.mTop, rect.mRight, rect.mBottom));
@@ -657,6 +658,16 @@ void LLComboBox::createLineEditor(const LLComboBox::Params& p)
             mTextEntry->setVisible(false);
         }
     }
+}
+
+void LLComboBox::setVkArrowImageWidth(S32 width)
+{
+    if (width <= 0 || width == mVkArrowImageWidth)
+    {
+        return;
+    }
+    mVkArrowImageWidth = width;
+    imageLoaded();
 }
 
 // <FS:Ansariel> For setting the focus to the LLLineEditor
@@ -1240,7 +1251,7 @@ void LLComboBox::imageLoaded()
     if (mAllowTextEntry)
     {
         LLRect rect = getLocalRect();
-        S32 arrow_width = mArrowImage ? mArrowImage->getWidth() : 0;
+        S32 arrow_width = mArrowImage ? mArrowImage->getWidth() : mVkArrowImageWidth;
         S32 shadow_size = BTN_DROP_SHADOW;
         mButton->setRect(LLRect(getRect().getWidth() - llmax(8, arrow_width) - 2 * shadow_size,
             rect.mTop, rect.mRight, rect.mBottom));

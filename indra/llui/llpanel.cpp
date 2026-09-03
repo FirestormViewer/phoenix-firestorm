@@ -104,6 +104,8 @@ LLPanel::LLPanel(const LLPanel::Params& p)
     mBgAlphaImageOverlay(p.bg_alpha_image_overlay),
     mBgOpaqueImage(p.bg_opaque_image()),
     mBgAlphaImage(p.bg_alpha_image()),
+    mVkBgOpaqueImage(p.bg_opaque_image.vk_image_name.isProvided() ? p.bg_opaque_image.vk_image_name() : ""),
+    mVkBgAlphaImage(p.bg_alpha_image.vk_image_name.isProvided() ? p.bg_alpha_image.vk_image_name() : ""),
     mDefaultBtn(NULL),
     mBorder(NULL),
     mLabel(p.label),
@@ -472,6 +474,10 @@ void LLPanel::initFromParams(const LLPanel::Params& p)
     setTransparentColor(p.bg_alpha_color);
     mBgOpaqueImage = p.bg_opaque_image();
     mBgAlphaImage = p.bg_alpha_image();
+    mVkBgOpaqueImage = p.bg_opaque_image.vk_image_name.isProvided()
+                           ? p.bg_opaque_image.vk_image_name() : "";
+    mVkBgAlphaImage = p.bg_alpha_image.vk_image_name.isProvided()
+                          ? p.bg_alpha_image.vk_image_name() : "";
     mBgOpaqueImageOverlay = p.bg_opaque_image_overlay;
     mBgAlphaImageOverlay = p.bg_alpha_image_overlay;
 

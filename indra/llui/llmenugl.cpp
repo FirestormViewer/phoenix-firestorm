@@ -578,6 +578,51 @@ void LLMenuItemGL::draw( void )
     }
 }
 
+// <VulkanStorm>
+LLMenuItemGL::VkDrawState LLMenuItemGL::getVkDrawState(F32 alpha)
+{
+    // OpenGL refreshes these derived strings while arranging/drawing menus.
+    // Rebuild them here because the Vulkan path intentionally skips draw().
+    buildDrawLabel();
+
+    VkDrawState out;
+    out.kind = dynamic_cast<LLMenuItemTearOffGL*>(this)
+        ? VkDrawState::Kind::TearOff
+        : dynamic_cast<LLMenuItemSeparatorGL*>(this)
+            ? VkDrawState::Kind::Separator : VkDrawState::Kind::Item;
+    out.label = mLabel.getWString();
+    out.bool_label = mDrawBoolLabel.getWString();
+    out.accel_label = mDrawAccelLabel.getWString();
+    out.branch_label = mDrawBranchLabel.getWString();
+    out.font = mFont;
+    out.highlight = mHighlight;
+    out.enabled = getEnabled();
+    out.brief = mBriefItem;
+    out.menu_bar = dynamic_cast<LLMenuBarGL*>(getMenu()) != nullptr;
+
+    if (ll::ui::SearchableControl::getHighlighted())
+    {
+        out.foreground = ll::ui::SearchableControl::getHighlightFontColor();
+    }
+    else if (mHighlight)
+    {
+        out.foreground = mHighlightForeground.get();
+    }
+    else if (getEnabled() && !mDrawTextDisabled)
+    {
+        out.foreground = mEnabledColor.get();
+    }
+    else
+    {
+        out.foreground = mDisabledColor.get();
+    }
+    out.foreground.mV[VALPHA] *= alpha;
+    out.highlight_background = mHighlightBackground.get();
+    out.highlight_background.mV[VALPHA] *= alpha;
+    return out;
+}
+// </VulkanStorm>
+
 bool LLMenuItemGL::setLabelArg( const std::string& key, const LLStringExplicit& text )
 {
     mLabel.setArg(key, text);
@@ -3262,6 +3307,19 @@ bool LLMenuGL::handleScrollWheel( S32 x, S32 y, S32 clicks )
     return true;
 }
 
+
+// <VulkanStorm> Read-only bg-strip color for the independent Vulkan UI
+// renderer: the same mBackgroundColor * FSMenuBackgroundAlpha LLMenuGL::draw()
+// computes. No GL code is executed.
+LLColor4 LLMenuGL::getVkBgColor() const
+{
+    // <FS:PP> Semi-transparent menu backgrounds
+    static LLUICachedControl<F32> menu_bg_alpha("FSMenuBackgroundAlpha");
+    LLColor4 bg_color = mBackgroundColor.get();
+    bg_color.mV[VALPHA] *= menu_bg_alpha;
+    return bg_color;
+}
+// </VulkanStorm>
 
 void LLMenuGL::draw( void )
 {

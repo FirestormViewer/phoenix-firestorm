@@ -167,6 +167,14 @@ public:
 
     const std::string& getName() const;
 
+    // <VulkanStorm> Backend-neutral face metadata used by the independent
+    // Vulkan text rasterizer.  These are CPU-side FreeType inputs only; no GL
+    // cache or texture object is exposed.
+    F32 getPointSize() const { return mPointSize; }
+    EFontHinting getHinting() const { return mHinting; }
+    S32 getFontFlags() const { return mFontFlags; }
+    // </VulkanStorm>
+
     void       dumpFontBitmaps() const;
     const LLFontBitmapCache* getFontBitmapCache() const;
 

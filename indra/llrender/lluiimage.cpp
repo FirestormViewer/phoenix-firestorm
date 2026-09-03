@@ -130,6 +130,15 @@ namespace LLInitParam
 {
     void ParamValue<LLUIImage*>::updateValueFromBlock()
     {
+        // <VulkanStorm> retain the raw XUI name for the GL-free Vulkan path.
+        // name() holds either the explicit XUI value or the template default.
+        // Pass true so the name is marked provided (constructors check
+        // vk_image_name.isProvided() before reading it).
+        if (!name().empty() && name() != "none")
+        {
+            vk_image_name.set(name(), true);
+        }
+        // </VulkanStorm>
         // The keyword "none" is specifically requesting a null image
         // do not default to current value. Used to overwrite template images.
         if (name() == "none")

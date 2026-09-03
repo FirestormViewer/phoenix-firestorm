@@ -70,6 +70,15 @@ public:
         mScaleStyle = style;
     }
 
+    // <VulkanStorm> GL-free region queries for the independent Vulkan UI
+    // renderer (M0 greenfield): read the normalized clip/scale regions + scale
+    // style without touching the GL-coupled texture (mImage) or its lazy
+    // dimension getters. Pure accessors; no behavior change.
+    LL_FORCE_INLINE const LLRectf& getClipRegion() const { return mClipRegion; }
+    LL_FORCE_INLINE const LLRectf& getScaleRegion() const { return mScaleRegion; }
+    LL_FORCE_INLINE EScaleStyle getScaleStyle() const { return mScaleStyle; }
+    // </VulkanStorm>
+
     LL_FORCE_INLINE LLPointer<LLTexture> getImage() { return mImage; }
     LL_FORCE_INLINE const LLPointer<LLTexture>& getImage() const { return mImage; }
 
@@ -125,11 +134,27 @@ namespace LLInitParam
     public:
         Optional<std::string> name;
 
+        // <VulkanStorm> Raw XUI image name, retained so the Vulkan UI renderer
+        // can resolve the image via the GL-free LLVKUIImage registry even when
+        // GL image loading is off (getUIImage() returns null). Metadata only.
+        Optional<std::string> vk_image_name;
+        // </VulkanStorm>
+
         ParamValue(LLUIImage* const& image = NULL)
         :   super_t(image)
         {
             updateBlockFromValue(false);
             addSynonym(name, "name");
+            // <VulkanStorm> capture the template-default name (set by the
+            // widget .xml default) for the GL-free Vulkan path. updateValue-
+            // FromBlock() also re-captures on explicit overrides. Pass true so
+            // the name is marked provided (the widget constructors check
+            // vk_image_name.isProvided() before reading it).
+            if (name.isProvided() && !name().empty() && name() != "none")
+            {
+                vk_image_name.set(name(), true);
+            }
+            // </VulkanStorm>
         }
 
         void updateValueFromBlock();

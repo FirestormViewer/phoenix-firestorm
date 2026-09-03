@@ -219,6 +219,22 @@ public:
 
     bool            toggleState();
     bool            getToggleState() const;
+
+    // <VulkanStorm> Read-only query for the independent Vulkan UI renderer (M0
+    // greenfield): return the button image LLButton::draw() would pick for the
+    // current state (pressed/selected/hover/disabled precedence), plus the
+    // modulation color. Replicates the RESULT of the GL draw's image selection
+    // without executing GL. May be null (button has no image). No behavior
+    // change.
+    LLUIImage* getStateImage(LLColor4& out_color, F32 alpha) const;
+    // Name-keyed variant: returns the image NAME (registry key) from the raw
+    // XUI name (works even when the LLUIImage object is null on the Vulkan
+    // path). Empty = no image.
+    std::string getStateImageName(LLColor4& out_color, F32 alpha) const;
+    // Advance and return the additive hover glow used by LLButton::draw().
+    // Called only by the Vulkan renderer; the OpenGL lifecycle is unchanged.
+    F32 updateVkGlowStrength();
+    // </VulkanStorm>
     void            setToggleState(bool b);
 
     void            setHighlight(bool b);
@@ -272,6 +288,36 @@ public:
     void            setFont(const LLFontGL* font);
     const LLFontGL* getFont() const override { return mGLFont; }
     const std::string& getText() const override { return getCurrentLabel().getString(); }
+
+    // <VulkanStorm> Read-only label result used by the Vulkan UI walk.
+    struct VkLabelState
+    {
+        LLWString text;
+        const LLFontGL* font = nullptr;
+        LLColor4 color;
+        F32 screen_x = 0.f;
+        F32 screen_baseline = 0.f;
+        S32 max_pixels = 0;
+        LLFontGL::HAlign halign = LLFontGL::LEFT;
+        bool ellipses = false;
+        bool soft_shadow = false;
+    };
+    VkLabelState getVkLabelState(F32 alpha) const;
+
+    // The OpenGL button path draws image_overlay as a distinct, native-sized
+    // layer after the button background. Keep its GL-free rendering state.
+    struct VkOverlayState
+    {
+        std::string name;
+        LLColor4 color;
+        LLFontGL::HAlign alignment = LLFontGL::HCENTER;
+        S32 right_delta = 0;
+        S32 left_pad = 0;
+        S32 right_pad = 0;
+        S32 top_pad = 0;
+        S32 bottom_pad = 0;
+    };
+    VkOverlayState getVkOverlayState(F32 alpha) const;
 
     S32             getLastDrawCharsCount() const { return mLastDrawCharsCount; }
     bool            labelIsTruncated() const;
@@ -375,6 +421,19 @@ protected:
     LLUIColor                   mFlashBgColor;
     // <FS:Ansariel> [FS communication UI]
     LLUIColor                   mFlashAltBgColor;
+
+    // <VulkanStorm> raw XUI image names (GL-free); the GL-coupled LLUIImage
+    // pointers stay null on the Vulkan path, so the renderer keys off these.
+    std::string                 mVkImgNameUnselected,
+                                mVkImgNameSelected,
+                                mVkImgNameHoverUnselected,
+                                mVkImgNameHoverSelected,
+                                mVkImgNameDisabled,
+                                mVkImgNameDisabledSelected,
+                                mVkImgNamePressed,
+                                mVkImgNamePressedSelected;
+    std::string                 mVkImgNameOverlay;
+    // </VulkanStorm>
 
     LLUIColor                   mImageColor;
     LLUIColor                   mDisabledImageColor;

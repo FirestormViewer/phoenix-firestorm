@@ -12,11 +12,19 @@
 #include "llvksession.h"
 
 #include "llerror.h"
+#include "llfile.h"
+
+#include <cstdlib>
 
 #if LL_WINDOWS
 
 #include "llvkcontext.h"
 #include "llvkgpufacts.h"
+#include "llvkui2d.h"
+#include "llvkuiimage.h"
+#include "llvktext.h"
+#include "llvkuirender.h"
+#include "llvkuitestscene.h"
 #include "llwindow.h"
 
 namespace
@@ -26,12 +34,61 @@ namespace
     uint32_t     s_width = 0;
     uint32_t     s_height = 0;
 
-    // Boot-path clear color. Matches the Phase-1 self-test teal so a Vulkan-
-    // owned frame is unmistakable during bring-up.
-    constexpr float kClearR = 0.0f;
-    constexpr float kClearG = 0.5f;
-    constexpr float kClearB = 0.5f;
-    constexpr float kClearA = 1.0f;
+    // Frame clear color. Matches the GL login path (transparent black) so
+    // byte-exact capture diffs compare like with like; VULKANSTORM_CLEAR_TEAL=1
+    // restores the bring-up teal so uncovered regions stay unmistakable while
+    // debugging.
+    bool tealClear()
+    {
+        static const bool s = getenv("VULKANSTORM_CLEAR_TEAL") != nullptr;
+        return s;
+    }
+    const float kClearR = 0.0f;
+    const float kClearG = tealClear() ? 0.5f : 0.0f;
+    const float kClearB = tealClear() ? 0.5f : 0.0f;
+    const float kClearA = tealClear() ? 1.0f : 0.0f;
+
+    // <VulkanStorm> One-shot capture arming (see header). Set by newview each
+    // frame based on the startup state.
+    bool s_capture_armed = false;
+    // </VulkanStorm>
+
+    // <VulkanStorm> M0 capture harness: dump the presented frame to a raw RGBA8
+    // file (8-byte LE width/height header + pixels) when VULKANSTORM_CAPTURE is
+    // set. One-shot after a settle delay so the frame is stable.
+    void captureFrameOnce()
+    {
+        static const char* cap = getenv("VULKANSTORM_CAPTURE");
+        if (!cap || !*cap) return;
+        if (!s_capture_armed) return;   // login UI not up yet (set by newview)
+        static int s_frame = 0;
+        const int kSettleFrames = 90;   // let the UI settle before capturing
+        if (++s_frame != kSettleFrames) return;
+
+        std::vector<uint8_t> rgba;
+        uint32_t w = 0, h = 0;
+        if (s_context && s_context->readbackSwapchain(rgba, w, h) && w > 0 && h > 0)
+        {
+            LLFILE* f = LLFile::fopen(cap, "wb");
+            if (f)
+            {
+                uint32_t header[2] = { w, h };
+                fwrite(header, sizeof(header), 1, f);
+                fwrite(rgba.data(), rgba.size(), 1, f);
+                LLFile::close(f);
+                LL_INFOS("Vulkan") << "Captured frame to " << cap << " (" << w << "x" << h << ")" << LL_ENDL;
+            }
+            else
+            {
+                LL_WARNS("Vulkan") << "captureFrameOnce: fopen failed for " << cap << LL_ENDL;
+            }
+        }
+        else
+        {
+            LL_WARNS("Vulkan") << "captureFrameOnce: readbackSwapchain failed (w=" << w << " h=" << h << ")" << LL_ENDL;
+        }
+    }
+    // </VulkanStorm>
 
     void queryClientSize(LLWindow* window, uint32_t& width, uint32_t& height)
     {
@@ -133,6 +190,13 @@ bool LLVKSession::isRunning()
     return s_context != nullptr;
 }
 
+// <VulkanStorm> Phase 3 v2 (M0 greenfield)
+void LLVKSession::armCapture(bool armed)
+{
+    s_capture_armed = armed;
+}
+// </VulkanStorm>
+
 void LLVKSession::renderFrame()
 {
     if (!s_context)
@@ -144,6 +208,84 @@ void LLVKSession::renderFrame()
         LL_WARNS("Vulkan") << "Session: renderClearFrame failed" << LL_ENDL;
     }
 }
+
+// <VulkanStorm> Phase 3 v2 (M0 greenfield)
+void LLVKSession::renderUIFrame(LLView* root, float ui_scale_x, float ui_scale_y)
+{
+    if (!s_context)
+    {
+        return;
+    }
+
+    // Lazily create the 2D pipeline once the device exists (shaders load on
+    // first use; createSwapchain rebuilds the pipelines on resize).
+    if (s_context->pipeline2D(LLVKContext::Blend2D::Alpha) == VK_NULL_HANDLE)
+    {
+        std::string error;
+        if (!s_context->create2DPipeline(error))
+        {
+            LL_WARNS("Vulkan") << "Session: create2DPipeline failed: " << error << LL_ENDL;
+            return;
+        }
+        // <VulkanStorm> M2: build the GL-free UI-image registry once the 2D
+        // pipeline (sampler/descriptor pool) exists.
+        LLVKUIImage::init(s_context);
+        LLVKText::init(s_context);
+    }
+
+    // Viewer-side hooks upload dynamic resources (notably media-plugin pixel
+    // surfaces) before dynamic rendering begins.
+    LLVKUIRender::prepareFrame(s_context, root);
+
+    // Begin the 2D render pass (clears to the boot teal so any uncovered region
+    // is unmistakable during bring-up).
+    VkCommandBuffer cmd = s_context->begin2DFrame(kClearR, kClearG, kClearB, kClearA);
+    if (cmd == VK_NULL_HANDLE)
+    {
+        return; // swapchain out of date; the caller resizes next frame
+    }
+
+    // Begin the sink, render the widget tree from its readable state, flush.
+    LLVKUI2DSink::get().begin(s_context, cmd);
+    // <VulkanStorm> UI A/B harness (VULKANSTORM_UITEST=1): emit the fixed test
+    // scene instead of walking the live tree, so the capture can be diffed
+    // byte-for-byte against the GL reference scene (newview/llviewerdisplay).
+    if (LLVKUITestScene::enabled())
+    {
+        LLVKUITestScene::emitVulkan();
+    }
+    else
+    {
+        LLVKUIRender::renderFrame(s_context, root, s_width, s_height, ui_scale_x, ui_scale_y);
+    }
+    // </VulkanStorm>
+
+    // <VulkanStorm> M0 diagnostic: read the counters BEFORE end() zeroes them.
+    // VULKANSTORM_UI_DEBUG=1 enables it.
+    static bool s_dbg = getenv("VULKANSTORM_UI_DEBUG") != nullptr;
+    if (s_dbg)
+    {
+        static int s_f = 0;
+        if ((s_f++ % 60) == 0)
+        {
+            LL_INFOS("Vulkan") << "renderUIFrame: pendingVerts=" << LLVKUI2DSink::get().pendingVerts()
+                               << " flushes=" << LLVKUI2DSink::get().frameFlushes()
+                               << " sinkActive=" << (LLVKUI2DSink::get().isActive() ? 1 : 0)
+                               << " extent=" << s_width << "x" << s_height << LL_ENDL;
+        }
+    }
+    // </VulkanStorm>
+
+    LLVKUI2DSink::get().end();
+
+    if (!s_context->end2DFrame())
+    {
+        LL_WARNS("Vulkan") << "Session: end2DFrame failed" << LL_ENDL;
+    }
+
+    captureFrameOnce();
+}
+// </VulkanStorm>
 
 void LLVKSession::resizeIfNeeded(LLWindow* window)
 {
@@ -177,6 +319,12 @@ void LLVKSession::stop()
     {
         return;
     }
+    // UI registries own Vulkan images.  Drain submitted frames first, then
+    // release them while the device/allocator/descriptor pool are alive.
+    s_context->waitIdle();
+    LLVKUI2DSink::get().shutdown(s_context);
+    LLVKText::shutdown();
+    LLVKUIImage::shutdown();
     // destroy() idles the device and releases the swapchain + surface.
     s_context->destroy();
     delete s_context;

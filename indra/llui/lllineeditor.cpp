@@ -160,6 +160,11 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
     mBgImage( p.background_image ),
     mBgImageDisabled( p.background_image_disabled ),
     mBgImageFocused( p.background_image_focused ),
+    // <VulkanStorm> raw XUI bg image names for the GL-free Vulkan path
+    mVkBgImageName(p.background_image.vk_image_name.isProvided() ? p.background_image.vk_image_name() : ""),
+    mVkBgImageDisabledName(p.background_image_disabled.vk_image_name.isProvided() ? p.background_image_disabled.vk_image_name() : ""),
+    mVkBgImageFocusedName(p.background_image_focused.vk_image_name.isProvided() ? p.background_image_focused.vk_image_name() : ""),
+    // </VulkanStorm>
     mShowImageFocused( p.bg_image_always_focused ),
     mShowLabelFocused( p.show_label_focused ),
     mUseBgColor(p.use_bg_color),
@@ -1894,6 +1899,74 @@ void LLLineEditor::drawBackground()
         image->draw(getLocalRect(), tmp_color);
     }
 }
+
+// <VulkanStorm> Read-only background selection for the independent Vulkan UI
+// renderer. Mirrors LLLineEditor::drawBackground()'s state choice exactly
+// (same mUseBgColor / mReadOnly / focus precedence and focus-border inputs),
+// but returns the raw XUI image NAME and colors instead of touching
+// LLUIImage/gl_rect_2d. No GL code is executed.
+LLLineEditor::VkBackground LLLineEditor::getVkBackground(F32 alpha) const
+{
+    VkBackground out;
+    out.solid_color = mUseBgColor;
+    out.focus_border = false;
+    out.focus_border_width = 0;
+    if (mUseBgColor)
+    {
+        out.bg_color = mBgColor.get() % alpha;
+        return out;
+    }
+
+    const bool has_focus = hasFocus();
+    if (mReadOnly)
+    {
+        out.image_name = mVkBgImageDisabledName;
+    }
+    else if (has_focus || mShowImageFocused)
+    {
+        out.image_name = mVkBgImageFocusedName;
+    }
+    else
+    {
+        out.image_name = mVkBgImageName;
+    }
+
+    // drawBackground() returns early when the image is null; on the Vulkan
+    // path the name stands in for the pointer, so no name = no border either.
+    if (has_focus && mDrawFocusBorder && !out.image_name.empty())
+    {
+        out.focus_border = true;
+        out.focus_color = gFocusMgr.getFocusColor();
+        out.focus_color.setAlpha(alpha);
+        out.focus_border_width = gFocusMgr.getFocusFlashWidth();
+    }
+    return out;
+}
+
+LLLineEditor::VkTextState LLLineEditor::getVkTextState(F32 alpha) const
+{
+    VkTextState out;
+    LLRect background(0, getRect().getHeight(), getRect().getWidth(), 0);
+    background.stretch(-mBorderThickness);
+    const S32 vpad = (background.getHeight() - mGLFont->getLineHeight()) / 2
+                   + (mSpellCheck ? 1 : 0);
+    LLRect screen = calcScreenRect();
+    out.font = mGLFont;
+    out.text = mText.getWString().substr(llclamp(mScrollHPos, 0, mText.length()));
+    if (mDrawAsterixes)
+    {
+        const LLWString bullet = utf8str_to_wstring(PASSWORD_ASTERISK);
+        out.text.assign(out.text.size(), bullet.empty() ? (llwchar)'*' : bullet[0]);
+    }
+    out.color = mReadOnly ? mReadOnlyFgColor.get()
+              : getTentative() ? mTentativeFgColor.get() : mFgColor.get();
+    out.color.mV[VALPHA] = alpha;
+    out.screen_x = (F32)(screen.mLeft + mTextLeftEdge);
+    out.screen_baseline = (F32)(screen.mBottom + background.mBottom + vpad);
+    out.max_pixels = llmax(0, mTextRightEdge - mTextLeftEdge);
+    return out;
+}
+// </VulkanStorm>
 
 //virtual
 void LLLineEditor::draw()

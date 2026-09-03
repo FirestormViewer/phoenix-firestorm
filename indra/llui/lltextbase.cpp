@@ -2194,6 +2194,173 @@ LLRect LLTextBase::getTextBoundingRect()
     return mTextBoundingRect;
 }
 
+// <VulkanStorm>
+void LLTextBase::getVkTextRuns(F32 alpha, std::vector<VkTextRun>& out)
+{
+    reflow();
+    const LLWString& source = useLabel() ? mLabel.getWString() : getWText();
+    if (!mFont || source.empty())
+    {
+        return;
+    }
+
+    const LLRect document = mDocumentView ? mDocumentView->getRect() : LLRect();
+    const LLRect owner_screen = calcScreenRect();
+    const bool inverted_owner = owner_screen.mTop < owner_screen.mBottom;
+
+    // LLTextBase::draw() installs this local clip before drawing the document.
+    // The Vulkan walk bypasses draw(), so carry the same clip into each run.
+    LLRect clip_local = mVisibleTextRect;
+    if (mScroller)
+    {
+        mScroller->localRectToOtherView(mScroller->getContentWindowRect(),
+                                        &clip_local, this);
+    }
+    if (clip_local.mTop > 2)
+    {
+        clip_local.mTop -= 2; // Firestorm's scrolling-text top-edge correction.
+    }
+    LLRect clip_screen;
+    localRectToScreen(clip_local, &clip_screen);
+    clip_screen.intersectWith(owner_screen);
+
+    // Toast alert panels are built inside a top-left-layout wrapper whose
+    // transient shape can have a negative height. OpenGL's nested matrix and
+    // clipping path normalizes that shape while drawing. The state-reading
+    // Vulkan walk has to reproduce the normalized result explicitly.
+    // A short alert already fits its allocated text box, so its malformed
+    // transient scrollbar must not become visible merely because the raw
+    // rectangle is inverted.
+    if (inverted_owner && mScroller)
+    {
+        if (LLView* vertical = mScroller->getChildView("scrollable vertical", false))
+        {
+            vertical->setVisible(false);
+        }
+        if (LLView* horizontal = mScroller->getChildView("scrollable horizontal", false))
+        {
+            horizontal->setVisible(false);
+        }
+    }
+
+    // Alert toasts use a legacy top-left wrapper whose text rectangle remains
+    // transiently inverted. Normal visible-line/scissor calculations cannot
+    // operate on it, so preserve the established reconstructed alert layout.
+    if (inverted_owner)
+    {
+        LLColor4 color = mFgColor.get();
+        color.mV[VALPHA] *= alpha;
+        for (const line_info& line : mLineInfoList)
+        {
+            const S32 start = llclamp(line.mDocIndexStart, 0, (S32)source.size());
+            const S32 end = llclamp(line.mDocIndexEnd, start, (S32)source.size());
+            if (end <= start) continue;
+
+            VkTextRun run;
+            run.text = source.substr(start, end - start);
+            run.font = mFont;
+            run.screen_rect.mLeft = owner_screen.mLeft + line.mRect.mLeft;
+            run.screen_rect.mRight = owner_screen.mLeft + line.mRect.mRight;
+            run.screen_rect.mBottom = owner_screen.mBottom + line.mRect.mBottom;
+            run.screen_rect.mTop = owner_screen.mBottom + line.mRect.mTop;
+            run.color = color;
+            run.valign = mTextVAlign;
+            run.ellipses = mUseEllipses;
+            run.clip = false;
+            out.push_back(run);
+        }
+        return;
+    }
+    const std::pair<S32, S32> visible = getVisibleLines(mClipPartial);
+    const S32 first_line = llclamp(visible.first, 0, (S32)mLineInfoList.size());
+    const S32 last_line = llclamp(visible.second, first_line,
+                                  (S32)mLineInfoList.size());
+    for (S32 line_index = first_line; line_index < last_line; ++line_index)
+    {
+        const line_info& line = mLineInfoList[line_index];
+        const S32 start = llclamp(line.mDocIndexStart, 0, (S32)source.size());
+        const S32 end = llclamp(line.mDocIndexEnd, start, (S32)source.size());
+        if (end <= start)
+        {
+            continue;
+        }
+        LLRect screen;
+        if (inverted_owner)
+        {
+            // The bottom edge and width remain valid. Rebuild the screen rect
+            // upward from that edge and use the unscrolled line coordinates;
+            // applying document.mBottom here would double the inverted height.
+            screen.mLeft = owner_screen.mLeft + line.mRect.mLeft;
+            screen.mRight = owner_screen.mLeft + line.mRect.mRight;
+            screen.mBottom = owner_screen.mBottom + line.mRect.mBottom;
+            screen.mTop = owner_screen.mBottom + line.mRect.mTop;
+        }
+        else
+        {
+            LLRect local = line.mRect;
+            local.translate(document.mLeft, document.mBottom);
+            localRectToScreen(local, &screen);
+        }
+        // OpenGL draws each intersection of a visual line and an LLTextSegment
+        // independently. Preserve that segmentation so skin colors, readonly
+        // colors, link colors, fonts, alpha and shadows survive in Vulkan.
+        segment_set_t::iterator segment = getSegIterContaining(start);
+        S32 cursor = start;
+        F32 screen_x = (F32)screen.mLeft;
+        while (cursor < end && segment != mSegments.end())
+        {
+            LLTextSegmentPtr segmentp = *segment;
+            if (segmentp.isNull() || segmentp->getEnd() <= cursor)
+            {
+                ++segment;
+                continue;
+            }
+
+            const S32 seg_start = llmax(cursor, segmentp->getStart());
+            const S32 seg_end = llmin(end, segmentp->getEnd());
+            if (seg_end <= seg_start)
+            {
+                ++segment;
+                continue;
+            }
+
+            F32 segment_width = 0.f;
+            S32 segment_height = 0;
+            segmentp->getDimensionsF32(seg_start - segmentp->getStart(),
+                                       seg_end - seg_start,
+                                       segment_width, segment_height);
+
+            LLStyleConstSP style = segmentp->getStyle();
+            if (dynamic_cast<LLNormalTextSegment*>(segmentp.get()) &&
+                style.notNull() && style->isVisible() && !style->isImage())
+            {
+                VkTextRun run;
+                run.text = source.substr(seg_start, seg_end - seg_start);
+                run.font = style->getFont();
+                run.screen_rect = screen;
+                run.screen_rect.mLeft = ll_round(screen_x);
+                run.screen_rect.mRight = ll_round(screen_x + segment_width);
+                run.clip_rect = clip_screen;
+                run.color = (mReadOnly ? style->getReadOnlyColor().get()
+                                       : style->getColor().get())
+                            % (alpha * style->getAlpha());
+                run.valign = mTextVAlign;
+                run.shadow = style->getShadowType();
+                run.ellipses = mUseEllipses;
+                out.push_back(run);
+            }
+
+            screen_x += segment_width;
+            cursor = seg_end;
+            if (segmentp->getEnd() <= cursor)
+            {
+                ++segment;
+            }
+        }
+    }
+}
+// </VulkanStorm>
+
 
 void LLTextBase::clearSegments()
 {

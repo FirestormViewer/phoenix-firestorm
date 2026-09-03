@@ -106,6 +106,7 @@ LLMediaCtrl::LLMediaCtrl( const Params& p) :
     mUpdateScrolls( false ),
     mTextureWidth ( 1024 ),
     mTextureHeight ( 1024 ),
+    mVkFrameSerial(1),
     mClearCache(false),
     mHomePageMimeType(p.initial_mime_type),
     mErrorPageURL(p.error_page_url),
@@ -832,6 +833,53 @@ LLPluginClassMedia* LLMediaCtrl::getMediaPlugin()
     return mMediaSource.isNull() ? NULL : mMediaSource->getMediaPlugin();
 }
 
+// <VulkanStorm> Read-only query for the independent Vulkan UI renderer (M0
+// greenfield): true exactly when draw() takes its media-texture branch.
+// Mirrors the draw_media condition so the Vulkan walker can reproduce the
+// no-media opaque-background result. No GL state is touched.
+bool LLMediaCtrl::hasDrawableMedia()
+{
+    if (mMediaSource && mMediaSource->hasMedia())
+    {
+        LLPluginClassMedia* media_plugin = mMediaSource->getMediaPlugin();
+        if (media_plugin && media_plugin->textureValid())
+        {
+            return LLViewerTextureManager::findMediaTexture(mMediaTextureID) != nullptr;
+        }
+    }
+    return false;
+}
+
+bool LLMediaCtrl::getVkMediaFrame(VkMediaFrame& frame)
+{
+    if (!mMediaSource || !mMediaSource->hasMedia()) return false;
+    LLPluginClassMedia* plugin = mMediaSource->getMediaPlugin();
+    if (!plugin || !plugin->textureValid()) return false;
+
+    frame.pixels = plugin->getBitsData();
+    frame.texture_width = plugin->getBitsWidth();
+    frame.texture_height = plugin->getBitsHeight();
+    frame.content_width = plugin->getWidth();
+    frame.content_height = plugin->getHeight();
+    frame.components = plugin->getTextureDepth();
+    frame.coords_opengl = plugin->getTextureCoordsOpenGL();
+    frame.bgra = plugin->getTextureFormatPrimary() == GL_BGRA
+#ifdef GL_BGRA_EXT
+              || plugin->getTextureFormatPrimary() == GL_BGRA_EXT
+#endif
+              ;
+    frame.serial = mVkFrameSerial;
+
+    S32 x_offset = 0, y_offset = 0, width = 0, height = 0;
+    calcOffsetsAndSize(&x_offset, &y_offset, &width, &height);
+    LLRect local(x_offset, y_offset + height, x_offset + width, y_offset);
+    localRectToScreen(local, &frame.screen_rect);
+    return frame.pixels && frame.texture_width > 0 && frame.texture_height > 0 &&
+           frame.content_width > 0 && frame.content_height > 0 &&
+           frame.components >= 3;
+}
+// </VulkanStorm>
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 void LLMediaCtrl::draw()
@@ -1047,6 +1095,7 @@ void LLMediaCtrl::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event)
     {
         case MEDIA_EVENT_CONTENT_UPDATED:
         {
+            ++mVkFrameSerial;
             // LL_DEBUGS("Media") <<  "Media event:  MEDIA_EVENT_CONTENT_UPDATED " << LL_ENDL;
         };
         break;
@@ -1059,6 +1108,7 @@ void LLMediaCtrl::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event)
 
         case MEDIA_EVENT_SIZE_CHANGED:
         {
+            ++mVkFrameSerial;
             LL_DEBUGS("Media") <<  "Media event:  MEDIA_EVENT_SIZE_CHANGED " << LL_ENDL;
             LLRect r = getRect();
             reshape( r.getWidth(), r.getHeight(), false );

@@ -55,6 +55,7 @@ LLIconCtrl::LLIconCtrl(const LLIconCtrl::Params& p)
 :   LLUICtrl(p),
     mColor(p.color()),
     mImagep(p.image),
+    mVkImgName(p.image.vk_image_name.isProvided() ? p.image.vk_image_name() : ""),
     mUseDrawContextAlpha(p.use_draw_context_alpha),
     mInteractable(p.interactable),
     mPriority(0),

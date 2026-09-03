@@ -31,6 +31,14 @@
 #include "llvkprobe.h"
 #include "llvkselftest.h"
 #include "llvksession.h"
+#include "llvkuirender.h"
+#include "llvkuiimage.h"
+#include "llvkuitestscene.h"
+// <VulkanStorm> UI A/B harness GL emitters (gl_render_ui_test_scene).
+#include "llrender2dutils.h"
+#include "lluiimage.h"
+// </VulkanStorm>
+#include "llrootview.h"
 #include "fsyspath.h"
 #include "hexdump.h"
 #include "llagent.h"
@@ -47,6 +55,7 @@
 #include "llenvironment.h"
 #include "llfasttimer.h"
 #include "llfeaturemanager.h"
+#include "llfile.h"
 #include "llfloatertools.h"
 #include "llfocusmgr.h"
 #include "llgl.h"
@@ -55,6 +64,7 @@
 #include "llhudmanager.h"
 #include "llimagepng.h"
 #include "llmachineid.h"
+#include "llmediactrl.h"
 #include "llmemory.h"
 #include "llparcel.h"
 #include "llperfstats.h"
@@ -67,6 +77,7 @@
 #include "llspatialpartition.h"
 #include "llstartup.h"
 #include "llstartup.h"
+#include "lltoastalertpanel.h"
 #include "lltooldraganddrop.h"
 #include "lltoolfocus.h"
 #include "lltoolmgr.h"
@@ -74,6 +85,8 @@
 #include "lltracker.h"
 #include "lltrans.h"
 #include "llui.h"
+#include "lluicolortable.h"
+#include "lluictrl.h"
 #include "lluuid.h"
 #include "llversioninfo.h"
 #include "llviewercamera.h"
@@ -161,27 +174,307 @@ void render_disconnected_background();
 void getProfileStatsContext(boost::json::object& stats);
 std::string getProfileStatsFilename();
 
+// <VulkanStorm> UI A/B harness (env-gated, VULKANSTORM_UITEST=1): render the
+// deterministic test scene (single-sourced neutral data in llvulkan's
+// LLVKUITestScene) through the REAL GL 2D path — gl_rect_2d / gl_line_2d /
+// LLUIImage::draw — in place of the login widget tree. This is the READ-ONLY
+// reference result the Vulkan path (LLVKUITestScene::emitVulkan) is diffed
+// against. Scene coords are top-left-origin device pixels; the GL 2D ortho is
+// bottom-left y-up (gl_state_for_2d), so y converts as window_height - scene_y.
+static void gl_render_ui_test_scene()
+{
+    if (!gViewerWindow)
+    {
+        return;
+    }
+    const S32 win_h = gViewerWindow->getWindowHeightRaw();
+    if (win_h <= 0)
+    {
+        return;
+    }
+    const LLVKUITestScene::Scene& scene = LLVKUITestScene::scene();
+
+    // Same shader + state the real UI pass uses (LLViewerWindow::draw binds
+    // gUIProgram; LLGLSUIDefault is already active in display_startup).
+    gUIProgram.bind();
+    gGL.setColorMask(true, true);
+
+    // Emission order must match LLVKUITestScene::emitVulkan exactly
+    // (painter's order): rects, then lines, then images.
+    for (const LLVKUITestScene::Rect& r : scene.rects)
+    {
+        gGL.setSceneBlendType(r.opaque ? LLRender::BT_REPLACE : LLRender::BT_ALPHA);
+        gl_rect_2d((S32)r.l, win_h - (S32)r.t, (S32)r.r, win_h - (S32)r.b,
+                   LLColor4(r.cr, r.cg, r.cb, r.ca));
+    }
+    gGL.setSceneBlendType(LLRender::BT_REPLACE);
+    for (const LLVKUITestScene::Line& l : scene.lines)
+    {
+        gl_line_2d((S32)l.x0, win_h - (S32)l.y0, (S32)l.x1, win_h - (S32)l.y1,
+                   LLColor4(l.cr, l.cg, l.cb, l.ca));
+    }
+    gGL.setSceneBlendType(LLRender::BT_ALPHA);
+    for (const LLVKUITestScene::Image& img : scene.images)
+    {
+        LLUIImagePtr ui_image = LLUI::getUIImage(img.name);
+        if (ui_image.notNull())
+        {
+            // LLUIImage::draw(x, y, w, h): (x, y) is the BOTTOM-left corner in
+            // GL y-up space; honors the image's clip + 9-slice scale regions.
+            ui_image->draw((S32)img.l, win_h - (S32)img.b,
+                           (S32)(img.r - img.l), (S32)(img.b - img.t),
+                           LLColor4(img.cr, img.cg, img.cb, img.ca));
+        }
+        else
+        {
+            LL_WARNS("Vulkan") << "UI test scene: GL image not found: " << img.name << LL_ENDL;
+        }
+    }
+    gGL.flush();
+    gUIProgram.unbind();
+    gGL.setSceneBlendType(LLRender::BT_ALPHA); // restore the UI-pass default
+}
+// </VulkanStorm>
+
+// <VulkanStorm> GL reference capture (read-only diagnostic, env-gated): dump
+// the finished GL back buffer to the same .rgba format the Vulkan harness uses
+// (8-byte LE w/h header + RGBA8, bottom-origin like glReadPixels) when
+// VULKANSTORM_CAPTURE is set. Lets the diff harness compare the Vulkan frame
+// against the GL frame for the identical login state. No behavior change.
+static void gl_capture_frame_once()
+{
+    static const char* cap = getenv("VULKANSTORM_CAPTURE");
+    if (!cap || !*cap) return;
+    // Wait until the login UI is actually up, then let it settle: early-
+    // startup frames contain only the clear + stray toasts, not the chrome.
+    if (LLStartUp::getStartupState() < STATE_LOGIN_SHOW) return;
+    static int s_frame = 0;
+    const int kSettleFrames = 90;
+    if (++s_frame != kSettleFrames) return;
+
+    S32 w = gViewerWindow->getWindowWidthRaw();
+    S32 h = gViewerWindow->getWindowHeightRaw();
+    if (w <= 0 || h <= 0)
+    {
+        LL_WARNS("Window") << "GL reference capture: degenerate size " << w << "x" << h << LL_ENDL;
+        return;
+    }
+    std::vector<U8> rgba((size_t)w * (size_t)h * 4);
+    glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, rgba.data());
+    LLFILE* f = LLFile::fopen(cap, "wb");
+    if (f)
+    {
+        U32 header[2] = { (U32)w, (U32)h };
+        fwrite(header, sizeof(header), 1, f);
+        fwrite(rgba.data(), rgba.size(), 1, f);
+        LLFile::close(f);
+        LL_INFOS("Window") << "GL reference frame captured to " << cap << " (" << w << "x" << h << ")" << LL_ENDL;
+    }
+    else
+    {
+        LL_WARNS("Window") << "GL reference capture: fopen failed for " << cap << LL_ENDL;
+    }
+}
+// </VulkanStorm>
+
+#if LL_WINDOWS
+// <VulkanStorm> M0 greenfield: LLMediaCtrl view hook (registered with
+// LLVKUIRender; llvulkan itself must not depend on newview classes). Mirrors
+// the RESULT of LLMediaCtrl::draw()'s no-media branch, which forces an opaque
+// background draw over the rect — the black "Loading..." backdrop covering
+// most of the login screen. Media-texture emission lands with the image work.
+static std::string vk_media_key(LLMediaCtrl* media)
+{
+    return std::string("media:") + media->getTextureID().asString();
+}
+
+static void vk_prepare_media_ctrl(const LLView* view, LLVKContext*)
+{
+    LLMediaCtrl* media = const_cast<LLMediaCtrl*>(static_cast<const LLMediaCtrl*>(view));
+    LLMediaCtrl::VkMediaFrame frame;
+    if (media->getVkMediaFrame(frame))
+    {
+        LLVKUIImage::updateDynamic(vk_media_key(media), frame.pixels,
+                                   frame.texture_width, frame.texture_height,
+                                   frame.components, frame.bgra, frame.serial);
+    }
+}
+
+static void vk_prepare_toast_alert_panel(const LLView* view, LLVKContext*)
+{
+    LLView* panel = const_cast<LLView*>(view);
+    LLView* message = panel->findChildView("Alert message", true);
+    if (!message || panel->getRect().getHeight() >= 0) return;
+
+    // The OpenGL floater traversal resolves this legacy top-left layout before
+    // hit testing.  With that traversal bypassed, the alert, wrapper and toast
+    // retain negative heights: Vulkan can draw reconstructed pixels, but the
+    // modal cannot receive clicks. Normalize the same live geometry once while
+    // preserving the established bottom-left position and child coordinates.
+    const S32 alert_height = llabs(message->getRect().getHeight()) + 16;
+    LLRect panel_rect = panel->getRect();
+    panel_rect.mTop = panel_rect.mBottom + alert_height;
+    panel->setRect(panel_rect);
+
+    LLView* wrapper = panel->getParent();
+    if (wrapper && wrapper->getRect().getHeight() < alert_height)
+    {
+        LLRect wrapper_rect = wrapper->getRect();
+        wrapper_rect.mTop = wrapper_rect.mBottom + alert_height;
+        wrapper->setRect(wrapper_rect);
+
+        LLView* toast = wrapper->getParent();
+        if (toast && toast->getRect().getHeight() < alert_height + 7)
+        {
+            LLRect toast_rect = toast->getRect();
+            toast_rect.mTop = toast_rect.mBottom + alert_height + 7;
+            toast->setRect(toast_rect);
+        }
+    }
+}
+
+static void vk_render_media_ctrl(const LLView* view, unsigned device_height, float ui_scale_y, float alpha)
+{
+    LLMediaCtrl* media = const_cast<LLMediaCtrl*>(static_cast<const LLMediaCtrl*>(view));
+    LLMediaCtrl::VkMediaFrame frame;
+    if (media->getVkMediaFrame(frame))
+    {
+        // calcOffsetsAndSize() can letterbox the CEF surface. OpenGL leaves
+        // those bands showing the opaque login-panel background, not the
+        // transparent Vulkan swapchain clear.
+        // panel_fs_login.xml specifies this opaque surround explicitly. The
+        // media control's immediate background is black and is not the color
+        // OpenGL exposes in its aspect-fit bands.
+        const LLColor4 surround(0.16f, 0.16f, 0.16f, 1.f);
+        LLVKUIRender::emitScreenRect(media->calcScreenRect(), device_height,
+                                     ui_scale_y, surround);
+
+        const F32 ui_h = (F32)device_height / ui_scale_y;
+        const F32 left = (F32)frame.screen_rect.mLeft;
+        const F32 right = (F32)frame.screen_rect.mRight;
+        const F32 top = ui_h - (F32)frame.screen_rect.mTop;
+        const F32 bottom = ui_h - (F32)frame.screen_rect.mBottom;
+        const F32 max_u = (F32)frame.content_width / (F32)frame.texture_width;
+        const F32 max_v = (F32)frame.content_height / (F32)frame.texture_height;
+        LLVKUIImage::drawDynamic(vk_media_key(media), left, top, right, bottom,
+                                 max_u, max_v, frame.coords_opengl,
+                                 LLColor4(1.f, 1.f, 1.f, alpha));
+    }
+    else
+    {
+        const LLRect screen = media->calcScreenRect();
+        LLColor4 c = media->getBackgroundColor();
+        c.mV[VALPHA] *= alpha;
+        LLVKUIRender::emitScreenRect(screen, device_height, ui_scale_y, c);
+    }
+}
+
+// Alert toasts are sized in LLToastAlertPanel before their top-left-layout
+// wrapper is repositioned. On the Vulkan path (which deliberately never calls
+// the GL draw traversal), that wrapper can retain an inverted vertical rect.
+// Reconstruct the final alert bounds from the measured message rect: its
+// bottom is the intended first-line anchor, while its absolute height is the
+// complete wrapped-text extent. These are the same padding values used by the
+// LLToastAlertPanel constructor.
+static void vk_render_toast_alert_panel(const LLView* view, unsigned device_height,
+                                        float ui_scale_y, float alpha)
+{
+    const LLView* message = view->findChildView("Alert message", true);
+    if (!message) return;
+
+    const LLRect panel_screen = view->calcScreenRect();
+    const LLRect message_screen = message->calcScreenRect();
+    const S32 text_height = llabs(message->getRect().getHeight());
+    if (text_height <= 0) return;
+
+    const S32 VPAD = 16;
+    const LLRect alert_rect(panel_screen.mLeft,
+                            message_screen.mBottom + text_height + VPAD,
+                            panel_screen.mRight,
+                            panel_screen.mBottom);
+
+    // Alert toasts are non-fading modal windows. LLToast's OpenGL path forces
+    // its wrapper panel opaque (Toast_Over) and LLToastAlertPanel::draw()
+    // applies the shadow without draw-context attenuation.
+    LLColor4 shadow = LLUIColorTable::instance().getColor("ColorDropShadow").get();
+    LLVKUIRender::emitDropShadow(alert_rect, device_height, ui_scale_y,
+                                 shadow, DROP_SHADOW_FLOATER);
+
+    LLColor4 base = LLUIColorTable::instance()
+                        .getColor("FloaterFocusBackgroundColor").get();
+    base.mV[VALPHA] = 1.f;
+    LLVKUIRender::emitScreenRect(alert_rect, device_height, ui_scale_y, base);
+
+    LLVKUIRender::emitScreenRect(alert_rect, device_height, ui_scale_y,
+                                 std::string("Toast_Over"),
+                                 LLColor4(1.f, 1.f, 1.f, 1.f));
+}
+
+static void vk_register_ui_hooks()
+{
+    static bool s_registered = false;
+    if (!s_registered)
+    {
+        s_registered = true;
+        LLVKUIRender::registerViewPrepareHook(typeid(LLMediaCtrl), &vk_prepare_media_ctrl);
+        LLVKUIRender::registerViewPrepareHook(typeid(LLToastAlertPanel), &vk_prepare_toast_alert_panel);
+        LLVKUIRender::registerViewHook(typeid(LLMediaCtrl), &vk_render_media_ctrl);
+        LLVKUIRender::registerViewHook(typeid(LLToastAlertPanel), &vk_render_toast_alert_panel);
+    }
+}
+// </VulkanStorm>
+#endif
+
 void display_startup()
 {
     if (   !gViewerWindow
-        || !gViewerWindow->getActive()
-        || !gViewerWindow->getWindow()->getVisible()
-        || gViewerWindow->getWindow()->getMinimized()
         || gNonInteractive)
     {
         return;
     }
 
 #if LL_WINDOWS
-    // <VulkanStorm> The Vulkan backend owns the frame end-to-end while the
-    // 2D/3D pipelines are being ported: clear + present, no GL calls.
+    // <VulkanStorm> The Vulkan backend owns the frame end-to-end. Phase 3 v2
+    // (M0 greenfield): render the 2D UI from the widget tree's readable state
+    // via LLVKUIRender into the sink — no GL draw() calls run on this path.
+    // Unlike the GL path below, this does NOT gate on window focus/visibility:
+    // the GL early-out exists to save power when unfocused, but the Vulkan
+    // frame already handles degenerate extents (minimized) internally, and
+    // focus-independent rendering is required for automated frame-capture
+    // verification (the harness launches the viewer without foreground focus).
     if (LLVKSession::isRunning())
     {
+        if (   !gViewerWindow->getWindow()
+            || gViewerWindow->getWindow()->getMinimized())
+        {
+            return;
+        }
+        LLVKSession::armCapture(LLStartUp::getStartupState() >= STATE_LOGIN_SHOW);
+        vk_register_ui_hooks();
         LLVKSession::resizeIfNeeded(gViewerWindow->getWindow());
-        LLVKSession::renderFrame();
+        const LLVector2 ui_scale = LLUI::getScaleFactor();
+        LLVKSession::renderUIFrame(gViewerWindow->getRootView(), ui_scale.mV[VX], ui_scale.mV[VY]);
         return;
     }
     // </VulkanStorm>
+
+    if (   !gViewerWindow->getActive()
+        || !gViewerWindow->getWindow()->getVisible()
+        || gViewerWindow->getWindow()->getMinimized())
+    {
+        return;
+    }
+#endif
+
+#if !LL_WINDOWS
+    // <VulkanStorm> Non-Windows builds have no Vulkan path yet; preserve the
+    // original focus/visibility gates for the GL path on those platforms.
+    if (   !gViewerWindow->getActive()
+        || !gViewerWindow->getWindow()->getVisible()
+        || gViewerWindow->getWindow()->getMinimized())
+    {
+        return;
+    }
 #endif
 
     gPipeline.updateGL();
@@ -218,13 +511,28 @@ void display_startup()
 
     if (gViewerWindow)
     gViewerWindow->setup2DRender();
-    if (gViewerWindow)
-    gViewerWindow->draw();
+    // <VulkanStorm> UI A/B harness (VULKANSTORM_UITEST=1): render the fixed
+    // test scene through the real GL 2D path instead of the login UI tree.
+    if (LLVKUITestScene::enabled())
+    {
+        gl_render_ui_test_scene();
+    }
+    else if (gViewerWindow)
+    {
+        gViewerWindow->draw();
+    }
+    // </VulkanStorm>
     gGL.flush();
 
     LLVertexBuffer::unbind();
 
     LLGLState::checkStates();
+
+#if LL_WINDOWS
+    // <VulkanStorm> GL reference capture for the byte-exact harness (env-gated).
+    gl_capture_frame_once();
+    // </VulkanStorm>
+#endif
 
 #if LL_WINDOWS
     // <VulkanStorm> Phase-1 bring-up: isolated Vulkan self-test. Runs on the
@@ -525,11 +833,22 @@ void display(bool rebuild, F32 zoom_factor, int subfield, bool for_snapshot)
 {
 #if LL_WINDOWS
     // <VulkanStorm> The Vulkan backend owns the frame end-to-end while the
-    // 2D/3D pipelines are being ported: clear + present, no GL calls.
+    // 2D/3D pipelines are being ported. Pre-STATE_STARTED (login/startup): the
+    // greenfield UI walker renders the widget tree from readable state. Post-
+    // login (world): clear + present until the 3D pipeline lands. No GL calls.
     if (LLVKSession::isRunning())
     {
+        LLVKSession::armCapture(LLStartUp::getStartupState() >= STATE_LOGIN_SHOW);
         LLVKSession::resizeIfNeeded(gViewerWindow->getWindow());
-        LLVKSession::renderFrame();
+        if (LLStartUp::getStartupState() < STATE_STARTED)
+        {
+            const LLVector2 ui_scale = LLUI::getScaleFactor();
+            LLVKSession::renderUIFrame(gViewerWindow->getRootView(), ui_scale.mV[VX], ui_scale.mV[VY]);
+        }
+        else
+        {
+            LLVKSession::renderFrame();
+        }
         return;
     }
     // </VulkanStorm>

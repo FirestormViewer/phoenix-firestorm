@@ -421,6 +421,111 @@ bool LLTabContainer::postBuild()
     return true;
 }
 
+// <VulkanStorm>
+// The first half of LLTabContainer::draw() is stateful: it positions the tab
+// buttons and decides whether the scroll arrows are visible.  Vulkan does not
+// call draw(), so perform the same layout before its generic child traversal.
+void LLTabContainer::prepareVkDraw()
+{
+    static LLUICachedControl<S32> tabcntrv_pad("UITabCntrvPad", 0);
+    static LLUICachedControl<S32> tabcntrv_arrow_btn_size("UITabCntrvArrowBtnSize", 0);
+    static LLUICachedControl<S32> tabcntr_tab_h_pad("UITabCntrTabHPad", 0);
+    static LLUICachedControl<S32> tabcntr_arrow_btn_size("UITabCntrArrowBtnSize", 0);
+    static LLUICachedControl<S32> tabcntr_tab_partial_width("UITabCntrTabPartialWidth", 0);
+
+    S32 target_pixel_scroll = 0;
+    S32 cur_scroll_pos = getScrollPos();
+    if (cur_scroll_pos > 0)
+    {
+        if (mIsVertical)
+        {
+            target_pixel_scroll = cur_scroll_pos * (BTN_HEIGHT + tabcntrv_pad);
+        }
+        else
+        {
+            const S32 available_width_with_arrows = getRect().getWidth() -
+                mRightTabBtnOffset - 2 * (LLPANEL_BORDER_WIDTH +
+                                           tabcntr_arrow_btn_size +
+                                           tabcntr_arrow_btn_size + 1);
+            for (tuple_list_t::iterator iter = mTabList.begin();
+                 iter != mTabList.end() && cur_scroll_pos > 0; ++iter)
+            {
+                if ((*iter)->mVisible)
+                {
+                    target_pixel_scroll += (*iter)->mButton->getRect().getWidth();
+                }
+                --cur_scroll_pos;
+            }
+            target_pixel_scroll -= tabcntr_tab_partial_width;
+            target_pixel_scroll = llmin(mTotalTabWidth - available_width_with_arrows,
+                                        target_pixel_scroll);
+        }
+    }
+    setScrollPosPixels(mIsVertical
+                           ? target_pixel_scroll
+                           : (S32)lerp((F32)getScrollPosPixels(),
+                                      (F32)target_pixel_scroll,
+                                      LLSmoothInterpolation::getInterpolant(0.08f)));
+
+    const bool has_scroll_arrows = !mHideScrollArrows && !getTabsHidden() &&
+        ((mMaxScrollPos > 0) || (mScrollPosPixels > 0));
+    if (!mIsVertical)
+    {
+        mJumpPrevArrowBtn->setVisible(has_scroll_arrows);
+        mJumpNextArrowBtn->setVisible(has_scroll_arrows);
+    }
+    mPrevArrowBtn->setVisible(has_scroll_arrows);
+    mNextArrowBtn->setVisible(has_scroll_arrows);
+
+    if (getTabsHidden())
+    {
+        for (LLTabTuple* tuple : mTabList)
+        {
+            tuple->mButton->setVisible(false);
+        }
+        return;
+    }
+
+    S32 left = 0;
+    S32 top = 0;
+    if (mIsVertical)
+    {
+        top = getRect().getHeight() - getTopBorderHeight() - LLPANEL_BORDER_WIDTH -
+              1 - (has_scroll_arrows ? tabcntrv_arrow_btn_size : 0);
+        top += getScrollPosPixels();
+    }
+    else
+    {
+        left = LLPANEL_BORDER_WIDTH +
+               (has_scroll_arrows ? tabcntr_arrow_btn_size * 2 : tabcntr_tab_h_pad) -
+               getScrollPosPixels();
+    }
+
+    const S32 max_scroll_visible = getVisibleTabCount() - getMaxScrollPos() +
+                                   getScrollPos();
+    S32 idx = 0;
+    for (LLTabTuple* tuple : mTabList)
+    {
+        tuple->mButton->setVisible(tuple->mVisible);
+        if (!tuple->mVisible)
+        {
+            ++idx;
+            continue;
+        }
+        tuple->mButton->translate(left ? left - tuple->mButton->getRect().mLeft : 0,
+                                  top ? top - tuple->mButton->getRect().mTop : 0);
+        if (top) top -= BTN_HEIGHT + tabcntrv_pad;
+        if (left) left += tuple->mButton->getRect().getWidth();
+        if (mIsVertical &&
+            ((idx < getScrollPos()) || (max_scroll_visible <= idx)))
+        {
+            tuple->mButton->setVisible(false);
+        }
+        ++idx;
+    }
+}
+// </VulkanStorm>
+
 // virtual
 void LLTabContainer::draw()
 {

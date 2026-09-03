@@ -84,6 +84,10 @@ LLScrollbar::LLScrollbar(const Params & p)
         mThumbImageH(p.thumb_image_horizontal),
         mTrackImageV(p.track_image_vertical),
         mTrackImageH(p.track_image_horizontal),
+        mVkThumbImageV(p.thumb_image_vertical.vk_image_name.isProvided() ? p.thumb_image_vertical.vk_image_name() : ""),
+        mVkThumbImageH(p.thumb_image_horizontal.vk_image_name.isProvided() ? p.thumb_image_horizontal.vk_image_name() : ""),
+        mVkTrackImageV(p.track_image_vertical.vk_image_name.isProvided() ? p.track_image_vertical.vk_image_name() : ""),
+        mVkTrackImageH(p.track_image_horizontal.vk_image_name.isProvided() ? p.track_image_horizontal.vk_image_name() : ""),
         mThickness(p.thickness.isProvided() ? p.thickness : LLUI::getInstance()->mSettingGroups["config"]->getS32("UIScrollbarSize")),
         mBGVisible(p.bg_visible),
         mBGColor(p.bg_color)
@@ -578,6 +582,42 @@ void LLScrollbar::draw()
     // Draw children
     LLView::draw();
 } // end draw
+
+// <VulkanStorm>
+LLScrollbar::VkDrawState LLScrollbar::getVkDrawState(F32 alpha) const
+{
+    VkDrawState state;
+    LLRect track_local;
+    if (mOrientation == HORIZONTAL)
+    {
+        track_local.set(mThickness, getRect().getHeight(),
+                        getRect().getWidth() - mThickness, 0);
+        state.track_image = mTrackImageH.notNull() ? mTrackImageH->getName() : mVkTrackImageH;
+        state.thumb_image = mThumbImageH.notNull() ? mThumbImageH->getName() : mVkThumbImageH;
+        if (state.track_image.empty()) state.track_image = "ScrollTrack_Horiz";
+        if (state.thumb_image.empty()) state.thumb_image = "ScrollThumb_Horiz";
+    }
+    else
+    {
+        track_local.set(0, getRect().getHeight() - mThickness,
+                        getRect().getWidth(), mThickness);
+        state.track_image = mTrackImageV.notNull() ? mTrackImageV->getName() : mVkTrackImageV;
+        state.thumb_image = mThumbImageV.notNull() ? mThumbImageV->getName() : mVkThumbImageV;
+        if (state.track_image.empty()) state.track_image = "ScrollTrack_Vert";
+        if (state.thumb_image.empty()) state.thumb_image = "ScrollThumb_Vert";
+    }
+    localRectToScreen(track_local, &state.track_rect);
+    localRectToScreen(mThumbRect, &state.thumb_rect);
+    state.track_color = mTrackColor.get();
+    state.thumb_color = mThumbColor.get();
+    state.bg_color = mBGColor.get();
+    state.track_color.mV[VALPHA] *= alpha;
+    state.thumb_color.mV[VALPHA] *= alpha;
+    state.bg_color.mV[VALPHA] *= alpha;
+    state.bg_visible = mBGVisible;
+    return state;
+}
+// </VulkanStorm>
 
 
 bool LLScrollbar::changeLine( S32 delta, bool update_thumb )

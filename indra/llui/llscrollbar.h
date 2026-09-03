@@ -96,6 +96,21 @@ public:
 
     virtual void    draw();
 
+    // <VulkanStorm> GL-free description of the chrome emitted by draw().
+    struct VkDrawState
+    {
+        LLRect track_rect;
+        LLRect thumb_rect;
+        LLColor4 track_color;
+        LLColor4 thumb_color;
+        LLColor4 bg_color;
+        std::string track_image;
+        std::string thumb_image;
+        bool bg_visible = false;
+    };
+    VkDrawState getVkDrawState(F32 alpha) const;
+    // </VulkanStorm>
+
     // How long the "document" is.
     void                setDocSize( S32 size );
     S32                 getDocSize() const      { return mDocSize; }
@@ -159,6 +174,14 @@ private:
     LLUIImagePtr        mThumbImageH;
     LLUIImagePtr        mTrackImageV;
     LLUIImagePtr        mTrackImageH;
+
+    // <VulkanStorm> Preserve XUI aliases even when the GL image provider is
+    // intentionally unavailable to the Vulkan renderer.
+    std::string         mVkThumbImageV;
+    std::string         mVkThumbImageH;
+    std::string         mVkTrackImageV;
+    std::string         mVkTrackImageH;
+    // </VulkanStorm>
 
     S32                 mThickness;
 

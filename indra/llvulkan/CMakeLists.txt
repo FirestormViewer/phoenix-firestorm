@@ -14,7 +14,9 @@ project(llvulkan)
 include(00-Common)
 include(LLCommon)
 include(LLWindow)
+include(LLImage)
 include(VulkanSdk)
+include(FreeType)
 
 set(llvulkan_SOURCE_FILES
     llvk_vma_impl.cpp
@@ -23,6 +25,11 @@ set(llvulkan_SOURCE_FILES
     llvkprobe.cpp
     llvkselftest.cpp
     llvksession.cpp
+    llvkui2d.cpp
+    llvkuiimage.cpp
+    llvkuirender.cpp
+    llvktext.cpp
+    llvkuitestscene.cpp
     ${VULKAN_SDK_VOLK_SOURCE}
     )
 
@@ -34,6 +41,11 @@ set(llvulkan_HEADER_FILES
     llvkprobe.h
     llvkselftest.h
     llvksession.h
+    llvkui2d.h
+    llvkuiimage.h
+    llvkuirender.h
+    llvktext.h
+    llvkuitestscene.h
     )
 
 # volk.c is C; the rest is C++. Give volk its required define so it exposes the
@@ -44,6 +56,12 @@ set_source_files_properties(${VULKAN_SDK_VOLK_SOURCE} PROPERTIES
 add_library (llvulkan ${llvulkan_SOURCE_FILES})
 target_include_directories(llvulkan INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(llvulkan PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+# <VulkanStorm> llxml + llfilesystem don't export an include() module here;
+# add their dirs explicitly for the GL-free XML parse + skin-dir resolution.
+target_include_directories(llvulkan PRIVATE
+    ${CMAKE_SOURCE_DIR}/llxml
+    ${CMAKE_SOURCE_DIR}/llfilesystem)
+# </VulkanStorm>
 
 set_property(TARGET llvulkan PROPERTY POSITION_INDEPENDENT_CODE ON)
 
@@ -62,6 +80,13 @@ target_compile_definitions(llvulkan PUBLIC
 
 target_link_libraries(llvulkan
         llcommon
+        llmath
         llwindow
+        llimage
+        llfilesystem
+        llxml
+        llrender
+        llui
+        ll::freetype
         ll::vulkan_sdk
         )

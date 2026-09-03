@@ -128,6 +128,34 @@ public:
         bool getFrequentUpdates() { return mFrequentUpdates; };
         void setFrequentUpdates( bool frequentUpdatesIn ) {  mFrequentUpdates = frequentUpdatesIn; };
 
+        // <VulkanStorm> Read-only state query for the independent Vulkan UI
+        // renderer (M0 greenfield): true exactly when LLMediaCtrl::draw()
+        // would take its media-texture branch (mirrors draw_media). Lets the
+        // Vulkan walker reproduce the no-media opaque-background RESULT
+        // without touching GL. No behavior change. (Non-const only because
+        // LLViewerMediaImpl::getMediaPlugin() is non-const; read-only in
+        // effect.)
+        bool hasDrawableMedia();
+
+        // CPU-side media surface consumed by the Vulkan UI renderer. The
+        // pointer belongs to the media plugin's shared-memory segment and is
+        // valid for the duration of the main-thread render callback.
+        struct VkMediaFrame
+        {
+            const U8* pixels = nullptr;
+            S32 texture_width = 0;
+            S32 texture_height = 0;
+            S32 content_width = 0;
+            S32 content_height = 0;
+            S32 components = 0;
+            bool bgra = false;
+            bool coords_opengl = true;
+            U64 serial = 0;
+            LLRect screen_rect;
+        };
+        bool getVkMediaFrame(VkMediaFrame& frame);
+        // </VulkanStorm>
+
         void setAlwaysRefresh(bool refresh) { mAlwaysRefresh = refresh; }
         bool getAlwaysRefresh() { return mAlwaysRefresh; }
 
@@ -218,6 +246,9 @@ public:
         viewer_media_t mMediaSource;
         S32 mTextureWidth,
             mTextureHeight;
+
+        // Monotonic content revision for Vulkan dynamic-texture uploads.
+        U64 mVkFrameSerial;
 
         class LLWindowShade* mWindowShade;
         LLHandle<LLContextMenu> mContextMenuHandle;

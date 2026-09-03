@@ -179,6 +179,28 @@ public:
     void setDrawTextDisabled(bool disabled) { mDrawTextDisabled = disabled; }
     bool getDrawTextDisabled() const { return mDrawTextDisabled; }
 
+    // <VulkanStorm> Final, GL-free inputs consumed by LLMenuItemGL::draw().
+    // The Vulkan UI walk uses these to reproduce menu-bar and popup-menu
+    // items without invoking the OpenGL draw traversal.
+    struct VkDrawState
+    {
+        enum class Kind { Item, Separator, TearOff };
+        Kind kind = Kind::Item;
+        LLWString label;
+        LLWString bool_label;
+        LLWString accel_label;
+        LLWString branch_label;
+        const LLFontGL* font = nullptr;
+        LLColor4 foreground;
+        LLColor4 highlight_background;
+        bool highlight = false;
+        bool enabled = false;
+        bool brief = false;
+        bool menu_bar = false;
+    };
+    VkDrawState getVkDrawState(F32 alpha);
+    // </VulkanStorm>
+
 protected:
     void setHover(bool hover) { mGotHover = hover; }
 
@@ -469,6 +491,14 @@ public:
     const LLUIColor& getBackgroundColor() const { return mBackgroundColor; }
     void setBackgroundVisible( bool b ) { mBgVisible = b; }
     void setCanTearOff(bool tear_off);
+
+    // <VulkanStorm> Read-only background-strip state for the independent Vulkan
+    // UI renderer: the same inputs LLMenuGL::draw() uses for its bg rect and
+    // drop shadow, without executing GL. No behavior change to the GL path.
+    bool        getVkBgVisible() const { return mBgVisible; }
+    LLColor4    getVkBgColor() const;   // mBackgroundColor * FSMenuBackgroundAlpha
+    bool        getVkDropShadow() const { return mDropShadowed && !mTornOff; }
+    // </VulkanStorm>
 
     // add a separator to this menu
     virtual bool addSeparator();
