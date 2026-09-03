@@ -234,10 +234,10 @@ const std::vector<std::string_view> FSManipRotateJoint::sSelectableJoints =
 };
 
 const std::unordered_map<FSManipRotateJoint::e_manip_part, FSManipRotateJoint::RingRenderParams> FSManipRotateJoint::sRingParams = 
-{ 
-    { LL_ROT_Z,   { LL_ROT_Z,   LLVector4(1.f, 1.f, SELECTED_MANIPULATOR_SCALE, 1.f), 0.f,             LLVector3(),              LLColor4(0.f,0.f,1.f,1.f), LLColor4(0.f,0.f,1.f,0.3f), 2 } },
-    { LL_ROT_Y,   { LL_ROT_Y,   LLVector4(1.f, SELECTED_MANIPULATOR_SCALE, 1.f, 1.f), 90.f,            LLVector3(1.f,0.f,0.f),     LLColor4(0.f,1.f,0.f,1.f), LLColor4(0.f,1.f,0.f,0.3f), 1 } },
-    { LL_ROT_X,   { LL_ROT_X,   LLVector4(SELECTED_MANIPULATOR_SCALE, 1.f, 1.f, 1.f), 90.f,            LLVector3(0.f,1.f,0.f),     LLColor4(1.f,0.f,0.f,1.f), LLColor4(1.f,0.f,0.f,0.3f), 0 } }
+{
+    { LL_ROT_Z,   { LL_ROT_Z,   LLVector4(1.f, 1.f, SELECTED_MANIPULATOR_SCALE, 1.f), 0.f,  LLVector3(),            2 } }, // blue
+    { LL_ROT_Y,   { LL_ROT_Y,   LLVector4(1.f, SELECTED_MANIPULATOR_SCALE, 1.f, 1.f), 90.f, LLVector3(1.f,0.f,0.f), 1 } }, // green
+    { LL_ROT_X,   { LL_ROT_X,   LLVector4(SELECTED_MANIPULATOR_SCALE, 1.f, 1.f, 1.f), 90.f, LLVector3(0.f,1.f,0.f), 0 } }  // red
 };
 
 // Helper function: Builds an alignment quaternion from the computed bone axes.
@@ -460,6 +460,7 @@ bool FSManipRotateJoint::updateVisiblity()
             F32 apparent_angle = fraction_of_fov * viewer_camera->getView();  // radians
             mRadiusMeters = z_dist * tan(apparent_angle);
             mRadiusMeters *= ui_scale_factor;
+            mRadiusMeters *= getUserEditHandleScaling();
 
             mCenterToProfilePlaneMag = mRadiusMeters * mRadiusMeters / mCenterToCamMag;
             mCenterToProfilePlane = -mCenterToProfilePlaneMag * mCenterToCamNorm;
@@ -524,7 +525,7 @@ void FSManipRotateJoint::renderRingPass(const RingRenderParams& params, float ra
                 break;
         }
         gGL.scalef(scaleVal, scaleVal, scaleVal);
-        gl_ring(radius, width, params.primaryColor, params.secondaryColor, CIRCLE_STEPS, pass);
+        gl_ring(radius, width, getUserEditColor(params.scaleIndex), getUserEditColor(params.scaleIndex, 0.3f), CIRCLE_STEPS, pass);
     }
     gGL.popMatrix();
 }
@@ -776,7 +777,7 @@ void FSManipRotateJoint::renderAxes(const LLVector3& agent_space_center, F32 siz
 {
     LLGLEnable cull_face(GL_CULL_FACE);
     LLGLEnable clip_plane0(GL_CLIP_PLANE0);
-    LLGLDepthTest gls_depth(GL_FALSE);    
+    LLGLDepthTest gls_depth(GL_FALSE);
     gGL.pushMatrix();
     gGL.translatef(agent_space_center.mV[VX], agent_space_center.mV[VY], agent_space_center.mV[VZ]);
 
@@ -787,17 +788,20 @@ void FSManipRotateJoint::renderAxes(const LLVector3& agent_space_center, F32 siz
     gGL.begin(LLRender::LINES);
 
     // X-axis (Red)
-    gGL.color4f(1.0f, 0.0f, 0.0f, 1.0f);
+    LLColor4 color(getUserEditColor(VX));
+    gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VALPHA]);
     gGL.vertex3f(-size, 0.0f, 0.0f);
     gGL.vertex3f(size, 0.0f, 0.0f);
 
     // Y-axis (Green)
-    gGL.color4f(0.0f, 1.0f, 0.0f, 1.0f);
+    color.setVec(getUserEditColor(VY));
+    gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VALPHA]);
     gGL.vertex3f(0.0f, -size, 0.0f);
     gGL.vertex3f(0.0f, size, 0.0f);
 
     // Z-axis (Blue)
-    gGL.color4f(0.0f, 0.0f, 1.0f, 1.0f);
+    color.setVec(getUserEditColor(VZ));
+    gGL.color4f(color.mV[VX], color.mV[VY], color.mV[VZ], color.mV[VALPHA]);
     gGL.vertex3f(0.0f, 0.0f, -size);
     gGL.vertex3f(0.0f, 0.0f, size);
 
@@ -892,14 +896,16 @@ void FSManipRotateJoint::renderNameXYZ(const LLQuaternion& rot)
         LLUIImagePtr imagep = LLUI::getUIImage("Rounded_Square");
         gViewerWindow->setup2DRender();
         const LLVector2& display_scale = gViewerWindow->getDisplayScale();
-        gGL.color4f(0.f, 0.f, 0.f, 0.7f);
+
+        LLColor4 backgroudColor = getUserEditColor(VALPHA, 0.7f);
+        gGL.color4f(backgroudColor.mV[VX], backgroudColor.mV[VY], backgroudColor.mV[VZ], backgroudColor.mV[VALPHA]);
 
         imagep->draw(
             (S32)((window_center_x - 150) * display_scale.mV[VX]),
             (S32)((window_center_y + vertical_offset - PAD) * display_scale.mV[VY]),
             (S32)(340 * display_scale.mV[VX]),
             (S32)((PAD * 2 + 10) * display_scale.mV[VY] * 2),
-            LLColor4(0.f, 0.f, 0.f, 0.7f) 
+            backgroudColor
         );
 
         LLFontGL* font = LLFontGL::getFontSansSerif();
@@ -948,17 +954,21 @@ void FSManipRotateJoint::renderNameXYZ(const LLQuaternion& rot)
         }
 
         auto renderTextWithShadow = [&](const LLWString& text, F32 x, F32 y, const LLColor4& color) {
-            font->render(text, 0, x + 1.f, y - 2.f, LLColor4::black,
-                LLFontGL::LEFT, LLFontGL::BASELINE,
-                LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, 1000, nullptr);
+            if (getUserEditHintTextShadow())
+            {
+                font->render(text, 0, x + 1.f, y - 2.f, LLColor4::black,
+                    LLFontGL::LEFT, LLFontGL::BASELINE,
+                    LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, 1000, nullptr);
+            }
+
             font->render(text, 0, x, y, color,
                 LLFontGL::LEFT, LLFontGL::BASELINE,
                 LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, 1000, nullptr);
             };
 
-        renderTextWithShadow(current_eulerX_str, window_center_x - 122.f, base_y, LLColor4(1.f, 0.5f, 0.5f, 1.f));
-        renderTextWithShadow(current_eulerY_str, window_center_x - 47.f, base_y, LLColor4(0.5f, 1.f, 0.5f, 1.f));
-        renderTextWithShadow(current_eulerZ_str, window_center_x + 28.f, base_y, LLColor4(0.5f, 0.5f, 1.f, 1.f));
+        renderTextWithShadow(current_eulerX_str, window_center_x - 122.f, base_y, getUserEditColor(VX));
+        renderTextWithShadow(current_eulerY_str, window_center_x - 47.f, base_y, getUserEditColor(VY));
+        renderTextWithShadow(current_eulerZ_str, window_center_x + 28.f, base_y, getUserEditColor(VZ));
         renderTextWithShadow(current_angle_str, window_center_x + 103.f, base_y, LLColor4(1.f, 0.65f, 0.f, 1.f));
         base_y += 20.f;
         renderTextWithShadow(current_joint_str, window_center_x - 130.f, base_y, LLColor4(1.f, 0.1f, 1.f, 1.f));
@@ -1288,7 +1298,8 @@ void FSManipRotateJoint::highlightManipulators(S32 x, S32 y)
     if (mHighlightedPart == LL_NO_PART)
     {
         F32 roll_distance = intersection_roll.magVec();
-        F32 width_meters = WIDTH_PIXELS * mRadiusMeters / RADIUS_PIXELS;
+        F32 width_meters  = WIDTH_PIXELS * mRadiusMeters / RADIUS_PIXELS;
+        width_meters *= getUserEditHandleScaling();
 
         if (llabs(roll_distance - (mRadiusMeters + (width_meters * 2.f))) < distance_threshold * 2.f)
         {
@@ -1364,7 +1375,7 @@ LLQuaternion FSManipRotateJoint::dragUnconstrained(S32 x, S32 y)
     }
     // If the mouse is still near the center of the manipulator in screen space,
     // simply return the computed sphere rotation.
-    else if (dist_from_sphere_center < RADIUS_PIXELS)
+    else if (dist_from_sphere_center < RADIUS_PIXELS * getUserEditHandleScaling())
     {
         return sphere_rot;
     }

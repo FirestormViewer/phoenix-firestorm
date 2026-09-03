@@ -1894,6 +1894,10 @@ void LLManipTranslate::renderTranslationHandles()
     F32 ui_scale_factor = LLUI::getScaleFactor().mV[VX];
     mArrowLengthMeters *= ui_scale_factor;
 
+    // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+    mArrowLengthMeters *= getUserEditHandleScaling();
+    // </FS:AR> [FIRE-36909]
+
     mPlaneManipOffsetMeters = mArrowLengthMeters * 1.8f;
     mGridSizeMeters = gSavedSettings.getF32("GridDrawSize");
     mConeSize = mArrowLengthMeters / 4.f;
@@ -1959,13 +1963,21 @@ void LLManipTranslate::renderTranslationHandles()
                 gGL.scalef(mPlaneScales.mV[VX], mPlaneScales.mV[VX], mPlaneScales.mV[VX]);
                 if (mHighlightedPart == LL_YZ_PLANE)
                 {
-                    color1.setVec(0.f, 1.f, 0.f, 1.f);
-                    color2.setVec(0.f, 0.f, 1.f, 1.f);
+                    // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                    //color1.setVec(0.f, 1.f, 0.f, 1.f);
+                    //color2.setVec(0.f, 0.f, 1.f, 1.f);
+                    color1.setVec(getUserEditColor(VY));
+                    color2.setVec(getUserEditColor(VZ));
+                    // </FS:AR> [FIRE-36909]
                 }
                 else
                 {
-                    color1.setVec(0.f, 1.f, 0.f, 0.6f);
-                    color2.setVec(0.f, 0.f, 1.f, 0.6f);
+                    // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                    //color1.setVec(0.f, 1.f, 0.f, 0.6f);
+                    //color2.setVec(0.f, 0.f, 1.f, 0.6f);
+                    color1.setVec(getUserEditColor(VY, 0.6f));
+                    color2.setVec(getUserEditColor(VZ, 0.6f));
+                    // </FS:AR> [FIRE-36909]
                 }
                 gGL.begin(LLRender::TRIANGLES);
                 {
@@ -2013,13 +2025,21 @@ void LLManipTranslate::renderTranslationHandles()
                 gGL.scalef(mPlaneScales.mV[VY], mPlaneScales.mV[VY], mPlaneScales.mV[VY]);
                 if (mHighlightedPart == LL_XZ_PLANE)
                 {
-                    color1.setVec(0.f, 0.f, 1.f, 1.f);
-                    color2.setVec(1.f, 0.f, 0.f, 1.f);
+                    // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                    //color1.setVec(0.f, 0.f, 1.f, 1.f);
+                    //color2.setVec(1.f, 0.f, 0.f, 1.f);
+                    color1.setVec(getUserEditColor(VZ));
+                    color2.setVec(getUserEditColor(VX));
+                    // </FS:AR> [FIRE-36909]
                 }
                 else
                 {
-                    color1.setVec(0.f, 0.f, 1.f, 0.6f);
-                    color2.setVec(1.f, 0.f, 0.f, 0.6f);
+                    // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                    //color1.setVec(0.f, 0.f, 1.f, 0.6f);
+                    //color2.setVec(1.f, 0.f, 0.f, 0.6f);
+                    color1.setVec(getUserEditColor(VZ, 0.6f));
+                    color2.setVec(getUserEditColor(VX, 0.6f));
+                    // </FS:AR> [FIRE-36909]
                 }
 
                 gGL.begin(LLRender::TRIANGLES);
@@ -2092,13 +2112,21 @@ void LLManipTranslate::renderTranslationHandles()
                     gGL.scalef(mPlaneScales.mV[VZ], mPlaneScales.mV[VZ], mPlaneScales.mV[VZ]);
                     if (mHighlightedPart == LL_XY_PLANE)
                     {
-                        color1.setVec(1.f, 0.f, 0.f, 1.f);
-                        color2.setVec(0.f, 1.f, 0.f, 1.f);
+                        // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                        //color1.setVec(1.f, 0.f, 0.f, 1.f);
+                        //color2.setVec(0.f, 1.f, 0.f, 1.f);
+                        color1.setVec(getUserEditColor(VX));
+                        color2.setVec(getUserEditColor(VY));
+                        // </FS:AR> [FIRE-36909]
                     }
                     else
                     {
-                        color1.setVec(0.8f, 0.f, 0.f, 0.6f);
-                        color2.setVec(0.f, 0.8f, 0.f, 0.6f);
+                        // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+                        //color1.setVec(0.8f, 0.f, 0.f, 0.6f);
+                        //color2.setVec(0.f, 0.8f, 0.f, 0.6f);
+                        color1.setVec(getUserEditColor(VX, 0.6f));
+                        color2.setVec(getUserEditColor(VY, 0.6f));
+                        // </FS:AR> [FIRE-36909]
                     }
 
                     gGL.begin(LLRender::TRIANGLES);
@@ -2230,19 +2258,40 @@ void LLManipTranslate::renderArrow(S32 which_arrow, S32 selected_arrow, F32 box_
 
         // assign a color for this arrow
         LLColor4 color;  // black
+        // <FS:AR> [FIRE-36909] Build Tools - Provide Accessibility(Color Config)
+        //if (which_arrow == selected_arrow || which_arrow == mHighlightedPart)
+        //{
+        //    color.mV[index] = (pass == 1) ? 1.f : 0.5f;
+        //}
+        //else if (selected_arrow != LL_NO_PART)
+        //{
+        //    color.mV[VALPHA] = 0.f;
+        //}
+        //else
+        //{
+        //    color.mV[index] = pass == 1 ? .8f : .35f ;          // red, green, or blue
+        //    color.mV[VALPHA] = 0.6f;
+        //}
+        color.setVec(getUserEditColor(which_arrow - 1));
+
         if (which_arrow == selected_arrow || which_arrow == mHighlightedPart)
         {
-            color.mV[index] = (pass == 1) ? 1.f : 0.5f;
+            if (pass == 2)
+            {
+                color *= 0.5f;
+                color.mV[VW] = 1.f;
+            }
         }
         else if (selected_arrow != LL_NO_PART)
         {
-            color.mV[VALPHA] = 0.f;
+            color.mV[VW] = 0.f;
         }
         else
         {
-            color.mV[index] = pass == 1 ? .8f : .35f ;          // red, green, or blue
-            color.mV[VALPHA] = 0.6f;
+            color *= pass == 1 ? .8f : .35f;
+            color.mV[VW] = 0.6f;
         }
+        // </FS:AR> [FIRE-36909]
         gGL.color4fv( color.mV );
 
         LLVector3 vec;

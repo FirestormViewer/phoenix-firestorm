@@ -24223,6 +24223,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>None</string>
     </map>
+    <key>FSBuildPrefs_EditHandleScaling</key>
+    <map>
+      <key>Comment</key>
+      <string>Factor to scale editing handles.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
+    </map>
+    <key>FSBuildPrefs_EditTextShadowing</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether the hint-text while building has a drop-shadow.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>FSBuildPrefs_FullBright</key>
     <map>
       <key>Comment</key>
@@ -27749,6 +27771,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>FSUseCompactEnvironmentFloaters</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, use custom compact floaters to edit environment settings.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
   </map>
 </llsd>
