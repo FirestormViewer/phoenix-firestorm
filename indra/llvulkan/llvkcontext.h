@@ -100,6 +100,10 @@ public:
     void bindTexture2D(VkCommandBuffer cmd, VkDescriptorSet descriptor);
     VkDescriptorSet whiteTextureDescriptor() const { return mWhiteTex.descriptor; }
 
+    // Wait for all submitted work before clients release textures referenced
+    // by recorded UI command buffers.
+    void waitIdle() { if (mDevice != VK_NULL_HANDLE) vkDeviceWaitIdle(mDevice); }
+
     VkCommandBuffer currentCmd() const { return mFrames[mFrameIndex].cmd; }
     // line=true selects the line-strip topology variant (topology is baked into
     // the pipeline at creation, not dynamic).

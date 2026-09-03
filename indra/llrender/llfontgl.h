@@ -166,6 +166,19 @@ public:
 
     const LLFontDescriptor& getFontDesc() const;
 
+    // <VulkanStorm> Read the CPU face inputs for the independent Vulkan text
+    // renderer.  This deliberately exposes no LLImageGL/bitmap-cache state.
+    struct VkFaceInfo
+    {
+        std::string filename;
+        F32 point_size = 0.f;
+        S32 weight = -1;
+        S32 flags = 0;
+        S32 hinting = 0;
+    };
+    bool getVkFaceInfo(VkFaceInfo& out) const;
+    // </VulkanStorm>
+
     void generateASCIIglyphs();
 
 

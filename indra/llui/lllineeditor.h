@@ -317,6 +317,17 @@ public:
         S32         focus_border_width;  // gFocusMgr.getFocusFlashWidth()
     };
     VkBackground    getVkBackground(F32 alpha) const;
+
+    struct VkTextState
+    {
+        LLWString text;
+        const LLFontGL* font = nullptr;
+        LLColor4 color;
+        F32 screen_x = 0.f;
+        F32 screen_baseline = 0.f;
+        S32 max_pixels = 0;
+    };
+    VkTextState getVkTextState(F32 alpha) const;
     // </VulkanStorm>
 
     void setShowContextMenu(bool show) { mShowContextMenu = show; }

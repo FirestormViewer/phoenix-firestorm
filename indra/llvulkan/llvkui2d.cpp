@@ -119,6 +119,26 @@ void LLVKUI2D::end()
     mCtx = nullptr;
 }
 
+void LLVKUI2D::shutdown(LLVKContext* ctx)
+{
+    if (!ctx) return;
+    for (auto& rb : mRetiredBufs)
+    {
+        vmaDestroyBuffer(ctx->allocator(), rb.first, rb.second);
+    }
+    mRetiredBufs.clear();
+    if (mVBuf != VK_NULL_HANDLE)
+    {
+        vmaDestroyBuffer(ctx->allocator(), mVBuf, mVBufAlloc);
+        mVBuf = VK_NULL_HANDLE;
+        mVBufAlloc = VK_NULL_HANDLE;
+        mVBufCapacity = 0;
+    }
+    mVerts.clear();
+    mCmd = VK_NULL_HANDLE;
+    mCtx = nullptr;
+}
+
 void LLVKUI2D::setBlend(LLVKBlend blend)
 {
     if (blend == mBlend) return;

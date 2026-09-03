@@ -76,6 +76,7 @@
 #include "llspatialpartition.h"
 #include "llstartup.h"
 #include "llstartup.h"
+#include "lltoastalertpanel.h"
 #include "lltooldraganddrop.h"
 #include "lltoolfocus.h"
 #include "lltoolmgr.h"
@@ -83,6 +84,8 @@
 #include "lltracker.h"
 #include "lltrans.h"
 #include "llui.h"
+#include "lluicolortable.h"
+#include "lluictrl.h"
 #include "lluuid.h"
 #include "llversioninfo.h"
 #include "llviewercamera.h"
@@ -293,6 +296,40 @@ static void vk_render_media_ctrl(const LLView* view, unsigned device_height, flo
     }
 }
 
+// Alert toasts are sized in LLToastAlertPanel before their top-left-layout
+// wrapper is repositioned. On the Vulkan path (which deliberately never calls
+// the GL draw traversal), that wrapper can retain an inverted vertical rect.
+// Reconstruct the final alert bounds from the measured message rect: its
+// bottom is the intended first-line anchor, while its absolute height is the
+// complete wrapped-text extent. These are the same padding values used by the
+// LLToastAlertPanel constructor.
+static void vk_render_toast_alert_panel(const LLView* view, unsigned device_height,
+                                        float ui_scale_y, float alpha)
+{
+    const LLView* message = view->findChildView("Alert message", true);
+    if (!message) return;
+
+    const LLRect panel_screen = view->calcScreenRect();
+    const LLRect message_screen = message->calcScreenRect();
+    const S32 text_height = llabs(message->getRect().getHeight());
+    if (text_height <= 0) return;
+
+    const S32 VPAD = 16;
+    const LLRect alert_rect(panel_screen.mLeft,
+                            message_screen.mBottom + text_height + VPAD,
+                            panel_screen.mRight,
+                            panel_screen.mBottom);
+
+    LLColor4 shadow = LLUIColorTable::instance().getColor("ColorDropShadow").get();
+    shadow.mV[VALPHA] *= alpha;
+    LLVKUIRender::emitDropShadow(alert_rect, device_height, ui_scale_y,
+                                 shadow, DROP_SHADOW_FLOATER);
+
+    LLVKUIRender::emitScreenRect(alert_rect, device_height, ui_scale_y,
+                                 std::string("Toast_Background"),
+                                 LLColor4(1.f, 1.f, 1.f, alpha));
+}
+
 static void vk_register_ui_hooks()
 {
     static bool s_registered = false;
@@ -300,6 +337,7 @@ static void vk_register_ui_hooks()
     {
         s_registered = true;
         LLVKUIRender::registerViewHook(typeid(LLMediaCtrl), &vk_render_media_ctrl);
+        LLVKUIRender::registerViewHook(typeid(LLToastAlertPanel), &vk_render_toast_alert_panel);
     }
 }
 // </VulkanStorm>

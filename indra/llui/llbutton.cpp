@@ -162,6 +162,7 @@ LLButton::LLButton(const LLButton::Params& p)
     mVkImgNameDisabledSelected(p.image_disabled_selected.vk_image_name.isProvided() ? p.image_disabled_selected.vk_image_name() : ""),
     mVkImgNamePressed(p.image_pressed.vk_image_name.isProvided() ? p.image_pressed.vk_image_name() : ""),
     mVkImgNamePressedSelected(p.image_pressed_selected.vk_image_name.isProvided() ? p.image_pressed_selected.vk_image_name() : ""),
+    mVkImgNameOverlay(p.image_overlay.vk_image_name.isProvided() ? p.image_overlay.vk_image_name() : ""),
     // </VulkanStorm>
     mImageHoverSelected(p.image_hover_selected),
     mImageHoverUnselected(p.image_hover_unselected),
@@ -588,6 +589,33 @@ std::string LLButton::getStateImageName(LLColor4& out_color, F32 alpha) const
     LLColor4 disabled_color = mFadeWhenDisabled ? mDisabledImageColor.get() % 0.5f : mDisabledImageColor.get();
     out_color = (enabled ? mImageColor.get() : disabled_color) % alpha;
     return name;
+}
+
+LLButton::VkOverlayState LLButton::getVkOverlayState(F32 alpha) const
+{
+    VkOverlayState state;
+    state.name = mVkImgNameOverlay;
+    state.alignment = mImageOverlayAlignment;
+    state.right_delta = mImageOverlayRightDelta;
+    state.left_pad = mLeftHPad;
+    state.right_pad = mRightHPad;
+    state.top_pad = mImageOverlayTopPad;
+    state.bottom_pad = mImageOverlayBottomPad;
+
+    if (!isInEnabledChain())
+    {
+        state.color = mImageOverlayDisabledColor.get();
+    }
+    else if (getToggleState())
+    {
+        state.color = mImageOverlaySelectedColor.get();
+    }
+    else
+    {
+        state.color = mImageOverlayColor.get();
+    }
+    state.color.mV[VALPHA] *= alpha;
+    return state;
 }
 // </VulkanStorm>
 
@@ -1368,6 +1396,41 @@ const LLUIString& LLButton::getCurrentLabel() const
 {
     return getToggleState() ? mSelectedLabel : mUnselectedLabel;
 }
+
+// <VulkanStorm>
+LLButton::VkLabelState LLButton::getVkLabelState(F32 alpha) const
+{
+    VkLabelState out;
+    out.text = getCurrentLabel().getWString();
+    LLWStringUtil::trim(out.text);
+    out.font = mGLFont;
+    out.halign = mHAlign;
+    out.max_pixels = llmax(0, getRect().getWidth() - mLeftHPad - mRightHPad);
+    out.ellipses = mUseEllipses;
+    out.soft_shadow = mDropShadowedText;
+
+    const bool enabled = isInEnabledChain();
+    if (enabled)
+    {
+        out.color = getToggleState() ? mSelectedLabelColor.get() : mUnselectedLabelColor.get();
+    }
+    else
+    {
+        out.color = getToggleState() ? mDisabledSelectedLabelColor.get() : mDisabledLabelColor.get();
+    }
+    out.color.mV[VALPHA] *= alpha;
+
+    const LLRect screen = calcScreenRect();
+    const S32 text_left = mLeftHPad;
+    const S32 text_right = getRect().getWidth() - mRightHPad;
+    S32 x = text_left;
+    if (mHAlign == LLFontGL::RIGHT) x = text_right;
+    else if (mHAlign == LLFontGL::HCENTER) x = text_left + out.max_pixels / 2;
+    out.screen_x = (F32)(screen.mLeft + x);
+    out.screen_baseline = (F32)(screen.mBottom + getRect().getHeight() / 2 + mBottomVPad);
+    return out;
+}
+// </VulkanStorm>
 
 void LLButton::setDropShadowedText(bool b)
 {

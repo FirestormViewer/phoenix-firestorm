@@ -1942,6 +1942,30 @@ LLLineEditor::VkBackground LLLineEditor::getVkBackground(F32 alpha) const
     }
     return out;
 }
+
+LLLineEditor::VkTextState LLLineEditor::getVkTextState(F32 alpha) const
+{
+    VkTextState out;
+    LLRect background(0, getRect().getHeight(), getRect().getWidth(), 0);
+    background.stretch(-mBorderThickness);
+    const S32 vpad = (background.getHeight() - mGLFont->getLineHeight()) / 2
+                   + (mSpellCheck ? 1 : 0);
+    LLRect screen = calcScreenRect();
+    out.font = mGLFont;
+    out.text = mText.getWString().substr(llclamp(mScrollHPos, 0, mText.length()));
+    if (mDrawAsterixes)
+    {
+        const LLWString bullet = utf8str_to_wstring(PASSWORD_ASTERISK);
+        out.text.assign(out.text.size(), bullet.empty() ? (llwchar)'*' : bullet[0]);
+    }
+    out.color = mReadOnly ? mReadOnlyFgColor.get()
+              : getTentative() ? mTentativeFgColor.get() : mFgColor.get();
+    out.color.mV[VALPHA] = alpha;
+    out.screen_x = (F32)(screen.mLeft + mTextLeftEdge);
+    out.screen_baseline = (F32)(screen.mBottom + background.mBottom + vpad);
+    out.max_pixels = llmax(0, mTextRightEdge - mTextLeftEdge);
+    return out;
+}
 // </VulkanStorm>
 
 //virtual

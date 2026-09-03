@@ -382,6 +382,15 @@ namespace LLVKUIImage
 
     bool ready() { return s_ready; }
 
+    bool getSize(const std::string& name, int& width, int& height)
+    {
+        auto it = s_images.find(name);
+        if (it == s_images.end() || !it->second.ok) return false;
+        width = it->second.w;
+        height = it->second.h;
+        return width > 0 && height > 0;
+    }
+
     void draw(const std::string& name, float left, float top, float right, float bottom, const LLColor4& color)
     {
         // <VulkanStorm> M2 diagnostic (VULKANSTORM_UI_DEBUG=1): log the first

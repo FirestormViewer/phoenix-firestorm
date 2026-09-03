@@ -2194,6 +2194,77 @@ LLRect LLTextBase::getTextBoundingRect()
     return mTextBoundingRect;
 }
 
+// <VulkanStorm>
+void LLTextBase::getVkTextRuns(F32 alpha, std::vector<VkTextRun>& out)
+{
+    reflow();
+    const LLWString& source = useLabel() ? mLabel.getWString() : getWText();
+    if (!mFont || source.empty())
+    {
+        return;
+    }
+
+    const LLRect document = mDocumentView ? mDocumentView->getRect() : LLRect();
+    const LLRect owner_screen = calcScreenRect();
+    const bool inverted_owner = owner_screen.mTop < owner_screen.mBottom;
+
+    // Toast alert panels are built inside a top-left-layout wrapper whose
+    // transient shape can have a negative height. OpenGL's nested matrix and
+    // clipping path normalizes that shape while drawing. The state-reading
+    // Vulkan walk has to reproduce the normalized result explicitly.
+    // A short alert already fits its allocated text box, so its malformed
+    // transient scrollbar must not become visible merely because the raw
+    // rectangle is inverted.
+    if (inverted_owner && mScroller)
+    {
+        if (LLView* vertical = mScroller->getChildView("scrollable vertical", false))
+        {
+            vertical->setVisible(false);
+        }
+        if (LLView* horizontal = mScroller->getChildView("scrollable horizontal", false))
+        {
+            horizontal->setVisible(false);
+        }
+    }
+    LLColor4 color = mFgColor.get();
+    color.mV[VALPHA] *= alpha;
+    for (const line_info& line : mLineInfoList)
+    {
+        const S32 start = llclamp(line.mDocIndexStart, 0, (S32)source.size());
+        const S32 end = llclamp(line.mDocIndexEnd, start, (S32)source.size());
+        if (end <= start)
+        {
+            continue;
+        }
+        LLRect screen;
+        if (inverted_owner)
+        {
+            // The bottom edge and width remain valid. Rebuild the screen rect
+            // upward from that edge and use the unscrolled line coordinates;
+            // applying document.mBottom here would double the inverted height.
+            screen.mLeft = owner_screen.mLeft + line.mRect.mLeft;
+            screen.mRight = owner_screen.mLeft + line.mRect.mRight;
+            screen.mBottom = owner_screen.mBottom + line.mRect.mBottom;
+            screen.mTop = owner_screen.mBottom + line.mRect.mTop;
+        }
+        else
+        {
+            LLRect local = line.mRect;
+            local.translate(document.mLeft, document.mBottom);
+            localRectToScreen(local, &screen);
+        }
+        VkTextRun run;
+        run.text = source.substr(start, end - start);
+        run.font = mFont;
+        run.screen_rect = screen;
+        run.color = color;
+        run.valign = mTextVAlign;
+        run.ellipses = mUseEllipses;
+        out.push_back(run);
+    }
+}
+// </VulkanStorm>
+
 
 void LLTextBase::clearSegments()
 {

@@ -790,6 +790,7 @@ void LLVKContext::destroy()
     }
 
     destroySwapchain();
+    destroy2DPipeline();
 
     // The surface was adopted by createSwapchain() (mSurface). It must outlive
     // the swapchain but not the instance, so destroy it here.
@@ -1125,6 +1126,7 @@ void LLVKContext::destroy2DPipeline()
     if (mDescPool2D != VK_NULL_HANDLE) { vkDestroyDescriptorPool(mDevice, mDescPool2D, nullptr); mDescPool2D = VK_NULL_HANDLE; }
     if (mDescSetLayout2D != VK_NULL_HANDLE) { vkDestroyDescriptorSetLayout(mDevice, mDescSetLayout2D, nullptr); mDescSetLayout2D = VK_NULL_HANDLE; }
     if (mSampler2D != VK_NULL_HANDLE) { vkDestroySampler(mDevice, mSampler2D, nullptr); mSampler2D = VK_NULL_HANDLE; }
+    if (mSampler2DLinear != VK_NULL_HANDLE) { vkDestroySampler(mDevice, mSampler2DLinear, nullptr); mSampler2DLinear = VK_NULL_HANDLE; }
     for (int i = 0; i < (int)Blend2D::Count; ++i)
     {
         for (int t = 0; t < 2; ++t)

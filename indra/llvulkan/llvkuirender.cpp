@@ -22,6 +22,7 @@
 #include <map>
 #include <string>
 #include <typeinfo>             // typeid (tree dump)
+#include <vector>
 
 #include "v4color.h"           // LLColor4
 #include "llrect.h"
@@ -31,8 +32,10 @@
 #include "llview.h"             // LLView
 #include "llpanel.h"            // LLPanel (background state)
 #include "llbutton.h"           // LLButton (state images)
+#include "llcombobox.h"         // editable-combo layout reconciliation
 #include "lliconctrl.h"         // LLIconCtrl (icons)
 #include "lllineeditor.h"       // LLLineEditor (field backgrounds)
+#include "lltextbase.h"         // LLTextBase (computed text-line layout)
 #include "llviewborder.h"       // LLViewBorder (bevel lines)
 #include "llmenugl.h"           // LLMenuGL (menu bar strip + drop shadow)
 #include "lllayoutstack.h"      // LLLayoutStack::updateLayout (GL-free rect math)
@@ -42,6 +45,7 @@
 #include "llvkcontext.h"
 #include "llvkui2d.h"
 #include "llvkuiimage.h"        // LLVKUIImage registry (GL-free)
+#include "llvktext.h"           // independent FreeType/Vulkan text atlas
 #include "lluiimage.h"          // LLUIImage (regions)
 
 namespace
@@ -343,6 +347,7 @@ namespace
         {
             stack->updateLayout();
         }
+
         // </VulkanStorm>
 
         // Widget-specific chrome. (v1: panels/floaters backgrounds; borders +
@@ -368,6 +373,38 @@ namespace
             {
                 LLColor4 imgc;
                 const std::string imgname = button->getStateImageName(imgc, rc.parent_alpha);
+                const LLComboBox* parent_combo =
+                    dynamic_cast<const LLComboBox*>(view->getParent());
+                const bool is_combo_button = parent_combo != nullptr;
+                if (is_combo_button)
+                {
+                    int image_w = 0, image_h = 0;
+                    if (LLVKUIImage::getSize(imgname, image_w, image_h))
+                    {
+                        // One state update supplies the missing intrinsic
+                        // width; subsequent calls are a no-op and resizes use
+                        // LLComboBox's normal layout path.
+                        const_cast<LLComboBox*>(parent_combo)
+                            ->setVkArrowImageWidth(image_w);
+                    }
+                }
+                const LLRect button_screen = view->calcScreenRect();
+                float button_l, button_t, button_r, button_b;
+                toSinkRect(rc, button_screen,
+                           button_l, button_t, button_r, button_b);
+                if (is_combo_button)
+                {
+                    int image_w = 0, image_h = 0;
+                    if (LLVKUIImage::getSize(imgname, image_w, image_h))
+                    {
+                        // LLComboBox::createLineEditor() uses the source image
+                        // width plus both BTN_DROP_SHADOW margins. Its GL image
+                        // pointer is null on Vulkan, so correct only the visual
+                        // bounds; never mutate the live control tree here.
+                        button_l = button_r - (float)(llmax(8, image_w) +
+                                                      2 * BTN_DROP_SHADOW);
+                    }
+                }
                 if (s_dbg && s_dbg_n < 12)
                 {
                     ++s_dbg_n;
@@ -376,10 +413,62 @@ namespace
                 }
                 if (!imgname.empty())
                 {
-                    const LLRect screen = view->calcScreenRect();
-                    float l, t, r, b; toSinkRect(rc, screen, l, t, r, b);
+                    float l = button_l, t = button_t;
+                    float r = button_r, b = button_b;
+                    if (!button->getScaleImage() && !is_combo_button)
+                    {
+                        int image_w = 0, image_h = 0;
+                        if (LLVKUIImage::getSize(imgname, image_w, image_h))
+                        {
+                            // LLButton::draw() places an unscaled image at the
+                            // local top-left corner.
+                            r = l + (F32)image_w;
+                            b = t + (F32)image_h;
+                        }
+                    }
                     LLVKUIImage::draw(imgname, l, t, r, b, imgc);
                     rc.emitted++;
+                }
+
+                // LLButton::draw() composites image_overlay after the state
+                // image. Login combos use this distinct layer for the arrow.
+                const LLButton::VkOverlayState overlay =
+                    button->getVkOverlayState(rc.parent_alpha);
+                if (!overlay.name.empty())
+                {
+                    int ow = 0, oh = 0;
+                    if (LLVKUIImage::getSize(overlay.name, ow, oh) && ow > 0 && oh > 0)
+                    {
+                        const float l = button_l, t = button_t;
+                        const float r = button_r, b = button_b;
+                        const float button_w = r - l;
+                        const float button_h = b - t;
+                        const float scale = llmin(llmin(button_w / (float)ow,
+                                                       button_h / (float)oh), 1.f);
+                        const float overlay_w = (float)ll_round((float)ow * scale);
+                        const float overlay_h = (float)ll_round((float)oh * scale);
+                        float overlay_l = l + (button_w - overlay_w) * 0.5f;
+                        if (overlay.right_delta > 0)
+                        {
+                            overlay_l = r - overlay_w - (float)overlay.right_delta;
+                        }
+                        else if (overlay.alignment == LLFontGL::LEFT)
+                        {
+                            overlay_l = l + (float)overlay.left_pad;
+                        }
+                        else if (overlay.alignment == LLFontGL::RIGHT)
+                        {
+                            overlay_l = r - (float)overlay.right_pad - overlay_w;
+                        }
+                        const float center_adjust =
+                            (float)(overlay.bottom_pad - overlay.top_pad);
+                        const float overlay_t = t + (button_h - overlay_h) * 0.5f
+                                                - center_adjust;
+                        LLVKUIImage::draw(overlay.name, overlay_l, overlay_t,
+                                          overlay_l + overlay_w,
+                                          overlay_t + overlay_h, overlay.color);
+                        rc.emitted++;
+                    }
                 }
             }
             const LLIconCtrl* icon = dynamic_cast<const LLIconCtrl*>(view);
@@ -427,6 +516,54 @@ namespace
                 // GL tints with UI_VERTEX_COLOR (white) at the draw alpha.
                 LLVKUIImage::draw(bg.image_name, l, t, r, b,
                                   LLColor4(1.f, 1.f, 1.f, rc.parent_alpha));
+                rc.emitted++;
+            }
+        }
+
+        // Vulkan-native text. LLTextBase supplies its already-reflowed line
+        // rectangles; buttons and editors expose the final baseline/alignment
+        // inputs consumed by their OpenGL draw methods.
+        if (LLVKText::ready())
+        {
+            if (const LLTextBase* text = dynamic_cast<const LLTextBase*>(view))
+            {
+                std::vector<LLTextBase::VkTextRun> runs;
+                const_cast<LLTextBase*>(text)->getVkTextRuns(rc.parent_alpha, runs);
+                for (const LLTextBase::VkTextRun& run : runs)
+                {
+                    if (rc.dump)
+                    {
+                        LL_INFOS("Vulkan") << "VULKTEXT '" << view->getName()
+                                           << "' rect=" << run.screen_rect.mLeft << ","
+                                           << run.screen_rect.mBottom << "-"
+                                           << run.screen_rect.mRight << ","
+                                           << run.screen_rect.mTop << " text='"
+                                           << wstring_to_utf8str(run.text) << "'" << LL_ENDL;
+                    }
+                    F32 y = (F32)run.screen_rect.mBottom;
+                    if (run.valign == LLFontGL::TOP) y = (F32)run.screen_rect.mTop;
+                    else if (run.valign == LLFontGL::VCENTER) y = (F32)run.screen_rect.getCenterY();
+                    LLVKText::render(run.font, run.text, (F32)run.screen_rect.mLeft, y,
+                                     run.color, LLFontGL::LEFT, run.valign,
+                                     run.screen_rect.getWidth(), run.ellipses);
+                    rc.emitted++;
+                }
+            }
+            else if (line_editor)
+            {
+                const LLLineEditor::VkTextState state = line_editor->getVkTextState(rc.parent_alpha);
+                LLVKText::render(state.font, state.text, state.screen_x, state.screen_baseline,
+                                 state.color, LLFontGL::LEFT, LLFontGL::BOTTOM,
+                                 state.max_pixels);
+                rc.emitted++;
+            }
+            else if (const LLButton* button = dynamic_cast<const LLButton*>(view))
+            {
+                const LLButton::VkLabelState state = button->getVkLabelState(rc.parent_alpha);
+                LLVKText::render(state.font, state.text, state.screen_x, state.screen_baseline,
+                                 state.color, state.halign, LLFontGL::VCENTER,
+                                 state.max_pixels, state.ellipses,
+                                 state.soft_shadow ? LLFontGL::DROP_SHADOW_SOFT : LLFontGL::NO_SHADOW);
                 rc.emitted++;
             }
         }
@@ -508,6 +645,28 @@ namespace LLVKUIRender
         const F32 top    = ui_h - (F32)gl_rect.mTop;
         const F32 bottom = ui_h - (F32)gl_rect.mBottom;
         LLVKUIImage::draw(image ? image->getName() : std::string(), left, top, right, bottom, color);
+    }
+
+    void emitScreenRect(const LLRect& gl_rect, unsigned device_height,
+                        float ui_scale_y, const std::string& image_name,
+                        const LLColor4& color)
+    {
+        if (gl_rect.isEmpty() || image_name.empty() || !LLVKUIImage::ready()) return;
+        const F32 ui_h = (F32)device_height / ui_scale_y;
+        const F32 left   = (F32)gl_rect.mLeft;
+        const F32 right  = (F32)gl_rect.mRight;
+        const F32 top    = ui_h - (F32)gl_rect.mTop;
+        const F32 bottom = ui_h - (F32)gl_rect.mBottom;
+        LLVKUIImage::draw(image_name, left, top, right, bottom, color);
+    }
+
+    void emitDropShadow(const LLRect& gl_rect, unsigned device_height,
+                        float ui_scale_y, const LLColor4& color, S32 lines)
+    {
+        RenderCtx rc;
+        rc.dev_h = device_height;
+        rc.ui_scale_y = ui_scale_y;
+        ::emitDropShadow(rc, gl_rect, color, lines);
     }
 
     void renderFrame(LLVKContext* ctx, LLView* root,

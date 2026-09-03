@@ -24,6 +24,7 @@
 #define LLVKUIRENDER_H
 
 #include <typeinfo>
+#include <string>
 
 #include "llrect.h"
 #include "v4color.h"
@@ -64,6 +65,17 @@ namespace LLVKUIRender
     // clip + 9-slice regions. Modulated by color.
     void emitScreenRect(const LLRect& gl_rect, unsigned device_height,
                         float ui_scale_y, const LLUIImage* image, const LLColor4& color);
+
+    // Named-image form for viewer-side hooks. This avoids requiring a live
+    // LLUIImage/GL texture merely to identify an image already decoded by the
+    // Vulkan-native image registry.
+    void emitScreenRect(const LLRect& gl_rect, unsigned device_height,
+                        float ui_scale_y, const std::string& image_name,
+                        const LLColor4& color);
+
+    // Emit the same right/bottom gradient shadow as gl_drop_shadow().
+    void emitDropShadow(const LLRect& gl_rect, unsigned device_height,
+                        float ui_scale_y, const LLColor4& color, S32 lines);
     // </VulkanStorm>
 }
 

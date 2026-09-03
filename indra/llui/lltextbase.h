@@ -584,6 +584,20 @@ public:
 
     const LLFontGL*         getFont() const override { return mFont; }
 
+    // <VulkanStorm> Flatten the already-computed one-line/word-wrap layout
+    // into backend-neutral runs for the independent Vulkan renderer.
+    struct VkTextRun
+    {
+        LLWString text;
+        const LLFontGL* font = nullptr;
+        LLRect screen_rect;
+        LLColor4 color;
+        LLFontGL::VAlign valign = LLFontGL::BASELINE;
+        bool ellipses = false;
+    };
+    void getVkTextRuns(F32 alpha, std::vector<VkTextRun>& out);
+    // </VulkanStorm>
+
     virtual void            copyContents(const LLTextBase* source);
     virtual void            appendLineBreakSegment(const LLStyle::Params& style_params);
     virtual void            appendImageSegment(const LLStyle::Params& style_params);

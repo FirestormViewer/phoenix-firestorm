@@ -286,6 +286,36 @@ public:
     const LLFontGL* getFont() const override { return mGLFont; }
     const std::string& getText() const override { return getCurrentLabel().getString(); }
 
+    // <VulkanStorm> Read-only label result used by the Vulkan UI walk.
+    struct VkLabelState
+    {
+        LLWString text;
+        const LLFontGL* font = nullptr;
+        LLColor4 color;
+        F32 screen_x = 0.f;
+        F32 screen_baseline = 0.f;
+        S32 max_pixels = 0;
+        LLFontGL::HAlign halign = LLFontGL::LEFT;
+        bool ellipses = false;
+        bool soft_shadow = false;
+    };
+    VkLabelState getVkLabelState(F32 alpha) const;
+
+    // The OpenGL button path draws image_overlay as a distinct, native-sized
+    // layer after the button background. Keep its GL-free rendering state.
+    struct VkOverlayState
+    {
+        std::string name;
+        LLColor4 color;
+        LLFontGL::HAlign alignment = LLFontGL::HCENTER;
+        S32 right_delta = 0;
+        S32 left_pad = 0;
+        S32 right_pad = 0;
+        S32 top_pad = 0;
+        S32 bottom_pad = 0;
+    };
+    VkOverlayState getVkOverlayState(F32 alpha) const;
+
     S32             getLastDrawCharsCount() const { return mLastDrawCharsCount; }
     bool            labelIsTruncated() const;
     // <FS:minerjr> [FIRE-36603] - LLTabContainer - Add button label to the tool tip when too long
@@ -399,6 +429,7 @@ protected:
                                 mVkImgNameDisabledSelected,
                                 mVkImgNamePressed,
                                 mVkImgNamePressedSelected;
+    std::string                 mVkImgNameOverlay;
     // </VulkanStorm>
 
     LLUIColor                   mImageColor;

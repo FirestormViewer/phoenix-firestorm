@@ -16,6 +16,7 @@ include(LLCommon)
 include(LLWindow)
 include(LLImage)
 include(VulkanSdk)
+include(FreeType)
 
 set(llvulkan_SOURCE_FILES
     llvk_vma_impl.cpp
@@ -27,6 +28,7 @@ set(llvulkan_SOURCE_FILES
     llvkui2d.cpp
     llvkuiimage.cpp
     llvkuirender.cpp
+    llvktext.cpp
     llvkuitestscene.cpp
     ${VULKAN_SDK_VOLK_SOURCE}
     )
@@ -42,6 +44,7 @@ set(llvulkan_HEADER_FILES
     llvkui2d.h
     llvkuiimage.h
     llvkuirender.h
+    llvktext.h
     llvkuitestscene.h
     )
 
@@ -84,5 +87,6 @@ target_link_libraries(llvulkan
         llxml
         llrender
         llui
+        ll::freetype
         ll::vulkan_sdk
         )

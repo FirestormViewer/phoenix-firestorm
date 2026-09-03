@@ -51,6 +51,9 @@ public:
     void begin(LLVKContext* ctx, VkCommandBuffer cmd);
     // Flush any pending run and end the frame.
     void end();
+    // Release persistent/retired vertex buffers after the caller has idled the
+    // device, before the context allocator is destroyed.
+    void shutdown(LLVKContext* ctx);
 
     bool isActive() const { return mCmd != VK_NULL_HANDLE; }
 

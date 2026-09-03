@@ -46,6 +46,10 @@ namespace LLVKUIImage
     // True after a successful init().
     bool ready();
 
+    // Decoded intrinsic dimensions for widgets whose GL contract draws an
+    // image unscaled at its native size (checkboxes and combo arrows).
+    bool getSize(const std::string& name, int& width, int& height);
+
     // Emit the image (by name) into the LLVKUI2D sink across the given
     // TOP-LEFT-origin sink rect, honoring the image's clip + 9-slice scale
     // region and modulating by color (per-component texel*vertexColor). If the

@@ -22,6 +22,7 @@
 #include "llvkgpufacts.h"
 #include "llvkui2d.h"
 #include "llvkuiimage.h"
+#include "llvktext.h"
 #include "llvkuirender.h"
 #include "llvkuitestscene.h"
 #include "llwindow.h"
@@ -229,6 +230,7 @@ void LLVKSession::renderUIFrame(LLView* root, float ui_scale_x, float ui_scale_y
         // <VulkanStorm> M2: build the GL-free UI-image registry once the 2D
         // pipeline (sampler/descriptor pool) exists.
         LLVKUIImage::init(s_context);
+        LLVKText::init(s_context);
     }
 
     // Begin the 2D render pass (clears to the boot teal so any uncovered region
@@ -313,6 +315,12 @@ void LLVKSession::stop()
     {
         return;
     }
+    // UI registries own Vulkan images.  Drain submitted frames first, then
+    // release them while the device/allocator/descriptor pool are alive.
+    s_context->waitIdle();
+    LLVKUI2DSink::get().shutdown(s_context);
+    LLVKText::shutdown();
+    LLVKUIImage::shutdown();
     // destroy() idles the device and releases the swapchain + surface.
     s_context->destroy();
     delete s_context;
