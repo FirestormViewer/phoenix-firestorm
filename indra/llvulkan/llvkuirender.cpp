@@ -18,6 +18,7 @@
 #include "llerror.h"            // LL_INFOS (diagnostic)
 
 #include <cstdlib>              // getenv
+#include <algorithm>            // std::swap (rect normalization)
 #include <map>
 #include <string>
 #include <typeinfo>             // typeid (tree dump)
@@ -66,7 +67,9 @@ namespace
     };
 
     // Convert a GL bottom-left-origin screen rect (from calcScreenRect) into
-    // the sink's top-left-origin coordinate space.
+    // the sink's top-left-origin coordinate space. Normalizes so top <= bottom
+    // (the GL->top-left conversion can produce inverted or off-window rects for
+    // some widgets; draw9Slice's band mapping assumes a sane top<bottom rect).
     void toSinkRect(const RenderCtx& rc, const LLRect& gl_rect,
                     float& left, float& top, float& right, float& bottom)
     {
@@ -75,6 +78,8 @@ namespace
         right  = (F32)gl_rect.mRight;
         top    = ui_h - (F32)gl_rect.mTop;
         bottom = ui_h - (F32)gl_rect.mBottom;
+        if (left > right) std::swap(left, right);
+        if (top > bottom) std::swap(top, bottom);
     }
 
     // <VulkanStorm> Registered per-class hooks (newview-side classes).

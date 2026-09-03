@@ -108,21 +108,33 @@ namespace
     }
 
     // Emit one textured quad (top-left sink coords, 2 tris) into the sink.
-    // UV convention (top-left texture frame): v0 = the texture row at the
-    // quad's TOP edge, v1 = row at the quad's BOTTOM edge. The negative-height
-    // viewport flips v so v grows downward on screen; mapping top->v0/v1->bottom
-    // keeps the texture upright.
+    // v0 = texture v at the quad's TOP screen edge, v1 = at the BOTTOM edge.
+    // The sink rect may arrive with the edges in either order (the GL->top-left
+    // conversion can yield top>bottom for some widgets), so normalize x/y to
+    // min..max while keeping the texture upright: v0 stays at the visual top.
     void emitQuad(float x0, float y0, float x1, float y1,
                   float u0, float v0, float u1, float v1, const float c[4])
     {
+        // Normalize the screen rect (min..max) so a rect passed with swapped
+        // edges still rasterizes upright instead of inverting the texture.
+        if (x0 > x1) { std::swap(x0, x1); }
+        if (y0 > y1) { std::swap(y0, y1); }
         float xy[12]; float uv[12]; float rgba[24];
         const float vx[6] = { x0, x1, x1, x0, x1, x0 };
         const float vy[6] = { y0, y0, y1, y0, y1, y1 };
         const float tu[6] = { u0, u1, u1, u0, u1, u0 };
-        // Texture content upright: v0 = texture row at the quad's TOP edge,
-        // v1 = row at the BOTTOM edge. (Position/orientation are now handled by
-        // the ortho + positive viewport; only the image content needs this.)
         const float tv[6] = { v0, v0, v1, v0, v1, v1 };
+        // <VulkanStorm> orientation diagnostic (VULKANSTORM_UI_DEBUG=1): log the
+        // quad's screen rect + texture v at its top/bottom edges.
+        static bool s_dbg = getenv("VULKANSTORM_UI_DEBUG") != nullptr;
+        static int  s_n = 0;
+        if (s_dbg && s_n < 24)
+        {
+            ++s_n;
+            LL_INFOS("Vulkan") << "VKQUAD rect=" << (int)x0 << "," << (int)y0 << "-" << (int)x1 << "," << (int)y1
+                               << " vTop=" << v0 << " vBot=" << v1 << LL_ENDL;
+        }
+        // </VulkanStorm>
         for (int i = 0; i < 6; ++i)
         {
             xy[i * 2] = vx[i]; xy[i * 2 + 1] = vy[i];
@@ -142,6 +154,11 @@ namespace
                     float x0, float y0, float x1, float y1,
                     const LLColor4& color)
     {
+        // Normalize the target rect to top<bottom/left<right. The GL->top-left
+        // conversion can hand us an inverted or off-window rect (e.g. the login
+        // connect button); the slice math below assumes a sane ordering.
+        if (x0 > x1) std::swap(x0, x1);
+        if (y0 > y1) std::swap(y0, y1);
         const float width  = x1 - x0;   // target rect size
         const float height = y1 - y0;
         if (width <= 0.f || height <= 0.f) return;
@@ -155,7 +172,11 @@ namespace
         modulate(white, color, c);
         LLVKUI2DSink::get().setTexture(rec.tex.descriptor);
 
-        // Degenerate (full-region) case == gl_draw_scaled_image.
+        // Degenerate (full-region) case == gl_draw_scaled_image. Same
+        // convention as the 9-slice bands: the quad's TOP screen edge samples
+        // the image's top (the HIGHER texture v, since the PNG decode stores
+        // the image bottom-origin => v=1 is the image top), and the BOTTOM
+        // screen edge samples the lower v.
         if (ctr.mLeft == 0.f && ctr.mRight == 1.f && ctr.mBottom == 0.f && ctr.mTop == 1.f)
         {
             emitQuad(x0, y0, x1, y1, uv_outer.mLeft, uv_outer.mTop, uv_outer.mRight, uv_outer.mBottom, c);

@@ -72,6 +72,16 @@ const Scene& scene()
         s.images.push_back({ "PushButton_Off", 200.f, 320.f, 264.f, 389.f, W, W, W, 1.f });
         // 9-slice (scale_outer) stretched 32x32: covers the outer slice style.
         s.images.push_back({ "Arrow_Left_Unscaled", 320.f, 280.f, 352.f, 312.f, W, W, W, 1.f });
+        // Gradient orientation canary: PushButton_Login (explicit scale region)
+        // has a bright->dark vertical gradient in source. Rendered at native
+        // size so the gradient direction directly exposes any content flip.
+        s.images.push_back({ "PushButton_Login", 400.f, 280.f, 699.f, 344.f, W, W, W, 1.f });
+        // Same image SCALED DOWN (the live login button is scaled) — reproduces
+        // the gradient flip that only appears under scaling.
+        s.images.push_back({ "PushButton_Login", 400.f, 360.f, 540.f, 396.f, W, W, W, 1.f });
+        // Same image at the LIVE login button's exact target size (960x140),
+        // strongly downscaled in X only — the case that flipped on screen.
+        s.images.push_back({ "PushButton_Login", 400.f, 410.f, 1360.f, 550.f, W, W, W, 1.f });
 
         return s;
     }();
