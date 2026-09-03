@@ -972,7 +972,7 @@
          left="10"
          name="render_backend"
          top_pad="8"
-         tool_tip="Selects the render backend used to draw the viewer. Changing the renderer requires shutting down and restarting the viewer."
+         tool_tip="Selects the render backend used to draw the viewer. Mesa/Zink runs the OpenGL pipeline over the bundled Mesa runtime on Vulkan. Changing the renderer requires shutting down and restarting the viewer."
          width="130">
             <combo_box.item
              label="OpenGL"
@@ -982,6 +982,10 @@
              label="Vulkan"
              name="Vulkan"
              value="Vulkan" />
+            <combo_box.item
+             label="Mesa/Zink"
+             name="Zink"
+             value="Zink" />
         </combo_box>
         <check_box
          control_name="RenderAnisotropic"

@@ -4036,16 +4036,16 @@ bool LLPanelPreferenceGraphics::postBuild()
     {
         refreshRenderBackendSelector();
         backend_combo->setCommitCallback(boost::bind(&LLPanelPreferenceGraphics::onRenderBackendCommit, this));
-        // <VulkanStorm> Only offer the renderer selector when a Vulkan ICD is
-        // actually present. Without one, Vulkan can never run, so hide the whole
-        // selector (label + combo) and stay on OpenGL.
+        // <VulkanStorm> The selector is always shown; when no Vulkan ICD is
+        // present, the Vulkan-dependent items (Vulkan, Mesa/Zink) are
+        // suppressed. OpenGL remains selectable.
         if (!probe_vulkan_available())
         {
-            backend_combo->setVisible(false);
-            LLTextBase* label = getChild<LLTextBase>("render_backend_label");
-            if (label)
+            backend_combo->setEnabledByValue(LLSD("Vulkan"), false);
+            backend_combo->setEnabledByValue(LLSD("Zink"), false);
+            if (gSavedSettings.getString("RenderBackendPending") != "OpenGL")
             {
-                label->setVisible(false);
+                gSavedSettings.setString("RenderBackendPending", "OpenGL");
             }
         }
     }
@@ -4061,7 +4061,7 @@ void LLPanelPreferenceGraphics::refreshRenderBackendSelector()
     if (backend_combo)
     {
         std::string active_backend = gSavedSettings.getString("RenderBackend");
-        if (active_backend != "Vulkan")
+        if (active_backend != "Vulkan" && active_backend != "Zink")
         {
             active_backend = "OpenGL";
         }
@@ -4074,7 +4074,7 @@ void LLPanelPreferenceGraphics::onRenderBackendCommit()
 {
     std::string selected_backend = gSavedSettings.getString("RenderBackendPending");
     std::string active_backend = gSavedSettings.getString("RenderBackend");
-    if (active_backend != "Vulkan")
+    if (active_backend != "Vulkan" && active_backend != "Zink")
     {
         active_backend = "OpenGL";
     }
@@ -4097,7 +4097,7 @@ void LLPanelPreferenceGraphics::callbackRenderBackendRestart(const LLSD& notific
     if (0 == option) // Shutdown now
     {
         std::string selected_backend = gSavedSettings.getString("RenderBackendPending");
-        if (selected_backend != "Vulkan")
+        if (selected_backend != "Vulkan" && selected_backend != "Zink")
         {
             selected_backend = "OpenGL";
         }

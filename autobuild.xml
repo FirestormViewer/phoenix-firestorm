@@ -1752,6 +1752,40 @@
         <key>name</key>
         <string>mesa</string>
       </map>
+      <key>mesazink</key>
+      <map>
+        <key>platforms</key>
+        <map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>f213c54e85adf7817c6d6e66bc9723eca6923cef</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://github.com/anne-skydancer/3p-mesazink/releases/download/v26.3.0-devel/mesazink-26.3.0-devel-git.00e42c51b1-windows64-g00e42c51b1.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
+        </map>
+        <key>license</key>
+        <string>MIT</string>
+        <key>license_file</key>
+        <string>LICENSES/mesazink.txt</string>
+        <key>copyright</key>
+        <string>Copyright (C) 1999-2007 Brian Paul. All Rights Reserved.</string>
+        <key>version</key>
+        <string>26.3.0-devel-git.00e42c51b1</string>
+        <key>name</key>
+        <string>mesazink</string>
+        <key>canonical_repo</key>
+        <string>https://github.com/anne-skydancer/3p-mesazink</string>
+        <key>description</key>
+        <string>Mesa Zink Gallium driver for OpenGL-over-Vulkan (patched: AMD RX9000-series support, viewer crash-region fixes)</string>
+      </map>
       <key>meshoptimizer</key>
       <map>
         <key>platforms</key>
