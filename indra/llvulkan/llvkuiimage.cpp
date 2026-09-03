@@ -133,111 +133,117 @@ namespace
         LLVKUI2DSink::get().texturedBatchPreTransformed(xy, uv, rgba, 6);
     }
 
-    // 9-slice draw across a top-left sink rect. The sink's negative-height
-    // viewport already flips texture v, so a fragment's texture-row index is
-    // rowTex = v * H where v grows DOWNWARD on screen. We therefore compute the
-    // slice layout directly in TOP-LEFT sink space (no y-up detour): the slice
-    // tops track the scale region's top edge, and UVs map top slice -> v_top.
-    // x0/y0 = top-left, x1/y1 = bottom-right in sink (top-left-origin) space.
+    // Faithful port of gl_draw_scaled_image_with_border (llrender2dutils.cpp).
+    // Same center-region math + same 9-quad decomposition; only the coordinate
+    // frame is converted at emission: GL bottom-left -> sink top-left
+    // (sink_top = total_height - gl_top). v0/v1 in emitQuad are the quad's
+    // top/bottom texture rows (v grows downward on screen).
     void draw9Slice(const ImageRec& rec,
                     float x0, float y0, float x1, float y1,
                     const LLColor4& color)
     {
-        const float width  = x1 - x0;
+        const float width  = x1 - x0;   // target rect size
         const float height = y1 - y0;
         if (width <= 0.f || height <= 0.f) return;
 
         const LLRectf& uv_outer = rec.clip;
-        const LLRectf& ctr      = rec.scale;   // normalized center region (top-left frame)
+        const LLRectf& ctr      = rec.scale;
         const bool scale_inner  = (rec.style == LLVKUIImage::ScaleStyle::Inner);
-
-        const float image_width  = (float)rec.w;
-        const float image_height = (float)rec.h;
-        const float uv_width  = uv_outer.getWidth();
-        const float uv_height = uv_outer.getHeight();
-
-        // Degenerate (full-region) case == plain gl_draw_scaled_image.
-        const bool full = (ctr.mLeft == 0.f && ctr.mRight == 1.f &&
-                           ctr.mBottom == 0.f && ctr.mTop == 1.f);
 
         float c[4];
         const LLColor4 white(1.f,1.f,1.f,1.f);
         modulate(white, color, c);
         LLVKUI2DSink::get().setTexture(rec.tex.descriptor);
 
-        if (full)
+        // Degenerate (full-region) case == gl_draw_scaled_image.
+        if (ctr.mLeft == 0.f && ctr.mRight == 1.f && ctr.mBottom == 0.f && ctr.mTop == 1.f)
         {
-            // Single quad: top-left sink corner maps to the clip region's top,
-            // bottom-right to its bottom (v grows downward through the texture).
             emitQuad(x0, y0, x1, y1, uv_outer.mLeft, uv_outer.mTop, uv_outer.mRight, uv_outer.mBottom, c);
             return;
         }
 
-        // uv_center_rect (top-left frame: ctr.mTop is the region's TOP).
-        LLRectf uv_center(uv_outer.mLeft + ctr.mLeft  * uv_width,
-                          uv_outer.mTop  + ctr.mTop   * uv_height,
-                          uv_outer.mLeft + ctr.mRight * uv_width,
-                          uv_outer.mTop  + ctr.mBottom* uv_height);
+        const float image_width  = (float)rec.w;
+        const float image_height = (float)rec.h;
+        const float uv_width  = uv_outer.getWidth();
+        const float uv_height = uv_outer.getHeight();
+
+        // uv_center_rect (mirrors GL exactly; note mBottom edge uses ctr.mTop).
+        LLRectf uv_center(uv_outer.mLeft   + ctr.mLeft  * uv_width,
+                          uv_outer.mBottom + ctr.mTop   * uv_height,
+                          uv_outer.mLeft   + ctr.mRight * uv_width,
+                          uv_outer.mBottom + ctr.mBottom* uv_height);
 
         const float img_nat_w = (float)ll_round(image_width  * uv_width);
         const float img_nat_h = (float)ll_round(image_height * uv_height);
 
-        // Center region edges in image-pixel space (top-left frame): distances
-        // from the top/left edges.
-        float cL = ctr.mLeft   * img_nat_w;   // left border width  (px)
-        float cR = ctr.mRight  * img_nat_w;   // left border + center (px from left)
-        float cT = ctr.mTop    * img_nat_h;   // top border height  (px)
-        float cB = ctr.mBottom * img_nat_h;   // top border + center (px from top)
+        // draw_center_rect in the GL frame (local, y-up; mBottom=min, mTop=max),
+        // then converted to sink top-left when emitting.
+        LLRectf draw_center(uv_center.mLeft  * image_width,
+                            uv_center.mTop   * image_height,
+                            uv_center.mRight * image_width,
+                            uv_center.mBottom* image_height);
 
-        // SCALE_INNER: stretch the center to fill, preserving border pixel size
-        // (shrinking borders proportionally if the rect is smaller than the image).
         if (scale_inner)
         {
-            cR += width  - img_nat_w;   // grow right edge by the extra width
-            cB += height - img_nat_h;   // grow bottom edge by the extra height
+            draw_center.mRight += width  - img_nat_w;
+            draw_center.mTop   += height - img_nat_h;
 
-            const float shrink_w = llmax(0.f, cL - cR);
-            const float shrink_h = llmax(0.f, cT - cB);
+            const float shrink_w = llmax(0.f, draw_center.mLeft - draw_center.mRight);
+            const float shrink_h = llmax(0.f, draw_center.mBottom - draw_center.mTop);
             const float w_ratio = ctr.getWidth()  == 1.f ? 0.f : shrink_w / (img_nat_w * (1.f - ctr.getWidth()));
             const float h_ratio = ctr.getHeight() == 1.f ? 0.f : shrink_h / (img_nat_h * (1.f - ctr.getHeight()));
             const float shrink_scale = 1.f - llmax(w_ratio, h_ratio);
-            cL *= shrink_scale;
-            cT *= shrink_scale;
-            cR = lerp(width,  cR, shrink_scale);
-            cB = lerp(height, cB, shrink_scale);
+            draw_center.mLeft   *= shrink_scale;
+            draw_center.mTop     = lerp(height, draw_center.mTop, shrink_scale);
+            draw_center.mRight   = lerp(width,  draw_center.mRight, shrink_scale);
+            draw_center.mBottom *= shrink_scale;
         }
         else
         {
-            // SCALE_OUTER: keep the center at a fixed scale, same relative spot.
-            const float center_w = cR - cL, center_h = cB - cT;
-            const float scale_factor = llmin(llmin(width / center_w, height / center_h), 1.f);
-            const float cx = (cL + cR) * 0.5f, cy = (cT + cB) * 0.5f;
-            const float sw = center_w * scale_factor, sh = center_h * scale_factor;
-            cL = cx - sw * 0.5f; cR = cx + sw * 0.5f;
-            cT = cy - sh * 0.5f; cB = cy + sh * 0.5f;
+            const float scale_factor = llmin(llmin(width / draw_center.getWidth(), height / draw_center.getHeight()), 1.f);
+            draw_center.setCenterAndSize(uv_center.getCenterX() * width, uv_center.getCenterY() * height,
+                                         draw_center.getWidth() * scale_factor, draw_center.getHeight() * scale_factor);
         }
 
-        // Convert local (top-left) center edges to absolute sink coords.
-        const float L  = x0 + cL;
-        const float R  = x0 + cR;
-        const float T  = y0 + cT;
-        const float B  = y0 + cB;
-        const float oL = x0, oR = x1, oT = y0, oB = y1;
+        // draw_center is local GL-frame (y-up, origin at the rect's bottom-left).
+        // Convert each GL y to sink top-left within the target rect:
+        //   sink_y = y0 + (height - gl_y)
+        // and translate x by x0.
+        auto X = [&](float gx) { return x0 + gx; };
+        auto Y = [&](float gy) { return y0 + (height - gy); };
 
-        // UV edges (top-left frame: v grows downward through the texture).
+        // Sink-space edges. GL mBottom(min y) -> larger sink y; mTop -> smaller.
+        const float oL = x0, oR = x1;                       // outer left/right
+        const float oT = y0, oB = y1;                       // outer top/bottom (sink)
+        const float cL = X(draw_center.mLeft);
+        const float cR = X(draw_center.mRight);
+        const float cTop_sink    = Y(draw_center.mTop);     // center top (sink, smaller)
+        const float cBottom_sink = Y(draw_center.mBottom);  // center bottom (sink, larger)
+
+        // UV edges (GL texture frame: mBottom=min row, mTop=max row).
         const float uL = uv_outer.mLeft, uC0 = uv_center.mLeft, uC1 = uv_center.mRight, uR = uv_outer.mRight;
-        const float vT = uv_outer.mTop, vC0 = uv_center.mTop,  vC1 = uv_center.mBottom, vB = uv_outer.mBottom;
+        const float vB = uv_outer.mBottom, vC0 = uv_center.mBottom, vC1 = uv_center.mTop, vT = uv_outer.mTop;
 
-        // Row band helper: sink-y band [yTop..yBot] maps to texture v [vTop..vBot].
-        auto band = [&](float yTop, float yBot, float vTop, float vBot)
+        // Emit a 3-wide band of the 9-slice. The sink band [sTop..sBot] is in
+        // top-left screen space (sTop = smaller y). Its texture rows in GL
+        // (bottom-origin) run glVlower..glVupper. emitQuad's v0 = the row at
+        // the quad's TOP screen edge. In the top-left texture frame the top
+        // screen edge samples the SMALLER texture row, so vTop = the band's
+        // top texture row = (1 - glVupper), and vBot = (1 - glVlower). The
+        // degenerate (near-1:1) arrow case exposed that these were swapped.
+        auto band = [&](float sTop, float sBot, float glVlower, float glVupper)
         {
-            emitQuad(oL, yTop, L,  yBot, uL,  vTop, uC0, vBot, c);
-            emitQuad(L,  yTop, R,  yBot, uC0, vTop, uC1, vBot, c);
-            emitQuad(R,  yTop, oR, yBot, uC1, vTop, uR,  vBot, c);
+            const float vTop = 1.f - glVupper;   // texture row at the band's top screen edge
+            const float vBot = 1.f - glVlower;   // texture row at the band's bottom screen edge
+            emitQuad(oL, sTop, cL, sBot, uL,  vTop, uC0, vBot, c);  // left column
+            emitQuad(cL, sTop, cR, sBot, uC0, vTop, uC1, vBot, c);  // center
+            emitQuad(cR, sTop, oR, sBot, uC1, vTop, uR,  vBot, c);  // right column
         };
-        band(oT, T,  vT,  vC0);   // top row
-        band(T,  B,  vC0, vC1);   // middle row
-        band(B,  oB, vC1, vB);    // bottom row
+        // GL rows: bottom band [vB..vC0], middle [vC0..vC1], top [vC1..vT].
+        // Sink rows (top..bottom): top band = GL top, then middle, then bottom.
+        band(cBottom_sink, oB,          vB,  vC0);  // GL bottom band -> sink bottom
+        band(cTop_sink,    cBottom_sink, vC0, vC1); // middle
+        band(oT,           cTop_sink,    vC1, vT);  // GL top band -> sink top
     }
 }
 
