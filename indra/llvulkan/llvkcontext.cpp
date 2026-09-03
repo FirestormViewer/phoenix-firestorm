@@ -1387,6 +1387,25 @@ bool LLVKContext::readbackSwapchain(std::vector<uint8_t>& out_rgba, uint32_t& ou
                 std::swap(out_rgba[i], out_rgba[i + 2]);
             }
         }
+
+        // <VulkanStorm> Flip to the harness's BOTTOM-origin row order so the
+        // Vulkan capture compares directly against the GL glReadPixels frame.
+        // The swapchain copy is TOP-origin (image row 0 = screen top); the GL
+        // reference is bottom-origin (row 0 = screen bottom). Without this the
+        // readback is vertically inverted relative to GL and the diff measures
+        // the OPPOSITE of the on-screen truth (this masked the real orientation
+        // bug for a whole debugging pass).
+        const size_t row = (size_t)w * 4;
+        std::vector<uint8_t> tmp(row);
+        for (uint32_t y = 0; y < h / 2; ++y)
+        {
+            uint8_t* top    = out_rgba.data() + (size_t)y * row;
+            uint8_t* bottom = out_rgba.data() + (size_t)(h - 1 - y) * row;
+            memcpy(tmp.data(), top, row);
+            memcpy(top, bottom, row);
+            memcpy(bottom, tmp.data(), row);
+        }
+        // </VulkanStorm>
     }
 
     vkDestroyFence(mDevice, fence, nullptr);

@@ -119,7 +119,10 @@ namespace
         const float vx[6] = { x0, x1, x1, x0, x1, x0 };
         const float vy[6] = { y0, y0, y1, y0, y1, y1 };
         const float tu[6] = { u0, u1, u1, u0, u1, u0 };
-        const float tv[6] = { v1, v1, v0, v1, v0, v0 };
+        // Texture content upright: v0 = texture row at the quad's TOP edge,
+        // v1 = row at the BOTTOM edge. (Position/orientation are now handled by
+        // the ortho + positive viewport; only the image content needs this.)
+        const float tv[6] = { v0, v0, v1, v0, v1, v1 };
         for (int i = 0; i < 6; ++i)
         {
             xy[i * 2] = vx[i]; xy[i * 2 + 1] = vy[i];

@@ -302,17 +302,18 @@ void LLVKUI2D::flushRun()
     mFrameVertOffset += mVerts.size();
     // </VulkanStorm>
 
-    // Ortho projection for TOP-LEFT-origin input: maps [0,W]x[0,H] to clip with
-    // y inverted (screen-y down). Combined with a POSITIVE-height viewport, this
-    // puts UI element (0,0) at the screen top-left with NO global flip — so both
-    // geometry positions and textured content land upright.
+    // Ortho projection for the sink's TOP-LEFT-origin input. The sink feeds
+    // device pixels with y measured DOWNWARD from the top (top-left = (0,0)).
+    // A positive-height viewport maps NDC y=+1 to the TOP; to land sink (0,0)
+    // at the screen top we use +2/H (NOT the -2/H inversion, which double-
+    // flips and pushed the whole UI to the bottom on screen).
     const float W = (float)mCtx->swapchainExtent().width;
     const float H = (float)mCtx->swapchainExtent().height;
     float ortho[16] = {
         2.f / W, 0.f,       0.f, 0.f,
-        0.f,    -2.f / H,   0.f, 0.f,
+        0.f,     2.f / H,   0.f, 0.f,
         0.f,     0.f,      -1.f, 0.f,
-       -1.f,     1.f,       0.f, 1.f
+       -1.f,    -1.f,       0.f, 1.f
     };
     vkCmdPushConstants(mCmd, mCtx->pipelineLayout2D(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ortho), ortho);
 

@@ -24,6 +24,7 @@
 
 #include "v4color.h"           // LLColor4
 #include "llrect.h"
+#include "llmath.h"             // ll_round
 #include "llui.h"               // LLUI::getScaleFactor (neutral)
 #include "lluicolortable.h"     // LLUIColor / LLUIColorTable (neutral)
 #include "llview.h"             // LLView
