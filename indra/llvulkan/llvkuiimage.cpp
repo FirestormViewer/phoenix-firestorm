@@ -220,24 +220,22 @@ namespace
         const float cTop_sink    = Y(draw_center.mTop);     // center top (sink, smaller)
         const float cBottom_sink = Y(draw_center.mBottom);  // center bottom (sink, larger)
 
-        // UV edges (GL texture frame: mBottom=min row, mTop=max row).
+        // UV edges (GL texture frame: mBottom=min row, mTop=max row). The PNG
+        // decoder stores the image BOTTOM-origin in texture memory (row 0 =
+        // image bottom), so a GL v already indexes the texture directly — v=1
+        // is the image top, v=0 the bottom, exactly as gl_draw_scaled_image
+        // samples it. emitQuad takes v0 = the quad's TOP screen edge row, so
+        // a band whose GL texture rows run glVlower..glVupper maps its TOP
+        // screen edge to glVupper and its BOTTOM edge to glVlower (no extra
+        // 1-x flip; emitQuad supplies the screen-vs-texture orientation).
         const float uL = uv_outer.mLeft, uC0 = uv_center.mLeft, uC1 = uv_center.mRight, uR = uv_outer.mRight;
         const float vB = uv_outer.mBottom, vC0 = uv_center.mBottom, vC1 = uv_center.mTop, vT = uv_outer.mTop;
 
-        // Emit a 3-wide band of the 9-slice. The sink band [sTop..sBot] is in
-        // top-left screen space (sTop = smaller y). Its texture rows in GL
-        // (bottom-origin) run glVlower..glVupper. emitQuad's v0 = the row at
-        // the quad's TOP screen edge. In the top-left texture frame the top
-        // screen edge samples the SMALLER texture row, so vTop = the band's
-        // top texture row = (1 - glVupper), and vBot = (1 - glVlower). The
-        // degenerate (near-1:1) arrow case exposed that these were swapped.
         auto band = [&](float sTop, float sBot, float glVlower, float glVupper)
         {
-            const float vTop = 1.f - glVupper;   // texture row at the band's top screen edge
-            const float vBot = 1.f - glVlower;   // texture row at the band's bottom screen edge
-            emitQuad(oL, sTop, cL, sBot, uL,  vTop, uC0, vBot, c);  // left column
-            emitQuad(cL, sTop, cR, sBot, uC0, vTop, uC1, vBot, c);  // center
-            emitQuad(cR, sTop, oR, sBot, uC1, vTop, uR,  vBot, c);  // right column
+            emitQuad(oL, sTop, cL, sBot, uL,  glVupper, uC0, glVlower, c);  // left column
+            emitQuad(cL, sTop, cR, sBot, uC0, glVupper, uC1, glVlower, c);  // center
+            emitQuad(cR, sTop, oR, sBot, uC1, glVupper, uR,  glVlower, c);  // right column
         };
         // GL rows: bottom band [vB..vC0], middle [vC0..vC1], top [vC1..vT].
         // Sink rows (top..bottom): top band = GL top, then middle, then bottom.
@@ -344,7 +342,10 @@ namespace LLVKUIImage
                     rec.scale = LLRectf(0.f, 1.f, 1.f, 0.f);
                 }
                 std::string error;
-                if (!ctx->createTexture2D(rgba.data(), (uint32_t)w, (uint32_t)h, rec.tex, error, /*linear=*/false))
+                // <VulkanStorm> GL samples UI textures LINEAR (no mips); use the
+                // GL-matched LINEAR sampler so stretched/9-slice images sample
+                // identically (NEAREST diverged on any non-1:1 stretch).
+                if (!ctx->createTexture2D(rgba.data(), (uint32_t)w, (uint32_t)h, rec.tex, error, /*linear=*/true))
                 {
                     LL_WARNS("Vulkan") << "LLVKUIImage: upload failed for " << name << ": " << error << LL_ENDL;
                     s_images[name] = rec;
