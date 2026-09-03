@@ -43,7 +43,6 @@ namespace
         U32 pen_x = 1, pen_y = 1, row_h = 0;
         bool dirty = false;
         LLVKContext::Texture2D texture;
-        std::vector<LLVKContext::Texture2D> retired;
     };
 
     LLVKContext* s_context = nullptr;
@@ -149,15 +148,25 @@ namespace
     bool upload(Font& font)
     {
         if (!font.dirty) return font.texture.descriptor != VK_NULL_HANDLE;
-        LLVKContext::Texture2D next;
         std::string error;
-        if (!s_context->createTexture2D(font.pixels.data(), ATLAS_SIZE, ATLAS_SIZE, next, error, true))
+        if (font.texture.descriptor == VK_NULL_HANDLE)
         {
-            LL_WARNS("Vulkan") << "LLVKText: atlas upload failed: " << error << LL_ENDL;
+            if (!s_context->createTexture2D(font.pixels.data(), ATLAS_SIZE,
+                                             ATLAS_SIZE, font.texture, error,
+                                             true))
+            {
+                LL_WARNS("Vulkan") << "LLVKText: atlas upload failed: "
+                                    << error << LL_ENDL;
+                return false;
+            }
+        }
+        else if (!s_context->updateTexture2D(font.pixels.data(), ATLAS_SIZE,
+                                              ATLAS_SIZE, font.texture, error))
+        {
+            LL_WARNS("Vulkan") << "LLVKText: atlas update failed: "
+                                << error << LL_ENDL;
             return false;
         }
-        if (font.texture.descriptor != VK_NULL_HANDLE) font.retired.push_back(font.texture);
-        font.texture = next;
         font.dirty = false;
         return true;
     }
@@ -229,7 +238,6 @@ namespace LLVKText
             {
                 Font& font = *pair.second;
                 s_context->destroyTexture2D(font.texture);
-                for (auto& texture : font.retired) s_context->destroyTexture2D(texture);
             }
         }
         for (auto& pair : s_fonts) if (pair.second->face) FT_Done_Face(pair.second->face);
@@ -240,6 +248,25 @@ namespace LLVKText
     }
 
     bool ready() { return s_context && s_library; }
+
+    void prepare(const LLFontGL* fontp, const LLWString& text)
+    {
+        if (!ready() || !fontp || text.empty() || !LLFontGL::sDisplayFont)
+            return;
+        Font* font = getFont(fontp);
+        if (!font) return;
+        measure(*font, text);
+    }
+
+    void flushPrepared()
+    {
+        if (!ready()) return;
+        for (auto& pair : s_fonts)
+        {
+            Font& font = *pair.second;
+            if (font.dirty) upload(font);
+        }
+    }
 
     S32 render(const LLFontGL* fontp, const LLWString& source,
                F32 x, F32 y, const LLColor4& color,
@@ -262,7 +289,11 @@ namespace LLVKText
             text += dots;
             width = measure(*font, text);
         }
-        if (!upload(*font)) return 0;
+        // Glyph discovery/upload belongs to prepareFrame(), before dynamic
+        // rendering starts. Queue submission here would occur inside the
+        // swapchain render pass and can make later UI text disappear.
+        if (font->dirty || font->texture.descriptor == VK_NULL_HANDLE)
+            return 0;
 
         F32 px = x * sx;
         F32 py = y * sy;

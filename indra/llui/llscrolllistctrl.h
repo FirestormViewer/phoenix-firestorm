@@ -362,6 +362,39 @@ public:
 
     // Overridden from LLView
     /*virtual*/ void    draw();
+
+    // <VulkanStorm> Reproduce draw-time row layout without issuing GL calls.
+    // The popup list uses these rectangles for both Vulkan presentation and
+    // mouse hit testing.
+    struct VkTextCellState
+    {
+        LLWString text;
+        const LLFontGL* font = nullptr;
+        LLColor4 color;
+        LLFontGL::HAlign alignment = LLFontGL::LEFT;
+        LLRect screen_rect;
+        F32 screen_x = 0.f;
+        F32 screen_baseline = 0.f;
+        S32 max_pixels = 0;
+    };
+    struct VkRowState
+    {
+        LLRect screen_rect;
+        LLColor4 background;
+        bool background_visible = false;
+        std::vector<VkTextCellState> cells;
+    };
+    struct VkDrawState
+    {
+        bool background_visible = false;
+        LLRect background_rect;
+        LLColor4 background;
+        LLRect clip_rect;
+        std::vector<VkRowState> rows;
+    };
+    void prepareVkDraw();
+    void getVkDrawState(F32 alpha, VkDrawState& out);
+    // </VulkanStorm>
     /*virtual*/ bool    handleMouseDown(S32 x, S32 y, MASK mask);
     /*virtual*/ bool    handleMouseUp(S32 x, S32 y, MASK mask);
     /*virtual*/ bool    handleRightMouseDown(S32 x, S32 y, MASK mask);

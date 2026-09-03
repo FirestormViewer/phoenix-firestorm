@@ -36,6 +36,7 @@
 #include "lltabcontainer.h"     // GL-free tab layout preparation
 #include "llscrollcontainer.h"  // GL-free scrollbar layout preparation
 #include "llscrollbar.h"       // scrollbar track/thumb state
+#include "llscrolllistctrl.h"  // popup/dropdown row layout and text state
 #include "llcombobox.h"         // editable-combo layout reconciliation
 #include "lliconctrl.h"         // LLIconCtrl (icons)
 #include "lllineeditor.h"       // LLLineEditor (field backgrounds)
@@ -442,8 +443,66 @@ namespace
     void prepareView(LLVKContext* context, const LLView* view)
     {
         if (!context || !view || !view->getVisible()) return;
+
+        // Several GL widgets finalize layout from draw(). Vulkan never calls
+        // draw(), so make the same non-rendering updates before collecting
+        // glyphs and before input dispatch uses their rectangles.
+        if (LLLayoutStack* stack = dynamic_cast<LLLayoutStack*>(const_cast<LLView*>(view)))
+            stack->updateLayout();
+        if (LLFloater* floater = dynamic_cast<LLFloater*>(const_cast<LLView*>(view)))
+            floater->prepareVkDraw();
+        if (LLTabContainer* tabs = dynamic_cast<LLTabContainer*>(const_cast<LLView*>(view)))
+            tabs->prepareVkDraw();
+        if (LLScrollContainer* scroller = dynamic_cast<LLScrollContainer*>(const_cast<LLView*>(view)))
+            scroller->prepareVkDraw();
+        if (LLSearchEditor* search = dynamic_cast<LLSearchEditor*>(const_cast<LLView*>(view)))
+            search->prepareVkDraw();
+        if (LLScrollListCtrl* list = dynamic_cast<LLScrollListCtrl*>(const_cast<LLView*>(view)))
+            list->prepareVkDraw();
+        if (LLMenuGL* menu = dynamic_cast<LLMenuGL*>(const_cast<LLView*>(view)))
+            menu->arrangeAndClear();
+
         auto hook = s_prepare_hooks.find(&typeid(*view));
         if (hook != s_prepare_hooks.end()) hook->second(view, context);
+
+        if (LLVKText::ready())
+        {
+            if (const LLTextBase* text = dynamic_cast<const LLTextBase*>(view))
+            {
+                std::vector<LLTextBase::VkTextRun> runs;
+                const_cast<LLTextBase*>(text)->getVkTextRuns(1.f, runs);
+                for (const LLTextBase::VkTextRun& run : runs)
+                    LLVKText::prepare(run.font, run.text);
+            }
+            else if (const LLLineEditor* editor = dynamic_cast<const LLLineEditor*>(view))
+            {
+                const LLLineEditor::VkTextState state = editor->getVkTextState(1.f);
+                LLVKText::prepare(state.font, state.text);
+                LLVKText::prepare(state.font, state.selected_text);
+                LLVKText::prepare(state.font, state.trailing_text);
+            }
+            else if (const LLButton* button = dynamic_cast<const LLButton*>(view))
+            {
+                const LLButton::VkLabelState state = button->getVkLabelState(1.f);
+                LLVKText::prepare(state.font, state.text);
+            }
+            if (LLMenuItemGL* item = dynamic_cast<LLMenuItemGL*>(const_cast<LLView*>(view)))
+            {
+                const LLMenuItemGL::VkDrawState state = item->getVkDrawState(1.f);
+                LLVKText::prepare(state.font, state.label);
+                LLVKText::prepare(state.font, state.bool_label);
+                LLVKText::prepare(state.font, state.accel_label);
+                LLVKText::prepare(state.font, state.branch_label);
+            }
+            if (LLScrollListCtrl* list = dynamic_cast<LLScrollListCtrl*>(const_cast<LLView*>(view)))
+            {
+                LLScrollListCtrl::VkDrawState state;
+                list->getVkDrawState(1.f, state);
+                for (const LLScrollListCtrl::VkRowState& row : state.rows)
+                    for (const LLScrollListCtrl::VkTextCellState& cell : row.cells)
+                        LLVKText::prepare(cell.font, cell.text);
+            }
+        }
         for (LLView::child_list_const_iter_t it = view->getChildList()->begin();
              it != view->getChildList()->end(); ++it)
         {
@@ -564,7 +623,11 @@ namespace
                 const std::string imgname = button->getStateImageName(imgc, rc.parent_alpha);
                 const LLComboBox* parent_combo =
                     dynamic_cast<const LLComboBox*>(view->getParent());
-                const bool is_combo_button = parent_combo != nullptr;
+                // Editable combos use a narrow arrow button beside their
+                // line editor. Non-editable combos use DropDown_* as the
+                // stretchable background for the entire field.
+                const bool is_combo_button = parent_combo != nullptr &&
+                                             parent_combo->acceptsTextInput();
                 if (is_combo_button)
                 {
                     int image_w = 0, image_h = 0;
@@ -722,6 +785,51 @@ namespace
             }
         }
 
+        // Scroll lists (including combo popup menus) draw their rows directly
+        // rather than as child text views. Emit the same row geometry here;
+        // prepareVkDraw() also keeps these rectangles current for hit testing.
+        if (LLScrollListCtrl* list =
+                dynamic_cast<LLScrollListCtrl*>(const_cast<LLView*>(view)))
+        {
+            LLScrollListCtrl::VkDrawState state;
+            list->getVkDrawState(rc.parent_alpha, state);
+            if (state.background_visible)
+            {
+                LLVKUIRender::emitScreenRect(state.background_rect, rc.dev_h,
+                                             rc.ui_scale_y, state.background);
+                rc.emitted++;
+            }
+            const S32 sx = llclamp(ll_round((F32)state.clip_rect.mLeft * rc.ui_scale_x),
+                                   0, (S32)rc.dev_w);
+            const S32 sy = llclamp(ll_round((F32)(rc.dev_h / rc.ui_scale_y -
+                                                  state.clip_rect.mTop) * rc.ui_scale_y),
+                                   0, (S32)rc.dev_h);
+            const S32 sr = llclamp(ll_round((F32)state.clip_rect.mRight * rc.ui_scale_x),
+                                   sx, (S32)rc.dev_w);
+            const S32 sb = llclamp(ll_round((F32)(rc.dev_h / rc.ui_scale_y -
+                                                  state.clip_rect.mBottom) * rc.ui_scale_y),
+                                   sy, (S32)rc.dev_h);
+            LLVKUI2DSink::get().setScissor(sx, sy, sr - sx, sb - sy);
+            for (const LLScrollListCtrl::VkRowState& row : state.rows)
+            {
+                if (row.background_visible)
+                    LLVKUIRender::emitScreenRect(row.screen_rect, rc.dev_h,
+                                                 rc.ui_scale_y, row.background);
+                if (LLVKText::ready())
+                {
+                    for (const LLScrollListCtrl::VkTextCellState& cell : row.cells)
+                    {
+                        LLVKText::render(cell.font, cell.text, cell.screen_x,
+                                         cell.screen_baseline, cell.color,
+                                         cell.alignment, LLFontGL::BOTTOM,
+                                         cell.max_pixels);
+                    }
+                }
+                rc.emitted++;
+            }
+            LLVKUI2DSink::get().clearScissor();
+        }
+
         // Vulkan-native text. LLTextBase supplies its already-reflowed line
         // rectangles; buttons and editors expose the final baseline/alignment
         // inputs consumed by their OpenGL draw methods.
@@ -775,9 +883,27 @@ namespace
             else if (line_editor)
             {
                 const LLLineEditor::VkTextState state = line_editor->getVkTextState(rc.parent_alpha);
+                if (state.selection_visible)
+                {
+                    LLVKUIRender::emitScreenRect(state.selection_rect, rc.dev_h,
+                                                 rc.ui_scale_y,
+                                                 state.selection_color);
+                    rc.emitted++;
+                }
                 LLVKText::render(state.font, state.text, state.screen_x, state.screen_baseline,
                                  state.color, LLFontGL::LEFT, LLFontGL::BOTTOM,
                                  state.max_pixels);
+                if (state.selection_visible)
+                {
+                    LLVKText::render(state.font, state.selected_text,
+                                     state.selected_x, state.screen_baseline,
+                                     state.selected_text_color, LLFontGL::LEFT,
+                                     LLFontGL::BOTTOM, state.selected_max_pixels);
+                    LLVKText::render(state.font, state.trailing_text,
+                                     state.trailing_x, state.screen_baseline,
+                                     state.color, LLFontGL::LEFT,
+                                     LLFontGL::BOTTOM, state.trailing_max_pixels);
+                }
                 rc.emitted++;
                 if (state.caret_visible)
                 {
@@ -863,6 +989,7 @@ namespace LLVKUIRender
     void prepareFrame(LLVKContext* context, LLView* root)
     {
         prepareView(context, root);
+        LLVKText::flushPrepared();
     }
 
     void emitScreenRect(const LLRect& gl_rect, unsigned device_height,

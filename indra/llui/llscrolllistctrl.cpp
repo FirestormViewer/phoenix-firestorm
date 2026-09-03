@@ -1868,6 +1868,115 @@ void LLScrollListCtrl::drawItems()
     }
 }
 
+// <VulkanStorm>
+void LLScrollListCtrl::prepareVkDraw()
+{
+    updateSort();
+    if (mNeedsScroll)
+    {
+        scrollToShowSelected();
+        mNeedsScroll = false;
+    }
+    updateColumns();
+    mCommentText->setVisible(getItemCount() == 0);
+    if (mBorder) mBorder->setKeyboardFocusHighlight(hasFocus());
+
+    const S32 first_line = mIsFiltered ? 0 : mScrollLines;
+    const S32 last_line = mIsFiltered
+        ? (S32)mItemList.size() - 1
+        : llmin((S32)mItemList.size() - 1, mScrollLines + getLinesPerPage());
+    S32 cur_y = mItemListRect.mTop - mLineHeight;
+    for (S32 line = first_line; line <= last_line; ++line)
+    {
+        LLScrollListItem* item = mItemList[line];
+        if (isFiltered(item)) continue;
+        item->setRect(LLRect(mItemListRect.mLeft, cur_y + mLineHeight,
+                             mItemListRect.mRight, cur_y));
+        cur_y -= mLineHeight;
+    }
+}
+
+void LLScrollListCtrl::getVkDrawState(F32 alpha, VkDrawState& out)
+{
+    out = VkDrawState();
+    prepareVkDraw();
+
+    LLRect local_background(0, getRect().getHeight(), getRect().getWidth(), 0);
+    localRectToScreen(local_background, &out.background_rect);
+    localRectToScreen(mItemListRect, &out.clip_rect);
+    out.background_visible = mBackgroundVisible;
+    out.background = getEnabled() ? mBgWriteableColor.get() : mBgReadOnlyColor.get();
+    out.background.setAlpha(out.background.mV[VALPHA] * alpha);
+
+    const S32 first_line = mIsFiltered ? 0 : mScrollLines;
+    const S32 last_line = mIsFiltered
+        ? (S32)mItemList.size() - 1
+        : llmin((S32)mItemList.size() - 1, mScrollLines + getLinesPerPage());
+    S32 logical_line = first_line;
+    for (S32 line = first_line; line <= last_line; ++line)
+    {
+        LLScrollListItem* item = mItemList[line];
+        if (isFiltered(item)) continue;
+
+        LLColor4 fg = item->getEnabled() ? mFgUnselectedColor.get()
+                                         : mFgDisabledColor.get();
+        LLColor4 row_bg = LLColor4::transparent;
+        if (item->getSelected() && mCanSelect)
+        {
+            row_bg = item->getHighlighted()
+                ? lerp(mBgSelectedColor.get(), mHighlightedColor.get(), 0.5f)
+                : mBgSelectedColor.get();
+            fg = item->getEnabled() ? mFgSelectedColor.get() : mFgDisabledColor.get();
+        }
+        else if (mHighlightedItem == logical_line && mCanSelect)
+        {
+            row_bg = item->getHighlighted()
+                ? lerp(mHoveredColor.get(), mHighlightedColor.get(), 0.5f)
+                : mHoveredColor.get();
+        }
+        else if (item->getHighlighted()) row_bg = mHighlightedColor.get();
+        else if (mDrawStripes && (logical_line % 2 == 0)) row_bg = mBgStripeColor.get();
+        if (!item->getEnabled()) row_bg = mBgReadOnlyColor.get();
+        row_bg.setAlpha(row_bg.mV[VALPHA] * alpha);
+
+        VkRowState row;
+        localRectToScreen(item->getRect(), &row.screen_rect);
+        row.background = row_bg;
+        row.background_visible = row_bg.mV[VALPHA] > 0.f;
+        S32 cur_x = item->getRect().mLeft;
+        for (S32 col = 0; col < item->getNumColumns(); ++col)
+        {
+            LLScrollListCell* cell = item->getColumn(col);
+            if (!cell || cell->getWidth() < 0 || !cell->getVisible()) continue;
+            if (LLScrollListText* text_cell = dynamic_cast<LLScrollListText*>(cell))
+            {
+                const LLScrollListText::VkTextState text = text_cell->getVkTextState(fg);
+                VkTextCellState cell_state;
+                cell_state.text = text.text;
+                cell_state.font = text.font;
+                cell_state.color = text.color;
+                cell_state.color.setAlpha(cell_state.color.mV[VALPHA] * alpha);
+                cell_state.alignment = text.alignment;
+                cell_state.max_pixels = text.max_pixels;
+                LLRect local_cell(cur_x, item->getRect().mBottom + cell->getHeight(),
+                                  cur_x + cell->getWidth(), item->getRect().mBottom);
+                localRectToScreen(local_cell, &cell_state.screen_rect);
+                cell_state.screen_baseline = (F32)cell_state.screen_rect.mBottom;
+                cell_state.screen_x = text.alignment == LLFontGL::RIGHT
+                    ? (F32)cell_state.screen_rect.mRight
+                    : text.alignment == LLFontGL::HCENTER
+                        ? (F32)cell_state.screen_rect.getCenterX()
+                        : (F32)cell_state.screen_rect.mLeft + 1.f;
+                row.cells.push_back(cell_state);
+            }
+            cur_x += cell->getWidth() + mColumnPadding;
+        }
+        out.rows.push_back(row);
+        ++logical_line;
+    }
+}
+// </VulkanStorm>
+
 
 void LLScrollListCtrl::draw()
 {

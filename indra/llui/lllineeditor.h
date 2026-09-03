@@ -343,6 +343,16 @@ public:
         F32 screen_x = 0.f;
         F32 screen_baseline = 0.f;
         S32 max_pixels = 0;
+        bool selection_visible = false;
+        LLRect selection_rect;
+        LLColor4 selection_color;
+        LLWString selected_text;
+        LLWString trailing_text;
+        F32 selected_x = 0.f;
+        F32 trailing_x = 0.f;
+        S32 selected_max_pixels = 0;
+        S32 trailing_max_pixels = 0;
+        LLColor4 selected_text_color;
         bool caret_visible = false;
         LLRect caret_rect;
         LLColor4 caret_color;

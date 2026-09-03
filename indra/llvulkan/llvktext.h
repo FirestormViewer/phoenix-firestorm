@@ -17,6 +17,11 @@ namespace LLVKText
     void shutdown();
     bool ready();
 
+    // Rasterize glyphs before the swapchain render pass begins, then upload
+    // each dirty atlas once. Rendering itself never performs queue work.
+    void prepare(const LLFontGL* font, const LLWString& text);
+    void flushPrepared();
+
     // Coordinates are viewer screen coordinates (GL-style bottom-left origin).
     // Raster dimensions are physical pixels; emission compensates for the
     // active UI scale because LLVKUI2D applies that scale at submission.

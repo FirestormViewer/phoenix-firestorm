@@ -165,6 +165,18 @@ public:
     void            setFontStyle(const U8 font_style);
     void            setAlignment(LLFontGL::HAlign align);
 
+    // <VulkanStorm> GL-free presentation state for scroll-list rows.
+    struct VkTextState
+    {
+        LLWString text;
+        const LLFontGL* font = nullptr;
+        LLColor4 color;
+        LLFontGL::HAlign alignment = LLFontGL::LEFT;
+        S32 max_pixels = 0;
+    };
+    VkTextState getVkTextState(const LLColor4& fallback_color) const;
+    // </VulkanStorm>
+
 protected:
 
     LLUIString      mText;
