@@ -1199,10 +1199,11 @@ VkCommandBuffer LLVKContext::begin2DFrame(float clear_r, float clear_g, float cl
 
     vkCmdBeginRendering(f.cmd, &rendering);
 
-    // Negative-height viewport flips NDC y so the 2D pipeline uses the viewer's
-    // top-left-origin UI convention (matching gl_rect_2d / GL ortho output)
-    // without the vertex shader needing to negate y.
-    VkViewport viewport{ 0.f, (float)mSwapchainExtent.height, (float)mSwapchainExtent.width, -(float)mSwapchainExtent.height, 0.f, 1.f };
+    // Positive-height viewport: the 2D pipeline's ortho matrix maps the
+    // top-left-origin UI coords to clip space directly (y inverted in the
+    // matrix), so no global viewport flip is applied. Positions AND textured
+    // content both land upright.
+    VkViewport viewport{ 0.f, 0.f, (float)mSwapchainExtent.width, (float)mSwapchainExtent.height, 0.f, 1.f };
     vkCmdSetViewport(f.cmd, 0, 1, &viewport);
     VkRect2D scissor{ { 0, 0 }, mSwapchainExtent };
     vkCmdSetScissor(f.cmd, 0, 1, &scissor);

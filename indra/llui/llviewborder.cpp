@@ -93,6 +93,22 @@ void LLViewBorder::setTexture( const LLUUID &image_id )
     mTexture = LLUI::getUIImageByID(image_id);
 }
 
+// <VulkanStorm> Read-only border state for the independent Vulkan UI renderer.
+// Pure getter pack; executes no GL and changes no behavior.
+LLViewBorder::VkBorderState LLViewBorder::getVkBorderState() const
+{
+    VkBorderState s;
+    s.style           = mStyle;
+    s.width           = mBorderWidth;
+    s.bevel           = mBevel;
+    s.highlight_light = mHighlightLight.get();
+    s.highlight_dark  = mHighlightDark.get();
+    s.shadow_light    = mShadowLight.get();
+    s.shadow_dark     = mShadowDark.get();
+    s.keyboard_focus  = mHasKeyboardFocus;
+    return s;
+}
+// </VulkanStorm>
 
 void LLViewBorder::draw()
 {

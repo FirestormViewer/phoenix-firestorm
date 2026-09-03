@@ -27,6 +27,7 @@ set(llvulkan_SOURCE_FILES
     llvkui2d.cpp
     llvkuiimage.cpp
     llvkuirender.cpp
+    llvkuitestscene.cpp
     ${VULKAN_SDK_VOLK_SOURCE}
     )
 
@@ -41,6 +42,7 @@ set(llvulkan_HEADER_FILES
     llvkui2d.h
     llvkuiimage.h
     llvkuirender.h
+    llvkuitestscene.h
     )
 
 # volk.c is C; the rest is C++. Give volk its required define so it exposes the

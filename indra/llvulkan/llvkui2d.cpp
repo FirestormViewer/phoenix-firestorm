@@ -302,21 +302,23 @@ void LLVKUI2D::flushRun()
     mFrameVertOffset += mVerts.size();
     // </VulkanStorm>
 
-    // Ortho projection (top-left origin via the negative-height viewport).
+    // Ortho projection for TOP-LEFT-origin input: maps [0,W]x[0,H] to clip with
+    // y inverted (screen-y down). Combined with a POSITIVE-height viewport, this
+    // puts UI element (0,0) at the screen top-left with NO global flip — so both
+    // geometry positions and textured content land upright.
     const float W = (float)mCtx->swapchainExtent().width;
     const float H = (float)mCtx->swapchainExtent().height;
     float ortho[16] = {
-        2.f / W, 0.f,      0.f, 0.f,
-        0.f,     2.f / H,  0.f, 0.f,
-        0.f,     0.f,     -1.f, 0.f,
-       -1.f,    -1.f,      0.f, 1.f
+        2.f / W, 0.f,       0.f, 0.f,
+        0.f,    -2.f / H,   0.f, 0.f,
+        0.f,     0.f,      -1.f, 0.f,
+       -1.f,     1.f,       0.f, 1.f
     };
     vkCmdPushConstants(mCmd, mCtx->pipelineLayout2D(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ortho), ortho);
 
-    // <VulkanStorm> Defensive: re-assert the negative-height UI viewport each
-    // flush so a stale/reset viewport can't silently drop the triangles (the
-    // harness path works because it inherits begin2DFrame's viewport directly).
-    VkViewport viewport{ 0.f, (float)mCtx->swapchainExtent().height, (float)mCtx->swapchainExtent().width, -(float)mCtx->swapchainExtent().height, 0.f, 1.f };
+    // <VulkanStorm> Positive-height viewport (no global flip): the top-left
+    // origin comes from the ortho matrix above, not from a negative viewport.
+    VkViewport viewport{ 0.f, 0.f, (float)mCtx->swapchainExtent().width, (float)mCtx->swapchainExtent().height, 0.f, 1.f };
     vkCmdSetViewport(mCmd, 0, 1, &viewport);
     // </VulkanStorm>
 

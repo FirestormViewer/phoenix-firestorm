@@ -3263,6 +3263,19 @@ bool LLMenuGL::handleScrollWheel( S32 x, S32 y, S32 clicks )
 }
 
 
+// <VulkanStorm> Read-only bg-strip color for the independent Vulkan UI
+// renderer: the same mBackgroundColor * FSMenuBackgroundAlpha LLMenuGL::draw()
+// computes. No GL code is executed.
+LLColor4 LLMenuGL::getVkBgColor() const
+{
+    // <FS:PP> Semi-transparent menu backgrounds
+    static LLUICachedControl<F32> menu_bg_alpha("FSMenuBackgroundAlpha");
+    LLColor4 bg_color = mBackgroundColor.get();
+    bg_color.mV[VALPHA] *= menu_bg_alpha;
+    return bg_color;
+}
+// </VulkanStorm>
+
 void LLMenuGL::draw( void )
 {
     if (mNeedsArrange)

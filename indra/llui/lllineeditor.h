@@ -303,6 +303,22 @@ public:
     void            setBgImage(LLPointer<LLUIImage> image) { mBgImage = image; }
     void            setBgImageFocused(LLPointer<LLUIImage> image) { mBgImageFocused = image; }
 
+    // <VulkanStorm> Read-only background state for the independent Vulkan UI
+    // renderer. Replicates the RESULT of drawBackground()'s color/image choice
+    // (and the focus-border inputs) without executing any GL code. alpha = the
+    // current draw-context alpha. No behavior change to the GL path.
+    struct VkBackground
+    {
+        bool        solid_color;         // mUseBgColor: fill with bg_color
+        LLColor4    bg_color;            // solid fill color (alpha applied)
+        std::string image_name;          // bg image for the current state ("" = none)
+        bool        focus_border;        // draw the focus border ring (before the image)
+        LLColor4    focus_color;         // focus border color (alpha applied)
+        S32         focus_border_width;  // gFocusMgr.getFocusFlashWidth()
+    };
+    VkBackground    getVkBackground(F32 alpha) const;
+    // </VulkanStorm>
+
     void setShowContextMenu(bool show) { mShowContextMenu = show; }
     bool getShowContextMenu() const { return mShowContextMenu; }
 
@@ -447,6 +463,11 @@ private:
     LLPointer<LLUIImage> mBgImage;
     LLPointer<LLUIImage> mBgImageDisabled;
     LLPointer<LLUIImage> mBgImageFocused;
+
+    // <VulkanStorm> raw XUI bg image names (GL-free); the GL-coupled LLUIImage
+    // pointers above stay null on the Vulkan path, so the renderer keys off these.
+    std::string mVkBgImageName, mVkBgImageDisabledName, mVkBgImageFocusedName;
+    // </VulkanStorm>
 
     bool        mReplaceNewlinesWithSpaces; // if false, will replace pasted newlines with paragraph symbol.
 

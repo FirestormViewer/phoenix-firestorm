@@ -32,6 +32,11 @@
 #include "llvkselftest.h"
 #include "llvksession.h"
 #include "llvkuirender.h"
+#include "llvkuitestscene.h"
+// <VulkanStorm> UI A/B harness GL emitters (gl_render_ui_test_scene).
+#include "llrender2dutils.h"
+#include "lluiimage.h"
+// </VulkanStorm>
 #include "llrootview.h"
 #include "fsyspath.h"
 #include "hexdump.h"
@@ -164,6 +169,68 @@ void render_disconnected_background();
 
 void getProfileStatsContext(boost::json::object& stats);
 std::string getProfileStatsFilename();
+
+// <VulkanStorm> UI A/B harness (env-gated, VULKANSTORM_UITEST=1): render the
+// deterministic test scene (single-sourced neutral data in llvulkan's
+// LLVKUITestScene) through the REAL GL 2D path — gl_rect_2d / gl_line_2d /
+// LLUIImage::draw — in place of the login widget tree. This is the READ-ONLY
+// reference result the Vulkan path (LLVKUITestScene::emitVulkan) is diffed
+// against. Scene coords are top-left-origin device pixels; the GL 2D ortho is
+// bottom-left y-up (gl_state_for_2d), so y converts as window_height - scene_y.
+static void gl_render_ui_test_scene()
+{
+    if (!gViewerWindow)
+    {
+        return;
+    }
+    const S32 win_h = gViewerWindow->getWindowHeightRaw();
+    if (win_h <= 0)
+    {
+        return;
+    }
+    const LLVKUITestScene::Scene& scene = LLVKUITestScene::scene();
+
+    // Same shader + state the real UI pass uses (LLViewerWindow::draw binds
+    // gUIProgram; LLGLSUIDefault is already active in display_startup).
+    gUIProgram.bind();
+    gGL.setColorMask(true, true);
+
+    // Emission order must match LLVKUITestScene::emitVulkan exactly
+    // (painter's order): rects, then lines, then images.
+    for (const LLVKUITestScene::Rect& r : scene.rects)
+    {
+        gGL.setSceneBlendType(r.opaque ? LLRender::BT_REPLACE : LLRender::BT_ALPHA);
+        gl_rect_2d((S32)r.l, win_h - (S32)r.t, (S32)r.r, win_h - (S32)r.b,
+                   LLColor4(r.cr, r.cg, r.cb, r.ca));
+    }
+    gGL.setSceneBlendType(LLRender::BT_REPLACE);
+    for (const LLVKUITestScene::Line& l : scene.lines)
+    {
+        gl_line_2d((S32)l.x0, win_h - (S32)l.y0, (S32)l.x1, win_h - (S32)l.y1,
+                   LLColor4(l.cr, l.cg, l.cb, l.ca));
+    }
+    gGL.setSceneBlendType(LLRender::BT_ALPHA);
+    for (const LLVKUITestScene::Image& img : scene.images)
+    {
+        LLUIImagePtr ui_image = LLUI::getUIImage(img.name);
+        if (ui_image.notNull())
+        {
+            // LLUIImage::draw(x, y, w, h): (x, y) is the BOTTOM-left corner in
+            // GL y-up space; honors the image's clip + 9-slice scale regions.
+            ui_image->draw((S32)img.l, win_h - (S32)img.b,
+                           (S32)(img.r - img.l), (S32)(img.b - img.t),
+                           LLColor4(img.cr, img.cg, img.cb, img.ca));
+        }
+        else
+        {
+            LL_WARNS("Vulkan") << "UI test scene: GL image not found: " << img.name << LL_ENDL;
+        }
+    }
+    gGL.flush();
+    gUIProgram.unbind();
+    gGL.setSceneBlendType(LLRender::BT_ALPHA); // restore the UI-pass default
+}
+// </VulkanStorm>
 
 // <VulkanStorm> GL reference capture (read-only diagnostic, env-gated): dump
 // the finished GL back buffer to the same .rgba format the Vulkan harness uses
@@ -324,8 +391,17 @@ void display_startup()
 
     if (gViewerWindow)
     gViewerWindow->setup2DRender();
-    if (gViewerWindow)
-    gViewerWindow->draw();
+    // <VulkanStorm> UI A/B harness (VULKANSTORM_UITEST=1): render the fixed
+    // test scene through the real GL 2D path instead of the login UI tree.
+    if (LLVKUITestScene::enabled())
+    {
+        gl_render_ui_test_scene();
+    }
+    else if (gViewerWindow)
+    {
+        gViewerWindow->draw();
+    }
+    // </VulkanStorm>
     gGL.flush();
 
     LLVertexBuffer::unbind();

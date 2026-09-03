@@ -23,6 +23,7 @@
 #include "llvkui2d.h"
 #include "llvkuiimage.h"
 #include "llvkuirender.h"
+#include "llvkuitestscene.h"
 #include "llwindow.h"
 
 namespace
@@ -240,7 +241,18 @@ void LLVKSession::renderUIFrame(LLView* root, float ui_scale_x, float ui_scale_y
 
     // Begin the sink, render the widget tree from its readable state, flush.
     LLVKUI2DSink::get().begin(s_context, cmd);
-    LLVKUIRender::renderFrame(s_context, root, s_width, s_height, ui_scale_x, ui_scale_y);
+    // <VulkanStorm> UI A/B harness (VULKANSTORM_UITEST=1): emit the fixed test
+    // scene instead of walking the live tree, so the capture can be diffed
+    // byte-for-byte against the GL reference scene (newview/llviewerdisplay).
+    if (LLVKUITestScene::enabled())
+    {
+        LLVKUITestScene::emitVulkan();
+    }
+    else
+    {
+        LLVKUIRender::renderFrame(s_context, root, s_width, s_height, ui_scale_x, ui_scale_y);
+    }
+    // </VulkanStorm>
 
     // <VulkanStorm> M0 diagnostic: read the counters BEFORE end() zeroes them.
     // VULKANSTORM_UI_DEBUG=1 enables it.

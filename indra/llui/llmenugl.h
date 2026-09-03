@@ -470,6 +470,14 @@ public:
     void setBackgroundVisible( bool b ) { mBgVisible = b; }
     void setCanTearOff(bool tear_off);
 
+    // <VulkanStorm> Read-only background-strip state for the independent Vulkan
+    // UI renderer: the same inputs LLMenuGL::draw() uses for its bg rect and
+    // drop shadow, without executing GL. No behavior change to the GL path.
+    bool        getVkBgVisible() const { return mBgVisible; }
+    LLColor4    getVkBgColor() const;   // mBackgroundColor * FSMenuBackgroundAlpha
+    bool        getVkDropShadow() const { return mDropShadowed && !mTornOff; }
+    // </VulkanStorm>
+
     // add a separator to this menu
     virtual bool addSeparator();
 

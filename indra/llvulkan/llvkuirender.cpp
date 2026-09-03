@@ -30,6 +30,11 @@
 #include "llpanel.h"            // LLPanel (background state)
 #include "llbutton.h"           // LLButton (state images)
 #include "lliconctrl.h"         // LLIconCtrl (icons)
+#include "lllineeditor.h"       // LLLineEditor (field backgrounds)
+#include "llviewborder.h"       // LLViewBorder (bevel lines)
+#include "llmenugl.h"           // LLMenuGL (menu bar strip + drop shadow)
+#include "llfocusmgr.h"         // gFocusMgr (focus border color)
+#include "lluictrl.h"           // DROP_SHADOW_FLOATER
 #include "lluicolor.h"          // LLUIColor
 #include "llvkcontext.h"
 #include "llvkui2d.h"
@@ -133,6 +138,177 @@ namespace
         LLVKUIRender::emitScreenRect(screen, rc.dev_h, rc.ui_scale_y, c);
     }
 
+    // <VulkanStorm> M3: non-text chrome helpers.
+
+    // Emit one GL-space line segment into the sink (GL bottom-left -> top-left
+    // conversion, same mapping as toSinkRect). Each gl_line_2d edge becomes its
+    // own 2-vertex strip so independent segments never connect.
+    void emitBorderLine(const RenderCtx& rc, S32 x1, S32 y1, S32 x2, S32 y2,
+                        const LLColor4& c)
+    {
+        const F32 ui_h = (F32)rc.dev_h / rc.ui_scale_y;
+        const float xy[4] = { (F32)x1, ui_h - (F32)y1, (F32)x2, ui_h - (F32)y2 };
+        LLVKUI2DSink::get().lineStrip(xy, 2, c.mV[VRED], c.mV[VGREEN], c.mV[VBLUE], c.mV[VALPHA]);
+    }
+
+    // Mirror LLViewBorder::drawOnePixelLines()/drawTwoPixelLines()
+    // (llviewborder.cpp): identical endpoints and per-edge colors, in sink
+    // space. STYLE_LINE only (STYLE_TEXTURE draws nothing in GL either);
+    // width 0 = no visible border; widths > 2 are llassert'ed in GL.
+    void renderViewBorder(RenderCtx& rc, const LLViewBorder* border)
+    {
+        const LLViewBorder::VkBorderState bs = border->getVkBorderState();
+        if (bs.style != LLViewBorder::STYLE_LINE || bs.width < 1 || bs.width > 2) return;
+
+        const LLRect screen = border->calcScreenRect();
+        const S32 left = screen.mLeft, top = screen.mTop,
+                  right = screen.mRight, bottom = screen.mBottom;
+
+        if (bs.width == 1)
+        {
+            LLColor4 top_color    = bs.highlight_light;
+            LLColor4 bottom_color = bs.highlight_light;
+            switch (bs.bevel)
+            {
+            case LLViewBorder::BEVEL_OUT:
+                top_color    = bs.highlight_light;
+                bottom_color = bs.shadow_dark;
+                break;
+            case LLViewBorder::BEVEL_IN:
+                top_color    = bs.shadow_dark;
+                bottom_color = bs.highlight_light;
+                break;
+            case LLViewBorder::BEVEL_NONE:
+                break; // use defaults (GL comment: "use defaults")
+            default:
+                break; // GL llassert(0)s on BEVEL_BRIGHT here; keep defaults
+            }
+            if (bs.keyboard_focus)
+            {
+                top_color = gFocusMgr.getFocusColor();
+                bottom_color = top_color;
+                // NOTE: GL also widens the line to lerp(1,2,focusFlashAmt);
+                // the 2D sink has no line-width state, so the focused border
+                // stays 1px wide (the color is exact).
+            }
+            emitBorderLine(rc, left, bottom, left, top, top_color);
+            emitBorderLine(rc, left, top, right, top, top_color);
+            emitBorderLine(rc, right, top, right, bottom, bottom_color);
+            emitBorderLine(rc, left, bottom, right, bottom, bottom_color);
+        }
+        else // width == 2
+        {
+            LLColor4 top_in_color, top_out_color, bottom_in_color, bottom_out_color;
+            switch (bs.bevel)
+            {
+            case LLViewBorder::BEVEL_OUT:
+                top_in_color     = bs.highlight_light;
+                top_out_color    = bs.highlight_dark;
+                bottom_in_color  = bs.shadow_light;
+                bottom_out_color = bs.shadow_dark;
+                break;
+            case LLViewBorder::BEVEL_IN:
+                top_in_color     = bs.shadow_dark;
+                top_out_color    = bs.shadow_light;
+                bottom_in_color  = bs.highlight_dark;
+                bottom_out_color = bs.highlight_light;
+                break;
+            case LLViewBorder::BEVEL_BRIGHT:
+                top_in_color = top_out_color = bottom_in_color = bottom_out_color = bs.highlight_light;
+                break;
+            case LLViewBorder::BEVEL_NONE:
+                top_in_color = top_out_color = bottom_in_color = bottom_out_color = bs.shadow_dark;
+                break;
+            default:
+                break;
+            }
+            if (bs.keyboard_focus)
+            {
+                top_out_color = bottom_out_color = gFocusMgr.getFocusColor();
+            }
+            emitBorderLine(rc, left, bottom, left, top - 1, top_out_color);
+            emitBorderLine(rc, left, top - 1, right, top - 1, top_out_color);
+            emitBorderLine(rc, left + 1, bottom + 1, left + 1, top - 2, top_in_color);
+            emitBorderLine(rc, left + 1, top - 2, right - 1, top - 2, top_in_color);
+            emitBorderLine(rc, right - 1, top - 1, right - 1, bottom, bottom_out_color);
+            emitBorderLine(rc, left, bottom, right, bottom, bottom_out_color);
+            emitBorderLine(rc, right - 2, top - 2, right - 2, bottom + 1, bottom_in_color);
+            emitBorderLine(rc, left + 1, bottom + 1, right - 1, bottom + 1, bottom_in_color);
+        }
+        rc.emitted++;
+    }
+
+    // Mirror gl_drop_shadow (llrender2dutils.cpp:165): the same 30-vertex
+    // gradient fan hugging the right/bottom edges, with the same 1px overlap
+    // hack and per-vertex alpha fade, in sink space.
+    void emitDropShadow(const RenderCtx& rc, const LLRect& gl_screen,
+                        const LLColor4& start_color, S32 lines)
+    {
+        // GL: right--, bottom++, lines++ (overlap with the rectangle).
+        const F32 left   = (F32)gl_screen.mLeft;
+        const F32 top    = (F32)gl_screen.mTop;
+        const F32 right  = (F32)gl_screen.mRight - 1.f;
+        const F32 bottom = (F32)gl_screen.mBottom + 1.f;
+        const F32 ln     = (F32)(lines + 1);
+        const F32 ui_h   = (F32)rc.dev_h / rc.ui_scale_y;
+
+        LLColor4 end_color = start_color;
+        end_color.mV[VALPHA] = 0.f;
+
+        // Vertex stream identical to gl_drop_shadow; each vertex carries its
+        // GL-space position (y flipped to sink space) and the start/end color.
+        struct V { F32 x, y; bool start; };
+        const V gv[30] = {
+            // right edge
+            { right, top - ln, true },   { right, bottom, true },             { right + ln, bottom, false },
+            { right, top - ln, true },   { right + ln, bottom, false },       { right + ln, top - ln, false },
+            // bottom edge
+            { right, bottom, true },     { left + ln, bottom, true },         { left + ln, bottom - ln, false },
+            { right, bottom, true },     { left + ln, bottom - ln, false },   { right, bottom - ln, false },
+            // bottom-left corner
+            { left + ln, bottom, true }, { left, bottom, false },             { left + 1, bottom - ln + 1, false },
+            { left + ln, bottom, true }, { left + 1, bottom - ln + 1, false },{ left + ln, bottom - ln, false },
+            // bottom-right corner
+            { right, bottom, true },     { right, bottom - ln, false },       { right + ln - 1, bottom - ln + 1, false },
+            { right, bottom, true },     { right + ln - 1, bottom - ln + 1, false }, { right + ln, bottom, false },
+            // top-right corner
+            { right, top - ln, true },   { right + ln, top - ln, false },     { right + ln - 1, top - 1, false },
+            { right, top - ln, true },   { right + ln - 1, top - 1, false },  { right, top, false },
+        };
+        float xy[60], rgba[120];
+        for (int i = 0; i < 30; ++i)
+        {
+            xy[i * 2]     = gv[i].x;
+            xy[i * 2 + 1] = ui_h - gv[i].y;
+            const LLColor4& c = gv[i].start ? start_color : end_color;
+            rgba[i * 4]     = c.mV[VRED];
+            rgba[i * 4 + 1] = c.mV[VGREEN];
+            rgba[i * 4 + 2] = c.mV[VBLUE];
+            rgba[i * 4 + 3] = c.mV[VALPHA];
+        }
+        LLVKUI2DSink::get().rawTris(xy, rgba, 30);
+    }
+
+    // Mirror the non-item chrome of LLMenuGL::draw() (llmenugl.cpp:3267): the
+    // drop shadow first, then the background strip (bg color *
+    // FSMenuBackgroundAlpha). Menu item text/highlight is out of scope.
+    void renderMenuChrome(RenderCtx& rc, const LLMenuGL* menu)
+    {
+        const LLRect screen = menu->calcScreenRect();
+        if (menu->getVkDropShadow())
+        {
+            static LLUIColor color_drop_shadow = LLUIColorTable::instance().getColor("ColorDropShadow");
+            emitDropShadow(rc, screen, color_drop_shadow.get(), DROP_SHADOW_FLOATER);
+            rc.emitted++;
+        }
+        if (menu->getVkBgVisible())
+        {
+            LLVKUIRender::emitScreenRect(screen, rc.dev_h, rc.ui_scale_y, menu->getVkBgColor());
+            rc.emitted++;
+        }
+    }
+    // </VulkanStorm>
+
     // Read a widget's own chrome (background/border) and recurse into children.
     // Painter's order: the child list is iterated so that back-most draws first.
     void renderView(RenderCtx& rc, const LLView* view)
@@ -203,6 +379,54 @@ namespace
                     rc.emitted++;
                 }
             }
+        }
+        // </VulkanStorm>
+
+        // <VulkanStorm> M3: non-text login chrome.
+        // Line-editor backgrounds: solid color, or the TextField_* 9-slice
+        // image (+ focus border ring) chosen by readOnly/focus state. Mirrors
+        // LLLineEditor::drawBackground()'s selection and draw order (border
+        // first, then the image over it).
+        const LLLineEditor* line_editor = dynamic_cast<const LLLineEditor*>(view);
+        static const bool s_no_lineedit = getenv("VULKANSTORM_NO_LINEEDIT") != nullptr;
+        if (line_editor && !s_no_lineedit)
+        {
+            const LLLineEditor::VkBackground bg = line_editor->getVkBackground(rc.parent_alpha);
+            const LLRect screen = view->calcScreenRect();
+            if (bg.solid_color)
+            {
+                LLVKUIRender::emitScreenRect(screen, rc.dev_h, rc.ui_scale_y, bg.bg_color);
+                rc.emitted++;
+            }
+            else if (!bg.image_name.empty() && LLVKUIImage::ready())
+            {
+                float l, t, r, b; toSinkRect(rc, screen, l, t, r, b);
+                if (bg.focus_border)
+                {
+                    LLVKUIImage::drawBorder(bg.image_name, l, t, r, b,
+                                            bg.focus_color, bg.focus_border_width);
+                }
+                // GL tints with UI_VERTEX_COLOR (white) at the draw alpha.
+                LLVKUIImage::draw(bg.image_name, l, t, r, b,
+                                  LLColor4(1.f, 1.f, 1.f, rc.parent_alpha));
+                rc.emitted++;
+            }
+        }
+
+        // View borders: 1-2px bevel line rings (LLViewBorder::draw()).
+        static const bool s_no_border = getenv("VULKANSTORM_NO_BORDER") != nullptr;
+        const LLViewBorder* border = dynamic_cast<const LLViewBorder*>(view);
+        if (border && !s_no_border)
+        {
+            renderViewBorder(rc, border);
+        }
+
+        // Menu background strip + drop shadow (LLMenuBarGL/LLMenuGL::draw()).
+        static const bool s_no_menu = getenv("VULKANSTORM_NO_MENU") != nullptr;
+        const LLMenuGL* menu = dynamic_cast<const LLMenuGL*>(view);
+        if (menu && !s_no_menu)
+        {
+            renderMenuChrome(rc, menu);
         }
         // </VulkanStorm>
 

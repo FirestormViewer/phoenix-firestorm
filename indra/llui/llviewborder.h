@@ -89,6 +89,23 @@ public:
 
     void        setKeyboardFocusHighlight( bool b ) { mHasKeyboardFocus = b; }
 
+    // <VulkanStorm> Read-only border state for the independent Vulkan UI
+    // renderer: everything draw()/drawOnePixelLines()/drawTwoPixelLines() read,
+    // returned without executing GL. No behavior change to the GL path.
+    struct VkBorderState
+    {
+        EStyle      style;
+        S32         width;
+        EBevel      bevel;
+        LLColor4    highlight_light;
+        LLColor4    highlight_dark;
+        LLColor4    shadow_light;
+        LLColor4    shadow_dark;
+        bool        keyboard_focus;
+    };
+    VkBorderState getVkBorderState() const;
+    // </VulkanStorm>
+
 private:
     void        drawOnePixelLines();
     void        drawTwoPixelLines();
