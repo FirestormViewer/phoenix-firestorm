@@ -123,6 +123,11 @@ public:
     virtual void    draw();
     virtual bool    addChild(LLView* view, S32 tab_group = 0);
 
+    // <VulkanStorm> Reconcile the scroll-bar geometry normally updated by
+    // draw(), without invoking any OpenGL rendering.
+    void prepareVkDraw();
+    // </VulkanStorm>
+
     bool canAutoScroll(S32 x, S32 y);
     bool autoScroll(S32 x, S32 y);
 

@@ -231,6 +231,9 @@ public:
     // XUI name (works even when the LLUIImage object is null on the Vulkan
     // path). Empty = no image.
     std::string getStateImageName(LLColor4& out_color, F32 alpha) const;
+    // Advance and return the additive hover glow used by LLButton::draw().
+    // Called only by the Vulkan renderer; the OpenGL lifecycle is unchanged.
+    F32 updateVkGlowStrength();
     // </VulkanStorm>
     void            setToggleState(bool b);
 

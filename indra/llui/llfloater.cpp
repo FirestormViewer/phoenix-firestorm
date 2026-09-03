@@ -2248,6 +2248,16 @@ void LLFloater::draw()
     }
 }
 
+// <VulkanStorm>
+// LLFloater::draw() normally refreshes title-button state indirectly through
+// the regular UI lifecycle.  The Vulkan renderer walks the view tree without
+// invoking draw(), so make that GL-free preparation explicit.
+void LLFloater::prepareVkDraw()
+{
+    updateTitleButtons();
+}
+// </VulkanStorm>
+
 void    LLFloater::drawShadow(LLPanel* panel)
 {
     S32 left = LLPANEL_BORDER_WIDTH;

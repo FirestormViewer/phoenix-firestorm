@@ -138,10 +138,19 @@ public:
     const LLColor4& getBackgroundColor() const { return mBgOpaqueColor; }
     void            setTransparentColor(const LLUIColor& color) { mBgAlphaColor = color; }
     const LLColor4& getTransparentColor() const { return mBgAlphaColor; }
-    void            setBackgroundImage(LLUIImage* image) { mBgOpaqueImage = image; }
-    void            setTransparentImage(LLUIImage* image) { mBgAlphaImage = image; }
+    void            setBackgroundImage(LLUIImage* image)
+                    { mBgOpaqueImage = image; if (image) mVkBgOpaqueImage = image->getName(); }
+    void            setTransparentImage(LLUIImage* image)
+                    { mBgAlphaImage = image; if (image) mVkBgAlphaImage = image->getName(); }
     LLPointer<LLUIImage> getBackgroundImage() const { return mBgOpaqueImage; }
     LLPointer<LLUIImage> getTransparentImage() const { return mBgAlphaImage; }
+    // <VulkanStorm> Skin aliases remain available when Vulkan deliberately
+    // has no GL-backed LLUIImage object.
+    std::string     getBackgroundImageVkName() const
+                    { return mBgOpaqueImage.notNull() ? mBgOpaqueImage->getName() : mVkBgOpaqueImage; }
+    std::string     getTransparentImageVkName() const
+                    { return mBgAlphaImage.notNull() ? mBgAlphaImage->getName() : mVkBgAlphaImage; }
+    // </VulkanStorm>
     const LLColor4&        getBackgroundImageOverlay() { return mBgOpaqueImageOverlay; }
     const LLColor4&        getTransparentImageOverlay() { return mBgAlphaImageOverlay; }
     void            setBackgroundVisible( bool b )  { mBgVisible = b; }
@@ -246,6 +255,10 @@ private:
     LLUIColor       mBgAlphaImageOverlay;
     LLPointer<LLUIImage> mBgOpaqueImage;    // "panel in front" look
     LLPointer<LLUIImage> mBgAlphaImage;     // "panel in back" look
+    // <VulkanStorm> Raw XUI aliases for the GL-free image registry.
+    std::string     mVkBgOpaqueImage;
+    std::string     mVkBgAlphaImage;
+    // </VulkanStorm>
     LLViewBorder*   mBorder;
     LLButton*       mDefaultBtn;
     LLUIString      mLabel;

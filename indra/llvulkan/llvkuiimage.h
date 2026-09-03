@@ -23,6 +23,7 @@
 #define LLVKUIIMAGE_H
 
 #include <string>
+#include <cstdint>
 
 #include <vulkan/vulkan.h>   // VkDescriptorSet
 
@@ -68,6 +69,17 @@ namespace LLVKUIImage
     void drawSolid(const std::string& name,
                    float left, float top, float right, float bottom,
                    const LLColor4& color);
+
+    // Upload/update a plugin-owned CPU pixel surface before the render pass.
+    // source_serial suppresses redundant uploads. Source rows retain the
+    // plugin's native orientation; drawDynamic applies the GL media UV rules.
+    bool updateDynamic(const std::string& key, const uint8_t* pixels,
+                       int width, int height, int components, bool bgra,
+                       uint64_t source_serial);
+    void drawDynamic(const std::string& key,
+                     float left, float top, float right, float bottom,
+                     float max_u, float max_v, bool coords_opengl,
+                     const LLColor4& color);
 
     // Release all uploaded textures (on session stop).
     void shutdown();

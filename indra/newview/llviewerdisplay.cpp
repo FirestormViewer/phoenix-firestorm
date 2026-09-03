@@ -32,6 +32,7 @@
 #include "llvkselftest.h"
 #include "llvksession.h"
 #include "llvkuirender.h"
+#include "llvkuiimage.h"
 #include "llvkuitestscene.h"
 // <VulkanStorm> UI A/B harness GL emitters (gl_render_ui_test_scene).
 #include "llrender2dutils.h"
@@ -282,15 +283,87 @@ static void gl_capture_frame_once()
 // the RESULT of LLMediaCtrl::draw()'s no-media branch, which forces an opaque
 // background draw over the rect — the black "Loading..." backdrop covering
 // most of the login screen. Media-texture emission lands with the image work.
+static std::string vk_media_key(LLMediaCtrl* media)
+{
+    return std::string("media:") + media->getTextureID().asString();
+}
+
+static void vk_prepare_media_ctrl(const LLView* view, LLVKContext*)
+{
+    LLMediaCtrl* media = const_cast<LLMediaCtrl*>(static_cast<const LLMediaCtrl*>(view));
+    LLMediaCtrl::VkMediaFrame frame;
+    if (media->getVkMediaFrame(frame))
+    {
+        LLVKUIImage::updateDynamic(vk_media_key(media), frame.pixels,
+                                   frame.texture_width, frame.texture_height,
+                                   frame.components, frame.bgra, frame.serial);
+    }
+}
+
+static void vk_prepare_toast_alert_panel(const LLView* view, LLVKContext*)
+{
+    LLView* panel = const_cast<LLView*>(view);
+    LLView* message = panel->findChildView("Alert message", true);
+    if (!message || panel->getRect().getHeight() >= 0) return;
+
+    // The OpenGL floater traversal resolves this legacy top-left layout before
+    // hit testing.  With that traversal bypassed, the alert, wrapper and toast
+    // retain negative heights: Vulkan can draw reconstructed pixels, but the
+    // modal cannot receive clicks. Normalize the same live geometry once while
+    // preserving the established bottom-left position and child coordinates.
+    const S32 alert_height = llabs(message->getRect().getHeight()) + 16;
+    LLRect panel_rect = panel->getRect();
+    panel_rect.mTop = panel_rect.mBottom + alert_height;
+    panel->setRect(panel_rect);
+
+    LLView* wrapper = panel->getParent();
+    if (wrapper && wrapper->getRect().getHeight() < alert_height)
+    {
+        LLRect wrapper_rect = wrapper->getRect();
+        wrapper_rect.mTop = wrapper_rect.mBottom + alert_height;
+        wrapper->setRect(wrapper_rect);
+
+        LLView* toast = wrapper->getParent();
+        if (toast && toast->getRect().getHeight() < alert_height + 7)
+        {
+            LLRect toast_rect = toast->getRect();
+            toast_rect.mTop = toast_rect.mBottom + alert_height + 7;
+            toast->setRect(toast_rect);
+        }
+    }
+}
+
 static void vk_render_media_ctrl(const LLView* view, unsigned device_height, float ui_scale_y, float alpha)
 {
-    const LLMediaCtrl* mc = static_cast<const LLMediaCtrl*>(view);
-    // const_cast: hasDrawableMedia() is read-only in effect but non-const
-    // because LLViewerMediaImpl::getMediaPlugin() is non-const.
-    if (!const_cast<LLMediaCtrl*>(mc)->hasDrawableMedia())
+    LLMediaCtrl* media = const_cast<LLMediaCtrl*>(static_cast<const LLMediaCtrl*>(view));
+    LLMediaCtrl::VkMediaFrame frame;
+    if (media->getVkMediaFrame(frame))
     {
-        const LLRect screen = mc->calcScreenRect();
-        LLColor4 c = mc->getBackgroundColor();
+        // calcOffsetsAndSize() can letterbox the CEF surface. OpenGL leaves
+        // those bands showing the opaque login-panel background, not the
+        // transparent Vulkan swapchain clear.
+        // panel_fs_login.xml specifies this opaque surround explicitly. The
+        // media control's immediate background is black and is not the color
+        // OpenGL exposes in its aspect-fit bands.
+        const LLColor4 surround(0.16f, 0.16f, 0.16f, 1.f);
+        LLVKUIRender::emitScreenRect(media->calcScreenRect(), device_height,
+                                     ui_scale_y, surround);
+
+        const F32 ui_h = (F32)device_height / ui_scale_y;
+        const F32 left = (F32)frame.screen_rect.mLeft;
+        const F32 right = (F32)frame.screen_rect.mRight;
+        const F32 top = ui_h - (F32)frame.screen_rect.mTop;
+        const F32 bottom = ui_h - (F32)frame.screen_rect.mBottom;
+        const F32 max_u = (F32)frame.content_width / (F32)frame.texture_width;
+        const F32 max_v = (F32)frame.content_height / (F32)frame.texture_height;
+        LLVKUIImage::drawDynamic(vk_media_key(media), left, top, right, bottom,
+                                 max_u, max_v, frame.coords_opengl,
+                                 LLColor4(1.f, 1.f, 1.f, alpha));
+    }
+    else
+    {
+        const LLRect screen = media->calcScreenRect();
+        LLColor4 c = media->getBackgroundColor();
         c.mV[VALPHA] *= alpha;
         LLVKUIRender::emitScreenRect(screen, device_height, ui_scale_y, c);
     }
@@ -320,14 +393,21 @@ static void vk_render_toast_alert_panel(const LLView* view, unsigned device_heig
                             panel_screen.mRight,
                             panel_screen.mBottom);
 
+    // Alert toasts are non-fading modal windows. LLToast's OpenGL path forces
+    // its wrapper panel opaque (Toast_Over) and LLToastAlertPanel::draw()
+    // applies the shadow without draw-context attenuation.
     LLColor4 shadow = LLUIColorTable::instance().getColor("ColorDropShadow").get();
-    shadow.mV[VALPHA] *= alpha;
     LLVKUIRender::emitDropShadow(alert_rect, device_height, ui_scale_y,
                                  shadow, DROP_SHADOW_FLOATER);
 
+    LLColor4 base = LLUIColorTable::instance()
+                        .getColor("FloaterFocusBackgroundColor").get();
+    base.mV[VALPHA] = 1.f;
+    LLVKUIRender::emitScreenRect(alert_rect, device_height, ui_scale_y, base);
+
     LLVKUIRender::emitScreenRect(alert_rect, device_height, ui_scale_y,
-                                 std::string("Toast_Background"),
-                                 LLColor4(1.f, 1.f, 1.f, alpha));
+                                 std::string("Toast_Over"),
+                                 LLColor4(1.f, 1.f, 1.f, 1.f));
 }
 
 static void vk_register_ui_hooks()
@@ -336,6 +416,8 @@ static void vk_register_ui_hooks()
     if (!s_registered)
     {
         s_registered = true;
+        LLVKUIRender::registerViewPrepareHook(typeid(LLMediaCtrl), &vk_prepare_media_ctrl);
+        LLVKUIRender::registerViewPrepareHook(typeid(LLToastAlertPanel), &vk_prepare_toast_alert_panel);
         LLVKUIRender::registerViewHook(typeid(LLMediaCtrl), &vk_render_media_ctrl);
         LLVKUIRender::registerViewHook(typeid(LLToastAlertPanel), &vk_render_toast_alert_panel);
     }

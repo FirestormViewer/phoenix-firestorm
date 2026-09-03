@@ -2920,6 +2920,11 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                         }
 
                         MASK mask = gKeyboard->currentMask(true);
+                        // Use the coordinates carried by this button message.
+                        // Depending on a previously-dispatched WM_MOUSEMOVE
+                        // races the window-thread queue; Vulkan exposed that as
+                        // clicks landing on an old control or no control.
+                        window_imp->mCursorPosition = window_coord;
                         auto gl_coord = window_imp->mCursorPosition.convert();
                         window_imp->mCallbacks->handleMouseMove(window_imp, gl_coord, mask);
                         window_imp->mCallbacks->handleMouseDown(window_imp, gl_coord, mask);

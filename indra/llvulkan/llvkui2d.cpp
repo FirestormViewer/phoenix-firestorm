@@ -177,6 +177,11 @@ void LLVKUI2D::rect(float left, float top, float right, float bottom,
                     float r, float g, float b, float a)
 {
     if (!isActive()) return;
+    // Solid geometry must bind the pipeline's white texture. A preceding text
+    // or image batch leaves its descriptor active; sampling that atlas across
+    // a later panel-sized rectangle produces the oversized "text leaking into
+    // windows" artifact.
+    setTexture(VK_NULL_HANDLE);
     if (mTopo != VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST) { flushRun(); mTopo = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST; }
 
     // Bake the UI transform at emit time (matches LLRender::vertex3f).
@@ -221,6 +226,7 @@ void LLVKUI2D::texturedQuad(float left, float top, float right, float bottom,
 void LLVKUI2D::lineStrip(const float* xy, int count, float r, float g, float b, float a)
 {
     if (!isActive() || count < 2) return;
+    setTexture(VK_NULL_HANDLE);
     // Each lineStrip is an INDEPENDENT polyline (GL draws each outline as its own
     // begin/end). A shared LINE_STRIP run would connect consecutive strips with a
     // spurious diagonal, so flush any pending work, emit this strip, and flush it
@@ -240,6 +246,7 @@ void LLVKUI2D::lineStrip(const float* xy, int count, float r, float g, float b, 
 void LLVKUI2D::rawTris(const float* xy, const float* rgba, int count)
 {
     if (!isActive() || count < 3 || (count % 3) != 0) return;
+    setTexture(VK_NULL_HANDLE);
     if (mTopo != VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST) { flushRun(); mTopo = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST; }
     for (int i = 0; i < count; ++i)
     {

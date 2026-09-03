@@ -31,7 +31,11 @@
 #include "lluicolortable.h"     // LLUIColor / LLUIColorTable (neutral)
 #include "llview.h"             // LLView
 #include "llpanel.h"            // LLPanel (background state)
+#include "llfloater.h"          // LLFloater (opaque chrome + shadow state)
 #include "llbutton.h"           // LLButton (state images)
+#include "lltabcontainer.h"     // GL-free tab layout preparation
+#include "llscrollcontainer.h"  // GL-free scrollbar layout preparation
+#include "llscrollbar.h"       // scrollbar track/thumb state
 #include "llcombobox.h"         // editable-combo layout reconciliation
 #include "lliconctrl.h"         // LLIconCtrl (icons)
 #include "lllineeditor.h"       // LLLineEditor (field backgrounds)
@@ -88,6 +92,7 @@ namespace
 
     // <VulkanStorm> Registered per-class hooks (newview-side classes).
     std::map<const std::type_info*, LLVKUIRender::ViewHook> s_hooks;
+    std::map<const std::type_info*, LLVKUIRender::ViewPrepareHook> s_prepare_hooks;
     // </VulkanStorm>
 
     // Emit a panel/floater background. Mirrors LLPanel::draw(): prefer the
@@ -108,30 +113,48 @@ namespace
         LLRect screen;
         panel->localRectToScreen(local, &screen);
 
+        // A floater is a separate in-viewer window. Its image/color can retain
+        // alpha for edge decoration and inactive-state tinting, but its body
+        // must first occlude the scene and any CEF surface below it. OpenGL
+        // obtains that composition from the floater pass; Vulkan needs the
+        // equivalent opaque underlay explicitly.
+        if (dynamic_cast<const LLFloater*>(panel))
+        {
+            LLColor4 base = panel->isBackgroundOpaque()
+                                ? panel->getBackgroundColor()
+                                : panel->getTransparentColor();
+            base.mV[VALPHA] = 1.f;
+            // Keep the opaque body inside the skinned image's antialiased
+            // corner pixels. A full-rect underlay made Vulkan floaters square.
+            LLRect body = screen;
+            body.stretch(-2);
+            LLVKUIRender::emitScreenRect(body, rc.dev_h, rc.ui_scale_y, base);
+        }
+
         if (panel->isBackgroundOpaque())
         {
-            LLPointer<LLUIImage> img = panel->getBackgroundImage();
-            if (img.notNull())
+            const std::string image_name = panel->getBackgroundImageVkName();
+            if (!image_name.empty() && LLVKUIImage::ready())
             {
                 // getBackgroundImageOverlay() is non-const; read-only in effect.
                 const LLColor4& ov = const_cast<LLPanel*>(panel)->getBackgroundImageOverlay();
                 LLColor4 c = LLColor4(ov.mV[0] * rc.parent_alpha, ov.mV[1] * rc.parent_alpha,
                                       ov.mV[2] * rc.parent_alpha, ov.mV[3] * rc.parent_alpha);
                 float l, t, r, b; toSinkRect(rc, screen, l, t, r, b);
-                LLVKUIImage::draw(img->getName(), l, t, r, b, c);
+                LLVKUIImage::draw(image_name, l, t, r, b, c);
                 return;
             }
         }
         else
         {
-            LLPointer<LLUIImage> img = panel->getTransparentImage();
-            if (img.notNull())
+            const std::string image_name = panel->getTransparentImageVkName();
+            if (!image_name.empty() && LLVKUIImage::ready())
             {
                 const LLColor4& ov = const_cast<LLPanel*>(panel)->getTransparentImageOverlay();
                 LLColor4 c = LLColor4(ov.mV[0] * rc.parent_alpha, ov.mV[1] * rc.parent_alpha,
                                       ov.mV[2] * rc.parent_alpha, ov.mV[3] * rc.parent_alpha);
                 float l, t, r, b; toSinkRect(rc, screen, l, t, r, b);
-                LLVKUIImage::draw(img->getName(), l, t, r, b, c);
+                LLVKUIImage::draw(image_name, l, t, r, b, c);
                 return;
             }
         }
@@ -305,6 +328,12 @@ namespace
     // FSMenuBackgroundAlpha). Menu item text/highlight is out of scope.
     void renderMenuChrome(RenderCtx& rc, const LLMenuGL* menu)
     {
+        // LLMenuGL::draw() performs lazy layout before drawing.  The Vulkan
+        // walker deliberately bypasses draw(), so reproduce that GL-free
+        // preparation here.  This is also required for interaction: without
+        // it newly-visible entries (notably the login Debug menu) retain an
+        // empty hit rectangle even if their text is emitted.
+        const_cast<LLMenuGL*>(menu)->arrangeAndClear();
         const LLRect screen = menu->calcScreenRect();
         if (menu->getVkDropShadow())
         {
@@ -314,8 +343,110 @@ namespace
         }
         if (menu->getVkBgVisible())
         {
-            LLVKUIRender::emitScreenRect(screen, rc.dev_h, rc.ui_scale_y, menu->getVkBgColor());
+            LLColor4 background = menu->getVkBgColor();
+            // Popup menus must occlude web/media content. Blending the menu
+            // directly over CEF makes Vulkan menus visibly glassy rather than
+            // matching the composed OpenGL result.
+            background.mV[VALPHA] = 1.f;
+            LLVKUIRender::emitScreenRect(screen, rc.dev_h, rc.ui_scale_y,
+                                         background);
             rc.emitted++;
+        }
+    }
+
+    void renderMenuItem(RenderCtx& rc, LLMenuItemGL* item)
+    {
+        if (!item || !LLVKText::ready()) return;
+        const LLMenuItemGL::VkDrawState state = item->getVkDrawState(rc.parent_alpha);
+        const LLRect screen = item->calcScreenRect();
+
+        const bool draw_highlight = state.highlight &&
+            (state.menu_bar || (state.enabled && !state.brief));
+        if (draw_highlight)
+        {
+            LLVKUIRender::emitScreenRect(screen, rc.dev_h, rc.ui_scale_y,
+                                         state.highlight_background);
+            rc.emitted++;
+        }
+
+        if (state.kind == LLMenuItemGL::VkDrawState::Kind::Separator)
+        {
+            const S32 y = screen.mBottom + screen.getHeight() / 2;
+            emitBorderLine(rc, screen.mLeft + 6, y, screen.mRight - 6, y,
+                           state.foreground);
+            rc.emitted++;
+            return;
+        }
+        if (state.kind == LLMenuItemGL::VkDrawState::Kind::TearOff)
+        {
+            const S32 y = screen.getHeight() / 3;
+            emitBorderLine(rc, screen.mLeft + 6, screen.mBottom + y,
+                           screen.mRight - 6, screen.mBottom + y,
+                           state.foreground);
+            emitBorderLine(rc, screen.mLeft + 6, screen.mBottom + y * 2,
+                           screen.mRight - 6, screen.mBottom + y * 2,
+                           state.foreground);
+            rc.emitted++;
+            return;
+        }
+        if (!state.font) return;
+
+        if (state.menu_bar)
+        {
+            LLVKText::render(state.font, state.label,
+                             (F32)screen.getCenterX(), (F32)(screen.mBottom + 1),
+                             state.foreground, LLFontGL::HCENTER,
+                             LLFontGL::BOTTOM, screen.getWidth());
+        }
+        else if (state.brief)
+        {
+            LLVKText::render(state.font, state.label,
+                             (F32)(screen.mLeft + 1), (F32)screen.mBottom,
+                             state.foreground, LLFontGL::LEFT,
+                             LLFontGL::BOTTOM, screen.getWidth() - 2);
+        }
+        else
+        {
+            const F32 baseline = (F32)(screen.mBottom + 2);
+            if (!state.bool_label.empty())
+            {
+                LLVKText::render(state.font, state.bool_label,
+                                 (F32)(screen.mLeft + 3), baseline,
+                                 state.foreground, LLFontGL::LEFT,
+                                 LLFontGL::BOTTOM, 15);
+            }
+            LLVKText::render(state.font, state.label,
+                             (F32)(screen.mLeft + 18), baseline,
+                             state.foreground, LLFontGL::LEFT,
+                             LLFontGL::BOTTOM,
+                             llmax(0, screen.getWidth() - 40));
+            if (!state.accel_label.empty())
+            {
+                LLVKText::render(state.font, state.accel_label,
+                                 (F32)(screen.mRight - 22), baseline,
+                                 state.foreground, LLFontGL::RIGHT,
+                                 LLFontGL::BOTTOM, screen.getWidth());
+            }
+            if (!state.branch_label.empty())
+            {
+                LLVKText::render(state.font, state.branch_label,
+                                 (F32)(screen.mRight - 7), baseline,
+                                 state.foreground, LLFontGL::RIGHT,
+                                 LLFontGL::BOTTOM, 15);
+            }
+        }
+        rc.emitted++;
+    }
+
+    void prepareView(LLVKContext* context, const LLView* view)
+    {
+        if (!context || !view || !view->getVisible()) return;
+        auto hook = s_prepare_hooks.find(&typeid(*view));
+        if (hook != s_prepare_hooks.end()) hook->second(view, context);
+        for (LLView::child_list_const_iter_t it = view->getChildList()->begin();
+             it != view->getChildList()->end(); ++it)
+        {
+            prepareView(context, *it);
         }
     }
     // </VulkanStorm>
@@ -347,6 +478,19 @@ namespace
         {
             stack->updateLayout();
         }
+        if (LLFloater* floater = dynamic_cast<LLFloater*>(const_cast<LLView*>(view)))
+        {
+            floater->prepareVkDraw();
+        }
+        if (LLTabContainer* tabs = dynamic_cast<LLTabContainer*>(const_cast<LLView*>(view)))
+        {
+            tabs->prepareVkDraw();
+        }
+        if (LLScrollContainer* scroller =
+                dynamic_cast<LLScrollContainer*>(const_cast<LLView*>(view)))
+        {
+            scroller->prepareVkDraw();
+        }
 
         // </VulkanStorm>
 
@@ -356,9 +500,48 @@ namespace
         if (panel)
         {
             rc.panels++;
+            if (const LLFloater* floater = dynamic_cast<const LLFloater*>(panel))
+            {
+                if (floater->isBackgroundVisible() && floater->getVkDropShadow())
+                {
+                    LLColor4 shadow = LLUIColorTable::instance()
+                                          .getColor("ColorDropShadow").get();
+                    emitDropShadow(rc, floater->calcScreenRect(), shadow,
+                                   DROP_SHADOW_FLOATER);
+                    rc.emitted++;
+                }
+            }
             size_t vbefore = LLVKUI2DSink::get().pendingVerts();
             renderPanelBackground(rc, panel);
             if (LLVKUI2DSink::get().pendingVerts() > vbefore) rc.emitted++;
+        }
+
+        if (const LLScrollbar* scrollbar = dynamic_cast<const LLScrollbar*>(view))
+        {
+            const LLScrollbar::VkDrawState state =
+                scrollbar->getVkDrawState(rc.parent_alpha);
+            if (state.bg_visible)
+            {
+                LLVKUIRender::emitScreenRect(view->calcScreenRect(), rc.dev_h,
+                                             rc.ui_scale_y, state.bg_color);
+            }
+            if (LLVKUIImage::ready())
+            {
+                LLVKUIRender::emitScreenRect(state.track_rect, rc.dev_h,
+                                             rc.ui_scale_y, state.track_image,
+                                             state.track_color);
+                LLVKUIRender::emitScreenRect(state.thumb_rect, rc.dev_h,
+                                             rc.ui_scale_y, state.thumb_image,
+                                             state.thumb_color);
+            }
+            else
+            {
+                LLVKUIRender::emitScreenRect(state.track_rect, rc.dev_h,
+                                             rc.ui_scale_y, state.track_color);
+                LLVKUIRender::emitScreenRect(state.thumb_rect, rc.dev_h,
+                                             rc.ui_scale_y, state.thumb_color);
+            }
+            rc.emitted += 2;
         }
 
         // <VulkanStorm> M2: button + icon images. These read the widget's
@@ -405,7 +588,8 @@ namespace
                                                       2 * BTN_DROP_SHADOW);
                     }
                 }
-                if (s_dbg && s_dbg_n < 12)
+                const bool floater_button = view->getName().find("llfloater_") == 0;
+                if (s_dbg && (s_dbg_n < 12 || floater_button))
                 {
                     ++s_dbg_n;
                     LL_INFOS("Vulkan") << "VKBUTTON '" << view->getName() << "' img='" << imgname << "'"
@@ -428,6 +612,18 @@ namespace
                     }
                     LLVKUIImage::draw(imgname, l, t, r, b, imgc);
                     rc.emitted++;
+
+                    const F32 glow = const_cast<LLButton*>(button)
+                                         ->updateVkGlowStrength();
+                    if (glow > 0.01f)
+                    {
+                        LLVKUI2DSink::get().setBlend(LLVKBlend::AddWithAlpha);
+                        LLVKUIImage::draw(imgname, l, t, r, b,
+                                          LLColor4(1.f, 1.f, 1.f,
+                                                   glow * rc.parent_alpha));
+                        LLVKUI2DSink::get().setBlend(LLVKBlend::Alpha);
+                        rc.emitted++;
+                    }
                 }
 
                 // LLButton::draw() composites image_overlay after the state
@@ -543,11 +739,32 @@ namespace
                     F32 y = (F32)run.screen_rect.mBottom;
                     if (run.valign == LLFontGL::TOP) y = (F32)run.screen_rect.mTop;
                     else if (run.valign == LLFontGL::VCENTER) y = (F32)run.screen_rect.getCenterY();
+
+                    if (run.clip)
+                    {
+                        const S32 sx = llclamp(ll_round((F32)run.clip_rect.mLeft * rc.ui_scale_x),
+                                               0, (S32)rc.dev_w);
+                        const S32 sy = llclamp(ll_round((F32)(rc.dev_h / rc.ui_scale_y -
+                                                              run.clip_rect.mTop) * rc.ui_scale_y),
+                                               0, (S32)rc.dev_h);
+                        const S32 sr = llclamp(ll_round((F32)run.clip_rect.mRight * rc.ui_scale_x),
+                                               sx, (S32)rc.dev_w);
+                        const S32 sb = llclamp(ll_round((F32)(rc.dev_h / rc.ui_scale_y -
+                                                              run.clip_rect.mBottom) * rc.ui_scale_y),
+                                               sy, (S32)rc.dev_h);
+                        LLVKUI2DSink::get().setScissor(sx, sy, sr - sx, sb - sy);
+                    }
+                    else
+                    {
+                        LLVKUI2DSink::get().clearScissor();
+                    }
                     LLVKText::render(run.font, run.text, (F32)run.screen_rect.mLeft, y,
                                      run.color, LLFontGL::LEFT, run.valign,
-                                     run.screen_rect.getWidth(), run.ellipses);
+                                     run.screen_rect.getWidth(), run.ellipses,
+                                     run.shadow);
                     rc.emitted++;
                 }
+                LLVKUI2DSink::get().clearScissor();
             }
             else if (line_editor)
             {
@@ -582,6 +799,11 @@ namespace
         if (menu && !s_no_menu)
         {
             renderMenuChrome(rc, menu);
+        }
+        if (LLMenuItemGL* menu_item =
+                dynamic_cast<LLMenuItemGL*>(const_cast<LLView*>(view)))
+        {
+            renderMenuItem(rc, menu_item);
         }
         // </VulkanStorm>
 
@@ -618,6 +840,16 @@ namespace LLVKUIRender
         {
             s_hooks[&type] = hook;
         }
+    }
+
+    void registerViewPrepareHook(const std::type_info& type, ViewPrepareHook hook)
+    {
+        if (hook) s_prepare_hooks[&type] = hook;
+    }
+
+    void prepareFrame(LLVKContext* context, LLView* root)
+    {
+        prepareView(context, root);
     }
 
     void emitScreenRect(const LLRect& gl_rect, unsigned device_height,

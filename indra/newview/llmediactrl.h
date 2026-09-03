@@ -136,6 +136,24 @@ public:
         // LLViewerMediaImpl::getMediaPlugin() is non-const; read-only in
         // effect.)
         bool hasDrawableMedia();
+
+        // CPU-side media surface consumed by the Vulkan UI renderer. The
+        // pointer belongs to the media plugin's shared-memory segment and is
+        // valid for the duration of the main-thread render callback.
+        struct VkMediaFrame
+        {
+            const U8* pixels = nullptr;
+            S32 texture_width = 0;
+            S32 texture_height = 0;
+            S32 content_width = 0;
+            S32 content_height = 0;
+            S32 components = 0;
+            bool bgra = false;
+            bool coords_opengl = true;
+            U64 serial = 0;
+            LLRect screen_rect;
+        };
+        bool getVkMediaFrame(VkMediaFrame& frame);
         // </VulkanStorm>
 
         void setAlwaysRefresh(bool refresh) { mAlwaysRefresh = refresh; }
@@ -228,6 +246,9 @@ public:
         viewer_media_t mMediaSource;
         S32 mTextureWidth,
             mTextureHeight;
+
+        // Monotonic content revision for Vulkan dynamic-texture uploads.
+        U64 mVkFrameSerial;
 
         class LLWindowShade* mWindowShade;
         LLHandle<LLContextMenu> mContextMenuHandle;

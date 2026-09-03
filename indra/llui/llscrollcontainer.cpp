@@ -569,6 +569,19 @@ void LLScrollContainer::draw()
     }
 } // end draw
 
+// <VulkanStorm>
+void LLScrollContainer::prepareVkDraw()
+{
+    // The OpenGL path calls this immediately before drawing the scrolled view.
+    // Vulkan walks the live tree directly, so perform the same layout/state
+    // reconciliation explicitly before it tests child visibility.
+    if (getRect().isValid() && mScrolledView)
+    {
+        updateScroll();
+    }
+}
+// </VulkanStorm>
+
 bool LLScrollContainer::addChild(LLView* view, S32 tab_group)
 {
     if (!mScrolledView)

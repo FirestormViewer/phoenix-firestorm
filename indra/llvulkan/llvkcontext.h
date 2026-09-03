@@ -96,6 +96,8 @@ public:
         VkDescriptorSet descriptor = VK_NULL_HANDLE;
     };
     bool createTexture2D(const uint8_t* rgba, uint32_t w, uint32_t h, Texture2D& out, std::string& error, bool useLinearFilter = false);
+    bool updateTexture2D(const uint8_t* rgba, uint32_t w, uint32_t h,
+                         Texture2D& texture, std::string& error);
     void destroyTexture2D(Texture2D& tex);
     void bindTexture2D(VkCommandBuffer cmd, VkDescriptorSet descriptor);
     VkDescriptorSet whiteTextureDescriptor() const { return mWhiteTex.descriptor; }

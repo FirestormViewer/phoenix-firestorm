@@ -52,7 +52,13 @@ namespace LLVKUIRender
     // LLVKUI2DSink — never GL code.
     typedef void (*ViewHook)(const LLView* view, unsigned device_height,
                              float ui_scale_y, float alpha);
+    typedef void (*ViewPrepareHook)(const LLView* view, LLVKContext* context);
     void registerViewHook(const std::type_info& type, ViewHook hook);
+    void registerViewPrepareHook(const std::type_info& type, ViewPrepareHook hook);
+
+    // Update dynamic resources required by viewer-side hooks before the
+    // swapchain render pass begins.
+    void prepareFrame(LLVKContext* context, LLView* root);
 
     // Emit a screen-space rect (GL bottom-left origin, window pixels) into the
     // sink with the standard GL->top-left conversion. Shared by the built-in

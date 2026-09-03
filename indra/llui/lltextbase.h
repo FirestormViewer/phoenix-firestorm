@@ -591,9 +591,12 @@ public:
         LLWString text;
         const LLFontGL* font = nullptr;
         LLRect screen_rect;
+        LLRect clip_rect;
         LLColor4 color;
         LLFontGL::VAlign valign = LLFontGL::BASELINE;
+        LLFontGL::ShadowType shadow = LLFontGL::NO_SHADOW;
         bool ellipses = false;
+        bool clip = true;
     };
     void getVkTextRuns(F32 alpha, std::vector<VkTextRun>& out);
     // </VulkanStorm>

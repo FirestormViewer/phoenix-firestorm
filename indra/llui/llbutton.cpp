@@ -556,14 +556,88 @@ std::string LLButton::getStateImageName(LLColor4& out_color, F32 alpha) const
     // Constructor fallbacks (llbutton.cpp): pressed defaults to the selected
     // image, pressed_selected to unselected, disabled to unselected (when a
     // custom unselected was provided and no explicit disabled name).
-    std::string unsel = mVkImgNameUnselected;
-    std::string sel   = mVkImgNameSelected;
-    std::string hovU  = mVkImgNameHoverUnselected;
-    std::string hovS  = mVkImgNameHoverSelected;
-    std::string dis   = mVkImgNameDisabled.empty() && !unsel.empty() ? unsel : mVkImgNameDisabled;
-    std::string disSel= mVkImgNameDisabledSelected.empty() && !sel.empty() ? sel : mVkImgNameDisabledSelected;
-    std::string press = mVkImgNamePressed.empty() ? sel : mVkImgNamePressed;
-    std::string pressSel = mVkImgNamePressedSelected.empty() ? unsel : mVkImgNamePressedSelected;
+    // Programmatic controls (notably floater close/minimize/help buttons) and
+    // LLTabContainer replace LLUIImage pointers after XUI parsing. Prefer the
+    // live pointer names so Vulkan sees the same active skin assets as GL.
+    const bool floater_title_button = getName().find("llfloater_") == 0;
+    const auto live_name = [floater_title_button](const LLPointer<LLUIImage>& image,
+                                                  const std::string& recorded)
+    {
+        // In GL-free startup, floater buttons later inherit the generic
+        // PushButton image even though buildButtons retained their real XUI
+        // icon name.  That generic pointer is not authoritative.
+        if (floater_title_button && !recorded.empty()) return recorded;
+        return image.notNull() ? image->getName() : recorded;
+    };
+    std::string unsel = live_name(mImageUnselected, mVkImgNameUnselected);
+    std::string sel   = live_name(mImageSelected, mVkImgNameSelected);
+    std::string hovU  = live_name(mImageHoverUnselected, mVkImgNameHoverUnselected);
+    std::string hovS  = live_name(mImageHoverSelected, mVkImgNameHoverSelected);
+    std::string liveDis = live_name(mImageDisabled, mVkImgNameDisabled);
+    std::string liveDisSel = live_name(mImageDisabledSelected, mVkImgNameDisabledSelected);
+    std::string livePress = live_name(mImagePressed, mVkImgNamePressed);
+    std::string livePressSel = live_name(mImagePressedSelected, mVkImgNamePressedSelected);
+    std::string dis   = liveDis.empty() && !unsel.empty() ? unsel : liveDis;
+    std::string disSel= liveDisSel.empty() && !sel.empty() ? sel : liveDisSel;
+    std::string press = livePress.empty() ? sel : livePress;
+    std::string pressSel = livePressSel.empty() ? unsel : livePressSel;
+
+    // LLUICtrlFactory reapplies the generic LLButton widget defaults after
+    // LLFloater builds its programmatic title controls, so even the retained
+    // parameter metadata can read PushButton_Off here.  Floater control names
+    // are a stable semantic contract; resolve them to the same logical image
+    // aliases as widgets/floater.xml. Themes remain free to remap the aliases.
+    if (floater_title_button)
+    {
+        std::string normal;
+        std::string pressed_icon;
+        if (getName() == "llfloater_close_btn")
+        {
+            normal = "Icon_Close_Foreground";
+            pressed_icon = "Icon_Close_Press";
+        }
+        else if (getName() == "llfloater_snooze_btn")
+        {
+            normal = "Icon_Snooze_Foreground";
+            pressed_icon = "Icon_Snooze_Press";
+        }
+        else if (getName() == "llfloater_restore_btn")
+        {
+            normal = "Icon_Restore_Foreground";
+            pressed_icon = "Icon_Restore_Press";
+        }
+        else if (getName() == "llfloater_minimize_btn")
+        {
+            normal = "Icon_Minimize_Foreground";
+            pressed_icon = "Icon_Minimize_Press";
+        }
+        else if (getName() == "llfloater_tear_off_btn")
+        {
+            normal = "tearoffbox.tga";
+            pressed_icon = "tearoff_pressed.tga";
+        }
+        else if (getName() == "llfloater_dock_btn")
+        {
+            normal = "Icon_Dock_Foreground";
+            pressed_icon = "Icon_Dock_Press";
+        }
+        else if (getName() == "llfloater_help_btn")
+        {
+            normal = "Icon_Help_Foreground";
+            pressed_icon = "Icon_Help_Press";
+        }
+        if (!normal.empty())
+        {
+            unsel = normal;
+            hovU = normal;
+            dis = normal;
+            sel = pressed_icon;
+            hovS = pressed_icon;
+            disSel = pressed_icon;
+            press = pressed_icon;
+            pressSel = normal;
+        }
+    }
 
     std::string name;
     if (mNeedsHighlight)
@@ -589,6 +663,23 @@ std::string LLButton::getStateImageName(LLColor4& out_color, F32 alpha) const
     LLColor4 disabled_color = mFadeWhenDisabled ? mDisabledImageColor.get() % 0.5f : mDisabledImageColor.get();
     out_color = (enabled ? mImageColor.get() : disabled_color) % alpha;
     return name;
+}
+
+F32 LLButton::updateVkGlowStrength()
+{
+    // Floater title controls use the hover-glow contract from floater.xml
+    // (hover_glow_amount = 0.33). Their semantic Vulkan image alias can be
+    // available even when the corresponding GL hover pointer is not.
+    const bool floater_title_button = getName().find("llfloater_") == 0;
+    const bool selected = getToggleState();
+    const bool missing_hover_image = selected ? mImageHoverSelected.isNull()
+                                               : mImageHoverUnselected.isNull();
+    const bool use_glow = mNeedsHighlight &&
+                          (floater_title_button || missing_hover_image);
+    const F32 target = use_glow ? mHoverGlowStrength : 0.f;
+    mCurGlowStrength = lerp(mCurGlowStrength, target,
+                            LLSmoothInterpolation::getInterpolant(0.05f));
+    return mCurGlowStrength;
 }
 
 LLButton::VkOverlayState LLButton::getVkOverlayState(F32 alpha) const

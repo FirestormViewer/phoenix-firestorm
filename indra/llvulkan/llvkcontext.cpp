@@ -1559,6 +1559,103 @@ bool LLVKContext::createTexture2D(const uint8_t* rgba, uint32_t w, uint32_t h, T
     return true;
 }
 
+bool LLVKContext::updateTexture2D(const uint8_t* rgba, uint32_t w, uint32_t h,
+                                  Texture2D& texture, std::string& error)
+{
+    if (mDevice == VK_NULL_HANDLE || !rgba || w == 0 || h == 0 ||
+        texture.image == VK_NULL_HANDLE)
+    {
+        error = "updateTexture2D: bad state or args";
+        return false;
+    }
+
+    const VkDeviceSize size = (VkDeviceSize)w * h * 4;
+    VkBufferCreateInfo bi{};
+    bi.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bi.size = size;
+    bi.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+    bi.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    VmaAllocationCreateInfo ai{};
+    ai.usage = VMA_MEMORY_USAGE_AUTO;
+    ai.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+               VMA_ALLOCATION_CREATE_MAPPED_BIT;
+    VkBuffer staging = VK_NULL_HANDLE;
+    VmaAllocation staging_alloc = VK_NULL_HANDLE;
+    VmaAllocationInfo info{};
+    if (vmaCreateBuffer(mAllocator, &bi, &ai, &staging, &staging_alloc, &info) != VK_SUCCESS)
+    {
+        error = "updateTexture2D: staging allocation failed";
+        return false;
+    }
+    memcpy(info.pMappedData, rgba, (size_t)size);
+
+    VkCommandBufferAllocateInfo cai{};
+    cai.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    cai.commandPool = mCommandPool;
+    cai.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    cai.commandBufferCount = 1;
+    VkCommandBuffer cmd = VK_NULL_HANDLE;
+    if (vkAllocateCommandBuffers(mDevice, &cai, &cmd) != VK_SUCCESS)
+    {
+        vmaDestroyBuffer(mAllocator, staging, staging_alloc);
+        error = "updateTexture2D: command allocation failed";
+        return false;
+    }
+    VkCommandBufferBeginInfo begin{};
+    begin.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    vkBeginCommandBuffer(cmd, &begin);
+
+    VkImageMemoryBarrier pre{};
+    pre.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    pre.oldLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    pre.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+    pre.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    pre.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    pre.image = texture.image;
+    pre.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    pre.subresourceRange.levelCount = 1;
+    pre.subresourceRange.layerCount = 1;
+    pre.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    pre.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+    vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                         VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0,
+                         nullptr, 1, &pre);
+
+    VkBufferImageCopy copy{};
+    copy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    copy.imageSubresource.layerCount = 1;
+    copy.imageExtent = { w, h, 1 };
+    vkCmdCopyBufferToImage(cmd, staging, texture.image,
+                           VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copy);
+
+    VkImageMemoryBarrier post = pre;
+    post.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+    post.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    post.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+    post.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr,
+                         0, nullptr, 1, &post);
+    vkEndCommandBuffer(cmd);
+
+    VkFenceCreateInfo fi{};
+    fi.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    VkFence fence = VK_NULL_HANDLE;
+    vkCreateFence(mDevice, &fi, nullptr, &fence);
+    VkSubmitInfo submit{};
+    submit.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submit.commandBufferCount = 1;
+    submit.pCommandBuffers = &cmd;
+    const bool ok = vkQueueSubmit(mGraphicsQueue, 1, &submit, fence) == VK_SUCCESS &&
+                    vkWaitForFences(mDevice, 1, &fence, VK_TRUE, UINT64_MAX) == VK_SUCCESS;
+    vkDestroyFence(mDevice, fence, nullptr);
+    vkFreeCommandBuffers(mDevice, mCommandPool, 1, &cmd);
+    vmaDestroyBuffer(mAllocator, staging, staging_alloc);
+    if (!ok) error = "updateTexture2D: upload submit failed";
+    return ok;
+}
+
 void LLVKContext::destroyTexture2D(Texture2D& tex)
 {
     if (mDevice == VK_NULL_HANDLE) return;

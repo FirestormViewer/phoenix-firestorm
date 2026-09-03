@@ -26,6 +26,7 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "llviewerwindow.h"
+#include "llvksession.h"
 
 
 // system library includes
@@ -245,6 +246,17 @@ void render_ui(F32 zoom_factor = 1.f, int subfield = 0);
 void swap();
 
 extern bool gDebugClicks;
+
+namespace
+{
+bool viewerUIEnabled()
+{
+    // The OpenGL pipeline owns this feature mask. Vulkan has an independent
+    // UI renderer and therefore must not use an unset GL bit as its input gate.
+    return LLVKSession::isRunning() ||
+           gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI);
+}
+}
 extern bool gDisplaySwapBuffers;
 extern bool gDepthDirty;
 extern bool gResizeScreenTexture;
@@ -1114,7 +1126,7 @@ bool LLViewerWindow::handleAnyMouseClick(LLWindow *window, LLCoordGL pos, MASK m
     gViewerInput.handleGlobalBindsMouse(clicktype, mask, down);
 
     // only send mouse clicks to UI if UI is visible
-    if(gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    if (viewerUIEnabled())
     {
 
         if (down)
@@ -3868,7 +3880,7 @@ void LLViewerWindow::updateUI()
     }
 
     // use full window for world view when not rendering UI
-    bool world_view_uses_full_window = gAgentCamera.cameraMouselook() || !gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI);
+    bool world_view_uses_full_window = gAgentCamera.cameraMouselook() || !viewerUIEnabled();
     updateWorldViewRect(world_view_uses_full_window);
 
     LLView::sMouseHandlerMessage.clear();
@@ -3973,7 +3985,7 @@ void LLViewerWindow::updateUI()
     }
 
     // only update mouse hover set when UI is visible (since we shouldn't send hover events to invisible UI
-    if (gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    if (viewerUIEnabled())
     {
         // include all ancestors of captor_view as automatically having mouse
         if (captor_view)
@@ -4109,7 +4121,7 @@ void LLViewerWindow::updateUI()
     swap(mMouseHoverViews, mouse_hover_set);
 
     // only handle hover events when UI is enabled
-    if (gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    if (viewerUIEnabled())
     {
 
         if( mouse_captor )
@@ -4402,7 +4414,12 @@ void LLViewerWindow::updateMouseDelta()
 
 void LLViewerWindow::updateKeyboardFocus()
 {
-    if (!gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    // The legacy UI feature bit belongs to the OpenGL pipeline.  It is not
+    // initialized while Vulkan owns the window, so consulting it unconditionally
+    // clears and restores the login control focus every frame.  Besides making
+    // text entry unusable, that repeatedly fires combo-box focus-lost callbacks.
+    // Vulkan's native UI walk is enabled whenever its session is running.
+    if (!viewerUIEnabled())
     {
         gFocusMgr.setKeyboardFocus(NULL);
     }

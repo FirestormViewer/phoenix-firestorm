@@ -233,6 +233,10 @@ void LLVKSession::renderUIFrame(LLView* root, float ui_scale_x, float ui_scale_y
         LLVKText::init(s_context);
     }
 
+    // Viewer-side hooks upload dynamic resources (notably media-plugin pixel
+    // surfaces) before dynamic rendering begins.
+    LLVKUIRender::prepareFrame(s_context, root);
+
     // Begin the 2D render pass (clears to the boot teal so any uncovered region
     // is unmistakable during bring-up).
     VkCommandBuffer cmd = s_context->begin2DFrame(kClearR, kClearG, kClearB, kClearA);

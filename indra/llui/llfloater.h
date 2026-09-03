@@ -325,6 +325,10 @@ public:
     virtual void    draw();
     virtual void    drawShadow(LLPanel* panel);
 
+    // GL-free state consumed by the Vulkan UI renderer.
+    bool            getVkDropShadow() const { return mDropShadow; }
+    void            prepareVkDraw();
+
     virtual void    onOpen(const LLSD& key) {}
     virtual void    onClose(bool app_quitting) {}
     virtual void    onSnooze() {}       // <FS:Ansariel> FIRE-11724: Snooze group chat
@@ -689,6 +693,4 @@ private:
 extern LLFloaterView* gFloaterView;
 
 #endif  // LL_FLOATER_H
-
-
 

@@ -50,6 +50,16 @@ namespace
     bool                    s_ready = false;
     std::map<std::string, ImageRec> s_images;
 
+    struct DynamicRec
+    {
+        LLVKContext::Texture2D tex;
+        int width = 0;
+        int height = 0;
+        uint64_t serial = 0;
+        bool ok = false;
+    };
+    std::map<std::string, DynamicRec> s_dynamic;
+
     // ---- helpers ----------------------------------------------------------
 
     // Decode a local image file to RGBA8 (bottom-left origin, like GL). Uses
@@ -442,6 +452,84 @@ namespace LLVKUIImage
         LLVKUI2DSink::get().rect(left, top, right, bottom, color.mV[0], color.mV[1], color.mV[2], color.mV[3]);
     }
 
+    bool updateDynamic(const std::string& key, const uint8_t* pixels,
+                       int width, int height, int components, bool bgra,
+                       uint64_t source_serial)
+    {
+        if (!s_ctx || key.empty() || !pixels || width <= 0 || height <= 0 ||
+            components < 3)
+        {
+            return false;
+        }
+        DynamicRec& rec = s_dynamic[key];
+        if (rec.ok && rec.width == width && rec.height == height &&
+            rec.serial == source_serial)
+        {
+            return true;
+        }
+
+        std::vector<uint8_t> rgba((size_t)width * height * 4, 255);
+        for (int y = 0; y < height; ++y)
+        {
+            for (int x = 0; x < width; ++x)
+            {
+                const size_t src = ((size_t)y * width + x) * components;
+                const size_t dst = ((size_t)y * width + x) * 4;
+                rgba[dst + 0] = pixels[src + (bgra ? 2 : 0)];
+                rgba[dst + 1] = pixels[src + 1];
+                rgba[dst + 2] = pixels[src + (bgra ? 0 : 2)];
+                rgba[dst + 3] = components > 3 ? pixels[src + 3] : 255;
+            }
+        }
+
+        std::string error;
+        if (!rec.ok || rec.width != width || rec.height != height)
+        {
+            if (rec.ok)
+            {
+                s_ctx->waitIdle();
+                s_ctx->destroyTexture2D(rec.tex);
+                rec.ok = false;
+            }
+            if (!s_ctx->createTexture2D(rgba.data(), (uint32_t)width,
+                                        (uint32_t)height, rec.tex, error,
+                                        /*linear=*/true))
+            {
+                LL_WARNS("Vulkan") << "dynamic UI texture upload failed: "
+                                    << error << LL_ENDL;
+                return false;
+            }
+            rec.width = width;
+            rec.height = height;
+            rec.ok = true;
+        }
+        else if (!s_ctx->updateTexture2D(rgba.data(), (uint32_t)width,
+                                         (uint32_t)height, rec.tex, error))
+        {
+            LL_WARNS("Vulkan") << "dynamic UI texture update failed: "
+                                << error << LL_ENDL;
+            return false;
+        }
+        rec.serial = source_serial;
+        return true;
+    }
+
+    void drawDynamic(const std::string& key,
+                     float left, float top, float right, float bottom,
+                     float max_u, float max_v, bool coords_opengl,
+                     const LLColor4& color)
+    {
+        auto it = s_dynamic.find(key);
+        if (it == s_dynamic.end() || !it->second.ok) return;
+        float c[4] = { color.mV[0], color.mV[1], color.mV[2], color.mV[3] };
+        LLVKUI2DSink::get().setTexture(it->second.tex.descriptor);
+        // LLMediaCtrl::draw maps OpenGL-coordinate plugins with the used
+        // texture's upper row at the view's top; non-GL plugins invert V.
+        const float v_top = coords_opengl ? max_v : 0.f;
+        const float v_bottom = coords_opengl ? 0.f : max_v;
+        emitQuad(left, top, right, bottom, 0.f, v_top, max_u, v_bottom, c);
+    }
+
     void shutdown()
     {
         if (s_ctx)
@@ -455,6 +543,14 @@ namespace LLVKUIImage
             }
         }
         s_images.clear();
+        if (s_ctx)
+        {
+            for (auto& kv : s_dynamic)
+            {
+                if (kv.second.ok) s_ctx->destroyTexture2D(kv.second.tex);
+            }
+        }
+        s_dynamic.clear();
         s_ctx = nullptr;
         s_ready = false;
     }

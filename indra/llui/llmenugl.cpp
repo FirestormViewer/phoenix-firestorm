@@ -578,6 +578,51 @@ void LLMenuItemGL::draw( void )
     }
 }
 
+// <VulkanStorm>
+LLMenuItemGL::VkDrawState LLMenuItemGL::getVkDrawState(F32 alpha)
+{
+    // OpenGL refreshes these derived strings while arranging/drawing menus.
+    // Rebuild them here because the Vulkan path intentionally skips draw().
+    buildDrawLabel();
+
+    VkDrawState out;
+    out.kind = dynamic_cast<LLMenuItemTearOffGL*>(this)
+        ? VkDrawState::Kind::TearOff
+        : dynamic_cast<LLMenuItemSeparatorGL*>(this)
+            ? VkDrawState::Kind::Separator : VkDrawState::Kind::Item;
+    out.label = mLabel.getWString();
+    out.bool_label = mDrawBoolLabel.getWString();
+    out.accel_label = mDrawAccelLabel.getWString();
+    out.branch_label = mDrawBranchLabel.getWString();
+    out.font = mFont;
+    out.highlight = mHighlight;
+    out.enabled = getEnabled();
+    out.brief = mBriefItem;
+    out.menu_bar = dynamic_cast<LLMenuBarGL*>(getMenu()) != nullptr;
+
+    if (ll::ui::SearchableControl::getHighlighted())
+    {
+        out.foreground = ll::ui::SearchableControl::getHighlightFontColor();
+    }
+    else if (mHighlight)
+    {
+        out.foreground = mHighlightForeground.get();
+    }
+    else if (getEnabled() && !mDrawTextDisabled)
+    {
+        out.foreground = mEnabledColor.get();
+    }
+    else
+    {
+        out.foreground = mDisabledColor.get();
+    }
+    out.foreground.mV[VALPHA] *= alpha;
+    out.highlight_background = mHighlightBackground.get();
+    out.highlight_background.mV[VALPHA] *= alpha;
+    return out;
+}
+// </VulkanStorm>
+
 bool LLMenuItemGL::setLabelArg( const std::string& key, const LLStringExplicit& text )
 {
     mLabel.setArg(key, text);
