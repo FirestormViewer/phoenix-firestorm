@@ -1171,24 +1171,39 @@ void LLTabContainer::update_images(LLTabTuple* tuple, TabParams params, LLTabCon
 {
     if (tuple && tuple->mButton)
     {
+        std::string vk_unselected;
+        std::string vk_selected;
         if (pos == LLTabContainer::TOP)
         {
             tuple->mButton->setImageUnselected(static_cast<LLUIImage*>(params.tab_top_image_unselected));
             tuple->mButton->setImageSelected(static_cast<LLUIImage*>(params.tab_top_image_selected));
             tuple->mButton->setImageFlash(static_cast<LLUIImage*>(params.tab_top_image_flash));
+            vk_unselected = params.tab_top_image_unselected.vk_image_name.isProvided()
+                ? params.tab_top_image_unselected.vk_image_name() : "";
+            vk_selected = params.tab_top_image_selected.vk_image_name.isProvided()
+                ? params.tab_top_image_selected.vk_image_name() : "";
         }
         else if (pos == LLTabContainer::BOTTOM)
         {
             tuple->mButton->setImageUnselected(static_cast<LLUIImage*>(params.tab_bottom_image_unselected));
             tuple->mButton->setImageSelected(static_cast<LLUIImage*>(params.tab_bottom_image_selected));
             tuple->mButton->setImageFlash(static_cast<LLUIImage*>(params.tab_bottom_image_flash));
+            vk_unselected = params.tab_bottom_image_unselected.vk_image_name.isProvided()
+                ? params.tab_bottom_image_unselected.vk_image_name() : "";
+            vk_selected = params.tab_bottom_image_selected.vk_image_name.isProvided()
+                ? params.tab_bottom_image_selected.vk_image_name() : "";
         }
         else if (pos == LLTabContainer::LEFT)
         {
             tuple->mButton->setImageUnselected(static_cast<LLUIImage*>(params.tab_left_image_unselected));
             tuple->mButton->setImageSelected(static_cast<LLUIImage*>(params.tab_left_image_selected));
             tuple->mButton->setImageFlash(static_cast<LLUIImage*>(params.tab_left_image_flash));
+            vk_unselected = params.tab_left_image_unselected.vk_image_name.isProvided()
+                ? params.tab_left_image_unselected.vk_image_name() : "";
+            vk_selected = params.tab_left_image_selected.vk_image_name.isProvided()
+                ? params.tab_left_image_selected.vk_image_name() : "";
         }
+        tuple->mButton->setVkStateImageNames(vk_unselected, vk_selected);
     }
 }
 

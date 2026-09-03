@@ -398,14 +398,14 @@ namespace
             LLVKText::render(state.font, state.label,
                              (F32)screen.getCenterX(), (F32)(screen.mBottom + 1),
                              state.foreground, LLFontGL::HCENTER,
-                             LLFontGL::BOTTOM, screen.getWidth());
+                             LLFontGL::BOTTOM, S32_MAX);
         }
         else if (state.brief)
         {
             LLVKText::render(state.font, state.label,
                              (F32)(screen.mLeft + 1), (F32)screen.mBottom,
                              state.foreground, LLFontGL::LEFT,
-                             LLFontGL::BOTTOM, screen.getWidth() - 2);
+                             LLFontGL::BOTTOM, S32_MAX);
         }
         else
         {
@@ -415,26 +415,25 @@ namespace
                 LLVKText::render(state.font, state.bool_label,
                                  (F32)(screen.mLeft + 3), baseline,
                                  state.foreground, LLFontGL::LEFT,
-                                 LLFontGL::BOTTOM, 15);
+                                 LLFontGL::BOTTOM, S32_MAX);
             }
             LLVKText::render(state.font, state.label,
                              (F32)(screen.mLeft + 18), baseline,
                              state.foreground, LLFontGL::LEFT,
-                             LLFontGL::BOTTOM,
-                             llmax(0, screen.getWidth() - 40));
+                             LLFontGL::BOTTOM, S32_MAX);
             if (!state.accel_label.empty())
             {
                 LLVKText::render(state.font, state.accel_label,
                                  (F32)(screen.mRight - 22), baseline,
                                  state.foreground, LLFontGL::RIGHT,
-                                 LLFontGL::BOTTOM, screen.getWidth());
+                                 LLFontGL::BOTTOM, S32_MAX);
             }
             if (!state.branch_label.empty())
             {
                 LLVKText::render(state.font, state.branch_label,
                                  (F32)(screen.mRight - 7), baseline,
                                  state.foreground, LLFontGL::RIGHT,
-                                 LLFontGL::BOTTOM, 15);
+                                 LLFontGL::BOTTOM, S32_MAX);
             }
         }
         rc.emitted++;
