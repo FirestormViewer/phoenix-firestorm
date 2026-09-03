@@ -33,6 +33,7 @@
 #include "lllineeditor.h"       // LLLineEditor (field backgrounds)
 #include "llviewborder.h"       // LLViewBorder (bevel lines)
 #include "llmenugl.h"           // LLMenuGL (menu bar strip + drop shadow)
+#include "lllayoutstack.h"      // LLLayoutStack::updateLayout (GL-free rect math)
 #include "llfocusmgr.h"         // gFocusMgr (focus border color)
 #include "lluictrl.h"           // DROP_SHADOW_FLOATER
 #include "lluicolor.h"          // LLUIColor
@@ -326,6 +327,17 @@ namespace
         }
         if (!view->getVisible()) return;
         rc.visible++;
+
+        // <VulkanStorm> Layout reconciliation: LLLayoutStack::draw() calls
+        // updateLayout() to position its panels. The greenfield walk never runs
+        // draw(), so layout stacks would otherwise report stale rects (the
+        // "wrong location" gap). updateLayout() is pure rect math (no GL), so
+        // calling it here makes the read positions match the GL result.
+        if (LLLayoutStack* stack = dynamic_cast<LLLayoutStack*>(const_cast<LLView*>(view)))
+        {
+            stack->updateLayout();
+        }
+        // </VulkanStorm>
 
         // Widget-specific chrome. (v1: panels/floaters backgrounds; borders +
         // images + text land next.)
