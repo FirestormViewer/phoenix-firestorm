@@ -83,6 +83,14 @@ const Scene& scene()
         // strongly downscaled in X only — the case that flipped on screen.
         s.images.push_back({ "PushButton_Login", 400.f, 410.f, 1360.f, 550.f, W, W, W, 1.f });
 
+        // --- The login-screen dropdown + checkbox images, at their natural
+        // sizes (the exact textures those widgets use), so their rendered
+        // size + content can be diffed GL vs VK directly.
+        s.images.push_back({ "ComboButton_Off", 720.f, 280.f, 742.f, 303.f, W, W, W, 1.f }); // dropdown arrow button
+        s.images.push_back({ "DropDown_Off",    760.f, 280.f, 882.f, 303.f, W, W, W, 1.f }); // start-loc dropdown
+        s.images.push_back({ "Checkbox_On",     900.f, 280.f, 914.f, 295.f, W, W, W, 1.f }); // checkbox (checked)
+        s.images.push_back({ "Checkbox_Off",    930.f, 280.f, 944.f, 295.f, W, W, W, 1.f }); // checkbox (unchecked)
+
         return s;
     }();
     return s_scene;
