@@ -1961,9 +1961,40 @@ LLLineEditor::VkTextState LLLineEditor::getVkTextState(F32 alpha) const
     out.color = mReadOnly ? mReadOnlyFgColor.get()
               : getTentative() ? mTentativeFgColor.get() : mFgColor.get();
     out.color.mV[VALPHA] = alpha;
+
+    // LLLineEditor::draw() shows the watermark whenever the field is empty
+    // (except for a focused editable field whose skin suppresses it).
+    if (mText.length() == 0 && (!hasFocus() || mReadOnly || mShowLabelFocused))
+    {
+        out.text = mLabel.getWString();
+        out.color = mTentativeFgColor.get();
+        out.color.mV[VALPHA] = alpha;
+    }
+
     out.screen_x = (F32)(screen.mLeft + mTextLeftEdge);
     out.screen_baseline = (F32)(screen.mBottom + background.mBottom + vpad);
     out.max_pixels = llmax(0, mTextRightEdge - mTextLeftEdge);
+
+    // Mirror the visible insertion caret.  Besides matching the GL result,
+    // this makes focus/typing state unambiguous in the Vulkan renderer.
+    if (hasFocus() && !mReadOnly && gFocusMgr.getAppHasFocus())
+    {
+        const F32 elapsed = mKeystrokeTimer.getElapsedTimeF32();
+        if ((elapsed < CURSOR_FLASH_DELAY) || (S32(elapsed * 2) & 1))
+        {
+            static LLUICachedControl<S32> cursor_thickness(
+                "UILineEditorCursorThickness", 0);
+            S32 cursor_left = screen.mLeft + findPixelNearestPos();
+            cursor_left -= cursor_thickness / 2;
+            S32 cursor_right = cursor_left + cursor_thickness;
+            out.caret_rect.set(cursor_left,
+                               screen.mBottom + background.mTop - 1,
+                               cursor_right,
+                               screen.mBottom + background.mBottom + 2);
+            out.caret_color = out.color;
+            out.caret_visible = true;
+        }
+    }
     return out;
 }
 // </VulkanStorm>

@@ -39,6 +39,7 @@
 #include "llcombobox.h"         // editable-combo layout reconciliation
 #include "lliconctrl.h"         // LLIconCtrl (icons)
 #include "lllineeditor.h"       // LLLineEditor (field backgrounds)
+#include "llsearcheditor.h"     // composite search-field preparation
 #include "lltextbase.h"         // LLTextBase (computed text-line layout)
 #include "llviewborder.h"       // LLViewBorder (bevel lines)
 #include "llmenugl.h"           // LLMenuGL (menu bar strip + drop shadow)
@@ -491,6 +492,11 @@ namespace
         {
             scroller->prepareVkDraw();
         }
+        if (LLSearchEditor* search =
+                dynamic_cast<LLSearchEditor*>(const_cast<LLView*>(view)))
+        {
+            search->prepareVkDraw();
+        }
 
         // </VulkanStorm>
 
@@ -773,6 +779,13 @@ namespace
                                  state.color, LLFontGL::LEFT, LLFontGL::BOTTOM,
                                  state.max_pixels);
                 rc.emitted++;
+                if (state.caret_visible)
+                {
+                    LLVKUIRender::emitScreenRect(state.caret_rect, rc.dev_h,
+                                                 rc.ui_scale_y,
+                                                 state.caret_color);
+                    rc.emitted++;
+                }
             }
             else if (const LLButton* button = dynamic_cast<const LLButton*>(view))
             {

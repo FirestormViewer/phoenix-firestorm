@@ -90,6 +90,10 @@ public:
     virtual void    clear();
     virtual void    setFocus( bool b );
 
+    // <VulkanStorm> Perform the non-rendering state refresh normally done by
+    // draw(), for the independent Vulkan UI traversal.
+    void            prepareVkDraw();
+
     void            setKeystrokeCallback( commit_callback_t cb ) { mKeystrokeCallback = cb; }
     void            setTextChangedCallback( commit_callback_t cb ) { mTextChangedCallback = cb; }
 
@@ -107,6 +111,10 @@ protected:
     LLPointer<LLUIImage> mEditorImageFocused;
     LLPointer<LLUIImage> mEditorSearchImage;
     LLPointer<LLUIImage> mEditorSearchImageFocused;
+
+    std::string mVkEditorImageName;
+    std::string mVkEditorImageFocusedName;
+    std::string mVkEditorSearchImageName;
 
     bool mHighlightTextField;
 };
