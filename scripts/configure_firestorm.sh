@@ -50,6 +50,9 @@ WANTS_AVX2=$TRUE
 # </VulkanStorm>
 WANTS_TESTBUILD=$FALSE
 WANTS_TRACY=$FALSE
+# <VulkanStorm> Mesa Zink (GL-over-Vulkan) runtime bundling, opt-in via --zink.
+WANTS_MESAZINK=$FALSE
+# </VulkanStorm>
 WANTS_LTO=$FALSE
 WANTS_BUILD=$FALSE
 WANTS_CRASHREPORTING=$FALSE
@@ -96,6 +99,7 @@ showUsage()
     echo "  --avx2                   : Build with Advanced Vector Extensions 2 (default; use --no-avx2 to opt out)"
     echo "  --no-avx2                : Build without AVX2 (overrides the default)"
     echo "  --tracy                  : Build with Tracy Profiler support"
+    echo "  --zink                   : Bundle the Mesa Zink OpenGL-over-Vulkan runtime (Windows 64-bit only)"
     echo "  --lto                    : Build with Link Time Optimization"
     echo "  --crashreporting         : Build with crash reporting enabled (Windows only)"
     echo "  --testbuild <days>       : Create time-limited test build (build date + <days>)"
@@ -113,7 +117,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package velopack inno nsis no-package fmodstudio openal ninja vscode compiler-cache jobs: platform: kdu opensim no-opensim singlegrid: havok avx avx2 tracy lto crashreporting testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package velopack inno nsis no-package fmodstudio openal ninja vscode compiler-cache jobs: platform: kdu opensim no-opensim singlegrid: havok avx avx2 tracy zink lto crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -145,6 +149,7 @@ getArgs()
           avx2)           WANTS_AVX2=$TRUE;;
           no-avx2)        WANTS_AVX2=$FALSE;;   # <VulkanStorm> opt out of the AVX2 default
           tracy)          WANTS_TRACY=$TRUE;;
+          zink)           WANTS_MESAZINK=$TRUE;;
           lto)            WANTS_LTO=$TRUE;;
           crashreporting) WANTS_CRASHREPORTING=$TRUE;;
           testbuild)      WANTS_TESTBUILD=$TRUE
@@ -346,6 +351,7 @@ echo -e "          HAVOK: `b2a $WANTS_HAVOK`"                                  |
 echo -e "            AVX: `b2a $WANTS_AVX`"                                    | tee -a "$LOG"
 echo -e "           AVX2: `b2a $WANTS_AVX2`"                                   | tee -a "$LOG"
 echo -e "          TRACY: `b2a $WANTS_TRACY`"                                  | tee -a "$LOG"
+echo -e "          ZINK: `b2a $WANTS_MESAZINK`"                                 | tee -a "$LOG"
 echo -e "            LTO: `b2a $WANTS_LTO`"                                    | tee -a "$LOG"
 echo -e " CRASHREPORTING: `b2a $WANTS_CRASHREPORTING`"                         | tee -a "$LOG"
 if [ $WANTS_TESTBUILD -eq $TRUE ] ; then
@@ -533,6 +539,13 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     else
         TRACY_PROFILER="-DUSE_TRACY:BOOL=OFF"
     fi
+    # <VulkanStorm> Mesa Zink GL-over-Vulkan runtime (windows64 only)
+    if [ $WANTS_MESAZINK -eq $TRUE ] ; then
+        MESAZINK="-DUSE_MESAZINK:BOOL=ON"
+    else
+        MESAZINK="-DUSE_MESAZINK:BOOL=OFF"
+    fi
+    # </VulkanStorm>
     if [ $WANTS_LTO -eq $TRUE ] ; then
         LTO="-DUSE_LTO:BOOL=ON"
     else
@@ -647,7 +660,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         fi
     fi
 
-    cmake -G "$TARGET" $CMAKE_ARCH ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $LTO $TESTBUILD $PACKAGE $VELOPACK $INNO $NSIS \
+    cmake -G "$TARGET" $CMAKE_ARCH ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $MESAZINK $LTO $TESTBUILD $PACKAGE $VELOPACK $INNO $NSIS \
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee "$LOG"
     configure_status=${PIPESTATUS[0]}

@@ -47,6 +47,7 @@
 
 #include "llviewercontrol.h"
 #include "lldxhardware.h"
+#include "llvkprobe.h" // <VulkanStorm> Zink backend requires a Vulkan device
 
 #include "nvapi/nvapi.h"
 #include "nvapi/NvApiDriverSettings.h"
@@ -1138,6 +1139,90 @@ bool LLAppViewerWin32::reportCustomToBugsplat(const std::string &description)
 #endif // LL_BUGSPLAT
     return false;
 }
+
+// <VulkanStorm>
+void LLAppViewerWin32::selectGLBackend()
+{
+    std::string backend = gSavedSettings.getString("RenderBackend");
+    LLStringUtil::toLower(backend);
+
+    const std::string mesa_dir = gDirUtilp->getExecutableDir() + "\\mesa";
+    const std::string mesa_opengl = mesa_dir + "\\opengl32.dll";
+    const std::string mesa_gallium = mesa_dir + "\\libgallium_wgl.dll";
+    const bool have_mesa = gDirUtilp->fileExists(mesa_opengl) &&
+                           gDirUtilp->fileExists(mesa_gallium);
+
+    // Zink is a GL-over-Vulkan bridge: the bundled Mesa runtime performs its
+    // own Vulkan device discovery at context creation, so we do NOT gate the
+    // preload on the viewer-side LLVKProbe here. If Vulkan is truly unusable,
+    // Mesa fails to create the context and the viewer's GL error handling
+    // takes over; the user can then switch back to native OpenGL.
+    if (backend == "zink")
+    {
+        if (have_mesa)
+        {
+            if (!GetEnvironmentVariableW(L"GALLIUM_DRIVER", nullptr, 0))
+            {
+                SetEnvironmentVariableW(L"GALLIUM_DRIVER", L"zink");
+            }
+            if (!GetEnvironmentVariableW(L"MESA_LOADER_DRIVER_OVERRIDE", nullptr, 0))
+            {
+                SetEnvironmentVariableW(L"MESA_LOADER_DRIVER_OVERRIDE", L"zink");
+            }
+
+            const std::wstring mesa_dir_w = ll_convert<std::wstring>(mesa_dir);
+            const std::wstring mesa_opengl_w = ll_convert<std::wstring>(mesa_opengl);
+
+            // The private runtime directory supplies Gallium dependencies while
+            // the preloaded module satisfies the later bare-name delay import.
+            if (SetDllDirectoryW(mesa_dir_w.c_str()))
+            {
+                HMODULE module = LoadLibraryExW(mesa_opengl_w.c_str(), nullptr,
+                                                LOAD_WITH_ALTERED_SEARCH_PATH);
+                if (module)
+                {
+                    LL_INFOS("RenderInit") << "GL backend: Mesa + Zink from '"
+                                           << mesa_dir << "'." << LL_ENDL;
+                    return;
+                }
+
+                LL_WARNS("RenderInit") << "Could not load bundled Mesa opengl32.dll from '"
+                                       << mesa_dir << "' (GetLastError=" << GetLastError()
+                                       << "); using native OpenGL." << LL_ENDL;
+            }
+            else
+            {
+                LL_WARNS("RenderInit") << "Could not add bundled Mesa directory '"
+                                       << mesa_dir << "' to the DLL search path (GetLastError="
+                                       << GetLastError() << "); using native OpenGL." << LL_ENDL;
+            }
+
+            SetDllDirectoryW(nullptr);
+        }
+        else
+        {
+            LL_WARNS("RenderInit") << "Mesa + Zink requested, but both '"
+                                   << mesa_opengl << "' and '" << mesa_gallium
+                                   << "' are required; using native OpenGL." << LL_ENDL;
+        }
+    }
+
+    // Loading only from System32 also protects the native selection from an
+    // obsolete flat opengl32.dll left beside the viewer executable.
+    SetDllDirectoryW(nullptr);
+    HMODULE module = LoadLibraryExW(L"opengl32.dll", nullptr,
+                                    LOAD_LIBRARY_SEARCH_SYSTEM32);
+    if (module)
+    {
+        LL_INFOS("RenderInit") << "GL backend: native OpenGL (System32)." << LL_ENDL;
+    }
+    else
+    {
+        LL_WARNS("RenderInit") << "Could not preload native opengl32.dll (GetLastError="
+                               << GetLastError() << ")." << LL_ENDL;
+    }
+}
+// </VulkanStorm>
 
 bool LLAppViewerWin32::initWindow()
 {

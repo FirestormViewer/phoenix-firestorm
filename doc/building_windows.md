@@ -277,6 +277,7 @@ There are a number of switches you can use to modify the configuration process. 
 - **--package** makes sure all files are copied into viewers output directory. You won't be able to start your compiled viewer if you don't enable package or do 'compile' it in VS. It will also run NSIS to create a setup package.
 - **--chan \<channel name\>** will set a unique channel (and the name) for the viewer, appending whatever is defined to "Firestorm-". By default, the channel is "private" followed by your computer's name.
 - **-LL_TESTS:BOOL=\<bool\>** controls if the tests are compiled and run. There are quite a lot of them so excluding them is recommended unless you have some reason to need one or more of them.
+- **-DUSE_MESAZINK:BOOL=\<bool\>** bundles the Mesa Zink OpenGL-over-Vulkan runtime (`mesa\opengl32.dll` + `mesa\libgallium_wgl.dll`) in 64bit Windows builds, enabling the Mesa/Zink renderer selection. Default is `OFF`. Requires the `mesazink` 3p package. Equivalent to the `--zink` configure switch.
 
 > [!TIP]
 > **OFF** and **NO** are the same as **FALSE**; anything else is considered to be **TRUE**
@@ -285,6 +286,10 @@ There are a number of switches you can use to modify the configuration process. 
 
 - To build a 64bit viewer with FMOD Studio and to create an installer package, run this command in the Windows command window:
 `autobuild configure -A 64 -c ReleaseFS_open -- --fmodstudio --package --chan MyViewer -DLL_TESTS:BOOL=FALSE`
+
+- To build a 64bit viewer with the Mesa Zink GL-over-Vulkan runtime bundled, run this command:
+`autobuild configure -A 64 -c ReleaseFS_open -- --chan MyViewer -DLL_TESTS:BOOL=FALSE --zink`
+(or pass `-DUSE_MESAZINK:BOOL=ON` directly instead of `--zink`)
 
 - To build a 64bit viewer without FMOD Studio and without installer package, run this command:
 `autobuild configure -A 64 -c ReleaseFS_open -- --chan MyViewer -DLL_TESTS:BOOL=FALSE`

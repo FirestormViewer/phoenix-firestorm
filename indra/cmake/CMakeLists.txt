@@ -44,6 +44,7 @@ set(cmake_SOURCE_FILES
         LLWindow.cmake
         Linking.cmake
         MediaPluginBase.cmake    # <FS:Zi> Linux volume catcher
+        MesaZink.cmake           # <VulkanStorm> Mesa Zink GL-over-Vulkan runtime
         Meshoptimizer.cmake
         NDOF.cmake
         OPENAL.cmake

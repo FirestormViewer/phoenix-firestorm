@@ -11,6 +11,7 @@ if (USE_DISCORD)
 endif ()
 include(OPENAL)
 include(FMODSTUDIO)
+include(MesaZink) # <VulkanStorm>
 
 # When we copy our dependent libraries, we almost always want to copy them to
 # both the Release and the RelWithDebInfo staging directories. This has
@@ -95,6 +96,19 @@ if(WINDOWS)
     if (TARGET ll::openal)
         list(APPEND release_files openal32.dll alut.dll)
     endif ()
+
+    # <VulkanStorm> Mesa Zink GL-over-Vulkan runtime (opt-in via USE_MESAZINK).
+    # The package ships the Gallium WGL opengl32.dll + libgallium_wgl.dll under
+    # bin/release; the viewer loads them from its mesa\ subdirectory when the
+    # Zink render backend is selected.
+    if (USE_MESAZINK AND ADDRESS_SIZE EQUAL 64)
+        to_staging_dirs(
+            "${AUTOBUILD_INSTALL_DIR}/bin/release"
+            third_party_targets
+            opengl32.dll libgallium_wgl.dll
+            )
+    endif ()
+    # </VulkanStorm>
 
     #*******************************
     # Copy MS C runtime dlls, required for packaging.

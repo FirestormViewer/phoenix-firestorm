@@ -272,6 +272,10 @@ public:
 #endif
 
 protected:
+    // <VulkanStorm> Select the platform OpenGL implementation before the first
+    // GL import is resolved and before the window creates its GL context.
+    virtual void selectGLBackend() {}
+    // </VulkanStorm>
     virtual bool initWindow(); // Initialize the viewer's window.
     virtual void initLoggingAndGetLastDuration(); // Initialize log files, logging system
     virtual void initConsole() {}; // Initialize OS level debugging console.
