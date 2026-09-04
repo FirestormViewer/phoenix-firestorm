@@ -38,6 +38,12 @@ LLSearchEditor::LLSearchEditor(const LLSearchEditor::Params& p)
     mEditorImage(p.background_image),
     mEditorImageFocused(p.background_image_focused),
     mEditorSearchImage(p.background_image_highlight),
+    mVkEditorImageName(p.background_image.vk_image_name.isProvided()
+                           ? p.background_image.vk_image_name() : ""),
+    mVkEditorImageFocusedName(p.background_image_focused.vk_image_name.isProvided()
+                                  ? p.background_image_focused.vk_image_name() : ""),
+    mVkEditorSearchImageName(p.background_image_highlight.vk_image_name.isProvided()
+                                 ? p.background_image_highlight.vk_image_name() : ""),
     mHighlightTextField(p.highlight_text_field)
 {
     S32 srch_btn_top = p.search_button.top_pad + p.search_button.rect.height;
@@ -72,6 +78,8 @@ LLSearchEditor::LLSearchEditor(const LLSearchEditor::Params& p)
     line_editor_params.keystroke_callback(boost::bind(&LLSearchEditor::handleKeystroke, this));
 
     mSearchEditor = LLUICtrlFactory::create<LLLineEditor>(line_editor_params);
+    mSearchEditor->setVkBgImageNames(mVkEditorImageName,
+                                     mVkEditorImageFocusedName);
     mSearchEditor->setPassDelete(true);
     addChild(mSearchEditor);
 
@@ -138,6 +146,29 @@ void LLSearchEditor::draw()
 
     LLUICtrl::draw();
 }
+
+// <VulkanStorm>
+void LLSearchEditor::prepareVkDraw()
+{
+    if (!mSearchEditor) return;
+
+    if (mClearButton)
+    {
+        mClearButton->setVisible(!mSearchEditor->getWText().empty());
+    }
+
+    if (mHighlightTextField && !mSearchEditor->getWText().empty())
+    {
+        mSearchEditor->setVkBgImageNames(mVkEditorSearchImageName,
+                                         mVkEditorSearchImageName);
+    }
+    else
+    {
+        mSearchEditor->setVkBgImageNames(mVkEditorImageName,
+                                         mVkEditorImageFocusedName);
+    }
+}
+// </VulkanStorm>
 
 //virtual
 void LLSearchEditor::setValue(const LLSD& value )

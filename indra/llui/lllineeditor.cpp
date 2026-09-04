@@ -1961,9 +1961,79 @@ LLLineEditor::VkTextState LLLineEditor::getVkTextState(F32 alpha) const
     out.color = mReadOnly ? mReadOnlyFgColor.get()
               : getTentative() ? mTentativeFgColor.get() : mFgColor.get();
     out.color.mV[VALPHA] = alpha;
+
+    // LLLineEditor::draw() shows the watermark whenever the field is empty
+    // (except for a focused editable field whose skin suppresses it).
+    if (mText.length() == 0 && (!hasFocus() || mReadOnly || mShowLabelFocused))
+    {
+        out.text = mLabel.getWString();
+        out.color = mTentativeFgColor.get();
+        out.color.mV[VALPHA] = alpha;
+    }
+
     out.screen_x = (F32)(screen.mLeft + mTextLeftEdge);
     out.screen_baseline = (F32)(screen.mBottom + background.mBottom + vpad);
     out.max_pixels = llmax(0, mTextRightEdge - mTextLeftEdge);
+
+    // Split the visible text around the selection exactly as draw() does.
+    // This keeps the highlight behind only the selected glyphs and lets the
+    // Vulkan renderer use the skin's selected-text color.
+    if (gFocusMgr.getKeyboardFocus() == this && hasSelection() && !mDrawAsterixes)
+    {
+        const S32 text_len = mText.length();
+        const S32 select_left = llclamp(llmin(mSelectionStart, mSelectionEnd),
+                                        mScrollHPos, text_len);
+        const S32 select_right = llclamp(llmax(mSelectionStart, mSelectionEnd),
+                                         select_left, text_len);
+        const LLWString& full_text = mText.getWString();
+        const S32 visible_start = llclamp(mScrollHPos, 0, text_len);
+        out.text = full_text.substr(visible_start, select_left - visible_start);
+        out.selected_text = full_text.substr(select_left, select_right - select_left);
+        out.trailing_text = full_text.substr(select_right);
+
+        const S32 prefix_width = mGLFont->getWidth(out.text.c_str());
+        const S32 selected_width = llmin(mGLFont->getWidth(out.selected_text.c_str()),
+                                         llmax(0, out.max_pixels - prefix_width));
+        out.selected_x = out.screen_x + prefix_width;
+        out.trailing_x = out.selected_x + selected_width;
+        out.max_pixels = prefix_width;
+        out.selected_max_pixels = selected_width;
+        out.trailing_max_pixels = llmax(0, mTextRightEdge - mTextLeftEdge
+                                           - prefix_width - selected_width);
+        out.selection_rect.set(ll_round(out.selected_x),
+                               screen.mBottom + background.mTop - 1,
+                               ll_round(out.trailing_x),
+                               screen.mBottom + background.mBottom + 2);
+        out.selection_color = mHighlightColor;
+        out.selection_color.setAlpha(alpha);
+        out.selected_text_color = mHighlightTextColor.value_or(
+            LLColor4(1.f - out.color.mV[VRED],
+                     1.f - out.color.mV[VGREEN],
+                     1.f - out.color.mV[VBLUE], alpha));
+        out.selected_text_color.setAlpha(alpha);
+        out.selection_visible = selected_width > 0;
+    }
+
+    // Mirror the visible insertion caret.  Besides matching the GL result,
+    // this makes focus/typing state unambiguous in the Vulkan renderer.
+    if (hasFocus() && !mReadOnly && gFocusMgr.getAppHasFocus())
+    {
+        const F32 elapsed = mKeystrokeTimer.getElapsedTimeF32();
+        if ((elapsed < CURSOR_FLASH_DELAY) || (S32(elapsed * 2) & 1))
+        {
+            static LLUICachedControl<S32> cursor_thickness(
+                "UILineEditorCursorThickness", 0);
+            S32 cursor_left = screen.mLeft + findPixelNearestPos();
+            cursor_left -= cursor_thickness / 2;
+            S32 cursor_right = cursor_left + cursor_thickness;
+            out.caret_rect.set(cursor_left,
+                               screen.mBottom + background.mTop - 1,
+                               cursor_right,
+                               screen.mBottom + background.mBottom + 2);
+            out.caret_color = out.color;
+            out.caret_visible = true;
+        }
+    }
     return out;
 }
 // </VulkanStorm>

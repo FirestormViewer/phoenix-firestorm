@@ -263,6 +263,11 @@ public:
     /*virtual*/ void    setColor(const LLUIColor& c) override;
 
     void            setImages(const std::string &image_name, const std::string &selected_name);
+    // <VulkanStorm> Preserve programmatic image aliases for the independent
+    // Vulkan registry when no GL-backed LLUIImage pointer is available.
+    void            setVkStateImageNames(const std::string& unselected,
+                                         const std::string& selected);
+    // </VulkanStorm>
 
     void            setDisabledImageColor(const LLUIColor& c)        { mDisabledImageColor = c; }
 

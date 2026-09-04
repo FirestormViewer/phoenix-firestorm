@@ -1581,9 +1581,23 @@ void LLButton::resize(const LLUIString& label)
 }
 void LLButton::setImages( const std::string &image_name, const std::string &selected_name )
 {
+    setVkStateImageNames(image_name, selected_name);
     setImageUnselected(LLUI::getUIImage(image_name));
     setImageSelected(LLUI::getUIImage(selected_name));
 }
+
+// <VulkanStorm>
+void LLButton::setVkStateImageNames(const std::string& unselected,
+                                    const std::string& selected)
+{
+    mVkImgNameUnselected = unselected;
+    mVkImgNameSelected = selected;
+    mVkImgNameDisabled = unselected;
+    mVkImgNameDisabledSelected = selected;
+    mVkImgNamePressed = selected;
+    mVkImgNamePressedSelected = unselected;
+}
+// </VulkanStorm>
 
 void LLButton::setImageSelected(LLPointer<LLUIImage> image)
 {

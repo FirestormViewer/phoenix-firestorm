@@ -392,6 +392,20 @@ void LLScrollListText::setAlignment(LLFontGL::HAlign align)
     mFontBuffer.reset();
 }
 
+// <VulkanStorm>
+LLScrollListText::VkTextState
+LLScrollListText::getVkTextState(const LLColor4& fallback_color) const
+{
+    VkTextState out;
+    out.text = mText.getWString();
+    out.font = mFont;
+    out.color = mUseColor ? mColor : fallback_color;
+    out.alignment = mFontAlignment;
+    out.max_pixels = mTextWidth;
+    return out;
+}
+// </VulkanStorm>
+
 //virtual
 void LLScrollListText::setValue(const LLSD& text)
 {
@@ -715,5 +729,4 @@ void LLScrollListIconText::draw(const LLColor4& color, const LLColor4& highlight
         mIcon->draw(start_icon_x, 0, icon_height, icon_height, mColor);
     }
 }
-
 
