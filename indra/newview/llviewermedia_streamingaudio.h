@@ -32,6 +32,7 @@
 #include "stdtypes.h" // from llcommon
 
 #include "llstreamingaudio.h"
+#include "lltimer.h"
 
 class LLPluginClassMedia;
 
@@ -63,11 +64,31 @@ private:
 
     // <FS:ND> stream metadata from plugin
     void updateMetadata() noexcept;
-
-    std::string mArtist;
-    std::string mTitle;
-    LLSD mMetadata;
     // </FS:ND>
+
+    // <FS> Stream metadata. Two sources feed it: in-band metadata surfaced
+    // by the media plugin (ICY etc.), and the stream server's Icecast
+    // status-json.xsl sidechannel, which also works where VLC does not
+    // surface in-band data (chained Ogg). The sidechannel wins once it has
+    // delivered data for the current stream.
+    void emitMetadata(const std::string& artist, const std::string& title);
+    void pollStreamStatus();
+    void onStreamStatus(const std::string& artist, const std::string& title, const std::string& status_url);
+    void onStreamStatusFailed();
+    static void streamStatusCoro(LLStreamingAudio_MediaPlugins* self, LLSD candidates, std::string mount_path, std::string stream_url);
+    void resetMetadata();
+
+    std::string mArtist;        // last emitted pair
+    std::string mTitle;
+    std::string mPluginArtist;  // last seen from the media plugin
+    std::string mPluginTitle;
+    std::string mStatusUrl;     // status endpoint that answered for this stream
+    bool mStatusValid;          // sidechannel has delivered data for this stream
+    bool mStatusPollDone;       // first poll fired (shorter initial delay)
+    S32 mStatusProbeFails;      // consecutive all-candidate failures; gives up at limit
+    LLTimer mStatusPollTimer;
+    LLSD mMetadata;
+    // </FS>
 
     F32 mGain;
 };

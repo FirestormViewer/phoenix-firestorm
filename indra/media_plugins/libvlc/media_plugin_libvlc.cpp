@@ -67,6 +67,9 @@ private:
     void setVolume(const F64 volume);
     void setVolumeVLC();
     void updateTitle(const char* title);
+    void updateStreamMetadata(int meta_type);
+
+    std::string mLastMetadataSent;
 
     static void* lock(void* data, void** p_pixels);
     static void unlock(void* data, void* id, void* const* raw_pixels);
@@ -171,6 +174,12 @@ void MediaPluginLibVLC::initVLC()
     {
         "--no-xlib",
         "--video-filter=transform{type=vflip}",  // MAINT-6578 Y flip textures in plugin vs client
+#if defined(__FreeBSD__)
+        // FreeBSD's VLC build ships only the OSS audio output (no PulseAudio
+        // module), so pin it explicitly; it coexists with the viewer's own OSS
+        // audio engine via the kernel's vchan mixing.
+        "--aout=oss",
+#endif
     };
 
 #if LL_DARWIN
@@ -294,6 +303,20 @@ void MediaPluginLibVLC::eventCallbacks(const libvlc_event_t* event, void* ptr)
         }
     }
     break;
+
+    // <FS:ND> Report ICY/stream metadata (song title/artist) to the viewer
+    case libvlc_MediaMetaChanged:
+    {
+        libvlc_meta_t meta_type = event->u.media_meta_changed.meta_type;
+        if (meta_type == libvlc_meta_NowPlaying ||
+            meta_type == libvlc_meta_Title ||
+            meta_type == libvlc_meta_Artist)
+        {
+            parent->updateStreamMetadata(meta_type);
+        }
+    }
+    break;
+    // </FS:ND>
     }
 }
 
@@ -349,6 +372,15 @@ void MediaPluginLibVLC::playMedia()
         libvlc_event_attach(em, libvlc_MediaPlayerTitleChanged, eventCallbacks, this);
     }
 
+    // <FS:ND> Stream metadata (ICY StreamTitle etc.) arrives on the media's
+    // own event manager, not the player's
+    libvlc_event_manager_t* mem = libvlc_media_event_manager(mLibVLCMedia);
+    if (mem)
+    {
+        libvlc_event_attach(mem, libvlc_MediaMetaChanged, eventCallbacks, this);
+    }
+    // </FS:ND>
+
     libvlc_video_set_callbacks(mLibVLCMediaPlayer, lock, unlock, display, &mLibVLCCallbackContext);
     libvlc_video_set_format(mLibVLCMediaPlayer, "RV32", mWidth, mHeight, mWidth * mDepth);
 
@@ -380,6 +412,18 @@ void MediaPluginLibVLC::playMedia()
         libvlc_media_add_option(mLibVLCMedia, "input-repeat=65535");
     }
 
+    // <FS> The streaming-audio instance is created 1x1 with no visible
+    // surface. Radio doesn't care about latency, and SLPlugin runs at
+    // background priority where VLC's default ~1s network cache underruns
+    // (audible pops/thuds) whenever the viewer loads the machine — buffer
+    // deep. Visible parcel media keeps the default for responsiveness.
+    if (mWidth <= 1 && mHeight <= 1)
+    {
+        libvlc_media_add_option(mLibVLCMedia, ":network-caching=5000");
+        libvlc_media_add_option(mLibVLCMedia, ":no-video");
+    }
+    // </FS>
+
     libvlc_media_player_play(mLibVLCMediaPlayer);
 
     // send a "location_changed" message - this informs the media system
@@ -409,6 +453,87 @@ void MediaPluginLibVLC::updateTitle(const char* title)
     message.setValue("name", title);
     sendMessage(message);
 }
+
+// <FS:ND> Report stream metadata to the viewer, same message the gstreamer
+// plugin sends. Which meta field carries the track depends on the stream:
+// MP3/AAC ICY updates arrive in NowPlaying ("Artist - Title"), while
+// Ogg/Icecast chains update Title/Artist from in-band Vorbis comments (and
+// often park the static station name in NowPlaying, so a fixed precedence
+// would mask per-track updates). React to the field that actually changed.
+void MediaPluginLibVLC::updateStreamMetadata(int meta_type)
+{
+    if (!mLibVLCMedia)
+    {
+        return;
+    }
+
+    std::string artist;
+    std::string title;
+
+    if (meta_type == libvlc_meta_NowPlaying)
+    {
+        char* meta = libvlc_media_get_meta(mLibVLCMedia, libvlc_meta_NowPlaying);
+        if (meta)
+        {
+            std::string now_playing = meta;
+            libvlc_free(meta);
+
+            size_t sep = now_playing.find(" - ");
+            if (sep != std::string::npos)
+            {
+                artist = now_playing.substr(0, sep);
+                title = now_playing.substr(sep + 3);
+            }
+            else
+            {
+                title = now_playing;
+            }
+        }
+    }
+    else // Title or Artist changed
+    {
+        char* meta = libvlc_media_get_meta(mLibVLCMedia, libvlc_meta_Artist);
+        if (meta)
+        {
+            artist = meta;
+            libvlc_free(meta);
+        }
+
+        meta = libvlc_media_get_meta(mLibVLCMedia, libvlc_meta_Title);
+        if (meta)
+        {
+            title = meta;
+            libvlc_free(meta);
+        }
+
+        // Before any real meta arrives VLC uses the URL's filename as the
+        // title placeholder; that is not worth announcing
+        if (artist.empty() && !title.empty() && mURL.find(title) != std::string::npos)
+        {
+            return;
+        }
+    }
+
+    if (artist.empty() && title.empty())
+    {
+        return;
+    }
+
+    // Both metas of a track boundary land before the first event is
+    // delivered, so Title and Artist events would send the same pair twice
+    std::string dedup_key = artist + "\x01" + title;
+    if (dedup_key == mLastMetadataSent)
+    {
+        return;
+    }
+    mLastMetadataSent = dedup_key;
+
+    LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "ndMediadata_change");
+    message.setValue("title", title);
+    message.setValue("artist", artist);
+    sendMessage(message);
+}
+// </FS:ND>
 
 void MediaPluginLibVLC::setVolumeVLC()
 {
