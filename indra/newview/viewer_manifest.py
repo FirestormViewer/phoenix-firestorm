@@ -1053,11 +1053,18 @@ class Windows_x86_64_Manifest(ViewerManifest):
         # fixed template GUID + app name, formatted as an Inno GUID constant).
         app_name_oneword = self.app_name_oneword()
 
+        # Inno VersionInfoVersion requires 4 numeric components each <= 65535;
+        # the viewer build number (4th component) can exceed that. Use the first
+        # three components with a zero fourth (AppVersion keeps the full string).
+        version_parts = self.args['version']
+        version_info = '.'.join(version_parts[:3]) + '.0' if len(version_parts) >= 3 else '.'.join(version_parts) + '.0'
+
         replacements = {
             '%%APP_NAME%%': self.app_name(),
             '%%APP_NAME_ONEWORD%%': app_name_oneword,
             '%%FRIENDLY_APP_NAME%%': self.friendly_app_name(),
             '%%VERSION%%': '.'.join(self.args['version']),
+            '%%VERSION_INFO%%': version_info,
             '%%FINAL_EXE%%': final_exe,
             '%%IS_OPENSIM%%': '1' if self.fs_is_opensim() else '0',
             '%%INSTALL_FILES%%': self.inno_file_commands(),

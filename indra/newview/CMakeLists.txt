@@ -2525,6 +2525,7 @@ if (WINDOWS)
               "--discord=${USE_DISCORD}"
               "--fmodstudio=${USE_FMODSTUDIO}"
               "--openal=${USE_OPENAL}"
+              "--mesazink=${USE_MESAZINK}"
               "--tracy=${USE_TRACY}"
               "--velopack=${USE_VELOPACK}"
               "--inno=${USE_INNOSETUP}"
