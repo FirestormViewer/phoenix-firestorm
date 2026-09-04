@@ -4037,13 +4037,14 @@ bool LLPanelPreferenceGraphics::postBuild()
         refreshRenderBackendSelector();
         backend_combo->setCommitCallback(boost::bind(&LLPanelPreferenceGraphics::onRenderBackendCommit, this));
         // <VulkanStorm> The selector is always shown; when no Vulkan ICD is
-        // present, the Vulkan-dependent items (Vulkan, Mesa/Zink) are
-        // suppressed. OpenGL remains selectable.
+        // present, only the native Vulkan item is suppressed. Mesa/Zink is NOT
+        // gated here: it is a GL-over-Vulkan bridge whose Mesa runtime does
+        // its own Vulkan device discovery, so the viewer-side ICD probe does
+        // not decide whether Zink can run.
         if (!probe_vulkan_available())
         {
             backend_combo->setEnabledByValue(LLSD("Vulkan"), false);
-            backend_combo->setEnabledByValue(LLSD("Zink"), false);
-            if (gSavedSettings.getString("RenderBackendPending") != "OpenGL")
+            if (gSavedSettings.getString("RenderBackendPending") == "Vulkan")
             {
                 gSavedSettings.setString("RenderBackendPending", "OpenGL");
             }

@@ -1152,13 +1152,11 @@ void LLAppViewerWin32::selectGLBackend()
     const bool have_mesa = gDirUtilp->fileExists(mesa_opengl) &&
                            gDirUtilp->fileExists(mesa_gallium);
 
-    // Zink renders OpenGL over Vulkan, so it also needs a Vulkan device.
-    if (backend == "zink" && !LLVKProbe::hasVulkanDevice())
-    {
-        LL_WARNS("RenderInit") << "Mesa + Zink requested, but no Vulkan device is available; using native OpenGL." << LL_ENDL;
-        backend = "opengl";
-    }
-
+    // Zink is a GL-over-Vulkan bridge: the bundled Mesa runtime performs its
+    // own Vulkan device discovery at context creation, so we do NOT gate the
+    // preload on the viewer-side LLVKProbe here. If Vulkan is truly unusable,
+    // Mesa fails to create the context and the viewer's GL error handling
+    // takes over; the user can then switch back to native OpenGL.
     if (backend == "zink")
     {
         if (have_mesa)
