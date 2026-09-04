@@ -3747,6 +3747,21 @@ void renderSoundHighlights(LLDrawable *drawablep)
     }
 }
 
+// <FS>
+bool LLPipeline::canUseInterleavedAlpha()
+{
+    static LLCachedControl<bool> interleaved_alpha(gSavedSettings, "RenderInterleavedAlpha", true);
+    return interleaved_alpha && !sRenderingHUDs && !sShadowRender && !gCubeSnapshot &&
+           LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD;
+}
+
+void LLPipeline::sortAlphaGroupsForInterleaving()
+{
+    std::sort(sCull->beginAlphaGroups(), sCull->endAlphaGroups(), LLSpatialGroup::CompareWorldAlphaDepth());
+    std::sort(sCull->beginRiggedAlphaGroups(), sCull->endRiggedAlphaGroups(), LLSpatialGroup::CompareDepthRenderOrder());
+}
+// </FS>
+
 void LLPipeline::postSort(LLCamera &camera)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
@@ -3827,11 +3842,23 @@ void LLPipeline::postSort(LLCamera &camera)
         if (hasRenderType(LLPipeline::RENDER_TYPE_PASS_ALPHA))
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("Collect Alpha groups");
+            // <FS> fan the attachment's stamp (LLVOAvatar::idleUpdateMisc) out from
+            // the bridge to every visible alpha group of the linkset; the shared
+            // mAvatarDepth keys the wearer's ensemble as one block in the walk
+            LLSpatialBridge *bridge = group->getSpatialPartition()->asBridge();
+            if (bridge && bridge->mAvatarp)
+            {
+                group->mAvatarp = bridge->mAvatarp;
+                group->mRenderOrder = bridge->mRenderOrder;
+                group->mAvatarDepth = bridge->mAvatarDepth;
+            }
+            // </FS>
+
             LLSpatialGroup::draw_map_t::iterator alpha = group->mDrawMap.find(LLRenderPass::PASS_ALPHA);
 
             if (alpha != group->mDrawMap.end())
             {  // store alpha groups for sorting
-                LLSpatialBridge *bridge = group->getSpatialPartition()->asBridge();
+                // <FS> (bridge already fetched above for the stamp fan-out)
                 if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD && !gCubeSnapshot)
                 {
                     if (bridge)
@@ -3901,11 +3928,11 @@ void LLPipeline::postSort(LLCamera &camera)
         LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("sort alpha groups");
     if (!sShadowRender)
     {
-        // order alpha groups by distance
+        // <FS> Legacy order is the baseline for every consumer. Post-water replaces
+        // it with the interleaved order only when it actually uses the merge.
         std::sort(sCull->beginAlphaGroups(), sCull->endAlphaGroups(), LLSpatialGroup::CompareDepthGreater());
-
-        // order rigged alpha groups by avatar attachment order
         std::sort(sCull->beginRiggedAlphaGroups(), sCull->endRiggedAlphaGroups(), LLSpatialGroup::CompareRenderOrder());
+        // </FS>
     }
     }
 

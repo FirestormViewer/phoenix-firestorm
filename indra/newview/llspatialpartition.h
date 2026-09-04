@@ -46,6 +46,7 @@
 //<FS:Beq> needed to resolve render_hull dep
 #include "llmodel.h"
 //</FS:Beq>
+#include <functional>
 #include <queue>
 #include <unordered_map>
 
@@ -249,18 +250,96 @@ public:
         }
     };
 
+    // <FS> interleaved world-alpha sort key: a stamped attachment's groups
+    // sort at the wearer's avatar depth, everything else at bounds depth
+    F32 worldAlphaDepth() const { return mAvatarp ? mAvatarDepth : mDepth; }
+
+    struct CompareWorldAlphaDepth
+    {
+        bool operator()(const LLSpatialGroup* const& lhs, const LLSpatialGroup* const& rhs)
+        {
+            F32 lhs_depth = lhs->worldAlphaDepth();
+            F32 rhs_depth = rhs->worldAlphaDepth();
+            if (lhs_depth != rhs_depth)
+            {
+                return lhs_depth > rhs_depth;
+            }
+
+            if (lhs->mAvatarp != rhs->mAvatarp)
+            {
+                // at an exact depth tie, drain stamped ensembles before plain
+                // world groups so a null head cannot split every ensemble
+                if (!lhs->mAvatarp)
+                {
+                    return false;
+                }
+                if (!rhs->mAvatarp)
+                {
+                    return true;
+                }
+                // std::less: raw < on unrelated pointers is unspecified
+                return std::less<const LLVOAvatar*>()(lhs->mAvatarp, rhs->mAvatarp);
+            }
+
+            // groups of one ensemble keep their bounds order among themselves
+            return lhs->mDepth > rhs->mDepth;
+        }
+    };
+    // </FS>
+
     struct CompareRenderOrder
     {
         bool operator()(const LLSpatialGroup* const& lhs, const LLSpatialGroup* const& rhs)
         {
             if (lhs->mAvatarp != rhs->mAvatarp)
             {
-                return lhs->mAvatarp < rhs->mAvatarp;
+                // <FS> std::less: raw < on unrelated pointers is unspecified
+                // return lhs->mAvatarp < rhs->mAvatarp;
+                return std::less<const LLVOAvatar*>()(lhs->mAvatarp, rhs->mAvatarp);
+                // </FS>
             }
 
             return lhs->mRenderOrder > rhs->mRenderOrder;
         }
     };
+
+    // <FS>
+    struct CompareDepthRenderOrder
+    {
+        bool operator()(const LLSpatialGroup* const& lhs, const LLSpatialGroup* const& rhs)
+        {
+            // farther avatars draw first; all of an avatar's groups share one
+            // depth, keeping its run contiguous and in attachment order
+            if (lhs->mAvatarDepth != rhs->mAvatarDepth)
+            {
+                return lhs->mAvatarDepth > rhs->mAvatarDepth;
+            }
+
+            if (lhs->mAvatarp != rhs->mAvatarp)
+            {
+                // An unstamped rigged group has no ensemble key; keep it first
+                // at an exact depth tie, matching the merge's legacy fallback.
+                if (!lhs->mAvatarp)
+                {
+                    return true;
+                }
+                if (!rhs->mAvatarp)
+                {
+                    return false;
+                }
+                return std::less<const LLVOAvatar*>()(lhs->mAvatarp, rhs->mAvatarp);
+            }
+
+            if (lhs->mRenderOrder != rhs->mRenderOrder)
+            {
+                return lhs->mRenderOrder > rhs->mRenderOrder;
+            }
+
+            // bounds depth: stable back-to-front order within one attachment
+            return lhs->mDepth > rhs->mDepth;
+        }
+    };
+    // </FS>
 
     typedef enum
     {
@@ -364,6 +443,10 @@ public:
     //used by LLVOAVatar to set render order in alpha draw pool to preserve legacy render order behavior
     LLVOAvatar* mAvatarp = nullptr;
     U32 mRenderOrder = 0;
+    // <FS> avatar-ensemble sort key, fanned out from the bridge in
+    // LLPipeline::postSort; mDepth stays bounds-derived
+    F32 mAvatarDepth = 0.f;
+    // </FS>
     // Reflection Probe associated with this node (if any)
     LLPointer<LLReflectionMap> mReflectionProbe = nullptr;
 } LL_ALIGN_POSTFIX(16);
@@ -471,6 +554,15 @@ public:
     //transform agent space bounding box into this Spatial Bridge's coordinate frame
     void transformExtents(const LLVector4a* src, LLVector4a* dst);
     LLDrawable* mDrawable;
+
+    // <FS> alpha draw-order stamp, set by LLVOAvatar::idleUpdateMisc /
+    // LLControlAvatar::idleUpdate and fanned out to this bridge's alpha
+    // groups in LLPipeline::postSort. mAvatarp is only ever compared,
+    // never dereferenced (avatar may die first).
+    LLVOAvatar* mAvatarp = nullptr;
+    U32 mRenderOrder = 0;
+    F32 mAvatarDepth = 0.f;
+    // </FS>
 };
 
 class LLCullResult

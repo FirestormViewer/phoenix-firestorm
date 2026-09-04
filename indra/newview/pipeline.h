@@ -387,6 +387,7 @@ public:
     LLCullResult::sg_iterator endAlphaGroups();
     LLCullResult::sg_iterator beginRiggedAlphaGroups();
     LLCullResult::sg_iterator endRiggedAlphaGroups();
+    void sortAlphaGroupsForInterleaving(); // <FS/> re-sort the shared lists for the merged post-water pass
 
     void addTrianglesDrawn(S32 index_count);
     void recordTrianglesDrawn();
@@ -402,6 +403,7 @@ public:
     bool hasAnyRenderType(const U32 type, ...) const;
 
     static bool isWaterClip();
+    static bool canUseInterleavedAlpha(); // <FS/> central eligibility gate for the merged alpha walk
 
     void setRenderTypeMask(U32 type, ...);
     // This is equivalent to 'setRenderTypeMask'

@@ -285,6 +285,7 @@ public:
     void            updateRootPositionAndRotation(LLAgent &agent, F32 speed, bool was_sit_ground_constrained);
 
     void            idleUpdateVoiceVisualizer(bool voice_enabled, const LLVector3 &position);
+    F32             calcRiggedAlphaDepth() const; // <FS/> interleaved world-alpha depth key
     void            idleUpdateMisc(bool detailed_update);
     virtual void    idleUpdateAppearanceAnimation();
     void            idleUpdateLipSync(bool voice_enabled);
