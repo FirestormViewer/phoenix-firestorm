@@ -356,7 +356,11 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         app_suffix=self.channel_variant()
 
         #<FS:ND> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
-        if self.fs_is_opensim():
+        # <VulkanStorm> Only prepend "OS" when the variant doesn't already carry
+        # it. The channel for an OpenSim build is "VulkanstormOS-<Type>", so
+        # channel_variant() already yields "OS-<Type>"; prepending "OS" again
+        # produced "OSOS-<Type>" (e.g. VulkanstormOSOS-RelWithDebInfo.exe).
+        if self.fs_is_opensim() and not app_suffix.startswith("OS"):
             app_suffix = "OS" + app_suffix
         #</FS:ND>
 
@@ -965,6 +969,29 @@ class Windows_x86_64_Manifest(ViewerManifest):
 
         return result
         # </FS:Ansariel>
+
+    def inno_file_commands(self):
+        # <VulkanStorm> Build the explicit [Files] list for the Inno installer
+        # from the packaged file_list. Shipping an explicit list (rather than a
+        # wildcard sweep of the staging dir) keeps development artifacts and
+        # stray executables out of the installation. Modeled on
+        # nsi_file_commands. PDB files are never shipped in a release install.
+        def quote(value):
+            return value.replace('"', '""')
+
+        result = []
+        dest_files = [pair[1] for pair in self.file_list if pair[0] and os.path.isfile(pair[1]) and not pair[1].endswith(".pdb")]
+        dest_files.sort()
+        for pkg_file in dest_files:
+            rel_file = os.path.normpath(pkg_file.replace(self.get_dst_prefix()+os.path.sep,''))
+            destination = os.path.dirname(rel_file).replace('/', '\\')
+            destination = "{app}" if not destination else "{app}\\" + destination
+            result.append('Source: "%s"; DestDir: "%s"; Flags: ignoreversion' %
+                          (quote(os.path.normpath(pkg_file)), quote(destination)))
+
+        return '\n'.join(result)
+        # </VulkanStorm>
+
     def dl_url_from_channel(self):
         if self.channel_type() == 'release':
             return 'https://www.firestormviewer.org/choose-your-platform'
@@ -1029,8 +1056,11 @@ class Windows_x86_64_Manifest(ViewerManifest):
         replacements = {
             '%%APP_NAME%%': self.app_name(),
             '%%APP_NAME_ONEWORD%%': app_name_oneword,
+            '%%FRIENDLY_APP_NAME%%': self.friendly_app_name(),
             '%%VERSION%%': '.'.join(self.args['version']),
             '%%FINAL_EXE%%': final_exe,
+            '%%IS_OPENSIM%%': '1' if self.fs_is_opensim() else '0',
+            '%%INSTALL_FILES%%': self.inno_file_commands(),
             '%%INSTALLER_FILE%%': installer_file,
             '%%INSTALLER_OUT%%': installer_base + '_Setup',
             '%%SOURCE_DIR%%': self.get_dst_prefix(),
