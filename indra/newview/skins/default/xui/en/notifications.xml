@@ -15024,6 +15024,24 @@ For detailed instructions on how to whitelist [APP_NAME] - including a list of f
 https://wiki.firestormviewer.org/antivirus_whitelisting
   </notification>
 
+  <!-- <FS:TJ> Detect and notify if the viewer is trying to run as admin on Windows -->
+  <notification
+    icon="alertmodal.tga"
+    name="ViewerProcessRunningAsAdmin"
+    type="alertmodal">
+One or more viewer processes are currently running as administrator. This is known to cause a number of issues and prevent media and web pages working within the viewer.
+
+Please ensure that all viewer processes are not set to run as administrator. For more information, please read here:
+
+https://wiki.firestormviewer.org/fs_media#one_or_more_viewer_processes_are_currently_running_as_administrator_error_message
+    <tag>fail</tag>
+    <usetemplate
+     ignoretext="Warn me when the viewer is running as administrator"
+     name="okignore"
+     yestext="OK" />
+  </notification>
+  <!-- </FS:TJ> -->
+
    <notification
    icon="alertmodal.tga"
    label="Confirm Pose Overwrite"
