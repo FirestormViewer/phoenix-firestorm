@@ -324,7 +324,7 @@
     <key>FSMutedAvatarResponse</key>
         <map>
         <key>Comment</key>
-            <string>Auto response to instant messages from avatars this account's muted.</string>
+            <string>Auto response to instant messages from avatars this account has blocked/muted.</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>
@@ -335,7 +335,7 @@
     <key>FSSendMutedAvatarResponse</key>
         <map>
         <key>Comment</key>
-            <string>True if the user wants to send a special autoresponse to muted avatars</string>
+            <string>True if the user wants to send a special autoresponse to blocked/muted avatars</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>
@@ -346,7 +346,7 @@
     <key>FSMutedAvatarResponseChanged</key>
         <map>
         <key>Comment</key>
-            <string>Does user's muted avatar response message differ from default?</string>
+            <string>Does user's blocked/muted avatar response message differ from default?</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>

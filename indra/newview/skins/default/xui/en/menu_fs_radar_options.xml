@@ -23,7 +23,7 @@
 		 parameter="LimitRadarByRange"/>
 	</menu_item_check>
 	<menu_item_check
-	 label="Show muted and blacklisted Avatars"
+	 label="Show blocked and blacklisted Avatars"
 	 name="FSRadarShowMutedAndDerendered">
 		<menu_item_check.on_check
 		 control="FSRadarShowMutedAndDerendered"/>
