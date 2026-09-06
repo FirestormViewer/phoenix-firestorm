@@ -32,6 +32,7 @@
 #include "llemojidictionary.h"
 #include "llemojihelper.h"
 #include "lllocalcliprect.h"
+#include "llmarkdown.h"
 #include "llmenugl.h"
 #include "llscrollcontainer.h"
 #include "llspellcheck.h"
@@ -197,7 +198,8 @@ LLTextBase::Params::Params()
     // </FS:Ansariel> Optional icon position
     parse_urls("parse_urls", false),
     force_urls_external("force_urls_external", false),
-    parse_highlights("parse_highlights", false)
+    parse_highlights("parse_highlights", false),
+    parse_markdown("parse_markdown", false)
 {
     addSynonym(track_end, "track_bottom");
     addSynonym(wrap, "word_wrap");
@@ -263,6 +265,7 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
     mParseHTML(p.parse_urls),
     mForceUrlsExternal(p.force_urls_external),
     mParseHighlights(p.parse_highlights),
+    mParseMarkdown(p.parse_markdown),
     mBGVisible(p.bg_visible),
     mScroller(NULL),
     // <FS:Ansariel> Optional icon position
@@ -2977,6 +2980,66 @@ void LLTextBase::appendAndHighlightTextImpl(const std::string &new_text, S32 hig
     deselect();
 
     setCursorPos(old_length);
+
+    // <FS> Markdown-style _italic_ / **bold** emphasis for read-only text.
+    // Runs before keyword highlights and URL/icon handling; operates on the
+    // plain-text chunk passed here (URLs and <nolink> content have already
+    // been split into separate segments by appendTextImpl).
+    if (mParseMarkdown && !mPlainText)
+    {
+        // Ensure the common case (no delimiters at all) stays on the fast path.
+        if (new_text.find('_') != std::string::npos || new_text.find("**") != std::string::npos)
+        {
+            auto spans = LLMarkdown::parseEmphasis(new_text, (bool)style_params.markdown_emote);
+            bool any_emphasis = false;
+            for (const auto& span : spans)
+            {
+                if (span.mType != LLMarkdown::ESpanType::PLAIN)
+                {
+                    any_emphasis = true;
+                    break;
+                }
+            }
+            if (any_emphasis)
+            {
+                // Determine the incoming base style once so nested spans
+                // merge on top of it rather than resetting it.
+                U8 base_flags = LLFontGL::getStyleFromString(style_params.font.style());
+                for (const auto& span : spans)
+                {
+                    if (span.mType == LLMarkdown::ESpanType::EMPHASIS_DELIM ||
+                        span.mType == LLMarkdown::ESpanType::STRONG_DELIM ||
+                        span.mType == LLMarkdown::ESpanType::EMOTE_DELIM)
+                    {
+                        continue; // drop the delimiter characters
+                    }
+                    LLStyle::Params span_params(style_params);
+                    U8 merged = base_flags;
+                    switch (span.mType)
+                    {
+                        case LLMarkdown::ESpanType::EMPHASIS:
+                            merged |= LLFontGL::ITALIC;
+                            break;
+                        case LLMarkdown::ESpanType::STRONG:
+                            merged |= LLFontGL::BOLD;
+                            break;
+                        case LLMarkdown::ESpanType::EMOTE_TOGGLE_ON:
+                            merged |= LLFontGL::ITALIC;  // action (italic) part of an emote
+                            break;
+                        case LLMarkdown::ESpanType::EMOTE_TOGGLE_OFF:
+                            merged &= ~LLFontGL::ITALIC; // spoken (normal) part of an emote
+                            break;
+                        default:
+                            break; // PLAIN / EMOTE_LITERAL keep the base style
+                    }
+                    span_params.font.style(LLFontGL::getStringFromStyle(merged));
+                    appendAndHighlightTextImpl(span.mText, highlight_part, span_params, underline_link);
+                }
+                return;
+            }
+        }
+    }
+    // </FS>
 
     if (mParseHighlights)
     {

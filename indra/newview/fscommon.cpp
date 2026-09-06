@@ -187,6 +187,12 @@ std::string FSCommon::applyMuPose(std::string message)
             message.replace(0, 1, "/me ");
         }
     }
+    // A leading underscore is a synonym for an emote ("_smiles" == "/me smiles").
+    // Unlike the MU* colon pose, this is always on (not gated by AllowMUpose).
+    if (message.find("_") == 0 && message.length() > 1)
+    {
+        message.replace(0, 1, "/me ");
+    }
 
     return message;
 }

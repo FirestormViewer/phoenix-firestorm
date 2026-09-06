@@ -47,8 +47,9 @@ LLStyle::Params::Params()
     draw_highlight_bg("draw_highlight_bg", false),
     // <FS:Ansariel> Don't highlight URLs on hover if font style contains underline
     use_default_link_style("use_default_link_style", true),
-    can_underline_on_hover("can_underline_on_hover", true)
+    can_underline_on_hover("can_underline_on_hover", true),
     // </FS:Ansariel>
+    markdown_emote("markdown_emote", false)
 {}
 
 

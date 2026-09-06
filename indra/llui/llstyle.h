@@ -55,6 +55,12 @@ public:
         Optional<bool>                  use_default_link_style;
         Optional<bool>                  can_underline_on_hover;
         // </FS:Ansariel>
+        // <FS> Markdown _italic_/**bold** parsing hint for text segments.
+        // markdown_emote enables the underscore-toggle convention used by
+        // emotes ("/me ..." and lines starting with '_', which are
+        // synonyms). Transient append-time hint, not part of LLStyle state.
+        Optional<bool>                  markdown_emote;
+        // </FS>
         Params();
     };
     LLStyle(const Params& p = Params());

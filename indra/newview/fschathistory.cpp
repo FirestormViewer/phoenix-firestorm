@@ -1295,6 +1295,11 @@ FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
     mLineSpacingPixels = llclamp(gSavedSettings.getS32("FSFontChatLineSpacingPixels"), 0, 36);
     mTextVAlign = LLFontGL::VAlign::VCENTER;
     mUseColor = true;
+    // <FS> Markdown-style _italic_ / **bold** emphasis in displayed chat.
+    // Suppressed per message when plain-text chat history is in effect
+    // (appendAndHighlightTextImpl skips markdown for mPlainText).
+    mParseMarkdown = true;
+    // </FS>
 
     setIsObjectBlockedCallback(boost::bind(&LLMuteList::isMuted, LLMuteList::getInstance(), _1, _2, 0));
     setIsObjectReachableCallback([](const LLUUID& obj_id)
@@ -1542,12 +1547,14 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
     {
         delimiter = LLStringUtil::null;
 
-        // italics for emotes -Zi
-        if (gSavedSettings.getBOOL("EmotesUseItalic"))
-        {
-            body_message_params.font.style = "ITALIC";
-            name_params.font.style = "ITALIC" + name_font_style_postfix;
-        }
+        // <FS> Emotes are italic unconditionally (the underscore-toggle
+        // convention depends on the italic base), and use '_' to toggle
+        // italic off (spoken part) and back on; the toggle does not
+        // survive the line.
+        body_message_params.font.style = "ITALIC";
+        name_params.font.style = "ITALIC" + name_font_style_postfix;
+        body_message_params.markdown_emote = true;
+        // </FS>
     }
 
     if (chat.mChatType == CHAT_TYPE_WHISPER && gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))

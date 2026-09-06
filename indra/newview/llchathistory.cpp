@@ -1176,6 +1176,10 @@ LLChatHistory::LLChatHistory(const LLChatHistory::Params& p)
     editor_params.trusted_content = false;
     editor_params.text_valign = LLFontGL::VAlign::VCENTER;
     editor_params.use_color = true;
+    // <FS> Markdown-style _italic_ / **bold** emphasis in displayed chat.
+    // The active plain-text setting is applied per message in appendMessage().
+    editor_params.parse_markdown = true;
+    // </FS>
     mEditor = LLUICtrlFactory::create<LLTextEditor>(editor_params, this);
     mEditor->setIsFriendCallback(LLAvatarActions::isFriend);
     mEditor->setIsObjectBlockedCallback(boost::bind(&LLMuteList::isMuted, LLMuteList::getInstance(), _1, _2, 0));
@@ -1363,7 +1367,13 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
     if (irc_me || chat.mChatStyle == CHAT_STYLE_IRC)
     {
         delimiter = LLStringUtil::null;
+        // <FS> Emotes are italic unconditionally (the underscore-toggle
+        // convention depends on the italic base), and use '_' to toggle
+        // italic off (spoken part) and back on; the toggle does not
+        // survive the line.
         body_message_params.font.style = "ITALIC";
+        body_message_params.markdown_emote = true;
+        // </FS>
     }
 
     if (chat.mChatType == CHAT_TYPE_WHISPER)
