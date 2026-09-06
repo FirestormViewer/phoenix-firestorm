@@ -1296,8 +1296,8 @@ FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
     mTextVAlign = LLFontGL::VAlign::VCENTER;
     mUseColor = true;
     // <FS> Markdown-style _italic_ / **bold** emphasis in displayed chat.
-    // Suppressed per message when plain-text chat history is in effect
-    // (appendAndHighlightTextImpl skips markdown for mPlainText).
+    // Applied in both plain-text and rich modes: plain text controls
+    // layout/columns, not emphasis, so `_`/`**` still parse.
     mParseMarkdown = true;
     // </FS>
 

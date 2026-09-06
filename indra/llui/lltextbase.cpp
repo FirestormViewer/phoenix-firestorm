@@ -2985,7 +2985,9 @@ void LLTextBase::appendAndHighlightTextImpl(const std::string &new_text, S32 hig
     // Runs before keyword highlights and URL/icon handling; operates on the
     // plain-text chunk passed here (URLs and <nolink> content have already
     // been split into separate segments by appendTextImpl).
-    if (mParseMarkdown && !mPlainText)
+    // Markdown is applied in BOTH plain-text and rich chat modes: plain text
+    // controls layout/columns, not emphasis, so `_`/`**` should still parse.
+    if (mParseMarkdown)
     {
         // Ensure the common case (no delimiters at all) stays on the fast path.
         if (new_text.find('_') != std::string::npos || new_text.find("**") != std::string::npos)
