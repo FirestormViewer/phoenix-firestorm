@@ -643,12 +643,12 @@
          top_pad="5"
          follows="left|top"
          height="16"
-         label="Send autoresponse to MUTED avatars:"
+         label="Send autoresponse to BLOCKED avatars:"
          left="15"
          name="send_muted_av_response"
          width="270"
          control_name="FSSendMutedAvatarResponse"
-         tool_tip="Send the text below when someone you've muted sends you an IM."/>
+         tool_tip="Send the text below when someone you've blocked sends you an IM."/>
         <text_editor
          enabled_control="FSSendMutedAvatarResponse"
          control_name="FSMutedAvatarResponse"

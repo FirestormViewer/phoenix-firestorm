@@ -6,6 +6,9 @@
 	<floater.string name="search_no_items">
 		Keine treffenden Objekte gefunden.
 	</floater.string>
+	<floater.string name="root_folder_label">
+		Alle Favoriten
+	</floater.string>
 	<panel name="buttons_panel">
 		<button name="new_folder_btn" tool_tip="Neuen Favoriten-Ordner erstellen"/>
 		<button name="rename_folder_btn" tool_tip="Ausgewählten Favoriten-Ordner umbenennen"/>

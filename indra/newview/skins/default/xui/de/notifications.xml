@@ -5983,6 +5983,14 @@ Detaillierte Instruktionen zum whitelisten von [APP_NAME] - inklusive einer List
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+	<notification name="ViewerProcessRunningAsAdmin">
+		Einer oder mehrere Viewer-Prozesse werden aktuell als Administrator ausgeführt. Dieses ist dafür bekannt Probleme zu verursachen, wie z.B. dass Medien und Webseiten nicht korrekt angezeigt werden.
+
+Bitte stellen Sie sicher, dass die Viewer-Prozesse nicht als Administrator ausgeführt werden. Für weitere Informationen siehe
+
+https://wiki.firestormviewer.org/fs_media#one_or_more_viewer_processes_are_currently_running_as_administrator_error_message
+		<usetemplate ignoretext="Warnen, wenn der Viewer als Administrator ausgeführt wird" name="okignore" yestext="OK" />
+	</notification>
 	<notification name="ConfirmPoserOverwrite">
 		Bestehende Pose „[POSE_NAME]“ überschreiben?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Okay"/>
