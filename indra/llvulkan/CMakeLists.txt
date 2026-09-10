@@ -21,12 +21,24 @@ include(PNG)
 include(ZLIBNG)
 include(EXPAT)
 
+add_library(llvkwidgets llvkwidgettree.cpp llvkwidgettree.h llvkwidgetlayout.cpp llvkwidgetlayout.h
+    llvkwidgetfactory.cpp llvkwidgetfactory.h llvkcontrol.cpp llvkcontrol.h
+    llvkwidgetimage.cpp llvkwidgetimage.h llvkicon.cpp llvkicon.h llvkbutton.cpp llvkbutton.h
+    llvkwidgetinput.cpp llvkbadge.cpp llvkbadge.h llvklabel.cpp llvklabel.h
+    llvkplaintextlayout.cpp llvkplaintextlayout.h llvkplaincontrol.cpp llvkplaincontrol.h llvkcheckbox.cpp
+    llvkcolor.cpp llvkcolor.h llvkborder.h llvkpanel.cpp llvkpanel.h)
+target_include_directories(llvkwidgets PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(llvkwidgets PRIVATE ll::expat ll::libpng ll::zlib-ng)
+target_link_libraries(llvkwidgets PUBLIC llcommon)
+set_property(TARGET llvkwidgets PROPERTY POSITION_INDEPENDENT_CODE ON)
+
 add_library(llvkfont llvkfont.cpp llvkfont.h llvkfontface.cpp llvkfontface.h llvkfontsvg.cpp llvkfontsvg.h
     llvkglyphatlas.cpp llvkglyphatlas.h llvkfontregistry.cpp llvkfontregistry.h)
 target_include_directories(llvkfont SYSTEM PRIVATE ${LIBS_PREBUILT_DIR}/include)
 target_include_directories(llvkfont PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(llvkfont PRIVATE ll::freetype ll::libpng ll::zlib-ng ll::expat)
 set_property(TARGET llvkfont PROPERTY POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(llvkwidgets PUBLIC llvkfont)
 
 find_program(LLVK_GLSLANG_VALIDATOR glslangValidator HINTS "$ENV{VULKAN_SDK}/Bin" REQUIRED)
 set(glyph_draw_headers)
@@ -52,6 +64,10 @@ set_property(TARGET llvkglyphgpu PROPERTY POSITION_INDEPENDENT_CODE ON)
 option(LL_VULKAN_GPU_TESTS "Run native glyph GPU tests requiring Vulkan validation layers" OFF)
 if (LL_TESTS)
     include(LLAddBuildTest)
+    LL_ADD_INTEGRATION_TEST(llvkwidgettree "" "llvkwidgets;llvkfont;llcommon;ll::libpng;ll::zlib-ng")
+    target_compile_definitions(INTEGRATION_TEST_llvkwidgettree PRIVATE
+        LLVK_WIDGET_FONT_FIXTURE="${CMAKE_SOURCE_DIR}/newview/fonts/Roboto-Regular.ttf"
+        LLVK_WIDGET_SKIN_FIXTURE="${CMAKE_SOURCE_DIR}/newview/skins/default")
     LL_ADD_INTEGRATION_TEST(llvkfontface "" "llvkfont;llcommon;ll::freetype")
     target_compile_definitions(INTEGRATION_TEST_llvkfontface PRIVATE
         LLVK_FONT_FIXTURE="${CMAKE_SOURCE_DIR}/newview/fonts/Roboto-Regular.ttf"
@@ -140,6 +156,7 @@ target_compile_definitions(llvulkan PUBLIC
     VMA_DYNAMIC_VULKAN_FUNCTIONS=1)
 
 target_link_libraries(llvulkan
+    llvkwidgets
     llvkfont
     llvkglyphgpu
         llcommon

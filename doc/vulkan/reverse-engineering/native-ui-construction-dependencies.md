@@ -11,6 +11,566 @@ construction is not automatically GPU-neutral. This document records factory
 decisions independently of the rendering path. None of the candidate CPU sharing
 choices below authorizes reuse until its outgoing constructor/helper targets close.
 
+## Native construction implementation (2026-09-10)
+
+Native visibility propagation Q1: LLView::setVisible/onVisibilityChange,
+LLPanel::onVisibilityChange/initFromParams, LLButton::onVisibilityChange. Equal
+local values do not notify; changes below an invisible ancestor do not propagate.
+Locally visible descendants receive the effective value before a panel emits its
+visible callback. Button visibility invalidates text cache generation. Panel
+callback installation occurs after control init. Q2/Q3: native tree recursion over
+snapshotted IDs with ownership rechecks; no viewer recorder or GL dirty-region
+globals. Setting subscribers snapshot IDs so visible callbacks may delete controls
+without invalidating iteration. Test43 checks timing, hierarchy, order and deletion.
+Native dirty-region publication, text popup hiding and application event-recorder
+integration remain separate open side effects, not claimed by these callbacks.
+
+Typed native panel/border construction Q1: LLPanel constructor/destructor,
+addBorder/removeBorder/initFromParams/getString; LLViewBorder constructor,
+Params and base view ownership. Typed panel construction creates a border before
+control init; panel init replaces it and installs strings/label/background/badge
+holder state afterward. Borders fill local rectangles, follow all edges and are
+not controls. Q2/Q3: native panel/control and border/view components with retained
+native color/image owners; nested ownership is retired by tree IDs. Test42 checks
+before/after callback border identity, string timing, bounds/follows and teardown.
+Border replacement allocates before retiring prior state for failure safety, not a
+GL factory call. Widths outside the implemented source range reject. Texture border
+style is retained as dormant source state, not invented texture drawing. XML panel
+construction is distinct: class/factory resolution, callback scopes, referenced
+files and parenting AFTER children remain open and must not be routed through the
+ordinary widget-parenting path without those contracts.
+
+Native default loading now parses view/icon/button/badge template declarations
+without constructing controls. Explicit ordered overlays preserve prior fields,
+provided geometry and pressed-image flags; button default image identities are
+captured after resolution and remain distinct from per-instance customization.
+Default button badge payload is separate from global badge defaults, preserving
+constructor equality/omission behavior. Test41 distinguishes overlay preservation,
+no construction side effects, custom disabled-image fallback and failed load
+rollback. Q1 roots: LLUICtrlFactory::ParamDefaults constructor/loadWidgetTemplate/
+create and existing typed constructor records; Q2/Q3: native parameter owners and
+explicit resource/path order. Full LLXMLNode keyed-child overlay semantics, recursive
+base-class provided-field filling, locale/skin path discovery and currently
+unimplemented widget templates remain open rather than equated to this API.
+
+Packaged color probe exposed `ChicletFlashColor value="SchemeLightest"`, not a
+reference attribute. LLXUIParser::readColor4Value accepts >=3 numeric components;
+LLInitParam::Multiple::validate counts valid elements without requiring every
+stored element valid. The color insertion loop handles unresolved entries without
+failing the whole file. Native loading now warns/skips invalid numeric entries,
+accepts RGB with default alpha, and does not reinterpret named values as aliases.
+Malformed XML still fails atomically. Test39 separates invalid entry content from
+structural parser failure; test40 exercises the actual packaged case without edits
+to the reference asset. Default-choice initialization quirks remain source-analysis
+evidence, not a mandate to publish an invalid entry under a fabricated alias.
+
+Test40 exercises the packaged default colors.xml and widgets/button.xml through
+the native parsers with native font and named image fixtures. It checks retained
+color/image identities and declared height/flash/glow fields. Image fixtures are
+one-pixel test images, not a skin rendering/parity claim; skin image files, clipping
+and scale metadata remain separate asset obligations. Constructing a template as
+a declaration tests parsing, not layered default-parameter inheritance.
+
+Native color declaration loading Q1: LLUIColorTable::loadFromFilename/
+insertFromParams plus the value-taking setColor overload. Literals overwrite in
+declaration order in the requested layer; reference map insertion retains the
+first alias declaration per name. Alias chains resolve against loaded colors and
+copy terminal values into loaded entries, even when processing a user file (the
+inspected source's explicit mLoadedColors target). Missing/cyclic chains warn and
+are skipped while independent entries survive. Q2: bounded native Expat parse and
+native value-map resolution; Q3: stage maps/slots before no-fail publication so
+syntax/allocation failure preserves live references, with no GL XUI parser.
+Test39 covers forward chains, copied alias identity, user versus loaded source,
+cycles/missing references, independent publication and malformed/DTD rejection.
+File-search layering and persisted user serialization remain caller integration
+work; the loader does not infer path order or mutate user profile files.
+
+Native color loaded/user layers now implement LLUIColorTable::setColor/
+isDefault/resetToDefault/clearTable. First user override moves the existing slot
+identity into the user layer and retains a copied original in loaded defaults;
+previous widget references therefore see the override and later reset. clear does
+not remove names: it sets both layers to magenta. Source user-only colors report
+default even without a reset target. Test38 checks these distinctions. Declarative
+alias resolution is value-copy resolution, not a live alias graph; loader work
+must preserve that distinction from widget references to table slots.
+
+Factory resources now resolve named native fonts and named/live or literal RGBA
+colors for icon/button/badge declarations. Native widget parameters carry
+LLVKColor reference identity; icon draw preparation snapshots its RGBA before alpha
+modulation so later theme updates do not mutate prepared work. Button construction
+also retains inspected image/flash/overlay colors, hover glow and overlay delta for
+its still-open draw consumer. Test37 checks native font ownership, live update
+through constructed controls, immutable prepared colors, literal identity and
+explicit unknown-name rejection. Source font descriptor composition/default file
+layering and color aliases/loading/persistence are still distinct open obligations.
+
+Native color reference Q1: LLUIColor constructors/set/get/isReference and
+LLInitParam::ParamCompare<LLUIColor>::equals, LLUIColorTable::getColor/setColor.
+Named colors retain references that survive loaded-to-user overrides; literals
+compare by value while any reference compares by identity. Q2: native color slots
+owned by a native table and retained by native parameter values; no GL color table
+or LLUIColor graph. Q3: single UI-thread updates, retained slot lifetime and explicit
+RGBA snapshots for later GPU publication; nonfinite changes reject atomically.
+Test36 distinguishes literal/reference equality, distinct names, live updates and
+table destruction. Layered color XML, alias graphs, user/default persistence and
+widget integration remain follow-on obligations, not implemented by slot ownership.
+
+Checkbox local-state follow-up Q1: LLCheckBoxCtrl::reshape/setLabel/setLabelArg/
+setEnabled/setTentative/getTentative and LLUICtrl::setTentative. Checkbox reshape
+refits the label from width minus label-left; wrap-down retains prior label top.
+The click rectangle expands to the new label bounds and never shrinks. Enabled
+changes replace label foreground with captured enabled/readonly colors, not the
+label enabled flag. Tentative forwards to the button and clears before commit.
+Q2/Q3: native checked reshape planning integrates the specialized checkbox branch,
+then publishes all rectangles atomically; native label parameters/child state carry
+color and tentative effects. Test35 covers these states, predicate refresh,
+argument-driven label refit and overflow rejection. Rich-label support and full
+factory/template integration still remain; this is bounded typed checkbox evidence.
+
+Checkbox binding correction from transitive source: LLCheckBoxCtrl::setControlName
+forwards to mButton. LLUICtrl::setControlName/setControlVariable disconnect prior
+subscription, look up the named setting and assign its value; empty names do
+nothing, unresolved names disconnect without changing value. Therefore the button
+toggle writes its binding BEFORE invoking checkbox onCommit. The outer checkbox's
+setControlValue normally has no bound variable. Native construction/rebinding now
+reflects this owner rather than writing late through the outer checkbox. Test34
+distinguishes initial binding, rebind/disconnect, empty/missing names, and direct
+embedded activation when the outer checkbox is disabled. Scope-dependent source
+findControl registries remain a separate native application integration obligation.
+
+Checkbox typed construction Q1: LLCheckBoxCtrl constructor/destructor,
+setValue/getValue/isDirty/resetDirty/onCommit/draw and LLUICtrlFactory::create.
+Constructor makes a label (blank becomes one space), optionally overrides its
+font, fits it, applies wrap-down translation, then creates a frontmost toggle
+button whose click rectangle covers the label. Embedded Return commit is disabled;
+its click callback calls the enabled checkbox's bound-value write then commit.
+The button owns value and dirty state; on_check is a draw-time predicate that
+updates differing values without committing. Q2: native label/button/document
+children and explicit owner IDs; value/dirty access forwards to the actual button.
+Q3: native construction snapshots and rechecks IDs after nested init and retires
+partial children; no GL factory, label, button or view model. Test33 covers actual
+children before init, front click area, keyboard policy, commit, binding, dirty and
+teardown. This initial typed path uses the explicit plain-label control; rich label
+URLs, inherited color/tentative/focus forwarding, specialized checkbox reshape,
+binding-name rebinding and full checkbox XML remain open, not hidden behind the
+plain label implementation.
+
+Plain control follow-up: native settings enabled callbacks now use the native
+setEnabled path so text read-only state follows both initialization and later
+updates. Constructor rejects failed typed initial assignment and removes its
+document. Context refresh stages resolved text/LLSD alongside button/badge labels,
+then publishes as one tree update; invalid text leaves both context and nodes
+unchanged. Test32 exercises these callback/transaction boundaries. Typed settings
+value updates still need a whole-subscriber transaction when one value is invalid;
+this constructor fix does not claim that broader setting pipeline closed.
+
+Native plain control Q1: LLTextBase constructor creates text_contents (500x500,
+non-mouse-opaque), default segment and document rectangles; LLTextBox constructor
+disables triple click. LLTextBase::setValue calls the virtual text assignment,
+which resolves label arguments, removes CRs, deselects, truncates by UTF-8 byte
+limit and moves cursor to start unless track-end. LLTextViewModel setDisplay/value
+dirty semantics are native-owned; init resets dirty after user callback and restores
+explicit read-only after enabled initialization. Q2: LLVKPlainControl owns source,
+display, cursor/selection, native document ID and optional native layout. Q3:
+explicitly plain/non-scrolling typed construction avoids falsely registering the
+full text widget; no GL text model/segment/cache objects are reused. Existing native
+tree/control lifecycle installs state/document before callbacks and owns teardown.
+Test31 checks callback-visible document/value/dirty/read-only, post-init override,
+UTF-8 byte truncation, CR removal, two-line reflow, fit invalidation and deletion.
+Rich URL/style/inline/scroll behavior, key/pointer selection, full text XML and
+clipboard/IME remain open; plain control does not close LLTextBox replacement.
+
+Plain non-scrolling document placement implements the inspected
+LLTextBase::updateRects / LLTextBox::reshapeToFitText branch: union includes
+zero-width line rectangles, adds vertical padding to bounds top, translates lines
+by top/center/bottom/baseline policy, sizes the document to max(view,text) height,
+then anchors overflowing documents to the view. Fit adds twice the pads and one
+extra width pixel, including the source's already padded bounds height. Test30
+checks those exact rules for one line, overflow, integer center rounding and
+coordinate failure. LLVKPlainTextLayout is separate from pre-existing untracked
+llvktextlayout files using an unavailable LLFontVK API; those files remain intact
+and are not integrated into this native target. Newline positions are scanned once
+per paragraph, avoiding repeated suffix scans at each narrow-width soft wrap.
+
+Plain text line-layout Q1: LLTextBase::reflow/getLeftOffset,
+LLNormalTextSegment::getNumChars/getDimensionsF32/updateLayout,
+LLLineBreakTextSegment::getNumChars/getDimensionsF32, LLFontGL::getLineHeight.
+In the single-font plain-text path, paragraphs split at explicit newline segments;
+word wrapping is permissive on an empty line, forces one character if none fit,
+and includes the newline or EOF position. Soft wraps retain paragraph number.
+Line height sums separately ceiled ascender/descender in logical units. Width is
+ceiled once per line after F32 remaining-width subtraction; line spacing rounds
+height*multiple then adds explicit pixels and FSFontLineSpacingAdjustment.
+Right alignment reserves one extra pixel. Q2: owned native line records from native
+font fitting/measurement and explicit layout parameters. Q3: independent CPU layout
+avoids GL segment objects/cache invalidation, with checked coordinate arithmetic
+and a one-million-codepoint input bound. Test29 checks empty/trailing newline/EOF,
+forced progress, paragraph numbering, line spacing, right padding and overflow.
+This covers only single-font plain normal/newline segments; rich runs, per-segment
+images, document/scroll rectangles, selection anchoring and two-pass reflow remain
+explicit separate obligations. No text widget constructor is claimed by this test.
+
+Native button and badge labels now consume LLVKLabel originals/argument maps with
+an explicit tree formatting context. Button setLabel/setLabelSelected/
+setLabelUnselected/setLabelArg preserve arguments and invalidate text generation,
+but do not auto-resize; context refresh resolves both labels and badges before
+publishing any node changes. Source assign and LLUIString copy overload distinctions
+are retained as separate future API obligations, not aliased silently. Test28
+checks constructor substitution, retained local arguments, default precedence,
+selected/unselected independence, currency re-resolution from originals and no
+geometry mutation. UTF-32/UTF-8 conversion uses the audited nonvisual llstring
+conversion path, not font or text-widget wrappers.
+
+Native label-state Q1: LLUIString assign/setArg/setArgList/clear/updateResult and
+Tea::wrapCurrency. Original text and arguments survive independent assignments;
+clear preserves arguments. Default-map insertion wins over local duplicate keys;
+format replacement is nonrecursive, followed by nonrecursive currency replacement.
+Q2: LLVKLabel owns text/arguments and takes an explicit defaults/currency snapshot;
+no LLUIString, LLTrans globals or Tea globals are called. Q3: no lazy mutable cache
+avoids stale context versions; audited nonvisual LLStringUtil::format is reused as
+the formatting service. Inspected roots getSubstitution/getTokens/simpleReplacement,
+formatNumber/formatDatetime, convertToS32/F32/F64, LLStringOps date-code/time-offset
+accessors and LLDate::toHTTPDateString perform parsing, standard stream/locale/time
+formatting, string conversion and diagnostics, not visual construction/callbacks.
+This preserves that service's process locale/date configuration; native lifecycle
+must supply its nonvisual setup and serialize access (strftime/setlocale/gmtime are
+not per-widget state). No sharing of the GL UI label owner or its default registry.
+Test27 distinguishes precedence, absent/empty tokens, nested brackets, replacement
+order and retained arguments. Date/locale platform qualification, formatted-output
+budgets and glyph-consumer integration remain open; this is not a text-control
+constructor or a claim that LLTextBase's rich segment/reflow paths are replaced.
+
+Native badge XML now supports both concrete badge controls and button.badge
+parameter blocks. The latter are not runtime children: resolved native defaults
+and provided payload feed the button constructor equality test, and only changed
+badge fields instantiate a badge before button init. Test26 checks entity-safe
+labels, relative location, provided-zero offsets, default omission, duplicate
+rejection and actual badge components. Native defaults match the inspected badge
+template's percentages/padding/requests-front/mouse-opaque fields; fonts and themed
+colors/images must still be supplied by native resource resolution. Nested widget
+content in a badge parameter block is explicitly rejected rather than discarded.
+
+Button/badge constructor integration now uses resolved native BadgeConstruction
+defaults and an optional provided badge payload. LLBadgeOwner's equals comparison
+decides whether to construct; its badge factory init/post-build precedes attachment
+to the button and the button's init callback. Button post-build moves an existing
+badge to the nearest accepting ancestor, retaining its owner ID. Lazy
+LLBadgeOwner::setBadgeLabel construction uses defaults, seeks a holder and fronts
+the actual badge in its parent. Native code rechecks IDs after nested constructor
+callbacks and removes partial children on failure; unlike source raw pointers,
+stale badge IDs are detected. Test25 covers both construction routes, init ordering,
+holder migration, label fronting, visibility and holder-owned destruction. Dotted
+badge XML parameters and scroll-aware positioning remain open integration work.
+
+Badge construction Q1: LLBadge::Params/equals/LLBadge/addToView/setLabel/destructor,
+LLBadgeOwner::initBadgeParams/createBadge/addBadgeToParentHolder/setBadgeVisibility/
+setDrawBadgeAtTop, LLBadgeHolder constructor/setAcceptsBadge/addBadge. Source
+constructor applies relative-location percentages (not clamped), separately tracks
+provided center offsets, and creates a control before its factory init. Equality
+excludes owner and base-control fields and compares offset values, not provided
+bits. Attachment front-parents the badge, reshapes to the parent's local rectangle,
+and retains the original weak owner. Holder search begins at the owner's parent and
+skips nonaccepting ancestors. Q2: native badge component/control with immutable
+native images/font, weak owner ID, explicit holder capability on native tree nodes.
+Q3: distinct owner and parent IDs allow source ownership behavior without borrowed
+GL LLView/LLHandle or dynamic_cast; existing checked reshape/reparent preserve tree
+invariants. Test24 covers init timing, provided offsets/equality, native percentages,
+front attachment and original-owner versus parent deletion. Scroll-container
+ancestor registration, rendered badge geometry, string substitution, full template
+resolution and integration in button constructor/post-build remain open here.
+
+Button flash lifecycle Q1 (same current-source revision/configuration as the button
+record): LLButton constructor/setFlashing/setToggleState/destructor,
+LLFlashTimer constructor/startFlashing/stopFlashing/tick/onUpdateFlashSettings/unset,
+LLEventTimer::updateClass and LLTimer::start/reset/stop. Timer count is twice the
+positive parameter or configured FlashCount; nonpositive period uses FlashPeriod.
+Each eligible update uses F32 elapsed > period, resets its origin and toggles once,
+not elapsed-time catchup. Start sets highlighted/running but preserves count; stop
+clears both flags and count. Settings changes stop and replace both settings,
+ignoring original parameter overrides. Timer completion leaves the button flashing
+flag for subsequent draw policy. Toggle cancels and resets force/alternate color.
+Q2: CPU-only timer state owned by the native button, explicit monotonic native tree
+clock and native settings updates. Q3: value ownership removes the global timer
+registry and dangling settings subscribers; node deletion retires the state
+immediately without reproducing dormant unset/deferred-deletion defects. Negative
+counts normalize to zero; nonfinite periods/times reject instead of retaining
+unusable schedules. Test23 distinguishes strict thresholds, restart versus stop,
+one tick per update, runtime settings, zero period/count, deletion and toggle reset.
+Draw-time flashing/glow composition remains a separate open consumer obligation.
+
+Native button declaration construction now dispatches to LLVKButton with owned
+font/image defaults, explicit per-file image identity comparisons, provided pressed
+flags and independent native callback lookup. Dotted callback parameter elements
+are parsed as parameters rather than child controls. Init and click/commit callback
+ordering is tested from actual XML. UTF-8 label conversion uses the audited
+nonvisual utf8str_to_wstring body (llstring.cpp:399): only string/byte operations,
+no visual services; Expat rejects malformed input before it reaches that routine.
+Pointer focus respects a locked external subtree without aborting button capture,
+as the source ignores rejected keyboard-focus requests. Unimplemented parameters
+and unresolved callback names fail explicitly; themed font/color/image-declaration
+resolution and badge/checkbox/flash extensions still need implementation.
+
+Native button pointer path Q1: LLView::childrenHandleMouseEvent (front order,
+visible/enabled/default bounds drilldown, mouse-opaque fallback), base LLUICtrl
+pointer signals, LLButton left/right/double/hover handlers and onMouseCaptureLost.
+Left-down traverses children before capture/focus, then base dispatch, own down,
+timer/frame reset and sound. Captured left-up stops the timer before releasing
+capture, then base/own up and inside-only sound/toggle/commit. Right mouse has
+separate base signals and no left-button timer setup. Hover gates held callbacks
+on both elapsed time and frame count and increments count per eligible hover.
+Q2: native pointer events carry explicit screen coords/modifiers/time/frame; native
+tree routes capture, converts coordinates and dispatches only native control code.
+Q3: snapshots of child IDs/handlers, current ownership checks after mutation,
+distinct base/button handlers, no OS/GL globals; cursor/sound effects go to audited
+native handlers. Tests cover callback order, capture-loss commit, no duplicate
+mouse-up commit, outside release, frame/time threshold, opaque children and callback
+deletion. Customized source drilldown, event-recorder integration, and platform
+input/IME remain separate open obligations, not inferred from these CPU tests.
+
+Button activation Q1 roots: LLButton::onCommit/handleUnicodeCharHere/handleKeyHere,
+setToggleState and LLUICtrl::onCommit. Programmatic commit emits down/up(undefined),
+requested sounds, toggle, then the commit signal. Unicode space and unmodified
+Return (unless disabled) suppress repeats and only toggle/commit. Click callback
+registered in the constructor precedes initFromParams' commit callback; both see
+the value snapshotted when the signal starts. Q2: native typed activation methods,
+explicit repeat/modifier data, native image/font/control owners and native sound
+effect handler. Q3: each callback invocation snapshots its callable and argument
+and rechecks the ID after invocation; self-deletion stops subsequent effects.
+Sound handling is injected by a future audited application audio consumer, not GL
+UI sound helpers. Tests verify exact event ordering, bound toggle writes, rejected
+keys and self-deleting handlers. Mouse routing/capture and specialized signal
+connection mutation still need their own tests and implementation.
+
+Native button constructor slice, 2026-09-10: Q1 roots LLButton constructor,
+postBuild/autoResize/resize, setToggleState and setLabel overloads. These construct
+labels/images before LLUICtrl init, default selected label only when absent,
+measure space for legacy padding fallback, compare image identities to defaults
+for disabled fading and pressed substitutions, and measure the current label on
+postBuild regardless of autoResize. Resize only grows, accounting for overlay
+height scaling/alignment. Toggle writes the bound value before its own value,
+stops flashing and invalidates text generation; setting labels does not auto-resize.
+Q2: LLVKButton state in the native tree owns native images, UTF-32 labels and
+explicit metric scale; createControlImpl installs it before init callbacks.
+Q3: explicit provided-image flags and immutable native asset identities, owned
+parameter snapshots, checked resize and native font measurement. No GL font/image
+owners or GL constructor callbacks. Check constructor-observed state, image
+fallback precedence, padding, label fallback, post-build width and grow-only toggle
+resize. Badge/checkbox construction, flash timers, input routing, image/style draw
+preparation and XML button dispatch remain required follow-on portions of this
+same constructor inventory entry; they are not treated as completed by this test.
+
+Prior font/text work was committed as `dfab8c2fd2` at the user's request. The next
+commit is gated on closing native widget construction, followed by startup/
+presentation routing. This construction gap is still OPEN; no closure commit or
+startup-routing change has been made.
+
+Current implementation: native tree ownership/geometry, typed control state,
+focus/capture callbacks, native PNG image input, and concrete base-view/icon
+construction from declarations. `INTEGRATION_TEST_llvkwidgettree` executes sixteen
+passing cases under Windows/MSVC 14.44 RelWithDebInfo. Generated link dependencies
+exclude llrender, llui, llwindow, llimage, llvulkan and GL/Vulkan loader libraries;
+executable imports contain no OpenGL/Vulkan loader. Editor diagnostics are clear.
+Existing GL code remains unchanged. These checks establish only the tested native
+construction operations, not full widget inventory or historical-oracle parity.
+
+Still required before closure: all remaining registered/custom constructors and
+child registries (including panel, button, text/editing controls, menus and floaters),
+layered templates/provided values, native image clip/scale/skin resolution and other
+formats, callback XML resolution, focus history/default focus/popups, specialized
+layout and visibility effects, native input/editor/IME integration and the declared
+construction exit-gate tests. The factory accepts view/icon only and rejects
+unsupported inputs; that rejection is not an implementation of the missing control.
+
+Native scalar setting notification policy: LLControlVariable::setValue (llcontrol.cpp:214)
+converts string input for declared booleans then compares by declared type before
+notifying; direct LLViewModel::setValue always dirties. Native defineSetting now
+takes an explicit scalar type (Boolean/Integer/Real/String), or Opaque for already
+dispatched values without equality suppression. It does not infer declaration type
+from LLSD storage. Boolean spellings follow convertToBOOL's listed tokens; rejected
+spellings map to false. Tests distinguish equal setting writes from equal control
+assignments. Settings validation, saved/default/unsaved stacks and composite-type
+comparison still belong to the required application service integration.
+
+Factory parent-order correction: construction now attaches each node after its own
+init and before creating children, matching the source factory's ancestor visibility.
+The descendant-init test observes the constructed root already attached externally
+while the descendant itself is still unparented. On failure, erase the new subtree;
+restore external-parent tab metadata only if its child list is restored, preserving
+unrelated callback mutations. Erasing a plain view containing native controls invokes
+the control focus-release protocol, not a callback-free destruction of focused
+descendants. Tests cover the actual ancestor chain and descendant focus-loss teardown.
+Earlier staging descriptions below are superseded by this verified ordering change.
+
+Native icon declaration integration: factory dispatch now includes an actual
+LLVKIcon constructor, using the source icon.xml defaults (name icon, no tab stop,
+mouse-transparent, follows left/top, white color). Resolved native font defaults
+and named images are explicit native inputs; no GL parameter construction runs.
+Icon geometry goes through the independent XUI resolver; image_name, literal RGBA,
+interaction/alpha/min-size and supported control bindings are parsed before init.
+Native control postBuild runs after children, preserving requests_front handling.
+Test constructs an icon beneath a top-left view declaration and checks real icon
+state, owner identity, template defaults, geometry and color errors. Themed color
+names, per-node font descriptors, full callback XML syntax and image skin metadata
+remain explicit unsupported inputs, not skipped parameters. Transactional root
+staging still differs from source external-parent visibility during descendant
+callbacks; this must close before the full factory construction gate can pass.
+
+Native icon constructor, 2026-09-10: Q1 roots LLIconCtrl constructor, draw,
+handleHover, setValue/loadImage in lliconctrl.cpp:54-177. Constructor seeds base
+value with image name before initFromParams. It does not reshape to image/minimum
+size; both nonzero minimum dimensions affect known texture draw size only on load.
+Draw scales to local rect and multiplies alpha only, choosing draw-context alpha
+or control transparency. Hover requests a hand only if interactable and locally
+enabled. Q2: LLVKIcon in native tree owns immutable image/color/alpha policy with
+native control state; prepareIcon returns screen rect and retained native image.
+Q3: image/font owners are present before init callback, value overrides resolve
+only from the native image table, and missing images stay absent. UUID conversion
+uses audited nonvisual LLUUID/LLSD, not viewer texture fetch. No platform cursor
+calls occur during preparation. Tests verify constructor/init ordering, unchanged
+geometry, alpha-only modulation, known-size hint and missing-image behavior.
+Image clip/nine-slice metadata, UUID asset loading/priority residency, themed colors
+and XML icon construction remain required; this record does not close the icon
+inventory entry until those consumers are implemented and qualified.
+
+Native widget PNG input, 2026-09-10: Q1 roots LLPngWrapper::readPng/normalizeImage/
+updateMetaData and readDataCallback: libpng expands palette/gray/tRNS, strips16,
+applies screen gamma2.2 using gAMA or reciprocal default and writes reversed rows.
+LLUIImage owns the texture and its dimensions; its construction cannot supply a
+native control image because that owner is GL-dependent. Q2: LLVKWidgetImage owns
+immutable named dimensions and bottom-up straight RGBA bytes, independent of GL
+LLImageRaw/LLImageFormatted/LLUIImage and the checkpoint Vulkan image wrappers.
+Q3: direct API-independent libpng with bounded memory reads; decoder state and row
+vectors live outside the setjmp frame's destructible locals. Libpng errors longjmp
+only to that frame and release the heap state. Limits: encoded/decoded64MiB,
+8192 per axis, ancillary allocation4MiB/chunk and cache128. Palette/gray pixels
+become RGBA; missing alpha becomes255 without premultiplication. Native publication
+and clip/scale metadata resolution remain separate work. Test checks exact bottom-up
+RGBA and truncated input rejection with caller-byte lifetime independent of output.
+TGA/JPEG and layered skin metadata are not yet implemented or implied by this API.
+
+Native control callback safety check: createControl snapshots both input blocks
+before callbacks, since native callers may release their original storage during
+init. Each setting event updates only its bound property, matching the separate
+branches in LLUICtrl::controlListener; updating enabled must not recalculate and
+overwrite independently changed visibility. Tests destroy parameter storage from
+init and independently mutate local flags between setting notifications.
+
+Native control state construction, 2026-09-10: Q1 roots LLUICtrl constructor,
+initFromParams, setControlVariable/enabled/visibility helpers, decideVisibility,
+initCommitCallback/initEnableCallback, onCommit/setValue, postBuild and setFocus.
+LLViewModel's value assignment always dirties. Init installs bindings and commit/
+validation before init callback, hover handlers after it; factory parenting follows
+initFromParams. A provided control name suppresses initial_value even when unresolved.
+Enabled bindings special-case string "0"; visibility combines both controls.
+Commit does not auto-validate or auto-write settings. PostBuild brings marked direct
+children forward in the source front-list iteration order. Q2: tree-owned native
+control values and settings bindings, explicit native font owner, native callbacks
+taking checked IDs/LLSD values rather than GL widget pointers. LLSD is audited
+nonvisual value storage/conversion from llcommon; no LLViewModel/LLUICtrl is used.
+Q3: publish a fully initialized control to its parent only after native init returns;
+recheck ID after callbacks, snapshot callable/value before invocation, and release
+all value/font/settings targets with the node. Settings mutations are explicit
+native-table updates, not subscriptions to GL settings callbacks. Missing binding
+names are currently ignored as in source; diagnostic reporting remains open.
+Tests cover init/parent order, binding/initial-value precedence, validation versus
+commit, hover-handler timing, live setting updates, dirty state, retained font and
+self-deleting callbacks. XML construction of derived controls, their concrete
+callbacks, focus history/defaults and popup teardown are still required before
+claiming full native widget construction. Generic control state is not a button,
+panel, editor or text control replacement.
+
+Native focus/capture construction dependency, 2026-09-10: Q1 roots
+LLFocusMgr::setKeyboardFocus/setMouseCapture/setTopCtrl/releaseFocusIfNeeded and
+LLFocusableElement focus notifications (llfocusmgr.cpp:92-452). New state is
+published before callbacks. Focus loss bubbles up, gain descends, common ancestors
+are omitted; a nested focus change cancels remaining outer traversal. Locking
+restricts focus to the locked subtree. Control destruction releases descendant
+capture then keyboard focus; top references are removed without top-lost callbacks.
+Q2: native tree owns focus/capture/top IDs and native-only scoped handlers, not
+gFocusMgr/LLFocusableElement. Q3: checked IDs, copied invocation targets and focus
+epochs survive callbacks changing focus or deleting unrelated subtrees. Destruction
+marks its subtree unavailable before callbacks and rejects overlapping destruction
+or reparenting that could resurrect it; this defines safe behavior where source
+deletion during callbacks is unsafe. Ordinary view erase is callback-free; control
+erase invokes focus-release protocol. Registered native callbacks must be audited
+at their concrete call sites; no existing GL callback registry is used.
+Check branch order, common ancestors, nested focus redirection, locks, capture-before-
+focus teardown, invalid IDs and resurrection rejection. Default-focus restoration,
+focus history, control-specific onFocusLost/commit and popup bookkeeping remain open.
+
+Construction resource policy: LLVKWidgetTree and the native XML factory use a
+10000-node/64-level limit. Source-invalid cyclic ownership and excessive trees fail
+before publication, not silent truncation. Reparent validates the entire subtree's
+new depth before detaching it. Tests include external-parent attachment failure,
+subtree cleanup and preservation of the old parent and metadata. These bounds are
+an explicit native resource policy, not source limits or a full-UI coverage claim.
+
+Native view geometry queries, 2026-09-10: Q1 roots LLView::calcBoundingRect,
+calcScreenRect, localPointToScreen and pointInView; LLRect::isEmpty uses edge
+equality, containment excludes top/right. Bounds union includes locally visible
+children except the current top control and translates into parent coordinates.
+Q2: native tree computes current bounds/screen rectangles and containment from
+native IDs and an explicit top-control ID. Q3: on-demand CPU queries avoid stale
+hidden-view caches; coordinate overflow is an explicit failure. Queries do not
+call GL focus/UI globals. Tests exercise union/translation, hidden/top children,
+half-open hit edges and deletion invalidation. Dirty-region propagation and
+control visibility callbacks remain distinct obligations.
+
+Native base-view factory, 2026-09-10: source LLDefaultChildRegistry::Register<LLView>
+(llview.cpp:90), factory createWidgetImpl/defaultBuilder and LLView initFromParams,
+getRequiredRect (= own rect) and postBuild (=true). Q1: resolve defaults/explicit
+params, transform XUI layout, construct/init, parent at front, build children in
+declaration order, invoke postBuild. Q2: LLVKWidgetFactory constructs native value
+nodes from typed parameters or Expat-parsed base-view declarations. Q3: native-owned
+defaults, explicit geometry-provided flags, inherited layout string, decoded text,
+bounded XML input with no DTD/entities, callback exception containment, rollback of
+partial subtrees. The constructed root is attached to the external parent only on
+success; plain-view construction has no postBuild action to observe staging. Future
+control callbacks must get their own ordering contract, not assume this suffices.
+Checks: actual nested view XML, sibling layout, inherited defaults, tab0, malformed
+children, unsupported tag rejection and unchanged external-parent metadata on failure.
+Only `view` is currently accepted; other control tags and unimplemented attributes
+are explicit errors, not placeholder nodes. This is deliberately not a claim of
+complete factory/widget coverage. Focus, dirty/bounds reporting and all specialized
+control constructors remain required work before the requested construction commit.
+
+Native declaration geometry, 2026-09-10: Q1 roots are LLView::applyXUILayout,
+get_last_child_rect (llview.cpp:2497-2690), and ParamValue<LLRect>::updateValueFromBlock
+(llui.cpp:688). Explicit opposing edges win dimensions; otherwise a supplied dimension
+and supplied edge determine the other edge. Parent-relative positive/negative edges,
+top-left inversion, recent declared sibling, minimum height10, padding4 and explicit
+delta override retain the source's value/provided distinction. Q2: native
+LLVKWidgetLayout holds independent value/provided fields and resolves a native rect;
+parent/sibling information comes only from LLVKWidgetTree. Q3: pure CPU resolution
+on copied params with checked output coordinates, no native/GL owner creation until
+geometry succeeds. No use of GL LLView, LLUI parameter code or LLRect interpreter.
+Checks cover edge/dimension precedence, top-left/negative coordinates, sibling
+padding and explicit delta override. Export conversion and specialized per-control
+layout remain separate obligations. This replaces the inspected runtime geometry
+operation, not all widget construction.
+
+Native construction work, 2026-09-10, after commit `dfab8c2fd2`:
+NV-00/01/03/12/17. This section records an implemented base ownership slice, not
+closure of the complete widget inventory. Source roots: LLView constructor,
+addChild/addChildInBack/removeChild, reshape, visible/enabled chains and
+parseFollowsFlags in llview.cpp. Q1: own parent/child relationships, front-insert
+children, reparent before insertion, store tab groups, apply follows translation
+and resizing recursively, preserve local flags while querying ancestor flags.
+Q2: LLVKWidgetTree owns native value nodes with never-reused IDs, explicit geometry,
+local visibility/enabled flags and child order, without LLView/LLUICtrl/GL Params.
+Q3: lifecycle-owned CPU tree; mutation is single-threaded, callers retain IDs rather
+than raw pointers across mutation. Reshape plans checked geometry before publishing,
+so overflow does not leave a half-resized tree. Cycle creation is rejected rather
+than reproducing an invalid source ownership graph. Subtree erase invalidates IDs.
+Absent factory tab groups map to INT32_MAX; provided zero remains distinct. Follows
+string parsing preserves exact case/whitespace token behavior. Allocation exceptions
+propagate without partial parenting. This is not a callback-dispatch abstraction.
+Check: isolated TUT executable excludes llui/llrender, verifies front insertion,
+detach/reparent/cycle rejection, subtree lifetime, all 16 follows combinations,
+ancestor flag queries and overflow rollback. Bounds propagation, focus/capture
+release, virtual reshape hooks, per-control constructors and declaration factory
+remain separate required implementations; no native widget closure is claimed here.
+
 ## UI-FACTORY-001: getDefaultParams<T>
 
 Source: [lluictrlfactory.h](../../../indra/llui/lluictrlfactory.h#L120).

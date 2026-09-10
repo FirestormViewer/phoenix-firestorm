@@ -1,0 +1,216 @@
+#include "llvkwidgettree.h"
+
+#include <cmath>
+
+bool LLVKWidgetTree::routePointer(Id root, const PointerEvent& screenEvent, std::string& error)
+{
+    error.clear();
+    if (!get(root) || !std::isfinite(screenEvent.time) || screenEvent.time < 0.0)
+    { error = "Invalid native pointer root or event time"; return false; }
+    switch (screenEvent.kind)
+    {
+        case PointerKind::LeftDown: case PointerKind::LeftUp:
+        case PointerKind::RightDown: case PointerKind::RightUp:
+        case PointerKind::DoubleClick: case PointerKind::Hover: break;
+        default: error = "Invalid native pointer kind"; return false;
+    }
+    const Id target = mMouseCapture ? mMouseCapture : root;
+    if (!canReceiveFocus(target)) { error = "Native pointer target is erasing"; return false; }
+    auto rect = screenRect(target,error);
+    if (!rect) return false;
+    const auto localX = std::int64_t(screenEvent.x)-rect->left;
+    const auto localY = std::int64_t(screenEvent.y)-rect->bottom;
+    if (localX < INT32_MIN || localX > INT32_MAX || localY < INT32_MIN || localY > INT32_MAX)
+    { error = "Native pointer coordinate conversion overflow"; return false; }
+    auto event = screenEvent;
+    event.x = static_cast<std::int32_t>(localX);
+    event.y = static_cast<std::int32_t>(localY);
+    return handlePointer(target,event,error);
+}
+
+bool LLVKWidgetTree::childrenPointer(Id id, const PointerEvent& event, std::string& error)
+{
+    const auto* node = get(id);
+    if (!node) return false;
+    const auto children = node->children;
+    for (Id child : children)
+    {
+        const auto* current = get(child);
+        if (!current || current->parent != id || !current->params.visible || !current->params.enabled) continue;
+        const auto localX = std::int64_t(event.x)-current->params.rect.left;
+        const auto localY = std::int64_t(event.y)-current->params.rect.bottom;
+        if (localX < INT32_MIN || localX > INT32_MAX || localY < INT32_MIN || localY > INT32_MAX)
+        { error = "Native child pointer coordinates overflow"; return false; }
+        auto localEvent = event;
+        localEvent.x = static_cast<std::int32_t>(localX);
+        localEvent.y = static_cast<std::int32_t>(localY);
+        auto contains = containsLocal(child,localEvent.x,localEvent.y,true,mTopControl,error);
+        if (!contains) return false;
+        if (!*contains) continue;
+        if (handlePointer(child,localEvent,error)) return true;
+        if (!error.empty()) return false;
+        current = get(child);
+        if (!get(id)) return true;
+        if (current && current->params.mouseOpaque)
+        {
+            contains = containsLocal(child,localEvent.x,localEvent.y,false,mTopControl,error);
+            if (!contains) return false;
+            if (*contains)
+            {
+                if (event.kind == PointerKind::Hover) cursorEffect(child,false);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool LLVKWidgetTree::basePointer(Id id, const PointerEvent& event, std::string& error)
+{
+    const bool handled = childrenPointer(id,event,error);
+    if (!error.empty()) return false;
+    const auto* node = get(id);
+    if (!node) return true;
+    const auto events = mEvents.find(id);
+    if (node->control && event.kind != PointerKind::Hover && events != mEvents.end())
+    {
+        const auto callback = events->second.pointer;
+        if (callback) callback(id,event);
+    }
+    return handled;
+}
+
+void LLVKWidgetTree::cursorEffect(Id id, bool hand)
+{
+    const auto events = mEvents.find(id);
+    if (events == mEvents.end() || !get(id)) return;
+    const auto callback = events->second.cursor;
+    if (callback) callback(id,hand);
+}
+
+bool LLVKWidgetTree::handlePointer(Id id, PointerEvent event, std::string& error)
+{
+    const auto* node = get(id);
+    if (!node) return false;
+    if (node->button) return buttonPointer(id,event,error);
+    if (event.kind == PointerKind::Hover && iconWantsHandCursor(id))
+    { cursorEffect(id,true); return true; }
+    return basePointer(id,event,error);
+}
+
+bool LLVKWidgetTree::buttonPointer(Id id, PointerEvent event, std::string& error)
+{
+    if (event.kind == PointerKind::DoubleClick) event.kind = PointerKind::LeftDown;
+    const auto focusButton = [&]
+    {
+        const auto* node = get(id);
+        if (mLockedFocus && !hasAncestor(id,mLockedFocus)) return;
+        if (node && node->control->params.tabStop && !chromeInChain(id))
+            requestControlFocus(id,true,error);
+    };
+    if (event.kind == PointerKind::LeftDown)
+    {
+        if (childrenPointer(id,event,error)) return true;
+        if (!error.empty()) return false;
+        if (!get(id)) return true;
+        if (!setMouseCapture(id,error)) return false;
+        if (!get(id)) return true;
+        focusButton();
+        if (!get(id)) return true;
+        if (!error.empty()) return false;
+        basePointer(id,event,error);
+        if (!error.empty()) return false;
+        if (!buttonCallback(id,&LLVKButton::Params::mouseDown,LLSD())) return true;
+        auto& button = *mNodes.at(id).button;
+        button.mouseDownTime = event.time;
+        button.mouseDownFrame = event.frame;
+        button.heldCount = 0;
+        buttonSound(id,false);
+        return true;
+    }
+    if (event.kind == PointerKind::LeftUp)
+    {
+        if (mMouseCapture == id)
+        {
+            mNodes.at(id).button->mouseDownTime.reset();
+            setMouseCapture(0,error);
+            if (!get(id)) return true;
+            basePointer(id,event,error);
+            if (!error.empty()) return false;
+            if (!buttonCallback(id,&LLVKButton::Params::mouseUp,LLSD())) return true;
+            auto contains = containsLocal(id,event.x,event.y,true,mTopControl,error);
+            if (!contains) return false;
+            if (*contains)
+            {
+                buttonSound(id,true);
+                const auto* node = get(id);
+                if (!node) return true;
+                if (node->button->params.toggle && !setButtonToggle(id,!node->control->value.asBoolean(),error)) return false;
+                buttonCommitSignal(id);
+            }
+        }
+        else childrenPointer(id,event,error);
+        return error.empty();
+    }
+    if (event.kind == PointerKind::RightDown)
+    {
+        if (!get(id)->button->params.handleRightMouse) return true;
+        if (childrenPointer(id,event,error)) return true;
+        if (!error.empty()) return false;
+        if (!get(id)) return true;
+        if (!setMouseCapture(id,error)) return false;
+        if (!get(id)) return true;
+        focusButton();
+        if (!get(id)) return true;
+        if (!error.empty()) return false;
+        basePointer(id,event,error);
+        return error.empty();
+    }
+    if (event.kind == PointerKind::RightUp)
+    {
+        if (!get(id)->button->params.handleRightMouse) return true;
+        if (mMouseCapture == id) setMouseCapture(0,error);
+        else childrenPointer(id,event,error);
+        if (!get(id)) return true;
+        if (!error.empty()) return false;
+        basePointer(id,event,error);
+        return error.empty();
+    }
+    auto& button = *mNodes.at(id).button;
+    if (enabledInChain(id) && (!mMouseCapture || mMouseCapture == id) && !button.highlighted)
+    { button.highlighted = true; ++button.textGeneration; }
+    if (childrenPointer(id,event,error)) return true;
+    if (!error.empty()) return false;
+    const auto* node = get(id);
+    if (!node) return true;
+    const auto& current = *node->button;
+    if (current.mouseDownTime && event.time >= *current.mouseDownTime && event.frame >= current.mouseDownFrame &&
+        static_cast<float>(event.time-*current.mouseDownTime) >= current.params.heldSeconds &&
+        event.frame-current.mouseDownFrame >= current.params.heldFrames)
+    {
+        LLSD argument;
+        argument["count"] = static_cast<LLSD::Integer>(mNodes.at(id).button->heldCount++);
+        if (!buttonCallback(id,&LLVKButton::Params::held,argument)) return true;
+    }
+    if (get(id)) cursorEffect(id,get(id)->button->params.hoverHandCursor);
+    return true;
+}
+
+void LLVKWidgetTree::buttonCaptureLost(Id id)
+{
+    const auto* node = get(id);
+    if (!node || !node->button) return;
+    if (node->button->params.commitOnCaptureLost && node->button->mouseDownTime)
+    {
+        if (!buttonCallback(id,&LLVKButton::Params::mouseUp,LLSD())) return;
+        node = get(id);
+        std::string error;
+        if (node->button->params.toggle && !setButtonToggle(id,!node->control->value.asBoolean(),error))
+        {
+            if (get(id)) mNodes.at(id).button->mouseDownTime.reset();
+            return;
+        }
+        buttonCommitSignal(id);
+    }
+    if (get(id)) mNodes.at(id).button->mouseDownTime.reset();
+}
