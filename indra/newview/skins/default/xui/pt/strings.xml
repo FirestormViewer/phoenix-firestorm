@@ -1697,6 +1697,9 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 	<string name="InventoryNoTexture">
 		Você não tem uma cópia desta textura no seu inventário.
 	</string>
+	<string name="InventoryNoMaterial">
+		Você não tem uma cópia deste item no seu inventário.
+	</string>
 	<string name="InventoryInboxNoItems">
 		Suas compras do Marketplace vão aparecer aqui. Depois você pode arrastá-las para o inventário para usar.
 	</string>

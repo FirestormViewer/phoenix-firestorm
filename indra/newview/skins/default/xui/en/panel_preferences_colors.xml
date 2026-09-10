@@ -228,7 +228,7 @@
        name="muted_label"
        top_delta="5"
        width="110">
-       Muted
+       Blocked
      </text>
      
      <color_swatch
@@ -838,7 +838,7 @@
        name="muted_tag_label"
        top_delta="5"
        width="95">
-       Muted
+       Blocked
      </text>
      
      <color_swatch
@@ -1589,7 +1589,7 @@
        name="MapAvatarMutedColor_label"
        top_delta="5"
        width="95">
-       Muted
+       Blocked
      </text>
      <check_box
        control_name="MiniMapChatRing"

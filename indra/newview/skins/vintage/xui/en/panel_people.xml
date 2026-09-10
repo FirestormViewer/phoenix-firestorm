@@ -168,7 +168,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 						follows="left|top"/>
 
 					<check_box
-						label="Show muted and blacklisted Avatars"
+						label="Show blocked and blacklisted Avatars"
 						left="0"
 						top_pad="2"
 						name="FSRadarShowMutedAndDerendered"

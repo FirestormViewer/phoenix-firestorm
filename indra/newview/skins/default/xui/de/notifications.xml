@@ -5979,6 +5979,14 @@ Detaillierte Instruktionen zum whitelisten von [APP_NAME] - inklusive einer List
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+	<notification name="ViewerProcessRunningAsAdmin">
+		Einer oder mehrere Viewer-Prozesse werden aktuell als Administrator ausgeführt. Dieses ist dafür bekannt Probleme zu verursachen, wie z.B. dass Medien und Webseiten nicht korrekt angezeigt werden.
+
+Bitte stellen Sie sicher, dass die Viewer-Prozesse nicht als Administrator ausgeführt werden. Für weitere Informationen siehe
+
+https://wiki.firestormviewer.org/fs_media#one_or_more_viewer_processes_are_currently_running_as_administrator_error_message
+		<usetemplate ignoretext="Warnen, wenn der Viewer als Administrator ausgeführt wird" name="okignore" yestext="OK" />
+	</notification>
 	<notification name="ConfirmPoserOverwrite">
 		Bestehende Pose „[POSE_NAME]“ überschreiben?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Okay"/>
@@ -6065,7 +6073,7 @@ Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
 		</form>
 	</notification>
 	<notification name="FSSetTitleRegionNotFound">
-		Die Region „[REGION]“ konnte nicht gefunden werden. Bitte überprüfen Sie den Namen und versuchen Sie es erneut.
+		Die Region '[REGION]' konnte nicht gefunden werden. Bitte überprüfen Sie den Namen und versuchen Sie es erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OmniFilterNewRuleSet">
@@ -6099,7 +6107,7 @@ Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OmniFilterRemoveRuleSet">
-		Sind Sie sicher, dass sie Regelset „[RULESETNAME]“ löschen möchten?
+		Sind Sie sicher, dass sie Regelset [RULESETNAME] löschen möchten?
 		<usetemplate name="okcancelignore" ignoretext="Bestätigen, bevor ein Regelset gelöscht wird." notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="OmniFilterRemoveRuleSetDefault">
@@ -6114,44 +6122,36 @@ Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
 		Regelset kann nicht gelöscht werden, da kein Set mit dem Namen gefunden wurde.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="OmniFilterExportRuleSet">
-		Name für Notizkarte eingeben, in die das Regel-Set „[RULESETNAME]“ exportiert wird:
+	<notification name="FSWearableFavoritesNewFolder">
+		Name für neuen Kleidungsfavoriten-Ordner eingeben:
+		<form name="form">
+			<input name="message">
+				Neuer Ordner
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesRenameFolder">
+		Neuer Name für neuen Kleidungsfavoriten-Ordner [FOLDER_NAME] eingeben:
 		<form name="form">
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
-	<notification name="OmniFilterMissingCategory">
-		Der Ordner für Notizkarten ist nicht im Inventar vorhanden. Notizkarte kann nicht erstellt werden.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="OmniFilterImportRuleSet">
-		Name für das importierte Regel-Set „[IMPORTNAME]“ eingeben:
+	<notification name="FSWearableFavoritesDeleteFolder">„[POSE_NAME]“
+		Kleidungsfavoriten-Ordner „[FOLDER_NAME]“ löschen?
+
+Hierdurch wird der Ordner und die Favoriten-Verknüpfungen geslöscht. Die Original-Gegenstände werden nicht gelöscht.
 		<form name="form">
-			<button name="OK" text="OK"/>
+			<button name="Delete" text="Löschen"/>
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
-	<notification name="OmniFilterInvalidImport">
-		Fehler: Die Notizkarte „[IMPORTNAME]“ enthält kein gültiges Regel-Set. Import kann nicht durchgeführt werden.
+	<notification name="FSWearableFavoritesFolderInvalidName">
+		Kleidungsfavoriten-Ordner „[FOLDER_NAME]“ konnte nicht erstellt werden.
+Ordner-Namen dürfen kein  / oder \ enthalten.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="OmniFilterNotANotecard">
-		Fehler: Objekt ist keine Notizkarte.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="OmnifilterImportInstructions" label="Omni-Filter-Import-Anleitung">
-		Um ein Regel-Set aus einer Notizkarte zu importieren, wählen Sie die entsprechende Notizkarte im Inventar aus und ziehen sie per Drag&amp;Drop in dieses Fenster.
-		<form name="form">
-			<button name="OK" text="OK"/>
-			<ignore name="ignore" text="Instruktionen für den Import von Regel-Sets des Omni-Filters anzeigen, wenn der Import-Button gedrückt wird"/>
-		</form>
-	</notification>
-	<notification name="OmniFilterNonAscii">
-		Der gewählte Namen „[INPUTNAME]“ für die Notizkarte ist ungültig - es werden nur ASCII-Zeichen unterstützt.
-		<form name="form">
-			<button name="OK" text="OK"/>
-			<button name="Cancel" text="Abbrechen"/>
-		</form>
-	</notification>
+
 </notifications>

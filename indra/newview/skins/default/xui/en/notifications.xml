@@ -15042,6 +15042,24 @@ For detailed instructions on how to whitelist [APP_NAME] - including a list of f
 https://wiki.firestormviewer.org/antivirus_whitelisting
   </notification>
 
+  <!-- <FS:TJ> Detect and notify if the viewer is trying to run as admin on Windows -->
+  <notification
+    icon="alertmodal.tga"
+    name="ViewerProcessRunningAsAdmin"
+    type="alertmodal">
+One or more viewer processes are currently running as administrator. This is known to cause a number of issues and prevent media and web pages working within the viewer.
+
+Please ensure that all viewer processes are not set to run as administrator. For more information, please read here:
+
+https://wiki.firestormviewer.org/fs_media#one_or_more_viewer_processes_are_currently_running_as_administrator_error_message
+    <tag>fail</tag>
+    <usetemplate
+     ignoretext="Warn me when the viewer is running as administrator"
+     name="okignore"
+     yestext="OK" />
+  </notification>
+  <!-- </FS:TJ> -->
+
    <notification
    icon="alertmodal.tga"
    label="Confirm Pose Overwrite"
@@ -15467,4 +15485,82 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
         </form>
     </notification>
   <!-- </FS:minerjr> [FIRE-36763] -->
+
+  <!-- <FS:Amy> Favorite Wearables folders -->
+  <notification
+   icon="alertmodal.tga"
+   name="FSWearableFavoritesNewFolder"
+   type="alertmodal">
+Enter a name for the new Favorite Wearables folder:
+    <form name="form">
+      <input name="message" type="text" default="true">
+New Folder
+      </input>
+      <button
+       default="true"
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="FSWearableFavoritesRenameFolder"
+   type="alertmodal">
+Enter a new name for Favorite Wearables folder [FOLDER_NAME]:
+    <form name="form">
+      <input name="message" type="text" default="true">
+[FOLDER_NAME]
+      </input>
+      <button
+       default="true"
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+
+
+  <notification
+   icon="alertmodal.tga"
+   name="FSWearableFavoritesDeleteFolder"
+   type="alertmodal">
+Delete Favorite Wearables folder "[FOLDER_NAME]"?
+
+This removes the folder and its favorite links only. Original inventory items are not deleted.
+    <form name="form">
+      <button
+       default="true"
+       index="0"
+       name="Delete"
+       text="Delete"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="FSWearableFavoritesFolderInvalidName"
+   type="alertmodal">
+Could not create Favorite Wearables folder "[FOLDER_NAME]".
+Folder names cannot contain / or \.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+  <!-- </FS:Amy> Favorite Wearables folders -->
+
 </notifications>

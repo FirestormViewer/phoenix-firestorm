@@ -11,17 +11,17 @@
  name="firestorm">
  
 <panel.string name="BeamsOffLabel">
-	=== OFF ===
+    === OFF ===
 </panel.string>
-	<string name="EmbeddedItemNotSet">
-		Not set
-	</string>
-	<string name="EmbeddedItemNotAvailable">
-		Not available
-	</string>
-	<string name="EmbeddedItemNotLoggedIn">
-		Not logged in
-	</string>
+    <string name="EmbeddedItemNotSet">
+        Not set
+    </string>
+    <string name="EmbeddedItemNotAvailable">
+        Not available
+    </string>
+    <string name="EmbeddedItemNotLoggedIn">
+        Not logged in
+    </string>
 
 <tab_container
  label="Firestorm Prefs"
@@ -74,16 +74,16 @@
          width="270"
          control_name="RezUnderLandGroup"
          tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
-		<check_box
-		 control_name="EffectScriptChatParticles"
-		 height="16"
-		 label="Create particle effects when scripts communicate"
-		 layout="topleft"
-		 name="EffectScriptChatParticles"
-		 tool_tip="If enabled scripted objects display swirling particle lights when the scripts communicate"
-		 initial_value="true"
-		 top_pad="3"
-		 width="350" />
+        <check_box
+         control_name="EffectScriptChatParticles"
+         height="16"
+         label="Create particle effects when scripts communicate"
+         layout="topleft"
+         name="EffectScriptChatParticles"
+         tool_tip="If enabled scripted objects display swirling particle lights when the scripts communicate"
+         initial_value="true"
+         top_pad="3"
+         width="350" />
         <check_box
          top_pad="3"
          follows="left|top"
@@ -130,32 +130,32 @@
          control_name="FSDisableLogoutScreens"
          tool_tip="Disables the black Logout progress screen."/>
 
-		<check_box
-		 control_name="FSRenderFarClipStepping"
-		 height="16"
-		 label="Enable progressive draw distance stepping"
-		 layout="topleft"
-		 name="FSRenderFarClipStepping"
-		 tool_tip="If enabled, Firestorm will use a progressive draw distance stepping after teleporting."
-		 initial_value="true"
-		 top_pad="10"
-		 width="250" />
-		<slider
-		 name="progressive_draw_distance_interval"
-		 control_name="FSRenderFarClipSteppingInterval"
-		 enabled_control="FSRenderFarClipStepping"
-		 decimal_digits="0"
-		 left="10"
-		 top_pad="2"
-		 follows="left|top"
-		 layout="topleft"
-		 height="18"
-		 increment="1"
-		 initial_value="20"
-		 max_val="30"
-		 min_val="5"
-		 width="225"
-		 tool_tip="Interval in seconds between each draw distance increment"/>
+        <check_box
+         control_name="FSRenderFarClipStepping"
+         height="16"
+         label="Enable progressive draw distance stepping"
+         layout="topleft"
+         name="FSRenderFarClipStepping"
+         tool_tip="If enabled, Firestorm will use a progressive draw distance stepping after teleporting."
+         initial_value="true"
+         top_pad="10"
+         width="250" />
+        <slider
+         name="progressive_draw_distance_interval"
+         control_name="FSRenderFarClipSteppingInterval"
+         enabled_control="FSRenderFarClipStepping"
+         decimal_digits="0"
+         left="10"
+         top_pad="2"
+         follows="left|top"
+         layout="topleft"
+         height="18"
+         increment="1"
+         initial_value="20"
+         max_val="30"
+         min_val="5"
+         width="225"
+         tool_tip="Interval in seconds between each draw distance increment"/>
 
         <check_box
          top_pad="10"
@@ -172,8 +172,8 @@
          control_name="UseLSLFlightAssist"
          enabled_control="UseLSLBridge"
          layout="topleft"
-		 left="10"
-		 top_pad="2"
+         left="10"
+         top_pad="2"
          follows="left|top"
          height="25"
          name="UseLSLFlightAssist"
@@ -1560,7 +1560,7 @@
          top_pad="8"
          follows="left|top"
          height="16"
-		 initial_value="false"
+         initial_value="false"
          label="Allow click-drag or click-scale (together with caps lock) of a texture face in build mode"
          tool_tip="If enabled, allows to click-drag or click-scale (together with caps lock) a texture face in build mode. This feature is still experimental and should be used with caution."
          name="FSExperimentalDragTexture"
@@ -1606,6 +1606,128 @@
          tool_tip="If enabled, the texture editing tools will use the refined [APP_NAME] workflow and allow editing of both Blinn-Phong and PBR textures."
          name="FSUseNewTexturePanel"
          control_name="FSUseNewTexturePanel"/>
+        <view_border
+         top_pad="5"
+         left="5"
+         height="70"
+         bevel_style="none"
+         border_thickness="1"
+         follows="top|left"
+         name="BuildAxisColorBoxes"
+         width="490" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left="15"
+         top_pad="-66"
+         mouse_opaque="false"
+         name="buildaxiscolors_label"
+         width="330">
+         Build X/Y/Z axis appearance:
+        </text>
+        <color_swatch
+         top_delta="16"
+         color="BuildToolsXAxisColor"
+         can_apply_immediately="true"
+         follows="left|top"
+         height="50"
+         label="X-Axis"
+         left="15"
+         mouse_opaque="true"
+         name="colorswatchXaxis"
+         tool_tip="Click to open Color Picker"
+         width="64">
+            <color_swatch.init_callback
+             function="Pref.getUIColor"
+             parameter="BuildToolsXAxisColor" />
+            <color_swatch.commit_callback
+             function="Pref.applyUIColor"
+             parameter="BuildToolsXAxisColor" />
+        </color_swatch>
+        <color_swatch
+         can_apply_immediately="true"
+         color="BuildToolsYAxisColor"
+         follows="left|top"
+         height="50"
+         label="Y-Axis"
+         top_delta="0"
+         left_delta="85"
+         mouse_opaque="true"
+         name="colorswatchYaxis"
+         tool_tip="Click to open Color Picker"
+         width="64">
+            <color_swatch.init_callback
+             function="Pref.getUIColor"
+             parameter="BuildToolsYAxisColor" />
+            <color_swatch.commit_callback
+             function="Pref.applyUIColor"
+             parameter="BuildToolsYAxisColor" />
+        </color_swatch>
+        <color_swatch
+         can_apply_immediately="true"
+         color="BuildToolsZAxisColor"
+         follows="left|top"
+         height="50"
+         label="Z-Axis"
+         top_delta="0"
+         left_delta="85"
+         mouse_opaque="true"
+         name="colorswatchZaxis"
+         tool_tip="Click to open Color Picker"
+         width="64">
+            <color_swatch.init_callback
+             function="Pref.getUIColor"
+             parameter="BuildToolsZAxisColor" />
+            <color_swatch.commit_callback
+             function="Pref.applyUIColor"
+             parameter="BuildToolsZAxisColor" />
+        </color_swatch>
+        <color_swatch
+         can_apply_immediately="true"
+         color="BuildToolsTextBackgroundColor"
+         follows="left|top"
+         height="50"
+         label="Text Backgr."
+         top_delta="0"
+         left_delta="85"
+         mouse_opaque="true"
+         name="colorswatchEditTextBackgroundColor"
+         tool_tip="Click to open Color Picker"
+         width="64">
+            <color_swatch.init_callback
+             function="Pref.getUIColor"
+             parameter="BuildToolsTextBackgroundColor" />
+            <color_swatch.commit_callback
+             function="Pref.applyUIColor"
+             parameter="BuildToolsTextBackgroundColor" />
+        </color_swatch>
+        <spinner
+         top_delta="0"
+         left_delta="85"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         label="Scale"
+         label_width="65"
+         max_val="50"
+         min_val="0.1"
+         name="editWidgetScaling"
+         tool_tip="Scales the size of the controls used for editing rotation/scale/position."
+         width="120"
+         control_name="FSBuildPrefs_EditHandleScaling"/>
+        <check_box
+         top_delta="28"
+         left_delta="0"
+         follows="left|top"
+         height="16"
+         label="Text Shadow"
+         tool_tip="If enabled, hint text while editing has a drop-shadow."
+         name="editTextDropShadow"
+         control_name="FSBuildPrefs_EditTextShadowing"/>
     </panel>
 
     <!--Script Editor-->
