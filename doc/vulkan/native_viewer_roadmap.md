@@ -102,7 +102,7 @@ The following alternatives remain decision work, not silently adopted changes:
 | Alternative | Feasibility question and required decision |
 |---|---|
 | Build-time GL/Zink versus Vulkan | Can CMake source/target closures and autobuild configurations select each lifecycle under the same executable target? Define settings/packaging behavior when a backend is compiled out. Do not just add a flag while linking GL owners |
-| Semantic abstractions | Which model, layout, asset-byte and application-action contracts are genuinely neutral? Share those after helper closure, not GL handles or callbacks |
+| Dependency suitability | Existing GL-exclusive visual functions cannot serve the native path. Share audited nonvisual services; independently assess API-independent third-party functionality under clarified NV-01. Implement native visual equivalents without changing or extracting shared services from GL |
 | Shared low-level RHI | Does it actually improve native ownership, or only preserve GL procedures? Present an explicit alternative design; current NV-01 prohibits GL-call translation/shared dispatch |
 | GL/Vulkan interop | Requires shared external memory as well as semaphores, compatible devices/drivers, formats/layouts and both APIs' completion. A hybrid strategy would require explicit NV-01/NV-03 amendment; hardware feasibility is unverified |
 | Compile GL out of native builds | Useful enforceable boundary after neutral dependencies are separated; it does not implement the missing viewer. Preserve the independently buildable GL reference, not delete it wholesale |
@@ -259,8 +259,12 @@ image capture or partially populated window cannot stand in for this gate.
 ## Working rules and immediate next task
 
 Keep each change reviewable around one behavior contract. Implement and validate
-the smallest native operation before expanding to adjacent consumers. Reuse neutral
-libraries only after checking initialization, global state and teardown requirements.
+the smallest native operation before expanding to adjacent consumers. Share audited
+nonvisual functionality under clarified NV-01. Existing CPU visual helpers are not
+neutral merely because their bodies contain no direct GL call. Independently audited
+API-independent third-party functionality is not categorically forbidden. Leave the
+OpenGL implementation untouched; independently implement native visual equivalents.
+Check initialization, global state, callbacks and teardown for every dependency.
 Do not reintroduce wrappers around GL owners or create disconnected test executables
 as substitutes for the application's selected lifecycle.
 

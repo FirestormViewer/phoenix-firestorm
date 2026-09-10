@@ -1,0 +1,15 @@
+#version 450
+layout(local_size_x = 8, local_size_y = 8) in;
+layout(set = 0, binding = 0) uniform sampler2D glyphImage;
+layout(std430, set = 1, binding = 0) buffer Readback
+{
+    uint pixels[];
+};
+void main()
+{
+    ivec2 position = ivec2(gl_GlobalInvocationID.xy);
+    ivec2 extent = textureSize(glyphImage, 0);
+    if (any(greaterThanEqual(position, extent))) return;
+    vec2 coordinates = (vec2(position) + vec2(0.25)) / vec2(extent) + vec2(1.0, -1.0);
+    pixels[position.y * extent.x + position.x] = packUnorm4x8(textureLod(glyphImage, coordinates, 0));
+}

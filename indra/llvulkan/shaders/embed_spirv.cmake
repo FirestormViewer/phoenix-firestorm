@@ -1,0 +1,8 @@
+file(READ "${INPUT}" shader_hex HEX)
+string(LENGTH "${shader_hex}" hex_length)
+math(EXPR remainder "${hex_length} % 8")
+if(NOT remainder EQUAL 0 OR hex_length LESS 40)
+    message(FATAL_ERROR "Invalid SPIR-V word stream: ${INPUT}")
+endif()
+string(REGEX REPLACE "(..)(..)(..)(..)" "0x\\4\\3\\2\\1u," shader_words "${shader_hex}")
+file(WRITE "${OUTPUT}" "#pragma once\n#include <cstdint>\ninline constexpr std::uint32_t ${NAME}[] = {${shader_words}};\n")

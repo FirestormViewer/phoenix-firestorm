@@ -39,3 +39,11 @@ Publication preserves the approved findings while replacing machine-local paths
 with portable references and correcting publication-context wording. Subsequent
 baseline updates must be explicit and reviewed; do not silently rewrite the
 historical observations to describe newer code.
+
+## Subsequent UI investigation
+
+The [native UI coverage ledger](native-ui-coverage.md) tracks the separate
+2026-09-10 investigation on branch native-vulkan-ui, based on implementation
+checkpoint 90af5a7 and source revision 3abd661f. Its local contracts and open
+dependencies do not amend the approved historical report or establish exhaustive
+coverage, native implementation, runtime validation or measured parity.

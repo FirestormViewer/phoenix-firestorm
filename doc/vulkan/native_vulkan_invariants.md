@@ -47,7 +47,7 @@ For every function and helper in the migration inventory, answer:
 	purity from a name or a const method; identify configuration-dependent paths.
 2. **How is this done in Vulkan?** Explain how to produce that result using native
 	data and ownership. Identify responsibilities that stay CPU-only and suitable
-	audited neutral libraries. Separate CPU preparation, GPU execution, publication
+	audited libraries within NV-01's sharing boundary. Separate CPU preparation, GPU execution, publication
 	and retirement. State dependencies instead of translating API calls.
 3. **What is the cleanest implementation of question 2 in terms of Vulkan?**
 	Compare viable native designs, choose the smallest coherent ownership model,
@@ -87,10 +87,37 @@ composition and temporal contracts natively. It MUST NOT translate `gGL`,
 introduce a common low-level GL/Vulkan RHI to preserve those callbacks; or render
 the GL frame to a texture and present it as native Vulkan.
 
-Sharing backend-neutral scene/layout/asset data and pure mathematical helpers is
-allowed. Vulkan-specific resource/command abstractions are encouraged. The test
-is whether a consumer receives the required result, not whether its producer
-resembles a GL class or pass.
+### NV-01 sharing boundary (user amendment, 2026-09-10)
+
+Native Vulkan MUST NOT reuse the existing OpenGL-exclusive visual functions as its
+implementation: rendering, UI construction/layout/input behavior, fonts/text
+measurement and rasterization, textures/images, meshes/scene preparation, materials,
+shaders, postprocessing, visual capture and related helpers. This applies to CPU
+preparation as well as GPU execution wherever the actual dependency chain relies on
+GL contexts, state, resources or execution semantics. Calling a function pure or
+backend-neutral does not establish independence. Separate instances, wrappers or
+indirect calls do not remove its GL dependencies.
+
+Functionality separate from the visual aspect MAY be shared after audit. General file IO,
+logging, allocation, generic configuration parsing or nonvisual application services
+are candidates, not blanket approvals. Trace callees, callbacks and ownership under
+NV-00: a nominally nonvisual service that constructs UI, resolves fonts, processes
+textures/meshes or invokes rendering is not an approved shared dependency as-is.
+Clarification, 2026-09-10: the incompatibility is in the existing functions as they
+are, not in code reuse as an abstract property. This is not a blanket requirement
+to reimplement independent third-party font rasterizers or other API-independent
+libraries. Such a dependency must be audited independently under NV-00; using it
+does not authorize reuse of the viewer's GL-coupled wrappers, globals or callbacks.
+Neither library provenance nor a neutral name proves suitability. Reading the same
+source asset or declaration does not authorize sharing its GL-exclusive consumers.
+
+Native development MUST leave the OpenGL implementation untouched. Implement native
+equivalents with their own visual functions and owners; do not extract shared visual
+services from GL, alter its upload timing or add backend branches to its functions.
+Keep existing GL/Zink operation intact. Vulkan-specific resource/command abstractions
+are encouraged, but they MUST NOT translate GL calls. Equivalent results and the
+three architectural questions remain required; independent code is not permission
+to approximate behavior or reproduce undefined behavior.
 
 **Example:** consume immutable material/mesh/view packets in a native pass;
 do not implement `LLRender::begin/end` as Vulkan command recording.
@@ -383,6 +410,35 @@ An amendment MUST name the rule and old/new behavior, rationale, affected
 consumers/platforms, reference evidence, migration/fallback plan and approval.
 Update this contract and applicable instructions together. Absence of a test,
 an old draft, or a performance aspiration is not an exception.
+
+## Amendment record: visual implementation independence
+
+- Approval: user directive on 2026-09-10, clarified as zero shared functions for
+	rendering, UI, textures, meshes, postprocessing and related visual behavior;
+	nonvisual functionality may be shared.
+- Affected rules: NV-00 dependency classification and NV-01 sharing permission;
+	NV-03 process exclusivity and all parity/lifetime requirements remain in force.
+- Old permission: audited neutral scene/layout/asset helpers could be shared.
+	New boundary: existing GL-exclusive visual functions must not implement the native
+	path. Nonvisual functionality may be shared after audit. The user's subsequent
+	clarification does not impose a blanket ban on independently audited API-independent
+	third-party functionality; it does not permit refactoring GL into shared visual code.
+- Rationale: build native equivalents without modifying or depending on the GL
+	visual implementation. A shared CPU atlas/GL-mirror refactor was explicitly rejected.
+- Evidence: the checkpoint native startup reaches GL font texture creation without
+	a GL context; see the separately dated
+	[startup investigation](reverse-engineering/native-ui-startup-dependencies.md).
+	This supports dependency separation, not an assertion of native completion.
+- Scope: all native visual consumers and supporting platform/startup/build paths.
+	One viewer executable and one OS process remain required. Existing GL/Zink visual
+	implementation remains unchanged; nonvisual selection/infrastructure may be shared
+	only after its contract is established.
+- Migration/verification: replace native dependencies on visual GL functions with
+	independently owned native equivalents. Audit direct, indirect and third-party
+	call dependencies; test native construction without GL owners and qualify output,
+	lifetime and unchanged GL behavior. Older reports remain source evidence, but any
+	earlier recommendation to share visual helpers is superseded. No fallback may
+	silently invoke GL in a running native session. No runtime gate is waived.
 
 ## Evidence map
 
