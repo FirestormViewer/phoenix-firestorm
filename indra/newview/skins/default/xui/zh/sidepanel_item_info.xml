@@ -50,7 +50,8 @@
 			<text name="LabelItemDescTitle">
 				描述：
 			</text>
-			<text_editor name="LabelItemDesc" tool_tip="在檢視器設定中選擇「所有物件的懸停提示」選項時，所有物件的描述都會在滑鼠指標下的彈出視窗中顯示。正式描述限制為127位元組，所有更長的字串將被縮短。" />
+			<line_editor name="LabelItemDescSingleLine" tool_tip="在檢視器設定中選擇「所有物件的懸停提示」選項時，所有物件的描述都會在滑鼠指標下的彈出視窗中顯示。正式描述限制為127位元組，所有更長的字串將被縮短。"/>
+			<text_editor name="LabelItemDescMultiLine" tool_tip="在檢視器設定中選擇「所有物件的懸停提示」選項時，所有物件的描述都會在滑鼠指標下的彈出視窗中顯示。正式描述限制為127位元組，所有更長的字串將被縮短。"/>
 			<text name="LabelItemExperienceTitle">
 				體驗：
 			</text>

@@ -201,19 +201,6 @@ LLUIColor LLKeywords::getColorGroup(std::string_view key_in) const
         color_group = "SyntaxLslGodMode";
     }
     // <FS:Ansariel> Split constant types up
-    //else if (key_in == "constants"
-    //       || key_in == "constants-integer"
-    //       || key_in == "constants-float"
-    //       || key_in == "constants-string"
-    //       || key_in == "constants-key"
-    //       || key_in == "constants-rotation"
-    //       || key_in == "constants-vector")
-    else if (key_in == "constants")
-    // </FS:Ansariel>
-    {
-        color_group = "SyntaxLslConstant";
-    }
-    // <FS:Ansariel> Split constant types up
     else if (key_in == "constants-integer")
     {
         color_group = "SyntaxLslIntegerConstant";
@@ -233,6 +220,19 @@ LLUIColor LLKeywords::getColorGroup(std::string_view key_in) const
         color_group = "SyntaxLslCompoundConstant";
     }
     // </FS:Ansariel>
+    else if (key_in == "constants"
+             || key_in.compare(0, 10, "constants-") == 0)
+
+
+
+
+
+
+
+
+    {
+        color_group = "SyntaxLslConstant";
+    }
     else
     {
         LL_WARNS("SyntaxLSL") << "Color key '" << key_in << "' not recognized." << LL_ENDL;

@@ -2639,7 +2639,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                     // minimize the viewer and hide its owned dialog.
                     if (!activating && activating_same_process_thread)
                     {
-                        activating = TRUE;
+                        return;
                     }
 
                     if (window_imp->mFullscreen)
