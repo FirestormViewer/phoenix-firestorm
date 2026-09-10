@@ -37,7 +37,7 @@
 #include "llcorehttputil.h"
 #include "llcoros.h"
 
-#include "tea.h"    //<COLOSI opensim multi-currency support />
+#include "llviewernetwork.h"
 
 // support for secondlife:///app/buycurrencyhtml/{ACTION}/{NEXT_ACTION}/{RETURN_CODE} SLapps
 class LLBuyCurrencyHTMLHandler :
@@ -126,7 +126,10 @@ void LLBuyCurrencyHTML::checkFeatureFlag()
 // the case where the amount is not requested.
 void LLBuyCurrencyHTML::openCurrencyFloater()
 {
-    if (gSavedSettings.getBOOL("BuyCurrencyHTML") && sWebFloaterEnabled)
+    // <FS:Ansariel> Don't use SL HTML version on OpenSim - just in case
+    //if (gSavedSettings.getBOOL("BuyCurrencyHTML") && sWebFloaterEnabled)
+    if (LLGridManager::instance().isInSecondLife() && gSavedSettings.getBOOL("BuyCurrencyHTML") && sWebFloaterEnabled)
+    // </FS:Ansariel>
     {
         LLBuyCurrencyHTML::showDialog();
     }
