@@ -158,6 +158,10 @@ bool LLVKWidgetTree::eraseOwned(Id id, bool notifyFocus, std::string& error)
     mErasing.insert(id);
     try
     {
+        std::vector<Id> swatches;
+        for (const auto& [candidate,current] : mNodes)
+            if (current.colorSwatch && hasAncestor(candidate,id)) swatches.push_back(candidate);
+        for (const auto swatch : swatches) closeColorSwatchPickers(swatch);
         if (notifyFocus)
         {
             if (hasAncestor(mMouseCapture,id)) setMouseCapture(0,error);
@@ -443,6 +447,13 @@ bool LLVKWidgetTree::setEnabled(Id id, bool enabled)
 {
     auto found = mNodes.find(id);
     if (found == mNodes.end()) return false;
+    if (found->second.textEditor)
+    {
+        const auto body=found->second.textEditor->body;
+        found->second.textEditor->readOnly=!enabled;
+        if (get(body) && get(body)->plainText) mNodes.at(body).plainText->readOnly=!enabled;
+        return true;
+    }
     if (found->second.lineEditor)
     {
         found->second.lineEditor->readOnly = !enabled;
@@ -451,6 +462,12 @@ bool LLVKWidgetTree::setEnabled(Id id, bool enabled)
         return true;
     }
     found->second.params.enabled = enabled;
+    if (found->second.colorSwatch && !enabled)
+    {
+        closeColorSwatchPickers(id);
+        found=mNodes.find(id);
+        if (found==mNodes.end()) return true;
+    }
     if (found->second.spinner)
     {
         const auto spinner = *found->second.spinner;

@@ -2,6 +2,7 @@
 #define LLVKAUDIO_H
 
 #include <memory>
+#include <optional>
 #include <string>
 
 class LLVKAudio final
@@ -13,6 +14,13 @@ public:
     LLVKAudio& operator=(const LLVKAudio&) = delete;
     bool start(bool disabled, std::string& error);
     bool stop(std::string& error);
+    struct Volume
+    {
+        float master = 1.f;
+        bool muted = false, windowActive = true, muteWhenInactive = false, progressVisible = false;
+    };
+    bool setVolume(const Volume& volume, std::string& error);
+    std::optional<float> listenerGain(std::string& error) const;
     bool active() const noexcept;
     std::string driverName() const;
 private:

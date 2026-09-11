@@ -119,6 +119,61 @@ public:
         std::optional<double> tripleClickUntil;
         double scrollTime = 0.0;
     };
+    struct SearchEditorParams
+    {
+        LineEditorParams editor;
+        LLVKControl::Params buttonControl;
+        LLVKButton::Params searchButton, clearButton;
+        bool searchVisible = true, clearVisible = false, highlight = true;
+        std::int32_t searchWidth = 13, searchHeight = 13, searchLeft = 4, searchBottom = 4;
+        std::int32_t clearWidth = 16, clearHeight = 16, clearBottom = 4, clearRight = 4, clearLeft = 4;
+        std::shared_ptr<const LLVKWidgetImage> highlightBackground;
+        LLVKControl::Callback keystroke, textChanged;
+    };
+    struct SearchEditor
+    {
+        Id editor = 0, search = 0, clear = 0;
+        std::shared_ptr<const SearchEditorParams> params;
+    };
+    struct ColorSwatchParams
+    {
+        LLVKColor color{1,1,1,1}, borderColor{1,1,1,1};
+        LLVKColor enabledText{1,1,1,1}, disabledText{0.5f,0.5f,0.5f,1};
+        std::string label;
+        std::int32_t labelWidth = -1, labelHeight = 16;
+        LLVKPlainControl::Params caption;
+        LLVKControl::Params captionControl;
+        LLVKBorder::Params border;
+        std::shared_ptr<const LLVKWidgetImage> alphaBackground;
+        bool applyImmediately = false;
+        LLVKControl::Callback selected, cancelled;
+        std::function<void(Id,bool)> showPicker;
+    };
+    struct ColorSwatch
+    {
+        std::shared_ptr<const ColorSwatchParams> params;
+        LLVKColor::Value color{1,1,1,1}, original{1,1,1,1}, pending{1,1,1,1};
+        Id caption = 0, border = 0;
+        bool valid = true, picking = false;
+        std::uint64_t generation = 0;
+    };
+    enum class ColorPickOperation { Change, Select, Cancel };
+    struct ColorPicker
+    {
+        Id swatch = 0;
+        std::map<std::string,Id> fields;
+        LLVKColor::Value rgb{1,1,1,1};
+        std::array<float,3> hsl{0,0,1};
+        std::shared_ptr<const LLVKWidgetImage> hueImage;
+        std::array<LLVKColor::Value,32> palette{};
+        bool paletteReady = false;
+        std::shared_ptr<LLVKColorTable> paletteColors;
+        enum class Drag { None, Hue, Luminance, Swatch };
+        Drag drag = Drag::None;
+        std::int32_t highlighted = -1;
+        bool immediate = false, synchronizing = false;
+        std::function<void()> close;
+    };
     struct ComboItem
     {
         std::string label;
@@ -245,12 +300,33 @@ public:
     };
     struct Node
     {
+        struct Floater
+        {
+            std::string title, positioning;
+            std::int32_t legacyHeaderHeight = 18;
+            bool saveRect = false, singleInstance = false;
+        };
+        std::optional<Floater> floater;
+        struct TextEditor
+        {
+            Id scroller = 0, document = 0, body = 0, border = 0;
+            bool readOnly = true;
+            std::uint64_t laidOutGeneration = UINT64_MAX;
+            std::int32_t width = -1, height = -1;
+        };
+        std::optional<TextEditor> textEditor;
         struct TabContainer
         {
             struct Tab { Id panel = 0, button = 0; };
             std::vector<Tab> tabs;
             Id selected = 0;
             std::uint64_t selectionGeneration = 0;
+            std::int32_t scrollPosition = 0, maximumScroll = 0;
+            std::int32_t scrollPixels = 0, targetScrollPixels = 0;
+            Id previousArrow = 0, nextArrow = 0;
+            Id firstArrow = 0, lastArrow = 0;
+            double lastArrowStep = 0.0;
+            bool arrowHeld = false;
             struct Layout
             {
                 enum class Position { Top, Bottom, Left };
@@ -258,6 +334,8 @@ public:
                 std::int32_t tabHeight = 21, minimumWidth = 60, maximumWidth = 160;
                 std::int32_t labelPadding = 0, horizontalPadding = 0, panelOverlap = 0;
                 std::int32_t verticalHeight = 23, verticalPadding = 0, rightPadding = 0;
+                std::int32_t verticalArrowSize = 0;
+                std::int32_t horizontalArrowSize = 0, partialTabWidth = 0;
                 bool hidden = false, panelOffset = false;
             };
             std::optional<Layout> layout;
@@ -299,6 +377,10 @@ public:
         std::optional<LLVKPanel> panel;
         std::optional<LLVKBorder> border;
         std::optional<LineEditor> lineEditor;
+        std::optional<SearchEditor> searchEditor;
+        std::optional<ColorSwatch> colorSwatch;
+        std::optional<ColorPicker> colorPicker;
+        std::vector<Id> preferenceLocalValues;
         std::optional<Scrollbar> scrollbar;
         std::optional<Combo> combo;
         std::optional<Spinner> spinner;
@@ -372,6 +454,18 @@ public:
     enum class SettingType { Opaque, Boolean, Integer, Real, String };
     bool defineSetting(const std::string& name, const LLSD& value, SettingType type = SettingType::Opaque);
     bool updateSetting(const std::string& name, const LLSD& value);
+    using SettingCallback = std::function<void(const LLSD&,const LLSD&)>;
+    std::optional<std::uint64_t> subscribeSetting(const std::string& name, SettingCallback callback);
+    bool unsubscribeSetting(std::uint64_t subscription);
+    struct PreferenceSnapshot
+    {
+        std::map<std::string,LLSD> settings;
+        std::map<Id,LLSD> colors;
+        std::map<Id,LLSD> localValues;
+    };
+    bool bindPreferenceColorAlpha(Id panel, std::shared_ptr<LLVKColorTable> colors, std::string& error);
+    std::optional<PreferenceSnapshot> snapshotPreferences(Id root, std::string& error) const;
+    bool restorePreferences(const PreferenceSnapshot& snapshot, const std::vector<std::string>& skip, std::string& error);
     std::optional<LLSD> setting(const std::string& name) const
     { const auto found = mSettings.find(name); return found == mSettings.end() ? std::nullopt : std::optional(found->second); }
     bool setValue(Id id, const LLSD& value);
@@ -392,10 +486,16 @@ public:
     bool panelKey(Id id, PanelKey key, LLVKLineEditor::Modifiers modifiers, std::string& error);
     bool setPanelDefaultButton(Id id, Id button, std::string& error);
     bool initializeTabContainer(Id panel, std::string& error);
+    bool scrollTabStrip(Id container, std::int32_t rows, std::string& error);
+    bool createVerticalTabArrows(Id container, const LLVKControl::Params& control,
+        const LLVKButton::Params& button, std::string& error);
+    bool createTabArrows(Id container, const LLVKControl::Params& control,
+        const LLVKButton::Params& button, std::string& error);
+    bool initializeFloater(Id panel, const Node::Floater& params, std::string& error);
     bool attachTabPanel(Id container, Id panel, Id button, std::string& error);
     bool selectTabPanel(Id container, Id panel, std::string& error);
     bool layoutTopTabs(Id container, const Node::TabContainer::Layout& layout, std::string& error);
-    bool layoutTabPanels(Id container, const Node::TabContainer::Layout& layout, std::string& error);
+    bool layoutTabPanels(Id container, const Node::TabContainer::Layout& layout, std::string& error, float frameDelta = 0.f);
     std::optional<Id> createLayoutStack(const Params& view, bool vertical, std::int32_t spacing, bool clip, Id parent, std::string& error);
     bool attachLayoutPanel(Id stack, Id panel, const Node::LayoutPanel& params, std::string& error);
     bool updateLayoutStack(Id id, std::string& error, float frameDelta = 0.f);
@@ -571,7 +671,36 @@ public:
     std::optional<std::size_t> plainTextLinkAt(Id id, std::int32_t x, std::int32_t y, std::string& error);
     std::optional<std::size_t> plainTextIndexAt(Id id, std::int32_t x, std::int32_t y, std::string& error);
     bool selectAllPlainText(Id id);
+    bool deselectPlainText(Id id);
     bool copyPlainText(Id id, std::string& error);
+    std::optional<Id> createSearchEditor(const Params& view, const LLVKControl::Params& control,
+        const SearchEditorParams& params, Id parent, std::string& error);
+    bool refreshSearchEditor(Id id, std::string& error);
+    bool clearSearchEditor(Id id, std::string& error);
+    std::optional<Id> createColorSwatch(const Params& view, const LLVKControl::Params& control,
+        const ColorSwatchParams& params, Id parent, std::string& error);
+    bool setColorSwatchValue(Id id, const LLSD& value, std::string& error);
+    bool beginColorSelection(Id id, std::string& error);
+    bool refreshColorSwatch(Id id, std::string& error);
+    bool colorSwatchPointer(Id id, const PointerEvent& event, std::string& error);
+    bool showColorSwatchPicker(Id id, bool takeFocus, std::string& error);
+    bool applyColorSelection(Id id, const LLVKColor::Value& color, ColorPickOperation operation, std::string& error);
+    bool initializeColorPicker(Id picker, Id swatch, std::string& error, std::function<void()> close = {});
+    bool finishColorPicker(Id picker, bool accept, std::string& error);
+    void closeColorSwatchPickers(Id swatch);
+    bool setColorPickerRgb(Id picker, const LLVKColor::Value& color, bool preview, std::string& error);
+    bool commitColorPickerField(Id picker, Id field, std::string& error);
+    bool syncColorPickerFields(Id picker, std::string& error);
+    bool setColorPickerPalette(Id picker, std::shared_ptr<LLVKColorTable> colors, std::string& error);
+    bool copyColorPickerLsl(Id picker, std::string& error);
+    bool colorPickerPointer(Id picker, const PointerEvent& event, std::string& error);
+    std::optional<Id> createTextEditor(const Params& view, const LLVKControl::Params& control,
+        const LLVKPlainControl::Params& text, const ScrollContainerParams& scroller, bool borderVisible,
+        Id parent, std::string& error);
+    bool layoutTextEditor(Id id, std::string& error);
+    bool setTextEditorText(Id id, const std::string& text, std::string& error);
+    bool startTextEditorDocument(Id id, std::string& error);
+    bool textEditorKey(Id id, ScrollKey key, LLVKLineEditor::Modifiers modifiers, std::string& error);
     std::optional<Id> createCheckBox(const Params& view, const LLVKControl::Params& control,
                                     const CheckBoxConstruction& checkbox, Id parent, std::string& error);
     LLSD value(Id id) const;
@@ -734,6 +863,9 @@ private:
     std::map<Id,Events> mEvents;
     std::map<std::string,LLSD> mSettings;
     std::map<std::string,SettingType> mSettingTypes;
+    struct SettingSubscription { std::string name; SettingCallback callback; };
+    std::map<std::uint64_t,SettingSubscription> mSettingSubscriptions;
+    std::uint64_t mNextSettingSubscription = 1;
     std::map<std::string,std::shared_ptr<const LLVKWidgetImage>> mImages;
     std::shared_ptr<LLVKSkinImages> mSkinImages;
     std::shared_ptr<LLVKClipboard> mClipboard;

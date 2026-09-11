@@ -1,4 +1,5 @@
 #include "llvkwidgetpaint.h"
+#include "v3color.h"
 #include "llstring.h"
 #include <algorithm>
 #include <cmath>
@@ -18,10 +19,22 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
     {
         const auto* node = tree.get(id);
         if (!node || !node->params.visible) return true;
+        if (node->searchEditor)
+        {
+            if (!tree.refreshSearchEditor(id,error)) return false;
+            node=tree.get(id);
+            if (!node) return true;
+        }
+        if (node->textEditor)
+        {
+            if (!tree.layoutTextEditor(id,error)) return false;
+            node=tree.get(id);
+            if (!node) return true;
+        }
         if (node->tabContainer && node->tabContainer->layout)
         {
             const auto layout = *node->tabContainer->layout;
-            if (!tree.layoutTabPanels(id,layout,error)) return false;
+            if (!tree.layoutTabPanels(id,layout,error,input.button.frameDelta)) return false;
             node = tree.get(id);
             if (!node) return true;
         }
@@ -47,6 +60,47 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             return true;
         };
         const auto width = screen->right-screen->left, height = screen->top-screen->bottom;
+        if (node->colorSwatch)
+        {
+            if (!tree.refreshColorSwatch(id,error)) return false;
+            node=tree.get(id);
+            if (!node) return true;
+            const auto swatch=*node->colorSwatch;
+            if (!swatch.valid) { error="Native invalid swatch fallback is not implemented"; return false; }
+            const Rect interior{1,swatch.params->labelHeight+1,width-1,height-1};
+            const auto alpha=input.button.drawAlpha;
+            if (swatch.color[3]<1.f)
+            {
+                const auto checker=tree.findImage("Checker",error);
+                if (!checker || !checker->pixelWidth() || !checker->pixelHeight())
+                { if (error.empty()) error="Native swatch requires the Checker skin image"; return false; }
+                const auto pixels=checker->bottomUpRgba();
+                const auto sample=[&](int x,int y)
+                {
+                    const auto column=static_cast<std::uint32_t>((float(x%32)+0.5f)*checker->pixelWidth()/32.f);
+                    const auto row=static_cast<std::uint32_t>((float(y%32)+0.5f)*checker->pixelHeight()/32.f);
+                    const auto offset=4*(std::size_t(row)*checker->pixelWidth()+column);
+                    return LLVKColor::Value{pixels[offset]/255.f,pixels[offset+1]/255.f,pixels[offset+2]/255.f,alpha*pixels[offset+3]/255.f};
+                };
+                for (int bottom=interior.bottom; bottom<interior.top; ++bottom)
+                    for (int left=interior.left; left<interior.right; )
+                    {
+                        const auto color=sample(left-interior.left,bottom-interior.bottom);
+                        auto right=left+1;
+                        while (right<interior.right && sample(right-interior.left,bottom-interior.bottom)==color) ++right;
+                        if (!append({left,bottom,right,bottom+1},color)) return false;
+                        left=right;
+                    }
+            }
+            auto color=swatch.color; color[3]*=alpha;
+            if (!append(interior,color)) return false;
+            if (swatch.color[3]<1.f && swatch.params->alphaBackground && !append(interior,color,swatch.params->alphaBackground)) return false;
+            auto border=swatch.params->borderColor.get(); border[3]*=alpha;
+            const auto bottom=swatch.params->labelHeight;
+            for (const Rect edge : {Rect{0,bottom,width,bottom+1},Rect{0,height-1,width,height},
+                Rect{0,bottom+1,1,height-1},Rect{width-1,bottom+1,width,height-1}})
+                if (!append(edge,border)) return false;
+        }
         if (node->slider)
         {
             if (!tree.updateSliderThumb(id,error)) return false;
@@ -197,6 +251,12 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             node = tree.get(id);
             if (!node) return true;
             const auto& text = *node->plainText;
+            if (text.params.backgroundVisible)
+            {
+                auto background=text.readOnly ? text.params.readOnlyBackground.get() : text.params.backgroundColor.get();
+                background[3]*=input.button.drawAlpha;
+                if (!append({0,0,width,height},background)) return false;
+            }
             const auto* document = tree.get(text.document);
             if (!document || !text.layout) { error = "Native text paint document is missing"; return false; }
             clip = intersect(clip,*screen);
@@ -332,6 +392,8 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             const auto* current = tree.get(*child);
             if (!current || current->parent != id) continue;
             auto childClip = clip;
+            if (node->tabContainer)
+                childClip=intersect(childClip,{screen->left+3,screen->bottom,screen->right-3,screen->top});
             if (clipPanels && current->layoutPanel)
             {
                 auto visible = tree.screenRect(*child,error);
@@ -342,6 +404,46 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                 childClip = intersect(childClip,*visible);
             }
             if (childClip.left < childClip.right && childClip.bottom < childClip.top && !self(self,*child,childClip)) return false;
+        }
+        node=tree.get(id);
+        if (node && node->colorPicker)
+        {
+            const auto& picker=*node->colorPicker;
+            const auto alpha=input.button.drawAlpha;
+            if (!append({140,100,396,356},{1,1,1,alpha},picker.hueImage)) return false;
+            const auto outline=[&](Rect rect,LLVKColor::Value color)
+            {
+                return append({rect.left,rect.bottom,rect.right,rect.bottom+1},color) &&
+                    append({rect.left,rect.top-1,rect.right,rect.top},color) &&
+                    append({rect.left,rect.bottom+1,rect.left+1,rect.top-1},color) &&
+                    append({rect.right-1,rect.bottom+1,rect.right,rect.top-1},color);
+            };
+            const auto hueX=140+static_cast<int>(256.f*picker.hsl[0]);
+            const auto saturationY=100+static_cast<int>(256.f*picker.hsl[1]);
+            if (!append({hueX-8,saturationY,hueX+8,saturationY+1},{0,0,0,1}) ||
+                !append({hueX,saturationY-8,hueX+1,saturationY+8},{0,0,0,1}) ||
+                !outline({140,100,397,356},{0,0,0,alpha})) return false;
+            for (int row=0; row<256; ++row)
+            {
+                LLColor3 color; color.setHSL(picker.hsl[0],picker.hsl[1],float(row)/256.f);
+                if (!append({412,99+row,428,100+row},{color.mV[0],color.mV[1],color.mV[2],alpha})) return false;
+            }
+            const auto markerY=100+static_cast<int>(256.f*picker.hsl[2]);
+            if (!append({428,markerY-6,434,markerY+6},{0.75f,0.75f,0.75f,1})) return false;
+            output.commands.back().triangle=std::array<float,6>{float(screen->left+428),float(screen->bottom+markerY),
+                float(screen->left+434),float(screen->bottom+markerY-6),float(screen->left+434),float(screen->bottom+markerY+6)};
+            if (!outline({412,100,429,356},{0,0,0,1}) ||
+                !append({12,130,128,190},{picker.rgb[0],picker.rgb[1],picker.rgb[2],alpha}) ||
+                !outline({12,130,129,190},{0,0,0,1})) return false;
+            if (picker.paletteReady)
+                for (int index=0; index<32; ++index)
+                {
+                    const auto column=index%16, row=index/16;
+                    const auto left=11+418*column/16, right=11+418*(column+1)/16;
+                    const auto top=92-40*row/2, bottom=92-40*(row+1)/2;
+                    auto color=picker.palette[index]; color[3]*=alpha;
+                    if (!append({left+2,bottom+2,right-2,top-2},color) || !outline({left+1,bottom+1,right-1,top-1},{0,0,0,1})) return false;
+                }
         }
         return true;
     };

@@ -85,6 +85,7 @@ std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::
     struct DllDirectory { ~DllDirectory() { SetDllDirectoryW(nullptr); } } dllDirectory;
     LLVKLoginWindow::Configuration configuration;
     configuration.ui.settings = values;
+    configuration.ui.settingDefaults = settings.defaults();
     configuration.ui.appliedSettingsMode = appliedSettingsMode;
     const auto preferenceFile=userSettings/std::filesystem::path(std::u8string(settingsFile.begin(),settingsFile.end()));
     configuration.ui.savePreferences=[&settings,preferenceFile](const auto& changes,std::string& problem)

@@ -93,6 +93,13 @@ bool LLVKStartupSettings::set(const std::string& name,const LLSD& value,bool sav
     return true;
 }
 
+std::map<std::string,LLSD> LLVKStartupSettings::defaults() const
+{
+    std::map<std::string,LLSD> result;
+    for (const auto& [name,entry] : mEntries) result.emplace(name,entry.defaultValue);
+    return result;
+}
+
 const LLVKStartupSettings::Entry* LLVKStartupSettings::find(const std::string& name) const
 {
     const auto found = mEntries.find(name);

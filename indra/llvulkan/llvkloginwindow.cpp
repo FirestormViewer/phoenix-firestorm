@@ -20,6 +20,7 @@ namespace
         LLVKLoginUi* ui = nullptr;
         LLVKBrowser* browser = nullptr;
         LLVKWidgetPaint::Input input;
+        std::function<void()> audioVolumeChanged;
         std::string error;
         bool close = false, resize = true;
         std::uint32_t width = 1024, height = 768;
@@ -36,7 +37,23 @@ namespace
             tree.setInputModifiers({bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_CONTROL)&0x8000),bool(GetKeyState(VK_MENU)&0x8000)});
             const auto focused = tree.keyboardFocus();
             const auto* focus = tree.get(focused);
-            if (message == WM_ACTIVATEAPP) { input.editor.applicationFocused = parameter != 0; if (!parameter) ui->menu().dismiss(); return 0; }
+            if (ui->modalNotice())
+            {
+                if (message==WM_KEYDOWN || message==WM_SYSKEYDOWN)
+                {
+                    ui->noticeKey(parameter==VK_RETURN,(GetKeyState(VK_SHIFT)&0x8000) ||
+                        (GetKeyState(VK_CONTROL)&0x8000) || (GetKeyState(VK_MENU)&0x8000),error);
+                    return 0;
+                }
+                if (message==WM_CHAR || message==WM_SYSCHAR || message==WM_KEYUP || message==WM_SYSKEYUP || message==WM_MOUSEWHEEL) return 0;
+            }
+            if (message == WM_ACTIVATEAPP)
+            {
+                input.editor.applicationFocused = parameter != 0;
+                if (!parameter) ui->menu().dismiss();
+                if (audioVolumeChanged) audioVolumeChanged();
+                return 0;
+            }
             if (message == WM_CAPTURECHANGED)
             { if (reinterpret_cast<HWND>(data) != window) tree.setMouseCapture(0,error); return 0; }
             if (message == WM_MOUSEMOVE || message == WM_LBUTTONDOWN || message == WM_LBUTTONUP || message == WM_LBUTTONDBLCLK)
@@ -50,6 +67,12 @@ namespace
                 if (message == WM_MOUSEMOVE) SetCursor(LoadCursorW(nullptr,IDC_ARROW));
                 if (GetKeyState(VK_SHIFT) & 0x8000) event.modifiers |= 1;
                 tree.advanceTime(event.time,error);
+                if (ui->modalNotice())
+                {
+                    tree.routePointer(ui->modalNotice(),event,error);
+                    if (tree.mouseCapture()) SetCapture(window); else if (GetCapture()==window) ReleaseCapture();
+                    return 0;
+                }
                 if (!tree.mouseCapture() && ui->menu().pointer(event))
                 {
                     if (ui->menu().open() && tree.topControl()) tree.setTopControl(0,error);
@@ -118,6 +141,8 @@ namespace
                 keystroke = std::chrono::steady_clock::now();
                 return 0;
             }
+            if (message==WM_CHAR && focus && focus->colorSwatch && parameter==' ')
+            { tree.showColorSwatchPicker(focused,true,error); return 0; }
             if (message == WM_KEYDOWN || message == WM_SYSKEYDOWN)
             {
                 keystroke = std::chrono::steady_clock::now();
@@ -126,6 +151,29 @@ namespace
                 {
                     if (parameter == 'A') { tree.selectAllPlainText(focused); return 0; }
                     if (parameter == 'C') { tree.copyPlainText(focused,error); return 0; }
+                }
+                if (focus && focus->plainText)
+                {
+                    std::optional<LLVKWidgetTree::ScrollKey> textKey;
+                    using Key=LLVKWidgetTree::ScrollKey;
+                    switch (parameter)
+                    {
+                    case VK_LEFT: textKey=Key::Left; break;
+                    case VK_RIGHT: textKey=Key::Right; break;
+                    case VK_UP: textKey=Key::Up; break;
+                    case VK_DOWN: textKey=Key::Down; break;
+                    case VK_HOME: textKey=Key::Home; break;
+                    case VK_END: textKey=Key::End; break;
+                    case VK_PRIOR: textKey=Key::PageUp; break;
+                    case VK_NEXT: textKey=Key::PageDown; break;
+                    }
+                    if (textKey)
+                        for (auto parent=focused; tree.get(parent); parent=tree.get(parent)->parent)
+                            if (tree.get(parent)->textEditor)
+                            {
+                                if (tree.textEditorKey(parent,*textKey,modifiers,error) || !error.empty()) return 0;
+                                break;
+                            }
                 }
                 if (parameter == VK_LEFT || parameter == VK_RIGHT || parameter == VK_UP || parameter == VK_DOWN)
                 {
@@ -258,6 +306,31 @@ bool LLVKLoginWindow::run(const Configuration& configuration,std::string& error)
     std::string audioError;
     if (!audio.start(ui->tree().setting("NoAudio").value_or(LLSD(false)).asBoolean(),audioError))
         LL_WARNS("NativeAudio") << audioError << LL_ENDL;
+    struct AudioBindings
+    {
+        LLVKWidgetTree& tree;
+        WindowState& window;
+        std::vector<std::uint64_t> subscriptions;
+        ~AudioBindings()
+        {
+            window.audioVolumeChanged={};
+            for (const auto subscription : subscriptions) tree.unsubscribeSetting(subscription);
+        }
+    } audioBindings{ui->tree(),state};
+    state.audioVolumeChanged=[&]
+    {
+        LLVKAudio::Volume volume;
+        volume.master=static_cast<float>(ui->tree().setting("AudioLevelMaster").value_or(LLSD(1.f)).asReal());
+        volume.muted=ui->tree().setting("MuteAudio").value_or(LLSD(false)).asBoolean();
+        volume.muteWhenInactive=ui->tree().setting("MuteWhenMinimized").value_or(LLSD(false)).asBoolean();
+        volume.windowActive=state.input.editor.applicationFocused;
+        std::string problem;
+        if (!audio.setVolume(volume,problem)) LL_WARNS("NativeAudio") << problem << LL_ENDL;
+    };
+    for (const auto name : {"AudioLevelMaster","MuteAudio","MuteWhenMinimized"})
+        if (const auto subscription=ui->tree().subscribeSetting(name,[&](const LLSD&,const LLSD&) { state.audioVolumeChanged(); }))
+            audioBindings.subscriptions.push_back(*subscription);
+    state.audioVolumeChanged();
     auto clipboard = LLVKClipboard::forWindow(state.window,error);
     if (!clipboard) return false;
     ui->setDialogClipboard(clipboard);
@@ -380,6 +453,7 @@ bool LLVKLoginWindow::run(const Configuration& configuration,std::string& error)
     auto previous = std::chrono::steady_clock::now();
     while (!state.close)
     {
+        if (!ui->advanceNotices(state.elapsed(),error)) return false;
         MSG message;
         while (PeekMessageW(&message,nullptr,0,0,PM_REMOVE))
         { if (message.message == WM_QUIT) state.close = true; TranslateMessage(&message); DispatchMessageW(&message); }

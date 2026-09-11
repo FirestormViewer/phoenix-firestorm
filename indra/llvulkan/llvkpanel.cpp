@@ -73,14 +73,15 @@ bool LLVKWidgetTree::layoutTopTabs(Id container, const Node::TabContainer::Layou
     return layoutTabPanels(container,top,error);
 }
 
-bool LLVKWidgetTree::layoutTabPanels(Id container, const Node::TabContainer::Layout& layout, std::string& error)
+bool LLVKWidgetTree::layoutTabPanels(Id container, const Node::TabContainer::Layout& layout, std::string& error,float frameDelta)
 {
     error.clear();
     const auto* owner = get(container);
     if (!owner || !owner->tabContainer || layout.tabHeight <= 0 || layout.minimumWidth < 0 ||
         layout.maximumWidth < layout.minimumWidth || layout.labelPadding < 0 || layout.horizontalPadding < 0 ||
         layout.panelOverlap < 0 || layout.panelOverlap > layout.tabHeight || layout.verticalHeight <= 0 ||
-        layout.verticalPadding < 0 || layout.rightPadding < 0)
+        layout.verticalPadding < 0 || layout.rightPadding < 0 || layout.verticalArrowSize < 0 ||
+        layout.horizontalArrowSize < 0 || layout.partialTabWidth < 0 || !std::isfinite(frameDelta) || frameDelta<0.f)
     { error = "Invalid native tab layout"; return false; }
     using Position = Node::TabContainer::Layout::Position;
     if (layout.position != Position::Top && layout.position != Position::Bottom && layout.position != Position::Left)
@@ -96,7 +97,21 @@ bool LLVKWidgetTree::layoutTabPanels(Id container, const Node::TabContainer::Lay
     if (top < bottom || right < left) { error = "Native tab container is too small for its content"; return false; }
     struct Placement { Id panel, button; Rect content, tab; };
     std::vector<Placement> placements;
-    std::int64_t next = vertical ? height-3 : 1+std::int64_t(layout.horizontalPadding);
+    const auto rowHeight=std::int64_t(layout.verticalHeight)+layout.verticalPadding;
+    const auto arrowSize=layout.verticalArrowSize ? layout.verticalArrowSize : setting("UITabCntrvArrowBtnSize").value_or(LLSD(0)).asInteger();
+    std::int32_t maximumScroll=0;
+    if (vertical && !layout.hidden && rowHeight*static_cast<std::int64_t>(tabs.size())>height-1)
+    {
+        if (arrowSize<=0 || height<=2*(std::int64_t(arrowSize)+3*layout.verticalPadding))
+        { error="Native vertical tab overflow requires space for its arrow controls"; return false; }
+        const auto available=height-2*(std::int64_t(arrowSize)+3*layout.verticalPadding);
+        const auto needed=rowHeight*static_cast<std::int64_t>(tabs.size())-available;
+        maximumScroll=static_cast<std::int32_t>(std::min<std::int64_t>(tabs.size()-1,(needed+rowHeight-1)/rowHeight));
+    }
+    auto scrollPosition=std::clamp(owner->tabContainer->scrollPosition,0,maximumScroll);
+    std::int32_t scrollPixels=0;
+    std::int32_t targetScrollPixels=0;
+    std::int64_t next = vertical ? height-3-(maximumScroll ? arrowSize : 0)+rowHeight*scrollPosition : 1+std::int64_t(layout.horizontalPadding);
     for (const auto& entry : tabs)
     {
         const auto* panel = get(entry.panel);
@@ -128,21 +143,189 @@ bool LLVKWidgetTree::layoutTabPanels(Id container, const Node::TabContainer::Lay
         }
         placements.push_back({entry.panel,entry.button,{static_cast<std::int32_t>(left),bottom,static_cast<std::int32_t>(right),static_cast<std::int32_t>(top)},tab});
     }
-    if (!layout.hidden && (vertical ? next < 0 : next > width-layout.rightPadding-1))
-    { error = "Native tab overflow scrolling is not implemented"; return false; }
+    if (!layout.hidden && !vertical)
+    {
+        const auto total=next-1-layout.horizontalPadding;
+        const auto available=width-layout.rightPadding-2*(1+std::int64_t(layout.horizontalPadding));
+        if (total>available || owner->tabContainer->scrollPixels>0)
+        {
+            const auto horizontalArrow=layout.horizontalArrowSize ? layout.horizontalArrowSize : setting("UITabCntrArrowBtnSize").value_or(LLSD(0)).asInteger();
+            const auto partial=layout.partialTabWidth ? layout.partialTabWidth : setting("UITabCntrTabPartialWidth").value_or(LLSD(0)).asInteger();
+            const auto withArrows=width-layout.rightPadding-2*(2+2*std::int64_t(horizontalArrow));
+            if (horizontalArrow<=0 || partial<0 || withArrows<=partial)
+            { error="Native horizontal tab overflow requires space for its arrow controls"; return false; }
+            maximumScroll=total>available ? static_cast<std::int32_t>(placements.size()) : 0;
+            std::int64_t accumulated=0;
+            for (auto tab=placements.rbegin(); tab!=placements.rend(); ++tab)
+            {
+                accumulated+=tab->tab.right-tab->tab.left;
+                if (accumulated>withArrows-partial) break;
+                if (maximumScroll>0) --maximumScroll;
+            }
+            maximumScroll=std::min(maximumScroll,static_cast<std::int32_t>(placements.size())-1);
+            scrollPosition=std::clamp(owner->tabContainer->scrollPosition,0,maximumScroll);
+            std::int64_t target=0;
+            if (scrollPosition)
+            {
+                for (std::int32_t index=0; index<scrollPosition; ++index) target+=placements[index].tab.right-placements[index].tab.left;
+                target=std::min(total-withArrows,target-partial);
+            }
+            if (target<INT32_MIN || target>INT32_MAX) { error="Native tab pixel scroll overflows"; return false; }
+            targetScrollPixels=static_cast<std::int32_t>(target);
+            const auto interpolant=std::clamp(1.f-std::pow(2.f,-frameDelta/0.08f),0.f,1.f);
+            const auto previous=owner->tabContainer->scrollPixels;
+            scrollPixels=static_cast<std::int32_t>(previous+(targetScrollPixels-previous)*interpolant);
+            const auto offset=(maximumScroll>0 || scrollPixels>0 ? 2*std::int64_t(horizontalArrow)-layout.horizontalPadding : 0)-scrollPixels;
+            for (auto& placement : placements)
+            {
+                const auto tabLeft=placement.tab.left+offset, tabRight=placement.tab.right+offset;
+                if (tabLeft<INT32_MIN || tabRight>INT32_MAX) { error="Native horizontal tab position overflows"; return false; }
+                placement.tab.left=static_cast<std::int32_t>(tabLeft);
+                placement.tab.right=static_cast<std::int32_t>(tabRight);
+            }
+        }
+    }
     ShapeChanges changes;
     for (const auto& placement : placements)
         for (const auto& [id,rect] : {std::pair{placement.panel,placement.content},std::pair{placement.button,placement.tab}})
             if (get(id)->params.rect != rect && !planReshape(id,std::int64_t(rect.right)-rect.left,std::int64_t(rect.top)-rect.bottom,rect,changes,error)) return false;
     if (!completeShapes(changes,error)) return false;
+    std::size_t index=0;
     for (const auto& placement : placements)
     {
         if (get(placement.panel)) mNodes.at(placement.panel).params.follows = Left|Right|Top|Bottom;
-        if (get(placement.button)) setVisible(placement.button,!layout.hidden);
+        const auto visibleEnd=tabs.size()-maximumScroll+scrollPosition;
+        if (get(placement.button)) setVisible(placement.button,!layout.hidden &&
+            (!vertical || (index>=static_cast<std::size_t>(scrollPosition) && index<visibleEnd)));
+        ++index;
     }
     if (!get(container) || !get(container)->tabContainer) { error = "Native tab layout owner was removed"; return false; }
     mNodes.at(container).tabContainer->layout = layout;
+    mNodes.at(container).tabContainer->maximumScroll=maximumScroll;
+    mNodes.at(container).tabContainer->scrollPosition=scrollPosition;
+    mNodes.at(container).tabContainer->scrollPixels=scrollPixels;
+    mNodes.at(container).tabContainer->targetScrollPixels=targetScrollPixels;
+    const auto previousArrow=get(container)->tabContainer->previousArrow;
+    const auto nextArrow=get(container)->tabContainer->nextArrow;
+    if (vertical)
+        for (const auto& [arrow,up] : {std::pair{previousArrow,true},std::pair{nextArrow,false}})
+            if (get(arrow))
+            {
+                const auto arrowLeft=layout.verticalPadding+3;
+                const auto arrowTop=up ? static_cast<std::int32_t>(height) : arrowSize;
+                const Rect rectangle{arrowLeft,arrowTop-arrowSize,arrowLeft+layout.minimumWidth,arrowTop};
+                if (get(arrow)->params.rect!=rectangle && !setShape(arrow,rectangle,error)) return false;
+                setVisible(arrow,!layout.hidden && maximumScroll>0);
+            }
+    if (!vertical)
+    {
+        const auto size=layout.horizontalArrowSize ? layout.horizontalArrowSize : setting("UITabCntrArrowBtnSize").value_or(LLSD(0)).asInteger();
+        const auto arrowTop=layout.position==Position::Top ? static_cast<std::int32_t>(height) : size+2;
+        const auto first=get(container)->tabContainer->firstArrow, last=get(container)->tabContainer->lastArrow;
+        for (const auto& [arrow,arrowLeft] : {std::pair{first,2},std::pair{previousArrow,2+size},
+            std::pair{nextArrow,static_cast<std::int32_t>(width)-layout.rightPadding-2-2*size},
+            std::pair{last,static_cast<std::int32_t>(width)-layout.rightPadding-2-size}})
+            if (get(arrow))
+            {
+                const Rect rectangle{arrowLeft,arrowTop-layout.tabHeight,arrowLeft+size,arrowTop};
+                if (get(arrow)->params.rect!=rectangle && !setShape(arrow,rectangle,error)) return false;
+                setVisible(arrow,!layout.hidden && (maximumScroll>0 || scrollPixels>0));
+            }
+    }
     return true;
+}
+
+bool LLVKWidgetTree::createVerticalTabArrows(Id container,const LLVKControl::Params& control,
+    const LLVKButton::Params& defaults,std::string& error)
+{
+    const auto* node=get(container);
+    if (!node || !node->tabContainer || !node->tabContainer->layout ||
+        node->tabContainer->layout->position!=Node::TabContainer::Layout::Position::Left) return false;
+    return createTabArrows(container,control,defaults,error);
+}
+
+bool LLVKWidgetTree::createTabArrows(Id container,const LLVKControl::Params& control,
+    const LLVKButton::Params& defaults,std::string& error)
+{
+    error.clear();
+    const auto* node=get(container);
+    if (!node || !node->tabContainer || !node->tabContainer->layout) return false;
+    if (node->tabContainer->previousArrow || node->tabContainer->nextArrow)
+    { error="Native tab arrows already exist"; return false; }
+    const auto layout=*node->tabContainer->layout;
+    const bool vertical=layout.position==Node::TabContainer::Layout::Position::Left;
+    const auto action=[this,container](bool forward,bool held)
+    {
+        auto* node=get(container);
+        if (!node || !node->tabContainer) return;
+        auto& state=*mNodes.at(container).tabContainer;
+        if (held && mTime-state.lastArrowStep<=0.4) return;
+        const bool scroll=held || !state.arrowHeld;
+        state.arrowHeld=held;
+        if (held) state.lastArrowStep=mTime;
+        std::string problem;
+        if (scroll && !scrollTabStrip(container,forward ? 1 : -1,problem)) return;
+        node=get(container);
+        if (!node || !node->tabContainer) return;
+        const auto tabs=node->tabContainer->tabs;
+        const auto selected=node->tabContainer->selected;
+        const auto found=std::find_if(tabs.begin(),tabs.end(),[&](const auto& tab) { return tab.panel==selected; });
+        if (found!=tabs.end() && (forward ? found+1!=tabs.end() : found!=tabs.begin())) moveTab(container,forward,problem);
+    };
+    for (int index=0; index<(vertical ? 2 : 4); ++index)
+    {
+        const bool forward=index%2!=0, jump=index>=2;
+        Params view;
+        view.name=vertical ? (forward ? "Down Arrow" : "Up Arrow") :
+            jump ? (forward ? "Jump Right Arrow" : "Jump Left Arrow") : (forward ? "Right Arrow" : "Left Arrow");
+        view.rect={0,0,layout.minimumWidth,1}; view.visible=false;
+        view.follows=vertical ? Left|(forward ? Bottom : Top) :
+            (forward ? Right : Left)|(layout.position==Node::TabContainer::Layout::Position::Top ? Top : Bottom);
+        auto button=defaults;
+        button.label.clear(); button.selectedLabel.reset(); button.click.reset();
+        if (vertical) button.images.overlay=findImage(forward ? "down_arrow.tga" : "up_arrow.tga",error);
+        else
+        {
+            const std::string prefix=jump ? (forward ? "jump_right_" : "jump_left_") :
+                (forward ? "scrollbutton_right_" : "scrollbutton_left_");
+            button.images.unselected=findImage(prefix+(jump ? "out.tga" : "out_blue.tga"),error);
+            if (!error.empty()) return false;
+            button.images.selected=findImage(prefix+(jump ? "in.tga" : "in_blue.tga"),error);
+            button.images.pressed=button.images.selected; button.pressedProvided=true;
+            button.images.overlay.reset();
+        }
+        if (!error.empty()) return false;
+        button.held={};
+        if (!jump) button.held.function=[action,forward](Id,const LLSD&) { action(forward,true); };
+        auto buttonControl=control;
+        buttonControl.init={}; buttonControl.tabStop=false;
+        buttonControl.commit.function=[this,container,action,forward,jump](Id,const LLSD&)
+        {
+            if (!jump) { action(forward,false); return; }
+            const auto* owner=get(container);
+            if (!owner || !owner->tabContainer) return;
+            std::string problem;
+            scrollTabStrip(container,forward ? owner->tabContainer->maximumScroll : -owner->tabContainer->maximumScroll,problem);
+        };
+        const auto arrow=createButton(view,buttonControl,button,container,error);
+        if (!arrow) return false;
+        auto& state=*mNodes.at(container).tabContainer;
+        (jump ? (forward ? state.lastArrow : state.firstArrow) : (forward ? state.nextArrow : state.previousArrow))=*arrow;
+    }
+    return layoutTabPanels(container,layout,error);
+}
+
+bool LLVKWidgetTree::scrollTabStrip(Id container,std::int32_t rows,std::string& error)
+{
+    error.clear();
+    const auto* node=get(container);
+    if (!node || !node->tabContainer || !node->tabContainer->layout) return false;
+    const auto state=*node->tabContainer;
+    const auto next=std::clamp(std::int64_t(state.scrollPosition)+rows,std::int64_t(0),std::int64_t(state.maximumScroll));
+    mNodes.at(container).tabContainer->scrollPosition=static_cast<std::int32_t>(next);
+    if (layoutTabPanels(container,*state.layout,error)) return true;
+    if (get(container) && get(container)->tabContainer) mNodes.at(container).tabContainer->scrollPosition=state.scrollPosition;
+    return false;
 }
 
 bool LLVKWidgetTree::initializeTabContainer(Id panel, std::string& error)
@@ -153,6 +336,21 @@ bool LLVKWidgetTree::initializeTabContainer(Id panel, std::string& error)
     { error = "Invalid native tab container initialization"; return false; }
     mNodes.at(panel).tabContainer.emplace();
     return true;
+}
+
+bool LLVKWidgetTree::initializeFloater(Id panel,const Node::Floater& params,std::string& error)
+{
+    error.clear();
+    const auto* node=get(panel);
+    if (!node || !node->panel || params.legacyHeaderHeight<0)
+    { error="Invalid native floater initialization"; return false; }
+    mNodes.at(panel).floater=params;
+    mNodes.at(panel).params.focusRoot=true;
+    mNodes.at(panel).params.mouseOpaque=true;
+    auto& background=mNodes.at(panel).panel->params;
+    background.backgroundVisible=background.backgroundOpaque=true;
+    background.opaqueImage=findImage("Window_Foreground",error);
+    return error.empty();
 }
 
 bool LLVKWidgetTree::attachTabPanel(Id container, Id panel, Id button, std::string& error)
@@ -200,6 +398,41 @@ bool LLVKWidgetTree::selectTabPanel(Id container, Id panel, std::string& error)
     const auto tabs = owner->tabContainer->tabs;
     auto& state = *mNodes.at(container).tabContainer;
     state.selected = panel;
+    if (state.layout && state.layout->position==Node::TabContainer::Layout::Position::Left)
+    {
+        const auto found=std::find_if(tabs.begin(),tabs.end(),[&](const auto& tab) { return tab.panel==panel; });
+        const auto index=static_cast<std::int32_t>(found-tabs.begin());
+        const auto visible=static_cast<std::int32_t>(tabs.size())-state.maximumScroll;
+        if (index<state.scrollPosition || index>=state.scrollPosition+visible)
+            state.scrollPosition=std::min(index,state.maximumScroll);
+    }
+    else if (state.layout && state.maximumScroll>0)
+    {
+        const auto index=static_cast<std::int32_t>(std::find_if(tabs.begin(),tabs.end(),[&](const auto& tab) { return tab.panel==panel; })-tabs.begin());
+        if (index<state.scrollPosition) state.scrollPosition=index;
+        else
+        {
+            const auto& layout=*state.layout;
+            const auto arrowSize=layout.horizontalArrowSize ? layout.horizontalArrowSize : setting("UITabCntrArrowBtnSize").value_or(LLSD(0)).asInteger();
+            const auto available=owner->params.rect.right-owner->params.rect.left-layout.rightPadding-2*(2+2*std::int64_t(arrowSize));
+            auto running=std::int64_t(get(button)->params.rect.right)-get(button)->params.rect.left;
+            auto minimum=index;
+            if (running<available)
+            {
+                auto previous=index-1;
+                while (previous>=0)
+                {
+                    const auto* tab=get(tabs[previous].button);
+                    if (!tab) break;
+                    running+=tab->params.rect.right-tab->params.rect.left;
+                    if (running>available) break;
+                    --previous;
+                }
+                minimum=previous+1;
+            }
+            state.scrollPosition=std::min(state.maximumScroll,std::clamp(state.scrollPosition,minimum,index));
+        }
+    }
     const auto generation = ++state.selectionGeneration;
     for (const auto& entry : tabs)
     {
@@ -212,6 +445,9 @@ bool LLVKWidgetTree::selectTabPanel(Id container, Id panel, std::string& error)
         owner = get(container);
         if (!owner || !owner->tabContainer || owner->tabContainer->selectionGeneration != generation) return false;
     }
+    if (owner->tabContainer->layout && !layoutTabPanels(container,*owner->tabContainer->layout,error)) return false;
+    owner=get(container);
+    if (!owner || !owner->tabContainer) return false;
     const auto callback = owner->control->params.commit;
     if (callback.function) callback.function(container,callback.parameter.value_or(argument));
     return true;

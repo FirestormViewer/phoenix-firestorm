@@ -412,6 +412,41 @@ namespace tut
         ensure("spinner packet recorded",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
         ensure("spinner packet presented",renderer.end2DFrame());
         renderer.waitIdle();
+        scrollView.rect={0,0,80,60};
+        scrollControl.initialValue.reset();
+        LLVKWidgetTree::ColorSwatchParams swatchParams;
+        swatchParams.color=LLVKColor{0.2f,0.6f,0.8f,0.5f};
+        swatchParams.label="Tint";
+        swatchParams.alphaBackground=skin.image("color_swatch_alpha.tga",error);
+        ensure(error,swatchParams.alphaBackground!=nullptr);
+        ensure("original checker pixels",scrollTree.registerImage(skin.image("Checker",error)));
+        const auto swatch=scrollTree.createColorSwatch(scrollView,scrollControl,swatchParams,0,error);
+        ensure(error,swatch.has_value());
+        const auto swatchPaint=LLVKWidgetPaint::prepare(scrollTree,*swatch,{},error);
+        ensure(error,swatchPaint.has_value());
+        auto swatchReady=widgetGpu.prepare(*swatchPaint,renderer.swapchainExtent(),widgetPacket,error);
+        if (swatchReady==LLVKWidgetGpu::Status::Pending)
+        {
+            ensure("test completes swatch uploads",widgetGpu.waitPendingUploads(5000000000ull,error));
+            swatchReady=widgetGpu.prepare(*swatchPaint,renderer.swapchainExtent(),widgetPacket,error);
+        }
+        ensure(error,swatchReady==LLVKWidgetGpu::Status::Ready);
+        ensure("swatch frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+        ensure("swatch packet recorded",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
+        ensure("swatch packet presented",renderer.end2DFrame());
+        renderer.waitIdle();
+        LLVKUiPacket trianglePacket(renderer.swapchainExtent());
+        const VkRect2D triangleClip{{0,0},renderer.swapchainExtent()};
+        ensure("native luminance marker triangle",trianglePacket.triangle({20,30,26,24,26,36},triangleClip,{0.75f,0.75f,0.75f,1},error));
+        ensure_equals("triangle has three vertices",trianglePacket.vertices().size(),std::size_t(3));
+        ensure_equals("triangle Y is converted once",trianglePacket.vertices()[0].positionY,float(renderer.swapchainExtent().height)-30.f);
+        const auto verticesBefore=trianglePacket.vertices().size();
+        ensure("invalid triangle clip rejected",!trianglePacket.triangle({0,0,1,0,0,1},{{-1,0},{1,1}},{1,1,1,1},error));
+        ensure_equals("rejected triangle preserves packet",trianglePacket.vertices().size(),verticesBefore);
+        ensure("marker frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+        ensure("marker triangle recorded",renderer.recordUiPacket(trianglePacket.vertices(),trianglePacket.draws()));
+        ensure("marker triangle presented",renderer.end2DFrame());
+        renderer.waitIdle();
     }
 #endif
 }

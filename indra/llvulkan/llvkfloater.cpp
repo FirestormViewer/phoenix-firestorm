@@ -23,21 +23,49 @@ std::unique_ptr<LLVKFloater> LLVKFloater::create(LLVKWidgetTree& tree,LLVKWidget
     const auto id = tree.createPanel(view,control,panel,root,error);
     if (!id) return nullptr;
     floater->mId = *id;
+    if (!floater->createChrome(factory,title,font,error)) return nullptr;
+    return floater;
+}
+
+std::unique_ptr<LLVKFloater> LLVKFloater::createFile(LLVKWidgetTree& tree,LLVKWidgetFactory& factory,Id root,
+    const std::string& filename,std::string& error)
+{
+    const auto id=factory.constructFile(tree,filename,root,error);
+    if (!id) return nullptr;
+    auto floater=std::unique_ptr<LLVKFloater>(new LLVKFloater(tree));
+    floater->mRoot=root; floater->mId=*id;
+    const auto* node=tree.get(*id);
+    if (!node || !node->floater) { error="Native floater file did not create a floater"; return nullptr; }
+    const auto title=node->floater->title;
+    const auto font=node->control->params.font;
+    tree.setVisible(*id,false);
+    if (!floater->createChrome(factory,title,font,error)) return nullptr;
+    return floater;
+}
+
+bool LLVKFloater::createChrome(LLVKWidgetFactory& factory,const std::string& title,std::shared_ptr<LLVKFont> font,std::string& error)
+{
+    auto& tree=mTree;
+    const auto* node=tree.get(mId);
+    const auto width=node->params.rect.right-node->params.rect.left, height=node->params.rect.top-node->params.rect.bottom;
+    const auto id=mId;
+    LLVKWidgetTree::Params view;
+    LLVKControl::Params control; control.font=font;
     LLVKPlainControl::Params label;
     label.maximumBytes = 4096;
     view.name = "floater_title"; view.visible = true; view.mouseOpaque = false;
     view.rect = {8,height-23,width-30,height-3}; view.follows = LLVKWidgetTree::Left|LLVKWidgetTree::Right|LLVKWidgetTree::Top;
     control.tabStop = false; control.initialValue = std::move(title);
-    if (!tree.createPlainText(view,control,label,*id,error)) return nullptr;
+    if (!tree.createPlainText(view,control,label,id,error)) return false;
     const auto close = factory.construct(tree,
-        "<button name='floater_close' left='"+std::to_string(width-23)+"' bottom='"+std::to_string(height-22)+
+        "<button name='floater_close' layout='bottomleft' left='"+std::to_string(width-23)+"' bottom='"+std::to_string(height-22)+
         "' width='18' height='18' follows='right|top' tab_stop='false' image_unselected='Icon_Close_Foreground' "
-        "image_selected='Icon_Close_Foreground' image_pressed='Icon_Close_Press' label='' />",*id,error);
-    if (!close) return nullptr;
+        "image_selected='Icon_Close_Foreground' image_pressed='Icon_Close_Press' label='' />",id,error);
+    if (!close) return false;
     LLVKControl::Callback callback;
-    callback.function = [owner=floater.get()](auto,const LLSD&) { std::string problem; owner->close(problem); };
+    callback.function = [this](auto,const LLSD&) { std::string problem; this->close(problem); };
     tree.setControlCommit(*close,std::move(callback));
-    return floater;
+    return true;
 }
 
 LLVKFloater::~LLVKFloater() { if (mId) { std::string error; mTree.erase(mId,error); } }

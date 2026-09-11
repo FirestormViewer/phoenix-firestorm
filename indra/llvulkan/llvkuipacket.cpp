@@ -31,6 +31,36 @@ bool LLVKUiPacket::solid(LLVKWidgetImage::Region deviceRectangle, VkRect2D clip,
     return append(geometry,{},clip,color,error);
 }
 
+bool LLVKUiPacket::triangle(const std::array<float,6>& points,VkRect2D clip,
+    const LLVKColor::Value& color,std::string& error)
+{
+    error.clear();
+    if (!mExtent.width || !mExtent.height || mExtent.width>INT32_MAX || mExtent.height>INT32_MAX ||
+        clip.offset.x<0 || clip.offset.y<0 || std::uint64_t(clip.offset.x)+clip.extent.width>mExtent.width ||
+        std::uint64_t(clip.offset.y)+clip.extent.height>mExtent.height)
+    { error="Native UI triangle clip or framebuffer extent is invalid"; return false; }
+    for (const auto coordinate : points)
+        if (!std::isfinite(coordinate)) { error="Native UI triangle has nonfinite coordinates"; return false; }
+    for (const auto channel : color)
+        if (!std::isfinite(channel)) { error="Native UI triangle has nonfinite color"; return false; }
+    if (!clip.extent.width || !clip.extent.height) return true;
+    if (mDraws.size()>=65536 || mVertices.size()>1024*1024-3)
+    { error="Native UI triangle exceeds frame geometry budget"; return false; }
+    std::array<LLVKContext::UiVertex,3> vertices;
+    for (std::size_t index=0; index<vertices.size(); ++index)
+    {
+        const float y=float(mExtent.height)-points[index*2+1];
+        if (!std::isfinite(y)) { error="Native UI triangle coordinate conversion overflows"; return false; }
+        vertices[index]={points[index*2],y,0,0,color[0],color[1],color[2],color[3]};
+    }
+    LLVKContext::UiDraw draw;
+    draw.firstVertex=static_cast<std::uint32_t>(mVertices.size()); draw.vertexCount=3; draw.clip=clip;
+    mVertices.reserve(mVertices.size()+3); mDraws.reserve(mDraws.size()+1);
+    mVertices.insert(mVertices.end(),vertices.begin(),vertices.end());
+    mDraws.push_back(std::move(draw));
+    return true;
+}
+
 bool LLVKUiPacket::append(const LLVKWidgetImage::Geometry& geometry, std::shared_ptr<const LLVKGlyphImage> resource,
     VkRect2D clip, const LLVKColor::Value& color, std::string& error)
 {

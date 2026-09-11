@@ -45,6 +45,23 @@ std::shared_ptr<const LLVKWidgetImage> LLVKWidgetImage::decodePng(std::string na
     return decode(std::move(name),encoded,error);
 }
 
+std::shared_ptr<const LLVKWidgetImage> LLVKWidgetImage::fromRgba(std::string name,std::uint32_t width,
+    std::uint32_t height,std::span<const std::uint8_t> pixels,std::string& error)
+{
+    error.clear();
+    const auto count=std::uint64_t(width)*height;
+    if (!width || !height || width>8192 || height>8192 || count>16*1024*1024 || pixels.size()!=count*4)
+    { error="Native RGBA image has invalid dimensions or byte count"; return nullptr; }
+    auto result=std::shared_ptr<LLVKWidgetImage>(new LLVKWidgetImage);
+    result->mName=std::move(name);
+    result->mWidth=result->mLogicalWidth=width;
+    result->mHeight=result->mLogicalHeight=height;
+    result->mPixels.assign(pixels.begin(),pixels.end());
+    for (std::size_t offset=3; offset<pixels.size(); offset+=4)
+        if (pixels[offset]!=255) { result->mHasAlpha=true; break; }
+    return result;
+}
+
 std::shared_ptr<const LLVKWidgetImage> LLVKWidgetImage::browserFrame(std::uint32_t width, std::uint32_t height,
     std::span<const std::uint8_t> topDownBgra, std::string& error)
 {

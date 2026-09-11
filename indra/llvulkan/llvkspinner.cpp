@@ -25,7 +25,9 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createSpinner(const Params& vi
     { error="Invalid native spinner range or geometry"; return std::nullopt; }
     Spinner state;
     state.params=std::make_shared<SpinnerParams>(params);
-    return createControlImpl(view,control,std::nullopt,parent,error,std::nullopt,std::nullopt,std::nullopt,std::nullopt,
+    auto ownerView=view;
+    ownerView.useBoundingRect=true;
+    return createControlImpl(ownerView,control,std::nullopt,parent,error,std::nullopt,std::nullopt,std::nullopt,std::nullopt,
         std::nullopt,std::nullopt,std::nullopt,std::nullopt,{},std::nullopt,std::nullopt,std::move(state));
 }
 
@@ -35,7 +37,7 @@ bool LLVKWidgetTree::constructSpinnerChildren(Id id,std::string& error)
     const auto params=owner->spinner->params;
     const auto width=owner->params.rect.right-owner->params.rect.left, height=owner->params.rect.top-owner->params.rect.bottom;
     const auto buttonHeight=params->dynamicHeight ? height/2 : params->buttonHeight;
-    if (buttonHeight<=0 || buttonHeight>height/2) { error="Native spinner buttons exceed its height"; return false; }
+    if (buttonHeight<=0 || buttonHeight>INT32_MAX/2) { error="Native spinner button height is invalid"; return false; }
     int left=0;
     Params view;
     LLVKControl::Params labelControl;
@@ -66,6 +68,7 @@ bool LLVKWidgetTree::constructSpinnerChildren(Id id,std::string& error)
         control.tabStop=false;
         view.name=increase ? "SpinCtrl Up" : "SpinCtrl Down";
         view.mouseOpaque=true;
+        view.follows=Left|Bottom;
         view.rect={left,height-(increase ? 1 : 2)*buttonHeight,left+params->buttonWidth,height-(increase ? 0 : 1)*buttonHeight};
         const auto child=createButton(view,control,button,id,error);
         if (!child) return false;
@@ -73,7 +76,7 @@ bool LLVKWidgetTree::constructSpinnerChildren(Id id,std::string& error)
     }
     view.name="SpinCtrl Editor";
     view.rect={left+params->buttonWidth+1,height-2*buttonHeight,width,height};
-    view.follows=Left|Right|Top;
+    view.follows=Left|Bottom;
     auto editor=params->editor;
     editor.text.maximumBytes=255;
     if (params->digitsOnly)

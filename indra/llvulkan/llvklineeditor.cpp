@@ -901,6 +901,107 @@ bool LLVKWidgetTree::lineEditorKey(Id id, LLVKLineEditor::Key key, LLVKLineEdito
     return finishLineEdit(id,rollback,readOnly && get(id)->lineEditor->text.text() == rollback.text());
 }
 
+std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createSearchEditor(const Params& view,
+    const LLVKControl::Params& control,const SearchEditorParams& params,Id parent,std::string& error)
+{
+    error.clear();
+    const auto width=view.rect.right-view.rect.left, height=view.rect.top-view.rect.bottom;
+    if (width<=0 || height<=0 || params.searchWidth<0 || params.searchHeight<0 || params.clearWidth<0 || params.clearHeight<0)
+    { error="Invalid native search editor geometry"; return std::nullopt; }
+    auto initial=control;
+    initial.init={}; initial.initialValue.reset(); initial.valueSetting.reset();
+    const auto id=createControl(view,initial,parent,error);
+    if (!id) return std::nullopt;
+    const auto discard=[&] { std::string ignored; if (get(*id)) erase(*id,ignored); };
+    try
+    {
+        mNodes.at(*id).searchEditor=SearchEditor{0,0,0,std::make_shared<SearchEditorParams>(params)};
+        Params child;
+        child.name="filter edit box"; child.rect={0,0,width,height}; child.follows=Left|Right|Top|Bottom;
+        auto editor=params.editor;
+        editor.revertOnEscape=false; editor.passDelete=true;
+        if (params.searchVisible) editor.text.leftPadding+=params.searchWidth;
+        if (params.clearVisible) editor.text.rightPadding=params.clearWidth+params.clearRight+params.clearLeft;
+        editor.keystroke.function=[this,owner=*id](Id child,const LLSD&)
+        {
+            const auto* node=get(owner);
+            if (!node || !node->searchEditor || !get(child)) return;
+            const auto callbacks=node->searchEditor->params;
+            const auto key=get(child)->lineEditor->lastKey;
+            if (callbacks->keystroke.function)
+                callbacks->keystroke.function(owner,callbacks->keystroke.parameter.value_or(value(owner)));
+            if (!get(owner) || key==LLVKLineEditor::Key::Left || key==LLVKLineEditor::Key::Right) return;
+            if (callbacks->textChanged.function)
+                callbacks->textChanged.function(owner,callbacks->textChanged.parameter.value_or(value(owner)));
+        };
+        auto editorControl=control;
+        editorControl.init={}; editorControl.valueSetting.reset();
+        editorControl.commit.function=[this,owner=*id](Id,const LLSD&)
+        {
+            if (!get(owner)) return;
+            writeBoundValue(owner,value(owner));
+            if (get(owner)) dispatchControl(owner,&LLVKControl::Params::commit);
+        };
+        if (control.valueSetting && mSettings.contains(*control.valueSetting)) editorControl.initialValue=mSettings.at(*control.valueSetting);
+        const auto body=createLineEditor(child,editorControl,editor,*id,error);
+        if (!body) { discard(); return std::nullopt; }
+        mNodes.at(*id).searchEditor->editor=*body;
+        auto buttonControl=params.buttonControl;
+        if (!buttonControl.font) buttonControl.font=control.font;
+        buttonControl.tabStop=false;
+        for (const bool search : {true,false})
+        {
+            if (!(search ? params.searchVisible : params.clearVisible)) continue;
+            auto button=search ? params.searchButton : params.clearButton;
+            child.name=search ? "search button" : "clear button";
+            child.follows=(search ? Left : Right)|Top;
+            child.rect=search ? Rect{params.searchLeft,params.searchBottom,params.searchLeft+params.searchWidth,params.searchBottom+params.searchHeight} :
+                Rect{width-params.clearRight-params.clearWidth,params.clearBottom,width-params.clearRight,params.clearBottom+params.clearHeight};
+            buttonControl.commit.function=[this,owner=*id,search](Id,const LLSD&)
+            { if (search) commit(owner); else { std::string problem; clearSearchEditor(owner,problem); } };
+            const auto buttonId=createButton(child,buttonControl,button,*body,error);
+            if (!buttonId) { discard(); return std::nullopt; }
+            (search ? mNodes.at(*id).searchEditor->search : mNodes.at(*id).searchEditor->clear)=*buttonId;
+        }
+        mNodes.at(*id).control->params=control;
+        if (!refreshSearchEditor(*id,error)) { discard(); return std::nullopt; }
+        if (control.init.function) control.init.function(*id,control.init.parameter.value_or(LLSD()));
+        if (!get(*id)) { error="Native search editor removed during initialization"; return std::nullopt; }
+        return id;
+    }
+    catch (...) { discard(); throw; }
+}
+
+bool LLVKWidgetTree::refreshSearchEditor(Id id,std::string& error)
+{
+    error.clear();
+    const auto* node=get(id);
+    if (!node || !node->searchEditor || !get(node->searchEditor->editor)) return false;
+    const auto state=*node->searchEditor;
+    const auto nonempty=!value(id).asString().empty();
+    if (state.clear) setVisible(state.clear,nonempty);
+    if (!get(id) || !get(state.editor)) return false;
+    auto& editor=mNodes.at(state.editor).lineEditor->params;
+    if (state.params->highlight)
+    {
+        editor.background=nonempty ? state.params->highlightBackground : state.params->editor.background;
+        editor.focusedBackground=nonempty ? state.params->highlightBackground : state.params->editor.focusedBackground;
+    }
+    return true;
+}
+
+bool LLVKWidgetTree::clearSearchEditor(Id id,std::string& error)
+{
+    error.clear();
+    const auto* node=get(id);
+    if (!node || !node->searchEditor) return false;
+    const auto state=*node->searchEditor;
+    if (!setValue(state.editor,LLSD(""))) return false;
+    const auto callback=state.params->textChanged;
+    if (callback.function) callback.function(id,callback.parameter.value_or(value(id)));
+    return !get(id) || commit(state.editor);
+}
+
 bool LLVKWidgetTree::finishLineEdit(Id id, const LLVKLineEditor& rollback, bool forceRollback)
 {
     const auto validator = get(id)->lineEditor->params.prevalidator;

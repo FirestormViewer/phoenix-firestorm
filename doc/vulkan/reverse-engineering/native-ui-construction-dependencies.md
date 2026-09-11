@@ -20,12 +20,12 @@ OpenGL behavior and shared source declarations, without GL visual ownership.
 | Area | Actual status |
 |---|---|
 | Login boot, top menu, font fallback | Implemented; native viewer runtime and focused regressions verified |
-| Scroll painting and top tabs | Implemented/tested for document clipping and non-overflow top tabs; left/bottom/overflow remain open |
-| About | Shared section templates, native facts, generated contributor/license assets and real scrollbars; exact hierarchy, rich links, selection, timestamp and all data parity remain open |
+| Scroll painting and tabs | Document clipping, top/left/bottom layout, horizontal/vertical overflow controls and horizontal interpolation tested; full hidden-tab, flash, drag and parity qualification remain open |
+| About | Original floater_about.xml hierarchy, separate native editors, original credits scroller, generated assets, support Copy and web-link subset; full editor semantics, timestamp, lifecycle and measured parity remain open |
 | Preferences | Reduced provisional window still present; original panels, control types, search, callbacks and full apply/cancel behavior are not restored |
-| RLVa/audio | Native initialization absent; About reports inactive states, not capability parity |
-| Settings persistence | Accepted native subset has staged file replacement and rollback tests; full original settings behavior remains open |
-| Validation | Font 18/18, widget 134/134, context 9/9, integrated window 1/1 passed; viewer rebuilt with BuildProjectReferences=false; no full-build or visual-parity claim |
+| RLVa/audio | Native OpenAL session initialization and driver reporting verified; RLVa service integration and complete audio behavior remain open |
+| Settings persistence | Accepted native subset has staged file replacement, subtree snapshots, settings subscribers and color rollback tests; full original settings behavior remains open |
+| Validation | Font 18/18 previously passed; widget 146/146, context 9/9 and original picker integrated window/audio 2/2 passed at the recorded increments below. Actual viewer rebuilt through the picker increment; no full-build or visual-parity claim |
 
 The unrelated baseline test repairs and older untracked text-layout experiment
 are excluded from this checkpoint. Texture cache, skins and close/logout policy
@@ -34,13 +34,228 @@ and screenshots do not close any outstanding behavior above.
 
 ## Native construction implementation (2026-09-10)
 
+Integration follow-up (2026-09-11, source d28b718b12, NV-00/01/03/12/15/17):
+the user's acceptance gate remains full Preferences and RLVa parity. The live
+Preferences window is still the reduced implementation and does not meet that
+gate. Production native panel_preference construction now supports the audited
+General/Colors application policies via constructPreferencePanel: source
+LLPanelPreference::postBuild display-name enablement and map-radius alpha,
+LLFloaterPreference::onOpen pre-login maturity choice, and onChangeMaturity rating
+icons/legacy search restrictions. Scoped native callbacks replace test-only
+maturity callbacks on this production path. Source LLAgentAccess begins with PG
+access and no account identity in this pre-login configuration; this is not a
+post-login maturity policy. Original General and Colors files are unchanged.
+Other panel classes and their application effects are not completed by this
+registration. Map-radius slider local state is included in native snapshots and
+restored after swatch commits. Tests preserve the captured quantized slider value
+separately from the original color alpha; no numeric tolerance was loosened.
+
+Source RlvSettings::onChangedSettingMain formats RLVaToggleMessageLogin while
+the handler is inactive and can still be enabled. Native startup subscribes the
+RestrainedLove setting and queues the original localized GenericAlert on changed
+values, including restoring writes. Its native single-button modal presenter
+reads the implicit Close label from notifications.xml, uses the alert button
+asset, native message measurement, focus locking/restoration and the0.5-second
+Return-default delay recovered from LLToastAlertPanel. Win32 routes modal input
+before login/menu input. Widget tests verify notices, duplicate suppression,
+focus lock, delay and dismissal; window/audio2/2 passes with an actual queued
+RLVa modal and production General/Colors construction. Alert shadow, caution
+forms, sound, full translation reload and all notification policies remain open.
+
+This does NOT activate RLVa. Reinspection of RlvHandler::setEnabled, constructor,
+onLoginComplete, RlvUIEnabler constructor and RlvExtGetSet constructor/dispatch
+confirms reachable agent listeners, inventory fetch, teleport callbacks, retained
+commands, environment handlers and visual UI consumers. Existing implementations
+cannot be installed in the native path under NV-01. Those missing native service
+consumers remain required work, not permission to set an enabled flag or report
+RLVa parity from the preference notice.
+
+Source FSResetControl restores the declared default through its settings signal.
+Native startup now carries LLVKStartupSettings::defaults separately from active
+saved/transient values; ResetControl/resetPreference uses those defaults. Cancel
+restores the pre-reset snapshot. Apply compares exact recursive LLSD values using
+audited nonvisual llsd_equals rather than asString, preserving structured-setting
+changes. Tests131/70 cover production panel policy, default reset/Cancel and array
+change detection. Widget146/146 and integrated window/audio2/2 pass. These are
+local integration checks, not the unmet full-parity gate.
+
+Preferences Colors and snapshot continuation (post-d28b718b12, NV-00/01/12/15/17):
+source LLFloaterPreference::getUIColor/applyUIColor reads the named color and
+sets the user color table from a swatch. Native startup factory now binds these
+callback names to independently owned native color state. The unchanged
+panel_preferences_colors.xml constructs and every tab paints in test70; the test
+also verifies a real UserChatColor preview and restoration. Original XUI names
+DialogColorFg, which is missing from the source table, then initializes that
+swatch from ScriptDialogFg. Source ParamValue<LLUIColor>::updateValueFromBlock
+and LLUIColorTable::getColor use a magenta fallback for missing named colors.
+Native swatch construction preserves that fallback and the subsequent correct
+init value; the source declaration/table was not altered.
+
+LLPanelPreference::saveSettings walks bound controls and saves colors separately;
+cancel restores settings, skipping an empty InstantMessageLogPath and explicitly
+excluded settings, then restores swatches and commits them. Native tree
+snapshotPreferences/restorePreferences implements that CPU transaction with stable
+widget IDs and tolerates removed swatches. Test146 verifies setting/color order,
+restoration and skips. The live provisional Preferences dialog now uses subtree
+snapshots instead of a fixed three-setting snapshot. The native snapshot is not
+closure of presets-manager state, account-only settings, advanced-floater sharing,
+minimap alpha synchronization or complete Apply/Cancel lifecycle. Colors-panel
+tests do not mean all its LLPanelPreference::postBuild hooks are installed in the
+live dialog; full Preferences and RLVa integration remain open.
+
+Color swatch/picker continuation (post-d28b718b12, NV-00/01/03/12/13/14/17):
+source LLColorSwatchCtrl constructor/set/setValue/onColorChanged/showPicker,
+mouse handlers, draw, setEnabled and destructor define caption/border ownership,
+RGBA values and RGB-only picker transactions. LLFloaterColorPicker constructor,
+createUI/postBuild/initUI/setCurRgb/setCurHsl/updateTextEntry/onTextEntryChanged,
+pointer region handlers, palette draw/drop, cancelSelection and select/copy
+actions define the independently reconstructed picker state. Native swatches own
+native caption/border, stable color and opening/pending RGB; select/cancel override
+the default commit while preserving alpha. Bound-setting echoes do not suppress
+callbacks. Disable/destruction cancels and closes dependent picker transactions
+under the tree's existing erasure guard without focusing an erasing swatch.
+
+Native factory consumes color_swatch.xml and the unchanged floater_color_picker.xml.
+LLVKLoginUi retains one native floater per swatch with normal close/cancel ownership.
+RGB byte, LSL float, HSL and hex fields are linked to native state. LLColor3
+setHSL/calcHSL and their arithmetic-only helpers are audited CPU math; no GL color
+picker, swatch, texture or layout owner is shared. Generated256x256 hue pixels
+preserve source column*3/767 and row/255 sampling and byte truncation, published
+through bounded immutable LLVKWidgetImage::fromRgba. Original Checker pixels are
+sampled at a32-UI-pixel period by the native swatch painter. Picker luminance,
+current swatch, palette, crosshair and triangle marker use original regions.
+Palette drag updates the retained native user color table; Copy LSL uses three
+decimal components. Native UI triangle packets validate extent/clip/color/positions
+and budgets before mutation and use existing frame-owned vertex submission.
+
+Tests70/131/145 check original XUI, source plane pixels, palette-cell bounds,
+numeric synchronization, pointer capture/clamp/release, palette selection/save,
+Select/Cancel, bound preview restoration and swatch teardown. Context9/9 passes
+with swatch assets and real triangle submission on RX9070XT; original picker
+window/audio2/2 passes. That integrated test exposed an incorrect native spinner
+height guard: source fixed-size children may extend below a shorter spinner and
+setUseBoundingRect(true); the native owner now preserves that behavior and source
+bottom-left anchoring. No source XML was resized to conceal the mismatch.
+
+Still open: invalid/fallback swatch painting, active-floater alpha policy,
+pipette and system-picker services, palette highlight/cursor/cone details,
+notification feedback, user palette disk persistence, complete callback-failure
+rollback and actual-viewer interaction/measured parity. These are implementation
+increments, not full color-picker or Preferences closure. Current CMake generation
+is7.2.5.79282 after adding llvkcolorswatch.cpp; actual viewer needs relinking for
+this latest slice. Full Preferences and native RLVa handler remain incomplete.
+
+Live settings/audio continuation (post-d28b718b12, NV-00/01/03/15/17):
+LLControlVariable::setValue/firePropertyChanged publishes changed values to
+registered callbacks. Native tree subscribeSetting/unsubscribeSetting adds
+independently owned subscriptions with stable old/new snapshots and disconnect
+checks across nested writes. Test144 verifies change-only Boolean notification,
+nested mutation and disconnect. Full validation/saved-layer and mixed widget/
+service subscriber ordering remain separate obligations; opaque-value equality
+is not qualified by that scalar test.
+
+Source audio_update_volume and LLAudioEngine::setMasterGain/setMuted compute
+effective master gain from mute, inactive-window policy and progress visibility;
+LLAudioEngine_OpenAL::setInternalGain sends that gain to the listener. Native
+LLVKAudio::Volume/setVolume independently implements this policy, validates
+finite nonnegative gains, and retains/verifies its actual OpenAL context identity.
+listenerGain queries actual OpenAL state for verification. The native window
+subscribes AudioLevelMaster/MuteAudio/MuteWhenMinimized and refreshes on activation;
+scoped teardown clears the window callback and disconnects subscriptions before
+audio-owner destruction. Window/audio test2 verifies actual0.375 listener gain,
+mute, inactive/reactivated window, progress mute and invalid-gain nonmutation;
+integrated window/audio2/2 passes. The current login has no progress view and
+supplies false for that state. Secondary gains, cues, deferred sounds, streaming,
+wind/listener spatial policy and voice/media providers remain open. No RLVa
+runtime handler is initialized by these setting subscriptions.
+
+Horizontal tab overflow continuation: original measured-width maximum scroll,
+partial previous-tab allowance and final-tab pixel clamp are implemented in native
+state. Four native arrow buttons use original jump/scroll images; jump actions
+only scroll, while next/previous also select. Selection reveals the requested
+tab and wheel input is confined to the strip. Painter uses explicit frame delta
+for the source0.08-second half-life and integer pixel conversion, and clips tab
+children to the source container inset. Test143 verifies targets, actual half-step
+movement, arrow selection distinctions, wheel and paint clip. Widget144/144
+passes with settings additions. Flash propagation, drag reorder/hover selection,
+hidden-tab bookkeeping, extreme-size failures and measured parity remain open.
+
+Vertical tab overflow (post-d28b718b12, NV-00/01/12/17): source
+LLTabContainer::updateMaxScrollPos/draw/initButtons/onNextBtn/onPrevBtn,
+their held callbacks, setTab and handleScrollWheel define whole-row scroll
+positions, source arrow-reserved height, visible-row limits and selected-row
+reveal. Native tab state now owns bounded row positions and native Up/Down
+buttons using original overlay assets. Arrow actions scroll then select;
+held actions use the source 0.4-second step, and wheel input over the strip
+scrolls without selecting. Layout preserves content geometry and restores all
+tabs/hides arrows after expansion. This is CPU ownership and input/paint
+preparation, not reuse of LLTabContainer or GL draw/prepareVkDraw.
+Test142 checks eight rows in a120px owner, max position5, hidden rows,
+selection reveal, arrow click, wheel region and resize recovery; widget142/142
+passes. Horizontal overflow/smoothing, flashing propagation, complete arrow
+construction-failure rollback and source resize/callback reentrancy remain open.
+
+Search editor (post-d28b718b12, NV-00/01/12/17): source
+LLSearchEditor constructor/draw/setValue/getValue/setFocus/onClearButtonClick/
+handleKeystroke in the current Windows tree owns an LLLineEditor plus optional
+search and clear buttons. Source GL draw and prepareVkDraw are not reused.
+The native SearchEditor owner instead contains its native line editor and button
+IDs. CPU preparation controls clear visibility and highlighted background;
+input reserves source button padding, forwards focus/value and preserves
+text-change-before-commit on clear. Keystrokes notify before text changes;
+Left/Right skip text-change notification. Native factory loads search_editor.xml
+and the original Preferences nested rect overrides, using native fonts/images.
+Tests70/141 verify original padding, clear icon painting, nested pointer capture,
+clear ordering, arrow/Unicode transitions and callback deletion. Full search
+filter application, teardown/focus-loss reentrancy and binding/dirty propagation
+remain open; the live Preferences floater is still provisional.
+
+About/editor continuation: source LLFloaterAbout::onClickCopyToClipboard calls
+selectAll/copy/deselect; native Copy now matches that order, with test131 using
+an isolated clipboard. Read-only LLTextEditor::handleKeyHere calls its scroller
+before selection/control handling. Native textEditorKey preserves that order
+and source scrollbar Home/End/line/page behavior, then horizontal Shift selection
+and Ctrl-word navigation over display indices. LLWStringUtil::isPartOfWord is
+audited CPU character classification; no text visual owner is shared. Win32
+routes focused editor navigation before parent tab handling. Tests140 and native
+window/audio2/2 pass; vertical/page selection, cursor reveal and all editable
+commands/context menus remain open. Current widget suite is141/141.
+
+Original About hierarchy (post-d28b718b12, NV-00/01/03/12/17): source
+LLFloaterAbout::postBuild populates support_editor, contrib_names and
+licenses_editor, makes each read-only and starts each at document origin.
+copy_btn selects and copies the support editor's display text; Firestorm credits
+remain separate text controls in their original scroll container. Native
+LLVKFloater::createFile and the native XUI factory now construct the unchanged
+source declaration with native tab, editor, border and scroll owners. The
+obsolete flattened page extraction and hand-built tab/page geometry are removed.
+This CPU-only design reuses declarations and audited file/formatting services,
+not GL visual constructors or callbacks; rendering continues through native
+paint packets and existing completion-owned uploads. Generated contributor
+first-line and license assets populate the original fields; a missing license
+asset leaves the XUI fallback intact. URL template inheritance distinguishes
+support links from literal license text. Tests70/131/140 disprove constructor,
+ownership, formatting, independent scroll, paint and template-policy regressions;
+window test1 presents the original Firestorm credits hierarchy with no GL parent
+module. Full text-editor commands/context menus, floater saved-rectangle lifecycle,
+all report data and measured pixel parity remain unresolved, not waived.
+
+Read-only editor composite (post-d28b718b12, NV-00/01/12/17): the audited
+LLTextBase/LLTextEditor constructor boundary is implemented as a native public
+control owning its scroller, panel document, selectable text and border. Read-only
+state does not disable scrolling. Reflow negotiates scrollbar width and retains
+scroll position; public value/focus/select/copy operations forward to owned state.
+Test140 checks independent ownership, read-only wheel input, start-of-document,
+selection, value replacement and resize. Editable commands/undo/context menus and
+full wrapping edge cases remain open; this change does not declare editor parity.
+
 Read-only editor constructor boundary (source e9c2af5aa7): LLTextBase::LLTextBase
 owns the text scroller and document, then initializes segments/rectangles;
 LLTextEditor adds its border and default text. LLTextEditor::initFromParams
 forces the view enabled even when text is read-only so scrolling remains usable.
-The current selectable native text body is not this complete composite owner.
-Original About construction still needs that internal scroller/document/border
-lifecycle, selection/navigation/menu behavior and original field geometry.
+The native composite now owns that internal scroller/document/border and loads
+the original About field geometry. Selection/navigation/menu behavior still
+requires complete qualification.
 Disabling a generic panel or aliasing text_editor to plain text is not closure.
 
 RLVa startup sequence correction (source e9c2af5aa7, NV-00/01/15/17): the

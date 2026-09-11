@@ -26,6 +26,7 @@ public:
     bool saveChanges(const std::filesystem::path& path, const std::map<std::string,LLSD>& changes, std::string& error);
     const Entry* find(const std::string& name) const;
     std::map<std::string,LLSD> values() const;
+    std::map<std::string,LLSD> defaults() const;
 private:
     std::map<std::string,Entry> mEntries;
 };

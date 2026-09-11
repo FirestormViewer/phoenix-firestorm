@@ -42,6 +42,8 @@ public:
         std::span<const std::uint8_t> encoded, std::string& error);
     static std::shared_ptr<const LLVKWidgetImage> browserFrame(std::uint32_t width, std::uint32_t height,
         std::span<const std::uint8_t> topDownBgra, std::string& error);
+    static std::shared_ptr<const LLVKWidgetImage> fromRgba(std::string name, std::uint32_t width,
+        std::uint32_t height, std::span<const std::uint8_t> bottomUpRgba, std::string& error);
     static std::shared_ptr<const LLVKWidgetImage> decodeSkinPng(std::string name,
         std::span<const std::uint8_t> encoded, const Metadata& metadata, std::string& error);
     static std::shared_ptr<const LLVKWidgetImage> decodeJpeg(std::string name,

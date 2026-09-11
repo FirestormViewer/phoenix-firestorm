@@ -3,6 +3,43 @@
 #include <algorithm>
 #include <cmath>
 
+bool LLVKWidgetTree::bindPreferenceColorAlpha(Id panel,std::shared_ptr<LLVKColorTable> colors,std::string& error)
+{
+    error.clear();
+    if (!get(panel) || !get(panel)->panel || !colors) return false;
+    Id slider=0,swatch=0;
+    std::vector<Id> children{panel};
+    for (std::size_t index=0; index<children.size(); ++index)
+    {
+        const auto* node=get(children[index]);
+        if (node->params.name=="MapPickRadiusTransparency") slider=children[index];
+        if (node->params.name=="MapPickRadiusColor") swatch=children[index];
+        children.insert(children.end(),node->children.begin(),node->children.end());
+    }
+    if (!slider) return true;
+    const auto color=colors->find("MapPickRadiusColor");
+    if (!color || !get(slider)->sliderControl || !swatch || !get(swatch)->colorSwatch)
+    { error="Native Preferences map-radius color controls are incomplete"; return false; }
+    if (!setValue(slider,LLSD(color->get()[3])))
+    { error="Native Preferences cannot initialize map-radius alpha"; return false; }
+    auto& locals=mNodes.at(panel).preferenceLocalValues;
+    if (std::find(locals.begin(),locals.end(),slider)==locals.end()) locals.push_back(slider);
+    LLVKControl::Callback callback;
+    callback.function=[this,colors,swatch](Id slider,const LLSD&)
+    {
+        const auto color=colors->find("MapPickRadiusColor");
+        if (!color || !get(slider) || !get(swatch)) return;
+        auto rgba=color->get();
+        rgba[3]=static_cast<float>(value(slider).asReal());
+        if (!colors->set("MapPickRadiusColor",rgba)) return;
+        LLSD updated=LLSD::emptyArray();
+        for (const auto channel : rgba) updated.append(channel);
+        std::string problem;
+        if (setColorSwatchValue(swatch,updated,problem)) writeBoundValue(swatch,updated);
+    };
+    return setControlCommit(slider,std::move(callback));
+}
+
 std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createControl(const Params& inputView,
     const LLVKControl::Params& inputControl, Id parent, std::string& error)
 {
@@ -263,6 +300,65 @@ bool LLVKWidgetTree::defineSetting(const std::string& name, const LLSD& value, S
     return true;
 }
 
+std::optional<LLVKWidgetTree::PreferenceSnapshot> LLVKWidgetTree::snapshotPreferences(Id root,std::string& error) const
+{
+    error.clear();
+    if (!get(root)) { error="Native Preferences snapshot root is missing"; return std::nullopt; }
+    PreferenceSnapshot snapshot;
+    std::vector<Id> pending{root};
+    for (std::size_t index=0; index<pending.size(); ++index)
+    {
+        const auto id=pending[index];
+        const auto* node=get(id);
+        if (!node) continue;
+        for (const auto local : node->preferenceLocalValues)
+            if (get(local)) snapshot.localValues[local]=value(local);
+        if (node->colorSwatch) snapshot.colors[id]=value(id);
+        else if (node->control && node->control->params.valueSetting)
+        {
+            const auto& name=*node->control->params.valueSetting;
+            if (const auto current=setting(name)) snapshot.settings[name]=*current;
+        }
+        pending.insert(pending.end(),node->children.begin(),node->children.end());
+    }
+    return snapshot;
+}
+
+bool LLVKWidgetTree::restorePreferences(const PreferenceSnapshot& snapshot,const std::vector<std::string>& skip,std::string& error)
+{
+    error.clear();
+    for (const auto& [name,value] : snapshot.settings)
+    {
+        if ((name=="InstantMessageLogPath" && value.asString().empty()) || std::find(skip.begin(),skip.end(),name)!=skip.end()) continue;
+        if (!updateSetting(name,value)) { error="Native Preferences could not restore setting: "+name; return false; }
+    }
+    for (const auto& [id,value] : snapshot.colors)
+    {
+        const auto* node=get(id);
+        if (!node || !node->colorSwatch) continue;
+        if (!setColorSwatchValue(id,value,error)) return false;
+        writeBoundValue(id,value);
+        if (get(id)) dispatchControl(id,&LLVKControl::Params::commit);
+    }
+    for (const auto& [id,value] : snapshot.localValues)
+        if (get(id) && !setValue(id,value))
+        { error="Native Preferences could not restore local control value"; return false; }
+    return true;
+}
+
+std::optional<std::uint64_t> LLVKWidgetTree::subscribeSetting(const std::string& name,SettingCallback callback)
+{
+    if (!mSettings.contains(name) || !callback || !mNextSettingSubscription) return std::nullopt;
+    const auto subscription=mNextSettingSubscription++;
+    mSettingSubscriptions.emplace(subscription,SettingSubscription{name,std::move(callback)});
+    return subscription;
+}
+
+bool LLVKWidgetTree::unsubscribeSetting(std::uint64_t subscription)
+{
+    return mSettingSubscriptions.erase(subscription)!=0;
+}
+
 bool LLVKWidgetTree::updateSetting(const std::string& name, const LLSD& inputValue)
 {
     const auto found = mSettings.find(name);
@@ -287,8 +383,12 @@ bool LLVKWidgetTree::updateSetting(const std::string& name, const LLSD& inputVal
         case SettingType::String: equal = found->second.asString() == value.asString(); break;
         case SettingType::Opaque: break;
     }
+    const auto previous=found->second;
     found->second = value;
     if (equal) return true;
+    std::vector<std::uint64_t> listeners;
+    for (const auto& [subscription,listener] : mSettingSubscriptions)
+        if (listener.name==name) listeners.push_back(subscription);
     if (name == "FlashCount" || name == "FlashPeriod") updateFlashSettings();
     std::vector<Id> subscribers;
     for (const auto& [id,node] : mNodes) if (node.control) subscribers.push_back(id);
@@ -310,6 +410,13 @@ bool LLVKWidgetTree::updateSetting(const std::string& name, const LLSD& inputVal
             setVisible(id,visible && !invisible);
         }
     }
+    for (const auto subscription : listeners)
+    {
+        const auto found=mSettingSubscriptions.find(subscription);
+        if (found==mSettingSubscriptions.end()) continue;
+        const auto callback=found->second.callback;
+        callback(value,previous);
+    }
     return true;
 }
 
@@ -317,6 +424,9 @@ bool LLVKWidgetTree::setValue(Id id, const LLSD& value)
 {
     auto found = mNodes.find(id);
     if (found == mNodes.end() || !found->second.control) return false;
+    if (found->second.colorSwatch) { std::string error; return setColorSwatchValue(id,value,error); }
+    if (found->second.searchEditor) return setValue(found->second.searchEditor->editor,value);
+    if (found->second.textEditor) { std::string error; return setTextEditorText(id,value.asString(),error); }
     if (found->second.sliderControl) { std::string error; return setSliderControlValue(id,value,error); }
     if (found->second.slider) { std::string error; return setSliderValue(id,static_cast<float>(value.asReal()),false,false,error); }
     if (found->second.radioGroup) { std::string error; return setRadioValue(id,value,error); }
@@ -487,6 +597,8 @@ bool LLVKWidgetTree::requestControlFocus(Id id, bool focus, std::string& error)
     error.clear();
     const auto* node = get(id);
     if (!node || !node->control) { error = "Native focus target is not a control"; return false; }
+    if (node->textEditor) return requestControlFocus(node->textEditor->body,focus,error);
+    if (node->searchEditor) return requestControlFocus(node->searchEditor->editor,focus,error);
     if (node->spinner) return requestControlFocus(node->spinner->editor,focus,error);
     if (node->lineEditor)
     {

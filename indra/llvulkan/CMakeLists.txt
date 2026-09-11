@@ -34,7 +34,7 @@ add_library(llvkwidgets llvkwidgettree.cpp llvkwidgettree.h llvkwidgetlayout.cpp
     llvkwidgetfactory.cpp llvkwidgetfactory.h llvkcontrol.cpp llvkcontrol.h
     llvkwidgetimage.cpp llvkwidgetimage.h llvkicon.cpp llvkicon.h llvkbutton.cpp llvkbutton.h
     llvkwidgetinput.cpp llvkbadge.cpp llvkbadge.h llvklabel.cpp llvklabel.h
-    llvkplaintextlayout.cpp llvkplaintextlayout.h llvkplaincontrol.cpp llvkplaincontrol.h llvkcheckbox.cpp
+    llvkplaintextlayout.cpp llvkplaintextlayout.h llvkplaincontrol.cpp llvkplaincontrol.h llvkcheckbox.cpp llvkcolorswatch.cpp
     llvkcolor.cpp llvkcolor.h llvkborder.h llvkpanel.cpp llvkpanel.h llvkxmllayers.cpp llvkxmllayers.h
     llvkskinfiles.cpp llvkskinfiles.h llvkskinimages.cpp llvkskinimages.h llvkwidgetjpeg.cpp llvkwidgettga.cpp llvkwidgetj2c.cpp
     llvklineeditor.cpp llvklineeditor.h llvkclipboard.cpp llvkclipboard.h llvkstyledtext.cpp llvkstyledtext.h

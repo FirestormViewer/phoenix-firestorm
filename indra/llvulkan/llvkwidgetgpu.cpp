@@ -120,7 +120,11 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
         const VkRect2D clip{{command.clip.left,static_cast<std::int32_t>(extent.height)-command.clip.top},
             {static_cast<std::uint32_t>(command.clip.right-command.clip.left),static_cast<std::uint32_t>(command.clip.top-command.clip.bottom)}};
         const auto& rect = command.rectangle;
-        if (command.image)
+        if (command.triangle)
+        {
+            if (command.image || command.text || !prepared.triangle(*command.triangle,clip,command.color,error)) return Status::Failed;
+        }
+        else if (command.image)
         {
             const auto source = command.streamingImage ? mStreams.at(command.owner).publication->current().source : command.image;
             const auto image = command.streamingImage ? mStreams.at(command.owner).publication->current().image : mImages.at(command.image.get()).ready;

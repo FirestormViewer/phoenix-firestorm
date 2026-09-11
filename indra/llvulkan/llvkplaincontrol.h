@@ -28,6 +28,8 @@ struct LLVKPlainControl
         std::function<void(std::uint64_t,const std::string&)> linkClicked;
         LLVKColor tentativeColor{1,1,1,1};
         LLVKColor backgroundColor{0,0,0,1};
+        LLVKColor readOnlyBackground{0,0,0,1};
+        bool backgroundVisible = false;
     };
     Params params;
     LLVKLabel source;

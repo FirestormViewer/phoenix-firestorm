@@ -63,7 +63,9 @@ std::unique_ptr<LLVKLoginUi> LLVKLoginUi::create(const Configuration& configurat
     auto images = std::make_shared<LLVKSkinImages>(ui->mSkin);
     if (!images->loadDeclarations(error)) return nullptr;
     ui->mTree.setSkinImages(images);
-    ui->mTree.setLabelContext(configuration.labels);
+    auto labels=configuration.labels;
+    labels.defaults.try_emplace("APP_NAME","Vulkanstorm");
+    ui->mTree.setLabelContext(std::move(labels));
     for (const auto& [name,value] : configuration.settings)
     {
         auto type = LLVKWidgetTree::SettingType::Opaque;
@@ -78,11 +80,53 @@ std::unique_ptr<LLVKLoginUi> LLVKLoginUi::create(const Configuration& configurat
     resources.fontRegistry = ui->mFonts;
     resources.colors = ui->mColors;
     resources.defaultFontRequest = {"SansSerif","Small"};
+    resources.webLinkHandler = [owner=ui.get()](auto,const std::string& url)
+    { if (owner->mOpenUrl) owner->mOpenUrl(url); else owner->mDialogError="Native web link service is not bound"; };
+    resources.colorPickerHandler=[owner=ui.get()](auto swatch,bool takeFocus)
+    { owner->showColorPicker(swatch,takeFocus,owner->mDialogError); };
     LLVKWidgetFactory::PanelDefaults panel;
     panel.control.fontRequest = resources.defaultFontRequest;
-    LLVKWidgetFactory factory({}, {}, {}, {},resources,panel);
+    LLVKWidgetFactory::Callbacks callbacks;
+    ui->mSettingDefaults=configuration.settingDefaults;
+    callbacks.actions["ResetControl"]=[owner=ui.get()](auto,const LLSD& parameter)
+    { owner->resetPreference(parameter.asString(),owner->mDialogError); };
+    resources.panelClasses["panel_preference"]=[owner=ui.get()](auto& tree,const auto& defaults,const auto&,std::string& problem)
+    {
+        LLVKWidgetFactory::PanelInstance instance;
+        auto view=defaults.view.view;
+        const auto rectangle=defaults.view.geometry.resolve(problem);
+        if (!rectangle) return instance;
+        view.rect=*rectangle;
+        auto control=defaults.control;
+        if (!control.font) control.font=owner->mFonts->resolve(control.fontRequest.value_or(LLVKFontRegistry::Request{"SansSerif","Small"}),problem);
+        if (!control.font) return instance;
+        const auto panel=tree.createPanel(view,control,defaults.panel,0,problem);
+        if (!panel) return instance;
+        instance.id=*panel;
+        instance.callbacks=std::make_shared<LLVKWidgetFactory::Callbacks>();
+        instance.callbacks->actions["Pref.MaturitySettings"]=[owner,panel=*panel](auto,const LLSD&)
+        { owner->updateStartupPreferenceMaturity(panel,owner->mDialogError); };
+        instance.postBuild=[owner](auto&,auto id,const auto&,std::string& error)
+        { return owner->initializeStartupPreferencePanel(id,error); };
+        return instance;
+    };
+    callbacks.actions["Pref.getUIColor"]=[owner=ui.get()](auto id,const LLSD& parameter)
+    {
+        const auto color=owner->mColors->find(parameter.asString());
+        if (!color) { owner->mDialogError="Missing native preference color: "+parameter.asString(); return; }
+        LLSD value=LLSD::emptyArray();
+        for (const auto channel : color->get()) value.append(channel);
+        owner->mTree.setColorSwatchValue(id,value,owner->mDialogError);
+    };
+    callbacks.actions["Pref.applyUIColor"]=[owner=ui.get()](auto id,const LLSD& parameter)
+    {
+        const auto* node=owner->mTree.get(id);
+        if (!node || !node->colorSwatch || !owner->mColors->set(parameter.asString(),node->colorSwatch->color))
+            owner->mDialogError="Cannot update native preference color: "+parameter.asString();
+    };
+    LLVKWidgetFactory factory({}, {}, {}, callbacks,resources,panel);
     for (const std::string widget : {"view_border","button","icon","line_editor","check_box","scroll_bar",
-        "scroll_container","combo_box","text","web_browser","layout_stack"})
+        "scroll_container","combo_box","text","web_browser","layout_stack","tab_container","simple_text_editor","text_editor","spinner","color_swatch","search_editor","slider_bar","slider","radio_item","radio_group"})
         if (!factory.loadDefaultsFile(ui->mTree,"widgets/"+widget+".xml",error))
         { error = "Native login "+widget+": "+error; return nullptr; }
     const auto root = factory.constructFile(ui->mTree,"panel_fs_nui_login.xml",0,error);

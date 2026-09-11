@@ -56,6 +56,14 @@ public:
         LLVKControl::Params control;
         LLVKWidgetTree::CheckBoxConstruction construction;
     };
+    struct SearchEditorDefaults
+    {
+        LineEditorDefaults editor;
+        LLVKWidgetTree::SearchEditorParams search;
+        ButtonDefaults searchButton, clearButton;
+        std::optional<std::string> highlightImage;
+        bool initialized = false;
+    };
     struct PanelDefaults
     {
         Defaults view;
@@ -110,6 +118,21 @@ public:
     {
         PanelDefaults panel;
         LLVKWidgetTree::Node::Browser browser;
+    };
+    struct ColorSwatchDefaults
+    {
+        Defaults view;
+        LLVKControl::Params control;
+        LLVKWidgetTree::ColorSwatchParams swatch;
+        TextDefaults caption;
+        std::optional<std::string> alphaImage;
+        bool initialized = false;
+    };
+    struct TextEditorDefaults
+    {
+        TextDefaults text;
+        bool borderVisible = false, backgroundVisible = true, contextMenu = true;
+        LLVKColor readOnlyBackground{0,0,0,1}, focusBackground{0,0,0,1}, cursorColor{1,1,1,1};
     };
     struct TabDefaults
     {
@@ -176,11 +199,15 @@ public:
         std::shared_ptr<LLVKColorTable> colors;
         std::shared_ptr<const TabDefaults> tabs = std::make_shared<TabDefaults>();
         std::shared_ptr<const SpinnerDefaults> spinner = std::make_shared<SpinnerDefaults>();
+        std::shared_ptr<const SearchEditorDefaults> searchEditor = std::make_shared<SearchEditorDefaults>();
+        std::shared_ptr<const ColorSwatchDefaults> colorSwatch = std::make_shared<ColorSwatchDefaults>();
         std::shared_ptr<const SliderDefaults> slider = std::make_shared<SliderDefaults>();
         std::shared_ptr<const SliderControlDefaults> sliderControl = std::make_shared<SliderControlDefaults>();
         std::shared_ptr<const CheckBoxDefaults> radioItem;
         LLVKControl::Params radioControl;
         std::function<void(LLVKWidgetTree::Id,const std::string&)> webLinkHandler;
+        std::function<void(LLVKWidgetTree::Id,bool)> colorPickerHandler;
+            std::shared_ptr<const TextEditorDefaults> textEditor = std::make_shared<TextEditorDefaults>();
         std::map<std::string,std::shared_ptr<LLVKFont>> fonts;
         std::shared_ptr<LLVKFontRegistry> fontRegistry;
         LLVKFontRegistry::Request defaultFontRequest;

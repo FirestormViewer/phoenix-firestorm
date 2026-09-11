@@ -23,6 +23,7 @@ public:
         std::optional<LLVKFont::LineLayout> text;
         bool alphaMask = false, additive = false, shadow = false;
         bool streamingImage = false;
+        std::optional<std::array<float,6>> triangle;
     };
     std::vector<Command> commands;
     std::vector<Id> pendingBrowsers;

@@ -1,5 +1,6 @@
 #include "llvkloginui.h"
 #include "llstring.h"
+#include "llsdutil.h"
 #include "llvkxmllayers.h"
 #include <expat/expat.h>
 #include <fstream>
@@ -8,13 +9,28 @@
 
 namespace
 {
-    std::string readText(const std::filesystem::path& path)
+    std::map<std::string,LLVKWidgetTree::Id> preferenceFields(const LLVKWidgetTree& tree,LLVKWidgetTree::Id panel)
+    {
+        std::map<std::string,LLVKWidgetTree::Id> fields;
+        std::vector<LLVKWidgetTree::Id> children{panel};
+        for (std::size_t index=0; index<children.size(); ++index)
+        {
+            const auto* node=tree.get(children[index]);
+            if (!node) continue;
+            fields.try_emplace(node->params.name,children[index]);
+            children.insert(children.end(),node->children.begin(),node->children.end());
+        }
+        return fields;
+    }
+
+    std::optional<std::string> readText(const std::filesystem::path& path)
     {
         std::ifstream file(path,std::ios::binary|std::ios::ate);
         if (!file || file.tellg() < 0 || file.tellg() > 4*1024*1024) return {};
         std::string text(static_cast<std::size_t>(file.tellg()),'\0');
         file.seekg(0);
-        return file.read(text.data(),text.size()) ? text : std::string();
+        if (!file.read(text.data(),text.size())) return std::nullopt;
+        return text;
     }
 }
 
@@ -33,8 +49,6 @@ bool LLVKLoginUi::initializeDialogs(const Configuration& configuration,std::stri
     struct Parser
     {
         XML_Parser parser;
-        std::vector<std::pair<std::string,std::string>>& pages;
-        std::vector<std::string>& pageNames;
         std::map<std::string,std::string>& strings;
         std::vector<std::string> stack;
         std::string body, name;
@@ -46,20 +60,8 @@ bool LLVKLoginUi::initializeDialogs(const Configuration& configuration,std::stri
             try
             {
                 if (state.stack.size() >= 64) throw std::runtime_error("About depth");
-                if (std::string_view(tag) == "panel" && !state.stack.empty() && state.stack.back() == "tab_container")
-                {
-                    std::string label, name;
-                    for (std::size_t index=0; attributes[index]; index+=2)
-                    {
-                        if (std::string_view(attributes[index]) == "label") label=attributes[index+1];
-                        if (std::string_view(attributes[index]) == "name") name=attributes[index+1];
-                    }
-                    state.pages.emplace_back(label,"");
-                    state.pageNames.push_back(name);
-                }
                 state.stack.emplace_back(tag);
-                if (std::string_view(tag) == "string" ||
-                    ((std::string_view(tag) == "text" || std::string_view(tag) == "text_editor") && !state.pages.empty()))
+                if (std::string_view(tag) == "string" || std::string_view(tag) == "global")
                 {
                     state.textDepth = static_cast<int>(state.stack.size()); state.body.clear(); state.name.clear();
                     for (std::size_t index=0; attributes[index]; index+=2) if (std::string_view(attributes[index]) == "name") state.name=attributes[index+1];
@@ -77,10 +79,7 @@ bool LLVKLoginUi::initializeDialogs(const Configuration& configuration,std::stri
                 if (state.textDepth == static_cast<int>(state.stack.size()))
                 {
                     LLStringUtil::trim(state.body);
-                    if (state.stack.back() == "string" || state.name == "support_intro" || state.name == "linden_intro")
-                        state.strings.insert_or_assign(state.name,state.body);
-                    else if (state.name != "support_editor" && state.name != "contrib_names" && !state.body.empty())
-                        state.pages.back().second += state.body+"\n\n";
+                    state.strings.insert_or_assign(state.name,state.body);
                     state.textDepth=0;
                 }
                 if (!state.stack.empty()) state.stack.pop_back();
@@ -94,41 +93,190 @@ bool LLVKLoginUi::initializeDialogs(const Configuration& configuration,std::stri
     for (const auto& document : *documents) layers.push_back(document);
     const auto merged=LLVKXmlLayers::merge(layers,error);
     if (!merged) return false;
-    Parser state{XML_ParserCreate(nullptr),mAboutPages,mAboutPageNames,mAboutStrings};
+    Parser state{XML_ParserCreate(nullptr),mAboutStrings};
     if (!state.parser) { error="Native About parser allocation failed"; return false; }
     XML_SetUserData(state.parser,&state); XML_SetElementHandler(state.parser,Parser::start,Parser::end);
     XML_SetCharacterDataHandler(state.parser,Parser::text); XML_SetStartDoctypeDeclHandler(state.parser,Parser::doctype);
     const auto parsed=XML_Parse(state.parser,merged->data(),static_cast<int>(merged->size()),XML_TRUE);
     XML_ParserFree(state.parser);
-    if (parsed != XML_STATUS_OK || state.failed || mAboutPages.empty()) { error="Invalid native About declaration"; return false; }
+    if (parsed != XML_STATUS_OK || state.failed) { error="Invalid native About declaration"; return false; }
     const auto strings=mSkin->read("xui","strings.xml",LLVKSkinFiles::Policy::Current,error);
     if (!strings) return false;
     layers.clear();
     for (const auto& document : *strings) layers.push_back(document);
     const auto mergedStrings=LLVKXmlLayers::merge(layers,error);
     if (!mergedStrings) return false;
-    Parser stringState{XML_ParserCreate(nullptr),mAboutPages,mAboutPageNames,mAboutStrings};
+    Parser stringState{XML_ParserCreate(nullptr),mAboutStrings};
     if (!stringState.parser) { error="Native About strings parser allocation failed"; return false; }
     XML_SetUserData(stringState.parser,&stringState); XML_SetElementHandler(stringState.parser,Parser::start,Parser::end);
     XML_SetCharacterDataHandler(stringState.parser,Parser::text); XML_SetStartDoctypeDeclHandler(stringState.parser,Parser::doctype);
     const auto stringsParsed=XML_Parse(stringState.parser,mergedStrings->data(),static_cast<int>(mergedStrings->size()),XML_TRUE);
     XML_ParserFree(stringState.parser);
     if (stringsParsed != XML_STATUS_OK || stringState.failed) { error="Invalid native About strings"; return false; }
-    const auto app = configuration.skin.skinBaseDirectory.parent_path()/"app_settings";
-    for (std::size_t index=0; index<mAboutPages.size(); ++index)
+    const auto notifications=mSkin->read("xui","notifications.xml",LLVKSkinFiles::Policy::Current,error);
+    if (!notifications) return false;
+    layers.clear();
+    for (const auto& document : *notifications) layers.push_back(document);
+    const auto notificationXml=LLVKXmlLayers::merge(layers,error);
+    if (!notificationXml) return false;
+    Parser notificationState{XML_ParserCreate(nullptr),mAboutStrings};
+    if (!notificationState.parser) { error="Native notification parser allocation failed"; return false; }
+    XML_SetUserData(notificationState.parser,&notificationState);
+    XML_SetElementHandler(notificationState.parser,Parser::start,Parser::end);
+    XML_SetCharacterDataHandler(notificationState.parser,Parser::text);
+    XML_SetStartDoctypeDeclHandler(notificationState.parser,Parser::doctype);
+    const auto parsedNotifications=XML_Parse(notificationState.parser,notificationXml->data(),static_cast<int>(notificationXml->size()),XML_TRUE);
+    XML_ParserFree(notificationState.parser);
+    if (parsedNotifications!=XML_STATUS_OK || notificationState.failed || !mAboutStrings.contains("implicitclosebutton"))
+    { error="Native notification strings are incomplete"; return false; }
+    if (mTree.setting("RestrainedLove"))
     {
-        auto& text=mAboutPages[index].second;
-        if (mAboutPageNames[index] == "credits_panel")
+        for (const auto name : {"RLVaToggleMessageLogin","RLVaToggleEnabled","RLVaToggleDisabled"})
+            if (!mAboutStrings.contains(name)) { error=std::string("Missing native RLVa startup string: ")+name; return false; }
+        const auto subscription=mTree.subscribeSetting("RestrainedLove",[this](const LLSD& value,const LLSD&)
         {
-            auto contributors=readText(app/"contributors.txt");
-            const auto newline=contributors.find_first_of("\r\n");
-            if (newline != std::string::npos) contributors.resize(newline);
-            text += contributors;
-        }
-        if (mAboutPageNames[index] == "licenses_panel")
-            if (const auto packages=readText(app/"packages-info.txt"); !packages.empty()) text=packages;
+            auto message=mAboutStrings.at("RLVaToggleMessageLogin");
+            LLStringUtil::format_map_t arguments;
+            arguments["[STATE]"]=mAboutStrings.at(value.asBoolean() ? "RLVaToggleEnabled" : "RLVaToggleDisabled");
+            LLStringUtil::format(message,arguments);
+            mNotices.push_back({"GenericAlert",std::move(message)});
+        });
+        if (!subscription) { error="Cannot subscribe native RLVa startup setting"; return false; }
     }
+    const auto app = configuration.skin.skinBaseDirectory.parent_path()/"app_settings";
+    mAboutContributors=readText(app/"contributors.txt").value_or("");
+    const auto newline=mAboutContributors.find_first_of("\r\n");
+    if (newline!=std::string::npos) mAboutContributors.resize(newline);
+    mAboutLicenses=readText(app/"packages-info.txt");
     mAboutInfo = "Vulkanstorm\nRenderer: native Vulkan\nNot connected\n";
+    return true;
+}
+
+bool LLVKLoginUi::advanceNotices(double time,std::string& error)
+{
+    error.clear();
+    if (!std::isfinite(time) || time<mNoticeTime) { error="Invalid native notice clock"; return false; }
+    mNoticeTime=time;
+    if (mNoticePanel || mNotices.empty()) return true;
+    if (mNotices.front().name!="GenericAlert") { error="Native notification form is not implemented"; return false; }
+    const auto font=mFonts->resolve({"SansSerif","Medium"},error);
+    if (!font) return false;
+    const auto wide=utf8str_to_wstring(mNotices.front().message);
+    LLVKPlainTextLayout::Options options; options.width=400; options.wrap=true;
+    const auto document=LLVKPlainTextLayout::document(std::u32string(wide.begin(),wide.end()),*font,options,0,0,LLVKFont::VerticalAlign::Top,error);
+    if (!document) return false;
+    const auto labelWide=utf8str_to_wstring(mAboutStrings.at("implicitclosebutton"));
+    const std::u32string label(labelWide.begin(),labelWide.end());
+    const auto measured=font->measureRun(label,0,label.size(),1.f,true,false,error);
+    const auto padding=font->measureRun(U"OO",0,2,1.f,true,false,error);
+    if (!measured || !padding) return false;
+    const auto buttonWidth=static_cast<int>(measured->width+0.99f)+static_cast<int>(padding->width)+20;
+    const auto textWidth=std::min(400,document->fitWidth+25);
+    const auto textHeight=document->fitHeight;
+    const auto width=std::max(buttonWidth,textWidth)+50, height=textHeight+48+23;
+    const auto root=mTree.get(mRoot)->params.rect;
+    const auto left=std::max(0,(root.right-root.left-width)/2),bottom=std::max(0,(root.top-root.bottom-height)/2);
+    LLVKWidgetTree::Params view; view.name="GenericAlert"; view.rect={left,bottom,left+width,bottom+height};
+    view.focusRoot=true;
+    LLVKControl::Params control; control.font=font;
+    LLVKPanel::Params background; background.backgroundVisible=background.backgroundOpaque=true;
+    background.opaqueImage=mTree.findImage("Window_Foreground",error);
+    if (!error.empty()) return false;
+    const auto panel=mTree.createPanel(view,control,background,mRoot,error);
+    if (!panel) return false;
+    const auto discard=[&] { std::string ignored; mTree.erase(*panel,ignored); };
+    view.name="Alert message"; view.rect={25,height-16-textHeight,25+textWidth,height-16};
+    view.focusRoot=false; view.mouseOpaque=false;
+    control.tabStop=false; control.initialValue=mNotices.front().message;
+    LLVKPlainControl::Params text; text.layout.wrap=true;
+    if (const auto color=mColors->find("LabelTextColor")) text.textColor=text.readOnlyColor=*color;
+    if (!mTree.createPlainText(view,control,text,*panel,error)) { discard(); return false; }
+    const auto button=mDialogFactory->constructFile(mTree,"alert_button.xml",*panel,error);
+    if (!button) { discard(); return false; }
+    const auto buttonLeft=(width-buttonWidth)/2;
+    if (!mTree.setShape(*button,{buttonLeft,16,buttonLeft+buttonWidth,39},error)) { discard(); return false; }
+    mTree.setButtonLabel(*button,label);
+    LLVKControl::Callback close;
+    close.function=[this](auto,const LLSD&) { dismissNotice(mDialogError); };
+    mTree.setControlCommit(*button,std::move(close));
+    mNoticePreviousFocus=mTree.keyboardFocus();
+    if (mTree.mouseCapture() && !mTree.setMouseCapture(0,error)) { discard(); return false; }
+    if (mTree.topControl() && !mTree.setTopControl(0,error)) { discard(); return false; }
+    mMenu->dismiss();
+    if (!mTree.setKeyboardFocus(*panel,true,false,error) || !mTree.requestControlFocus(*button,true,error))
+    { mTree.unlockFocus(); discard(); return false; }
+    mNoticePanel=*panel; mNoticeButton=*button; mNoticeOpened=time;
+    mNotices.erase(mNotices.begin());
+    return true;
+}
+
+bool LLVKLoginUi::dismissNotice(std::string& error)
+{
+    error.clear();
+    if (!mNoticePanel) return false;
+    const auto panel=mNoticePanel,focus=mNoticePreviousFocus;
+    mTree.unlockFocus();
+    mNoticePanel=mNoticeButton=mNoticePreviousFocus=0;
+    if (!mTree.erase(panel,error)) return false;
+    return !mTree.get(focus) || mTree.requestControlFocus(focus,true,error);
+}
+
+bool LLVKLoginUi::noticeKey(bool returnKey,bool modified,std::string& error)
+{
+    if (!mNoticePanel) return false;
+    if (returnKey && !modified && mNoticeTime-mNoticeOpened>=0.5) dismissNotice(error);
+    return true;
+}
+
+std::optional<LLVKWidgetTree::Id> LLVKLoginUi::constructPreferencePanel(const std::string& filename,
+    LLVKWidgetTree::Id parent,std::string& error)
+{
+    error.clear();
+    if (filename!="panel_preferences_colors.xml" && filename!="panel_preferences_general.xml")
+    { error="Native Preferences panel application policy is not implemented: "+filename; return std::nullopt; }
+    return mDialogFactory->construct(mTree,"<panel class='panel_preference' filename='"+filename+"'/>",parent,error);
+}
+
+bool LLVKLoginUi::initializeStartupPreferencePanel(LLVKWidgetTree::Id panel,std::string& error)
+{
+    error.clear();
+    const auto fields=preferenceFields(mTree,panel);
+    if (const auto display=fields.find("display_names_check"); display!=fields.end())
+    {
+        const bool enabled=mTree.setting("UsePeopleAPI").value_or(LLSD(false)).asBoolean();
+        mTree.setEnabled(display->second,enabled);
+        if (!enabled) mTree.setValue(display->second,LLSD(false));
+    }
+    if (!mTree.bindPreferenceColorAlpha(panel,mColors,error)) return false;
+    const auto maturity=fields.find("maturity_desired_combobox");
+    if (maturity!=fields.end())
+    {
+        const auto* combo=mTree.get(maturity->second);
+        if (!combo || !combo->combo || !fields.contains("maturity_desired_textbox"))
+        { error="Native General Preferences maturity controls are incomplete"; return false; }
+        std::string label;
+        if (combo->combo->selected && *combo->combo->selected<combo->combo->items.size())
+            label=combo->combo->items[*combo->combo->selected].label;
+        if (!mTree.setValue(fields.at("maturity_desired_textbox"),LLSD(label))) return false;
+        mTree.setEnabled(maturity->second,false);
+        return updateStartupPreferenceMaturity(panel,error);
+    }
+    return true;
+}
+
+bool LLVKLoginUi::updateStartupPreferenceMaturity(LLVKWidgetTree::Id panel,std::string& error)
+{
+    error.clear();
+    const auto fields=preferenceFields(mTree,panel);
+    for (const auto name : {"rating_icon_general","rating_icon_moderate","rating_icon_adult"})
+        if (!fields.contains(name)) { error=std::string("Missing native maturity control: ")+name; return false; }
+    const auto maturity=mTree.setting("PreferredMaturity").value_or(LLSD(13)).asInteger();
+    mTree.setVisible(fields.at("rating_icon_general"),maturity==13 || maturity==21 || maturity==42);
+    mTree.setVisible(fields.at("rating_icon_moderate"),maturity==21 || maturity==42);
+    mTree.setVisible(fields.at("rating_icon_adult"),maturity==42);
+    for (const auto setting : {"ShowMatureSims","ShowMatureLand","ShowMatureClassifieds","ShowAdultSims","ShowAdultLand","ShowAdultClassifieds"})
+        if (mTree.setting(setting)) mTree.updateSetting(setting,LLSD(false));
+    if (mTree.setting("FSSearchGroupMaturity")) mTree.updateSetting("FSSearchGroupMaturity",LLSD(13));
     return true;
 }
 
@@ -164,8 +312,8 @@ bool LLVKLoginUi::showPreferences(std::string& error)
         mTree.setPanelDefaultButton(mPreferences->id(),*ok,error);
         mPreferences->onClose([this]
         {
-            if (!mPreferencesAccepted) for (const auto& [name,value] : mPreferenceSnapshot) mTree.updateSetting(name,value);
-            mPreferenceSnapshot.clear();
+            if (!mPreferencesAccepted) mTree.restorePreferences(mPreferenceSnapshot,{},mDialogError);
+            mPreferenceSnapshot={};
         });
     }
     if (!mPreferences->visible())
@@ -173,12 +321,24 @@ bool LLVKLoginUi::showPreferences(std::string& error)
         mPreferencesAccepted=false;
         const auto backend=mTree.setting("RenderBackend").value_or(LLSD("Vulkan"));
         if (!mTree.updateSetting("RenderBackendPending",backend)) mTree.defineSetting("RenderBackendPending",backend,LLVKWidgetTree::SettingType::String);
-        for (const auto name : {"FSRememberUsername","RememberPassword","RenderBackendPending"})
-            if (const auto value=mTree.setting(name)) mPreferenceSnapshot[name]=*value;
         mTree.setValue(find("native_renderer_choice"),backend);
+        const auto snapshot=mTree.snapshotPreferences(mPreferences->id(),error);
+        if (!snapshot) return false;
+        mPreferenceSnapshot=*snapshot;
     }
     mActiveFloater=mPreferences.get();
     return mPreferences->open(error);
+}
+
+bool LLVKLoginUi::resetPreference(const std::string& name,std::string& error)
+{
+    error.clear();
+    const auto found=mSettingDefaults.find(name);
+    if (found==mSettingDefaults.end() || !mTree.setting(name))
+    { error="Native preference has no loaded default: "+name; return false; }
+    if (!mTree.updateSetting(name,found->second))
+    { error="Native preference reset failed: "+name; return false; }
+    return true;
 }
 
 bool LLVKLoginUi::applyPreferences(std::string& error)
@@ -186,10 +346,10 @@ bool LLVKLoginUi::applyPreferences(std::string& error)
     error.clear();
     if (!mPreferences || !mPreferences->visible()) return false;
     std::map<std::string,LLSD> changed;
-    for (const auto& [name,old] : mPreferenceSnapshot)
+    for (const auto& [name,old] : mPreferenceSnapshot.settings)
     {
         const auto value=mTree.setting(name);
-        if (value && value->asString() != old.asString()) changed[name == "RenderBackendPending" ? "RenderBackend" : name]=*value;
+        if (value && !llsd_equals(*value,old)) changed[name == "RenderBackendPending" ? "RenderBackend" : name]=*value;
     }
     if (!changed.empty() && (!mSavePreferences || !mSavePreferences(changed,error)))
     { if (error.empty()) error="Native preference persistence is unavailable"; return false; }
@@ -202,95 +362,46 @@ bool LLVKLoginUi::showAbout(std::string& error)
     error.clear();
     if (!mAbout)
     {
-        auto font=mFonts->resolve({"SansSerif","Small"},error);
-        if (!font) return false;
-        mAbout=LLVKFloater::create(mTree,*mDialogFactory,mRoot,"floater_about","About Vulkanstorm",515,600,font,error);
+        mAbout=LLVKFloater::createFile(mTree,*mDialogFactory,mRoot,"floater_about.xml",error);
         if (!mAbout) return false;
-        int left=7;
-        for (std::size_t page=0; page<mAboutPages.size(); ++page)
+        const auto support=find("support_editor"), contributors=find("contrib_names"), licenses=find("licenses_editor"), copy=find("copy_btn");
+        if (!support || !contributors || !licenses || !copy)
+        { error="Native About declaration is missing required controls"; mAbout.reset(); return false; }
+        for (const auto editor : {support,contributors,licenses})
         {
-            const auto& label=mAboutPages[page].first;
-            LLVKButton::Params button; const auto wide=utf8str_to_wstring(label); button.label={wide.begin(),wide.end()};
-            const auto measured=font->measureRun(button.label,0,button.label.size(),1.f,true,false,error);
-            if (!measured) { mAbout.reset(); return false; }
-            const auto width=static_cast<int>(std::ceil(measured->width))+20;
-            LLVKWidgetTree::Params view; view.name="about_tab_"+std::to_string(page); view.rect={left,545,left+width,570};
-            LLVKControl::Params control; control.font=font;
-            button.labelAlign=LLVKButton::Align::Center;
-            button.images.unselected=mTree.findImage("PushButton_Off"); button.images.selected=mTree.findImage("PushButton_Selected");
-            button.images.pressed=mTree.findImage("PushButton_Press"); button.pressedProvided=true; button.toggle=false;
-            control.commit.function=[this,page](auto,const LLSD&) { selectAboutPage(page,mDialogError); };
-            const auto tab=mTree.createButton(view,control,button,mAbout->id(),error);
-            if (!tab) { mAbout.reset(); return false; }
-            mAboutTabs.push_back(*tab); left+=width+1;
+            if (!mTree.get(editor)->textEditor)
+            { error="Native About requires text-editor ownership"; mAbout.reset(); return false; }
+            mTree.setEnabled(editor,false);
         }
-        const auto scroll=mDialogFactory->construct(mTree,
-            "<scroll_container name='about_scroll' left='14' bottom='55' width='487' height='475' reserve_scroll_corner='true'>"
-            "<panel name='about_document' width='470' height='475' font='SansSerifSmall'/></scroll_container>",mAbout->id(),error);
-        if (!scroll) { mAbout.reset(); return false; }
-        mAboutScrollContainer=*scroll;
-        mAboutDocument=mTree.get(*scroll)->scrollContainer->document;
-        LLVKWidgetTree::Params view; view.name="native_about_body"; view.rect={0,0,470,475}; view.mouseOpaque=true;
-        LLVKControl::Params control; control.font=font; control.tabStop=false;
-        LLVKPlainControl::Params text; text.maximumBytes=65536; text.layout.wrap=true; text.readOnly=true;
-        text.parseWebLinks=true;
-        text.selectable=true;
-        if (const auto color=mColors->find("TextSelectedColor")) text.selectionColor=*color;
-        if (const auto color=mColors->find("TextSelectedBgColor")) text.selectionBackground=*color;
-        if (const auto color=mColors->find("HTMLLinkColor")) text.linkColor=*color;
-        if (const auto color=mColors->find("UriQueryPartColor")) text.queryColor=*color;
-        text.linkClicked=[this](auto,const std::string& url)
-        { if (mOpenUrl) mOpenUrl(url); else mDialogError="Native web link service is not bound"; };
-        const auto body=mTree.createPlainText(view,control,text,mAboutDocument,error);
-        if (!body) { mAbout.reset(); return false; }
-        mAboutBody=*body;
-        view.name="about_intro";
-        view.rect={19,515,453,545};
-        text.selectable=false;
-        const auto intro=mTree.createPlainText(view,control,text,mAbout->id(),error);
-        if (!intro) { mAbout.reset(); return false; }
-        mAboutIntro=*intro;
+        mAboutBody=support;
+        if (!updateAboutText(error)) { mAboutBody=0; mAbout.reset(); return false; }
+        if (!mTree.setTextEditorText(contributors,mAboutContributors,error) ||
+            (mAboutLicenses && !mTree.setTextEditorText(licenses,*mAboutLicenses,error)))
+        { mAboutBody=0; mAbout.reset(); return false; }
+        for (const auto editor : {support,contributors,licenses})
+            if (!mTree.startTextEditorDocument(editor,error)) { mAboutBody=0; mAbout.reset(); return false; }
         LLVKWidgetTree::Events linkEvents;
         linkEvents.cursor=[this](auto,bool hand) { if (mPointerCursor) mPointerCursor(hand); };
-        mTree.setEvents(mAboutBody,linkEvents);
-        mTree.setEvents(mAboutIntro,std::move(linkEvents));
-        const auto copy=mDialogFactory->construct(mTree,"<button name='about_copy' label='Copy to Clipboard' left='12' bottom='12' width='180' height='25'/>",mAbout->id(),error);
-        if (!copy) { mAbout.reset(); return false; }
-        mAboutCopy=*copy;
+        std::vector<LLVKWidgetTree::Id> pending{mAbout->id()};
+        while (!pending.empty())
+        {
+            const auto id=pending.back(); pending.pop_back();
+            const auto* node=mTree.get(id);
+            pending.insert(pending.end(),node->children.begin(),node->children.end());
+            if (node->plainText) mTree.setEvents(id,linkEvents);
+        }
         LLVKControl::Callback callback;
-        callback.function=[this](auto,const LLSD&)
+        callback.function=[this,support](auto,const LLSD&)
         {
             if (!mDialogClipboard) { mDialogError="Native clipboard unavailable"; return; }
-            const auto parsed=LLVKWebText::parse(mAboutInfo,mDialogError);
-            if (parsed) mDialogClipboard->write(parsed->text,false,mDialogError);
+            mTree.selectAllPlainText(support);
+            mTree.copyPlainText(support,mDialogError);
+            mTree.deselectPlainText(support);
         };
-        mTree.setControlCommit(*copy,std::move(callback));
+        mTree.setControlCommit(copy,std::move(callback));
     }
     mActiveFloater=mAbout.get();
-    if (!mAbout->open(error)) return false;
-    return selectAboutPage(mAboutPage,error);
-}
-
-bool LLVKLoginUi::selectAboutPage(std::size_t page,std::string& error)
-{
-    if (page>=mAboutPages.size()) return false;
-    mAboutPage=page;
-    const bool support=mAboutPageNames[page]=="support_panel";
-    const bool credits=mAboutPageNames[page]=="credits_panel";
-    mTree.setVisible(mAboutCopy,support);
-    mTree.setVisible(mAboutIntro,support || credits);
-    if (support || credits)
-    {
-        if (!mTree.setPlainText(mAboutIntro,mAboutStrings[support ? "support_intro" : "linden_intro"],error) ||
-            !mTree.setShape(mAboutIntro,support ? LLVKWidgetTree::Rect{19,515,453,545} : LLVKWidgetTree::Rect{12,475,501,545},error)) return false;
-    }
-    if (!mTree.setShape(mAboutScrollContainer,support ? LLVKWidgetTree::Rect{13,42,502,510} :
-        credits ? LLVKWidgetTree::Rect{12,12,501,470} : LLVKWidgetTree::Rect{14,12,501,530},error)) return false;
-    for (std::size_t index=0; index<mAboutTabs.size(); ++index) mTree.setButtonToggle(mAboutTabs[index],index==page,error);
-    if (!updateAboutText(error)) return false;
-    const auto vertical=mTree.get(mAboutScrollContainer)->scrollContainer->vertical;
-    mTree.setScrollPosition(vertical,0,true,error);
-    return error.empty() && mTree.updateScrollContainer(mAboutScrollContainer,error);
+    return mAbout->open(error);
 }
 void LLVKLoginUi::setAboutInfo(std::string info)
 { mAboutInfo=std::move(info); if (mAboutBody) updateAboutText(mDialogError); }
@@ -368,34 +479,59 @@ bool LLVKLoginUi::setAboutInfo(const LLSD& info,std::string& error)
 }
 bool LLVKLoginUi::updateAboutText(std::string& error)
 {
-    const auto source=mAboutPageNames[mAboutPage]=="support_panel" ? mAboutInfo : mAboutPages[mAboutPage].second;
-    const auto parsed=LLVKWebText::parse(source,error);
-    if (!parsed) return false;
-    const auto& text=parsed->text;
-    LLVKPlainTextLayout::Options options; options.width=470; options.wrap=true;
-    const auto* body=mTree.get(mAboutBody); if (!body) return false;
-    const auto lines=LLVKPlainTextLayout::plain(text,*body->control->params.font,options,error);
-    if (!lines) return false;
-    const auto scrollRect=mTree.get(mAboutScrollContainer)->params.rect;
-    const auto height=std::max(scrollRect.top-scrollRect.bottom,-lines->back().bottom);
-    const auto vertical=mTree.get(mAboutScrollContainer)->scrollContainer->vertical;
-    const auto position=mTree.get(vertical)->scrollbar->position;
-    if (!mTree.setPlainText(mAboutBody,source,error) || !mTree.setShape(mAboutBody,{0,0,470,height},error) ||
-        !mTree.reshape(mAboutDocument,470,height,error)) return false;
-    mTree.setScrollPosition(vertical,position,true,error);
-    if (!error.empty()) return false;
-    return mTree.updateScrollContainer(mAboutScrollContainer,error);
+    return mTree.setTextEditorText(mAboutBody,mAboutInfo,error);
 }
+bool LLVKLoginUi::showColorPicker(LLVKWidgetTree::Id swatch,bool takeFocus,std::string& error)
+{
+    error.clear();
+    const auto* source=mTree.get(swatch);
+    if (!source || !source->colorSwatch) { error="Native picker has no owning swatch"; return false; }
+    auto found=mColorPickers.find(swatch);
+    if (found==mColorPickers.end())
+    {
+        auto picker=LLVKFloater::createFile(mTree,*mDialogFactory,mRoot,"floater_color_picker.xml",error);
+        if (!picker) return false;
+        const auto id=picker->id();
+        if (!mTree.initializeColorPicker(id,swatch,error,[this,swatch]
+            { const auto found=mColorPickers.find(swatch); if (found!=mColorPickers.end()) found->second->close(mDialogError); }) ||
+            !mTree.setColorPickerPalette(id,mColors,error)) return false;
+        picker->onClose([this,swatch]
+        {
+            const auto* node=mTree.get(swatch);
+            if (node && node->colorSwatch && node->colorSwatch->picking)
+                mTree.applyColorSelection(swatch,{},LLVKWidgetTree::ColorPickOperation::Cancel,mDialogError);
+        });
+        found=mColorPickers.emplace(swatch,std::move(picker)).first;
+    }
+    else
+    {
+        if (!mTree.beginColorSelection(swatch,error) ||
+            !mTree.setColorPickerRgb(found->second->id(),mTree.get(swatch)->colorSwatch->color,false,error)) return false;
+    }
+    if (!found->second->open(error)) return false;
+    mActiveFloater=found->second.get();
+    const auto& fields=mTree.get(found->second->id())->colorPicker->fields;
+    if (takeFocus) return mTree.requestControlFocus(fields.at("select_btn"),true,error);
+    return true;
+}
+
+std::vector<LLVKFloater*> LLVKLoginUi::floaters() const
+{
+    std::vector<LLVKFloater*> result{mPreferences.get(),mAbout.get()};
+    for (const auto& [swatch,picker] : mColorPickers) result.push_back(picker.get());
+    return result;
+}
+
 LLVKWidgetTree::Id LLVKLoginUi::activeFloater() const
 {
     for (const auto child : mTree.get(mRoot)->children)
-        for (const auto* floater : {mPreferences.get(),mAbout.get()})
+        for (const auto* floater : floaters())
             if (floater && floater->id() == child && floater->visible()) return child;
     return 0;
 }
 bool LLVKLoginUi::pointOverFloater(int x,int y) const
 {
-    for (const auto* floater : {mPreferences.get(),mAbout.get()})
+    for (const auto* floater : floaters())
     {
         if (!floater || !floater->visible()) continue;
         std::string error;
@@ -407,7 +543,7 @@ bool LLVKLoginUi::pointOverFloater(int x,int y) const
 bool LLVKLoginUi::closeFloater(std::string& error)
 {
     const auto active=activeFloater();
-    for (auto* floater : {mPreferences.get(),mAbout.get()})
+    for (auto* floater : floaters())
         if (floater && floater->id()==active) return floater->close(error);
     return false;
 }
@@ -415,14 +551,15 @@ bool LLVKLoginUi::floaterPointer(const LLVKWidgetTree::PointerEvent& event,std::
 {
     if (mTree.mouseCapture())
     {
-        for (auto* floater : {mPreferences.get(),mAbout.get()})
+        for (auto* floater : floaters())
             if (floater && floater->id()==mTree.mouseCapture()) return floater->pointer(event,error);
         return false;
     }
     if (event.kind == LLVKWidgetTree::PointerKind::LeftDown)
         for (const auto child : mTree.get(mRoot)->children)
         {
-            auto* floater=mPreferences && mPreferences->id()==child ? mPreferences.get() : mAbout && mAbout->id()==child ? mAbout.get() : nullptr;
+            LLVKFloater* floater=nullptr;
+            for (auto* candidate : floaters()) if (candidate && candidate->id()==child) { floater=candidate; break; }
             if (!floater || !floater->visible()) continue;
             const auto rect=mTree.screenRect(floater->id(),error);
             if (rect && event.x>=rect->left && event.x<rect->right && event.y>=rect->bottom && event.y<rect->top)
@@ -432,8 +569,9 @@ bool LLVKLoginUi::floaterPointer(const LLVKWidgetTree::PointerEvent& event,std::
 }
 bool LLVKLoginUi::floaterWheel(int x,int y,int clicks,std::string& error)
 {
-    if (!mAbout || activeFloater()!=mAbout->id()) return false;
-    const auto rect=mTree.screenRect(mAboutScrollContainer,error);
+    const auto active=activeFloater();
+    if (!active) return false;
+    const auto rect=mTree.screenRect(active,error);
     if (!rect || x<rect->left || x>=rect->right || y<rect->bottom || y>=rect->top) return false;
-    return mTree.routeWheel(mAboutScrollContainer,x,y,clicks,false,error);
+    return mTree.routeWheel(active,x,y,clicks,false,error);
 }

@@ -21,6 +21,19 @@ bool LLVKWidgetTree::handleWheel(Id id, std::int32_t x, std::int32_t y, std::int
     if (!node) return false;
     if (node->slider && node->slider->params->vertical) return sliderStep(id,-clicks,error);
     if (node->scrollbar) return scrollbarWheel(id,clicks,horizontal,error);
+    if (node->tabContainer && node->tabContainer->layout && !node->tabContainer->layout->hidden &&
+        !node->tabContainer->tabs.empty())
+    {
+        const auto& layout=*node->tabContainer->layout;
+        const auto left=layout.verticalPadding+3;
+        const auto height=node->params.rect.top-node->params.rect.bottom;
+        const bool vertical=layout.position==Node::TabContainer::Layout::Position::Left;
+        const auto width=node->params.rect.right-node->params.rect.left;
+        const auto bottom=layout.position==Node::TabContainer::Layout::Position::Top ? height-layout.tabHeight : 1;
+        if (vertical ? x>=left && x<left+layout.minimumWidth && y>=0 && y<height :
+            x>=2 && x<width-layout.rightPadding-2 && y>=bottom && y<bottom+layout.tabHeight)
+            return scrollTabStrip(id,clicks,error);
+    }
     const auto children = node->children;
     for (const Id child : children)
     {
@@ -169,6 +182,8 @@ bool LLVKWidgetTree::handlePointer(Id id, PointerEvent event, std::string& error
     const auto* node = get(id);
     if (!node) return false;
     if (node->slider) return sliderPointer(id,event,error);
+    if (node->colorSwatch) return colorSwatchPointer(id,event,error);
+    if (node->colorPicker) return colorPickerPointer(id,event,error);
     if (node->comboListOwner) return comboListPointer(id,event,error);
     if (node->lineEditor) return lineEditorPointer(id,event,error);
     if (node->scrollbar) return scrollbarPointer(id,event,error);

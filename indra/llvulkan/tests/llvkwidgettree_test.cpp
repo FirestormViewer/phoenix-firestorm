@@ -69,6 +69,345 @@ namespace tut
     typedef widgettree_group::object object;
     widgettree_group widgettree_tests("llvkwidgettree");
 
+    template<> template<> void object::test<146>()
+    {
+        set_test_name("native Preferences snapshots restore bound settings and commit swatch colors");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view; view.rect={0,0,300,200};
+        LLVKControl::Params control; control.font=loadFont();
+        std::string error;
+        const auto root=tree.createPanel(view,control,{},0,error);
+        ensure(error,root.has_value());
+        ensure("Boolean preference",tree.defineSetting("RestrainedLove",LLSD(false),LLVKWidgetTree::SettingType::Boolean));
+        ensure("empty chat path",tree.defineSetting("InstantMessageLogPath",LLSD(""),LLVKWidgetTree::SettingType::String));
+        for (const auto name : {"RestrainedLove","InstantMessageLogPath"})
+        {
+            control.valueSetting=name;
+            ensure("bound preference control",tree.createControl(view,control,*root,error).has_value());
+        }
+        control.valueSetting.reset();
+        int colorCommits=0;
+        bool settingAtColorCommit=true;
+        control.commit.function=[&](auto,const LLSD&)
+        { settingAtColorCommit=tree.setting("RestrainedLove")->asBoolean(); ++colorCommits; };
+        LLVKWidgetTree::ColorSwatchParams params; params.color=LLVKColor{0.25f,0.5f,0.75f,1.f};
+        const auto swatch=tree.createColorSwatch(view,control,params,*root,error);
+        ensure(error,swatch.has_value());
+        const auto snapshot=tree.snapshotPreferences(*root,error);
+        ensure(error,snapshot.has_value());
+        ensure_equals("two bound settings captured",snapshot->settings.size(),std::size_t(2));
+        ensure_equals("one swatch captured",snapshot->colors.size(),std::size_t(1));
+        tree.updateSetting("RestrainedLove",LLSD(true));
+        tree.updateSetting("InstantMessageLogPath",LLSD("new-path"));
+        ensure("start preview",tree.beginColorSelection(*swatch,error));
+        ensure("select replacement",tree.applyColorSelection(*swatch,{1,0,0,1},LLVKWidgetTree::ColorPickOperation::Select,error));
+        colorCommits=0;
+        ensure("Cancel restores snapshot",tree.restorePreferences(*snapshot,{},error));
+        ensure("Boolean restored",!tree.setting("RestrainedLove")->asBoolean());
+        ensure_equals("empty original chat path deliberately skipped",tree.setting("InstantMessageLogPath")->asString(),std::string("new-path"));
+        ensure("original swatch restored",tree.get(*swatch)->colorSwatch->color==params.color.get());
+        ensure_equals("restored color committed",colorCommits,1);
+        ensure("settings restored before color callback",!settingAtColorCommit);
+        tree.updateSetting("RestrainedLove",LLSD(true));
+        auto settingsOnly=*snapshot; settingsOnly.colors.clear();
+        ensure("explicit skip retained",tree.restorePreferences(settingsOnly,{"RestrainedLove"},error));
+        ensure("skipped setting unchanged",tree.setting("RestrainedLove")->asBoolean());
+    }
+
+    template<> template<> void object::test<145>()
+    {
+        set_test_name("native color swatch preserves alpha and preview cancellation order");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view; view.rect={0,0,80,60};
+        LLVKControl::Params control; control.font=loadFont();
+        std::vector<std::string> events;
+        control.commit.function=[&](auto,const LLSD&) { events.push_back("commit"); };
+        LLVKWidgetTree::ColorSwatchParams params;
+        params.color=LLVKColor{0.2f,0.3f,0.4f,0.5f}; params.label="Tint";
+        params.applyImmediately=true;
+        int opened=0;
+        params.showPicker=[&](auto,bool takeFocus)
+        {
+            ensure("click releases capture before opening",tree.mouseCapture()==0);
+            ensure("mouse picker does not force focus",!takeFocus);
+            ++opened;
+        };
+        params.cancelled.function=[&](auto,const LLSD&) { events.push_back("cancel"); };
+        params.selected.function=[&](auto,const LLSD&) { events.push_back("select"); };
+        LLSD initialColor=LLSD::emptyArray();
+        for (const auto channel : params.color.get()) initialColor.append(channel);
+        ensure("bound native color",tree.defineSetting("Tint",initialColor));
+        control.valueSetting="Tint";
+        std::string error;
+        const auto swatch=tree.createColorSwatch(view,control,params,0,error);
+        ensure(error,swatch.has_value());
+        LLVKWidgetTree::PointerEvent pointer;
+        pointer.kind=LLVKWidgetTree::PointerKind::LeftDown; pointer.x=10; pointer.y=30;
+        ensure("swatch press",tree.routePointer(*swatch,pointer,error));
+        pointer.kind=LLVKWidgetTree::PointerKind::LeftUp; pointer.x=90;
+        ensure("release outside swatch",tree.routePointer(*swatch,pointer,error));
+        ensure_equals("outside release does not open picker",opened,0);
+        pointer.kind=LLVKWidgetTree::PointerKind::LeftDown; pointer.x=10;
+        ensure("second swatch press",tree.routePointer(*swatch,pointer,error));
+        pointer.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("inside release opens picker",tree.routePointer(*swatch,pointer,error));
+        ensure_equals("picker opens once",opened,1);
+        ensure("begin native selection",tree.beginColorSelection(*swatch,error));
+        ensure("live preview",tree.applyColorSelection(*swatch,{0.8f,0.7f,0.6f,1.f},LLVKWidgetTree::ColorPickOperation::Change,error));
+        ensure("preview callback",events==std::vector<std::string>{"commit"});
+        ensure_equals("preview updates bound setting",tree.setting("Tint")->operator[](0).asReal(),double(0.8f));
+        ensure_equals("picker preserves current alpha",tree.value(*swatch)[3].asReal(),0.5);
+        ensure("cancel selection",tree.applyColorSelection(*swatch,{},LLVKWidgetTree::ColorPickOperation::Cancel,error));
+        ensure("cancel overrides default commit",events==std::vector<std::string>{"commit","cancel"});
+        ensure("original RGB restored",tree.get(*swatch)->colorSwatch->color==params.color.get());
+        ensure_equals("cancel restores bound setting",tree.setting("Tint")->operator[](0).asReal(),double(0.2f));
+        ensure("begin selected color",tree.beginColorSelection(*swatch,error));
+        ensure("select color",tree.applyColorSelection(*swatch,{1.f,0.f,0.f,0.f},LLVKWidgetTree::ColorPickOperation::Select,error));
+        ensure("select callback",events.back()=="select");
+        ensure("selection closed",!tree.get(*swatch)->colorSwatch->picking);
+        ensure_equals("focus restored to swatch",tree.keyboardFocus(),*swatch);
+        ensure("checker fixture registered",tree.registerImage(image("Checker")));
+        const auto paint=LLVKWidgetPaint::prepare(tree,*swatch,{},error);
+        ensure(error,paint.has_value());
+        ensure("native color fill retains alpha",std::any_of(paint->commands.begin(),paint->commands.end(),
+            [&](const auto& command) { return command.owner==*swatch && command.rectangle==LLVKWidgetTree::Rect{1,17,79,59} && command.color==LLVKColor::Value{1,0,0,0.5f}; }));
+    }
+
+    template<> template<> void object::test<144>()
+    {
+        set_test_name("native setting subscribers observe changes and tolerate nested disconnects");
+        LLVKWidgetTree tree;
+        ensure("RLVa setting",tree.defineSetting("RestrainedLove",LLSD(false),LLVKWidgetTree::SettingType::Boolean));
+        std::vector<std::string> changes;
+        std::optional<std::uint64_t> later;
+        const auto first=tree.subscribeSetting("RestrainedLove",[&](const LLSD& value,const LLSD& previous)
+        {
+            changes.push_back(previous.asString()+":"+value.asString());
+            if (value.asBoolean())
+            {
+                if (later) tree.unsubscribeSetting(*later);
+                ensure("nested setting update",tree.updateSetting("RestrainedLove",LLSD(false)));
+            }
+        });
+        ensure("subscribed",first.has_value());
+        later=tree.subscribeSetting("RestrainedLove",[&](const LLSD&,const LLSD&) { changes.push_back("disconnected"); });
+        ensure("same value accepted",tree.updateSetting("RestrainedLove",LLSD(false)));
+        ensure("unchanged values do not notify",changes.empty());
+        ensure("changed setting",tree.updateSetting("RestrainedLove",LLSD(true)));
+        ensure_equals("outer and nested notifications",changes.size(),std::size_t(2));
+        ensure("outer value snapshot stable",changes[0]==LLSD(false).asString()+":"+LLSD(true).asString());
+        ensure("nested previous value",changes[1]==LLSD(true).asString()+":"+LLSD(false).asString());
+        ensure("nested value retained",!tree.setting("RestrainedLove")->asBoolean());
+        ensure("disconnect",tree.unsubscribeSetting(*first));
+        ensure("missing setting rejected",!tree.subscribeSetting("missing",[](const LLSD&,const LLSD&){}));
+    }
+
+    template<> template<> void object::test<143>()
+    {
+        set_test_name("native horizontal tabs clamp pixel scrolling to the last tab");
+        LLVKWidgetTree tree;
+        LLVKControl::Params control; control.font=loadFont();
+        LLVKWidgetTree::Params view; view.rect={0,0,300,120};
+        std::string error;
+        const auto owner=tree.createPanel(view,control,{},0,error);
+        ensure(error,owner.has_value());
+        ensure("tab owner",tree.initializeTabContainer(*owner,error));
+        for (int index=0; index<8; ++index)
+        {
+            view.name="page"+std::to_string(index);
+            const auto panel=tree.createPanel(view,control,{},*owner,error);
+            view.name="tab"+std::to_string(index);
+            LLVKButton::Params button; button.label=U"Tab";
+            const auto tab=tree.createButton(view,control,button,*owner,error);
+            ensure(error,panel && tab);
+            ensure("attach tab",tree.attachTabPanel(*owner,*panel,*tab,error));
+        }
+        LLVKWidgetTree::Node::TabContainer::Layout layout;
+        layout.minimumWidth=layout.maximumWidth=60;
+        layout.horizontalArrowSize=16; layout.partialTabWidth=20;
+        ensure("horizontal overflow layout",tree.layoutTabPanels(*owner,layout,error));
+        auto state=*tree.get(*owner)->tabContainer;
+        ensure_equals("source maximum scroll position",state.maximumScroll,5);
+        ensure_equals("arrows reserve left strip",tree.get(state.tabs.front().button)->params.rect.left,33);
+        ensure("scroll one tab",tree.scrollTabStrip(*owner,1,error));
+        ensure_equals("partial previous tab allowance",tree.get(*owner)->tabContainer->targetScrollPixels,40);
+        ensure_equals("input does not jump animated pixels",tree.get(*owner)->tabContainer->scrollPixels,0);
+        ensure("source half-life animation",tree.layoutTabPanels(*owner,layout,error,0.08f));
+        ensure_equals("one half-life moves halfway",tree.get(*owner)->tabContainer->scrollPixels,20);
+        ensure("scroll to end",tree.scrollTabStrip(*owner,100,error));
+        state=*tree.get(*owner)->tabContainer;
+        ensure_equals("source last-tab pixel clamp",state.targetScrollPixels,248);
+        ensure("settled pixel layout",tree.layoutTabPanels(*owner,layout,error,10.f));
+        ensure_equals("rightmost tab remains beside arrows",tree.get(state.tabs.back().button)->params.rect.right,265);
+        ensure("horizontal tabs remain visible for clipping",std::all_of(state.tabs.begin(),state.tabs.end(),[&](const auto& tab) { return tree.get(tab.button)->params.visible; }));
+        ensure("horizontal arrow owners",tree.createTabArrows(*owner,control,{},error));
+        state=*tree.get(*owner)->tabContainer;
+        ensure("four arrows",state.previousArrow && state.nextArrow && state.firstArrow && state.lastArrow);
+        ensure("selected tab reveals first",tree.selectTabPanel(*owner,state.tabs.front().panel,error));
+        ensure_equals("selection reveals first pixel",tree.get(*owner)->tabContainer->scrollPosition,0);
+        ensure("jump last",tree.commit(state.lastArrow));
+        ensure_equals("jump does not select",tree.get(*owner)->tabContainer->selected,state.tabs.front().panel);
+        ensure_equals("jump reaches maximum",tree.get(*owner)->tabContainer->scrollPosition,5);
+        ensure("selected last tab remains visible",tree.selectTabPanel(*owner,state.tabs.back().panel,error));
+        ensure("jump first",tree.commit(state.firstArrow));
+        ensure_equals("first resets position",tree.get(*owner)->tabContainer->scrollPosition,0);
+        ensure("horizontal strip wheel",tree.routeWheel(*owner,120,110,2,false,error));
+        ensure_equals("horizontal wheel scrolls",tree.get(*owner)->tabContainer->scrollPosition,2);
+        LLVKWidgetPaint::Input paintInput; paintInput.button.frameDelta=0.08f;
+        const auto paint=LLVKWidgetPaint::prepare(tree,*owner,paintInput,error);
+        ensure(error,paint.has_value());
+        ensure("overflow paint remains inside source clip",std::all_of(paint->commands.begin(),paint->commands.end(),
+            [&](const auto& command) { return command.owner==*owner || (command.clip.left>=3 && command.clip.right<=297); }));
+    }
+
+    template<> template<> void object::test<142>()
+    {
+        set_test_name("native vertical tab overflow owns bounded row positions");
+        LLVKWidgetTree tree;
+        LLVKControl::Params control; control.font=loadFont();
+        LLVKWidgetTree::Params view; view.rect={0,0,300,120};
+        std::string error;
+        const auto owner=tree.createPanel(view,control,{},0,error);
+        ensure(error,owner.has_value());
+        ensure("tab owner",tree.initializeTabContainer(*owner,error));
+        for (int index=0; index<8; ++index)
+        {
+            view.name="page"+std::to_string(index);
+            const auto panel=tree.createPanel(view,control,{},*owner,error);
+            view.name="tab"+std::to_string(index);
+            LLVKButton::Params button; button.label=U"Tab";
+            const auto tab=tree.createButton(view,control,button,*owner,error);
+            ensure(error,panel && tab);
+            ensure("attach tab",tree.attachTabPanel(*owner,*panel,*tab,error));
+        }
+        LLVKWidgetTree::Node::TabContainer::Layout layout;
+        layout.position=decltype(layout.position)::Left;
+        layout.minimumWidth=100; layout.verticalArrowSize=16;
+        ensure("overflow layout",tree.layoutTabPanels(*owner,layout,error));
+        auto state=*tree.get(*owner)->tabContainer;
+        ensure_equals("source maximum row scroll",state.maximumScroll,5);
+        ensure("first row visible",tree.get(state.tabs[0].button)->params.visible);
+        ensure("fourth row hidden",!tree.get(state.tabs[3].button)->params.visible);
+        ensure("scroll to last rows",tree.scrollTabStrip(*owner,100,error));
+        state=*tree.get(*owner)->tabContainer;
+        ensure_equals("bounded scroll position",state.scrollPosition,5);
+        ensure("first row hidden",!tree.get(state.tabs[0].button)->params.visible);
+        ensure("last row visible",tree.get(state.tabs.back().button)->params.visible);
+        ensure("arrow owners",tree.createVerticalTabArrows(*owner,control,{},error));
+        state=*tree.get(*owner)->tabContainer;
+        ensure("overflow arrow visible",tree.get(state.previousArrow)->params.visible && tree.get(state.nextArrow)->params.visible);
+        ensure("select first reveals row",tree.selectTabPanel(*owner,state.tabs.front().panel,error));
+        ensure_equals("selection scrolls into view",tree.get(*owner)->tabContainer->scrollPosition,0);
+        ensure("next arrow click",tree.commit(state.nextArrow));
+        ensure_equals("arrow changes selected panel",tree.get(*owner)->tabContainer->selected,state.tabs[1].panel);
+        ensure_equals("arrow advances scroll",tree.get(*owner)->tabContainer->scrollPosition,1);
+        ensure("wheel over tab strip",tree.routeWheel(*owner,20,60,2,false,error));
+        ensure_equals("wheel advances rows",tree.get(*owner)->tabContainer->scrollPosition,3);
+        ensure_equals("wheel preserves selected panel",tree.get(*owner)->tabContainer->selected,state.tabs[1].panel);
+        ensure("wheel outside tab strip falls through",!tree.routeWheel(*owner,200,60,2,false,error));
+        ensure_equals("content wheel leaves strip unchanged",tree.get(*owner)->tabContainer->scrollPosition,3);
+        ensure("expand owner",tree.reshape(*owner,300,400,error));
+        ensure("expanded layout",tree.layoutTabPanels(*owner,layout,error));
+        state=*tree.get(*owner)->tabContainer;
+        ensure_equals("no overflow after resize",state.maximumScroll,0);
+        ensure_equals("resize resets scroll",state.scrollPosition,0);
+        ensure("resize hides arrows",!tree.get(state.previousArrow)->params.visible && !tree.get(state.nextArrow)->params.visible);
+        ensure("all tabs restored",std::all_of(state.tabs.begin(),state.tabs.end(),[&](const auto& tab) { return tree.get(tab.button)->params.visible; }));
+    }
+
+    template<> template<> void object::test<141>()
+    {
+        set_test_name("native search editor owns input and clear callback ordering");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view; view.rect={0,0,200,24};
+        LLVKControl::Params control; control.font=loadFont(); control.initialValue="query";
+        std::vector<std::string> calls;
+        control.commit.function=[&](auto,const LLSD& value) { calls.push_back("commit:"+value.asString()); };
+        LLVKWidgetTree::SearchEditorParams search;
+        search.clearVisible=true; search.editor.text.leftPadding=6;
+        search.textChanged.function=[&](auto,const LLSD& value) { calls.push_back("changed:"+value.asString()); };
+        std::string error;
+        const auto owner=tree.createSearchEditor(view,control,search,0,error);
+        ensure(error,owner.has_value());
+        const auto state=*tree.get(*owner)->searchEditor;
+        ensure_equals("public input value",tree.value(*owner).asString(),std::string("query"));
+        ensure("clear initially visible",tree.get(state.clear)->params.visible);
+        ensure_equals("search reserves input padding",tree.get(state.editor)->lineEditor->params.text.leftPadding,19);
+        ensure("focus forwards",tree.requestControlFocus(*owner,true,error));
+        ensure_equals("input owns focus",tree.keyboardFocus(),state.editor);
+        ensure("clear button",tree.commit(state.clear));
+        ensure("changed before commit",calls==std::vector<std::string>{"changed:","commit:"});
+        ensure("refresh after clear",tree.refreshSearchEditor(*owner,error));
+        ensure("empty hides clear",!tree.get(state.clear)->params.visible);
+        ensure("set value forwards",tree.setValue(*owner,LLSD("next")));
+        ensure_equals("inner value",tree.value(state.editor).asString(),std::string("next"));
+        calls.clear();
+        ensure("navigation handled",tree.lineEditorKey(state.editor,LLVKLineEditor::Key::Left,{},error));
+        ensure("left is not text change",calls.empty());
+        ensure("typing after left",tree.lineEditorUnicode(state.editor,U'x',error));
+        ensure("typing not suppressed by previous arrow",calls.size()==1 && calls.front().starts_with("changed:"));
+        search.textChanged.function=[&](auto id,const LLSD&) { tree.erase(id,error); };
+        const auto deleting=tree.createSearchEditor(view,control,search,0,error);
+        ensure(error,deleting.has_value());
+        ensure("clear tolerates callback deletion",tree.clearSearchEditor(*deleting,error));
+        ensure("deleted owner",!tree.get(*deleting));
+    }
+
+    template<> template<> void object::test<140>()
+    {
+        set_test_name("native read-only editor owns scroll document border and selectable contents");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKWidgetTree::Params view; view.rect={0,0,140,70}; view.enabled=false;
+        LLVKControl::Params control; control.font=loadFont();
+        control.initialValue="first line\nsecond line\nthird line\nfourth line\nfifth line\nsixth line";
+        LLVKPlainControl::Params text; text.layout.wrap=true;
+        LLVKWidgetTree::ScrollContainerParams scroll;
+        scroll.size=16; scroll.scrollbarControl.font=control.font;
+        scroll.vertical.decreaseControl.font=scroll.vertical.increaseControl.font=control.font;
+        scroll.horizontal.decreaseControl.font=scroll.horizontal.increaseControl.font=control.font;
+        const auto editor=tree.createTextEditor(view,control,text,scroll,true,0,error);
+        ensure(error,editor.has_value());
+        const auto state=*tree.get(*editor)->textEditor;
+        ensure("read-only editor stays enabled",tree.get(*editor)->params.enabled && tree.get(state.body)->plainText->readOnly);
+        const auto bar=tree.get(state.scroller)->scrollContainer->vertical;
+        ensure("editor scrollbar visible",tree.get(bar)->params.visible);
+        ensure("editor painter",LLVKWidgetPaint::prepare(tree,*editor,{},error).has_value());
+        ensure("read-only wheel",tree.routeWheel(*editor,20,20,2,false,error));
+        ensure("scroll position changes",tree.get(bar)->scrollbar->position>0);
+        ensure("editor start of document",tree.startTextEditorDocument(*editor,error));
+        ensure_equals("document start",tree.get(bar)->scrollbar->position,0);
+        ensure("read-only Down delegates before tabs",tree.textEditorKey(*editor,LLVKWidgetTree::ScrollKey::Down,{},error));
+        ensure_equals("source line scroll step",tree.get(bar)->scrollbar->position,16);
+        ensure("read-only End",tree.textEditorKey(*editor,LLVKWidgetTree::ScrollKey::End,{},error));
+        ensure_equals("source End reaches scroll maximum",tree.get(bar)->scrollbar->position,
+            tree.get(bar)->scrollbar->documentSize-tree.get(bar)->scrollbar->pageSize);
+        ensure("read-only Home",tree.textEditorKey(*editor,LLVKWidgetTree::ScrollKey::Home,{},error));
+        ensure_equals("source Home scrolls without changing text",tree.get(bar)->scrollbar->position,0);
+        const auto beforePage=tree.value(*editor).asString();
+        ensure("source page key returns unhandled",!tree.textEditorKey(*editor,LLVKWidgetTree::ScrollKey::PageDown,{},error));
+        ensure("source page key still scrolls",tree.get(bar)->scrollbar->position>0);
+        ensure_equals("keyboard scrolling preserves contents",tree.value(*editor).asString(),beforePage);
+        ensure("public editor select-all",tree.selectAllPlainText(*editor));
+        ensure_equals("selection covers display text",tree.get(state.body)->plainText->selectionStart,tree.get(state.body)->plainText->text.size());
+        ensure("public text update",tree.setValue(*editor,LLSD("short")));
+        ensure("short document hides bar",!tree.get(bar)->params.visible);
+        ensure("short document unmodified Right is unhandled",!tree.textEditorKey(*editor,LLVKWidgetTree::ScrollKey::Right,{},error));
+        tree.deselectPlainText(*editor);
+        ensure("Shift Right selects a display character",tree.textEditorKey(*editor,LLVKWidgetTree::ScrollKey::Right,{true,false,false},error));
+        ensure_equals("selection begins at cursor",tree.get(state.body)->plainText->selectionStart,std::size_t(0));
+        ensure_equals("one display character selected",tree.get(state.body)->plainText->selectionEnd,std::size_t(1));
+        ensure("Ctrl Right follows word boundary",tree.textEditorKey(*editor,LLVKWidgetTree::ScrollKey::Right,{false,true,false},error));
+        ensure_equals("word navigation reaches end",tree.get(state.body)->plainText->cursor,std::size_t(5));
+        ensure_equals("word navigation clears selection",tree.get(state.body)->plainText->selectionEnd,std::size_t(0));
+        ensure("Ctrl Shift Left selects back to start",tree.textEditorKey(*editor,LLVKWidgetTree::ScrollKey::Left,{true,true,false},error));
+        ensure_equals("reverse selection anchor",tree.get(state.body)->plainText->selectionStart,std::size_t(5));
+        ensure_equals("reverse selection end",tree.get(state.body)->plainText->selectionEnd,std::size_t(0));
+        ensure("editor resize",tree.reshape(*editor,200,100,error));
+        ensure("editor layout after resize",tree.layoutTextEditor(*editor,error));
+        ensure_equals("scroller follows editor",tree.get(state.scroller)->params.rect.right,200);
+    }
+
     template<> template<> void object::test<139>()
     {
         set_test_name("native slider rounding, change-only commits and drag offset");
@@ -517,6 +856,12 @@ namespace tut
         configuration.settings = {{"FSRememberUsername",LLSD(true)},{"RememberPassword",LLSD(false)},
             {"RenderBackend",LLSD("Vulkan")},{"RenderBackendPending",LLSD("Vulkan")},{"UIScrollbarSize",LLSD(16)}};
         configuration.settings["SessionSettingsFile"]="settings_phoenix.xml";
+        configuration.settings["RestrainedLove"]=LLSD(false);
+        configuration.settings["PreferredMaturity"]=LLSD(21);
+        configuration.settings["UsePeopleAPI"]=LLSD(false);
+        configuration.settings["UseDisplayNames"]=LLSD(true);
+        configuration.settingDefaults["RememberPassword"]=LLSD(false);
+        configuration.settings["ShowAdultSims"]=LLSD(true);
         configuration.appliedSettingsMode="settings_firestorm.xml";
         std::map<std::string,LLSD> saved;
         configuration.savePreferences = [&](const auto& values,std::string&) { saved=values; return true; };
@@ -524,8 +869,31 @@ namespace tut
         auto login = LLVKLoginUi::create(configuration,error);
         ensure(error,login != nullptr);
         auto& tree=login->tree();
+        ensure("RLVa startup does not fabricate an activation notice",login->takeNotices().empty());
+        ensure("RLVa pre-login preference enabled",tree.updateSetting("RestrainedLove",LLSD(true)));
+        auto rlvNotices=login->takeNotices();
+        ensure_equals("one RLVa change notice",rlvNotices.size(),std::size_t(1));
+        ensure_equals("original RLVa notification type",rlvNotices.front().name,std::string("GenericAlert"));
+        ensure_equals("original pre-login RLVa enable message",rlvNotices.front().message,std::string("RLVa has been enabled (no restart required)"));
+        ensure("equal RLVa value accepted",tree.updateSetting("RestrainedLove",LLSD(true)));
+        ensure("equal RLVa setting has no duplicate notice",login->takeNotices().empty());
+        ensure("RLVa setting rollback",tree.updateSetting("RestrainedLove",LLSD(false)));
+        rlvNotices=login->takeNotices();
+        ensure_equals("original pre-login RLVa disable message",rlvNotices.front().message,std::string("RLVa has been disabled (no restart required)"));
         const auto password=login->find("password_edit");
         ensure("focus before dialog",tree.requestControlFocus(password,true,error));
+        ensure("RLVa enable produces modal",tree.updateSetting("RestrainedLove",LLSD(true)));
+        ensure("show queued RLVa modal",login->advanceNotices(1.0,error));
+        const auto modal=login->modalNotice();
+        ensure("RLVa modal exists",modal!=0);
+        ensure("RLVa modal paints",login->preparePaint({},error).has_value());
+        ensure("modal locks underlying focus",!tree.requestControlFocus(password,true,error));
+        ensure("early Return consumed",login->noticeKey(true,false,error));
+        ensure_equals("source default action delay",login->modalNotice(),modal);
+        ensure("notice delay elapses",login->advanceNotices(1.5,error));
+        ensure("Return dismisses notice",login->noticeKey(true,false,error));
+        ensure_equals("notice closed",login->modalNotice(),LLVKWidgetTree::Id(0));
+        ensure_equals("notice restores editor focus",tree.keyboardFocus(),password);
         ensure("Preferences shortcut",login->menu().shortcut("P",true,false,false));
         ensure(login->dialogError(),login->dialogError().empty());
         const auto preferences=login->activeFloater();
@@ -541,7 +909,34 @@ namespace tut
         ensure("change remember preference",tree.updateSetting("RememberPassword",LLSD(true)));
         ensure("accept",login->applyPreferences(error));
         ensure("accepted value persisted",saved["RememberPassword"].asBoolean());
+        ensure("open for source default reset",login->showPreferences(error));
+        ensure("reset to loaded default",login->resetPreference("RememberPassword",error));
+        ensure("reset differs from saved value",!tree.setting("RememberPassword")->asBoolean());
+        ensure("Cancel reverses reset",login->closeFloater(error));
+        ensure("Cancel retains accepted value",tree.setting("RememberPassword")->asBoolean());
+        ensure("unknown defaults rejected",!login->resetPreference("MissingDefault",error));
+        LLSD initialStructured=LLSD::emptyArray(); initialStructured.append(1.0); initialStructured.append(0.5);
+        ensure("structured preference definition",tree.defineSetting("StructuredPreference",initialStructured));
+        LLVKWidgetTree::Params structuredView; structuredView.rect={0,0,1,1}; structuredView.visible=false;
+        LLVKControl::Params structuredControl; structuredControl.font=tree.get(password)->control->params.font;
+        structuredControl.valueSetting="StructuredPreference";
+        const auto structured=tree.createControl(structuredView,structuredControl,preferences,error);
+        ensure(error,structured.has_value());
+        ensure("snapshot structured preference",login->showPreferences(error));
+        auto changedStructured=initialStructured; changedStructured[1]=0.75;
+        ensure("structured preference changed",tree.updateSetting("StructuredPreference",changedStructured));
+        ensure("accept structured preference",login->applyPreferences(error));
+        ensure("structured change is persisted",saved.contains("StructuredPreference"));
+        ensure_equals("structured setting retains changed channel",saved.at("StructuredPreference")[1].asReal(),0.75);
+        ensure("snapshot unchanged structured setting",login->showPreferences(error));
+        saved.clear();
+        ensure("accept unchanged structured preference",login->applyPreferences(error));
+        ensure("unchanged structured setting does not save",saved.empty());
+        ensure("remove structured fixture",tree.erase(*structured,error));
         ensure("About opens",login->showAbout(error));
+        ensure_equals("localized About title",tree.value(login->find("floater_title")).asString(),std::string("About Vulkanstorm"));
+        const auto closeRect=tree.get(login->find("floater_close"))->params.rect;
+        ensure_equals("close button at original header",closeRect.top,596);
         LLSD aboutInfo;
         aboutInfo["VIEWER_VERSION"]=LLSD::emptyArray();
         for (const auto value : {"7","2","5","test"}) aboutInfo["VIEWER_VERSION"].append(value);
@@ -551,7 +946,13 @@ namespace tut
         aboutInfo["BANDWIDTH"]=3000;
         aboutInfo["LIBCURL_VERSION"]="curl fixture";
         ensure("source About formatter",login->setAboutInfo(aboutInfo,error));
-        const auto formatted=tree.get(login->find("native_about_body"))->plainText->text;
+        const auto support=login->find("support_editor");
+        const auto supportBody=tree.get(support)->textEditor->body;
+        ensure("support URLs enabled by original declaration",tree.get(supportBody)->plainText->params.parseWebLinks);
+        const auto licenseBody=tree.get(login->find("licenses_editor"))->textEditor->body;
+        ensure("license URLs remain literal",!tree.get(licenseBody)->plainText->params.parseWebLinks);
+        ensure("source read-only background stays transparent",tree.get(supportBody)->plainText->params.readOnlyBackground.get()[3]==0.f);
+        const auto formatted=tree.get(supportBody)->plainText->text;
         ensure("source Info header",formatted.find(U"Vulkanstorm 7.2.5 (test)")!=std::u32string::npos);
         ensure("source Info renderer line",formatted.find(U"Rendering API: Vulkan\nVersion: 1.4")!=std::u32string::npos);
         ensure("source Info system field",formatted.find(U"CPU: fixture CPU")!=std::u32string::npos);
@@ -559,28 +960,44 @@ namespace tut
         ensure("absent audio uses source state",formatted.find(U"Audio Driver Version: Undefined")!=std::u32string::npos);
         aboutInfo["AUDIO_DRIVER_VERSION"]="OpenAL, version active fixture";
         ensure("active audio metadata",login->setAboutInfo(aboutInfo,error));
-        ensure("active audio not replaced by fallback",tree.get(login->find("native_about_body"))->plainText->text.find(U"Audio Driver Version: OpenAL, version active fixture")!=std::u32string::npos);
+        ensure("active audio not replaced by fallback",tree.get(supportBody)->plainText->text.find(U"Audio Driver Version: OpenAL, version active fixture")!=std::u32string::npos);
         ensure("curl version from producer",formatted.find(U"libcurl Version: curl fixture")!=std::u32string::npos);
         ensure("actual native J2C provider",formatted.find(U"J2C Decoder Version: OpenJPEG:")!=std::u32string::npos);
         ensure("mode reports applied preset",formatted.find(U"Settings mode: Vulkanstorm")!=std::u32string::npos);
         ensure("unapplied mode not reported",formatted.find(U"Settings mode: Phoenix")==std::u32string::npos);
         ensure("reopen Info resets scroll after focus",login->showAbout(error));
-        const auto infoScroll=tree.get(login->find("about_scroll"))->scrollContainer->vertical;
+        const auto infoScroll=tree.get(tree.get(support)->textEditor->scroller)->scrollContainer->vertical;
         ensure_equals("Info opens at document start",tree.get(infoScroll)->scrollbar->position,0);
         ensure("Info data refresh",login->setAboutInfo(aboutInfo,error));
         ensure_equals("Info refresh preserves document start",tree.get(infoScroll)->scrollbar->position,0);
         login->setAboutInfo("Vulkanstorm test\nRenderer: native Vulkan\nDevice: fixture\nNot connected");
+        struct Clipboard final : LLVKClipboard
+        {
+            std::u32string copied;
+            bool available(bool) const override { return false; }
+            std::optional<std::u32string> read(bool,std::string&) override { return std::nullopt; }
+            bool write(std::u32string_view text,bool,std::string&) override { copied=text; return true; }
+        };
+        auto clipboard=std::make_shared<Clipboard>();
+        login->setDialogClipboard(clipboard);
+        ensure("original About Copy action",tree.commit(login->find("copy_btn")));
+        ensure("Copy exports editor display text",clipboard->copied==tree.get(supportBody)->plainText->text);
+        ensure("Copy deselects original editor",tree.get(supportBody)->plainText->selectionStart==0 && tree.get(supportBody)->plainText->selectionEnd==0);
         ensure("About painter",login->preparePaint({},error).has_value());
-        ensure("credits tab",tree.commit(login->find("about_tab_1")));
+        const auto tabs=login->find("about_tab");
+        const auto& tabItems=tree.get(tabs)->tabContainer->tabs;
+        ensure_equals("original About tab count",tabItems.size(),std::size_t(4));
+        ensure("credits tab",tree.commit(tabItems[1].button));
         ensure(login->dialogError(),login->dialogError().empty());
-        ensure("Linden introduction stays outside scroll document",tree.get(login->find("about_intro"))->plainText->text.find(U"Firestorm would not be possible")!=std::u32string::npos);
-        ensure("Copy belongs only to Info",!tree.get(login->find("about_copy"))->params.visible);
+        ensure("Linden introduction stays outside scroll document",tree.get(login->find("linden_intro"))->plainText->text.find(U"Firestorm would not be possible")!=std::u32string::npos);
+        ensure("Copy belongs only to Info",tree.get(login->find("copy_btn"))->parent==login->find("support_panel"));
+        ensure("Info panel hidden on credits",!tree.get(login->find("support_panel"))->params.visible);
         ensure("credits painter",login->preparePaint({},error).has_value());
-        ensure("Firestorm tab",tree.commit(login->find("about_tab_2")));
+        ensure("Firestorm tab",tree.commit(tabItems[2].button));
         ensure(login->dialogError(),login->dialogError().empty());
-        const auto body=login->find("native_about_body");
+        const auto body=login->find("firestorm_intro");
         ensure("actual credits text loaded",tree.get(body)->plainText->text.find(U"community development project") != std::u32string::npos);
-        ensure("Firestorm uses its own scrolling introduction",!tree.get(login->find("about_intro"))->params.visible);
+        ensure("Firestorm uses its own scrolling introduction",tree.get(body)->parent==login->find("fs_credits_scroll_container_content_panel"));
         const auto creditsPaint=login->preparePaint({},error);
         ensure(error,creditsPaint.has_value());
         bool visibleGlyph=false;
@@ -590,7 +1007,7 @@ namespace tut
                     if (glyph.left<command.clip.right && glyph.right>command.clip.left && glyph.bottom<command.clip.top && glyph.top>command.clip.bottom)
                         visibleGlyph=true;
         ensure("credits glyphs intersect visible body",visibleGlyph);
-        const auto scroll=login->find("about_scroll");
+        const auto scroll=login->find("fs_credits_scroll_container");
         const auto vertical=tree.get(scroll)->scrollContainer->vertical;
         ensure("Firestorm scrollbar visible",tree.get(vertical)->params.visible);
         ensure("Firestorm scrollbar painted",std::any_of(creditsPaint->commands.begin(),creditsPaint->commands.end(),
@@ -601,10 +1018,58 @@ namespace tut
         ensure("Firestorm wheel scrolls",login->floaterWheel(scrollRect->left+10,scrollRect->top-10,3,error));
         ensure("scrollbar position advances",tree.get(vertical)->scrollbar->position>0);
         ensure("scrolling preserves full credits",tree.get(body)->plainText->text==wholeText);
-        ensure("license tab",tree.commit(login->find("about_tab_3")));
-        ensure_equals("tab change starts at top",tree.get(vertical)->scrollbar->position,0);
-        ensure("license text exists",!tree.get(body)->plainText->text.empty());
+        const auto creditsPosition=tree.get(vertical)->scrollbar->position;
+        ensure("license tab",tree.commit(tabItems[3].button));
+        const auto licenses=login->find("licenses_editor");
+        const auto licenseScroll=tree.get(tree.get(licenses)->textEditor->scroller)->scrollContainer->vertical;
+        ensure_equals("license document starts at top",tree.get(licenseScroll)->scrollbar->position,0);
+        ensure("license text exists",!tree.value(licenses).asString().empty());
+        ensure("return to credits",tree.commit(tabItems[2].button));
+        ensure_equals("credits retain independent scroll position",tree.get(vertical)->scrollbar->position,creditsPosition);
         ensure("About closes",login->closeFloater(error));
+        const auto generalPanel=login->constructPreferencePanel("panel_preferences_general.xml",login->root(),error);
+        ensure(error,generalPanel.has_value());
+        ensure("startup maturity choice disabled",!tree.get(login->find("maturity_desired_combobox"))->params.enabled);
+        ensure_equals("saved maturity choice displayed",tree.value(login->find("maturity_desired_textbox")).asString(),std::string("General and Moderate"));
+        ensure("saved moderate rating shown",tree.get(login->find("rating_icon_moderate"))->params.visible);
+        ensure("adult rating hidden",!tree.get(login->find("rating_icon_adult"))->params.visible);
+        ensure("display name control follows People API",!tree.get(login->find("display_names_check"))->params.enabled);
+        ensure("unavailable display-name option unchecked",!tree.value(login->find("display_names_check")).asBoolean());
+        ensure("display-name preference itself not overwritten",tree.setting("UseDisplayNames")->asBoolean());
+        ensure("startup access constrains legacy search",!tree.setting("ShowAdultSims")->asBoolean());
+        ensure("General application panel paints",login->preparePaint({},error).has_value());
+        ensure("remove tested General panel",tree.erase(*generalPanel,error));
+        const auto colorPanel=login->constructPreferencePanel("panel_preferences_colors.xml",login->root(),error);
+        ensure(error,colorPanel.has_value());
+        ensure("native application owner installs alpha policy",!tree.get(*colorPanel)->preferenceLocalValues.empty());
+        const auto localSnapshot=tree.snapshotPreferences(*colorPanel,error);
+        ensure(error,localSnapshot.has_value());
+        const auto localAlpha=tree.get(*colorPanel)->preferenceLocalValues.front();
+        ensure("live owner alpha edit",tree.setValue(localAlpha,LLSD(0.4)));
+        ensure("live owner alpha callback",tree.commit(localAlpha));
+        ensure("live owner Colors restoration",tree.restorePreferences(*localSnapshot,{},error));
+        ensure_equals("live local slider restored",tree.value(localAlpha).asReal(),localSnapshot->localValues.at(localAlpha).asReal());
+        ensure("remove tested application panel",tree.erase(*colorPanel,error));
+        LLVKWidgetTree::Params swatchView; swatchView.rect={10,10,90,70};
+        LLVKControl::Params swatchControl; swatchControl.font=tree.get(password)->control->params.font;
+        LLVKWidgetTree::ColorSwatchParams swatchParams; swatchParams.color=LLVKColor{0.4f,0.5f,0.6f,1.f};
+        const auto swatch=tree.createColorSwatch(swatchView,swatchControl,swatchParams,login->root(),error);
+        ensure(error,swatch.has_value());
+        ensure("native dialog picker opens",login->showColorPicker(*swatch,true,error));
+        const auto picker=login->activeFloater();
+        ensure("native dialog owns original picker",tree.get(picker)->colorPicker.has_value());
+        ensure("native dialog picker paints",login->preparePaint({},error).has_value());
+        ensure("picker close cancels",login->closeFloater(error));
+        ensure("picker transaction ended",!tree.get(*swatch)->colorSwatch->picking);
+        ensure("same swatch reopens picker",login->showColorPicker(*swatch,false,error));
+        ensure_equals("picker identity retained",login->activeFloater(),picker);
+        ensure("disable swatch",tree.setEnabled(*swatch,false));
+        ensure("disabled swatch closes its picker",!tree.get(picker)->params.visible);
+        ensure("disabled swatch cancels transaction",!tree.get(*swatch)->colorSwatch->picking);
+        ensure("reenable swatch",tree.setEnabled(*swatch,true));
+        ensure("open before owner removal",login->showColorPicker(*swatch,false,error));
+        ensure("remove swatch owner",tree.erase(*swatch,error));
+        ensure("removed swatch leaves picker closed",!tree.get(picker)->params.visible);
     }
 
     template<> template<> void object::test<130>()
@@ -3124,6 +3589,46 @@ namespace tut
             ensure_equals("declared native callback",scrollPosition,12);
         }
         ensure("container packaged template",scrollFactory.loadDefaultsFile(tree,"widgets/scroll_container.xml",error));
+        ensure("base text editor template",scrollFactory.loadDefaultsFile(tree,"widgets/simple_text_editor.xml",error));
+        ensure("search editor template",scrollFactory.loadDefaultsFile(tree,"widgets/search_editor.xml",error));
+        ensure("color swatch template",scrollFactory.loadDefaultsFile(tree,"widgets/color_swatch.xml",error));
+        const auto colorSwatch=scrollFactory.construct(tree,
+            "<color_swatch name='background_color' width='80' height='60' label='Color' color='1 0 0 0.5' can_apply_immediately='true'/>",0,error);
+        ensure(error,colorSwatch.has_value());
+        ensure("original swatch constructor",tree.get(*colorSwatch)->colorSwatch.has_value());
+        ensure("source alpha image",tree.get(*colorSwatch)->colorSwatch->params->alphaBackground!=nullptr);
+        ensure_equals("source swatch caption",tree.value(tree.get(*colorSwatch)->colorSwatch->caption).asString(),std::string("Color"));
+        ensure("original swatch painter",LLVKWidgetPaint::prepare(tree,*colorSwatch,{},error).has_value());
+        const auto searchEditor=scrollFactory.construct(tree,
+            "<search_editor name='search_prefs_edit' width='220' height='18' clear_button_visible='true' max_length_bytes='255'>"
+            "<search_editor.clear_button rect.height='18' rect.width='18' rect.bottom='-1'/>"
+            "<search_editor.search_button rect.height='12' rect.width='12' rect.bottom='-1'/></search_editor>",0,error);
+        ensure(error,searchEditor.has_value());
+        ensure("search constructor is composite",tree.get(*searchEditor)->searchEditor.has_value());
+        const auto searchState=*tree.get(*searchEditor)->searchEditor;
+        ensure_equals("source search text padding",tree.get(searchState.editor)->lineEditor->params.text.leftPadding,18);
+        ensure_equals("source clear height override",tree.get(searchState.clear)->params.rect.top-tree.get(searchState.clear)->params.rect.bottom,18);
+        ensure("search query update",tree.setValue(*searchEditor,LLSD("cache")));
+        const auto searchPaint=LLVKWidgetPaint::prepare(tree,*searchEditor,{},error);
+        ensure(error,searchPaint.has_value());
+        ensure("visible native clear image",std::any_of(searchPaint->commands.begin(),searchPaint->commands.end(),
+            [&](const auto& command) { return command.owner==searchState.clear && command.image; }));
+        const auto clearRect=tree.screenRect(searchState.clear,error);
+        ensure(error,clearRect.has_value());
+        LLVKWidgetTree::PointerEvent clearClick;
+        clearClick.kind=LLVKWidgetTree::PointerKind::LeftDown;
+        clearClick.x=(clearRect->left+clearRect->right)/2; clearClick.y=(clearRect->bottom+clearRect->top)/2;
+        ensure("pointer reaches nested clear",tree.routePointer(*searchEditor,clearClick,error));
+        clearClick.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("pointer releases nested clear",tree.routePointer(*searchEditor,clearClick,error));
+        ensure_equals("pointer clears original search input",tree.value(*searchEditor).asString(),std::string());
+        ensure("text editor overlay template",scrollFactory.loadDefaultsFile(tree,"widgets/text_editor.xml",error));
+        const auto aboutEditor=scrollFactory.construct(tree,
+            "<text_editor name='support_editor' width='300' height='90' enabled='false' word_wrap='true' max_length='65536'>Original editor contents</text_editor>",0,error);
+        ensure(error,aboutEditor.has_value());
+        ensure("editor constructor is composite",tree.get(*aboutEditor)->textEditor.has_value());
+        ensure_equals("original editor body",tree.value(*aboutEditor).asString(),std::string("Original editor contents"));
+        ensure_equals("source editor padding",tree.get(tree.get(*aboutEditor)->textEditor->body)->plainText->params.layout.horizontalPadding,6);
         ensure("panel construction font default",scrollFactory.loadDefaults(tree,"<panel font='SansSerifSmall'/>",error));
         ensure("spinner editor defaults",scrollFactory.loadDefaultsFile(tree,"widgets/line_editor.xml",error));
         ensure("packaged spinner template",scrollFactory.loadDefaultsFile(tree,"widgets/spinner.xml",error));
@@ -3165,13 +3670,144 @@ namespace tut
         ensure_equals("source radio XUI top",tree.get(radioFirst)->params.rect.top,80);
         auto preferenceCallbacks=callbacks;
         preferenceCallbacks.actions["Pref.MaturitySettings"]=[](auto,const LLSD&) {};
+        preferenceCallbacks.actions["Pref.getUIColor"]=[&](auto id,const LLSD& parameter)
+        {
+            const auto color=resources.colors->find(parameter.asString());
+            ensure("original preference color exists",color.has_value());
+            LLSD value=LLSD::emptyArray();
+            for (const auto channel : color->get()) value.append(channel);
+            ensure("original color initialization",tree.setColorSwatchValue(id,value,error));
+        };
+        preferenceCallbacks.actions["Pref.applyUIColor"]=[&](auto id,const LLSD& parameter)
+        { ensure("native user color commit",resources.colors->set(parameter.asString(),tree.get(id)->colorSwatch->color)); };
         auto preferenceResources=resources;
         std::string preferenceLink;
         preferenceResources.webLinkHandler=[&](auto,const std::string& target) { preferenceLink=target; };
         LLVKWidgetFactory generalFactory({}, {}, {}, preferenceCallbacks,preferenceResources);
         ensure("General panel constructor font",generalFactory.loadDefaults(tree,"<panel font='SansSerifSmall'/>",error));
-        for (const std::string widget : {"button","view_border","line_editor","check_box","radio_item","radio_group","spinner","combo_box","text"})
+        for (const std::string widget : {"button","view_border","line_editor","check_box","radio_item","radio_group","spinner","combo_box","text","color_swatch","slider_bar","slider"})
             ensure("General widget template "+widget,generalFactory.loadDefaultsFile(tree,"widgets/"+widget+".xml",error));
+            for (const std::string widget : {"scroll_bar","scroll_container","tab_container","simple_text_editor","text_editor"})
+                ensure("About widget template "+widget,generalFactory.loadDefaultsFile(tree,"widgets/"+widget+".xml",error));
+            const auto about=generalFactory.constructFile(tree,"floater_about.xml",0,error);
+            ensure(error,about.has_value());
+            ensure("original About root is native floater",tree.get(*about)->floater.has_value());
+            const auto colorPreferences=generalFactory.constructFile(tree,"panel_preferences_colors.xml",0,error);
+            ensure(error,colorPreferences.has_value());
+            const auto colorPreferencePaint=LLVKWidgetPaint::prepare(tree,*colorPreferences,{},error);
+            ensure(error,colorPreferencePaint.has_value());
+            std::map<std::string,LLVKWidgetTree::Id> colorFields;
+            std::vector<LLVKWidgetTree::Id> colorChildren{*colorPreferences};
+            for (std::size_t index=0; index<colorChildren.size(); ++index)
+            {
+                const auto* node=tree.get(colorChildren[index]);
+                colorFields.try_emplace(node->params.name,colorChildren[index]);
+                colorChildren.insert(colorChildren.end(),node->children.begin(),node->children.end());
+            }
+            const auto dialogSwatch=colorFields.at("ScriptDialogFb");
+            ensure("original init replaces missing named-color fallback",tree.get(dialogSwatch)->colorSwatch->color==resources.colors->find("ScriptDialogFg")->get());
+            const auto colorsTabs=colorFields.at("tabs");
+            const auto colorTabs=tree.get(colorsTabs)->tabContainer->tabs;
+            for (const auto& tab : colorTabs)
+            {
+                ensure("select original Colors subpanel",tree.selectTabPanel(colorsTabs,tab.panel,error));
+                const auto paint=LLVKWidgetPaint::prepare(tree,*colorPreferences,{},error);
+                ensure(error,paint.has_value());
+            }
+            const auto colorsSnapshot=tree.snapshotPreferences(*colorPreferences,error);
+            ensure("source map alpha post-build binding",tree.bindPreferenceColorAlpha(*colorPreferences,resources.colors,error));
+            const auto alphaSnapshot=tree.snapshotPreferences(*colorPreferences,error);
+            ensure(error,alphaSnapshot.has_value());
+            const auto alphaSlider=colorFields.at("MapPickRadiusTransparency");
+            const auto radiusSwatch=colorFields.at("MapPickRadiusColor");
+            const auto originalRadius=resources.colors->find("MapPickRadiusColor")->get();
+            ensure("edit original map alpha",tree.setValue(alphaSlider,LLSD(0.25)));
+            ensure("commit original map alpha",tree.commit(alphaSlider));
+            ensure_equals("map alpha updates native color table",resources.colors->find("MapPickRadiusColor")->get()[3],0.25f);
+            ensure_equals("map alpha updates native swatch",tree.get(radiusSwatch)->colorSwatch->color[3],0.25f);
+            ensure("Cancel restores local alpha",tree.restorePreferences(*alphaSnapshot,{},error));
+            ensure_equals("alpha slider restored",tree.value(alphaSlider).asReal(),alphaSnapshot->localValues.at(alphaSlider).asReal());
+            ensure("map color restored",resources.colors->find("MapPickRadiusColor")->get()==originalRadius);
+            ensure(error,colorsSnapshot.has_value());
+            const auto userSwatch=colorFields.at("user");
+            const auto originalUserColor=resources.colors->find("UserChatColor")->get();
+            ensure("edit original user-color swatch",tree.beginColorSelection(userSwatch,error));
+            ensure("preview original user-color callback",tree.applyColorSelection(userSwatch,{0.15f,0.25f,0.35f,1.f},LLVKWidgetTree::ColorPickOperation::Change,error));
+            ensure("original color callback reaches native table",resources.colors->find("UserChatColor")->get()==LLVKColor::Value{0.15f,0.25f,0.35f,originalUserColor[3]});
+            ensure("original Colors Cancel",tree.restorePreferences(*colorsSnapshot,{},error));
+            ensure("original color table restored",resources.colors->find("UserChatColor")->get()==originalUserColor);
+            const auto picker=generalFactory.constructFile(tree,"floater_color_picker.xml",0,error);
+            ensure(error,picker.has_value());
+            ensure("original picker is a native floater",tree.get(*picker)->floater.has_value());
+            ensure("native picker owns original fields",tree.initializeColorPicker(*picker,*colorSwatch,error));
+            ensure("original palette colors",tree.setColorPickerPalette(*picker,resources.colors,error));
+            const auto hueImage=tree.get(*picker)->colorPicker->hueImage;
+            ensure("native picker owns generated color plane",hueImage && hueImage->pixelWidth()==256 && hueImage->pixelHeight()==256);
+            const auto huePixels=hueImage->bottomUpRgba();
+            ensure("source low-saturation edge is grey",huePixels[0]==127 && huePixels[1]==127 && huePixels[2]==127 && huePixels[3]==255);
+            const auto redOffset=4*255*256;
+            ensure("source top-left hue is red",huePixels[redOffset]==255 && huePixels[redOffset+1]==0 && huePixels[redOffset+2]==0);
+            const auto pickerPaint=LLVKWidgetPaint::prepare(tree,*picker,{},error);
+            ensure(error,pickerPaint.has_value());
+            const auto paletteOrigin=tree.screenRect(*picker,error);
+            ensure(error,paletteOrigin.has_value());
+            ensure("first palette cell retains source bounds",std::any_of(pickerPaint->commands.begin(),pickerPaint->commands.end(),
+                [&](const auto& command) { return command.owner==*picker && command.rectangle==LLVKWidgetTree::Rect{
+                    paletteOrigin->left+13,paletteOrigin->bottom+74,paletteOrigin->left+35,paletteOrigin->bottom+90}; }));
+            ensure("color plane occupies original region",std::any_of(pickerPaint->commands.begin(),pickerPaint->commands.end(),
+                [&](const auto& command) { return command.owner==*picker && command.image==hueImage && command.rectangle.right-command.rectangle.left==256; }));
+            const auto pickerFields=tree.get(*picker)->colorPicker->fields;
+            ensure_equals("original picker RGB",tree.value(pickerFields.at("rspin")).asReal(),255.);
+            ensure_equals("original picker hex",tree.value(pickerFields.at("hex_value")).asString(),std::string("ff0000"));
+            ensure("hex entry",tree.setValue(pickerFields.at("hex_value"),LLSD("336699")));
+            ensure("hex commit",tree.commit(pickerFields.at("hex_value")));
+            ensure_equals("hex synchronizes RGB",tree.value(pickerFields.at("gspin")).asReal(),102.);
+            ensure("hue edit",tree.setValue(pickerFields.at("hspin"),LLSD(120.)));
+            ensure("hue field commit",tree.commitColorPickerField(*picker,pickerFields.at("hspin"),error));
+            ensure_equals("hue state preserved",tree.get(*picker)->colorPicker->hsl[0],120.f/360.f);
+            ensure("invalid hex retained without color change",tree.setValue(pickerFields.at("hex_value"),LLSD("oops")));
+            const auto beforeInvalid=tree.get(*picker)->colorPicker->rgb;
+            ensure("invalid hex ignored",tree.commit(pickerFields.at("hex_value")));
+            ensure("invalid hex leaves RGB unchanged",tree.get(*picker)->colorPicker->rgb==beforeInvalid);
+            const auto pickerRect=tree.screenRect(*picker,error);
+            ensure(error,pickerRect.has_value());
+            LLVKWidgetTree::PointerEvent colorPoint;
+            colorPoint.kind=LLVKWidgetTree::PointerKind::LeftDown;
+            colorPoint.x=pickerRect->left+268; colorPoint.y=pickerRect->bottom+228;
+            ensure("hue plane click",tree.routePointer(*picker,colorPoint,error));
+            ensure_equals("hue plane owns capture",tree.mouseCapture(),*picker);
+            ensure_equals("hue midpoint",tree.get(*picker)->colorPicker->hsl[0],0.5f);
+            ensure_equals("saturation midpoint",tree.get(*picker)->colorPicker->hsl[1],0.5f);
+            colorPoint.kind=LLVKWidgetTree::PointerKind::Hover;
+            colorPoint.x=pickerRect->left+500; colorPoint.y=pickerRect->bottom+500;
+            ensure("hue drag clamps",tree.routePointer(*picker,colorPoint,error));
+            ensure_equals("hue upper boundary",tree.get(*picker)->colorPicker->hsl[0],1.f);
+            ensure_equals("saturation upper boundary",tree.get(*picker)->colorPicker->hsl[1],1.f);
+            colorPoint.kind=LLVKWidgetTree::PointerKind::LeftUp;
+            ensure("hue release",tree.routePointer(*picker,colorPoint,error));
+            ensure_equals("hue capture released",tree.mouseCapture(),LLVKWidgetTree::Id(0));
+            colorPoint.kind=LLVKWidgetTree::PointerKind::LeftDown;
+            colorPoint.x=pickerRect->left+15; colorPoint.y=pickerRect->bottom+85;
+            ensure("original palette selection",tree.routePointer(*picker,colorPoint,error));
+            ensure("palette selects first source color",tree.get(*picker)->colorPicker->rgb==tree.get(*picker)->colorPicker->palette[0]);
+            const auto originalColor=tree.get(*colorSwatch)->colorSwatch->original;
+            ensure("picker Cancel button",tree.commit(pickerFields.at("cancel_btn")));
+            ensure("Cancel closes picker",!tree.get(*picker)->params.visible);
+            ensure("Cancel restores original swatch",tree.get(*colorSwatch)->colorSwatch->color==originalColor);
+            ensure("reopen source transaction",tree.beginColorSelection(*colorSwatch,error));
+            tree.setVisible(*picker,true);
+            ensure("new picker RGB",tree.setColorPickerRgb(*picker,{0.1f,0.2f,0.3f,1.f},false,error));
+            ensure("picker OK button",tree.commit(pickerFields.at("select_btn")));
+            ensure("OK closes picker",!tree.get(*picker)->params.visible);
+            ensure("OK preserves swatch alpha",tree.get(*colorSwatch)->colorSwatch->color==LLVKColor::Value{0.1f,0.2f,0.3f,0.5f});
+            tree.setVisible(*picker,true);
+            colorPoint.kind=LLVKWidgetTree::PointerKind::LeftDown;
+            colorPoint.x=pickerRect->left+30; colorPoint.y=pickerRect->bottom+160;
+            ensure("current-color drag starts",tree.routePointer(*picker,colorPoint,error));
+            colorPoint.kind=LLVKWidgetTree::PointerKind::LeftUp;
+            colorPoint.x=pickerRect->left+15; colorPoint.y=pickerRect->bottom+85;
+            ensure("palette receives current color",tree.routePointer(*picker,colorPoint,error));
+            ensure("palette updates native user color",resources.colors->find("ColorPaletteEntry01")->get()==LLVKColor::Value{0.1f,0.2f,0.3f,1.f});
         const auto general=generalFactory.constructFile(tree,"panel_preferences_general.xml",0,error);
         ensure(error,general.has_value());
         ensure_equals("original General panel name",tree.get(*general)->params.name,std::string("general_panel"));

@@ -160,6 +160,7 @@ bool LLVKWidgetTree::plainTextPointer(Id id, const PointerEvent& event, std::str
 bool LLVKWidgetTree::selectAllPlainText(Id id)
 {
     const auto* node = get(id);
+    if (node && node->textEditor) return selectAllPlainText(node->textEditor->body);
     if (!node || !node->plainText || !node->plainText->params.selectable) return false;
     auto& text = *mNodes.at(id).plainText;
     text.selectionStart = text.text.size();
@@ -169,10 +170,22 @@ bool LLVKWidgetTree::selectAllPlainText(Id id)
     return true;
 }
 
+bool LLVKWidgetTree::deselectPlainText(Id id)
+{
+    const auto* node=get(id);
+    if (node && node->textEditor) return deselectPlainText(node->textEditor->body);
+    if (!node || !node->plainText) return false;
+    auto& text=*mNodes.at(id).plainText;
+    text.selectionStart=text.selectionEnd=0;
+    text.selecting=false;
+    return true;
+}
+
 bool LLVKWidgetTree::copyPlainText(Id id,std::string& error)
 {
     error.clear();
     const auto* node = get(id);
+    if (node && node->textEditor) return copyPlainText(node->textEditor->body,error);
     if (!node || !node->plainText || !node->plainText->params.selectable || !mClipboard) return false;
     const auto& text = *node->plainText;
     const auto begin = std::min(text.selectionStart,text.selectionEnd), end = std::max(text.selectionStart,text.selectionEnd);
@@ -338,4 +351,166 @@ bool LLVKWidgetTree::fitPlainText(Id id, std::string& error)
     if (!reflowPlainText(id,error)) return false;
     const auto& layout = *get(id)->plainText->layout;
     return reshape(id,layout.fitWidth,layout.fitHeight,error);
+}
+
+std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createTextEditor(const Params& input,const LLVKControl::Params& control,
+    const LLVKPlainControl::Params& text,const ScrollContainerParams& scroll,bool borderVisible,Id parent,std::string& error)
+{
+    auto view=input;
+    view.enabled=true;
+    auto initial=control;
+    initial.init={}; initial.initialValue.reset(); initial.valueSetting.reset();
+    const auto id=createControl(view,initial,parent,error);
+    if (!id) return std::nullopt;
+    mNodes.at(*id).textEditor.emplace();
+    const bool readOnly=text.readOnly.value_or(!input.enabled);
+    mNodes.at(*id).textEditor->readOnly=readOnly;
+    const auto discard=[&] { std::string ignored; if (get(*id)) erase(*id,ignored); };
+    try
+    {
+        Params child;
+        child.name="text scroller"; child.rect={0,0,view.rect.right-view.rect.left,view.rect.top-view.rect.bottom};
+        child.follows=Left|Right|Top|Bottom;
+        LLVKControl::Params childControl;
+        childControl.font=control.font;
+        auto scrollParams=scroll;
+        scrollParams.borderVisible=false;
+        scrollParams.minAutoRate=200; scrollParams.maxAutoRate=800;
+        const auto scroller=createScrollContainer(child,childControl,scrollParams,*id,error);
+        if (!scroller) { discard(); return std::nullopt; }
+        mNodes.at(*id).textEditor->scroller=*scroller;
+        child.name="text document"; child.follows=0;
+        const auto document=createPanel(child,childControl,{},*scroller,error);
+        if (!document || !attachScrollContent(*scroller,*document,0,error)) { discard(); return std::nullopt; }
+        mNodes.at(*id).textEditor->document=*document;
+        child.name="text contents";
+        auto bodyParams=text;
+        bodyParams.selectable=true; bodyParams.readOnly=readOnly;
+        const auto body=createPlainText(child,childControl,bodyParams,*document,error);
+        if (!body) { discard(); return std::nullopt; }
+        mNodes.at(*id).textEditor->body=*body;
+        child.name="text ed border"; child.mouseOpaque=false; child.visible=borderVisible;
+        child.follows=Left|Right|Top|Bottom;
+        auto borderParams=scroll.border; borderParams.bevel=LLVKBorder::Bevel::In; borderParams.thickness=1;
+        const auto border=createBorder(child,borderParams,*id,error);
+        if (!border) { discard(); return std::nullopt; }
+        mNodes.at(*id).textEditor->border=*border;
+        auto value=control.initialValue.value_or(LLSD(""));
+        if (control.valueSetting && mSettings.contains(*control.valueSetting)) value=mSettings.at(*control.valueSetting);
+        mNodes.at(*id).control->params=control;
+        if (!setTextEditorText(*id,value.asString(),error)) { discard(); return std::nullopt; }
+        if (control.init.function) control.init.function(*id,control.init.parameter.value_or(LLSD()));
+        if (!get(*id)) { error="Native text editor removed during initialization"; return std::nullopt; }
+        return id;
+    }
+    catch (...) { discard(); throw; }
+}
+
+bool LLVKWidgetTree::setTextEditorText(Id id,const std::string& text,std::string& error)
+{
+    const auto* node=get(id);
+    if (!node || !node->textEditor) return false;
+    if (!setPlainText(node->textEditor->body,text,error)) return false;
+    mNodes.at(id).control->value=value(node->textEditor->body);
+    return layoutTextEditor(id,error);
+}
+
+bool LLVKWidgetTree::layoutTextEditor(Id id,std::string& error)
+{
+    error.clear();
+    const auto* node=get(id);
+    if (!node || !node->textEditor) return false;
+    const auto state=*node->textEditor;
+    const auto* body=get(state.body);
+    if (!body || !body->plainText || !get(state.scroller)) return false;
+    const auto width=node->params.rect.right-node->params.rect.left, height=node->params.rect.top-node->params.rect.bottom;
+    if (state.width==width && state.height==height && state.laidOutGeneration==body->plainText->textGeneration) return true;
+    if (width<=0 || height<=0) { error="Native text editor has invalid extent"; return false; }
+    const auto generation=body->plainText->textGeneration;
+    const auto scroller=*get(state.scroller)->scrollContainer;
+    const auto position=get(scroller.vertical)->scrollbar->position;
+    auto options=body->plainText->params.layout;
+    const auto font=body->control->params.font;
+    const auto text=body->plainText->text;
+    const auto padding=body->plainText->params.verticalPadding;
+    const auto barSize=scroller.useSizeSetting ? setting("UIScrollbarSize").value_or(LLSD(0)).asInteger() : scroller.scrollbarSize;
+    options.width=width;
+    auto document=LLVKPlainTextLayout::document(text,*font,options,height,padding,LLVKFont::VerticalAlign::Top,error);
+    if (!document) return false;
+    if (document->fitHeight>height)
+    {
+        options.width=std::max(1,width-barSize);
+        document=LLVKPlainTextLayout::document(text,*font,options,height,padding,LLVKFont::VerticalAlign::Top,error);
+        if (!document) return false;
+    }
+    const auto contentHeight=std::max(height,document->fitHeight);
+    const auto contentWidth=options.wrap ? options.width : std::max(options.width,document->fitWidth);
+    if (!setShape(state.body,{0,0,contentWidth,contentHeight},error) || !reshape(state.document,contentWidth,contentHeight,error) ||
+        !reshape(state.scroller,width,height,error)) return false;
+    setScrollPosition(scroller.vertical,position,true,error);
+    if (!error.empty() || !updateScrollContainer(state.scroller,error) || !get(id)) return false;
+    auto& current=*mNodes.at(id).textEditor;
+    current.width=width; current.height=height; current.laidOutGeneration=generation;
+    return true;
+}
+
+bool LLVKWidgetTree::textEditorKey(Id id,ScrollKey key,LLVKLineEditor::Modifiers modifiers,std::string& error)
+{
+    error.clear();
+    const auto* node=get(id);
+    if (!node || !node->textEditor || !node->textEditor->readOnly) return false;
+    if (!layoutTextEditor(id,error)) return false;
+    const auto scroller=get(id)->textEditor->scroller;
+    if (scrollContainerKey(scroller,key,modifiers,error)) return true;
+    if (!error.empty() || !get(id)) return false;
+    const auto body=get(id)->textEditor->body;
+    if (!get(body) || !get(body)->plainText) return false;
+    auto& text=*mNodes.at(body).plainText;
+    const auto length=text.text.size();
+    const auto previous=std::min(text.cursor,length);
+    auto position=previous;
+    if (key==ScrollKey::Left || key==ScrollKey::Right)
+    {
+        if (!modifiers.shift && !modifiers.control) return false;
+        if (key==ScrollKey::Left && position)
+        {
+            --position;
+            if (modifiers.control)
+            {
+                while (position && text.text[position-1]==U' ') --position;
+                while (position && LLWStringUtil::isPartOfWord(static_cast<llwchar>(text.text[position-1]))) --position;
+            }
+        }
+        else if (key==ScrollKey::Right && position<length)
+        {
+            ++position;
+            if (modifiers.control)
+            {
+                while (position<length && LLWStringUtil::isPartOfWord(static_cast<llwchar>(text.text[position]))) ++position;
+                while (position<length && text.text[position]==U' ') ++position;
+            }
+        }
+    }
+    else if ((key==ScrollKey::Home || key==ScrollKey::End) && modifiers.control)
+        position=key==ScrollKey::Home ? 0 : length;
+    else return false;
+    if (modifiers.shift)
+    {
+        if (text.selectionStart==text.selectionEnd) text.selectionStart=previous;
+        text.selectionEnd=position;
+    }
+    else text.selectionStart=text.selectionEnd=0;
+    text.cursor=position;
+    text.selecting=false;
+    text.pressedLink.reset();
+    return true;
+}
+
+bool LLVKWidgetTree::startTextEditorDocument(Id id,std::string& error)
+{
+    if (!layoutTextEditor(id,error)) return false;
+    const auto scroll=get(get(id)->textEditor->scroller)->scrollContainer;
+    setScrollPosition(scroll->vertical,0,true,error);
+    setScrollPosition(scroll->horizontal,0,true,error);
+    return error.empty() && updateScrollContainer(get(id)->textEditor->scroller,error);
 }
