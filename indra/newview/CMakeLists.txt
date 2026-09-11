@@ -2433,6 +2433,8 @@ if (WINDOWS)
         --viewer_flavor=${ND_VIEWER_FLAVOR}
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
+        ${CMAKE_SOURCE_DIR}/../doc/contributions.txt
+        ${CMAKE_CURRENT_BINARY_DIR}/packages-info.txt
         stage_third_party_libs
         llwebrtc
         ${COPY_INPUT_DEPENDENCIES}

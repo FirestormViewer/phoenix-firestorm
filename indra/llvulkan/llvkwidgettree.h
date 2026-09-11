@@ -179,6 +179,21 @@ public:
     };
     struct Node
     {
+        struct TabContainer
+        {
+            struct Tab { Id panel = 0, button = 0; };
+            std::vector<Tab> tabs;
+            Id selected = 0;
+            std::uint64_t selectionGeneration = 0;
+            struct Layout
+            {
+                std::int32_t tabHeight = 21, minimumWidth = 60, maximumWidth = 160;
+                std::int32_t labelPadding = 0, horizontalPadding = 0, panelOverlap = 0;
+                bool hidden = false, panelOffset = false;
+            };
+            std::optional<Layout> layout;
+        };
+        std::optional<TabContainer> tabContainer;
         struct Browser
         {
             std::string startUrl, mimeType, errorUrl;
@@ -284,6 +299,8 @@ public:
     enum class SettingType { Opaque, Boolean, Integer, Real, String };
     bool defineSetting(const std::string& name, const LLSD& value, SettingType type = SettingType::Opaque);
     bool updateSetting(const std::string& name, const LLSD& value);
+    std::optional<LLSD> setting(const std::string& name) const
+    { const auto found = mSettings.find(name); return found == mSettings.end() ? std::nullopt : std::optional(found->second); }
     bool setValue(Id id, const LLSD& value);
     bool resetDirty(Id id);
     bool commit(Id id);
@@ -301,6 +318,10 @@ public:
     enum class PanelKey { Escape, Tab, Return };
     bool panelKey(Id id, PanelKey key, LLVKLineEditor::Modifiers modifiers, std::string& error);
     bool setPanelDefaultButton(Id id, Id button, std::string& error);
+    bool initializeTabContainer(Id panel, std::string& error);
+    bool attachTabPanel(Id container, Id panel, Id button, std::string& error);
+    bool selectTabPanel(Id container, Id panel, std::string& error);
+    bool layoutTopTabs(Id container, const Node::TabContainer::Layout& layout, std::string& error);
     std::optional<Id> createLayoutStack(const Params& view, bool vertical, std::int32_t spacing, bool clip, Id parent, std::string& error);
     bool attachLayoutPanel(Id stack, Id panel, const Node::LayoutPanel& params, std::string& error);
     bool updateLayoutStack(Id id, std::string& error, float frameDelta = 0.f);
@@ -385,6 +406,8 @@ public:
     bool setScrollDocumentSize(Id id, std::int32_t size, std::string& error);
     bool setScrollPageSize(Id id, std::int32_t size, std::string& error);
     enum class ScrollKey { Home, End, Up, Down, PageUp, PageDown, Left, Right };
+    bool tabContainerKey(Id id, ScrollKey key, LLVKLineEditor::Modifiers modifiers, std::string& error);
+    bool moveTab(Id id, bool forward, std::string& error);
     bool scrollbarKey(Id id, ScrollKey key, std::string& error);
     bool scrollbarWheel(Id id, std::int32_t clicks, bool horizontal, std::string& error);
     struct ScrollbarDraw

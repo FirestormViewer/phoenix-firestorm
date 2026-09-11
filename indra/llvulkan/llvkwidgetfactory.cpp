@@ -111,6 +111,7 @@ namespace
         std::optional<LLVKBadge::Params> badge;
         std::optional<LLVKPanel::Params> panel;
         std::optional<LLVKWidgetTree::Node::Browser> browser;
+        std::shared_ptr<LLVKWidgetFactory::TabDefaults> tabs;
         std::optional<LLVKBorder::Params> border;
         std::optional<LLVKWidgetTree::LineEditorParams> lineEditor;
         std::optional<LLVKWidgetFactory::CheckBoxDefaults> checkBox;
@@ -329,6 +330,26 @@ namespace
         {
             auto& view = declaration.params.view;
             auto& geometry = declaration.params.geometry;
+            if (declaration.tabs)
+            {
+                auto& tabs = *declaration.tabs;
+                if (name == "tab_position") return text == "top";
+                if (name == "tab_height") return integer(text,tabs.layout.tabHeight);
+                if (name == "tab_min_width") return integer(text,tabs.layout.minimumWidth);
+                if (name == "tab_max_width") return integer(text,tabs.layout.maximumWidth);
+                if (name == "hide_tabs") return boolean(text,tabs.layout.hidden);
+                if (name == "use_tab_offset") return boolean(text,tabs.layout.panelOffset);
+                if (name == "label_pad_left") return integer(text,tabs.labelPadLeft);
+                if (name == "label_pad_bottom") return integer(text,tabs.labelPadBottom);
+                if (name == "tabs_flashing_color") return color(text,tabs.flashColor);
+                if (name == "use_custom_icon_ctrl") { bool enabled; return boolean(text,enabled) && !enabled; }
+                if (name == "halign")
+                {
+                    if (text != "left" && text != "center" && text != "right") return false;
+                    tabs.alignment = text == "left" ? LLVKButton::Align::Left : text == "right" ? LLVKButton::Align::Right : LLVKButton::Align::Center;
+                    return true;
+                }
+            }
             if (declaration.browser)
             {
                 auto& browser = *declaration.browser;
@@ -858,7 +879,7 @@ namespace
             if (separator == std::string_view::npos || !declaration.control) return false;
             const auto prefix = tag.substr(0,separator);
             if ((declaration.button && prefix != "button") || (declaration.icon && prefix != "icon") ||
-                (declaration.badge && prefix != "badge") || (declaration.panel && prefix != (declaration.browser ? "web_browser" : declaration.layoutPanel ? "layout_panel" : "panel")) ||
+                (declaration.badge && prefix != "badge") || (declaration.panel && prefix != (declaration.tabs ? "tab_container" : declaration.browser ? "web_browser" : declaration.layoutPanel ? "layout_panel" : "panel")) ||
                 (declaration.lineEditor && prefix != "line_editor") || (declaration.checkBox && prefix != "check_box") ||
                 (declaration.scrollbar && prefix != "scroll_bar") ||
                 (declaration.scrollContainer && prefix != "scroll_container") || (declaration.combo && prefix != "combo_box")) return false;
@@ -1045,6 +1066,22 @@ namespace
                     state.stack.push_back(current);
                     return;
                 }
+                if (!state.stack.empty() && state.stack.back()->tabs &&
+                    (std::string_view(tag) == "first_tab" || std::string_view(tag) == "middle_tab" || std::string_view(tag) == "last_tab"))
+                {
+                    const auto part = std::string_view(tag) == "first_tab" ? 0 : std::string_view(tag) == "middle_tab" ? 1 : 2;
+                    for (std::size_t index = 0; attributes[index]; index += 2)
+                    {
+                        const std::string name = attributes[index];
+                        if (name != "tab_top_image_unselected" && name != "tab_top_image_selected" && name != "tab_top_image_flash" &&
+                            name != "tab_bottom_image_unselected" && name != "tab_bottom_image_selected" && name != "tab_bottom_image_flash" &&
+                            name != "tab_left_image_unselected" && name != "tab_left_image_selected" && name != "tab_left_image_flash")
+                        { state.reject("Unsupported native tab image parameter: "+name); return; }
+                        state.stack.back()->tabs->images[part][name] = attributes[index+1];
+                    }
+                    state.callbackElement = true;
+                    return;
+                }
                 if (std::string_view(tag).find('.') != std::string_view::npos)
                 {
                     if (state.stack.empty() || !state.callback(*state.stack.back(),tag,attributes))
@@ -1055,7 +1092,8 @@ namespace
                 const bool icon = std::string_view(tag) == "icon";
                 const bool button = std::string_view(tag) == "button";
                 const bool badge = std::string_view(tag) == "badge";
-                const bool panel = std::string_view(tag) == "panel";
+                const bool tabs = std::string_view(tag) == "tab_container";
+                const bool panel = std::string_view(tag) == "panel" || tabs;
                 const bool border = std::string_view(tag) == "view_border";
                 const bool editor = std::string_view(tag) == "line_editor";
                 const bool check = std::string_view(tag) == "check_box";
@@ -1157,6 +1195,16 @@ namespace
                     declaration->control = state.panelDefaults.control;
                     declaration->panel = state.panelDefaults.panel;
                     declaration->panelConstructor = state.panelDefaults;
+                }
+                if (tabs)
+                {
+                    declaration->tabs = std::make_shared<LLVKWidgetFactory::TabDefaults>(*state.resources.tabs);
+                    declaration->params = declaration->tabs->panel.view;
+                    declaration->control = declaration->tabs->panel.control;
+                    declaration->panel = declaration->tabs->panel.panel;
+                    declaration->panelConstructor = state.panelDefaults;
+                    if (!declaration->control->font && !declaration->control->fontRequest)
+                        declaration->control->fontRequest = state.resources.defaultFontRequest;
                 }
                 if (icon)
                 {
@@ -1858,6 +1906,54 @@ namespace
             }
             if (declaration.layoutStack && !tree.updateLayoutStack(*id,error))
             { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
+            if (declaration.tabs)
+            {
+                const auto constructTabs = [&]() -> bool
+                {
+                    if (!tree.initializeTabContainer(*id,error)) return false;
+                    auto children = tree.get(*id)->children;
+                    std::reverse(children.begin(),children.end());
+                    std::vector<LLVKWidgetTree::Id> panels;
+                    for (const auto child : children) if (tree.get(child) && tree.get(child)->panel) panels.push_back(child);
+                    for (std::size_t index = 0; index < panels.size(); ++index)
+                    {
+                        const auto child = panels[index];
+                        auto button = environment.buttonDefaults.button;
+                        button.label = labelText(tree.get(child)->panel->params.label);
+                        button.selectedLabel = button.label;
+                        button.labelAlign = declaration.tabs->alignment;
+                        button.leftPad = declaration.tabs->labelPadLeft;
+                        button.bottomPad = declaration.tabs->labelPadBottom;
+                        button.toggle = false;
+                        button.click.reset();
+                        const auto& images = declaration.tabs->images[index == 0 ? 0 : index+1 == panels.size() ? 2 : 1];
+                        for (const auto& [name,target] : {std::pair{"tab_top_image_unselected",&button.images.unselected},
+                            std::pair{"tab_top_image_selected",&button.images.selected},std::pair{"tab_top_image_flash",&button.images.flash}})
+                        {
+                            const auto found = images.find(name);
+                            if (found != images.end()) { *target = tree.findImage(found->second,error); if (!error.empty()) return false; }
+                        }
+                        button.images.pressed = button.images.selected;
+                        button.images.pressedSelected = button.images.selected;
+                        button.pressedProvided = button.pressedSelectedProvided = true;
+                        LLVKControl::Params buttonControl;
+                        buttonControl.font = control->font;
+                        buttonControl.tabStop = false;
+                        LLVKWidgetTree::Params buttonView;
+                        buttonView.name = "htab_"+tree.get(child)->params.name;
+                        buttonView.rect = {0,0,60,declaration.tabs->layout.tabHeight};
+                        const auto tab = tree.createButton(buttonView,buttonControl,button,*id,error);
+                        if (!tab || !tree.attachTabPanel(*id,child,*tab,error)) return false;
+                    }
+                    auto layout = declaration.tabs->layout;
+                    layout.labelPadding = tree.setting("UITabPadding").value_or(LLSD(0)).asInteger();
+                    layout.horizontalPadding = tree.setting("UITabCntrTabHPad").value_or(LLSD(0)).asInteger();
+                    layout.panelOverlap = tree.setting("UITabCntrButtonPanelOverlap").value_or(LLSD(0)).asInteger();
+                    if (!tree.layoutTopTabs(*id,layout,error)) return false;
+                    return panels.empty() || tree.selectTabPanel(*id,panels.front(),error);
+                };
+                if (!constructTabs()) { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
+            }
             if (panel && !typedLayoutPanel && owningParent)
             {
                 const auto* owner = tree.get(owningParent);
@@ -1994,7 +2090,15 @@ bool LLVKWidgetFactory::loadDefaults(const LLVKWidgetTree& tree, std::string_vie
     if (!declaration.children.empty() || (declaration.ownedBadge && !declaration.ownedBadge->children.empty()))
     { error = "Native widget defaults cannot construct child widgets"; return false; }
     declaration.params.view.fromDeclaration = false;
-    if (declaration.icon)
+    if (declaration.tabs)
+    {
+        auto defaults = std::make_shared<TabDefaults>(*declaration.tabs);
+        defaults->panel.view = declaration.params;
+        defaults->panel.control = *declaration.control;
+        defaults->panel.panel = *declaration.panel;
+        mResources.tabs = std::move(defaults);
+    }
+    else if (declaration.icon)
     {
         auto defaults = mIconDefaults;
         defaults.view = std::move(declaration.params);

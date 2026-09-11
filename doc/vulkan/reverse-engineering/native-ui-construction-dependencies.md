@@ -11,7 +11,194 @@ construction is not automatically GPU-neutral. This document records factory
 decisions independently of the rendering path. None of the candidate CPU sharing
 choices below authorizes reuse until its outgoing constructor/helper targets close.
 
+## UI checkpoint status (2026-09-11)
+
+This is a user-requested work-in-progress commit, not the Full UI Parity
+checkpoint. The next acceptance gate is full startup UI parity with the original
+OpenGL behavior and shared source declarations, without GL visual ownership.
+
+| Area | Actual status |
+|---|---|
+| Login boot, top menu, font fallback | Implemented; native viewer runtime and focused regressions verified |
+| Scroll painting and top tabs | Implemented/tested for document clipping and non-overflow top tabs; left/bottom/overflow remain open |
+| About | Shared section templates, native facts, generated contributor/license assets and real scrollbars; exact hierarchy, rich links, selection, timestamp and all data parity remain open |
+| Preferences | Reduced provisional window still present; original panels, control types, search, callbacks and full apply/cancel behavior are not restored |
+| RLVa/audio | Native initialization absent; About reports inactive states, not capability parity |
+| Settings persistence | Accepted native subset has staged file replacement and rollback tests; full original settings behavior remains open |
+| Validation | Font 18/18, widget 134/134, context 9/9, integrated window 1/1 passed; viewer rebuilt with BuildProjectReferences=false; no full-build or visual-parity claim |
+
+The unrelated baseline test repairs and older untracked text-layout experiment
+are excluded from this checkpoint. Texture cache, skins and close/logout policy
+review remain deferred until the UI parity priority is satisfied. Test counts
+and screenshots do not close any outstanding behavior above.
+
 ## Native construction implementation (2026-09-10)
+
+About service-field contract (2026-09-11, NV-00/01/15/17): at c4d2f9a600
+getViewerInfo uses RlvHandler::isEnabled before displaying getVersionAbout,
+LLCore::LLHttp::getCURLVersion (a direct curl_version string), the actual J2C
+implementation's getEngineInfo, and gAudiop->getDriverName or "Undefined".
+Native startup has no initialized RLVa handler or audio engine, so it reports
+the same inactive states: localized RLVaStatusDisabled and "Undefined". This is
+not implementation or enablement parity for those services. In particular,
+RlvHandler::setEnabled also initializes visual UI/environment callbacks; it cannot
+be enabled merely to display a version number. OpenAL getDriverName queries an
+active audio context and is not an installed-library-version query.
+
+Native curl uses the same API-independent curl_version from ll::libcurl. Native
+J2C reports compile/runtime OpenJPEG versions from the translation unit that
+actually decodes native images, using the LLImageJ2COJ string format; a GL build
+using Kakadu must not cause native OpenJPEG to be mislabeled as KDU. The mode
+label now uses an explicitly recorded successfully loaded preset, not a mutable
+SessionSettingsFile value; load failure is surfaced before native window startup.
+Test131 checks inactive services, codec/runtime labeling and applied-versus-saved
+mode distinction. Full RLVa/audio capability restoration remains open.
+
+About scroll correction (2026-09-11, NV-00/01/12/17): original floater_about.xml
+fs_credits_scroll_container and LLScrollContainer::draw/updateScroll retain the
+whole document and move its viewport, with visible scrollbar controls. The
+native flattened page previously sliced off leading lines and had no scrollbar.
+Native About now owns a real native scroll_container/panel document and retains
+the text while scroll position moves. Test131 requires a visible painted bar,
+wheel movement without text mutation, and reset on tab change. This repairs the
+missing scrollbar but does not establish original per-tab layout/content parity.
+
+About content/asset correction: c4d2f9a600 LLFloaterAbout::postBuild reads the
+first contributor-file line and package-info lines (retaining XUI license text
+when the file is missing). The development copy path did not generate either
+asset. ViewerManifest now uses its existing extract_names/put_in_file and
+BuildPackagesInfo output for development copy too, with Windows dependency
+edges. The extraction algorithm, randomized ordering and GL visual consumers
+are unchanged. copy_w_viewer_manifest completed and staged contributors.txt
+(6816 bytes) and packages-info.txt (5579 bytes). Python syntax check passed.
+
+Native About keys pages by original panel names, merges skin/language XUI layers,
+and keeps support/Linden introductions outside scroll documents. Copy is Info-only.
+The Info formatter consumes original strings.xml About sections in source order
+from getViewerInfoString; native facts use CMake's full version/build/upstream,
+CPUID, Win32 memory/OS APIs and the selected Vulkan physical-device properties.
+Native Dullahan version getters only format compiled library constants; no GL
+viewer/provider singleton is called. Mode/font/quality/voice labels use source
+translations. Browser version and resize facts update the displayed Info text.
+Tests131 and the Vulkan window test cover formatter/scroll consumers. CPU frequency,
+exact original memory accounting, driver-version labeling, uninitialized library
+services, SLT timestamp, rich links/editor selection and exact original per-control
+layout remain unqualified; unavailable values are explicit, not GL-derived.
+
+Tab selection owner (2026-09-11, NV-00/01/12/17): c4d2f9a600
+LLTabContainer::addTabPanel/selectTab/setTab stores panel/button pairs, initially
+hides panels, validates the selected panel name, toggles button/visibility and
+tab-stop state, then commits the panel name. Native tree-owned stable IDs and
+selection generations implement those CPU responsibilities without GL owners.
+Snapshot iteration and owner rechecks protect reentrant visibility/commit calls;
+a nested selection supersedes the outer operation. Test134 checks validation
+veto, callback ordering, button routing, selected tab-stop and callback deletion.
+Geometry, overflow scrolling, source XUI constructor integration and application
+panel services remain open; this owner alone is not floater parity.
+
+Top-tab layout probe: source LLTabContainer::addTabPanel uses a one-pixel panel
+border, configurable tab/panel overlap, optional panel side offsets, and clamped
+font-measured tab widths. Native layoutTopTabs stages panel/button shapes before
+publication and uses actual native font measurements. Test134 checks exact
+content/strip coordinates, resize and atomic rejection of unsupported overflow.
+The non-overflow top arrangement is now wired to the native tab_container
+factory with the original widgets/tab_container.xml image/font/geometry defaults.
+Test70 constructs panels and selects them with the original tab skin images.
+Painting reconciles resized tab geometry without publishing unchanged shapes.
+Source handleKeyHere/selectNextTab/selectPrevTab/onTabBtn and setValue establish
+Alt-arrow and Shift-Alt-parent navigation, strip-only unmodified arrows,
+selected-button focus retention, click-to-panel focus and indexed selection.
+Native input observes those top-tab rules and WM_SYSKEYDOWN routing; test134
+covers wrapping, focus retention and indexed selection. Left/bottom layout,
+overflow arrows and flash propagation remain outstanding. Full floater
+construction and parity are not established by this template regression.
+
+Scroll painter integration (2026-09-11, NV-00/01/12/13/14/17): source
+c4d2f9a600 LLScrollContainer::draw updates autoscroll/layout, focuses active
+scrollbars, paints the document inside a local clip, then paints visible chrome.
+LLScrollbar::draw paints track/thumb/focus/glow then button children. Native
+prepareScrollContainer/prepareScrollbar own the audited CPU decisions; the painter
+consumes their screen rectangles, preserves document-only clipping and emits
+ordered image/solid commands through the existing immutable Vulkan packet path.
+No GL draw/prepareVkDraw/getVkDrawState callback is used. Test133 discriminates
+document clipping and chrome ordering before and after a wheel event. Visible
+border painting remains a separate open dependency; floater parity is not closed.
+
+Fallback kerning correction (2026-09-11, NV-00/01/17/18): source c4d2f9a600
+LLFontFreetype::getXKerning uses the primary face with cached glyph indices,
+tabular-digit suppression and a separate auto-hinter side-bearing correction.
+Native measurement/layout inherited primary-face selection even for glyphs owned
+by fallback faces, causing the checked FreeType owner to reject foreign indices.
+The CPU-only pair helper now uses the shared owning face for same-face pairs;
+cross-face pairs have no font-table kern, but retain the discrete side-bearing
+correction. Measurement, drawing, wrapping and hit-testing use this helper.
+This is a native ownership correction, not reproduction of foreign-face glyph
+lookup or a change to the GL reference. Font test7 exercises mixed-face layout
+and measurement agreement plus same-fallback fitting. The face bounds guard
+remains enabled. A one-glyph primary test fixture proves that the previous
+cross-face call rejects the fallback index; corrected measurement, drawing and
+fitting succeed for both same-fallback and mixed-face pairs. Runtime credits
+rendering is the affected consumer check.
+
+Native login dialog content (NV-00/01/12/17): source LLFloaterAbout postBuild/
+setSupportText/copy and original floater_about.xml provide read-only runtime Info,
+credits, license data and clipboard behavior. Native content reads the packaged
+text rather than copying a GL-produced visual; scroll state is CPU-owned.
+Preferences currently supports pre-login remember flags and renderer choice only.
+Source LLPanelPreference::saveSettings/cancel and onBtnOK establish snapshot,
+rollback and explicit persistence; native unported in-world panels remain open.
+Renderer choice is pending and never changes the active device; application
+binding must confirm shutdown and persist the approved change. Exact full
+Preferences layout/panels, rich About links, docking and tab overflow remain
+unqualified. These native dialogs do not establish full preferences parity.
+
+Preference file update contract: c4d2f9a600 LLControlGroup::saveToFile writes
+Type/Comment/Value/Backup from persistent save values, excluding transient values.
+The native CPU-only owner uses the audited LLSD serializer and filesystem IO,
+not LLControlGroup callbacks. A bounded parse and same-volume staged replacement
+merge only explicitly accepted changes into the existing document; unrelated
+entries and metadata survive. Failed parse/write/replacement leaves the in-memory
+saved layer unchanged. Test132 checks saved reload, unrelated entries, transient
+exclusion and malformed-file refusal. Concurrent writes by the GL viewer and
+power-loss durability are not qualified; staging conflicts fail explicitly.
+
+Native floater frame (NV-00/01/12/17): c4d2f9a600 LLFloater close/destruction/
+focus lifecycle and widgets/floater.xml establish independent panel chrome, close
+button, focus root and drag header. Native LLVKFloater owns an independent panel
+and native close/text children; opening centers it and retains prior focus;
+closing releases descendant capture and restores the surviving focus owner.
+Dragging uses explicit screen coordinates with root bounds, no GL drag callbacks.
+This CPU-only frame is shared by native About/Preferences, not a wrapper around
+LLFloater. Resize handles, docking, minimization and persisted geometry remain
+open; narrow construction/input checks are required before content integration.
+
+Login menu restoration (2026-09-11, NV-00/01/12/17): source c4d2f9a600
+llviewermenu.cpp login menu construction and LLMenuItemBranchDownGL nominal width,
+draw and mouse-down; LLMenuItemGL nominal height and menu_login.xml/templates.
+Q1 the menu is a separate 18px top-edge owner, not a child in the login XML;
+bar items use measured label width+25, centered text with bottom pad1, toggle
+on mouse-down, and skin highlight colors. Popup rows use font height+4 and
+independent foreground/disabled colors. Q2 native Expat menu model and explicit
+popup/input state append image-free solid/text paint commands to native packets.
+Q3 retain callback names as data and dispatch only explicitly bound native
+handlers after dismissing the menu; never invoke GL menu/floater callbacks.
+Tests cover actual menu XML, top placement, popup input and action dispatch.
+Unbound floater actions are visibly disabled, not implemented. Tear-off, full
+accelerator/jump-key/check predicate semantics and full menu parity remain open.
+
+Verification: construction suite 130/130 and integrated native login window 1/1
+passed. The integrated log contains no VUID/Validation Error entries. The actual
+rebuilt vulkanstorm-bin.exe (PID 9456) displayed Viewer/Help/Debug above the live
+browser, including Help and Viewer popups. At resized 1264x861 client extent the
+bar stayed anchored at the top, and F10/Down/Enter activated Exit and closed the
+viewer. Parent modules included Vulkan, CEF and Khronos validation, not OpenGL/GLU.
+Local screen captures: logs/native-login-menu.png, logs/native-login-menu-viewer.png
+(Help popup), logs/native-login-menu-resized.png (Viewer popup). This is runtime
+render/input evidence, not measured GL parity. Exit and confirmed HTTP(S) help
+links have native bindings; Preferences/About/Guidebook and other GL-owned
+floater actions are disabled pending native service implementations. The URL
+launch confirmation path was inspected/compiled, not exercised to open a browser.
+Grid-specific Help entries follow update_grid_help's non-OpenSim hidden policy.
 
 Login password visibility binding (NV-00/01/12/17): source
 FSPanelLogin::onShowHidePasswordClick/syncShowHidePasswordButton and

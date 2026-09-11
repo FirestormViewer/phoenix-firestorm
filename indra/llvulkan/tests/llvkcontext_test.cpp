@@ -337,6 +337,33 @@ namespace tut
         paint.commands[0].image = LLVKWidgetImage::browserFrame(1,1,browserPixel,error);
         ensure("new frame does not starve completed publication",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Ready);
         ensure("browser packet owns a completed image",widgetPacket.draws()[0].image != nullptr);
+        LLVKWidgetTree scrollTree;
+        LLVKWidgetTree::Params scrollView;
+        scrollView.rect={0,0,120,100};
+        LLVKControl::Params scrollControl;
+        scrollControl.font=std::move(font);
+        LLVKWidgetTree::ScrollContainerParams scrollParams;
+        scrollParams.size=16;
+        scrollParams.scrollbarControl=scrollControl;
+        scrollParams.vertical.decreaseControl=scrollParams.vertical.increaseControl=scrollControl;
+        scrollParams.horizontal.decreaseControl=scrollParams.horizontal.increaseControl=scrollControl;
+        const auto scrollRoot=scrollTree.createScrollContainer(scrollView,scrollControl,scrollParams,0,error);
+        ensure(error,scrollRoot.has_value());
+        scrollView.rect={0,0,100,300};
+        LLVKPanel::Params scrollPanel;
+        scrollPanel.backgroundVisible=scrollPanel.backgroundOpaque=true;
+        scrollPanel.opaqueColor=LLVKColor{0.3f,0.5f,0.7f,1};
+        const auto document=scrollTree.createPanel(scrollView,scrollControl,scrollPanel,*scrollRoot,error);
+        ensure(error,document.has_value());
+        ensure("native GPU scroll document attached",scrollTree.attachScrollContent(*scrollRoot,*document,0,error));
+        const auto scrollPaint=LLVKWidgetPaint::prepare(scrollTree,*scrollRoot,{},error);
+        ensure(error,scrollPaint.has_value());
+        const auto scrollReady=widgetGpu.prepare(*scrollPaint,renderer.swapchainExtent(),widgetPacket,error);
+        ensure(error,scrollReady==LLVKWidgetGpu::Status::Ready);
+        ensure("scroll frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+        ensure("native scroll packet recorded",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
+        ensure("native scroll packet presented",renderer.end2DFrame());
+        renderer.waitIdle();
     }
 #endif
 }

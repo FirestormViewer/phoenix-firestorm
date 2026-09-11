@@ -59,6 +59,12 @@ std::shared_ptr<const LLVKWidgetImage> LLVKWidgetImage::decodeJ2c(std::string na
     return decodeJ2cPixels(std::move(name),encoded,error);
 }
 
+std::string LLVKWidgetImage::j2cDecoderVersion()
+{
+    return "OpenJPEG: "+std::to_string(OPJ_VERSION_MAJOR)+"."+std::to_string(OPJ_VERSION_MINOR)+"."+
+        std::to_string(OPJ_VERSION_BUILD)+", Runtime: "+opj_version();
+}
+
 std::shared_ptr<LLVKWidgetImage> LLVKWidgetImage::decodeJ2cPixels(std::string name,
     std::span<const std::uint8_t> encoded, std::string& error)
 {

@@ -314,6 +314,15 @@ bool LLVKWidgetTree::setValue(Id id, const LLSD& value)
 {
     auto found = mNodes.find(id);
     if (found == mNodes.end() || !found->second.control) return false;
+    if (found->second.tabContainer)
+    {
+        const auto index = value.asInteger();
+        const auto& tabs = found->second.tabContainer->tabs;
+        if (index < 0 || static_cast<std::size_t>(index) >= tabs.size()) return false;
+        const auto panel = tabs[index].panel;
+        std::string error;
+        return selectTabPanel(id,panel,error);
+    }
     if (found->second.combo) { std::string error; return setComboValue(id,value,error); }
     if (found->second.checkBox) return setValue(found->second.checkBox->button,value);
     if (found->second.scrollbar)

@@ -2,6 +2,9 @@
 #include "llsdserialize.h"
 #include <fstream>
 #include <sstream>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 namespace
 {
@@ -37,6 +40,7 @@ bool LLVKStartupSettings::load(std::string_view xml,bool defaults,bool saved,std
             if (type.empty()) { error = "Native settings entry has no type: "+name; return false; }
             Entry entry;
             entry.type = type;
+            entry.definition = definition;
             entry.defaultValue = comparable(type,definition["Value"]);
             entry.persistent = !defaults || !definition.has("Persist") || definition["Persist"].asInteger() != 0;
             entries.emplace(name,std::move(entry));
@@ -45,6 +49,7 @@ bool LLVKStartupSettings::load(std::string_view xml,bool defaults,bool saved,std
         {
             if (found->second.type != type) { error = "Native settings type mismatch: "+name; return false; }
             found->second.defaultValue = comparable(type,definition["Value"]);
+            found->second.definition = definition;
             found->second.saved.reset();
             found->second.transient.reset();
             found->second.persistent = !definition.has("Persist") || definition["Persist"].asInteger() != 0;
@@ -92,6 +97,65 @@ const LLVKStartupSettings::Entry* LLVKStartupSettings::find(const std::string& n
 {
     const auto found = mEntries.find(name);
     return found == mEntries.end() ? nullptr : &found->second;
+}
+
+bool LLVKStartupSettings::saveChanges(const std::filesystem::path& path,const std::map<std::string,LLSD>& changes,std::string& error)
+{
+    error.clear();
+    auto updated = *this;
+    for (const auto& [name,value] : changes)
+    {
+        const auto* entry = find(name);
+        if (!entry || !entry->persistent) { error = "Native preference is not persistent: "+name; return false; }
+        if (!updated.set(name,value,true,error)) return false;
+    }
+    if (changes.empty()) return true;
+    std::error_code status;
+    std::filesystem::create_directories(path.parent_path(),status);
+    if (status) { error = "Native settings directory cannot be created: "+status.message(); return false; }
+    auto staging = path;
+    staging += ".native-write";
+    if (!std::filesystem::create_directory(staging,status))
+    { error = "Native settings update cannot acquire its staging directory"; return false; }
+    struct Cleanup
+    {
+        std::filesystem::path directory;
+        ~Cleanup() { std::error_code ignored; std::filesystem::remove(directory/"settings.tmp",ignored); std::filesystem::remove(directory,ignored); }
+    } cleanup{staging};
+    LLSD document = LLSD::emptyMap();
+    const bool exists = std::filesystem::exists(path,status);
+    if (status) { error = "Native settings file status failed: "+status.message(); return false; }
+    if (exists)
+    {
+        std::ifstream input(path,std::ios::binary|std::ios::ate);
+        if (!input || input.tellg() < 0 || input.tellg() > 16*1024*1024)
+        { error = "Native settings file cannot be read safely"; return false; }
+        input.seekg(0);
+        if (LLSDSerialize::fromXML(document,input,false) == LLSDParser::PARSE_FAILURE || !document.isMap())
+        { error = "Existing native settings file is invalid; it was not overwritten"; return false; }
+    }
+    for (const auto& [name,value] : changes)
+    {
+        const auto* entry = updated.find(name);
+        if (!document[name].isMap()) document[name] = entry->definition;
+        document[name]["Type"] = entry->type;
+        document[name]["Value"] = entry->saveValue();
+    }
+    const auto temporary = staging/"settings.tmp";
+    std::ofstream output(temporary,std::ios::binary|std::ios::trunc);
+    if (!output) { error = "Native settings staging file cannot be opened"; return false; }
+    LLSDSerialize::toPrettyXML(document,output);
+    output.close();
+    if (!output) { error = "Native settings write failed"; return false; }
+#ifdef _WIN32
+    if (!MoveFileExW(temporary.c_str(),path.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))
+    { error = "Native settings replacement failed: "+std::to_string(GetLastError()); return false; }
+#else
+    std::filesystem::rename(temporary,path,status);
+    if (status) { error = "Native settings replacement failed: "+status.message(); return false; }
+#endif
+    mEntries = std::move(updated.mEntries);
+    return true;
 }
 
 std::map<std::string,LLSD> LLVKStartupSettings::values() const

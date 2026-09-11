@@ -39,12 +39,15 @@ add_library(llvkwidgets llvkwidgettree.cpp llvkwidgettree.h llvkwidgetlayout.cpp
     llvkskinfiles.cpp llvkskinfiles.h llvkskinimages.cpp llvkskinimages.h llvkwidgetjpeg.cpp llvkwidgettga.cpp llvkwidgetj2c.cpp
     llvklineeditor.cpp llvklineeditor.h llvkclipboard.cpp llvkclipboard.h llvkstyledtext.cpp llvkstyledtext.h
     llvkscroll.cpp llvkscroll.h llvkcombo.cpp llvkbrowsersurface.cpp llvkbrowsersurface.h llvkwidgetpaint.cpp llvkwidgetpaint.h
-    llvkloginui.cpp llvkloginui.h llvkstartupsettings.cpp llvkstartupsettings.h)
+    llvkloginui.cpp llvkloginui.h llvkstartupsettings.cpp llvkstartupsettings.h llvkloginmenu.cpp llvkloginmenu.h llvkfloater.cpp llvkfloater.h llvklogindialogs.cpp)
 target_include_directories(llvkwidgets PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(llvkwidgets SYSTEM PRIVATE ${llvk_stb_SOURCE_DIR})
 target_link_libraries(llvkwidgets PRIVATE ll::expat ll::libpng ll::zlib-ng ll::libjpeg ll::openjpeg)
 target_link_libraries(llvkwidgets PUBLIC llcommon)
 if (WINDOWS)
+    include(OpenSSL)
+    include(NGHTTP2)
+    include(CURL)
     target_link_libraries(llvkwidgets PRIVATE user32)
 endif ()
 set_property(TARGET llvkwidgets PROPERTY POSITION_INDEPENDENT_CODE ON)
@@ -101,7 +104,11 @@ if (WINDOWS)
     target_link_libraries(llvkbrowser PUBLIC llvkwidgets PRIVATE llvk_dullahan user32)
     add_library(llvkloginwindow llvkloginwindow.cpp llvkloginwindow.h llvknativestartup.cpp llvknativestartup.h)
     target_compile_definitions(llvkloginwindow PRIVATE VK_USE_PLATFORM_WIN32_KHR)
-    target_link_libraries(llvkloginwindow PUBLIC llvkuipacket llvkbrowser PRIVATE user32 shell32 ole32)
+    target_compile_definitions(llvkloginwindow PRIVATE
+        LLVK_VIEWER_MAJOR="${VIEWER_VERSION_MAJOR}" LLVK_VIEWER_MINOR="${VIEWER_VERSION_MINOR}"
+        LLVK_VIEWER_PATCH="${VIEWER_VERSION_PATCH}" LLVK_VIEWER_BUILD="${VIEWER_VERSION_REVISION}"
+        LLVK_VIEWER_UPSTREAM="${VIEWER_VERSION_LL}" LLVK_VIEWER_CHANNEL="${VIEWER_CHANNEL}")
+    target_link_libraries(llvkloginwindow PUBLIC llvkuipacket llvkbrowser PRIVATE ll::libcurl user32 shell32 ole32 psapi)
     add_dependencies(llvkloginwindow llvk_ui_shaders)
 endif ()
 

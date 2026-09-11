@@ -1,6 +1,7 @@
 #include "llvkloginui.h"
 #include "llvkskinimages.h"
 #include "lluri.h"
+#include "llvkxmllayers.h"
 #include <fstream>
 
 std::string LLVKLoginUi::pageUrl(const Page& page)
@@ -106,7 +107,34 @@ std::unique_ptr<LLVKLoginUi> LLVKLoginUi::create(const Configuration& configurat
     ui->mTree.setControlCommit(ui->find("password_hide_btn"),std::move(togglePassword));
     const auto mode = configuration.settings.find("SessionSettingsFile");
     if (mode != configuration.settings.end()) ui->mTree.setValue(ui->find("mode_combo"),mode->second);
+    const auto menuFiles = ui->mSkin->read("xui","menu_login.xml",LLVKSkinFiles::Policy::Current,error);
+    if (!menuFiles) return nullptr;
+    std::vector<std::string_view> menuLayers;
+    for (const auto& file : *menuFiles) menuLayers.push_back(file);
+    const auto menuXml = LLVKXmlLayers::merge(menuLayers,error);
+    if (!menuXml) return nullptr;
+    const auto menuFont = ui->mFonts->resolve({"SansSerif","Small"},error);
+    if (!menuFont) return nullptr;
+    const auto debug = configuration.settings.find("UseDebugMenus");
+    ui->mMenu = LLVKLoginMenu::create(*menuXml,menuFont,ui->mColors,configuration.labels,
+        debug != configuration.settings.end() && debug->second.asBoolean(),error);
+    if (!ui->mMenu) return nullptr;
+#ifndef OPENSIM
+    for (const auto name : {"current_grid_help_login","current_grid_about_login","grid_help_seperator_login"})
+        ui->mMenu->setVisible(name,false);
+#endif
+    ui->mDialogFactory = std::make_unique<LLVKWidgetFactory>(factory);
+    if (!ui->initializeDialogs(configuration,error)) return nullptr;
     return ui;
+}
+
+std::optional<LLVKWidgetPaint> LLVKLoginUi::preparePaint(const LLVKWidgetPaint::Input& input,std::string& error)
+{
+    auto paint = LLVKWidgetPaint::prepare(mTree,mRoot,input,error);
+    if (!paint) return std::nullopt;
+    const auto viewport = mTree.screenRect(mRoot,error);
+    if (!viewport || !mMenu->paint(*paint,*viewport,error)) return std::nullopt;
+    return paint;
 }
 
 LLVKWidgetTree::Id LLVKLoginUi::find(std::string_view name) const

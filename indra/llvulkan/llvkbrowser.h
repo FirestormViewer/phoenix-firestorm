@@ -39,6 +39,7 @@ public:
     bool wheel(int x, int y, int horizontal, int vertical, std::string& error);
     bool keyboard(std::uint32_t message, std::uint32_t parameter, std::uint64_t flags, std::string& error);
     std::vector<Event> takeEvents();
+    std::string versionInfo(std::string& error) const;
     State state() const noexcept { return mState; }
     const LLVKBrowserSurface& surface() const noexcept { return mSurface; }
 private:

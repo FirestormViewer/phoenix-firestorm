@@ -69,6 +69,290 @@ namespace tut
     typedef widgettree_group::object object;
     widgettree_group widgettree_tests("llvkwidgettree");
 
+    template<> template<> void object::test<134>()
+    {
+        set_test_name("native tab selection validates panel names and commits after visibility changes");
+        LLVKWidgetTree tree;
+        LLVKControl::Params control;
+        control.font=loadFont();
+        LLVKWidgetTree::Params view;
+        view.rect={0,0,200,100};
+        std::string error;
+        bool reject=false;
+        control.validate.function=[&](auto,const LLSD& name) { ensure("validation receives panel name",name.asString()=="first" || name.asString()=="second"); return !reject; };
+        const auto container=tree.createPanel(view,control,{},0,error);
+        ensure(error,container.has_value());
+        ensure("native tab state",tree.initializeTabContainer(*container,error));
+        control.validate={};
+        view.name="first";
+        const auto first=tree.createPanel(view,control,{},*container,error);
+        view.name="second";
+        const auto second=tree.createPanel(view,control,{},*container,error);
+        const auto firstButton=tree.createButton(view,control,{},*container,error);
+        const auto secondButton=tree.createButton(view,control,{},*container,error);
+        ensure(error,first && second && firstButton && secondButton);
+        ensure("attach first",tree.attachTabPanel(*container,*first,*firstButton,error));
+        ensure("attach second",tree.attachTabPanel(*container,*second,*secondButton,error));
+        LLVKWidgetTree::Node::TabContainer::Layout layout;
+        layout.panelOverlap=3;
+        layout.horizontalPadding=2;
+        ensure("source top-tab geometry",tree.layoutTopTabs(*container,layout,error));
+        ensure("panel uses tab content bounds",tree.get(*first)->params.rect == LLVKWidgetTree::Rect{1,1,199,81});
+        ensure("button uses top strip",tree.get(*firstButton)->params.rect == LLVKWidgetTree::Rect{3,79,63,100});
+        ensure("resize tab owner",tree.reshape(*container,300,140,error));
+        ensure("resized tab geometry",tree.layoutTopTabs(*container,layout,error));
+        ensure_equals("resized panel top",tree.get(*first)->params.rect.top,121);
+        layout.minimumWidth=layout.maximumWidth=200;
+        const auto beforeLayout=tree.get(*firstButton)->params.rect;
+        ensure("overflow remains explicit",!tree.layoutTopTabs(*container,layout,error));
+        ensure("rejected layout preserves geometry",tree.get(*firstButton)->params.rect==beforeLayout);
+        ensure("panels hidden before selection",!tree.get(*first)->params.visible && !tree.get(*second)->params.visible);
+        int commits=0;
+        LLVKControl::Callback callback;
+        callback.function=[&](auto,const LLSD& name)
+        {
+            ++commits;
+            const bool selectedFirst=name.asString()=="first";
+            ensure("commit sees new panel visibility",tree.get(*first)->params.visible==selectedFirst && tree.get(*second)->params.visible!=selectedFirst);
+        };
+        tree.setControlCommit(*container,callback);
+        ensure("select first",tree.selectTabPanel(*container,*first,error));
+        reject=true;
+        ensure("selection veto",!tree.selectTabPanel(*container,*second,error));
+        ensure("veto preserves selected panel",tree.get(*first)->params.visible);
+        ensure_equals("veto does not commit",commits,1);
+        reject=false;
+        ensure("button selects second",tree.commit(*secondButton));
+        ensure("only selected tab in keyboard traversal",!tree.get(*firstButton)->control->params.tabStop && tree.get(*secondButton)->control->params.tabStop);
+        ensure("tab strip focus",tree.requestControlFocus(*secondButton,true,error));
+        ensure("right wraps to first tab",tree.tabContainerKey(*container,LLVKWidgetTree::ScrollKey::Right,{},error));
+        ensure_equals("arrow keeps tab focus",tree.keyboardFocus(),*firstButton);
+        ensure("numeric tab selection",tree.setValue(*container,LLSD(1)));
+        ensure_equals("numeric value selects second",tree.get(*container)->tabContainer->selected,*second);
+        ensure("invalid index rejected",!tree.setValue(*container,LLSD(-1)));
+        callback.function=[&](auto id,const LLSD&) { tree.erase(id,error); };
+        tree.setControlCommit(*container,callback);
+        ensure("commit may erase tab owner",tree.selectTabPanel(*container,*first,error));
+        ensure_equals("tab subtree retired",tree.size(),std::size_t(0));
+    }
+
+    template<> template<> void object::test<133>()
+    {
+        set_test_name("native scroll painter clips document before painting scrollbar controls");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKWidgetTree::Params view;
+        view.rect={0,0,120,100};
+        LLVKControl::Params control;
+        control.font=loadFont();
+        LLVKWidgetTree::ScrollContainerParams container;
+        container.size=16;
+        container.scrollbarControl=control;
+        container.vertical.decreaseControl=container.vertical.increaseControl=control;
+        container.horizontal.decreaseControl=container.horizontal.increaseControl=control;
+        const auto root=tree.createScrollContainer(view,control,container,0,error);
+        ensure(error,root.has_value());
+        view.rect={0,0,100,300};
+        LLVKPanel::Params panel;
+        panel.backgroundVisible=panel.backgroundOpaque=true;
+        panel.opaqueColor=LLVKColor{1,0,0,1};
+        const auto document=tree.createPanel(view,control,panel,*root,error);
+        ensure(error,document.has_value());
+        ensure("attach scroll document",tree.attachScrollContent(*root,*document,0,error));
+        const auto paint=LLVKWidgetPaint::prepare(tree,*root,{},error);
+        ensure(error,paint.has_value());
+        const auto vertical=tree.get(*root)->scrollContainer->vertical;
+        ensure("vertical scrollbar visible",tree.get(vertical)->params.visible);
+        bool foundDocument=false,foundScrollbar=false;
+        for (const auto& command : paint->commands)
+        {
+            if (command.owner==*document)
+            {
+                foundDocument=true;
+                ensure("document cannot paint over scrollbar",command.clip.right<=104);
+                ensure("document vertically clipped",command.clip.bottom>=0 && command.clip.top<=100);
+            }
+            if (command.owner==vertical)
+            {
+                ensure("scrollbar paints after document",foundDocument);
+                ensure_equals("scrollbar retains outer clip",command.clip.right,120);
+                foundScrollbar=true;
+            }
+        }
+        ensure("document and scrollbar emitted",foundDocument && foundScrollbar);
+        ensure("wheel moves document",tree.routeWheel(*root,50,50,1,false,error));
+        ensure("scrolled paint succeeds",LLVKWidgetPaint::prepare(tree,*root,{},error).has_value());
+    }
+
+    template<> template<> void object::test<132>()
+    {
+        set_test_name("native preference persistence merges saved changes without saving transient overrides");
+        const auto directory=std::filesystem::temp_directory_path()/"vulkanstorm-settings-test";
+        std::filesystem::create_directories(directory);
+        const auto path=directory/"settings.xml";
+        struct Cleanup { std::filesystem::path path; ~Cleanup() { std::filesystem::remove(path/"settings.xml"); std::filesystem::remove(path); } } cleanup{directory};
+        std::ofstream file(path);
+        file << "<llsd><map><key>Unrelated</key><map><key>Type</key><string>String</string><key>Value</key><string>keep</string></map></map></llsd>";
+        file.close();
+        LLVKStartupSettings settings;
+        std::string error;
+        ensure("defaults",settings.load("<llsd><map><key>RenderBackend</key><map><key>Type</key><string>String</string>"
+            "<key>Value</key><string>OpenGL</string><key>Comment</key><string>Backend</string></map>"
+            "<key>RememberPassword</key><map><key>Type</key><string>Boolean</string><key>Value</key><boolean>false</boolean></map></map></llsd>",true,true,error));
+        ensure("transient renderer",settings.set("RenderBackend",LLSD("Vulkan"),false,error));
+        ensure("save changed flag",settings.saveChanges(path,{{"RememberPassword",LLSD(true)}},error));
+        LLVKStartupSettings reloaded;
+        ensure("reload",reloaded.loadFile(path,true,false,true,error));
+        ensure_equals("unrelated retained",reloaded.find("Unrelated")->value().asString(),std::string("keep"));
+        ensure("changed flag retained",reloaded.find("RememberPassword")->value().asBoolean());
+        ensure("transient backend excluded",reloaded.find("RenderBackend") == nullptr);
+        ensure("explicit backend change",settings.saveChanges(path,{{"RenderBackend",LLSD("Zink")}},error));
+        ensure("reload backend",reloaded.loadFile(path,true,false,true,error));
+        ensure_equals("backend persisted",reloaded.find("RenderBackend")->value().asString(),std::string("Zink"));
+        std::ofstream corrupt(path); corrupt << "not settings"; corrupt.close();
+        ensure("malformed file preserved",!settings.saveChanges(path,{{"RenderBackend",LLSD("OpenGL")}},error));
+        ensure_equals("failed save leaves memory unchanged",settings.find("RenderBackend")->value().asString(),std::string("Zink"));
+    }
+
+    template<> template<> void object::test<131>()
+    {
+        set_test_name("native login dialogs paint and preserve Cancel and accepted settings transactions");
+        LLVKLoginUi::Configuration configuration;
+        const auto fonts = std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory = std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription = fonts/"fonts.xml";
+        configuration.fonts.platform = "Windows";
+        configuration.fonts.searchDirectories = {fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        configuration.settings = {{"FSRememberUsername",LLSD(true)},{"RememberPassword",LLSD(false)},
+            {"RenderBackend",LLSD("Vulkan")},{"RenderBackendPending",LLSD("Vulkan")},{"UIScrollbarSize",LLSD(16)}};
+        configuration.settings["SessionSettingsFile"]="settings_phoenix.xml";
+        configuration.appliedSettingsMode="settings_firestorm.xml";
+        std::map<std::string,LLSD> saved;
+        configuration.savePreferences = [&](const auto& values,std::string&) { saved=values; return true; };
+        std::string error;
+        auto login = LLVKLoginUi::create(configuration,error);
+        ensure(error,login != nullptr);
+        auto& tree=login->tree();
+        const auto password=login->find("password_edit");
+        ensure("focus before dialog",tree.requestControlFocus(password,true,error));
+        ensure("Preferences shortcut",login->menu().shortcut("P",true,false,false));
+        ensure(login->dialogError(),login->dialogError().empty());
+        const auto preferences=login->activeFloater();
+        ensure("Preferences visible",preferences != 0);
+        ensure("Preferences painter",login->preparePaint({},error).has_value());
+        ensure("change bound remember preference",tree.updateSetting("FSRememberUsername",LLSD(false)));
+        ensure("Cancel",login->closeFloater(error));
+        ensure("Cancel restores snapshot",tree.setting("FSRememberUsername")->asBoolean());
+        ensure_equals("close restores focus",tree.keyboardFocus(),password);
+        ensure("Cancel never saves",saved.empty());
+        ensure("reopen",login->showPreferences(error));
+        ensure_equals("single instance",login->activeFloater(),preferences);
+        ensure("change remember preference",tree.updateSetting("RememberPassword",LLSD(true)));
+        ensure("accept",login->applyPreferences(error));
+        ensure("accepted value persisted",saved["RememberPassword"].asBoolean());
+        ensure("About opens",login->showAbout(error));
+        LLSD aboutInfo;
+        aboutInfo["VIEWER_VERSION"]=LLSD::emptyArray();
+        for (const auto value : {"7","2","5","test"}) aboutInfo["VIEWER_VERSION"].append(value);
+        aboutInfo["RENDERING_API"]="Vulkan";
+        aboutInfo["RENDERING_API_VERSION"]="1.4";
+        aboutInfo["CPU"]="fixture CPU";
+        aboutInfo["BANDWIDTH"]=3000;
+        aboutInfo["LIBCURL_VERSION"]="curl fixture";
+        ensure("source About formatter",login->setAboutInfo(aboutInfo,error));
+        const auto formatted=tree.get(login->find("native_about_body"))->plainText->text;
+        ensure("source Info header",formatted.find(U"Vulkanstorm 7.2.5 (test)")!=std::u32string::npos);
+        ensure("source Info renderer line",formatted.find(U"Rendering API: Vulkan\nVersion: 1.4")!=std::u32string::npos);
+        ensure("source Info system field",formatted.find(U"CPU: fixture CPU")!=std::u32string::npos);
+        ensure("inactive RLVa uses source state",formatted.find(U"RestrainedLove API: (disabled)")!=std::u32string::npos);
+        ensure("absent audio uses source state",formatted.find(U"Audio Driver Version: Undefined")!=std::u32string::npos);
+        ensure("curl version from producer",formatted.find(U"libcurl Version: curl fixture")!=std::u32string::npos);
+        ensure("actual native J2C provider",formatted.find(U"J2C Decoder Version: OpenJPEG:")!=std::u32string::npos);
+        ensure("mode reports applied preset",formatted.find(U"Settings mode: Vulkanstorm")!=std::u32string::npos);
+        ensure("unapplied mode not reported",formatted.find(U"Settings mode: Phoenix")==std::u32string::npos);
+        ensure("reopen Info resets scroll after focus",login->showAbout(error));
+        const auto infoScroll=tree.get(login->find("about_scroll"))->scrollContainer->vertical;
+        ensure_equals("Info opens at document start",tree.get(infoScroll)->scrollbar->position,0);
+        ensure("Info data refresh",login->setAboutInfo(aboutInfo,error));
+        ensure_equals("Info refresh preserves document start",tree.get(infoScroll)->scrollbar->position,0);
+        login->setAboutInfo("Vulkanstorm test\nRenderer: native Vulkan\nDevice: fixture\nNot connected");
+        ensure("About painter",login->preparePaint({},error).has_value());
+        ensure("credits tab",tree.commit(login->find("about_tab_1")));
+        ensure(login->dialogError(),login->dialogError().empty());
+        ensure("Linden introduction stays outside scroll document",tree.get(login->find("about_intro"))->plainText->text.find(U"Firestorm would not be possible")!=std::u32string::npos);
+        ensure("Copy belongs only to Info",!tree.get(login->find("about_copy"))->params.visible);
+        ensure("credits painter",login->preparePaint({},error).has_value());
+        ensure("Firestorm tab",tree.commit(login->find("about_tab_2")));
+        ensure(login->dialogError(),login->dialogError().empty());
+        const auto body=login->find("native_about_body");
+        ensure("actual credits text loaded",tree.get(body)->plainText->text.find(U"community development project") != std::u32string::npos);
+        ensure("Firestorm uses its own scrolling introduction",!tree.get(login->find("about_intro"))->params.visible);
+        const auto creditsPaint=login->preparePaint({},error);
+        ensure(error,creditsPaint.has_value());
+        bool visibleGlyph=false;
+        for (const auto& command : creditsPaint->commands)
+            if (command.owner==body && command.text)
+                for (const auto& glyph : command.text->glyphs)
+                    if (glyph.left<command.clip.right && glyph.right>command.clip.left && glyph.bottom<command.clip.top && glyph.top>command.clip.bottom)
+                        visibleGlyph=true;
+        ensure("credits glyphs intersect visible body",visibleGlyph);
+        const auto scroll=login->find("about_scroll");
+        const auto vertical=tree.get(scroll)->scrollContainer->vertical;
+        ensure("Firestorm scrollbar visible",tree.get(vertical)->params.visible);
+        ensure("Firestorm scrollbar painted",std::any_of(creditsPaint->commands.begin(),creditsPaint->commands.end(),
+            [vertical](const auto& command) { return command.owner==vertical; }));
+        const auto wholeText=tree.get(body)->plainText->text;
+        const auto scrollRect=tree.screenRect(scroll,error);
+        ensure(error,scrollRect.has_value());
+        ensure("Firestorm wheel scrolls",login->floaterWheel(scrollRect->left+10,scrollRect->top-10,3,error));
+        ensure("scrollbar position advances",tree.get(vertical)->scrollbar->position>0);
+        ensure("scrolling preserves full credits",tree.get(body)->plainText->text==wholeText);
+        ensure("license tab",tree.commit(login->find("about_tab_3")));
+        ensure_equals("tab change starts at top",tree.get(vertical)->scrollbar->position,0);
+        ensure("license text exists",!tree.get(body)->plainText->text.empty());
+        ensure("About closes",login->closeFloater(error));
+    }
+
+    template<> template<> void object::test<130>()
+    {
+        set_test_name("native login menu paints at top and routes popup selection without GL menu owners");
+        std::ifstream file(std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE)/"xui"/"en"/"menu_login.xml");
+        ensure("packaged login menu",file.good());
+        const std::string xml{std::istreambuf_iterator<char>(file),std::istreambuf_iterator<char>()};
+        std::string error;
+        auto menu = LLVKLoginMenu::create(xml,loadFont(),{}, {},false,error);
+        ensure(error,menu != nullptr);
+        int quits = 0;
+        menu->bind("File.Quit",[&](const auto&,const auto&) { ensure("menu dismissed before action",!menu->open()); ++quits; });
+        LLVKWidgetPaint paint;
+        ensure("menu paint",menu->paint(paint,{0,0,1024,768},error));
+        ensure_equals("menu bar top",paint.commands[0].rectangle.top,768);
+        ensure_equals("menu bar height",paint.commands[0].rectangle.bottom,750);
+        ensure_equals("bar and two visible headings",paint.commands.size(),std::size_t(3));
+        LLVKWidgetTree::PointerEvent event;
+        event.x = 15; event.y = 759; event.kind = LLVKWidgetTree::PointerKind::LeftDown;
+        ensure("Viewer opens on press",menu->pointer(event) && menu->open());
+        paint = {};
+        ensure("popup paint",menu->paint(paint,{0,0,1024,768},error));
+        ensure("popup adds rows",paint.commands.size() > 3);
+        ensure("down selects enabled exit skipping preferences",menu->key(LLVKLoginMenu::Key::Down));
+        ensure("return activates exit",menu->key(LLVKLoginMenu::Key::Return));
+        ensure_equals("exit dispatched once",quits,1);
+        menu->key(LLVKLoginMenu::Key::Activate);
+        menu->key(LLVKLoginMenu::Key::Right);
+        paint = {};
+        ensure("Help popup paint",menu->paint(paint,{0,0,1280,900},error));
+        ensure_equals("menu follows resize",paint.commands[0].rectangle.top,900);
+        event.x = 900; event.y = 200;
+        ensure("outside press consumed",menu->pointer(event));
+        ensure("outside press dismisses",!menu->open());
+        ensure("bound exit shortcut",menu->shortcut("Q",true,false,false));
+        ensure_equals("shortcut dispatches",quits,2);
+        ensure("unbound Preferences shortcut unavailable",!menu->shortcut("P",true,false,false));
+        ensure("unmodified letter is not a shortcut",!menu->shortcut("Q",false,false,false));
+        ensure("DTD rejected",!LLVKLoginMenu::create("<!DOCTYPE menu_bar><menu_bar/>",loadFont(),{}, {},false,error));
+    }
+
     template<> template<> void object::test<129>()
     {
         set_test_name("native login page preserves existing query and encodes viewer metadata");
@@ -2547,6 +2831,16 @@ namespace tut
         }
         ensure("container packaged template",scrollFactory.loadDefaultsFile(tree,"widgets/scroll_container.xml",error));
         ensure("panel construction font default",scrollFactory.loadDefaults(tree,"<panel font='SansSerifSmall'/>",error));
+        ensure("tab container packaged template",scrollFactory.loadDefaultsFile(tree,"widgets/tab_container.xml",error));
+        const auto tabs = scrollFactory.construct(tree,
+            "<tab_container width='501' height='572'><panel name='info' label='Info'/><panel name='credits' label='Credits'/></tab_container>",0,error);
+        ensure(error,tabs.has_value());
+        const auto tabState = *tree.get(*tabs)->tabContainer;
+        ensure_equals("two declared native tabs",tabState.tabs.size(),std::size_t(2));
+        ensure_equals("first declared tab selected",tabState.selected,tabState.tabs.front().panel);
+        ensure_equals("source tab skin image",tree.get(tabState.tabs.front().button)->button->params.images.unselected->name(),std::string("TabTop_Left_Off"));
+        ensure("declared tab click",tree.commit(tabState.tabs.back().button));
+        ensure("second panel visible",tree.get(tabState.tabs.back().panel)->params.visible);
         const auto container = scrollFactory.construct(tree,
             "<scroll_container width='100' height='100'><panel name='document' width='300' height='400' font='SansSerifSmall'/></scroll_container>",0,error);
         ensure(error,container.has_value());

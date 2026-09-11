@@ -18,6 +18,13 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
     {
         const auto* node = tree.get(id);
         if (!node || !node->params.visible) return true;
+        if (node->tabContainer && node->tabContainer->layout)
+        {
+            const auto layout = *node->tabContainer->layout;
+            if (!tree.layoutTopTabs(id,layout,error)) return false;
+            node = tree.get(id);
+            if (!node) return true;
+        }
         if (node->comboListOwner && !paintingPopups) { popups.push_back(id); return true; }
         const auto screen = tree.screenRect(id,error);
         if (!screen) return false;
@@ -40,6 +47,32 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             return true;
         };
         const auto width = screen->right-screen->left, height = screen->top-screen->bottom;
+        if (node->scrollContainer)
+        {
+            if (!tree.advanceScrollFrame(id,input.button.frameDelta,error)) return false;
+            const auto draw = tree.prepareScrollContainer(id,input.button.transparency,error);
+            if (!draw) return false;
+            if (draw->backgroundVisible && !append({draw->background.left-screen->left,draw->background.bottom-screen->bottom,
+                draw->background.right-screen->left,draw->background.top-screen->bottom},draw->backgroundColor)) return false;
+            const auto documentClip = intersect(clip,draw->documentClip);
+            if (draw->document && documentClip.left < documentClip.right && documentClip.bottom < documentClip.top &&
+                !self(self,draw->document,documentClip)) return false;
+            for (const auto child : draw->chrome) if (!self(self,child,clip)) return false;
+            return true;
+        }
+        if (node->scrollbar)
+        {
+            const auto draw = tree.prepareScrollbar(id,input.button.mouseX,input.button.mouseY,
+                input.button.frameDelta,input.button.focusColor,error);
+            if (!draw) return false;
+            for (const auto& primitive : draw->primitives)
+                if (!append({primitive.rectangle.left-screen->left,primitive.rectangle.bottom-screen->bottom,
+                    primitive.rectangle.right-screen->left,primitive.rectangle.top-screen->bottom},primitive.color,
+                    primitive.image,{},primitive.solidImage,primitive.additive)) return false;
+            for (auto child = draw->children.rbegin(); child != draw->children.rend(); ++child)
+                if (!self(self,*child,clip)) return false;
+            return true;
+        }
         if (node->panel && node->panel->params.backgroundVisible)
         {
             const auto& panel = node->panel->params;

@@ -169,8 +169,7 @@ std::optional<LLVKFont::MeasuredRun> LLVKFont::measureRun(std::u32string_view te
         {
             const auto next = glyph(text[index + 1], false, error);
             if (!next) return std::nullopt;
-            const auto kern = mFaces.front()->kerning(raster.requestedIndex, next->raster.requestedIndex,
-                                                     raster.rsbDelta, next->raster.lsbDelta, error);
+            const auto kern = pairKerning(*current, *next, tabularNumbers, error);
             if (!kern) return std::nullopt;
             run.advancePixels += *kern;
         }
@@ -309,8 +308,7 @@ std::optional<LLVKFont::LineLayout> LLVKFont::layoutLine(std::u32string_view tex
         {
             auto next = glyph(text[index + 1], options.requestColor, error);
             if (!next) return std::nullopt;
-            auto kern = mFaces.front()->kerning(raster.requestedIndex, next->raster.requestedIndex,
-                                               raster.rsbDelta, next->raster.lsbDelta, error);
+            auto kern = pairKerning(*current, *next, options.tabularNumbers, error);
             if (!kern) return std::nullopt;
             penX += *kern;
         }
@@ -362,9 +360,15 @@ std::optional<float> LLVKFont::digitWidth(bool tabularNumbers, std::string& erro
 std::optional<float> LLVKFont::pairKerning(const Glyph& left, const Glyph& right,
                                          bool tabularNumbers, std::string& error)
 {
+    error.clear();
     if (tabularNumbers && mWeight > 0 &&
         (digitCharacter(left.raster.codepoint) || digitCharacter(right.raster.codepoint))) return 0.f;
-    return mFaces.front()->kerning(left.raster.requestedIndex, right.raster.requestedIndex,
+    if (left.faceIndex != right.faceIndex)
+    {
+        const auto difference = static_cast<std::int64_t>(left.raster.rsbDelta) - right.raster.lsbDelta;
+        return difference > 32 ? -1.f : difference < -31 ? 1.f : 0.f;
+    }
+    return mFaces.at(left.faceIndex)->kerning(left.raster.requestedIndex, right.raster.requestedIndex,
                                    left.raster.rsbDelta, right.raster.lsbDelta, error);
 }
 

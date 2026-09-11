@@ -40,6 +40,14 @@ namespace tut
         configuration.browser.cacheDirectory = profile.path/"browser";
         configuration.loginPage = "data:text/html,<html><body style='margin:0;background:rgb(45,90,120)'><h1>Native browser validation</h1></body></html>";
         configuration.stopAfterFrames = 6;
+        configuration.bindServices=[](LLVKLoginUi& ui)
+        {
+            std::string problem;
+            ensure("native Preferences in presentation",ui.showPreferences(problem));
+            ensure("native About in presentation",ui.showAbout(problem));
+            ensure("native credits selected",ui.tree().commit(ui.find("about_tab_2")));
+            ensure(ui.dialogError(),ui.dialogError().empty());
+        };
         const bool ran = LLVKLoginWindow::run(configuration,error);
         ensure(error,ran);
         ensure("no OpenGL parent module",GetModuleHandleW(L"opengl32.dll") == nullptr);

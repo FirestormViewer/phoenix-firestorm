@@ -50,6 +50,7 @@ public:
         std::span<const std::uint8_t> encoded, std::string& error);
     static std::shared_ptr<const LLVKWidgetImage> decodeJ2c(std::string name,
         std::span<const std::uint8_t> encoded, std::string& error);
+    static std::string j2cDecoderVersion();
     static std::shared_ptr<const LLVKWidgetImage> decodeSkin(std::string name,
         std::span<const std::uint8_t> encoded, const Metadata& metadata, std::string& error);
     static std::shared_ptr<const LLVKWidgetImage> skinView(std::string name,

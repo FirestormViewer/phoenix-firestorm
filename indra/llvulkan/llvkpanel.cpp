@@ -2,6 +2,181 @@
 
 #include <cmath>
 
+bool LLVKWidgetTree::moveTab(Id id, bool forward, std::string& error)
+{
+    error.clear();
+    const auto* owner = get(id);
+    if (!owner || !owner->tabContainer || owner->tabContainer->tabs.empty()) return false;
+    const auto tabs = owner->tabContainer->tabs;
+    const auto selected = owner->tabContainer->selected;
+    std::size_t current = forward ? tabs.size()-1 : 0;
+    bool buttonFocused = false;
+    for (std::size_t index = 0; index < tabs.size(); ++index)
+        if (tabs[index].panel == selected) { current = index; buttonFocused = mKeyboardFocus == tabs[index].button; break; }
+    for (std::size_t attempt = 0; attempt < tabs.size(); ++attempt)
+    {
+        current = forward ? (current+1)%tabs.size() : (current+tabs.size()-1)%tabs.size();
+        if (selectTabPanel(id,tabs[current].panel,error))
+        {
+            if (buttonFocused && get(tabs[current].button)) return requestControlFocus(tabs[current].button,true,error);
+            return true;
+        }
+        if (!error.empty() || !get(id)) return false;
+    }
+    return false;
+}
+
+bool LLVKWidgetTree::tabContainerKey(Id id, ScrollKey key, LLVKLineEditor::Modifiers modifiers, std::string& error)
+{
+    error.clear();
+    const auto* owner = get(id);
+    if (!owner || !owner->tabContainer) return false;
+    const bool horizontal = key == ScrollKey::Left || key == ScrollKey::Right;
+    if (horizontal && modifiers.alt && !modifiers.control)
+    {
+        if (modifiers.shift)
+            for (Id parent = owner->parent; get(parent); parent = get(parent)->parent)
+                if (get(parent)->tabContainer) { id = parent; break; }
+        moveTab(id,key == ScrollKey::Right,error);
+        owner = get(id);
+        if (owner && owner->tabContainer && get(owner->tabContainer->selected))
+            requestControlFocus(owner->tabContainer->selected,true,error);
+        return error.empty();
+    }
+    if (hasAncestor(mKeyboardFocus,owner->tabContainer->selected)) return false;
+    if (horizontal) { moveTab(id,key == ScrollKey::Right,error); return error.empty(); }
+    if (key == ScrollKey::Down)
+    {
+        if (get(owner->tabContainer->selected)) requestControlFocus(owner->tabContainer->selected,true,error);
+        return error.empty();
+    }
+    return key == ScrollKey::Up;
+}
+
+bool LLVKWidgetTree::layoutTopTabs(Id container, const Node::TabContainer::Layout& layout, std::string& error)
+{
+    error.clear();
+    const auto* owner = get(container);
+    if (!owner || !owner->tabContainer || layout.tabHeight <= 0 || layout.minimumWidth < 0 ||
+        layout.maximumWidth < layout.minimumWidth || layout.labelPadding < 0 || layout.horizontalPadding < 0 ||
+        layout.panelOverlap < 0 || layout.panelOverlap > layout.tabHeight)
+    { error = "Invalid native top-tab layout"; return false; }
+    const auto width = std::int64_t(owner->params.rect.right)-owner->params.rect.left;
+    const auto height = std::int64_t(owner->params.rect.top)-owner->params.rect.bottom;
+    const auto tabs = owner->tabContainer->tabs;
+    const auto top = layout.hidden ? height : height-1-layout.tabHeight+layout.panelOverlap;
+    const auto left = layout.panelOffset ? 3 : 1;
+    const auto right = width-(layout.panelOffset ? 2 : 1);
+    if (top < 1 || right < left) { error = "Native tab container is too small for its content"; return false; }
+    struct Placement { Id panel, button; Rect content, tab; };
+    std::vector<Placement> placements;
+    std::int64_t next = 1+std::int64_t(layout.horizontalPadding);
+    for (const auto& entry : tabs)
+    {
+        const auto* panel = get(entry.panel);
+        const auto* button = get(entry.button);
+        if (!panel || panel->parent != container || !button || !button->button || button->parent != container) continue;
+        const auto& label = button->button->params.label;
+        const auto measured = button->control->params.font->measureRun(label,0,label.size(),1.f,true,false,error);
+        if (!measured) return false;
+        const double padded = std::ceil(measured->width)+layout.labelPadding;
+        if (!std::isfinite(padded) || padded > INT32_MAX) { error = "Native tab label width overflows"; return false; }
+        const auto tabWidth = std::clamp(static_cast<std::int32_t>(padded),layout.minimumWidth,layout.maximumWidth);
+        if (next+tabWidth > INT32_MAX) { error = "Native tab strip width overflows"; return false; }
+        placements.push_back({entry.panel,entry.button,{left,1,static_cast<std::int32_t>(right),static_cast<std::int32_t>(top)},
+            {static_cast<std::int32_t>(next),static_cast<std::int32_t>(height-layout.tabHeight),
+                static_cast<std::int32_t>(next+tabWidth),static_cast<std::int32_t>(height)}});
+        next += tabWidth;
+    }
+    if (!layout.hidden && next > width-1)
+    { error = "Native top-tab overflow scrolling is not implemented"; return false; }
+    ShapeChanges changes;
+    for (const auto& placement : placements)
+        for (const auto& [id,rect] : {std::pair{placement.panel,placement.content},std::pair{placement.button,placement.tab}})
+            if (get(id)->params.rect != rect && !planReshape(id,std::int64_t(rect.right)-rect.left,std::int64_t(rect.top)-rect.bottom,rect,changes,error)) return false;
+    if (!completeShapes(changes,error)) return false;
+    for (const auto& placement : placements)
+    {
+        if (get(placement.panel)) mNodes.at(placement.panel).params.follows = Left|Right|Top|Bottom;
+        if (get(placement.button)) setVisible(placement.button,!layout.hidden);
+    }
+    if (!get(container) || !get(container)->tabContainer) { error = "Native tab layout owner was removed"; return false; }
+    mNodes.at(container).tabContainer->layout = layout;
+    return true;
+}
+
+bool LLVKWidgetTree::initializeTabContainer(Id panel, std::string& error)
+{
+    error.clear();
+    const auto* node = get(panel);
+    if (!node || !node->panel || !node->control || node->tabContainer)
+    { error = "Invalid native tab container initialization"; return false; }
+    mNodes.at(panel).tabContainer.emplace();
+    return true;
+}
+
+bool LLVKWidgetTree::attachTabPanel(Id container, Id panel, Id button, std::string& error)
+{
+    error.clear();
+    const auto* owner = get(container);
+    const auto* content = get(panel);
+    const auto* tab = get(button);
+    if (!owner || !owner->tabContainer || !content || !content->panel || !tab || !tab->button ||
+        content->parent != container || tab->parent != container || panel == container)
+    { error = "Native tab requires an owned panel and button"; return false; }
+    for (const auto& entry : owner->tabContainer->tabs)
+        if (entry.panel == panel || entry.button == button)
+        { error = "Native tab panel or button is already registered"; return false; }
+    mNodes.at(container).tabContainer->tabs.push_back({panel,button});
+    mNodes.at(button).control->params.tabStop = false;
+    LLVKControl::Callback callback;
+    callback.function = [this,container,panel](Id,const LLSD&)
+    {
+        std::string problem;
+        selectTabPanel(container,panel,problem);
+        if (get(panel)) requestControlFocus(panel,true,problem);
+    };
+    setControlCommit(button,std::move(callback));
+    setVisible(panel,false);
+    return get(container) && get(panel) && get(button);
+}
+
+bool LLVKWidgetTree::selectTabPanel(Id container, Id panel, std::string& error)
+{
+    error.clear();
+    const auto* owner = get(container);
+    const auto* content = get(panel);
+    if (!owner || !owner->tabContainer || !content || content->parent != container) return false;
+    Id button = 0;
+    for (const auto& entry : owner->tabContainer->tabs) if (entry.panel == panel) button = entry.button;
+    if (!button || !get(button) || !get(button)->params.enabled) return false;
+    const auto validate = owner->control->params.validate;
+    const LLSD argument(content->params.name);
+    const auto before = owner->tabContainer->selectionGeneration;
+    if (validate.function && !validate.function(container,validate.parameter.value_or(argument))) return false;
+    owner = get(container);
+    if (!owner || !owner->tabContainer || owner->tabContainer->selectionGeneration != before || !get(panel) ||
+        get(panel)->parent != container || !get(button) || get(button)->parent != container || !get(button)->params.enabled) return false;
+    const auto tabs = owner->tabContainer->tabs;
+    auto& state = *mNodes.at(container).tabContainer;
+    state.selected = panel;
+    const auto generation = ++state.selectionGeneration;
+    for (const auto& entry : tabs)
+    {
+        if (get(entry.button) && get(entry.button)->parent == container)
+        {
+            if (!setButtonToggle(entry.button,entry.panel == panel,error)) return false;
+            mNodes.at(entry.button).control->params.tabStop = entry.panel == panel;
+        }
+        if (get(entry.panel) && get(entry.panel)->parent == container) setVisible(entry.panel,entry.panel == panel);
+        owner = get(container);
+        if (!owner || !owner->tabContainer || owner->tabContainer->selectionGeneration != generation) return false;
+    }
+    const auto callback = owner->control->params.commit;
+    if (callback.function) callback.function(container,callback.parameter.value_or(argument));
+    return true;
+}
+
 std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createBorder(const Params& view,
     const LLVKBorder::Params& params, Id parent, std::string& error)
 {

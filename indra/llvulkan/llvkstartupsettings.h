@@ -14,6 +14,7 @@ public:
     {
         std::string type;
         LLSD defaultValue;
+        LLSD definition;
         std::optional<LLSD> saved, transient;
         bool persistent = true;
         const LLSD& value() const { return transient ? *transient : saved ? *saved : defaultValue; }
@@ -22,6 +23,7 @@ public:
     bool load(std::string_view xml, bool defaults, bool saved, std::string& error);
     bool loadFile(const std::filesystem::path& path, bool required, bool defaults, bool saved, std::string& error);
     bool set(const std::string& name, const LLSD& value, bool saved, std::string& error);
+    bool saveChanges(const std::filesystem::path& path, const std::map<std::string,LLSD>& changes, std::string& error);
     const Entry* find(const std::string& name) const;
     std::map<std::string,LLSD> values() const;
 private:

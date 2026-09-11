@@ -779,6 +779,41 @@ namespace tut
         auto ordinary = font->glyph(U'A', false, error);
         ensure(error, ordinary != nullptr);
         ensure_equals("primary always precedes fallback", ordinary->faceIndex, std::size_t(0));
+        const std::u32string mixed{candidate,U'A',candidate,candidate,U' '};
+        const auto measured=font->measureRun(mixed,0,mixed.size(),1.f,true,false,error);
+        ensure(error,measured.has_value());
+        const auto drawn=font->layoutLine(mixed,0,mixed.size(),{},error);
+        ensure(error,drawn.has_value());
+        ensure_equals("mixed-face measurement and drawing agree",drawn->endPixelX,measured->advancePixels);
+        const auto fitted=font->fitCharacters(mixed,10000.f,mixed.size(),1.f,LLVKFont::Wrap::Anywhere,false,error);
+        ensure(error,fitted.has_value());
+        ensure_equals("fallback pairs fit without primary-face kerning",*fitted,mixed.size());
+        auto minimalBytes=bytes;
+        const auto read32=[&](std::size_t offset)
+        {
+            std::uint32_t value=0;
+            for (std::size_t index=0; index<4; ++index) value=(value<<8)|minimalBytes.at(offset+index);
+            return value;
+        };
+        const auto tableCount=(std::uint16_t(minimalBytes.at(4))<<8)|minimalBytes.at(5);
+        bool limited=false;
+        for (std::size_t table=0; table<tableCount; ++table)
+        {
+            const auto entry=12+16*table;
+            if (read32(entry)==FT_MAKE_TAG('m','a','x','p'))
+            { write16(minimalBytes,read32(entry+8)+4,1); limited=true; break; }
+        }
+        ensure("minimal primary fixture has glyph count table",limited);
+        auto minimal=LLVKFontFace::create(minimalBytes,{},error);
+        ensure(error,minimal != nullptr);
+        ensure_equals("minimal primary has no A",minimal->glyphIndex(U'A'),std::uint32_t(0));
+        ensure("old owner rejects fallback A",!minimal->kerning(primaryFace->glyphIndex(U'A'),primaryFace->glyphIndex(U'A'),0,0,error));
+        auto limitedFont=LLVKFont::create({minimalBytes,{}},{{{bytes,{}},LLVKFont::FallbackPolicy::Unrestricted}},false,error);
+        ensure(error,limitedFont != nullptr);
+        const std::u32string foreignText{U'A',U'A',char32_t(0x10ffff),U'A'};
+        ensure("foreign index measures on its owner",limitedFont->measureRun(foreignText,0,foreignText.size(),1.f,true,false,error).has_value());
+        ensure("foreign index draws on its owner",limitedFont->layoutLine(foreignText,0,foreignText.size(),{},error).has_value());
+        ensure("same fallback pairs fit on their owner",limitedFont->fitCharacters(foreignText,10000.f,foreignText.size(),1.f,LLVKFont::Wrap::Anywhere,false,error).has_value());
         fallbacks.front().source.bytes = {1, 2, 3};
         ensure("bad fallback construction fails", !LLVKFont::create({bytes, {}}, fallbacks, false, error));
         ensure("existing font unaffected", font->glyph(candidate, false, error) == glyph);

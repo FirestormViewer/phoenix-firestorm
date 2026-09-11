@@ -111,6 +111,15 @@ public:
         PanelDefaults panel;
         LLVKWidgetTree::Node::Browser browser;
     };
+    struct TabDefaults
+    {
+        PanelDefaults panel;
+        LLVKWidgetTree::Node::TabContainer::Layout layout;
+        std::array<std::map<std::string,std::string>,3> images;
+        LLVKButton::Align alignment = LLVKButton::Align::Center;
+        std::int32_t labelPadLeft = 4, labelPadBottom = 1;
+        LLVKColor flashColor{1,1,1,1};
+    };
     class Construction
     {
     public:
@@ -139,6 +148,7 @@ public:
     {
         std::shared_ptr<LLVKSkinFiles> skinFiles;
         std::shared_ptr<LLVKColorTable> colors;
+        std::shared_ptr<const TabDefaults> tabs = std::make_shared<TabDefaults>();
         std::map<std::string,std::shared_ptr<LLVKFont>> fonts;
         std::shared_ptr<LLVKFontRegistry> fontRegistry;
         LLVKFontRegistry::Request defaultFontRequest;

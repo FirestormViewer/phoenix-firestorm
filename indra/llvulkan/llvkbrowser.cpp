@@ -210,3 +210,10 @@ std::vector<LLVKBrowser::Event> LLVKBrowser::takeEvents()
     mEvents.clear();
     return events;
 }
+
+std::string LLVKBrowser::versionInfo(std::string& error) const
+{
+    if (!running(error)) return {};
+    return "Dullahan: "+mEngine->dullahan_version(false)+"\n  CEF: "+mEngine->dullahan_cef_version(false)+
+        "\n  Chromium: "+mEngine->dullahan_chrome_version(false);
+}

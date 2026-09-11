@@ -43,6 +43,7 @@ std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::
     const auto userSettings = profile/"user_settings";
     LLVKStartupSettings settings;
     std::string error;
+    std::string appliedSettingsMode, modeError;
     const bool defaults = settings.loadFile(directory/"app_settings"/"settings.xml",true,true,true,error);
     if (defaults)
     {
@@ -56,7 +57,11 @@ std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::
             const auto* first = settings.find("FirstRunThisInstall");
             if (sessionFile.empty() && first && first->value().asBoolean()) sessionFile = "settings_firestorm.xml";
         }
-        if (!sessionFile.empty()) settings.loadFile(directory/"app_settings"/sessionFile,false,true,false,error);
+        if (!sessionFile.empty())
+        {
+            const auto modePath=directory/"app_settings"/sessionFile;
+            if (settings.loadFile(modePath,true,true,false,modeError)) appliedSettingsMode=sessionFile;
+        }
         settings.loadFile(userSettings/std::filesystem::path(std::u8string(settingsFile.begin(),settingsFile.end())),false,false,true,error);
     }
     const auto explicitBackend = overrides.find("RenderBackend");
@@ -69,6 +74,7 @@ std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::
         return -1;
     };
     if (!defaults) return fail(error.empty() ? "Native default settings could not be loaded" : error);
+    if (!modeError.empty()) return fail("Native settings mode could not be applied: "+modeError);
     if (unsupported) return fail("This native startup path does not yet support one or more supplied command-line options.");
     for (const auto& [name,value] : overrides) if (!settings.set(name,LLSD(value),false,error)) return fail(error);
     const auto values = settings.values();
@@ -79,6 +85,10 @@ std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::
     struct DllDirectory { ~DllDirectory() { SetDllDirectoryW(nullptr); } } dllDirectory;
     LLVKLoginWindow::Configuration configuration;
     configuration.ui.settings = values;
+    configuration.ui.appliedSettingsMode = appliedSettingsMode;
+    const auto preferenceFile=userSettings/std::filesystem::path(std::u8string(settingsFile.begin(),settingsFile.end()));
+    configuration.ui.savePreferences=[&settings,preferenceFile](const auto& changes,std::string& problem)
+    { return settings.saveChanges(preferenceFile,changes,problem); };
     configuration.ui.skin.executableDirectory = directory;
     configuration.ui.skin.workingDirectory = std::filesystem::current_path();
     configuration.ui.skin.skinBaseDirectory = directory/"skins";
