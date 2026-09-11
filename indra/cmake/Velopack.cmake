@@ -48,7 +48,7 @@ if (USE_VELOPACK) # <FS:TJ/> Only include and link Velopack if it is being used
         )
 
         target_link_libraries(ll::velopack INTERFACE
-            ${ARCH_PREBUILT_DIRS_RELEASE}/libvelopack_libc.a
+            ${LIBS_PREBUILT_DIR}/lib/release/libvelopack_libc.a
         )
 
         # macOS system frameworks required by Velopack (Rust static library dependencies)

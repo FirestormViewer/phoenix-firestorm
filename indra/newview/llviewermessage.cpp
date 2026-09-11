@@ -5531,6 +5531,10 @@ void process_clear_follow_cam_properties(LLMessageSystem *mesgsys, void **user_d
     mesgsys->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, source_id);
 
     LLFollowCamMgr::getInstance()->removeFollowCamParams(source_id);
+    if (!LLFollowCamMgr::getInstance()->getActiveFollowCamParams())
+    {
+        gAgentCamera.notifyFollowCamParamsCleared();
+    }
 }
 
 void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_data)
@@ -5600,6 +5604,10 @@ void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_dat
         case FOLLOWCAM_ACTIVE:
             //if 1, set using followcam,.
             LLFollowCamMgr::getInstance()->setCameraActive(source_id, value != 0.f);
+            if (value == 0.f && !LLFollowCamMgr::getInstance()->getActiveFollowCamParams())
+            {
+                gAgentCamera.notifyFollowCamParamsCleared();
+            }
             break;
         case FOLLOWCAM_POSITION_X:
             settingPosition = true;
