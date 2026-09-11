@@ -39,6 +39,7 @@
 #endif
 
 #include "llwebrtc.h"
+#include <mutex>
 // WebRTC Includes
 #ifdef WEBRTC_WIN
 #pragma warning(push)
@@ -555,6 +556,7 @@ class LLWebRTCImpl : public LLWebRTCDeviceInterface, public webrtc::AudioDeviceO
     std::atomic<int>                                           mDevicesDeploying;
     webrtc::scoped_refptr<LLWebRTCAudioDeviceModule>           mDeviceModule;
     std::vector<LLWebRTCDevicesObserver *>                     mVoiceDevicesObserverList;
+    std::recursive_mutex                                      mDevicesObserverMutex;
 
     bool mBuiltinNS;
     bool mBuiltinAGC;

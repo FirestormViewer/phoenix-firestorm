@@ -1,5 +1,9 @@
 #ifndef LLVKWIDGETTREE_H
 #define LLVKWIDGETTREE_H
+#include "llvktexturectrl.h"
+
+#include "llsd.h"
+#include "llcontrol.h"
 
 #include "llvkcontrol.h"
 #include "llvkicon.h"
@@ -125,6 +129,7 @@ public:
         LLVKControl::Params buttonControl;
         LLVKButton::Params searchButton, clearButton;
         bool searchVisible = true, clearVisible = false, highlight = true;
+        bool commitOnKeystroke = false;
         std::int32_t searchWidth = 13, searchHeight = 13, searchLeft = 4, searchBottom = 4;
         std::int32_t clearWidth = 16, clearHeight = 16, clearBottom = 4, clearRight = 4, clearLeft = 4;
         std::shared_ptr<const LLVKWidgetImage> highlightBackground;
@@ -140,16 +145,20 @@ public:
         std::string name, label;
         std::int32_t width = -1;
         float relativeWidth = -1.f;
+        bool hidden = false;
     };
     struct ListCellStyle
     {
-        enum class Type { Text, Icon, IconText };
+        enum class Type { Text, Icon, IconText, CheckBox };
         Type type = Type::Text;
         std::shared_ptr<LLVKFont> font;
         std::shared_ptr<const LLVKWidgetImage> image;
         LLVKButton::Align alignment = LLVKButton::Align::Left;
         LLVKColor imageColor{1,1,1,1};
         std::string tooltip;
+        std::shared_ptr<const LLVKWidgetImage> checkedImage, disabledImage, disabledCheckedImage;
+        bool enabled = true;
+        std::int32_t checkSize = 13, checkLeft = 2;
     };
     struct ListRow
     {
@@ -276,12 +285,16 @@ public:
         std::shared_ptr<const ListHeaderParams> header;
         bool multiSelect = false, heading = false, drawBorder = false, background = true, stripes = true;
         bool commitOnSelection = false, commitOnKeyboard = true, wheelOpaque = true;
+        LLVKControl::Callback doubleClick;
+        std::function<void(Id,std::int32_t,std::int32_t)> rightClick;
         std::int32_t searchColumn = 0;
         std::int32_t sortColumn = -1;
         bool sortAscending = true;
         enum class Selection { Row, Cell, Header };
         Selection selection = Selection::Row;
         bool canSort = true;
+        bool preserveContextSelection = false;
+        std::int32_t desiredLineHeight = -1;
         LLVKColor highlightedColor{1,1,1,1};
         std::int32_t headingHeight = 23, rowPadding = 2, columnPadding = 5, scrollbarSize = 16;
         LLVKColor foreground{1,1,1,1}, selectedForeground{1,1,1,1}, disabledForeground{0.5f,0.5f,0.5f,1};
@@ -352,6 +365,7 @@ public:
         LLVKControl::Params editorControl;
         LineEditorParams editor;
         std::string label;
+        LLVKFont::HorizontalAlign labelAlignment = LLVKFont::HorizontalAlign::Left;
         std::optional<std::int32_t> labelWidth, textWidth;
         std::int32_t precision = 3, spacing = 4;
         bool showText = true, editable = false;
@@ -366,14 +380,48 @@ public:
     };
     struct Node
     {
+        struct InventoryDropTarget
+        {
+            struct Item
+            {
+                enum class Kind { Texture, Sound, CallingCard, Landmark, Script, Clothing, Object, Notecard, Bodypart, Animation, Gesture, Other };
+                Kind kind = Kind::Other;
+                std::string id, name;
+                bool link = false, folder = false, copy = false, transfer = false;
+            };
+            std::function<void(Id,const Item&)> dropped;
+        };
+        std::optional<InventoryDropTarget> inventoryDropTarget;
+        std::optional<std::set<std::string>> preferenceSnapshotAllowlist;
+        struct ContainerView
+        {
+            std::string label;
+            bool showLabel = false, displayChildren = true, backgroundVisible = true;
+            LLVKColor backgroundColor{0,0,0,0.25f};
+            std::shared_ptr<LLVKFont> font;
+        };
+        std::optional<ContainerView> containerView;
+        struct StatBar
+        {
+            std::string label;
+            std::shared_ptr<LLVKFont> font;
+            float minimum = 0.f, maximum = 0.f, currentMinimum = 0.f, currentMaximum = 0.f, tickSpacing = 0.f;
+            bool showBar = false, showHistory = false;
+            std::int32_t maximumHeight = 67, decimalDigits = 3, historyFrames = 200, shortFrames = 20;
+            std::vector<float> samples;
+        };
+        std::optional<StatBar> statBar;
         struct Floater
         {
             std::string title, positioning;
             std::int32_t legacyHeaderHeight = 18;
             bool saveRect = false, singleInstance = false;
             bool canClose = true, canMinimize = true;
+            bool canResize = false;
+            std::int32_t minWidth = 0, minHeight = 0;
         };
         std::optional<Floater> floater;
+        std::optional<LLVKTextureCtrl> textureControl;
         struct TextEditor
         {
             struct Revision { std::string before, after; std::size_t cursorBefore=0, cursorAfter=0; };
@@ -390,6 +438,7 @@ public:
         {
             struct Tab { Id panel = 0, button = 0; };
             std::vector<Tab> tabs;
+            std::set<Id> hiddenPanels;
             Id selected = 0;
             std::uint64_t selectionGeneration = 0;
             std::int32_t scrollPosition = 0, maximumScroll = 0;
@@ -524,6 +573,7 @@ public:
     std::optional<Id> createControl(const Params& view, const LLVKControl::Params& control,
                                     Id parent, std::string& error);
     enum class SettingType { Opaque, Boolean, Integer, Real, String };
+    bool bindSettings(LLControlGroup& group, std::string& error);
     bool defineSetting(const std::string& name, const LLSD& value, SettingType type = SettingType::Opaque);
     bool updateSetting(const std::string& name, const LLSD& value);
     using SettingCallback = std::function<void(const LLSD&,const LLSD&)>;
@@ -537,6 +587,7 @@ public:
     };
     bool bindPreferenceColorAlpha(Id panel, std::shared_ptr<LLVKColorTable> colors, std::string& error);
     std::optional<PreferenceSnapshot> snapshotPreferences(Id root, std::string& error) const;
+    bool setPreferenceSnapshotAllowlist(Id panel, std::optional<std::set<std::string>> names);
     bool restorePreferences(const PreferenceSnapshot& snapshot, const std::vector<std::string>& skip, std::string& error);
     std::optional<LLSD> setting(const std::string& name) const
     { const auto found = mSettings.find(name); return found == mSettings.end() ? std::nullopt : std::optional(found->second); }
@@ -566,6 +617,7 @@ public:
     bool initializeFloater(Id panel, const Node::Floater& params, std::string& error);
     bool attachTabPanel(Id container, Id panel, Id button, std::string& error);
     bool selectTabPanel(Id container, Id panel, std::string& error);
+    bool setTabVisibility(Id container, Id panel, bool visible, std::string& error);
     bool layoutTopTabs(Id container, const Node::TabContainer::Layout& layout, std::string& error);
     bool layoutTabPanels(Id container, const Node::TabContainer::Layout& layout, std::string& error, float frameDelta = 0.f);
     std::optional<Id> createLayoutStack(const Params& view, bool vertical, std::int32_t spacing, bool clip, Id parent, std::string& error);
@@ -611,6 +663,8 @@ public:
     bool stepSpinner(Id id, bool increase, LLVKLineEditor::Modifiers modifiers, std::string& error);
     void setInputModifiers(LLVKLineEditor::Modifiers modifiers) { mInputModifiers = modifiers; }
     bool setSpinnerValue(Id id, const LLSD& value, bool forceEditor, std::string& error);
+    bool setSpinnerRange(Id id, float minimum, float maximum, std::string& error);
+    bool setIconColor(Id id, LLVKColor color);
     std::optional<Id> createRadioGroup(const Params& view, const LLVKControl::Params& control,
         std::span<const RadioItemParams> items, bool allowDeselect, Id parent, std::string& error);
     bool selectRadioIndex(Id id, std::int32_t index, bool publish, std::string& error);
@@ -754,9 +808,32 @@ public:
     std::optional<Id> createScrollList(const Params& view, const LLVKControl::Params& control,
         const ScrollListParams& params, Id parent, std::string& error);
     bool setScrollListRows(Id id, std::vector<ListRow> rows, std::string& error);
+    bool setScrollListColumns(Id id, std::vector<ListColumn> columns, std::string& error);
+    bool initializeContainerView(Id id, const Node::ContainerView& params, std::string& error);
+    bool layoutContainerView(Id id, std::int32_t width, std::int32_t minimumHeight, std::string& error);
+    bool setContainerExpanded(Id id, bool expanded, std::string& error);
+    bool initializeStatBar(Id id, const Node::StatBar& params, std::string& error);
+    bool sampleStatBar(Id id, float value, std::string& error);
+    bool setStatBarRange(Id id, float minimum, float maximum, std::string& error);
+    bool cycleStatBar(Id id, std::string& error);
+    bool advanceStatBar(Id id, float frameDelta, std::string& error);
     bool layoutScrollList(Id id, std::string& error);
     bool sortScrollList(Id id, std::size_t column, bool ascending, std::string& error);
     bool setScrollListCommitOnSelection(Id id, bool enabled);
+    bool setScrollListActions(Id id, LLVKControl::Callback doubleClick,
+        std::function<void(Id,std::int32_t,std::int32_t)> rightClick);
+    bool setTooltip(Id id, std::string tooltip);
+    bool initializeInventoryDropTarget(Id id, std::string& error);
+    std::optional<Id> createTextureControl(const Params& view,const LLVKControl::Params& control,
+        const LLVKTextureCtrl::Params& params,Id parent,std::string& error);
+    bool setTextureValue(Id id,const LLSD& value,std::string& error);
+    bool beginTextureSelection(Id id,std::string& error);
+    bool applyTextureSelection(Id id,const LLVKTextureCtrl::Selection& selection,LLVKTextureCtrl::Operation operation,std::string& error);
+    bool publishTexturePreview(Id id,const LLUUID& asset,std::uint64_t generation,std::shared_ptr<const LLVKWidgetImage> image);
+    bool textureControlPointer(Id id,const PointerEvent& event,std::string& error);
+    bool refreshTextureControl(Id id,std::string& error);
+    bool setInventoryDropHandler(Id id, std::function<void(Id,const Node::InventoryDropTarget::Item&)> handler);
+    bool inventoryDrop(Id id, const Node::InventoryDropTarget::Item& item, bool drop);
     bool selectScrollListValue(Id id, const LLSD& value, bool selected, std::string& error);
     bool scrollListPointer(Id id, const PointerEvent& event, std::string& error);
     bool scrollListKey(Id id, ScrollKey key, LLVKLineEditor::Modifiers modifiers, std::string& error);
@@ -844,6 +921,9 @@ public:
     bool setButtonLabelArgument(Id id, std::string key, std::string replacement);
     void setLabelContext(LLVKLabel::Context context);
     bool activateButton(Id id, std::string& error);
+    bool setMenuButtonHandler(Id id, std::function<void(Id)> handler);
+    bool setButtonForcePressed(Id id, bool pressed);
+    bool setButtonImages(Id id, LLVKButton::Image unselected, LLVKButton::Image selected);
     bool setButtonFlashing(Id id, bool flashing, bool force = false, bool alternateColor = false);
     bool advanceTime(double time, std::string& error);
     bool buttonUnicode(Id id, char32_t character, bool repeated, std::string& error);
@@ -974,6 +1054,9 @@ private:
     double mFocusFlashTime = 0.0;
     LLVKLineEditor::Modifiers mInputModifiers;
     LLVKLabel::Context mLabelContext;
+    bool publishSetting(const std::string& name, const LLSD& value);
+    std::map<std::string,LLControlVariablePtr> mSettingControls;
+    std::vector<boost::signals2::scoped_connection> mControlConnections;
 };
 
 #endif

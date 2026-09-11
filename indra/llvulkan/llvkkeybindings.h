@@ -32,6 +32,7 @@ public:
     bool loadFile(const std::filesystem::path& path, std::string& error);
     std::optional<std::string> serialize(std::string& error) const;
     bool saveFile(const std::filesystem::path& path, std::string& error) const;
+    static std::string label(const LLKeyData& data, const std::function<std::string(const std::string&)>& translate);
 private:
     std::array<Controls,4> mControls;
 };

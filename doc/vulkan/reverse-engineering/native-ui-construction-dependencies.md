@@ -13,6 +13,38 @@ choices below authorizes reuse until its outgoing constructor/helper targets clo
 
 ## UI checkpoint status (2026-09-11)
 
+### End-of-session checkpoint (2026-09-12)
+
+The user requested a commit and pause after successful validation. The live menu
+opens the original Preferences hierarchy, not the earlier provisional window.
+Latest widget177/177 and native window3/3 pass. The viewer link passed through the
+color/tab work; the final permissions/executable-picker changes have widget and
+window-target validation, with the executable refreshed separately before commit.
+This checkpoint does not declare complete service wiring or measured parity.
+The older status table below describes the prior checkpoint, not the live hierarchy.
+
+Default Creation Permissions now opens from the live Viewer tab using original
+floater_perms_default.xml. Source LLFloaterPermsDefault postBuild/refresh/cancel/
+onCommitCopy/ok and updateCap were inspected: eight categories, one-time upload
+migration, no-copy forces transfer, independent acceptance and cancellation, and
+optional region capability publication. The XML has 37 editable settings; three
+environment permissions are fixed and absent from settings.xml. Native ownership
+uses existing settings plus a child-dialog snapshot and existing persistence
+callback, with no GL visual calls. Test176 covers actual launch callback, migration,
+copy/transfer enablement, Cancel, failed-save retry and painting. Region
+AgentPreferences capability submission/retries remain open; no native region is
+currently initialized. Accepted defaults are persisted immediately because this
+native lifecycle has no general shutdown-save hook.
+
+External Editor Browse now uses the existing native picker worker with an explicit
+executable kind, rather than the unbound Viewer action handler. Source
+LLFloaterPreference::changeExternalEditorPath on Windows quotes the chosen path
+and updates ExternalEditor; it does not execute it. Native selection does the same,
+and a Preferences generation rejects callbacks from closed/reopened transactions.
+Test177 covers path quoting, Cancel, stale callback rejection, picker cancellation
+and accepted settings publication. Windows picker code compiled and window tests
+passed; an interactive executable-picker selection was not exercised automatically.
+
 This is a user-requested work-in-progress commit, not the Full UI Parity
 checkpoint. The next acceptance gate is full startup UI parity with the original
 OpenGL behavior and shared source declarations, without GL visual ownership.
@@ -33,6 +65,391 @@ review remain deferred until the UI parity priority is satisfied. Test counts
 and screenshots do not close any outstanding behavior above.
 
 ## Native construction implementation (2026-09-10)
+
+Live Preferences integration continuation (2026-09-11, bdb5e59486 source,
+Windows RelWithDebInfo, NV-00/01/03/12/15/17): showPreferences now constructs
+the original floater_preferences.xml, replacing the provisional General/renderer
+window. Pref.OK/Cancel route to the native transaction. Build exclusions match
+the source OPENSIM/SINGLEGRID and LL_SEND_CRASH_REPORTS tab policy. All applicable
+root panels and their nested tabs construct and paint through the live menu path.
+This is live hierarchy integration, not completion of all behavioral services.
+
+Post-crash continuation: widget175/175, native window3/3 and the dedicated
+vulkanstorm-bin link target passed after user-color persistence and tab restoration.
+LLVKColorTable serializes the source colors/color name/value XML, omitting unchanged
+defaults; native startup loads user_settings/colors.xml before widget construction,
+and accepted Preferences writes changed overrides with staged replacement.
+Source roots are LLUIColorTable::saveUserSettings and LLFloaterPreference::onBtnOK;
+CPU-only native XML/file ownership replaces GL UI-table ownership. Runtime voice
+meter colors have a separate nonpersistent layer. Test174 covers serialization and
+test175 covers live startup/preview/Cancel/failed-write retry/acceptance/recreation
+using isolated files. Windows path validation checks actual ancestor reparse points,
+not canonical spelling equality (which rejected a valid temporary path). Concurrent
+path replacement and cross-file transaction atomicity are not established by this.
+
+LastPrefTab now remembers unfiltered close and restores on unfiltered open; search
+does not overwrite that preference. Source LLFloaterPreference::onOpen/onClose
+contracts apply, with native persistence at close because this lifecycle has no
+general shutdown-save hook. Test171 checks close/reopen/search behavior. Native
+tab selection/arrow bounds now use the same filtered list as layout; test142 covers
+hidden leading tabs, overflow recomputation, and keyboard skipping/restoration.
+Global/account persistence routing and loaded-account gating pass test172; live
+warning suppression obeys OK/Cancel in test173. These checks do not close remaining
+unbound graphics, asset picker, backup, or account services listed below.
+
+Inspected source LLPanelPreferenceGraphics postBuild/backend selection/restart,
+indirect avatar limit conversions and labels, FSPanelPrefs construction/postBuild/
+onOpen/apply/cancel/beam lists/permission callbacks, FSPanelPreferenceBackup
+postBuild/path selection/confirmation/selection and backup/restore file contracts,
+LLFloaterPreference search/copy/onClose/OK/Cancel, and ll::prefs search traversal.
+Native Graphics implements backend prompt and indirect-limit calculations; native
+Viewer implements prelogin inventory gating and directory-backed beam lists;
+Backup implements original row selection and confirmation-gated typed requests.
+Hardware recommendations, preset operations, wireframe, beam editors/deletion,
+default permissions, anti-spam clearing and backup/restore storage remain explicit
+unbound service edges. No GL visual controller or GL feature manager is invoked.
+
+UI gaps handled as components, then integrated: nested checkbox internal-button
+commit callback (LLCheckBoxCtrl constructor preserves button commit alongside its
+own click callback); widthless checkbox fitting (source reshape/reshapeToFitText);
+comma-separated source RGBA literals; inline scroll-list text/checkbox rows with
+native checkbox images; text-owned embedded inventory targets using the same
+source copy/transfer acceptance rules as the line-editor target. Factory rollback
+exceptions now include owning panel/control identity. Owner-scoped find avoids
+hidden child-dialog controls with the same name receiving test actions.
+
+Native texture swatch component implements source asset/item/tracking identity,
+preview/select/cancel state, immutable caption/border/multiselect controls, native
+image/fallback painting and generation-checked preview publication. Inspected
+LLTextureCtrl constructor/destructor/showPicker/closeDependentFloater/onFloaterCommit/
+setImageAssetID/input/draw; full picker inventory/local/bake branches and asset
+acquisition remain open. The original texture_picker declaration constructs, but
+its picker callback/asset service are not bound and it is not a completed picker.
+
+Checks: widget171/171 passes. Test171 opens via menu, recursively selects and
+paints more than 40 tabs, verifies search/no-results/clear, copied search SLURL,
+and Backup confirmation/selection requests. Test169 exercises original Graphics
+checkbox callback, test170 checks texture selection/rollback/stale publication and
+paint. Window3/3 passes after presenting original Preferences Backup in the actual
+GL-free Vulkan lifecycle. A dedicated Native Viewer Link Validation task is running;
+no current viewer-executable link success is claimed yet. Search highlighting,
+filtered-tab scroll bookkeeping, last-tab persistence, complete account/color/
+notification transactions and child-dialog draft inclusion still require work.
+
+The earlier skin shutdown test failure was a fixture violation of the existing
+0.5-second click-through guard, resolved by testing before/after that deadline.
+Untouched skin catalog fallback no longer counts as an edit. Live transaction tests
+now edit an original General control rather than the removed provisional controls.
+Passing these checks does not establish measured visual parity or service closure.
+
+Network/Files and Skins continuation (2026-09-11, bdb5e59486 source, Windows,
+NV-00/01/03/15/17): inspected LLFloaterPreference onClickSetCache/changeCachePath,
+onClickResetCache, sound-cache counterparts/setSoundCacheLocation, directory-open
+callbacks, log-path selection/reset, cache confirmation callbacks and
+onClickJavascript. Native original panel_preferences_setup.xml now constructs
+with staged cache-location settings, sound-path selection/reset, native Shell
+directory opening, folder picking and original confirmations. Source prelogin
+account gating is retained. The native picker reuses the native worker/pump owner,
+with a Shell folder dialog and cancellation timer; no GL picker/window is called.
+Browser startup now consumes saved JavaScript/cookie options. Widget167/167 passed
+for original-panel construction, selection/cancellation/reset/open routing. Native
+window library compiled after Shell integration; context9/9 passed. Cache purge/
+relocation consumption, account log migration, live browser options and a real
+folder-dialog cancellation runtime check remain open.
+
+Inspected LLPanelPreferenceSkins constructor/postBuild/apply/cancel, skin/theme
+callbacks and refreshSkinList/refreshSkinThemeList/refreshPreviewImage, plus
+LLFloaterPreference onBtnOK/onBtnCancel/onClose. Native panel_preference_skins uses
+the original skins.xml installed-directory catalog and named preview image assets,
+with panel-owned skin/theme drafts. Native button image replacement only changes
+CPU image references; existing immutable paint/publication ownership applies.
+Acceptance merges skin/readable-name/toolbar-reset and StarLight defaults into
+the native settings save transaction. Cancel reloads saved drafts. Original skin
+notifications are constructed and a native shutdown callback is bound. Catalog,
+draft and preview tests passed at widget168/168 before the acceptance test extension.
+The latest extended test168 FAILS at 'shutdown handler invoked'; persistence
+assertions pass, but notification response/queue routing remains unresolved after
+three fixture corrections. Current widget result is 167/168, not a passing gate.
+Do not claim skin restart behavior or full Preferences parity from this work.
+
+The user-authorized stalled compiler tree (23468 and eight children) was killed.
+The viewer rebuild subsequently lost its MSBuild/CMake owners while compiler25100
+and eight children remained; that orphaned tree was also killed. No current viewer
+link proof was obtained. Use a dedicated VS Code task for the next full viewer build;
+do not reuse the command terminal while a long-running build owns it.
+
+Network/Proxy continuation (2026-09-11, bdb5e59486 source, Windows,
+NV-00/01/03/15/17):
+LLFloaterPreferenceProxy postBuild/onOpen/onClose/saveSettings/onBtnOk/onBtnCancel/
+cancel/onChangeSocksSettings and LLStartUp::startLLProxy were inspected. The dialog
+snapshots bound settings, repairs invalid HTTP proxy selection, and saves/deletes
+SOCKS5 credentials through the protected-data handler. Runtime setup separately
+negotiates SOCKS UDP and enables the selected HTTP proxy. LLProxy::applyProxySettings
+uses CURLPROXY_HTTP or CURLPROXY_SOCKS5 (local DNS), and password credentials only
+for authenticated SOCKS. LLSecAPIBasicHandler explicit-path construction/init,
+credential load/save/delete and protected read/write helpers, LLMachineID::init/
+getUniqueID/getLegacyID and Windows WMI initialization/query/cleanup were inspected.
+These are CPU-only file/crypto/COM services; no visual owner is installed. Explicit
+credential paths skip the handler's default certificate-store initialization.
+
+Q2/Q3: LLVKProxy selects typed endpoints independently of GL network/UI owners.
+Native translation curl handles explicitly select direct/HTTP/SOCKS transport and
+separate credential options before submission. Direct mode explicitly clears the
+proxy, and configured modes clear environment bypass lists. Unlike the source's
+implicit curl defaults, environment proxies cannot override the viewer selection.
+Native Dullahan startup consumes the browser-specific HTTP proxy endpoint. The
+original proxy XML has native callbacks, settings snapshots, Cancel/X rollback,
+masked credential inputs, HTTP-choice repair, protected-save failure retention,
+and cleared credential editors on close. Credentials use the existing
+user_settings/bin_conf.dat credential/SOCKS5 record, not ordinary LLControlGroup
+settings or a second persistent credential service. Native startup initializes the
+machine-ID service before native workers and injects exact-record callbacks.
+
+The existing handler uses RC4 with an obfuscated stored key, not OS-backed
+protection, and swallows some write errors. Native save therefore copies the
+encrypted store to an exclusively created staging directory, invokes that handler
+there, reloads/verifies the requested record, and only then uses atomic Windows
+replacement with write-through. Failed staging cannot delete the live store.
+No changes were made to the GL credential implementation or its format. Existing
+crypto/read failure handling, concurrent writers and complete ancestor reparse
+checks remain follow-up risks; staged verification does not prove those closed.
+
+Checks: widget166/166 passed with explicit policy branches, original dialog
+callbacks, save failure/retry, Cancel/X, masking/editability, credential-field
+clearing, staged failure preservation and temporary-file retirement. Window3/3
+passed after HTTP consumer wiring, before production credential binding. GPU
+context9/9 passed and llvkwindowmgr compiled after credential factory binding.
+Actual proxy-server handshakes and production credential codec runtime tests remain
+open. This curl package lacks CURLOPT_SOCKS5_AUTH; its available username/password
+options are used. SOCKS UDP negotiation, live browser reconfiguration and source
+post-login restart notifications remain open. The stalled compiler tree was
+terminated at the user's explicit request; the real viewer rebuild is in progress.
+
+Notifications continuation (2026-09-11, source bdb5e59486, Windows,
+NV-00/01/03/15/17): inspected LLFloaterPreference buildPopupList/onSelectPopup/
+onUpdatePopupFilter, LLNotificationForm construction/getIgnored/setIgnored and
+handleIgnoredNotification; online-notice dependency and Growl capability callbacks.
+Original panel_preferences_alerts.xml now uses native checkbox rows and a filter
+editor. Ignore metadata is parsed from the already Expat-validated/merged original
+notification XML using Boost.PropertyTree, including form templates/substitutions,
+global-control overrides/inversion and default/last-response metadata. Existing
+gWarningSettings is passed into native startup and persisted through LLVKSettingsMgr
+to user_settings/ignorable_dialogs.xml. Native fallback test owners use the same
+LLControlGroup implementation, not a second settings implementation.
+
+Q2/Q3: native metadata and UI callbacks avoid LLNotificationForm's LLUI singleton
+and GL notification pipeline. Suppressed queueNotice calls return the original
+default button response, or the existing saved response, without creating a modal.
+The list retains source true=show/false=suppress semantics. Desktop notifier
+availability is explicit; GrowlManager cannot be reused because its constructor
+installs viewer notification/chat/script callbacks. A native desktop notifier has
+not yet been bound. Session-only delivery, last-response persistence, template
+overrides/custom forms, source-exact filtering and save-failure recovery remain
+open; original visible notice types outside the existing native form set remain
+unsupported rather than replaced with fabricated dialogs.
+
+Tests165/165 pass. Test165 constructs the original Notifications panel, checks
+template labels and shared warning mutation/persistence/filter behavior, and proves
+OutboxFolderCreated suppression invokes option0 with OK_okignore=true without a
+modal. Native window tests3/3 pass after the Warnings-group startup signature change.
+Actual viewer relink remains blocked by the existing compiler tree holding its PCH;
+no compiler process was terminated or build file deleted. Full Preferences remains
+provisional and this is not the requested parity gate.
+
+Privacy and Block List continuation (2026-09-11, Windows RelWithDebInfo,
+source bdb5e59486, NV-00/01/03/12/15/17): original Privacy XML now constructs
+with native localized pre-login autoresponses, DebugLookAt integer/checkbox
+synchronization, read-only inventory target and disabled account-history controls.
+LLPanelPreferencePrivacy construction/postBuild/onOpen/saveSettings/apply/cancel
+and parent pre-login initialization were inspected. Its pre-login snapshot only
+includes AutoDisengageMic; native panel snapshot allowlists preserve this exception.
+FSCopyTransInventoryDropTarget construction/postBuild/handleDragAndDrop were
+inspected: native data acceptance checks supported item kinds, copy/transfer,
+non-link/non-folder and distinguishes hover from drop. Actual native inventory
+drag producers, account item lookup and post-login behavior remain open.
+
+Block List source roots: FSPanelBlockList construction/postBuild/refresh/filter/
+sort/selection/predicates/remove/toggle/picker callbacks, FSFloaterBlocklist,
+LLFloaterGetBlockedObjectName and LLMuteList add/remove/isMuted/isLinden/updateAdd.
+The existing mute constructor resolves viewer objects, and mutation calls reach
+avatar lights, notifications and server messages; it is not reused by native code.
+Native LLVKMuteList implements explicit resolved-ID/name entries, inverted allow
+flags, self/staff restrictions, capacity, exact legacy names and queued change
+records. These records do not yet have server/visual/notification consumers.
+Native Block List controller constructs the original panel, sorts and filters,
+evaluates original menu predicates, removes entries, toggles resident flags and
+uses unchanged floater_mute_object.xml for by-name additions. Original standalone
+floater_fs_blocklist.xml opens when FSUseStandaloneBlocklistFloater is true;
+cascading uses the prior native cascading rectangle and UIFloaterOffset, or the
+native top-left available area. Saved group rectangles/full registry placement,
+People sidebar route, resident picker/profile, mute-list loading/failure/cache/
+server synchronization and authoritative self identity remain open. Block List
+actions are not yet a functional substitute for the full account mute service.
+
+Supporting native ownership: menu_button uses mouse-down and Return activation,
+captured panel callback scopes, anchored popup positions and pressed-state cleanup.
+Menu parser retains action/check/enable/visible fields; checked items paint the
+source checkmark. Only bounded flat command popups are implemented. fs_scroll_list
+supports the miscellaneous-item branch, desired row height and multi-selection
+context retention; avatar-drag behavior is rejected rather than silently reused.
+Explicit negative-width columns are hidden metadata, omitted widths remain dynamic.
+Plain text supports horizontal use_ellipses; multiline last-visible-line behavior
+is still open. Unprefixed callback elements and line-editor XML body values now
+use the existing native scoped callback/value paths.
+
+Two recursive stack regressions were diagnosed with LLDB without changing test
+depth/stack limits. Native nodes now construct directly in their owning map entry
+with exception cleanup, avoiding a roughly14KB stack temporary; recursive factory
+panel-constructor parameters are heap-owned. Tests164/164 pass: test161 covers
+inventory acceptance/deletion, test162 unchanged Privacy and Block List panels,
+snapshot policy, original menus/flag toggles/object picker and standalone lifecycle;
+test163 mute decisions/change records; test164 menu-button scoping and popup
+lifecycle. No full Preferences, RLVa, or runtime account parity is claimed.
+
+Sound and Media continuation (2026-09-11, source bdb5e59486, Windows OpenAL;
+NV-00/01/03/12/15/17): original panel_preferences_sound.xml now constructs via
+native panel_preference_sounds, fs_panel_preference_ui_sounds and
+panel_voice_device_settings controllers. The live full Preferences root remains
+provisional; this is not completion of Preferences or audio/voice parity.
+
+Source roots inspected: FSPanelPreferenceSounds postBuild/onMoapInteractionChanged/
+updateMoapInteractionSetting; volume_controls_on_click_set_sounds and
+volume_controls_set_control_false; LLPanelPreference::updateMediaAutoPlayCheckbox;
+FSResetVoiceTimer and LLFloaterPreference::onClickResetVoice; all
+FSPanelPreferenceUISounds construction/list/editor/commit/reset/preview/filter/
+localization/context callbacks; LLPanelVoiceDeviceSettings construction,
+postBuild/visibility/draw/refresh/initialize/cleanup/device commits/apply/cancel.
+Q1: the sound controls coordinate mute and autoplay enablement, preserve the media
+interaction bitmask, edit source UI-sound UUID/playmode settings, enumerate voice
+devices, and tune microphone gain/energy. Snapshot sound uses inverted Boolean
+playmode; three IM sounds use four-valued modes. OpenAL hides the FMOD-only output
+selector. Voice reset disables voice for five seconds before enabling it again.
+UI sound labels resolve through ancestors after hierarchy attachment.
+
+Q2/Q3: native scoped panel controllers use the shared control service and native
+list/editor widgets. LLFilterEditor source behavior is independently implemented
+as search behavior followed by a commit on every keystroke, including navigation,
+with no focus-loss recommit; its original filter_editor.xml defaults are separate.
+Native list checkbox cells toggle before selection callbacks, propagate to selected
+rows, and paint checked/unchecked/disabled skin images. Original dotted slider
+and checkbox label alignment parameters now feed native label layout. Enable and
+disable bindings follow source choice-style overrides, not an invented AND rule.
+The locate tag constructs a non-drawing native control, not a plain untyped view.
+
+Native VoiceDevices in llvkwindowmgr lazily owns the existing nonvisual llwebrtc
+device interface, without LLVoiceClient/LLWebRTCVoiceClient UI or channel owners.
+Inspected llwebrtc init/terminate/device observation/enumeration/tuning/gain and
+public entry points: native WebRTC threads, platform audio device module and CPU
+audio processing, no GL visual dependency. Worker notifications copy device lists
+under a native mutex; observers detach before engine shutdown. An unsynchronized
+shared observer vector was found and fixed with a recursive mutex and guarded
+notification snapshot. Existing viewer OnDevicesChanged only queues copied data;
+GL visual functions were unchanged. Native service creates no peer connections.
+Tuning starts only for a visible enabled device panel. Five native rectangle meters
+use source energy conversion, 0.7 threshold, and speaking/overdriven colors.
+
+Checks: widget159/159 passes. Test141 covers filter callback ordering/navigation/
+focus; test158 checkbox toggles, selected-row propagation, images and callback row
+replacement; test159 unchanged full sound hierarchy, every tab CPU painting,
+localized UI-sound rows, UUID edits, selected preview dispatch, inverted snapshot
+playmode, IM mode, reset, filter clear, media mask, injected device selection,
+tuning start/stop and meter commands. llwebrtc builds after observer synchronization.
+Integrated window3/3 passes with actual WebRTC initialization/device enumeration
+and teardown through the original panel; EnableVoiceChat remains false in that
+test so no microphone capture is requested. Hardware microphone levels and actual
+voice transport are not verified by injected energy or enumeration.
+
+Open: Media Lists auxiliary dialog, UI-sound right-click Copy UUID/double-click
+preview/default tooltip, source-exact filtering/selection and per-cell callbacks,
+dynamic UI-sound transaction registration and disk acceptance, voice popup device
+refresh/rollback/processing settings, immediate hide/delete tuning transitions,
+hardware capture/hot-plug/failure paths and source backend alternatives. WebRTC
+shutdown still has a pre-timeout BlockingCall and other device-state threading
+obligations; observer synchronization alone does not close its lifetime audit.
+
+Media Lists and sound follow-up (same source/configuration, NV-00/01/12/15/17):
+FloaterMediaLists postBuild/add/remove/handleAddDomainCallback and
+LLViewerParcelMedia extractDomain/saveDomainFilterList/loadDomainFilterList plus
+the first-rule media decision loop were inspected. Native LLVKMediaFilter owns
+ordered allow/deny LLSD rules and a revision for cached-decision invalidation;
+alphabetical dialog display does not reorder policy. The legacy normalization
+and suffix matching are explicit, including the lack of a DNS dot-boundary check.
+This is not standards-compliant host matching or an approved security improvement.
+Native showMediaLists constructs unchanged floater_media_lists.xml, uses original
+AddToMediaList confirmation/localized list names, and publishes add/remove changes
+through an optional account persistence callback. Source LL_PATH_PER_SL_ACCOUNT
+is empty before an account is known; no global media-list filename is invented.
+Native account-file lifecycle and actual parcel-media consumption remain open.
+
+Original Media Lists requires resizing. Native floater parameters now retain
+can_resize/min_width/min_height; pointer-captured edges/corners update native
+rectangles with minimum sizes and child follows. The original Resize_Corner image
+is painted. LLFloater::addResizeCtrls and LLResizeHandle pointer/capture/minimum
+geometry were inspected. Source snapping/docking, resize cursors, full edge
+geometry qualification, overflow and persisted rectangles remain open.
+
+UI-sound default UUID tooltips, double-click preview and right-click Copy UUID
+are now wired. Native LLVKMenu supports bounded command context menus anchored
+at a screen point with source upward/leftward overflow placement, normal keyboard
+activation and dismissal. LLContextMenu::show/hide was inspected; nested context
+submenus, spawn-release movement thresholds and measured visual parity remain open.
+The source UI-sound controls directly mutate settings and are not part of the
+base panel bound-control snapshot. Native direct edits now invoke the configured
+settings writer before publication, with failure restoring the editor. This saves
+earlier than source shutdown persistence; no claim of cross-file atomicity follows.
+
+Widget160/160 passes: test159 now additionally checks original Media Lists add/
+remove/Cancel, callback persistence and rule decisions, corner resize and repaint,
+UI-sound save rejection, five-second voice reset, default tooltip, pointer-driven
+context Copy UUID with isolated clipboard, and double-click preview. Test160
+checks normalization, rule ordering, suffix matching, revisions and invalid-load
+nonmutation. Last real-window3/3 predates these Media Lists/context follow-ups.
+Full Preferences root and remaining panels are still incomplete.
+
+Shared settings continuation (2026-09-11, source bdb5e59486, Windows
+RelWithDebInfo; NV-00/01/03/15/17): the user requested the existing settings
+service and the filename llvksettingsmgr. LLVKSettingsMgr replaces the former
+LLVKStartupSettings name and no longer contains an Entry table or independent
+default/saved/transient stacks. It adapts LLControlGroup and LLControlVariable.
+
+Q1: inspected LLControlGroup construction/cleanup, declaration, getControl,
+loadFromFile, saveToFile, applyToAll, and LLControlVariable construction,
+setValue/setDefaultValue/resetToDefault/getSaveValue, typed comparison and sanity
+signals. Value conversion/comparison uses LLSD, generic string conversion and
+CPU math types; file loading uses LLSD XML and generic IO. Signal targets belong
+to the caller, not the storage implementation. The optional LL_SETTINGS_PROFILE
+cleanup path writes access statistics through generic file/directory utilities.
+No existing visual settings subscribers are installed by this integration.
+
+Q2/Q3: extract the unchanged parsed-document loop as LLControlGroup::loadFromLLSD,
+with loadFromFile delegating to it. Existing viewer callers retain their original
+semantics. After backend selection, llvkStartup receives and loads the existing
+gSavedSettings, gSavedPerAccountSettings and gCrashSettings groups passed from
+Windows entry. Its preliminary backend probe uses a temporary instance of the
+same service, not another implementation. LLVKSettingsMgr manages bounded XML
+input and staged file replacement around those groups. Native widget bindings
+retain control identities, send edits through service validators as transient
+values, and observe service commit signals through scoped connections. The
+widget setting table is a UI cache, with local-only controls still supported.
+No GPU resources, GL callbacks or renderer-specific storage are introduced.
+
+Native input compatibility explicitly maps the account declarations' Integer
+spelling to S32, rejects unknown types/type mismatches before mutation, and
+supplies a descriptive comment for previously tolerated commentless definitions.
+Boolean XML storage remains the existing service's representation; native UI
+views expose Boolean values. Staged saves preserve unrelated file entries and
+promote accepted values only after successful replacement. Validation currently
+runs before staging and again when publishing saved values; reentrant validators,
+concurrent writers and multi-file atomic acceptance remain open obligations.
+Account identity/load/save after authentication and complete Preferences behavior
+are still incomplete; this integration does not close the full parity gate.
+
+Checks: existing LLControlGroup tests4/4 pass after loader extraction. Widget
+tests157/157 pass after the manager rename, including precedence/failed-save
+tests128/132 and new test157 proving shared control identity, two-way updates,
+validator veto, retained saved layers, structured-value notification deduplication,
+nested service writes and scoped disconnection. Integrated window tests3/3 pass
+with real global/account service bindings before the final filename rename.
 
 Post-18701018f4 integration work (2026-09-11, NV-00/01/12/15/17): the requested
 partial checkpoint was committed as18701018f4. Full Preferences and RLVa
@@ -114,6 +531,126 @@ remain open. Source declarations and GL implementation were left unchanged.
 
 Original Chat FSKeywords requires editable multiline text and focus-loss commit.
 Controls/Move & View continuation (NV-00/01/12/15/17, source18701018f4):
+Post-bdb5e59486 continuation: the user has explicitly classified Preferences
+parity as a chokepoint and a viewer without settable Preferences as a failure.
+That gate remains open; neither the Controls increment below nor the existing
+provisional Preferences window meets full parity.
+
+Source LLPanelPreferenceControls postBuild/populateControlTable/onModeCommit/
+onListCommit/onSetKeyBind/onDefaultKeyBind/onRestoreDefaultsResponse and
+LLSetKeyBindDialog postBuild/onOpen/onClose/recordAndHandleKey/handleAnyMouseClick/
+onClickTimeout define the current native controller increment. Q1: mode changes
+rebuild original section/action rows and suppress empty unassignable commands;
+binding-cell clicks open the original modal, keys and mouse combinations replace
+the selected slot, Cancel preserves it, Default resets it, and the defaults prompt
+chooses all/current/no modes. Q2: native panel callbacks own the native binding
+maps; original table files, fonts and images feed native list painting. Q3: one
+native dialog owns capture state and a pending single-click deadline, with
+keyboard/mouse events routed before menu or ordinary widget handling. The
+source's modifier-release capture,0.7second single-click delay, double-click
+release, Clear, Cancel and mode restrictions are explicit native state. Original
+yesnocancelbuttons template values supply defaults-confirmation responses.
+LLVKFloater can_close controls chrome, not programmatic close. Floater-scoped
+string declarations use the native panel string owner. No GL input or modal
+owner is called.
+
+Native Preferences now snapshots binding maps on open, restores them on Cancel,
+and sends changed accepted maps to startup-owned key_bindings.xml persistence.
+Tests131 cover original Controls construction and mode rows, captured/localized
+binding labels, keyboard/mouse/default operations, Cancel non-write and accepted
+binding callback. Integrated window test1 sends an actual WM_KEYDOWN to the
+native window and checks the binding table update; widget152/152 and window2/2
+pass. A teardown access violation was found with LLDB: the new floater member
+had been declared before the widget tree, causing reverse destruction to access
+a destroyed tree. Its owner is now declared with the other floaters after the
+tree and the unchanged destruction regression passes.
+
+Still open: original live Preferences root, full mode/reset/search refresh
+coupling, context-cone drawing, complete menu reservation/name conversion,
+keypad-distinction policy, character-message isolation after keyboard capture,
+multiple Controls owners, cross-file transaction failure semantics and runtime
+in-world input consumers. Current Controls tests do not qualify those gaps or
+the remaining original Preferences panels. The keyboard name table is native;
+the tested strings retain source MMB/Double LMB labels, not invented labels.
+The matching keyboard release is now consumed after closing capture, with a
+test proving that a subsequent unrelated release is not swallowed.
+
+Joystick prerequisite (Windows, source bdb5e59486): LLFloaterJoystick device
+enumeration/initFromSettings/cancel/updateAxesAndButtons and LLViewerJoystick
+di8_devices_callback/EnumObjectsCallback/initDevice/updateStatus were inspected.
+The source requests DirectInput game controllers, stores binary GUIDs, negotiates
+[-3000,3000] axes and normalizes polling values. Native LLVKJoystick owns a
+DirectInput interface/device and an explicit eight-axis/32-button state without
+using the viewer's joystick or window owners. The packaged ndofdev_external.h
+declares six axes while this source updateStatus loops over eight; native code
+does not copy that out-of-bounds access. An independently bounded DIJOYSTATE
+buffer supplies the native axis values. Failure to poll clears live readings
+and marks the device disconnected; invalid identities do not fabricate a device.
+Real-window tests3/3 cover actual interface enumeration, malformed GUID rejection,
+no-selected-device polling and teardown. Connected-device readings, driver/range
+quirks, hot-plug and thread/fault qualification remain open.
+
+Post-bdb5e59486 continuation (NV-00/01/12/15/17): the window now binds that
+DirectInput owner through scoped enumeration, identity selection and polling
+callbacks, cleared before owner destruction. Original floater_joystick.xml is
+constructed unchanged. Its native controller selects binary device identities,
+persists canonical GUID strings, previews eight axis samples/sixteen button lights,
+applies the source Windows SpaceNavigator defaults and restores settings/device
+selection on Cancel. Native container_view/stat_view owns declaration-order rows,
+required heights and collapse state; the scroll-container constructor accepts this
+native document owner. Native stat_bar owns bounded samples, range interpolation,
+bar/history/label modes and native text/rectangle painting. Test153 checks native
+row geometry, collapse ownership and sample painting. Test154 checks original
+joystick construction, injected device readings, defaults/Cancel and original
+Move & View callbacks. Real-window tests3/3 exercise actual DirectInput services
+and original dialog painting, not connected hardware parity.
+
+Move & View now uses the shared native binding store for single/double click
+walk/teleport selection and the derived DoubleClickTeleport setting; its original
+joystick button invokes the native floater directly. Open obligations include
+flycam/world consumers, complete cross-panel refresh, device hot-plug/ranges,
+container viewport negotiation/reentrancy, stat_view setting-backed expansion,
+and source LLTrace period aggregates, rapid-change mean/median/autoscaling.
+Per-frame sample history is not proof of those source statistics contracts.
+
+Crash Reports continuation (NV-00/01/15/17, Windows source bdb5e59486):
+LLPanelPreferenceCrashReports postBuild/refresh/apply/cancel reads gCrashSettings,
+keeps local checkbox drafts, enables subordinate consent fields only when sending,
+substitutes its privacy URL and conditionally shows the BugSplat restart notice.
+Apply maps send/ask to 0/1/2 and writes consent fields to the separate crash group.
+Native Q2/Q3: independent CPU draft controls plus a dedicated crash-settings map
+and save callback avoid reusing GL controls or contaminating global settings.
+Startup loads defaults/user settings_crash_behavior.xml and uses the existing
+native staged writer for that file. Test155 verifies original controls, privacy
+URL, conditional restart notice, Cancel, save rejection and dedicated accepted
+writes with no global-writer call. Cross-file atomic acceptance and actual crash
+reporter startup/submission remain open; this is not crash reporting parity.
+
+Advanced reset continuation (NV-00/01/15/17, same source/configuration):
+LLFloaterPreference onClickClearSettings/callback_clear_settings confirms via
+FirestormClearSettingsPrompt, creates logs/CLEAR, then shows SettingsWillClear.
+LLAppViewer init/initConfiguration removes enumerated files, matching
+feature*.txt/gpu*.txt/settings_*.xml and the selected global settings file, plus
+specified immediate per-account files. LLFile::rmdir is nonrecursive; directories
+containing custom content survive. LLFile::remove does not glob the literal
+screen_last*.* argument, so native reset does not invent snapshot wildcard deletion.
+Native Q2/Q3: CPU-only marker scheduling and a bounded filesystem consumer,
+independent original notifications/control callbacks, and reload of native settings
+before native window creation. GL startup remains untouched. Backend selection
+precedes destructive reset and remains process-exclusive after reloading defaults.
+Failures are explicit and retain the marker for retry; linked paths and nonlocal
+custom settings filenames are rejected. These are deliberate safety differences
+from source best-effort deletion, not measured parity. Test156 uses an isolated
+UUID-named temporary profile and proves no-marker nonmutation, deferred consent,
+invalid-path nonmutation, bounded file removal, custom/nonempty-directory retention,
+marker completion and idempotence. Test155 exercises the unchanged Advanced panel
+and cancellation/confirmation notification paths. Widget156/156 passes. Native
+multi-instance reset coordination, crash interruption, filesystem race resistance,
+all Advanced setting consumers and full startup reset parity remain open.
+
+The full live Preferences root is still provisional. These tested panel/controller
+increments do not satisfy the user's Preferences parity gate.
+
 LLFloaterPreference updateClickActionControls/updateClickActionViews dispatch
 through LLPanelPreferenceControls, not independent boolean settings. Source
 LLKeyConflictHandler registerControl/removeConflicts/generatePlaceholders and

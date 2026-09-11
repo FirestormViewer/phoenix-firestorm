@@ -58,3 +58,11 @@ std::optional<LLVKWidgetTree::IconDraw> LLVKWidgetTree::prepareIcon(Id id, float
     if (!std::isfinite(color[3])) { error = "Native icon transparency overflow"; return std::nullopt; }
     return IconDraw{id,*rect,color,icon.image};
 }
+
+bool LLVKWidgetTree::setIconColor(Id id,LLVKColor color)
+{
+    if (!get(id) || !get(id)->icon) return false;
+    for (const auto channel : color.get()) if (!std::isfinite(channel)) return false;
+    mNodes.at(id).icon->params.color=std::move(color);
+    return true;
+}

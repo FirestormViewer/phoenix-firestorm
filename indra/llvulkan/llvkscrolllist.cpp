@@ -50,6 +50,22 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createScrollList(const Params&
     catch (...) { discard(); throw; }
 }
 
+bool LLVKWidgetTree::setScrollListColumns(Id id,std::vector<ListColumn> columns,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->scrollList || columns.size()>128)
+    { error="Invalid native list columns"; return false; }
+    for (const auto& column : columns)
+        if (column.width<-1 || !std::isfinite(column.relativeWidth) || column.relativeWidth>1.f)
+        { error="Invalid native list column width"; return false; }
+    const auto headers=get(id)->scrollList->headers;
+    for (const auto header : headers) if (get(header) && !erase(header,error)) return false;
+    if (!get(id)) return false;
+    auto& list=*mNodes.at(id).scrollList;
+    list.headers.clear(); list.sortColumns.clear(); list.columns=std::move(columns);
+    return layoutScrollList(id,error);
+}
+
 bool LLVKWidgetTree::setScrollListRows(Id id,std::vector<ListRow> rows,std::string& error)
 {
     error.clear();
@@ -76,11 +92,12 @@ bool LLVKWidgetTree::setScrollListRows(Id id,std::vector<ListRow> rows,std::stri
         {
             const auto* style=column<row.styles.size() ? &row.styles[column] : nullptr;
             const auto font=style && style->font ? style->font : get(id)->control->params.font;
-            const auto height=style && style->type==ListCellStyle::Type::Icon ?
+            const auto height=style && style->type==ListCellStyle::Type::CheckBox ? style->checkSize : style && style->type==ListCellStyle::Type::Icon ?
                 (style->image ? static_cast<int>(style->image->height()) : 0) : static_cast<int>(std::ceil(font->metrics().lineHeight));
             state.lineHeight=std::max(state.lineHeight,height+state.params->rowPadding);
         }
     if (!state.lineHeight) state.lineHeight=static_cast<int>(std::ceil(get(id)->control->params.font->metrics().lineHeight))+state.params->rowPadding;
+    if (state.params->desiredLineHeight>=0) state.lineHeight=state.params->desiredLineHeight;
     if (layoutScrollList(id,error))
     {
         if (get(id)->scrollList->sortColumns.empty())
@@ -94,6 +111,24 @@ bool LLVKWidgetTree::setScrollListRows(Id id,std::vector<ListRow> rows,std::stri
     }
     if (get(id) && get(id)->scrollList) mNodes.at(id).scrollList=before;
     return false;
+}
+
+bool LLVKWidgetTree::setTooltip(Id id,std::string tooltip)
+{
+    const auto found=mNodes.find(id);
+    if (found==mNodes.end()) return false;
+    found->second.params.tooltip=std::move(tooltip);
+    return true;
+}
+
+bool LLVKWidgetTree::setScrollListActions(Id id,LLVKControl::Callback doubleClick,
+    std::function<void(Id,std::int32_t,std::int32_t)> rightClick)
+{
+    if (!get(id) || !get(id)->scrollList) return false;
+    auto params=std::make_shared<ScrollListParams>(*get(id)->scrollList->params);
+    params->doubleClick=std::move(doubleClick); params->rightClick=std::move(rightClick);
+    mNodes.at(id).scrollList->params=std::move(params);
+    return true;
 }
 
 bool LLVKWidgetTree::setScrollListCommitOnSelection(Id id,bool enabled)
@@ -161,7 +196,7 @@ bool LLVKWidgetTree::layoutScrollList(Id id,std::string& error)
     {
         if (!std::isfinite(column.relativeWidth) || column.relativeWidth>1.f || column.width<-1)
         { error="Invalid native list column width"; return false; }
-        const auto size=column.width>=0 ? column.width : column.relativeWidth>=0 ? static_cast<int>(available*column.relativeWidth) : -1;
+        const auto size=column.hidden ? 0 : column.width>=0 ? column.width : column.relativeWidth>=0 ? static_cast<int>(available*column.relativeWidth) : -1;
         widths.push_back(size);
         if (size>=0) remaining-=size; else ++dynamic;
     }
@@ -278,6 +313,7 @@ bool LLVKWidgetTree::scrollListPointer(Id id,const PointerEvent& event,std::stri
         { cell=static_cast<int>(column); break; }
         left+=state.widths[column]+state.params->columnPadding;
     }
+    const auto hitCell=cell;
     if (state.params->selection==ScrollListParams::Selection::Row ||
         (state.params->selection==ScrollListParams::Selection::Header && cell==0)) cell=-1;
     const auto select=[&]()
@@ -304,8 +340,41 @@ bool LLVKWidgetTree::scrollListPointer(Id id,const PointerEvent& event,std::stri
     };
     if (event.kind==PointerKind::LeftDown || event.kind==PointerKind::DoubleClick)
     {
+        if (hit && hitCell>=0 && static_cast<std::size_t>(hitCell)<state.rows[row].cells.size() && static_cast<std::size_t>(hitCell)<state.rows[row].styles.size() &&
+            state.rows[row].styles[hitCell].type==ListCellStyle::Type::CheckBox)
+        {
+            const auto column=static_cast<std::size_t>(hitCell);
+            const auto& style=state.rows[row].styles[column];
+            const auto currentValue=state.rows[row].cells[column]=="true" || state.rows[row].cells[column]=="1";
+            const auto checked=style.enabled ? !currentValue : currentValue;
+            mNodes.at(id).scrollList->rows[row].cells[column]=checked ? "true" : "false";
+            if (!state.rows[row].selected)
+            {
+                if (!select() || !get(id) || !get(id)->scrollList) return true;
+                if (!setMouseCapture(id,error)) return false;
+            }
+            if (!get(id) || !get(id)->scrollList) return true;
+            for (auto& item : mNodes.at(id).scrollList->rows)
+                if (item.selected && column<item.cells.size()) item.cells[column]=checked ? "true" : "false";
+            mNodes.at(id).control->dirty=true;
+            return dispatchControl(id,&LLVKControl::Params::commit);
+        }
         if (!select() || !get(id)) return true;
+        if (event.kind==PointerKind::DoubleClick && state.params->doubleClick.function)
+        {
+            const auto callback=state.params->doubleClick;
+            callback.function(id,callback.parameter.value_or(value(id)));
+            if (!get(id)) return true;
+        }
         if (hit && !setMouseCapture(id,error)) return false;
+        return true;
+    }
+    if (event.kind==PointerKind::RightDown && state.params->rightClick)
+    {
+        const auto selectedCount=std::count_if(state.rows.begin(),state.rows.end(),[](const auto& row) { return row.selected; });
+        if (!(state.params->preserveContextSelection && selectedCount>1) && !select()) return true;
+        if (!get(id)) return true;
+        state.params->rightClick(id,event.x,event.y);
         return true;
     }
     if (event.kind==PointerKind::Hover)

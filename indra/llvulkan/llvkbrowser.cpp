@@ -110,6 +110,15 @@ bool LLVKBrowser::start(const Configuration& configuration, std::string& error)
     settings.initial_width = configuration.width;
     settings.initial_height = configuration.height;
     settings.accept_language_list = configuration.language;
+    if (configuration.proxy.type!=LLVKProxy::Type::None)
+    {
+        if (configuration.proxy.type!=LLVKProxy::Type::Http || configuration.proxy.host.empty() ||
+            configuration.proxy.port<1 || configuration.proxy.port>65535)
+        { error="Invalid native browser HTTP proxy configuration"; return false; }
+        const auto& host=configuration.proxy.host;
+        settings.proxy_host_port=(host.find(':')!=std::string::npos && host.front()!='[' ? "["+host+"]" : host)+
+            ":"+std::to_string(configuration.proxy.port);
+    }
     settings.user_agent_substring = mEngine->makeCompatibleUserAgentString(configuration.userAgent);
     settings.disable_gpu = true;
     settings.webgl_enabled = false;
@@ -118,7 +127,8 @@ bool LLVKBrowser::start(const Configuration& configuration, std::string& error)
     settings.background_color = 0xffffffff;
     settings.flash_enabled = settings.java_enabled = settings.plugins_enabled = false;
     settings.media_stream_enabled = false;
-    settings.javascript_enabled = settings.cookies_enabled = true;
+    settings.javascript_enabled = configuration.javascriptEnabled;
+    settings.cookies_enabled = configuration.cookiesEnabled;
     settings.disable_web_security = settings.file_access_from_file_urls = false;
     settings.frame_rate = 60;
     bool expected = false;

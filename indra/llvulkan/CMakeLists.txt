@@ -40,10 +40,14 @@ add_library(llvkwidgets llvkwidgettree.cpp llvkwidgettree.h llvkwidgetlayout.cpp
     llvkskinfiles.cpp llvkskinfiles.h llvkskinimages.cpp llvkskinimages.h llvkwidgetjpeg.cpp llvkwidgettga.cpp llvkwidgetj2c.cpp
     llvklineeditor.cpp llvklineeditor.h llvkclipboard.cpp llvkclipboard.h llvkstyledtext.cpp llvkstyledtext.h
     llvkscroll.cpp llvkscroll.h llvkcombo.cpp llvkbrowsersurface.cpp llvkbrowsersurface.h llvkwidgetpaint.cpp llvkwidgetpaint.h
-    llvkloginui.cpp llvkloginui.h llvkstartupsettings.cpp llvkstartupsettings.h llvkloginmenu.cpp llvkloginmenu.h llvkfloater.cpp llvkfloater.h llvklogindialogs.cpp llvkspinner.cpp llvkradiogroup.cpp)
-target_link_libraries(llvkwidgets PRIVATE llmath)
+    llvkviewerui.cpp llvkviewerui.h llvksettingsmgr.cpp llvksettingsmgr.h llvkmenu.cpp llvkmenu.h llvkfloater.cpp llvkfloater.h llvkdialogs.cpp llvkspinner.cpp llvkradiogroup.cpp)
+target_link_libraries(llvkwidgets PRIVATE llmath PUBLIC llxml)
 target_sources(llvkwidgets PRIVATE llvkslider.cpp llvkspellcheck.cpp llvkspellcheck.h llvktranslation.cpp llvktranslation.h)
 target_sources(llvkwidgets PRIVATE llvkkeybindings.cpp llvkkeybindings.h)
+target_sources(llvkwidgets PRIVATE llvkmediafilter.cpp llvkmediafilter.h)
+target_sources(llvkwidgets PRIVATE llvkmutelist.cpp llvkmutelist.h)
+target_sources(llvkwidgets PRIVATE llvkproxy.cpp llvkproxy.h)
+target_sources(llvkwidgets PRIVATE llvktexturectrl.cpp llvktexturectrl.h)
 target_include_directories(llvkwidgets PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(llvkwidgets SYSTEM PRIVATE ${llvk_stb_SOURCE_DIR})
 target_link_libraries(llvkwidgets PRIVATE ll::expat ll::libpng ll::zlib-ng ll::libjpeg ll::openjpeg ll::hunspell)
@@ -106,19 +110,22 @@ if (WINDOWS)
     add_library(llvkbrowser llvkbrowser.cpp llvkbrowser.h)
     target_include_directories(llvkbrowser SYSTEM PRIVATE "${LIBS_PREBUILT_DIR}/include/cef")
     target_link_libraries(llvkbrowser PUBLIC llvkwidgets PRIVATE llvk_dullahan user32)
-    add_library(llvkloginwindow llvkloginwindow.cpp llvkloginwindow.h llvknativestartup.cpp llvknativestartup.h)
-    target_sources(llvkloginwindow PRIVATE llvkaudio.cpp llvkaudio.h)
+    add_library(llvkwindowmgr llvkwindowmgr.cpp llvkwindowmgr.h llvkstartup.cpp llvkstartup.h)
+    target_sources(llvkwindowmgr PRIVATE llvkaudio.cpp llvkaudio.h)
+    target_sources(llvkwindowmgr PRIVATE llvkjoystick.cpp llvkjoystick.h)
+    target_link_libraries(llvkwindowmgr PRIVATE dinput8 dxguid)
+    target_link_libraries(llvkwindowmgr PRIVATE llwebrtc)
     include(OPENAL)
     if (TARGET ll::openal)
-        target_link_libraries(llvkloginwindow PRIVATE ll::openal)
+        target_link_libraries(llvkwindowmgr PRIVATE ll::openal)
     endif ()
-    target_compile_definitions(llvkloginwindow PRIVATE VK_USE_PLATFORM_WIN32_KHR)
-    target_compile_definitions(llvkloginwindow PRIVATE
+    target_compile_definitions(llvkwindowmgr PRIVATE VK_USE_PLATFORM_WIN32_KHR)
+    target_compile_definitions(llvkwindowmgr PRIVATE
         LLVK_VIEWER_MAJOR="${VIEWER_VERSION_MAJOR}" LLVK_VIEWER_MINOR="${VIEWER_VERSION_MINOR}"
         LLVK_VIEWER_PATCH="${VIEWER_VERSION_PATCH}" LLVK_VIEWER_BUILD="${VIEWER_VERSION_REVISION}"
         LLVK_VIEWER_UPSTREAM="${VIEWER_VERSION_LL}" LLVK_VIEWER_CHANNEL="${VIEWER_CHANNEL}")
-    target_link_libraries(llvkloginwindow PUBLIC llvkuipacket llvkbrowser PRIVATE ll::libcurl user32 shell32 ole32 psapi comdlg32)
-    add_dependencies(llvkloginwindow llvk_ui_shaders)
+    target_link_libraries(llvkwindowmgr PUBLIC llvkuipacket llvkbrowser PRIVATE ll::libcurl user32 shell32 ole32 psapi comdlg32)
+    add_dependencies(llvkwindowmgr llvk_ui_shaders)
 endif ()
 
 option(LL_VULKAN_GPU_TESTS "Run native glyph GPU tests requiring Vulkan validation layers" OFF)
@@ -129,16 +136,16 @@ if (LL_TESTS)
         LL_ADD_INTEGRATION_TEST(llvkbrowser "" "llvkbrowser;llcommon")
         set(native_browser_test_targets INTEGRATION_TEST_llvkbrowser)
         if (LL_VULKAN_GPU_TESTS)
-            LL_ADD_INTEGRATION_TEST(llvkloginwindow "llvkcontext.cpp;llvk_vma_impl.cpp;${VULKAN_SDK_VOLK_SOURCE}" "llvkloginwindow;llcommon;ll::vulkan_sdk")
-            target_compile_definitions(INTEGRATION_TEST_llvkloginwindow PRIVATE VK_USE_PLATFORM_WIN32_KHR
+            LL_ADD_INTEGRATION_TEST(llvkwindowmgr "llvkcontext.cpp;llvk_vma_impl.cpp;${VULKAN_SDK_VOLK_SOURCE}" "llvkwindowmgr;llcommon;ll::vulkan_sdk")
+            target_compile_definitions(INTEGRATION_TEST_llvkwindowmgr PRIVATE VK_USE_PLATFORM_WIN32_KHR
                 LLVK_LOGIN_SOURCE="${CMAKE_SOURCE_DIR}/newview" LLVK_LOGIN_PACKAGED_FONTS="${LIBS_PREBUILT_DIR}/fonts")
-            list(APPEND native_browser_test_targets INTEGRATION_TEST_llvkloginwindow)
+            list(APPEND native_browser_test_targets INTEGRATION_TEST_llvkwindowmgr)
             foreach(stage vert frag)
-                add_custom_command(TARGET INTEGRATION_TEST_llvkloginwindow PRE_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:INTEGRATION_TEST_llvkloginwindow>/shaders/compiled"
+                add_custom_command(TARGET INTEGRATION_TEST_llvkwindowmgr PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:INTEGRATION_TEST_llvkwindowmgr>/shaders/compiled"
                     COMMAND "${LLVK_GLSLANG_VALIDATOR}" -V --target-env vulkan1.1
                         "${CMAKE_CURRENT_SOURCE_DIR}/shaders/ui2d.${stage}"
-                        -o "$<TARGET_FILE_DIR:INTEGRATION_TEST_llvkloginwindow>/shaders/compiled/ui2d.${stage}.spv"
+                        -o "$<TARGET_FILE_DIR:INTEGRATION_TEST_llvkwindowmgr>/shaders/compiled/ui2d.${stage}.spv"
                     VERBATIM)
             endforeach()
         endif()

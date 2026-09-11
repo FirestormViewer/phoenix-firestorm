@@ -1,7 +1,8 @@
 #include "linden_common.h"
-#include "llvkloginwindow.h"
-#include "llvkstartupsettings.h"
+#include "llvkwindowmgr.h"
+#include "llvksettingsmgr.h"
 #include "llvkaudio.h"
+#include "llvkjoystick.h"
 #include "lltut.h"
 #include <windows.h>
 
@@ -10,7 +11,28 @@ namespace tut
     struct loginwindow_data {};
     typedef test_group<loginwindow_data> loginwindow_group;
     typedef loginwindow_group::object loginwindow_object;
-    loginwindow_group loginwindow_tests("llvkloginwindow");
+    loginwindow_group loginwindow_tests("llvkwindowmgr");
+
+    template<> template<> void loginwindow_object::test<3>()
+    {
+        set_test_name("native joystick owns DirectInput enumeration and bounded device state");
+        const auto window=CreateWindowExW(0,L"STATIC",L"Native input test",WS_OVERLAPPED,0,0,32,32,nullptr,nullptr,GetModuleHandleW(nullptr),nullptr);
+        ensure("input test window",window!=nullptr);
+        struct Window { HWND handle; ~Window() { DestroyWindow(handle); } } cleanup{window};
+        LLVKJoystick joystick;
+        std::string error;
+        const bool started=joystick.start(window,error);
+        ensure(error,started);
+        ensure("native joystick enumeration",joystick.enumerate(error));
+        for (const auto& device : joystick.devices()) ensure("binary device identity",device.id.isBinary() && device.id.asBinary().size()==16);
+        ensure("invalid identity rejected",!joystick.select(LLSD("not a GUID"),error));
+        ensure("no fabricated selected device",!joystick.selected().isDefined());
+        ensure("no-device polling succeeds",joystick.poll(error));
+        ensure("no fabricated axes",joystick.state().axisCount==0 && !joystick.state().connected);
+        ensure("explicit no device selection",joystick.select(LLSD(0),error));
+        joystick.stop();
+        ensure("stopped input cannot poll",!joystick.poll(error));
+    }
 
     template<> template<> void loginwindow_object::test<2>()
     {
@@ -80,28 +102,33 @@ namespace tut
             ~Profile() { std::error_code ignored; std::filesystem::remove_all(path,ignored); }
         } profile;
         const auto viewer = std::filesystem::path(LLVK_LOGIN_SOURCE);
-        LLVKStartupSettings settings;
+        LLVKSettingsMgr settings;
         std::string error;
         const bool loaded = settings.loadFile(viewer/"app_settings"/"settings.xml",true,true,true,error);
         ensure(error,loaded);
-        LLVKLoginWindow::Configuration configuration;
+        LLVKWindowMgr::Configuration configuration;
         configuration.ui.skin.skinBaseDirectory = viewer/"skins";
         configuration.ui.skin.userAppDirectory = profile.path;
         configuration.ui.fontDescription = viewer/"fonts"/"fonts.xml";
         configuration.ui.fonts.platform = "Windows";
         configuration.ui.fonts.searchDirectories = {viewer/"fonts",std::filesystem::path(LLVK_LOGIN_PACKAGED_FONTS)};
         configuration.ui.settings = settings.values();
+        configuration.ui.settingsGroup=&settings.group();
         configuration.ui.settingDefaults = settings.defaults();
-        LLVKStartupSettings accountSettings;
+        LLVKSettingsMgr accountSettings;
         ensure("native account declaration load",accountSettings.loadFile(viewer/"app_settings"/"settings_per_account.xml",true,true,true,error));
         configuration.ui.accountSettings=accountSettings.values(); configuration.ui.accountDefaults=accountSettings.defaults();
+        configuration.ui.accountSettingsGroup=&accountSettings.group();
+        LLVKSettingsMgr crashSettings;
+        ensure("native crash declaration load",crashSettings.loadFile(viewer/"app_settings"/"settings_crash_behavior.xml",true,true,true,error));
+        configuration.ui.crashSettings=crashSettings.values();
         configuration.ui.dictionaryDirectory=std::filesystem::path(LLVK_LOGIN_PACKAGED_FONTS).parent_path()/"dictionaries";
         configuration.browser.helperDirectory = directory;
         configuration.browser.localesDirectory = directory/"locales";
         configuration.browser.cacheDirectory = profile.path/"browser";
         configuration.loginPage = "data:text/html,<html><body style='margin:0;background:rgb(45,90,120)'><h1>Native browser validation</h1></body></html>";
         configuration.stopAfterFrames = 6;
-        configuration.bindServices=[](LLVKLoginUi& ui)
+        configuration.bindServices=[](LLVKViewerUi& ui)
         {
             std::string problem;
             ensure("native Preferences in presentation",ui.showPreferences(problem));
@@ -140,6 +167,53 @@ namespace tut
                 }
             }
             ui.tree().setVisible(*chat,false);
+            const auto controls=ui.constructPreferencePanel("panel_preferences_controls.xml",ui.root(),problem);
+            ensure(problem,controls.has_value());
+            const auto list=ui.find("controls_list");
+            auto rows=ui.tree().get(list)->scrollList->rows;
+            for (auto& row : rows) { row.selected=row.value.asString()=="walk_to"; row.selectedCell=row.selected ? 1 : -1; }
+            ensure("select integrated binding cell",ui.tree().setScrollListRows(list,std::move(rows),problem));
+            ensure("open integrated key capture",ui.tree().commit(list));
+            ensure("original key capture visible",ui.keyCaptureDialog()!=0);
+            const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+            ensure("native capture window exists",window!=nullptr);
+            SendMessageW(window,WM_KEYDOWN,'J',1);
+            ensure("Windows input closes key capture",ui.keyCaptureDialog()==0);
+            const auto& updated=ui.tree().get(list)->scrollList->rows;
+            const auto walk=std::find_if(updated.begin(),updated.end(),[](const auto& row) { return row.value.asString()=="walk_to"; });
+            ensure("Windows input updates binding table",walk!=updated.end() && walk->cells[1]=="J");
+            ui.tree().setVisible(*controls,false);
+            const bool joystickOpened=ui.showJoystick(problem);
+            ensure(problem,joystickOpened);
+            ensure("original joystick native service paint",ui.preparePaint({},problem).has_value());
+            ensure("close integrated joystick",ui.closeFloater(problem));
+            ensure("keep microphone capture disabled in integration test",ui.tree().updateSetting("EnableVoiceChat",LLSD(false)));
+            const auto sound=ui.constructPreferencePanel("panel_preferences_sound.xml",ui.root(),problem);
+            ensure(problem,sound.has_value());
+            auto voiceAncestor=ui.tree().get(ui.find("voice_input_device"))->parent;
+            while (voiceAncestor && voiceAncestor!=*sound)
+            {
+                const auto parent=ui.tree().get(voiceAncestor)->parent;
+                if (parent && ui.tree().get(parent)->tabContainer)
+                    ensure("select native voice device tab",ui.tree().selectTabPanel(parent,voiceAncestor,problem));
+                voiceAncestor=parent;
+            }
+            ensure("show original voice device controls",ui.tree().updateSetting("ShowDeviceSettings",LLSD(true)));
+            const auto voicePaint=ui.preparePaint({},problem);
+            ensure(problem,voicePaint.has_value());
+            ensure("voice remains disabled during real enumeration",!ui.tree().setting("EnableVoiceChat")->asBoolean());
+            ui.tree().setVisible(*sound,false);
+            const auto privacy=ui.constructPreferencePanel("panel_preferences_privacy.xml",ui.root(),problem);
+            ensure(problem,privacy.has_value());
+            ensure("Privacy native paint",ui.preparePaint({},problem).has_value());
+            ui.tree().setVisible(*privacy,false);
+            ensure("select standalone block-list policy",ui.tree().updateSetting("FSUseStandaloneBlocklistFloater",LLSD(true)));
+            const bool blockOpened=ui.showBlockList(problem);
+            ensure(problem,blockOpened);
+            ensure("original Block List sort popup",ui.tree().buttonReturn(ui.find("view_btn"),0,false,problem));
+            ensure("native Block List popup paint",ui.preparePaint({},problem).has_value());
+            ui.menu().dismiss();
+            ensure("close original Block List",ui.closeFloater(problem));
             ensure("original Spell Checker in presentation",ui.showSpellCheck(problem));
             ensure("actual dictionary service active",ui.spellCheck().active());
             ensure("original Translation Settings in presentation",ui.showTranslation(problem));
@@ -148,8 +222,15 @@ namespace tut
             ensure("original AutoReplace in native presentation",ui.showAutoReplace(problem));
             ensure("native asynchronous XML picker starts",ui.tree().commit(ui.find("autoreplace_import_list")));
             ensure(ui.dialogError(),ui.dialogError().empty());
+            ensure("bring live Preferences to front",ui.showPreferences(problem));
+            const auto preferences=ui.activeFloater();
+            const auto core=ui.find("pref core",preferences);
+            ensure("original Preferences hierarchy presented",core && ui.tree().get(core)->tabContainer->tabs.size()>=15);
+            ensure("present original Backup controls",ui.tree().selectTabPanel(core,ui.find("backup",core),problem));
+            const auto preferencesPaint=ui.preparePaint({},problem);
+            ensure(problem,preferencesPaint.has_value());
         };
-        const bool ran = LLVKLoginWindow::run(configuration,error);
+        const bool ran = LLVKWindowMgr::run(configuration,error);
         ensure(error,ran);
         ensure("no OpenGL parent module",GetModuleHandleW(L"opengl32.dll") == nullptr);
         std::cout << "Native login window presented six frames with real widgets, fonts, skin and browser\n";

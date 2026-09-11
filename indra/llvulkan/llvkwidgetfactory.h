@@ -142,6 +142,15 @@ public:
         bool borderVisible = false, backgroundVisible = true, contextMenu = true;
         LLVKColor readOnlyBackground{0,0,0,1}, focusBackground{0,0,0,1}, cursorColor{1,1,1,1};
     };
+    struct TextureDefaults
+    {
+        Defaults view;
+        LLVKControl::Params control;
+        LLVKTextureCtrl::Params texture;
+        TextDefaults caption, multiple;
+        std::optional<std::string> fallbackImage;
+        bool initialized = false;
+    };
     struct TabDefaults
     {
         PanelDefaults panel;
@@ -208,15 +217,19 @@ public:
         std::shared_ptr<const TabDefaults> tabs = std::make_shared<TabDefaults>();
         std::shared_ptr<const SpinnerDefaults> spinner = std::make_shared<SpinnerDefaults>();
         std::shared_ptr<const SearchEditorDefaults> searchEditor = std::make_shared<SearchEditorDefaults>();
+        std::shared_ptr<const SearchEditorDefaults> filterEditor = std::make_shared<SearchEditorDefaults>();
         std::shared_ptr<const ScrollListDefaults> scrollList = std::make_shared<ScrollListDefaults>();
         std::shared_ptr<const ButtonDefaults> scrollColumnHeader;
         std::shared_ptr<const ColorSwatchDefaults> colorSwatch = std::make_shared<ColorSwatchDefaults>();
+        std::shared_ptr<const TextureDefaults> texture = std::make_shared<TextureDefaults>();
+        std::function<void(LLVKControl::Id,bool)> texturePickerHandler;
         std::shared_ptr<const SliderDefaults> slider = std::make_shared<SliderDefaults>();
         std::shared_ptr<const SliderControlDefaults> sliderControl = std::make_shared<SliderControlDefaults>();
         std::shared_ptr<const CheckBoxDefaults> radioItem;
         LLVKControl::Params radioControl;
         std::function<void(LLVKWidgetTree::Id,const std::string&)> webLinkHandler;
         std::function<void(LLVKWidgetTree::Id,bool)> colorPickerHandler;
+        std::function<void(LLVKWidgetTree::Id,const std::string&,const std::string&,const Callbacks&)> menuHandler;
             std::shared_ptr<const TextEditorDefaults> textEditor = std::make_shared<TextEditorDefaults>();
         std::map<std::string,std::shared_ptr<LLVKFont>> fonts;
         std::shared_ptr<LLVKFontRegistry> fontRegistry;
@@ -226,6 +239,7 @@ public:
         std::map<std::string,std::vector<std::string>> declarationLayers;
         std::map<std::string,PanelConstructor> panelClasses;
         std::map<std::string,PanelConstructor> panelFactories;
+        std::set<std::string> excludedPanelClasses;
     };
     explicit LLVKWidgetFactory(Defaults defaults);
     LLVKWidgetFactory(Defaults defaults, IconDefaults iconDefaults);

@@ -3,6 +3,8 @@
 #include "llstring.h"
 #include <algorithm>
 #include <cmath>
+#include <iomanip>
+#include <sstream>
 
 std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id root, const Input& input, std::string& error)
 {
@@ -19,6 +21,13 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
     {
         const auto* node = tree.get(id);
         if (!node || !node->params.visible) return true;
+        if (node->containerView && (!node->parent || !tree.get(node->parent)->containerView))
+        {
+            const auto rectangle=node->params.rect;
+            if (!tree.layoutContainerView(id,rectangle.right-rectangle.left,0,error)) return false;
+            node=tree.get(id);
+            if (!node) return true;
+        }
         if (node->scrollList)
         {
             if (!tree.layoutScrollList(id,error)) return false;
@@ -66,6 +75,103 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             return true;
         };
         const auto width = screen->right-screen->left, height = screen->top-screen->bottom;
+        if (node->statBar)
+        {
+            if (!tree.advanceStatBar(id,input.button.frameDelta,error)) return false;
+            const auto bar=*tree.get(id)->statBar;
+            clip=intersect(clip,*screen);
+            const auto number=[&](float value,bool padded)
+            {
+                std::ostringstream output;
+                const int precision=value==std::trunc(value) ? 0 : bar.decimalDigits;
+                if (padded) output<<std::setw(10);
+                output<<std::fixed<<std::setprecision(precision)<<value;
+                return output.str();
+            };
+            const auto text=[&](const std::string& value,float x,float y,LLVKFont::HorizontalAlign align,float alpha)
+            {
+                const auto wide=utf8str_to_wstring(value);
+                const std::u32string label(wide.begin(),wide.end());
+                LLVKFont::LineOptions options; options.x=x; options.y=y; options.horizontal=align; options.vertical=LLVKFont::VerticalAlign::Top;
+                const auto line=bar.font->layoutLine(label,0,label.size(),options,error);
+                return line && append({},{1,1,1,alpha},{},*line);
+            };
+            const float current=bar.samples.empty() ? 0.f : bar.samples.back();
+            if (!text(bar.label,0,float(height),LLVKFont::HorizontalAlign::Left,1.f) ||
+                !text(number(current,true)+" ",float(width),float(height),LLVKFont::HorizontalAlign::Right,1.f)) return false;
+            if (bar.showBar && !bar.samples.empty())
+            {
+                const Rect plot{0,std::min(std::max(5,height-15)-5,20),width,std::max(5,height-15)};
+                const auto range=bar.currentMaximum-bar.currentMinimum;
+                const auto scale=range>0 ? float(width)/range : 0.f;
+                const auto position=[&](float value)
+                { return static_cast<int>(std::clamp((value-bar.currentMinimum)*scale,float(-1000000),float(1000000))); };
+                if (bar.tickSpacing>0 && scale>0)
+                {
+                    const float start=bar.currentMinimum<0 ? -std::ceil(-bar.currentMinimum/bar.tickSpacing)*bar.tickSpacing : 0;
+                    int lastTick=-1000000,lastLabel=-1000000;
+                    for (int index=0; index<4096; ++index)
+                    {
+                        const float value=start+index*bar.tickSpacing;
+                        const int tick=position(value);
+                        if (tick>=lastTick+30)
+                        {
+                            lastTick=tick;
+                            const bool labeled=tick>lastLabel+60;
+                            if (!append({tick,plot.bottom-(labeled ? 4 : 2),tick+1,plot.top},{1,1,1,labeled ? 0.25f : 0.1f})) return false;
+                            if (labeled)
+                            {
+                                const auto label=number(value,false);
+                                const auto wide=utf8str_to_wstring(label);
+                                const std::u32string string(wide.begin(),wide.end());
+                                const auto measured=bar.font->measureRun(string,0,string.size(),1.f,true,false,error);
+                                if (!measured) return false;
+                                const auto left=tick-static_cast<int>(std::round(measured->width*(width ? float(tick)/width : 0.f)));
+                                if (!text(label,float(left),float(plot.bottom-4),LLVKFont::HorizontalAlign::Left,0.5f)) return false;
+                                lastLabel=left;
+                            }
+                        }
+                        if (value>bar.currentMaximum) break;
+                    }
+                }
+                if (!append(plot,{0,0,0,0.25f})) return false;
+                const auto count=std::min(bar.samples.size(),static_cast<std::size_t>(bar.showHistory ? bar.historyFrames : bar.shortFrames));
+                const auto begin=bar.samples.end()-count;
+                const auto extrema=std::minmax_element(begin,bar.samples.end());
+                if (!append({std::max(0,position(*extrema.first)),plot.bottom,position(*extrema.second),plot.top},{1,0,0,0.25f})) return false;
+                if (bar.showHistory)
+                {
+                    for (std::size_t index=1; index<count; ++index)
+                    {
+                        const auto left=position(bar.samples[bar.samples.size()-1-index]);
+                        const auto bottom=plot.bottom+static_cast<int>(float(index)/bar.historyFrames*(plot.top-plot.bottom));
+                        if (!append({left,bottom,left+1,bottom+1},{1,0,0,1})) return false;
+                    }
+                }
+                else
+                {
+                    const auto currentPosition=position(current);
+                    if (!append({currentPosition-1,plot.bottom,currentPosition+1,plot.top},{1,0,0,1})) return false;
+                }
+                double sum=0; for (auto sample=begin; sample!=bar.samples.end(); ++sample) sum+=*sample;
+                const auto mean=position(static_cast<float>(sum/count));
+                if (!append({mean-1,plot.bottom-2,mean+1,plot.top+2},{0,1,0,1})) return false;
+            }
+            return true;
+        }
+        if (node->containerView)
+        {
+            const auto params=*node->containerView;
+            if (params.backgroundVisible && !append({0,0,width,height},params.backgroundColor.get())) return false;
+            if (params.showLabel)
+            {
+                const auto wide=utf8str_to_wstring(params.label);
+                const std::u32string text(wide.begin(),wide.end());
+                LLVKFont::LineOptions options; options.x=2.f; options.y=float(height-2); options.vertical=LLVKFont::VerticalAlign::Top;
+                const auto label=params.font->layoutLine(text,0,text.size(),options,error);
+                if (!label || !append({},{1,1,1,input.button.drawAlpha},{},*label)) return false;
+            }
+        }
         if (node->scrollList)
         {
             const auto state=*node->scrollList;
@@ -93,6 +199,18 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                     if (column<row.cells.size() && state.widths[column]>0)
                     {
                         const auto* style=column<row.styles.size() ? &row.styles[column] : nullptr;
+                        if (style && style->type==LLVKWidgetTree::ListCellStyle::Type::CheckBox)
+                        {
+                            const bool checked=row.cells[column]=="true" || row.cells[column]=="1";
+                            const bool enabled=row.enabled && style->enabled && tree.enabledInChain(id);
+                            const auto image=enabled ? (checked ? style->checkedImage : style->image) :
+                                (checked ? style->disabledCheckedImage : style->disabledImage);
+                            if (!image) { error="Native list checkbox image is unavailable"; return false; }
+                            if (!append({left+style->checkLeft,bottom,left+style->checkLeft+style->checkSize,bottom+style->checkSize},
+                                tint(style->imageColor.get()),image)) return false;
+                            left+=state.widths[column]+params.columnPadding;
+                            continue;
+                        }
                         const auto font=style && style->font ? style->font : node->control->params.font;
                         const bool iconOnly=style && style->type==LLVKWidgetTree::ListCellStyle::Type::Icon;
                         const bool iconText=style && style->type==LLVKWidgetTree::ListCellStyle::Type::IconText;
@@ -133,6 +251,50 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             for (auto child=node->children.rbegin(); child!=node->children.rend(); ++child)
                 if (!self(self,*child,clip)) return false;
             return true;
+        }
+        if (node->textureControl)
+        {
+            if (!tree.refreshTextureControl(id,error)) return false;
+            node=tree.get(id);
+            if (!node) return true;
+            const auto texture=*node->textureControl;
+            const Rect interior{1,texture.params->captionHeight+1,width-1,height-1};
+            const auto alpha=input.button.drawAlpha;
+            const auto preview=texture.valid ? texture.preview : nullptr;
+            if (preview && texture.previewHasAlpha)
+            {
+                const auto checker=tree.findImage("Checker",error);
+                if (!checker) return false;
+                const auto pixels=checker->bottomUpRgba();
+                for (int bottom=interior.bottom; bottom<interior.top; ++bottom)
+                    for (int left=interior.left; left<interior.right; ++left)
+                    {
+                        const auto column=static_cast<std::uint32_t>(((left-interior.left)%32+0.5f)*checker->pixelWidth()/32.f);
+                        const auto row=static_cast<std::uint32_t>(((bottom-interior.bottom)%32+0.5f)*checker->pixelHeight()/32.f);
+                        const auto offset=4*(std::size_t(row)*checker->pixelWidth()+column);
+                        if (!append({left,bottom,left+1,bottom+1},{pixels[offset]/255.f,pixels[offset+1]/255.f,pixels[offset+2]/255.f,alpha*pixels[offset+3]/255.f})) return false;
+                    }
+            }
+            if (preview || texture.params->fallback)
+            {
+                if (!append(interior,{1,1,1,alpha},preview ? preview : texture.params->fallback)) return false;
+            }
+            else
+            {
+                if (!append(interior,{0.5f,0.5f,0.5f,alpha})) return false;
+                const auto rows=interior.top-interior.bottom,columns=interior.right-interior.left;
+                for (int row=0; row<rows && columns>0; ++row)
+                {
+                    const auto offset=static_cast<int>(std::int64_t(row)*columns/std::max(1,rows));
+                    const auto left=interior.left+offset,right=interior.right-offset-1,bottom=interior.bottom+row;
+                    if (!append({left,bottom,left+1,bottom+1},{0,0,0,alpha}) || !append({right,bottom,right+1,bottom+1},{0,0,0,alpha})) return false;
+                }
+            }
+            auto border=texture.params->borderColor.get(); border[3]*=alpha;
+            const auto bottom=texture.params->captionHeight;
+            for (const Rect edge : {Rect{0,bottom,width,bottom+1},Rect{0,height-1,width,height},
+                Rect{0,bottom+1,1,height-1},Rect{width-1,bottom+1,width,height-1}})
+                if (!append(edge,border)) return false;
         }
         if (node->colorSwatch)
         {
@@ -345,6 +507,11 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                 options.x = float(sourceLine.left+document->params.rect.left);
                 options.y = float(sourceLine.bottom+document->params.rect.bottom);
                 options.vertical = LLVKFont::VerticalAlign::Bottom;
+                if (text.params.useEllipses)
+                {
+                    options.ellipses=true;
+                    options.maxPixels=std::max(0,width-text.params.layout.horizontalPadding-sourceLine.left-document->params.rect.left);
+                }
                 const auto selectionBegin = std::min(text.selectionStart,text.selectionEnd);
                 const auto selectionEnd = std::max(text.selectionStart,text.selectionEnd);
                 const bool selection = text.params.selectable && selectionBegin != selectionEnd;

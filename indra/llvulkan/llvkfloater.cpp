@@ -40,6 +40,9 @@ std::unique_ptr<LLVKFloater> LLVKFloater::createFile(LLVKWidgetTree& tree,LLVKWi
     const auto font=node->control->params.font;
     floater->mCanClose=node->floater->canClose;
     floater->mCanMinimize=node->floater->canMinimize;
+    floater->mCanResize=node->floater->canResize;
+    floater->mMinWidth=node->floater->minWidth;
+    floater->mMinHeight=node->floater->minHeight;
     tree.setVisible(*id,false);
     if (!floater->createChrome(factory,title,font,error)) return nullptr;
     return floater;
@@ -68,6 +71,9 @@ bool LLVKFloater::createChrome(LLVKWidgetFactory& factory,const std::string& tit
     if (!close) return false;
     mCloseButton=*close;
     tree.setVisible(*close,mCanClose);
+    if (mCanResize && !factory.construct(tree,
+        "<icon name='floater_resize_corner' layout='bottomleft' left='"+std::to_string(width-16)+
+        "' bottom='0' width='16' height='16' follows='right|bottom' mouse_opaque='false' image_name='Resize_Corner'/>",id,error)) return false;
     LLVKControl::Callback callback;
     callback.function = [this](auto,const LLSD&) { std::string problem; this->close(problem); };
     tree.setControlCommit(*close,std::move(callback));
@@ -105,7 +111,19 @@ bool LLVKFloater::open(std::string& error)
         mPreviousFocus = mTree.keyboardFocus();
         const auto root = mTree.get(mRoot)->params.rect, rect = mTree.get(mId)->params.rect;
         const auto width = rect.right-rect.left, height = rect.top-rect.bottom;
-        const auto left = std::max(0,(root.right-root.left-width)/2), bottom = std::max(0,(root.top-root.bottom-height)/2);
+        auto left = std::max(0,(root.right-root.left-width)/2), bottom = std::max(0,(root.top-root.bottom-height)/2);
+        if (mTree.get(mId)->floater && mTree.get(mId)->floater->positioning=="cascading")
+        {
+            left=0; bottom=std::max(0,root.top-root.bottom-18-height);
+            for (const auto sibling : mTree.get(mRoot)->children)
+            {
+                const auto* other=mTree.get(sibling);
+                if (sibling==mId || !other || !other->params.visible || !other->floater || other->floater->positioning!="cascading") continue;
+                const auto offset=mTree.setting("UIFloaterOffset").value_or(LLSD(16)).asInteger();
+                left=other->params.rect.left+offset; bottom=other->params.rect.top-offset-height;
+                break;
+            }
+        }
         if (!mTree.setShape(mId,{left,bottom,left+width,bottom+height},error)) return false;
     }
     if (!mTree.reparent(mId,mRoot,false,0,error)) return false;
@@ -116,12 +134,13 @@ bool LLVKFloater::open(std::string& error)
 bool LLVKFloater::close(std::string& error)
 {
     error.clear();
-    if (!mCanClose || !visible()) return true;
+    if (!visible()) return true;
     if (mMinimized && !setMinimized(false,error)) return false;
     const auto callback = mClose;
     for (Id capture = mTree.mouseCapture(); capture && mTree.get(capture); capture = mTree.get(capture)->parent)
         if (capture == mId) { mTree.setMouseCapture(0,error); break; }
     mDragging = false;
+    mResizeEdges = 0;
     for (Id popup = mTree.topControl(); popup && mTree.get(popup); popup = mTree.get(popup)->parent)
         if (popup == mId) { mTree.setTopControl(0,error); break; }
     mTree.setVisible(mId,false);
@@ -177,6 +196,41 @@ bool LLVKFloater::pointer(const LLVKWidgetTree::PointerEvent& event,std::string&
     const auto rect = mTree.screenRect(mId,error);
     if (!rect) return false;
     using Kind = LLVKWidgetTree::PointerKind;
+    if (mResizeEdges && mTree.mouseCapture()!=mId) mResizeEdges=0;
+    if (mResizeEdges)
+    {
+        if (event.kind==Kind::LeftUp) { mResizeEdges=0; return mTree.setMouseCapture(0,error); }
+        if (event.kind!=Kind::Hover) return true;
+        const auto parent=mTree.screenRect(mRoot,error);
+        if (!parent) return false;
+        const auto deltaX=std::clamp(event.x,parent->left,parent->right)-mDragX;
+        const auto deltaY=std::clamp(event.y,parent->bottom,parent->top)-mDragY;
+        auto resized=mResizeRect;
+        if (mResizeEdges&1) resized.left=std::min(resized.left+deltaX,resized.right-mMinWidth);
+        if (mResizeEdges&2) resized.right=std::max(resized.right+deltaX,resized.left+mMinWidth);
+        if (mResizeEdges&4) resized.bottom=std::min(resized.bottom+deltaY,resized.top-mMinHeight);
+        if (mResizeEdges&8) resized.top=std::max(resized.top+deltaY,resized.bottom+mMinHeight);
+        return mTree.setShape(mId,resized,error);
+    }
+    if (mCanResize && !mMinimized && event.kind==Kind::LeftDown && event.x>=rect->left && event.x<rect->right && event.y>=rect->bottom && event.y<rect->top)
+    {
+        constexpr int edge=3,corner=16;
+        std::uint8_t edges=0;
+        if (event.x<rect->left+edge) edges|=1;
+        if (event.x>=rect->right-edge) edges|=2;
+        if (event.y<rect->bottom+edge) edges|=4;
+        if (event.y>=rect->top-edge) edges|=8;
+        if (event.x-rect->left+event.y-rect->bottom<corner) edges=1|4;
+        if (rect->right-1-event.x+event.y-rect->bottom<corner) edges=2|4;
+        if (event.x-rect->left+rect->top-1-event.y<corner) edges=1|8;
+        if (rect->right-1-event.x+rect->top-1-event.y<corner) edges=2|8;
+        if (edges)
+        {
+            if (!mTree.setMouseCapture(mId,error)) return false;
+            mResizeEdges=edges; mResizeRect=mTree.get(mId)->params.rect; mDragX=event.x; mDragY=event.y;
+            return true;
+        }
+    }
     if (mDragging && mTree.mouseCapture() != mId) mDragging = false;
     if (mDragging)
     {

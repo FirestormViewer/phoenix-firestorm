@@ -1,13 +1,15 @@
-#include "llvknativestartup.h"
-#include "llvkloginwindow.h"
-#include "llvkstartupsettings.h"
+#include "llvkstartup.h"
+#include "llvkwindowmgr.h"
+#include "llvksettingsmgr.h"
 #include "llstring.h"
 #include "llerror.h"
 #include <windows.h>
 #include <shellapi.h>
 #include <shlobj.h>
 
-std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::string& profileName,const std::string& shortVersion)
+std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string& profileName,const std::string& shortVersion,
+    LLControlGroup& globalGroup,LLControlGroup& accountGroup,LLControlGroup& crashGroup,LLControlGroup& warningGroup,
+    const LLVKProxy::CredentialFactory& proxyCredentials)
 {
     int count = 0;
     auto arguments = CommandLineToArgvW((L"viewer "+commandLine).c_str(),&count);
@@ -42,21 +44,24 @@ std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::
     const auto profile = std::filesystem::path(roaming)/std::filesystem::path(std::u8string(profileName.begin(),profileName.end()));
     CoTaskMemFree(roaming);
     const auto userSettings = profile/"user_settings";
-    LLVKStartupSettings settings;
+    LLVKSettingsMgr settings;
     std::string error;
     std::string appliedSettingsMode, modeError;
-    const bool defaults = settings.loadFile(directory/"app_settings"/"settings.xml",true,true,true,error);
-    if (defaults)
+    const auto requestedSessionFile=sessionFile;
+    const auto loadSettings=[&]()
     {
+        settings.group().cleanup();
+        sessionFile=requestedSessionFile; appliedSettingsMode.clear(); modeError.clear();
+        if (!settings.loadFile(directory/"app_settings"/"settings.xml",true,true,true,error)) return false;
         settings.loadFile(directory/"app_settings"/"settings_install.xml",false,true,true,error);
         settings.loadFile(userSettings/("fsdata_defaults."+shortVersion+".xml"),false,true,true,error);
         settings.loadFile(userSettings/std::filesystem::path(std::u8string(settingsFile.begin(),settingsFile.end())),false,false,true,error);
         if (sessionFile.empty())
         {
             const auto* session = settings.find("SessionSettingsFile");
-            if (session) sessionFile = session->value().asString();
+            if (session) sessionFile = session->getValue().asString();
             const auto* first = settings.find("FirstRunThisInstall");
-            if (sessionFile.empty() && first && first->value().asBoolean()) sessionFile = "settings_firestorm.xml";
+            if (sessionFile.empty() && first && first->getValue().asBoolean()) sessionFile = "settings_firestorm.xml";
         }
         if (!sessionFile.empty())
         {
@@ -64,10 +69,12 @@ std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::
             if (settings.loadFile(modePath,true,true,false,modeError)) appliedSettingsMode=sessionFile;
         }
         settings.loadFile(userSettings/std::filesystem::path(std::u8string(settingsFile.begin(),settingsFile.end())),false,false,true,error);
-    }
+        return true;
+    };
+    const bool defaults=loadSettings();
     const auto explicitBackend = overrides.find("RenderBackend");
     const auto* savedBackend = settings.find("RenderBackend");
-    const auto backend = explicitBackend != overrides.end() ? explicitBackend->second : savedBackend ? savedBackend->value().asString() : std::string();
+    const auto backend = explicitBackend != overrides.end() ? explicitBackend->second : savedBackend ? savedBackend->getValue().asString() : std::string();
     if (backend != "Vulkan") return std::nullopt;
     const auto fail = [&](const std::string& problem) -> std::optional<int>
     {
@@ -77,6 +84,16 @@ std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::
     if (!defaults) return fail(error.empty() ? "Native default settings could not be loaded" : error);
     if (!modeError.empty()) return fail("Native settings mode could not be applied: "+modeError);
     if (unsupported) return fail("This native startup path does not yet support one or more supplied command-line options.");
+    settings=LLVKSettingsMgr(globalGroup);
+    if (!loadSettings()) return fail(error);
+    const auto reset=LLVKSettingsMgr::consumeReset(profile,std::filesystem::path(std::u8string(settingsFile.begin(),settingsFile.end())),error);
+    if (!reset) return fail(error);
+    if (*reset)
+    {
+        if (!loadSettings()) return fail(error);
+        if (!modeError.empty()) return fail("Native settings mode could not be applied after reset: "+modeError);
+        if (!settings.set("RenderBackend",LLSD("Vulkan"),false,error)) return fail(error);
+    }
     for (const auto& [name,value] : overrides) if (!settings.set(name,LLSD(value),false,error)) return fail(error);
     const auto values = settings.values();
     const auto stringValue = [&](const char* name,const std::string& fallback = {})
@@ -84,26 +101,56 @@ std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::
     const auto browserDirectory = directory/"llplugin";
     if (!SetDllDirectoryW(browserDirectory.c_str())) return fail("Native browser DLL directory could not be selected.");
     struct DllDirectory { ~DllDirectory() { SetDllDirectoryW(nullptr); } } dllDirectory;
-    LLVKLoginWindow::Configuration configuration;
+    LLVKWindowMgr::Configuration configuration;
+    if (proxyCredentials)
+    {
+        auto credentials=proxyCredentials(userSettings/"bin_conf.dat");
+        configuration.ui.loadProxyCredentials=std::move(credentials.load);
+        configuration.ui.saveProxyCredentials=std::move(credentials.save);
+    }
     configuration.ui.settings = values;
+    configuration.ui.userColorsFile=userSettings/"colors.xml";
+    configuration.ui.settingsGroup=&globalGroup;
+    configuration.ui.accountSettingsGroup=&accountGroup;
+    LLVKSettingsMgr warnings(warningGroup);
+    const auto warningsFile=userSettings/"ignorable_dialogs.xml";
+    if (!warnings.loadFile(warningsFile,false,false,true,error)) return fail(error);
+    configuration.ui.warningSettingsGroup=&warningGroup;
+    configuration.ui.saveWarningPreferences=[&warnings,warningsFile](const auto& changes,std::string& problem)
+    { return warnings.saveChanges(warningsFile,changes,problem); };
     configuration.ui.settingDefaults = settings.defaults();
-    LLVKStartupSettings accountSettings;
+    LLVKSettingsMgr accountSettings(accountGroup);
     if (!accountSettings.loadFile(directory/"app_settings"/"settings_per_account.xml",true,true,true,error)) return fail(error);
     configuration.ui.accountSettings=accountSettings.values();
     configuration.ui.accountDefaults=accountSettings.defaults();
-    const auto soundCache=stringValue("FSSoundCacheLocation",stringValue("CacheLocation"));
-    if (!soundCache.empty()) configuration.soundCacheDirectory=std::filesystem::path(std::u8string(soundCache.begin(),soundCache.end()));
-    else
-    {
-        PWSTR local=nullptr;
-        if (FAILED(SHGetKnownFolderPath(FOLDERID_LocalAppData,0,nullptr,&local))) return fail("Cannot resolve native sound cache directory");
-        configuration.soundCacheDirectory=std::filesystem::path(local)/std::filesystem::path(std::u8string(profileName.begin(),profileName.end()));
-        CoTaskMemFree(local);
-    }
+    LLVKSettingsMgr crashSettings(crashGroup);
+    const auto crashFile=userSettings/"settings_crash_behavior.xml";
+    if (!crashSettings.loadFile(directory/"app_settings"/"settings_crash_behavior.xml",true,true,true,error) ||
+        !crashSettings.loadFile(crashFile,false,false,true,error)) return fail(error);
+    configuration.ui.crashSettings=crashSettings.values();
+    configuration.ui.saveCrashPreferences=[&crashSettings,crashFile](const auto& changes,std::string& problem)
+    { return crashSettings.saveChanges(crashFile,changes,problem); };
+    configuration.ui.scheduleSettingsReset=[profile](std::string& problem)
+    { return LLVKSettingsMgr::scheduleReset(profile,problem); };
+#if LL_SEND_CRASH_REPORTS && defined(LL_BUGSPLAT)
+    configuration.ui.crashSettingsRequireRestart=true;
+#endif
+    PWSTR local=nullptr;
+    if (FAILED(SHGetKnownFolderPath(FOLDERID_LocalAppData,0,nullptr,&local))) return fail("Cannot resolve native cache directory");
+    configuration.ui.defaultCacheDirectory=std::filesystem::path(local)/std::filesystem::path(std::u8string(profileName.begin(),profileName.end()));
+    CoTaskMemFree(local);
+    const auto cache=stringValue("CacheLocation");
+    configuration.ui.cacheDirectory=cache.empty() ? configuration.ui.defaultCacheDirectory :
+        std::filesystem::path(std::u8string(cache.begin(),cache.end()));
+    const auto soundCache=stringValue("FSSoundCacheLocation");
+    configuration.soundCacheDirectory=soundCache.empty() ? configuration.ui.cacheDirectory :
+        std::filesystem::path(std::u8string(soundCache.begin(),soundCache.end()));
     configuration.ui.appliedSettingsMode = appliedSettingsMode;
     const auto preferenceFile=userSettings/std::filesystem::path(std::u8string(settingsFile.begin(),settingsFile.end()));
     configuration.ui.savePreferences=[&settings,preferenceFile](const auto& changes,std::string& problem)
     { return settings.saveChanges(preferenceFile,changes,problem); };
+    configuration.ui.saveKeyBindings=[path=userSettings/"key_bindings.xml"](const LLVKKeyBindings& bindings,std::string& problem)
+    { return bindings.saveFile(path,problem); };
     LLVKAutoReplaceSettings autoReplace;
     const auto autoReplaceFile=userSettings/"autoreplace.xml";
     if (std::filesystem::exists(autoReplaceFile))
@@ -139,6 +186,7 @@ std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::
     wchar_t windowsDirectory[32768]{};
     GetWindowsDirectoryW(windowsDirectory,32768);
     configuration.ui.fonts.searchDirectories = {directory/"fonts",userSettings/"fonts",std::filesystem::path(windowsDirectory)/"Fonts"};
+    configuration.ui.fontPresetDirectories={directory/"fonts",userSettings/"fonts"};
     const auto descriptor = stringValue("FSFontSettingsFile","fonts.xml");
     if (std::filesystem::is_regular_file(directory/"fonts"/descriptor)) configuration.ui.fontDescription = directory/"fonts"/descriptor;
     else if (std::filesystem::is_regular_file(userSettings/"fonts"/descriptor)) configuration.ui.fontDescription = userSettings/"fonts"/descriptor;
@@ -147,7 +195,7 @@ std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::
     configuration.browser.cacheDirectory = profile/"native_browser";
     configuration.browser.language = configuration.ui.skin.language;
     configuration.browser.userAgent = "Vulkanstorm/"+shortVersion;
-    LLVKLoginUi::Page page;
+    LLVKViewerUi::Page page;
     page.url = stringValue("LoginPage",page.url);
     page.language = configuration.ui.skin.language;
     page.version = shortVersion;
@@ -157,10 +205,10 @@ std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::
     page.skin = configuration.ui.skin.skin;
     page.theme = configuration.ui.skin.theme;
     page.settings = values;
-    configuration.loginPage = LLVKLoginUi::pageUrl(page);
+    configuration.loginPage = LLVKViewerUi::pageUrl(page);
     try
     {
-        if (!LLVKLoginWindow::run(configuration,error)) return fail(error);
+        if (!LLVKWindowMgr::run(configuration,error)) return fail(error);
     }
     catch (const std::exception& exception) { return fail(exception.what()); }
     return 0;

@@ -212,6 +212,35 @@ bool LLVKKeyBindings::saveFile(const std::filesystem::path& path,std::string& er
     return true;
 }
 
+std::string LLVKKeyBindings::label(const LLKeyData& data,const std::function<std::string(const std::string&)>& translate)
+{
+    std::string result;
+    if (data.mMask&MASK_CONTROL) result+=translate("accel-win-control");
+    if (data.mMask&MASK_ALT) result+=translate("accel-win-alt");
+    if (data.mMask&MASK_SHIFT) result+=translate("accel-win-shift");
+    if (data.mKey!=KEY_NONE)
+    {
+        std::string key;
+        const auto found=std::find_if(keyNames().begin(),keyNames().end(),[&](const auto& entry) { return entry.second==data.mKey; });
+        if (found!=keyNames().end())
+        {
+            key=found->first;
+            static const std::map<std::string,std::string> display{{"SPACE","Space"},{"ENTER","Enter"},{"LEFT","Left"},
+                {"RIGHT","Right"},{"UP","Up"},{"DOWN","Down"},{"ESC","Esc"},{"HOME","Home"},{"END","End"},
+                {"PGUP","PgUp"},{"PGDN","PgDn"},{"TAB","Tab"},{"ADD","Add"},{"SUBTRACT","Subtract"},
+                {"MULTIPLY","Multiply"},{"DIVIDE","Divide"},{"BACKSP","Backsp"},{"DEL","Del"},
+                {"SHIFT","Shift"},{"CTRL","Ctrl"},{"ALT","Alt"},{"INS","Ins"},{"CAPSLOCK","CapsLock"},{"PAD_ENTER","PAD_Enter"}};
+            if (const auto named=display.find(key); named!=display.end()) key=named->second;
+        }
+        else key.assign(1,static_cast<char>(data.mKey));
+        if (data.mMask && (key=="-" || key=="=" || key=="+")) result+=' ';
+        result+=translate(key);
+    }
+    for (const auto& [name,mouse] : mouseNames) if (mouse==data.mMouse) result+=translate(name);
+    if (data.mMouse==CLICK_RIGHT) result+=translate("RMB");
+    return result;
+}
+
 void LLVKKeyBindings::setControls(Mode mode,Controls controls)
 {
     const auto reserve=[&](const char* name) { controls[name].assignable=false; controls[name].conflicts=0; };

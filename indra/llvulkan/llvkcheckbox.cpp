@@ -168,9 +168,9 @@ bool LLVKWidgetTree::planCheckBoxReshape(Id id, std::int64_t width,
     if (!label || !label->plainText || !button)
     { error = "Native checkbox children no longer exist"; return false; }
     auto labelRect = label->params.rect;
-    const auto available = width-labelRect.left;
+    const auto available = std::max<std::int64_t>(0,width-labelRect.left);
     const auto oldHeight = std::int64_t(labelRect.top)-labelRect.bottom;
-    if (available < 0 || available > INT32_MAX || oldHeight < 0 || oldHeight > INT32_MAX)
+    if (available > INT32_MAX || oldHeight < 0 || oldHeight > INT32_MAX)
     { error = "Native checkbox label reshape dimensions invalid"; return false; }
     auto options = label->plainText->params.layout;
     options.width = static_cast<std::int32_t>(available);

@@ -89,7 +89,8 @@ bool LLVKWidgetTree::layoutTabPanels(Id container, const Node::TabContainer::Lay
     const bool vertical = layout.position == Position::Left;
     const auto width = std::int64_t(owner->params.rect.right)-owner->params.rect.left;
     const auto height = std::int64_t(owner->params.rect.top)-owner->params.rect.bottom;
-    const auto tabs = owner->tabContainer->tabs;
+    auto tabs = owner->tabContainer->tabs;
+    std::erase_if(tabs,[&](const auto& tab) { return owner->tabContainer->hiddenPanels.contains(tab.panel); });
     const auto top = layout.hidden ? height : layout.position == Position::Top ? height-1-layout.tabHeight+layout.panelOverlap : height-1;
     const auto bottom = !layout.hidden && layout.position == Position::Bottom ? layout.tabHeight-layout.panelOverlap : 1;
     const auto left = vertical && !layout.hidden ? std::int64_t(layout.minimumWidth)+layout.rightPadding+2+layout.verticalPadding : layout.panelOffset ? 3 : 1;
@@ -267,7 +268,8 @@ bool LLVKWidgetTree::createTabArrows(Id container,const LLVKControl::Params& con
         if (scroll && !scrollTabStrip(container,forward ? 1 : -1,problem)) return;
         node=get(container);
         if (!node || !node->tabContainer) return;
-        const auto tabs=node->tabContainer->tabs;
+        auto tabs=node->tabContainer->tabs;
+        std::erase_if(tabs,[&](const auto& tab) { return node->tabContainer->hiddenPanels.contains(tab.panel); });
         const auto selected=node->tabContainer->selected;
         const auto found=std::find_if(tabs.begin(),tabs.end(),[&](const auto& tab) { return tab.panel==selected; });
         if (found!=tabs.end() && (forward ? found+1!=tabs.end() : found!=tabs.begin())) moveTab(container,forward,problem);
@@ -338,6 +340,146 @@ bool LLVKWidgetTree::initializeTabContainer(Id panel, std::string& error)
     return true;
 }
 
+bool LLVKWidgetTree::initializeStatBar(Id id,const Node::StatBar& params,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !params.font || !std::isfinite(params.minimum) || !std::isfinite(params.maximum) ||
+        params.minimum>params.maximum || !std::isfinite(params.tickSpacing) || params.tickSpacing<0 ||
+        params.historyFrames<1 || params.historyFrames>10000 || params.shortFrames<1 || params.shortFrames>10000 ||
+        params.decimalDigits<0 || params.decimalDigits>9 || params.maximumHeight<14 || params.maximumHeight>4096)
+    { error="Invalid native statistic bar parameters"; return false; }
+    mNodes.at(id).statBar=params;
+    auto& bar=*mNodes.at(id).statBar;
+    bar.currentMinimum=0.f; bar.currentMaximum=bar.maximum;
+    auto rect=get(id)->params.rect;
+    rect.bottom=rect.top-(bar.showBar ? bar.showHistory ? bar.maximumHeight : 40 : 14);
+    return setShape(id,rect,error);
+}
+
+bool LLVKWidgetTree::sampleStatBar(Id id,float value,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->statBar || !std::isfinite(value))
+    { error="Invalid native statistic sample"; return false; }
+    auto& bar=*mNodes.at(id).statBar;
+    bar.samples.push_back(value);
+    const auto maximum=static_cast<std::size_t>(std::max(bar.historyFrames,bar.shortFrames));
+    if (bar.samples.size()>maximum) bar.samples.erase(bar.samples.begin(),bar.samples.begin()+(bar.samples.size()-maximum));
+    return true;
+}
+
+bool LLVKWidgetTree::setStatBarRange(Id id,float minimum,float maximum,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->statBar || !std::isfinite(minimum) || !std::isfinite(maximum) || minimum>=maximum)
+    { error="Invalid native statistic range"; return false; }
+    auto& bar=*mNodes.at(id).statBar;
+    bar.minimum=minimum; bar.maximum=maximum;
+    return true;
+}
+
+bool LLVKWidgetTree::advanceStatBar(Id id,float frameDelta,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->statBar || !std::isfinite(frameDelta) || frameDelta<0)
+    { error="Invalid native statistic frame"; return false; }
+    auto& bar=*mNodes.at(id).statBar;
+    const auto blend=1.f-std::exp2(-frameDelta/0.05f);
+    bar.currentMinimum+=(bar.minimum-bar.currentMinimum)*blend;
+    bar.currentMaximum+=(bar.maximum-bar.currentMaximum)*blend;
+    return true;
+}
+
+bool LLVKWidgetTree::cycleStatBar(Id id,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->statBar) return false;
+    auto& bar=*mNodes.at(id).statBar;
+    if (!bar.showBar) bar.showBar=true;
+    else if (!bar.showHistory) bar.showHistory=true;
+    else { bar.showBar=false; bar.showHistory=false; }
+    auto rect=get(id)->params.rect;
+    rect.bottom=rect.top-(bar.showBar ? bar.showHistory ? bar.maximumHeight : 40 : 14);
+    if (!setShape(id,rect,error)) return false;
+    auto parent=get(id)->parent;
+    while (get(parent) && get(parent)->parent && get(get(parent)->parent)->containerView) parent=get(parent)->parent;
+    if (get(parent) && get(parent)->containerView)
+    {
+        rect=get(parent)->params.rect;
+        return layoutContainerView(parent,rect.right-rect.left,0,error);
+    }
+    return true;
+}
+
+bool LLVKWidgetTree::initializeContainerView(Id id,const Node::ContainerView& params,std::string& error)
+{
+    error.clear();
+    if (!get(id) || (params.showLabel && !params.font))
+    { error="Invalid native container owner or label font"; return false; }
+    mNodes.at(id).containerView=params;
+    const auto children=get(id)->children;
+    for (const auto child : children) setVisible(child,params.displayChildren);
+    const auto rect=get(id)->params.rect;
+    return layoutContainerView(id,rect.right-rect.left,0,error);
+}
+
+bool LLVKWidgetTree::layoutContainerView(Id id,std::int32_t width,std::int32_t minimumHeight,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->containerView || width<0 || minimumHeight<0)
+    { error="Invalid native container layout"; return false; }
+    const auto params=*get(id)->containerView;
+    auto children=get(id)->children;
+    std::reverse(children.begin(),children.end());
+    std::vector<std::int32_t> heights;
+    std::int64_t total=params.showLabel ? 20 : 0;
+    const auto childWidth=std::max(0,width-12);
+    if (params.displayChildren)
+        for (const auto child : children)
+        {
+            if (!get(child)) { error="Native container child disappeared"; return false; }
+            if (get(child)->containerView && !layoutContainerView(child,childWidth,0,error)) return false;
+            const auto rect=get(child)->params.rect;
+            const auto height=rect.top-rect.bottom;
+            heights.push_back(height); total+=std::int64_t(height)+2;
+        }
+    total=std::max(total,std::int64_t(minimumHeight));
+    if (total>INT32_MAX) { error="Native container height exceeds limit"; return false; }
+    auto rect=get(id)->params.rect;
+    if (std::int64_t(rect.left)+width>INT32_MAX) { error="Native container width exceeds limit"; return false; }
+    rect.right=rect.left+width;
+    if (get(id)->params.follows&Top)
+    {
+        if (std::int64_t(rect.top)-total<INT32_MIN) { error="Native container bottom exceeds limit"; return false; }
+        rect.bottom=rect.top-static_cast<int>(total);
+    }
+    else
+    {
+        if (std::int64_t(rect.bottom)+total>INT32_MAX) { error="Native container top exceeds limit"; return false; }
+        rect.top=rect.bottom+static_cast<int>(total);
+    }
+    if (!setShape(id,rect,error)) return false;
+    int top=static_cast<int>(total)-(params.showLabel ? 20 : 0);
+    for (std::size_t index=0; params.displayChildren && index<children.size(); ++index)
+    {
+        if (!setShape(children[index],{10,top-heights[index],10+childWidth,top},error)) return false;
+        top-=heights[index]+2;
+    }
+    return true;
+}
+
+bool LLVKWidgetTree::setContainerExpanded(Id id,bool expanded,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->containerView) return false;
+    mNodes.at(id).containerView->displayChildren=expanded;
+    const auto children=get(id)->children;
+    for (const auto child : children) if (!setVisible(child,expanded)) return false;
+    while (get(id)->parent && get(get(id)->parent)->containerView) id=get(id)->parent;
+    const auto rect=get(id)->params.rect;
+    return layoutContainerView(id,rect.right-rect.left,0,error);
+}
+
 bool LLVKWidgetTree::initializeFloater(Id panel,const Node::Floater& params,std::string& error)
 {
     error.clear();
@@ -379,12 +521,37 @@ bool LLVKWidgetTree::attachTabPanel(Id container, Id panel, Id button, std::stri
     return get(container) && get(panel) && get(button);
 }
 
+bool LLVKWidgetTree::setTabVisibility(Id container,Id panel,bool visible,std::string& error)
+{
+    error.clear();
+    const auto* owner=get(container);
+    if (!owner || !owner->tabContainer) { error="Invalid native tab visibility owner"; return false; }
+    const auto tabs=owner->tabContainer->tabs;
+    const auto found=std::find_if(tabs.begin(),tabs.end(),[&](const auto& tab) { return tab.panel==panel; });
+    if (found==tabs.end()) { error="Native tab panel is not registered"; return false; }
+    auto& state=*mNodes.at(container).tabContainer;
+    if (visible) state.hiddenPanels.erase(panel);
+    else state.hiddenPanels.insert(panel);
+    setVisible(found->button,visible);
+    if (!visible)
+    {
+        setVisible(panel,false);
+        if (state.selected==panel) state.selected=0;
+    }
+    if (!state.selected)
+        for (const auto& tab : tabs)
+            if (!state.hiddenPanels.contains(tab.panel) && selectTabPanel(container,tab.panel,error)) break;
+    const auto layout=get(container)->tabContainer->layout;
+    return !layout || layoutTabPanels(container,*layout,error);
+}
+
 bool LLVKWidgetTree::selectTabPanel(Id container, Id panel, std::string& error)
 {
     error.clear();
     const auto* owner = get(container);
     const auto* content = get(panel);
     if (!owner || !owner->tabContainer || !content || content->parent != container) return false;
+    if (owner->tabContainer->hiddenPanels.contains(panel)) return false;
     Id button = 0;
     for (const auto& entry : owner->tabContainer->tabs) if (entry.panel == panel) button = entry.button;
     if (!button || !get(button) || !get(button)->params.enabled) return false;
@@ -396,19 +563,21 @@ bool LLVKWidgetTree::selectTabPanel(Id container, Id panel, std::string& error)
     if (!owner || !owner->tabContainer || owner->tabContainer->selectionGeneration != before || !get(panel) ||
         get(panel)->parent != container || !get(button) || get(button)->parent != container || !get(button)->params.enabled) return false;
     const auto tabs = owner->tabContainer->tabs;
+    auto visibleTabs=tabs;
+    std::erase_if(visibleTabs,[&](const auto& tab) { return owner->tabContainer->hiddenPanels.contains(tab.panel); });
     auto& state = *mNodes.at(container).tabContainer;
     state.selected = panel;
     if (state.layout && state.layout->position==Node::TabContainer::Layout::Position::Left)
     {
-        const auto found=std::find_if(tabs.begin(),tabs.end(),[&](const auto& tab) { return tab.panel==panel; });
-        const auto index=static_cast<std::int32_t>(found-tabs.begin());
-        const auto visible=static_cast<std::int32_t>(tabs.size())-state.maximumScroll;
+        const auto found=std::find_if(visibleTabs.begin(),visibleTabs.end(),[&](const auto& tab) { return tab.panel==panel; });
+        const auto index=static_cast<std::int32_t>(found-visibleTabs.begin());
+        const auto visible=static_cast<std::int32_t>(visibleTabs.size())-state.maximumScroll;
         if (index<state.scrollPosition || index>=state.scrollPosition+visible)
             state.scrollPosition=std::min(index,state.maximumScroll);
     }
     else if (state.layout && state.maximumScroll>0)
     {
-        const auto index=static_cast<std::int32_t>(std::find_if(tabs.begin(),tabs.end(),[&](const auto& tab) { return tab.panel==panel; })-tabs.begin());
+        const auto index=static_cast<std::int32_t>(std::find_if(visibleTabs.begin(),visibleTabs.end(),[&](const auto& tab) { return tab.panel==panel; })-visibleTabs.begin());
         if (index<state.scrollPosition) state.scrollPosition=index;
         else
         {
@@ -422,7 +591,7 @@ bool LLVKWidgetTree::selectTabPanel(Id container, Id panel, std::string& error)
                 auto previous=index-1;
                 while (previous>=0)
                 {
-                    const auto* tab=get(tabs[previous].button);
+                    const auto* tab=get(visibleTabs[previous].button);
                     if (!tab) break;
                     running+=tab->params.rect.right-tab->params.rect.left;
                     if (running>available) break;

@@ -1,6 +1,8 @@
-#include "llvkstartupsettings.h"
+#include "llvksettingsmgr.h"
 #include "llsdserialize.h"
 #include "llstring.h"
+#include "llsdutil.h"
+#include "lluuid.h"
 #include <algorithm>
 #include <fstream>
 #include <sstream>
@@ -53,14 +55,6 @@ namespace
         return true;
     }
 
-    LLSD comparable(const std::string& type,const LLSD& value)
-    {
-        if (type == "Boolean") return LLSD(value.asString() == "0" ? false : value.asBoolean());
-        if (type == "S32" || type == "U32") return LLSD(value.asInteger());
-        if (type == "F32") return LLSD(value.asReal());
-        if (type == "String") return LLSD(value.asString());
-        return value;
-    }
 }
 
 bool LLVKAutoReplaceSettings::loadFile(const std::filesystem::path& path,std::string& error)
@@ -198,7 +192,17 @@ std::string LLVKAutoReplaceSettings::replaceWord(const std::string& word,bool en
     return word;
 }
 
-bool LLVKStartupSettings::load(std::string_view xml,bool defaults,bool saved,std::string& error)
+LLVKSettingsMgr::LLVKSettingsMgr()
+    : mGroup(std::make_shared<LLControlGroup>("NativeSettings-"+LLUUID::generateNewID().asString()))
+{
+}
+
+LLVKSettingsMgr::LLVKSettingsMgr(LLControlGroup& group)
+    : mGroup(&group,[](LLControlGroup*) {})
+{
+}
+
+bool LLVKSettingsMgr::load(std::string_view xml,bool defaults,bool saved,std::string& error)
 {
     error.clear();
     if (xml.size() > 16*1024*1024) { error = "Native settings document exceeds byte limit"; return false; }
@@ -206,47 +210,24 @@ bool LLVKStartupSettings::load(std::string_view xml,bool defaults,bool saved,std
     LLSD document;
     if (LLSDSerialize::fromXML(document,stream,false) == LLSDParser::PARSE_FAILURE || !document.isMap())
     { error = "Invalid native LLSD settings document"; return false; }
-    auto entries = mEntries;
+    if (document.size()>20000) { error="Native settings entry limit exceeded"; return false; }
     for (auto item = document.beginMap(); item != document.endMap(); ++item)
     {
         const auto& name = item->first;
-        const auto& definition = item->second;
+        auto& definition = document[name];
         if (name.empty() || !definition.isMap() || !definition.has("Value"))
         { error = "Invalid native settings entry: "+name; return false; }
-        auto found = entries.find(name);
-        const auto type = definition["Type"].asString();
-        if (found == entries.end())
-        {
-            if (type.empty()) { error = "Native settings entry has no type: "+name; return false; }
-            Entry entry;
-            entry.type = type;
-            entry.definition = definition;
-            entry.defaultValue = comparable(type,definition["Value"]);
-            entry.persistent = !defaults || !definition.has("Persist") || definition["Persist"].asInteger() != 0;
-            entries.emplace(name,std::move(entry));
-        }
-        else if (defaults)
-        {
-            if (found->second.type != type) { error = "Native settings type mismatch: "+name; return false; }
-            found->second.defaultValue = comparable(type,definition["Value"]);
-            found->second.definition = definition;
-            found->second.saved.reset();
-            found->second.transient.reset();
-            found->second.persistent = !definition.has("Persist") || definition["Persist"].asInteger() != 0;
-        }
-        else if (found->second.persistent)
-        {
-            const auto value = comparable(found->second.type,definition["Value"]);
-            if (saved) { found->second.saved = value; found->second.transient.reset(); }
-            else found->second.transient = value;
-        }
+        if (definition["Type"].asString()=="Integer") definition["Type"]="S32";
+        const auto type=LLControlGroup::typeStringToEnum(definition["Type"].asString());
+        if (type<0 || type>=TYPE_COUNT) { error="Invalid native settings type: "+name; return false; }
+        auto existing=mGroup->getControl(name);
+        if (defaults && existing && !existing->isType(type)) { error="Native settings type mismatch: "+name; return false; }
+        if (definition["Comment"].asString().empty()) definition["Comment"]="Imported setting: "+name;
     }
-    if (entries.size() > 20000) { error = "Native settings entry limit exceeded"; return false; }
-    mEntries = std::move(entries);
-    return true;
+    return mGroup->loadFromLLSD(document,"native settings document",defaults,saved)==document.size();
 }
 
-bool LLVKStartupSettings::loadFile(const std::filesystem::path& path,bool required,bool defaults,bool saved,std::string& error)
+bool LLVKSettingsMgr::loadFile(const std::filesystem::path& path,bool required,bool defaults,bool saved,std::string& error)
 {
     error.clear();
     std::ifstream stream(path,std::ios::binary | std::ios::ate);
@@ -263,38 +244,116 @@ bool LLVKStartupSettings::loadFile(const std::filesystem::path& path,bool requir
     return load(xml,defaults,saved,error);
 }
 
-bool LLVKStartupSettings::set(const std::string& name,const LLSD& value,bool saved,std::string& error)
+bool LLVKSettingsMgr::scheduleReset(const std::filesystem::path& profile,std::string& error)
 {
     error.clear();
-    const auto found = mEntries.find(name);
-    if (found == mEntries.end()) { error = "Unknown native setting: "+name; return false; }
-    if (saved) { found->second.saved = comparable(found->second.type,value); found->second.transient.reset(); }
-    else found->second.transient = comparable(found->second.type,value);
+    if (profile.empty() || !profile.is_absolute()) { error="Native settings reset requires an absolute profile path"; return false; }
+    std::error_code status;
+    std::filesystem::create_directories(profile/"logs",status);
+    if (status) { error="Cannot create native reset marker directory: "+status.message(); return false; }
+    std::ofstream marker(profile/"logs"/"CLEAR",std::ios::binary|std::ios::app);
+    marker.close();
+    if (!marker) { error="Cannot create native settings reset marker"; return false; }
     return true;
 }
 
-std::map<std::string,LLSD> LLVKStartupSettings::defaults() const
-{
-    std::map<std::string,LLSD> result;
-    for (const auto& [name,entry] : mEntries) result.emplace(name,entry.defaultValue);
-    return result;
-}
-
-const LLVKStartupSettings::Entry* LLVKStartupSettings::find(const std::string& name) const
-{
-    const auto found = mEntries.find(name);
-    return found == mEntries.end() ? nullptr : &found->second;
-}
-
-bool LLVKStartupSettings::saveChanges(const std::filesystem::path& path,const std::map<std::string,LLSD>& changes,std::string& error)
+std::optional<bool> LLVKSettingsMgr::consumeReset(const std::filesystem::path& profile,
+    const std::filesystem::path& selectedSettings,std::string& error)
 {
     error.clear();
-    auto updated = *this;
+    if (profile.empty() || !profile.is_absolute()) { error="Native settings reset requires an absolute profile path"; return std::nullopt; }
+    try
+    {
+        const auto root=std::filesystem::weakly_canonical(profile);
+        const auto marker=root/"logs"/"CLEAR",settings=root/"user_settings";
+        if (!std::filesystem::exists(marker)) return false;
+        const auto selected=selectedSettings.lexically_normal();
+        if (selected.empty() || selected.is_absolute() || selected.has_parent_path())
+        { error="Native settings reset requires a profile-local settings filename"; return std::nullopt; }
+        std::vector<std::filesystem::path> files{settings/selected},directories;
+        const auto verify=[&](const std::filesystem::path& path)
+        {
+            if (std::filesystem::weakly_canonical(path)!=path.lexically_normal())
+                throw std::runtime_error("Native settings reset refuses linked paths");
+        };
+        verify(marker); verify(settings);
+        for (const auto name : {"account_settings_phoenix.xml","agents.xml","bin_conf.dat","client_list_v2.xml","colors.xml",
+            "ignorable_dialogs.xml","grids.remote.xml","grids.user.xml","password.dat","quick_preferences.xml","releases.xml","settings_crash_behavior.xml"})
+            files.push_back(settings/name);
+        for (const auto name : {"beams","beamsColors","windlight/water","windlight/days","windlight/skies","windlight"})
+            directories.push_back(settings/name);
+        if (std::filesystem::exists(settings))
+            for (const auto& entry : std::filesystem::directory_iterator(settings))
+            {
+                const auto name=entry.path().filename().string();
+                if (((name.starts_with("feature") || name.starts_with("gpu")) && name.ends_with(".txt")) ||
+                    (name.starts_with("settings_") && name.ends_with(".xml"))) files.push_back(entry.path());
+                if (files.size()>20000) throw std::runtime_error("Native settings reset file limit exceeded");
+            }
+        directories.push_back(root/"browser_profile"); directories.push_back(root/"data");
+        for (const auto& entry : std::filesystem::directory_iterator(root))
+        {
+            if (!entry.is_directory()) continue;
+            verify(entry.path());
+            for (const auto name : {"filters.xml","medialist.xml","plugin_cookies.xml","search_history.xml","settings_friends_groups.xml",
+                "settings_per_account.xml","teleport_history.xml","texture_list_last.xml","toolbars.xml","typed_locations.xml","url_history.xml","volume_settings.xml"})
+                files.push_back(entry.path()/name);
+            directories.push_back(entry.path()/"browser_profile");
+            if (files.size()>20000) throw std::runtime_error("Native settings reset file limit exceeded");
+        }
+        for (const auto& path : files) verify(path);
+        for (const auto& path : directories) verify(path);
+        for (const auto& path : files)
+        {
+            if (std::filesystem::is_directory(path)) throw std::runtime_error("Native settings reset file is a directory");
+            std::filesystem::remove(path);
+        }
+        for (const auto& path : directories)
+            if (std::filesystem::is_directory(path) && std::filesystem::is_empty(path)) std::filesystem::remove(path);
+        std::filesystem::remove(marker);
+        return true;
+    }
+    catch (const std::exception& failure) { error=std::string("Native settings reset failed: ")+failure.what(); return std::nullopt; }
+}
+
+bool LLVKSettingsMgr::set(const std::string& name,const LLSD& value,bool saved,std::string& error)
+{
+    error.clear();
+    auto control=mGroup->getControl(name);
+    if (!control) { error="Unknown native setting: "+name; return false; }
+    control->setValue(value,saved);
+    return true;
+}
+
+std::map<std::string,LLSD> LLVKSettingsMgr::defaults() const
+{
+    struct Collect final : LLControlGroup::ApplyFunctor
+    {
+        std::map<std::string,LLSD> result;
+        void apply(const std::string& name,LLControlVariable* control) override
+        { result.emplace(name,control->isType(TYPE_BOOLEAN) ? LLSD(control->getDefault().asBoolean()) : control->getDefault()); }
+    } collect;
+    mGroup->applyToAll(&collect);
+    return collect.result;
+}
+
+LLControlVariable* LLVKSettingsMgr::find(const std::string& name) const
+{
+    return mGroup->getControl(name).get();
+}
+
+bool LLVKSettingsMgr::saveChanges(const std::filesystem::path& path,const std::map<std::string,LLSD>& changes,std::string& error)
+{
+    error.clear();
+    LLControlGroup updated("NativeSettingsWrite-"+LLUUID::generateNewID().asString());
     for (const auto& [name,value] : changes)
     {
-        const auto* entry = find(name);
-        if (!entry || !entry->persistent) { error = "Native preference is not persistent: "+name; return false; }
-        if (!updated.set(name,value,true,error)) return false;
+        auto control=mGroup->getControl(name);
+        if (!control || !control->isPersisted()) { error="Native preference is not persistent: "+name; return false; }
+        if (!(*control->getValidateSignal())(control.get(),value)) { error="Preference validation rejected: "+name; return false; }
+        const auto staged=updated.declareControl(name,control->type(),control->getDefault(),control->getComment(),
+            SANITY_TYPE_NONE,{},"",LLControlVariable::PERSIST_ALWAYS,control->isBackupable(),control->isHiddenFromSettingsEditor());
+        staged->setValue(value,true);
     }
     if (changes.empty()) return true;
     std::error_code status;
@@ -323,10 +382,11 @@ bool LLVKStartupSettings::saveChanges(const std::filesystem::path& path,const st
     }
     for (const auto& [name,value] : changes)
     {
-        const auto* entry = updated.find(name);
-        if (!document[name].isMap()) document[name] = entry->definition;
-        document[name]["Type"] = entry->type;
-        document[name]["Value"] = entry->saveValue();
+        auto control=updated.getControl(name);
+        document[name]["Type"] = LLControlGroup::typeEnumToString(control->type());
+        document[name]["Comment"] = control->getComment();
+        document[name]["Backup"] = control->isBackupable();
+        document[name]["Value"] = control->getSaveValue();
     }
     const auto temporary = staging/"settings.tmp";
     std::ofstream output(temporary,std::ios::binary|std::ios::trunc);
@@ -341,13 +401,18 @@ bool LLVKStartupSettings::saveChanges(const std::filesystem::path& path,const st
     std::filesystem::rename(temporary,path,status);
     if (status) { error = "Native settings replacement failed: "+status.message(); return false; }
 #endif
-    mEntries = std::move(updated.mEntries);
+    for (const auto& [name,value] : changes) mGroup->getControl(name)->setValue(updated.getControl(name)->getSaveValue(),true);
     return true;
 }
 
-std::map<std::string,LLSD> LLVKStartupSettings::values() const
+std::map<std::string,LLSD> LLVKSettingsMgr::values() const
 {
-    std::map<std::string,LLSD> values;
-    for (const auto& [name,entry] : mEntries) values.emplace(name,entry.value());
-    return values;
+    struct Collect final : LLControlGroup::ApplyFunctor
+    {
+        std::map<std::string,LLSD> result;
+        void apply(const std::string& name,LLControlVariable* control) override
+        { result.emplace(name,control->isType(TYPE_BOOLEAN) ? LLSD(control->getValue().asBoolean()) : control->getValue()); }
+    } collect;
+    mGroup->applyToAll(&collect);
+    return collect.result;
 }

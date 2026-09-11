@@ -111,9 +111,14 @@ namespace
         std::optional<LLVKBadge::Params> badge;
         std::optional<LLVKPanel::Params> panel;
         std::optional<LLVKWidgetTree::Node::Floater> floater;
+        std::shared_ptr<LLVKWidgetTree::Node::ContainerView> containerView;
+        std::shared_ptr<LLVKWidgetTree::Node::StatBar> statBar;
         std::shared_ptr<LLVKWidgetFactory::SearchEditorDefaults> searchEditor;
         std::map<std::string,std::unique_ptr<Declaration>> searchButtons;
+        std::string menuFilename, menuPosition = "bottomleft";
         std::shared_ptr<LLVKWidgetFactory::ColorSwatchDefaults> colorSwatch;
+        std::shared_ptr<LLVKWidgetFactory::TextureDefaults> texture;
+        std::unique_ptr<Declaration> textureCaption, textureMultiple;
         std::unique_ptr<Declaration> swatchCaption;
         std::shared_ptr<LLVKWidgetFactory::ScrollListDefaults> scrollList;
         std::optional<LLVKWidgetTree::Node::Browser> browser;
@@ -257,6 +262,9 @@ namespace
         const LLVKWidgetFactory::BrowserDefaults& browserDefaults;
         std::unique_ptr<Declaration> root;
         std::vector<Declaration*> stack;
+        std::optional<LLVKWidgetTree::ListRow> inlineRow;
+        std::optional<std::size_t> inlineCell;
+        std::string inlineCellText;
         std::string error;
         std::exception_ptr exception;
         std::size_t nodes = 0;
@@ -295,11 +303,20 @@ namespace
             if (resources.colors)
                 if (auto named = resources.colors->find(std::string(text))) { output = *named; return true; }
             LLVKColor::Value value;
+            bool firstChannel=true;
             for (auto& channel : value)
             {
-                const auto start = text.find_first_not_of(" \t\r\n");
+                auto start = text.find_first_not_of(" \t\r\n");
                 if (start == std::string_view::npos) return false;
                 text.remove_prefix(start);
+                if (!firstChannel && text.front()==',')
+                {
+                    text.remove_prefix(1);
+                    start=text.find_first_not_of(" \t\r\n");
+                    if (start==std::string_view::npos) return false;
+                    text.remove_prefix(start);
+                }
+                firstChannel=false;
                 const auto result = std::from_chars(text.data(),text.data()+text.size(),channel);
                 if (result.ec != std::errc() || !std::isfinite(channel)) return false;
                 text.remove_prefix(result.ptr-text.data());
@@ -344,6 +361,32 @@ namespace
         {
             auto& view = declaration.params.view;
             auto& geometry = declaration.params.geometry;
+            if (declaration.statBar)
+            {
+                auto& bar=*declaration.statBar;
+                if (name=="label") { bar.label=text; return true; }
+                if (name=="show_bar") return boolean(text,bar.showBar);
+                if (name=="show_history") return boolean(text,bar.showHistory);
+                if (name=="max_height") return integer(text,bar.maximumHeight);
+                if (name=="decimal_digits") return integer(text,bar.decimalDigits);
+                if (name=="num_frames") return integer(text,bar.historyFrames);
+                if (name=="num_frames_short") return integer(text,bar.shortFrames);
+                if (name=="bar_min" || name=="bar_max" || name=="tick_spacing")
+                {
+                    auto& value=name=="bar_min" ? bar.minimum : name=="bar_max" ? bar.maximum : bar.tickSpacing;
+                    const auto parsed=std::from_chars(text.data(),text.data()+text.size(),value);
+                    return parsed.ec==std::errc() && parsed.ptr==text.data()+text.size() && std::isfinite(value);
+                }
+            }
+            if (declaration.containerView)
+            {
+                auto& container=*declaration.containerView;
+                if (name=="show_label") return boolean(text,container.showLabel);
+                if (name=="display_children") return boolean(text,container.displayChildren);
+                if (name=="background_visible") return boolean(text,container.backgroundVisible);
+                if (name=="bg_color") return color(text,container.backgroundColor);
+                if (name=="label") { container.label=text; return true; }
+            }
             if (declaration.control && !declaration.panel)
             {
                 if (name=="commit_callback.function") { declaration.control->commit.functionName=std::string(text); return true; }
@@ -352,6 +395,8 @@ namespace
             }
             if (declaration.scrollList)
             {
+                if (name=="desired_line_height") return integer(text,declaration.scrollList->list.desiredLineHeight);
+                if (name=="content_type") return text=="Misc";
                 auto& list=declaration.scrollList->list;
                 if (name=="multi_select") return boolean(text,list.multiSelect);
                 if (name=="draw_heading") return boolean(text,list.heading);
@@ -397,6 +442,26 @@ namespace
                     return true;
                 }
             }
+            if (declaration.texture)
+            {
+                auto& texture=declaration.texture->texture;
+                if (name=="label") { texture.label=text; return true; }
+                if (name=="label_width") return integer(text,texture.labelWidth);
+                if (name=="show_caption") { bool show; if (!boolean(text,show)) return false; texture.captionHeight=show ? 23 : 0; return true; }
+                if (name=="allow_no_texture") return boolean(text,texture.allowNone);
+                if (name=="can_apply_immediately") return boolean(text,texture.applyImmediately);
+                if (name=="no_commit_on_selection") { bool disable; if (!boolean(text,disable)) return false; texture.commitOnSelection=!disable; return true; }
+                if (name=="border_color") return color(text,texture.borderColor);
+                if (name=="text_enabled_color") return color(text,texture.enabledText);
+                if (name=="text_disabled_color") return color(text,texture.disabledText);
+                if (name=="image_id" || name=="default_image_id")
+                {
+                    if (!LLUUID::validate(std::string(text))) return false;
+                    (name=="image_id" ? texture.initialAsset : texture.defaultAsset).set(std::string(text)); return true;
+                }
+                if (name=="default_image_name") return text=="Default";
+                if (name=="fallback_image") { declaration.texture->fallbackImage=std::string(text); return true; }
+            }
             if (declaration.colorSwatch)
             {
                 auto& swatch=declaration.colorSwatch->swatch;
@@ -430,18 +495,34 @@ namespace
                 if (name=="highlight_text_field") return boolean(text,search.search.highlight);
                 if (name=="background_image_highlight") { search.highlightImage=text; return true; }
             }
+            if (declaration.tag=="menu_button")
+            {
+                if (name=="menu_filename") { declaration.menuFilename=text; return true; }
+                if (name=="menu_position" || name=="position")
+                {
+                    if (text!="bottomleft" && text!="bottomright" && text!="topleft" && text!="topright") return false;
+                    declaration.menuPosition=text; return true;
+                }
+            }
             if (declaration.floater)
             {
                 auto& floater=*declaration.floater;
                 if (name=="title") { floater.title=text; return true; }
-                if (name=="positioning") { floater.positioning=text; return text=="centered"; }
+                if (name=="positioning") { floater.positioning=text; return text=="centered" || text=="cascading"; }
+                if (name=="save_visibility") { bool enabled; return boolean(text,enabled) && !enabled; }
+                if (name=="reuse_instance") { bool enabled; return boolean(text,enabled) && enabled; }
                 if (name=="legacy_header_height") return integer(text,floater.legacyHeaderHeight);
                 if (name=="save_rect") return boolean(text,floater.saveRect);
                 if (name=="single_instance") return boolean(text,floater.singleInstance);
                 if (name=="can_close") return boolean(text,floater.canClose);
                 if (name=="can_minimize") return boolean(text,floater.canMinimize);
-                if (name=="can_resize") { bool enabled; return boolean(text,enabled) && !enabled; }
+                if (name=="can_drag_on_left") { bool enabled; return boolean(text,enabled) && !enabled; }
+                if (name=="can_resize") return boolean(text,floater.canResize);
+                if (name=="min_width") return integer(text,floater.minWidth) && floater.minWidth>=0;
+                if (name=="min_height") return integer(text,floater.minHeight) && floater.minHeight>=0;
             }
+            if (declaration.plainLabel && name=="line_spacing.pixels")
+                return integer(text,declaration.plainLabel->layout.spacingPixels);
                         if (declaration.textEditor)
                         {
                             auto& editor=*declaration.textEditor;
@@ -458,7 +539,6 @@ namespace
                             if (name=="read_only") { bool value; if (!boolean(text,value)) return false; declaration.plainLabel->readOnly=value; return true; }
                             if (name=="allow_scroll" || name=="ignore_tab") { bool value; return boolean(text,value) && value; }
                             if (name=="embedded_items" || name=="track_bottom") { bool value; return boolean(text,value) && !value; }
-                            if (name=="line_spacing.pixels") return integer(text,declaration.plainLabel->layout.spacingPixels);
                         }
             if (declaration.sliderControl)
             {
@@ -470,6 +550,14 @@ namespace
                 if (name=="label_width" || name=="text_width")
                 { std::int32_t value; if (!integer(text,value) || value<0) return false; (name=="label_width" ? slider.labelWidth : slider.textWidth)=value; return true; }
                 if (name=="text_color") return color(text,slider.textColor);
+                if (name=="slider_label.halign")
+                {
+                    if (text=="left") slider.labelAlignment=LLVKFont::HorizontalAlign::Left;
+                    else if (text=="right") slider.labelAlignment=LLVKFont::HorizontalAlign::Right;
+                    else if (text=="center") slider.labelAlignment=LLVKFont::HorizontalAlign::Center;
+                    else return false;
+                    return true;
+                }
                 if (name=="text_disabled_color") return color(text,slider.disabledColor);
                 if (name=="volume") { bool unused; return boolean(text,unused); }
             }
@@ -698,6 +786,15 @@ namespace
             if (declaration.checkBox)
             {
                 auto& check = declaration.checkBox->construction;
+                if (name=="label_text.halign")
+                {
+                    if (text=="left") check.labelText.layout.alignment=LLVKFont::HorizontalAlign::Left;
+                    else if (text=="right") check.labelText.layout.alignment=LLVKFont::HorizontalAlign::Right;
+                    else if (text=="center") check.labelText.layout.alignment=LLVKFont::HorizontalAlign::Center;
+                    else return false;
+                    return true;
+                }
+                if (name=="halign") { LLVKButton::Align ignored; return alignment(text,ignored); }
                 if (name == "label") { check.label = text; return true; }
                 if (name == "initial_value" || name == "value")
                 {
@@ -719,6 +816,7 @@ namespace
             if (declaration.plainLabel)
             {
                 auto& label = *declaration.plainLabel;
+                if (name=="use_ellipses") return boolean(text,label.useEllipses);
                 if (name == "label") return true;
                 if (name == "skip_link_underline") return boolean(text,label.skipLinkUnderline);
                 if (name == "bg_readonly_color") return color(text,label.readOnlyBackground);
@@ -995,7 +1093,6 @@ namespace
                 if (name == "control_name") { control.valueSetting = text; return true; }
                 if (name == "enabled_control" || name == "disabled_control")
                 {
-                    if (control.enabledSetting) return false;
                     control.enabledSetting = text;
                     control.invertEnabled = name == "disabled_control";
                     return true;
@@ -1027,7 +1124,6 @@ namespace
                 if (name == "control_name") { control.valueSetting = text; return true; }
                 if (name == "enabled_control" || name == "disabled_control")
                 {
-                    if (control.enabledSetting) return false;
                     control.enabledSetting = text;
                     control.invertEnabled = name == "disabled_control";
                     return true;
@@ -1088,6 +1184,8 @@ namespace
         bool callback(Declaration& declaration, std::string_view tag, const XML_Char** attributes)
         {
             const auto separator = tag.find('.');
+            if (separator==std::string_view::npos && declaration.control && tag.ends_with("_callback"))
+                return callback(declaration,declaration.tag+"."+std::string(tag),attributes);
             if (separator == std::string_view::npos || !declaration.control) return false;
             const auto prefix = tag.substr(0,separator);
             if (declaration.radioGroup && prefix!="radio_group") return false;
@@ -1097,7 +1195,7 @@ namespace
             if (declaration.colorSwatch && prefix!="color_swatch") return false;
             if ((declaration.button && prefix != "button") || (declaration.icon && prefix != "icon") ||
                 (declaration.badge && prefix != "badge") || (declaration.panel && prefix != (declaration.tabs ? "tab_container" : declaration.browser ? "web_browser" : declaration.layoutPanel ? "layout_panel" : "panel")) ||
-                (declaration.lineEditor && prefix != (declaration.searchEditor ? "search_editor" : "line_editor")) || (declaration.checkBox && prefix != (declaration.radioItem ? "radio_item" : "check_box")) ||
+                (declaration.lineEditor && prefix != (declaration.searchEditor ? declaration.tag : "line_editor")) || (declaration.checkBox && prefix != (declaration.radioItem ? "radio_item" : "check_box")) ||
                 (declaration.scrollbar && prefix != "scroll_bar") ||
                 (declaration.scrollContainer && prefix != "scroll_container") || (declaration.combo && prefix != "combo_box")) return false;
             const auto name = tag.substr(separator+1);
@@ -1123,6 +1221,7 @@ namespace
             LLVKControl::Validation* predicate = nullptr;
             auto& control = *declaration.control;
             if (name == "commit_callback") action = &control.commit;
+            else if (declaration.checkBox && name=="check_button.commit_callback") action=&declaration.checkBox->construction.buttonControl.commit;
             else if (declaration.sliderControl && name=="editor_commit_callback") action=&declaration.sliderControl->slider.editorCommit;
             else if (declaration.slider && name=="mouse_down_callback") action=&declaration.slider->slider.mouseDown;
             else if (declaration.slider && name=="mouse_up_callback") action=&declaration.slider->slider.mouseUp;
@@ -1175,7 +1274,44 @@ namespace
                 if (state.panelString) { state.reject("Native panel strings cannot contain nested elements"); return; }
                 if (state.callbackElement) { state.reject("Nested native callback declarations are unsupported"); return; }
                 if (!state.stack.empty() && state.stack.back()->scrollList &&
-                    (std::string_view(tag)=="scroll_list.columns" || std::string_view(tag)=="scroll_list.column" ||
+                    (std::string_view(tag)=="row" || std::string_view(tag)=="scroll_list.row"))
+                {
+                    if (state.inlineRow || state.stack.back()->scrollList->list.rows.size()>=10000)
+                    { state.reject("Nested or over-budget native list row"); return; }
+                    state.inlineRow.emplace();
+                    for (std::size_t index=0; attributes[index]; index+=2)
+                    {
+                        const std::string_view name(attributes[index]),value(attributes[index+1]);
+                        if (name=="value") state.inlineRow->value=std::string(value);
+                        else if (name=="name") { if (state.inlineRow->value.isUndefined()) state.inlineRow->value=std::string(value); }
+                        else if (name=="enabled") { if (!boolean(value,state.inlineRow->enabled)) { state.reject("Invalid native row enabled flag"); return; } }
+                        else { state.reject("Unsupported native list row attribute"); return; }
+                    }
+                    return;
+                }
+                if (state.inlineRow)
+                {
+                    if (state.inlineCell || (std::string_view(tag)!="column" && std::string_view(tag)!="scroll_list.column"))
+                    { state.reject("Unsupported nested native list cell"); return; }
+                    std::map<std::string,std::string> fields;
+                    for (std::size_t index=0; attributes[index]; index+=2) fields.emplace(attributes[index],attributes[index+1]);
+                    const auto& columns=state.stack.back()->scrollList->list.columns;
+                    const auto found=std::find_if(columns.begin(),columns.end(),[&](const auto& column) { return column.name==fields["name"]; });
+                    if (found==columns.end()) { state.reject("Native inline cell references unknown column"); return; }
+                    const auto index=static_cast<std::size_t>(found-columns.begin());
+                    state.inlineRow->cells.resize(columns.size()); state.inlineRow->styles.resize(columns.size());
+                    auto& style=state.inlineRow->styles[index];
+                    if (fields["type"].empty() || fields["type"]=="text") style.type=LLVKWidgetTree::ListCellStyle::Type::Text;
+                    else if (fields["type"]=="checkbox") style.type=LLVKWidgetTree::ListCellStyle::Type::CheckBox;
+                    else { state.reject("Unsupported native inline cell type"); return; }
+                    if (fields.contains("enabled") && !boolean(fields["enabled"],style.enabled))
+                    { state.reject("Invalid native cell enabled flag"); return; }
+                    state.inlineRow->cells[index]=fields["value"];
+                    style.tooltip=fields["tool_tip"];
+                    state.inlineCell=index; state.inlineCellText.clear(); return;
+                }
+                if (!state.stack.empty() && state.stack.back()->scrollList &&
+                    (std::string_view(tag)=="fs_scroll_list.columns" || std::string_view(tag)=="scroll_list.columns" || std::string_view(tag)=="scroll_list.column" ||
                      std::string_view(tag)=="columns" || std::string_view(tag)=="column"))
                 {
                     auto& columns=state.stack.back()->scrollList->list.columns;
@@ -1187,7 +1323,7 @@ namespace
                         if (name=="name") column.name=value;
                         else if (name=="label") column.label=value;
                         else if (name=="width")
-                        { if (!integer(value,column.width)) { state.reject("Invalid native list column width"); return; } }
+                        { if (!integer(value,column.width)) { state.reject("Invalid native list column width"); return; } column.hidden=column.width<0; }
                         else if (name=="relative_width" || name=="relwidth")
                         {
                             const auto result=std::from_chars(value.data(),value.data()+value.size(),column.relativeWidth);
@@ -1197,6 +1333,43 @@ namespace
                         else { state.reject("Unsupported native list column parameter: "+std::string(name)); return; }
                     }
                     columns.push_back(std::move(column)); state.callbackElement=true; return;
+                }
+                if (!state.stack.empty() && state.stack.back()->texture &&
+                    (std::string_view(tag)=="caption_text" || std::string_view(tag)=="texture_picker.caption_text" ||
+                     std::string_view(tag)=="multiselect_text" || std::string_view(tag)=="texture_picker.multiselect_text"))
+                {
+                    auto& owner=*state.stack.back();
+                    const bool multiple=std::string_view(tag).find("multiselect_text")!=std::string_view::npos;
+                    auto& slot=multiple ? owner.textureMultiple : owner.textureCaption;
+                    if (slot || state.stack.size()>=LLVKWidgetTree::maximumDepth || ++state.nodes>LLVKWidgetTree::maximumNodes)
+                    { state.reject("Duplicate or over-budget native texture text parameters"); return; }
+                    const auto& defaults=multiple ? owner.texture->multiple : owner.texture->caption;
+                    auto child=std::make_unique<Declaration>();
+                    child->tag="text"; child->params=defaults.view; child->control=defaults.control; child->plainLabel=defaults.text;
+                    for (std::size_t index=0; attributes[index]; index+=2)
+                        if (!state.attribute(*child,attributes[index],attributes[index+1]))
+                        { state.reject("Unsupported native texture text parameter: "+std::string(attributes[index])); return; }
+                    auto* current=child.get(); slot=std::move(child); state.stack.push_back(current); return;
+                }
+                if (!state.stack.empty() && state.stack.back()->texture &&
+                    (std::string_view(tag)=="border" || std::string_view(tag)=="texture_picker.border"))
+                {
+                    auto& border=state.stack.back()->texture->texture.border;
+                    for (std::size_t index=0; attributes[index]; index+=2)
+                    {
+                        const std::string_view name(attributes[index]),value(attributes[index+1]);
+                        if (name=="bevel_style")
+                        {
+                            if (value=="in") border.bevel=LLVKBorder::Bevel::In;
+                            else if (value=="out") border.bevel=LLVKBorder::Bevel::Out;
+                            else if (value=="none") border.bevel=LLVKBorder::Bevel::None;
+                            else { state.reject("Invalid texture border bevel"); return; }
+                        }
+                        else if (name=="border_thickness")
+                        { if (!integer(value,border.thickness)) { state.reject("Invalid texture border thickness"); return; } }
+                        else { state.reject("Unsupported texture border parameter"); return; }
+                    }
+                    state.callbackElement=true; return;
                 }
                 if (std::string_view(tag)=="color_swatch.caption_text")
                 {
@@ -1219,6 +1392,7 @@ namespace
                 {
                     std::string_view part(tag);
                     if (part.starts_with("search_editor.")) part.remove_prefix(14);
+                    if (part.starts_with("filter_editor.")) part.remove_prefix(14);
                     if (part=="search_button" || part=="clear_button")
                     {
                         auto& owner=*state.stack.back();
@@ -1275,7 +1449,7 @@ namespace
                         return;
                     }
                 }
-                if ((std::string_view(tag) == "string" || std::string_view(tag) == "panel.string") &&
+                if ((std::string_view(tag) == "string" || std::string_view(tag) == "panel.string" || std::string_view(tag) == "floater.string") &&
                     !state.stack.empty() && state.stack.back()->panel)
                 {
                     PanelString entry;
@@ -1416,7 +1590,7 @@ namespace
                     state.stack.push_back(current);
                     return;
                 }
-                if (std::string_view(tag).find('.') != std::string_view::npos)
+                if (std::string_view(tag).find('.') != std::string_view::npos || std::string_view(tag).ends_with("_callback"))
                 {
                     if (state.stack.empty() || !state.callback(*state.stack.back(),tag,attributes))
                     { state.reject("Unresolved or unsupported native callback: " + std::string(tag)); return; }
@@ -1424,16 +1598,19 @@ namespace
                     return;
                 }
                 const bool icon = std::string_view(tag) == "icon";
-                const bool button = std::string_view(tag) == "button" || std::string_view(tag) == "scroll_column_header";
+                const bool containerView = std::string_view(tag)=="container_view" || std::string_view(tag)=="stat_view";
+                const bool statBar = std::string_view(tag)=="stat_bar";
+                const bool button = std::string_view(tag) == "button" || std::string_view(tag) == "scroll_column_header" || std::string_view(tag)=="menu_button";
                 const bool badge = std::string_view(tag) == "badge";
                 const bool tabs = std::string_view(tag) == "tab_container";
                 const bool floater = std::string_view(tag) == "floater";
                 const bool panel = std::string_view(tag) == "panel" || tabs || floater;
                 const bool border = std::string_view(tag) == "view_border";
-                const bool searchEditor = std::string_view(tag) == "search_editor";
+                const bool searchEditor = std::string_view(tag) == "search_editor" || std::string_view(tag) == "filter_editor";
                 const bool colorSwatch = std::string_view(tag) == "color_swatch";
-                const bool scrollList = std::string_view(tag) == "scroll_list";
-                const bool editor = std::string_view(tag) == "line_editor" || searchEditor;
+                const bool texture = std::string_view(tag)=="texture_picker";
+                const bool scrollList = std::string_view(tag) == "scroll_list" || std::string_view(tag)=="fs_scroll_list";
+                const bool editor = std::string_view(tag) == "line_editor" || std::string_view(tag)=="fs_copytrans_inventory_drop_target" || searchEditor;
                 const bool radioGroup = std::string_view(tag) == "radio_group";
                 const bool radioItem = std::string_view(tag) == "radio_item" ||
                     (std::string_view(tag) == "item" && !state.stack.empty() && state.stack.back()->radioGroup);
@@ -1444,27 +1621,51 @@ namespace
                 const bool layoutPanel = std::string_view(tag) == "layout_panel";
                 const bool combo = std::string_view(tag) == "combo_box";
                 const bool textEditor = std::string_view(tag) == "text_editor" || std::string_view(tag) == "simple_text_editor";
-                const bool textWidget = std::string_view(tag) == "text" || textEditor;
+                const bool textWidget = std::string_view(tag) == "text" || std::string_view(tag)=="fs_embedded_item_drop_target" || textEditor;
                 const bool browser = std::string_view(tag) == "web_browser";
                 const bool spinner = std::string_view(tag) == "spinner";
                 const bool sliderControl = std::string_view(tag) == "slider";
                 const bool slider = std::string_view(tag) == "slider_bar" || sliderControl;
-                if (std::string_view(tag) != "view" && !icon && !button && !badge && !panel && !border && !editor && !check && !scroll && !container && !layoutStack && !layoutPanel && !combo && !textWidget && !browser && !spinner && !radioGroup && !slider && !colorSwatch && !scrollList)
+                if (std::string_view(tag) != "view" && std::string_view(tag)!="locate" && !statBar && !containerView && !icon && !button && !badge && !panel && !border && !editor && !check && !scroll && !container && !layoutStack && !layoutPanel && !combo && !textWidget && !browser && !spinner && !radioGroup && !slider && !colorSwatch && !scrollList && !texture)
                 { state.reject("Native constructor not implemented for tag: " + std::string(tag)); return; }
                 if (++state.nodes > LLVKWidgetTree::maximumNodes || state.stack.size() >= LLVKWidgetTree::maximumDepth)
                 { state.reject("Native widget declaration exceeds node/depth limits"); return; }
                 auto declaration = std::make_unique<Declaration>();
                 declaration->tag = tag;
+                if (containerView) declaration->containerView=std::make_shared<LLVKWidgetTree::Node::ContainerView>();
+                if (statBar) declaration->statBar=std::make_shared<LLVKWidgetTree::Node::StatBar>();
                 declaration->params = icon ? state.iconDefaults.view : button ? state.buttonDefaults.view :
                                       badge ? state.buttonDefaults.badge.view : panel ? state.panelDefaults.view :
                                       border ? state.panelDefaults.borderView : editor ? state.lineDefaults.view : check ? state.checkDefaults.view :
                                       scroll ? state.scrollDefaults.view : container ? state.containerDefaults.view :
                                       layoutStack ? state.layoutDefaults.view : layoutPanel ? state.panelDefaults.view : combo ? state.comboDefaults.view : textWidget ? state.textDefaults.view : state.defaults;
+                if (containerView) declaration->params.view.mouseOpaque=false;
+                if (std::string_view(tag)=="locate")
+                {
+                    declaration->control=LLVKControl::Params{};
+                    declaration->control->tabStop=false;
+                    declaration->control->fontRequest=state.resources.defaultFontRequest;
+                }
+                if (statBar) declaration->params.view.follows=LLVKWidgetTree::Left|LLVKWidgetTree::Top;
                 if (slider)
                 {
                     declaration->slider=std::make_shared<LLVKWidgetFactory::SliderDefaults>(*state.resources.slider);
                     declaration->params=declaration->slider->view;
                     declaration->control=declaration->slider->control;
+                    if (!declaration->control->font && !declaration->control->fontRequest)
+                        declaration->control->fontRequest=state.resources.defaultFontRequest;
+                }
+                if (texture)
+                {
+                    declaration->texture=std::make_shared<LLVKWidgetFactory::TextureDefaults>(*state.resources.texture);
+                    auto& defaults=*declaration->texture;
+                    if (!defaults.initialized)
+                    {
+                        defaults.caption=defaults.multiple=state.textDefaults;
+                        defaults.texture.border=state.panelDefaults.panel.border;
+                        defaults.initialized=true;
+                    }
+                    declaration->params=defaults.view; declaration->control=defaults.control;
                     if (!declaration->control->font && !declaration->control->fontRequest)
                         declaration->control->fontRequest=state.resources.defaultFontRequest;
                 }
@@ -1486,6 +1687,7 @@ namespace
                 if (scrollList)
                 {
                     declaration->scrollList=std::make_shared<LLVKWidgetFactory::ScrollListDefaults>(*state.resources.scrollList);
+                    declaration->scrollList->list.preserveContextSelection=std::string_view(tag)=="fs_scroll_list";
                     auto& list=*declaration->scrollList;
                     if (!list.initialized)
                     {
@@ -1627,8 +1829,10 @@ namespace
                     if (!declaration->lineBorderProvided) declaration->lineEditor->border = state.panelDefaults.panel.border;
                     if (searchEditor)
                     {
-                        declaration->searchEditor=std::make_shared<LLVKWidgetFactory::SearchEditorDefaults>(*state.resources.searchEditor);
+                        const bool filter=std::string_view(tag)=="filter_editor";
+                        declaration->searchEditor=std::make_shared<LLVKWidgetFactory::SearchEditorDefaults>(*(filter ? state.resources.filterEditor : state.resources.searchEditor));
                         auto& search=*declaration->searchEditor;
+                        search.search.commitOnKeystroke=filter;
                         if (!search.initialized)
                         {
                             search.editor=state.lineDefaults;
@@ -1703,9 +1907,27 @@ namespace
             });
         }
 
-        static void XMLCALL end(void* pointer, const XML_Char*)
+        static void XMLCALL end(void* pointer, const XML_Char* tag)
         {
             auto& state = *static_cast<Parser*>(pointer);
+            if (state.inlineRow)
+            {
+                state.guarded([&]
+                {
+                    if (state.inlineCell)
+                    {
+                        const auto body=panelText(std::move(state.inlineCellText));
+                        if (!body.empty()) state.inlineRow->cells[*state.inlineCell]=body;
+                        state.inlineCell.reset();
+                    }
+                    else if (std::string_view(tag)=="row" || std::string_view(tag)=="scroll_list.row")
+                    {
+                        state.stack.back()->scrollList->list.rows.push_back(std::move(*state.inlineRow));
+                        state.inlineRow.reset();
+                    }
+                });
+                return;
+            }
             if (state.panelString)
             {
                 state.guarded([&]
@@ -1721,7 +1943,7 @@ namespace
                 return;
             }
             if (state.callbackElement) { state.callbackElement = false; return; }
-            if (!state.stack.empty() && (state.stack.back()->plainLabel || state.stack.back()->panel))
+            if (!state.stack.empty() && (state.stack.back()->plainLabel || state.stack.back()->panel || state.stack.back()->lineEditor))
             {
                 state.guarded([&]
                 {
@@ -1740,7 +1962,8 @@ namespace
             state.guarded([&]
             {
                 if (state.panelString) { state.panelString->body.append(text,length); return; }
-                if (!state.callbackElement && !state.stack.empty() && (state.stack.back()->plainLabel || state.stack.back()->panel))
+                if (state.inlineCell) { state.inlineCellText.append(text,length); return; }
+                if (!state.callbackElement && !state.stack.empty() && (state.stack.back()->plainLabel || state.stack.back()->panel || state.stack.back()->lineEditor))
                 { state.stack.back()->textBody.append(text,length); return; }
                 if (std::string_view(text,length).find_first_not_of(" \t\r\n") != std::string_view::npos)
                     state.reject("Native widget does not accept text content: "+
@@ -1946,6 +2169,22 @@ namespace
         }
         return resolveFont(defaults.construction.labelControl,resources,error) &&
             resolveFont(defaults.construction.buttonControl,resources,error);
+    }
+
+    bool resolveTexture(const Declaration& declaration,LLVKWidgetFactory::TextureDefaults& defaults,const LLVKWidgetTree& tree,std::string& error)
+    {
+        defaults.view=declaration.params; defaults.control=*declaration.control;
+        for (const auto& pair : {std::pair{declaration.textureCaption.get(),&defaults.caption},std::pair{declaration.textureMultiple.get(),&defaults.multiple}})
+            if (pair.first)
+            { pair.second->view=pair.first->params; pair.second->control=*pair.first->control; pair.second->text=*pair.first->plainLabel; }
+        defaults.texture.captionControl=defaults.caption.control; defaults.texture.caption=defaults.caption.text;
+        defaults.texture.multipleControl=defaults.multiple.control; defaults.texture.multiple=defaults.multiple.text;
+        if (defaults.fallbackImage)
+        {
+            defaults.texture.fallback=tree.findImage(*defaults.fallbackImage,error);
+            if (!defaults.texture.fallback) return false;
+        }
+        return true;
     }
 
     bool resolveColorSwatch(const Declaration& declaration,LLVKWidgetFactory::ColorSwatchDefaults& defaults,
@@ -2290,7 +2529,7 @@ namespace
         if (container)
         {
             for (const auto& child : declaration.children)
-                if (!child->panel)
+                if (!child->panel && !child->containerView)
                 { error = "Native scroll container child constructor is not implemented: " + child->tag; return std::nullopt; }
             if (!resolveCallback(container->scrolled,callbacks.actions,error)) return std::nullopt;
             auto defaults = std::make_unique<LLVKWidgetFactory::ScrollbarDefaults>(environment.scrollDefaults);
@@ -2380,6 +2619,18 @@ namespace
             scrollList=std::make_shared<LLVKWidgetFactory::ScrollListDefaults>(*declaration.scrollList);
             if (!resolveScrollList(declaration,*scrollList,tree,environment.resources,error) ||
                 !resolveControl(scrollList->list.scrollbarControl,callbacks,environment.resources,error)) return std::nullopt;
+            for (auto& row : scrollList->list.rows)
+                for (auto& style : row.styles)
+                    if (style.type==LLVKWidgetTree::ListCellStyle::Type::CheckBox)
+                    {
+                        const auto& images=environment.checkDefaults.construction.button.images;
+                        style.image=images.unselected;
+                        style.checkedImage=images.selected;
+                        style.disabledImage=images.disabled;
+                        style.disabledCheckedImage=images.disabledSelected;
+                        if (!style.image || !style.checkedImage || !style.disabledImage || !style.disabledCheckedImage)
+                        { error="Native inline list requires resolved checkbox images"; return {}; }
+                    }
         }
         std::shared_ptr<LLVKWidgetFactory::ColorSwatchDefaults> colorSwatch;
         if (declaration.colorSwatch)
@@ -2391,6 +2642,15 @@ namespace
                 !resolveCallback(colorSwatch->swatch.selected,callbacks.actions,error) ||
                 !resolveCallback(colorSwatch->swatch.cancelled,callbacks.actions,error)) return std::nullopt;
         }
+            std::shared_ptr<LLVKWidgetFactory::TextureDefaults> texture;
+            if (declaration.texture)
+            {
+                texture=std::make_shared<LLVKWidgetFactory::TextureDefaults>(*declaration.texture);
+                texture->texture.showPicker=environment.resources.texturePickerHandler;
+                if (!resolveTexture(declaration,*texture,tree,error) ||
+                !resolveControl(texture->texture.captionControl,callbacks,environment.resources,error) ||
+                !resolveControl(texture->texture.multipleControl,callbacks,environment.resources,error)) return {};
+            }
         if (declaration.searchEditor)
         {
             searchEditor=std::make_shared<LLVKWidgetFactory::SearchEditorDefaults>(*declaration.searchEditor);
@@ -2432,9 +2692,10 @@ namespace
         if (button && !resolveControl(construction.control,callbacks,environment.resources,error)) return std::nullopt;
         if (panel && declaration.panelOpaqueImage) panel->opaqueImage = tree.findImage(*declaration.panelOpaqueImage);
         if (panel && declaration.panelTransparentImage) panel->transparentImage = tree.findImage(*declaration.panelTransparentImage);
-        auto constructorView = declaration.panelConstructor.view.view;
-        auto constructorControl = declaration.panelConstructor.control;
-        auto constructorPanel = declaration.panelConstructor.panel;
+        auto constructorDefaults = std::make_unique<LLVKWidgetFactory::PanelDefaults>(declaration.panelConstructor);
+        auto& constructorView = constructorDefaults->view.view;
+        auto& constructorControl = constructorDefaults->control;
+        auto& constructorPanel = constructorDefaults->panel;
         if (panel && !typedLayoutPanel && !declaration.browser)
         {
             if (!panelConstructor && (!resolveControl(constructorControl,callbacks,environment.resources,error) ||
@@ -2489,6 +2750,7 @@ namespace
                    check ? tree.createCheckBox(params,*control,check->construction,owningParent,error) :
                    scrollList ? tree.createScrollList(params,*control,scrollList->list,owningParent,error) :
                    colorSwatch ? tree.createColorSwatch(params,*control,colorSwatch->swatch,owningParent,error) :
+                   texture ? tree.createTextureControl(params,*control,texture->texture,owningParent,error) :
                    searchEditor ? tree.createSearchEditor(params,*control,searchEditor->search,owningParent,error) :
                    lineEditor ? tree.createLineEditor(params,*control,*lineEditor,owningParent,error) :
                    declaration.plainLabel ? tree.createPlainText(params,*control,*declaration.plainLabel,owningParent,error) :
@@ -2496,8 +2758,20 @@ namespace
                        badge ? tree.createBadge(params,*control,*badge,0,owningParent,error) :
                        icon ? tree.createIcon(params,*control,*icon,owningParent,error) :
                        declaration.border ? tree.createBorder(params,*declaration.border,owningParent,error) :
+                       declaration.tag=="locate" ? tree.createControl(params,*control,owningParent,error) :
                        tree.create(params,owningParent,error);
         if (!id) return std::nullopt;
+        if (declaration.tag=="menu_button" && !declaration.menuFilename.empty())
+        {
+            if (!environment.resources.menuHandler)
+            { std::string ignored; tree.erase(*id,ignored); error="Native menu-button service is unavailable"; return std::nullopt; }
+            auto registry=std::make_shared<LLVKWidgetFactory::Callbacks>(callbacks);
+            tree.setMenuButtonHandler(*id,[handler=environment.resources.menuHandler,registry,
+                filename=declaration.menuFilename,position=declaration.menuPosition](auto owner)
+            { handler(owner,filename,position,*registry); });
+        }
+        if ((declaration.tag=="fs_copytrans_inventory_drop_target" || declaration.tag=="fs_embedded_item_drop_target") && !tree.initializeInventoryDropTarget(*id,error))
+        { std::string ignored; tree.erase(*id,ignored); return std::nullopt; }
         struct PanelScope
         {
             BuildState& state;
@@ -2592,6 +2866,7 @@ namespace
             for (const auto& child : declaration.children)
             {
                 if (declaration.radioGroup) continue;
+                if (!child->panelClass.empty() && environment.resources.excludedPanelClasses.contains(child->panelClass)) continue;
                 if (!build(tree,*child,*id,*id,error,environment,buildState))
                 {
                     std::string cleanupError;
@@ -2601,6 +2876,29 @@ namespace
             }
             if (declaration.layoutStack && !tree.updateLayoutStack(*id,error))
             { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
+            if (declaration.statBar)
+            {
+                auto params=std::make_unique<LLVKWidgetTree::Node::StatBar>(*declaration.statBar);
+                auto label=std::make_unique<LLVKControl::Params>();
+                label->fontRequest=LLVKFontRegistry::Request{"Monospace","Medium"};
+                if (!resolveFont(*label,environment.resources,error)) { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
+                params->font=label->font;
+                if (!tree.initializeStatBar(*id,*params,error)) { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
+            }
+            if (declaration.containerView)
+            {
+                auto params=std::make_unique<LLVKWidgetTree::Node::ContainerView>(*declaration.containerView);
+                if (params->showLabel)
+                {
+                    auto label=std::make_unique<LLVKControl::Params>();
+                    label->fontRequest=LLVKFontRegistry::Request{"Monospace","Medium"};
+                    if (!resolveFont(*label,environment.resources,error)) { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
+                    params->font=label->font;
+                }
+                if (!tree.initializeContainerView(*id,*params,error) || (owningParent && tree.get(owningParent)->scrollContainer &&
+                    !tree.attachScrollContent(owningParent,*id,0,error)))
+                { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
+            }
             if (declaration.tabs)
             {
                 const auto constructTabs = [&]() -> bool
@@ -2681,6 +2979,13 @@ namespace
                 if (tree.get(*id)) { std::string cleanupError; tree.eraseControl(*id,cleanupError); }
                 return std::nullopt;
             }
+        }
+        catch (const std::exception& failure)
+        {
+            const auto message="Native construction of "+params.name+" ("+declaration.panelClass+"): "+failure.what();
+            std::string cleanupError;
+            tree.erase(*id,cleanupError);
+            throw std::runtime_error(message);
         }
         catch (...)
         {
@@ -2936,6 +3241,12 @@ bool LLVKWidgetFactory::loadDefaults(const LLVKWidgetTree& tree, std::string_vie
         if (!resolveScrollList(declaration,*defaults,tree,mResources,error)) return false;
         mResources.scrollList=std::move(defaults);
     }
+    else if (declaration.texture)
+    {
+        auto defaults=std::make_shared<TextureDefaults>(*declaration.texture);
+        if (!resolveTexture(declaration,*defaults,tree,error)) return false;
+        mResources.texture=std::move(defaults);
+    }
     else if (declaration.colorSwatch)
     {
         auto defaults=std::make_shared<ColorSwatchDefaults>(*declaration.colorSwatch);
@@ -2946,7 +3257,8 @@ bool LLVKWidgetFactory::loadDefaults(const LLVKWidgetTree& tree, std::string_vie
     {
         auto defaults=std::make_shared<SearchEditorDefaults>(*declaration.searchEditor);
         if (!resolveSearchEditor(declaration,*defaults,tree,error)) return false;
-        mResources.searchEditor=std::move(defaults);
+        if (declaration.tag=="filter_editor") mResources.filterEditor=std::move(defaults);
+        else mResources.searchEditor=std::move(defaults);
     }
     else if (declaration.lineEditor)
     {

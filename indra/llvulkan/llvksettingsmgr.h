@@ -1,7 +1,9 @@
-#ifndef LLVKSTARTUPSETTINGS_H
-#define LLVKSTARTUPSETTINGS_H
+#ifndef LLVKSETTINGSMGR_H
+#define LLVKSETTINGSMGR_H
 
 #include "llsd.h"
+#include "llcontrol.h"
+#include <memory>
 #include <filesystem>
 #include <map>
 #include <optional>
@@ -29,28 +31,24 @@ private:
     LLSD mLists = LLSD::emptyArray();
 };
 
-class LLVKStartupSettings final
+class LLVKSettingsMgr final
 {
 public:
-    struct Entry
-    {
-        std::string type;
-        LLSD defaultValue;
-        LLSD definition;
-        std::optional<LLSD> saved, transient;
-        bool persistent = true;
-        const LLSD& value() const { return transient ? *transient : saved ? *saved : defaultValue; }
-        const LLSD& saveValue() const { return saved ? *saved : defaultValue; }
-    };
+    LLVKSettingsMgr();
+    explicit LLVKSettingsMgr(LLControlGroup& group);
+    LLControlGroup& group() const { return *mGroup; }
     bool load(std::string_view xml, bool defaults, bool saved, std::string& error);
     bool loadFile(const std::filesystem::path& path, bool required, bool defaults, bool saved, std::string& error);
     bool set(const std::string& name, const LLSD& value, bool saved, std::string& error);
     bool saveChanges(const std::filesystem::path& path, const std::map<std::string,LLSD>& changes, std::string& error);
-    const Entry* find(const std::string& name) const;
+    static bool scheduleReset(const std::filesystem::path& profile, std::string& error);
+    static std::optional<bool> consumeReset(const std::filesystem::path& profile,
+        const std::filesystem::path& selectedSettings, std::string& error);
+    LLControlVariable* find(const std::string& name) const;
     std::map<std::string,LLSD> values() const;
     std::map<std::string,LLSD> defaults() const;
 private:
-    std::map<std::string,Entry> mEntries;
+    std::shared_ptr<LLControlGroup> mGroup;
 };
 
 #endif

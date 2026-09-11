@@ -437,7 +437,10 @@ bool LLWebRTCImpl::terminate()
             mDeviceModule->SetObserver(nullptr);
         }
     });
-    mVoiceDevicesObserverList.clear();
+    {
+        std::lock_guard observerLock(mDevicesObserverMutex);
+        mVoiceDevicesObserverList.clear();
+    }
 
     // shutdown_thread can be detached, then LLWebRTCImpl will be nulled out.
     // Capture what's needed in lambda, don't rely on [this].
@@ -643,10 +646,15 @@ void LLWebRTCImpl::refreshDevices()
     mWorkerThread->PostTask([this]() { updateDevices(); });
 }
 
-void LLWebRTCImpl::setDevicesObserver(LLWebRTCDevicesObserver *observer) { mVoiceDevicesObserverList.emplace_back(observer); }
+void LLWebRTCImpl::setDevicesObserver(LLWebRTCDevicesObserver *observer)
+{
+    std::lock_guard observerLock(mDevicesObserverMutex);
+    mVoiceDevicesObserverList.emplace_back(observer);
+}
 
 void LLWebRTCImpl::unsetDevicesObserver(LLWebRTCDevicesObserver *observer)
 {
+    std::lock_guard observerLock(mDevicesObserverMutex);
     std::vector<LLWebRTCDevicesObserver *>::iterator it =
         std::find(mVoiceDevicesObserverList.begin(), mVoiceDevicesObserverList.end(), observer);
     if (it != mVoiceDevicesObserverList.end())
@@ -1009,9 +1017,12 @@ void LLWebRTCImpl::updateDevices()
     // Flag the device is no longer being interacted with for the Co-routine in case something goes wrong.
     gWebRTCUpdateDevices = false;
     // </FS:minerjr> [FIRE-36022]
-    for (auto &observer : mVoiceDevicesObserverList)
     {
-        observer->OnDevicesChanged(mPlayoutDeviceList, mRecordingDeviceList);
+        std::lock_guard observerLock(mDevicesObserverMutex);
+        const auto observers=mVoiceDevicesObserverList;
+        for (auto* observer : observers)
+            if (observer && std::find(mVoiceDevicesObserverList.begin(),mVoiceDevicesObserverList.end(),observer)!=mVoiceDevicesObserverList.end())
+                observer->OnDevicesChanged(mPlayoutDeviceList, mRecordingDeviceList);
     }
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
     }

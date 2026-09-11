@@ -105,6 +105,17 @@ bool LLVKWidgetTree::refreshSpinnerEditor(Id id,std::string& error)
     return setValue(owner->spinner->editor,LLSD(std::string(buffer,formatted.ptr)));
 }
 
+bool LLVKWidgetTree::setSpinnerRange(Id id,float minimum,float maximum,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->spinner || !std::isfinite(minimum) || !std::isfinite(maximum) || minimum>maximum)
+    { error="Invalid native spinner range"; return false; }
+    auto params=std::make_shared<SpinnerParams>(*get(id)->spinner->params);
+    params->minimum=minimum; params->maximum=maximum;
+    mNodes.at(id).spinner->params=std::move(params);
+    return setSpinnerValue(id,value(id),true,error);
+}
+
 bool LLVKWidgetTree::setSpinnerValue(Id id,const LLSD& value,bool forceEditor,std::string& error)
 {
     error.clear();

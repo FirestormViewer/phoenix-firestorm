@@ -16,6 +16,7 @@ struct LLVKPlainControl
         std::size_t maximumBytes = 4096;
         std::optional<bool> readOnly;
         bool trackEnd = false;
+        bool useEllipses = false;
         LLVKColor textColor{1,1,1,1};
         LLVKColor readOnlyColor{1,1,1,1};
         std::function<void(std::uint64_t)> clicked;

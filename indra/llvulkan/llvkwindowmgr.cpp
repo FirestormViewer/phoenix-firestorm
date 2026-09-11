@@ -1,12 +1,17 @@
-#include "llvkloginwindow.h"
+#include "llvkwindowmgr.h"
 #include "llvkwidgetgpu.h"
 #include "llvkaudio.h"
 #include "llvktranslation.h"
+#include "llvkjoystick.h"
+#include "llwebrtc.h"
+#include <mutex>
+#include <cmath>
 #include <fstream>
 #include <windows.h>
 #include <windowsx.h>
 #include <chrono>
 #include <shellapi.h>
+#include <shlobj.h>
 #include "llstring.h"
 #include "lluri.h"
 #include <intrin.h>
@@ -20,10 +25,110 @@
 
 namespace
 {
+    KEY preferenceKey(WPARAM key)
+    {
+        if ((key>='A' && key<='Z') || (key>='0' && key<='9')) return static_cast<KEY>(key);
+        if (key>=VK_NUMPAD0 && key<=VK_NUMPAD9) return static_cast<KEY>('0'+key-VK_NUMPAD0);
+        if (key>=VK_F1 && key<=VK_F12) return static_cast<KEY>(KEY_F1+key-VK_F1);
+        static const std::map<WPARAM,KEY> keys{{VK_SPACE,' '},{VK_OEM_1,';'},{VK_OEM_PLUS,'='},{VK_OEM_COMMA,','},
+            {VK_OEM_MINUS,'-'},{VK_OEM_PERIOD,'.'},{VK_OEM_2,KEY_DIVIDE},{VK_OEM_3,'`'},{VK_OEM_4,'['},{VK_OEM_5,'\\'},
+            {VK_OEM_6,']'},{VK_OEM_7,'\''},{VK_ESCAPE,KEY_ESCAPE},{VK_RETURN,KEY_RETURN},{VK_LEFT,KEY_LEFT},{VK_RIGHT,KEY_RIGHT},
+            {VK_UP,KEY_UP},{VK_DOWN,KEY_DOWN},{VK_BACK,KEY_BACKSPACE},{VK_INSERT,KEY_INSERT},{VK_DELETE,KEY_DELETE},
+            {VK_SHIFT,KEY_SHIFT},{VK_CONTROL,KEY_CONTROL},{VK_MENU,KEY_ALT},{VK_CAPITAL,KEY_CAPSLOCK},{VK_HOME,KEY_HOME},
+            {VK_END,KEY_END},{VK_PRIOR,KEY_PAGE_UP},{VK_NEXT,KEY_PAGE_DOWN},{VK_TAB,KEY_TAB},{VK_ADD,KEY_ADD},
+            {VK_SUBTRACT,KEY_SUBTRACT},{VK_MULTIPLY,KEY_MULTIPLY},{VK_DIVIDE,KEY_DIVIDE},{VK_CLEAR,KEY_PAD_CENTER},{VK_APPS,KEY_CONTEXT_MENU}};
+        const auto found=keys.find(key);
+        return found==keys.end() ? KEY_NONE : found->second;
+    }
+
+    class VoiceDevices final : public llwebrtc::LLWebRTCDevicesObserver, public llwebrtc::LLWebRTCLogCallback
+    {
+    public:
+        explicit VoiceDevices(LLVKViewerUi& ui) : mUi(ui)
+        {
+            LLVKViewerUi::VoiceDeviceServices services;
+            services.refresh=[this](std::string& error)
+            { if (!start(error)) return false; mDevice->refreshDevices(); return true; };
+            services.state=[this](std::string& error) -> std::optional<LLVKViewerUi::VoiceDeviceState>
+            {
+                if (!start(error)) return std::nullopt;
+                LLVKViewerUi::VoiceDeviceState state;
+                { std::lock_guard lock(mMutex); state=mState; }
+                state.tuning=mTuning;
+                if (mTuning)
+                {
+                    const auto level=mDevice->getTuningAudioLevel();
+                    state.energy=std::isfinite(level) ? 0.8f-0.01f*level : 0.f;
+                }
+                return state;
+            };
+            services.select=[this](bool input,const std::string& device,std::string& error)
+            {
+                if (!start(error)) return false;
+                if (input) mDevice->setCaptureDevice(device); else mDevice->setRenderDevice(device);
+                return true;
+            };
+            services.tune=[this](bool enabled,float gain,std::string& error)
+            {
+                if (!std::isfinite(gain) || gain<0.f || gain>2.f) { error="Invalid native voice tuning gain"; return false; }
+                if (!enabled && !mDevice) return true;
+                if (!start(error)) return false;
+                if (mTuning!=enabled)
+                {
+                    mDevice->setVoiceEnabled(enabled);
+                    mDevice->setTuningMode(enabled);
+                    mTuning=enabled;
+                }
+                if (enabled) mDevice->setTuningMicGain(gain);
+                return true;
+            };
+            mUi.setVoiceDeviceServices(std::move(services));
+        }
+        ~VoiceDevices()
+        {
+            mUi.setVoiceDeviceServices({});
+            if (!mDevice) return;
+            mDevice->unsetDevicesObserver(this);
+            mDevice->setTuningMode(false);
+            mDevice->setVoiceEnabled(false);
+            llwebrtc::terminate();
+        }
+        void OnDevicesChanged(const llwebrtc::LLWebRTCVoiceDeviceList& outputs,const llwebrtc::LLWebRTCVoiceDeviceList& inputs) override
+        {
+            LLVKViewerUi::VoiceDeviceState state;
+            for (const auto& device : inputs) state.inputs.push_back({device.mDisplayName,device.mID});
+            for (const auto& device : outputs) state.outputs.push_back({device.mDisplayName,device.mID});
+            std::lock_guard lock(mMutex);
+            state.generation=mState.generation+1; mState=std::move(state);
+        }
+        void LogMessage(LogLevel,const std::string&) override {}
+    private:
+        bool start(std::string& error)
+        {
+            error.clear();
+            if (mDevice) return true;
+            if (llwebrtc::getDeviceInterface()) { error="Voice device engine already has an owner"; return false; }
+            llwebrtc::init(this);
+            mDevice=llwebrtc::getDeviceInterface();
+            if (!mDevice) { error="Native voice device engine initialization failed"; return false; }
+            mDevice->setDevicesObserver(this);
+            mDevice->setMute(true);
+            mDevice->setCaptureDevice(mUi.tree().setting("VoiceInputAudioDevice").value_or(LLSD("Default")).asString());
+            mDevice->setRenderDevice(mUi.tree().setting("VoiceOutputAudioDevice").value_or(LLSD("Default")).asString());
+            mDevice->refreshDevices();
+            return true;
+        }
+        LLVKViewerUi& mUi;
+        llwebrtc::LLWebRTCDeviceInterface* mDevice = nullptr;
+        std::mutex mMutex;
+        LLVKViewerUi::VoiceDeviceState mState;
+        bool mTuning = false;
+    };
+
     class TranslationVerification
     {
     public:
-        TranslationVerification(LLVKLoginUi& ui,const std::filesystem::path& certificate) : mUi(ui)
+        TranslationVerification(LLVKViewerUi& ui,const std::filesystem::path& certificate) : mUi(ui)
         {
             mInitialized=curl_global_init(CURL_GLOBAL_DEFAULT)==CURLE_OK;
             if (mInitialized) mMulti=curl_multi_init();
@@ -94,6 +199,24 @@ namespace
             }
             const auto handle=job->handle;
             const auto option=[&](auto name,auto value) { return curl_easy_setopt(handle,name,value)==CURLE_OK; };
+            const auto proxy=mUi.httpProxy(error);
+            if (!proxy) return false;
+            if (!option(CURLOPT_PROXY,proxy->host.c_str()) || !option(CURLOPT_PROXYPORT,static_cast<long>(proxy->port)) ||
+                !option(CURLOPT_NOPROXY,"") ||
+                !option(CURLOPT_PROXYTYPE,proxy->type==LLVKProxy::Type::Socks5 ? CURLPROXY_SOCKS5 : CURLPROXY_HTTP))
+            { error="Native HTTP proxy configuration failed"; return false; }
+            if (proxy->passwordAuthentication)
+            {
+                const auto credentials=mUi.proxyCredentials(error);
+                if (!credentials) return false;
+                if (credentials->username.empty() || credentials->username.size()>255 ||
+                    credentials->password.empty() || credentials->password.size()>255 ||
+                    credentials->username.find('\0')!=std::string::npos || credentials->password.find('\0')!=std::string::npos)
+                { error="SOCKS5 requires valid protected username and password"; return false; }
+                if (!option(CURLOPT_PROXYUSERNAME,credentials->username.c_str()) ||
+                    !option(CURLOPT_PROXYPASSWORD,credentials->password.c_str()))
+                { error="Native SOCKS5 authentication configuration failed"; return false; }
+            }
             if (!option(CURLOPT_URL,job->request.url.c_str()) || !option(CURLOPT_HTTPHEADER,job->headers) ||
                 !option(CURLOPT_USERAGENT,"Vulkanstorm native translation") || !option(CURLOPT_WRITEFUNCTION,&Job::write) ||
                 !option(CURLOPT_WRITEDATA,job.get()) || !option(CURLOPT_CONNECTTIMEOUT_MS,10000L) || !option(CURLOPT_TIMEOUT_MS,30000L) ||
@@ -108,7 +231,7 @@ namespace
             { mJobs.erase(handle); error="Native translation submission failed"; return false; }
             return true;
         }
-        LLVKLoginUi& mUi;
+        LLVKViewerUi& mUi;
         CURLM* mMulti=nullptr;
         bool mInitialized=false;
         std::string mCertificate;
@@ -117,18 +240,39 @@ namespace
 
     class XmlFilePicker
     {
+        enum class Kind { Xml, Dictionary, Directory, Executable };
     public:
-        XmlFilePicker(LLVKLoginUi& ui,HWND owner) : mUi(ui),mOwner(owner)
+        XmlFilePicker(LLVKViewerUi& ui,HWND owner) : mUi(ui),mOwner(owner)
         {
-            ui.setXmlFilePicker([this](bool save,const std::string& name,LLVKLoginUi::XmlFileResult callback,std::string& error)
-            { return start(save,name,std::move(callback),false,error); });
-            ui.setDictionaryFilePicker([this](bool save,const std::string& name,LLVKLoginUi::XmlFileResult callback,std::string& error)
-            { return start(save,name,std::move(callback),true,error); });
+            ui.setXmlFilePicker([this](bool save,const std::string& name,LLVKViewerUi::XmlFileResult callback,std::string& error)
+            { return start(save,name,std::move(callback),Kind::Xml,error); });
+            ui.setDictionaryFilePicker([this](bool save,const std::string& name,LLVKViewerUi::XmlFileResult callback,std::string& error)
+            { return start(save,name,std::move(callback),Kind::Dictionary,error); });
+            ui.setExecutableFilePicker([this](bool save,const std::string& name,LLVKViewerUi::XmlFileResult callback,std::string& error)
+            { return start(save,name,std::move(callback),Kind::Executable,error); });
+            ui.setDirectoryPicker([this](const std::filesystem::path& path,LLVKViewerUi::XmlFileResult callback,std::string& error)
+            {
+                const auto bytes=path.u8string();
+                return start(false,std::string(bytes.begin(),bytes.end()),std::move(callback),Kind::Directory,error);
+            });
+            ui.setDirectoryOpener([owner](const std::filesystem::path& path,std::string& error)
+            {
+                error.clear();
+                std::error_code status;
+                if (!path.is_absolute() || !std::filesystem::is_directory(path,status) || status)
+                { error="The selected directory does not exist"; return false; }
+                if (reinterpret_cast<INT_PTR>(ShellExecuteW(owner,L"open",path.c_str(),nullptr,nullptr,SW_SHOWNORMAL))<=32)
+                { error="Windows could not open the selected directory"; return false; }
+                return true;
+            });
         }
         ~XmlFilePicker()
         {
             mUi.setXmlFilePicker({});
             mUi.setDictionaryFilePicker({});
+            mUi.setExecutableFilePicker({});
+            mUi.setDirectoryPicker({});
+            mUi.setDirectoryOpener({});
             mCancelled.store(true);
             if (mWorker.joinable())
             {
@@ -169,26 +313,68 @@ namespace
             if (message==WM_DESTROY) KillTimer(window,1);
             return 0;
         }
-        bool start(bool save,const std::string& name,LLVKLoginUi::XmlFileResult callback,bool dictionary,std::string& error)
+        struct DirectoryContext
+        {
+            XmlFilePicker* owner;
+            const std::wstring* initial;
+        };
+        static int CALLBACK directoryCallback(HWND window,UINT message,LPARAM,LPARAM data)
+        {
+            if (message==BFFM_INITIALIZED)
+            {
+                const auto* context=reinterpret_cast<const DirectoryContext*>(data);
+                if (!SetPropW(window,L"NativeDirectoryPicker",context->owner) || !SetTimer(window,1,20,directoryTimer))
+                { PostMessageW(window,WM_COMMAND,IDCANCEL,0); return 0; }
+                if (!context->initial->empty()) SendMessageW(window,BFFM_SETSELECTIONW,TRUE,reinterpret_cast<LPARAM>(context->initial->c_str()));
+            }
+            return 0;
+        }
+        static void CALLBACK directoryTimer(HWND window,UINT,UINT_PTR timer,DWORD)
+        {
+            const auto* owner=static_cast<const XmlFilePicker*>(GetPropW(window,L"NativeDirectoryPicker"));
+            if (owner && owner->mCancelled.load())
+            { KillTimer(window,timer); PostMessageW(window,WM_COMMAND,IDCANCEL,0); }
+        }
+        bool start(bool save,const std::string& name,LLVKViewerUi::XmlFileResult callback,Kind kind,std::string& error)
         {
             error.clear();
             if (mWorker.joinable()) { error="A native file picker is already active"; return false; }
             const auto wide=ll_convert<std::wstring>(name);
             if (wide.size()>=32768) { error="Native file picker name exceeds limit"; return false; }
             mPath.reset(); mError.clear(); mCallback=std::move(callback); mCancelled.store(false);
-            mWorker=std::thread([this,save,wide,dictionary]
+            mWorker=std::thread([this,save,wide,kind]
             {
                 const auto initialized=CoInitializeEx(nullptr,COINIT_APARTMENTTHREADED);
                 if (FAILED(initialized)) { mError="Native file picker COM initialization failed"; mDone.store(true); return; }
                 struct ComScope { ~ComScope() { CoUninitialize(); } } com;
                 try
                 {
+                    if (kind==Kind::Directory)
+                    {
+                        DirectoryContext context{this,&wide};
+                        BROWSEINFOW configuration{};
+                        configuration.hwndOwner=mOwner;
+                        configuration.ulFlags=BIF_RETURNONLYFSDIRS|BIF_USENEWUI;
+                        configuration.lpfn=directoryCallback;
+                        configuration.lParam=reinterpret_cast<LPARAM>(&context);
+                        const auto selected=SHBrowseForFolderW(&configuration);
+                        if (selected)
+                        {
+                            wchar_t path[32768]{};
+                            if (SHGetPathFromIDListEx(selected,path,32768,GPFIDL_DEFAULT)) mPath=std::filesystem::path(path);
+                            else mError="Windows could not resolve the selected directory";
+                            CoTaskMemFree(selected);
+                        }
+                        mDone.store(true);
+                        return;
+                    }
                     std::vector<wchar_t> filename(32768,0);
                     std::copy(wide.begin(),wide.end(),filename.begin());
                     OPENFILENAMEW configuration{}; configuration.lStructSize=sizeof(configuration);
                     configuration.hwndOwner=mOwner; configuration.lpstrFile=filename.data(); configuration.nMaxFile=static_cast<DWORD>(filename.size());
-                    configuration.lpstrFilter=dictionary ? L"Dictionary Files (*.dic;*.aff;*.xcu)\0*.dic;*.aff;*.xcu\0\0" : L"XML File (*.xml)\0*.xml\0\0";
-                    configuration.nFilterIndex=1; configuration.lpstrDefExt=dictionary ? L"dic" : L"xml";
+                    configuration.lpstrFilter=kind==Kind::Executable ? L"Executable Files (*.exe)\0*.exe\0\0" :
+                        kind==Kind::Dictionary ? L"Dictionary Files (*.dic;*.aff;*.xcu)\0*.dic;*.aff;*.xcu\0\0" : L"XML File (*.xml)\0*.xml\0\0";
+                    configuration.nFilterIndex=1; configuration.lpstrDefExt=kind==Kind::Executable ? L"exe" : kind==Kind::Dictionary ? L"dic" : L"xml";
                     configuration.Flags=OFN_EXPLORER|OFN_ENABLEHOOK|OFN_NOCHANGEDIR|OFN_HIDEREADONLY|
                         (save ? OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST : OFN_FILEMUSTEXIST);
                     configuration.lpfnHook=hook; configuration.lCustData=reinterpret_cast<LPARAM>(this);
@@ -201,11 +387,11 @@ namespace
             });
             return true;
         }
-        LLVKLoginUi& mUi;
+        LLVKViewerUi& mUi;
         HWND mOwner;
         std::thread mWorker;
         std::atomic<bool> mDone{false},mCancelled{false};
-        LLVKLoginUi::XmlFileResult mCallback;
+        LLVKViewerUi::XmlFileResult mCallback;
         std::optional<std::filesystem::path> mPath;
         std::string mError;
     };
@@ -213,7 +399,7 @@ namespace
     struct WindowState
     {
         HWND window = nullptr;
-        LLVKLoginUi* ui = nullptr;
+        LLVKViewerUi* ui = nullptr;
         LLVKBrowser* browser = nullptr;
         LLVKWidgetPaint::Input input;
         std::function<void()> audioVolumeChanged;
@@ -233,6 +419,34 @@ namespace
             tree.setInputModifiers({bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_CONTROL)&0x8000),bool(GetKeyState(VK_MENU)&0x8000)});
             const auto focused = tree.keyboardFocus();
             const auto* focus = tree.get(focused);
+            if (!ui->keyCaptureDialog() && (message==WM_KEYUP || message==WM_SYSKEYUP) &&
+                ui->recordPreferenceKey(preferenceKey(parameter),0,false,error)) return 0;
+            if (ui->keyCaptureDialog())
+            {
+                const MASK mask=((GetKeyState(VK_CONTROL)&0x8000) ? MASK_CONTROL : 0) |
+                    ((GetKeyState(VK_SHIFT)&0x8000) ? MASK_SHIFT : 0) | ((GetKeyState(VK_MENU)&0x8000) ? MASK_ALT : 0);
+                if (message==WM_KEYDOWN || message==WM_KEYUP || message==WM_SYSKEYDOWN || message==WM_SYSKEYUP)
+                {
+                    ui->recordPreferenceKey(preferenceKey(parameter),mask,message==WM_KEYDOWN || message==WM_SYSKEYDOWN,error);
+                    return 0;
+                }
+                if (message==WM_CHAR || message==WM_SYSCHAR || message==WM_MOUSEWHEEL) return 0;
+                if (message==WM_LBUTTONDOWN || message==WM_LBUTTONUP || message==WM_LBUTTONDBLCLK ||
+                    message==WM_RBUTTONDOWN || message==WM_RBUTTONUP || message==WM_MBUTTONDOWN || message==WM_MBUTTONUP ||
+                    message==WM_XBUTTONDOWN || message==WM_XBUTTONUP)
+                {
+                    const bool down=message==WM_LBUTTONDOWN || message==WM_LBUTTONDBLCLK || message==WM_RBUTTONDOWN || message==WM_MBUTTONDOWN || message==WM_XBUTTONDOWN;
+                    const auto click=message==WM_LBUTTONDBLCLK ? CLICK_DOUBLELEFT : message==WM_RBUTTONDOWN || message==WM_RBUTTONUP ? CLICK_RIGHT :
+                        message==WM_MBUTTONDOWN || message==WM_MBUTTONUP ? CLICK_MIDDLE : message==WM_XBUTTONDOWN || message==WM_XBUTTONUP ?
+                        (GET_XBUTTON_WPARAM(parameter)==XBUTTON1 ? CLICK_BUTTON4 : CLICK_BUTTON5) : CLICK_LEFT;
+                    LLVKWidgetTree::PointerEvent event;
+                    event.x=GET_X_LPARAM(data); event.y=static_cast<int>(height)-1-GET_Y_LPARAM(data); event.time=elapsed();
+                    event.kind=down ? LLVKWidgetTree::PointerKind::LeftDown : LLVKWidgetTree::PointerKind::LeftUp;
+                    ui->recordPreferenceMouse(event,click,down,mask,error);
+                    if (tree.mouseCapture()) SetCapture(window); else if (GetCapture()==window) ReleaseCapture();
+                    return message==WM_XBUTTONDOWN || message==WM_XBUTTONUP ? TRUE : 0;
+                }
+            }
             LLVKWidgetTree::Id multiline=0;
             if (focus && focus->plainText)
                 for (auto parent=focused; tree.get(parent); parent=tree.get(parent)->parent)
@@ -307,10 +521,10 @@ namespace
                 else if (parameter >= VK_F1 && parameter <= VK_F12) shortcut = "F"+std::to_string(parameter-VK_F1+1);
                 if (!shortcut.empty() && ui->menu().shortcut(shortcut,bool(GetKeyState(VK_CONTROL)&0x8000),
                     bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_MENU)&0x8000))) return 0;
-                if (parameter == VK_F10) { ui->menu().key(LLVKLoginMenu::Key::Activate); return 0; }
+                if (parameter == VK_F10) { ui->menu().key(LLVKMenu::Key::Activate); return 0; }
                 if (ui->menu().open())
                 {
-                    using Key = LLVKLoginMenu::Key;
+                    using Key = LLVKMenu::Key;
                     switch (parameter)
                     {
                         case VK_ESCAPE: ui->menu().key(Key::Escape); break;
@@ -461,7 +675,7 @@ namespace
     };
 }
 
-bool LLVKLoginWindow::run(const Configuration& configuration,std::string& error)
+bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
 {
     error.clear();
     WindowState state;
@@ -483,11 +697,12 @@ bool LLVKLoginWindow::run(const Configuration& configuration,std::string& error)
         if (restart) state.close=true;
         return true;
     };
-    auto ui = LLVKLoginUi::create(uiConfiguration,error);
+    auto ui = LLVKViewerUi::create(uiConfiguration,error);
     if (!ui) return false;
     state.ui = ui.get();
     struct DetachUi { WindowState& state; ~DetachUi() { state.ui=nullptr; } } detachUi{state};
     ui->menu().bind("File.Quit",[&state](const auto&,const auto&) { state.close = true; });
+    ui->setQuitRequestHandler([&state] { state.close=true; });
     const auto openUrl=[&state](const std::string& url)
     {
         const LLURI uri(url);
@@ -526,7 +741,7 @@ bool LLVKLoginWindow::run(const Configuration& configuration,std::string& error)
     struct AudioBindings
     {
         LLVKWidgetTree& tree;
-        LLVKLoginUi& ui;
+        LLVKViewerUi& ui;
         WindowState& window;
         std::vector<std::uint64_t> subscriptions;
         ~AudioBindings()
@@ -652,7 +867,7 @@ bool LLVKLoginWindow::run(const Configuration& configuration,std::string& error)
     struct DetachWindow
     {
         WindowState& state;
-        LLVKLoginUi& ui;
+        LLVKViewerUi& ui;
         ~DetachWindow()
         {
             state.browser = nullptr;
@@ -663,6 +878,11 @@ bool LLVKLoginWindow::run(const Configuration& configuration,std::string& error)
         }
     } detach{state,*ui};
     auto browserConfiguration = configuration.browser;
+    const auto browserProxy=LLVKProxy::select(configuration.ui.settings,true,error);
+    if (!browserProxy) return false;
+    browserConfiguration.proxy=*browserProxy;
+    if (const auto value=ui->tree().setting("BrowserJavascriptEnabled")) browserConfiguration.javascriptEnabled=value->asBoolean();
+    if (const auto value=ui->tree().setting("CookiesEnabled")) browserConfiguration.cookiesEnabled=value->asBoolean();
     const auto browserId = ui->find("login_html");
     auto browserRect = ui->tree().screenRect(browserId,error);
     if (!browserRect) return false;
@@ -683,7 +903,60 @@ bool LLVKLoginWindow::run(const Configuration& configuration,std::string& error)
         { browser.pointer(event.x,height-1-event.y,0,false,state.error); ui->tree().setMouseCapture(0,state.error); }
     };
     ui->tree().setEvents(browserId,std::move(events));
+    LLVKJoystick joystick;
+    bool joystickStarted=false;
+    LLVKViewerUi::JoystickServices joystickServices;
+    const auto startJoystick=[&](std::string& problem)
+    {
+        if (joystickStarted) return true;
+        joystickStarted=joystick.start(state.window,problem);
+        return joystickStarted;
+    };
+    joystickServices.enumerate=[&](std::string& problem) -> std::optional<std::vector<LLVKJoystick::Device>>
+    {
+        if (!startJoystick(problem) || !joystick.enumerate(problem)) return std::nullopt;
+        return joystick.devices();
+    };
+    joystickServices.select=[&](const LLSD& requested,std::string& problem) -> std::optional<std::string>
+    {
+        if (!startJoystick(problem)) return std::nullopt;
+        LLSD id=requested;
+        if (requested.isString())
+        {
+            const auto value=requested.asString();
+            if (value.empty()) id=joystick.devices().empty() ? LLSD(0) : joystick.devices().front().id;
+            else
+            {
+                GUID guid{};
+                if (FAILED(CLSIDFromString(ll_convert<std::wstring>(value).c_str(),&guid)))
+                { problem="Invalid saved native joystick GUID"; return std::nullopt; }
+                LLSD::Binary bytes(sizeof(guid)); std::memcpy(bytes.data(),&guid,sizeof(guid)); id=LLSD(bytes);
+                const auto found=std::find_if(joystick.devices().begin(),joystick.devices().end(),[&](const auto& device)
+                { return device.id.asBinary()==bytes; });
+                if (found==joystick.devices().end())
+                { if (!joystick.select(LLSD(0),problem)) return std::nullopt; return value; }
+            }
+        }
+        if (!joystick.select(id,problem)) return std::nullopt;
+        if (!joystick.selected().isBinary()) return std::string();
+        GUID guid{}; const auto bytes=joystick.selected().asBinary(); std::memcpy(&guid,bytes.data(),sizeof(guid));
+        wchar_t identity[40]{};
+        if (!StringFromGUID2(guid,identity,40)) { problem="Native joystick identity conversion failed"; return std::nullopt; }
+        return ll_convert<std::string>(std::wstring(identity));
+    };
+    joystickServices.poll=[&](std::string& problem) -> std::optional<LLVKJoystick::State>
+    {
+        if (!startJoystick(problem) || !joystick.poll(problem)) return std::nullopt;
+        return joystick.state();
+    };
+    ui->setJoystickServices(std::move(joystickServices));
+    struct JoystickBindings
+    {
+        LLVKViewerUi& ui;
+        ~JoystickBindings() { ui.setJoystickServices({}); }
+    } joystickBindings{*ui};
     TranslationVerification translationVerification(*ui,configuration.ui.skin.executableDirectory/"ca-bundle.crt");
+    VoiceDevices voiceDevices(*ui);
     XmlFilePicker xmlFilePicker(*ui,state.window);
     ShowWindow(state.window,SW_SHOW);
     if (configuration.bindServices) configuration.bindServices(*ui);

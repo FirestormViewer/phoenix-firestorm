@@ -2,6 +2,7 @@
 #define LLVKBROWSER_H
 
 #include "llvkbrowsersurface.h"
+#include "llvkproxy.h"
 #include <filesystem>
 #include <thread>
 
@@ -15,6 +16,8 @@ public:
         std::filesystem::path helperDirectory, localesDirectory, cacheDirectory;
         std::uint32_t width = 1024, height = 598;
         std::string language = "en", userAgent;
+        LLVKProxy::Endpoint proxy;
+        bool javascriptEnabled = true, cookiesEnabled = true;
     };
     enum class State { Fresh, Running, Closing, Closed, Failed };
     enum class EventKind { Address, LoadStart, LoadEnd, LoadError, Popup, CustomScheme, Cursor, Status, Title, Tooltip };

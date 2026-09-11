@@ -2665,7 +2665,7 @@ if (USE_DISCORD)
 endif ()
 
 if (WINDOWS)
-  target_link_libraries(${VIEWER_BINARY_NAME} llvkloginwindow)
+  target_link_libraries(${VIEWER_BINARY_NAME} llvkwindowmgr)
   add_dependencies(${VIEWER_BINARY_NAME} llvk_ui_shaders)
   add_custom_command(TARGET ${VIEWER_BINARY_NAME} POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:${VIEWER_BINARY_NAME}>/shaders/compiled"

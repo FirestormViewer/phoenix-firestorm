@@ -189,8 +189,22 @@ bool LLVKWidgetTree::handlePointer(Id id, PointerEvent event, std::string& error
     if (!node) return false;
     if (node->slider) return sliderPointer(id,event,error);
     if (node->colorSwatch) return colorSwatchPointer(id,event,error);
+    if (node->textureControl) return textureControlPointer(id,event,error);
     if (node->colorPicker) return colorPickerPointer(id,event,error);
     if (node->scrollList) return scrollListPointer(id,event,error);
+    if (node->statBar)
+        return event.kind==PointerKind::LeftDown ? cycleStatBar(id,error) : basePointer(id,event,error);
+    if (node->containerView)
+    {
+        const auto params=*node->containerView;
+        const auto height=node->params.rect.top-node->params.rect.bottom;
+        if (params.displayChildren && childrenPointer(id,event,error)) return true;
+        if (!error.empty() || !get(id)) return error.empty();
+        if (params.showLabel && event.y>=height-10 &&
+            (event.kind==PointerKind::LeftDown || event.kind==PointerKind::DoubleClick))
+            return setContainerExpanded(id,!params.displayChildren,error);
+        return false;
+    }
     if (node->comboListOwner) return comboListPointer(id,event,error);
     if (node->lineEditor) return lineEditorPointer(id,event,error);
     if (node->scrollbar) return scrollbarPointer(id,event,error);

@@ -1,3 +1,5 @@
+#include "llsd.h"
+#include "llsdutil.h"
 #include "llvkwidgettree.h"
 
 #include <algorithm>
@@ -300,6 +302,13 @@ bool LLVKWidgetTree::defineSetting(const std::string& name, const LLSD& value, S
     return true;
 }
 
+bool LLVKWidgetTree::setPreferenceSnapshotAllowlist(Id panel,std::optional<std::set<std::string>> names)
+{
+    if (!get(panel) || !get(panel)->panel) return false;
+    mNodes.at(panel).preferenceSnapshotAllowlist=std::move(names);
+    return true;
+}
+
 std::optional<LLVKWidgetTree::PreferenceSnapshot> LLVKWidgetTree::snapshotPreferences(Id root,std::string& error) const
 {
     error.clear();
@@ -314,10 +323,18 @@ std::optional<LLVKWidgetTree::PreferenceSnapshot> LLVKWidgetTree::snapshotPrefer
         for (const auto local : node->preferenceLocalValues)
             if (get(local)) snapshot.localValues[local]=value(local);
         if (node->colorSwatch) snapshot.colors[id]=value(id);
-        else if (node->control && node->control->params.valueSetting)
+        if (node->control && node->control->params.valueSetting)
         {
             const auto& name=*node->control->params.valueSetting;
-            if (const auto current=setting(name)) snapshot.settings[name]=*current;
+            bool included=true;
+            for (auto ancestor=id; ancestor && get(ancestor); ancestor=get(ancestor)->parent)
+            {
+                const auto& allowed=get(ancestor)->preferenceSnapshotAllowlist;
+                if (allowed && !allowed->contains(name)) { included=false; break; }
+                if (ancestor==root) break;
+            }
+            if (included)
+                if (const auto current=setting(name)) snapshot.settings[name]=*current;
         }
         pending.insert(pending.end(),node->children.begin(),node->children.end());
     }
@@ -359,7 +376,50 @@ bool LLVKWidgetTree::unsubscribeSetting(std::uint64_t subscription)
     return mSettingSubscriptions.erase(subscription)!=0;
 }
 
-bool LLVKWidgetTree::updateSetting(const std::string& name, const LLSD& inputValue)
+bool LLVKWidgetTree::bindSettings(LLControlGroup& group,std::string& error)
+{
+    error.clear();
+    struct Collect final : LLControlGroup::ApplyFunctor
+    {
+        std::map<std::string,LLControlVariablePtr> controls;
+        void apply(const std::string& name,LLControlVariable* control) override { controls.emplace(name,control); }
+    } collect;
+    group.applyToAll(&collect);
+    for (const auto& [name,control] : collect.controls)
+        if (mSettingControls.contains(name)) { error="Duplicate settings group binding: "+name; return false; }
+    for (auto& [name,control] : collect.controls)
+    {
+        auto type=SettingType::Opaque;
+        switch (control->type())
+        {
+            case TYPE_BOOLEAN: type=SettingType::Boolean; break;
+            case TYPE_U32: case TYPE_S32: type=SettingType::Integer; break;
+            case TYPE_F32: type=SettingType::Real; break;
+            case TYPE_STRING: type=SettingType::String; break;
+            default: break;
+        }
+        const auto value=control->isType(TYPE_BOOLEAN) ? LLSD(control->getValue().asBoolean()) : control->getValue();
+        if (!mSettings.contains(name)) defineSetting(name,value,type);
+        else { mSettingTypes[name]=type; publishSetting(name,value); }
+        mSettingControls.emplace(name,control);
+        mControlConnections.emplace_back(control->getSignal()->connect([this,name](LLControlVariable* changed,const LLSD& value,const LLSD&)
+        { publishSetting(name,changed->isType(TYPE_BOOLEAN) ? LLSD(value.asBoolean()) : value); }));
+    }
+    return true;
+}
+
+bool LLVKWidgetTree::updateSetting(const std::string& name,const LLSD& value)
+{
+    const auto found=mSettingControls.find(name);
+    if (found==mSettingControls.end()) return publishSetting(name,value);
+    auto control=found->second;
+    control->setValue(value,false);
+    const auto current=control->isType(TYPE_BOOLEAN) ? LLSD(control->getValue().asBoolean()) : control->getValue();
+    publishSetting(name,current);
+    return llsd_equals(current,value);
+}
+
+bool LLVKWidgetTree::publishSetting(const std::string& name, const LLSD& inputValue)
 {
     const auto found = mSettings.find(name);
     if (found == mSettings.end()) return false;
@@ -381,7 +441,7 @@ bool LLVKWidgetTree::updateSetting(const std::string& name, const LLSD& inputVal
         case SettingType::Integer: equal = found->second.asInteger() == value.asInteger(); break;
         case SettingType::Real: equal = found->second.asReal() == value.asReal(); break;
         case SettingType::String: equal = found->second.asString() == value.asString(); break;
-        case SettingType::Opaque: break;
+        case SettingType::Opaque: equal = llsd_equals(found->second,value); break;
     }
     const auto previous=found->second;
     found->second = value;
@@ -422,6 +482,8 @@ bool LLVKWidgetTree::updateSetting(const std::string& name, const LLSD& inputVal
 
 bool LLVKWidgetTree::setValue(Id id, const LLSD& value)
 {
+    if (get(id) && get(id)->textureControl)
+    { std::string error; return setTextureValue(id,value,error); }
     auto found = mNodes.find(id);
     if (found == mNodes.end() || !found->second.control) return false;
     if (found->second.scrollList) { std::string error; return selectScrollListValue(id,value,true,error); }

@@ -908,6 +908,31 @@ bool LLVKWidgetTree::lineEditorKey(Id id, LLVKLineEditor::Key key, LLVKLineEdito
     return finishLineEdit(id,rollback,readOnly && get(id)->lineEditor->text.text() == rollback.text());
 }
 
+bool LLVKWidgetTree::initializeInventoryDropTarget(Id id,std::string& error)
+{
+    error.clear();
+    if (!get(id) || (!get(id)->lineEditor && !get(id)->plainText)) { error="Native inventory target requires a text control"; return false; }
+    mNodes.at(id).inventoryDropTarget=Node::InventoryDropTarget{};
+    return !get(id)->lineEditor || setEnabled(id,false);
+}
+
+bool LLVKWidgetTree::setInventoryDropHandler(Id id,std::function<void(Id,const Node::InventoryDropTarget::Item&)> handler)
+{
+    if (!get(id) || !get(id)->inventoryDropTarget) return false;
+    mNodes.at(id).inventoryDropTarget->dropped=std::move(handler);
+    return true;
+}
+
+bool LLVKWidgetTree::inventoryDrop(Id id,const Node::InventoryDropTarget::Item& item,bool drop)
+{
+    const auto* node=get(id);
+    if (!node || !node->inventoryDropTarget || item.kind==Node::InventoryDropTarget::Item::Kind::Other ||
+        item.link || item.folder || !item.copy || !item.transfer || item.id.empty()) return false;
+    const auto callback=node->inventoryDropTarget->dropped;
+    if (drop && callback) callback(id,item);
+    return true;
+}
+
 std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createSearchEditor(const Params& view,
     const LLVKControl::Params& control,const SearchEditorParams& params,Id parent,std::string& error)
 {
@@ -927,6 +952,7 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createSearchEditor(const Param
         child.name="filter edit box"; child.rect={0,0,width,height}; child.follows=Left|Right|Top|Bottom;
         auto editor=params.editor;
         editor.revertOnEscape=false; editor.passDelete=true;
+        if (params.commitOnKeystroke) editor.commitOnFocusLost=false;
         if (params.searchVisible) editor.text.leftPadding+=params.searchWidth;
         if (params.clearVisible) editor.text.rightPadding=params.clearWidth+params.clearRight+params.clearLeft;
         editor.keystroke.function=[this,owner=*id](Id child,const LLSD&)
@@ -937,9 +963,10 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createSearchEditor(const Param
             const auto key=get(child)->lineEditor->lastKey;
             if (callbacks->keystroke.function)
                 callbacks->keystroke.function(owner,callbacks->keystroke.parameter.value_or(value(owner)));
-            if (!get(owner) || key==LLVKLineEditor::Key::Left || key==LLVKLineEditor::Key::Right) return;
-            if (callbacks->textChanged.function)
+            if (!get(owner)) return;
+            if (key!=LLVKLineEditor::Key::Left && key!=LLVKLineEditor::Key::Right && callbacks->textChanged.function)
                 callbacks->textChanged.function(owner,callbacks->textChanged.parameter.value_or(value(owner)));
+            if (get(owner) && callbacks->commitOnKeystroke) commit(child);
         };
         auto editorControl=control;
         editorControl.init={}; editorControl.valueSetting.reset();

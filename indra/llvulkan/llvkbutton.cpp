@@ -482,6 +482,35 @@ bool LLVKWidgetTree::buttonCommitSignal(Id id)
     return true;
 }
 
+bool LLVKWidgetTree::setButtonForcePressed(Id id,bool pressed)
+{
+    if (!get(id) || !get(id)->button) return false;
+    mNodes.at(id).button->forcePressed=pressed;
+    return true;
+}
+
+bool LLVKWidgetTree::setButtonImages(Id id,LLVKButton::Image unselected,LLVKButton::Image selected)
+{
+    if (!get(id) || !get(id)->button) return false;
+    auto& images=mNodes.at(id).button->images;
+    images.unselected=std::move(unselected);
+    images.selected=std::move(selected);
+    return true;
+}
+
+bool LLVKWidgetTree::setMenuButtonHandler(Id id,std::function<void(Id)> handler)
+{
+    if (!get(id) || !get(id)->button) return false;
+    const auto previous=get(id)->button->params.mouseDown;
+    mNodes.at(id).button->params.menuButton=true;
+    mNodes.at(id).button->params.mouseDown.function=[this,previous,handler=std::move(handler)](Id owner,const LLSD& value)
+    {
+        if (previous.function) previous.function(owner,previous.parameter.value_or(value));
+        if (get(owner) && validate(owner)) handler(owner);
+    };
+    return true;
+}
+
 bool LLVKWidgetTree::activateButton(Id id, std::string& error)
 {
     error.clear();
@@ -513,6 +542,8 @@ bool LLVKWidgetTree::buttonReturn(Id id, std::uint32_t modifiers, bool repeated,
     error.clear();
     const auto* node = get(id);
     if (!node || !node->button) { error = "Native Return target is not a button"; return false; }
+    if (node->button->params.menuButton && !modifiers && !repeated)
+        return buttonCallback(id,&LLVKButton::Params::mouseDown,LLSD());
     if (!node->button->params.commitOnReturn || modifiers || repeated) return false;
     if (node->button->params.toggle && !setButtonToggle(id,!node->control->value.asBoolean(),error)) return false;
     return buttonCommitSignal(id);

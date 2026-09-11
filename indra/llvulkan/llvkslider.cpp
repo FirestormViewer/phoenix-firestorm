@@ -47,7 +47,8 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createSliderControl(const Para
         {
             childView.name="slider label"; childView.rect={0,0,labelWidth,height}; childView.mouseOpaque=false;
             childControl.initialValue=params.label; childControl.tabStop=false;
-            const auto label=createPlainText(childView,childControl,text,*id,error);
+            auto labelText=text; labelText.layout.alignment=params.labelAlignment;
+            const auto label=createPlainText(childView,childControl,labelText,*id,error);
             if (!label) { discard(); return std::nullopt; }
             mNodes.at(*id).sliderControl->label=*label;
         }

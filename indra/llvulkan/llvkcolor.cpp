@@ -1,4 +1,14 @@
 #include "llvkcolor.h"
+#include "llsd.h"
+#include "lluuid.h"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+#include <fstream>
+#include <iomanip>
+#include <limits>
+#if LL_WINDOWS
+#include <windows.h>
+#endif
 
 #include <algorithm>
 #include <cmath>
@@ -195,6 +205,114 @@ bool LLVKColorTable::load(std::string_view xml, Layer layer, std::vector<std::st
     return true;
 }
 
+std::optional<std::string> LLVKColorTable::serializeUser(std::string& error) const
+{
+    error.clear();
+    try
+    {
+        boost::property_tree::ptree document,colors;
+        for (const auto& [name,slot] : mUser)
+        {
+            const auto original=mLoaded.find(name);
+            if (original!=mLoaded.end() && original->second->value==slot->value) continue;
+            boost::property_tree::ptree entry;
+            entry.put("<xmlattr>.name",name);
+            std::ostringstream channels; channels.imbue(std::locale::classic());
+            channels<<std::setprecision(std::numeric_limits<float>::max_digits10);
+            for (std::size_t index=0; index<slot->value.size(); ++index)
+            { if (index) channels<<' '; channels<<slot->value[index]; }
+            entry.put("<xmlattr>.value",channels.str());
+            colors.add_child("color",entry);
+        }
+        document.add_child("colors",colors);
+        std::ostringstream output;
+        boost::property_tree::write_xml(output,document);
+        const auto xml=output.str();
+        if (xml.size()>4*1024*1024) { error="Native user colors exceed document limit"; return {}; }
+        return xml;
+    }
+    catch (const std::exception&) { error="Cannot serialize native user colors"; return {}; }
+}
+
+bool LLVKColorTable::saveUserFile(const std::filesystem::path& path,std::string& error) const
+{
+    const auto xml=serializeUser(error);
+    if (!xml) return false;
+    try
+    {
+        if (!path.is_absolute() || path.filename().empty())
+        { error="Native user colors require an absolute unlinked path"; return false; }
+        for (auto component=path.lexically_normal(); !component.empty();)
+        {
+#if LL_WINDOWS
+            const auto attributes=GetFileAttributesW(component.c_str());
+            if (attributes==INVALID_FILE_ATTRIBUTES)
+            {
+                const auto failure=GetLastError();
+                if (failure!=ERROR_FILE_NOT_FOUND && failure!=ERROR_PATH_NOT_FOUND)
+                { error="Cannot inspect native user color destination"; return false; }
+            }
+            else if (attributes&FILE_ATTRIBUTE_REPARSE_POINT)
+            { error="Native user colors require an absolute unlinked path"; return false; }
+#else
+            std::error_code status;
+            const auto type=std::filesystem::symlink_status(component,status);
+            if (status && status!=std::errc::no_such_file_or_directory)
+            { error="Cannot inspect native user color destination"; return false; }
+            if (std::filesystem::is_symlink(type))
+            { error="Native user colors require an absolute unlinked path"; return false; }
+#endif
+            const auto parent=component.parent_path();
+            if (parent==component) break;
+            component=parent;
+        }
+        std::filesystem::create_directories(path.parent_path());
+        const auto temporary=path.parent_path()/(".native-colors-"+LLUUID::generateNewID().asString());
+        if (!std::filesystem::create_directory(temporary)) { error="Cannot stage native user colors"; return false; }
+        struct Cleanup
+        {
+            std::filesystem::path path;
+            ~Cleanup() { std::error_code ignored; std::filesystem::remove(path/"colors.xml",ignored); std::filesystem::remove(path,ignored); }
+        } cleanup{temporary};
+        const auto pending=temporary/"colors.xml";
+        std::ofstream output(pending,std::ios::binary|std::ios::trunc);
+        output.write(xml->data(),xml->size()); output.close();
+        if (!output) { error="Cannot write native user colors"; return false; }
+#if LL_WINDOWS
+        if (!MoveFileExW(pending.c_str(),path.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))
+        { error="Cannot replace native user colors"; return false; }
+#else
+        std::filesystem::rename(pending,path);
+#endif
+        return true;
+    }
+    catch (const std::filesystem::filesystem_error&) { error="Cannot persist native user colors"; return false; }
+}
+
+bool LLVKColorTable::loadUserFile(const std::filesystem::path& path,std::string& error)
+{
+    error.clear();
+    std::error_code status;
+    if (!std::filesystem::exists(path,status))
+    { if (status) error="Cannot inspect native user colors"; return !status; }
+    std::ifstream input(path,std::ios::binary|std::ios::ate);
+    if (!input || input.tellg()<0 || input.tellg()>4*1024*1024)
+    { error="Cannot read native user colors or document exceeds limit"; return false; }
+    std::string xml(static_cast<std::size_t>(input.tellg()),'\0'); input.seekg(0);
+    if (!input.read(xml.data(),xml.size())) { error="Cannot read native user colors"; return false; }
+    std::vector<std::string> warnings;
+    return load(xml,Layer::User,warnings,error);
+}
+
+bool LLVKColorTable::setRuntime(const std::string& name,LLVKColor::Value color)
+{
+    if (name.empty() || !std::all_of(color.begin(),color.end(),[](float channel) { return std::isfinite(channel); })) return false;
+    auto& slot=mRuntime[name];
+    if (!slot) slot=std::make_shared<LLVKColor::Slot>(LLVKColor::Slot{color});
+    else slot->value=color;
+    return true;
+}
+
 bool LLVKColorTable::define(const std::string& name, LLVKColor::Value color)
 {
     if (name.empty() || !std::all_of(color.begin(),color.end(),[](float channel) { return std::isfinite(channel); })) return false;
@@ -224,6 +342,12 @@ bool LLVKColorTable::set(const std::string& name, LLVKColor::Value color)
 
 std::optional<LLVKColor> LLVKColorTable::find(const std::string& name) const
 {
+    if (const auto found=mRuntime.find(name); found!=mRuntime.end())
+    {
+        LLVKColor color;
+        color.mReference=found->second;
+        return color;
+    }
     const auto user = mUser.find(name);
     const auto loaded = mLoaded.find(name);
     if (user == mUser.end() && loaded == mLoaded.end()) return std::nullopt;
@@ -253,4 +377,5 @@ void LLVKColorTable::clear()
 {
     for (auto& [name,slot] : mLoaded) slot->value = {1,0,1,1};
     for (auto& [name,slot] : mUser) slot->value = {1,0,1,1};
+    for (auto& [name,slot] : mRuntime) slot->value = {1,0,1,1};
 }

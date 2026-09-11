@@ -30,6 +30,10 @@ private:
     LLVKWidgetTree::Rect mExpandedRect;
     std::map<Id,bool> mExpandedVisibility;
     bool mDragging = false;
+    bool mCanResize = false;
+    std::uint8_t mResizeEdges = 0;
+    int mMinWidth = 0, mMinHeight = 0;
+    LLVKWidgetTree::Rect mResizeRect;
     int mDragX = 0, mDragY = 0;
     std::function<void()> mClose;
 };

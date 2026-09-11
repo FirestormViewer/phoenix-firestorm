@@ -12,8 +12,11 @@
 #include "llvkclipboard.h"
 #include "llvkbrowsersurface.h"
 #include "llvkwidgetpaint.h"
-#include "llvkloginui.h"
-#include "llvkstartupsettings.h"
+#include "llvkviewerui.h"
+#include "llvkmediafilter.h"
+#include "llvkmutelist.h"
+#include "llvkproxy.h"
+#include "llvksettingsmgr.h"
 #include "llvkspellcheck.h"
 #include "llvktranslation.h"
 #include "llvkkeybindings.h"
@@ -38,8 +41,61 @@ extern "C" {
 
 namespace tut
 {
+    void verifyProxyPolicy()
+    {
+        std::string error;
+        std::map<std::string,LLSD> settings{{"HttpProxyType","None"}, {"BrowserProxyEnabled",true},
+            {"BrowserProxyAddress","proxy.example.test"}, {"BrowserProxyPort",8080},
+            {"Socks5ProxyEnabled",true}, {"Socks5ProxyHost","127.0.0.1"}, {"Socks5ProxyPort",1080},
+            {"Socks5AuthType","UserPass"}};
+        auto endpoint=LLVKProxy::select(settings,false,error);
+        ensure("None selects direct HTTP",endpoint && endpoint->type==LLVKProxy::Type::None);
+        endpoint=LLVKProxy::select(settings,true,error);
+        ensure("browser independently selects HTTP",endpoint && endpoint->type==LLVKProxy::Type::Http &&
+            endpoint->host=="proxy.example.test" && endpoint->port==8080 && !endpoint->passwordAuthentication);
+        settings["HttpProxyType"]="Socks";
+        endpoint=LLVKProxy::select(settings,false,error);
+        ensure("SOCKS authentication retained",endpoint && endpoint->type==LLVKProxy::Type::Socks5 && endpoint->passwordAuthentication);
+        settings["Socks5AuthType"]="None";
+        endpoint=LLVKProxy::select(settings,false,error);
+        ensure("SOCKS no authentication",endpoint && !endpoint->passwordAuthentication);
+        settings["Socks5ProxyEnabled"]=false;
+        ensure("disabled proxy cannot silently bypass",!LLVKProxy::select(settings,false,error));
+        settings["HttpProxyType"]="Web";
+        settings["BrowserProxyAddress"]="user:secret@proxy.example.test";
+        ensure("URL credentials rejected",!LLVKProxy::select(settings,false,error));
+        ensure("credentials absent from error",error.find("secret")==std::string::npos);
+        settings["BrowserProxyAddress"]="https://proxy.example.test";
+        ensure("scheme cannot override proxy protocol",!LLVKProxy::select(settings,false,error));
+        settings["BrowserProxyAddress"]="proxy.example.test";
+        settings["BrowserProxyPort"]=65536;
+        ensure("port bounded",!LLVKProxy::select(settings,false,error));
+        settings["BrowserProxyEnabled"]=false;
+        endpoint=LLVKProxy::select(settings,true,error);
+        ensure("disabled browser ignores stale endpoint",endpoint && endpoint->type==LLVKProxy::Type::None);
+    }
     struct widgettree_data
     {
+        void completePreferenceSettings(LLVKViewerUi::Configuration& configuration)
+        {
+            const auto app=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path()/"app_settings";
+            LLVKSettingsMgr global,account,crash;
+            std::string error;
+            ensure("global defaults for live Preferences",global.loadFile(app/"settings.xml",true,true,true,error));
+            for (const auto& [name,value] : global.values()) configuration.settings.try_emplace(name,value);
+            for (const auto& [name,value] : global.defaults()) configuration.settingDefaults.try_emplace(name,value);
+            if (configuration.accountSettings.empty())
+            {
+                ensure("account defaults for live Preferences",account.loadFile(app/"settings_per_account.xml",true,true,true,error));
+                configuration.accountSettings=account.values();
+                configuration.accountDefaults=account.defaults();
+            }
+            if (configuration.crashSettings.empty())
+            {
+                ensure("crash defaults for live Preferences",crash.loadFile(app/"settings_crash_behavior.xml",true,true,true,error));
+                configuration.crashSettings=crash.values();
+            }
+        }
         std::shared_ptr<LLVKFont> loadFont()
         {
             std::ifstream stream(LLVK_WIDGET_FONT_FIXTURE,std::ios::binary);
@@ -72,6 +128,1422 @@ namespace tut
     typedef test_group<widgettree_data,200> widgettree_group;
     typedef widgettree_group::object object;
     widgettree_group widgettree_tests("llvkwidgettree");
+
+    template<> template<> void object::test<177>()
+    {
+        set_test_name("live external editor selection respects Preferences transaction lifetime");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::map<std::string,LLSD> saved;
+        configuration.savePreferences=[&](const auto& changes,std::string&) { saved=changes; return true; };
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        LLVKViewerUi::XmlFileResult response;
+        ui->setExecutableFilePicker([&](bool save,const std::string&,auto callback,std::string&)
+        { ensure("selection never requests Save dialog",!save); response=std::move(callback); return true; });
+        ensure("open live Preferences",ui->showPreferences(error));
+        auto& tree=ui->tree();
+        const auto button=ui->find("SetExternalEditor",ui->activeFloater());
+        const auto original=tree.setting("ExternalEditor")->asString();
+        ensure("original Browse callback",tree.commit(button) && bool(response));
+        response(std::filesystem::path("C:/Editor With Spaces/editor.exe"),{});
+        ensure_equals("source executable quoting",tree.setting("ExternalEditor")->asString(),std::string("\"C:/Editor With Spaces/editor.exe\""));
+        ensure("Cancel restores editor",ui->closeFloater(error) && tree.setting("ExternalEditor")->asString()==original);
+        ensure("reopen for pending picker",ui->showPreferences(error) && tree.commit(button));
+        const auto stale=response;
+        ensure("close while picker pending",ui->closeFloater(error));
+        ensure("start new transaction",ui->showPreferences(error));
+        stale(std::filesystem::path("C:/stale/editor.exe"),{});
+        ensure_equals("old picker cannot mutate new transaction",tree.setting("ExternalEditor")->asString(),original);
+        ensure("new Browse",tree.commit(button));
+        response({},{});
+        ensure_equals("picker cancellation retains value",tree.setting("ExternalEditor")->asString(),original);
+        ensure("select accepted editor",tree.commit(button));
+        response(std::filesystem::path("C:/Editor With Spaces/editor.exe"),{});
+        ensure("OK persists selected editor",ui->applyPreferences(error));
+        ensure_equals("global writer receives quoted executable",saved.at("ExternalEditor").asString(),std::string("\"C:/Editor With Spaces/editor.exe\""));
+    }
+
+    template<> template<> void object::test<176>()
+    {
+        set_test_name("default creation permissions use original dialog and shared settings transaction");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        configuration.settings["DefaultUploadPermissionsConverted"]=false;
+        configuration.settings["NextOwnerModify"]=true;
+        configuration.settings["ObjectsNextOwnerCopy"]=true;
+        configuration.settings["ObjectsNextOwnerTransfer"]=false;
+        bool failSave=false;
+        std::map<std::string,LLSD> saved;
+        configuration.savePreferences=[&](const auto& changes,std::string& problem)
+        { if (failSave) { problem="fixture save failure"; return false; } saved=changes; return true; };
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        ensure("open actual Preferences",ui->showPreferences(error));
+        auto& tree=ui->tree();
+        LLVKWidgetTree::Id launch=0;
+        std::vector<LLVKWidgetTree::Id> pending{ui->activeFloater()};
+        for (std::size_t index=0; index<pending.size(); ++index)
+        {
+            const auto* node=tree.get(pending[index]);
+            pending.insert(pending.end(),node->children.begin(),node->children.end());
+            if (node->control && node->control->params.commit.functionName==std::optional<std::string>("Pref.PermsDefault")) launch=pending[index];
+        }
+        ensure("Viewer tab action opens original dialog",launch && tree.commit(launch));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        const auto dialog=ui->activeFloater();
+        ensure_equals("original dialog name",tree.get(dialog)->params.name,std::string("perms default"));
+        ensure("one-time upload migration persisted",saved.contains("DefaultUploadPermissionsConverted") && saved.at("UploadsNextOwnerModify").asBoolean());
+        const auto snapshot=tree.snapshotPreferences(dialog,error);
+        ensure("original editable category permissions bound",snapshot && snapshot->settings.size()==37);
+        const auto copy=ui->find("objects_c",dialog),transfer=ui->find("objects_t",dialog);
+        ensure("disable next-owner copy",tree.activateButton(tree.get(copy)->checkBox->button,error));
+        ensure("no-copy forces transfer",tree.setting("ObjectsNextOwnerTransfer")->asBoolean());
+        ensure("transfer control disabled with no-copy",!tree.get(transfer)->params.enabled);
+        ensure("cancel child dialog",ui->closeFloater(error));
+        ensure("Cancel restores copy and transfer",tree.setting("ObjectsNextOwnerCopy")->asBoolean() && !tree.setting("ObjectsNextOwnerTransfer")->asBoolean());
+        ensure("reopen creation permissions",ui->showDefaultPermissions(error));
+        ensure("change copy for acceptance",tree.activateButton(tree.get(copy)->checkBox->button,error));
+        LLVKWidgetTree::Id accept=0;
+        for (const auto child : tree.get(dialog)->children)
+            if (tree.get(child)->control && tree.get(child)->control->params.commit.functionName==std::optional<std::string>("PermsDefault.OK")) accept=child;
+        ensure("original OK exists",accept!=0);
+        failSave=true;
+        ensure("attempt failing save",tree.commit(accept));
+        ensure("failed save retains child",ui->activeFloater()==dialog);
+        failSave=false;
+        ensure("retry accepted save",tree.commit(accept));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("accepted permission changes persisted",saved.contains("ObjectsNextOwnerCopy") && !saved.at("ObjectsNextOwnerCopy").asBoolean());
+        ensure("child closes on accepted save",ui->activeFloater()!=dialog);
+        ensure("original permissions paint",ui->showDefaultPermissions(error) && ui->preparePaint({},error).has_value());
+    }
+
+    template<> template<> void object::test<175>()
+    {
+        set_test_name("live Preferences user colors persist only on acceptance and reload at startup");
+        const auto directory=std::filesystem::temp_directory_path()/("native-color-ui-"+LLUUID::generateNewID().asString());
+        struct Cleanup
+        {
+            std::filesystem::path path;
+            ~Cleanup()
+            {
+                std::error_code ignored;
+                std::filesystem::remove(path/"colors.xml",ignored);
+                std::filesystem::remove(path/"previous.xml",ignored);
+                std::filesystem::remove(path,ignored);
+            }
+        } cleanup{directory};
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        configuration.userColorsFile=directory/"colors.xml";
+        completePreferenceSettings(configuration);
+        LLVKColorTable initial;
+        initial.set("UserChatColor",{0.125f,0.25f,0.5f,1.f});
+        std::string error;
+        ensure("seed isolated user colors",initial.saveUserFile(configuration.userColorsFile,error));
+        const auto savedBytes=[&]
+        {
+            std::ifstream input(configuration.userColorsFile,std::ios::binary);
+            return std::string(std::istreambuf_iterator<char>(input),std::istreambuf_iterator<char>());
+        };
+        const auto before=savedBytes();
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        ensure("open live color transaction",ui->showPreferences(error));
+        auto& tree=ui->tree();
+        const auto swatch=ui->find("user",ui->find("colors",ui->activeFloater()));
+        ensure("startup loaded persisted color",tree.get(swatch)->colorSwatch->color==initial.find("UserChatColor")->get());
+        LLSD edited=LLSD::emptyArray();
+        for (const auto channel : {0.75,0.5,0.25,1.0}) edited.append(channel);
+        ensure("edit original swatch",tree.setColorSwatchValue(swatch,edited,error) && tree.commit(swatch));
+        ensure_equals("preview does not write disk",savedBytes(),before);
+        ensure("Cancel color draft",ui->closeFloater(error));
+        ensure("Cancel restores live color",tree.get(swatch)->colorSwatch->color==initial.find("UserChatColor")->get());
+        ensure_equals("Cancel preserves disk",savedBytes(),before);
+        ensure("reopen color transaction",ui->showPreferences(error));
+        ensure("edit color for acceptance",tree.setColorSwatchValue(swatch,edited,error) && tree.commit(swatch));
+        std::filesystem::rename(configuration.userColorsFile,directory/"previous.xml");
+        std::filesystem::create_directory(configuration.userColorsFile);
+        ensure("failed replacement retains Preferences",!ui->applyPreferences(error) && ui->activeFloater()!=0);
+        std::filesystem::remove(configuration.userColorsFile);
+        std::filesystem::rename(directory/"previous.xml",configuration.userColorsFile);
+        ensure_equals("failed save preserved prior file",savedBytes(),before);
+        ensure("retry accepted color save",ui->applyPreferences(error));
+        ensure("accepted color changed disk",savedBytes()!=before);
+        ensure("runtime meters excluded",savedBytes().find("NativeVoiceMeter")==std::string::npos);
+        ui.reset();
+        auto reopened=LLVKViewerUi::create(configuration,error); ensure(error,reopened!=nullptr);
+        ensure("reopen UI after persistence",reopened->showPreferences(error));
+        const auto restored=reopened->find("user",reopened->find("colors",reopened->activeFloater()));
+        ensure("new UI loads accepted color",llsd_equals(reopened->tree().value(restored),edited));
+    }
+
+    template<> template<> void object::test<174>()
+    {
+        set_test_name("native user colors round trip original XML format and omit defaults");
+        LLVKColorTable colors;
+        colors.define("unchanged",{1,1,1,1}); colors.set("unchanged",{1,1,1,1});
+        colors.define("changed",{0,0,0,1}); colors.set("changed",{0.125f,0.25f,0.5f,0.75f});
+        colors.set("user & custom",{0.3f,0.4f,0.6f,1});
+        ensure("runtime color defined",colors.setRuntime("NativeVoiceMeter0",{1,0,0,1}));
+        const auto meter=colors.find("NativeVoiceMeter0");
+        ensure("runtime reference follows updates",colors.setRuntime("NativeVoiceMeter0",{0,1,0,1}) && meter->get()[1]==1.f);
+        std::string error;
+        const auto xml=colors.serializeUser(error); ensure(error,xml.has_value());
+        ensure("default colors omitted",xml->find("unchanged")==std::string::npos);
+        ensure("runtime colors never persisted",xml->find("NativeVoiceMeter")==std::string::npos);
+        ensure("XML names escaped",xml->find("user &amp; custom")!=std::string::npos);
+        const auto directory=std::filesystem::temp_directory_path()/("native-color-test-"+LLUUID::generateNewID().asString());
+        struct Cleanup { std::filesystem::path path; ~Cleanup() { std::error_code ignored; std::filesystem::remove(path/"colors.xml",ignored); std::filesystem::remove(path,ignored); } } cleanup{directory};
+        const bool saved=colors.saveUserFile(directory/"colors.xml",error);
+        ensure("save native user colors: "+error,saved);
+        LLVKColorTable reloaded;
+        reloaded.define("changed",{0,0,0,1});
+        ensure("load native user layer",reloaded.loadUserFile(directory/"colors.xml",error));
+        ensure("float channels round trip",reloaded.find("changed")->get()==colors.find("changed")->get());
+        ensure("custom named color round trip",reloaded.find("user & custom")->get()==colors.find("user & custom")->get());
+        ensure("reset override",reloaded.resetToDefault("changed"));
+        ensure("save reset",reloaded.saveUserFile(directory/"colors.xml",error));
+        const auto reset=reloaded.serializeUser(error);
+        ensure("reset color omitted",reset && reset->find("changed")==std::string::npos);
+    }
+
+    template<> template<> void object::test<173>()
+    {
+        set_test_name("live notification suppression follows Preferences OK and Cancel");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        LLControlGroup warnings("live-warnings-transaction"); configuration.warningSettingsGroup=&warnings;
+        int writes=0;
+        configuration.saveWarningPreferences=[&](const auto&,std::string&) { ++writes; return true; };
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        auto& tree=ui->tree();
+        ensure("open live notification transaction",ui->showPreferences(error));
+        const auto list=ui->find("all_popups",ui->activeFloater());
+        const auto toggle=[&]
+        {
+            auto rows=tree.get(list)->scrollList->rows;
+            for (auto& row : rows)
+            {
+                row.selected=row.value.asString()=="OutboxFolderCreated";
+                if (row.selected) row.cells[1]="false";
+            }
+            ensure("set suppression draft",tree.setScrollListRows(list,std::move(rows),error) && tree.commit(list));
+        };
+        toggle();
+        ensure("draft changes live warning state",!warnings.getBOOL("OutboxFolderCreated"));
+        ensure_equals("draft not persisted",writes,0);
+        ensure("cancel suppression edit",ui->closeFloater(error));
+        ensure("Cancel restores warnings",warnings.getBOOL("OutboxFolderCreated"));
+        ensure("reopen suppression transaction",ui->showPreferences(error));
+        toggle();
+        ensure("accept suppression edit",ui->applyPreferences(error));
+        ensure_equals("OK persists warnings once",writes,1);
+        ensure("accepted suppression retained",!warnings.getBOOL("OutboxFolderCreated"));
+    }
+
+    template<> template<> void object::test<172>()
+    {
+        set_test_name("live Preferences routes changes to their owning settings stores");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::map<std::string,LLSD> global,account;
+        configuration.savePreferences=[&](const auto& changes,std::string&) { global=changes; return true; };
+        configuration.saveAccountPreferences=[&](const auto& changes,std::string&) { account=changes; return true; };
+        std::string error;
+        for (const bool loggedIn : {false,true})
+        {
+            configuration.accountSettingsLoaded=loggedIn; global.clear(); account.clear();
+            auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+            ensure("open live transaction",ui->showPreferences(error));
+            auto& tree=ui->tree();
+            const auto before=tree.setting("RenderNameShowSelf")->asBoolean();
+            ensure("edit global control",tree.updateSetting("RenderNameShowSelf",LLSD(!before)));
+            const auto embedded=tree.setting("FSBuildPrefs_EmbedItem")->asBoolean();
+            ensure("edit account control",tree.updateSetting("FSBuildPrefs_EmbedItem",LLSD(!embedded)));
+            ensure("temporary backend selector",tree.updateSetting("RenderBackendPending",LLSD("Zink")));
+            ensure("apply live transaction",ui->applyPreferences(error));
+            ensure("global change reaches global writer",global.contains("RenderNameShowSelf"));
+            ensure("account value never reaches global file",!global.contains("FSBuildPrefs_EmbedItem"));
+            ensure("pending backend is not a committed renderer switch",!global.contains("RenderBackend") && !global.contains("RenderBackendPending"));
+            ensure("account write requires loaded account",account.contains("FSBuildPrefs_EmbedItem")==loggedIn);
+        }
+    }
+
+    template<> template<> void object::test<171>()
+    {
+        set_test_name("live original Preferences hierarchy visits and paints every tab");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        const auto viewer=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path();
+        configuration.skin.skinBaseDirectory=viewer/"skins";
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::map<std::string,LLSD> savedPreferences;
+        configuration.savePreferences=[&](const auto& changes,std::string&) { savedPreferences=changes; return true; };
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        ensure("open via live menu shortcut",ui->menu().shortcut("P",true,false,false));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        auto& tree=ui->tree();
+        const auto preferences=ui->activeFloater(),core=ui->find("pref core",preferences);
+        ensure("original tab container exists",core && tree.get(core)->tabContainer.has_value());
+        ensure("provisional controls removed",!ui->find("native_preferences_content",preferences));
+        ensure("all applicable root tabs mounted",tree.get(core)->tabContainer->tabs.size()>=15);
+        std::size_t visited=0;
+        const auto visit=[&](const auto& self,LLVKWidgetTree::Id id) -> void
+        {
+            const auto* node=tree.get(id);
+            if (node->tabContainer)
+            {
+                const auto tabs=node->tabContainer->tabs;
+                for (const auto& tab : tabs)
+                {
+                    const auto name=tree.get(tab.panel)->params.name;
+                    ensure("select live tab "+name,tree.selectTabPanel(id,tab.panel,error));
+                    const auto paint=ui->preparePaint({},error);
+                    ensure("paint live tab "+name+": "+error,paint.has_value());
+                    ++visited;
+                    self(self,tab.panel);
+                }
+            }
+            else
+            {
+                const auto children=node->children;
+                for (const auto child : children) self(self,child);
+            }
+        };
+        visit(visit,core);
+        ensure("nested tabs visited",visited>40);
+        const auto search=ui->find("search_prefs_edit",preferences);
+        ensure("search real setting",tree.setValue(search,LLSD("RenderAlphaOITNodesPerPixel")) && tree.commit(search));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        const auto graphics=ui->find("display",core);
+        ensure("search keeps Graphics",!tree.get(core)->tabContainer->hiddenPanels.contains(graphics));
+        ensure_equals("search selects matching tab",tree.get(core)->tabContainer->selected,graphics);
+        ensure("search removes unrelated tabs",!tree.get(core)->tabContainer->hiddenPanels.empty());
+        ensure("filtered hierarchy paints",ui->preparePaint({},error).has_value());
+        ensure("unmatched query",tree.setValue(search,LLSD("no-such-setting-fixture-93842")) && tree.commit(search));
+        ensure("no result leaves no selected tab",tree.get(core)->tabContainer->selected==0);
+        ensure("clear search restores tabs",tree.clearSearchEditor(search,error));
+        ensure("all root tabs restored",tree.get(core)->tabContainer->hiddenPanels.empty());
+        struct Clipboard final : LLVKClipboard
+        {
+            std::u32string value;
+            bool available(bool) const override { return !value.empty(); }
+            std::optional<std::u32string> read(bool,std::string&) override { return value; }
+            bool write(std::u32string_view text,bool,std::string&) override { value=text; return true; }
+        };
+        auto clipboard=std::make_shared<Clipboard>(); ui->setDialogClipboard(clipboard);
+        ensure("set copy query",tree.setValue(search,LLSD("Sound & Media")));
+        ensure("copy original search SLURL",tree.commit(ui->find("copy_search_slurl_btn",preferences)));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("query URL escaped",clipboard->value==U"secondlife:///app/openfloater/preferences?search=Sound%20%26%20Media");
+        ensure("clear query",tree.clearSearchEditor(search,error));
+        const auto backup=ui->find("backup",core);
+        ensure("select Backup",tree.selectTabPanel(core,backup,error));
+        const auto files=ui->find("restore_global_files_list",backup);
+        ensure("deselect original backup rows",tree.commit(ui->find("deselect_all_button",backup)));
+        for (const auto& row : tree.get(files)->scrollList->rows) ensure("restore selection cleared",row.cells[0]=="false");
+        std::optional<LLVKViewerUi::BackupRequest> request;
+        ui->setBackupHandler([&](const auto& value,std::string&) { request=value; return true; });
+        ensure("set backup path",tree.updateSetting("SettingsBackupPath",LLSD("C:/native-backup-fixture")));
+        ensure("request backup",tree.commit(ui->find("backup_settings",backup)));
+        auto notices=ui->takeNotices();
+        ensure("original confirmation gates backup",!request && notices.size()==1 && notices.front().name=="SettingsConfirmBackup");
+        notices.front().response(1,{});
+        ensure("cancel does not call storage",!request);
+        ensure("request backup again",tree.commit(ui->find("backup_settings",backup)));
+        notices=ui->takeNotices(); notices.front().response(0,{});
+        ensure("backup includes unchecked files",request && request->globalFiles.size()==tree.get(files)->scrollList->rows.size());
+        ensure("backup retains credential filename",std::find(request->globalFiles.begin(),request->globalFiles.end(),"bin_conf.dat")!=request->globalFiles.end());
+        ensure("select all original rows",tree.commit(ui->find("select_all_button",backup)));
+        for (const auto& row : tree.get(files)->scrollList->rows) ensure("restore selection checked",row.cells[0]=="true");
+        ensure("close live Preferences",ui->closeFloater(error));
+        ensure("unfiltered close persists last tab",savedPreferences.contains("LastPrefTab"));
+        const auto savedTab=tree.setting("LastPrefTab")->asInteger();
+        ensure("reopen on saved tab",ui->showPreferences(error) && tree.get(core)->tabContainer->selected==backup);
+        ensure("search temporarily selects Graphics",tree.setValue(search,LLSD("RenderAlphaOITNodesPerPixel")) && tree.commit(search));
+        savedPreferences.clear();
+        ensure("close filtered Preferences",ui->closeFloater(error));
+        ensure("search does not persist tab choice",!savedPreferences.contains("LastPrefTab") && tree.setting("LastPrefTab")->asInteger()==savedTab);
+        ensure("clear retained search",tree.clearSearchEditor(search,error));
+        ensure("reopen original saved tab",ui->showPreferences(error) && tree.get(core)->tabContainer->selected==backup);
+    }
+
+    template<> template<> void object::test<170>()
+    {
+        set_test_name("native texture selection and versioned preview ownership");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view; view.rect={0,0,64,80};
+        LLVKControl::Params control; control.font=loadFont();
+        const LLUUID original=LLUUID::generateNewID(),replacement=LLUUID::generateNewID();
+        tree.defineSetting("texture",LLSD(original.asString()),LLVKWidgetTree::SettingType::String);
+        control.valueSetting="texture";
+        LLVKTextureCtrl::Params params; params.label="Texture"; params.applyImmediately=true;
+        int commits=0;
+        control.commit.function=[&](auto,const LLSD&) { ++commits; };
+        std::string error;
+        const auto texture=tree.createTextureControl(view,control,params,0,error);
+        ensure(error,texture.has_value());
+        ensure("begin native selection",tree.beginTextureSelection(*texture,error));
+        const auto generation=tree.get(*texture)->textureControl->generation;
+        const auto preview=image("texture-preview");
+        ensure("publish current preview",tree.publishTexturePreview(*texture,original,generation,preview));
+        const auto painted=LLVKWidgetPaint::prepare(tree,*texture,{},error);
+        ensure(error,painted.has_value());
+        ensure("native swatch paints published asset",std::any_of(painted->commands.begin(),painted->commands.end(),[&](const auto& command)
+        { return command.image==preview && command.rectangle==LLVKWidgetTree::Rect{1,24,63,79}; }));
+        LLVKTextureCtrl::Selection selected{replacement,LLUUID::generateNewID(),{}};
+        ensure("preview selected asset",tree.applyTextureSelection(*texture,selected,LLVKTextureCtrl::Operation::Preview,error));
+        ensure_equals("preview updates bound setting",tree.setting("texture")->asString(),replacement.asString());
+        ensure("new asset invalidates old preview",!tree.get(*texture)->textureControl->preview);
+        const auto pendingPaint=LLVKWidgetPaint::prepare(tree,*texture,{},error);
+        ensure(error,pendingPaint.has_value());
+        ensure("old asset is not painted after selection",std::none_of(pendingPaint->commands.begin(),pendingPaint->commands.end(),[&](const auto& command)
+        { return command.image==preview; }));
+        ensure("late preview rejected",!tree.publishTexturePreview(*texture,original,generation,preview));
+        ensure("cancel restores original",tree.applyTextureSelection(*texture,{},LLVKTextureCtrl::Operation::Cancel,error));
+        ensure_equals("cancel restores setting",tree.setting("texture")->asString(),original.asString());
+        ensure("cancel ends selection",!tree.get(*texture)->textureControl->picking);
+        ensure("begin accepted selection",tree.beginTextureSelection(*texture,error));
+        ensure("None rejected",!tree.applyTextureSelection(*texture,{},LLVKTextureCtrl::Operation::Select,error));
+        ensure("accept valid asset",tree.applyTextureSelection(*texture,selected,LLVKTextureCtrl::Operation::Select,error));
+        ensure("inventory identity retained",tree.get(*texture)->textureControl->current.item==selected.item);
+        ensure_equals("change cancel select commit counts",commits,3);
+        ensure("bound update accepted",tree.updateSetting("texture",LLSD(original.asString())));
+        ensure("external asset update clears inventory identity",tree.get(*texture)->textureControl->current.item.isNull());
+        const auto latest=tree.get(*texture)->textureControl->generation;
+        ensure("destroy texture owner",tree.erase(*texture,error));
+        ensure("late destroyed-owner publication rejected",!tree.publishTexturePreview(*texture,original,latest,preview));
+    }
+
+    template<> template<> void object::test<169>()
+    {
+        set_test_name("native checkbox preserves original inner-button commit callback");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        const auto viewer=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path();
+        configuration.skin.skinBaseDirectory=viewer/"skins";
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        LLVKSettingsMgr settings;
+        std::string error;
+        ensure("source defaults",settings.loadFile(viewer/"app_settings"/"settings.xml",true,true,true,error));
+        configuration.settings=settings.values(); configuration.settingDefaults=settings.defaults();
+        completePreferenceSettings(configuration);
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        const auto panel=ui->constructPreferencePanel("panel_preferences_graphics1.xml",ui->root(),error);
+        ensure("original Graphics construction: "+error,panel.has_value());
+        auto& tree=ui->tree();
+        const auto lights=ui->find("Render Attached Lights");
+        const auto old=tree.setting("RenderAttachedLights")->asBoolean();
+        ensure("refresh original checkbox predicate",tree.refreshCheckBox(lights));
+        ensure("activate nested original callback",tree.activateButton(tree.get(lights)->checkBox->button,error));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("inner callback toggles viewer setting",tree.setting("RenderAttachedLights")->asBoolean()!=old);
+    }
+
+    template<> template<> void object::test<168>()
+    {
+        set_test_name("original skin catalog and native preview draft");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        const auto viewer=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path();
+        configuration.skin.skinBaseDirectory=viewer/"skins";
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        LLVKSettingsMgr settings;
+        std::string error;
+        ensure("load source settings",settings.loadFile(viewer/"app_settings"/"settings.xml",true,true,true,error));
+        configuration.settings=settings.values(); configuration.settingDefaults=settings.defaults(); configuration.settingsGroup=&settings.group();
+        bool failSave=false,quit=false;
+        std::map<std::string,LLSD> saved;
+        configuration.savePreferences=[&](const auto& changes,std::string& problem)
+        { if (failSave) { problem="fixture save failure"; return false; } saved=changes; return true; };
+        completePreferenceSettings(configuration);
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        ui->setQuitRequestHandler([&] { quit=true; });
+        const bool preferencesOpened=ui->showPreferences(error);
+        ensure("open original Preferences: "+error,preferencesOpened);
+        const auto panel=ui->constructPreferencePanel("panel_preferences_skins.xml",ui->root(),error);
+        ensure(error,panel.has_value());
+        auto& tree=ui->tree();
+        const auto skin=ui->find("skin_combobox"),theme=ui->find("theme_combobox"),preview=ui->find("skin_preview");
+        ensure("installed skins from original catalog",tree.get(skin)->combo->items.size()>3);
+        ensure("original theme choices present",!tree.get(theme)->combo->items.empty());
+        const auto original=tree.setting("SkinCurrent")->asString();
+        const auto image=tree.get(preview)->button->images.unselected;
+        ensure("native preview image resolved",image!=nullptr);
+        ensure("enable source toolbar reset policy",tree.updateSetting("FSSkinClobbersToolbarPrefs",LLSD(true)));
+        ensure("select catalog skin",tree.setValue(skin,LLSD("firestorm")) && tree.commit(skin));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure_equals("draft does not mutate active skin",tree.setting("SkinCurrent")->asString(),original);
+        ensure("selected skin has multiple themes",tree.get(theme)->combo->items.size()>1);
+        ensure("select source dark theme",tree.setValue(theme,LLSD("dark")) && tree.commit(theme));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("preview follows draft",tree.get(preview)->button->images.unselected!=image);
+        ensure("original skin panel paints",ui->preparePaint({},error).has_value());
+        failSave=true;
+        ensure("failed save retains skin draft",!ui->applyPreferences(error));
+        ensure_equals("failed save leaves active choice",tree.setting("SkinCurrent")->asString(),original);
+        failSave=false;
+        ensure("accept skin selection",ui->applyPreferences(error));
+        ensure("accepted skin keys present",saved.contains("SkinCurrent") && saved.contains("SkinCurrentTheme") && saved.contains("ResetToolbarSettings"));
+        ensure_equals("skin persisted",saved.at("SkinCurrent").asString(),std::string("firestorm"));
+        ensure_equals("theme persisted",saved.at("SkinCurrentTheme").asString(),std::string("dark"));
+        ensure("skin change requests toolbar reset",saved.at("ResetToolbarSettings").asBoolean());
+        ensure("skin restart notice opens",ui->advanceNotices(1.,error));
+        ensure("restart does not happen before response",!quit);
+        LLVKWidgetTree::Id shutdown=0;
+        for (const auto child : tree.get(ui->modalNotice())->children)
+            if (tree.get(child)->button && (!shutdown || tree.get(child)->params.rect.left<tree.get(shutdown)->params.rect.left)) shutdown=child;
+        ensure("choose shutdown from original prompt",shutdown && tree.activateButton(shutdown,error));
+        ensure("default action is guarded against click-through",!quit);
+        ensure("advance past notice click-through guard",ui->advanceNotices(1.5,error));
+        ensure("activate shutdown after guard",tree.activateButton(shutdown,error));
+        ensure("shutdown handler invoked",quit);
+        ensure("reopen preferences",ui->showPreferences(error));
+        ensure("draft another skin",tree.setValue(skin,LLSD("ansastorm")) && tree.commit(skin));
+        ensure("cancel preferences",ui->closeFloater(error));
+        ensure_equals("cancel restores saved skin draft",tree.value(skin).asString(),std::string("firestorm"));
+    }
+
+    template<> template<> void object::test<167>()
+    {
+        set_test_name("original Network and Files panel directory transactions");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        const auto viewer=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path();
+        configuration.skin.skinBaseDirectory=viewer/"skins";
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        configuration.cacheDirectory=viewer/"fixture-cache";
+        configuration.defaultCacheDirectory=viewer/"default-fixture-cache";
+        LLVKSettingsMgr settings;
+        std::string error;
+        ensure("load source settings",settings.loadFile(viewer/"app_settings"/"settings.xml",true,true,true,error));
+        configuration.settings=settings.values(); configuration.settingDefaults=settings.defaults(); configuration.settingsGroup=&settings.group();
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        const auto panel=ui->constructPreferencePanel("panel_preferences_setup.xml",ui->root(),error);
+        ensure(error,panel.has_value());
+        auto& tree=ui->tree();
+        ensure("cache path is display-only",tree.get(ui->find("cache_location"))->lineEditor->readOnly);
+        ensure("account logs disabled before login",!tree.get(ui->find("log_path_button-panelsetup"))->params.enabled);
+        LLVKViewerUi::XmlFileResult result;
+        ui->setDirectoryPicker([&](const auto&,auto callback,std::string&) { result=std::move(callback); return true; });
+        const auto next=viewer/"fixture-new-cache";
+        ensure("invoke original Set cache",tree.commit(ui->find("set_cache")) && bool(result));
+        result(next,{});
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure_equals("new cache leaf staged",tree.setting("NewCacheLocationTopFolder")->asString(),next.filename().string());
+        const auto pending=tree.setting("NewCacheLocation")->asString();
+        ensure("invoke picker again",tree.commit(ui->find("set_cache")));
+        result({},{});
+        ensure_equals("picker cancellation preserves draft",tree.setting("NewCacheLocation")->asString(),pending);
+        ensure("original sound cache Set",tree.commit(ui->find("set_sound_cache")));
+        result(next,{});
+        ensure_equals("sound path changes independently",tree.setting("FSSoundCacheLocation")->asString(),pending);
+        ensure("original sound cache Reset",tree.commit(ui->find("reset_sound_cache")));
+        ensure("sound reset uses default",tree.setting("FSSoundCacheLocation")->asString().empty());
+        ensure("original cache Reset",tree.commit(ui->find("reset_cache")));
+        ensure("cache reset stages default",tree.setting("NewCacheLocation")->asString().empty());
+        std::filesystem::path opened;
+        ui->setDirectoryOpener([&](const auto& path,std::string&) { opened=path; return true; });
+        ensure("original Open cache",tree.commit(ui->find("open_cache")));
+        ensure("open uses active path not pending move",opened==configuration.cacheDirectory);
+        ui->takeNotices();
+        ensure("original network tabs paint",ui->preparePaint({},error).has_value());
+    }
+
+    template<> template<> void object::test<166>()
+    {
+        set_test_name("native proxy policy and original proxy dialog transactions");
+        verifyProxyPolicy();
+        const auto directory=std::filesystem::temp_directory_path()/("native-proxy-test-"+LLUUID::generateNewID().asString());
+        struct Cleanup
+        {
+            std::filesystem::path directory;
+            ~Cleanup()
+            {
+                std::error_code ignored;
+                std::filesystem::remove(directory/"credentials",ignored);
+                std::filesystem::remove(directory,ignored);
+            }
+        } cleanup{directory};
+        std::string storageError;
+        const auto destination=directory/"credentials";
+        const auto writer=[](const std::filesystem::path& file,const auto&,std::string&)
+        { std::ofstream stream(file,std::ios::binary); stream<<"protected-fixture"; stream.close(); return !stream.fail(); };
+        ensure("publish isolated credential fixture",LLVKProxy::saveCredentialFile(destination,{},writer,storageError));
+        ensure("failed writer is not published",!LLVKProxy::saveCredentialFile(destination,{},
+            [](const auto& file,const auto&,std::string& problem)
+            { std::ofstream stream(file,std::ios::binary); stream<<"broken-fixture"; problem="fixture failure"; return false; },storageError));
+        std::ifstream preserved(destination,std::ios::binary);
+        const std::string preservedBytes{std::istreambuf_iterator<char>(preserved),std::istreambuf_iterator<char>()};
+        preserved.close();
+        ensure_equals("failed write preserves prior bytes",preservedBytes,std::string("protected-fixture"));
+        ensure_equals("staging files retired",std::distance(std::filesystem::directory_iterator(directory),std::filesystem::directory_iterator()),std::ptrdiff_t(1));
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        const auto viewer=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path();
+        configuration.skin.skinBaseDirectory=viewer/"skins";
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        LLVKSettingsMgr settings;
+        std::string error;
+        ensure("load source settings",settings.loadFile(viewer/"app_settings"/"settings.xml",true,true,true,error));
+        configuration.settings=settings.values(); configuration.settingDefaults=settings.defaults(); configuration.settingsGroup=&settings.group();
+        std::optional<LLVKProxy::Credentials> stored=LLVKProxy::Credentials{"fixture-user","fixture-password"};
+        bool failSave=false;
+        int writes=0;
+        configuration.loadProxyCredentials=[&](std::string&) { return stored.value_or(LLVKProxy::Credentials{}); };
+        configuration.saveProxyCredentials=[&](const auto& credentials,std::string& problem)
+        {
+            ++writes;
+            if (failSave) { problem="fixture protected-store failure"; return false; }
+            stored=credentials; return true;
+        };
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        auto& tree=ui->tree();
+        const auto original=settings.values();
+        ensure("open original proxy dialog",ui->showProxy(error));
+        ensure("password field is masked",tree.get(ui->find("socks5_password"))->lineEditor->params.text.password);
+        ensure("no-auth disables password",tree.get(ui->find("socks5_password"))->lineEditor->readOnly);
+        ensure("choose authenticated SOCKS",tree.updateSetting("Socks5ProxyEnabled",LLSD(true)) &&
+            tree.updateSetting("Socks5AuthType",LLSD("UserPass")) && tree.commit(ui->find("socks5_auth_type")));
+        ensure("auth enables fields",!tree.get(ui->find("socks5_password"))->lineEditor->readOnly);
+        ensure("select SOCKS HTTP",tree.updateSetting("HttpProxyType",LLSD("Socks")));
+        ensure("disable SOCKS repairs HTTP selection",tree.updateSetting("Socks5ProxyEnabled",LLSD(false)) && tree.commit(ui->find("socks_proxy_enabled")));
+        ensure_equals("HTTP choice repaired",tree.setting("HttpProxyType")->asString(),std::string("None"));
+        ensure("cancel through original callback",tree.commit(ui->find("Cancel")));
+        ensure_equals("cancel restores source auth",tree.setting("Socks5AuthType")->asString(),original.at("Socks5AuthType").asString());
+        ensure_equals("cancel performs no credential writes",writes,0);
+        ensure("set saved auth",tree.updateSetting("Socks5AuthType",LLSD("UserPass")));
+        ensure("reopen with protected credentials",ui->showProxy(error));
+        ensure_equals("protected username loaded",tree.value(ui->find("socks5_username")).asString(),stored->username);
+        ensure("edit password draft",tree.setValue(ui->find("socks5_password"),LLSD("replacement-fixture")));
+        failSave=true;
+        ensure("original OK callback",tree.commit(ui->find("OK")));
+        ensure("save failure keeps dialog open",ui->activeFloater()!=0);
+        ensure_equals("save failure preserves protected value",stored->password,std::string("fixture-password"));
+        failSave=false;
+        ensure("retry OK",tree.commit(ui->find("OK")));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("successful save closes",ui->activeFloater()==0);
+        ensure_equals("accepted password persisted",stored->password,std::string("replacement-fixture"));
+        ensure("closed editor cleared",tree.value(ui->find("socks5_password")).asString().empty());
+        ensure("original proxy dialog paints",ui->showProxy(error) && ui->preparePaint({},error).has_value());
+        ensure("window close rolls back",ui->closeFloater(error));
+    }
+
+    template<> template<> void object::test<165>()
+    {
+        set_test_name("original Notifications panel edits the existing warning settings service");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        const auto viewer=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path();
+        configuration.skin.skinBaseDirectory=viewer/"skins";
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        LLVKSettingsMgr settings;
+        LLControlGroup warnings("notification-preferences-test");
+        std::string error;
+        ensure("load source settings",settings.loadFile(viewer/"app_settings"/"settings.xml",true,true,true,error));
+        configuration.settings=settings.values(); configuration.settingDefaults=settings.defaults(); configuration.settingsGroup=&settings.group();
+        configuration.warningSettingsGroup=&warnings;
+        std::map<std::string,LLSD> saved;
+        configuration.saveWarningPreferences=[&](const auto& changes,std::string&) { saved=changes; return true; };
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        const auto panel=ui->constructPreferencePanel("panel_preferences_alerts.xml",ui->root(),error);
+        ensure(error,panel.has_value());
+        auto& tree=ui->tree();
+        const auto list=ui->find("all_popups");
+        auto rows=tree.get(list)->scrollList->rows;
+        ensure("original suppressible templates listed",rows.size()>100);
+        for (const auto& row : rows) ensure("template labels resolved",row.cells[2].find("$ignoretext")==std::string::npos);
+        const auto total=rows.size();
+        auto selected=std::find_if(rows.begin(),rows.end(),[&](const auto& row) { return warnings.getControl(row.value.asString()).notNull(); });
+        ensure("warning-backed row exists",selected!=rows.end());
+        const auto name=selected->value.asString(); selected->selected=true; selected->cells[1]="false";
+        ensure("set selected popup check state",tree.setScrollListRows(list,std::move(rows),error));
+        ensure("commit original popup selection",tree.commit(list));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("same warning service updated",!warnings.getBOOL(name));
+        ensure("warning persistence callback receives suppression",saved.contains(name) && !saved.at(name).asBoolean());
+        warnings.setBOOL("OutboxFolderCreated",false);
+        bool responded=false;
+        ensure("suppressed original notice delivers default response",ui->queueNotice("OutboxFolderCreated",{},[&](int option,const LLSD& response)
+        {
+            ensure_equals("source default button option",option,0);
+            ensure("source default response name",response["OK_okignore"].asBoolean());
+            responded=true;
+        },error));
+        ensure("suppressed response callback executed",responded);
+        ensure("suppressed notice does not create modal",ui->takeNotices().empty() && ui->modalNotice()==0);
+        ensure("filter alerts",tree.setValue(ui->find("popup_filter"),LLSD("nonmatching-notification-fixture")) && tree.commit(ui->find("popup_filter")));
+        ensure("no matching alerts",tree.get(list)->scrollList->rows.empty());
+        ensure("clear original filter",tree.clearSearchEditor(ui->find("popup_filter"),error));
+        ensure_equals("clear restores templates",tree.get(list)->scrollList->rows.size(),total);
+        ensure("unavailable desktop notifier explicit",!tree.get(ui->find("notify_growl_checkbox"))->params.enabled);
+        ensure("online notices off",tree.updateSetting("OnlineOfflinetoNearbyChat",LLSD(false)) && tree.commit(ui->find("OnlineOfflinetoNearbyChat")));
+        ensure("history option follows online notice switch",!tree.get(ui->find("OnlineOfflinetoNearbyChatHistory"))->params.enabled);
+        ensure("original Notifications panel paints",ui->preparePaint({},error).has_value());
+    }
+
+    template<> template<> void object::test<164>()
+    {
+        set_test_name("native menu button retains scoped actions and popup pressed-state lifecycle");
+        LLVKWidgetTree tree;
+        const auto font=loadFont();
+        std::string error;
+        auto menu=LLVKMenu::create("<menu_bar/>",font,{}, {},false,error);
+        ensure(error,menu!=nullptr);
+        int opened=0,activated=0;
+        LLVKWidgetFactory::Callbacks callbacks;
+        callbacks.actions["Fixture.Action"]=[&](auto,const LLSD& value)
+        { ensure_equals("scoped parameter retained",value.asString(),std::string("selected")); ++activated; };
+        LLVKWidgetFactory::Resources resources;
+        resources.menuHandler=[&](auto id,const std::string& file,const std::string& position,const auto& scope)
+        {
+            ++opened;
+            ensure_equals("menu filename retained",file,std::string("fixture.xml"));
+            ensure_equals("menu anchor retained",position,std::string("topright"));
+            LLVKMenu::Item item; item.name="fixture"; item.label="Selected"; item.checkable=item.checked=true;
+            item.invoke=[handler=scope.actions.at("Fixture.Action"),id] { handler(id,LLSD("selected")); };
+            const auto rect=tree.screenRect(id,error); ensure(error,rect.has_value());
+            ensure("open anchored menu",menu->showPopup({item},*rect,position,[&,id] { tree.setButtonForcePressed(id,false); },error));
+            tree.setButtonForcePressed(id,true);
+        };
+        LLVKWidgetFactory::ButtonDefaults button; button.control.font=font;
+        LLVKWidgetFactory factory({}, {},button,callbacks,resources);
+        const auto id=factory.construct(tree,"<menu_button name='menu' left='20' bottom='20' width='80' height='24' menu_filename='fixture.xml' menu_position='topright'/>",0,error);
+        ensure(error,id.has_value());
+        ensure("Return opens native menu",tree.buttonReturn(*id,0,false,error));
+        ensure_equals("one opening per Return",opened,1);
+        ensure("menu holds pressed state",tree.get(*id)->button->forcePressed);
+        ensure("repeat does not reopen",!tree.buttonReturn(*id,0,true,error));
+        LLVKWidgetPaint paint;
+        ensure("anchored popup paints",menu->paint(paint,{0,0,320,240},error));
+        ensure("checked menu glyph painted",std::any_of(paint.commands.begin(),paint.commands.end(),[](const auto& command) { return command.text.has_value(); }));
+        ensure("select popup item",menu->key(LLVKMenu::Key::Down));
+        ensure("invoke scoped popup action",menu->key(LLVKMenu::Key::Return));
+        ensure_equals("action invoked once",activated,1);
+        ensure("dismiss clears pressed state",!menu->open() && !tree.get(*id)->button->forcePressed);
+    }
+
+    template<> template<> void object::test<163>()
+    {
+        set_test_name("native mute rules preserve inverted flags name mutes and explicit change records");
+        LLVKMuteList mutes;
+        const auto self=LLUUID::generateNewID(),other=LLUUID::generateNewID();
+        std::string error;
+        ensure("self mute rejected",!mutes.add({self,"Self Resident",LLVKMuteList::Type::Agent},0,self,100,error));
+        ensure("staff text mute rejected",!mutes.add({other,"Example.Linden",LLVKMuteList::Type::Agent},LLVKMuteList::Text,self,100,error));
+        ensure("staff voice mute permitted",mutes.add({other,"Example Linden",LLVKMuteList::Type::Agent},LLVKMuteList::Voice,self,100,error));
+        ensure("voice muted",mutes.muted(other,"",LLVKMuteList::Voice,self));
+        ensure("text remains allowed",!mutes.muted(other,"",LLVKMuteList::Text,self));
+        ensure("additional flags accumulate",mutes.add({other,"Example Linden",LLVKMuteList::Type::Agent},LLVKMuteList::Particles,self,100,error));
+        ensure("partial unmute retains entry",mutes.remove(other,"",LLVKMuteList::Voice) && mutes.entries().size()==1);
+        ensure("last partial unmute removes entry",mutes.remove(other,"",LLVKMuteList::Particles) && mutes.entries().empty());
+        ensure("by-name mute accepted",mutes.add({LLUUID::null,"Object name",LLVKMuteList::Type::Name},0,self,100,error));
+        ensure("by-name match",mutes.muted(other,"Object name",LLVKMuteList::Text,self));
+        ensure("name matching is exact",!mutes.muted(other,"object name",LLVKMuteList::Text,self));
+        ensure("self exempt from legacy name mute",!mutes.muted(self,"Object name",LLVKMuteList::Text,self));
+        ensure("duplicate by-name rejected",!mutes.add({LLUUID::null,"Object name",LLVKMuteList::Type::Name},0,self,100,error));
+        ensure("source capacity checked before mutation",!mutes.add({other,"Other Resident",LLVKMuteList::Type::Agent},0,self,1,error));
+        const auto changes=mutes.takeChanges();
+        ensure_equals("only successful operations publish",changes.size(),std::size_t(5));
+        ensure("removal record carries fully allowed flags",changes[3].removed && changes[3].entry.allowed==LLVKMuteList::All);
+        ensure("change queue consumed once",mutes.takeChanges().empty());
+    }
+
+    template<> template<> void object::test<162>()
+    {
+        set_test_name("original Privacy panel uses native pre-login account state and inventory target");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        const auto viewer=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path();
+        configuration.skin.skinBaseDirectory=viewer/"skins";
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        LLVKSettingsMgr settings,account; std::string error;
+        ensure("load global settings",settings.loadFile(viewer/"app_settings"/"settings.xml",true,true,true,error));
+        ensure("load account settings",account.loadFile(viewer/"app_settings"/"settings_per_account.xml",true,true,true,error));
+        configuration.settings=settings.values(); configuration.settingDefaults=settings.defaults(); configuration.settingsGroup=&settings.group();
+        configuration.accountSettings=account.values(); configuration.accountDefaults=account.defaults(); configuration.accountSettingsGroup=&account.group();
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        const auto privacy=ui->constructPreferencePanel("panel_preferences_privacy.xml",ui->root(),error);
+        ensure(error,privacy.has_value());
+        auto& tree=ui->tree();
+        const auto target=ui->find("autoresponse_item");
+        ensure("original inventory target has native ownership",tree.get(target)->inventoryDropTarget.has_value());
+        ensure_equals("pre-login inventory status",tree.value(target).asString(),std::string("Not logged in"));
+        ensure("inventory Clear disabled before login",!tree.get(ui->find("clear_autoresponse_item"))->params.enabled);
+        ensure("history actions disabled before account state",!tree.get(ui->find("clear_webcache"))->params.enabled && !tree.get(ui->find("delete_transcripts"))->params.enabled);
+        ensure("localized autoresponse populated",!account.group().getString("DoNotDisturbModeResponse").empty());
+        account.group().setS32("DebugLookAt",2);
+        ensure("nonzero account look-at mode checks native checkbox",tree.value(ui->find("showlookat")).asBoolean());
+        const auto check=tree.get(ui->find("showlookat"))->checkBox->button;
+        ensure("toggle native look-at checkbox",tree.activateButton(check,error));
+        ensure_equals("look-at checkbox updates account service",account.group().getS32("DebugLookAt"),0);
+        const auto snapshot=tree.snapshotPreferences(*privacy,error); ensure(error,snapshot.has_value());
+        ensure("pre-login Privacy snapshot only retains source account-independent setting",snapshot->settings.size()==1 && snapshot->settings.contains("AutoDisengageMic"));
+        const bool disengage=settings.group().getBOOL("AutoDisengageMic");
+        ensure("change account-independent preference",tree.updateSetting("AutoDisengageMic",LLSD(!disengage)));
+        account.group().setS32("DebugLookAt",1);
+        ensure("restore source Privacy snapshot",tree.restorePreferences(*snapshot,{},error));
+        ensure_equals("account-independent setting restored",settings.group().getBOOL("AutoDisengageMic"),disengage);
+        ensure_equals("account state excluded from pre-login rollback",account.group().getS32("DebugLookAt"),1);
+        tree.setVisible(*privacy,false);
+        const auto blockedId=LLUUID::generateNewID();
+        ensure("add fixture blocked resident",ui->muteList().add({blockedId,"Fixture Resident",LLVKMuteList::Type::Agent},0,LLUUID::null,1000,error));
+        const auto blocked=ui->constructPreferencePanel("panel_fs_block_list_sidetray.xml",ui->root(),error);
+        ensure(error,blocked.has_value());
+        const auto blockedList=ui->find("block_list");
+        ensure_equals("blocked row constructed",tree.get(blockedList)->scrollList->rows.size(),std::size_t(1));
+        ensure("metadata columns hidden",tree.get(blockedList)->scrollList->widths[2]==0 && tree.get(blockedList)->scrollList->widths[3]==0);
+        ensure("open original sort menu",tree.buttonReturn(ui->find("view_btn"),0,false,error));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("original sort popup shown",ui->menu().open());
+        ensure("sort popup paints",ui->preparePaint({},error).has_value());
+        ensure("select sort command",ui->menu().key(LLVKMenu::Key::Down));
+        ensure("invoke original sort command",ui->menu().key(LLVKMenu::Key::Return));
+        ensure("select blocked fixture",tree.selectScrollListValue(blockedList,LLSD(0),true,error));
+        ensure("selection enables removal",tree.get(ui->find("unblock_btn"))->params.enabled);
+        ensure("open original block actions menu",tree.buttonReturn(ui->find("blocked_gear_btn"),0,false,error));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("gear menu paints",ui->preparePaint({},error).has_value());
+        ensure("select first block action",ui->menu().key(LLVKMenu::Key::Down));
+        ensure("select block voice action",ui->menu().key(LLVKMenu::Key::Down));
+        ensure("toggle selected resident voice",ui->menu().key(LLVKMenu::Key::Return));
+        ensure("voice flag changed in native rule owner",!ui->muteList().muted(blockedId,"",LLVKMuteList::Voice,LLUUID::null));
+        ensure("reselect resident after refresh",tree.selectScrollListValue(blockedList,LLSD(0),true,error));
+        ensure("unblock selected entry",tree.commit(ui->find("unblock_btn")));
+        ensure("unblocking mutates rule owner",ui->muteList().entries().empty());
+        ensure("open original add-block menu",tree.buttonReturn(ui->find("plus_btn"),0,false,error));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("add menu paints",ui->preparePaint({},error).has_value());
+        ui->menu().key(LLVKMenu::Key::Down); ui->menu().key(LLVKMenu::Key::Down);
+        ensure("open object-name picker",ui->menu().key(LLVKMenu::Key::Return));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("original object picker active",tree.get(ui->activeFloater())->params.name=="block by name");
+        ensure("enter exact object name",tree.setValue(ui->find("object_name"),LLSD("Fixture object")));
+        ensure("accept object-name picker",tree.commit(ui->find("object_name")));
+        ensure("object name now blocked",ui->muteList().muted(blockedId,"Fixture object",LLVKMuteList::Text,LLUUID::null));
+        tree.setVisible(*blocked,false);
+        tree.setVisible(*privacy,true);
+        ensure("select standalone block-list policy",tree.updateSetting("FSUseStandaloneBlocklistFloater",LLSD(true)));
+        ensure("open original standalone Block List",ui->showBlockList(error));
+        const auto blockFloater=ui->activeFloater();
+        ensure_equals("original block-list floater name",tree.get(blockFloater)->params.name,std::string("floater_blocklist"));
+        ensure_equals("first cascading floater starts at left edge",tree.get(blockFloater)->params.rect.left,0);
+        ensure("standalone block list paints",ui->preparePaint({},error).has_value());
+        ensure("close standalone block list",ui->closeFloater(error));
+        ensure("reopen retained standalone instance",ui->showBlockList(error) && ui->activeFloater()==blockFloater);
+        ensure("close reused instance",ui->closeFloater(error));
+        std::vector<LLVKWidgetTree::Id> pending{*privacy};
+        while (!pending.empty())
+        {
+            const auto id=pending.back(); pending.pop_back(); const auto* node=tree.get(id);
+            pending.insert(pending.end(),node->children.begin(),node->children.end());
+            if (!node->tabContainer) continue;
+            const auto tabs=node->tabContainer->tabs;
+            for (const auto& tab : tabs)
+            {
+                ensure("select original Privacy tab",tree.selectTabPanel(id,tab.panel,error));
+                const auto paint=ui->preparePaint({},error); ensure(error,paint.has_value());
+            }
+        }
+    }
+
+    template<> template<> void object::test<161>()
+    {
+        set_test_name("native inventory drop target enforces copy transfer and item-kind acceptance");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view; view.rect={0,0,240,24};
+        LLVKControl::Params control; control.font=loadFont();
+        std::string error;
+        const auto target=tree.createLineEditor(view,control,{},0,error);
+        ensure(error,target.has_value());
+        ensure("initialize native inventory target",tree.initializeInventoryDropTarget(*target,error));
+        ensure("inventory target text is read-only",tree.get(*target)->lineEditor->readOnly);
+        using Item=LLVKWidgetTree::Node::InventoryDropTarget::Item;
+        Item item; item.kind=Item::Kind::Object; item.id=LLUUID::generateNewID().asString(); item.name="Fixture inventory item";
+        item.copy=true; item.transfer=true;
+        int drops=0;
+        tree.setInventoryDropHandler(*target,[&](auto,const Item& received) { ensure_equals("drop identity retained",received.id,item.id); ++drops; });
+        ensure("permitted hover accepted",tree.inventoryDrop(*target,item,false));
+        ensure_equals("hover does not commit",drops,0);
+        ensure("permitted drop accepted",tree.inventoryDrop(*target,item,true));
+        ensure_equals("drop commits once",drops,1);
+        item.copy=false; ensure("no-copy item rejected",!tree.inventoryDrop(*target,item,true)); item.copy=true;
+        item.transfer=false; ensure("no-transfer item rejected",!tree.inventoryDrop(*target,item,true)); item.transfer=true;
+        item.link=true; ensure("links rejected",!tree.inventoryDrop(*target,item,true)); item.link=false;
+        item.folder=true; ensure("folders rejected",!tree.inventoryDrop(*target,item,true)); item.folder=false;
+        item.kind=Item::Kind::Other; ensure("unsupported cargo rejected",!tree.inventoryDrop(*target,item,true)); item.kind=Item::Kind::Notecard;
+        tree.setInventoryDropHandler(*target,[&](auto id,const Item&) { tree.erase(id,error); });
+        ensure("drop callback may delete target",tree.inventoryDrop(*target,item,true));
+        ensure("deleted target released",!tree.get(*target));
+        control.initialValue="Drop an inventory item here.";
+        const auto embedded=tree.createPlainText(view,control,{},0,error);
+        ensure(error,embedded.has_value());
+        ensure("embedded target uses native text ownership",tree.initializeInventoryDropTarget(*embedded,error));
+        ensure("embedded target remains a text box",tree.get(*embedded)->plainText.has_value() && !tree.get(*embedded)->lineEditor);
+        ensure("embedded target accepts same copy-transfer contract",tree.inventoryDrop(*embedded,item,false));
+        item.transfer=false;
+        ensure("embedded target rejects nontransferable cargo",!tree.inventoryDrop(*embedded,item,true));
+    }
+
+    template<> template<> void object::test<160>()
+    {
+        set_test_name("native media filter preserves source normalization ordered decisions and revisions");
+        LLVKMediaFilter filter;
+        std::string error;
+        ensure_equals("credentials port and path removed",LLVKMediaFilter::domain("https://user:password@EXAMPLE.com:443/path"),std::string("example.com"));
+        ensure("empty original LLSD list accepted",filter.load({},error));
+        ensure("no decision without a matching rule",!filter.decide("https://example.com/movie"));
+        ensure("add source allow rule",filter.add("https://EXAMPLE.com/path",LLVKMediaFilter::Action::Allow,error));
+        const auto revision=filter.revision();
+        ensure("add duplicate deny rule without sorting policy",filter.add("example.com",LLVKMediaFilter::Action::Deny,error));
+        ensure("first stored rule wins",filter.decide("https://sub.example.com/movie")==LLVKMediaFilter::Action::Allow);
+        ensure("source suffix rule retained explicitly",filter.decide("https://notexample.com/movie")==LLVKMediaFilter::Action::Allow);
+        ensure("remove first matching domain",filter.remove("example.com"));
+        ensure("removal changes decision revision",filter.revision()>revision);
+        ensure("next stored rule becomes effective",filter.decide("https://example.com/movie")==LLVKMediaFilter::Action::Deny);
+        const auto accepted=filter.rules();
+        ensure("invalid update rejected",!filter.load(LLSD("invalid"),error));
+        ensure("failed update preserves rules",llsd_equals(accepted,filter.rules()));
+        ensure("empty domain rejected",!filter.add("https:///",LLVKMediaFilter::Action::Allow,error));
+    }
+
+    template<> template<> void object::test<159>()
+    {
+        set_test_name("original Sound and Media panel uses native settings and device controllers");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        const auto viewer=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path();
+        configuration.skin.skinBaseDirectory=viewer/"skins";
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        LLVKSettingsMgr settings; std::string error;
+        ensure("load source sound settings",settings.loadFile(viewer/"app_settings"/"settings.xml",true,true,true,error));
+        LLSD savedRules;
+        configuration.saveMediaFilterRules=[&](const LLSD& rules,std::string&) { savedRules=rules; return true; };
+        std::map<std::string,LLSD> savedSoundSettings;
+        bool rejectSoundSave=false;
+        configuration.savePreferences=[&](const auto& changes,std::string& problem)
+        { if (rejectSoundSave) { problem="fixture sound save rejected"; return false; } savedSoundSettings=changes; return true; };
+        configuration.settings=settings.values(); configuration.settingDefaults=settings.defaults(); configuration.settingsGroup=&settings.group();
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        bool tuning=false;
+        LLVKViewerUi::VoiceDeviceState devices;
+        devices.inputs={{"Fixture microphone","input"}}; devices.outputs={{"Fixture speaker","output"}}; devices.generation=1;
+        LLVKViewerUi::VoiceDeviceServices services;
+        services.refresh=[](std::string&) { return true; };
+        services.state=[&](std::string&) { devices.tuning=tuning; return std::optional(devices); };
+        std::string selectedInput,selectedOutput;
+        services.select=[&](bool input,const std::string& value,std::string&) { (input ? selectedInput : selectedOutput)=value; return true; };
+        services.tune=[&](bool enabled,float,std::string&) { tuning=enabled; return true; };
+        ui->setVoiceDeviceServices(std::move(services));
+        const auto sound=ui->constructPreferencePanel("panel_preferences_sound.xml",ui->root(),error);
+        ensure(error,sound.has_value());
+        auto& tree=ui->tree();
+        ensure("UI sound rows populated",tree.get(ui->find("ui_sounds_list"))->scrollList->rows.size()==50);
+        const auto sounds=ui->find("ui_sounds_list");
+        ensure("source sound labels localized",tree.get(sounds)->scrollList->rows.front().cells.front()!=std::string("UISndAlert"));
+        ensure("select snapshot sound",tree.selectScrollListValue(sounds,LLSD("UISndSnapshot"),true,error) && tree.commit(sounds));
+        const auto uuid=LLUUID::generateNewID().asString();
+        ensure("edit sound UUID",tree.setValue(ui->find("ui_sound_uuid"),LLSD(uuid)) && tree.commit(ui->find("ui_sound_uuid")));
+        ensure_equals("UUID reaches shared settings",settings.group().getString("UISndSnapshot"),uuid);
+        ensure_equals("direct sound UUID edit is persisted",savedSoundSettings.at("UISndSnapshot").asString(),uuid);
+        rejectSoundSave=true;
+        ensure("attempt rejected UUID edit",tree.setValue(ui->find("ui_sound_uuid"),LLSD("rejected")) && tree.commit(ui->find("ui_sound_uuid")));
+        ensure_equals("save error surfaced",ui->takeDialogError(),std::string("fixture sound save rejected"));
+        ensure_equals("rejected edit preserves authoritative UUID",settings.group().getString("UISndSnapshot"),uuid);
+        ensure_equals("rejected editor restored",tree.value(ui->find("ui_sound_uuid")).asString(),uuid);
+        rejectSoundSave=false;
+        std::string preview;
+        ui->setUiSoundPlayer([&](const std::string& asset,std::string&) { preview=asset; return true; });
+        ensure("preview selected sound",tree.commit(ui->find("ui_sound_preview")));
+        ensure_equals("preview uses selected asset",preview,uuid);
+        ensure_equals("UUID tooltip shows default",tree.get(ui->find("ui_sound_uuid"))->params.tooltip,configuration.settingDefaults.at("UISndSnapshot").asString());
+        struct SoundClipboard final : LLVKClipboard
+        {
+            std::u32string content;
+            bool available(bool) const override { return true; }
+            std::optional<std::u32string> read(bool,std::string&) override { return content; }
+            bool write(std::u32string_view value,bool primary,std::string&) override
+            { ensure("Copy UUID uses standard clipboard",!primary); content=value; return true; }
+        };
+        const auto soundClipboard=std::make_shared<SoundClipboard>(); ui->setDialogClipboard(soundClipboard);
+        auto soundAncestor=tree.get(sounds)->parent;
+        while (soundAncestor && soundAncestor!=*sound)
+        {
+            const auto parent=tree.get(soundAncestor)->parent;
+            if (parent && tree.get(parent)->tabContainer) ensure("select UI sounds tab",tree.selectTabPanel(parent,soundAncestor,error));
+            soundAncestor=parent;
+        }
+        ensure("filter snapshot for pointer workflow",tree.setValue(ui->find("ui_sound_filter"),LLSD("Snapshot")) && tree.commit(ui->find("ui_sound_filter")));
+        ensure("layout filtered sound list",tree.layoutScrollList(sounds,error));
+        const auto listRect=tree.screenRect(sounds,error); ensure(error,listRect.has_value());
+        const auto content=tree.get(sounds)->scrollList->content;
+        LLVKWidgetTree::PointerEvent soundClick;
+        soundClick.kind=LLVKWidgetTree::PointerKind::RightDown; soundClick.x=listRect->left+content.left+10; soundClick.y=listRect->bottom+content.top-5;
+        ensure("right-click original sound row",tree.routePointer(ui->root(),soundClick,error));
+        ensure("native sound context menu opened",ui->menu().open());
+        ensure("context menu paints",ui->preparePaint({},error).has_value());
+        ensure("select Copy UUID command",ui->menu().key(LLVKMenu::Key::Down));
+        ensure("activate Copy UUID command",ui->menu().key(LLVKMenu::Key::Return));
+        ensure("copied selected sound UUID",soundClipboard->content==std::u32string(uuid.begin(),uuid.end()));
+        ensure("context menu dismissed after copy",!ui->menu().open());
+        preview.clear(); soundClick.kind=LLVKWidgetTree::PointerKind::DoubleClick;
+        ensure("double-click original sound row",tree.routePointer(ui->root(),soundClick,error));
+        ensure_equals("double-click previews selected asset",preview,uuid);
+        soundClick.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("release sound list capture",tree.routePointer(ui->root(),soundClick,error));
+        ensure("restore unfiltered sounds",tree.clearSearchEditor(ui->find("ui_sound_filter"),error));
+        const auto play=ui->find("ui_sound_play_checkbox");
+        const bool before=settings.group().getBOOL("PlayModeUISndSnapshot");
+        ensure("toggle snapshot playback",tree.activateButton(tree.get(play)->checkBox->button,error));
+        ensure("snapshot stored play mode is inverted",settings.group().getBOOL("PlayModeUISndSnapshot")!=before &&
+            settings.group().getBOOL("PlayModeUISndSnapshot")!=tree.value(play).asBoolean());
+        ensure("reset selected sound",tree.commit(ui->find("ui_sound_default")));
+        ensure_equals("reset restores original sound UUID",settings.group().getString("UISndSnapshot"),configuration.settingDefaults.at("UISndSnapshot").asString());
+        ensure("select IM sound",tree.selectScrollListValue(sounds,LLSD("UISndNewIncomingIMSession"),true,error) && tree.commit(sounds));
+        ensure("IM sound uses mode selector",tree.get(ui->find("ui_sound_play_combo"))->params.visible && !tree.get(play)->params.visible);
+        ensure("set IM play mode",tree.setValue(ui->find("ui_sound_play_combo"),LLSD(3)) && tree.commit(ui->find("ui_sound_play_combo")));
+        ensure_equals("IM mode reaches settings",settings.group().getU32("PlayModeUISndNewIncomingIMSession"),U32(3));
+        const auto filter=ui->find("ui_sound_filter");
+        ensure("filter original sound labels",tree.setValue(filter,LLSD("no-matching-sound-fixture")) && tree.commit(filter));
+        ensure("empty filter result clears editor",tree.get(sounds)->scrollList->rows.empty() && tree.value(ui->find("ui_sound_uuid")).asString().empty());
+        ensure("clear sound filter",tree.clearSearchEditor(filter,error));
+        ensure_equals("clearing restores source sound rows",tree.get(sounds)->scrollList->rows.size(),std::size_t(50));
+        ensure("all-media policy setting",tree.updateSetting("MediaFirstClickInteract",LLSD(65535)));
+        ensure("all-media disables narrower rules",!tree.get(ui->find("media_first_click_any"))->params.enabled && !tree.get(ui->find("media_first_click_hud"))->params.enabled);
+        ensure("specific-media policy setting",tree.updateSetting("MediaFirstClickInteract",LLSD(9)));
+        ensure("HUD and group flags reflected",tree.value(ui->find("media_first_click_hud")).asBoolean() && tree.value(ui->find("media_first_click_group")).asBoolean());
+        std::vector<LLVKWidgetTree::Id> pending{*sound};
+        while (!pending.empty())
+        {
+            const auto id=pending.back(); pending.pop_back(); const auto* node=tree.get(id);
+            pending.insert(pending.end(),node->children.begin(),node->children.end());
+            if (!node->tabContainer) continue;
+            const auto tabs=node->tabContainer->tabs;
+            for (const auto& tab : tabs)
+            {
+                ensure("select original sound tab",tree.selectTabPanel(id,tab.panel,error));
+                const auto paint=ui->preparePaint({},error); ensure(error,paint.has_value());
+            }
+        }
+        const auto voice=ui->find("voice_input_device");
+        auto ancestor=tree.get(voice)->parent;
+        while (ancestor && ancestor!=*sound)
+        {
+            const auto parent=tree.get(ancestor)->parent;
+            if (parent && tree.get(parent)->tabContainer) ensure("select voice tab",tree.selectTabPanel(parent,ancestor,error));
+            ancestor=parent;
+        }
+        ensure("enable local voice tuning",tree.updateSetting("EnableVoiceChat",LLSD(true)) && tree.updateSetting("ShowDeviceSettings",LLSD(true)));
+        devices.energy=0.7f;
+        ensure("prepare local device panel",ui->preparePaint({},error).has_value());
+        ensure("visible enabled device panel starts tuning",tuning);
+        ensure("select injected input device",tree.setValue(voice,LLSD("input")) && tree.commit(voice));
+        ensure_equals("input selection reaches voice service",selectedInput,std::string("input"));
+        ensure_equals("input selection reaches shared settings",settings.group().getString("VoiceInputAudioDevice"),std::string("input"));
+        ensure("select injected output device",tree.setValue(ui->find("voice_output_device"),LLSD("output")) && tree.commit(ui->find("voice_output_device")));
+        ensure_equals("output selection reaches service",selectedOutput,std::string("output"));
+        const auto meterPaint=ui->preparePaint({},error); ensure(error,meterPaint.has_value());
+        ensure("native meter rectangles painted",std::any_of(meterPaint->commands.begin(),meterPaint->commands.end(),[&](const auto& command)
+        { const auto* node=tree.get(command.owner); return node && node->params.name=="native_voice_meter_fill"; }));
+        ensure("hide device panel",tree.updateSetting("ShowDeviceSettings",LLSD(false)));
+        ensure("refresh hidden device panel",ui->preparePaint({},error).has_value());
+        ensure("hiding device panel stops tuning",!tuning);
+        ensure("reset voice action",tree.commit(ui->find("reset_voice_button")));
+        ensure("voice disabled during reset",!settings.group().getBOOL("EnableVoiceChat") && !tree.get(ui->find("enable_voice_check"))->params.enabled);
+        ensure("advance before reset deadline",ui->advanceNotices(4.9,error));
+        ensure("voice still disabled before deadline",!settings.group().getBOOL("EnableVoiceChat"));
+        ensure("advance to reset deadline",ui->advanceNotices(5.0,error));
+        ensure("voice restored after five seconds",settings.group().getBOOL("EnableVoiceChat") && tree.get(ui->find("enable_voice_check"))->params.enabled);
+        ensure("open original Media Lists from sound preferences",tree.commit(ui->find("edit_media_lists_button")));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure_equals("original media lists floater active",tree.get(ui->activeFloater())->params.name,std::string("floatermedialists"));
+        ensure("request allow-domain prompt",tree.commit(ui->find("add_whitelist")));
+        auto notices=ui->takeNotices();
+        ensure("original add-domain form",notices.size()==1 && notices.front().name=="AddToMediaList" && notices.front().inputName=="url");
+        LLSD response; response["url"]="https://EXAMPLE.com:443/movie";
+        notices.front().response(0,response);
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("domain saved through account callback",savedRules.size()==1 && savedRules[0]["domain"].asString()=="example.com");
+        ensure("dialog change updates media decision owner",ui->mediaFilter().decide("https://example.com/movie")==LLVKMediaFilter::Action::Allow);
+        ensure("request denied-domain prompt",tree.commit(ui->find("add_blacklist")));
+        notices=ui->takeNotices(); notices.front().response(1,response);
+        ensure_equals("Cancel does not add a rule",ui->mediaFilter().rules().size(),1);
+        ensure("select allowed domain",tree.selectScrollListValue(ui->find("whitelist"),LLSD("example.com"),true,error));
+        ensure("remove allowed domain",tree.commit(ui->find("remove_whitelist")));
+        ensure("removal persists and invalidates decision",savedRules.size()==0 && !ui->mediaFilter().decide("https://example.com/movie"));
+        const auto floater=ui->activeFloater();
+        const auto rect=tree.screenRect(floater,error); ensure(error,rect.has_value());
+        LLVKWidgetTree::PointerEvent resize; resize.kind=LLVKWidgetTree::PointerKind::LeftDown; resize.x=rect->right-2; resize.y=rect->bottom+2;
+        ensure("capture original floater resize corner",ui->floaterPointer(resize,error));
+        resize.kind=LLVKWidgetTree::PointerKind::Hover; resize.x+=80; resize.y-=80;
+        ensure("resize original Media Lists",ui->floaterPointer(resize,error));
+        resize.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("release resize capture",ui->floaterPointer(resize,error));
+        const auto grown=tree.get(floater)->params.rect;
+        ensure("resize grows original floater and respects minimum",grown.right-grown.left==540 && grown.top-grown.bottom>=300);
+        ensure("resized original lists paint",ui->preparePaint({},error).has_value());
+        ensure("close original media lists",ui->closeFloater(error));
+    }
+
+    template<> template<> void object::test<158>()
+    {
+        set_test_name("native list checkbox cells toggle before commit and propagate across selected rows");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view; view.rect={0,0,220,80};
+        LLVKControl::Params control; control.font=loadFont();
+        LLVKWidgetTree::ScrollListParams list;
+        list.scrollbarControl.font=control.font;
+        list.scrollbar.decreaseControl.font=list.scrollbar.increaseControl.font=control.font;
+        list.columns={{"name","Sound",100},{"enabled","",22}};
+        list.multiSelect=true;
+        LLVKWidgetTree::ListCellStyle check;
+        check.type=LLVKWidgetTree::ListCellStyle::Type::CheckBox;
+        check.image=image("check-off"); check.checkedImage=image("check-on");
+        check.disabledImage=check.image; check.disabledCheckedImage=check.checkedImage;
+        list.rows={{LLSD(0),{"First","false"},true,true},{LLSD(1),{"Second","false"},true,true}};
+        for (auto& row : list.rows) row.styles={{},check};
+        bool observed=false;
+        control.commit.function=[&](auto id,const LLSD&)
+        {
+            const auto& rows=tree.get(id)->scrollList->rows;
+            observed=rows[0].cells[1]=="true" && rows[1].cells[1]=="true";
+        };
+        std::string error;
+        const auto id=tree.createScrollList(view,control,list,0,error);
+        ensure(error,id.has_value());
+        LLVKWidgetTree::PointerEvent click; click.kind=LLVKWidgetTree::PointerKind::LeftDown; click.x=110; click.y=75;
+        ensure("embedded checkbox press",tree.routePointer(*id,click,error));
+        ensure("commit observes propagated check state",observed);
+        const auto paint=LLVKWidgetPaint::prepare(tree,*id,{},error);
+        ensure(error,paint.has_value());
+        ensure("checked skin image painted",std::any_of(paint->commands.begin(),paint->commands.end(),[&](const auto& command)
+        { return command.image==check.checkedImage; }));
+        list.rows[0].selected=list.rows[1].selected=false;
+        list.commitOnSelection=true;
+        const auto replacement=tree.createScrollList(view,control,list,0,error);
+        ensure(error,replacement.has_value());
+        LLVKControl::Callback callback;
+        int replacementCommits=0;
+        callback.function=[&](auto owner,const LLSD&)
+        {
+            if (++replacementCommits>1) { ensure("replacement rows remain empty",tree.get(owner)->scrollList->rows.empty()); return; }
+            ensure("clicked cell updated before selection callback",tree.get(owner)->scrollList->rows.front().cells[1]=="true");
+            tree.setScrollListRows(owner,{},error);
+        };
+        tree.setControlCommit(*replacement,callback);
+        ensure("row replacement during checkbox selection is safe",tree.routePointer(*replacement,click,error));
+        ensure_equals("selection and cell commit both delivered",replacementCommits,2);
+    }
+
+    template<> template<> void object::test<157>()
+    {
+        set_test_name("native settings bindings use existing control variables as the single authority");
+        LLControlGroup group("native-settings-binding-test");
+        auto enabled=group.declareBOOL("Enabled",true,"Fixture enabled");
+        auto count=group.declareS32("Count",1,"Fixture count");
+        group.declareLLSD("Structured",LLSD::emptyMap(),"Fixture structured value");
+        LLVKSettingsMgr manager(group);
+        ensure("manager retains exact existing control identity",manager.find("Enabled")==enabled);
+        int notifications=0;
+        boost::signals2::scoped_connection validator=count->getValidateSignal()->connect(
+            [](LLControlVariable*,const LLSD& value) { return value.asInteger()>=0; });
+        {
+            LLVKWidgetTree tree;
+            std::string error;
+            ensure("bind existing group",tree.bindSettings(group,error));
+            ensure("duplicate group binding rejected",!tree.bindSettings(group,error));
+            ensure("subscribe native view",tree.subscribeSetting("Enabled",[&](const LLSD&,const LLSD&) { ++notifications; }).has_value());
+            ensure("native write accepted",tree.updateSetting("Enabled",LLSD(false)));
+            ensure("same existing control changed",!group.getBOOL("Enabled"));
+            ensure("draft does not change persisted layer",enabled->getSaveValue().asBoolean());
+            ensure_equals("one change notification",notifications,1);
+            group.setBOOL("Enabled",true);
+            ensure("external service write refreshes native cache",tree.setting("Enabled")->asBoolean());
+            ensure_equals("external change observed once",notifications,2);
+            ensure("service validation rejects native write",!tree.updateSetting("Count",LLSD(-1)));
+            ensure_equals("rejected service value unchanged",group.getS32("Count"),1);
+            ensure_equals("rejected cache unchanged",tree.setting("Count")->asInteger(),1);
+            int structuredNotifications=0;
+            tree.subscribeSetting("Structured",[&](const LLSD&,const LLSD&) { ++structuredNotifications; });
+            LLSD value; value["item"]=1;
+            ensure("structured service write",tree.updateSetting("Structured",value));
+            ensure_equals("structured signal not duplicated by echo",structuredNotifications,1);
+            ensure("structured value shared",llsd_equals(group.getLLSD("Structured"),value));
+            tree.subscribeSetting("Count",[&](const LLSD& value,const LLSD&)
+            { if (value.asInteger()==2) group.setS32("Count",3); });
+            group.setS32("Count",2);
+            ensure_equals("nested service write remains authoritative",tree.setting("Count")->asInteger(),3);
+        }
+        ensure("native listeners detached before tree destruction",enabled->getSignal()->empty());
+        group.setBOOL("Enabled",false);
+        ensure_equals("destroyed tree receives no callbacks",notifications,2);
+    }
+
+    template<> template<> void object::test<156>()
+    {
+        set_test_name("deferred native reset removes only specified profile files and preserves unrelated content");
+        const auto directory=std::filesystem::temp_directory_path()/("vulkanstorm-reset-test-"+LLUUID::generateNewID().asString());
+        struct Cleanup { std::filesystem::path directory; ~Cleanup() { std::error_code ignored; std::filesystem::remove_all(directory,ignored); } } cleanup{directory};
+        const auto user=directory/"user_settings",account=directory/"test_resident";
+        std::filesystem::create_directories(user/"beams");
+        std::filesystem::create_directories(user/"beamsColors");
+        std::filesystem::create_directories(account/"browser_profile");
+        const auto write=[](const std::filesystem::path& path) { std::ofstream stream(path); stream << "fixture"; };
+        for (const auto name : {"settings.xml","settings_custom.xml","custom.xml","feature_table.txt","gpu_table.txt","notes.txt","colors.xml","autoreplace.xml","key_bindings.xml"}) write(user/name);
+        write(user/"beams"/"keep.xml"); write(account/"settings_per_account.xml"); write(account/"chat.txt"); write(account/"screen_last.png");
+        std::string error;
+        const auto absent=LLVKSettingsMgr::consumeReset(directory,"settings.xml",error);
+        ensure("absent marker changes nothing",absent && !*absent && std::filesystem::exists(user/"settings.xml"));
+        ensure("schedule deferred reset",LLVKSettingsMgr::scheduleReset(directory,error));
+        ensure("marker does not remove settings",std::filesystem::exists(directory/"logs"/"CLEAR") && std::filesystem::exists(user/"settings.xml"));
+        ensure("invalid selected path rejected",!LLVKSettingsMgr::consumeReset(directory,"../custom.xml",error));
+        ensure("failure retains marker and settings",std::filesystem::exists(directory/"logs"/"CLEAR") && std::filesystem::exists(user/"colors.xml"));
+        const auto reset=LLVKSettingsMgr::consumeReset(directory,"settings.xml",error);
+        ensure(error,reset && *reset);
+        for (const auto name : {"settings.xml","settings_custom.xml","feature_table.txt","gpu_table.txt","colors.xml"})
+            ensure(std::string("selected reset file removed: ")+name,!std::filesystem::exists(user/name));
+        for (const auto name : {"custom.xml","notes.txt","autoreplace.xml","key_bindings.xml","beams/keep.xml"})
+            ensure(std::string("unrelated file retained: ")+name,std::filesystem::exists(user/name));
+        ensure("account settings removed",!std::filesystem::exists(account/"settings_per_account.xml"));
+        ensure("account chat and snapshot retained",std::filesystem::exists(account/"chat.txt") && std::filesystem::exists(account/"screen_last.png"));
+        ensure("empty directories removed",!std::filesystem::exists(user/"beamsColors") && !std::filesystem::exists(account/"browser_profile"));
+        ensure("marker consumed after success",!std::filesystem::exists(directory/"logs"/"CLEAR"));
+        ensure("reset idempotent",LLVKSettingsMgr::consumeReset(directory,"settings.xml",error)==std::optional(false));
+    }
+
+    template<> template<> void object::test<155>()
+    {
+        set_test_name("original crash preferences keep drafts and persistence separate from global settings");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        const auto viewer=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path();
+        configuration.skin.skinBaseDirectory=viewer/"skins";
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        LLVKSettingsMgr settings,crash; std::string error;
+        ensure("load global settings",settings.loadFile(viewer/"app_settings"/"settings.xml",true,true,true,error));
+        ensure("load crash settings",crash.loadFile(viewer/"app_settings"/"settings_crash_behavior.xml",true,true,true,error));
+        configuration.settings=settings.values(); configuration.settingDefaults=settings.defaults();
+        configuration.crashSettings=crash.values(); configuration.crashSettingsRequireRestart=true;
+        std::map<std::string,LLSD> saved,global;
+        bool reject=true;
+        int resets=0;
+        configuration.scheduleSettingsReset=[&](std::string&) { ++resets; return true; };
+        configuration.saveCrashPreferences=[&](const auto& changes,std::string& problem)
+        { if (reject) { problem="fixture crash save rejected"; return false; } saved=changes; return true; };
+        configuration.savePreferences=[&](const auto& changes,std::string&) { global=changes; return true; };
+        completePreferenceSettings(configuration);
+        auto ui=LLVKViewerUi::create(configuration,error);
+        ensure(error,ui!=nullptr);
+        ensure("open preferences transaction",ui->showPreferences(error));
+        const auto panel=ui->constructPreferencePanel("panel_preferences_crashreports.xml",ui->activeFloater(),error);
+        ensure(error,panel.has_value());
+        auto& tree=ui->tree();
+        const auto send=ui->find("checkSendCrashReports"),ask=ui->find("checkSendCrashReportsAlwaysAsk");
+        const auto include=ui->find("checkSendSettings");
+        ensure("crash values are not global settings",!tree.setting("CrashSubmitBehavior"));
+        ensure("initial behavior asks",tree.value(send).asBoolean() && tree.value(ask).asBoolean());
+        ensure("restart notice follows backend configuration",tree.get(ui->find("textRestartRequired"))->params.visible);
+        ensure("privacy URL resolved",tree.value(ui->find("textInformation4")).asString().find("https://www.firestormviewer.org/privacy-policy")!=std::string::npos);
+        ensure("turn off reports",tree.setValue(send,LLSD(false)) && tree.commit(send));
+        ensure("dependent controls disabled",!tree.get(ask)->params.enabled && !tree.get(include)->params.enabled);
+        ensure("cancel transaction",ui->closeFloater(error));
+        ensure("cancel does not persist",saved.empty() && global.empty());
+        ensure("cancel restores crash draft",tree.value(send).asBoolean() && tree.get(ask)->params.enabled);
+        ensure("reopen preferences transaction",ui->showPreferences(error));
+        ensure("choose always send",tree.setValue(ask,LLSD(false)));
+        ensure("include settings",tree.setValue(include,LLSD(true)));
+        ensure("failed save leaves preferences open",!ui->applyPreferences(error) && ui->activeFloater()!=0);
+        ensure_equals("persistence error retained",error,std::string("fixture crash save rejected"));
+        reject=false;
+        ensure("accept original crash preference drafts",ui->applyPreferences(error));
+        ensure_equals("always send serialized",saved.at("CrashSubmitBehavior").asInteger(),1);
+        ensure("settings consent serialized",saved.at("CrashSubmitSettings").asBoolean());
+        ensure("unchanged name excluded",!saved.contains("CrashSubmitName"));
+        ensure("global writer untouched",global.empty());
+        ensure("reopen accepted preferences",ui->showPreferences(error));
+        ensure("draft change after acceptance",tree.setValue(send,LLSD(false)) && tree.commit(send));
+        ensure("cancel restores accepted behavior",ui->closeFloater(error) && tree.value(send).asBoolean() && !tree.value(ask).asBoolean());
+        const auto advanced=ui->constructPreferencePanel("panel_preferences_advanced.xml",ui->root(),error);
+        ensure(error,advanced.has_value());
+        ensure("reset button requests confirmation",tree.commit(ui->find("clear_settings")));
+        auto notices=ui->takeNotices();
+        ensure("original reset confirmation",notices.size()==1 && notices.front().name=="FirestormClearSettingsPrompt" && notices.front().buttons.size()==2);
+        notices.front().response(1,{});
+        ensure_equals("cancel never requests reset",resets,0);
+        ensure("confirm another reset",tree.commit(ui->find("clear_settings")));
+        notices=ui->takeNotices(); notices.front().response(0,{});
+        ensure_equals("explicit consent requests reset",resets,1);
+        notices=ui->takeNotices();
+        ensure("deferred success notification",notices.size()==1 && notices.front().name=="SettingsWillClear");
+        const auto interfacePanel=ui->constructPreferencePanel("panel_preferences_UI.xml",ui->root(),error);
+        ensure(error,interfacePanel.has_value());
+        const auto username=ui->find("FSFriendListColumnShowUserName"),displayName=ui->find("FSFriendListColumnShowDisplayName"),fullName=ui->find("FSFriendListColumnShowFullName");
+        ensure("set single name column",tree.updateSetting("FSFriendListColumnShowUserName",LLSD(true)) &&
+            tree.updateSetting("FSFriendListColumnShowDisplayName",LLSD(false)) && tree.updateSetting("FSFriendListColumnShowFullName",LLSD(false)) && tree.commit(username));
+        ensure("last visible name column cannot be disabled",!tree.get(username)->params.enabled && tree.get(displayName)->params.enabled && tree.get(fullName)->params.enabled);
+        ensure("enable additional name column",tree.activateButton(tree.get(displayName)->checkBox->button,error));
+        ensure("both visible name columns may now be disabled",tree.get(username)->params.enabled && tree.get(displayName)->params.enabled);
+        const auto font=ui->find("Fontsettingsfile");
+        const auto& presets=tree.get(font)->combo->items;
+        ensure("installed Inter preset present",std::any_of(presets.begin(),presets.end(),[](const auto& item) { return item.label=="Inter" && item.value.asString()=="fonts.xml"; }));
+        ensure("font scheme accepted into native setting",tree.setValue(font,LLSD("fonts.xml")) && tree.commit(font) && tree.setting("FSFontSettingsFile")->asString()=="fonts.xml");
+        std::vector<LLVKWidgetTree::Id> pending{*interfacePanel};
+        while (!pending.empty())
+        {
+            const auto id=pending.back(); pending.pop_back();
+            const auto* node=tree.get(id);
+            pending.insert(pending.end(),node->children.begin(),node->children.end());
+            if (!node->tabContainer) continue;
+            const auto tabs=node->tabContainer->tabs;
+            for (const auto& tab : tabs)
+            {
+                ensure("select original User Interface tab",tree.selectTabPanel(id,tab.panel,error));
+                const auto paint=ui->preparePaint({},error);
+                ensure(error,paint.has_value());
+            }
+        }
+    }
+
+        template<> template<> void object::test<154>()
+        {
+            set_test_name("original native joystick dialog previews device state and restores settings");
+            LLVKViewerUi::Configuration configuration;
+            const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+            const auto viewer=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path();
+            configuration.skin.skinBaseDirectory=viewer/"skins";
+            configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+            configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+            LLVKSettingsMgr settings; std::string error;
+            ensure("full source settings",settings.loadFile(viewer/"app_settings"/"settings.xml",true,true,true,error));
+            configuration.settings=settings.values(); configuration.settingDefaults=settings.defaults();
+            auto ui=LLVKViewerUi::create(configuration,error);
+            ensure(error,ui!=nullptr);
+            LLSD::Binary binary(16,1);
+            std::string selected;
+            LLVKJoystick::State state; state.axisCount=2; state.buttonCount=3; state.connected=true; state.axes[0]=0.25f; state.buttons[1]=true;
+            LLVKViewerUi::JoystickServices services;
+            services.enumerate=[&](std::string&) { return std::optional(std::vector<LLVKJoystick::Device>{{"Fixture device",LLSD(binary),"fixture"}}); };
+            services.select=[&](const LLSD& value,std::string&)
+            { selected=value.isBinary() ? "fixture" : value.asString(); return std::optional(selected); };
+            services.poll=[&](std::string&) { return std::optional(state); };
+            ui->setJoystickServices(std::move(services));
+            const bool opened=ui->showJoystick(error);
+            ensure(error,opened);
+            auto& tree=ui->tree();
+            const auto combo=ui->find("joystick_combo");
+            ensure("select native device",tree.setValue(combo,LLSD(binary)) && tree.commit(combo));
+            ensure(ui->dialogError(),ui->dialogError().empty());
+            ensure_equals("device selection persisted as string",tree.setting("JoystickDeviceUUID")->asString(),std::string("fixture"));
+            ensure("native device enabled",tree.setting("JoystickEnabled")->asBoolean());
+            const auto paint=ui->preparePaint({},error);
+            ensure(error,paint.has_value());
+            ensure("available axis shown",tree.get(ui->find("axis_view_0"))->containerView->displayChildren);
+            ensure("absent axis collapsed",!tree.get(ui->find("axis_view_2"))->containerView->displayChildren);
+            ensure_equals("actual device sample reaches bar",tree.get(ui->find("axis0"))->statBar->samples.back(),0.25f);
+            const auto oldScale=configuration.settings.at("FlycamAxisScale0");
+            ensure("SpaceNavigator defaults action",tree.commit(ui->find("SpaceNavigatorDefaults")));
+            ensure_equals("source Windows flycam scale",tree.setting("FlycamAxisScale0")->asReal(),double(2.1f));
+            ensure("Cancel original joystick dialog",tree.commit(ui->find("cancel_btn")));
+            ensure_equals("Cancel restores prior scale",tree.setting("FlycamAxisScale0")->asReal(),oldScale.asReal());
+            ensure_equals("Cancel restores prior device identity",tree.setting("JoystickDeviceUUID")->asString(),configuration.settings.at("JoystickDeviceUUID").asString());
+            const auto move=ui->constructPreferencePanel("panel_preferences_move.xml",ui->root(),error);
+            ensure(error,move.has_value());
+            ensure("select double-click teleport",tree.setValue(ui->find("double_click_action_combo"),LLSD(2)) && tree.commit(ui->find("double_click_action_combo")));
+            ensure(ui->dialogError(),ui->dialogError().empty());
+            ensure("click action updates native binding-dependent setting",tree.setting("DoubleClickTeleport")->asBoolean());
+            ensure("Move & View opens original joystick",tree.commit(ui->find("joystick_setup_button")));
+            ensure(ui->dialogError(),ui->dialogError().empty());
+            ensure_equals("original joystick is active",tree.get(ui->activeFloater())->params.name,std::string("Joystick"));
+            ensure("close joystick from Move & View",ui->closeFloater(error));
+        }
+
+        template<> template<> void object::test<153>()
+        {
+            set_test_name("native container rows preserve required height and collapse ownership");
+            LLVKWidgetTree tree;
+            std::string error;
+            LLVKWidgetTree::Params view; view.rect={0,0,200,100};
+            const auto root=tree.create(view,0,error);
+            ensure(error,root.has_value());
+            LLVKWidgetTree::Node::ContainerView params;
+            ensure("initialize outer native container",tree.initializeContainerView(*root,params,error));
+            view.rect={0,0,20,30};
+            const auto first=tree.create(view,*root,error),second=tree.create(view,*root,error);
+            ensure("container rows exist",first.has_value() && second.has_value());
+            ensure("arrange native rows",tree.layoutContainerView(*root,200,0,error));
+            ensure_equals("two rows with source spacing",tree.get(*root)->params.rect.top-tree.get(*root)->params.rect.bottom,64);
+            ensure("first declared row at top",tree.get(*first)->params.rect==LLVKWidgetTree::Rect{10,34,198,64});
+            ensure("second declared row below",tree.get(*second)->params.rect==LLVKWidgetTree::Rect{10,2,198,32});
+            ensure("collapse retains children",tree.setContainerExpanded(*root,false,error));
+            ensure_equals("unlabelled collapse height",tree.get(*root)->params.rect.top-tree.get(*root)->params.rect.bottom,0);
+            ensure("collapsed children hidden",!tree.get(*first)->params.visible && !tree.get(*second)->params.visible);
+            ensure("expand retained rows",tree.setContainerExpanded(*root,true,error));
+            ensure_equals("expanded height restored",tree.get(*root)->params.rect.top-tree.get(*root)->params.rect.bottom,64);
+            ensure_equals("no children discarded",tree.size(),std::size_t(3));
+            LLVKWidgetFactory factory({});
+            const auto declared=factory.construct(tree,
+                "<container_view width='200' background_visible='false'><stat_view name='axis_group' show_label='false'>"
+                "<view name='first' height='20'/><view name='second' height='30'/></stat_view></container_view>",0,error);
+            ensure(error,declared.has_value());
+            ensure("declared container owns native layout",tree.get(*declared)->containerView.has_value());
+            ensure_equals("nested required heights",tree.get(*declared)->params.rect.top-tree.get(*declared)->params.rect.bottom,56);
+            ensure("native container paints",LLVKWidgetPaint::prepare(tree,*declared,{},error).has_value());
+            view.rect={0,0,180,40};
+            const auto bar=tree.create(view,*root,error);
+            ensure(error,bar.has_value());
+            LLVKWidgetTree::Node::StatBar stat; stat.font=loadFont(); stat.label="Axis 0";
+            stat.minimum=-0.5f; stat.maximum=0.5f; stat.showBar=true; stat.historyFrames=3; stat.shortFrames=2;
+            ensure("native axis bar initialized",tree.initializeStatBar(*bar,stat,error));
+            for (const float value : {0.f,0.1f,-0.1f,0.2f}) ensure("native axis sample",tree.sampleStatBar(*bar,value,error));
+            ensure_equals("axis history bounded",tree.get(*bar)->statBar->samples.size(),std::size_t(3));
+            ensure("axis history mode",tree.cycleStatBar(*bar,error));
+            ensure_equals("history required height",tree.get(*bar)->params.rect.top-tree.get(*bar)->params.rect.bottom,67);
+            ensure("axis label mode",tree.cycleStatBar(*bar,error));
+            ensure_equals("label required height",tree.get(*bar)->params.rect.top-tree.get(*bar)->params.rect.bottom,14);
+            ensure("axis bar mode",tree.cycleStatBar(*bar,error));
+            ensure_equals("bar required height",tree.get(*bar)->params.rect.top-tree.get(*bar)->params.rect.bottom,40);
+            LLVKWidgetPaint::Input input; input.button.frameDelta=0.1f;
+            const auto paint=LLVKWidgetPaint::prepare(tree,*root,input,error);
+            ensure(error,paint.has_value());
+            ensure("axis value painted",std::any_of(paint->commands.begin(),paint->commands.end(),[&](const auto& command) { return command.owner==*bar && command.text.has_value(); }));
+            ensure("axis current marker painted",std::any_of(paint->commands.begin(),paint->commands.end(),[&](const auto& command)
+            { return command.owner==*bar && command.color==LLVKColor::Value{1,0,0,1}; }));
+            ensure("axis mean marker painted",std::any_of(paint->commands.begin(),paint->commands.end(),[&](const auto& command)
+            { return command.owner==*bar && command.color==LLVKColor::Value{0,1,0,1}; }));
+        }
 
         template<> template<> void object::test<152>()
         {
@@ -680,6 +2152,17 @@ namespace tut
         ensure_equals("resize resets scroll",state.scrollPosition,0);
         ensure("resize hides arrows",!tree.get(state.previousArrow)->params.visible && !tree.get(state.nextArrow)->params.visible);
         ensure("all tabs restored",std::all_of(state.tabs.begin(),state.tabs.end(),[&](const auto& tab) { return tree.get(tab.button)->params.visible; }));
+        ensure("restore overflow height",tree.reshape(*owner,300,120,error) && tree.layoutTabPanels(*owner,layout,error));
+        for (std::size_t index=0; index<4; ++index)
+            ensure("filter leading tabs",tree.setTabVisibility(*owner,state.tabs[index].panel,false,error));
+        ensure("select final filtered tab",tree.selectTabPanel(*owner,state.tabs.back().panel,error));
+        ensure("selected filtered button remains visible",tree.get(state.tabs.back().button)->params.visible);
+        ensure_equals("filtered strip uses visible count",tree.get(*owner)->tabContainer->maximumScroll,0);
+        ensure("hidden tab cannot be selected",!tree.selectTabPanel(*owner,state.tabs.front().panel,error));
+        ensure("keyboard skips hidden tabs",tree.moveTab(*owner,true,error));
+        ensure_equals("keyboard wraps to first visible tab",tree.get(*owner)->tabContainer->selected,state.tabs[4].panel);
+        for (const auto& tab : state.tabs) ensure("restore filtered tabs",tree.setTabVisibility(*owner,tab.panel,true,error));
+        ensure("restored last tab is reachable",tree.selectTabPanel(*owner,state.tabs.back().panel,error) && tree.get(state.tabs.back().button)->params.visible);
     }
 
     template<> template<> void object::test<141>()
@@ -713,6 +2196,20 @@ namespace tut
         ensure("left is not text change",calls.empty());
         ensure("typing after left",tree.lineEditorUnicode(state.editor,U'x',error));
         ensure("typing not suppressed by previous arrow",calls.size()==1 && calls.front().starts_with("changed:"));
+        search.commitOnKeystroke=true;
+        const auto filter=tree.createSearchEditor(view,control,search,0,error);
+        ensure(error,filter.has_value());
+        const auto filterEditor=tree.get(*filter)->searchEditor->editor;
+        ensure("focus filter",tree.requestControlFocus(*filter,true,error));
+        calls.clear();
+        ensure("filter navigation handled",tree.lineEditorKey(filterEditor,LLVKLineEditor::Key::Left,{},error));
+        ensure("filter navigation commits without text change",calls.size()==1 && calls.front().starts_with("commit:"));
+        calls.clear();
+        ensure("filter typing handled",tree.lineEditorUnicode(filterEditor,U'z',error));
+        ensure("filter text change precedes commit",calls.size()==2 && calls[0].starts_with("changed:") && calls[1].starts_with("commit:"));
+        calls.clear();
+        ensure("filter focus released",tree.requestControlFocus(*filter,false,error));
+        ensure("filter does not recommit on focus loss",calls.empty());
         search.textChanged.function=[&](auto id,const LLSD&) { tree.erase(id,error); };
         const auto deleting=tree.createSearchEditor(view,control,search,0,error);
         ensure(error,deleting.has_value());
@@ -1191,30 +2688,30 @@ namespace tut
         std::ofstream file(path);
         file << "<llsd><map><key>Unrelated</key><map><key>Type</key><string>String</string><key>Value</key><string>keep</string></map></map></llsd>";
         file.close();
-        LLVKStartupSettings settings;
+        LLVKSettingsMgr settings;
         std::string error;
         ensure("defaults",settings.load("<llsd><map><key>RenderBackend</key><map><key>Type</key><string>String</string>"
             "<key>Value</key><string>OpenGL</string><key>Comment</key><string>Backend</string></map>"
             "<key>RememberPassword</key><map><key>Type</key><string>Boolean</string><key>Value</key><boolean>false</boolean></map></map></llsd>",true,true,error));
         ensure("transient renderer",settings.set("RenderBackend",LLSD("Vulkan"),false,error));
         ensure("save changed flag",settings.saveChanges(path,{{"RememberPassword",LLSD(true)}},error));
-        LLVKStartupSettings reloaded;
+        LLVKSettingsMgr reloaded;
         ensure("reload",reloaded.loadFile(path,true,false,true,error));
-        ensure_equals("unrelated retained",reloaded.find("Unrelated")->value().asString(),std::string("keep"));
-        ensure("changed flag retained",reloaded.find("RememberPassword")->value().asBoolean());
+        ensure_equals("unrelated retained",reloaded.find("Unrelated")->getValue().asString(),std::string("keep"));
+        ensure("changed flag retained",reloaded.find("RememberPassword")->getValue().asBoolean());
         ensure("transient backend excluded",reloaded.find("RenderBackend") == nullptr);
         ensure("explicit backend change",settings.saveChanges(path,{{"RenderBackend",LLSD("Zink")}},error));
         ensure("reload backend",reloaded.loadFile(path,true,false,true,error));
-        ensure_equals("backend persisted",reloaded.find("RenderBackend")->value().asString(),std::string("Zink"));
+        ensure_equals("backend persisted",reloaded.find("RenderBackend")->getValue().asString(),std::string("Zink"));
         std::ofstream corrupt(path); corrupt << "not settings"; corrupt.close();
         ensure("malformed file preserved",!settings.saveChanges(path,{{"RenderBackend",LLSD("OpenGL")}},error));
-        ensure_equals("failed save leaves memory unchanged",settings.find("RenderBackend")->value().asString(),std::string("Zink"));
+        ensure_equals("failed save leaves memory unchanged",settings.find("RenderBackend")->getValue().asString(),std::string("Zink"));
     }
 
     template<> template<> void object::test<131>()
     {
         set_test_name("native login dialogs paint and preserve Cancel and accepted settings transactions");
-        LLVKLoginUi::Configuration configuration;
+        LLVKViewerUi::Configuration configuration;
         const auto fonts = std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
         configuration.skin.skinBaseDirectory = std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
         configuration.fontDescription = fonts/"fonts.xml";
@@ -1238,17 +2735,21 @@ namespace tut
         configuration.settings["TranslationService"]=LLSD("google"); configuration.settings["GoogleTranslateAPIKey"]=LLSD("");
         configuration.settings["AzureTranslateAPIKey"]=LLSD(); configuration.settings["DeepLTranslateAPIKey"]=LLSD();
         configuration.dictionaryDirectory=std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS).parent_path()/"dictionaries";
-        LLVKStartupSettings accountSettings;
+        LLVKSettingsMgr accountSettings;
         std::string accountError;
-        ensure("original account defaults",accountSettings.loadFile(configuration.skin.skinBaseDirectory.parent_path()/"app_settings"/"settings_per_account.xml",true,true,true,accountError));
+        const bool accountLoaded=accountSettings.loadFile(configuration.skin.skinBaseDirectory.parent_path()/"app_settings"/"settings_per_account.xml",true,true,true,accountError);
+        ensure(accountError,accountLoaded);
         configuration.accountSettings=accountSettings.values(); configuration.accountDefaults=accountSettings.defaults();
         configuration.appliedSettingsMode="settings_firestorm.xml";
         std::map<std::string,LLSD> saved;
         configuration.savePreferences = [&](const auto& values,std::string&) { saved=values; return true; };
+        std::optional<LLVKKeyBindings> savedBindings;
+        configuration.saveKeyBindings=[&](const LLVKKeyBindings& bindings,std::string&) { savedBindings=bindings; return true; };
         LLSD savedAutoReplace;
         configuration.saveAutoReplace=[&](const LLSD& lists,std::string&) { savedAutoReplace=lists; return true; };
         std::string error;
-        auto login = LLVKLoginUi::create(configuration,error);
+        completePreferenceSettings(configuration);
+        auto login = LLVKViewerUi::create(configuration,error);
         ensure(error,login != nullptr);
         auto& tree=login->tree();
         ensure("native account default exists",tree.setting("UISndFSKeywordSound").has_value());
@@ -1372,7 +2873,7 @@ namespace tut
         } autoReplaceCleanup{autoReplaceDirectory};
         LLSD importList; importList["name"]="Imported"; importList["replacements"]["typo"]="correct";
         ensure("prepare import file",LLVKAutoReplaceSettings::writeListFile(importPath,importList,error));
-        LLVKLoginUi::XmlFileResult fileResult;
+        LLVKViewerUi::XmlFileResult fileResult;
         std::string proposedName;
         login->setXmlFilePicker([&](bool save,const std::string& name,auto response,std::string&)
         { proposedName=name; fileResult=std::move(response); return true; });
@@ -1457,27 +2958,109 @@ namespace tut
         ensure_equals("Chat opens original AutoReplace",tree.get(login->activeFloater())->params.name,std::string("autoreplace_floater"));
         ensure("close Chat auxiliary",login->closeFloater(error));
         ensure("remove tested Chat panel",tree.erase(*chatPanel,error));
+        const auto controlsPanel=login->constructPreferencePanel("panel_preferences_controls.xml",login->root(),error);
+        ensure(error,controlsPanel.has_value());
+        const auto controlsList=login->find("controls_list"),keyMode=login->find("key_mode");
+        const auto hasAction=[&](const std::string& name)
+        { const auto& rows=tree.get(controlsList)->scrollList->rows; return std::any_of(rows.begin(),rows.end(),[&](const auto& row) { return row.value.asString()==name; }); };
+        ensure("third-person Controls has teleport",hasAction("teleport_to"));
+        ensure("third-person Controls has camera actions",hasAction("spin_around_cw"));
+        ensure("native Controls paints",login->preparePaint({},error).has_value());
+        ensure("select first-person controls",tree.setValue(keyMode,LLSD(0)) && tree.commit(keyMode));
+        ensure(login->dialogError(),login->dialogError().empty());
+        ensure("first-person Controls excludes teleport",!hasAction("teleport_to"));
+        ensure("first-person Controls excludes camera group",!hasAction("spin_around_cw"));
+        ensure("first-person Controls retains movement",hasAction("push_forward"));
+        ensure("return to third-person controls",tree.setValue(keyMode,LLSD(1)) && tree.commit(keyMode));
+        const auto chooseBinding=[&]
+        {
+            auto rows=tree.get(controlsList)->scrollList->rows;
+            for (auto& row : rows) { row.selected=row.value.asString()=="walk_to"; row.selectedCell=row.selected ? 1 : -1; }
+            ensure("select binding cell",tree.setScrollListRows(controlsList,std::move(rows),error));
+            ensure("open original key dialog",tree.commit(controlsList));
+            ensure(login->dialogError(),login->dialogError().empty());
+            ensure("native key dialog visible",login->keyCaptureDialog()!=0);
+        };
+        chooseBinding();
+        ensure("capture native preference key",login->recordPreferenceKey('J',MASK_CONTROL,true,error));
+        ensure(error,error.empty());
+        ensure_equals("capture closes dialog",login->keyCaptureDialog(),LLVKWidgetTree::Id(0));
+        const auto bindingLabel=[&]
+        { const auto& rows=tree.get(controlsList)->scrollList->rows; return std::find_if(rows.begin(),rows.end(),[](const auto& row) { return row.value.asString()=="walk_to"; })->cells[1]; };
+        ensure_equals("captured binding shown",bindingLabel(),std::string("Ctrl+J"));
+        ensure("captured release consumed after dialog closes",login->recordPreferenceKey('J',MASK_CONTROL,false,error));
+        ensure("later unrelated release is not consumed",!login->recordPreferenceKey('J',MASK_CONTROL,false,error));
+        chooseBinding();
+        ensure("cancel key capture",login->recordPreferenceKey(KEY_ESCAPE,0,true,error));
+        ensure_equals("cancel retains binding",bindingLabel(),std::string("Ctrl+J"));
+        chooseBinding();
+        ensure("clear captured binding",login->recordPreferenceKey(KEY_DELETE,0,true,error));
+        ensure("cleared binding shown empty",bindingLabel().empty());
+        chooseBinding();
+        LLVKWidgetTree::PointerEvent mouseBinding; mouseBinding.time=10; mouseBinding.x=0; mouseBinding.y=0;
+        mouseBinding.kind=LLVKWidgetTree::PointerKind::LeftDown;
+        ensure("record mouse press",login->recordPreferenceMouse(mouseBinding,CLICK_MIDDLE,true,0,error));
+        ensure("mouse capture dialog waits for release",login->keyCaptureDialog()!=0);
+        mouseBinding.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("record mouse release",login->recordPreferenceMouse(mouseBinding,CLICK_MIDDLE,false,0,error));
+        ensure_equals("mouse binding displayed",bindingLabel(),std::string("MMB"));
+        chooseBinding();
+        mouseBinding.kind=LLVKWidgetTree::PointerKind::LeftDown;
+        ensure("defer single click",login->recordPreferenceMouse(mouseBinding,CLICK_LEFT,true,0,error));
+        ensure("single-click delay pending",login->advanceNotices(10.6,error) && login->keyCaptureDialog()!=0);
+        ensure("single-click timeout applies",login->advanceNotices(10.7,error));
+        ensure_equals("timeout closes capture",login->keyCaptureDialog(),LLVKWidgetTree::Id(0));
+        chooseBinding();
+        mouseBinding.time=11;
+        ensure("double-click press",login->recordPreferenceMouse(mouseBinding,CLICK_DOUBLELEFT,true,0,error));
+        mouseBinding.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("double-click left release",login->recordPreferenceMouse(mouseBinding,CLICK_LEFT,false,0,error));
+        ensure_equals("double-click capture closes",login->keyCaptureDialog(),LLVKWidgetTree::Id(0));
+        ensure_equals("double-click label",bindingLabel(),std::string("Double LMB"));
+        ensure("restore defaults asks",tree.commit(login->find("restore_defaults")));
+        ensure("show original restore confirmation",login->advanceNotices(12,error));
+        ensure("restore confirmation delay",login->advanceNotices(12.5,error));
+        ensure("restore all modes",login->noticeKey(true,false,error));
+        ensure("restored default walk binding",bindingLabel().empty());
+        const bool preferencesOpened=login->showPreferences(error);
+        ensure("open Preferences binding transaction: "+error,preferencesOpened);
+        chooseBinding();
+        ensure("preview binding inside Preferences",login->recordPreferenceKey('J',MASK_CONTROL,true,error));
+        ensure_equals("binding preview visible",bindingLabel(),std::string("Ctrl+J"));
+        ensure("cancel Preferences binding transaction",tree.commit(login->find("Cancel",login->activeFloater())));
+        ensure("Cancel does not write bindings",!savedBindings.has_value());
+        ensure("refresh after Cancel",tree.commit(keyMode));
+        ensure("Cancel restores accepted binding",bindingLabel().empty());
+        ensure("open accepted binding transaction",login->showPreferences(error));
+        chooseBinding();
+        ensure("edit accepted binding",login->recordPreferenceKey('J',MASK_CONTROL,true,error));
+        ensure("accept Preferences binding transaction",login->applyPreferences(error));
+        ensure(error,savedBindings.has_value());
+        ensure("accepted binding persisted",savedBindings->handles(LLVKKeyBindings::Mode::ThirdPerson,"walk_to",CLICK_NONE,'J',MASK_CONTROL));
+        saved.clear();
+        ensure("remove tested Controls panel",tree.erase(*controlsPanel,error));
         ensure_equals("notice restores editor focus",tree.keyboardFocus(),password);
         ensure("Preferences shortcut",login->menu().shortcut("P",true,false,false));
         ensure(login->dialogError(),login->dialogError().empty());
         const auto preferences=login->activeFloater();
         ensure("Preferences visible",preferences != 0);
         ensure("Preferences painter",login->preparePaint({},error).has_value());
-        ensure("change bound remember preference",tree.updateSetting("FSRememberUsername",LLSD(false)));
+        const bool originalNameVisibility=tree.setting("RenderNameShowSelf")->asBoolean();
+        ensure("change original General preference",tree.updateSetting("RenderNameShowSelf",LLSD(!originalNameVisibility)));
         ensure("Cancel",login->closeFloater(error));
-        ensure("Cancel restores snapshot",tree.setting("FSRememberUsername")->asBoolean());
+        ensure("Cancel restores snapshot",tree.setting("RenderNameShowSelf")->asBoolean()==originalNameVisibility);
         ensure_equals("close restores focus",tree.keyboardFocus(),password);
         ensure("Cancel never saves",saved.empty());
         ensure("reopen",login->showPreferences(error));
         ensure_equals("single instance",login->activeFloater(),preferences);
-        ensure("change remember preference",tree.updateSetting("RememberPassword",LLSD(true)));
+        ensure("change original General preference",tree.updateSetting("RenderNameShowSelf",LLSD(!originalNameVisibility)));
         ensure("accept",login->applyPreferences(error));
-        ensure("accepted value persisted",saved["RememberPassword"].asBoolean());
+        ensure("accepted value persisted",saved.contains("RenderNameShowSelf") && saved.at("RenderNameShowSelf").asBoolean()!=originalNameVisibility);
         ensure("open for source default reset",login->showPreferences(error));
-        ensure("reset to loaded default",login->resetPreference("RememberPassword",error));
-        ensure("reset differs from saved value",!tree.setting("RememberPassword")->asBoolean());
+        ensure("reset to loaded default",login->resetPreference("RenderNameShowSelf",error));
+        ensure("reset restores source default",tree.setting("RenderNameShowSelf")->asBoolean()==configuration.settingDefaults.at("RenderNameShowSelf").asBoolean());
         ensure("Cancel reverses reset",login->closeFloater(error));
-        ensure("Cancel retains accepted value",tree.setting("RememberPassword")->asBoolean());
+        ensure("Cancel retains accepted value",tree.setting("RenderNameShowSelf")->asBoolean()!=originalNameVisibility);
         ensure("unknown defaults rejected",!login->resetPreference("MissingDefault",error));
         LLSD initialStructured=LLSD::emptyArray(); initialStructured.append(1.0); initialStructured.append(0.5);
         ensure("structured preference definition",tree.defineSetting("StructuredPreference",initialStructured));
@@ -1643,7 +3226,7 @@ namespace tut
         ensure("packaged login menu",file.good());
         const std::string xml{std::istreambuf_iterator<char>(file),std::istreambuf_iterator<char>()};
         std::string error;
-        auto menu = LLVKLoginMenu::create(xml,loadFont(),{}, {},false,error);
+        auto menu = LLVKMenu::create(xml,loadFont(),{}, {},false,error);
         ensure(error,menu != nullptr);
         int quits = 0;
         menu->bind("File.Quit",[&](const auto&,const auto&) { ensure("menu dismissed before action",!menu->open()); ++quits; });
@@ -1658,11 +3241,11 @@ namespace tut
         paint = {};
         ensure("popup paint",menu->paint(paint,{0,0,1024,768},error));
         ensure("popup adds rows",paint.commands.size() > 3);
-        ensure("down selects enabled exit skipping preferences",menu->key(LLVKLoginMenu::Key::Down));
-        ensure("return activates exit",menu->key(LLVKLoginMenu::Key::Return));
+        ensure("down selects enabled exit skipping preferences",menu->key(LLVKMenu::Key::Down));
+        ensure("return activates exit",menu->key(LLVKMenu::Key::Return));
         ensure_equals("exit dispatched once",quits,1);
-        menu->key(LLVKLoginMenu::Key::Activate);
-        menu->key(LLVKLoginMenu::Key::Right);
+        menu->key(LLVKMenu::Key::Activate);
+        menu->key(LLVKMenu::Key::Right);
         paint = {};
         ensure("Help popup paint",menu->paint(paint,{0,0,1280,900},error));
         ensure_equals("menu follows resize",paint.commands[0].rectangle.top,900);
@@ -1673,13 +3256,13 @@ namespace tut
         ensure_equals("shortcut dispatches",quits,2);
         ensure("unbound Preferences shortcut unavailable",!menu->shortcut("P",true,false,false));
         ensure("unmodified letter is not a shortcut",!menu->shortcut("Q",false,false,false));
-        ensure("DTD rejected",!LLVKLoginMenu::create("<!DOCTYPE menu_bar><menu_bar/>",loadFont(),{}, {},false,error));
+        ensure("DTD rejected",!LLVKMenu::create("<!DOCTYPE menu_bar><menu_bar/>",loadFont(),{}, {},false,error));
     }
 
     template<> template<> void object::test<129>()
     {
         set_test_name("native login page preserves existing query and encodes viewer metadata");
-        LLVKLoginUi::Page page;
+        LLVKViewerUi::Page page;
         page.url = "https://example.com/login/?existing=yes";
         page.language = "en";
         page.version = "7.2.5 (79279)";
@@ -1688,7 +3271,7 @@ namespace tut
         page.operatingSystem = "Win";
         page.skin = "default";
         page.settings = {{"FirstLoginThisInstall",LLSD(true)},{"FSSplashScreenHideBlogs",LLSD(true)}};
-        const LLURI uri(LLVKLoginUi::pageUrl(page));
+        const LLURI uri(LLVKViewerUi::pageUrl(page));
         const auto query = uri.queryMap();
         ensure_equals("original query retained",query["existing"].asString(),std::string("yes"));
         ensure_equals("version encoded and recovered",query["version"].asString(),page.version);
@@ -1700,32 +3283,32 @@ namespace tut
     template<> template<> void object::test<128>()
     {
         set_test_name("native startup settings preserve default saved and transient precedence");
-        LLVKStartupSettings settings;
+        LLVKSettingsMgr settings;
         std::string error;
         const auto document = [](const std::string& value)
         { return "<llsd><map><key>RenderBackend</key><map><key>Type</key><string>String</string><key>Value</key><string>"+value+"</string></map></map></llsd>"; };
         ensure("initial default",settings.load(document("OpenGL"),true,true,error));
         ensure("user override",settings.load(document("Vulkan"),false,true,error));
-        ensure_equals("saved backend",settings.find("RenderBackend")->saveValue().asString(),std::string("Vulkan"));
+        ensure_equals("saved backend",settings.find("RenderBackend")->getSaveValue().asString(),std::string("Vulkan"));
         ensure("session defaults reset active layers",settings.load(document("Zink"),true,false,error));
-        ensure_equals("session default active",settings.find("RenderBackend")->value().asString(),std::string("Zink"));
+        ensure_equals("session default active",settings.find("RenderBackend")->getValue().asString(),std::string("Zink"));
         ensure("user reloaded after mode",settings.load(document("Vulkan"),false,true,error));
         ensure("command line transient override",settings.set("RenderBackend",LLSD("OpenGL"),false,error));
-        ensure_equals("command line wins",settings.find("RenderBackend")->value().asString(),std::string("OpenGL"));
-        ensure_equals("command line not saved",settings.find("RenderBackend")->saveValue().asString(),std::string("Vulkan"));
+        ensure_equals("command line wins",settings.find("RenderBackend")->getValue().asString(),std::string("OpenGL"));
+        ensure_equals("command line not saved",settings.find("RenderBackend")->getSaveValue().asString(),std::string("Vulkan"));
         ensure("malformed load rejected",!settings.load("<llsd><array/></llsd>",true,true,error));
-        ensure_equals("failure preserves active settings",settings.find("RenderBackend")->value().asString(),std::string("OpenGL"));
+        ensure_equals("failure preserves active settings",settings.find("RenderBackend")->getValue().asString(),std::string("OpenGL"));
         const auto appSettings = std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path().parent_path()/"app_settings"/"settings.xml";
-        LLVKStartupSettings packaged;
+        LLVKSettingsMgr packaged;
         ensure("actual default settings parse",packaged.loadFile(appSettings,true,true,true,error));
         ensure("native backend setting exists",packaged.find("RenderBackend") != nullptr);
-        ensure("Boolean defaults converted",packaged.find("FSRememberUsername")->value().isBoolean());
+        ensure("Boolean values exposed to native UI",packaged.values().at("FSRememberUsername").isBoolean());
     }
 
     template<> template<> void object::test<127>()
     {
         set_test_name("native login resource owner resolves real font sizes and packaged controls");
-        LLVKLoginUi::Configuration configuration;
+        LLVKViewerUi::Configuration configuration;
         const auto fonts = std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
         configuration.skin.skinBaseDirectory = std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
         configuration.fontDescription = fonts/"fonts.xml";
@@ -1734,7 +3317,7 @@ namespace tut
         configuration.settings = {{"FSRememberUsername",LLSD(true)},{"RememberPassword",LLSD(false)},
             {"NextLoginLocation",LLSD("home")},{"UIResizeBarHeight",LLSD(3)}};
         std::string error;
-        auto login = LLVKLoginUi::create(configuration,error);
+        auto login = LLVKViewerUi::create(configuration,error);
         ensure(error,login != nullptr);
         const auto& tree = login->tree();
         const auto password = login->find("password_edit"), link = login->find("forgot_password_text");
@@ -5973,9 +7556,9 @@ namespace tut
         ensure("label updates refit",tree.setCheckBoxLabel(*id,"[TEXT]",error));
         ensure("label arguments refit",tree.setCheckBoxLabelArgument(*id,"TEXT","Updated",error));
         ensure("resolved new label",tree.get(label)->plainText->text == U"Updated");
-        const auto before = tree.get(*id)->params.rect;
-        ensure("invalid narrow label width explicit",!tree.reshape(*id,1,30,error));
-        ensure("failed reshape atomic",tree.get(*id)->params.rect == before);
+        ensure("narrow source checkbox fits its label",tree.reshape(*id,1,30,error));
+        ensure("narrow checkbox preserves label text",tree.get(label)->plainText->text==U"Updated");
+        ensure("narrow checkbox retains clickable label",tree.get(button)->params.rect.right>=tree.get(label)->params.rect.right);
     }
 
     template<> template<> void object::test<34>()

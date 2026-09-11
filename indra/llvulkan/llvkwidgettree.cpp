@@ -41,13 +41,12 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::create(const Params& params, I
         error = "Native widget tree size/depth limit exceeded";
         return std::nullopt;
     }
-    Node node;
-    node.params = params;
-    node.parent = parent;
     const Id id = mNextId;
-    auto inserted = mNodes.emplace(id,std::move(node));
+    auto inserted = mNodes.try_emplace(id);
     try
     {
+        inserted.first->second.params = params;
+        inserted.first->second.parent = parent;
         if (parent)
         {
             auto& owner = mNodes.at(parent);

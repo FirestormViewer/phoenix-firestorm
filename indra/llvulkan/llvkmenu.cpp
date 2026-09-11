@@ -1,4 +1,4 @@
-#include "llvkloginmenu.h"
+#include "llvkmenu.h"
 #include "llstring.h"
 #include <expat/expat.h>
 #include <algorithm>
@@ -15,16 +15,16 @@ namespace
     }
 }
 
-std::unique_ptr<LLVKLoginMenu> LLVKLoginMenu::create(std::string_view xml,std::shared_ptr<LLVKFont> font,
+std::unique_ptr<LLVKMenu> LLVKMenu::create(std::string_view xml,std::shared_ptr<LLVKFont> font,
     std::shared_ptr<LLVKColorTable> colors,LLVKLabel::Context labels,bool debug,std::string& error)
 {
     error.clear();
     if (!font || xml.size() > 1024*1024) { error = "Invalid native login menu resources"; return nullptr; }
-    auto menu = std::make_unique<LLVKLoginMenu>();
+    auto menu = std::make_unique<LLVKMenu>();
     menu->mFont = std::move(font); menu->mColors = std::move(colors); menu->mLabels = std::move(labels);
     struct Parser
     {
-        LLVKLoginMenu& menu;
+        LLVKMenu& menu;
         XML_Parser parser;
         std::vector<std::optional<std::size_t>> stack;
         bool failed = false, root = false;
@@ -37,7 +37,7 @@ std::unique_ptr<LLVKLoginMenu> LLVKLoginMenu::create(std::string_view xml,std::s
                 if (state.stack.size() >= 64 || state.menu.mItems.size() >= 2048) throw std::runtime_error("menu limit");
                 if (state.stack.empty())
                 {
-                    if (name != "menu_bar") throw std::runtime_error("menu root");
+                    if (name != "menu_bar" && name!="toggleable_menu" && name!="context_menu") throw std::runtime_error("menu root");
                     state.root = true; state.stack.push_back({}); return;
                 }
                 const bool item = name == "menu" || name == "menu_item_call" || name == "menu_item_check" || name == "menu_item_separator";
@@ -45,6 +45,7 @@ std::unique_ptr<LLVKLoginMenu> LLVKLoginMenu::create(std::string_view xml,std::s
                 {
                     Item entry;
                     entry.branch = name == "menu"; entry.separator = name == "menu_item_separator";
+                    entry.checkable=name=="menu_item_check";
                     for (std::size_t index = 0; attributes[index]; index += 2)
                     {
                         const std::string_view attribute(attributes[index]);
@@ -62,12 +63,17 @@ std::unique_ptr<LLVKLoginMenu> LLVKLoginMenu::create(std::string_view xml,std::s
                 }
                 else
                 {
-                    if ((name == "on_click" || name.ends_with(".on_click")) && state.stack.back())
+                    if ((name == "on_click" || name.ends_with(".on_click") || name=="on_check" || name.ends_with(".on_check") ||
+                        name=="on_enable" || name.ends_with(".on_enable") || name=="on_visible" || name.ends_with(".on_visible")) && state.stack.back())
                         for (std::size_t index = 0; attributes[index]; index += 2)
                         {
                             auto& entry = state.menu.mItems[*state.stack.back()];
-                            if (std::string_view(attributes[index]) == "function") entry.action = attributes[index+1];
-                            else if (std::string_view(attributes[index]) == "parameter") entry.parameter = attributes[index+1];
+                            auto* action=&entry.action; auto* parameter=&entry.parameter;
+                            if (name=="on_check" || name.ends_with(".on_check")) { action=&entry.checkAction; parameter=&entry.checkParameter; }
+                            else if (name=="on_enable" || name.ends_with(".on_enable")) { action=&entry.enableAction; parameter=&entry.enableParameter; }
+                            else if (name=="on_visible" || name.ends_with(".on_visible")) { action=&entry.visibleAction; parameter=&entry.visibleParameter; }
+                            if (std::string_view(attributes[index]) == "function") *action = attributes[index+1];
+                            else if (std::string_view(attributes[index]) == "parameter") *parameter = attributes[index+1];
                         }
                     state.stack.push_back({});
                 }
@@ -96,12 +102,12 @@ std::unique_ptr<LLVKLoginMenu> LLVKLoginMenu::create(std::string_view xml,std::s
     return menu;
 }
 
-void LLVKLoginMenu::bind(std::string action,Handler handler) { mHandlers.insert_or_assign(std::move(action),std::move(handler)); }
-void LLVKLoginMenu::bindItem(std::string action,std::string parameter,Handler handler)
+void LLVKMenu::bind(std::string action,Handler handler) { mHandlers.insert_or_assign(std::move(action),std::move(handler)); }
+void LLVKMenu::bindItem(std::string action,std::string parameter,Handler handler)
 { mItemHandlers.insert_or_assign({std::move(action),std::move(parameter)},std::move(handler)); }
-void LLVKLoginMenu::setVisible(std::string_view name,bool visible)
+void LLVKMenu::setVisible(std::string_view name,bool visible)
 { for (auto& item : mItems) if (item.name == name) item.visible = visible; }
-bool LLVKLoginMenu::shortcut(std::string key,bool control,bool shift,bool alt)
+bool LLVKMenu::shortcut(std::string key,bool control,bool shift,bool alt)
 {
     std::string shortcut;
     if (control) shortcut += "control|";
@@ -119,28 +125,62 @@ bool LLVKLoginMenu::shortcut(std::string key,bool control,bool shift,bool alt)
     for (auto root : mRoots) if (visit(visit,root)) return true;
     return false;
 }
-bool LLVKLoginMenu::enabled(std::size_t item) const
+bool LLVKMenu::enabled(std::size_t item) const
 {
+    if (!mItems[item].enabled) return false;
     const auto& entry = mItems[item];
     const auto specific = mItemHandlers.find({entry.action,entry.parameter});
     const auto handler = mHandlers.find(entry.action);
-    return entry.branch || (!entry.separator && ((specific != mItemHandlers.end() && bool(specific->second)) ||
+    return entry.branch || (!entry.separator && (bool(entry.invoke) || (specific != mItemHandlers.end() && bool(specific->second)) ||
         (handler != mHandlers.end() && bool(handler->second))));
 }
-void LLVKLoginMenu::dismiss() { mOpen.clear(); mHovered.reset(); mHits.clear(); mPressed = false; }
-void LLVKLoginMenu::activate(std::size_t item,std::size_t level)
+bool LLVKMenu::showContext(std::vector<Item> items,int x,int y,std::string& error)
+{
+    error.clear();
+    if (items.empty() || items.size()>128) { error="Invalid native context menu size"; return false; }
+    for (const auto& item : items)
+        if (item.branch || !item.children.empty()) { error="Native context submenu construction is not implemented"; return false; }
+    dismiss();
+    mContextRoot=mItems.size();
+    Item root; root.branch=true; root.name="native_context_menu";
+    for (std::size_t index=0; index<items.size(); ++index) root.children.push_back(*mContextRoot+1+index);
+    mItems.push_back(std::move(root));
+    for (auto& item : items) mItems.push_back(std::move(item));
+    mContextAnchor={x,y,x,y}; mOpen.push_back(*mContextRoot);
+    return true;
+}
+
+bool LLVKMenu::showPopup(std::vector<Item> items,LLVKWidgetTree::Rect anchor,const std::string& position,
+    std::function<void()> dismissed,std::string& error)
+{
+    if (!showContext(std::move(items),anchor.left,anchor.bottom,error)) return false;
+    mContextAnchor=anchor; mPopupPosition=position; mDismissed=std::move(dismissed);
+    return true;
+}
+
+void LLVKMenu::dismiss()
+{
+    mOpen.clear(); mHovered.reset(); mHits.clear(); mPressed=false;
+    if (mContextRoot) { mItems.resize(*mContextRoot); mContextRoot.reset(); }
+    mPopupPosition.clear();
+    auto callback=std::move(mDismissed); mDismissed={};
+    if (callback) callback();
+}
+void LLVKMenu::activate(std::size_t item,std::size_t level)
 {
     if (!enabled(item)) return;
+    if (mContextRoot && item<*mContextRoot) dismiss();
     if (mItems[item].branch)
     { mOpen.resize(std::min(level,mOpen.size())); mOpen.push_back(item); mHovered = item; return; }
     const auto entry = mItems[item];
+    if (entry.invoke) { dismiss(); entry.invoke(); return; }
     const auto specific = mItemHandlers.find({entry.action,entry.parameter});
     const auto handler = specific != mItemHandlers.end() ? specific->second : mHandlers.at(entry.action);
     dismiss();
     handler(entry.action,entry.parameter);
 }
 
-bool LLVKLoginMenu::pointer(const LLVKWidgetTree::PointerEvent& event)
+bool LLVKMenu::pointer(const LLVKWidgetTree::PointerEvent& event)
 {
     using Kind = LLVKWidgetTree::PointerKind;
     auto hit = std::find_if(mHits.rbegin(),mHits.rend(),[&](const Hit& hit)
@@ -167,7 +207,7 @@ bool LLVKLoginMenu::pointer(const LLVKWidgetTree::PointerEvent& event)
     return event.y >= mViewport.top-18 && event.y < mViewport.top;
 }
 
-bool LLVKLoginMenu::key(Key key)
+bool LLVKMenu::key(Key key)
 {
     if (key == Key::Activate)
     { for (auto item : mRoots) if (mItems[item].visible && mItems[item].branch) { activate(item,0); return true; } return false; }
@@ -175,6 +215,7 @@ bool LLVKLoginMenu::key(Key key)
     if (key == Key::Escape) { dismiss(); return true; }
     if (key == Key::Left || key == Key::Right)
     {
+        if (mContextRoot) return true;
         std::vector<std::size_t> roots;
         for (auto item : mRoots) if (mItems[item].visible && mItems[item].branch) roots.push_back(item);
         const auto position = std::find(roots.begin(),roots.end(),mOpen.front())-roots.begin();
@@ -193,7 +234,7 @@ bool LLVKLoginMenu::key(Key key)
     return true;
 }
 
-bool LLVKLoginMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::string& error)
+bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::string& error)
 {
     error.clear(); mViewport = viewport; mHits.clear();
     using Rect = LLVKWidgetTree::Rect;
@@ -236,6 +277,7 @@ bool LLVKLoginMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,
         left += width;
     }
     const int rowHeight = static_cast<int>(mFont->metrics().lineHeight)+4;
+    if (mContextRoot) mHits.push_back({*mContextRoot,0,mContextAnchor});
     for (std::size_t level = 0; level < mOpen.size(); ++level)
     {
         const auto parent = std::find_if(mHits.begin(),mHits.end(),[&](const Hit& hit) { return hit.item == mOpen[level]; });
@@ -248,6 +290,15 @@ bool LLVKLoginMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,
         width = std::min(width,viewport.right-viewport.left);
         left = std::clamp(level ? parentRect.right : parentRect.left,viewport.left,viewport.right-width);
         int top = level ? parentRect.top : parentRect.bottom;
+        if (mContextRoot && level==0)
+        {
+            left=parentRect.left;
+            if (mPopupPosition.ends_with("right")) left=parentRect.right-width;
+            if (mPopupPosition.starts_with("top")) top=parentRect.top+height;
+            if (left+width>viewport.right) left-=width;
+            left=std::max(left,viewport.left);
+            if (top-height<viewport.bottom) top+=height;
+        }
         top = std::min(viewport.top,std::max(top,viewport.bottom+height));
         solid(mOpen[level],{left,top-height,left+width,top},background);
         top -= 2;
@@ -259,6 +310,7 @@ bool LLVKLoginMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,
             const bool selected = mHovered == item && enabled(item);
             if (selected) solid(item,rect,highlight);
             const auto tint = enabled(item) ? (selected ? foreground : normal) : disabled;
+            if (entry.checkable && entry.checked && !text(item,"\xE2\x9C\x94",left+2.f,rect.bottom+2.f,tint,LLVKFont::HorizontalAlign::Left)) return false;
             if (!text(item,entry.label,left+18.f,rect.bottom+2.f,tint,LLVKFont::HorizontalAlign::Left)) return false;
             if (!entry.shortcut.empty() && !text(item,shortcutLabel(entry.shortcut),left+width-7.f,rect.bottom+2.f,tint,LLVKFont::HorizontalAlign::Right)) return false;
             if (entry.branch && !text(item,">",left+width-7.f,rect.bottom+2.f,tint,LLVKFont::HorizontalAlign::Right)) return false;

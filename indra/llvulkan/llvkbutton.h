@@ -54,6 +54,7 @@ struct LLVKButton
         std::uint64_t heldFrames = 0;
         std::optional<LLVKControl::Callback> click;
         LLVKControl::Callback mouseDown, mouseUp, held;
+        bool menuButton = false;
         LLVKControl::Validation isToggled;
         LLVKColor labelColor{1,1,1,1};
         LLVKColor selectedLabelColor{1,1,1,1};
