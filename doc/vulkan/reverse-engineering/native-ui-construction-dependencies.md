@@ -34,6 +34,178 @@ and screenshots do not close any outstanding behavior above.
 
 ## Native construction implementation (2026-09-10)
 
+Read-only editor constructor boundary (source e9c2af5aa7): LLTextBase::LLTextBase
+owns the text scroller and document, then initializes segments/rectangles;
+LLTextEditor adds its border and default text. LLTextEditor::initFromParams
+forces the view enabled even when text is read-only so scrolling remains usable.
+The current selectable native text body is not this complete composite owner.
+Original About construction still needs that internal scroller/document/border
+lifecycle, selection/navigation/menu behavior and original field geometry.
+Disabling a generic panel or aliasing text_editor to plain text is not closure.
+
+RLVa startup sequence correction (source e9c2af5aa7, NV-00/01/15/17): the
+RlvHandler::setEnabled(true) call is inside STATE_LOGIN_CLEANUP in llstartup.cpp,
+not the initial login-screen construction. RlvSettings::onChangedSettingMain
+posts the pre-login/restart notice but does not call setEnabled. The latter
+loads settings/string tables, registers RlvEnvironment/RlvExtGetSet, subscribes
+to login completion and constructs RlvUIEnabler. Inspected registered targets
+reach GL-owned environment and HUD/UI state; they are not shareable as native
+visual callbacks. The native login screen's inactive RLVa report is not proof
+of initialized RLVa capability. The complete native handler/service integration
+remains an explicit user requirement; no success flag or no-op registration has
+been substituted. A previous progress statement suggesting the setting callback
+itself enables RLVa was incorrect.
+
+Slider integration continuation: original slider_bar skin parameters now feed
+native track/highlight/thumb, pressed ghost, disabled and focus paint states;
+test70 checks the actual skin assets. Native SliderControl adds label and value
+editor/text, source range validation and rollback, rounded precision display,
+and a parent editor-commit callback. Factory loads widgets/slider.xml and its
+child parameter blocks; test139 checks parent/editor synchronization and veto.
+Full child-parameter override behavior, locale formatting, bound-callback
+reentrancy, resize/color propagation and exact visual equivalence remain open.
+
+Current validation after numeric controls: widget139/139 and context9/9 pass,
+including actual spinner packet presentation; window/audio2/2 pass. Two generated
+MSVC objects were rejected by LNK1163 and recompiled individually, after which
+the same tests passed; source was not reverted. General Preferences XUI now
+constructs and paints in the source-asset test with explicit test callbacks.
+This does not mean the live Preferences floater has been restored: its original
+application services and other panels are still incomplete.
+
+Native slider bar owner (NV-00/01/12/17): source LLSlider::setValue quantizes
+relative to minimum with increment/2.0001 downward tie bias; setValueAndCommit
+commits changes only. updateThumbRect uses integer half-thumb extents and
+truncated proportional position. Mouse press preserves grab offset, Ctrl resets
+initial value, hover drags, and release drops capture before callback. Native
+slider state implements these decisions with checked finite/range geometry and
+native focus/capture/settings. Test139 checks ties, unchanged commits, grab
+offset, clamping and reset. Composite slider label/editor, skin paint, full XML
+construction and visual parity remain follow-up requirements.
+
+Upload completion test correction (NV-13/14/17): context test8's single
+queue-idle-then-poll assertion repeatedly failed on browser or glyph readiness.
+The test now explicitly waits on each pending owner's upload fence through the
+already checked LLVKGlyphUpload::wait, with a five-second bound per upload.
+Publication still occurs in the subsequent prepare/advance operation and the
+unchanged assertions require Ready and retained image ownership. The runtime
+frame loop does not call these diagnostic/bootstrap wait methods and remains
+asynchronous. This records the observed failure without attributing it to a
+driver or layer; precise cause of queue-idle observation remains unqualified.
+
+General Preferences construction check: unchanged panel_preferences_general.xml
+contains a bracketed secondlife:///app/openfloater/preferences target. Source
+LLUrlEntrySLLabel uses the same owned label/target split as HTTPLabel. Native
+web ranges now parse bracketed secondlife/hop targets, while factory consumers
+must explicitly supply their native link handler. Test70 constructs and paints
+the original General panel using a test maturity callback and link recorder;
+this is construction evidence, not application-service completion. Internal URI
+dispatch must select native panels, never invoke an external browser or GL
+floater callback. Full target navigation remains an integration obligation.
+
+Native radio owner (post-e9c2af5aa7, NV-00/01/12/17): LLRadioGroup
+initFromParams/setSelectedIndex/setValue/onClickButton/getValue and LLRadioCtrl
+setValue define mutually exclusive checkbox children, payload-string matching
+before integer-index fallback, selected-only tab stops and repeated-click commits.
+Native radio state owns child/payload pairs and routes through native checkbox
+controls; selection publishes bound values before commit without wrapping arrow
+selection. Test138 checks these discrete contracts, optional deselection,
+source disabled-index reselection and owner deletion from commit. Factory loads
+the packaged radio_group/radio_item templates and applies item XUI layout only
+after the owning group exists; test70 checks actual RadioButton skin assets and
+top-left coordinates. Arrow keys route through the native group before enclosing
+tabs. Mouse pre-focus and remaining registry/style behavior remain open.
+
+Native spinner owner (post-e9c2af5aa7, NV-00/01/12/17): LLSpinCtrl constructor,
+onUpBtn/onDownBtn/onEditorCommit/setValue/onCommit and LLF32UICtrl establish child
+label/editor/buttons, precision rounding, modifier increment, range clamp,
+proposed-value validation/rollback and bound-setting-before-commit ordering.
+LLLineEditor::evaluateFloat delegates to LLCalc; audited llmath LLCalc/LLCalcParser
+use private constants/variables, Boost.Spirit arithmetic, strings and logging,
+without visual callbacks. Native controls own composite state and instantiate a
+private calculator. Test137 checks expression evaluation, clamping, modifiers,
+veto and binding order. Locale-specific editing, focus-loss reconciliation,
+resize and full locale qualification remain required follow-up. Native factory
+loads widgets/spinner.xml and original Preferences ranges; test70 checks real
+Stepper assets and numeric initial values. Native focus forwards to the editor,
+focus loss reconciles updated values, disabled state forwards read-only state,
+and live modifier snapshots feed held/released arrow actions. Test137 checks
+focus/draft preservation and disabled input. Capture-lost uses native button
+commit-on-capture-lost. This is not yet complete spinner parity.
+
+Native startup audio owner (post-e9c2af5aa7, NV-00/01/15/17): source
+LLStartUp startup_state_machine at llstartup.cpp1095 initializes the compiled
+audio provider before login, honors NoAudio and starts muted; failure leaves
+gAudiop absent. OpenAL init calls ALUT and driverName queries its active context;
+base listener allocation only initializes CPU vectors. Native LLVKAudio owns
+ALUT/OpenAL for the native window lifetime, guards preexisting context ownership,
+starts listener gain at zero and shuts down on the creating thread. It uses the
+same OpenAL library and active driver string, not an inspection-only temporary
+device. Context creation failure is explicit and startup continues without audio,
+matching the source's nonfatal policy. Test2 in the window suite checks NoAudio,
+real initialization, conflicting-owner refusal and shutdown. This closes only
+OpenAL initialization ownership: full cue playback, gain subscriptions, streaming
+media, alternate compiled providers and RLVa remain open, not parity-complete.
+
+Read-only text selection (post-checkpoint e9c2af5aa7, NV-00/01/12/17): source
+LLTextEditor::handleMouseDown/handleHover/handleMouseUp tracks an anchor and cursor,
+extends Shift selections, suppresses link activation during a selection drag and
+releases capture; copy transfers the selected display substring. Native selectable
+text uses the existing Unicode document/selection state and native clipboard,
+with Ctrl+A/Ctrl+C, selection foreground/background and link-drag cancellation.
+About's body opts in; its fixed introduction remains nonselectable. Test136 checks
+display-label copying, selection painting and drag-vs-link behavior. Primary
+selection clipboard, word/double-click selection, keyboard range movement and
+drag-autoscroll remain pending parts of full editor parity.
+
+Native web-text ranges (post-checkpoint e9c2af5aa7, NV-00/01/12/17):
+LLTextBase::appendTextImpl consumes registry matches as label/query segments;
+LLUrlEntryHTTP/HTTPLabel/NoLink define HTTP/FTP targets, bracket labels and
+nolink suppression. LLUrlEntryBase escapes targets and percent-decodes labels.
+Native LLVKWebText owns Unicode display ranges and escaped targets, preserving
+separate suffix coloring and suppressing URL-shaped masking labels. Audited
+LLUriParser uses Boost.URL parse/normalize/string operations only; native code
+reuses it and LLURI without LLUrlRegistry, LLStyle or GL text controls. Input and
+link counts are bounded; parse failures are atomic. Test136 checks Unicode ranges,
+bracket labels, nolink, suffixes, punctuation, masking and bounds. Other registry
+entry types, trusted-domain masking policy and URL menus are still open. This
+parser is not yet a complete rich editor or generic URL-registry replacement.
+
+Native text controls now opt into these web ranges for About. They paint link
+and query colors using the original color keys; underline position follows
+LLFontGL::render's baseline minus floor(descender) rule. Pointer hit testing uses
+the native font and document layout, rejects points outside ancestor scroll clips,
+captures a pressed target and dispatches only on release over that same target.
+Updates clear pressed-link state. About's introduction/report and clipboard use
+display labels rather than raw bracket markup. A native window URL callback
+validates HTTP/HTTPS/FTP and uses the existing confirmation/external-browser path;
+hand cursor is native Win32. Test136 checks paint, click target, capture release
+and release-outside cancellation. Full context menus, keyboard accessibility,
+other registry entry types and exact underline raster parity remain open.
+
+Tab orientation extension (post-checkpoint e9c2af5aa7, NV-00/01/12/17):
+LLTabContainer::addTabPanel defines left content bounds from tab width/right
+padding/vertical spacing, with BTN_HEIGHT=23 (llbutton.cpp); bottom tabs reserve
+the strip below content and begin at y=1. Native layoutTabPanels stages these
+rectangles, retains top-layout compatibility and selects top/bottom/left skin
+images from the same tab template. Test134 checks exact left/bottom geometry.
+Source handleKeyHere's vertical Up/Down selection and Right-to-content, and
+bottom-tab Up-to-content, are implemented; test134 checks vertical focus and
+test70 checks packaged vertical images and Preferences content bounds.
+Overflow scrolling remains explicit pending its source-driven implementation.
+
+Border painter (post-checkpoint e9c2af5aa7, NV-00/01/12/17): source
+LLViewBorder::draw/drawOnePixelLines/drawTwoPixelLines selects bevel colors,
+retains RGBA on one-pixel borders but uses opaque RGB on two-pixel borders,
+substitutes focus colors and varies one-pixel focus width. gl_line_2d emits
+axis-aligned lines with no extra CPU state beyond color/line width. Native
+painting represents covered edges as ordered solid strips, with independently
+owned color/focus state; it does not invoke source GL draw/getter callbacks.
+Texture-style borders have no source border draw and retain child traversal;
+one-pixel bright bevel is source-undefined and remains explicit. Test135 checks
+bevel order, alpha and zero thickness. Exact raster endpoints/focus-width pixel
+parity still require the controlled GL comparison at the full UI gate.
+
 About service-field contract (2026-09-11, NV-00/01/15/17): at c4d2f9a600
 getViewerInfo uses RlvHandler::isEnabled before displaying getVersionAbout,
 LLCore::LLHttp::getCURLVersion (a direct curl_version string), the actual J2C

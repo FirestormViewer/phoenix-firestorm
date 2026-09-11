@@ -69,6 +69,278 @@ namespace tut
     typedef widgettree_group::object object;
     widgettree_group widgettree_tests("llvkwidgettree");
 
+    template<> template<> void object::test<139>()
+    {
+        set_test_name("native slider rounding, change-only commits and drag offset");
+        LLVKWidgetTree tree;
+        LLVKControl::Params control; control.font=loadFont();
+        int commits=0;
+        control.commit.function=[&](auto,const LLSD&) { ++commits; };
+        LLVKWidgetTree::Params view; view.rect={0,0,116,24};
+        LLVKWidgetTree::SliderParams params; params.maximum=10; params.increment=1; params.initial=3;
+        std::string error;
+        const auto id=tree.createSlider(view,control,params,0,error);
+        ensure(error,id.has_value());
+        ensure("half rounds down",tree.setSliderValue(*id,4.5f,false,true,error));
+        ensure_equals("source tie bias",tree.value(*id).asReal(),4.);
+        ensure("same value accepted",tree.setSliderValue(*id,4.f,false,true,error));
+        ensure_equals("no unchanged commit",commits,1);
+        const auto thumb=tree.get(*id)->slider->thumb;
+        LLVKWidgetTree::PointerEvent event;
+        event.kind=LLVKWidgetTree::PointerKind::LeftDown; event.x=thumb.left+2; event.y=12;
+        ensure("thumb captured",tree.routePointer(*id,event,error));
+        event.kind=LLVKWidgetTree::PointerKind::Hover;
+        ensure("stationary drag",tree.routePointer(*id,event,error));
+        ensure_equals("grab offset prevents jump",tree.value(*id).asReal(),4.);
+        event.x=500;
+        ensure("drag clamps",tree.routePointer(*id,event,error));
+        ensure_equals("drag maximum",tree.value(*id).asReal(),10.);
+        event.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("release",tree.routePointer(*id,event,error));
+        ensure_equals("capture released",tree.mouseCapture(),LLVKWidgetTree::Id(0));
+        tree.setInputModifiers({false,true,false});
+        event.kind=LLVKWidgetTree::PointerKind::LeftDown; event.x=40;
+        ensure("control-click restores initial",tree.routePointer(*id,event,error));
+        ensure_equals("initial restored",tree.value(*id).asReal(),3.);
+        LLVKWidgetTree::SliderControlParams composite;
+        composite.bar=params;
+        composite.editable=true; composite.precision=1;
+        composite.textWidth=40;
+        composite.editorControl.font=control.font;
+        view.rect={0,0,200,24};
+        control.initialValue=LLSD(2.f);
+        bool reject=false;
+        control.validate.function=[&](auto,const LLSD&) { return !reject; };
+        const auto slider=tree.createSliderControl(view,control,composite,0,error);
+        ensure(error,slider.has_value());
+        const auto editor=tree.get(*slider)->sliderControl->editor;
+        ensure_equals("slider value editor",tree.value(editor).asString(),std::string("2.0"));
+        tree.setValue(editor,LLSD("7"));
+        ensure("slider editor commit",tree.commitSliderControl(*slider,true,error));
+        ensure_equals("editor updates bar and parent",tree.value(*slider).asReal(),7.);
+        reject=true;
+        tree.setValue(editor,LLSD("8"));
+        ensure("slider validation veto",!tree.commitSliderControl(*slider,true,error));
+        ensure_equals("parent value restored",tree.value(*slider).asReal(),7.);
+        ensure_equals("value editor restored",tree.value(editor).asString(),std::string("7.0"));
+    }
+
+    template<> template<> void object::test<138>()
+    {
+        set_test_name("native radio group payload selection, exclusion and repeated commits");
+        LLVKWidgetTree tree;
+        tree.defineSetting("Choice",LLSD("second"),LLVKWidgetTree::SettingType::String);
+        LLVKControl::Params control;
+        control.font=loadFont(); control.valueSetting="Choice";
+        int commits=0;
+        control.commit.function=[&](auto,const LLSD&) { ++commits; };
+        std::vector<LLVKWidgetTree::RadioItemParams> items(2);
+        for (std::size_t index=0; index<items.size(); ++index)
+        {
+            auto& item=items[index];
+            item.view.name=index ? "second" : "first";
+            item.view.rect={0,static_cast<int>(index)*24,120,static_cast<int>(index)*24+20};
+            item.check.label=item.view.name;
+            item.check.labelControl.font=item.check.buttonControl.font=control.font;
+            item.check.labelView.rect={20,0,120,20};
+            item.check.buttonView.rect={0,0,16,16};
+            item.check.button.toggle=true;
+        }
+        std::string error;
+        LLVKWidgetTree::Params view; view.rect={0,0,140,60};
+        const auto id=tree.createRadioGroup(view,control,items,false,0,error);
+        ensure(error,id.has_value());
+        const auto first=tree.get(*id)->radioGroup->items[0].control;
+        const auto second=tree.get(*id)->radioGroup->items[1].control;
+        ensure("initial setting selects payload",!tree.value(first).asBoolean() && tree.value(second).asBoolean());
+        ensure("index fallback selects first",tree.setRadioValue(*id,LLSD(0),error));
+        ensure_equals("payload returned",tree.value(*id).asString(),std::string("first"));
+        ensure("cannot deselect",!tree.selectRadioIndex(*id,-1,true,error));
+        ensure("radio click",tree.commit(first));
+        ensure("repeat radio click",tree.commit(first));
+        ensure_equals("unchanged clicks still commit",commits,2);
+        ensure_equals("clicked payload saved",tree.setting("Choice")->asString(),std::string("first"));
+        ensure("keyboard next",tree.radioKey(*id,true,error));
+        ensure("mutual exclusion",!tree.value(first).asBoolean() && tree.value(second).asBoolean());
+        ensure("no wrap past final radio",!tree.radioKey(*id,true,error));
+        control.valueSetting.reset();
+        control.initialValue=LLSD("second");
+        const auto deselectable=tree.createRadioGroup(view,control,items,true,0,error);
+        ensure(error,deselectable.has_value());
+        ensure("disable selected item",tree.setRadioIndexEnabled(*deselectable,1,false,error));
+        ensure_equals("nearest enabled lower item selected",tree.value(*deselectable).asString(),std::string("first"));
+        ensure("allow deselection",tree.selectRadioIndex(*deselectable,-1,false,error));
+        ensure("deselected payload undefined",tree.value(*deselectable).isUndefined());
+        LLVKControl::Callback remove;
+        remove.function=[&](auto owner,const LLSD&) { tree.erase(owner,error); };
+        tree.setControlCommit(*deselectable,remove);
+        ensure("radio commit may delete owner",tree.radioKey(*deselectable,true,error));
+        ensure("radio owner removed",tree.get(*deselectable)==nullptr);
+    }
+
+    template<> template<> void object::test<137>()
+    {
+        set_test_name("native spinner expression, clamp, validation and setting publication");
+        LLVKWidgetTree tree;
+        tree.defineSetting("Number",LLSD(2.f),LLVKWidgetTree::SettingType::Real);
+        LLVKControl::Params control;
+        control.font=loadFont(); control.valueSetting="Number";
+        bool reject=false;
+        int commits=0;
+        control.validate.function=[&](auto,const LLSD&) { return !reject; };
+        control.commit.function=[&](auto,const LLSD& value) { ++commits; ensure_equals("setting published before callback",tree.setting("Number")->asReal(),value.asReal()); };
+        LLVKWidgetTree::SpinnerParams params;
+        params.minimum=-10; params.maximum=10; params.increment=1; params.precision=2;
+        params.buttonControl.font=params.editorControl.font=control.font;
+        LLVKWidgetTree::Params view; view.rect={0,0,150,24};
+        std::string error;
+        const auto id=tree.createSpinner(view,control,params,0,error);
+        ensure(error,id.has_value());
+        const auto editor=tree.get(*id)->spinner->editor;
+        ensure_equals("bound initial editor",tree.value(editor).asString(),std::string("2.00"));
+        tree.setValue(editor,LLSD("2+3*2"));
+        ensure("shared calculator expression",tree.commitSpinner(*id,error));
+        ensure_equals("evaluated value",tree.value(*id).asReal(),8.);
+        ensure("modified increment",tree.stepSpinner(*id,true,{false,true,false},error));
+        ensure("control increment",std::abs(tree.value(*id).asReal()-8.1)<0.0001);
+        reject=true;
+        const auto before=tree.value(*id).asReal();
+        ensure("validation veto",!tree.stepSpinner(*id,false,{},error));
+        ensure_equals("veto restored value",tree.value(*id).asReal(),before);
+        ensure_equals("veto did not publish",commits,2);
+        reject=false;
+        tree.setValue(editor,LLSD("100"));
+        ensure("clamped expression",tree.commitSpinner(*id,error));
+        ensure_equals("maximum",tree.value(*id).asReal(),10.);
+        tree.setValue(editor,LLSD("SQRT(-1)"));
+        ensure("invalid expression rejected",!tree.commitSpinner(*id,error));
+        ensure_equals("invalid expression restores editor",tree.value(editor).asString(),std::string("10.00"));
+        ensure("spinner focus forwards to editor",tree.requestControlFocus(*id,true,error));
+        ensure_equals("editor owns keyboard focus",tree.keyboardFocus(),editor);
+        ensure("external value while focused",tree.setSpinnerValue(*id,LLSD(3.f),false,error));
+        ensure_equals("focused editor keeps draft",tree.value(editor).asString(),std::string("10.00"));
+        ensure("focus leaves spinner",tree.requestControlFocus(*id,false,error));
+        ensure_equals("focus loss reconciles clean editor",tree.value(editor).asString(),std::string("3.00"));
+        tree.setEnabled(*id,false);
+        ensure("disabled spinner editor read-only",tree.get(editor)->lineEditor->readOnly);
+        ensure("disabled spinner does not step",!tree.stepSpinner(*id,true,{},error));
+    }
+
+    template<> template<> void object::test<136>()
+    {
+        set_test_name("native web text owns display ranges and release-note targets without GL URL owners");
+        std::string error;
+        const auto text=LLVKWebText::parse("Caf\xc3\xa9 [https://example.com/notes Release%20Notes] <nolink>https://hidden.example/a</nolink> https://example.com/path?q=1.",error);
+        ensure(error,text.has_value());
+        ensure("source wiki label and nolink contents",text->text==U"Caf\u00e9 Release Notes https://hidden.example/a https://example.com/path?q=1.");
+        ensure_equals("label plus host and suffix links",text->links.size(),std::size_t(3));
+        ensure_equals("Unicode display offset",text->links.front().begin,std::size_t(5));
+        ensure_equals("release-note target retained",text->links.front().target,std::string("https://example.com/notes"));
+        ensure("query suffix marked separately",!text->links[1].query && text->links[2].query);
+        ensure_equals("punctuation not part of target",text->links.back().target,std::string("https://example.com/path?q=1"));
+        const auto masked=LLVKWebText::parse("[https://actual.example/path https://other.example]",error);
+        ensure("URL-shaped label cannot hide target",masked && masked->text==U"https://actual.example/path");
+        const auto appLink=LLVKWebText::parse("[secondlife:///app/openfloater/preferences?tab=ui Interface]",error);
+        ensure("application label",appLink && appLink->text==U"Interface");
+        ensure_equals("application target preserved",appLink->links.front().target,std::string("secondlife:///app/openfloater/preferences?tab=ui"));
+        ensure("bounded markup",!LLVKWebText::parse(std::string(65537,'a'),error));
+        ensure("embedded NUL rejected",!LLVKWebText::parse(std::string("a\0b",3),error));
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect={0,0,180,70};
+        LLVKControl::Params control;
+        control.font=loadFont();
+        control.initialValue="[https://example.com/notes Release Notes]";
+        LLVKPlainControl::Params params;
+        params.parseWebLinks=true;
+        params.selectable=true;
+        params.layout.wrap=true;
+        std::string opened;
+        params.linkClicked=[&](auto,const std::string& target) { opened=target; };
+        const auto id=tree.createPlainText(view,control,params,0,error);
+        ensure(error,id.has_value());
+        ensure("link label replaces markup",tree.get(*id)->plainText->text==U"Release Notes");
+        const auto paint=LLVKWidgetPaint::prepare(tree,*id,{},error);
+        ensure(error,paint.has_value());
+        ensure("native link color",paint->commands.front().color==params.linkColor.get());
+        ensure("link underline emitted",std::any_of(paint->commands.begin(),paint->commands.end(),
+            [](const auto& command) { return !command.text && command.rectangle.top-command.rectangle.bottom==1; }));
+        LLVKWidgetTree::PointerEvent event;
+        event.x=3; event.y=63; event.kind=LLVKWidgetTree::PointerKind::LeftDown;
+        ensure("link press captured",tree.routePointer(*id,event,error));
+        event.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("link release",tree.routePointer(*id,event,error));
+        ensure_equals("native link dispatched",opened,std::string("https://example.com/notes"));
+        ensure_equals("link releases capture",tree.mouseCapture(),LLVKWidgetTree::Id(0));
+        opened.clear();
+        event.kind=LLVKWidgetTree::PointerKind::LeftDown;
+        ensure("second link press",tree.routePointer(*id,event,error));
+        event.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        event.x=179;
+        tree.routePointer(*id,event,error);
+        ensure("release outside link does not navigate",opened.empty());
+        struct Clipboard final : LLVKClipboard
+        {
+            std::u32string copied;
+            bool available(bool) const override { return false; }
+            std::optional<std::u32string> read(bool,std::string&) override { return std::nullopt; }
+            bool write(std::u32string_view text,bool,std::string&) override { copied=text; return true; }
+        };
+        auto clipboard=std::make_shared<Clipboard>();
+        tree.setClipboard(clipboard);
+        ensure("select readonly display text",tree.selectAllPlainText(*id));
+        ensure("copy readonly selection",tree.copyPlainText(*id,error));
+        ensure("clipboard contains label not markup",clipboard->copied==U"Release Notes");
+        const auto selectedPaint=LLVKWidgetPaint::prepare(tree,*id,{},error);
+        ensure(error,selectedPaint.has_value());
+        ensure("selection background drawn",selectedPaint->commands.front().color==params.selectionBackground.get());
+        event.kind=LLVKWidgetTree::PointerKind::LeftDown; event.x=2;
+        ensure("selection drag begins",tree.routePointer(*id,event,error));
+        event.kind=LLVKWidgetTree::PointerKind::Hover; event.x=50;
+        ensure("selection drag updates",tree.routePointer(*id,event,error));
+        event.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        tree.routePointer(*id,event,error);
+        ensure("drag selects rather than activating link",opened.empty() && tree.get(*id)->plainText->selectionStart!=tree.get(*id)->plainText->selectionEnd);
+    }
+
+    template<> template<> void object::test<135>()
+    {
+        set_test_name("native border paint preserves bevel color order and two-pixel opaque alpha");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect={0,0,100,60};
+        LLVKBorder::Params border;
+        border.thickness=2;
+        border.highlightLight=LLVKColor{1,0,0,0.2f};
+        border.highlightDark=LLVKColor{0,1,0,0.3f};
+        border.shadowLight=LLVKColor{0,0,1,0.4f};
+        border.shadowDark=LLVKColor{0.2f,0.3f,0.4f,0.5f};
+        std::string error;
+        const auto id=tree.createBorder(view,border,0,error);
+        ensure(error,id.has_value());
+        const auto paint=LLVKWidgetPaint::prepare(tree,*id,{},error);
+        ensure(error,paint.has_value());
+        ensure_equals("two-pixel eight edges",paint->commands.size(),std::size_t(8));
+        ensure("outer highlight RGB alpha one",paint->commands[0].color==LLVKColor::Value{0,1,0,1});
+        ensure("inner highlight",paint->commands[2].color==LLVKColor::Value{1,0,0,1});
+        ensure("outer shadow",paint->commands[4].color==LLVKColor::Value{0.2f,0.3f,0.4f,1});
+        ensure("inner shadow",paint->commands[6].color==LLVKColor::Value{0,0,1,1});
+        border.thickness=1;
+        border.bevel=LLVKBorder::Bevel::In;
+        const auto inset=tree.createBorder(view,border,0,error);
+        ensure(error,inset.has_value());
+        const auto one=LLVKWidgetPaint::prepare(tree,*inset,{},error);
+        ensure(error,one.has_value());
+        ensure_equals("one-pixel four edges",one->commands.size(),std::size_t(4));
+        ensure("one-pixel inset shadow preserves alpha",one->commands[0].color==border.shadowDark.get());
+        ensure("one-pixel inset highlight preserves alpha",one->commands[2].color==border.highlightLight.get());
+        border.thickness=0;
+        const auto invisible=tree.createBorder(view,border,0,error);
+        ensure(error,invisible.has_value());
+        const auto empty=LLVKWidgetPaint::prepare(tree,*invisible,{},error);
+        ensure("zero border emits no edges",empty && empty->commands.empty());
+    }
+
     template<> template<> void object::test<134>()
     {
         set_test_name("native tab selection validates panel names and commits after visibility changes");
@@ -106,6 +378,18 @@ namespace tut
         const auto beforeLayout=tree.get(*firstButton)->params.rect;
         ensure("overflow remains explicit",!tree.layoutTopTabs(*container,layout,error));
         ensure("rejected layout preserves geometry",tree.get(*firstButton)->params.rect==beforeLayout);
+        layout.minimumWidth=125;
+        layout.maximumWidth=160;
+        layout.position=LLVKWidgetTree::Node::TabContainer::Layout::Position::Left;
+        layout.rightPadding=4;
+        ensure("left tabs for Preferences",tree.layoutTabPanels(*container,layout,error));
+        ensure("source left panel bounds",tree.get(*first)->params.rect==LLVKWidgetTree::Rect{131,1,299,139});
+        ensure("source vertical button geometry",tree.get(*firstButton)->params.rect==LLVKWidgetTree::Rect{3,114,128,137});
+        layout.position=LLVKWidgetTree::Node::TabContainer::Layout::Position::Bottom;
+        layout.minimumWidth=60;
+        ensure("bottom tabs",tree.layoutTabPanels(*container,layout,error));
+        ensure("source bottom panel bounds",tree.get(*first)->params.rect==LLVKWidgetTree::Rect{1,18,299,139});
+        ensure_equals("bottom tab offset",tree.get(*firstButton)->params.rect.bottom,1);
         ensure("panels hidden before selection",!tree.get(*first)->params.visible && !tree.get(*second)->params.visible);
         int commits=0;
         LLVKControl::Callback callback;
@@ -130,6 +414,13 @@ namespace tut
         ensure("numeric tab selection",tree.setValue(*container,LLSD(1)));
         ensure_equals("numeric value selects second",tree.get(*container)->tabContainer->selected,*second);
         ensure("invalid index rejected",!tree.setValue(*container,LLSD(-1)));
+        layout.position=LLVKWidgetTree::Node::TabContainer::Layout::Position::Left;
+        ensure("vertical navigation layout",tree.layoutTabPanels(*container,layout,error));
+        ensure("vertical strip focused",tree.requestControlFocus(*secondButton,true,error));
+        ensure("up selects previous vertical tab",tree.tabContainerKey(*container,LLVKWidgetTree::ScrollKey::Up,{},error));
+        ensure_equals("vertical tab focus follows",tree.keyboardFocus(),*firstButton);
+        ensure("right enters selected vertical panel",tree.tabContainerKey(*container,LLVKWidgetTree::ScrollKey::Right,{},error));
+        ensure_equals("vertical panel receives focus",tree.keyboardFocus(),*first);
         callback.function=[&](auto id,const LLSD&) { tree.erase(id,error); };
         tree.setControlCommit(*container,callback);
         ensure("commit may erase tab owner",tree.selectTabPanel(*container,*first,error));
@@ -266,6 +557,9 @@ namespace tut
         ensure("source Info system field",formatted.find(U"CPU: fixture CPU")!=std::u32string::npos);
         ensure("inactive RLVa uses source state",formatted.find(U"RestrainedLove API: (disabled)")!=std::u32string::npos);
         ensure("absent audio uses source state",formatted.find(U"Audio Driver Version: Undefined")!=std::u32string::npos);
+        aboutInfo["AUDIO_DRIVER_VERSION"]="OpenAL, version active fixture";
+        ensure("active audio metadata",login->setAboutInfo(aboutInfo,error));
+        ensure("active audio not replaced by fallback",tree.get(login->find("native_about_body"))->plainText->text.find(U"Audio Driver Version: OpenAL, version active fixture")!=std::u32string::npos);
         ensure("curl version from producer",formatted.find(U"libcurl Version: curl fixture")!=std::u32string::npos);
         ensure("actual native J2C provider",formatted.find(U"J2C Decoder Version: OpenJPEG:")!=std::u32string::npos);
         ensure("mode reports applied preset",formatted.find(U"Settings mode: Vulkanstorm")!=std::u32string::npos);
@@ -2831,6 +3125,59 @@ namespace tut
         }
         ensure("container packaged template",scrollFactory.loadDefaultsFile(tree,"widgets/scroll_container.xml",error));
         ensure("panel construction font default",scrollFactory.loadDefaults(tree,"<panel font='SansSerifSmall'/>",error));
+        ensure("spinner editor defaults",scrollFactory.loadDefaultsFile(tree,"widgets/line_editor.xml",error));
+        ensure("packaged spinner template",scrollFactory.loadDefaultsFile(tree,"widgets/spinner.xml",error));
+        const auto spinner=scrollFactory.construct(tree,
+            "<spinner name='RenderNameShowTime' width='40' height='20' min_val='1' max_val='60' increment='1' decimal_digits='0' initial_value='5'/>",0,error);
+        ensure(error,spinner.has_value());
+        const auto spinState=*tree.get(*spinner)->spinner;
+        ensure_equals("spinner skin arrow",tree.get(spinState.up)->button->images.unselected->name(),std::string("Stepper_Up_Off"));
+        ensure_equals("spinner precision from original declaration",tree.value(spinState.editor).asString(),std::string("5"));
+        ensure("spinner from XUI commits",tree.stepSpinner(*spinner,true,{},error));
+        ensure_equals("spinner native result",tree.value(*spinner).asReal(),6.);
+        ensure("slider bar template",scrollFactory.loadDefaultsFile(tree,"widgets/slider_bar.xml",error));
+        const auto slider=scrollFactory.construct(tree,
+            "<slider_bar name='gain' width='140' height='24' min_val='0' max_val='1' increment='0.1' initial_value='0.5'/>",0,error);
+        ensure(error,slider.has_value());
+        const auto sliderPaint=LLVKWidgetPaint::prepare(tree,*slider,{},error);
+        ensure(error,sliderPaint.has_value());
+        ensure_equals("slider thumb real skin image",tree.get(*slider)->slider->params->thumb->name(),std::string("SliderThumb_Off"));
+        ensure("slider track and thumb emitted",sliderPaint->commands.size()>=3);
+        ensure("composite slider template",scrollFactory.loadDefaultsFile(tree,"widgets/slider.xml",error));
+        const auto compositeSlider=scrollFactory.construct(tree,
+            "<slider name='volume' label='Volume' label_width='60' text_width='40' width='240' height='24' min_val='0' max_val='1' increment='0.1' initial_value='0.5' decimal_digits='1' can_edit_text='true'/>",0,error);
+        ensure(error,compositeSlider.has_value());
+        const auto compositeState=*tree.get(*compositeSlider)->sliderControl;
+        ensure("full slider owns label bar and editor",compositeState.label && compositeState.bar && compositeState.editor);
+        ensure_equals("declared slider value",tree.value(compositeState.editor).asString(),std::string("0.5"));
+        ensure("composite slider painted",LLVKWidgetPaint::prepare(tree,*compositeSlider,{},error).has_value());
+        ensure("radio checkbox defaults",scrollFactory.loadDefaultsFile(tree,"widgets/check_box.xml",error));
+        ensure("radio item template",scrollFactory.loadDefaultsFile(tree,"widgets/radio_item.xml",error));
+        ensure("radio group template",scrollFactory.loadDefaultsFile(tree,"widgets/radio_group.xml",error));
+        const auto radio=scrollFactory.construct(tree,
+            "<radio_group width='200' height='80' layout='topleft' initial_value='second'>"
+            "<radio_item name='first' value='first' label='First' left='0' top='0' width='150' height='20'/>"
+            "<radio_item name='second' value='second' label='Second' left='0' top_pad='4' width='150' height='20'/></radio_group>",0,error);
+        ensure(error,radio.has_value());
+        ensure_equals("radio payload initial selection",tree.value(*radio).asString(),std::string("second"));
+        const auto radioFirst=tree.get(*radio)->radioGroup->items.front().control;
+        ensure_equals("source radio image",tree.get(tree.get(radioFirst)->checkBox->button)->button->images.unselected->name(),std::string("RadioButton_Off"));
+        ensure_equals("source radio XUI top",tree.get(radioFirst)->params.rect.top,80);
+        auto preferenceCallbacks=callbacks;
+        preferenceCallbacks.actions["Pref.MaturitySettings"]=[](auto,const LLSD&) {};
+        auto preferenceResources=resources;
+        std::string preferenceLink;
+        preferenceResources.webLinkHandler=[&](auto,const std::string& target) { preferenceLink=target; };
+        LLVKWidgetFactory generalFactory({}, {}, {}, preferenceCallbacks,preferenceResources);
+        ensure("General panel constructor font",generalFactory.loadDefaults(tree,"<panel font='SansSerifSmall'/>",error));
+        for (const std::string widget : {"button","view_border","line_editor","check_box","radio_item","radio_group","spinner","combo_box","text"})
+            ensure("General widget template "+widget,generalFactory.loadDefaultsFile(tree,"widgets/"+widget+".xml",error));
+        const auto general=generalFactory.constructFile(tree,"panel_preferences_general.xml",0,error);
+        ensure(error,general.has_value());
+        ensure_equals("original General panel name",tree.get(*general)->params.name,std::string("general_panel"));
+        const auto generalPaint=LLVKWidgetPaint::prepare(tree,*general,{},error);
+        ensure(error,generalPaint.has_value());
+        ensure("original General controls painted",generalPaint->commands.size()>30);
         ensure("tab container packaged template",scrollFactory.loadDefaultsFile(tree,"widgets/tab_container.xml",error));
         const auto tabs = scrollFactory.construct(tree,
             "<tab_container width='501' height='572'><panel name='info' label='Info'/><panel name='credits' label='Credits'/></tab_container>",0,error);
@@ -2841,6 +3188,13 @@ namespace tut
         ensure_equals("source tab skin image",tree.get(tabState.tabs.front().button)->button->params.images.unselected->name(),std::string("TabTop_Left_Off"));
         ensure("declared tab click",tree.commit(tabState.tabs.back().button));
         ensure("second panel visible",tree.get(tabState.tabs.back().panel)->params.visible);
+        const auto leftTabs=scrollFactory.construct(tree,
+            "<tab_container width='673' height='480' tab_position='left' tab_width='125' tab_padding_right='4'>"
+            "<panel name='general' label='General'/><panel name='graphics' label='Graphics'/></tab_container>",0,error);
+        ensure(error,leftTabs.has_value());
+        const auto leftState=*tree.get(*leftTabs)->tabContainer;
+        ensure_equals("source vertical tab image",tree.get(leftState.tabs.front().button)->button->params.images.unselected->name(),std::string("SegmentedBtn_Left_Disabled"));
+        ensure_equals("source Preferences panel starts after tabs",tree.get(leftState.tabs.front().panel)->params.rect.left,131);
         const auto container = scrollFactory.construct(tree,
             "<scroll_container width='100' height='100'><panel name='document' width='300' height='400' font='SansSerifSmall'/></scroll_container>",0,error);
         ensure(error,container.has_value());

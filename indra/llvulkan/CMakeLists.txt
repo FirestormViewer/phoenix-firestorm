@@ -39,7 +39,9 @@ add_library(llvkwidgets llvkwidgettree.cpp llvkwidgettree.h llvkwidgetlayout.cpp
     llvkskinfiles.cpp llvkskinfiles.h llvkskinimages.cpp llvkskinimages.h llvkwidgetjpeg.cpp llvkwidgettga.cpp llvkwidgetj2c.cpp
     llvklineeditor.cpp llvklineeditor.h llvkclipboard.cpp llvkclipboard.h llvkstyledtext.cpp llvkstyledtext.h
     llvkscroll.cpp llvkscroll.h llvkcombo.cpp llvkbrowsersurface.cpp llvkbrowsersurface.h llvkwidgetpaint.cpp llvkwidgetpaint.h
-    llvkloginui.cpp llvkloginui.h llvkstartupsettings.cpp llvkstartupsettings.h llvkloginmenu.cpp llvkloginmenu.h llvkfloater.cpp llvkfloater.h llvklogindialogs.cpp)
+    llvkloginui.cpp llvkloginui.h llvkstartupsettings.cpp llvkstartupsettings.h llvkloginmenu.cpp llvkloginmenu.h llvkfloater.cpp llvkfloater.h llvklogindialogs.cpp llvkspinner.cpp llvkradiogroup.cpp)
+target_link_libraries(llvkwidgets PRIVATE llmath)
+target_sources(llvkwidgets PRIVATE llvkslider.cpp)
 target_include_directories(llvkwidgets PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(llvkwidgets SYSTEM PRIVATE ${llvk_stb_SOURCE_DIR})
 target_link_libraries(llvkwidgets PRIVATE ll::expat ll::libpng ll::zlib-ng ll::libjpeg ll::openjpeg)
@@ -103,6 +105,11 @@ if (WINDOWS)
     target_include_directories(llvkbrowser SYSTEM PRIVATE "${LIBS_PREBUILT_DIR}/include/cef")
     target_link_libraries(llvkbrowser PUBLIC llvkwidgets PRIVATE llvk_dullahan user32)
     add_library(llvkloginwindow llvkloginwindow.cpp llvkloginwindow.h llvknativestartup.cpp llvknativestartup.h)
+    target_sources(llvkloginwindow PRIVATE llvkaudio.cpp llvkaudio.h)
+    include(OPENAL)
+    if (TARGET ll::openal)
+        target_link_libraries(llvkloginwindow PRIVATE ll::openal)
+    endif ()
     target_compile_definitions(llvkloginwindow PRIVATE VK_USE_PLATFORM_WIN32_KHR)
     target_compile_definitions(llvkloginwindow PRIVATE
         LLVK_VIEWER_MAJOR="${VIEWER_VERSION_MAJOR}" LLVK_VIEWER_MINOR="${VIEWER_VERSION_MINOR}"

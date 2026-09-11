@@ -1,5 +1,15 @@
 #include "llvkimagepublication.h"
 
+bool LLVKImagePublication::waitPendingUpload(std::uint64_t timeout,std::string& error)
+{
+    error=mFailure;
+    if (!error.empty()) return false;
+    if (!mUpload) return true;
+    const auto status=mUpload->wait(timeout,error);
+    if (status==LLVKGlyphUpload::Status::Failed) mFailure=error;
+    return status==LLVKGlyphUpload::Status::Ready;
+}
+
 bool LLVKImagePublication::advance(std::shared_ptr<const LLVKWidgetImage> latest, std::string& error)
 {
     error = mFailure;

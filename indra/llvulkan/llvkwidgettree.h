@@ -19,6 +19,8 @@
 #include <functional>
 #include <set>
 
+struct LLVKWidgetLayout;
+
 class LLVKWidgetTree final
 {
 public:
@@ -177,6 +179,70 @@ public:
         float glow = 0.f;
         Id decrease = 0, increase = 0;
     };
+    struct SpinnerParams
+    {
+        float minimum = 0.f, maximum = 1.f, increment = 0.1f;
+        std::int32_t precision = 3, labelWidth = 40, buttonWidth = 16, buttonHeight = 10, spacing = 2;
+        std::string label;
+        bool dynamicHeight = false, digitsOnly = false, labelWrap = false;
+        LLVKColor textEnabledColor{1,1,1,1}, textDisabledColor{0.5f,0.5f,0.5f,1};
+        LLVKControl::Params buttonControl, editorControl;
+        LLVKButton::Params upButton, downButton;
+        LineEditorParams editor;
+    };
+    struct Spinner
+    {
+        std::shared_ptr<const SpinnerParams> params;
+        Id editor = 0, up = 0, down = 0, label = 0;
+        std::uint64_t generation = 0;
+    };
+    struct RadioItemParams
+    {
+        Params view;
+        std::shared_ptr<const LLVKWidgetLayout> layout;
+        LLVKControl::Params control;
+        CheckBoxConstruction check;
+        std::optional<LLSD> payload;
+    };
+    struct RadioGroup
+    {
+        struct Item { Id control = 0; LLSD payload; };
+        std::vector<Item> items;
+        std::int32_t selected = -1;
+        bool allowDeselect = false;
+    };
+    struct SliderParams
+    {
+        float minimum = 0.f, maximum = 1.f, increment = 0.1f, initial = 0.f;
+        bool vertical = false;
+        std::shared_ptr<const LLVKWidgetImage> thumb, pressedThumb, disabledThumb, track, highlight;
+        LLVKColor outlineColor{1,1,1,1}, centerColor{1,1,1,1};
+        LLVKControl::Callback mouseDown, mouseUp;
+    };
+    struct Slider
+    {
+        std::shared_ptr<const SliderParams> params;
+        Rect thumb, dragStart;
+        std::int32_t mouseOffset = 0;
+    };
+    struct SliderControlParams
+    {
+        SliderParams bar;
+        LLVKControl::Params editorControl;
+        LineEditorParams editor;
+        std::string label;
+        std::optional<std::int32_t> labelWidth, textWidth;
+        std::int32_t precision = 3, spacing = 4;
+        bool showText = true, editable = false;
+        LLVKColor textColor{1,1,1,1}, disabledColor{0.5f,0.5f,0.5f,1};
+        LLVKControl::Callback editorCommit;
+    };
+    struct SliderControl
+    {
+        std::shared_ptr<const SliderControlParams> params;
+        Id bar = 0, label = 0, editor = 0, text = 0;
+        std::uint64_t generation = 0;
+    };
     struct Node
     {
         struct TabContainer
@@ -187,8 +253,11 @@ public:
             std::uint64_t selectionGeneration = 0;
             struct Layout
             {
+                enum class Position { Top, Bottom, Left };
+                Position position = Position::Top;
                 std::int32_t tabHeight = 21, minimumWidth = 60, maximumWidth = 160;
                 std::int32_t labelPadding = 0, horizontalPadding = 0, panelOverlap = 0;
+                std::int32_t verticalHeight = 23, verticalPadding = 0, rightPadding = 0;
                 bool hidden = false, panelOffset = false;
             };
             std::optional<Layout> layout;
@@ -232,6 +301,10 @@ public:
         std::optional<LineEditor> lineEditor;
         std::optional<Scrollbar> scrollbar;
         std::optional<Combo> combo;
+        std::optional<Spinner> spinner;
+        std::optional<RadioGroup> radioGroup;
+        std::optional<Slider> slider;
+        std::optional<SliderControl> sliderControl;
         Id comboListOwner = 0;
         struct ScrollContainer
         {
@@ -322,6 +395,7 @@ public:
     bool attachTabPanel(Id container, Id panel, Id button, std::string& error);
     bool selectTabPanel(Id container, Id panel, std::string& error);
     bool layoutTopTabs(Id container, const Node::TabContainer::Layout& layout, std::string& error);
+    bool layoutTabPanels(Id container, const Node::TabContainer::Layout& layout, std::string& error);
     std::optional<Id> createLayoutStack(const Params& view, bool vertical, std::int32_t spacing, bool clip, Id parent, std::string& error);
     bool attachLayoutPanel(Id stack, Id panel, const Node::LayoutPanel& params, std::string& error);
     bool updateLayoutStack(Id id, std::string& error, float frameDelta = 0.f);
@@ -357,6 +431,29 @@ public:
     bool setLineEditorPassword(Id id, bool password);
     bool selectLineEditorAll(Id id, std::string& error);
     bool setControlCommit(Id id, LLVKControl::Callback callback);
+    std::optional<Id> createSpinner(const Params& view, const LLVKControl::Params& control,
+        const SpinnerParams& params, Id parent, std::string& error);
+    bool commitSpinner(Id id, std::string& error);
+    bool stepSpinner(Id id, bool increase, LLVKLineEditor::Modifiers modifiers, std::string& error);
+    void setInputModifiers(LLVKLineEditor::Modifiers modifiers) { mInputModifiers = modifiers; }
+    bool setSpinnerValue(Id id, const LLSD& value, bool forceEditor, std::string& error);
+    std::optional<Id> createRadioGroup(const Params& view, const LLVKControl::Params& control,
+        std::span<const RadioItemParams> items, bool allowDeselect, Id parent, std::string& error);
+    bool selectRadioIndex(Id id, std::int32_t index, bool publish, std::string& error);
+    bool setRadioValue(Id id, const LLSD& value, std::string& error);
+    bool radioKey(Id id, bool forward, std::string& error);
+    bool setRadioIndexEnabled(Id id, std::int32_t index, bool enabled, std::string& error);
+    std::optional<Id> createSlider(const Params& view, const LLVKControl::Params& control,
+        const SliderParams& params, Id parent, std::string& error);
+    bool setSliderValue(Id id, float value, bool publish, bool commit, std::string& error);
+    bool updateSliderThumb(Id id, std::string& error);
+    bool sliderPointer(Id id, const PointerEvent& event, std::string& error);
+    bool sliderStep(Id id, std::int32_t steps, std::string& error);
+    std::optional<Id> createSliderControl(const Params& view, const LLVKControl::Params& control,
+        const SliderControlParams& params, Id parent, std::string& error);
+    bool setSliderControlValue(Id id, const LLSD& value, std::string& error);
+    bool commitSliderControl(Id id, bool fromEditor, std::string& error);
+    bool updateSliderControlText(Id id, std::string& error);
     bool commitLineEditor(Id id);
     bool enableLineHistory(Id id, bool enabled);
     bool lineEditorUnicode(Id id, char32_t character, bool overwrite, std::string& error);
@@ -471,6 +568,10 @@ public:
     bool reflowPlainText(Id id, std::string& error);
     bool fitPlainText(Id id, std::string& error);
     bool setPlainTextClicked(Id id, std::function<void(Id)> callback);
+    std::optional<std::size_t> plainTextLinkAt(Id id, std::int32_t x, std::int32_t y, std::string& error);
+    std::optional<std::size_t> plainTextIndexAt(Id id, std::int32_t x, std::int32_t y, std::string& error);
+    bool selectAllPlainText(Id id);
+    bool copyPlainText(Id id, std::string& error);
     std::optional<Id> createCheckBox(const Params& view, const LLVKControl::Params& control,
                                     const CheckBoxConstruction& checkbox, Id parent, std::string& error);
     LLSD value(Id id) const;
@@ -596,7 +697,11 @@ private:
                                        std::optional<Scrollbar> scrollbar = std::nullopt,
                                        std::shared_ptr<const ScrollContainerParams> scrollContainer = {},
                                        std::optional<Combo> combo = std::nullopt,
-                                       std::optional<Node::Browser> browser = std::nullopt);
+                                       std::optional<Node::Browser> browser = std::nullopt,
+                                       std::optional<Spinner> spinner = std::nullopt);
+    bool constructSpinnerChildren(Id id, std::string& error);
+    bool refreshSpinnerEditor(Id id, std::string& error);
+    bool publishSpinnerValue(Id id, float value, std::string& error);
     bool constructComboChildren(Id id, std::string& error);
     bool comboListPointer(Id id, const PointerEvent& event, std::string& error);
     bool constructScrollContainerChildren(Id id, const ScrollContainerParams& params, std::string& error);
@@ -644,6 +749,7 @@ private:
     Id mNextId = 1;
     double mTime = 0.0;
     double mFocusFlashTime = 0.0;
+    LLVKLineEditor::Modifiers mInputModifiers;
     LLVKLabel::Context mLabelContext;
 };
 

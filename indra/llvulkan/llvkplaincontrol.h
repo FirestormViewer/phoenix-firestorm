@@ -4,6 +4,7 @@
 #include "llvklabel.h"
 #include "llvkcolor.h"
 #include "llvkplaintextlayout.h"
+#include "llvkstyledtext.h"
 
 struct LLVKPlainControl
 {
@@ -20,12 +21,19 @@ struct LLVKPlainControl
         std::function<void(std::uint64_t)> clicked;
         bool showHandCursor = true;
         bool parseUrls = false;
+        bool parseWebLinks = false;
+        bool selectable = false;
+        LLVKColor selectionColor{1,1,1,1}, selectionBackground{0.2f,0.4f,0.7f,1};
+        LLVKColor linkColor{0.2f,0.6f,1,1}, queryColor{0.5f,0.5f,0.5f,1};
+        std::function<void(std::uint64_t,const std::string&)> linkClicked;
         LLVKColor tentativeColor{1,1,1,1};
         LLVKColor backgroundColor{0,0,0,1};
     };
     Params params;
     LLVKLabel source;
     std::u32string text;
+    std::vector<LLVKWebText::Link> links;
+    std::optional<std::string> pressedLink;
     std::string value;
     std::uint64_t document = 0;
     std::size_t cursor = 0;

@@ -451,6 +451,16 @@ bool LLVKWidgetTree::setEnabled(Id id, bool enabled)
         return true;
     }
     found->second.params.enabled = enabled;
+    if (found->second.spinner)
+    {
+        const auto spinner = *found->second.spinner;
+        if (get(spinner.editor)) setEnabled(spinner.editor,enabled);
+        if (get(spinner.label) && get(spinner.label)->plainText)
+        {
+            auto& text = *mNodes.at(spinner.label).plainText;
+            text.params.textColor = text.params.readOnlyColor = enabled ? spinner.params->textEnabledColor : spinner.params->textDisabledColor;
+        }
+    }
     if (found->second.plainText) found->second.plainText->readOnly = !enabled;
     if (found->second.checkBox)
     {

@@ -233,14 +233,27 @@ bool LLVKLoginUi::showAbout(std::string& error)
         LLVKWidgetTree::Params view; view.name="native_about_body"; view.rect={0,0,470,475}; view.mouseOpaque=true;
         LLVKControl::Params control; control.font=font; control.tabStop=false;
         LLVKPlainControl::Params text; text.maximumBytes=65536; text.layout.wrap=true; text.readOnly=true;
+        text.parseWebLinks=true;
+        text.selectable=true;
+        if (const auto color=mColors->find("TextSelectedColor")) text.selectionColor=*color;
+        if (const auto color=mColors->find("TextSelectedBgColor")) text.selectionBackground=*color;
+        if (const auto color=mColors->find("HTMLLinkColor")) text.linkColor=*color;
+        if (const auto color=mColors->find("UriQueryPartColor")) text.queryColor=*color;
+        text.linkClicked=[this](auto,const std::string& url)
+        { if (mOpenUrl) mOpenUrl(url); else mDialogError="Native web link service is not bound"; };
         const auto body=mTree.createPlainText(view,control,text,mAboutDocument,error);
         if (!body) { mAbout.reset(); return false; }
         mAboutBody=*body;
         view.name="about_intro";
         view.rect={19,515,453,545};
+        text.selectable=false;
         const auto intro=mTree.createPlainText(view,control,text,mAbout->id(),error);
         if (!intro) { mAbout.reset(); return false; }
         mAboutIntro=*intro;
+        LLVKWidgetTree::Events linkEvents;
+        linkEvents.cursor=[this](auto,bool hand) { if (mPointerCursor) mPointerCursor(hand); };
+        mTree.setEvents(mAboutBody,linkEvents);
+        mTree.setEvents(mAboutIntro,std::move(linkEvents));
         const auto copy=mDialogFactory->construct(mTree,"<button name='about_copy' label='Copy to Clipboard' left='12' bottom='12' width='180' height='25'/>",mAbout->id(),error);
         if (!copy) { mAbout.reset(); return false; }
         mAboutCopy=*copy;
@@ -248,8 +261,8 @@ bool LLVKLoginUi::showAbout(std::string& error)
         callback.function=[this](auto,const LLSD&)
         {
             if (!mDialogClipboard) { mDialogError="Native clipboard unavailable"; return; }
-            const auto wide=utf8str_to_wstring(mAboutInfo);
-            mDialogClipboard->write(std::u32string(wide.begin(),wide.end()),false,mDialogError);
+            const auto parsed=LLVKWebText::parse(mAboutInfo,mDialogError);
+            if (parsed) mDialogClipboard->write(parsed->text,false,mDialogError);
         };
         mTree.setControlCommit(*copy,std::move(callback));
     }
@@ -324,7 +337,7 @@ bool LLVKLoginUi::setAboutInfo(const LLSD& info,std::string& error)
     LLStringUtil::format(modeLabel,arguments);
     arguments["MODE"]=modeLabel;
     arguments["RLV_VERSION"]=mAboutStrings["RLVaStatusDisabled"];
-    arguments["AUDIO_DRIVER_VERSION"]="Undefined";
+    if (!info.has("AUDIO_DRIVER_VERSION")) arguments["AUDIO_DRIVER_VERSION"]="Undefined";
     arguments["J2C_VERSION"]=LLVKWidgetImage::j2cDecoderVersion();
     const auto quality=mTree.setting("RenderQualityPerformance").value_or(LLSD(-1)).asInteger();
     const char* qualities[]{"render_quality_low","render_quality_mediumlow","render_quality_medium","render_quality_mediumhigh",
@@ -356,7 +369,9 @@ bool LLVKLoginUi::setAboutInfo(const LLSD& info,std::string& error)
 bool LLVKLoginUi::updateAboutText(std::string& error)
 {
     const auto source=mAboutPageNames[mAboutPage]=="support_panel" ? mAboutInfo : mAboutPages[mAboutPage].second;
-    const auto wide=utf8str_to_wstring(source); const std::u32string text(wide.begin(),wide.end());
+    const auto parsed=LLVKWebText::parse(source,error);
+    if (!parsed) return false;
+    const auto& text=parsed->text;
     LLVKPlainTextLayout::Options options; options.width=470; options.wrap=true;
     const auto* body=mTree.get(mAboutBody); if (!body) return false;
     const auto lines=LLVKPlainTextLayout::plain(text,*body->control->params.font,options,error);

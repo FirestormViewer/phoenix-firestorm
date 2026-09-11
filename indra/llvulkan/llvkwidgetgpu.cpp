@@ -2,6 +2,19 @@
 #include <algorithm>
 #include <cmath>
 
+bool LLVKWidgetGpu::waitPendingUploads(std::uint64_t timeout,std::string& error)
+{
+    error.clear();
+    for (auto& [key,image] : mImages)
+        if (image.upload && image.upload->wait(timeout,error)!=LLVKGlyphUpload::Status::Ready) return false;
+    for (auto& [key,text] : mTexts)
+        for (auto& upload : text.uploads)
+            if (upload && upload->wait(timeout,error)!=LLVKGlyphUpload::Status::Ready) return false;
+    for (auto& [owner,stream] : mStreams)
+        if (!stream.publication->waitPendingUpload(timeout,error)) return false;
+    return true;
+}
+
 LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExtent2D extent,
     LLVKUiPacket& packet, std::string& error)
 {

@@ -44,33 +44,59 @@ bool LLVKWidgetTree::tabContainerKey(Id id, ScrollKey key, LLVKLineEditor::Modif
         return error.empty();
     }
     if (hasAncestor(mKeyboardFocus,owner->tabContainer->selected)) return false;
+    using Position = Node::TabContainer::Layout::Position;
+    const auto position = owner->tabContainer->layout ? owner->tabContainer->layout->position : Position::Top;
+    if (position == Position::Left)
+    {
+        if (key == ScrollKey::Up || key == ScrollKey::Down)
+        { moveTab(id,key == ScrollKey::Down,error); return error.empty(); }
+        if (key == ScrollKey::Right)
+        {
+            if (get(owner->tabContainer->selected)) requestControlFocus(owner->tabContainer->selected,true,error);
+            return error.empty();
+        }
+        return key == ScrollKey::Left;
+    }
     if (horizontal) { moveTab(id,key == ScrollKey::Right,error); return error.empty(); }
-    if (key == ScrollKey::Down)
+    if ((key == ScrollKey::Down && position == Position::Top) || (key == ScrollKey::Up && position == Position::Bottom))
     {
         if (get(owner->tabContainer->selected)) requestControlFocus(owner->tabContainer->selected,true,error);
         return error.empty();
     }
-    return key == ScrollKey::Up;
+    return key == ScrollKey::Up || key == ScrollKey::Down;
 }
 
 bool LLVKWidgetTree::layoutTopTabs(Id container, const Node::TabContainer::Layout& layout, std::string& error)
+{
+    auto top = layout;
+    top.position = Node::TabContainer::Layout::Position::Top;
+    return layoutTabPanels(container,top,error);
+}
+
+bool LLVKWidgetTree::layoutTabPanels(Id container, const Node::TabContainer::Layout& layout, std::string& error)
 {
     error.clear();
     const auto* owner = get(container);
     if (!owner || !owner->tabContainer || layout.tabHeight <= 0 || layout.minimumWidth < 0 ||
         layout.maximumWidth < layout.minimumWidth || layout.labelPadding < 0 || layout.horizontalPadding < 0 ||
-        layout.panelOverlap < 0 || layout.panelOverlap > layout.tabHeight)
-    { error = "Invalid native top-tab layout"; return false; }
+        layout.panelOverlap < 0 || layout.panelOverlap > layout.tabHeight || layout.verticalHeight <= 0 ||
+        layout.verticalPadding < 0 || layout.rightPadding < 0)
+    { error = "Invalid native tab layout"; return false; }
+    using Position = Node::TabContainer::Layout::Position;
+    if (layout.position != Position::Top && layout.position != Position::Bottom && layout.position != Position::Left)
+    { error = "Invalid native tab position"; return false; }
+    const bool vertical = layout.position == Position::Left;
     const auto width = std::int64_t(owner->params.rect.right)-owner->params.rect.left;
     const auto height = std::int64_t(owner->params.rect.top)-owner->params.rect.bottom;
     const auto tabs = owner->tabContainer->tabs;
-    const auto top = layout.hidden ? height : height-1-layout.tabHeight+layout.panelOverlap;
-    const auto left = layout.panelOffset ? 3 : 1;
-    const auto right = width-(layout.panelOffset ? 2 : 1);
-    if (top < 1 || right < left) { error = "Native tab container is too small for its content"; return false; }
+    const auto top = layout.hidden ? height : layout.position == Position::Top ? height-1-layout.tabHeight+layout.panelOverlap : height-1;
+    const auto bottom = !layout.hidden && layout.position == Position::Bottom ? layout.tabHeight-layout.panelOverlap : 1;
+    const auto left = vertical && !layout.hidden ? std::int64_t(layout.minimumWidth)+layout.rightPadding+2+layout.verticalPadding : layout.panelOffset ? 3 : 1;
+    const auto right = width-(!vertical && layout.panelOffset ? 2 : 1);
+    if (top < bottom || right < left) { error = "Native tab container is too small for its content"; return false; }
     struct Placement { Id panel, button; Rect content, tab; };
     std::vector<Placement> placements;
-    std::int64_t next = 1+std::int64_t(layout.horizontalPadding);
+    std::int64_t next = vertical ? height-3 : 1+std::int64_t(layout.horizontalPadding);
     for (const auto& entry : tabs)
     {
         const auto* panel = get(entry.panel);
@@ -81,15 +107,29 @@ bool LLVKWidgetTree::layoutTopTabs(Id container, const Node::TabContainer::Layou
         if (!measured) return false;
         const double padded = std::ceil(measured->width)+layout.labelPadding;
         if (!std::isfinite(padded) || padded > INT32_MAX) { error = "Native tab label width overflows"; return false; }
-        const auto tabWidth = std::clamp(static_cast<std::int32_t>(padded),layout.minimumWidth,layout.maximumWidth);
+        const auto tabWidth = vertical ? layout.minimumWidth : std::clamp(static_cast<std::int32_t>(padded),layout.minimumWidth,layout.maximumWidth);
         if (next+tabWidth > INT32_MAX) { error = "Native tab strip width overflows"; return false; }
-        placements.push_back({entry.panel,entry.button,{left,1,static_cast<std::int32_t>(right),static_cast<std::int32_t>(top)},
-            {static_cast<std::int32_t>(next),static_cast<std::int32_t>(height-layout.tabHeight),
-                static_cast<std::int32_t>(next+tabWidth),static_cast<std::int32_t>(height)}});
-        next += tabWidth;
+        const auto tabBottom = layout.position == Position::Bottom ? 1 : height-layout.tabHeight;
+        Rect tab;
+        if (vertical)
+        {
+            const auto tabLeft = std::int64_t(layout.verticalPadding)+3;
+            if (next-layout.verticalHeight < INT32_MIN || tabLeft+tabWidth > INT32_MAX)
+            { error = "Native vertical tab geometry overflows"; return false; }
+            tab = {static_cast<std::int32_t>(tabLeft),static_cast<std::int32_t>(next-layout.verticalHeight),
+                static_cast<std::int32_t>(tabLeft+tabWidth),static_cast<std::int32_t>(next)};
+            next -= std::int64_t(layout.verticalHeight)+layout.verticalPadding;
+        }
+        else
+        {
+            tab = {static_cast<std::int32_t>(next),static_cast<std::int32_t>(tabBottom),
+                static_cast<std::int32_t>(next+tabWidth),static_cast<std::int32_t>(tabBottom+layout.tabHeight)};
+            next += tabWidth;
+        }
+        placements.push_back({entry.panel,entry.button,{static_cast<std::int32_t>(left),bottom,static_cast<std::int32_t>(right),static_cast<std::int32_t>(top)},tab});
     }
-    if (!layout.hidden && next > width-1)
-    { error = "Native top-tab overflow scrolling is not implemented"; return false; }
+    if (!layout.hidden && (vertical ? next < 0 : next > width-layout.rightPadding-1))
+    { error = "Native tab overflow scrolling is not implemented"; return false; }
     ShapeChanges changes;
     for (const auto& placement : placements)
         for (const auto& [id,rect] : {std::pair{placement.panel,placement.content},std::pair{placement.button,placement.tab}})

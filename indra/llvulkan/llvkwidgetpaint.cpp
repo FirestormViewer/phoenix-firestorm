@@ -21,7 +21,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
         if (node->tabContainer && node->tabContainer->layout)
         {
             const auto layout = *node->tabContainer->layout;
-            if (!tree.layoutTopTabs(id,layout,error)) return false;
+            if (!tree.layoutTabPanels(id,layout,error)) return false;
             node = tree.get(id);
             if (!node) return true;
         }
@@ -47,6 +47,42 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             return true;
         };
         const auto width = screen->right-screen->left, height = screen->top-screen->bottom;
+        if (node->slider)
+        {
+            if (!tree.updateSliderThumb(id,error)) return false;
+            node=tree.get(id);
+            const auto slider=*node->slider;
+            const auto& params=*slider.params;
+            if (!params.thumb || !params.track || !params.highlight)
+            { error="Native slider paint requires its thumb, track and highlight images"; return false; }
+            const auto enabled=tree.enabledInChain(id);
+            auto color=LLVKColor::Value{1,1,1,(enabled ? 1.f : 0.6f)*input.button.drawAlpha};
+            const auto trackWidth=static_cast<int>(params.track->width()), trackHeight=static_cast<int>(params.track->height());
+            const Rect track=params.vertical ? Rect{width/2-trackWidth/2,0,width/2+trackWidth/2,height} :
+                Rect{static_cast<int>(params.thumb->width()/2),height/2-trackHeight/2,width-static_cast<int>(params.thumb->width()/2),height/2+trackHeight/2};
+            auto highlight=track;
+            if (!params.vertical) highlight.right=(slider.thumb.left+slider.thumb.right)/2;
+            if (!append(track,color,params.track) || !append(highlight,color,params.highlight)) return false;
+            if (tree.keyboardFocus()==id)
+            {
+                auto focus=input.button.focusColor;
+                focus[3]*=input.button.drawAlpha;
+                const auto border=input.button.focusWidth;
+                if (!append({slider.thumb.left-border,slider.thumb.bottom-border,slider.thumb.right+border,slider.thumb.top+border},focus,params.thumb,{},true)) return false;
+            }
+            auto center=params.centerColor.get(); center[3]*=input.button.drawAlpha;
+            if (tree.mouseCapture()==id)
+            {
+                auto ghost=center; ghost[3]*=0.3f;
+                if (!append(slider.dragStart,ghost,params.thumb)) return false;
+                auto pressed=params.outlineColor.get(); pressed[3]*=input.button.drawAlpha;
+                if (params.pressedThumb && !append(slider.thumb,pressed,params.pressedThumb)) return false;
+            }
+            else if (!enabled)
+            { if (params.disabledThumb && !append(slider.thumb,center,params.disabledThumb)) return false; }
+            else if (!append(slider.thumb,center,params.thumb)) return false;
+            return true;
+        }
         if (node->scrollContainer)
         {
             if (!tree.advanceScrollFrame(id,input.button.frameDelta,error)) return false;
@@ -175,8 +211,59 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                 options.x = float(sourceLine.left+document->params.rect.left);
                 options.y = float(sourceLine.bottom+document->params.rect.bottom);
                 options.vertical = LLVKFont::VerticalAlign::Bottom;
+                const auto selectionBegin = std::min(text.selectionStart,text.selectionEnd);
+                const auto selectionEnd = std::max(text.selectionStart,text.selectionEnd);
+                const bool selection = text.params.selectable && selectionBegin != selectionEnd;
+                if (selection && selectionBegin < begin+count && selectionEnd > begin)
+                {
+                    const auto first = std::max(begin,selectionBegin), last = std::min(begin+count,selectionEnd);
+                    const auto left = node->control->params.font->measureRun(text.text,begin,first-begin,1.f,false,false,error);
+                    const auto right = node->control->params.font->measureRun(text.text,begin,last-begin,1.f,false,false,error);
+                    if (!left || !right) return false;
+                    auto background = text.params.selectionBackground.get();
+                    background[3] *= input.button.drawAlpha;
+                    if (!append({static_cast<std::int32_t>(options.x+left->advancePixels),static_cast<std::int32_t>(options.y),
+                        static_cast<std::int32_t>(options.x+right->advancePixels),sourceLine.top+document->params.rect.bottom},background)) return false;
+                }
                 auto line = node->control->params.font->layoutLine(text.text,begin,count,options,error);
-                if (!line || !append({},color,{},std::move(line))) return false;
+                if (!line) return false;
+                if (text.links.empty() && !selection)
+                { if (!append({},color,{},std::move(line))) return false; }
+                else
+                {
+                    for (std::size_t first = 0; first < line->glyphs.size(); )
+                    {
+                        const auto linkAt = [&](std::size_t glyph) -> const LLVKWebText::Link*
+                        {
+                            for (const auto& link : text.links)
+                                if (line->glyphs[glyph].sourceIndex >= link.begin && line->glyphs[glyph].sourceIndex < link.end) return &link;
+                            return nullptr;
+                        };
+                        const auto* link = linkAt(first);
+                        const auto selected = [&](std::size_t glyph)
+                        { return selection && line->glyphs[glyph].sourceIndex >= selectionBegin && line->glyphs[glyph].sourceIndex < selectionEnd; };
+                        const bool highlighted = selected(first);
+                        auto last = first+1;
+                        while (last < line->glyphs.size() && linkAt(last) == link && selected(last) == highlighted) ++last;
+                        auto part = *line;
+                        part.glyphs.assign(line->glyphs.begin()+first,line->glyphs.begin()+last);
+                        auto foreground = color;
+                        if (link)
+                        { foreground = link->query ? text.params.queryColor.get() : text.params.linkColor.get(); foreground[3] *= input.button.drawAlpha; }
+                        if (highlighted) { foreground = text.params.selectionColor.get(); foreground[3] *= input.button.drawAlpha; }
+                        if (!append({},foreground,{},std::move(part))) return false;
+                        if (link)
+                        {
+                            const auto& initial = line->glyphs[first];
+                            const auto& final = line->glyphs[last-1];
+                            const auto left = static_cast<std::int32_t>(std::floor(initial.left-initial.glyph->raster.bearingX+0.5f));
+                            const auto right = static_cast<std::int32_t>(std::floor(final.left-final.glyph->raster.bearingX+final.glyph->raster.advanceX+0.5f));
+                            const auto bottom = static_cast<std::int32_t>(std::floor(line->baselinePixelY-std::floor(node->control->params.font->metrics().descender)));
+                            if (right > left && !append({left,bottom,right,bottom+1},foreground)) return false;
+                        }
+                        first = last;
+                    }
+                }
             }
             return true;
         }
@@ -186,7 +273,54 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             if (!draw) return false;
             if (draw->image && !append({0,0,width,height},draw->color,draw->image)) return false;
         }
-        else if (node->border || node->scrollbar || node->scrollContainer || node->badge)
+        else if (node->border)
+        {
+            const auto& border = *node->border;
+            const auto& params = border.params;
+            if (params.style == LLVKBorder::Style::Line && params.thickness)
+            {
+                using Bevel = LLVKBorder::Bevel;
+                const auto upper = [&](int inset,int thickness,LLVKColor::Value color)
+                {
+                    return append({inset,inset,std::min(width-inset,inset+thickness),height-inset},color) &&
+                        append({inset,std::max(inset,height-inset-thickness),width-inset,height-inset},color);
+                };
+                const auto lower = [&](int inset,int thickness,LLVKColor::Value color)
+                {
+                    return append({std::max(inset,width-inset-thickness),inset,width-inset,height-inset},color) &&
+                        append({inset,inset,width-inset,std::min(height-inset,inset+thickness)},color);
+                };
+                if (params.thickness == 1)
+                {
+                    if (params.bevel == Bevel::Bright) { error = "One-pixel bright border is undefined in the source contract"; return false; }
+                    auto top = params.bevel == Bevel::In ? params.shadowDark.get() : params.highlightLight.get();
+                    auto bottom = params.bevel == Bevel::Out ? params.shadowDark.get() : params.highlightLight.get();
+                    int thickness = 1;
+                    if (border.keyboardFocus)
+                    {
+                        top = bottom = input.button.focusColor;
+                        thickness = static_cast<int>(std::floor(1.f+tree.focusFlashAmount()+0.5f));
+                    }
+                    if (!upper(0,thickness,top) || !lower(0,thickness,bottom)) return false;
+                }
+                else
+                {
+                    auto topOuter = params.highlightDark.get(), topInner = params.highlightLight.get();
+                    auto bottomOuter = params.shadowDark.get(), bottomInner = params.shadowLight.get();
+                    if (params.bevel == Bevel::In)
+                    { topOuter = params.shadowLight.get(); topInner = params.shadowDark.get(); bottomOuter = params.highlightLight.get(); bottomInner = params.highlightDark.get(); }
+                    else if (params.bevel == Bevel::Bright)
+                    { topOuter = topInner = bottomOuter = bottomInner = params.highlightLight.get(); }
+                    else if (params.bevel == Bevel::None)
+                    { topOuter = topInner = bottomOuter = bottomInner = params.shadowDark.get(); }
+                    if (border.keyboardFocus) topOuter = bottomOuter = input.button.focusColor;
+                    topOuter[3] = topInner[3] = bottomOuter[3] = bottomInner[3] = 1.f;
+                    if (!upper(0,1,topOuter) || (width > 2 && height > 2 && !upper(1,1,topInner)) ||
+                        !lower(0,1,bottomOuter) || (width > 2 && height > 2 && !lower(1,1,bottomInner))) return false;
+                }
+            }
+        }
+        else if (node->badge)
         { error = "Native paint consumer not implemented for visible widget: " + node->params.name; return false; }
         node = tree.get(id);
         if (!node) return true;

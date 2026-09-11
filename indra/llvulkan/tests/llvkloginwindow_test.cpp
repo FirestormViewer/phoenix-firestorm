@@ -1,6 +1,7 @@
 #include "linden_common.h"
 #include "llvkloginwindow.h"
 #include "llvkstartupsettings.h"
+#include "llvkaudio.h"
 #include "lltut.h"
 #include <windows.h>
 
@@ -10,6 +11,27 @@ namespace tut
     typedef test_group<loginwindow_data> loginwindow_group;
     typedef loginwindow_group::object loginwindow_object;
     loginwindow_group loginwindow_tests("llvkloginwindow");
+
+    template<> template<> void loginwindow_object::test<2>()
+    {
+        set_test_name("native startup audio owns an actual driver and honors NoAudio");
+        std::string error;
+        LLVKAudio disabled;
+        ensure("NoAudio accepted",disabled.start(true,error));
+        ensure("NoAudio has no active device",!disabled.active());
+        ensure_equals("inactive source report",disabled.driverName(),std::string("Undefined"));
+        LLVKAudio audio;
+        const auto started=audio.start(false,error);
+        ensure(error,started);
+        ensure("real audio context active",audio.active());
+        ensure("real provider driver report",audio.driverName().find("OpenAL, version ")==0);
+        LLVKAudio conflict;
+        ensure("cannot steal context",!conflict.start(false,error));
+        ensure("original audio unaffected",audio.active());
+        ensure("clean audio shutdown",audio.stop(error));
+        ensure("audio no longer active",!audio.active());
+        ensure("idempotent shutdown",audio.stop(error));
+    }
 
     template<> template<> void loginwindow_object::test<1>()
     {

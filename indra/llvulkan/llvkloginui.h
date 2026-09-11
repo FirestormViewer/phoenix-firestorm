@@ -43,6 +43,8 @@ public:
     void setAboutInfo(std::string info);
     bool setAboutInfo(const LLSD& info, std::string& error);
     void setDialogClipboard(std::shared_ptr<LLVKClipboard> clipboard) { mDialogClipboard = std::move(clipboard); }
+    void setOpenUrl(std::function<void(const std::string&)> callback) { mOpenUrl = std::move(callback); }
+    void setPointerCursor(std::function<void(bool)> callback) { mPointerCursor = std::move(callback); }
     const std::string& dialogError() const noexcept { return mDialogError; }
     std::string takeDialogError() { auto error = std::move(mDialogError); mDialogError.clear(); return error; }
 private:
@@ -61,6 +63,8 @@ private:
     std::map<std::string,LLSD> mPreferenceSnapshot;
     std::function<bool(const std::map<std::string,LLSD>&,std::string&)> mSavePreferences;
     std::shared_ptr<LLVKClipboard> mDialogClipboard;
+    std::function<void(const std::string&)> mOpenUrl;
+    std::function<void(bool)> mPointerCursor;
     std::string mAboutInfo, mDialogError;
     std::string mAppliedSettingsMode;
     LLVKWidgetTree::Id mAboutBody = 0, mAboutScrollContainer = 0, mAboutDocument = 0;

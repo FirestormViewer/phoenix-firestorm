@@ -91,6 +91,11 @@ bool LLVKWidgetTree::constructCheckBoxChildren(Id id, std::string& error)
 LLSD LLVKWidgetTree::value(Id id) const
 {
     const auto* node = get(id);
+    if (node && node->radioGroup)
+    {
+        const auto& radio=*node->radioGroup;
+        return radio.selected>=0 && static_cast<std::size_t>(radio.selected)<radio.items.size() ? radio.items[radio.selected].payload : LLSD();
+    }
     if (!node || !node->control) return LLSD();
     if (node->combo)
     {

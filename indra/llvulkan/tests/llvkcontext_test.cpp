@@ -319,7 +319,7 @@ namespace tut
         LLVKWidgetGpu widgetGpu(uploadDevice);
         LLVKUiPacket widgetPacket(renderer.swapchainExtent());
         ensure("widget resources await publication",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Pending);
-        ensure_equals("test completes widget uploads",vkQueueWaitIdle(renderer.graphicsQueue()),VK_SUCCESS);
+        ensure("test completes widget upload fences",widgetGpu.waitPendingUploads(5000000000ull,error));
         const auto ready = widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error);
         ensure(error,ready == LLVKWidgetGpu::Status::Ready);
         const auto imageIdentity = widgetPacket.draws()[0].image;
@@ -333,9 +333,10 @@ namespace tut
         paint.commands[0].streamingImage = true;
         paint.commands[0].image = browserFrame;
         ensure("browser stream initially pending",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Pending);
-        ensure_equals("test completes first browser frame",vkQueueWaitIdle(renderer.graphicsQueue()),VK_SUCCESS);
+        ensure("test completes browser upload fence",widgetGpu.waitPendingUploads(5000000000ull,error));
         paint.commands[0].image = LLVKWidgetImage::browserFrame(1,1,browserPixel,error);
-        ensure("new frame does not starve completed publication",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Ready);
+        const auto streamed=widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error);
+        ensure("new frame publication status="+std::to_string(static_cast<int>(streamed))+": "+error,streamed == LLVKWidgetGpu::Status::Ready);
         ensure("browser packet owns a completed image",widgetPacket.draws()[0].image != nullptr);
         LLVKWidgetTree scrollTree;
         LLVKWidgetTree::Params scrollView;
@@ -363,6 +364,53 @@ namespace tut
         ensure("scroll frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
         ensure("native scroll packet recorded",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
         ensure("native scroll packet presented",renderer.end2DFrame());
+        renderer.waitIdle();
+        scrollView.rect={0,0,180,70};
+        scrollControl.initialValue="[https://example.com/notes Release Notes]";
+        LLVKPlainControl::Params linkedText;
+        linkedText.parseWebLinks=linkedText.selectable=true;
+        const auto textId=scrollTree.createPlainText(scrollView,scrollControl,linkedText,0,error);
+        ensure(error,textId.has_value());
+        auto linkPaint=LLVKWidgetPaint::prepare(scrollTree,*textId,{},error);
+        ensure(error,linkPaint.has_value());
+        ensure("link glyph upload begins",widgetGpu.prepare(*linkPaint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Pending);
+        ensure("test completes link glyph upload fences",widgetGpu.waitPendingUploads(5000000000ull,error));
+        ensure("native link packet ready",widgetGpu.prepare(*linkPaint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+        ensure("select linked display text",scrollTree.selectAllPlainText(*textId));
+        linkPaint=LLVKWidgetPaint::prepare(scrollTree,*textId,{},error);
+        ensure(error,linkPaint.has_value());
+        auto linkReady=widgetGpu.prepare(*linkPaint,renderer.swapchainExtent(),widgetPacket,error);
+        if (linkReady==LLVKWidgetGpu::Status::Pending)
+        {
+            ensure("test completes selected text upload fence",widgetGpu.waitPendingUploads(5000000000ull,error));
+            linkReady=widgetGpu.prepare(*linkPaint,renderer.swapchainExtent(),widgetPacket,error);
+        }
+        ensure(error,linkReady==LLVKWidgetGpu::Status::Ready);
+        ensure("selected link frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+        ensure("selected link packet recorded",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
+        ensure("selected link packet presented",renderer.end2DFrame());
+        renderer.waitIdle();
+        scrollView.rect={0,0,150,24};
+        scrollControl.initialValue=LLSD(2.f);
+        LLVKWidgetTree::SpinnerParams spinnerParams;
+        spinnerParams.maximum=10.f;
+        spinnerParams.buttonControl.font=spinnerParams.editorControl.font=scrollControl.font;
+        spinnerParams.editor.textColor=LLVKColor{1,1,1,1};
+        const auto spinner=scrollTree.createSpinner(scrollView,scrollControl,spinnerParams,0,error);
+        ensure(error,spinner.has_value());
+        ensure("numeric control advances",scrollTree.stepSpinner(*spinner,true,{},error));
+        const auto spinnerPaint=LLVKWidgetPaint::prepare(scrollTree,*spinner,{},error);
+        ensure(error,spinnerPaint.has_value());
+        auto spinnerReady=widgetGpu.prepare(*spinnerPaint,renderer.swapchainExtent(),widgetPacket,error);
+        if (spinnerReady==LLVKWidgetGpu::Status::Pending)
+        {
+            ensure("test completes spinner upload fences",widgetGpu.waitPendingUploads(5000000000ull,error));
+            spinnerReady=widgetGpu.prepare(*spinnerPaint,renderer.swapchainExtent(),widgetPacket,error);
+        }
+        ensure(error,spinnerReady==LLVKWidgetGpu::Status::Ready);
+        ensure("spinner frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+        ensure("spinner packet recorded",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
+        ensure("spinner packet presented",renderer.end2DFrame());
         renderer.waitIdle();
     }
 #endif

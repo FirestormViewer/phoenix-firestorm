@@ -11,6 +11,7 @@ public:
     enum class Status { Pending, Ready, Failed };
     explicit LLVKWidgetGpu(LLVKGlyphUpload::Device device) : mDevice(device) {}
     Status prepare(const LLVKWidgetPaint& paint, VkExtent2D extent, LLVKUiPacket& packet, std::string& error);
+    bool waitPendingUploads(std::uint64_t timeout, std::string& error);
 private:
     struct Image
     {

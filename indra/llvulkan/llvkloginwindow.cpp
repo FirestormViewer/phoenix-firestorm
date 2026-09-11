@@ -1,5 +1,6 @@
 #include "llvkloginwindow.h"
 #include "llvkwidgetgpu.h"
+#include "llvkaudio.h"
 #include <windows.h>
 #include <windowsx.h>
 #include <chrono>
@@ -32,6 +33,7 @@ namespace
             if (message == WM_SIZE) { width = LOWORD(data); height = HIWORD(data); resize = true; return 0; }
             if (!ui) return DefWindowProcW(window,message,parameter,data);
             auto& tree = ui->tree();
+            tree.setInputModifiers({bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_CONTROL)&0x8000),bool(GetKeyState(VK_MENU)&0x8000)});
             const auto focused = tree.keyboardFocus();
             const auto* focus = tree.get(focused);
             if (message == WM_ACTIVATEAPP) { input.editor.applicationFocused = parameter != 0; if (!parameter) ui->menu().dismiss(); return 0; }
@@ -45,6 +47,7 @@ namespace
                 event.kind = message == WM_MOUSEMOVE ? LLVKWidgetTree::PointerKind::Hover : message == WM_LBUTTONDOWN ?
                     LLVKWidgetTree::PointerKind::LeftDown : message == WM_LBUTTONDBLCLK ? LLVKWidgetTree::PointerKind::DoubleClick : LLVKWidgetTree::PointerKind::LeftUp;
                 input.button.mouseX = event.x; input.button.mouseY = event.y;
+                if (message == WM_MOUSEMOVE) SetCursor(LoadCursorW(nullptr,IDC_ARROW));
                 if (GetKeyState(VK_SHIFT) & 0x8000) event.modifiers |= 1;
                 tree.advanceTime(event.time,error);
                 if (!tree.mouseCapture() && ui->menu().pointer(event))
@@ -119,6 +122,11 @@ namespace
             {
                 keystroke = std::chrono::steady_clock::now();
                 LLVKLineEditor::Modifiers modifiers{bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_CONTROL)&0x8000),bool(GetKeyState(VK_MENU)&0x8000)};
+                if (focus && focus->plainText && focus->plainText->params.selectable && modifiers.control)
+                {
+                    if (parameter == 'A') { tree.selectAllPlainText(focused); return 0; }
+                    if (parameter == 'C') { tree.copyPlainText(focused,error); return 0; }
+                }
                 if (parameter == VK_LEFT || parameter == VK_RIGHT || parameter == VK_UP || parameter == VK_DOWN)
                 {
                     const auto key = parameter == VK_LEFT ? LLVKWidgetTree::ScrollKey::Left : parameter == VK_RIGHT ? LLVKWidgetTree::ScrollKey::Right :
@@ -126,6 +134,10 @@ namespace
                     for (auto parent = focused; tree.get(parent); )
                     {
                         const auto ancestor = tree.get(parent)->parent;
+                        if (tree.get(parent)->slider)
+                        { tree.sliderStep(parent,parameter==VK_RIGHT || parameter==VK_UP ? 1 : -1,error); return 0; }
+                        if (tree.get(parent)->radioGroup && !modifiers.shift && !modifiers.control && !modifiers.alt)
+                        { tree.radioKey(parent,parameter==VK_RIGHT || parameter==VK_DOWN,error); return 0; }
                         if (tree.get(parent)->tabContainer && tree.tabContainerKey(parent,key,modifiers,error)) return 0;
                         if (!tree.get(parent) || !error.empty()) return 0;
                         parent = ancestor;
@@ -211,17 +223,23 @@ bool LLVKLoginWindow::run(const Configuration& configuration,std::string& error)
     state.ui = ui.get();
     struct DetachUi { WindowState& state; ~DetachUi() { state.ui=nullptr; } } detachUi{state};
     ui->menu().bind("File.Quit",[&state](const auto&,const auto&) { state.close = true; });
-    ui->menu().bind("PromptShowURL",[&state](const auto&,const std::string& parameter)
+    const auto openUrl=[&state](const std::string& url)
     {
-        const auto separator = parameter.find(',');
-        if (separator == std::string::npos) return;
-        const auto url = parameter.substr(separator+1);
         const LLURI uri(url);
-        if ((uri.scheme() != "https" && uri.scheme() != "http") || uri.hostName().empty()) return;
+        auto scheme = uri.scheme();
+        LLStringUtil::toLower(scheme);
+        if ((scheme != "https" && scheme != "http" && scheme != "ftp") || uri.hostName().empty()) return;
         const auto wide = ll_convert<std::wstring>(url);
         if (MessageBoxW(state.window,(L"Open this page in your web browser?\n\n"+wide).c_str(),L"Vulkanstorm",MB_YESNO|MB_ICONQUESTION) == IDYES)
             if (reinterpret_cast<INT_PTR>(ShellExecuteW(state.window,L"open",wide.c_str(),nullptr,nullptr,SW_SHOWNORMAL)) <= 32)
                 MessageBoxW(state.window,L"The web browser could not be opened.",L"Vulkanstorm",MB_OK|MB_ICONERROR);
+    };
+    ui->setOpenUrl(openUrl);
+    ui->setPointerCursor([](bool hand) { SetCursor(LoadCursorW(nullptr,hand ? IDC_HAND : IDC_ARROW)); });
+    ui->menu().bind("PromptShowURL",[openUrl](const auto&,const std::string& parameter)
+    {
+        const auto separator = parameter.find(',');
+        if (separator != std::string::npos) openUrl(parameter.substr(separator+1));
     });
     WNDCLASSW windowClass{};
     windowClass.style = CS_DBLCLKS;
@@ -236,6 +254,10 @@ bool LLVKLoginWindow::run(const Configuration& configuration,std::string& error)
     if (!CreateWindowExW(0,windowClass.lpszClassName,L"Vulkanstorm",WS_OVERLAPPEDWINDOW,CW_USEDEFAULT,CW_USEDEFAULT,
         rectangle.right-rectangle.left,rectangle.bottom-rectangle.top,nullptr,nullptr,windowClass.hInstance,&state))
     { error = "Native login window creation failed"; return false; }
+    LLVKAudio audio;
+    std::string audioError;
+    if (!audio.start(ui->tree().setting("NoAudio").value_or(LLSD(false)).asBoolean(),audioError))
+        LL_WARNS("NativeAudio") << audioError << LL_ENDL;
     auto clipboard = LLVKClipboard::forWindow(state.window,error);
     if (!clipboard) return false;
     ui->setDialogClipboard(clipboard);
@@ -300,6 +322,7 @@ bool LLVKLoginWindow::run(const Configuration& configuration,std::string& error)
     aboutInfo["GRAPHICS_CARD_MEMORY"]=std::to_string(localBytes/(1024*1024));
     aboutInfo["GRAPHICS_CARD_MEMORY_DETECTED"]=aboutInfo["GRAPHICS_CARD_MEMORY"];
     aboutInfo["RENDERING_API"]="Vulkan";
+    aboutInfo["AUDIO_DRIVER_VERSION"]=audio.driverName();
     aboutInfo["LIBCURL_VERSION"]=curl_version();
     aboutInfo["RENDERING_API_VERSION"]=std::to_string(VK_VERSION_MAJOR(properties.apiVersion))+"."+
         std::to_string(VK_VERSION_MINOR(properties.apiVersion))+"."+std::to_string(VK_VERSION_PATCH(properties.apiVersion));
@@ -386,6 +409,7 @@ bool LLVKLoginWindow::run(const Configuration& configuration,std::string& error)
         state.input.button.returnDown = bool(GetKeyState(VK_RETURN)&0x8000);
         state.input.editor.secondsSinceKeystroke = std::chrono::duration<double>(now-state.keystroke).count();
         state.input.browsers[browserId] = browser.surface().frame();
+        ui->tree().setInputModifiers({bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_CONTROL)&0x8000),bool(GetKeyState(VK_MENU)&0x8000)});
         ui->tree().advanceTime(state.elapsed(),error);
         if (state.width && state.height)
         {
@@ -409,5 +433,5 @@ bool LLVKLoginWindow::run(const Configuration& configuration,std::string& error)
         MsgWaitForMultipleObjectsEx(0,nullptr,16,QS_ALLINPUT,MWMO_INPUTAVAILABLE);
     }
     renderer.waitIdle();
-    return true;
+    return audio.stop(error);
 }

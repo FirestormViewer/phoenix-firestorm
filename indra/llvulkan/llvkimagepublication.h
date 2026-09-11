@@ -14,6 +14,7 @@ public:
     };
     explicit LLVKImagePublication(LLVKGlyphUpload::Device device) : mDevice(device) {}
     bool advance(std::shared_ptr<const LLVKWidgetImage> latest, std::string& error);
+    bool waitPendingUpload(std::uint64_t timeout, std::string& error);
     const Version& current() const noexcept { return mCurrent; }
     bool pending() const noexcept { return bool(mUpload); }
     std::size_t residentBytes() const noexcept

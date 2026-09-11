@@ -6,6 +6,19 @@
 #include "llvkplaintextlayout.h"
 #include <span>
 
+struct LLVKWebText
+{
+    struct Link
+    {
+        std::size_t begin = 0, end = 0;
+        std::string target;
+        bool query = false;
+    };
+    std::u32string text;
+    std::vector<Link> links;
+    static std::optional<LLVKWebText> parse(std::string_view markup, std::string& error);
+};
+
 class LLVKStyledTextSegment final
 {
 public:

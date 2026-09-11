@@ -115,10 +115,36 @@ public:
     {
         PanelDefaults panel;
         LLVKWidgetTree::Node::TabContainer::Layout layout;
+        std::optional<std::int32_t> width;
         std::array<std::map<std::string,std::string>,3> images;
         LLVKButton::Align alignment = LLVKButton::Align::Center;
         std::int32_t labelPadLeft = 4, labelPadBottom = 1;
         LLVKColor flashColor{1,1,1,1};
+    };
+    struct SpinnerDefaults
+    {
+        Defaults view;
+        LLVKControl::Params control;
+        LLVKWidgetTree::SpinnerParams spinner;
+        ButtonDefaults up, down;
+        LineEditorDefaults editor;
+        bool initialized = false;
+    };
+    struct SliderDefaults
+    {
+        Defaults view;
+        LLVKControl::Params control;
+        LLVKWidgetTree::SliderParams slider;
+        std::map<std::string,std::string> images;
+    };
+    struct SliderControlDefaults
+    {
+        Defaults view;
+        LLVKControl::Params control;
+        LLVKWidgetTree::SliderControlParams slider;
+        LineEditorDefaults editor;
+        TextDefaults label, text;
+        bool initialized = false;
     };
     class Construction
     {
@@ -149,6 +175,12 @@ public:
         std::shared_ptr<LLVKSkinFiles> skinFiles;
         std::shared_ptr<LLVKColorTable> colors;
         std::shared_ptr<const TabDefaults> tabs = std::make_shared<TabDefaults>();
+        std::shared_ptr<const SpinnerDefaults> spinner = std::make_shared<SpinnerDefaults>();
+        std::shared_ptr<const SliderDefaults> slider = std::make_shared<SliderDefaults>();
+        std::shared_ptr<const SliderControlDefaults> sliderControl = std::make_shared<SliderControlDefaults>();
+        std::shared_ptr<const CheckBoxDefaults> radioItem;
+        LLVKControl::Params radioControl;
+        std::function<void(LLVKWidgetTree::Id,const std::string&)> webLinkHandler;
         std::map<std::string,std::shared_ptr<LLVKFont>> fonts;
         std::shared_ptr<LLVKFontRegistry> fontRegistry;
         LLVKFontRegistry::Request defaultFontRequest;

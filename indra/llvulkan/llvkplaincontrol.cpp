@@ -63,6 +63,60 @@ bool LLVKWidgetTree::setPlainTextClicked(Id id, std::function<void(Id)> callback
 
 bool LLVKWidgetTree::plainTextPointer(Id id, const PointerEvent& event, std::string& error)
 {
+    const auto* initial = get(id);
+    if (initial && initial->plainText && initial->plainText->params.selectable)
+    {
+        const bool down = event.kind == PointerKind::LeftDown;
+        const bool up = event.kind == PointerKind::LeftUp;
+        const bool captured = mMouseCapture == id;
+        if (down || (captured && initial->plainText->selecting && (up || event.kind == PointerKind::Hover)))
+        {
+            const auto index = plainTextIndexAt(id,event.x,event.y,error);
+            if (!index) return false;
+            if (down && !requestControlFocus(id,true,error)) return false;
+            if (!get(id)) return true;
+            auto& text = *mNodes.at(id).plainText;
+            if (down)
+            {
+                if (!(event.modifiers&1)) text.selectionStart = *index;
+                else if (text.selectionStart == text.selectionEnd) text.selectionStart = text.cursor;
+                text.selecting = true;
+            }
+            text.cursor = text.selectionEnd = *index;
+            if (text.selectionStart != text.selectionEnd) text.pressedLink.reset();
+            if (up)
+            {
+                text.selecting = false;
+                if (!text.pressedLink) return setMouseCapture(0,error);
+            }
+            else if (!down) return true;
+        }
+    }
+    initial = get(id);
+    if (initial && initial->plainText && !initial->plainText->links.empty())
+    {
+        const auto link = plainTextLinkAt(id,event.x,event.y,error);
+        if (!error.empty()) return false;
+        const auto* current = get(id);
+        if (!current) return true;
+        const auto target = link ? std::optional(current->plainText->links[*link].target) : std::nullopt;
+        if (event.kind == PointerKind::LeftDown && target)
+        {
+            mNodes.at(id).plainText->pressedLink = target;
+            return setMouseCapture(id,error);
+        }
+        if (event.kind == PointerKind::LeftUp && mMouseCapture == id && current->plainText->pressedLink)
+        {
+            const auto pressed = current->plainText->pressedLink;
+            const auto callback = current->plainText->params.linkClicked;
+            mNodes.at(id).plainText->pressedLink.reset();
+            if (!setMouseCapture(0,error)) return false;
+            if (target == pressed && callback) callback(id,*target);
+            return true;
+        }
+        if (event.kind == PointerKind::Hover && target)
+        { cursorEffect(id,true); return true; }
+    }
     bool handled = basePointer(id,event,error);
     if (!error.empty()) return false;
     const auto* node = get(id);
@@ -79,7 +133,7 @@ bool LLVKWidgetTree::plainTextPointer(Id id, const PointerEvent& event, std::str
     }
     if (down)
     {
-        handled = handled || bool(node->plainText->params.clicked);
+        handled = handled || bool(node->plainText->params.clicked) || node->plainText->params.selectable;
         if (handled && !mMouseCapture && !setMouseCapture(id,error)) return false;
     }
     else if (up && mMouseCapture == id)
@@ -101,6 +155,97 @@ bool LLVKWidgetTree::plainTextPointer(Id id, const PointerEvent& event, std::str
         return true;
     }
     return handled;
+}
+
+bool LLVKWidgetTree::selectAllPlainText(Id id)
+{
+    const auto* node = get(id);
+    if (!node || !node->plainText || !node->plainText->params.selectable) return false;
+    auto& text = *mNodes.at(id).plainText;
+    text.selectionStart = text.text.size();
+    text.selectionEnd = text.cursor = 0;
+    text.selecting = false;
+    text.pressedLink.reset();
+    return true;
+}
+
+bool LLVKWidgetTree::copyPlainText(Id id,std::string& error)
+{
+    error.clear();
+    const auto* node = get(id);
+    if (!node || !node->plainText || !node->plainText->params.selectable || !mClipboard) return false;
+    const auto& text = *node->plainText;
+    const auto begin = std::min(text.selectionStart,text.selectionEnd), end = std::max(text.selectionStart,text.selectionEnd);
+    if (end > text.text.size() || begin == end) return false;
+    const auto selection = text.text.substr(begin,end-begin);
+    const auto clipboard = mClipboard;
+    return clipboard->write(selection,false,error);
+}
+
+std::optional<std::size_t> LLVKWidgetTree::plainTextIndexAt(Id id,std::int32_t x,std::int32_t y,std::string& error)
+{
+    error.clear();
+    if (!reflowPlainText(id,error)) return std::nullopt;
+    const auto* node = get(id);
+    if (!node || !node->plainText || !node->plainText->layout) return std::nullopt;
+    const auto& text = *node->plainText;
+    const auto* document = get(text.document);
+    if (!document) return std::nullopt;
+    for (const auto& line : text.layout->lines)
+    {
+        if (y < line.bottom+document->params.rect.bottom) continue;
+        const auto begin = std::min(line.begin,text.text.size());
+        auto end = std::min(line.end,text.text.size());
+        if (end > begin && text.text[end-1] == U'\n') --end;
+        const auto offset = node->control->params.font->hitTest(text.text,begin,
+            float(std::max(0,x-line.left-document->params.rect.left)),float(std::max(0,line.right-line.left)),
+            end-begin+1,text.params.layout.scaleX,true,text.params.layout.tabularNumbers,error);
+        return offset ? std::optional(begin+*offset) : std::nullopt;
+    }
+    return text.text.size();
+}
+
+std::optional<std::size_t> LLVKWidgetTree::plainTextLinkAt(Id id,std::int32_t x,std::int32_t y,std::string& error)
+{
+    error.clear();
+    const auto* node = get(id);
+    if (!node || !node->plainText || x < 0 || y < 0 || x >= node->params.rect.right-node->params.rect.left ||
+        y >= node->params.rect.top-node->params.rect.bottom) return std::nullopt;
+    const auto screen = screenRect(id,error);
+    if (!screen) return std::nullopt;
+    const auto screenX = std::int64_t(screen->left)+x, screenY = std::int64_t(screen->bottom)+y;
+    for (Id parent = node->parent; get(parent); )
+    {
+        const auto ancestor = get(parent)->parent;
+        if (get(parent)->scrollContainer)
+        {
+            const auto scroll = prepareScrollContainer(parent,1.f,error);
+            if (!scroll || screenX < scroll->documentClip.left || screenX >= scroll->documentClip.right ||
+                screenY < scroll->documentClip.bottom || screenY >= scroll->documentClip.top) return std::nullopt;
+        }
+        parent = ancestor;
+    }
+    if (!reflowPlainText(id,error)) return std::nullopt;
+    node = get(id);
+    if (!node || !node->plainText || !node->plainText->layout) return std::nullopt;
+    const auto& text = *node->plainText;
+    const auto* document = get(text.document);
+    if (!document) return std::nullopt;
+    for (const auto& line : text.layout->lines)
+    {
+        const auto left = line.left+document->params.rect.left;
+        if (y < line.bottom+document->params.rect.bottom || y >= line.top+document->params.rect.bottom ||
+            x < left || x >= line.right+document->params.rect.left) continue;
+        const auto count = std::min(line.end,text.text.size())-line.begin;
+        const auto offset = node->control->params.font->hitTest(text.text,line.begin,float(x-left),float(line.right-line.left),
+            count+1,text.params.layout.scaleX,false,text.params.layout.tabularNumbers,error);
+        if (!offset) return std::nullopt;
+        const auto character = line.begin+*offset;
+        for (std::size_t index = 0; index < text.links.size(); ++index)
+            if (character >= text.links[index].begin && character < text.links[index].end) return index;
+        return std::nullopt;
+    }
+    return std::nullopt;
 }
 
 bool LLVKWidgetTree::setPlainTextArgument(Id id, std::string key, std::string replacement, std::string& error)
@@ -131,8 +276,16 @@ std::optional<LLVKPlainControl> LLVKWidgetTree::resolvePlainText(const LLVKPlain
 {
     auto resolved = source.resolve(context);
     std::erase(resolved,'\r');
-    if (state.params.parseUrls && requiresRichText(resolved))
+    if (state.params.parseUrls && !state.params.parseWebLinks && requiresRichText(resolved))
     { error = "Native text requires rich URL/issue/embedded-content processing, which is not implemented"; return std::nullopt; }
+    std::vector<LLVKWebText::Link> links;
+    if (state.params.parseWebLinks)
+    {
+        auto parsed = LLVKWebText::parse(resolved,error);
+        if (!parsed) return std::nullopt;
+        resolved = wstring_to_utf8str(LLWString(parsed->text.begin(),parsed->text.end()));
+        links = std::move(parsed->links);
+    }
     resolved = utf8str_truncate(resolved,static_cast<std::int32_t>(state.params.maximumBytes));
     const auto wide = utf8str_to_wstring(resolved);
     std::u32string text(wide.begin(),wide.end());
@@ -141,6 +294,10 @@ std::optional<LLVKPlainControl> LLVKWidgetTree::resolvePlainText(const LLVKPlain
     auto output = state;
     output.source = std::move(source);
     output.text = std::move(text);
+    for (auto& link : links) link.end = std::min(link.end,output.text.size());
+    std::erase_if(links,[](const auto& link) { return link.begin >= link.end; });
+    output.links = std::move(links);
+    output.pressedLink.reset();
     output.value = std::move(resolved);
     output.layout.reset();
     output.cursor = output.params.trackEnd ? output.text.size() : 0;

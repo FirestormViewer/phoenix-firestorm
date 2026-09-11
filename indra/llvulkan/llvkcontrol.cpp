@@ -23,7 +23,7 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createControlImpl(const Params
     std::optional<BadgeConstruction> badgeConstruction, std::optional<LLVKPlainControl> plainText,
     std::optional<CheckBox> checkBox, std::optional<LLVKPanel> panel, std::optional<LineEditor> lineEditor,
     std::optional<Scrollbar> scrollbar, std::shared_ptr<const ScrollContainerParams> scrollContainer, std::optional<Combo> combo,
-    std::optional<Node::Browser> browser)
+    std::optional<Node::Browser> browser, std::optional<Spinner> spinner)
 {
     error.clear();
     const auto view = inputView;
@@ -49,6 +49,7 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createControlImpl(const Params
         mNodes.at(*id).scrollbar = std::move(scrollbar);
         mNodes.at(*id).combo = std::move(combo);
         mNodes.at(*id).browser = std::move(browser);
+        mNodes.at(*id).spinner = std::move(spinner);
         if (const auto& installed = mNodes.at(*id).icon; installed && installed->image)
         {
             state.value = installed->image->name();
@@ -65,6 +66,8 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createControlImpl(const Params
         keepExisting(state.params.visibleSetting);
         keepExisting(state.params.invisibleSetting);
         mNodes.at(*id).control = std::move(state);
+        if (mNodes.at(*id).spinner && !constructSpinnerChildren(*id,error))
+        { std::string cleanup; erase(*id,cleanup); return std::nullopt; }
         if (mNodes.at(*id).combo && !constructComboChildren(*id,error))
         {
             std::string cleanup;
@@ -176,7 +179,7 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createControlImpl(const Params
         {
             std::string cleanup;
             erase(*id,cleanup);
-            error = "Native control rejected its initial value";
+            error = "Native control '"+view.name+"' rejected its initial value";
             return std::nullopt;
         }
         applyControlSettings(*id);
@@ -314,6 +317,10 @@ bool LLVKWidgetTree::setValue(Id id, const LLSD& value)
 {
     auto found = mNodes.find(id);
     if (found == mNodes.end() || !found->second.control) return false;
+    if (found->second.sliderControl) { std::string error; return setSliderControlValue(id,value,error); }
+    if (found->second.slider) { std::string error; return setSliderValue(id,static_cast<float>(value.asReal()),false,false,error); }
+    if (found->second.radioGroup) { std::string error; return setRadioValue(id,value,error); }
+    if (found->second.spinner) { std::string error; return setSpinnerValue(id,value,false,error); }
     if (found->second.tabContainer)
     {
         const auto index = value.asInteger();
@@ -395,6 +402,7 @@ bool LLVKWidgetTree::dispatchControl(Id id, LLVKControl::Callback LLVKControl::P
 bool LLVKWidgetTree::commit(Id id)
 {
     const auto* node = get(id);
+    if (node && node->spinner) { std::string error; return commitSpinner(id,error); }
     if (node && node->combo) return commitCombo(id);
     if (node && node->button) { std::string error; return activateButton(id,error); }
     if (node && node->checkBox) return commitCheckBox(id);
@@ -479,6 +487,7 @@ bool LLVKWidgetTree::requestControlFocus(Id id, bool focus, std::string& error)
     error.clear();
     const auto* node = get(id);
     if (!node || !node->control) { error = "Native focus target is not a control"; return false; }
+    if (node->spinner) return requestControlFocus(node->spinner->editor,focus,error);
     if (node->lineEditor)
     {
         if (!focus) lineLanguageInput(id,true);

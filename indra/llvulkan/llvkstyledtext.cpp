@@ -3,6 +3,82 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include "llsd.h"
+#include "llstring.h"
+#include "lluri.h"
+#include "lluriparser.h"
+#include <boost/regex.hpp>
+
+std::optional<LLVKWebText> LLVKWebText::parse(std::string_view markup, std::string& error)
+{
+    error.clear();
+    if (markup.size() > 65536 || markup.find('\0') != markup.npos)
+    { error = "Native web text exceeds its input budget or contains NUL"; return std::nullopt; }
+    static const boost::regex pattern(
+        "<nolink>.*?</nolink>|\\[(?:https?|ftp|secondlife|hop)://[^\\s]+[ \\t]+[^\\]]+\\]|(?:https?|ftp)://([^\\s/?\\.#]+\\.?)+\\.\\w+(:\\d+)?(/[^\\s]*)?",
+        boost::regex::perl|boost::regex::icase);
+    static const boost::regex webLabel("(?:https?|ftp)://|www\\.",boost::regex::perl|boost::regex::icase);
+    static const std::string allowed = []
+    {
+        std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~!$?&()*+,@:;=/%#";
+        std::sort(chars.begin(),chars.end());
+        return chars;
+    }();
+    LLVKWebText result;
+    const auto append = [&](std::string_view value,const std::string& target = {},bool query = false)
+    {
+        const auto wide = utf8str_to_wstring(std::string(value));
+        const auto begin = result.text.size();
+        result.text.append(wide.begin(),wide.end());
+        if (!target.empty() && begin != result.text.size()) result.links.push_back({begin,result.text.size(),target,query});
+    };
+    const std::string source(markup);
+    auto begin = source.cbegin();
+    const auto end = source.cend();
+    boost::match_results<std::string::const_iterator> match;
+    try
+    {
+        while (boost::regex_search(begin,end,match,pattern))
+        {
+            if (result.links.size() >= 1024) { error = "Native web text link budget exceeded"; return std::nullopt; }
+            append(std::string(begin,match[0].first));
+            std::string found(match[0].first,match[0].second);
+            begin = match[0].second;
+            if (found.front() == '<') { append(std::string_view(found).substr(8,found.size()-17)); continue; }
+            if (found.front() == '[')
+            {
+                const auto split = found.find_first_of(" \t");
+                const auto labelBegin = found.find_first_not_of(" \t",split);
+                const auto target = LLURI::escape(found.substr(1,split-1),allowed,true);
+                auto label = LLURI::unescape(found.substr(labelBegin,found.size()-labelBegin-1));
+                if (boost::regex_search(label,webLabel)) label = target;
+                append(label,target);
+                continue;
+            }
+            std::string trailing;
+            while (!found.empty() && (found.back()=='.' || found.back()==','))
+            { trailing.insert(trailing.begin(),found.back()); found.pop_back(); }
+            const auto target = LLURI::escape(found,allowed,true);
+            LLUriParser normalized(target);
+            if (!normalized.normalize()) { append(found); append(trailing); continue; }
+            normalized.extractParts();
+            std::string label;
+            normalized.glueFirst(label);
+            LLUriParser original(target);
+            original.extractParts();
+            std::string host;
+            original.glueFirst(host,false);
+            const auto offset = target.find(host);
+            append(LLURI::unescape(label),target);
+            if (offset != std::string::npos) append(LLURI::unescape(target.substr(offset+host.size())),target,true);
+            append(trailing);
+        }
+        append(std::string(begin,end));
+    }
+    catch (const std::runtime_error& exception)
+    { error = "Native web text parsing failed: "+std::string(exception.what()); return std::nullopt; }
+    return result;
+}
 
 std::optional<LLVKStyledTextSegment> LLVKStyledTextSegment::create(const Params& params,
     std::u32string_view text, std::string& error)

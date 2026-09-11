@@ -112,6 +112,13 @@ namespace
         std::optional<LLVKPanel::Params> panel;
         std::optional<LLVKWidgetTree::Node::Browser> browser;
         std::shared_ptr<LLVKWidgetFactory::TabDefaults> tabs;
+        std::shared_ptr<LLVKWidgetFactory::SpinnerDefaults> spinner;
+        std::shared_ptr<LLVKWidgetFactory::SliderDefaults> slider;
+        std::shared_ptr<LLVKWidgetFactory::SliderControlDefaults> sliderControl;
+        std::map<std::string,std::unique_ptr<Declaration>> sliderParts;
+        bool radioGroup = false, radioItem = false, allowDeselect = false;
+        std::optional<LLSD> radioPayload;
+        std::map<std::string,std::unique_ptr<Declaration>> spinnerButtons;
         std::optional<LLVKBorder::Params> border;
         std::optional<LLVKWidgetTree::LineEditorParams> lineEditor;
         std::optional<LLVKWidgetFactory::CheckBoxDefaults> checkBox;
@@ -330,10 +337,82 @@ namespace
         {
             auto& view = declaration.params.view;
             auto& geometry = declaration.params.geometry;
+            if (declaration.sliderControl)
+            {
+                auto& slider=declaration.sliderControl->slider;
+                if (name=="show_text") return boolean(text,slider.showText);
+                if (name=="can_edit_text") return boolean(text,slider.editable);
+                if (name=="decimal_digits") return integer(text,slider.precision);
+                if (name=="label") { slider.label=text; return true; }
+                if (name=="label_width" || name=="text_width")
+                { std::int32_t value; if (!integer(text,value) || value<0) return false; (name=="label_width" ? slider.labelWidth : slider.textWidth)=value; return true; }
+                if (name=="text_color") return color(text,slider.textColor);
+                if (name=="text_disabled_color") return color(text,slider.disabledColor);
+                if (name=="volume") { bool unused; return boolean(text,unused); }
+            }
+            if (declaration.slider)
+            {
+                auto& slider=declaration.slider->slider;
+                if (name=="min_val" || name=="max_val" || name=="increment" || name=="initial_value")
+                {
+                    auto& value=name=="min_val" ? slider.minimum : name=="max_val" ? slider.maximum : name=="increment" ? slider.increment : slider.initial;
+                    const auto parsed=std::from_chars(text.data(),text.data()+text.size(),value);
+                    if (parsed.ec!=std::errc() || parsed.ptr!=text.data()+text.size() || !std::isfinite(value)) return false;
+                    if (name=="initial_value") declaration.control->initialValue=LLSD(value);
+                    return true;
+                }
+                if (name=="orientation") { if (text!="horizontal" && text!="vertical") return false; slider.vertical=text=="vertical"; return true; }
+                if (name=="thumb_outline_color") return color(text,slider.outlineColor);
+                if (name=="thumb_center_color") return color(text,slider.centerColor);
+                if (name=="thumb_image" || name=="thumb_image_pressed" || name=="thumb_image_disabled" ||
+                    name=="track_image_horizontal" || name=="track_image_vertical" || name=="track_highlight_horizontal_image" || name=="track_highlight_vertical_image")
+                { declaration.slider->images[std::string(name)]=text; return true; }
+            }
+            if (declaration.radioGroup && name=="allow_deselect") return boolean(text,declaration.allowDeselect);
+            if (declaration.radioItem && (name=="value" || name=="initial_value"))
+            { declaration.radioPayload=LLSD(std::string(text)); return true; }
+            if (declaration.radioGroup && name=="initial_value")
+            { declaration.control->initialValue=LLSD(std::string(text)); return true; }
+            if (declaration.spinner)
+            {
+                auto& spinner=declaration.spinner->spinner;
+                if (name=="initial_value")
+                {
+                    float value=0.f;
+                    const auto parsed=std::from_chars(text.data(),text.data()+text.size(),value);
+                    if (parsed.ec!=std::errc() || parsed.ptr!=text.data()+text.size() || !std::isfinite(value)) return false;
+                    declaration.control->initialValue=LLSD(value);
+                    return true;
+                }
+                if (name=="min_val" || name=="max_val" || name=="increment")
+                {
+                    auto& value=name=="min_val" ? spinner.minimum : name=="max_val" ? spinner.maximum : spinner.increment;
+                    const auto parsed=std::from_chars(text.data(),text.data()+text.size(),value);
+                    return parsed.ec==std::errc() && parsed.ptr==text.data()+text.size() && std::isfinite(value);
+                }
+                if (name=="decimal_digits") return integer(text,spinner.precision);
+                if (name=="label_width") return integer(text,spinner.labelWidth);
+                if (name=="label") { spinner.label=text; return true; }
+                if (name=="label_wrap") return boolean(text,spinner.labelWrap);
+                if (name=="dynamic_button_height") return boolean(text,spinner.dynamicHeight);
+                if (name=="allow_digits_only") return boolean(text,spinner.digitsOnly);
+                if (name=="allow_text_entry") { bool unused; return boolean(text,unused); }
+                if (name=="text_enabled_color") return color(text,spinner.textEnabledColor);
+                if (name=="text_disabled_color") return color(text,spinner.textDisabledColor);
+            }
             if (declaration.tabs)
             {
                 auto& tabs = *declaration.tabs;
-                if (name == "tab_position") return text == "top";
+                if (name == "tab_position")
+                {
+                    using Position = LLVKWidgetTree::Node::TabContainer::Layout::Position;
+                    if (text != "top" && text != "bottom" && text != "left") return false;
+                    tabs.layout.position = text == "top" ? Position::Top : text == "bottom" ? Position::Bottom : Position::Left;
+                    return true;
+                }
+                if (name == "tab_width")
+                { std::int32_t width; if (!integer(text,width) || width < 0) return false; tabs.width = width; return true; }
+                if (name == "tab_padding_right") return integer(text,tabs.layout.rightPadding);
                 if (name == "tab_height") return integer(text,tabs.layout.tabHeight);
                 if (name == "tab_min_width") return integer(text,tabs.layout.minimumWidth);
                 if (name == "tab_max_width") return integer(text,tabs.layout.maximumWidth);
@@ -878,9 +957,12 @@ namespace
             const auto separator = tag.find('.');
             if (separator == std::string_view::npos || !declaration.control) return false;
             const auto prefix = tag.substr(0,separator);
+            if (declaration.radioGroup && prefix!="radio_group") return false;
+            if (declaration.slider && prefix!=(declaration.sliderControl ? "slider" : "slider_bar")) return false;
+            if (declaration.spinner && prefix != "spinner") return false;
             if ((declaration.button && prefix != "button") || (declaration.icon && prefix != "icon") ||
                 (declaration.badge && prefix != "badge") || (declaration.panel && prefix != (declaration.tabs ? "tab_container" : declaration.browser ? "web_browser" : declaration.layoutPanel ? "layout_panel" : "panel")) ||
-                (declaration.lineEditor && prefix != "line_editor") || (declaration.checkBox && prefix != "check_box") ||
+                (declaration.lineEditor && prefix != "line_editor") || (declaration.checkBox && prefix != (declaration.radioItem ? "radio_item" : "check_box")) ||
                 (declaration.scrollbar && prefix != "scroll_bar") ||
                 (declaration.scrollContainer && prefix != "scroll_container") || (declaration.combo && prefix != "combo_box")) return false;
             const auto name = tag.substr(separator+1);
@@ -906,6 +988,9 @@ namespace
             LLVKControl::Validation* predicate = nullptr;
             auto& control = *declaration.control;
             if (name == "commit_callback") action = &control.commit;
+            else if (declaration.sliderControl && name=="editor_commit_callback") action=&declaration.sliderControl->slider.editorCommit;
+            else if (declaration.slider && name=="mouse_down_callback") action=&declaration.slider->slider.mouseDown;
+            else if (declaration.slider && name=="mouse_up_callback") action=&declaration.slider->slider.mouseUp;
             else if (name == "init_callback") action = &control.init;
             else if (name == "mouseenter_callback") action = &control.mouseEnter;
             else if (name == "mouseleave_callback") action = &control.mouseLeave;
@@ -1023,13 +1108,14 @@ namespace
                     state.stack.push_back(current);
                     return;
                 }
-                if (std::string_view(tag) == "check_box.label_text" || std::string_view(tag) == "check_box.check_button")
+                if (std::string_view(tag) == "check_box.label_text" || std::string_view(tag) == "check_box.check_button" ||
+                    std::string_view(tag) == "radio_item.label_text" || std::string_view(tag) == "radio_item.check_button")
                 {
                     if (state.stack.empty() || !state.stack.back()->checkBox ||
                         state.stack.size() >= LLVKWidgetTree::maximumDepth || ++state.nodes > LLVKWidgetTree::maximumNodes)
                     { state.reject("Invalid native checkbox parameter owner or budget"); return; }
                     auto& owner = *state.stack.back();
-                    const bool label = std::string_view(tag) == "check_box.label_text";
+                    const bool label = std::string_view(tag) == "check_box.label_text" || std::string_view(tag) == "radio_item.label_text";
                     auto& destination = label ? owner.checkLabel : owner.checkButton;
                     if (destination) { state.reject("Duplicate native checkbox parameter block"); return; }
                     const auto& defaults = *owner.checkBox;
@@ -1082,6 +1168,47 @@ namespace
                     state.callbackElement = true;
                     return;
                 }
+                if (!state.stack.empty() && state.stack.back()->sliderControl &&
+                    (std::string_view(tag)=="slider.value_editor" || std::string_view(tag)=="slider.value_text" || std::string_view(tag)=="slider.slider_label"))
+                {
+                    if (++state.nodes>LLVKWidgetTree::maximumNodes || state.stack.size()>=LLVKWidgetTree::maximumDepth)
+                    { state.reject("Native slider parameter budget exceeded"); return; }
+                    auto part=std::make_unique<Declaration>();
+                    const auto& defaults=*state.stack.back()->sliderControl;
+                    const bool editor=std::string_view(tag)=="slider.value_editor";
+                    const std::string name=editor ? "editor" : std::string_view(tag)=="slider.value_text" ? "text" : "label";
+                    if (editor)
+                    { part->params=defaults.editor.view; part->control=defaults.editor.control; part->lineEditor=defaults.editor.editor; }
+                    else
+                    {
+                        const auto& text=name=="text" ? defaults.text : defaults.label;
+                        part->params=text.view; part->control=text.control; part->plainLabel=text.text;
+                    }
+                    for (std::size_t index=0; attributes[index]; index+=2)
+                        if (!state.attribute(*part,attributes[index],attributes[index+1]))
+                        { state.reject("Unsupported native slider child parameter: "+std::string(attributes[index])); return; }
+                    auto* current=part.get();
+                    state.stack.back()->sliderParts.insert_or_assign(name,std::move(part));
+                    state.stack.push_back(current);
+                    return;
+                }
+                if (!state.stack.empty() && state.stack.back()->spinner &&
+                    (std::string_view(tag)=="spinner.up_button" || std::string_view(tag)=="spinner.down_button"))
+                {
+                    const std::string name=std::string_view(tag)=="spinner.up_button" ? "up" : "down";
+                    if (state.stack.size()>=LLVKWidgetTree::maximumDepth || ++state.nodes>LLVKWidgetTree::maximumNodes)
+                    { state.reject("Native spinner parameter budget exceeded"); return; }
+                    auto part=std::make_unique<Declaration>();
+                    const auto& defaults=name=="up" ? state.stack.back()->spinner->up : state.stack.back()->spinner->down;
+                    part->tag="button"; part->params=defaults.view; part->control=defaults.control; part->button=defaults.button;
+                    for (std::size_t index=0; attributes[index]; index+=2)
+                        if (!state.attribute(*part,attributes[index],attributes[index+1]))
+                        { state.reject("Unsupported native spinner button attribute"); return; }
+                    auto* current=part.get();
+                    state.stack.back()->spinnerButtons.insert_or_assign(name,std::move(part));
+                    state.stack.push_back(current);
+                    return;
+                }
                 if (std::string_view(tag).find('.') != std::string_view::npos)
                 {
                     if (state.stack.empty() || !state.callback(*state.stack.back(),tag,attributes))
@@ -1096,7 +1223,10 @@ namespace
                 const bool panel = std::string_view(tag) == "panel" || tabs;
                 const bool border = std::string_view(tag) == "view_border";
                 const bool editor = std::string_view(tag) == "line_editor";
-                const bool check = std::string_view(tag) == "check_box";
+                const bool radioGroup = std::string_view(tag) == "radio_group";
+                const bool radioItem = std::string_view(tag) == "radio_item" ||
+                    (std::string_view(tag) == "item" && !state.stack.empty() && state.stack.back()->radioGroup);
+                const bool check = std::string_view(tag) == "check_box" || radioItem;
                 const bool scroll = std::string_view(tag) == "scroll_bar";
                 const bool container = std::string_view(tag) == "scroll_container";
                 const bool layoutStack = std::string_view(tag) == "layout_stack";
@@ -1104,7 +1234,10 @@ namespace
                 const bool combo = std::string_view(tag) == "combo_box";
                 const bool textWidget = std::string_view(tag) == "text";
                 const bool browser = std::string_view(tag) == "web_browser";
-                if (std::string_view(tag) != "view" && !icon && !button && !badge && !panel && !border && !editor && !check && !scroll && !container && !layoutStack && !layoutPanel && !combo && !textWidget && !browser)
+                const bool spinner = std::string_view(tag) == "spinner";
+                const bool sliderControl = std::string_view(tag) == "slider";
+                const bool slider = std::string_view(tag) == "slider_bar" || sliderControl;
+                if (std::string_view(tag) != "view" && !icon && !button && !badge && !panel && !border && !editor && !check && !scroll && !container && !layoutStack && !layoutPanel && !combo && !textWidget && !browser && !spinner && !radioGroup && !slider)
                 { state.reject("Native constructor not implemented for tag: " + std::string(tag)); return; }
                 if (++state.nodes > LLVKWidgetTree::maximumNodes || state.stack.size() >= LLVKWidgetTree::maximumDepth)
                 { state.reject("Native widget declaration exceeds node/depth limits"); return; }
@@ -1115,9 +1248,55 @@ namespace
                                       border ? state.panelDefaults.borderView : editor ? state.lineDefaults.view : check ? state.checkDefaults.view :
                                       scroll ? state.scrollDefaults.view : container ? state.containerDefaults.view :
                                       layoutStack ? state.layoutDefaults.view : layoutPanel ? state.panelDefaults.view : combo ? state.comboDefaults.view : textWidget ? state.textDefaults.view : state.defaults;
+                if (slider)
+                {
+                    declaration->slider=std::make_shared<LLVKWidgetFactory::SliderDefaults>(*state.resources.slider);
+                    declaration->params=declaration->slider->view;
+                    declaration->control=declaration->slider->control;
+                    if (!declaration->control->font && !declaration->control->fontRequest)
+                        declaration->control->fontRequest=state.resources.defaultFontRequest;
+                }
+                if (sliderControl)
+                {
+                    declaration->sliderControl=std::make_shared<LLVKWidgetFactory::SliderControlDefaults>(*state.resources.sliderControl);
+                    if (!declaration->sliderControl->initialized)
+                    {
+                        declaration->sliderControl->editor=state.lineDefaults;
+                        declaration->sliderControl->label=declaration->sliderControl->text=state.textDefaults;
+                        declaration->sliderControl->initialized=true;
+                    }
+                    declaration->params=declaration->sliderControl->view;
+                    declaration->control=declaration->sliderControl->control;
+                    if (!declaration->control->font && !declaration->control->fontRequest)
+                        declaration->control->fontRequest=state.resources.defaultFontRequest;
+                }
+                if (spinner)
+                {
+                    declaration->spinner=std::make_shared<LLVKWidgetFactory::SpinnerDefaults>(*state.resources.spinner);
+                    if (!declaration->spinner->initialized)
+                    {
+                        declaration->spinner->up=declaration->spinner->down=state.buttonDefaults;
+                        declaration->spinner->editor=state.lineDefaults;
+                        declaration->spinner->initialized=true;
+                    }
+                    declaration->params=declaration->spinner->view;
+                    declaration->control=declaration->spinner->control;
+                    if (!declaration->control->font && !declaration->control->fontRequest)
+                        declaration->control->fontRequest=state.resources.defaultFontRequest;
+                }
                 if (textWidget)
                 {
                     declaration->plainLabel = state.textDefaults.text;
+                    if (state.resources.webLinkHandler)
+                    {
+                        declaration->plainLabel->parseWebLinks=true;
+                        declaration->plainLabel->linkClicked=state.resources.webLinkHandler;
+                        if (state.resources.colors)
+                        {
+                            if (const auto color=state.resources.colors->find("HTMLLinkColor")) declaration->plainLabel->linkColor=*color;
+                            if (const auto color=state.resources.colors->find("UriQueryPartColor")) declaration->plainLabel->queryColor=*color;
+                        }
+                    }
                     declaration->control = state.textDefaults.control;
                     if (!declaration->control->font && !declaration->control->fontRequest)
                         declaration->control->fontRequest = state.resources.defaultFontRequest;
@@ -1179,8 +1358,18 @@ namespace
                 }
                 if (check)
                 {
-                    declaration->checkBox = state.checkDefaults;
-                    declaration->control = state.checkDefaults.control;
+                    const auto& defaults=radioItem && state.resources.radioItem ? *state.resources.radioItem : state.checkDefaults;
+                    declaration->checkBox = defaults;
+                    declaration->control = defaults.control;
+                    if (radioItem) declaration->params=defaults.view;
+                    declaration->radioItem=radioItem;
+                }
+                if (radioGroup)
+                {
+                    declaration->radioGroup=true;
+                    declaration->control=state.resources.radioControl;
+                    if (!declaration->control->font && !declaration->control->fontRequest)
+                        declaration->control->fontRequest=state.resources.defaultFontRequest;
                 }
                 if (editor)
                 {
@@ -1559,6 +1748,59 @@ namespace
             resolveFont(defaults.dropDown.control,resources,error) && resolveFont(defaults.combo.listControl,resources,error);
     }
 
+    bool resolveSliderControl(const Declaration& declaration,LLVKWidgetFactory::SliderControlDefaults& defaults,
+        const LLVKWidgetTree& tree,const LLVKWidgetFactory::Resources& resources,std::string& error)
+    {
+        for (const auto& [name,part] : declaration.sliderParts)
+        {
+            if (!resolveImages(tree,*part,error)) return false;
+            if (name=="editor")
+            {
+                defaults.editor.view=part->params; defaults.editor.control=*part->control; defaults.editor.editor=*part->lineEditor;
+                for (const auto& [attribute,image] : part->lineImages)
+                {
+                    auto& target=attribute=="background_image" ? defaults.editor.editor.background :
+                        attribute=="background_image_disabled" ? defaults.editor.editor.disabledBackground : defaults.editor.editor.focusedBackground;
+                    target=tree.findImage(image);
+                }
+            }
+            else
+            { auto& text=name=="text" ? defaults.text : defaults.label; text.view=part->params; text.control=*part->control; text.text=*part->plainLabel; }
+        }
+        if (!defaults.editor.control.font && !defaults.editor.control.fontRequest) defaults.editor.control.fontRequest=resources.defaultFontRequest;
+        if (!resolveFont(defaults.editor.control,resources,error)) return false;
+        defaults.slider.editor=defaults.editor.editor;
+        defaults.slider.editorControl=defaults.editor.control;
+        defaults.slider.spacing=tree.setting("UISliderctrlSpacing").value_or(LLSD(4)).asInteger();
+        return true;
+    }
+
+    bool resolveSpinner(const Declaration& declaration,LLVKWidgetFactory::SpinnerDefaults& defaults,
+        const LLVKWidgetTree& tree,const LLVKWidgetFactory::Resources& resources,std::string& error)
+    {
+        for (const auto& [name,part] : declaration.spinnerButtons)
+        {
+            if (!resolveImages(tree,*part,error)) return false;
+            auto& button=name=="up" ? defaults.up : defaults.down;
+            button.view=part->params; button.control=*part->control; button.button=*part->button;
+            for (const auto& [attribute,image] : part->buttonImages) *buttonImage(button.button.images,attribute)=tree.findImage(image);
+        }
+        for (auto* child : {&defaults.up.control,&defaults.down.control,&defaults.editor.control})
+        {
+            if (!child->font && !child->fontRequest) child->fontRequest=resources.defaultFontRequest;
+            if (!resolveFont(*child,resources,error)) return false;
+        }
+        defaults.spinner.buttonControl=defaults.up.control;
+        defaults.spinner.upButton=defaults.up.button;
+        defaults.spinner.downButton=defaults.down.button;
+        defaults.spinner.editorControl=defaults.editor.control;
+        defaults.spinner.editor=defaults.editor.editor;
+        defaults.spinner.spacing=tree.setting("UISpinctrlSpacing").value_or(LLSD(2)).asInteger();
+        defaults.spinner.buttonWidth=tree.setting("UISpinctrlBtnWidth").value_or(LLSD(16)).asInteger();
+        defaults.spinner.buttonHeight=tree.setting("UISpinctrlBtnHeight").value_or(LLSD(10)).asInteger();
+        return true;
+    }
+
     std::optional<LLVKWidgetTree::Id> build(LLVKWidgetTree& tree, const Declaration& declaration,
                                           LLVKWidgetTree::Id layoutParent,
                                           LLVKWidgetTree::Id owningParent, std::string& error,
@@ -1608,6 +1850,46 @@ namespace
         if (control && !declaration.panel && !resolveControl(*control,callbacks,environment.resources,error)) return std::nullopt;
         if (icon && declaration.imageName) icon->image = tree.findImage(*declaration.imageName);
         auto button = declaration.button;
+        auto slider=declaration.slider ? std::make_unique<LLVKWidgetFactory::SliderDefaults>(*declaration.slider) : nullptr;
+        if (slider)
+        {
+            auto& params=slider->slider;
+            for (const auto& [name,target] : {std::pair{"thumb_image",&params.thumb},std::pair{"thumb_image_pressed",&params.pressedThumb},
+                std::pair{"thumb_image_disabled",&params.disabledThumb},std::pair{params.vertical ? "track_image_vertical" : "track_image_horizontal",&params.track},
+                std::pair{params.vertical ? "track_highlight_vertical_image" : "track_highlight_horizontal_image",&params.highlight}})
+            {
+                const auto found=slider->images.find(name);
+                if (found!=slider->images.end()) { *target=tree.findImage(found->second,error); if (!error.empty()) return std::nullopt; }
+            }
+            if (!resolveCallback(params.mouseDown,callbacks.actions,error) || !resolveCallback(params.mouseUp,callbacks.actions,error)) return std::nullopt;
+        }
+        auto spinner=declaration.spinner ? std::make_unique<LLVKWidgetFactory::SpinnerDefaults>(*declaration.spinner) : nullptr;
+        auto sliderControl=declaration.sliderControl ? std::make_unique<LLVKWidgetFactory::SliderControlDefaults>(*declaration.sliderControl) : nullptr;
+        if (sliderControl)
+        {
+            if (!resolveSliderControl(declaration,*sliderControl,tree,environment.resources,error)) return std::nullopt;
+            sliderControl->slider.bar=slider->slider;
+            if (!resolveCallback(sliderControl->slider.editorCommit,callbacks.actions,error)) return std::nullopt;
+        }
+        if (spinner && !resolveSpinner(declaration,*spinner,tree,environment.resources,error)) return std::nullopt;
+        std::vector<LLVKWidgetTree::RadioItemParams> radioItems;
+        if (declaration.radioGroup)
+        {
+            for (const auto& child : declaration.children)
+            {
+                if (!child->radioItem || !child->checkBox) { error="Native radio group requires radio items"; return std::nullopt; }
+                auto defaults=std::make_unique<LLVKWidgetFactory::CheckBoxDefaults>(*child->checkBox);
+                if (!resolveImages(tree,*child,error) || !resolveCheckBox(*child,*defaults,tree,environment.resources,error)) return std::nullopt;
+                auto item=std::make_unique<LLVKWidgetTree::RadioItemParams>();
+                item->view=child->params.view;
+                item->layout=std::make_shared<LLVKWidgetLayout>(child->params.geometry);
+                item->control=*child->control;
+                if (!resolveControl(item->control,callbacks,environment.resources,error)) return std::nullopt;
+                item->check=defaults->construction;
+                item->payload=child->radioPayload;
+                radioItems.push_back(std::move(*item));
+            }
+        }
         auto combo = declaration.combo ? std::make_unique<LLVKWidgetFactory::ComboDefaults>(*declaration.combo) : nullptr;
         if (combo)
         {
@@ -1794,6 +2076,10 @@ namespace
              declaration.browser ? tree.createBrowser(params,*control,*panel,*declaration.browser,0,error) :
                panel ? tree.createPanel(constructorView,constructorControl,constructorPanel,0,error) :
                declaration.layoutStack ? tree.createLayoutStack(params,declaration.layoutStack->vertical,declaration.layoutStack->spacing,declaration.layoutStack->clip,owningParent,error) :
+                   sliderControl ? tree.createSliderControl(params,*control,sliderControl->slider,owningParent,error) :
+                   slider ? tree.createSlider(params,*control,slider->slider,owningParent,error) :
+                   declaration.radioGroup ? tree.createRadioGroup(params,*control,radioItems,declaration.allowDeselect,owningParent,error) :
+                   spinner ? tree.createSpinner(params,*control,spinner->spinner,owningParent,error) :
                    combo ? tree.createCombo(params,*control,combo->combo,owningParent,error) :
                    container ? tree.createScrollContainer(params,*control,container->container,owningParent,error) :
                    scroll ? tree.createScrollbar(params,*control,scroll->scrollbar,owningParent,error) :
@@ -1897,6 +2183,7 @@ namespace
             }
             for (const auto& child : declaration.children)
             {
+                if (declaration.radioGroup) continue;
                 if (!build(tree,*child,*id,*id,error,environment,buildState))
                 {
                     std::string cleanupError;
@@ -1927,10 +2214,13 @@ namespace
                         button.toggle = false;
                         button.click.reset();
                         const auto& images = declaration.tabs->images[index == 0 ? 0 : index+1 == panels.size() ? 2 : 1];
-                        for (const auto& [name,target] : {std::pair{"tab_top_image_unselected",&button.images.unselected},
-                            std::pair{"tab_top_image_selected",&button.images.selected},std::pair{"tab_top_image_flash",&button.images.flash}})
+                        using Position = LLVKWidgetTree::Node::TabContainer::Layout::Position;
+                        const std::string prefix = declaration.tabs->layout.position == Position::Top ? "tab_top_image_" :
+                            declaration.tabs->layout.position == Position::Bottom ? "tab_bottom_image_" : "tab_left_image_";
+                        for (const auto& [name,target] : {std::pair{"unselected",&button.images.unselected},
+                            std::pair{"selected",&button.images.selected},std::pair{"flash",&button.images.flash}})
                         {
-                            const auto found = images.find(name);
+                            const auto found = images.find(prefix+name);
                             if (found != images.end()) { *target = tree.findImage(found->second,error); if (!error.empty()) return false; }
                         }
                         button.images.pressed = button.images.selected;
@@ -1940,16 +2230,19 @@ namespace
                         buttonControl.font = control->font;
                         buttonControl.tabStop = false;
                         LLVKWidgetTree::Params buttonView;
-                        buttonView.name = "htab_"+tree.get(child)->params.name;
+                        buttonView.name = (declaration.tabs->layout.position == Position::Left ? "vtab_" : "htab_")+tree.get(child)->params.name;
                         buttonView.rect = {0,0,60,declaration.tabs->layout.tabHeight};
                         const auto tab = tree.createButton(buttonView,buttonControl,button,*id,error);
                         if (!tab || !tree.attachTabPanel(*id,child,*tab,error)) return false;
                     }
                     auto layout = declaration.tabs->layout;
+                    layout.minimumWidth = declaration.tabs->width.value_or(layout.position == LLVKWidgetTree::Node::TabContainer::Layout::Position::Left ?
+                        tree.setting("UITabCntrVertTabMinWidth").value_or(LLSD(100)).asInteger() : layout.minimumWidth);
+                    layout.verticalPadding = tree.setting("UITabCntrvPad").value_or(LLSD(0)).asInteger();
                     layout.labelPadding = tree.setting("UITabPadding").value_or(LLSD(0)).asInteger();
                     layout.horizontalPadding = tree.setting("UITabCntrTabHPad").value_or(LLSD(0)).asInteger();
                     layout.panelOverlap = tree.setting("UITabCntrButtonPanelOverlap").value_or(LLSD(0)).asInteger();
-                    if (!tree.layoutTopTabs(*id,layout,error)) return false;
+                    if (!tree.layoutTabPanels(*id,layout,error)) return false;
                     return panels.empty() || tree.selectTabPanel(*id,panels.front(),error);
                 };
                 if (!constructTabs()) { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
@@ -1971,7 +2264,7 @@ namespace
             const bool built = instance && instance->postBuild ? instance->postBuild(tree,*id,context,error) :
                 combo ? tree.postBuildCombo(*id,error) :
                 button ? tree.postBuildButton(*id,error) :
-                icon || badge || panel || lineEditor || check || scroll || container ? tree.postBuildControl(*id) : true;
+                icon || badge || panel || lineEditor || check || scroll || container || spinner ? tree.postBuildControl(*id) : true;
             if (!built || !tree.get(*id))
             {
                 if (error.empty()) error = "Native control no longer exists at post-build";
@@ -2090,7 +2383,42 @@ bool LLVKWidgetFactory::loadDefaults(const LLVKWidgetTree& tree, std::string_vie
     if (!declaration.children.empty() || (declaration.ownedBadge && !declaration.ownedBadge->children.empty()))
     { error = "Native widget defaults cannot construct child widgets"; return false; }
     declaration.params.view.fromDeclaration = false;
-    if (declaration.tabs)
+    if (declaration.sliderControl)
+    {
+        auto defaults=std::make_shared<SliderControlDefaults>(*declaration.sliderControl);
+        if (!resolveSliderControl(declaration,*defaults,tree,mResources,error)) return false;
+        defaults->view=declaration.params;
+        defaults->control=*declaration.control;
+        mResources.sliderControl=std::move(defaults);
+    }
+    else if (declaration.slider)
+    {
+        auto defaults=std::make_shared<SliderDefaults>(*declaration.slider);
+        defaults->view=declaration.params;
+        defaults->control=*declaration.control;
+        mResources.slider=std::move(defaults);
+    }
+    else if (declaration.radioGroup)
+    {
+        mResources.radioControl=*declaration.control;
+    }
+    else if (declaration.radioItem)
+    {
+        auto defaults=std::make_shared<CheckBoxDefaults>(*declaration.checkBox);
+        if (!resolveCheckBox(declaration,*defaults,tree,mResources,error)) return false;
+        defaults->view=declaration.params;
+        defaults->control=*declaration.control;
+        mResources.radioItem=std::move(defaults);
+    }
+    else if (declaration.spinner)
+    {
+        auto defaults=std::make_shared<SpinnerDefaults>(*declaration.spinner);
+        if (!resolveSpinner(declaration,*defaults,tree,mResources,error)) return false;
+        defaults->view=declaration.params;
+        defaults->control=*declaration.control;
+        mResources.spinner=std::move(defaults);
+    }
+    else if (declaration.tabs)
     {
         auto defaults = std::make_shared<TabDefaults>(*declaration.tabs);
         defaults->panel.view = declaration.params;

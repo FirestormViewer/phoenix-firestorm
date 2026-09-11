@@ -19,6 +19,7 @@ bool LLVKWidgetTree::handleWheel(Id id, std::int32_t x, std::int32_t y, std::int
 {
     const auto* node = get(id);
     if (!node) return false;
+    if (node->slider && node->slider->params->vertical) return sliderStep(id,-clicks,error);
     if (node->scrollbar) return scrollbarWheel(id,clicks,horizontal,error);
     const auto children = node->children;
     for (const Id child : children)
@@ -167,6 +168,7 @@ bool LLVKWidgetTree::handlePointer(Id id, PointerEvent event, std::string& error
 {
     const auto* node = get(id);
     if (!node) return false;
+    if (node->slider) return sliderPointer(id,event,error);
     if (node->comboListOwner) return comboListPointer(id,event,error);
     if (node->lineEditor) return lineEditorPointer(id,event,error);
     if (node->scrollbar) return scrollbarPointer(id,event,error);
