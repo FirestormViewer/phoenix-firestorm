@@ -52,7 +52,8 @@
 			<text name="LabelItemDescTitle">
 				Descrição:
 			</text>
-			<text_editor name="LabelItemDesc" tool_tip="Quando a opção &quot;Dicas ao passar o mouse em todos os objetos&quot; estiver ativa nas configurações do viewer, a descrição do objeto será mostrada para qualquer objeto sob o cursor. A descrição é limitada a 127 bytes; textos maiores serão truncados."/>
+			<line_editor name="LabelItemDescSingleLine" tool_tip="Quando a opção &quot;Dicas ao passar o mouse em todos os objetos&quot; estiver ativa nas configurações do viewer, a descrição do objeto será mostrada para qualquer objeto sob o cursor. A descrição é limitada a 127 bytes; textos maiores serão truncados."/>
+			<text_editor name="LabelItemDescMultiLine" tool_tip="Quando a opção &quot;Dicas ao passar o mouse em todos os objetos&quot; estiver ativa nas configurações do viewer, a descrição do objeto será mostrada para qualquer objeto sob o cursor. A descrição é limitada a 127 bytes; textos maiores serão truncados."/>
 			<text name="LabelItemExperienceTitle">
 				Experiência:
 			</text>

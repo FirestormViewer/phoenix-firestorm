@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_maturity_dialog" title="Altersfreigabe">
+	<floater.string name="location_rated_string" value="Der ausgewählte Ort ist als [MATURITY] eingestuft."/>
+	<floater.string name="update_maturity_string" value="Ihre aktuelle Einstellung zur Altersfreigabe enthält keine [MATURITY] Inhalte. Eine Freigabe aktualisiert Ihre Einstellungen."/>
+	<floater.string name="allow_maturity_string" value="Inhalte der Einstufung [MATURITY] erlauben"/>
+	<text name="location_rated_lbl">
+		Der ausgewählte Ort ist als Adult eingestuft.
+	</text>
+	<text name="current_maturity_lbl">
+		Ihre aktuelle Einstellung zur Altersfreigabe enthält keine Adult Inhalte. Eine Freigabe aktualisiert Ihre Einstellungen.
+	</text>
+	<button label="Inhalt erlauben" name="continue_btn"/>
+	<button label="Abbrechen" name="cancel_btn"/>
+	<text name="learn_more_lbl">
+		[https://lindenlab.freshdesk.com/support/solutions/articles/31000135220-i-can-t-access-adult-land-and-content- Mehr erfahren] über Altersfreigabe.
+	</text>
+</floater>
