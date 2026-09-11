@@ -90,10 +90,12 @@ experimental test once passed.
 
 ## Architecture decisions and constraints
 
-The user's confirmed runtime boundary is **one viewer executable and one OS
-process**, selecting an independent GL/Zink or native Vulkan lifecycle before
-incompatible application initialization. Independent lifecycle does not mean a
-second executable, another instance of the executable, or GL-owned constructors
+The user's confirmed runtime boundary is **one viewer executable with its 3D
+renderer in the viewer process**, selecting an independent GL/Zink or native
+Vulkan lifecycle before incompatible application initialization. As clarified
+on 2026-09-11, Dullahan/CEF browser helpers and the slvoice helper are permitted; the one-process
+rule is strictly for the viewer's 3D portion. Independent lifecycle does not mean a
+separate 3D renderer executable/process, another viewer instance, or GL-owned constructors
 followed by a late native display branch. Common process/static initialization
 must be audited too; early branching alone does not prove absence of GL effects.
 
@@ -146,8 +148,9 @@ neutral, and which belongs exclusively to the selected lifecycle. Evaluate the
 architecture alternatives above before coding their selection mechanism.
 
 Exit: reviewed lifecycle state diagram, owner graph and build decision; tests of
-settings precedence and failure behavior against the reference; one executable,
-one process, no GL initialization on the native route, unchanged GL/Zink route.
+settings precedence and failure behavior against the reference; one viewer
+executable with in-process 3D rendering (browser and slvoice helpers permitted), no GL
+initialization on the native route, unchanged GL/Zink route.
 A diagnostic rejecting the requested route is containment, not this exit gate.
 Packaging/updater paths must not be left pointing to an incomplete scaffold.
 

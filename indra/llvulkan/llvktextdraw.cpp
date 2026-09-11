@@ -218,6 +218,43 @@ std::shared_ptr<LLVKTextPipeline> LLVKTextPipeline::create(const LLVKGlyphUpload
     return std::shared_ptr<LLVKTextPipeline>(new LLVKTextPipeline(std::move(impl)));
 }
 
+std::optional<std::vector<LLVKTextDraw::Quad>> LLVKTextDraw::prepare(const LLVKGlyphAtlas& atlas,
+    const Style& style, std::string& error)
+{
+    error.clear();
+    if (!std::isfinite(style.depth) || !std::isfinite(style.shadowStrength) || style.shadowStrength < 0 || style.shadowStrength > 1 ||
+        (style.shadow != Shadow::None && style.shadow != Shadow::Hard && style.shadow != Shadow::Soft))
+    { error = "Invalid native text style"; return std::nullopt; }
+    std::vector<Quad> quads;
+    for (const auto& placement : atlas.placements())
+    {
+        if (!placement.page) continue;
+        if (quads.size()*6 > 1024*1024-36) { error = "Native text vertex budget exceeded"; return std::nullopt; }
+        auto color = style.color;
+        if (placement.draw.glyph->raster.encoding == LLVKFontFace::PixelEncoding::PremultipliedSrgbRgba8)
+            color[0] = color[1] = color[2] = 255;
+        const auto quad = [&](float offsetX, float offsetY, const std::array<std::uint8_t,4>& tint)
+        {
+            const auto& draw = placement.draw;
+            quads.push_back({*placement.page,draw.left+offsetX,draw.bottom+offsetY,draw.right+offsetX,draw.top+offsetY,
+                placement.leftU,placement.bottomV,placement.rightU,placement.topV,tint});
+        };
+        if (style.syntheticBold) { quad(0,0,color); quad(1,0,color); }
+        else
+        {
+            if (style.shadow != Shadow::None)
+            {
+                auto shadow = style.shadowColor;
+                shadow[3] = static_cast<std::uint8_t>(color[3]*style.shadowStrength*(style.shadow == Shadow::Soft ? 0.3f : 1.f));
+                if (style.shadow == Shadow::Hard) quad(1,-1,shadow);
+                else { quad(-1,-1,shadow); quad(1,-1,shadow); quad(1,1,shadow); quad(-1,1,shadow); quad(0,-2,shadow); }
+            }
+            quad(0,0,color);
+        }
+    }
+    return quads;
+}
+
 bool LLVKTextDraw::record(LLVKGlyphSubmission& submission, std::shared_ptr<LLVKTextPipeline> pipeline,
                          const LLVKGlyphAtlas& atlas,
                          std::vector<std::shared_ptr<const LLVKGlyphImage>> images,
@@ -248,37 +285,19 @@ bool LLVKTextDraw::record(LLVKGlyphSubmission& submission, std::shared_ptr<LLVKT
     struct Run { std::size_t page; std::uint32_t first; std::uint32_t count; };
     std::vector<Vertex> vertices;
     std::vector<Run> runs;
-    for (const auto& placement : atlas.placements())
+    const auto prepared = prepare(atlas,style,error);
+    if (!prepared) return false;
+    for (const auto& quad : *prepared)
     {
-        if (!placement.page) continue;
-        if (vertices.size() > 1024 * 1024 - 36) { error = "Native text vertex budget exceeded"; return false; }
-        auto color = style.color;
-        if (placement.draw.glyph->raster.encoding == LLVKFontFace::PixelEncoding::PremultipliedSrgbRgba8)
-            color[0] = color[1] = color[2] = 255;
         const auto first = static_cast<std::uint32_t>(vertices.size());
-        const auto quad = [&](float offsetX, float offsetY, const std::array<std::uint8_t,4>& tint)
-        {
-            const auto& draw = placement.draw;
-            const Vertex corners[]{
-                {{draw.right+offsetX,draw.top+offsetY,style.depth},{placement.rightU,placement.topV},tint},
-                {{draw.left+offsetX,draw.top+offsetY,style.depth},{placement.leftU,placement.topV},tint},
-                {{draw.left+offsetX,draw.bottom+offsetY,style.depth},{placement.leftU,placement.bottomV},tint},
-                {{draw.right+offsetX,draw.bottom+offsetY,style.depth},{placement.rightU,placement.bottomV},tint}};
-            for (auto index : {0,1,2,0,2,3}) vertices.push_back(corners[index]);
-        };
-        if (style.syntheticBold) { quad(0,0,color); quad(1,0,color); }
-        else
-        {
-            if (style.shadow != Shadow::None)
-            {
-                auto shadow = style.shadowColor;
-                shadow[3] = static_cast<std::uint8_t>(color[3] * style.shadowStrength * (style.shadow == Shadow::Soft ? 0.3f : 1.f));
-                if (style.shadow == Shadow::Hard) quad(1,-1,shadow);
-                else { quad(-1,-1,shadow); quad(1,-1,shadow); quad(1,1,shadow); quad(-1,1,shadow); quad(0,-2,shadow); }
-            }
-            quad(0,0,color);
-        }
-        runs.push_back({*placement.page,first,static_cast<std::uint32_t>(vertices.size())-first});
+        const Vertex corners[]{
+            {{quad.right,quad.top,style.depth},{quad.rightU,quad.topV},quad.color},
+            {{quad.left,quad.top,style.depth},{quad.leftU,quad.topV},quad.color},
+            {{quad.left,quad.bottom,style.depth},{quad.leftU,quad.bottomV},quad.color},
+            {{quad.right,quad.bottom,style.depth},{quad.rightU,quad.bottomV},quad.color}};
+        for (auto index : {0,1,2,0,2,3}) vertices.push_back(corners[index]);
+        if (!runs.empty() && runs.back().page == quad.page) runs.back().count += 6;
+        else runs.push_back({quad.page,first,6});
     }
     if (vertices.empty() || !view.clip.extent.width || !view.clip.extent.height) return true;
     auto impl = std::make_unique<Impl>();

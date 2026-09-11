@@ -182,6 +182,10 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         # that didn't copy them) white-screens on the Vulkan backend.
         with self.prefix(src=os.path.join(self.args['source'], "..", "llvulkan", "shaders"), dst="shaders"):
             self.path("compiled/*.spv")
+        if self.args['platform'] == 'windows':
+            with self.prefix(src=os.path.join(self.args['build'], "..", "llvulkan", "compiled_ui"), dst="shaders/compiled"):
+                self.path("ui2d.vert.spv")
+                self.path("ui2d.frag.spv")
 
         if self.is_packaging_viewer():
             with self.prefix(src_dst="app_settings"):

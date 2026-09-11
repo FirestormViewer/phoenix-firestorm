@@ -1,4 +1,5 @@
 #include "llvkwidgettree.h"
+#include "llstring.h"
 #include "llvkfont.h"
 
 #include <algorithm>
@@ -175,6 +176,132 @@ bool LLVKWidgetTree::setButtonToggle(Id id, bool selected, std::string& error)
     setButtonFlashing(id,false);
     ++button.textGeneration;
     return resizeButton(id,error);
+}
+
+std::optional<LLVKWidgetTree::ButtonDraw> LLVKWidgetTree::prepareButton(Id id, const ButtonView& view, std::string& error)
+{
+    error.clear();
+    const auto* node = get(id);
+    if (!node || !node->button || !std::isfinite(view.frameDelta) || view.frameDelta < 0 ||
+        !std::isfinite(view.drawAlpha) || !std::isfinite(view.transparency) || view.focusWidth < 0)
+    { error = "Invalid native button preparation input"; return std::nullopt; }
+    const bool focused = mKeyboardFocus == id, enabled = enabledInChain(id);
+    const auto inside = containsLocal(id,view.mouseX,view.mouseY,true,mTopControl,error);
+    if (!inside) return std::nullopt;
+    auto& installed = *mNodes.at(id).button;
+    const bool pressed = (focused && (view.spaceDown || (installed.params.commitOnReturn && view.returnDown))) ||
+        (mMouseCapture == id && *inside) || installed.forcePressed;
+    const bool selected = node->control->value.asBoolean();
+    if (installed.flashTimer && ((selected && !installed.flashTimer->running && !installed.forceFlashing) || pressed))
+        installed.flashing = false;
+    const auto before = installed;
+    const auto& images = before.images;
+    auto image = selected ? images.selected : images.unselected;
+    bool useGlow = false, additive = true;
+    LLVKColor::Value glowColor{1,1,1,1};
+    if (pressed && before.params.displayPressed) image = selected ? images.pressedSelected : images.pressed;
+    else if (before.highlighted)
+    {
+        const auto hover = selected ? images.hoverSelected : images.hover;
+        if (hover) image = hover;
+        else useGlow = true;
+    }
+    if (images.disabledSelected && ((enabled && node->control->tentative) || (!enabled && selected))) image = images.disabledSelected;
+    else if (images.disabled && !enabled && !selected) image = images.disabled;
+    auto glowImage = image;
+    const auto flashSetting = mSettings.find("EnableButtonFlashing");
+    const bool flashEnabled = flashSetting == mSettings.end() || flashSetting->second.asBoolean();
+    if (before.flashing)
+    {
+        if (flashEnabled && images.flash) glowImage = images.flash;
+        if (before.flashTimer)
+        {
+            useGlow = true;
+            additive = false;
+            if (before.flashTimer->highlighted || !before.flashTimer->running || !before.highlighted)
+                glowColor = before.alternateFlashColor ? before.params.alternateFlashColor.get() : before.params.flashColor.get();
+        }
+    }
+    if (before.highlighted && !image) useGlow = true;
+    const auto toggled = before.params.isToggled;
+    if (toggled.function)
+    {
+        const bool value = toggled.function(id,toggled.parameter.value_or(LLSD()));
+        if (!get(id)) { error = "Native button removed by toggle callback"; return std::nullopt; }
+        if (!setButtonToggle(id,value,error)) return std::nullopt;
+    }
+    node = get(id);
+    if (!node) { error = "Native button removed during preparation"; return std::nullopt; }
+    auto& button = *mNodes.at(id).button;
+    const auto width64 = std::int64_t(node->params.rect.right)-node->params.rect.left;
+    const auto height64 = std::int64_t(node->params.rect.top)-node->params.rect.bottom;
+    if (width64 < 0 || height64 < 0 || width64 > INT32_MAX-view.focusWidth || height64 > INT32_MAX-view.focusWidth)
+    { error = "Native button draw extent overflows"; return std::nullopt; }
+    const auto width = static_cast<std::int32_t>(width64), height = static_cast<std::int32_t>(height64);
+    const float alpha = button.params.useDrawContextAlpha ? view.drawAlpha : view.transparency;
+    const auto tint = [](LLVKColor::Value color,float alpha) { color[3] *= alpha; return color; };
+    ButtonDraw output;
+    const bool currentSelected = node->control->value.asBoolean();
+    output.labelColor = tint(enabled ? (currentSelected ? button.params.selectedLabelColor.get() : button.params.labelColor.get()) :
+        (currentSelected ? button.params.disabledSelectedLabelColor.get() : button.params.disabledLabelColor.get()),alpha);
+    Rect imageRect{0,0,width,height};
+    if (image && !button.params.scaleImage) imageRect = {0,height-static_cast<std::int32_t>(image->height()),static_cast<std::int32_t>(image->width()),height};
+    if (focused && button.params.drawFocusBorder && image)
+        output.primitives.push_back({{imageRect.left-view.focusWidth,imageRect.bottom-view.focusWidth,imageRect.right+view.focusWidth,imageRect.top+view.focusWidth},
+            tint(view.focusColor,alpha),image,true,false,false});
+    float targetGlow = 0.f;
+    if (useGlow) targetGlow = button.flashing && button.flashTimer ?
+        (button.flashTimer->highlighted || !button.flashTimer->running || button.highlighted ? 1.f : 0.f) : button.params.hoverGlow;
+    button.glow += (targetGlow-button.glow)*(1.f-std::pow(2.f,-view.frameDelta/0.05f));
+    if (image)
+    {
+        const float disabledFade = !enabled && button.fadeWhenDisabled ? 0.5f : 1.f;
+        output.primitives.push_back({imageRect,tint(enabled ? button.params.imageColor.get() : button.params.disabledImageColor.get(),alpha*disabledFade),image});
+        if (button.glow > 0.01f && glowImage)
+        {
+            auto glowRect = imageRect;
+            if (!button.params.scaleImage)
+            { glowRect.right = static_cast<std::int32_t>(glowImage->width()); glowRect.top = glowRect.bottom+static_cast<std::int32_t>(glowImage->height()); }
+            output.primitives.push_back({glowRect,tint(glowColor,button.glow*alpha),glowImage,true,additive,false});
+        }
+    }
+    else output.primitives.push_back({{0,0,width,height},{1,0,1,alpha},{},false,false,true});
+    auto textLeft = button.leftPad, textRight = width-button.rightPad;
+    auto textWidth = width-button.leftPad-button.rightPad;
+    if (images.overlay)
+    {
+        const float factor = std::min({float(width)/images.overlay->width(),float(height)/images.overlay->height(),1.f});
+        const auto overlayWidth = static_cast<std::int32_t>(std::floor(images.overlay->width()*factor+0.5f));
+        const auto overlayHeight = static_cast<std::int32_t>(std::floor(images.overlay->height()*factor+0.5f));
+        auto centerX = width/2, centerY = height/2;
+        if (pressed && button.params.displayPressed) { ++centerX; --centerY; }
+        centerY += button.params.overlayBottomPad-button.params.overlayTopPad;
+        std::int32_t left = centerX-overlayWidth/2;
+        if (button.params.overlayRightDelta > 0) left = width-overlayWidth-button.params.overlayRightDelta;
+        else if (button.params.overlayAlign == LLVKButton::Align::Left)
+        { left = button.leftPad; textLeft += overlayWidth+button.params.overlayLabelSpace; textWidth -= overlayWidth+button.params.overlayLabelSpace; }
+        else if (button.params.overlayAlign == LLVKButton::Align::Right)
+        { left = width-button.rightPad-overlayWidth; textRight -= overlayWidth+button.params.overlayLabelSpace; textWidth -= overlayWidth+button.params.overlayLabelSpace; }
+        output.primitives.push_back({{left,centerY-overlayHeight/2,left+overlayWidth,centerY-overlayHeight/2+overlayHeight},
+            tint(!enabled ? button.params.disabledOverlayColor.get() : currentSelected ? button.params.selectedOverlayColor.get() : button.params.overlayColor.get(),alpha),images.overlay});
+    }
+    output.label = currentSelected ? button.selectedLabel : button.params.label;
+    LLWString label(output.label.begin(),output.label.end());
+    LLWStringUtil::trim(label);
+    output.label.assign(label.begin(),label.end());
+    output.text.x = float(button.params.labelAlign == LLVKButton::Align::Right ? textRight :
+        button.params.labelAlign == LLVKButton::Align::Center ? textLeft+textWidth/2 : textLeft);
+    if (pressed && button.params.displayPressed) ++output.text.x;
+    output.text.y = float(height/2+button.params.bottomPad);
+    output.text.maxPixels = std::max(0,textWidth);
+    output.text.horizontal = button.params.labelAlign == LLVKButton::Align::Right ? LLVKFont::HorizontalAlign::Right :
+        button.params.labelAlign == LLVKButton::Align::Center ? LLVKFont::HorizontalAlign::Center : LLVKFont::HorizontalAlign::Left;
+    output.text.vertical = LLVKFont::VerticalAlign::Center;
+    output.text.ellipses = button.params.useEllipses;
+    output.text.requestColor = button.params.useFontColor;
+    output.shadow = button.params.labelShadow;
+    output.font = node->control->params.font;
+    return output;
 }
 
 bool LLVKWidgetTree::setButtonLabel(Id id, std::u32string label, std::optional<bool> selectedOnly)

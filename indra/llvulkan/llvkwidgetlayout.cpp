@@ -1,4 +1,188 @@
 #include "llvkwidgetlayout.h"
+#include <cmath>
+std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createLayoutStack(const Params& view, bool vertical,
+    std::int32_t spacing, bool clip, Id parent, std::string& error)
+{
+    if (spacing == -1)
+    {
+        const auto setting = mSettings.find("UIResizeBarHeight");
+        spacing = setting == mSettings.end() ? 0 : setting->second.asInteger();
+    }
+    if (spacing < 0) { error = "Native layout stack spacing cannot be negative"; return std::nullopt; }
+    const auto id = create(view,parent,error);
+    if (id) mNodes.at(*id).layoutStack = Node::LayoutStack{vertical,clip,spacing,{}};
+    return id;
+}
+
+bool LLVKWidgetTree::attachLayoutPanel(Id stack, Id panel, const Node::LayoutPanel& params, std::string& error)
+{
+    error.clear();
+    const auto* owner = get(stack);
+    const auto* child = get(panel);
+    if (!owner || !owner->layoutStack || !child || !child->panel || params.minimum < 0 ||
+        params.expandedMinimum < 0 || params.maximum < params.minimum)
+    { error = "Invalid native layout panel owner or dimensions"; return false; }
+    auto state = params;
+    state.visibleAmount = child->params.visible ? 1.f : 0.f;
+    const auto dimension = owner->layoutStack->vertical ? std::int64_t(child->params.rect.top)-child->params.rect.bottom :
+        std::int64_t(child->params.rect.right)-child->params.rect.left;
+    if (dimension < 0 || dimension > INT32_MAX) { error = "Invalid native layout panel extent"; return false; }
+    state.target = std::min(std::max(static_cast<std::int32_t>(dimension),state.minimum),state.maximum);
+    auto panels = owner->layoutStack->panels;
+    std::erase(panels,panel);
+    panels.push_back(panel);
+    if (!reparent(panel,stack,false,child->params.tabGroup.value_or(0),error)) return false;
+    mNodes.at(panel).layoutPanel = state;
+    mNodes.at(panel).params.follows = 0;
+    mNodes.at(stack).layoutStack->panels = std::move(panels);
+    mNodes.at(stack).layoutStack->needsLayout = true;
+    float total = 0.f;
+    for (const Id current : mNodes.at(stack).layoutStack->panels)
+    {
+        auto& node = mNodes.at(current);
+        if (!node.layoutPanel->autoResize) continue;
+        const auto dim = owner->layoutStack->vertical ? std::int64_t(node.params.rect.top)-node.params.rect.bottom :
+            std::int64_t(node.params.rect.right)-node.params.rect.left;
+        node.layoutPanel->fraction = std::max(0.00001f,float(dim-node.layoutPanel->expandedMinimum));
+        total += node.layoutPanel->fraction;
+    }
+    float normalized = 0.f;
+    for (const Id current : mNodes.at(stack).layoutStack->panels)
+    {
+        auto& panelState = *mNodes.at(current).layoutPanel;
+        if (panelState.autoResize) { panelState.fraction = std::clamp(panelState.fraction/total,0.00001f,1.f); normalized += panelState.fraction; }
+    }
+    for (const Id current : mNodes.at(stack).layoutStack->panels)
+        if (mNodes.at(current).layoutPanel->autoResize) mNodes.at(current).layoutPanel->fraction /= normalized;
+    return true;
+}
+
+bool LLVKWidgetTree::configureLayoutStack(Id id, bool animate, float openTime, float closeTime, std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->layoutStack || !std::isfinite(openTime) || !std::isfinite(closeTime) || openTime < 0.f || closeTime < 0.f)
+    { error = "Invalid native layout animation configuration"; return false; }
+    auto& stack = *mNodes.at(id).layoutStack;
+    stack.animate = animate; stack.openTime = openTime; stack.closeTime = closeTime;
+    stack.needsLayout = true;
+    return true;
+}
+
+bool LLVKWidgetTree::updateLayoutStack(Id id, std::string& error, float frameDelta)
+{
+    error.clear();
+    const auto* node = get(id);
+    if (!node || !node->layoutStack) { error = "Native layout stack is missing"; return false; }
+    if (!std::isfinite(frameDelta) || frameDelta < 0.f) { error = "Invalid native layout frame delta"; return false; }
+    const auto stack = *node->layoutStack;
+    const auto width = std::int64_t(node->params.rect.right)-node->params.rect.left;
+    const auto height = std::int64_t(node->params.rect.top)-node->params.rect.bottom;
+    if (width < 0 || height < 0 || width > INT32_MAX || height > INT32_MAX)
+    { error = "Invalid native layout stack extent"; return false; }
+    std::map<Id,std::int64_t> targets;
+    std::map<Id,float> visibility;
+    bool animated = false, continuing = false;
+    auto remaining = stack.vertical ? height : width;
+    float totalFraction = 0.f;
+    for (const Id panel : stack.panels)
+    {
+        const auto* child = get(panel);
+        if (!child || child->parent != id || !child->layoutPanel)
+        { error = "Native layout panel is detached"; return false; }
+        const auto& state = *child->layoutPanel;
+        float amount = state.visibleAmount;
+        const float targetAmount = child->params.visible ? 1.f : 0.f;
+        if (amount != targetAmount)
+        {
+            if (!stack.animate) amount = targetAmount;
+            else
+            {
+                if (!animated)
+                {
+                    const float time = child->params.visible ? stack.openTime : stack.closeTime;
+                    const float interpolant = time == 0.f ? 1.f : std::clamp(1.f-std::pow(2.f,-frameDelta/time),0.f,1.f);
+                    amount += (targetAmount-amount)*interpolant;
+                    if ((child->params.visible && amount > 0.99f) || (!child->params.visible && amount < 0.001f)) amount = targetAmount;
+                }
+                continuing = true;
+            }
+            animated = true;
+        }
+        visibility[panel] = amount;
+        targets[panel] = state.autoResize ? state.expandedMinimum : state.target;
+        remaining -= static_cast<std::int64_t>(std::floor(amount*float(targets[panel])+0.5f)) +
+            static_cast<std::int64_t>(std::floor(amount*float(stack.spacing)+0.5f));
+        if (state.autoResize) totalFraction += state.fraction*amount;
+    }
+    if (!stack.panels.empty()) remaining += static_cast<std::int64_t>(std::floor(float(stack.spacing)*visibility.at(stack.panels.back())+0.5f));
+    const auto extra = remaining;
+    if (extra > 0 && totalFraction > 0.f)
+        for (const Id panel : stack.panels)
+        {
+            const auto& child = *get(panel);
+            const auto& state = *child.layoutPanel;
+            if (!state.autoResize) continue;
+            const auto delta = static_cast<std::int64_t>(std::floor(float(extra)*(state.fraction*visibility.at(panel)/totalFraction)+0.5f));
+            targets[panel] = std::min(targets[panel]+delta,std::int64_t(state.maximum));
+            remaining -= delta;
+        }
+    for (const Id panel : stack.panels)
+    {
+        if (!remaining) break;
+        const auto& child = *get(panel);
+        if (child.layoutPanel->autoResize && child.params.visible)
+        {
+            const auto delta = remaining > 0 ? 1 : -1;
+            targets[panel] = std::min(targets[panel]+delta,std::int64_t(child.layoutPanel->maximum));
+            remaining -= delta;
+        }
+    }
+    ShapeChanges changes;
+    double position = stack.vertical ? double(height) : 0.0;
+    for (const Id panel : stack.panels)
+    {
+        const auto& child = *get(panel);
+        const auto dimension = std::max(std::int64_t(child.layoutPanel->expandedMinimum),targets[panel]);
+        const auto origin = std::floor(position+0.5);
+        const auto bottom = stack.vertical ? origin-double(dimension) : 0.0;
+        const auto left = stack.vertical ? 0.0 : origin;
+        if (left < INT32_MIN || left > INT32_MAX || bottom < INT32_MIN || bottom > INT32_MAX ||
+            targets[panel] < INT32_MIN || targets[panel] > INT32_MAX)
+        { error = "Native layout stack position overflows"; return false; }
+        if (!planReshape(panel,stack.vertical ? width : dimension,stack.vertical ? dimension : height,
+            {static_cast<std::int32_t>(left),static_cast<std::int32_t>(bottom),0,0},changes,error)) return false;
+        position += (stack.vertical ? -1 : 1)*(std::floor(visibility.at(panel)*float(targets[panel])+0.5f)+visibility.at(panel)*float(stack.spacing));
+    }
+    if (!completeShapes(changes,error)) return false;
+    for (const auto& [panel,target] : targets)
+        if (get(panel) && get(panel)->layoutPanel)
+        {
+            mNodes.at(panel).layoutPanel->target = static_cast<std::int32_t>(target);
+            mNodes.at(panel).layoutPanel->visibleAmount = visibility.at(panel);
+        }
+    if (get(id) && get(id)->layoutStack) mNodes.at(id).layoutStack->needsLayout = continuing;
+    return true;
+}
+
+bool LLVKWidgetTree::prepareLayoutStacks(Id root, float frameDelta, std::string& error)
+{
+    error.clear();
+    if (!get(root) || !std::isfinite(frameDelta) || frameDelta < 0.f)
+    { error = "Invalid native layout preparation root or delta"; return false; }
+    const auto visit = [&](auto&& self, Id id) -> bool
+    {
+        const auto* node = get(id);
+        if (!node) return true;
+        if (node->layoutStack && node->layoutStack->needsLayout && !updateLayoutStack(id,error,frameDelta)) return false;
+        node = get(id);
+        if (!node) return true;
+        const auto children = node->children;
+        for (const Id child : children)
+            if (get(child) && get(child)->parent == id && !self(self,child)) return false;
+        return true;
+    };
+    return visit(visit,root);
+}
 
 namespace
 {

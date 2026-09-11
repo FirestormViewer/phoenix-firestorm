@@ -9,6 +9,324 @@ implementation or runtime qualification. See [coverage ledger](native-ui-coverag
 
 ## UI-START-001: Windows WINMAIN viewer entry
 
+### Native boot integration update (2026-09-11)
+
+#### Verified viewer boot, 2026-09-11
+
+The actual build-vc170-64/newview/RelWithDebInfo/vulkanstorm-bin.exe was built
+and launched with --set RenderBackend Vulkan. It reached the independently owned
+native login window before LLAppViewerWin32 construction. The live default CEF
+splash page, packaged panel_fs_nui_login.xml widgets, actual font descriptors,
+skin images and native image/text packets were visibly present. No second viewer
+or renderer executable was used. Historical binaries with native-login names in
+the build directory were not used as evidence.
+
+Runtime observations on AMD Radeon RX 9070 XT / Windows / RelWithDebInfo:
+
+- Parent PID 5684 loaded vulkan-1.dll, libcef.dll and
+   VkLayer_khronos_validation.dll, but neither opengl32.dll nor glu32.dll.
+   Enumerated child processes were dullahan_host.exe browser helpers, as permitted.
+- Synthetic username input and password masking worked. Separate arrow-click /
+   Home-row-click selected Home and closed the popup after the top-control fix.
+   Password reveal displayed only the synthetic value mask-check and changed the
+   eye icon; masking was restored before closing.
+- Earlier PID 26452 resized from a 1024x768 client to 1264x861 with live browser
+   reflow and retained native field values. Both viewer instances responded to
+   normal WM_CLOSE and exited; process inspection did not provide an exit code,
+   so no specific process exit code is asserted.
+- Local client captures are logs/native-login-current.png,
+   logs/native-login-input.png, logs/native-login-resized.png,
+   logs/native-login-verified.png and logs/native-login-reveal.png. These are
+   screen captures, not Vulkan readback or measured GL/native pixel parity.
+- Runtime shader SHA256 matched generated build outputs: fragment
+   225C1C935F8B3A06950987E42FA2B8ECBEDD3DEE49ADF9FA2CC5F88547D5D919;
+   vertex 47118C2EA27875BAE63961DDDF65B054EB23B32D0414A37472A837A0F37332FF.
+- Native construction/settings tests: 129/129; context GPU tests: 9/9;
+   browser lifecycle: 1/1; integrated native login window: 1/1;
+   native glyph pixel tests: 6/6 at their latest run. Integrated Vulkan test logs
+   confirm Khronos layer insertion and contain no VUID/Validation Error entries.
+   Actual viewer module loading alone is not a complete validation-error audit.
+
+The viewer was compiled with BuildProjectReferences=false after focused native
+dependency builds. This proves executable compilation/linking and the observed
+boot, not a clean all-target build/test pass. The separate world-map test
+assertion remains unchanged, and no tests were disabled to disguise it.
+
+This is a native login **boot/render/input checkpoint**, not production login
+service closure: the Log In authentication action, grid/account population,
+credential persistence, account/help link dispatch and viewer-mode application
+are not wired into the early native session. Startup supports a bounded option
+subset and does not yet reproduce complete settings/locale/DPI/multi-instance
+policy. IME, complete keyboard/popup/capture semantics, generic widgets, GPU
+pressure policy and measured visual parity remain open. Neither these omissions
+nor the successful capture may be treated as full NV-00/12/17 closure.
+
+Native window partial-exit cleanup: a scoped guard detaches browser/UI pointers,
+browser event callbacks and clipboard ownership before browser destruction on
+every exit after browser construction, including initialization/load/paint errors.
+This prevents window messages during CEF teardown from accessing destroyed owners.
+The integrated window lifecycle test remains the focused executable check.
+
+Native UI shader build/package correction (NV-00/16/17): llvk_ui_shaders
+generates both ui2d stages from reviewed source in build/llvulkan/compiled_ui.
+The Windows viewer depends on that target and stages the pair after linking;
+viewer_manifest packages the identical generated pair over historical source-tree
+SPIR-V. Other legacy shader assets remain unchanged. Focused validation builds
+the shader target and checks manifest syntax; executable staging is verified at
+the viewer build boundary. No hand-edited binary or stale shader fallback.
+
+Animated browser publication correction: paint commands mark streaming browser
+images explicitly. WidgetGpu uses one LLVKImagePublication per browser owner,
+sampling the latest completed same-size version while a newer frame uploads.
+This prevents perpetual Pending when CEF repaints faster than GPU publication.
+Resize still waits for a matching extent. Unused streams drain pending uploads
+before retirement; packet/frame references retain sampled images. Context test8
+provides a new immutable browser frame at the completion observation and requires
+Ready, directly discriminating the starvation defect.
+
+Native login page query (NV-00/01/12/17): source LLGridManager built-in Agni/Aditi
+grids use https://phoenixviewer.com/app/loginV3/; FSPanelLogin::loadLoginPage
+preserves existing query then adds language, firstlogin string TRUE, version,
+channel/grid/OS/source/content/skin and splash preferences. Native Page builder
+uses audited nonvisual LLURI structured encoding; test129 checks query retention
+and metadata encoding. Early startup currently supplies default Agni/channel/OS
+metadata; exact build/channel/selected-grid integration and ForceLoginURL warning
+policy remain open rather than reusing GL-owned grid/settings callbacks.
+
+Early native entry integration (NV-00/01/03/17): Windows entry after Velopack and
+before LLAppViewerWin32 now selects a native-owned lifecycle from RenderBackend.
+Nonvisual OS argument/profile/executable paths and LLVKStartupSettings read
+defaults/install/fsdata/user/session/user layers, then explicit --set values.
+Non-Vulkan selection returns to existing GL/Zink startup without mutating its
+settings or DLL search state. Native CEF DLL lookup uses the staged llplugin
+directory and must be delay-loaded by the viewer. No renderer subprocess is used.
+Supported initial command-line subset is --set/--settings/--sessionsettings;
+other native options fail explicitly. Startup error UI is native Win32. Full
+configuration parity, locale/theme/DPI policy, multi-instance/SLURL handling,
+crash reporting, grid page parameters and authentication callbacks remain open.
+This is early lifecycle integration, not a claim that those services are closed.
+
+Native login window runtime test: when both browser and GPU tests are enabled,
+INTEGRATION_TEST_llvkloginwindow loads real default settings, packaged login XML,
+native font descriptors and skin assets, a local CEF page, and presents six frames
+through LLVKLoginWindow. A separate test process is necessary because CEF cannot
+be reinitialized after shutdown; it is not a production renderer subprocess.
+The actual viewer entry remains unmodified until startup selection is integrated.
+
+Native login window integration (NV-00/01/03/11/12/14/15/17): independently owned
+Win32 window procedure consumes native pointer/key/clipboard operations, native
+browser event/frame owner, actual login resources and paint/GPU packets. Source
+contracts are the preceding input/paint/WSI records; no LLWindow/LLView/GL owner is
+invoked. Close stops the loop while the window remains alive; browser and packet/
+cache owners release before the Vulkan context and HWND. Resize uses the actual
+swapchain extent and native layout before browser resize. Configuration supplies
+the page and application service binding explicitly. This is not yet hooked into
+viewer entry. IME, complete shortcut/focus/cursor routing, popup browser policy,
+login authentication services and DPI scaling remain open. stopAfterFrames is
+an integration-test bound, not a second renderer executable or normal exit policy.
+
+Native settings value layers (NV-00/01/03/17): source 1819c5fecf
+LLAppViewer::initConfiguration and LLControlGroup::loadFromFile,
+LLControlVariable::setValue/setDefaultValue/resetToDefault. Q1 default replacement
+clears saved/transient layers; Firestorm reapplies user settings after mode defaults;
+command-line transient values must not change saved values; nonpersistent settings
+ignore file overrides. Q2 independently owned LLVKStartupSettings consumes LLSD
+configuration through the nonvisual llcommon serializer, without control-group
+registry callbacks or visual defaults. Q3 bounded documents/entry counts, atomic
+load, explicit type/default/saved/transient layers. Test128 checks precedence and
+parses the real packaged defaults. Legacy XML, complete comparable-type semantics,
+validation/sanity callbacks, metadata persistence, startup path/CLI selection and
+file writes remain open; the model is not yet an early backend selector.
+
+Native widget GPU consumer (NV-00/01/06/11/13/14/17): LLVKWidgetGpu consumes
+the native paint-list contract, caches immutable images by source identity and
+glyph atlases by widget/part plus exact glyph identity/geometry. Uploads poll
+without normal-path waits; pending browser or glyph resources leave the output
+packet unchanged. Completed unused entries retire while frame slots independently
+retain submitted image references. Text changes coalesce while an upload is in
+flight. Extent/clip conversion is explicit; current scope is 1:1 device pixels.
+Test8 checks pending-to-ready, unchanged resource reuse and packet presentation.
+Global cache budget is checked each prepare; reservation-before-allocation and
+pressure eviction, full font-shadow policy and full login runtime remain open.
+
+Native focus/glow mask pipeline (NV-00/06/12/16/17): source solidcolorF.glsl
+outputs uniform RGB and sampled-alpha times uniform alpha; ordinary ui2d instead
+multiplies texture RGB. Native ui2d specialization constant selects alpha-mask
+output, with a separate triangle pipeline per existing blend mode. Packets carry
+explicit mask/blend flags; ordinary/legacy draws retain the default specialization.
+All variants rebuild from the same shader source. Context test8 records a tinted
+additive mask with the real logo; this is runtime validation, not pixel parity.
+
+Asynchronous native image publication (NV-00/06/13/14/17): GL browser image
+updates previously hid synchronization behind mutable texture upload. Native
+LLVKImagePublication instead owns one pending immutable LLVKGlyphUpload, polls
+completion without waiting, and publishes a matching CPU-source/GPU-image pair.
+On completion the latest frame is selected for the next upload; intermediates
+coalesce without unbounded uploads. Same-size completed frames may publish while
+a newer version uploads to avoid starvation; mismatched resize completions do not
+publish. Null source invalidates current output without releasing pending work
+early. In-flight packet references retain old GPU images independently. Test8
+checks first publication, replacement and invalidation; queue waits occur only
+in the test, never in advance. Owner destruction inherits upload completion wait.
+
+Browser lifetime defect qualification (2026-09-11): real packaged-browser test
+verified initial pixels, clicked pixels and resized pixels, then crashed in
+dullahan::~dullahan after shutdown returned. LLDB/PDB identified the destructor,
+not startup. Pinned source 49a551c0216ac7db03e36c9cc7ec44650c0be1c4 owns
+CEF-refcounted dullahan_impl with unique_ptr but supplies no owning CEF reference.
+The native-only llvk_dullahan target retains AddRef at construction and pairs it
+with Release after relinquishing unique_ptr ownership at destruction. This keeps
+the object valid through CefShutdown without a leak/double delete. The generated
+facade preserves upstream license; existing GL plugin/prebuilt Dullahan remains
+untouched. Matching CEF 139.0.40 headers are checksum-pinned; runtime still uses
+the viewer's packaged CEF/helper. The same browser test is the discriminating
+check; failure/partial-init and other platforms remain separately unqualified.
+
+Browser runtime check: opt-in LL_VULKAN_BROWSER_TESTS stages the installed CEF
+runtime/helper/resources beside an isolated integration executable. Test1 uses
+a disposable profile and local HTML, asserting exact opaque primary-color pixels
+at interior sample points before/after a mouse click and resize, old-frame
+immutability, absence of opengl32 in the parent, and asynchronous close completion.
+This tests the real packaged browser; it does not exercise remote login policy,
+credentials, native widget embedding or complete viewer startup.
+
+Direct native browser owner (NV-00/01/03/12/14/15/17): source roots are the
+packaged Dullahan API 1.26.0, viewer MediaPluginCEF init/update/requestExit and
+upstream initCEF, OnPaint, OnBeforeClose and callback handlers. Q1 CEF is global,
+must pump on its initialization thread, publishes borrowed complete pixels, and
+closes asynchronously before shutdown. Q2 LLVKBrowser owns Dullahan directly,
+copies pixels into native frames and queues events instead of executing viewer
+callbacks in CEF. CPU rendering disables GPU/WebGL; approved browser helpers are
+permitted, no GL viewer media class is used. Q3 one initialization per process,
+thread checks, bounded events/frames, explicit Closing/Closed and exit-callback
+gated shutdown. Destructor pumps completion up to 15 seconds then terminates
+rather than free a live CEF owner. Windows only; runtime test pending. HTTP auth,
+file dialogs and JS dialogs are currently denied/suppressed, explicitly incomplete
+application services. Popup/custom scheme events await native application policy.
+Exact packaged-source audit, failed-init partial cleanup and reentrant CEF internals
+remain open; this owner is not a completed browser or login milestone.
+
+Browser CPU publication (NV-00/01/06/11/14/17): packaged Dullahan 1.26.0,
+build 202510161628, CEF 139.0.40/Chromium 139.0.7258.139; viewer source
+1819c5fecf MediaPluginCEF::onPageChangedCallback and media init texture_params.
+Q1: callback borrows a complete BGRA page; source copies only matching dimensions,
+and GL_RGB internal storage discards incoming alpha. Dullahan's upstream
+dullahan_render_handler::OnPaint composites popups before callback; with
+flip_pixels_y=false the buffer is top-down. Upstream master inspection is not
+proof of exact binary implementation; real browser qualification remains required.
+Q2: independently owned LLVKBrowserSurface publishes copied immutable bottom-up
+opaque RGBA frames with full UV range, no power-of-two padding, and bounded extent.
+Q3: resize invalidates current publication, late mismatched callbacks are ignored,
+and externally retained frames stay valid until their consumers release them.
+Test123 checks exact channels/orientation/alpha, borrowed-buffer isolation,
+replacement retention, stale resize callback and invalid byte counts. Main-thread
+owner integration, browser lifecycle, network and Vulkan publication remain open.
+
+Packet CPU validation: context test9 checks exact top-left conversion, preserved
+tint/alpha and painter ranges, invalid clip/inverted geometry rejection without
+mutating preceding draws, empty clipping and frame reset. Test8 rejects an
+unpublished image before retaining a valid packaged image. These are discrete
+contract assertions, not image-parity tolerance changes.
+
+Native packet text consumer (NV-00/01/06/11/12/14/17): consumes the established
+native LLVKTextDraw::prepare result, byte tint normalized to float, already
+scaled glyph geometry plus explicit device-space origin. Position Y conversion
+is shared with image packets; texture UVs remain unchanged. UI depth must be
+disabled, page count/extents/publication must match, and a failed append rolls
+back the whole text operation. Context test8 now shapes packaged-font "Log In",
+publishes its real atlas and presents glyphs/shadow in order after the login logo.
+Synchronous waits are bounded test/bootstrap work, not per-frame streaming policy.
+Full tree painting, input-to-frame updates and actual viewer boot remain open.
+
+Native text preparation reuse (NV-00/01/06/12/17): the independently implemented
+LLVKTextDraw glyph ordering/color/shadow/bold contract from dfab8c2fd2 now exposes
+CPU quads for the native UI packet consumer. No GL function is shared or changed.
+The existing offscreen renderer consumes those same quads; adjacent same-page
+runs coalesce without reordering. The six established GPU pixel tests are the
+discriminating check for this native-only preparation refactor. Depth remains
+the offscreen renderer's explicit pipeline/style responsibility.
+
+Native image packet producer (2026-09-11, NV-00/01/06/11/12/14/17): source image
+geometry contract is recorded in native-ui-construction-dependencies.md under
+Native skin geometry. Q1 painter order, per-draw clip/tint and bottom-up UI/UVs
+must survive presentation. Q2 LLVKUiPacket consumes native prepared quads and
+published image resources, converting positions to the context's top-left ABI
+without flipping UVs. Q3 append-only bounded frame data retains image resources,
+checks clip/extent/color and rejects unpublished/mismatched padded dimensions;
+context takes over image retention when the packet is recorded. Test8 now loads
+and decodes packaged login_fs_logo, uploads its pixels and presents it over the
+native panel color in both frame slots, then checks retirement. This verifies a
+native asset-to-presentation path, not a complete login tree or measured parity.
+
+Skin image sampler follow-up (NV-00/06/15/17): source LLUIImageList::loadUIImage
+sets TAM_CLAMP, fetched-file construction uses MIPMAP_NO, and
+LLTexUnit::setTextureFilteringOptionFast selects linear min/mag for the default
+non-point, nonmipped image. Native published images now take an explicit
+SkinLinearClamp option, verify selected-device linear format support, and retain
+the default GlyphNearestRepeat behavior. Context test8 uses the skin variant;
+the existing glyph readback tests protect nearest/repeat. Global anisotropy
+configuration and measured skin pixel parity remain unqualified.
+
+Native packet image retention update (2026-09-11, NV-00/01/06/13/14/17):
+Q1 GL texture binding retains implicit driver use, while native submitted
+descriptors and images must outlive all consuming command buffers. Q2 reuse the
+independently owned LLVKGlyphUpload RGBA image publication (fence, flushed staging,
+transfer-to-shader barrier) and retain its immutable resource in each packet's
+frame slot. Q3 same-device/allocator/queue/family check before recording, compatible
+descriptor layout (fragment+compute), release only after that slot's successful
+fence wait or checked device completion at destruction. Raw descriptor callers
+remain legacy caller-lifetime debt, not the new native owner path. Context test8
+now submits one published image in both slots, removes producer references, and
+checks retirement only after both slots complete. This is resource/presentation
+qualification, not native login boot or visual parity. Default image sampling
+still nearest/repeat; skin linear filtering requires an explicit follow-up.
+
+Browser dependency decision (2026-09-11): the packaged Dullahan API at
+build-vc170-64/packages/include/cef/dullahan.h fixes host_process_filename to
+dullahan_host.exe and exposes no single-process setting. The viewer wrapper
+MediaPluginCEF additionally runs under LLPluginProcessParent/SLPlugin. Upstream
+Dullahan initCEF sets CEF browser_subprocess_path; direct embedding removes the
+viewer plugin wrapper but not CEF subprocesses. The user subsequently clarified
+on 2026-09-11 that the one-process rule applies strictly to the viewer's 3D
+portion and that Dullahan/CEF helper processes are allowed. The user also
+explicitly permitted the slvoice helper. The earlier browser
+blocker was an overly broad interpretation and is removed. Native browser
+ownership, callbacks, CPU pixel publication, input, shutdown and Vulkan upload
+still require implementation and verification. No blank browser or static
+screenshot is substituted as completion.
+
+The active milestone is booting the actual login UI natively, not completing the
+entire widget registry before startup integration. Existing UI-START records stay
+open where stated. The present LLVKSession entry is too late because application
+initialization has already constructed GL-owned UI; the native boot owner must be
+selected before LLAppViewerWin32 construction, after the existing updater hook.
+
+Frame prerequisite (NV-00/03/13/14/15/17): source contract is the existing native
+LLVKContext::begin2DFrame/end2DFrame versus the GL window swap lifecycle. Q1 GL
+presentation hides acquisition/fence ownership, whereas the native path explicitly
+waits/acquires/records/submits/presents. Q2 a failed recording must not reset the
+fence that a future frame waits on, and a failed submit cannot reuse its reset
+fence or acquired semaphore. Q3 reset the fence only immediately before submit,
+check all result-returning operations and make fatal state sticky; expose
+Unavailable/OutOfDate/Fatal distinctly to the future boot loop. Recreate is only
+appropriate for out-of-date/suboptimal WSI, not device loss. Focused checks are
+native compilation and fault-injected frame transitions before runtime boot.
+No login boot or GPU runtime success is claimed by this frame change.
+
+Native packet prerequisite (NV-00/01/06/11/13/14/17): Q1 UI output is a painter-
+ordered set of textured triangles with clip/blend state; the historical sink's
+ambient dispatch and single shared vertex buffer are not native login ownership.
+The existing ui2d shaders require position/UV/RGBA and a top-left pixel projection.
+Q2 recordUiPacket consumes explicit native vertices/ranges/descriptors once per
+acquired frame. Q3 each fence-owned frame slot retains its own mapped VMA buffer;
+begin waits that slot before reuse/growth, allocation flush precedes submission,
+and shutdown waits device work before releasing buffers. A second packet cannot
+overwrite a previously recorded packet. Geometry/clip validation precedes any
+allocation or draw. Texture descriptors must be retained by the boot resource
+owner through all consuming fences; their integration remains open. Fault tests
+cover invalid clipping and duplicate packet refusal. Actual presentation and
+native login consumers are not established by these CPU failure tests.
+
 Source: [llappviewerwin32.cpp](../../../indra/newview/llappviewerwin32.cpp#L521).
 WINMAIN names wWinMain normally, DebuggingWinMain under DEBUGGING_SEH_FILTER.
 **1.** Under LL_VELOPACK call velopack_initialize FIRST; false returns0 before viewer

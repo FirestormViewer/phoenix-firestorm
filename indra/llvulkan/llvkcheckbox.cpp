@@ -15,6 +15,8 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createCheckBox(const Params& i
     if (!control.initialValue) control.initialValue = construction.initialValue;
     CheckBox checkbox;
     checkbox.construction = construction;
+    const auto padding = mSettings.find("UICheckboxctrlHPad");
+    if (padding != mSettings.end()) checkbox.construction.horizontalPadding = padding->second.asInteger();
     return createControlImpl(view,control,std::nullopt,parent,error,std::nullopt,std::nullopt,std::nullopt,std::nullopt,std::move(checkbox));
 }
 
@@ -90,12 +92,20 @@ LLSD LLVKWidgetTree::value(Id id) const
 {
     const auto* node = get(id);
     if (!node || !node->control) return LLSD();
+    if (node->combo)
+    {
+        const auto& combo = *node->combo;
+        if (combo.selected && *combo.selected < combo.items.size()) return combo.items[*combo.selected].value;
+        return combo.editor ? value(combo.editor) : LLSD();
+    }
     return node->checkBox ? value(node->checkBox->button) : node->control->value;
 }
 
 bool LLVKWidgetTree::dirty(Id id) const
 {
     const auto* node = get(id);
+    if (node && node->lineEditor) return node->lineEditor->text.dirty();
+    if (node && node->combo) return node->combo->dirty;
     return node && node->control && (node->checkBox ? dirty(node->checkBox->button) : node->control->dirty);
 }
 
@@ -139,7 +149,7 @@ bool LLVKWidgetTree::tentative(Id id) const
 }
 
 bool LLVKWidgetTree::planCheckBoxReshape(Id id, std::int64_t width,
-    std::map<Id,Rect>& changes, std::string& error) const
+    ShapeChanges& changes, std::string& error) const
 {
     const auto& checkbox = *get(id)->checkBox;
     const auto* label = get(checkbox.label);

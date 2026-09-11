@@ -7,10 +7,12 @@ layout(location = 0) in vec2 vUV;
 layout(location = 1) in vec4 vColor;
 
 layout(set = 0, binding = 0) uniform sampler2D tex0;
+layout(constant_id = 0) const bool alphaMask = false;
 
 layout(location = 0) out vec4 outColor;
 
 void main()
 {
-    outColor = texture(tex0, vUV) * vColor;
+    vec4 sampled = texture(tex0, vUV);
+    outColor = alphaMask ? vec4(vColor.rgb, sampled.a * vColor.a) : sampled * vColor;
 }

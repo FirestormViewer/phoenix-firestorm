@@ -4,6 +4,29 @@
 #include <algorithm>
 #include <cmath>
 
+namespace
+{
+    bool requiresRichText(std::string_view text)
+    {
+        for (const std::string_view marker : {"ARVD","BUG","CHOP","CHUIBUG","CTS","DOC","DN","ECC","EXP",
+             "FIRE","FITMESH","LEAP","LLSD","MATBUG","MISC","OPEN","PATHBUG","PLAT","PYO","SCR","SH",
+             "SINV","SLS","SNOW","SOCIAL","STORM","SUN","SUP","SVC","TPV","VWR","WEB"})
+            if (text.find(marker) != text.npos) return true;
+        if (text.size() < 3) return false;
+        for (std::size_t offset = 0; offset < text.size(); ++offset)
+        {
+            const auto tail = text.substr(offset);
+            if (tail.front() == '@') return true;
+            if (tail.size() < 4) return false;
+            if (tail.starts_with("://") || tail.starts_with("www.") || tail.starts_with(".com") ||
+                tail.starts_with(".net") || tail.starts_with(".org") || tail.starts_with(".edu") ||
+                (tail.size() > 7 && tail.starts_with("<nolink")) ||
+                (tail.size() > 4 && tail.starts_with("<icon"))) return true;
+        }
+        return false;
+    }
+}
+
 std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createPlainText(const Params& view,
     const LLVKControl::Params& control, const LLVKPlainControl::Params& params, Id parent, std::string& error)
 {
@@ -28,6 +51,56 @@ bool LLVKWidgetTree::setPlainText(Id id, std::string text, std::string& error)
     auto source = found->second.plainText->source;
     source.assign(std::move(text));
     return updatePlainText(id,std::move(source),mLabelContext,error);
+}
+
+bool LLVKWidgetTree::setPlainTextClicked(Id id, std::function<void(Id)> callback)
+{
+    const auto found = mNodes.find(id);
+    if (found == mNodes.end() || !found->second.plainText) return false;
+    found->second.plainText->params.clicked = std::move(callback);
+    return true;
+}
+
+bool LLVKWidgetTree::plainTextPointer(Id id, const PointerEvent& event, std::string& error)
+{
+    bool handled = basePointer(id,event,error);
+    if (!error.empty()) return false;
+    const auto* node = get(id);
+    if (!node) return true;
+    const bool down = event.kind == PointerKind::LeftDown;
+    const bool up = event.kind == PointerKind::LeftUp;
+    if ((down || up) && (node->params.soundFlags & (down ? 1 : 2)))
+    {
+        const auto events = mEvents.find(id);
+        const auto sound = events == mEvents.end() ? std::function<void(Id,bool)>{} : events->second.sound;
+        if (sound) sound(id,up);
+        node = get(id);
+        if (!node) return true;
+    }
+    if (down)
+    {
+        handled = handled || bool(node->plainText->params.clicked);
+        if (handled && !mMouseCapture && !setMouseCapture(id,error)) return false;
+    }
+    else if (up && mMouseCapture == id)
+    {
+        if (!setMouseCapture(0,error)) return false;
+        node = get(id);
+        if (!node) return true;
+        const auto clicked = node->plainText->params.clicked;
+        if (!handled && clicked)
+        {
+            clicked(id);
+            return true;
+        }
+    }
+    else if (event.kind == PointerKind::Hover && !handled &&
+             node->plainText->params.clicked && node->plainText->params.showHandCursor)
+    {
+        cursorEffect(id,true);
+        return true;
+    }
+    return handled;
 }
 
 bool LLVKWidgetTree::setPlainTextArgument(Id id, std::string key, std::string replacement, std::string& error)
@@ -58,6 +131,8 @@ std::optional<LLVKPlainControl> LLVKWidgetTree::resolvePlainText(const LLVKPlain
 {
     auto resolved = source.resolve(context);
     std::erase(resolved,'\r');
+    if (state.params.parseUrls && requiresRichText(resolved))
+    { error = "Native text requires rich URL/issue/embedded-content processing, which is not implemented"; return std::nullopt; }
     resolved = utf8str_truncate(resolved,static_cast<std::int32_t>(state.params.maximumBytes));
     const auto wide = utf8str_to_wstring(resolved);
     std::u32string text(wide.begin(),wide.end());
@@ -92,10 +167,11 @@ bool LLVKWidgetTree::reflowPlainText(Id id, std::string& error)
     if (!document) return false;
     const auto rect = document->rectangle;
     const Id documentId = node->plainText->document;
-    std::map<Id,Rect> changes;
+    ShapeChanges changes;
     if (!planReshape(documentId,std::int64_t(rect.right)-rect.left,std::int64_t(rect.top)-rect.bottom,
                      {rect.left,rect.bottom,rect.right,rect.top},changes,error)) return false;
-    for (const auto& [changed,rectangle] : changes) mNodes.at(changed).params.rect = rectangle;
+    if (!completeShapes(changes,error)) return false;
+    if (!get(id)) { error = "Native text owner removed during document resize"; return false; }
     mNodes.at(id).plainText->layout = std::move(document);
     return true;
 }

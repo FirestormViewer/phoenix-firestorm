@@ -48,6 +48,8 @@
 #include "llviewercontrol.h"
 #include "lldxhardware.h"
 #include "llvkprobe.h" // <VulkanStorm> Zink backend requires a Vulkan device
+#include "llvknativestartup.h"
+#include "fsversionvalues.h"
 
 #include "nvapi/nvapi.h"
 #include "nvapi/NvApiDriverSettings.h"
@@ -533,6 +535,10 @@ int APIENTRY WINMAIN(HINSTANCE hInstance,
         return 0;
     }
 #endif
+
+    if (const auto native = llvkNativeStartup(pCmdLine,APP_NAME + "_x64",
+        std::to_string(LL_VIEWER_VERSION_MAJOR)+"."+std::to_string(LL_VIEWER_VERSION_MINOR)+"."+std::to_string(LL_VIEWER_VERSION_PATCH)))
+        return *native;
 
     // Call Tracy first thing to have it allocate memory
     // https://github.com/wolfpld/tracy/issues/196

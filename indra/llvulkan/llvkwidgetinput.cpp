@@ -2,6 +2,60 @@
 
 #include <cmath>
 
+bool LLVKWidgetTree::routeWheel(Id root, std::int32_t x, std::int32_t y, std::int32_t clicks,
+    bool horizontal, std::string& error)
+{
+    error.clear();
+    const auto rectangle = screenRect(root,error);
+    if (!rectangle) return false;
+    const auto localX = std::int64_t(x)-rectangle->left, localY = std::int64_t(y)-rectangle->bottom;
+    if (localX < INT32_MIN || localX > INT32_MAX || localY < INT32_MIN || localY > INT32_MAX)
+    { error = "Native wheel coordinate conversion overflows"; return false; }
+    return handleWheel(root,static_cast<std::int32_t>(localX),static_cast<std::int32_t>(localY),clicks,horizontal,error);
+}
+
+bool LLVKWidgetTree::handleWheel(Id id, std::int32_t x, std::int32_t y, std::int32_t clicks,
+    bool horizontal, std::string& error)
+{
+    const auto* node = get(id);
+    if (!node) return false;
+    if (node->scrollbar) return scrollbarWheel(id,clicks,horizontal,error);
+    const auto children = node->children;
+    for (const Id child : children)
+    {
+        const auto* current = get(child);
+        if (!current || current->parent != id || !current->params.visible || !current->params.enabled) continue;
+        const auto localX = std::int64_t(x)-current->params.rect.left, localY = std::int64_t(y)-current->params.rect.bottom;
+        if (localX < INT32_MIN || localX > INT32_MAX || localY < INT32_MIN || localY > INT32_MAX)
+        { error = "Native child wheel coordinates overflow"; return false; }
+        const auto inside = containsLocal(child,static_cast<std::int32_t>(localX),static_cast<std::int32_t>(localY),true,mTopControl,error);
+        if (!inside) return false;
+        if (*inside && handleWheel(child,static_cast<std::int32_t>(localX),static_cast<std::int32_t>(localY),clicks,horizontal,error)) return true;
+        if (!error.empty()) return false;
+        if (!get(id)) return true;
+    }
+    node = get(id);
+    if (!node || !node->scrollContainer) return false;
+    const auto state = *node->scrollContainer;
+    const auto* vertical = get(state.vertical);
+    if (!horizontal && vertical && vertical->params.visible && vertical->params.enabled)
+    {
+        const bool changed = scrollbarWheel(state.vertical,clicks,false,error);
+        if (!error.empty()) return false;
+        if (changed && get(id) && !updateScrollContainer(id,error)) return false;
+        return true;
+    }
+    const auto* horizontalBar = get(state.horizontal);
+    if (horizontalBar && horizontalBar->params.visible && horizontalBar->params.enabled)
+    {
+        const bool changed = scrollbarWheel(state.horizontal,clicks,horizontal,error);
+        if (!error.empty()) return false;
+        if (changed && get(id) && !updateScrollContainer(id,error)) return false;
+        return changed;
+    }
+    return false;
+}
+
 bool LLVKWidgetTree::routePointer(Id root, const PointerEvent& screenEvent, std::string& error)
 {
     error.clear();
@@ -11,8 +65,29 @@ bool LLVKWidgetTree::routePointer(Id root, const PointerEvent& screenEvent, std:
     {
         case PointerKind::LeftDown: case PointerKind::LeftUp:
         case PointerKind::RightDown: case PointerKind::RightUp:
-        case PointerKind::DoubleClick: case PointerKind::Hover: break;
+        case PointerKind::DoubleClick: case PointerKind::Hover: case PointerKind::MiddleDown: break;
         default: error = "Invalid native pointer kind"; return false;
+    }
+    if (!mMouseCapture && mTopControl && get(mTopControl))
+    {
+        const Id top = mTopControl;
+        const auto rectangle = screenRect(top,error);
+        if (!rectangle) return false;
+        const auto localX = std::int64_t(screenEvent.x)-rectangle->left;
+        const auto localY = std::int64_t(screenEvent.y)-rectangle->bottom;
+        if (localX < INT32_MIN || localX > INT32_MAX || localY < INT32_MIN || localY > INT32_MAX)
+        { error = "Native top-control pointer coordinates overflow"; return false; }
+        const auto inside = containsLocal(top,static_cast<std::int32_t>(localX),static_cast<std::int32_t>(localY),true,0,error);
+        if (!inside) return false;
+        if (*inside)
+        {
+            auto event = screenEvent;
+            event.x = static_cast<std::int32_t>(localX);
+            event.y = static_cast<std::int32_t>(localY);
+            if (handlePointer(top,event,error)) return true;
+            if (!error.empty()) return false;
+        }
+        else if (screenEvent.kind == PointerKind::LeftDown && get(top)->combo) hideComboList(top);
     }
     const Id target = mMouseCapture ? mMouseCapture : root;
     if (!canReceiveFocus(target)) { error = "Native pointer target is erasing"; return false; }
@@ -92,7 +167,11 @@ bool LLVKWidgetTree::handlePointer(Id id, PointerEvent event, std::string& error
 {
     const auto* node = get(id);
     if (!node) return false;
+    if (node->comboListOwner) return comboListPointer(id,event,error);
+    if (node->lineEditor) return lineEditorPointer(id,event,error);
+    if (node->scrollbar) return scrollbarPointer(id,event,error);
     if (node->button) return buttonPointer(id,event,error);
+    if (node->plainText) return plainTextPointer(id,event,error);
     if (event.kind == PointerKind::Hover && iconWantsHandCursor(id))
     { cursorEffect(id,true); return true; }
     return basePointer(id,event,error);
@@ -100,6 +179,7 @@ bool LLVKWidgetTree::handlePointer(Id id, PointerEvent event, std::string& error
 
 bool LLVKWidgetTree::buttonPointer(Id id, PointerEvent event, std::string& error)
 {
+    if (event.kind == PointerKind::MiddleDown) return basePointer(id,event,error);
     if (event.kind == PointerKind::DoubleClick) event.kind = PointerKind::LeftDown;
     const auto focusButton = [&]
     {

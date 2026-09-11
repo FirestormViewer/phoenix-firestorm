@@ -54,14 +54,13 @@ bool LLVKWidgetTree::attachBadge(Id id, Id parent, std::string& error)
     const auto height = std::int64_t(target->params.rect.top)-target->params.rect.bottom;
     if (width < INT32_MIN || width > INT32_MAX || height < INT32_MIN || height > INT32_MAX)
     { error = "Native badge attachment rectangle overflow"; return false; }
-    std::map<Id,Rect> changes;
+    ShapeChanges changes;
     Rect origin = badge->params.rect;
     origin.left = 0;
     origin.bottom = 0;
     if (!planReshape(id,width,height,origin,changes,error)) return false;
     if (!reparent(id,parent,false,0,error)) return false;
-    for (const auto& [changed,rect] : changes) mNodes.at(changed).params.rect = rect;
-    return true;
+    return completeShapes(changes,error);
 }
 
 bool LLVKWidgetTree::setAcceptsBadge(Id id, bool accepts)

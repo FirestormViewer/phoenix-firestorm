@@ -2,6 +2,7 @@
 #define LLVKCONTROL_H
 
 #include "llsd.h"
+#include "llvkfontregistry.h"
 #include <cstdint>
 #include <functional>
 #include <memory>
@@ -17,15 +18,18 @@ struct LLVKControl
     {
         std::function<void(Id,const LLSD&)> function;
         std::optional<LLSD> parameter;
+        std::optional<std::string> functionName;
     };
     struct Validation
     {
         std::function<bool(Id,const LLSD&)> function;
         std::optional<LLSD> parameter;
+        std::optional<std::string> functionName;
     };
     struct Params
     {
         std::shared_ptr<LLVKFont> font;
+        std::optional<LLVKFontRegistry::Request> fontRequest;
         std::optional<LLSD> initialValue;
         std::optional<std::string> valueSetting;
         std::optional<std::string> enabledSetting;

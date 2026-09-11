@@ -45,6 +45,14 @@ public:
         std::array<float, 16> projection{};
         std::array<float, 16> textureTransform{1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
     };
+    struct Quad
+    {
+        std::size_t page;
+        float left, bottom, right, top;
+        float leftU, bottomV, rightU, topV;
+        std::array<std::uint8_t,4> color;
+    };
+    static std::optional<std::vector<Quad>> prepare(const LLVKGlyphAtlas& atlas, const Style& style, std::string& error);
     static bool record(LLVKGlyphSubmission& submission, std::shared_ptr<LLVKTextPipeline> pipeline,
                        const LLVKGlyphAtlas& atlas,
                        std::vector<std::shared_ptr<const LLVKGlyphImage>> images,

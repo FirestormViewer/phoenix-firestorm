@@ -154,6 +154,7 @@ bool LLVKWidgetTree::eraseOwned(Id id, bool notifyFocus, std::string& error)
         if (hasAncestor(id,active) || hasAncestor(active,id))
         { error = "Native subtree destruction is already active"; return false; }
     }
+    if (node->lineEditor) mNodes.at(id).lineEditor->params.commitOnFocusLost = false;
     mErasing.insert(id);
     try
     {
@@ -202,10 +203,19 @@ bool LLVKWidgetTree::canReceiveFocus(Id id) const noexcept
 
 void LLVKWidgetTree::notify(Id id, std::function<void(Id)> Events::* event)
 {
+    if (event == &Events::focusLost && get(id) && get(id)->lineEditor)
+    {
+        lineLanguageInput(id);
+        const auto* node = get(id);
+        if (node && node->lineEditor->params.commitOnFocusLost && node->lineEditor->text.dirty()) commitLineEditor(id);
+    }
     const auto found = mEvents.find(id);
-    if (found == mEvents.end() || !get(id)) return;
-    const auto callback = found->second.*event;
-    if (callback) callback(id);
+    if (found != mEvents.end() && get(id))
+    {
+        const auto callback = found->second.*event;
+        if (callback) callback(id);
+    }
+    if (event == &Events::focusReceived) lineLanguageInput(id);
 }
 
 bool LLVKWidgetTree::setEvents(Id id, Events events)
@@ -261,6 +271,8 @@ bool LLVKWidgetTree::setMouseCapture(Id id, std::string& error)
         const Id previous = mMouseCapture;
         mMouseCapture = id;
         buttonCaptureLost(previous);
+        if (const auto* node = get(previous); node && node->lineEditor)
+            mNodes.at(previous).lineEditor->text.endSelection();
         notify(previous,&Events::captureLost);
     }
     return true;
@@ -274,13 +286,14 @@ bool LLVKWidgetTree::setTopControl(Id id, std::string& error)
     {
         const Id previous = mTopControl;
         mTopControl = id;
+        if (get(previous) && get(previous)->combo) hideComboList(previous);
         notify(previous,&Events::topLost);
     }
     return true;
 }
 
 bool LLVKWidgetTree::planReshape(Id id, std::int64_t width, std::int64_t height, const Rect& origin,
-                                std::map<Id,Rect>& changes, std::string& error) const
+                                ShapeChanges& changes, std::string& error) const
 {
     const auto& node = mNodes.at(id);
     const auto deltaWidth = width - (std::int64_t(node.params.rect.right)-node.params.rect.left);
@@ -289,7 +302,13 @@ bool LLVKWidgetTree::planReshape(Id id, std::int64_t width, std::int64_t height,
     const auto top = std::int64_t(origin.bottom) + height;
     if (!coordinate(width) || !coordinate(height) || !coordinate(right) || !coordinate(top))
     { error = "Native widget reshape would overflow its coordinates"; return false; }
-    changes[id] = {origin.left,origin.bottom,static_cast<std::int32_t>(right),static_cast<std::int32_t>(top)};
+    changes.rectangles[id] = {origin.left,origin.bottom,static_cast<std::int32_t>(right),static_cast<std::int32_t>(top)};
+    if (node.lineEditor)
+    {
+        auto text = node.lineEditor->text;
+        if (!text.resize(static_cast<std::int32_t>(width),error)) return false;
+        changes.editors.insert_or_assign(id,std::move(text));
+    }
     if (node.checkBox && node.checkBox->label && node.checkBox->button)
         return planCheckBoxReshape(id,width,changes,error);
     for (Id child : node.children)
@@ -310,6 +329,39 @@ bool LLVKWidgetTree::planReshape(Id id, std::int64_t width, std::int64_t height,
         childOrigin.bottom = static_cast<std::int32_t>(childBottom);
         if (!planReshape(child,childWidth,childHeight,childOrigin,changes,error)) return false;
     }
+    if (node.scrollbar && (deltaWidth || deltaHeight))
+    {
+        const auto& scrollbar = *node.scrollbar;
+        if (width < 0 || height < 0) { error = "Native scrollbar resize dimensions cannot be negative"; return false; }
+        LLVKScrollLayout::ThumbParams thumb;
+        thumb.documentSize = scrollbar.documentSize; thumb.pageSize = scrollbar.pageSize; thumb.position = scrollbar.position;
+        thumb.thickness = scrollbar.thickness; thumb.vertical = scrollbar.params->vertical;
+        thumb.length = static_cast<std::int32_t>(thumb.vertical ? height : width);
+        const auto rectangle = LLVKScrollLayout::thumb(thumb,error);
+        if (!rectangle) return false;
+        changes.thumbs[id] = *rectangle;
+        for (const Id child : {scrollbar.decrease,scrollbar.increase})
+        {
+            if (!child || !get(child) || !changes.rectangles.contains(child))
+            { error = "Native scrollbar resize requires its button children"; return false; }
+            const auto planned = changes.rectangles.at(child);
+            auto childWidth = std::int64_t(planned.right)-planned.left;
+            auto childHeight = std::int64_t(planned.top)-planned.bottom;
+            Rect childOrigin{};
+            if (thumb.vertical)
+            {
+                childHeight = std::min(height/2,std::int64_t(scrollbar.thickness));
+                childOrigin.bottom = child == scrollbar.decrease ? static_cast<std::int32_t>(height-childHeight) : 0;
+            }
+            else
+            {
+                childWidth = std::min(width/2,std::int64_t(scrollbar.thickness));
+                childOrigin.left = child == scrollbar.increase ? static_cast<std::int32_t>(width-childWidth) : 0;
+            }
+            if (!planReshape(child,childWidth,childHeight,childOrigin,changes,error)) return false;
+        }
+    }
+    if (node.scrollContainer) changes.scrollContainers.push_back(id);
     return true;
 }
 
@@ -318,15 +370,40 @@ bool LLVKWidgetTree::reshape(Id id, std::int32_t width, std::int32_t height, std
     error.clear();
     const auto* node = get(id);
     if (!node) { error = "Native widget to reshape does not exist"; return false; }
-    std::map<Id,Rect> changes;
+    ShapeChanges changes;
     if (!planReshape(id,width,height,node->params.rect,changes,error)) return false;
-    for (const auto& [changed,rect] : changes)
+    return completeShapes(changes,error);
+}
+
+bool LLVKWidgetTree::completeShapes(ShapeChanges& changes, std::string& error)
+{
+    publishShapes(changes);
+    for (const Id id : changes.scrollContainers)
+        if (get(id) && !finishScrollResize(id,error)) return false;
+    return true;
+}
+
+void LLVKWidgetTree::publishShapes(ShapeChanges& changes)
+{
+    for (const auto& [changed,rect] : changes.rectangles)
     {
         auto& current = mNodes.at(changed);
         if (current.plainText && current.params.rect != rect) current.plainText->layout.reset();
+        if (current.layoutStack && current.params.rect != rect) current.layoutStack->needsLayout = true;
         current.params.rect = rect;
     }
-    return true;
+    for (auto& [id,text] : changes.editors) mNodes.at(id).lineEditor->text = std::move(text);
+    for (const auto& [id,thumb] : changes.thumbs) mNodes.at(id).scrollbar->thumb = thumb;
+}
+
+bool LLVKWidgetTree::setShape(Id id, const Rect& rectangle, std::string& error)
+{
+    error.clear();
+    if (!get(id)) { error = "Native shape target does not exist"; return false; }
+    ShapeChanges changes;
+    if (!planReshape(id,std::int64_t(rectangle.right)-rectangle.left,std::int64_t(rectangle.top)-rectangle.bottom,
+                     rectangle,changes,error)) return false;
+    return completeShapes(changes,error);
 }
 
 bool LLVKWidgetTree::setVisible(Id id, bool visible)
@@ -336,6 +413,8 @@ bool LLVKWidgetTree::setVisible(Id id, bool visible)
     if (found->second.params.visible == visible) return true;
     found->second.params.visible = visible;
     const Id parent = found->second.parent;
+    if (found->second.layoutPanel && get(parent) && get(parent)->layoutStack)
+        mNodes.at(parent).layoutStack->needsLayout = true;
     if (!parent || visibleInChain(parent)) notifyVisibility(id,visible);
     return true;
 }
@@ -364,6 +443,13 @@ bool LLVKWidgetTree::setEnabled(Id id, bool enabled)
 {
     auto found = mNodes.find(id);
     if (found == mNodes.end()) return false;
+    if (found->second.lineEditor)
+    {
+        found->second.lineEditor->readOnly = !enabled;
+        found->second.control->params.tabStop = enabled;
+        lineLanguageInput(id);
+        return true;
+    }
     found->second.params.enabled = enabled;
     if (found->second.plainText) found->second.plainText->readOnly = !enabled;
     if (found->second.checkBox)

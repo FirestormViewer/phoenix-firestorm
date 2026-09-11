@@ -1,4 +1,5 @@
 #include "llvkwidgetfactory.h"
+#include "llvkxmllayers.h"
 #include "llstring.h"
 
 #if __has_include(<expat.h>)
@@ -9,20 +10,130 @@
 
 #include <charconv>
 #include <cmath>
+#include <cwctype>
 #include <exception>
+#include <locale.h>
 #include <memory>
 #include <utility>
 
 namespace
 {
+#if defined(_WIN32)
+    struct TextValidationLocale
+    {
+        _locale_t handle = _create_locale(LC_ALL,"English_United States.1252");
+        ~TextValidationLocale() { if (handle) _free_locale(handle); }
+        TextValidationLocale() = default;
+        TextValidationLocale(const TextValidationLocale&) = delete;
+        TextValidationLocale& operator=(const TextValidationLocale&) = delete;
+    };
+#endif
+
+    std::function<bool(std::u32string_view)> builtinTextValidator(std::string_view name)
+    {
+        if (name == "ascii" || name == "ascii_with_newline")
+        {
+            const bool allowNewline = name == "ascii_with_newline";
+            return [allowNewline](std::u32string_view text)
+            {
+                return std::all_of(text.begin(),text.end(),[allowNewline](char32_t character)
+                { return (character >= 0x20 && character <= 0x7f) || (allowNewline && character == U'\n'); });
+            };
+        }
+        if (name == "ascii_printable_no_pipe" || name == "ascii_printable_no_space")
+        {
+            const bool allowSpace = name == "ascii_printable_no_pipe";
+            return [allowSpace](std::u32string_view text)
+            {
+                return std::all_of(text.begin(),text.end(),[allowSpace](char32_t character)
+                {
+                    if (character < 0x20 || character > 0x7f) return false;
+                    if (allowSpace && character == U'|') return false;
+                    if (character == U' ') return allowSpace;
+                    const auto code = static_cast<wint_t>(character);
+                    return std::iswalnum(code) != 0 || std::iswpunct(code) != 0;
+                });
+            };
+        }
+#if defined(_WIN32)
+        if (name == "float" || name == "int" || name == "positive_s32" || name == "non_negative_s32" ||
+            name == "alpha_num" || name == "alpha_num_space")
+        {
+            auto locale = std::make_shared<TextValidationLocale>();
+            if (!locale->handle) return {};
+            return [locale,kind = std::string(name)](std::u32string_view text)
+            {
+                const auto space = [&](char32_t character)
+                { return character <= 0xffff && _iswspace_l(static_cast<wint_t>(character),locale->handle) != 0; };
+                const auto digit = [&](char32_t character)
+                { return character <= 0xffff && _iswdigit_l(static_cast<wint_t>(character),locale->handle) != 0; };
+                if (kind == "alpha_num" || kind == "alpha_num_space")
+                {
+                    return std::all_of(text.begin(),text.end(),[&](char32_t character)
+                    {
+                        if (kind == "alpha_num_space" && character == U' ') return true;
+                        return character <= 0xffff && _iswalnum_l(static_cast<wint_t>(character),locale->handle) != 0;
+                    });
+                }
+                while (!text.empty() && space(text.front())) text.remove_prefix(1);
+                while (!text.empty() && space(text.back())) text.remove_suffix(1);
+                if (kind == "positive_s32" || kind == "non_negative_s32")
+                {
+                    if (!text.empty() && (text.front() == U'-' || (kind == "positive_s32" && text.front() == U'0'))) return false;
+                    if (!std::all_of(text.begin(),text.end(),digit)) return false;
+                    if (kind == "non_negative_s32") return true;
+                    return !text.empty() && text.front() >= U'1' && text.front() <= U'9';
+                }
+                if (!text.empty() && text.front() == U'-') text.remove_prefix(1);
+                return std::all_of(text.begin(),text.end(),[&](char32_t character)
+                { return digit(character) || (kind == "float" && character == U'.'); });
+            };
+        }
+#endif
+        return {};
+    }
+
     struct Declaration
     {
+        struct CallbackDeclaration
+        {
+            std::string tag;
+            std::vector<std::pair<std::string,std::string>> attributes;
+        };
         std::string tag;
+        std::vector<std::pair<std::string,std::string>> attributes;
+        std::vector<CallbackDeclaration> panelCallbacks;
+        std::map<std::string,std::string> panelStrings;
         LLVKWidgetFactory::Defaults params;
         std::optional<LLVKControl::Params> control;
         std::optional<LLVKIcon::Params> icon;
         std::optional<LLVKButton::Params> button;
         std::optional<LLVKBadge::Params> badge;
+        std::optional<LLVKPanel::Params> panel;
+        std::optional<LLVKWidgetTree::Node::Browser> browser;
+        std::optional<LLVKBorder::Params> border;
+        std::optional<LLVKWidgetTree::LineEditorParams> lineEditor;
+        std::optional<LLVKWidgetFactory::CheckBoxDefaults> checkBox;
+        std::shared_ptr<LLVKWidgetFactory::ScrollbarDefaults> scrollbar;
+        std::shared_ptr<LLVKWidgetFactory::ScrollContainerDefaults> scrollContainer;
+        std::optional<LLVKWidgetTree::Node::LayoutStack> layoutStack;
+        std::optional<LLVKWidgetTree::Node::LayoutPanel> layoutPanel;
+        bool expandedMinimumProvided = false;
+        std::shared_ptr<LLVKWidgetFactory::ComboDefaults> combo;
+        std::map<std::string,std::unique_ptr<Declaration>> comboParts;
+        bool comboList = false;
+        LLVKColor comboListBackground{1,1,1,1};
+        bool comboListBackgroundVisible = true;
+        std::map<std::string,std::unique_ptr<Declaration>> scrollButtons;
+        std::map<std::string,std::string> scrollImages;
+        std::optional<LLVKPlainControl::Params> plainLabel;
+        std::string textBody;
+        std::unique_ptr<Declaration> checkLabel, checkButton;
+        bool lineBorderProvided = false;
+        std::map<std::string,std::string> lineImages;
+        std::string panelClass;
+        LLVKWidgetFactory::PanelDefaults panelConstructor;
+        std::optional<std::string> panelOpaqueImage, panelTransparentImage;
         LLVKWidgetTree::BadgeConstruction badgeConstruction;
         std::unique_ptr<Declaration> ownedBadge;
         std::optional<std::string> badgeImage, badgeBorderImage;
@@ -74,6 +185,44 @@ namespace
         return false;
     }
 
+    std::string panelText(std::string text)
+    {
+        auto position = text.find_first_not_of(" \t\n");
+        if (position == std::string::npos) return {};
+        if (text[position] != '"')
+        {
+            auto result = text.substr(position,text.find_last_not_of(" \t\n")-position+1);
+            std::erase(result,'\r');
+            return result;
+        }
+        std::string result;
+        std::size_t lines = 0;
+        for (;;)
+        {
+            const auto start = ++position;
+            auto scan = start;
+            std::size_t end;
+            for (;;)
+            {
+                end = text.find_first_of("\\\"",scan);
+                if (end == std::string::npos || text[end] == '"') break;
+                text.erase(end,1);
+                scan = end+1;
+            }
+            if (end == std::string::npos) break;
+            result.append(text,start,end-start);
+            result.push_back('\n');
+            ++lines;
+            position = text.find('"',end+1);
+            if (position == std::string::npos)
+            {
+                if (lines == 1) result.pop_back();
+                break;
+            }
+        }
+        return result;
+    }
+
     struct Parser
     {
         XML_Parser parser = nullptr;
@@ -82,16 +231,36 @@ namespace
         const LLVKWidgetFactory::ButtonDefaults& buttonDefaults;
         const LLVKWidgetFactory::Callbacks& callbacks;
         const LLVKWidgetFactory::Resources& resources;
+        const LLVKWidgetFactory::PanelDefaults& panelDefaults;
+        const LLVKWidgetFactory::LineEditorDefaults& lineDefaults;
+        const LLVKWidgetFactory::CheckBoxDefaults& checkDefaults;
+        const LLVKWidgetFactory::ScrollbarDefaults& scrollDefaults;
+        const LLVKWidgetFactory::ScrollContainerDefaults& containerDefaults;
+        const LLVKWidgetFactory::LayoutDefaults& layoutDefaults;
+        const LLVKWidgetFactory::ComboDefaults& comboDefaults;
+        const LLVKWidgetFactory::TextDefaults& textDefaults;
+        const LLVKWidgetFactory::BrowserDefaults& browserDefaults;
         std::unique_ptr<Declaration> root;
         std::vector<Declaration*> stack;
         std::string error;
         std::exception_ptr exception;
         std::size_t nodes = 0;
         bool callbackElement = false;
+        struct PanelString
+        {
+            std::string name;
+            std::optional<std::string> value;
+            std::string body;
+        };
+        std::optional<PanelString> panelString;
         Parser(const LLVKWidgetFactory::Defaults& source, const LLVKWidgetFactory::IconDefaults& icons,
                     const LLVKWidgetFactory::ButtonDefaults& buttons, const LLVKWidgetFactory::Callbacks& handlers,
-                    const LLVKWidgetFactory::Resources& assets)
-                : defaults(source), iconDefaults(icons), buttonDefaults(buttons), callbacks(handlers), resources(assets) {}
+                    const LLVKWidgetFactory::Resources& assets, const LLVKWidgetFactory::PanelDefaults& panels,
+                    const LLVKWidgetFactory::LineEditorDefaults& editors, const LLVKWidgetFactory::CheckBoxDefaults& checks,
+                    const LLVKWidgetFactory::ScrollbarDefaults& scrolls, const LLVKWidgetFactory::ScrollContainerDefaults& containers,
+                    const LLVKWidgetFactory::LayoutDefaults& layouts, const LLVKWidgetFactory::ComboDefaults& combos,
+                    const LLVKWidgetFactory::TextDefaults& texts, const LLVKWidgetFactory::BrowserDefaults& browsers)
+                : defaults(source), iconDefaults(icons), buttonDefaults(buttons), callbacks(handlers), resources(assets), panelDefaults(panels), lineDefaults(editors), checkDefaults(checks), scrollDefaults(scrolls), containerDefaults(containers), layoutDefaults(layouts), comboDefaults(combos), textDefaults(texts), browserDefaults(browsers) {}
         ~Parser() { if (parser) XML_ParserFree(parser); }
 
         void reject(const std::string& reason)
@@ -125,15 +294,349 @@ namespace
             return true;
         }
 
+        Declaration* comboPart(Declaration& owner, std::string_view name)
+        {
+            if (!owner.combo || (name != "combo_editor" && name != "combo_button" && name != "drop_down_button" && name != "combo_list")) return nullptr;
+            auto& part = owner.comboParts[std::string(name)];
+            if (!part)
+            {
+                part = std::make_unique<Declaration>();
+                if (name == "combo_editor")
+                {
+                    part->params = owner.combo->editor.view;
+                    part->control = owner.combo->editor.control;
+                    part->lineEditor = owner.combo->editor.editor;
+                }
+                else if (name == "combo_list")
+                {
+                    part->control = owner.combo->combo.listControl;
+                    part->comboList = true;
+                    part->comboListBackground = owner.combo->combo.listBackground;
+                    part->comboListBackgroundVisible = owner.combo->combo.listBackgroundVisible;
+                }
+                else
+                {
+                    const auto& defaults = name == "combo_button" ? owner.combo->button : owner.combo->dropDown;
+                    part->params = defaults.view;
+                    part->control = defaults.control;
+                    part->button = defaults.button;
+                }
+            }
+            return part.get();
+        }
+
         bool attribute(Declaration& declaration, std::string_view name, std::string_view text)
         {
             auto& view = declaration.params.view;
             auto& geometry = declaration.params.geometry;
-            if (name == "font" && declaration.control)
+            if (declaration.browser)
             {
-                const auto found = resources.fonts.find(std::string(text));
-                if (found == resources.fonts.end() || !found->second) return false;
-                declaration.control->font = found->second;
+                auto& browser = *declaration.browser;
+                if (name == "start_url") { browser.startUrl = text; return true; }
+                if (name == "initial_mime_type") { browser.mimeType = text; return true; }
+                if (name == "error_page_url") { browser.errorUrl = text; return true; }
+                if (name == "trusted_content") return boolean(text,browser.trusted);
+                if (name == "focus_on_click") return boolean(text,browser.focusOnClick);
+                if (name == "border_visible") return boolean(text,browser.borderVisible);
+                if (name == "decouple_texture_size") return boolean(text,browser.decoupleSize);
+                if (name == "texture_width") return integer(text,browser.textureWidth);
+                if (name == "texture_height") return integer(text,browser.textureHeight);
+            }
+            if (declaration.combo)
+            {
+                const auto separator = name.find('.');
+                if (separator != std::string_view::npos)
+                    if (auto* part = comboPart(declaration,name.substr(0,separator))) return attribute(*part,name.substr(separator+1),text);
+                auto& combo = declaration.combo->combo;
+                if (name == "label") { combo.label = text; return true; }
+                if (name == "allow_text_entry") return boolean(text,combo.allowTextEntry);
+                if (name == "show_text_as_tentative") return boolean(text,combo.tentativeText);
+                if (name == "force_disable_fulltext_search") return boolean(text,combo.forceDisableSubstring);
+                if (name == "allow_new_values") { bool enabled; return boolean(text,enabled) && !enabled; }
+                if (name == "max_chars")
+                {
+                    std::int32_t count;
+                    if (!integer(text,count) || count <= 0) return false;
+                    combo.maximumBytes = static_cast<std::size_t>(count);
+                    return true;
+                }
+                if (name == "list_position")
+                {
+                    if (text != "above" && text != "below") return false;
+                    combo.listAbove = text == "above";
+                    return true;
+                }
+            }
+            if (declaration.comboList)
+            {
+                if (name == "bg_writeable_color") return color(text,declaration.comboListBackground);
+                if (name == "background_visible") return boolean(text,declaration.comboListBackgroundVisible);
+            }
+            if (declaration.layoutStack)
+            {
+                auto& stack = *declaration.layoutStack;
+                if (name == "orientation")
+                {
+                    if (text != "horizontal" && text != "vertical") return false;
+                    stack.vertical = text == "vertical";
+                    return true;
+                }
+                if (name == "clip") return boolean(text,stack.clip);
+                if (name == "animate") return boolean(text,stack.animate);
+                if (name == "border_size" || name == "drag_handle_gap") return integer(text,stack.spacing);
+                if (name == "save_sizes" || name == "show_drag_handle") { bool enabled; return boolean(text,enabled) && !enabled; }
+                if (name == "open_time_constant" || name == "close_time_constant")
+                {
+                    auto& time = name == "open_time_constant" ? stack.openTime : stack.closeTime;
+                    const auto parsed = std::from_chars(text.data(),text.data()+text.size(),time);
+                    return parsed.ec == std::errc() && parsed.ptr == text.data()+text.size() && std::isfinite(time) && time >= 0.f;
+                }
+            }
+            if (declaration.layoutPanel)
+            {
+                auto& panel = *declaration.layoutPanel;
+                if (name == "auto_resize") return boolean(text,panel.autoResize);
+                if (name == "user_resize") { bool enabled; return boolean(text,enabled) && !enabled; }
+                if (name == "min_dim" || name == "min_width" || name == "min_height")
+                {
+                    std::int32_t value;
+                    if (!integer(text,value)) return false;
+                    panel.minimum = std::max(0,value);
+                    if (!declaration.expandedMinimumProvided) panel.expandedMinimum = panel.minimum;
+                    return true;
+                }
+                if (name == "expanded_min_dim")
+                {
+                    if (!integer(text,panel.expandedMinimum)) return false;
+                    if (panel.expandedMinimum < 0) panel.expandedMinimum = panel.minimum;
+                    declaration.expandedMinimumProvided = true;
+                    return true;
+                }
+                if (name == "max_dim" || name == "max_width" || name == "max_height")
+                {
+                    if (!integer(text,panel.maximum)) return false;
+                    if (panel.maximum < 0) panel.maximum = INT32_MAX;
+                    return true;
+                }
+            }
+            if (declaration.scrollContainer)
+            {
+                auto& container = declaration.scrollContainer->container;
+                if (name == "opaque") return boolean(text,container.opaque);
+                if (name == "color") return color(text,container.backgroundColor);
+                if (name == "border_visible") return boolean(text,container.borderVisible);
+                if (name == "hide_scrollbar") return boolean(text,container.hideScrollbars);
+                if (name == "reserve_scroll_corner") return boolean(text,container.reserveCorner);
+                if (name == "size")
+                {
+                    std::int32_t size;
+                    if (!integer(text,size) || size < -1) return false;
+                    container.size = size == -1 ? std::nullopt : std::optional(size);
+                    return true;
+                }
+                if (name == "max_auto_scroll_zone") return integer(text,container.maxAutoZone);
+                if (name == "min_auto_scroll_rate" || name == "max_auto_scroll_rate")
+                {
+                    auto& rate = name == "min_auto_scroll_rate" ? container.minAutoRate : container.maxAutoRate;
+                    const auto parsed = std::from_chars(text.data(),text.data()+text.size(),rate);
+                    return parsed.ec == std::errc() && parsed.ptr == text.data()+text.size() && std::isfinite(rate);
+                }
+                if (name == "ignore_arrow_keys") return boolean(text,container.ignoreArrowKeys);
+            }
+            if (declaration.scrollbar)
+            {
+                auto& scrollbar = declaration.scrollbar->scrollbar;
+                if (name == "orientation")
+                {
+                    if (text != "vertical" && text != "horizontal") return false;
+                    scrollbar.vertical = text == "vertical";
+                    return true;
+                }
+                if (name == "doc_size") return integer(text,scrollbar.documentSize);
+                if (name == "doc_pos") return integer(text,scrollbar.position);
+                if (name == "page_size") return integer(text,scrollbar.pageSize);
+                if (name == "step_size") return integer(text,scrollbar.stepSize);
+                if (name == "thickness")
+                {
+                    std::int32_t thickness;
+                    if (!integer(text,thickness)) return false;
+                    scrollbar.thickness = thickness;
+                    return true;
+                }
+                if (name == "track_color") return color(text,scrollbar.trackColor);
+                if (name == "thumb_color") return color(text,scrollbar.thumbColor);
+                if (name == "bg_color") return color(text,scrollbar.backgroundColor);
+                if (name == "bg_visible") return boolean(text,scrollbar.backgroundVisible);
+                if (name == "thumb_image_vertical" || name == "thumb_image_horizontal" ||
+                    name == "track_image_vertical" || name == "track_image_horizontal")
+                { declaration.scrollImages[std::string(name)] = text; return true; }
+            }
+            if (declaration.checkBox)
+            {
+                auto& check = declaration.checkBox->construction;
+                if (name == "label") { check.label = text; return true; }
+                if (name == "initial_value" || name == "value")
+                {
+                    if (!boolean(text,check.initialValue)) return false;
+                    declaration.control->initialValue = check.initialValue;
+                    return true;
+                }
+                if (name == "word_wrap")
+                {
+                    if (text == "none") check.wrap = LLVKWidgetTree::CheckBoxWrap::None;
+                    else if (text == "up") check.wrap = LLVKWidgetTree::CheckBoxWrap::Up;
+                    else if (text == "down") check.wrap = LLVKWidgetTree::CheckBoxWrap::Down;
+                    else return false;
+                    return true;
+                }
+                if (name == "radio_style") { bool ignored; return boolean(text,ignored); }
+                if (name == "font") check.fontProvided = true;
+            }
+            if (declaration.plainLabel)
+            {
+                auto& label = *declaration.plainLabel;
+                if (name == "text_color") return color(text,label.textColor);
+                if (name == "text_readonly_color") return color(text,label.readOnlyColor);
+                if (name == "text_tentative_color") return color(text,label.tentativeColor);
+                if (name == "bg_writeable_color") return color(text,label.backgroundColor);
+                if (name == "word_wrap" || name == "wrap") return boolean(text,label.layout.wrap);
+                if (name == "parse_urls" || name == "allow_html") return boolean(text,label.parseUrls);
+                if (name == "h_pad") return integer(text,label.layout.horizontalPadding);
+                if (name == "v_pad") return integer(text,label.verticalPadding);
+                if (name == "max_length")
+                {
+                    std::int32_t maximum;
+                    if (!integer(text,maximum) || maximum < 0) return false;
+                    label.maximumBytes = static_cast<std::size_t>(maximum);
+                    return true;
+                }
+                if (name == "halign")
+                {
+                    if (text == "left") label.layout.alignment = LLVKFont::HorizontalAlign::Left;
+                    else if (text == "center") label.layout.alignment = LLVKFont::HorizontalAlign::Center;
+                    else if (text == "right") label.layout.alignment = LLVKFont::HorizontalAlign::Right;
+                    else return false;
+                    return true;
+                }
+                if (name == "valign" || name == "text_valign")
+                {
+                    if (text == "top") label.vertical = LLVKFont::VerticalAlign::Top;
+                    else if (text == "center") label.vertical = LLVKFont::VerticalAlign::Center;
+                    else if (text == "bottom") label.vertical = LLVKFont::VerticalAlign::Bottom;
+                    else return false;
+                    return true;
+                }
+                if (name == "read_only")
+                { bool value; if (!boolean(text,value)) return false; label.readOnly = value; return true; }
+                if (name == "track_end" || name == "track_bottom") return boolean(text,label.trackEnd);
+                if (name == "font_shadow") return text == "none";
+                if (name == "allow_scroll" || name == "use_ellipses" || name == "bg_visible" || name == "border_visible" ||
+                    name == "parse_markdown" || name == "parse_highlights" || name == "spellcheck")
+                { bool enabled; return boolean(text,enabled) && !enabled; }
+            }
+            if (declaration.lineEditor)
+            {
+                auto& editor = *declaration.lineEditor;
+                if (name == "default_text") { editor.text.defaultText = text; return true; }
+                if (name == "label" || name == "watermark_text") { editor.label = text; return true; }
+                if (name == "value" || name == "initial_value") { declaration.control->initialValue = std::string(text); return true; }
+                if (name == "max_length_bytes" || name == "max_length_chars" || name == "max_length")
+                {
+                    std::int32_t value;
+                    if (!integer(text,value) || value < 0) return false;
+                    if (name == "max_length_bytes") { editor.text.maximumBytes = value; editor.text.maximumCharacters = 0; }
+                    else { editor.text.maximumCharacters = value; editor.text.maximumBytes = 4096; }
+                    return true;
+                }
+                if (name == "text_pad_left") return integer(text,editor.text.leftPadding);
+                if (name == "text_pad_right") return integer(text,editor.text.rightPadding);
+                if (name == "is_password") return boolean(text,editor.text.password);
+                if (name == "allow_emoji") return boolean(text,editor.text.allowEmoji);
+                if (name == "select_on_focus" || name == "select_all_on_focus_received") return boolean(text,editor.text.selectOnFocus);
+                if (name == "commit_on_focus_lost") return boolean(text,editor.commitOnFocusLost);
+                if (name == "revert_on_esc") return boolean(text,editor.revertOnEscape);
+                if (name == "ignore_tab") return boolean(text,editor.ignoreTab);
+                if (name == "draw_focus_border") return boolean(text,editor.drawFocusBorder);
+                if (name == "bg_image_always_focused") return boolean(text,editor.showFocusedBackground);
+                if (name == "show_label_focused") return boolean(text,editor.showFocusedLabel);
+                if (name == "use_bg_color") return boolean(text,editor.useBackgroundColor);
+                if (name == "bg_visible") { bool ignored; return boolean(text,ignored); }
+                if (name == "spellcheck") { bool enabled; return boolean(text,enabled) && !enabled; }
+                if (name == "prevalidator" || name == "prevalidate_callback") { editor.prevalidatorName = text; editor.prevalidator = {}; return true; }
+                if (name == "input_prevalidator" || name == "prevalidate_input_callback") { editor.inputPrevalidatorName = text; editor.inputPrevalidator = {}; return true; }
+                if (name == "cursor_color") return color(text,editor.cursorColor);
+                if (name == "bg_color") return color(text,editor.backgroundColor);
+                if (name == "text_color") return color(text,editor.textColor);
+                if (name == "text_readonly_color") return color(text,editor.readOnlyColor);
+                if (name == "text_tentative_color") return color(text,editor.tentativeColor);
+                if (name == "highlight_color") return color(text,editor.highlightColor);
+                if (name == "preedit_bg_color") return color(text,editor.preeditColor);
+                if (name == "background_image" || name == "background_image_disabled" || name == "background_image_focused")
+                { declaration.lineImages[std::string(name)] = text; return true; }
+                if (name == "border_thickness" || name == "thickness" || name == "bevel_style" || name == "border_style" ||
+                    name == "style" || name == "highlight_light_color" || name == "highlight_dark_color" ||
+                    name == "shadow_light_color" || name == "shadow_dark_color") declaration.lineBorderProvided = true;
+            }
+            auto* border = declaration.border ? &*declaration.border : declaration.panel ? &declaration.panel->border :
+                           declaration.lineEditor ? &declaration.lineEditor->border : nullptr;
+            if (border)
+            {
+                if (name == "border_thickness" || name == "thickness") return integer(text,border->thickness);
+                if (name == "highlight_light_color") return color(text,border->highlightLight);
+                if (name == "highlight_dark_color") return color(text,border->highlightDark);
+                if (name == "shadow_light_color") return color(text,border->shadowLight);
+                if (name == "shadow_dark_color") return color(text,border->shadowDark);
+                if (name == "bevel_style")
+                {
+                    if (text == "in") border->bevel = LLVKBorder::Bevel::In;
+                    else if (text == "out") border->bevel = LLVKBorder::Bevel::Out;
+                    else if (text == "bright") border->bevel = LLVKBorder::Bevel::Bright;
+                    else if (text == "none") border->bevel = LLVKBorder::Bevel::None;
+                    else return false;
+                    return true;
+                }
+                if (name == "border_style" || name == "style")
+                {
+                    if (text == "line") border->style = LLVKBorder::Style::Line;
+                    else if (text == "texture") border->style = LLVKBorder::Style::Texture;
+                    else return false;
+                    return true;
+                }
+            }
+            if (declaration.panel)
+            {
+                auto& panel = *declaration.panel;
+                if (name == "background_visible" || name == "bg_visible") return boolean(text,panel.backgroundVisible);
+                if (name == "background_opaque") return boolean(text,panel.backgroundOpaque);
+                if (name == "accepts_badge") return boolean(text,panel.acceptsBadge);
+                if (name == "border" || name == "border_visible") return boolean(text,panel.hasBorder);
+                if (name == "bg_opaque_color") return color(text,panel.opaqueColor);
+                if (name == "bg_alpha_color") return color(text,panel.transparentColor);
+                if (name == "bg_opaque_image_overlay") return color(text,panel.opaqueImageOverlay);
+                if (name == "bg_alpha_image_overlay") return color(text,panel.transparentImageOverlay);
+                if (name == "bg_opaque_image") { declaration.panelOpaqueImage = text; return true; }
+                if (name == "bg_alpha_image") { declaration.panelTransparentImage = text; return true; }
+                if (name == "label" || name == "title") { panel.label = text; return true; }
+                if (name == "help_topic") { panel.helpTopic = text; return true; }
+                if (name == "filename") { panel.filename = text; return true; }
+                if (name == "class") { declaration.panelClass = text; return true; }
+                if (name == "min_width" || name == "min_height")
+                { std::int32_t dimension; return integer(text,dimension); }
+                if (name == "border_thickness" || name == "thickness") return integer(text,panel.border.thickness);
+            }
+            if ((name == "font" || name == "font.name" || name == "font.size" || name == "font.style") && declaration.control)
+            {
+                auto& request = declaration.control->fontRequest;
+                if (!request) request = resources.defaultFontRequest;
+                if (name == "font" || name == "font.name") request->name = text;
+                else if (name == "font.size") request->size = text;
+                else
+                {
+                    request->style = 0;
+                    if (text.find("BOLD") != text.npos) request->style |= 1;
+                    if (text.find("ITALIC") != text.npos) request->style |= 2;
+                    if (text.find("UNDERLINE") != text.npos) request->style |= 4;
+                }
                 return true;
             }
             if (declaration.badge)
@@ -310,6 +813,8 @@ namespace
             else if (name == "visible") return boolean(text,view.visible);
             else if (name == "mouse_opaque") return boolean(text,view.mouseOpaque);
             else if (name == "use_bounding_rect") return boolean(text,view.useBoundingRect);
+            else if (name == "focus_root") return boolean(text,view.focusRoot);
+            else if (name == "default_tab_group") return integer(text,view.defaultTabGroup);
             else if (name == "sound_flags")
             {
                 std::int32_t value;
@@ -353,8 +858,20 @@ namespace
             if (separator == std::string_view::npos || !declaration.control) return false;
             const auto prefix = tag.substr(0,separator);
             if ((declaration.button && prefix != "button") || (declaration.icon && prefix != "icon") ||
-                (declaration.badge && prefix != "badge")) return false;
+                (declaration.badge && prefix != "badge") || (declaration.panel && prefix != (declaration.browser ? "web_browser" : declaration.layoutPanel ? "layout_panel" : "panel")) ||
+                (declaration.lineEditor && prefix != "line_editor") || (declaration.checkBox && prefix != "check_box") ||
+                (declaration.scrollbar && prefix != "scroll_bar") ||
+                (declaration.scrollContainer && prefix != "scroll_container") || (declaration.combo && prefix != "combo_box")) return false;
             const auto name = tag.substr(separator+1);
+            const auto remember = [&]
+            {
+                if (!declaration.panel) return;
+                Declaration::CallbackDeclaration stored;
+                stored.tag = tag;
+                for (std::size_t index = 0; attributes[index]; index += 2)
+                    stored.attributes.emplace_back(attributes[index],attributes[index+1]);
+                declaration.panelCallbacks.push_back(std::move(stored));
+            };
             std::string function;
             std::optional<LLSD> parameter;
             for (std::size_t index = 0; attributes[index]; index += 2)
@@ -372,6 +889,14 @@ namespace
             else if (name == "mouseenter_callback") action = &control.mouseEnter;
             else if (name == "mouseleave_callback") action = &control.mouseLeave;
             else if (name == "validate_callback") predicate = &control.validate;
+            else if (declaration.panel && name == "visible_callback") action = &declaration.panel->visible;
+            else if (declaration.lineEditor && name == "keystroke_callback") action = &declaration.lineEditor->keystroke;
+            else if (declaration.checkBox && name == "on_check") predicate = &declaration.checkBox->construction.onCheck;
+            else if (declaration.scrollbar && name == "change_callback") action = &declaration.scrollbar->changed;
+            else if (declaration.scrollContainer && name == "scroll_callback") action = &declaration.scrollContainer->scrolled;
+            else if (declaration.combo && name == "prearrange_callback") action = &declaration.combo->combo.prearrange;
+            else if (declaration.combo && name == "text_entry_callback") action = &declaration.combo->combo.textEntry;
+            else if (declaration.combo && name == "text_changed_callback") action = &declaration.combo->combo.textChanged;
             else if (declaration.button)
             {
                 auto& button = *declaration.button;
@@ -383,16 +908,14 @@ namespace
             }
             if (action)
             {
-                const auto found = callbacks.actions.find(function);
-                if (found == callbacks.actions.end()) return false;
-                *action = {found->second,parameter};
+                *action = {{},parameter,function};
+                remember();
                 return true;
             }
             if (predicate)
             {
-                const auto found = callbacks.predicates.find(function);
-                if (found == callbacks.predicates.end()) return false;
-                *predicate = {found->second,parameter};
+                *predicate = {{},parameter,function};
+                remember();
                 return true;
             }
             return false;
@@ -403,7 +926,106 @@ namespace
             auto& state = *static_cast<Parser*>(pointer);
             state.guarded([&]
             {
+                if (state.panelString) { state.reject("Native panel strings cannot contain nested elements"); return; }
                 if (state.callbackElement) { state.reject("Nested native callback declarations are unsupported"); return; }
+                if (!state.stack.empty() && state.stack.back()->combo)
+                {
+                    std::string_view name(tag);
+                    if (name.starts_with("combo_box.")) name.remove_prefix(10);
+                    if (name == "item" || name == "combo_item")
+                    {
+                        LLVKWidgetTree::ComboItem item;
+                        bool labelProvided = false;
+                        for (std::size_t index = 0; attributes[index]; index += 2)
+                        {
+                            const std::string_view attribute(attributes[index]);
+                            if (attribute == "label") { item.label = attributes[index+1]; labelProvided = true; }
+                            else if (attribute == "value") item.value = attributes[index+1];
+                            else if (attribute == "enabled")
+                            { if (!boolean(attributes[index+1],item.enabled)) { state.reject("Invalid native combo item enabled flag"); return; } }
+                            else if (attribute != "name") { state.reject("Unsupported native combo item attribute"); return; }
+                        }
+                        if (!labelProvided) item.label = item.value.asString();
+                        if (++state.nodes > LLVKWidgetTree::maximumNodes) { state.reject("Native combo item budget exceeded"); return; }
+                        state.stack.back()->combo->combo.items.push_back(std::move(item));
+                        state.callbackElement = true;
+                        return;
+                    }
+                    if (auto* part = state.comboPart(*state.stack.back(),name))
+                    {
+                        if (state.stack.size() >= LLVKWidgetTree::maximumDepth || ++state.nodes > LLVKWidgetTree::maximumNodes)
+                        { state.reject("Native combo parameter budget exceeded"); return; }
+                        for (std::size_t index = 0; attributes[index]; index += 2)
+                            if (!state.attribute(*part,attributes[index],attributes[index+1]))
+                            { state.reject("Unsupported native combo parameter: " + std::string(attributes[index])); return; }
+                        state.stack.push_back(part);
+                        return;
+                    }
+                }
+                if ((std::string_view(tag) == "string" || std::string_view(tag) == "panel.string") &&
+                    !state.stack.empty() && state.stack.back()->panel)
+                {
+                    PanelString entry;
+                    bool named = false;
+                    for (std::size_t index = 0; attributes[index]; index += 2)
+                    {
+                        const std::string_view name(attributes[index]);
+                        if (name == "name") { entry.name = attributes[index+1]; named = true; }
+                        else if (name == "value") entry.value = attributes[index+1];
+                        else { state.reject("Unsupported native panel string attribute"); return; }
+                    }
+                    if (!named || ++state.nodes > LLVKWidgetTree::maximumNodes)
+                    { state.reject("Native panel string is unnamed or exceeds declaration budget"); return; }
+                    state.panelString = std::move(entry);
+                    return;
+                }
+                std::string_view scrollButton(tag);
+                if (scrollButton.starts_with("scroll_bar.")) scrollButton.remove_prefix(11);
+                if (!state.stack.empty() && state.stack.back()->scrollbar &&
+                    (scrollButton == "up_button" || scrollButton == "down_button" || scrollButton == "left_button" || scrollButton == "right_button"))
+                {
+                    auto& owner = *state.stack.back();
+                    if (owner.scrollButtons.contains(std::string(scrollButton)) ||
+                        state.stack.size() >= LLVKWidgetTree::maximumDepth || ++state.nodes > LLVKWidgetTree::maximumNodes)
+                    { state.reject("Duplicate or over-budget native scrollbar button parameters"); return; }
+                    const auto& defaults = owner.scrollbar->buttons.at(std::string(scrollButton));
+                    auto declaration = std::make_unique<Declaration>();
+                    declaration->tag = "button";
+                    declaration->params = defaults.view;
+                    declaration->control = defaults.control;
+                    declaration->button = defaults.button;
+                    for (std::size_t index = 0; attributes[index]; index += 2)
+                        if (!state.attribute(*declaration,attributes[index],attributes[index+1]))
+                        { state.reject("Unsupported native scrollbar button parameter: " + std::string(attributes[index])); return; }
+                    auto* current = declaration.get();
+                    owner.scrollButtons.emplace(std::string(scrollButton),std::move(declaration));
+                    state.stack.push_back(current);
+                    return;
+                }
+                if (std::string_view(tag) == "check_box.label_text" || std::string_view(tag) == "check_box.check_button")
+                {
+                    if (state.stack.empty() || !state.stack.back()->checkBox ||
+                        state.stack.size() >= LLVKWidgetTree::maximumDepth || ++state.nodes > LLVKWidgetTree::maximumNodes)
+                    { state.reject("Invalid native checkbox parameter owner or budget"); return; }
+                    auto& owner = *state.stack.back();
+                    const bool label = std::string_view(tag) == "check_box.label_text";
+                    auto& destination = label ? owner.checkLabel : owner.checkButton;
+                    if (destination) { state.reject("Duplicate native checkbox parameter block"); return; }
+                    const auto& defaults = *owner.checkBox;
+                    auto declaration = std::make_unique<Declaration>();
+                    declaration->tag = label ? "text" : "button";
+                    declaration->params = label ? defaults.labelView : defaults.buttonView;
+                    declaration->control = label ? defaults.construction.labelControl : defaults.construction.buttonControl;
+                    if (label) declaration->plainLabel = defaults.construction.labelText;
+                    else declaration->button = defaults.construction.button;
+                    for (std::size_t index = 0; attributes[index]; index += 2)
+                        if (!state.attribute(*declaration,attributes[index],attributes[index+1]))
+                        { state.reject("Unsupported native checkbox parameter: " + std::string(attributes[index])); return; }
+                    auto* current = declaration.get();
+                    destination = std::move(declaration);
+                    state.stack.push_back(current);
+                    return;
+                }
                 if (std::string_view(tag) == "button.badge")
                 {
                     if (state.stack.empty() || !state.stack.back()->button || state.stack.back()->ownedBadge ||
@@ -433,18 +1055,115 @@ namespace
                 const bool icon = std::string_view(tag) == "icon";
                 const bool button = std::string_view(tag) == "button";
                 const bool badge = std::string_view(tag) == "badge";
-                if (std::string_view(tag) != "view" && !icon && !button && !badge)
+                const bool panel = std::string_view(tag) == "panel";
+                const bool border = std::string_view(tag) == "view_border";
+                const bool editor = std::string_view(tag) == "line_editor";
+                const bool check = std::string_view(tag) == "check_box";
+                const bool scroll = std::string_view(tag) == "scroll_bar";
+                const bool container = std::string_view(tag) == "scroll_container";
+                const bool layoutStack = std::string_view(tag) == "layout_stack";
+                const bool layoutPanel = std::string_view(tag) == "layout_panel";
+                const bool combo = std::string_view(tag) == "combo_box";
+                const bool textWidget = std::string_view(tag) == "text";
+                const bool browser = std::string_view(tag) == "web_browser";
+                if (std::string_view(tag) != "view" && !icon && !button && !badge && !panel && !border && !editor && !check && !scroll && !container && !layoutStack && !layoutPanel && !combo && !textWidget && !browser)
                 { state.reject("Native constructor not implemented for tag: " + std::string(tag)); return; }
                 if (++state.nodes > LLVKWidgetTree::maximumNodes || state.stack.size() >= LLVKWidgetTree::maximumDepth)
                 { state.reject("Native widget declaration exceeds node/depth limits"); return; }
                 auto declaration = std::make_unique<Declaration>();
                 declaration->tag = tag;
                 declaration->params = icon ? state.iconDefaults.view : button ? state.buttonDefaults.view :
-                                      badge ? state.buttonDefaults.badge.view : state.defaults;
+                                      badge ? state.buttonDefaults.badge.view : panel ? state.panelDefaults.view :
+                                      border ? state.panelDefaults.borderView : editor ? state.lineDefaults.view : check ? state.checkDefaults.view :
+                                      scroll ? state.scrollDefaults.view : container ? state.containerDefaults.view :
+                                      layoutStack ? state.layoutDefaults.view : layoutPanel ? state.panelDefaults.view : combo ? state.comboDefaults.view : textWidget ? state.textDefaults.view : state.defaults;
+                if (textWidget)
+                {
+                    declaration->plainLabel = state.textDefaults.text;
+                    declaration->control = state.textDefaults.control;
+                    if (!declaration->control->font && !declaration->control->fontRequest)
+                        declaration->control->fontRequest = state.resources.defaultFontRequest;
+                }
+                    if (browser)
+                    {
+                        declaration->params = state.browserDefaults.panel.view;
+                        declaration->panel = state.browserDefaults.panel.panel;
+                        declaration->control = state.browserDefaults.panel.control;
+                        declaration->browser = state.browserDefaults.browser;
+                        if (!declaration->control->font && !declaration->control->fontRequest)
+                        declaration->control->fontRequest = state.resources.defaultFontRequest;
+                    }
+                if (combo)
+                {
+                    declaration->combo = std::make_shared<LLVKWidgetFactory::ComboDefaults>(state.comboDefaults);
+                    if (!declaration->combo->initialized)
+                    {
+                        declaration->combo->button = state.buttonDefaults;
+                        declaration->combo->dropDown = state.buttonDefaults;
+                        declaration->combo->editor = state.lineDefaults;
+                        declaration->combo->combo.listControl.fontRequest = state.resources.defaultFontRequest;
+                        if (state.resources.colors)
+                        {
+                            auto& params = declaration->combo->combo;
+                            for (const auto& [name,color] : {std::pair{"ScrollUnselectedColor",&params.listForeground},
+                                std::pair{"ScrollSelectedFGColor",&params.listSelectedForeground},std::pair{"ScrollDisabledColor",&params.listDisabledForeground},
+                                std::pair{"ScrollSelectedBGColor",&params.listSelectedBackground},std::pair{"ScrollHoveredColor",&params.listHoverBackground},
+                                std::pair{"ScrollBgReadOnlyColor",&params.listReadOnlyBackground}})
+                                if (const auto resolved = state.resources.colors->find(name)) *color = *resolved;
+                        }
+                        declaration->combo->initialized = true;
+                    }
+                    declaration->control = state.comboDefaults.control;
+                    if (!declaration->control->font && !declaration->control->fontRequest) declaration->control->fontRequest = state.resources.defaultFontRequest;
+                }
+                if (layoutStack) declaration->layoutStack = state.layoutDefaults.stack;
+                if (layoutPanel)
+                {
+                    declaration->layoutPanel.emplace();
+                    declaration->control = state.panelDefaults.control;
+                    declaration->panel = state.panelDefaults.panel;
+                }
+                if (container)
+                {
+                    declaration->scrollContainer = std::make_shared<LLVKWidgetFactory::ScrollContainerDefaults>(state.containerDefaults);
+                    declaration->control = state.containerDefaults.control;
+                    if (!declaration->control->font && !declaration->control->fontRequest)
+                        declaration->control->fontRequest = state.resources.defaultFontRequest;
+                }
+                if (scroll)
+                {
+                    declaration->scrollbar = std::make_shared<LLVKWidgetFactory::ScrollbarDefaults>(state.scrollDefaults);
+                    declaration->control = state.scrollDefaults.control;
+                    if (!declaration->control->font && !declaration->control->fontRequest)
+                        declaration->control->fontRequest = state.resources.defaultFontRequest;
+                    for (const std::string name : {"up_button","down_button","left_button","right_button"})
+                        if (!declaration->scrollbar->buttons.contains(name)) declaration->scrollbar->buttons.emplace(name,state.buttonDefaults);
+                }
+                if (check)
+                {
+                    declaration->checkBox = state.checkDefaults;
+                    declaration->control = state.checkDefaults.control;
+                }
+                if (editor)
+                {
+                    declaration->lineEditor = state.lineDefaults.editor;
+                    declaration->control = state.lineDefaults.control;
+                    declaration->lineBorderProvided = state.lineDefaults.borderProvided;
+                    if (!declaration->lineBorderProvided) declaration->lineEditor->border = state.panelDefaults.panel.border;
+                }
+                if (border) declaration->border = state.panelDefaults.panel.border;
+                if (panel)
+                {
+                    declaration->control = state.panelDefaults.control;
+                    declaration->panel = state.panelDefaults.panel;
+                    declaration->panelConstructor = state.panelDefaults;
+                }
                 if (icon)
                 {
                     declaration->control = state.iconDefaults.control;
                     declaration->icon = state.iconDefaults.icon;
+                    if (!declaration->control->font && !declaration->control->fontRequest)
+                        declaration->control->fontRequest = state.resources.defaultFontRequest;
                 }
                 if (button)
                 {
@@ -469,6 +1188,7 @@ namespace
                 declaration->params.view.fromDeclaration = true;
                 for (std::size_t index = 0; attributes[index]; index += 2)
                 {
+                    if (panel) declaration->attributes.emplace_back(attributes[index],attributes[index+1]);
                     if (!state.attribute(*declaration,attributes[index],attributes[index+1]))
                     { state.reject("Unsupported or invalid native view attribute: " + std::string(attributes[index])); return; }
                 }
@@ -482,7 +1202,31 @@ namespace
         static void XMLCALL end(void* pointer, const XML_Char*)
         {
             auto& state = *static_cast<Parser*>(pointer);
+            if (state.panelString)
+            {
+                state.guarded([&]
+                {
+                    auto entry = std::move(*state.panelString);
+                    auto body = panelText(std::move(entry.body));
+                    if (!body.empty()) entry.value = std::move(body);
+                    if (!entry.value) { state.reject("Native panel string requires a value"); return; }
+                    state.stack.back()->panelStrings.insert_or_assign(entry.name,*entry.value);
+                    state.stack.back()->panel->strings.insert_or_assign(std::move(entry.name),std::move(*entry.value));
+                    state.panelString.reset();
+                });
+                return;
+            }
             if (state.callbackElement) { state.callbackElement = false; return; }
+            if (!state.stack.empty() && state.stack.back()->tag == "text")
+            {
+                state.guarded([&]
+                {
+                    auto& declaration = *state.stack.back();
+                    auto body = panelText(std::move(declaration.textBody));
+                    if (!body.empty()) declaration.control->initialValue = std::move(body);
+                    if (!declaration.children.empty()) state.reject("Native literal text does not support embedded child widgets");
+                });
+            }
             if (!state.stack.empty()) state.stack.pop_back();
         }
 
@@ -491,6 +1235,9 @@ namespace
             auto& state = *static_cast<Parser*>(pointer);
             state.guarded([&]
             {
+                if (state.panelString) { state.panelString->body.append(text,length); return; }
+                if (!state.callbackElement && !state.stack.empty() && state.stack.back()->tag == "text")
+                { state.stack.back()->textBody.append(text,length); return; }
                 if (std::string_view(text,length).find_first_not_of(" \t\r\n") != std::string_view::npos)
                     state.reject("Native view/icon does not accept text content");
             });
@@ -525,10 +1272,282 @@ namespace
         return true;
     }
 
+    struct BuildState
+    {
+        std::vector<std::string> files;
+        std::vector<const LLVKWidgetFactory::PanelInstance*> panels;
+        std::size_t bytes = 0;
+        std::size_t depth = 0;
+    };
+
+    bool resolveImages(const LLVKWidgetTree& tree, const Declaration& declaration, std::string& error)
+    {
+        for (const auto* name : {&declaration.imageName,&declaration.badgeImage,&declaration.badgeBorderImage,
+                                 &declaration.panelOpaqueImage,&declaration.panelTransparentImage})
+            if (*name)
+            {
+                tree.findImage(**name,error);
+                if (!error.empty()) return false;
+            }
+        for (const auto& [attribute,name] : declaration.buttonImages)
+        {
+            tree.findImage(name,error);
+            if (!error.empty()) return false;
+        }
+        for (const auto& [attribute,name] : declaration.lineImages)
+        {
+            tree.findImage(name,error);
+            if (!error.empty()) return false;
+        }
+        if (declaration.checkLabel && !resolveImages(tree,*declaration.checkLabel,error)) return false;
+        if (declaration.checkButton && !resolveImages(tree,*declaration.checkButton,error)) return false;
+        for (const auto& [attribute,name] : declaration.scrollImages)
+        {
+            tree.findImage(name,error);
+            if (!error.empty()) return false;
+        }
+        for (const auto& [name,button] : declaration.scrollButtons)
+            if (!resolveImages(tree,*button,error)) return false;
+        for (const auto& [name,part] : declaration.comboParts)
+            if (!resolveImages(tree,*part,error)) return false;
+        return !declaration.ownedBadge || resolveImages(tree,*declaration.ownedBadge,error);
+    }
+
+    std::optional<std::string> declarationFile(const LLVKWidgetFactory::Resources& resources,
+        const std::string& filename, std::size_t& bytes, std::string& error)
+    {
+        if (resources.skinFiles && !resources.declarationLayers.contains(filename) && !resources.declarations.contains(filename))
+        {
+            const auto files = resources.skinFiles->read("xui",filename,LLVKSkinFiles::Policy::Current,error);
+            if (!files) return std::nullopt;
+            std::vector<std::string_view> layers;
+            std::size_t additional = 0;
+            for (const auto& file : *files)
+            {
+                if (file.size() > 64*1024*1024-bytes-additional)
+                { error = "Native skin construction exceeds total byte budget"; return std::nullopt; }
+                additional += file.size();
+                layers.push_back(file);
+            }
+            auto merged = LLVKXmlLayers::merge(layers,error);
+            if (merged) bytes += additional;
+            return merged;
+        }
+        std::vector<std::string> paths{filename};
+        const auto layered = resources.declarationLayers.find(filename);
+        if (layered != resources.declarationLayers.end()) paths = layered->second;
+        if (paths.empty() || paths.front().empty())
+        { error = "Native layered declaration has no base file: " + filename; return std::nullopt; }
+        std::vector<std::string_view> documents;
+        std::size_t additional = 0;
+        for (std::size_t index = 0; index < paths.size(); ++index)
+        {
+            const auto& path = paths[index];
+            if (index && (path.empty() || path == paths.front())) continue;
+            const auto file = resources.declarations.find(path);
+            if (file == resources.declarations.end())
+            { error = "Native panel declaration is unavailable: " + path; return std::nullopt; }
+            constexpr std::size_t maximumBytes = 64 * 1024 * 1024;
+            if (file->second.size() > maximumBytes-bytes-additional)
+            { error = "Native declaration files exceed total byte budget"; return std::nullopt; }
+            additional += file->second.size();
+            documents.push_back(file->second);
+        }
+        auto merged = LLVKXmlLayers::merge(documents,error);
+        if (!merged) { error = filename + ": " + error; return std::nullopt; }
+        bytes += additional;
+        return merged;
+    }
+
+    LLVKWidgetFactory::Callbacks activeCallbacks(const LLVKWidgetFactory::Callbacks& defaults, const BuildState& state)
+    {
+        auto callbacks = defaults;
+        for (const auto* panel : state.panels)
+        {
+            if (!panel->callbacks) continue;
+            for (const auto& [name,function] : panel->callbacks->actions) callbacks.actions.insert_or_assign(name,function);
+            for (const auto& [name,function] : panel->callbacks->predicates) callbacks.predicates.insert_or_assign(name,function);
+            for (const auto& [name,function] : panel->callbacks->textValidators) callbacks.textValidators.insert_or_assign(name,function);
+        }
+        return callbacks;
+    }
+
+    template<class Callback, class Registry>
+    bool resolveCallback(Callback& callback, const Registry& registry, std::string& error)
+    {
+        if (callback.function || !callback.functionName) return true;
+        const auto found = registry.find(*callback.functionName);
+        if (found == registry.end() || !found->second)
+        { error = "Unresolved native callback: " + *callback.functionName; return false; }
+        callback.function = found->second;
+        return true;
+    }
+
+    bool resolveFont(LLVKControl::Params& control, const LLVKWidgetFactory::Resources& resources, std::string& error)
+    {
+        if (!control.fontRequest) return true;
+        const auto named = resources.fonts.find(control.fontRequest->name);
+        if (named != resources.fonts.end() && named->second) { control.font = named->second; return true; }
+        std::shared_ptr<LLVKFont> font;
+        if (resources.fontRegistry) font = resources.fontRegistry->resolve(*control.fontRequest,error);
+        if (!font) font = resources.fallbackFont;
+        if (!font)
+        {
+            if (error.empty()) error = "Unresolved native font: " + control.fontRequest->name;
+            return false;
+        }
+        control.font = std::move(font);
+        error.clear();
+        return true;
+    }
+
+    bool resolveControl(LLVKControl::Params& control, const LLVKWidgetFactory::Callbacks& callbacks,
+                         const LLVKWidgetFactory::Resources& resources, std::string& error)
+    {
+        if (!resolveFont(control,resources,error)) return false;
+        for (auto* callback : {&control.init,&control.commit,&control.mouseEnter,&control.mouseLeave})
+            if (!resolveCallback(*callback,callbacks.actions,error)) return false;
+        return resolveCallback(control.validate,callbacks.predicates,error);
+    }
+
+    bool resolveButton(LLVKButton::Params& button, const LLVKWidgetFactory::Callbacks& callbacks, std::string& error)
+    {
+        for (auto* callback : {&button.mouseDown,&button.mouseUp,&button.held})
+            if (!resolveCallback(*callback,callbacks.actions,error)) return false;
+        return (!button.click || resolveCallback(*button.click,callbacks.actions,error)) &&
+               resolveCallback(button.isToggled,callbacks.predicates,error);
+    }
+
+    bool resolveCheckBox(const Declaration& declaration, LLVKWidgetFactory::CheckBoxDefaults& defaults,
+        const LLVKWidgetTree& tree, const LLVKWidgetFactory::Resources& resources, std::string& error)
+    {
+        if (declaration.checkLabel)
+        {
+            const auto& label = *declaration.checkLabel;
+            if (!label.children.empty()) { error = "Checkbox label parameters cannot contain widgets"; return false; }
+            defaults.labelView = label.params;
+            defaults.construction.labelControl = *label.control;
+            defaults.construction.labelText = *label.plainLabel;
+        }
+        if (declaration.checkButton)
+        {
+            const auto& button = *declaration.checkButton;
+            if (!button.children.empty() || button.ownedBadge) { error = "Nested checkbox button construction is not implemented"; return false; }
+            defaults.buttonView = button.params;
+            defaults.construction.buttonControl = *button.control;
+            defaults.construction.button = *button.button;
+            for (const auto& [attribute,name] : button.buttonImages)
+                *buttonImage(defaults.construction.button.images,attribute) = tree.findImage(name);
+        }
+        return resolveFont(defaults.construction.labelControl,resources,error) &&
+            resolveFont(defaults.construction.buttonControl,resources,error);
+    }
+
+    bool resolveScrollbar(const Declaration& declaration, LLVKWidgetFactory::ScrollbarDefaults& defaults,
+        const LLVKWidgetTree& tree, const LLVKWidgetFactory::Resources& resources, std::string& error)
+    {
+        for (const auto& [name,button] : declaration.scrollButtons)
+        {
+            if (!button->children.empty() || button->ownedBadge)
+            { error = "Nested scrollbar button widgets or badges are not implemented"; return false; }
+            auto& destination = defaults.buttons.at(name);
+            destination.view = button->params;
+            destination.control = *button->control;
+            destination.button = *button->button;
+            for (const auto& [attribute,image] : button->buttonImages)
+                *buttonImage(destination.button.images,attribute) = tree.findImage(image);
+            destination.button.defaultImages = destination.button.images;
+        }
+        for (auto& [name,button] : defaults.buttons)
+        {
+            if (!button.control.font && !button.control.fontRequest) button.control.fontRequest = resources.defaultFontRequest;
+            if (!resolveFont(button.control,resources,error)) return false;
+        }
+        for (const auto& [attribute,name] : declaration.scrollImages)
+        {
+            auto& params = defaults.scrollbar;
+            auto& image = attribute == "thumb_image_vertical" ? params.thumbVertical :
+                attribute == "thumb_image_horizontal" ? params.thumbHorizontal :
+                attribute == "track_image_vertical" ? params.trackVertical : params.trackHorizontal;
+            image = tree.findImage(name);
+        }
+        return true;
+    }
+
+    bool resolveCombo(const Declaration& declaration, LLVKWidgetFactory::ComboDefaults& defaults,
+        const LLVKWidgetTree& tree, const LLVKWidgetFactory::Resources& resources, std::string& error)
+    {
+        for (const auto& [name,part] : declaration.comboParts)
+        {
+            if (!part->children.empty() || part->ownedBadge)
+            { error = "Native combo parameter blocks cannot construct nested widgets"; return false; }
+            if (name == "combo_editor")
+            {
+                defaults.editor.control = *part->control;
+                defaults.editor.editor = *part->lineEditor;
+                for (const auto& [attribute,imageName] : part->lineImages)
+                {
+                    auto& image = attribute == "background_image" ? defaults.editor.editor.background :
+                        attribute == "background_image_disabled" ? defaults.editor.editor.disabledBackground : defaults.editor.editor.focusedBackground;
+                    image = tree.findImage(imageName);
+                }
+            }
+            else if (name == "combo_list")
+            {
+                defaults.combo.listControl = *part->control;
+                defaults.combo.listBackground = part->comboListBackground;
+                defaults.combo.listBackgroundVisible = part->comboListBackgroundVisible;
+            }
+            else
+            {
+                auto& button = name == "combo_button" ? defaults.button : defaults.dropDown;
+                button.control = *part->control;
+                button.button = *part->button;
+                for (const auto& [attribute,imageName] : part->buttonImages) *buttonImage(button.button.images,attribute) = tree.findImage(imageName);
+                button.button.defaultImages = button.button.images;
+            }
+        }
+        return resolveFont(defaults.editor.control,resources,error) && resolveFont(defaults.button.control,resources,error) &&
+            resolveFont(defaults.dropDown.control,resources,error) && resolveFont(defaults.combo.listControl,resources,error);
+    }
+
     std::optional<LLVKWidgetTree::Id> build(LLVKWidgetTree& tree, const Declaration& declaration,
                                           LLVKWidgetTree::Id layoutParent,
-                                          LLVKWidgetTree::Id owningParent, std::string& error)
+                                          LLVKWidgetTree::Id owningParent, std::string& error,
+                                          const Parser& environment, BuildState& buildState)
     {
+        if (buildState.depth >= LLVKWidgetTree::maximumDepth)
+        { error = "Native construction recursion exceeds depth limit"; return std::nullopt; }
+        ++buildState.depth;
+        struct DepthScope
+        {
+            BuildState& state;
+            ~DepthScope() { --state.depth; }
+        } depthScope{buildState};
+        if (!resolveImages(tree,declaration,error)) return std::nullopt;
+        const auto callbacks = activeCallbacks(environment.callbacks,buildState);
+        LLVKWidgetFactory::PanelConstructor panelConstructor;
+        if (declaration.panel)
+        {
+            if (!declaration.panelClass.empty())
+            {
+                const auto found = environment.resources.panelClasses.find(declaration.panelClass);
+                if (found == environment.resources.panelClasses.end() || !found->second)
+                { error = "Native panel class is not implemented: " + declaration.panelClass; return std::nullopt; }
+                panelConstructor = found->second;
+            }
+            else
+            {
+                const auto found = environment.resources.panelFactories.find(declaration.params.view.name);
+                if (found != environment.resources.panelFactories.end()) panelConstructor = found->second;
+                if (!panelConstructor)
+                    for (const auto* scope : buildState.panels)
+                    {
+                        const auto factory = scope->childFactories.find(declaration.params.view.name);
+                        if (factory != scope->childFactories.end()) { panelConstructor = factory->second; break; }
+                    }
+            }
+        }
         auto params = declaration.params.view;
         const auto* parent = tree.get(layoutParent);
         const auto parentLayout = parent ? parent->params.layout : std::string();
@@ -537,8 +1556,120 @@ namespace
         params.rect = *rect;
         params.layout = declaration.params.geometry.layout.empty() ? parentLayout : declaration.params.geometry.layout;
         auto icon = declaration.icon;
+        auto control = declaration.control;
+        if (control && !declaration.panel && !resolveControl(*control,callbacks,environment.resources,error)) return std::nullopt;
         if (icon && declaration.imageName) icon->image = tree.findImage(*declaration.imageName);
         auto button = declaration.button;
+        auto combo = declaration.combo ? std::make_unique<LLVKWidgetFactory::ComboDefaults>(*declaration.combo) : nullptr;
+        if (combo)
+        {
+            if (!resolveCombo(declaration,*combo,tree,environment.resources,error)) return std::nullopt;
+            auto& childButton = combo->combo.allowTextEntry ? combo->button : combo->dropDown;
+            if (!resolveControl(childButton.control,callbacks,environment.resources,error) || !resolveButton(childButton.button,callbacks,error) ||
+                !resolveControl(combo->editor.control,callbacks,environment.resources,error) ||
+                !resolveControl(combo->combo.listControl,callbacks,environment.resources,error)) return std::nullopt;
+            for (auto* callback : {&combo->combo.textEntry,&combo->combo.textChanged,&combo->combo.prearrange})
+                if (!resolveCallback(*callback,callbacks.actions,error)) return std::nullopt;
+            auto& editor = combo->editor.editor;
+            for (const auto& [name,function] : {std::pair{&editor.prevalidatorName,&editor.prevalidator},std::pair{&editor.inputPrevalidatorName,&editor.inputPrevalidator}})
+            {
+                if (!*name || *function) continue;
+                const auto found = callbacks.textValidators.find(**name);
+                *function = found == callbacks.textValidators.end() ? builtinTextValidator(**name) : found->second;
+                if (!*function) { error = "Unresolved native combo text validator: " + **name; return std::nullopt; }
+            }
+            combo->combo.editorControl = combo->editor.control;
+            combo->combo.editor = editor;
+            combo->combo.buttonControl = childButton.control;
+            combo->combo.button = childButton.button;
+        }
+        auto container = declaration.scrollContainer ? std::make_unique<LLVKWidgetFactory::ScrollContainerDefaults>(*declaration.scrollContainer) : nullptr;
+        if (container)
+        {
+            for (const auto& child : declaration.children)
+                if (!child->panel)
+                { error = "Native scroll container child constructor is not implemented: " + child->tag; return std::nullopt; }
+            if (!resolveCallback(container->scrolled,callbacks.actions,error)) return std::nullopt;
+            auto defaults = std::make_unique<LLVKWidgetFactory::ScrollbarDefaults>(environment.scrollDefaults);
+            if (defaults->buttons.size() != 4)
+            { error = "Native scroll container requires loaded scrollbar defaults"; return std::nullopt; }
+            container->container.scrollbarControl = defaults->control;
+            if (!resolveControl(container->container.scrollbarControl,callbacks,environment.resources,error)) return std::nullopt;
+            container->container.border = environment.panelDefaults.panel.border;
+            for (bool vertical : {true,false})
+            {
+                auto& bar = vertical ? container->container.vertical : container->container.horizontal;
+                bar = defaults->scrollbar;
+                bar.vertical = vertical;
+                auto& decrease = defaults->buttons.at(vertical ? "up_button" : "left_button");
+                auto& increase = defaults->buttons.at(vertical ? "down_button" : "right_button");
+                for (auto* child : {&decrease,&increase})
+                    if (!resolveControl(child->control,callbacks,environment.resources,error) ||
+                        !resolveButton(child->button,callbacks,error)) return std::nullopt;
+                bar.decreaseControl = decrease.control; bar.increaseControl = increase.control;
+                bar.decreaseButton = decrease.button; bar.increaseButton = increase.button;
+                const auto callback = container->scrolled;
+                bar.changed = callback.function ? std::function<void(LLVKWidgetTree::Id,std::int32_t)>([callback](auto id,auto position)
+                    { callback.function(id,callback.parameter.value_or(LLSD(position))); }) : std::function<void(LLVKWidgetTree::Id,std::int32_t)>();
+            }
+        }
+        auto scroll = declaration.scrollbar ? std::make_unique<LLVKWidgetFactory::ScrollbarDefaults>(*declaration.scrollbar) : nullptr;
+        if (scroll)
+        {
+            if (!resolveScrollbar(declaration,*scroll,tree,environment.resources,error) ||
+                !resolveCallback(scroll->changed,callbacks.actions,error)) return std::nullopt;
+            auto& decrease = scroll->buttons.at(scroll->scrollbar.vertical ? "up_button" : "left_button");
+            auto& increase = scroll->buttons.at(scroll->scrollbar.vertical ? "down_button" : "right_button");
+            for (auto* child : {&decrease,&increase})
+                if (!resolveControl(child->control,callbacks,environment.resources,error) ||
+                    !resolveButton(child->button,callbacks,error)) return std::nullopt;
+            scroll->scrollbar.decreaseControl = decrease.control;
+            scroll->scrollbar.increaseControl = increase.control;
+            scroll->scrollbar.decreaseButton = decrease.button;
+            scroll->scrollbar.increaseButton = increase.button;
+            const auto changed = scroll->changed;
+            if (changed.function) scroll->scrollbar.changed = [changed](auto id,auto position)
+            { changed.function(id,changed.parameter.value_or(LLSD(position))); };
+        }
+        auto check = declaration.checkBox ? std::make_unique<LLVKWidgetFactory::CheckBoxDefaults>(*declaration.checkBox) : nullptr;
+        if (check)
+        {
+            if (!resolveCheckBox(declaration,*check,tree,environment.resources,error)) return std::nullopt;
+            auto& construction = check->construction;
+            if (!resolveControl(construction.labelControl,callbacks,environment.resources,error) ||
+                !resolveControl(construction.buttonControl,callbacks,environment.resources,error) ||
+                !resolveButton(construction.button,callbacks,error) ||
+                !resolveCallback(construction.onCheck,callbacks.predicates,error)) return std::nullopt;
+            const auto labelRect = check->labelView.geometry.apply(tree,0,"",error);
+            if (!labelRect) return std::nullopt;
+            const auto buttonRect = check->buttonView.geometry.apply(tree,0,"",error);
+            if (!buttonRect) return std::nullopt;
+            construction.labelView = check->labelView.view;
+            construction.labelView.rect = *labelRect;
+            construction.buttonView = check->buttonView.view;
+            construction.buttonView.rect = *buttonRect;
+        }
+        auto lineEditor = declaration.lineEditor;
+        if (lineEditor)
+        {
+            for (const auto& [name,function] : {std::pair{&lineEditor->prevalidatorName,&lineEditor->prevalidator},
+                                               std::pair{&lineEditor->inputPrevalidatorName,&lineEditor->inputPrevalidator}})
+            {
+                if (!*name || *function) continue;
+                const auto found = callbacks.textValidators.find(**name);
+                *function = found == callbacks.textValidators.end() ? builtinTextValidator(**name) : found->second;
+                if (!*function)
+                { error = "Unresolved native text validator: " + **name; return std::nullopt; }
+            }
+            if (!resolveCallback(lineEditor->keystroke,callbacks.actions,error)) return std::nullopt;
+            for (const auto& [attribute,name] : declaration.lineImages)
+            {
+                auto& image = attribute == "background_image" ? lineEditor->background :
+                    attribute == "background_image_disabled" ? lineEditor->disabledBackground : lineEditor->focusedBackground;
+                image = tree.findImage(name);
+            }
+        }
+        if (button && !resolveButton(*button,callbacks,error)) return std::nullopt;
         if (button)
             for (const auto& [attribute,name] : declaration.buttonImages)
                 *buttonImage(button->images,attribute) = tree.findImage(name);
@@ -560,23 +1691,192 @@ namespace
             if (owned.badgeImage) construction.provided->image = tree.findImage(*owned.badgeImage);
             if (owned.badgeBorderImage) construction.provided->borderImage = tree.findImage(*owned.badgeBorderImage);
         }
-        const auto id = button ? tree.createButton(params,*declaration.control,*button,owningParent,error,construction) :
-                       badge ? tree.createBadge(params,*declaration.control,*badge,0,owningParent,error) :
-                       icon ? tree.createIcon(params,*declaration.control,*icon,owningParent,error) :
+        auto panel = declaration.panel;
+        const bool typedLayoutPanel = declaration.layoutPanel.has_value();
+        if (declaration.layoutStack)
+            for (const auto& child : declaration.children)
+                if (!child->layoutPanel) { error = "Native layout stack requires layout_panel children"; return std::nullopt; }
+        if ((typedLayoutPanel || declaration.browser) && (!resolveControl(*control,callbacks,environment.resources,error) ||
+            !resolveCallback(panel->visible,callbacks.actions,error))) return std::nullopt;
+        if (button && !resolveControl(construction.control,callbacks,environment.resources,error)) return std::nullopt;
+        if (panel && declaration.panelOpaqueImage) panel->opaqueImage = tree.findImage(*declaration.panelOpaqueImage);
+        if (panel && declaration.panelTransparentImage) panel->transparentImage = tree.findImage(*declaration.panelTransparentImage);
+        auto constructorView = declaration.panelConstructor.view.view;
+        auto constructorControl = declaration.panelConstructor.control;
+        auto constructorPanel = declaration.panelConstructor.panel;
+        if (panel && !typedLayoutPanel && !declaration.browser)
+        {
+            if (!panelConstructor && (!resolveControl(constructorControl,callbacks,environment.resources,error) ||
+                !resolveCallback(constructorPanel.visible,callbacks.actions,error))) return std::nullopt;
+            const auto constructorRect = declaration.panelConstructor.view.geometry.resolve(error);
+            if (!constructorRect) return std::nullopt;
+            constructorView.rect = *constructorRect;
+        }
+        std::optional<LLVKWidgetFactory::PanelInstance> instance;
+        const auto lease = std::make_shared<bool>(true);
+        const LLVKWidgetFactory::Construction context(
+            [lifetime = std::weak_ptr<bool>(lease),&tree,&environment,&buildState](std::string_view xml,LLVKWidgetTree::Id parent,std::string& problem)
+            -> std::optional<LLVKWidgetTree::Id>
+            {
+                const auto alive = lifetime.lock();
+                if (!alive) { problem = "Native construction context has expired"; return std::nullopt; }
+                if (parent && !tree.get(parent)) { problem = "Native nested construction parent is missing"; return std::nullopt; }
+                constexpr std::size_t maximumBytes = 64 * 1024 * 1024;
+                if (xml.size() > maximumBytes-buildState.bytes)
+                { problem = "Native nested construction exceeds total byte budget"; return std::nullopt; }
+                buildState.bytes += xml.size();
+                Parser nested(environment.defaults,environment.iconDefaults,environment.buttonDefaults,
+                    environment.callbacks,environment.resources,environment.panelDefaults,environment.lineDefaults,environment.checkDefaults,environment.scrollDefaults,environment.containerDefaults,environment.layoutDefaults,environment.comboDefaults,environment.textDefaults,environment.browserDefaults);
+                if (!parse(nested,xml,problem)) return std::nullopt;
+                return build(tree,*nested.root,parent,parent,problem,environment,buildState);
+            });
+        if (panelConstructor)
+        {
+            const auto boundary = tree.nextWidgetId();
+            instance = panelConstructor(tree,declaration.panelConstructor,context,error);
+            const auto* created = tree.get(instance->id);
+            if (!created || instance->id < boundary || !created->panel || created->parent)
+            {
+                if (created && instance->id >= boundary) { std::string cleanup; tree.erase(instance->id,cleanup); }
+                if (error.empty()) error = "Native panel constructor must transfer a newly constructed detached panel";
+                return std::nullopt;
+            }
+        }
+        const auto id = instance ? std::optional(instance->id) : typedLayoutPanel ? tree.createPanel(params,*control,*panel,0,error) :
+             declaration.browser ? tree.createBrowser(params,*control,*panel,*declaration.browser,0,error) :
+               panel ? tree.createPanel(constructorView,constructorControl,constructorPanel,0,error) :
+               declaration.layoutStack ? tree.createLayoutStack(params,declaration.layoutStack->vertical,declaration.layoutStack->spacing,declaration.layoutStack->clip,owningParent,error) :
+                   combo ? tree.createCombo(params,*control,combo->combo,owningParent,error) :
+                   container ? tree.createScrollContainer(params,*control,container->container,owningParent,error) :
+                   scroll ? tree.createScrollbar(params,*control,scroll->scrollbar,owningParent,error) :
+                   check ? tree.createCheckBox(params,*control,check->construction,owningParent,error) :
+                   lineEditor ? tree.createLineEditor(params,*control,*lineEditor,owningParent,error) :
+                   declaration.plainLabel ? tree.createPlainText(params,*control,*declaration.plainLabel,owningParent,error) :
+                   button ? tree.createButton(params,*control,*button,owningParent,error,construction) :
+                       badge ? tree.createBadge(params,*control,*badge,0,owningParent,error) :
+                       icon ? tree.createIcon(params,*control,*icon,owningParent,error) :
+                       declaration.border ? tree.createBorder(params,*declaration.border,owningParent,error) :
                        tree.create(params,owningParent,error);
         if (!id) return std::nullopt;
+        struct PanelScope
+        {
+            BuildState& state;
+            bool pushed = false;
+            ~PanelScope() { if (pushed) state.panels.pop_back(); }
+        } scope{buildState};
         try
         {
+            if (declaration.layoutStack && !tree.configureLayoutStack(*id,declaration.layoutStack->animate,
+                declaration.layoutStack->openTime,declaration.layoutStack->closeTime,error))
+            { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
+            if (typedLayoutPanel)
+            {
+                const auto* owner = tree.get(owningParent);
+                if (!owner || !owner->layoutStack || !tree.attachLayoutPanel(owningParent,*id,*declaration.layoutPanel,error))
+                { if (error.empty()) error = "Native layout panel requires a layout stack"; std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
+            }
+            if (instance) { buildState.panels.push_back(&*instance); scope.pushed = true; }
+            const auto initialize = [&]() -> bool
+            {
+                if (!panel || typedLayoutPanel || declaration.browser) return true;
+                if (!instance && !tree.postBuildControl(*id)) { error = "Native panel default post-build failed"; return false; }
+                const auto filename = tree.get(*id)->panel->params.filename.empty() ? panel->filename :
+                                      tree.get(*id)->panel->params.filename;
+                if (!tree.setPanelFilename(*id,filename)) { error = "Native panel disappeared before file resolution"; return false; }
+                std::unique_ptr<Parser> referenced;
+                const Declaration* effective = &declaration;
+                if (!filename.empty())
+                {
+                    if (buildState.files.size() >= LLVKWidgetTree::maximumDepth ||
+                        std::find(buildState.files.begin(),buildState.files.end(),filename) != buildState.files.end())
+                    { error = "Native panel reference cycle or depth limit: " + filename; return false; }
+                    const auto file = declarationFile(environment.resources,filename,buildState.bytes,error);
+                    if (!file) return false;
+                    referenced = std::make_unique<Parser>(environment.defaults,environment.iconDefaults,
+                        environment.buttonDefaults,environment.callbacks,environment.resources,environment.panelDefaults,environment.lineDefaults,environment.checkDefaults,environment.scrollDefaults,environment.containerDefaults,environment.layoutDefaults,environment.comboDefaults,environment.textDefaults,environment.browserDefaults);
+                    if (!parse(*referenced,*file,error)) { error = filename + ": " + error; return false; }
+                    if (!referenced->root->panel)
+                    { error = "Native referenced declaration is not a panel: " + filename; return false; }
+                    const auto referenceRect = referenced->root->params.geometry.resolve(error);
+                    if (!referenceRect || !tree.setShape(*id,*referenceRect,error)) return false;
+                    {
+                        buildState.files.push_back(filename);
+                        struct FileScope
+                        {
+                            std::vector<std::string>& files;
+                            ~FileScope() { files.pop_back(); }
+                        } scope{buildState.files};
+                        for (const auto& child : referenced->root->children)
+                            if (!build(tree,*child,*id,*id,error,environment,buildState)) return false;
+                    }
+                    for (const auto& [name,value] : declaration.attributes)
+                        if (!referenced->attribute(*referenced->root,name,value))
+                        { error = "Invalid native panel override: " + name; return false; }
+                    for (const auto& callback : declaration.panelCallbacks)
+                    {
+                        std::vector<const XML_Char*> attributes;
+                        for (const auto& [name,value] : callback.attributes)
+                        { attributes.push_back(name.c_str()); attributes.push_back(value.c_str()); }
+                        attributes.push_back(nullptr);
+                        if (!referenced->callback(*referenced->root,callback.tag,attributes.data()))
+                        { error = "Unresolved native panel callback override"; return false; }
+                    }
+                    for (const auto& [name,value] : declaration.panelStrings)
+                        referenced->root->panel->strings.insert_or_assign(name,value);
+                    effective = referenced->root.get();
+                }
+                params = effective->params.view;
+                const auto rectangle = effective->params.geometry.apply(tree,layoutParent,parentLayout,error);
+                if (!rectangle) return false;
+                params.rect = *rectangle;
+                params.layout = effective->params.geometry.layout.empty() ? parentLayout : effective->params.geometry.layout;
+                panel = effective->panel;
+                if (!resolveImages(tree,*effective,error)) return false;
+                panel->filename = filename;
+                if (effective->panelOpaqueImage) panel->opaqueImage = tree.findImage(*effective->panelOpaqueImage);
+                if (effective->panelTransparentImage) panel->transparentImage = tree.findImage(*effective->panelTransparentImage);
+                control = effective->control;
+                const auto localCallbacks = activeCallbacks(environment.callbacks,buildState);
+                if (!resolveControl(*control,localCallbacks,environment.resources,error) ||
+                    !resolveCallback(panel->visible,localCallbacks.actions,error)) return false;
+                return tree.initializePanel(*id,params,*control,*panel,error);
+            };
+            if (!initialize())
+            {
+                std::string cleanupError;
+                tree.erase(*id,cleanupError);
+                return std::nullopt;
+            }
             for (const auto& child : declaration.children)
             {
-                if (!build(tree,*child,*id,*id,error))
+                if (!build(tree,*child,*id,*id,error,environment,buildState))
                 {
                     std::string cleanupError;
                     tree.erase(*id,cleanupError);
                     return std::nullopt;
                 }
             }
-            if ((button && !tree.postBuildButton(*id,error)) || ((icon || badge) && !tree.postBuildControl(*id)))
+            if (declaration.layoutStack && !tree.updateLayoutStack(*id,error))
+            { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
+            if (panel && !typedLayoutPanel && owningParent)
+            {
+                const auto* owner = tree.get(owningParent);
+                const bool attached = owner && (owner->scrollContainer ?
+                    tree.attachScrollContent(owningParent,*id,params.tabGroup.value_or(owner->lastTabGroup),error) :
+                    tree.reparent(*id,owningParent,false,params.tabGroup.value_or(owner->lastTabGroup),error));
+                if (!attached)
+                {
+                    if (error.empty()) error = "Native panel lost its parent before attachment";
+                    std::string cleanupError;
+                    tree.erase(*id,cleanupError);
+                    return std::nullopt;
+                }
+            }
+            const bool built = instance && instance->postBuild ? instance->postBuild(tree,*id,context,error) :
+                combo ? tree.postBuildCombo(*id,error) :
+                button ? tree.postBuildButton(*id,error) :
+                icon || badge || panel || lineEditor || check || scroll || container ? tree.postBuildControl(*id) : true;
+            if (!built || !tree.get(*id))
             {
                 if (error.empty()) error = "Native control no longer exists at post-build";
                 if (tree.get(*id)) { std::string cleanupError; tree.eraseControl(*id,cleanupError); }
@@ -619,13 +1919,27 @@ LLVKWidgetFactory::BadgeDefaults::BadgeDefaults()
     badge.paddingVertical = 4.f;
 }
 
+LLVKWidgetFactory::PanelDefaults::PanelDefaults()
+{
+    view.view.name = "panel";
+    borderView.view.name = "view_border";
+    borderView.view.mouseOpaque = false;
+    borderView.view.follows = LLVKWidgetTree::Left | LLVKWidgetTree::Right | LLVKWidgetTree::Top | LLVKWidgetTree::Bottom;
+}
+
+LLVKWidgetFactory::LineEditorDefaults::LineEditorDefaults()
+{
+    view.view.name = "line_editor";
+}
+
 LLVKWidgetFactory::LLVKWidgetFactory(Defaults defaults, IconDefaults iconDefaults)
     : mDefaults(std::move(defaults)), mIconDefaults(std::move(iconDefaults)) {}
 
 LLVKWidgetFactory::LLVKWidgetFactory(Defaults defaults, IconDefaults iconDefaults,
-        ButtonDefaults buttonDefaults, Callbacks callbacks, Resources resources)
+        ButtonDefaults buttonDefaults, Callbacks callbacks, Resources resources, PanelDefaults panelDefaults, LineEditorDefaults lineDefaults, CheckBoxDefaults checkDefaults)
         : mDefaults(std::move(defaults)), mIconDefaults(std::move(iconDefaults)),
-            mButtonDefaults(std::move(buttonDefaults)), mCallbacks(std::move(callbacks)), mResources(std::move(resources)) {}
+            mButtonDefaults(std::move(buttonDefaults)), mCallbacks(std::move(callbacks)), mResources(std::move(resources)),
+            mPanelDefaults(std::move(panelDefaults)), mLineDefaults(std::move(lineDefaults)), mCheckDefaults(std::move(checkDefaults)) {}
 
 std::optional<LLVKWidgetTree::Id> LLVKWidgetFactory::construct(LLVKWidgetTree& tree,
     const LLVKWidgetTree::Params& params, LLVKWidgetTree::Id parent, std::string& error) const
@@ -633,12 +1947,50 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetFactory::construct(LLVKWidgetTree& t
     return tree.create(params,parent,error);
 }
 
+bool LLVKWidgetFactory::loadDefaultsFile(const LLVKWidgetTree& tree, const std::string& filename, std::string& error)
+{
+    error.clear();
+    std::size_t bytes = 0;
+    const auto xml = declarationFile(mResources,filename,bytes,error);
+    return xml && loadDefaults(tree,*xml,error);
+}
+
+std::optional<LLVKWidgetTree::Id> LLVKWidgetFactory::constructFile(LLVKWidgetTree& tree,
+    const std::string& filename, LLVKWidgetTree::Id parent, std::string& error) const
+{
+    error.clear();
+    BuildState buildState;
+    const auto xml = declarationFile(mResources,filename,buildState.bytes,error);
+    if (!xml) return std::nullopt;
+    Parser parser(mDefaults,mIconDefaults,mButtonDefaults,mCallbacks,mResources,mPanelDefaults,mLineDefaults,mCheckDefaults,*mScrollDefaults,*mContainerDefaults,mLayoutDefaults,*mComboDefaults,*mTextDefaults,*mBrowserDefaults);
+    if (!parse(parser,*xml,error)) return std::nullopt;
+    const auto* owner = tree.get(parent);
+    if (parent && !owner) { error = "Native file construction parent is missing"; return std::nullopt; }
+    const auto children = owner ? owner->children : std::vector<LLVKWidgetTree::Id>();
+    const auto tabGroup = owner ? owner->lastTabGroup : 0;
+    const auto restore = [&]
+    {
+        const auto* current = tree.get(parent);
+        if (current && current->children == children) tree.mNodes.at(parent).lastTabGroup = tabGroup;
+    };
+    try
+    {
+        const auto result = build(tree,*parser.root,parent,parent,error,parser,buildState);
+        if (!result) restore();
+        return result;
+    }
+    catch (...) { restore(); throw; }
+}
+
 bool LLVKWidgetFactory::loadDefaults(const LLVKWidgetTree& tree, std::string_view xml, std::string& error)
 {
     error.clear();
-    Parser state(mDefaults,mIconDefaults,mButtonDefaults,mCallbacks,mResources);
+    Parser state(mDefaults,mIconDefaults,mButtonDefaults,mCallbacks,mResources,mPanelDefaults,mLineDefaults,mCheckDefaults,*mScrollDefaults,*mContainerDefaults,mLayoutDefaults,*mComboDefaults,*mTextDefaults,*mBrowserDefaults);
     if (!parse(state,xml,error)) return false;
     auto& declaration = *state.root;
+    if (!resolveImages(tree,declaration,error)) return false;
+    if (declaration.control && !resolveFont(*declaration.control,mResources,error)) return false;
+    if (declaration.ownedBadge && declaration.ownedBadge->control && !resolveFont(*declaration.ownedBadge->control,mResources,error)) return false;
     if (!declaration.children.empty() || (declaration.ownedBadge && !declaration.ownedBadge->children.empty()))
     { error = "Native widget defaults cannot construct child widgets"; return false; }
     declaration.params.view.fromDeclaration = false;
@@ -683,6 +2035,89 @@ bool LLVKWidgetFactory::loadDefaults(const LLVKWidgetTree& tree, std::string_vie
         }
         mButtonDefaults = std::move(defaults);
     }
+    else if (declaration.plainLabel)
+    {
+        auto defaults = std::make_shared<TextDefaults>();
+        defaults->view = declaration.params;
+        defaults->control = *declaration.control;
+        defaults->text = *declaration.plainLabel;
+        mTextDefaults = std::move(defaults);
+    }
+    else if (declaration.combo)
+    {
+        auto defaults = std::make_shared<ComboDefaults>(*declaration.combo);
+        if (!resolveCombo(declaration,*defaults,tree,mResources,error)) return false;
+        defaults->view = declaration.params;
+        defaults->control = *declaration.control;
+        mComboDefaults = std::move(defaults);
+    }
+    else if (declaration.layoutStack)
+    {
+        mLayoutDefaults.view = declaration.params;
+        mLayoutDefaults.stack = *declaration.layoutStack;
+    }
+    else if (declaration.scrollContainer)
+    {
+        auto defaults = std::make_shared<ScrollContainerDefaults>(*declaration.scrollContainer);
+        defaults->view = declaration.params;
+        defaults->control = *declaration.control;
+        mContainerDefaults = std::move(defaults);
+    }
+    else if (declaration.scrollbar)
+    {
+        auto defaults = std::make_shared<ScrollbarDefaults>(*declaration.scrollbar);
+        if (!resolveScrollbar(declaration,*defaults,tree,mResources,error)) return false;
+        defaults->view = declaration.params;
+        defaults->control = *declaration.control;
+        mScrollDefaults = std::move(defaults);
+    }
+    else if (declaration.checkBox)
+    {
+        auto defaults = *declaration.checkBox;
+        if (!resolveCheckBox(declaration,defaults,tree,mResources,error)) return false;
+        defaults.view = declaration.params;
+        defaults.control = *declaration.control;
+        mCheckDefaults = std::move(defaults);
+    }
+    else if (declaration.lineEditor)
+    {
+        auto defaults = mLineDefaults;
+        defaults.view = std::move(declaration.params);
+        defaults.control = std::move(*declaration.control);
+        defaults.editor = std::move(*declaration.lineEditor);
+        defaults.borderProvided = declaration.lineBorderProvided;
+        for (const auto& [attribute,name] : declaration.lineImages)
+        {
+            auto& image = attribute == "background_image" ? defaults.editor.background :
+                attribute == "background_image_disabled" ? defaults.editor.disabledBackground : defaults.editor.focusedBackground;
+            image = tree.findImage(name);
+        }
+        mLineDefaults = std::move(defaults);
+    }
+    else if (declaration.border)
+    {
+        mPanelDefaults.borderView = std::move(declaration.params);
+        mPanelDefaults.panel.border = std::move(*declaration.border);
+    }
+    else if (declaration.browser)
+    {
+        auto defaults = std::make_shared<BrowserDefaults>();
+        defaults->panel.view = declaration.params;
+        defaults->panel.control = *declaration.control;
+        defaults->panel.panel = *declaration.panel;
+        defaults->browser = *declaration.browser;
+        mBrowserDefaults = std::move(defaults);
+    }
+    else if (declaration.panel)
+    {
+        auto defaults = mPanelDefaults;
+        defaults.view = std::move(declaration.params);
+        defaults.control = std::move(*declaration.control);
+        defaults.panel = std::move(*declaration.panel);
+        if (declaration.panelOpaqueImage) defaults.panel.opaqueImage = tree.findImage(*declaration.panelOpaqueImage);
+        if (declaration.panelTransparentImage) defaults.panel.transparentImage = tree.findImage(*declaration.panelTransparentImage);
+        mPanelDefaults = std::move(defaults);
+    }
     else mDefaults = std::move(declaration.params);
     return true;
 }
@@ -693,7 +2128,7 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetFactory::construct(LLVKWidgetTree& t
     error.clear();
     if ((parent && !tree.get(parent)) || xml.size() > 4 * 1024 * 1024)
     { error = "Invalid native widget parent or oversized declaration"; return std::nullopt; }
-    Parser state(mDefaults,mIconDefaults,mButtonDefaults,mCallbacks,mResources);
+    Parser state(mDefaults,mIconDefaults,mButtonDefaults,mCallbacks,mResources,mPanelDefaults,mLineDefaults,mCheckDefaults,*mScrollDefaults,*mContainerDefaults,mLayoutDefaults,*mComboDefaults,*mTextDefaults,*mBrowserDefaults);
     if (!parse(state,xml,error)) return std::nullopt;
     const auto* owner = tree.get(parent);
     const auto previousChildren = owner ? owner->children : std::vector<LLVKWidgetTree::Id>();
@@ -706,7 +2141,9 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetFactory::construct(LLVKWidgetTree& t
     };
     try
     {
-        auto root = build(tree,*state.root,parent,parent,error);
+        BuildState buildState;
+        buildState.bytes = xml.size();
+        auto root = build(tree,*state.root,parent,parent,error,state,buildState);
         if (!root) restoreFactoryMetadata();
         return root;
     }

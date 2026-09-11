@@ -23,8 +23,17 @@ bool LLVKWidgetTree::registerImage(std::shared_ptr<const LLVKWidgetImage> image)
 
 std::shared_ptr<const LLVKWidgetImage> LLVKWidgetTree::findImage(const std::string& name) const
 {
+    std::string error;
+    return findImage(name,error);
+}
+
+std::shared_ptr<const LLVKWidgetImage> LLVKWidgetTree::findImage(const std::string& name, std::string& error) const
+{
+    error.clear();
+    if (name.empty() || name == "none") return nullptr;
     const auto found = mImages.find(name);
-    return found == mImages.end() ? nullptr : found->second;
+    if (found != mImages.end()) return found->second;
+    return mSkinImages ? mSkinImages->image(name,error) : nullptr;
 }
 
 bool LLVKWidgetTree::iconWantsHandCursor(Id id) const noexcept

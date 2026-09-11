@@ -17,6 +17,11 @@ struct LLVKPlainControl
         bool trackEnd = false;
         LLVKColor textColor{1,1,1,1};
         LLVKColor readOnlyColor{1,1,1,1};
+        std::function<void(std::uint64_t)> clicked;
+        bool showHandCursor = true;
+        bool parseUrls = false;
+        LLVKColor tentativeColor{1,1,1,1};
+        LLVKColor backgroundColor{0,0,0,1};
     };
     Params params;
     LLVKLabel source;

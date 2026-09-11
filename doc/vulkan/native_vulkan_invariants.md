@@ -430,7 +430,8 @@ an old draft, or a performance aspiration is not an exception.
 	[startup investigation](reverse-engineering/native-ui-startup-dependencies.md).
 	This supports dependency separation, not an assertion of native completion.
 - Scope: all native visual consumers and supporting platform/startup/build paths.
-	One viewer executable and one OS process remain required. Existing GL/Zink visual
+	One viewer executable and in-process 3D rendering remain required. Browser and
+	slvoice helper processes are permitted by the user clarification below. Existing GL/Zink visual
 	implementation remains unchanged; nonvisual selection/infrastructure may be shared
 	only after its contract is established.
 - Migration/verification: replace native dependencies on visual GL functions with
@@ -439,6 +440,23 @@ an old draft, or a performance aspiration is not an exception.
 	lifetime and unchanged GL behavior. Older reports remain source evidence, but any
 	earlier recommendation to share visual helpers is superseded. No fallback may
 	silently invoke GL in a running native session. No runtime gate is waived.
+
+## Process-boundary clarification (2026-09-11)
+
+- Approval: the user explicitly clarified that Dullahan/CEF needs helper processes
+	and that the one-process rule applies strictly to the viewer's 3D portion.
+	The user also explicitly permitted the viewer's slvoice helper.
+- Affected scope: NV-03 and roadmap R1 process ownership. The earlier wording
+	incorrectly extended the one-process restriction to embedded-browser helpers.
+- Required behavior: the selected 3D renderer runs inside the viewer process;
+	no separate 3D renderer executable/process or second viewer instance implements
+	it. Dullahan/CEF browser helper processes and the slvoice helper are allowed.
+- Unchanged requirements: independently owned native visual integration, no
+	GL-produced viewer frame, audited dependencies, explicit browser pixel format
+	and publication, completion-based GPU retirement and runtime verification.
+- Migration/verification: remove the browser-process blocker, implement and audit
+	native browser integration, and verify process roles separately from the 3D
+	backend's ownership. This clarification does not establish browser completion.
 
 ## Evidence map
 

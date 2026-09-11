@@ -22,6 +22,7 @@ public:
     VkDescriptorSet descriptor() const noexcept;
     VkDescriptorSetLayout descriptorLayout() const noexcept;
     VkExtent2D extent() const noexcept;
+    bool compatibleWith(VkDevice device, VmaAllocator allocator, VkQueue queue, std::uint32_t queueFamily) const noexcept;
 private:
     friend class LLVKGlyphUpload;
     friend class LLVKGlyphSubmission;
@@ -42,10 +43,12 @@ public:
         std::uint32_t queueFamily = 0;
     };
     enum class Status { Pending, Ready, Failed };
+    enum class Sampling { GlyphNearestRepeat, SkinLinearClamp };
     static std::unique_ptr<LLVKGlyphUpload> submit(const Device& device,
                                                   VkExtent2D extent,
                                                   std::span<const std::uint8_t> rgba,
-                                                  std::string& error);
+                                                  std::string& error,
+                                                  Sampling sampling = Sampling::GlyphNearestRepeat);
     ~LLVKGlyphUpload();
     LLVKGlyphUpload(const LLVKGlyphUpload&) = delete;
     LLVKGlyphUpload& operator=(const LLVKGlyphUpload&) = delete;

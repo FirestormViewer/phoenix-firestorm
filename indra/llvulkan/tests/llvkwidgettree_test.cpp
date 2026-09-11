@@ -5,10 +5,29 @@
 #include "llvklabel.h"
 #include "llvkcolor.h"
 #include "llvkplaintextlayout.h"
+#include "llvkxmllayers.h"
+#include "llvkskinfiles.h"
+#include "llvkskinimages.h"
+#include "llvklineeditor.h"
+#include "llvkclipboard.h"
+#include "llvkbrowsersurface.h"
+#include "llvkwidgetpaint.h"
+#include "llvkloginui.h"
+#include "llvkstartupsettings.h"
+#include "lluri.h"
+#include "llvkstyledtext.h"
+#include "llvkscroll.h"
 #include "llvkfont.h"
 #include "llvkwidgetimage.h"
 #include "lltut.h"
 #include <png.h>
+extern "C" {
+#if __has_include(<jpeglib.h>)
+#include <jpeglib.h>
+#else
+#include <jpeglib/jpeglib.h>
+#endif
+}
 
 #include <fstream>
 #include <iterator>
@@ -46,9 +65,3702 @@ namespace tut
             return result;
         }
     };
-    typedef test_group<widgettree_data> widgettree_group;
+    typedef test_group<widgettree_data,200> widgettree_group;
     typedef widgettree_group::object object;
     widgettree_group widgettree_tests("llvkwidgettree");
+
+    template<> template<> void object::test<129>()
+    {
+        set_test_name("native login page preserves existing query and encodes viewer metadata");
+        LLVKLoginUi::Page page;
+        page.url = "https://example.com/login/?existing=yes";
+        page.language = "en";
+        page.version = "7.2.5 (79279)";
+        page.channel = "Vulkanstorm Test";
+        page.grid = "agni";
+        page.operatingSystem = "Win";
+        page.skin = "default";
+        page.settings = {{"FirstLoginThisInstall",LLSD(true)},{"FSSplashScreenHideBlogs",LLSD(true)}};
+        const LLURI uri(LLVKLoginUi::pageUrl(page));
+        const auto query = uri.queryMap();
+        ensure_equals("original query retained",query["existing"].asString(),std::string("yes"));
+        ensure_equals("version encoded and recovered",query["version"].asString(),page.version);
+        ensure_equals("first login source spelling",query["firstlogin"].asString(),std::string("TRUE"));
+        ensure_equals("splash preference",query["hideblogs"].asString(),std::string("1"));
+        ensure_equals("unset splash preference",query["hidetopbar"].asString(),std::string("0"));
+    }
+
+    template<> template<> void object::test<128>()
+    {
+        set_test_name("native startup settings preserve default saved and transient precedence");
+        LLVKStartupSettings settings;
+        std::string error;
+        const auto document = [](const std::string& value)
+        { return "<llsd><map><key>RenderBackend</key><map><key>Type</key><string>String</string><key>Value</key><string>"+value+"</string></map></map></llsd>"; };
+        ensure("initial default",settings.load(document("OpenGL"),true,true,error));
+        ensure("user override",settings.load(document("Vulkan"),false,true,error));
+        ensure_equals("saved backend",settings.find("RenderBackend")->saveValue().asString(),std::string("Vulkan"));
+        ensure("session defaults reset active layers",settings.load(document("Zink"),true,false,error));
+        ensure_equals("session default active",settings.find("RenderBackend")->value().asString(),std::string("Zink"));
+        ensure("user reloaded after mode",settings.load(document("Vulkan"),false,true,error));
+        ensure("command line transient override",settings.set("RenderBackend",LLSD("OpenGL"),false,error));
+        ensure_equals("command line wins",settings.find("RenderBackend")->value().asString(),std::string("OpenGL"));
+        ensure_equals("command line not saved",settings.find("RenderBackend")->saveValue().asString(),std::string("Vulkan"));
+        ensure("malformed load rejected",!settings.load("<llsd><array/></llsd>",true,true,error));
+        ensure_equals("failure preserves active settings",settings.find("RenderBackend")->value().asString(),std::string("OpenGL"));
+        const auto appSettings = std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path().parent_path()/"app_settings"/"settings.xml";
+        LLVKStartupSettings packaged;
+        ensure("actual default settings parse",packaged.loadFile(appSettings,true,true,true,error));
+        ensure("native backend setting exists",packaged.find("RenderBackend") != nullptr);
+        ensure("Boolean defaults converted",packaged.find("FSRememberUsername")->value().isBoolean());
+    }
+
+    template<> template<> void object::test<127>()
+    {
+        set_test_name("native login resource owner resolves real font sizes and packaged controls");
+        LLVKLoginUi::Configuration configuration;
+        const auto fonts = std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory = std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription = fonts/"fonts.xml";
+        configuration.fonts.platform = "Windows";
+        configuration.fonts.searchDirectories = {fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        configuration.settings = {{"FSRememberUsername",LLSD(true)},{"RememberPassword",LLSD(false)},
+            {"NextLoginLocation",LLSD("home")},{"UIResizeBarHeight",LLSD(3)}};
+        std::string error;
+        auto login = LLVKLoginUi::create(configuration,error);
+        ensure(error,login != nullptr);
+        const auto& tree = login->tree();
+        const auto password = login->find("password_edit"), link = login->find("forgot_password_text");
+        ensure("real different font sizes",tree.get(password)->control->params.font->metrics().lineHeight > tree.get(link)->control->params.font->metrics().lineHeight);
+        ensure_equals("bound location applies after construction",tree.value(login->find("start_location_combo")).asString(),std::string("home"));
+        ensure("native browser retained",tree.get(login->find("login_html"))->browser.has_value());
+        ensure("login paint with real fonts",LLVKWidgetPaint::prepare(login->tree(),login->root(),{},error).has_value());
+        const auto location = login->find("start_location_combo");
+        ensure("open actual location popup",login->tree().showComboList(location,error));
+        const auto popup = tree.get(location)->combo->list;
+        const auto painted = LLVKWidgetPaint::prepare(login->tree(),login->root(),{},error);
+        ensure(error,painted.has_value());
+        ensure_equals("popup painted above tree",painted->commands.back().owner,popup);
+        std::size_t rows = 0;
+        for (const auto& command : painted->commands) if (command.owner == popup && command.text) ++rows;
+        ensure_equals("actual location rows painted",rows,std::size_t(3));
+        login->tree().setValue(password,LLSD("mask-test"));
+        const auto cursor = tree.get(password)->lineEditor->text.cursor();
+        ensure("show password action",login->tree().commit(login->find("password_show_btn")));
+        ensure("mask disabled",!tree.get(password)->lineEditor->params.text.password);
+        ensure("hide action shown",tree.get(login->find("password_hide_btn"))->params.visible);
+        ensure("hide password action",login->tree().commit(login->find("password_hide_btn")));
+        ensure("mask restored",tree.get(password)->lineEditor->params.text.password);
+        ensure_equals("toggle preserves password value",tree.value(password).asString(),std::string("mask-test"));
+        ensure_equals("toggle preserves cursor",tree.get(password)->lineEditor->text.cursor(),cursor);
+    }
+
+    template<> template<> void object::test<126>()
+    {
+        set_test_name("native password editor prepares masked selection and focus-sensitive caret");
+        LLVKWidgetTree tree;
+        tree.defineSetting("UILineEditorCursorThickness",LLSD(2),LLVKWidgetTree::SettingType::Integer);
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,201,32};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        control.initialValue = "secret";
+        LLVKWidgetTree::LineEditorParams params;
+        params.text.password = true;
+        params.text.leftPadding = params.text.rightPadding = 8;
+        params.background = image("normal");
+        params.focusedBackground = image("focused");
+        params.textColor = LLVKColor{0.2f,0.4f,0.6f,0.1f};
+        std::string error;
+        const auto editor = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,editor.has_value());
+        tree.setKeyboardFocus(*editor,false,false,error);
+        LLVKWidgetTree::EditorView input;
+        input.drawAlpha = 0.75f;
+        const auto prepared = tree.prepareLineEditor(*editor,input,error);
+        ensure(error,prepared.has_value());
+        ensure("caret visible initially",prepared->caretVisible);
+        ensure("focus image",prepared->parts[1].image->name() == "focused");
+        ensure("programmatic border hidden",!tree.get(tree.get(*editor)->lineEditor->border)->params.visible);
+        ensure_equals("text alpha replaces color alpha",prepared->parts[2].color[3],0.75f);
+        const auto& glyphs = prepared->parts[2].text->glyphs;
+        ensure_equals("one masked glyph per character",glyphs.size(),std::size_t(6));
+        for (const auto& glyph : glyphs) ensure("same password mask glyph",glyph.glyph == glyphs.front().glyph);
+        input.secondsSinceKeystroke = 1.1;
+        const auto blink = tree.prepareLineEditor(*editor,input,error);
+        ensure(error,blink.has_value());
+        ensure("caret blinks off",!blink->caretVisible);
+        input.secondsSinceKeystroke = 1.6;
+        input.applicationFocused = false;
+        const auto inactive = tree.prepareLineEditor(*editor,input,error);
+        ensure(error,inactive.has_value());
+        ensure("inactive application has no caret",!inactive->caretVisible);
+    }
+
+    template<> template<> void object::test<125>()
+    {
+        set_test_name("native button preparation preserves image callback label ordering and pressed offset");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,32};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKButton::Params params;
+        params.label = U" Before ";
+        params.selectedLabel = U" After ";
+        params.images.unselected = image("normal");
+        params.images.selected = image("selected");
+        params.images.disabledSelected = image("disabled-selected");
+        params.images.pressedSelected = image("pressed-selected");
+        params.pressedSelectedProvided = true;
+        params.selectedLabelColor = LLVKColor{0,1,0,1};
+        params.hoverGlow = 0.5f;
+        params.isToggled.function = [](auto,const LLSD&) { return true; };
+        std::string error;
+        const auto button = tree.createButton(view,control,params,0,error);
+        ensure(error,button.has_value());
+        LLVKWidgetTree::ButtonView input;
+        const auto first = tree.prepareButton(*button,input,error);
+        ensure(error,first.has_value());
+        ensure_equals("image selected before callback",first->primitives[0].image->name(),std::string("normal"));
+        ensure("label after callback trimmed",first->label == U"After");
+        ensure_equals("selected label color",first->labelColor[1],1.f);
+        tree.setKeyboardFocus(*button,false,false,error);
+        input.spaceDown = true;
+        const auto pressed = tree.prepareButton(*button,input,error);
+        ensure(error,pressed.has_value());
+        ensure_equals("focused border precedes image",pressed->primitives[1].image->name(),std::string("pressed-selected"));
+        ensure_equals("pressed text x offset",pressed->text.x,first->text.x+1.f);
+        tree.setEnabled(*button,false);
+        input.spaceDown = false;
+        const auto disabled = tree.prepareButton(*button,input,error);
+        ensure(error,disabled.has_value());
+        ensure_equals("disabled checked image overrides",disabled->primitives.back().image->name(),std::string("disabled-selected"));
+    }
+
+    template<> template<> void object::test<124>()
+    {
+        set_test_name("native browser declaration retains login policy without starting media during construction");
+        LLVKWidgetTree tree;
+        LLVKWidgetFactory::Resources resources;
+        resources.fallbackFont = loadFont();
+        LLVKWidgetFactory::Callbacks callbacks;
+        bool initialized = false;
+        callbacks.actions["browser-init"] = [&](auto id,const LLSD&)
+        {
+            const auto* node = tree.get(id);
+            initialized = node && node->browser && node->browser->trusted && node->browser->startUrl.empty();
+        };
+        LLVKWidgetFactory factory({}, {}, {},callbacks,resources);
+        std::string error;
+        const auto browser = factory.construct(tree,
+            "<web_browser name='login_html' width='1024' height='598' start_url='' trusted_content='true' border_visible='false' tab_stop='false'>"
+            "<web_browser.init_callback function='browser-init'/></web_browser>",0,error);
+        ensure(error,browser.has_value());
+        ensure("browser configuration before init",initialized);
+        ensure("native panel base retained",tree.get(*browser)->panel.has_value());
+        ensure("browser border policy retained",!tree.get(*browser)->browser->borderVisible);
+    }
+
+    template<> template<> void object::test<123>()
+    {
+        set_test_name("native browser frames copy borrowed BGRA with opaque alpha and resize invalidation");
+        LLVKBrowserSurface surface;
+        std::string error;
+        ensure("size accepted",surface.resize(2,2,error));
+        std::vector<std::uint8_t> pixels{1,2,3,4, 5,6,7,8, 9,10,11,12, 13,14,15,16};
+        ensure("frame published",surface.publish(2,2,pixels,error));
+        auto first = surface.frame();
+        const std::vector<std::uint8_t> expected{11,10,9,255, 15,14,13,255, 3,2,1,255, 7,6,5,255};
+        ensure("bottom-up RGBA matches RGB upload contract",std::ranges::equal(first->bottomUpRgba(),expected));
+        pixels.assign(16,99);
+        ensure("borrowed pixels copied",std::ranges::equal(first->bottomUpRgba(),expected));
+        ensure("replacement frame",surface.publish(2,2,pixels,error));
+        ensure("old frame remains immutable",std::ranges::equal(first->bottomUpRgba(),expected));
+        ensure("resize invalidates publication",surface.resize(3,2,error) && !surface.frame());
+        const auto generation = surface.generation();
+        ensure("stale callback ignored",!surface.publish(2,2,pixels,error) && error.empty());
+        ensure_equals("stale callback does not advance generation",surface.generation(),generation);
+        ensure("malformed current frame rejected",!surface.publish(3,2,pixels,error) && !error.empty());
+        ensure("oversized surface rejected",!surface.resize(8192,8192,error));
+        ensure_equals("failed resize retains width",surface.width(),3u);
+    }
+
+    template<> template<> void object::test<122>()
+    {
+        set_test_name("native image preparation preserves nine-slice borders shrink and fractional scale");
+        png_image encoder{};
+        encoder.version = PNG_IMAGE_VERSION;
+        encoder.width = encoder.height = 8;
+        encoder.format = PNG_FORMAT_RGBA;
+        std::vector<std::uint8_t> pixels(8*8*4,255);
+        png_alloc_size_t length = 0;
+        ensure("geometry PNG size",png_image_write_to_memory(&encoder,nullptr,&length,0,pixels.data(),0,nullptr) != 0);
+        std::vector<std::uint8_t> encoded(length);
+        ensure("geometry PNG",png_image_write_to_memory(&encoder,encoded.data(),&length,0,pixels.data(),0,nullptr) != 0);
+        png_image_free(&encoder);
+        std::string error;
+        LLVKWidgetImage::Metadata metadata;
+        metadata.scale = LLVKWidgetImage::Rect{2,2,6,6};
+        const auto image = LLVKWidgetImage::decodeSkinPng("bordered",encoded,metadata,error);
+        ensure(error,image != nullptr);
+        const auto geometry = image->prepare({10,20,30,32},1,1,0,0,error);
+        ensure(error,geometry.has_value());
+        ensure_equals("nine quads",geometry->count,std::size_t(9));
+        ensure_equals("left border fixed",geometry->quads[0].position.right,12.f);
+        ensure_equals("bottom border fixed",geometry->quads[0].position.top,22.f);
+        ensure_equals("center stretches right",geometry->quads[4].position.right,28.f);
+        ensure_equals("center stretches top",geometry->quads[4].position.top,30.f);
+        ensure_equals("center UV unaffected",geometry->quads[4].uv.right,0.75f);
+        const auto small = image->prepare({0,0,2,8},1,1,0,0,error);
+        ensure(error,small.has_value());
+        ensure_equals("uniform shrink horizontal",small->quads[0].position.right,1.f);
+        ensure_equals("uniform shrink vertical",small->quads[0].position.top,1.f);
+        ensure_equals("collapsed center",small->quads[4].position.right,1.f);
+        const auto scaled = image->prepare({0,0,20,12},1.25f,1.25f,0.25f,0.25f,error);
+        ensure(error,scaled.has_value());
+        ensure_equals("outer origin stays fractional",scaled->quads[0].position.left,0.3125f);
+        ensure_equals("inner edge rounds after transform",scaled->quads[0].position.right,3.f);
+        metadata.style = LLVKWidgetImage::Scale::Outer;
+        const auto outerImage = LLVKWidgetImage::decodeSkinPng("outer",encoded,metadata,error);
+        ensure(error,outerImage != nullptr);
+        const auto outer = outerImage->prepare({0,0,20,12},1,1,0,0,error);
+        ensure(error,outer.has_value());
+        ensure_equals("outer scale keeps center width",outer->quads[4].position.right-outer->quads[4].position.left,4.f);
+        ensure_equals("outer scale centers region",outer->quads[4].position.left,8.f);
+        ensure("invalid scale rejected",!image->prepare({0,0,20,12},0,1,0,0,error));
+        metadata = {};
+        const auto simple = LLVKWidgetImage::decodeSkinPng("simple",encoded,metadata,error);
+        const auto single = simple->prepare({0,0,3,3},1.25f,1.25f,0.25f,0.25f,error);
+        ensure(error,single.has_value());
+        ensure_equals("no border single quad",single->count,std::size_t(1));
+        ensure_equals("single quad extent rounds independently",single->quads[0].position.right,4.3125f);
+    }
+
+    template<> template<> void object::test<121>()
+    {
+        set_test_name("native login text declarations preserve body layout and reject unresolved rich content");
+        LLVKWidgetTree tree;
+        LLVKWidgetFactory::Resources resources;
+        resources.fallbackFont = loadFont();
+        LLVKWidgetFactory factory({}, {}, {}, {}, resources);
+        std::string error;
+        ensure("text defaults",factory.loadDefaults(tree,
+            "<text parse_urls='true' font='SansSerifSmall' mouse_opaque='false' tab_stop='false' font_shadow='none' "
+            "allow_scroll='false' h_pad='0' v_pad='0' max_length='4096'/>",error));
+        const auto label = factory.construct(tree,
+            "<text name='forgot_password_text' width='140' height='32' font='SansSerifMedium' valign='center' halign='right'>\n"
+            "    Forgot password?\n</text>",0,error);
+        ensure(error,label.has_value());
+        ensure_equals("trimmed text body",tree.value(*label).asString(),std::string("Forgot password?"));
+        ensure("native document reflows",tree.reflowPlainText(*label,error));
+        ensure("right alignment",tree.get(*label)->plainText->params.layout.alignment == LLVKFont::HorizontalAlign::Right);
+        ensure("vertical center",tree.get(*label)->plainText->params.vertical == LLVKFont::VerticalAlign::Center);
+        ensure("URL update fails explicitly",!tree.setPlainText(*label,"https://example.com",error));
+        ensure("rich processing diagnostic",error.find("rich") != error.npos);
+        ensure_equals("failed update retains old value",tree.value(*label).asString(),std::string("Forgot password?"));
+        ensure("issue code cannot silently become literal",!tree.setPlainText(*label,"FIRE-123",error));
+        ensure("URL-shaped literal allowed with parsing disabled",factory.construct(tree,
+            "<text width='200' height='32' parse_urls='false'>https://example.com</text>",0,error).has_value());
+    }
+
+    template<> template<> void object::test<120>()
+    {
+        set_test_name("native login literal link releases capture before destructive click callback");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,140,32};
+        view.mouseOpaque = false;
+        view.soundFlags = 3;
+        LLVKControl::Params control;
+        control.font = loadFont();
+        control.initialValue = "Create an account";
+        std::string error;
+        const auto label = tree.createPlainText(view,control,{},0,error);
+        ensure(error,label.has_value());
+        std::vector<std::string> order;
+        LLVKWidgetTree::Events events;
+        events.sound = [&](auto,bool release) { order.push_back(release ? "up" : "down"); };
+        events.cursor = [&](auto,bool hand) { ensure("hand cursor",hand); order.push_back("hover"); };
+        events.captureLost = [&](auto) { order.push_back("release"); };
+        tree.setEvents(*label,std::move(events));
+        tree.setPlainTextClicked(*label,[&](auto id)
+        {
+            ensure_equals("capture cleared before callback",tree.mouseCapture(),LLVKWidgetTree::Id(0));
+            order.push_back("click");
+            ensure("callback erases label",tree.erase(id,error));
+        });
+        LLVKWidgetTree::PointerEvent event;
+        event.x = 5; event.y = 5;
+        ensure("hover link",tree.routePointer(*label,event,error));
+        event.kind = LLVKWidgetTree::PointerKind::LeftDown;
+        ensure("press link",tree.routePointer(*label,event,error));
+        ensure_equals("label captures",tree.mouseCapture(),*label);
+        event.kind = LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("release link",tree.routePointer(*label,event,error));
+        ensure("label removed",!tree.get(*label));
+        ensure("sound capture callback ordering",order == std::vector<std::string>({"hover","down","up","release","click"}));
+    }
+
+    template<> template<> void object::test<119>()
+    {
+        set_test_name("native login combo commits canonical item values and stacks resolve configured spacing");
+        LLVKWidgetTree tree;
+        tree.defineSetting("UIResizeBarHeight",LLSD(3),LLVKWidgetTree::SettingType::Integer);
+        LLVKWidgetFactory::PanelDefaults panels;
+        panels.control.font = loadFont();
+        LLVKWidgetFactory factory({}, {}, {}, {}, {}, panels);
+        std::string error;
+        const auto stack = factory.construct(tree,"<layout_stack width='100' height='20' orientation='horizontal'/>" ,0,error);
+        ensure(error,stack.has_value());
+        ensure_equals("configured spacing",tree.get(*stack)->layoutStack->spacing,3);
+        const auto explicitStack = factory.construct(tree,"<layout_stack width='100' height='20' border_size='0'/>" ,0,error);
+        ensure(error,explicitStack.has_value());
+        ensure_equals("explicit zero retained",tree.get(*explicitStack)->layoutStack->spacing,0);
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,211,32};
+        LLVKControl::Params control;
+        control.font = panels.control.font;
+        auto params = std::make_shared<LLVKWidgetTree::ComboParams>();
+        params->buttonControl.font = params->listControl.font = params->editorControl.font = control.font;
+        params->allowTextEntry = true;
+        params->items = {{"Home",LLSD("canonical-home-value"),true}};
+        LLSD committed;
+        control.commit.function = [&](auto,const LLSD& value) { committed = value; };
+        const auto combo = tree.createCombo(view,control,*params,0,error);
+        ensure(error,combo.has_value());
+        const auto editor = tree.get(*combo)->combo->editor;
+        tree.setValue(editor,LLSD("hOmE"));
+        ensure("commit case-insensitive label",tree.commit(editor));
+        ensure_equals("canonical value, not typed casing",committed.asString(),std::string("canonical-home-value"));
+        ensure_equals("selected label capitalization",tree.value(editor).asString(),std::string("Home"));
+    }
+
+    template<> template<> void object::test<118>()
+    {
+        set_test_name("native login combo typing completes labels and clears stale item values");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,211,32};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto params = std::make_shared<LLVKWidgetTree::ComboParams>();
+        params->buttonControl.font = params->listControl.font = params->editorControl.font = control.font;
+        params->allowTextEntry = true; params->maximumBytes = 128;
+        params->items = {{"Home",LLSD("home"),true},{"Last location",LLSD("last"),true}};
+        int prearranged = 0, changed = 0;
+        params->prearrange.function = [&](auto,const LLSD&) { ++prearranged; };
+        params->textChanged.function = [&](auto,const LLSD&) { ++changed; };
+        std::string error;
+        auto combo = tree.createCombo(view,control,*params,0,error);
+        ensure(error,combo.has_value());
+        const auto editor = tree.get(*combo)->combo->editor;
+        tree.setKeyboardFocus(editor,false,false,error);
+        ensure("type h",tree.lineEditorUnicode(editor,U'h',false,error));
+        ensure_equals("prefix completed preserving case",tree.value(editor).asString(),std::string("home"));
+        ensure_equals("selected item value",tree.value(*combo).asString(),std::string("home"));
+        ensure_equals("completion selection start",tree.get(editor)->lineEditor->text.selectionStart(),std::size_t(4));
+        ensure_equals("completion caret at prefix",tree.get(editor)->lineEditor->text.cursor(),std::size_t(1));
+        ensure_equals("prearrange first character",prearranged,1);
+        ensure("replace completion with unmatched character",tree.lineEditorUnicode(editor,U'z',false,error));
+        ensure_equals("typed unmatched prefix retained",tree.value(*combo).asString(),std::string("hz"));
+        ensure("selection cleared",!tree.get(*combo)->combo->selected);
+        ensure("unmatched text tentative",tree.get(editor)->control->tentative);
+        ensure("backspace avoids autocomplete",tree.lineEditorKey(editor,LLVKLineEditor::Key::Backspace,{},error));
+        ensure_equals("deletion retains literal text",tree.value(editor).asString(),std::string("h"));
+        ensure_equals("three text-change notifications",changed,3);
+    }
+
+    template<> template<> void object::test<117>()
+    {
+        set_test_name("native login combo opens and selects a location through pointer routing");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,1024,768};
+        std::string error;
+        auto root = tree.create(view,0,error);
+        ensure(error,root.has_value());
+        view.rect = {300,50,511,82};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto params = std::make_shared<LLVKWidgetTree::ComboParams>();
+        params->buttonControl.font = params->listControl.font = params->editorControl.font = control.font;
+        params->allowTextEntry = true;
+        params->items = {{"Last location",LLSD("last"),true},{"Home",LLSD("home"),true}};
+        LLSD committed;
+        control.commit.function = [&](auto,const LLSD& value) { committed = value; };
+        auto combo = tree.createCombo(view,control,*params,*root,error);
+        ensure(error,combo.has_value());
+        const auto children = *tree.get(*combo)->combo;
+        LLVKWidgetTree::PointerEvent event;
+        event.kind = LLVKWidgetTree::PointerKind::LeftDown;
+        event.x = 505; event.y = 65;
+        ensure("arrow click",tree.routePointer(*root,event,error));
+        ensure("list visible",tree.get(children.list)->params.visible);
+        ensure_equals("capture transfers to list",tree.mouseCapture(),children.list);
+        const auto popup = tree.screenRect(children.list,error);
+        ensure(error,popup.has_value());
+        ensure("popup stays in root",popup->bottom >= 0 && popup->top <= 768);
+        const auto rowHeight = tree.get(*combo)->combo->rowHeight;
+        event.kind = LLVKWidgetTree::PointerKind::LeftUp;
+        event.x = popup->left+5; event.y = popup->top-2-rowHeight-rowHeight/2;
+        ensure("choose second row",tree.routePointer(*root,event,error));
+        ensure_equals("Home committed",committed.asString(),std::string("home"));
+        ensure_equals("editor shows selected label",tree.value(children.editor).asString(),std::string("Home"));
+        ensure("popup closed",!tree.get(children.list)->params.visible);
+        ensure_equals("focus restored to editor",tree.keyboardFocus(),children.editor);
+        ensure_equals("capture released",tree.mouseCapture(),LLVKWidgetTree::Id(0));
+        event.kind = LLVKWidgetTree::PointerKind::LeftDown;
+        event.x = 505; event.y = 65;
+        ensure("reopen popup",tree.routePointer(*root,event,error));
+        event.kind = LLVKWidgetTree::PointerKind::LeftUp;
+        tree.routePointer(*root,event,error);
+        ensure_equals("arrow release clears capture",tree.mouseCapture(),LLVKWidgetTree::Id(0));
+        event.kind = LLVKWidgetTree::PointerKind::LeftDown;
+        event.x = popup->left+5; event.y = popup->top-2-rowHeight/2;
+        ensure("second click reaches popup",tree.routePointer(*root,event,error));
+        event.kind = LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("second click selects popup row",tree.routePointer(*root,event,error));
+        ensure_equals("first row committed after separate click",committed.asString(),std::string("last"));
+    }
+
+    template<> template<> void object::test<116>()
+    {
+        set_test_name("native login combo owns editor button list and distinguishes item from typed values");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,211,32};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto params = std::make_shared<LLVKWidgetTree::ComboParams>();
+        params->buttonControl.font = params->listControl.font = params->editorControl.font = control.font;
+        params->allowTextEntry = true;
+        params->maximumBytes = 128;
+        params->items = {{"Last location",LLSD("last"),true},{"Home",LLSD("home"),true},{"Unavailable",LLSD("no"),false}};
+        int initializations = 0;
+        LLSD committed;
+        control.init.function = [&](auto id,const LLSD&)
+        {
+            ++initializations;
+            const auto& combo = *tree.get(id)->combo;
+            ensure("all children exist before init",tree.get(combo.button)->button && tree.get(combo.editor)->lineEditor && tree.get(combo.list)->control);
+        };
+        control.commit.function = [&](auto,const LLSD& value) { committed = value; };
+        std::string error;
+        auto combo = tree.createCombo(view,control,*params,0,error);
+        ensure(error,combo.has_value());
+        const auto children = *tree.get(*combo)->combo;
+        ensure_equals("once initialized",initializations,1);
+        ensure("list initially hidden",!tree.get(children.list)->params.visible);
+        ensure("editable button not tab-stop",!tree.get(children.button)->control->params.tabStop);
+        ensure("native select home",tree.setComboValue(*combo,LLSD("home"),error));
+        ensure_equals("selection exposes item value",tree.value(*combo).asString(),std::string("home"));
+        ensure_equals("editor exposes label",tree.value(children.editor).asString(),std::string("Home"));
+        ensure("clear selection for unmatched value",tree.setComboValue(*combo,LLSD("missing"),error));
+        ensure_equals("unmatched selection retains editor",tree.value(*combo).asString(),std::string("Home"));
+        tree.setValue(children.editor,LLSD("Region/128/128"));
+        ensure("commit typed entry",tree.commit(children.editor));
+        ensure_equals("typed value committed by parent",committed.asString(),std::string("Region/128/128"));
+        ensure("disabled selection rejected",!tree.selectComboItem(*combo,2,error));
+        ensure("erase composite",tree.erase(*combo,error));
+        ensure("all children released",!tree.get(children.button) && !tree.get(children.editor) && !tree.get(children.list));
+    }
+
+    template<> template<> void object::test<115>()
+    {
+        set_test_name("native login layout preparation propagates resize and visibility animation");
+        LLVKWidgetTree tree;
+        LLVKWidgetFactory::PanelDefaults defaults;
+        defaults.control.font = loadFont();
+        LLVKWidgetFactory factory({}, {}, {}, {}, {}, defaults);
+        std::string error;
+        auto root = factory.construct(tree,
+            "<layout_stack width='200' height='60' orientation='horizontal' open_time_constant='0.02' close_time_constant='0.03'>"
+            "<layout_panel width='100' height='60'/><layout_panel width='100' height='60'/></layout_stack>",0,error);
+        ensure(error,root.has_value());
+        const auto panels = tree.get(*root)->layoutStack->panels;
+        tree.reshape(*root,400,60,error);
+        ensure("resize marks dirty",tree.get(*root)->layoutStack->needsLayout);
+        ensure("frame prepares resize",tree.prepareLayoutStacks(*root,0.03f,error));
+        ensure_equals("both expand",tree.get(panels.front())->params.rect.right,200);
+        tree.setVisible(panels.front(),false);
+        ensure("frame animates close",tree.prepareLayoutStacks(*root,0.03f,error));
+        ensure_equals("close half life",tree.get(panels.front())->layoutPanel->visibleAmount,0.5f);
+        ensure("closing still occupies visible extent",tree.get(panels.back())->params.rect.left > 0);
+        ensure("animation remains dirty",tree.get(*root)->layoutStack->needsLayout);
+        ensure("close settles",tree.prepareLayoutStacks(*root,1.f,error));
+        ensure_equals("closed panel amount",tree.get(panels.front())->layoutPanel->visibleAmount,0.f);
+        ensure_equals("remaining panel at left",tree.get(panels.back())->params.rect.left,0);
+        tree.setVisible(panels.front(),true);
+        ensure("opening",tree.prepareLayoutStacks(*root,0.02f,error));
+        ensure_equals("open half life",tree.get(panels.front())->layoutPanel->visibleAmount,0.5f);
+    }
+
+    template<> template<> void object::test<114>()
+    {
+        set_test_name("native login layout declarations construct typed panels and nested rows");
+        LLVKWidgetTree tree;
+        LLVKWidgetFactory::PanelDefaults panels;
+        panels.control.font = loadFont();
+        int initialized = 0;
+        LLVKWidgetFactory::Callbacks callbacks;
+        callbacks.actions["init"] = [&](auto id,const LLSD&)
+        { ++initialized; ensure("typed init before parent attachment",tree.get(id)->parent == 0); };
+        LLVKWidgetFactory factory({}, {}, {}, callbacks, {}, panels);
+        std::string error;
+        auto stack = factory.construct(tree,
+            "<layout_stack width='1024' height='152' orientation='horizontal' animate='false' border_size='0'>"
+            "<layout_panel name='left' width='27' height='152'/>"
+            "<layout_panel name='center' width='970' height='152' min_width='970' auto_resize='false'>"
+            "<layout_panel.init_callback function='init'/>"
+            "<layout_stack width='685' height='152' orientation='vertical' animate='false'>"
+            "<layout_panel name='row' width='685' height='86' auto_resize='false'/></layout_stack>"
+            "</layout_panel><layout_panel name='right' width='27' height='152'/></layout_stack>",0,error);
+        ensure(error,stack.has_value());
+        ensure_equals("one typed initialization",initialized,1);
+        const auto center = tree.get(*stack)->layoutStack->panels.at(1);
+        ensure("center geometry",tree.get(center)->params.rect == LLVKWidgetTree::Rect{27,0,997,152});
+        ensure_equals("layout panel follows reset",tree.get(center)->params.follows,std::uint8_t(0));
+        ensure("nested stack exists",tree.get(tree.get(center)->children.front())->layoutStack.has_value());
+        const auto count = tree.size();
+        ensure("wrong child type rejects",!factory.construct(tree,"<layout_stack><panel/></layout_stack>",0,error));
+        ensure_equals("rejected construction atomic",tree.size(),count);
+        ensure("unimplemented user resizing explicit",!factory.construct(tree,"<layout_stack><layout_panel user_resize='true'/></layout_stack>",0,error));
+    }
+
+    template<> template<> void object::test<113>()
+    {
+        set_test_name("native login stack distributes elastic margins around fixed content");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,1024,152};
+        std::string error;
+        auto stack = tree.createLayoutStack(view,false,0,true,0,error);
+        ensure(error,stack.has_value());
+        ensure("settled geometry test disables animation",tree.configureLayoutStack(*stack,false,0.02f,0.03f,error));
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::Node::LayoutPanel flexible, fixed;
+        fixed.autoResize = false; fixed.minimum = fixed.expandedMinimum = 970;
+        view.rect = {0,0,27,152};
+        auto left = tree.createPanel(view,control,{},0,error);
+        ensure(error,left.has_value());
+        ensure("attach left",tree.attachLayoutPanel(*stack,*left,flexible,error));
+        view.rect = {0,0,970,152};
+        auto center = tree.createPanel(view,control,{},0,error);
+        ensure(error,center.has_value());
+        ensure("attach center",tree.attachLayoutPanel(*stack,*center,fixed,error));
+        view.rect = {0,0,27,152};
+        auto right = tree.createPanel(view,control,{},0,error);
+        ensure(error,right.has_value());
+        ensure("attach right",tree.attachLayoutPanel(*stack,*right,flexible,error));
+        ensure("login baseline layout",tree.updateLayoutStack(*stack,error));
+        ensure("center at baseline",tree.get(*center)->params.rect == LLVKWidgetTree::Rect{27,0,997,152});
+        tree.reshape(*stack,1200,152,error);
+        ensure("wide login layout",tree.updateLayoutStack(*stack,error));
+        ensure("elastic margins expanded equally",tree.get(*center)->params.rect == LLVKWidgetTree::Rect{115,0,1085,152});
+        tree.setVisible(*right,false);
+        ensure("hidden panel redistributes space",tree.updateLayoutStack(*stack,error));
+        ensure_equals("single elastic margin",tree.get(*center)->params.rect.left,230);
+        view.rect = {0,0,685,152};
+        auto column = tree.createLayoutStack(view,true,0,false,0,error);
+        ensure(error,column.has_value());
+        fixed.minimum = fixed.expandedMinimum = 0;
+        view.rect = {0,0,685,86};
+        auto row = tree.createPanel(view,control,{},0,error);
+        ensure(error,row.has_value());
+        tree.attachLayoutPanel(*column,*row,fixed,error);
+        ensure("vertical login row",tree.updateLayoutStack(*column,error));
+        ensure("rows begin at top",tree.get(*row)->params.rect == LLVKWidgetTree::Rect{0,66,685,152});
+    }
+
+    template<> template<> void object::test<112>()
+    {
+        set_test_name("native panel keys respect focus roots default buttons and Return capture");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.focusRoot = true;
+        LLVKControl::Params control;
+        control.font = loadFont();
+        std::string error;
+        auto panel = tree.createPanel(view,control,{},0,error);
+        ensure(error,panel.has_value());
+        view.focusRoot = false;
+        view.rect = {0,0,100,23};
+        int textCommits = 0, buttonCommits = 0;
+        control.commit.function = [&](auto,const LLSD&) { ++textCommits; };
+        auto editor = tree.createLineEditor(view,control,{},*panel,error);
+        ensure(error,editor.has_value());
+        control.commit.function = [&](auto,const LLSD&) { ++buttonCommits; };
+        auto button = tree.createButton(view,control,{},*panel,error);
+        ensure(error,button.has_value());
+        tree.setPanelDefaultButton(*panel,*button,error);
+        tree.setKeyboardFocus(*editor,false,false,error);
+        using Key = LLVKWidgetTree::PanelKey;
+        ensure("Return invokes default",tree.panelKey(*panel,Key::Return,{},error));
+        ensure_equals("default committed",buttonCommits,1);
+        ensure_equals("editor not committed when default exists",textCommits,0);
+        tree.setVisible(*button,false);
+        ensure("hidden default falls back to editor",tree.panelKey(*panel,Key::Return,{},error));
+        ensure_equals("editor committed",textCommits,1);
+        tree.setVisible(*button,true);
+        tree.setKeyboardFocus(*button,false,false,error);
+        ensure("Return-capturing button handles own key",!tree.panelKey(*panel,Key::Return,{},error));
+        ensure_equals("no duplicate commit",buttonCommits,1);
+        ensure("Tab from button wraps",tree.panelKey(*panel,Key::Tab,{},error));
+        ensure_equals("Tab selects editor",tree.keyboardFocus(),*editor);
+        ensure("Shift-Tab reverses",tree.panelKey(*panel,Key::Tab,{true,false,false},error));
+        ensure_equals("Shift-Tab selects button",tree.keyboardFocus(),*button);
+        ensure("modified Return unhandled",!tree.panelKey(*panel,Key::Return,{false,true,false},error));
+        ensure("Escape handled",tree.panelKey(*panel,Key::Escape,{},error));
+        ensure_equals("Escape clears subtree focus",tree.keyboardFocus(),LLVKWidgetTree::Id(0));
+        ensure("Return without focus unhandled",!tree.panelKey(*panel,Key::Return,{},error));
+    }
+
+    template<> template<> void object::test<111>()
+    {
+        set_test_name("native panel focus takes ownership before handing focus to first child");
+        LLVKWidgetTree tree;
+        LLVKControl::Params control;
+        control.font = loadFont();
+        std::string error;
+        auto panel = tree.createPanel({},control,{},0,error);
+        ensure(error,panel.has_value());
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,23};
+        LLVKWidgetTree::LineEditorParams params;
+        params.text.defaultText = "child";
+        auto editor = tree.createLineEditor(view,control,params,*panel,error);
+        ensure(error,editor.has_value());
+        bool sawPanelFocus = false;
+        LLVKWidgetTree::Events events;
+        events.focusReceived = [&](auto id) { sawPanelFocus = tree.keyboardFocus() == id; };
+        tree.setEvents(*panel,events);
+        ensure("request panel focus",tree.requestControlFocus(*panel,true,error));
+        ensure("panel first owns focus",sawPanelFocus);
+        ensure_equals("focus handed to child",tree.keyboardFocus(),*editor);
+        ensure_equals("child tab entry selects all",tree.get(*editor)->lineEditor->text.selectionStart(),std::size_t(5));
+        ensure("repeat panel focus",tree.requestControlFocus(*panel,true,error));
+        ensure_equals("repeat preserves descendant",tree.keyboardFocus(),*editor);
+        auto empty = tree.createPanel({},control,{},0,error);
+        ensure(error,empty.has_value());
+        ensure("empty panel focus",tree.requestControlFocus(*empty,true,error));
+        ensure_equals("empty panel retains own focus without recursion",tree.keyboardFocus(),*empty);
+    }
+
+    template<> template<> void object::test<110>()
+    {
+        set_test_name("native container keys preserve document delegation axis order and ignore policy");
+        LLVKWidgetTree tree;
+        tree.defineSetting("UIScrollbarSize",LLSD(16),LLVKWidgetTree::SettingType::Integer);
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,100};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto params = std::make_shared<LLVKWidgetTree::ScrollContainerParams>();
+        params->scrollbarControl.font = control.font;
+        params->vertical.decreaseControl.font = params->vertical.increaseControl.font = control.font;
+        params->horizontal.decreaseControl.font = params->horizontal.increaseControl.font = control.font;
+        std::string error;
+        auto container = tree.createScrollContainer(view,control,*params,0,error);
+        ensure(error,container.has_value());
+        view.rect = {0,0,300,400};
+        auto document = tree.create(view,0,error);
+        ensure(error,document.has_value());
+        tree.attachScrollContent(*container,*document,0,error);
+        tree.updateScrollContainer(*container,error);
+        const auto chrome = *tree.get(*container)->scrollContainer;
+        using Key = LLVKWidgetTree::ScrollKey;
+        ensure("page key remains unhandled",!tree.scrollContainerKey(*container,Key::PageDown,{},error));
+        ensure_equals("vertical page moved",tree.get(chrome.vertical)->scrollbar->position,83);
+        ensure_equals("horizontal page also moved",tree.get(chrome.horizontal)->scrollbar->position,83);
+        ensure_equals("unhandled page does not force document update",tree.get(*document)->params.rect.top,100);
+        ensure("Down handled",tree.scrollContainerKey(*container,Key::Down,{},error));
+        ensure_equals("vertical priority",tree.get(chrome.vertical)->scrollbar->position,99);
+        ensure_equals("horizontal not changed by Down",tree.get(chrome.horizontal)->scrollbar->position,83);
+        ensure_equals("handled key updates document",tree.get(*document)->params.rect.top,199);
+        params->ignoreArrowKeys = true;
+        view.rect = {0,0,100,100};
+        auto ignored = tree.createScrollContainer(view,control,*params,0,error);
+        ensure(error,ignored.has_value());
+        ensure("ignore rejects before delegation",!tree.scrollContainerKey(*ignored,Key::End,{},error));
+        params->ignoreArrowKeys = false;
+        auto delegate = tree.createScrollContainer(view,control,*params,0,error);
+        ensure(error,delegate.has_value());
+        LLVKWidgetTree::LineEditorParams editorParams;
+        editorParams.text.defaultText = "abc";
+        auto editor = tree.createLineEditor(view,control,editorParams,0,error);
+        ensure(error,editor.has_value());
+        tree.attachScrollContent(*delegate,*editor,0,error);
+        tree.setKeyboardFocus(*editor,false,false,error);
+        ensure("document receives navigation first",tree.scrollContainerKey(*delegate,Key::Home,{},error));
+        ensure_equals("editor home applied",tree.get(*editor)->lineEditor->text.cursor(),std::size_t(0));
+    }
+
+    template<> template<> void object::test<109>()
+    {
+        set_test_name("native directional tab movement wraps and honors text-only prefilter");
+        LLVKWidgetTree tree;
+        std::string error;
+        auto root = tree.create({},0,error);
+        ensure(error,root.has_value());
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto first = tree.createControl({},control,*root,error);
+        ensure(error,first.has_value());
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,23};
+        auto editor = tree.createLineEditor(view,control,{},*root,error);
+        ensure(error,editor.has_value());
+        auto last = tree.createControl({},control,*root,error);
+        ensure(error,last.has_value());
+        ensure("next with no focus starts oldest",tree.moveFocus(*root,true,false,error));
+        ensure_equals("first target",tree.keyboardFocus(),*first);
+        tree.moveFocus(*root,true,false,error);
+        ensure_equals("next target",tree.keyboardFocus(),*editor);
+        tree.moveFocus(*root,true,false,error);
+        ensure_equals("last target",tree.keyboardFocus(),*last);
+        tree.moveFocus(*root,true,false,error);
+        ensure_equals("forward wrap",tree.keyboardFocus(),*first);
+        tree.moveFocus(*root,false,false,error);
+        ensure_equals("backward wrap",tree.keyboardFocus(),*last);
+        tree.defineSetting("TabToTextFieldsOnly",LLSD(true),LLVKWidgetTree::SettingType::Boolean);
+        int tabs = 0;
+        LLVKWidgetTree::Events events;
+        events.tabInto = [&](auto) { ++tabs; };
+        tree.setEvents(*editor,events);
+        tree.moveFocus(*root,true,false,error);
+        ensure_equals("setting selects only text",tree.keyboardFocus(),*editor);
+        tree.moveFocus(*root,true,false,error);
+        ensure_equals("single forward candidate still tabs into",tabs,2);
+        tree.moveFocus(*root,false,false,error);
+        ensure_equals("single backward candidate does not retab",tabs,2);
+        tree.setEnabled(*editor,false);
+        ensure("no text candidate returns false",!tree.moveFocus(*root,true,false,error));
+    }
+
+    template<> template<> void object::test<108>()
+    {
+        set_test_name("native first focus runs editor tab selection notification and flash in order");
+        LLVKWidgetTree tree;
+        std::string error;
+        auto root = tree.create({},0,error);
+        ensure(error,root.has_value());
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,23};
+        LLVKWidgetTree::LineEditorParams params;
+        params.text.defaultText = "select me";
+        auto editor = tree.createLineEditor(view,control,params,*root,error);
+        ensure(error,editor.has_value());
+        int tabEvents = 0;
+        LLVKWidgetTree::Events events;
+        events.tabInto = [&](auto id)
+        {
+            ++tabEvents;
+            ensure_equals("focus precedes tab event",tree.keyboardFocus(),id);
+            ensure_equals("selection precedes tab event",tree.get(id)->lineEditor->text.selectionStart(),std::size_t(9));
+            ensure("selection is active",tree.get(id)->lineEditor->text.selecting());
+            ensure_equals("flash reset follows tab event",tree.focusFlashAmount(),0.f);
+        };
+        tree.setEvents(*editor,events);
+        tree.advanceTime(1.0,error);
+        ensure("focus first",tree.focusFirst(*root,true,error));
+        ensure_equals("flash starts",tree.focusFlashAmount(),1.f);
+        ensure("repeat focus no extra tab event",tree.focusFirst(*root,true,error));
+        ensure_equals("one tab notification",tabEvents,1);
+        tree.advanceTime(1.3,error);
+        ensure("flash decays",tree.focusFlashAmount() < 0.00001f);
+        events.tabInto = [&](auto id) { std::string failure; ensure("tab callback deletion",tree.erase(id,failure)); };
+        tree.setEvents(*editor,events);
+        tree.setKeyboardFocus(0,false,false,error);
+        ensure("deletion during tab entry tolerated",tree.focusFirst(*root,true,error));
+        ensure("editor removed",!tree.get(*editor));
+    }
+
+    template<> template<> void object::test<107>()
+    {
+        set_test_name("native tab query preserves stable group ordering and leaf filters");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.defaultTabGroup = 2;
+        std::string error;
+        auto root = tree.create(view,0,error);
+        ensure(error,root.has_value());
+        LLVKControl::Params control;
+        control.font = loadFont();
+        view.tabGroup = 1;
+        auto low = tree.createControl(view,control,*root,error);
+        ensure(error,low.has_value());
+        view.tabGroup = 2;
+        auto first = tree.createControl(view,control,*root,error);
+        auto second = tree.createControl(view,control,*root,error);
+        ensure(error,first && second);
+        view.tabGroup = 3;
+        auto high = tree.createControl(view,control,*root,error);
+        ensure(error,high.has_value());
+        auto order = tree.tabOrder(*root,error);
+        ensure(error,order.has_value());
+        ensure("reverse group query with stable front order",*order == std::vector<LLVKWidgetTree::Id>({*low,*high,*second,*first}));
+        view.tabGroup = 0;
+        auto leaf = tree.createControl(view,control,*first,error);
+        ensure(error,leaf.has_value());
+        order = tree.tabOrder(*root,error);
+        ensure(error,order.has_value());
+        ensure_equals("matching parent replaced by matching leaf",order->back(),*leaf);
+        tree.setEnabled(*leaf,false);
+        order = tree.tabOrder(*root,error);
+        ensure(error,order.has_value());
+        ensure_equals("disabled leaf restores matching parent",order->back(),*first);
+        control.tabStop = false;
+        auto gate = tree.createControl(view,control,*root,error);
+        ensure(error,gate.has_value());
+        control.tabStop = true;
+        auto hiddenByGate = tree.createControl(view,control,*gate,error);
+        ensure(error,hiddenByGate.has_value());
+        order = tree.tabOrder(*root,error);
+        ensure(error,order.has_value());
+        ensure("tab-stop false prevents control descendant traversal",std::find(order->begin(),order->end(),*hiddenByGate) == order->end());
+        tree.setVisible(*root,false);
+        order = tree.tabOrder(*root,error);
+        ensure(error,order.has_value());
+        ensure("hidden root prunes query",order->empty());
+    }
+
+    template<> template<> void object::test<106>()
+    {
+        set_test_name("native scroll preparation separates background document clip and chrome order");
+        LLVKWidgetTree tree;
+        tree.defineSetting("UIScrollbarSize",LLSD(16),LLVKWidgetTree::SettingType::Integer);
+        LLVKWidgetTree::Params view;
+        view.rect = {10,20,110,120};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto params = std::make_shared<LLVKWidgetTree::ScrollContainerParams>();
+        params->scrollbarControl.font = control.font;
+        params->vertical.decreaseControl.font = params->vertical.increaseControl.font = control.font;
+        params->horizontal.decreaseControl.font = params->horizontal.increaseControl.font = control.font;
+        params->opaque = true; params->borderVisible = true;
+        params->backgroundColor = LLVKColor{0.2f,0.3f,0.4f,0.5f};
+        std::string error;
+        auto container = tree.createScrollContainer(view,control,*params,0,error);
+        ensure(error,container.has_value());
+        view.rect = {0,0,300,400};
+        auto document = tree.create(view,0,error);
+        ensure(error,document.has_value());
+        tree.attachScrollContent(*container,*document,0,error);
+        auto prepared = tree.prepareScrollContainer(*container,0.5f,error);
+        ensure(error,prepared.has_value());
+        const auto state = *tree.get(*container)->scrollContainer;
+        ensure("background outside clip",prepared->background == LLVKWidgetTree::Rect{11,21,109,119});
+        ensure("document clip uses border plus strips",prepared->documentClip == LLVKWidgetTree::Rect{11,37,93,119});
+        ensure_equals("background alpha multiplied",prepared->backgroundColor[3],0.25f);
+        ensure_equals("background RGB retained",prepared->backgroundColor[0],0.2f);
+        ensure("document not in chrome list",std::find(prepared->chrome.begin(),prepared->chrome.end(),*document) == prepared->chrome.end());
+        ensure("chrome painter order",prepared->chrome == std::vector<LLVKWidgetTree::Id>({state.border,state.horizontal,state.vertical}));
+        tree.setMouseCapture(state.vertical,error);
+        prepared = tree.prepareScrollContainer(*container,1.f,error);
+        ensure(error,prepared.has_value());
+        ensure("active scrollbar transfers focus to native content",tree.keyboardFocus() == state.horizontal || tree.keyboardFocus() == state.vertical);
+        tree.setKeyboardFocus(state.vertical,false,false,error);
+        prepared = tree.prepareScrollContainer(*container,1.f,error);
+        ensure(error,prepared.has_value());
+        ensure_equals("existing descendant focus retained",tree.keyboardFocus(),state.vertical);
+        ensure("border focus prepared",tree.get(state.border)->border->keyboardFocus);
+    }
+
+    template<> template<> void object::test<105>()
+    {
+        set_test_name("native auto-scroll preserves edge zones query purity and next-frame acceleration");
+        LLVKWidgetTree tree;
+        tree.defineSetting("UIScrollbarSize",LLSD(16),LLVKWidgetTree::SettingType::Integer);
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,100};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto params = std::make_shared<LLVKWidgetTree::ScrollContainerParams>();
+        params->scrollbarControl.font = control.font;
+        params->vertical.decreaseControl.font = params->vertical.increaseControl.font = control.font;
+        params->horizontal.decreaseControl.font = params->horizontal.increaseControl.font = control.font;
+        params->minAutoRate = 120.f; params->maxAutoRate = 500.f;
+        std::string error;
+        auto container = tree.createScrollContainer(view,control,*params,0,error);
+        ensure(error,container.has_value());
+        view.rect = {0,0,300,400};
+        auto document = tree.create(view,0,error);
+        ensure(error,document.has_value());
+        tree.attachScrollContent(*container,*document,0,error);
+        tree.updateScrollContainer(*container,error);
+        const auto chrome = *tree.get(*container)->scrollContainer;
+        const LLVKWidgetTree::Rect root{0,0,100,100};
+        ensure("edge query",tree.autoScroll(*container,95,5,root,0.1f,false,error));
+        ensure("query does not activate scrolling",!tree.get(*container)->scrollContainer->autoScrolling);
+        ensure("initial zero-speed activation",tree.autoScroll(*container,95,5,root,0.1f,true,error));
+        ensure_equals("zero-speed first call",tree.get(chrome.vertical)->scrollbar->position,0);
+        ensure("accelerate next frame",tree.advanceScrollFrame(*container,0.1f,error));
+        ensure_equals("initial active acceleration from zero",tree.get(*container)->scrollContainer->autoRate,12.f);
+        ensure("edge scroll",tree.autoScroll(*container,95,5,root,0.1f,true,error));
+        ensure_equals("vertical one-pixel rounded step",tree.get(chrome.vertical)->scrollbar->position,1);
+        ensure_equals("horizontal one-pixel rounded step",tree.get(chrome.horizontal)->scrollbar->position,1);
+        tree.advanceScrollFrame(*container,0.1f,error);
+        tree.advanceScrollFrame(*container,0.1f,error);
+        ensure_equals("inactive frame resets minimum",tree.get(*container)->scrollContainer->autoRate,120.f);
+        ensure("outside root not active",!tree.autoScroll(*container,101,5,root,0.1f,true,error));
+        ensure("center not active",!tree.autoScroll(*container,50,50,root,0.1f,true,error));
+        ensure("minimum-rate scroll",tree.autoScroll(*container,95,5,root,0.1f,true,error));
+        ensure_equals("minimum-rate step",tree.get(chrome.vertical)->scrollbar->position,13);
+    }
+
+    template<> template<> void object::test<104>()
+    {
+        set_test_name("native scrollbar preparation preserves fallback image focus and glow order");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {10,20,110,30};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::ScrollbarParams params;
+        params.decreaseControl.font = params.increaseControl.font = control.font;
+        params.thickness = 10; params.documentSize = 1000; params.pageSize = 100;
+        params.backgroundVisible = true;
+        params.trackColor = LLVKColor{0.2f,0.3f,0.4f,0.5f};
+        std::string error;
+        auto bar = tree.createScrollbar(view,control,params,0,error);
+        ensure(error,bar.has_value());
+        auto fallback = tree.prepareScrollbar(*bar,25,25,0.05f,{1,1,1,1},error);
+        ensure(error,fallback.has_value());
+        ensure_equals("background then fallback track and thumb",fallback->primitives.size(),std::size_t(3));
+        ensure("fallback uses literal right edge",fallback->primitives.at(1).rectangle == LLVKWidgetTree::Rect{20,20,90,30});
+        ensure("fallback no image",!fallback->primitives.at(1).image);
+        ensure_equals("stored alpha unmodified",fallback->primitives.at(1).color[3],0.5f);
+        params.trackHorizontal = params.trackVertical = image("track");
+        params.thumbHorizontal = params.thumbVertical = image("thumb");
+        bar = tree.createScrollbar(view,control,params,0,error);
+        ensure(error,bar.has_value());
+        tree.setKeyboardFocus(*bar,false,false,error);
+        auto prepared = tree.prepareScrollbar(*bar,25,25,0.05f,{0,1,0,0.7f},error);
+        ensure(error,prepared.has_value());
+        ensure_equals("background track focus thumb glow",prepared->primitives.size(),std::size_t(5));
+        ensure("image track extent differs from fallback",prepared->primitives.at(1).rectangle == LLVKWidgetTree::Rect{20,20,100,30});
+        ensure("drawSolid keeps image",prepared->primitives.at(1).solidImage && prepared->primitives.at(1).image == params.trackHorizontal);
+        ensure_equals("focus alpha",prepared->primitives.at(2).color[3],0.7f);
+        ensure("glow additive",prepared->primitives.back().additive && prepared->primitives.back().solidImage);
+        ensure_equals("half-life glow",prepared->primitives.back().color[3],0.075f);
+        ensure_equals("children retained after chrome",prepared->children.size(),std::size_t(2));
+        const auto owner = params.thumbHorizontal;
+        ensure("erase drawable",tree.erase(*bar,error));
+        ensure("prepared image ownership retained",prepared->primitives.back().image == owner);
+    }
+
+    template<> template<> void object::test<103>()
+    {
+        set_test_name("native ancestor resize completes scroll page and document geometry updates");
+        LLVKWidgetTree tree;
+        tree.defineSetting("UIScrollbarSize",LLSD(16),LLVKWidgetTree::SettingType::Integer);
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,100};
+        std::string error;
+        auto parent = tree.create(view,0,error);
+        ensure(error,parent.has_value());
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto params = std::make_shared<LLVKWidgetTree::ScrollContainerParams>();
+        params->scrollbarControl.font = control.font;
+        params->vertical.decreaseControl.font = params->vertical.increaseControl.font = control.font;
+        params->horizontal.decreaseControl.font = params->horizontal.increaseControl.font = control.font;
+        view.follows = LLVKWidgetTree::Left | LLVKWidgetTree::Right | LLVKWidgetTree::Top | LLVKWidgetTree::Bottom;
+        auto container = tree.createScrollContainer(view,control,*params,*parent,error);
+        ensure(error,container.has_value());
+        view.follows = 0;
+        view.rect = {0,0,200,300};
+        auto document = tree.create(view,0,error);
+        ensure(error,document.has_value());
+        tree.attachScrollContent(*container,*document,0,error);
+        tree.updateScrollContainer(*container,error);
+        const auto chrome = *tree.get(*container)->scrollContainer;
+        tree.setScrollPosition(chrome.vertical,200,true,error);
+        ensure("ancestor grows",tree.reshape(*parent,400,500,error));
+        ensure("no query needed to hide bars",!tree.get(chrome.vertical)->params.visible && !tree.get(chrome.horizontal)->params.visible);
+        ensure_equals("vertical page reflects parent",tree.get(chrome.vertical)->scrollbar->pageSize,500);
+        ensure_equals("horizontal page reflects parent",tree.get(chrome.horizontal)->scrollbar->pageSize,400);
+        ensure_equals("position clamped during resize",tree.get(chrome.vertical)->scrollbar->position,0);
+        ensure("document repositioned during resize",tree.get(*document)->params.rect == LLVKWidgetTree::Rect{0,200,200,500});
+        ensure("explicit container shrinks",tree.setShape(*container,{5,6,105,106},error));
+        ensure("both bars restored",tree.get(chrome.vertical)->params.visible && tree.get(chrome.horizontal)->params.visible);
+        ensure_equals("small page restored",tree.get(chrome.vertical)->scrollbar->pageSize,84);
+    }
+
+    template<> template<> void object::test<102>()
+    {
+        set_test_name("native scroll update rejects stale descendant shape plans after callbacks");
+        LLVKWidgetTree tree;
+        tree.defineSetting("UIScrollbarSize",LLSD(16),LLVKWidgetTree::SettingType::Integer);
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,100};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto params = std::make_shared<LLVKWidgetTree::ScrollContainerParams>();
+        params->scrollbarControl.font = control.font;
+        params->vertical.decreaseControl.font = params->vertical.increaseControl.font = control.font;
+        params->horizontal.decreaseControl.font = params->horizontal.increaseControl.font = control.font;
+        LLVKWidgetTree::Id arrow = 0;
+        bool remove = false;
+        params->vertical.changed = [&](auto,auto)
+        {
+            if (remove) { std::string error; ensure("remove arrow during range callback",tree.erase(arrow,error)); }
+        };
+        std::string error;
+        auto container = tree.createScrollContainer(view,control,*params,0,error);
+        ensure(error,container.has_value());
+        view.rect = {0,0,200,300};
+        auto document = tree.create(view,0,error);
+        ensure(error,document.has_value());
+        tree.attachScrollContent(*container,*document,0,error);
+        ensure("initial update",tree.updateScrollContainer(*container,error));
+        const auto chrome = *tree.get(*container)->scrollContainer;
+        arrow = tree.get(chrome.horizontal)->scrollbar->increase;
+        tree.setScrollPosition(chrome.vertical,30,true,error);
+        tree.reshape(*document,200,20,error);
+        remove = true;
+        ensure("stale plan rejected without dereference",!tree.updateScrollContainer(*container,error));
+        ensure("actionable stale-target error",error.find("removed during callback") != std::string::npos);
+        ensure("callback-owned deletion preserved",!tree.get(arrow));
+        ensure("container remains owned",tree.get(*container) != nullptr);
+    }
+
+    template<> template<> void object::test<101>()
+    {
+        set_test_name("native reveal scrolls minimally and biases oversized target to top left");
+        LLVKWidgetTree tree;
+        tree.defineSetting("UIScrollbarSize",LLSD(16),LLVKWidgetTree::SettingType::Integer);
+        LLVKWidgetTree::Params view;
+        view.rect = {10,20,110,120};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto params = std::make_shared<LLVKWidgetTree::ScrollContainerParams>();
+        params->scrollbarControl.font = control.font;
+        params->vertical.decreaseControl.font = params->vertical.increaseControl.font = control.font;
+        params->horizontal.decreaseControl.font = params->horizontal.increaseControl.font = control.font;
+        std::string error;
+        auto container = tree.createScrollContainer(view,control,*params,0,error);
+        ensure(error,container.has_value());
+        view.rect = {0,0,300,400};
+        auto document = tree.create(view,0,error);
+        ensure(error,document.has_value());
+        tree.attachScrollContent(*container,*document,0,error);
+        const LLVKWidgetTree::Rect constraint{0,0,84,84};
+        const auto target = LLVKWidgetTree::Rect{200,10,220,30};
+        auto result = tree.scrollToReveal(*container,target,constraint,error);
+        ensure(error,result.has_value());
+        const auto chrome = *tree.get(*container)->scrollContainer;
+        ensure_equals("minimal horizontal scroll",tree.get(chrome.horizontal)->scrollbar->position,136);
+        ensure_equals("minimal vertical scroll",tree.get(chrome.vertical)->scrollbar->position,306);
+        ensure("parent notification data uses container coordinates",*result == LLVKWidgetTree::Rect{210,30,230,50});
+        result = tree.scrollToReveal(*container,target,constraint,error);
+        ensure(error,result.has_value());
+        ensure_equals("repeat reveal stable",tree.get(chrome.horizontal)->scrollbar->position,136);
+        result = tree.scrollToReveal(*container,{20,0,200,200},constraint,error);
+        ensure(error,result.has_value());
+        ensure_equals("oversized target left bias",tree.get(chrome.horizontal)->scrollbar->position,20);
+        ensure_equals("oversized target top bias",tree.get(chrome.vertical)->scrollbar->position,200);
+        ensure("oversized parent target clipped",*result == LLVKWidgetTree::Rect{30,136,114,220});
+        ensure("inverted constraint rejected",!tree.scrollToReveal(*container,target,{0,10,84,0},error));
+    }
+
+    template<> template<> void object::test<100>()
+    {
+        set_test_name("native container wheel routing respects axis priority and boundary propagation");
+        LLVKWidgetTree tree;
+        tree.defineSetting("UIScrollbarSize",LLSD(16),LLVKWidgetTree::SettingType::Integer);
+        LLVKWidgetTree::Params view;
+        view.rect = {10,20,110,120};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto params = std::make_shared<LLVKWidgetTree::ScrollContainerParams>();
+        params->scrollbarControl.font = control.font;
+        params->vertical.decreaseControl.font = params->vertical.increaseControl.font = control.font;
+        params->horizontal.decreaseControl.font = params->horizontal.increaseControl.font = control.font;
+        std::string error;
+        auto container = tree.createScrollContainer(view,control,*params,0,error);
+        ensure(error,container.has_value());
+        view.rect = {0,0,200,300};
+        auto document = tree.create(view,0,error);
+        ensure(error,document.has_value());
+        tree.attachScrollContent(*container,*document,0,error);
+        tree.updateScrollContainer(*container,error);
+        const auto chrome = *tree.get(*container)->scrollContainer;
+        ensure("vertical edge consumed despite passive opaque content",tree.routeWheel(*container,30,70,-1,false,error));
+        ensure("vertical wheel",tree.routeWheel(*container,30,70,1,false,error));
+        ensure_equals("vertical step",tree.get(chrome.vertical)->scrollbar->position,16);
+        ensure_equals("horizontal unchanged",tree.get(chrome.horizontal)->scrollbar->position,0);
+        ensure_equals("document translation applied",tree.get(*document)->params.rect.top,116);
+        ensure("horizontal wheel",tree.routeWheel(*container,30,70,1,true,error));
+        ensure_equals("horizontal step",tree.get(chrome.horizontal)->scrollbar->position,16);
+        tree.setScrollPosition(chrome.horizontal,INT32_MAX,true,error);
+        ensure("horizontal edge propagates",!tree.routeWheel(*container,30,70,1,true,error));
+        tree.reshape(*document,200,20,error);
+        tree.updateScrollContainer(*container,error);
+        ensure("horizontal-only boundary propagates",!tree.routeWheel(*container,30,70,1,false,error));
+        ensure("horizontal-only ordinary wheel",tree.routeWheel(*container,30,70,-1,false,error));
+    }
+
+    template<> template<> void object::test<99>()
+    {
+        set_test_name("native scroll updates survive callback teardown and preserve reserved corner");
+        LLVKWidgetTree tree;
+        tree.defineSetting("UIScrollbarSize",LLSD(16),LLVKWidgetTree::SettingType::Integer);
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,100};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto params = std::make_shared<LLVKWidgetTree::ScrollContainerParams>();
+        params->scrollbarControl.font = control.font;
+        params->vertical.decreaseControl.font = params->vertical.increaseControl.font = control.font;
+        params->horizontal.decreaseControl.font = params->horizontal.increaseControl.font = control.font;
+        params->reserveCorner = true;
+        LLVKWidgetTree::Id owner = 0;
+        bool destroy = false;
+        params->vertical.changed = [&](auto,auto)
+        {
+            if (destroy) { std::string error; ensure("callback destroys container",tree.erase(owner,error)); }
+        };
+        std::string error;
+        auto container = tree.createScrollContainer(view,control,*params,0,error);
+        ensure(error,container.has_value());
+        owner = *container;
+        view.rect = {0,0,30,300};
+        auto document = tree.create(view,0,error);
+        ensure(error,document.has_value());
+        tree.attachScrollContent(owner,*document,0,error);
+        ensure("initial update",tree.updateScrollContainer(owner,error));
+        const auto chrome = *tree.get(owner)->scrollContainer;
+        ensure("reserve corner without horizontal",tree.get(chrome.vertical)->params.rect == LLVKWidgetTree::Rect{84,16,100,100});
+        ensure_equals("corner does not reduce page",tree.get(chrome.vertical)->scrollbar->pageSize,100);
+        tree.setScrollPosition(chrome.vertical,50,true,error);
+        tree.reshape(*document,30,20,error);
+        destroy = true;
+        ensure("update tolerates callback destruction",tree.updateScrollContainer(owner,error));
+        ensure("entire subtree gone",!tree.get(owner) && !tree.get(*document));
+        destroy = false;
+        view.rect = {0,0,100,100};
+        container = tree.createScrollContainer(view,control,*params,0,error);
+        ensure(error,container.has_value());
+        owner = *container;
+        view.rect = {INT32_MIN,0,INT32_MAX,20};
+        ensure("oversized document rejected at tree boundary",!tree.create(view,0,error));
+        view.rect = {0,0,INT32_MAX,20};
+        document = tree.create(view,0,error);
+        ensure(error,document.has_value());
+        tree.attachScrollContent(owner,*document,0,error);
+        tree.setVisible(owner,false);
+        ensure("hidden update skips content",tree.updateScrollContainer(owner,error));
+        const auto hidden = tree.scrollContentWindow(owner,error);
+        ensure(error,hidden.has_value());
+        ensure_equals("hidden query supports maximum document extent",hidden->right,100);
+    }
+
+    template<> template<> void object::test<98>()
+    {
+        set_test_name("native scroll update aligns document and negotiates scrollbar pages");
+        LLVKWidgetTree tree;
+        tree.defineSetting("UIScrollbarSize",LLSD(16),LLVKWidgetTree::SettingType::Integer);
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,80};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto params = std::make_shared<LLVKWidgetTree::ScrollContainerParams>();
+        params->scrollbarControl.font = control.font;
+        params->vertical.decreaseControl.font = params->vertical.increaseControl.font = control.font;
+        params->horizontal.decreaseControl.font = params->horizontal.increaseControl.font = control.font;
+        params->borderVisible = true;
+        std::string error;
+        auto container = tree.createScrollContainer(view,control,*params,0,error);
+        ensure(error,container.has_value());
+        view.rect = {0,0,200,300};
+        auto document = tree.create(view,0,error);
+        ensure(error,document.has_value());
+        ensure("attach",tree.attachScrollContent(*container,*document,0,error));
+        ensure("update",tree.updateScrollContainer(*container,error));
+        const auto state = *tree.get(*container)->scrollContainer;
+        ensure("both bars visible",tree.get(state.vertical)->params.visible && tree.get(state.horizontal)->params.visible);
+        ensure_equals("horizontal page",tree.get(state.horizontal)->scrollbar->pageSize,82);
+        ensure_equals("vertical page",tree.get(state.vertical)->scrollbar->pageSize,62);
+        ensure("document aligned top left",tree.get(*document)->params.rect == LLVKWidgetTree::Rect{1,-221,201,79});
+        const auto content = tree.scrollContentWindow(*container,error);
+        ensure(error,content.has_value());
+        ensure("source content window",*content == LLVKWidgetTree::Rect{1,16,83,78});
+        tree.setScrollPosition(state.vertical,40,true,error);
+        tree.setScrollPosition(state.horizontal,20,true,error);
+        ensure("apply positions",tree.updateScrollContainer(*container,error));
+        ensure("document offset",tree.get(*document)->params.rect == LLVKWidgetTree::Rect{-19,-181,181,119});
+        ensure("shrink content",tree.reshape(*document,30,20,error));
+        ensure("update smaller document",tree.updateScrollContainer(*container,error));
+        ensure("bars hidden",!tree.get(state.vertical)->params.visible && !tree.get(state.horizontal)->params.visible);
+        ensure_equals("vertical reset",tree.get(state.vertical)->scrollbar->position,0);
+        ensure_equals("horizontal reset",tree.get(state.horizontal)->scrollbar->position,0);
+        ensure("small content top aligned",tree.get(*document)->params.rect == LLVKWidgetTree::Rect{1,59,31,79});
+    }
+
+    template<> template<> void object::test<97>()
+    {
+        set_test_name("native scroll container owns chrome before init and content behind scrollbars");
+        LLVKWidgetTree tree;
+        tree.defineSetting("UIScrollbarSize",LLSD(16),LLVKWidgetTree::SettingType::Integer);
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,80};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        auto params = std::make_shared<LLVKWidgetTree::ScrollContainerParams>();
+        params->scrollbarControl.font = control.font;
+        control.chrome = true;
+        params->vertical.decreaseControl.font = params->vertical.increaseControl.font = control.font;
+        params->horizontal.decreaseControl.font = params->horizontal.increaseControl.font = control.font;
+        params->borderVisible = true;
+        control.init.function = [&](auto id,const LLSD&)
+        {
+            const auto& state = *tree.get(id)->scrollContainer;
+            ensure("border before init",tree.get(state.border)->border.has_value());
+            ensure("bars before init",tree.get(state.vertical)->scrollbar && tree.get(state.horizontal)->scrollbar);
+            ensure("no document assigned to chrome",state.document == 0);
+        };
+        std::string error;
+        auto container = tree.createScrollContainer(view,control,*params,0,error);
+        ensure(error,container.has_value());
+        const auto chrome = *tree.get(*container)->scrollContainer;
+        ensure("bars initially hidden",!tree.get(chrome.vertical)->params.visible && !tree.get(chrome.horizontal)->params.visible);
+        ensure_equals("vertical page inner height",tree.get(chrome.vertical)->scrollbar->pageSize,78);
+        ensure_equals("container sets scrollbar step",tree.get(chrome.vertical)->scrollbar->params->stepSize,16);
+        ensure("child control independent of parent chrome",!tree.get(chrome.vertical)->control->params.chrome);
+        ensure_equals("horizontal page inner width",tree.get(chrome.horizontal)->scrollbar->pageSize,98);
+        auto content = tree.create(view,0,error);
+        ensure(error,content.has_value());
+        ensure("attach content",tree.attachScrollContent(*container,*content,4,error));
+        ensure_equals("first child selected as document",tree.get(*container)->scrollContainer->document,*content);
+        ensure_equals("vertical in front",tree.get(*container)->children.at(0),chrome.vertical);
+        ensure_equals("horizontal next",tree.get(*container)->children.at(1),chrome.horizontal);
+        auto second = tree.create(view,0,error);
+        ensure(error,second.has_value());
+        ensure("attach second",tree.attachScrollContent(*container,*second,4,error));
+        ensure_equals("first document retained",tree.get(*container)->scrollContainer->document,*content);
+        ensure("chrome rejected as content",!tree.attachScrollContent(*container,chrome.border,0,error));
+        ensure("erase owner",tree.erase(*container,error));
+        ensure("all children destroyed",!tree.get(*content) && !tree.get(*second) && !tree.get(chrome.vertical));
+    }
+
+    template<> template<> void object::test<96>()
+    {
+        set_test_name("native scrollbar drag preserves pixel thumb and callback lifetime");
+        for (bool vertical : {false,true})
+        {
+            LLVKWidgetTree tree;
+            LLVKWidgetTree::Params view;
+            view.rect = vertical ? LLVKWidgetTree::Rect{0,0,10,100} : LLVKWidgetTree::Rect{0,0,100,10};
+            LLVKControl::Params control;
+            control.font = loadFont();
+            LLVKWidgetTree::ScrollbarParams params;
+            params.decreaseControl.font = params.increaseControl.font = control.font;
+            params.vertical = vertical; params.thickness = 10;
+            params.documentSize = 1000; params.pageSize = 100;
+            int changes = 0;
+            bool destroy = false;
+            params.changed = [&](auto id,auto)
+            {
+                ++changes;
+                if (destroy) { std::string error; ensure("erase in drag callback",tree.erase(id,error)); }
+            };
+            std::string error;
+            auto bar = tree.createScrollbar(view,control,params,0,error);
+            ensure(error,bar.has_value());
+            LLVKWidgetTree::PointerEvent event;
+            event.kind = LLVKWidgetTree::PointerKind::LeftDown;
+            event.x = vertical ? 5 : 15; event.y = vertical ? 80 : 5;
+            ensure("thumb down",tree.routePointer(*bar,event,error));
+            ensure_equals("thumb captures",tree.mouseCapture(),*bar);
+            event.kind = LLVKWidgetTree::PointerKind::Hover;
+            if (vertical) event.y -= 31; else event.x += 31;
+            ensure("drag",tree.routePointer(*bar,event,error));
+            ensure_equals("rounded position",tree.get(*bar)->scrollbar->position,436);
+            const auto dragged = tree.get(*bar)->scrollbar->thumb;
+            ensure_equals("one callback",changes,1);
+            ensure("unchanged hover",tree.routePointer(*bar,event,error));
+            ensure_equals("same drag does not notify",changes,1);
+            event.kind = LLVKWidgetTree::PointerKind::LeftUp;
+            ensure("release",tree.routePointer(*bar,event,error));
+            ensure_equals("capture released",tree.mouseCapture(),LLVKWidgetTree::Id(0));
+            ensure("release keeps pixel thumb",tree.get(*bar)->scrollbar->thumb == dragged);
+            event.kind = LLVKWidgetTree::PointerKind::DoubleClick;
+            event.x = vertical ? 5 : dragged.left+1; event.y = vertical ? dragged.bottom+1 : 5;
+            ensure("double click begins drag",tree.routePointer(*bar,event,error));
+            destroy = true;
+            event.kind = LLVKWidgetTree::PointerKind::Hover;
+            if (vertical) event.y = -100; else event.x = 200;
+            ensure("drag callback deletion",tree.routePointer(*bar,event,error));
+            ensure("bar removed",!tree.get(*bar));
+            ensure_equals("capture cleared by teardown",tree.mouseCapture(),LLVKWidgetTree::Id(0));
+        }
+    }
+
+    template<> template<> void object::test<95>()
+    {
+        set_test_name("native scrollbar keys and wheel retain propagation and page overlap rules");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,10,100};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::ScrollbarParams params;
+        params.decreaseControl.font = params.increaseControl.font = control.font;
+        params.vertical = true; params.thickness = 10;
+        params.documentSize = 100; params.pageSize = 20; params.stepSize = 3;
+        std::string error;
+        auto scrollbar = tree.createScrollbar(view,control,params,0,error);
+        ensure(error,scrollbar.has_value());
+        using Key = LLVKWidgetTree::ScrollKey;
+        ensure("Home handled even unchanged",tree.scrollbarKey(*scrollbar,Key::Home,error));
+        ensure("wheel at beginning propagates",!tree.scrollbarWheel(*scrollbar,-1,false,error));
+        ensure("horizontal wheel skips vertical",!tree.scrollbarWheel(*scrollbar,1,true,error));
+        ensure("ordinary wheel moves",tree.scrollbarWheel(*scrollbar,2,false,error));
+        ensure_equals("wheel step",tree.get(*scrollbar)->scrollbar->position,6);
+        ensure("page down propagates after movement",!tree.scrollbarKey(*scrollbar,Key::PageDown,error));
+        ensure_equals("page overlap one",tree.get(*scrollbar)->scrollbar->position,25);
+        ensure("page up propagates after movement",!tree.scrollbarKey(*scrollbar,Key::PageUp,error));
+        ensure_equals("page up overlap one",tree.get(*scrollbar)->scrollbar->position,6);
+        ensure("End handled",tree.scrollbarKey(*scrollbar,Key::End,error));
+        ensure_equals("End maximum",tree.get(*scrollbar)->scrollbar->position,80);
+        ensure("wheel at end propagates",!tree.scrollbarWheel(*scrollbar,1,false,error));
+        ensure("large negative wheel clamps",tree.scrollbarWheel(*scrollbar,INT32_MIN,false,error));
+        ensure_equals("large wheel no overflow",tree.get(*scrollbar)->scrollbar->position,0);
+        tree.setVisible(*scrollbar,false);
+        ensure("hidden but scrollable still handles",tree.scrollbarKey(*scrollbar,Key::Down,error));
+        ensure("zero scroll range",tree.setScrollPageSize(*scrollbar,100,error));
+        ensure("hidden without scroll range propagates",!tree.scrollbarKey(*scrollbar,Key::Home,error));
+    }
+
+    template<> template<> void object::test<94>()
+    {
+        set_test_name("native scrollbar reshape stages arrow extents and thumb atomically");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,10,100};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::ScrollbarParams params;
+        params.decreaseControl.font = params.increaseControl.font = control.font;
+        params.vertical = true; params.thickness = 10;
+        params.documentSize = 1000; params.pageSize = 100;
+        std::string error;
+        auto scrollbar = tree.createScrollbar(view,control,params,0,error);
+        ensure(error,scrollbar.has_value());
+        ensure("short vertical resize",tree.reshape(*scrollbar,10,12,error));
+        const auto state = *tree.get(*scrollbar)->scrollbar;
+        ensure("upper button shrinks and anchors",tree.get(state.decrease)->params.rect == LLVKWidgetTree::Rect{0,6,10,12});
+        ensure("lower button shrinks",tree.get(state.increase)->params.rect == LLVKWidgetTree::Rect{0,0,10,6});
+        ensure("zero thumb track",state.thumb.top == state.thumb.bottom);
+        const auto before = tree.get(*scrollbar)->params.rect;
+        ensure("negative scrollbar resize rejects",!tree.reshape(*scrollbar,10,-1,error));
+        ensure("parent geometry unchanged",tree.get(*scrollbar)->params.rect == before);
+        ensure("button geometry unchanged",tree.get(state.decrease)->params.rect == LLVKWidgetTree::Rect{0,6,10,12});
+        ensure("thumb unchanged",tree.get(*scrollbar)->scrollbar->thumb == state.thumb);
+        params.vertical = false;
+        view.rect = {0,0,100,10};
+        auto horizontal = tree.createScrollbar(view,control,params,0,error);
+        ensure(error,horizontal.has_value());
+        ensure("horizontal shape",tree.setShape(*horizontal,{20,30,32,40},error));
+        const auto other = *tree.get(*horizontal)->scrollbar;
+        ensure("left arrow",tree.get(other.decrease)->params.rect == LLVKWidgetTree::Rect{0,0,6,10});
+        ensure("right arrow",tree.get(other.increase)->params.rect == LLVKWidgetTree::Rect{6,0,12,10});
+    }
+
+    template<> template<> void object::test<93>()
+    {
+        set_test_name("native scrollbar constructs button owners and notifies before thumb refresh");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,10,100};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::ScrollbarParams params;
+        params.decreaseControl.font = params.increaseControl.font = control.font;
+        params.vertical = true; params.thickness = 10;
+        params.documentSize = 1000; params.pageSize = 100; params.stepSize = 5;
+        int changes = 0;
+        bool destroy = false;
+        LLVKScrollLayout::Rect thumbAtCallback;
+        params.changed = [&](auto id,auto position)
+        {
+            ++changes;
+            ensure_equals("new position published before callback",tree.get(id)->scrollbar->position,position);
+            thumbAtCallback = tree.get(id)->scrollbar->thumb;
+            if (destroy) { std::string error; ensure("destroy in changed callback",tree.erase(id,error)); }
+        };
+        control.init.function = [&](auto id,const LLSD&)
+        {
+            const auto& state = *tree.get(id)->scrollbar;
+            ensure("real buttons before init",tree.get(state.decrease)->button && tree.get(state.increase)->button);
+        };
+        std::string error;
+        auto scrollbar = tree.createScrollbar(view,control,params,0,error);
+        ensure(error,scrollbar.has_value());
+        const auto before = tree.get(*scrollbar)->scrollbar->thumb;
+        ensure("scroll changed",tree.setScrollPosition(*scrollbar,450,true,error));
+        ensure("callback sees old thumb",thumbAtCallback == before);
+        ensure("thumb updated after callback",tree.get(*scrollbar)->scrollbar->thumb != before);
+        ensure("same position no callback",!tree.setScrollPosition(*scrollbar,450,true,error));
+        ensure_equals("one position notification",changes,1);
+        ensure("page clamps position",tree.setScrollPageSize(*scrollbar,900,error));
+        ensure_equals("position clamped",tree.get(*scrollbar)->scrollbar->position,100);
+        const auto decrease = tree.get(*scrollbar)->scrollbar->decrease;
+        ensure("button changes position",tree.buttonUnicode(decrease,U' ',false,error));
+        ensure_equals("decrease step",tree.get(*scrollbar)->scrollbar->position,95);
+        ensure("small document clamps",tree.setScrollDocumentSize(*scrollbar,50,error));
+        ensure_equals("no scrolling when page exceeds doc",tree.get(*scrollbar)->scrollbar->position,0);
+        ensure("restore range",tree.setScrollDocumentSize(*scrollbar,1000,error));
+        destroy = true;
+        ensure("callback deletion safe",tree.setScrollPosition(*scrollbar,50,true,error));
+        ensure("owner and children gone",!tree.get(*scrollbar) && !tree.get(decrease));
+    }
+
+    template<> template<> void object::test<92>()
+    {
+        set_test_name("native scrollbar thumb geometry preserves integer sizing and axis conventions");
+        LLVKScrollLayout::ThumbParams params;
+        params.length = 100; params.thickness = 10;
+        params.documentSize = 1000; params.pageSize = 100;
+        std::string error;
+        auto thumb = LLVKScrollLayout::thumb(params,error);
+        ensure(error,thumb.has_value());
+        ensure("vertical start thumb",*thumb == LLVKScrollLayout::Rect{0,74,10,90});
+        params.position = 900;
+        thumb = LLVKScrollLayout::thumb(params,error);
+        ensure(error,thumb.has_value());
+        ensure("vertical end thumb",*thumb == LLVKScrollLayout::Rect{0,10,10,26});
+        params.vertical = false;
+        thumb = LLVKScrollLayout::thumb(params,error);
+        ensure(error,thumb.has_value());
+        ensure("horizontal end thumb",*thumb == LLVKScrollLayout::Rect{74,0,90,10});
+        params.position = 450;
+        thumb = LLVKScrollLayout::thumb(params,error);
+        ensure(error,thumb.has_value());
+        ensure("horizontal middle thumb",*thumb == LLVKScrollLayout::Rect{42,0,58,10});
+        params.documentSize = 0; params.pageSize = 0;
+        thumb = LLVKScrollLayout::thumb(params,error);
+        ensure(error,thumb.has_value());
+        ensure("empty document fills track",*thumb == LLVKScrollLayout::Rect{10,0,90,10});
+        params.length = 25; params.documentSize = 1000; params.pageSize = 1;
+        thumb = LLVKScrollLayout::thumb(params,error);
+        ensure(error,thumb.has_value());
+        ensure("small track caps minimum thumb",*thumb == LLVKScrollLayout::Rect{10,0,15,10});
+        params.length = INT32_MAX; params.documentSize = INT32_MAX;
+        params.pageSize = INT32_MAX/2; params.position = INT32_MAX/2;
+        thumb = LLVKScrollLayout::thumb(params,error);
+        ensure("large products use checked wide arithmetic",thumb.has_value() && thumb->right <= INT32_MAX);
+        params.documentSize = -1;
+        ensure("negative document rejects",!LLVKScrollLayout::thumb(params,error));
+    }
+
+    template<> template<> void object::test<91>()
+    {
+        set_test_name("native scroll visibility preserves one-pixel allowance and cross-axis dependencies");
+        LLVKScrollLayout::Params params;
+        params.width = 102; params.height = 102;
+        params.borderWidth = 1; params.scrollbarSize = 16;
+        params.documentWidth = 101; params.documentHeight = 101;
+        std::string error;
+        auto visible = LLVKScrollLayout::visible(params,error);
+        ensure(error,visible.has_value());
+        ensure("one pixel overflow does not show bars",!visible->horizontal && !visible->vertical);
+        ensure_equals("border removed from width",visible->width,100);
+        ensure_equals("border removed from height",visible->height,100);
+        params.documentHeight = 102;
+        visible = LLVKScrollLayout::visible(params,error);
+        ensure(error,visible.has_value());
+        ensure("vertical creates horizontal need",visible->horizontal && visible->vertical);
+        ensure_equals("both bars narrow width",visible->width,84);
+        ensure_equals("both bars narrow height",visible->height,84);
+        params.documentWidth = 102; params.documentHeight = 100;
+        visible = LLVKScrollLayout::visible(params,error);
+        ensure(error,visible.has_value());
+        ensure("horizontal creates vertical need",visible->horizontal && visible->vertical);
+        params.documentWidth = 84; params.documentHeight = 200;
+        visible = LLVKScrollLayout::visible(params,error);
+        ensure(error,visible.has_value());
+        ensure("narrow document only needs vertical",visible->vertical && !visible->horizontal);
+        params.hideScrollbars = true;
+        visible = LLVKScrollLayout::visible(params,error);
+        ensure(error,visible.has_value());
+        ensure("hidden bars do not reserve room",!visible->vertical && !visible->horizontal && visible->width == 100 && visible->height == 100);
+        params.width = 0;
+        visible = LLVKScrollLayout::visible(params,error);
+        ensure(error,visible.has_value());
+        ensure_equals("signed small-window content retained",visible->width,-2);
+        params.borderWidth = INT32_MAX;
+        ensure("border arithmetic overflow rejects",!LLVKScrollLayout::visible(params,error));
+    }
+
+    template<> template<> void object::test<90>()
+    {
+        set_test_name("native plain append produces styled newline spans and preserves terminal owner");
+        LLVKStyledTextSegment::Params defaults;
+        defaults.font = loadFont();
+        auto alternate = defaults;
+        alternate.font = loadFont();
+        std::string error;
+        auto document = LLVKStyledTextDocument::create(U"",defaults,error);
+        ensure(error,document.has_value());
+        ensure("empty append ignores prepend",document->appendPlain(U"",alternate,true,error));
+        ensure("empty remains empty",document->text().empty());
+        ensure("literal append",document->appendPlain(U"one\n\ntwo\n",alternate,false,error));
+        ensure("literal text retained",document->text() == U"one\n\ntwo\n");
+        ensure_equals("normal break break normal break EOF",document->segments().size(),std::size_t(6));
+        ensure("new text uses supplied font",document->segments().front().params().font == alternate.font);
+        ensure("EOF keeps original font",document->segments().back().params().font == defaults.font);
+        LLVKPlainTextLayout::Options options;
+        options.width = 200;
+        ensure("produced segments reflow",document->reflow(options,error));
+        ensure_equals("blank and final lines retained",document->lines()->size(),std::size_t(4));
+        ensure("prepend append",document->appendPlain(U"end",defaults,true,error));
+        ensure("explicit extra newline retained",document->text() == U"one\n\ntwo\n\nend");
+        const auto before = document->text();
+        ensure("over-budget newline segments reject",!document->appendPlain(std::u32string(10001,U'\n'),defaults,false,error));
+        ensure("failed append leaves text and ranges unchanged",document->text() == before);
+        ensure("document remains reflowable",document->reflow(options,error));
+    }
+
+    template<> template<> void object::test<89>()
+    {
+        set_test_name("native styled truncation preserves scalar boundaries styles and EOF at every byte limit");
+        LLVKStyledTextSegment::Params defaults;
+        defaults.font = loadFont();
+        const std::u32string text = U"A\u00e9\u3042\U0001f600Z";
+        const std::size_t boundaries[]{1,3,6,10,11};
+        std::string error;
+        for (std::size_t limit = 0; limit <= 12; ++limit)
+        {
+            auto document = LLVKStyledTextDocument::create(text,defaults,error);
+            ensure(error,document.has_value());
+            auto highlighted = defaults;
+            highlighted.begin = 1; highlighted.end = 4; highlighted.highlightBackground = true;
+            ensure("style overlay",document->overlay(highlighted,error));
+            const auto expected = static_cast<std::size_t>(std::count_if(std::begin(boundaries),std::end(boundaries),
+                [&](auto boundary) { return boundary <= limit; }));
+            const auto truncated = document->truncate(limit,error);
+            ensure(error,truncated.has_value());
+            ensure_equals("reports actual truncation",*truncated,limit < 11);
+            ensure("exact scalar prefix",document->text() == text.substr(0,expected));
+            ensure_equals("EOF follows truncated text",document->segments().back().params().end,expected+1);
+            if (expected > 1)
+            {
+                ensure("prefix style retained",!document->segments().at(1).editable());
+                ensure_equals("clipped style end",document->segments().at(1).params().end,std::min(expected,std::size_t(4)));
+            }
+            const auto again = document->truncate(limit,error);
+            ensure(error,again.has_value());
+            ensure("truncation idempotent",!*again);
+        }
+    }
+
+    template<> template<> void object::test<88>()
+    {
+        set_test_name("native styled edits preserve style spans immutable ranges and EOF");
+        LLVKStyledTextSegment::Params defaults;
+        defaults.font = loadFont();
+        std::string error;
+        auto document = LLVKStyledTextDocument::create(U"abcdef",defaults,error);
+        ensure(error,document.has_value());
+        auto highlight = defaults;
+        highlight.begin = 2; highlight.end = 5; highlight.highlightBackground = true;
+        ensure("highlight range",document->overlay(highlight,error));
+        const auto insertion = document->insert(3,U"XY",error);
+        ensure(error,insertion.has_value());
+        ensure_equals("insert snaps past noneditable span",insertion->position,std::size_t(5));
+        ensure("inserted text",document->text() == U"abcdeXYf");
+        ensure_equals("highlight unchanged",document->segments().at(1).params().end,std::size_t(5));
+        ensure_equals("following editable span grows",document->segments().back().params().end,std::size_t(9));
+        const auto boundary = document->insert(2,U"Z",error);
+        ensure(error,boundary.has_value());
+        ensure_equals("editable predecessor extends",document->segments().front().params().end,std::size_t(3));
+        ensure_equals("highlight shifts",document->segments().at(1).params().begin,std::size_t(3));
+        const auto removed = document->erase(1,6,error);
+        ensure(error,removed.has_value());
+        ensure_equals("removed count",removed->removed,std::size_t(6));
+        ensure("cross-span deletion",document->text() == U"aYf");
+        ensure_equals("noneditable span removed",document->segments().size(),std::size_t(2));
+        ensure_equals("EOF retained",document->segments().back().params().end,std::size_t(4));
+        ensure("clear all text",document->erase(0,100,error).has_value());
+        ensure("empty text",document->text().empty());
+        ensure_equals("empty document EOF segment",document->segments().back().params().end,std::size_t(1));
+        ensure("invalid insertion rejects",!document->insert(0,std::u32string(1,0xd800),error));
+        ensure("failed insertion leaves empty document",document->text().empty());
+        auto leading = LLVKStyledTextDocument::create(U"abc",defaults,error);
+        ensure(error,leading.has_value());
+        highlight.begin = 0; highlight.end = 2;
+        ensure("leading noneditable",leading->overlay(highlight,error));
+        ensure("insert before leading indivisible",leading->insert(0,U"X",error).has_value());
+        ensure("native default editable prefix",leading->segments().front().editable());
+        ensure("leading insertion text",leading->text() == U"Xabc");
+        LLVKPlainTextLayout::Options options;
+        options.width = 100;
+        ensure("edited document reflows",leading->reflow(options,error));
+    }
+
+    template<> template<> void object::test<87>()
+    {
+        set_test_name("native styled document overlays preserve coverage and editable boundaries");
+        LLVKStyledTextSegment::Params defaults;
+        defaults.font = loadFont();
+        std::string error;
+        auto document = LLVKStyledTextDocument::create(U"abcdef",defaults,error);
+        ensure(error,document.has_value());
+        ensure_equals("default EOF coverage",document->segments().front().params().end,std::size_t(7));
+        LLVKPlainTextLayout::Options options;
+        options.width = 100;
+        ensure("initial reflow",document->reflow(options,error));
+        ensure("clean reflow index",!document->reflowIndex());
+        auto highlight = defaults;
+        highlight.begin = 2; highlight.end = 5; highlight.highlightBackground = true;
+        ensure("overlay highlight",document->overlay(highlight,error));
+        ensure_equals("prefix overlay suffix",document->segments().size(),std::size_t(3));
+        ensure_equals("invalidated containing segment",*document->reflowIndex(),std::size_t(0));
+        ensure("old lines invalidated",!document->lines());
+        ensure_equals("forward snaps interior",document->editableIndex(3,true),std::size_t(5));
+        ensure_equals("backward snaps interior",document->editableIndex(3,false),std::size_t(2));
+        ensure_equals("boundary unchanged",document->editableIndex(2,true),std::size_t(2));
+        ensure_equals("editable predecessor at boundary",*document->editableSegment(2),std::size_t(0));
+        auto overlay = defaults;
+        overlay.begin = 1; overlay.end = 3;
+        ensure("overlapping replacement",document->overlay(overlay,error));
+        ensure_equals("remaining highlight begins after overlap",document->segments().at(2).params().begin,std::size_t(3));
+        ensure("remaining highlight intact",!document->segments().at(2).editable());
+        const auto count = document->segments().size();
+        overlay.end = 100;
+        ensure("invalid overlay rejects",!document->overlay(overlay,error));
+        ensure_equals("failed overlay atomic",document->segments().size(),count);
+        ensure("reset defaults",document->resetSegments(error));
+        ensure_equals("one default restored",document->segments().size(),std::size_t(1));
+        ensure("default owner reflows",document->reflow(options,error));
+        ensure("invalid document scalar rejects",!LLVKStyledTextDocument::create(std::u32string(1,0x110000),defaults,error));
+    }
+
+    template<> template<> void object::test<86>()
+    {
+        set_test_name("native segmented reflow preserves plain lines and mixed inline heights");
+        const auto font = loadFont();
+        const std::u32string text = U"one two three\nlast";
+        LLVKStyledTextSegment::Params params;
+        params.font = font;
+        std::vector<LLVKStyledTextSegment> segments;
+        std::string error;
+        const auto append = [&](std::size_t begin, std::size_t end, LLVKStyledTextSegment::Kind kind)
+        {
+            params.begin = begin; params.end = end; params.kind = kind;
+            auto segment = LLVKStyledTextSegment::create(params,text,error);
+            ensure(error,segment.has_value());
+            segments.push_back(std::move(*segment));
+        };
+        const auto newline = text.find(U'\n');
+        append(0,newline,LLVKStyledTextSegment::Kind::Normal);
+        append(newline,newline+1,LLVKStyledTextSegment::Kind::LineBreak);
+        append(newline+1,text.size()+1,LLVKStyledTextSegment::Kind::Normal);
+        LLVKPlainTextLayout::Options options;
+        options.width = 45; options.wrap = true; options.horizontalPadding = 2;
+        const auto plain = LLVKPlainTextLayout::plain(text,*font,options,error);
+        ensure(error,plain.has_value());
+        const auto rich = LLVKStyledTextSegment::reflow(text,segments,options,error);
+        ensure(error,rich.has_value());
+        ensure_equals("same line count",rich->size(),plain->size());
+        for (std::size_t index = 0; index < rich->size(); ++index)
+        {
+            const auto& actual = rich->at(index);
+            const auto& expected = plain->at(index);
+            ensure("same ranges",actual.begin == expected.begin && actual.end == expected.end && actual.paragraph == expected.paragraph);
+            ensure("same rectangles",actual.left == expected.left && actual.right == expected.right &&
+                actual.top == expected.top && actual.bottom == expected.bottom);
+        }
+        segments.clear();
+        params.widget = 1; params.widgetWidth = 10; params.widgetHeight = 80;
+        params.forceNewLine = true;
+        append(0,3,LLVKStyledTextSegment::Kind::Normal);
+        append(3,7,LLVKStyledTextSegment::Kind::InlineWidget);
+        append(7,text.size()+1,LLVKStyledTextSegment::Kind::Normal);
+        const auto mixed = LLVKStyledTextSegment::reflow(text,segments,options,error);
+        ensure(error,mixed.has_value());
+        ensure("inline forces split",mixed->size() > 1 && mixed->front().end == 3);
+        ensure("widget height retained",std::any_of(mixed->begin(),mixed->end(),[](const auto& line) { return line.top-line.bottom == 80; }));
+        segments.erase(segments.begin());
+        ensure("gap rejected",!LLVKStyledTextSegment::reflow(text,segments,options,error));
+    }
+
+    template<> template<> void object::test<85>()
+    {
+        set_test_name("native image and inline widget metrics retain distinct fit thresholds");
+        LLVKStyledTextSegment::Params params;
+        params.font = loadFont();
+        params.image = image("inline");
+        params.kind = LLVKStyledTextSegment::Kind::Image;
+        params.end = 1;
+        std::string error;
+        auto segment = LLVKStyledTextSegment::create(params,U" ",error);
+        ensure(error,segment.has_value());
+        const auto dimensions = segment->measure(U" ",0,1,error);
+        ensure(error,dimensions.has_value());
+        ensure_equals("image padded width",dimensions->width,4.f);
+        ensure("image retains independent base emoji flag",segment->permitsEmoji() && !segment->editable());
+        ensure_equals("image exact fit midline rejected",*segment->fit(U" ",4,0,1,1,error),std::size_t(0));
+        ensure_equals("image extra pixel fits",*segment->fit(U" ",5,0,1,1,error),std::size_t(1));
+        ensure_equals("image forced at line start",*segment->fit(U" ",0,0,0,1,error),std::size_t(1));
+        params.kind = LLVKStyledTextSegment::Kind::InlineWidget;
+        params.widget = 17;
+        params.widgetWidth = 10; params.widgetHeight = 20;
+        params.leftPad = 2; params.rightPad = 3;
+        params.bottomPad = 4; params.topPad = 5;
+        params.end = 3;
+        auto widget = LLVKStyledTextSegment::create(params,U"abc",error);
+        ensure(error,widget.has_value());
+        const auto size = widget->measure(U"abc",0,3,error);
+        ensure(error,size.has_value());
+        ensure_equals("widget padded width",size->width,15.f);
+        ensure_equals("widget padded height",size->height,29);
+        ensure_equals("widget exact fit accepted",*widget->fit(U"abc",15,0,1,3,error),std::size_t(3));
+        ensure_equals("widget cannot fit midline",*widget->fit(U"abc",14,0,1,3,error),std::size_t(0));
+        ensure_equals("widget forced at line start",*widget->fit(U"abc",0,0,0,3,error),std::size_t(3));
+        ensure("inline cannot split for emoji",!widget->permitsEmoji());
+        params.forceNewLine = true;
+        auto forced = LLVKStyledTextSegment::create(params,U"abc",error);
+        ensure(error,forced.has_value());
+        ensure_equals("forced widget skips line zero",*forced->fit(U"abc",100,0,0,3,error,0),std::size_t(0));
+        ensure_equals("forced widget appears next line",*forced->fit(U"abc",100,0,0,3,error,1),std::size_t(3));
+        const auto blank = forced->measure(U"abc",0,0,error);
+        ensure(error,blank.has_value());
+        ensure("forced blank keeps font height and breaks",blank->lineBreak && blank->height > 0 && blank->width == 0.f);
+        params.widgetWidth = INT32_MAX;
+        ensure("padded extent overflow rejects",!LLVKStyledTextSegment::create(params,U"abc",error));
+    }
+
+    template<> template<> void object::test<84>()
+    {
+        set_test_name("native styled segments retain word-wrap EOF and line-break metrics");
+        const std::u32string text = U"ABC";
+        LLVKStyledTextSegment::Params params;
+        params.font = loadFont();
+        params.end = text.size()+1;
+        std::string error;
+        auto segment = LLVKStyledTextSegment::create(params,text,error);
+        ensure(error,segment.has_value());
+        auto first = segment->fit(text,0,0,0,4,error);
+        ensure(error,first.has_value());
+        ensure_equals("line start forces progress",*first,std::size_t(1));
+        const auto midline = segment->fit(text,0,0,1,4,error);
+        ensure(error,midline.has_value());
+        ensure_equals("midline requires whole word",*midline,std::size_t(0));
+        const auto all = segment->fit(text,1000,0,0,4,error);
+        ensure(error,all.has_value());
+        ensure_equals("fit includes EOF",*all,std::size_t(4));
+        const auto eof = segment->measure(text,3,1,error);
+        ensure(error,eof.has_value());
+        ensure_equals("EOF width",eof->width,0.f);
+        ensure("EOF contributes line height",eof->height > 0);
+        const auto empty = segment->measure(text,0,0,error);
+        ensure(error,empty.has_value());
+        ensure_equals("empty normal run no height",empty->height,0);
+        const auto hit = segment->hit(text,1000,0,4,true,error);
+        ensure(error,hit.has_value());
+        ensure_equals("normal hit count reserves EOF",*hit,std::size_t(3));
+        params.highlightBackground = true;
+        auto highlighted = LLVKStyledTextSegment::create(params,text,error);
+        ensure(error,highlighted.has_value());
+        ensure("highlight prevents editing and emoji splitting",!highlighted->editable() && !highlighted->permitsEmoji());
+        params.kind = LLVKStyledTextSegment::Kind::LineBreak;
+        params.end = 1;
+        auto newline = LLVKStyledTextSegment::create(params,U"\n",error);
+        ensure(error,newline.has_value());
+        const auto metrics = newline->measure(U"\n",0,1,error);
+        ensure(error,metrics.has_value());
+        ensure("newline forces break",metrics->lineBreak && metrics->height > 0 && metrics->width == 0.f);
+        ensure("newline retains independent base emoji flag",newline->permitsEmoji() && !newline->editable());
+        ensure("wrong line-break text rejects",!LLVKStyledTextSegment::create(params,U"A",error));
+        ensure("stale segment range rejects",!segment->measure(U"",0,4,error));
+    }
+
+    template<> template<> void object::test<83>()
+    {
+        set_test_name("native checkbox construction samples horizontal padding without live reshaping");
+        LLVKWidgetTree tree;
+        tree.defineSetting("UICheckboxctrlHPad",LLSD(2),LLVKWidgetTree::SettingType::Integer);
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,90,23};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::CheckBoxConstruction construction;
+        construction.labelControl.font = control.font;
+        construction.buttonControl.font = control.font;
+        construction.label = "A wrapped checkbox label";
+        construction.wrap = LLVKWidgetTree::CheckBoxWrap::Down;
+        construction.labelView.rect = {20,3,20,3};
+        construction.buttonView.rect = {2,1,15,14};
+        construction.button.toggle = true;
+        std::string error;
+        auto first = tree.createCheckBox(view,control,construction,0,error);
+        ensure(error,first.has_value());
+        ensure_equals("native configured padding",tree.get(*first)->checkBox->construction.horizontalPadding,2);
+        const auto label = tree.get(*first)->checkBox->label;
+        const auto before = tree.get(label)->params.rect;
+        ensure("update native setting",tree.updateSetting("UICheckboxctrlHPad",LLSD(35)));
+        ensure("existing label does not reactively reshape",tree.get(label)->params.rect == before);
+        auto second = tree.createCheckBox(view,control,construction,0,error);
+        ensure(error,second.has_value());
+        ensure_equals("next construction samples update",tree.get(*second)->checkBox->construction.horizontalPadding,35);
+        const auto secondLabel = tree.get(*second)->checkBox->label;
+        ensure("narrower initial label wraps more",tree.get(secondLabel)->params.rect.top-tree.get(secondLabel)->params.rect.bottom > before.top-before.bottom);
+    }
+
+    template<> template<> void object::test<82>()
+    {
+        set_test_name("native checkbox XML retains embedded bindings callbacks and nested overrides");
+        LLVKWidgetTree tree;
+        tree.defineSetting("checked",LLSD(false),LLVKWidgetTree::SettingType::Boolean);
+        LLVKWidgetFactory::Resources resources;
+        resources.fonts["outer"] = loadFont();
+        resources.fonts["inner"] = loadFont();
+        LLVKWidgetFactory::CheckBoxDefaults defaults;
+        defaults.control.font = resources.fonts.at("outer");
+        defaults.construction.labelControl.font = resources.fonts.at("inner");
+        defaults.construction.buttonControl.font = resources.fonts.at("inner");
+        defaults.construction.button.toggle = true;
+        defaults.buttonView.geometry.width = {13,true};
+        defaults.buttonView.geometry.height = {13,true};
+        int commits = 0;
+        bool predicate = true;
+        LLVKWidgetFactory::Callbacks callbacks;
+        callbacks.actions["changed"] = [&](auto,const LLSD&) { ++commits; };
+        callbacks.predicates["checked"] = [&](auto,const LLSD&) { return predicate; };
+        LLVKWidgetFactory factory({}, {}, {}, callbacks, resources, {}, {}, defaults);
+        std::string error;
+        auto checkbox = factory.construct(tree,
+            "<check_box width='150' height='23' font='outer' label='Choice' control_name='checked' initial_value='true'>"
+            "<check_box.label_text left='20' bottom='3' width='0' height='0' font='inner'/>"
+            "<check_box.check_button left='2' bottom='1' width='15' height='15'/>"
+            "<check_box.on_check function='checked'/><check_box.commit_callback function='changed'/></check_box>",0,error);
+        ensure(error,checkbox.has_value());
+        const auto children = *tree.get(*checkbox)->checkBox;
+        ensure("setting overrides initial checkbox value",!tree.value(*checkbox).asBoolean());
+        ensure("inner binding owns value",tree.get(children.button)->control->params.valueSetting == "checked");
+        ensure("outer font overrides nested label font",tree.get(children.label)->control->params.font == resources.fonts.at("outer"));
+        ensure("nested button keeps own font",tree.get(children.button)->control->params.font == resources.fonts.at("inner"));
+        ensure("predicate resolved",tree.refreshCheckBox(*checkbox));
+        ensure("predicate updates native toggle",tree.value(*checkbox).asBoolean());
+        predicate = false;
+        ensure("predicate refresh",tree.refreshCheckBox(*checkbox));
+        ensure("predicate updates false",!tree.value(*checkbox).asBoolean());
+        ensure("toggle activation",tree.buttonUnicode(children.button,U' ',false,error));
+        ensure_equals("declared commit callback",commits,1);
+        const auto size = tree.size();
+        ensure("unknown checkbox predicate rejects",!factory.construct(tree,
+            "<check_box><check_box.on_check function='missing'/></check_box>",0,error));
+        ensure_equals("unknown callback leaves tree intact",tree.size(),size);
+        ensure("invalid boolean rejects",!factory.construct(tree,"<check_box initial_value='maybe'/>",0,error));
+    }
+
+    template<> template<> void object::test<81>()
+    {
+        set_test_name("native preedit geometry preserves nested coordinates scale and range checks");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {100,200,500,400};
+        std::string error;
+        auto parent = tree.create(view,0,error);
+        ensure(error,parent.has_value());
+        view.rect = {10,20,210,43};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::LineEditorParams params;
+        params.text.leftPadding = 3;
+        auto editor = tree.createLineEditor(view,control,params,*parent,error);
+        ensure(error,editor.has_value());
+        ensure("composition",tree.updateLinePreedit(*editor,U"abc",{1,2},{false,true},1,error));
+        const auto geometry = tree.linePreeditLocation(*editor,-1,2.f,2.f,error);
+        ensure(error,geometry.has_value());
+        const auto first = tree.get(*editor)->lineEditor->text.pixelPosition(0,error);
+        const auto caret = tree.get(*editor)->lineEditor->text.pixelPosition(1,error);
+        const auto last = tree.get(*editor)->lineEditor->text.pixelPosition(3,error);
+        ensure("measured locations",first && caret && last);
+        ensure_equals("scaled caret X",geometry->x,2*(110+*caret));
+        ensure_equals("scaled half-height caret Y",geometry->y,462);
+        ensure_equals("bounds left",geometry->bounds.left,2*(110+*first));
+        ensure_equals("bounds right",geometry->bounds.right,2*(110+*last));
+        ensure_equals("bounds bottom",geometry->bounds.bottom,440);
+        ensure_equals("bounds top",geometry->bounds.top,486);
+        ensure("source control-rectangle offset retained",geometry->control == LLVKWidgetTree::Rect{240,480,640,526});
+        ensure_equals("preedit position",geometry->position,std::size_t(0));
+        ensure_equals("preedit length",geometry->length,std::size_t(3));
+        ensure("font size positive",geometry->fontSize > 0);
+        ensure("out-of-range query rejects",!tree.linePreeditLocation(*editor,4,1.f,1.f,error));
+        ensure("nonpositive scale rejects",!tree.linePreeditLocation(*editor,0,0.f,1.f,error));
+        ensure("scaled overflow rejects",!tree.linePreeditLocation(*editor,0,1.e20f,1.f,error));
+    }
+
+    template<> template<> void object::test<80>()
+    {
+        set_test_name("native preedit owns clauses overwrite restoration and composition ordering");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,200,23};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::LineEditorParams params;
+        params.text.defaultText = "abcd";
+        params.text.maximumBytes = 4;
+        int strokes = 0, validations = 0;
+        params.prevalidator = [&](auto) { ++validations; return false; };
+        params.keystroke.function = [&](auto,const LLSD&) { ++strokes; };
+        std::string error;
+        auto editor = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,editor.has_value());
+        ensure("initial reset",tree.resetLinePreedit(*editor,error));
+        ensure("preedit beyond ordinary cap",tree.updateLinePreedit(*editor,U"\u3042\u3044",{1,1},{true,false},1,error));
+        const auto& text = tree.get(*editor)->lineEditor->text;
+        ensure("native preedit present",text.hasPreedit());
+        ensure("clause boundaries",text.preedit().positions == std::vector<std::size_t>({4,5,6}));
+        ensure_equals("composition caret",text.cursor(),std::size_t(5));
+        ensure_equals("preedit bypasses whole validator",validations,0);
+        ensure_equals("update notifies",strokes,1);
+        ensure("missing reset rejects",!tree.updateLinePreedit(*editor,U"x",{1},{false},0,error));
+        ensure("reset composition",tree.resetLinePreedit(*editor,error));
+        ensure_equals("reset restores base",tree.value(*editor).asString(),std::string("abcd"));
+        ensure_equals("reset does not notify",strokes,1);
+        ensure("bad clause sum rejects",!tree.updateLinePreedit(*editor,U"xy",{1},{false},1,error));
+        ensure("malformed preedit atomic",!tree.get(*editor)->lineEditor->text.hasPreedit());
+        params.prevalidator = {};
+        auto overwrite = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,overwrite.has_value());
+        tree.setKeyboardFocus(*overwrite,false,false,error);
+        tree.lineEditorKey(*overwrite,LLVKLineEditor::Key::Home,{},error);
+        tree.lineEditorKey(*overwrite,LLVKLineEditor::Key::Insert,{},error);
+        ensure("overwrite composition",tree.updateLinePreedit(*overwrite,U"XY",{2},{true},1,error));
+        ensure_equals("overwritten text retained",tree.value(*overwrite).asString(),std::string("XYcd"));
+        ensure("original range retained",tree.get(*overwrite)->lineEditor->text.preedit().overwritten == U"ab");
+        ensure("reset overwrite",tree.resetLinePreedit(*overwrite,error));
+        ensure_equals("overwrite restored",tree.value(*overwrite).asString(),std::string("abcd"));
+        ensure("mark reconversion",tree.markLinePreedit(*overwrite,1,2,error));
+        ensure("reset marked overwrite",tree.resetLinePreedit(*overwrite,error));
+        ensure_equals("marked overwrite retains text",tree.value(*overwrite).asString(),std::string("abcd"));
+        tree.lineEditorKey(*overwrite,LLVKLineEditor::Key::Insert,{},error);
+        ensure("mark insert reconversion",tree.markLinePreedit(*overwrite,1,2,error));
+        ensure("reset marked insertion",tree.resetLinePreedit(*overwrite,error));
+        ensure_equals("marked insert removes range",tree.value(*overwrite).asString(),std::string("ad"));
+        tree.setEnabled(*overwrite,false);
+        ensure("readonly composition refuses",!tree.updateLinePreedit(*overwrite,U"x",{1},{false},1,error));
+    }
+
+    template<> template<> void object::test<79>()
+    {
+        set_test_name("native editor pointer selection owns capture focus and release ordering");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {10,20,210,43};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::LineEditorParams params;
+        params.text.defaultText = "one two";
+        std::string error;
+        auto editor = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,editor.has_value());
+        int beams = 0;
+        bool endedBeforeUp = false;
+        LLVKWidgetTree::Events events;
+        events.textCursor = [&](auto) { ++beams; };
+        events.pointer = [&](auto,const auto& event)
+        { if (event.kind == LLVKWidgetTree::PointerKind::LeftUp) endedBeforeUp = !tree.get(*editor)->lineEditor->text.selecting(); };
+        tree.setEvents(*editor,events);
+        LLVKWidgetTree::PointerEvent event;
+        event.kind = LLVKWidgetTree::PointerKind::LeftDown;
+        event.x = 10; event.y = 25; event.time = 1.0;
+        ensure("click",tree.routePointer(*editor,event,error));
+        ensure_equals("capture",tree.mouseCapture(),*editor);
+        ensure_equals("focus",tree.keyboardFocus(),*editor);
+        ensure_equals("cursor at start",tree.get(*editor)->lineEditor->text.cursor(),std::size_t(0));
+        event.kind = LLVKWidgetTree::PointerKind::Hover;
+        event.x = 210; event.time = 1.1;
+        ensure("drag",tree.routePointer(*editor,event,error));
+        ensure_equals("drag selection",tree.get(*editor)->lineEditor->text.selectionEnd(),std::size_t(7));
+        ensure_equals("I-beam requested",beams,1);
+        event.kind = LLVKWidgetTree::PointerKind::LeftUp;
+        event.x = 10; event.time = 1.2;
+        ensure("release",tree.routePointer(*editor,event,error));
+        ensure_equals("release does not reposition ended selection",tree.get(*editor)->lineEditor->text.selectionEnd(),std::size_t(7));
+        ensure("capture callback ended selection before up",endedBeforeUp);
+        ensure_equals("capture released",tree.mouseCapture(),LLVKWidgetTree::Id(0));
+        event.kind = LLVKWidgetTree::PointerKind::LeftDown;
+        event.x = 10; event.time = 2.0;
+        ensure("word click",tree.routePointer(*editor,event,error));
+        event.kind = LLVKWidgetTree::PointerKind::DoubleClick;
+        event.time = 2.1;
+        ensure("double click",tree.routePointer(*editor,event,error));
+        ensure_equals("word selection start",tree.get(*editor)->lineEditor->text.selectionStart(),std::size_t(0));
+        ensure_equals("word selection end",tree.get(*editor)->lineEditor->text.selectionEnd(),std::size_t(3));
+        event.kind = LLVKWidgetTree::PointerKind::LeftDown;
+        event.time = 2.2;
+        ensure("triple click",tree.routePointer(*editor,event,error));
+        ensure_equals("triple selects all",tree.get(*editor)->lineEditor->text.selectionStart(),std::size_t(7));
+        ensure("triple selection complete",!tree.get(*editor)->lineEditor->text.selecting());
+    }
+
+    template<> template<> void object::test<78>()
+    {
+        set_test_name("native editor clipboard commands enforce password ownership and rollback contracts");
+        struct Clipboard final : LLVKClipboard
+        {
+            std::u32string text;
+            int writes = 0;
+            std::function<void()> onWrite;
+            bool available(bool primary) const override { return !primary; }
+            std::optional<std::u32string> read(bool primary, std::string& error) override
+            { error.clear(); return primary ? std::nullopt : std::optional(text); }
+            bool write(std::u32string_view value, bool primary, std::string& error) override
+            {
+                error.clear();
+                if (primary) return false;
+                ++writes;
+                text = value;
+                if (onWrite) onWrite();
+                return true;
+            }
+        };
+        LLVKWidgetTree tree;
+        auto clipboard = std::make_shared<Clipboard>();
+        tree.setClipboard(clipboard);
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,23};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::LineEditorParams params;
+        params.text.defaultText = "secret";
+        params.text.selectOnFocus = true;
+        params.text.password = true;
+        std::string error;
+        auto password = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,password.has_value());
+        ensure("password focus and selection",tree.requestControlFocus(*password,true,error));
+        ensure("password not copyable",!tree.canLineEditorCopy(*password));
+        ensure("password not cuttable",!tree.canLineEditorCut(*password));
+        ensure("password copy does not write",!tree.copyLineEditor(*password,false,error));
+        ensure_equals("no password leaked",clipboard->writes,0);
+        clipboard->text = U"replacement";
+        ensure("password paste allowed",tree.pasteLineEditor(*password,false,error));
+        ensure_equals("password replacement",tree.value(*password).asString(),std::string("replacement"));
+        params.text.password = false;
+        params.prevalidator = [](auto text) { return !text.empty(); };
+        auto editor = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,editor.has_value());
+        ensure("editor focus and selection",tree.requestControlFocus(*editor,true,error));
+        ensure("cut",tree.cutLineEditor(*editor,error));
+        ensure("clipboard gets selection before rejected deletion",clipboard->text == U"secret");
+        ensure_equals("cut rollback restores text",tree.value(*editor).asString(),std::string("secret"));
+        ensure("cut rollback restores selection",tree.canLineEditorCopy(*editor));
+        tree.setEnabled(*editor,false);
+        ensure("readonly copy allowed",tree.copyLineEditor(*editor,false,error));
+        ensure("readonly cut unavailable",!tree.canLineEditorCut(*editor));
+        ensure("readonly paste unavailable",!tree.canLineEditorPaste(*editor,false));
+        tree.setEnabled(*editor,true);
+        ensure("primary unavailable",!tree.canLineEditorPaste(*editor,true));
+        clipboard->onWrite = [&] { std::string failure; ensure("erase during clipboard callback",tree.erase(*editor,failure)); tree.setClipboard({}); };
+        ensure("retained clipboard supports reentrant deletion",tree.cutLineEditor(*editor,error));
+        ensure("editor deleted",tree.get(*editor) == nullptr);
+    }
+
+        template<> template<> void object::test<77>()
+        {
+        set_test_name("native clipboard encoding owns Unicode and Windows newline contracts");
+        std::string error;
+        const std::u32string input = U"A\r\nB\n\U0001f600\r";
+        auto encoded = LLVKClipboard::encodeWindows(input,error);
+        ensure(error,encoded.has_value());
+        auto decoded = LLVKClipboard::decodeWindows(*encoded,error);
+        ensure(error,decoded.has_value());
+        ensure("copy/paste newline round trip",*decoded == input);
+        ensure("copy inserts CR even before existing CRLF",encoded->substr(0,4) == L"A\r\r\n");
+        ensure("invalid scalar write rejected",!LLVKClipboard::encodeWindows(std::u32string(1,0xd800),error));
+        ensure("embedded NUL write rejected",!LLVKClipboard::encodeWindows(std::u32string(1,0),error));
+        ensure("oversized write rejected",!LLVKClipboard::encodeWindows(std::u32string(1024*1024+1,U'a'),error));
+        ensure("no window cannot create transport",!LLVKClipboard::forWindow(nullptr,error));
+    #if defined(_WIN32)
+        ensure("trailing high surrogate rejected",!LLVKClipboard::decodeWindows(std::wstring(1,wchar_t(0xd800)),error));
+        ensure("lone low surrogate rejected",!LLVKClipboard::decodeWindows(std::wstring(1,wchar_t(0xdc00)),error));
+    #endif
+        const auto external = LLVKClipboard::decodeWindows(L"A\r\nB\rC\n",error);
+        ensure(error,external.has_value());
+        ensure("only paired CR removed",*external == U"A\nB\rC\n");
+        }
+
+    template<> template<> void object::test<76>()
+    {
+        set_test_name("native paste preserves validation order limits and primary selection behavior");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,23};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::LineEditorParams params;
+        params.text.defaultText = "old";
+        params.text.maximumBytes = 7;
+        std::vector<std::u32string> validated;
+        params.inputPrevalidator = [&](auto text) { validated.emplace_back(text); return true; };
+        std::string error;
+        auto editor = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,editor.has_value());
+        tree.setKeyboardFocus(*editor,false,false,error);
+        tree.lineEditorKey(*editor,LLVKLineEditor::Key::Home,{true,false,false},error);
+        validated.clear();
+        int limited = 0;
+        LLVKWidgetTree::Events events;
+        events.badKeystroke = [&](auto) { ++limited; };
+        tree.setEvents(*editor,events);
+        ensure("paste",tree.pasteLineEditorText(*editor,U"A\t\n\U0001f600Z",false,error));
+        ensure("validate before cleanup",validated.front() == U"A\t\n\U0001f600Z");
+        ensure("selection checked separately",validated.back() == U"old");
+        ensure("byte-safe prefix",tree.get(*editor)->lineEditor->text.display() == U"A  \U0001f600");
+        ensure_equals("byte-limit effect",limited,1);
+        ensure("selection gone",tree.get(*editor)->lineEditor->text.selectionStart() == tree.get(*editor)->lineEditor->text.selectionEnd());
+        params.text.maximumBytes = 100;
+        params.text.maximumCharacters = 12;
+        params.text.replaceNewlinesWithSpaces = false;
+        auto primary = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,primary.has_value());
+        tree.setEvents(*primary,events);
+        tree.setKeyboardFocus(*primary,false,false,error);
+        tree.lineEditorKey(*primary,LLVKLineEditor::Key::Home,{true,false,false},error);
+        const auto before = limited;
+        ensure("primary paste",tree.pasteLineEditorText(*primary,U"\n",true,error));
+        ensure("primary preserves selected text",tree.get(*primary)->lineEditor->text.display() == U"\u00b6old");
+        ensure_equals("configured character cap always reports",limited,before+1);
+        params.text.maximumCharacters = 0;
+        params.prevalidator = [](auto) { return false; };
+        auto rejecting = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,rejecting.has_value());
+        ensure("invalid whole paste handled",tree.pasteLineEditorText(*rejecting,U"X",false,error));
+        ensure_equals("rejected paste rollback",tree.value(*rejecting).asString(),std::string("old"));
+        ensure("rejected paste resets baseline",!tree.dirty(*rejecting));
+        ensure("invalid scalar rejected",!tree.pasteLineEditorText(*rejecting,std::u32string(1,0xd800),false,error));
+        ensure_equals("invalid input atomic",tree.value(*rejecting).asString(),std::string("old"));
+    }
+
+    template<> template<> void object::test<75>()
+    {
+        set_test_name("native Delete command keeps validation multiplicity and propagation policy");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,23};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::LineEditorParams params;
+        params.text.defaultText = "abc";
+        int inputCalls = 0, strokes = 0;
+        bool denyFirst = false, denySecond = false;
+        params.inputPrevalidator = [&](auto) { ++inputCalls; return !denyFirst && !(denySecond && inputCalls%2 == 0); };
+        params.keystroke.function = [&](auto,const LLSD&) { ++strokes; };
+        std::string error;
+        auto editor = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,editor.has_value());
+        tree.setKeyboardFocus(*editor,false,false,error);
+        tree.lineEditorKey(*editor,LLVKLineEditor::Key::Home,{},error);
+        ensure("forward delete",tree.deleteLineEditor(*editor,error));
+        ensure_equals("single character validates twice",inputCalls,2);
+        ensure_equals("first removed",tree.value(*editor).asString(),std::string("bc"));
+        denySecond = true;
+        ensure("second predicate may refuse",tree.deleteLineEditor(*editor,error));
+        ensure_equals("refusal preserves text",tree.value(*editor).asString(),std::string("bc"));
+        ensure_equals("second refusal retains advanced cursor",tree.get(*editor)->lineEditor->text.cursor(),std::size_t(1));
+        denyFirst = true;
+        const auto before = strokes;
+        ensure("first predicate may refuse",tree.deleteLineEditor(*editor,error));
+        ensure_equals("first refusal notifies",strokes,before+1);
+        ensure_equals("first refusal does not advance",tree.get(*editor)->lineEditor->text.cursor(),std::size_t(1));
+        tree.lineEditorKey(*editor,LLVKLineEditor::Key::End,{},error);
+        ensure("default consumes delete at end",tree.canLineEditorDelete(*editor));
+        params.passDelete = true;
+        auto propagating = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,propagating.has_value());
+        ensure("configured end-of-text delete propagates",!tree.canLineEditorDelete(*propagating));
+        tree.setEnabled(*editor,false);
+        ensure("readonly delete unavailable",!tree.canLineEditorDelete(*editor));
+        ensure("readonly delete untouched",!tree.deleteLineEditor(*editor,error));
+    }
+
+    template<> template<> void object::test<74>()
+    {
+        set_test_name("native history preserves drafts and Return Escape and Insert semantics");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,23};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::LineEditorParams params;
+        params.text.defaultText = "first";
+        params.keystrokeOnEscape = true;
+        params.selectOnCommit = false;
+        int commits = 0, strokes = 0;
+        control.commit.function = [&](auto,const LLSD&) { ++commits; };
+        params.keystroke.function = [&](auto,const LLSD&) { ++strokes; };
+        std::string error;
+        auto editor = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,editor.has_value());
+        tree.setKeyboardFocus(*editor,false,false,error);
+        tree.enableLineHistory(*editor,true);
+        using Key = LLVKLineEditor::Key;
+        ensure("Return propagates",!tree.lineEditorKey(*editor,Key::Return,{},error));
+        ensure_equals("Return records text",tree.get(*editor)->lineEditor->history.front(),std::string("first"));
+        ensure_equals("Return does not commit",commits,0);
+        ensure("commit",tree.commitLineEditor(*editor));
+        ensure_equals("Return then commit deduplicates",tree.get(*editor)->lineEditor->history.size(),std::size_t(2));
+        ensure("clear for draft",tree.clearLineEditor(*editor,error));
+        ensure("draft input",tree.lineEditorUnicode(*editor,U'd',error));
+        ensure("browse up",tree.lineEditorKey(*editor,Key::Up,{},error));
+        ensure_equals("history recalled",tree.value(*editor).asString(),std::string("first"));
+        ensure("browse down",tree.lineEditorKey(*editor,Key::Down,{},error));
+        ensure_equals("draft restored",tree.value(*editor).asString(),std::string("d"));
+        const auto beforeEscape = strokes;
+        ensure("Escape propagates",!tree.lineEditorKey(*editor,Key::Escape,{},error));
+        ensure_equals("Escape restores baseline",tree.value(*editor).asString(),std::string("first"));
+        ensure_equals("Escape optional notification",strokes,beforeEscape+1);
+        ensure("Escape resets dirty",!tree.dirty(*editor));
+        ensure("home",tree.lineEditorKey(*editor,Key::Home,{},error));
+        ensure("insert",tree.lineEditorKey(*editor,Key::Insert,{},error));
+        ensure("native mode toggled",tree.overwriteMode());
+        ensure("overwrite uses native mode",tree.lineEditorUnicode(*editor,U'X',error));
+        ensure_equals("replaced character",tree.value(*editor).asString(),std::string("Xirst"));
+        ensure("modified Insert consumed",tree.lineEditorKey(*editor,Key::Insert,{true,false,false},error));
+        ensure("modified Insert does not toggle",tree.overwriteMode());
+        auto other = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,other.has_value());
+        tree.setKeyboardFocus(*other,false,false,error);
+        ensure("insert mode shared by native tree",tree.overwriteMode());
+        ensure("toggle in second editor",tree.lineEditorKey(*other,Key::Insert,{},error));
+        ensure("native mode insert",!tree.overwriteMode());
+    }
+
+    template<> template<> void object::test<73>()
+    {
+        set_test_name("native line editor keyboard navigation deletion and validation rollback");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,100,23};
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::LineEditorParams params;
+        params.text.defaultText = "one two!";
+        int strokes = 0, rejected = 0;
+        params.keystroke.function = [&](auto,const LLSD&) { ++strokes; };
+        LLVKWidgetTree::Events events;
+        events.badKeystroke = [&](auto) { ++rejected; };
+        std::string error;
+        auto editor = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,editor.has_value());
+        ensure("editor events",tree.setEvents(*editor,events));
+        ensure("focus",tree.setKeyboardFocus(*editor,false,false,error));
+        using Key = LLVKLineEditor::Key;
+        const LLVKLineEditor::Modifiers shift{true,false,false}, ctrl{false,true,false};
+        ensure("left selects",tree.lineEditorKey(*editor,Key::Left,shift,error));
+        ensure_equals("selection begins at end",tree.get(*editor)->lineEditor->text.selectionStart(),std::size_t(8));
+        ensure_equals("selection moves one",tree.get(*editor)->lineEditor->text.selectionEnd(),std::size_t(7));
+        ensure("backspace selection",tree.lineEditorKey(*editor,Key::Backspace,{},error));
+        ensure_equals("removed punctuation",tree.value(*editor).asString(),std::string("one two"));
+        ensure("word backspace",tree.lineEditorKey(*editor,Key::Backspace,ctrl,error));
+        ensure_equals("word removed",tree.value(*editor).asString(),std::string("one "));
+        ensure("home",tree.lineEditorKey(*editor,Key::Home,{},error));
+        ensure("boundary backspace consumed",tree.lineEditorKey(*editor,Key::Backspace,{},error));
+        ensure_equals("boundary effect",rejected,1);
+        ensure("delete left for external edit routing",!tree.lineEditorKey(*editor,Key::Delete,{},error));
+        ensure("word delete",tree.lineEditorKey(*editor,Key::Delete,ctrl,error));
+        ensure_equals("word and trailing spaces removed",tree.value(*editor).asString(),std::string());
+        ensure_equals("handled keys notify",strokes,6);
+        params.text.defaultText = "12";
+        params.prevalidator = [](auto text) { return text.size() == 2; };
+        auto validated = tree.createLineEditor(view,control,params,0,error);
+        ensure(error,validated.has_value());
+        ensure("focus validated",tree.setKeyboardFocus(*validated,false,false,error));
+        ensure("invalid deletion handled",tree.lineEditorKey(*validated,Key::Backspace,{},error));
+        ensure_equals("rollback text",tree.value(*validated).asString(),std::string("12"));
+        ensure_equals("rollback cursor",tree.get(*validated)->lineEditor->text.cursor(),std::size_t(2));
+        ensure("rollback resets baseline",!tree.dirty(*validated));
+        tree.setEnabled(*validated,false);
+        ensure("readonly plain navigation unhandled",!tree.lineEditorKey(*validated,Key::Home,{},error));
+        ensure("readonly shift consumed then rolled back",tree.lineEditorKey(*validated,Key::Home,shift,error));
+        ensure_equals("readonly cursor restored",tree.get(*validated)->lineEditor->text.cursor(),std::size_t(2));
+    }
+
+    template<> template<> void object::test<72>()
+    {
+        set_test_name("native Windows numeric validators retain edit-state and locale contracts");
+#if defined(_WIN32)
+        LLVKWidgetTree tree;
+        LLVKWidgetFactory::LineEditorDefaults defaults;
+        defaults.control.font = loadFont();
+        LLVKWidgetFactory factory({}, {}, {}, {}, {}, {}, defaults);
+        struct Case { const char* name; std::u32string text; bool accepted; };
+        const Case cases[]{
+            {"float",U"",true},{"float",U"-",true},{"float",U" -..1.2 \t",true},
+            {"float",U"1,2",false},{"float",U"+1",false},{"float",U"1e2",false},{"float",U"1-2",false},
+            {"int",U"",true},{"int",U"-",true},{"int",U" \t-12\n",true},{"int",U"1 2",false},
+            {"int",U"1.2",false},{"int",U"+12",false},
+            {"positive_s32",U"",false},{"positive_s32",U"0",false},{"positive_s32",U"01",false},
+            {"positive_s32",U"-1",false},{"positive_s32",U" 1 ",true},
+            {"positive_s32",U"999999999999999999999999",true},
+            {"non_negative_s32",U"",true},{"non_negative_s32",U" \t",true},
+            {"non_negative_s32",U"0001",true},{"non_negative_s32",U"-0",false},
+            {"non_negative_s32",U"999999999999999999999999",true},
+            {"alpha_num",U"",true},{"alpha_num",U"aZ09\u00e9",true},
+            {"alpha_num",U"a b",false},{"alpha_num",U"a_b",false},
+            {"alpha_num_space",U"a b9",true},{"alpha_num_space",U"a\tb",false}
+        };
+        std::string error;
+        for (const auto& entry : cases)
+        {
+            auto editor = factory.construct(tree,std::string("<line_editor prevalidator='") + entry.name + "'/>",0,error);
+            ensure(error,editor.has_value());
+            const auto validator = tree.get(*editor)->lineEditor->params.prevalidator;
+            ensure_equals(std::string(entry.name) + " predicate",validator(entry.text),entry.accepted);
+            ensure("invalid scalar rejects without narrowing",!validator(std::u32string(1,0x110031)));
+            ensure("remove editor",tree.erase(*editor,error));
+            ensure("predicate owns locale beyond widget lifetime",validator(entry.text) == entry.accepted);
+        }
+#endif
+    }
+
+    template<> template<> void object::test<71>()
+    {
+        set_test_name("native built-in ASCII validator declarations preserve exact character sets");
+        LLVKWidgetTree tree;
+        LLVKWidgetFactory::Resources resources;
+        LLVKWidgetFactory::LineEditorDefaults defaults;
+        defaults.control.font = loadFont();
+        LLVKWidgetFactory factory({}, {}, {}, {}, resources, {}, defaults);
+        std::string error;
+        for (const std::string name : {"ascii","ascii_with_newline","ascii_printable_no_pipe","ascii_printable_no_space"})
+        {
+            auto editor = factory.construct(tree,"<line_editor width='100' height='23' prevalidator='" + name +
+                "' input_prevalidator='" + name + "'/>",0,error);
+            ensure(error,editor.has_value());
+            const auto& params = tree.get(*editor)->lineEditor->params;
+            ensure("empty field accepted",params.prevalidator(U""));
+            for (char32_t character = 0; character < 256; ++character)
+            {
+                bool accepted = character >= 0x20 && character <= 0x7f;
+                if (name == "ascii_with_newline") accepted = accepted || character == U'\n';
+                if (name == "ascii_printable_no_pipe") accepted = accepted && character != U'|' && character != 0x7f;
+                if (name == "ascii_printable_no_space") accepted = accepted && character != U' ' && character != 0x7f;
+                const std::u32string text(1,character);
+                ensure_equals(name + " full-text character " + std::to_string(character),params.prevalidator(text),accepted);
+                ensure_equals(name + " input character " + std::to_string(character),params.inputPrevalidator(text),accepted);
+            }
+            ensure("non-ASCII rejected",!params.prevalidator(U"\u03a9"));
+            ensure("invalid scalar rejected",!params.prevalidator(std::u32string(1,0x110000)));
+        }
+        LLVKWidgetFactory::Callbacks callbacks;
+        callbacks.textValidators["ascii"] = [](auto text) { return text == U"override"; };
+        LLVKWidgetFactory scoped({}, {}, {}, callbacks, resources, {}, defaults);
+        auto editor = scoped.construct(tree,"<line_editor prevalidator='ascii'/>",0,error);
+        ensure(error,editor.has_value());
+        ensure("native explicit registration has precedence",tree.get(*editor)->lineEditor->params.prevalidator(U"override"));
+        ensure("built-in does not mask explicit registration",!tree.get(*editor)->lineEditor->params.prevalidator(U"other"));
+    }
+
+    template<> template<> void object::test<70>()
+    {
+        set_test_name("native line editor XML constructs usable text state from packaged defaults");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKSkinFiles::Configuration configuration;
+        configuration.skinBaseDirectory = std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.userAppDirectory = "unused-profile";
+        LLVKWidgetFactory::Resources resources;
+        resources.skinFiles = std::make_shared<LLVKSkinFiles>(configuration);
+        resources.fonts["EmojiSmall"] = loadFont();
+        resources.colors = std::make_shared<LLVKColorTable>();
+        const auto colors = resources.skinFiles->read("","colors.xml",LLVKSkinFiles::Policy::All,error);
+        ensure(error,colors.has_value());
+        std::vector<std::string> warnings;
+        for (const auto& file : *colors) ensure("colors",resources.colors->load(file,LLVKColorTable::Layer::Loaded,warnings,error));
+        auto images = std::make_shared<LLVKSkinImages>(resources.skinFiles);
+        ensure("image declarations",images->loadDeclarations(error));
+        tree.setSkinImages(images);
+        LLVKWidgetFactory::Callbacks callbacks;
+        std::string typed;
+        callbacks.actions["changed"] = [&](auto,const LLSD& value) { typed = value.asString(); };
+        callbacks.textValidators["digits"] = [](auto text)
+        { return std::all_of(text.begin(),text.end(),[](char32_t character) { return character >= U'0' && character <= U'9'; }); };
+        LLVKWidgetFactory factory({}, {}, {}, callbacks, resources);
+        const bool border = factory.loadDefaultsFile(tree,"widgets/view_border.xml",error);
+        ensure(error,border);
+        const bool defaults = factory.loadDefaultsFile(tree,"widgets/line_editor.xml",error);
+        ensure(error,defaults);
+        auto editor = factory.construct(tree,
+            "<line_editor width='100' height='23' prevalidator='digits' max_length='3' value='12'>"
+            "<line_editor.keystroke_callback function='changed'/></line_editor>",0,error);
+        ensure(error,editor.has_value());
+        ensure("real native editor component",tree.get(*editor)->lineEditor.has_value());
+        ensure("real background image",tree.get(*editor)->lineEditor->params.background != nullptr);
+        ensure("native font from template",tree.get(*editor)->control->params.font == resources.fonts.at("EmojiSmall"));
+        ensure_equals("source byte default retained by char limit choice",tree.get(*editor)->lineEditor->params.text.maximumBytes,std::size_t(4096));
+        tree.setKeyboardFocus(*editor,false,false,error);
+        tree.lineEditorUnicode(*editor,U'3',false,error);
+        ensure_equals("typed callback from declaration",typed,std::string("123"));
+        tree.lineEditorUnicode(*editor,U'x',false,error);
+        ensure_equals("native validator prevents invalid value",tree.value(*editor).asString(),std::string("123"));
+        const auto size = tree.size();
+        ensure("unknown validator explicit",!factory.construct(tree,"<line_editor prevalidator='unknown'/>",0,error));
+        ensure_equals("unknown validator creates no partial widget",tree.size(),size);
+        auto readonly = factory.construct(tree,"<line_editor enabled='false' is_password='true'/>",0,error);
+        ensure(error,readonly.has_value());
+        ensure("readonly password constructed",tree.get(*readonly)->lineEditor->readOnly && tree.get(*readonly)->lineEditor->params.text.password);
+        resources.fonts["SansSerifSmall"] = resources.fonts.at("EmojiSmall");
+        resources.fonts["SansSerif"] = resources.fonts.at("EmojiSmall");
+        LLVKWidgetFactory checkboxFactory({}, {}, {}, {}, resources);
+        ensure("checkbox template",checkboxFactory.loadDefaultsFile(tree,"widgets/check_box.xml",error));
+        auto checkbox = checkboxFactory.construct(tree,"<check_box width='150' height='23' label='Remember' initial_value='true'/>",0,error);
+        ensure(error,checkbox.has_value());
+        const auto children = *tree.get(*checkbox)->checkBox;
+        ensure("actual native label",tree.get(children.label)->plainText.has_value());
+        ensure("actual native toggle",tree.get(children.button)->button.has_value());
+        ensure("real checkbox image",tree.get(children.button)->button->params.images.selected != nullptr);
+        ensure("initial checkbox value",tree.value(*checkbox).asBoolean());
+        ensure_equals("checkbox label from declaration",tree.value(children.label).asString(),std::string("Remember"));
+        resources.fallbackFont = resources.fonts.at("SansSerifSmall");
+        int scrollPosition = -1;
+        callbacks.actions["scrolled"] = [&](auto,const LLSD& value) { scrollPosition = value.asInteger(); };
+        LLVKWidgetFactory scrollFactory({}, {}, {}, callbacks, resources);
+        ensure("scrollbar packaged template",scrollFactory.loadDefaultsFile(tree,"widgets/scroll_bar.xml",error));
+        for (const std::string orientation : {"vertical","horizontal"})
+        {
+            const auto scrollbar = scrollFactory.construct(tree,
+                "<scroll_bar width='100' height='100' orientation='" + orientation + "' doc_size='1000' page_size='100'>"
+                "<scroll_bar.change_callback function='scrolled'/></scroll_bar>",0,error);
+            ensure(error,scrollbar.has_value());
+            const auto& state = *tree.get(*scrollbar)->scrollbar;
+            ensure_equals("packaged scrollbar thickness",state.thickness,15);
+            const auto& images = tree.get(state.decrease)->button->images;
+            ensure("orientation selects actual arrow asset",images.unselected && images.unselected->name() ==
+                (orientation == "vertical" ? "ScrollArrow_Up" : "ScrollArrow_Left"));
+            ensure("real native track and thumb",state.params->trackVertical && state.params->trackHorizontal &&
+                state.params->thumbVertical && state.params->thumbHorizontal);
+            ensure("declared scroll update",tree.setScrollPosition(*scrollbar,12,true,error));
+            ensure_equals("declared native callback",scrollPosition,12);
+        }
+        ensure("container packaged template",scrollFactory.loadDefaultsFile(tree,"widgets/scroll_container.xml",error));
+        ensure("panel construction font default",scrollFactory.loadDefaults(tree,"<panel font='SansSerifSmall'/>",error));
+        const auto container = scrollFactory.construct(tree,
+            "<scroll_container width='100' height='100'><panel name='document' width='300' height='400' font='SansSerifSmall'/></scroll_container>",0,error);
+        ensure(error,container.has_value());
+        const auto containerState = *tree.get(*container)->scrollContainer;
+        ensure("factory assigns document",containerState.document != 0 && tree.get(containerState.document)->panel.has_value());
+        ensure_equals("template minimum auto rate",containerState.minAutoRate,120.f);
+        ensure_equals("template maximum auto rate",containerState.maxAutoRate,500.f);
+        ensure_equals("vertical stays in front",tree.get(*container)->children.front(),containerState.vertical);
+        ensure("declared container updates",tree.updateScrollContainer(*container,error));
+        ensure("declared scrollbars visible",tree.get(containerState.vertical)->params.visible && tree.get(containerState.horizontal)->params.visible);
+        ensure("native declared container wheel",tree.routeWheel(*container,30,50,1,false,error));
+        ensure_equals("declared container moves document",tree.get(containerState.vertical)->scrollbar->position,16);
+        const bool comboEditorDefaults = scrollFactory.loadDefaultsFile(tree,"widgets/line_editor.xml",error);
+        ensure(error,comboEditorDefaults);
+        const bool comboDefaults = scrollFactory.loadDefaultsFile(tree,"widgets/combo_box.xml",error);
+        ensure(error,comboDefaults);
+        const auto combo = scrollFactory.construct(tree,
+            "<combo_box width='211' height='32' allow_text_entry='true' max_chars='128' combo_editor.prevalidator='ascii'>"
+            "<combo_box.combo_editor text_pad_left='8'/><combo_box.item label='Last location' value='last'/>"
+            "<combo_box.item label='Home' value='home'/></combo_box>",0,error);
+        ensure(error,combo.has_value());
+        const auto comboState = *tree.get(*combo)->combo;
+        ensure_equals("declared items",comboState.items.size(),std::size_t(2));
+        ensure("real combo arrow image",tree.get(comboState.button)->button->images.unselected != nullptr);
+        ensure("native editor validator",tree.get(comboState.editor)->lineEditor->params.prevalidator(U"Home"));
+        ensure("native editor rejects nonascii",!tree.get(comboState.editor)->lineEditor->params.prevalidator(U"\u03a9"));
+        ensure("declared Home selection",tree.setValue(*combo,LLSD("home")));
+        ensure_equals("declared combo label",tree.value(comboState.editor).asString(),std::string("Home"));
+        const bool textDefaults = scrollFactory.loadDefaultsFile(tree,"widgets/text.xml",error);
+        ensure(error,textDefaults);
+        const auto textLabel = scrollFactory.construct(tree,
+            "<text width='140' height='16' font='SansSerifMedium' text_color='EmphasisColor'>Create an account</text>",0,error);
+        ensure(error,textLabel.has_value());
+        ensure_equals("packaged literal text",tree.value(*textLabel).asString(),std::string("Create an account"));
+        for (const std::string widget : {"button","icon","check_box","web_browser","layout_stack"})
+        {
+            const bool loaded = scrollFactory.loadDefaultsFile(tree,"widgets/"+widget+".xml",error);
+            ensure(widget+": "+error,loaded);
+        }
+        tree.defineSetting("FSRememberUsername",LLSD(true),LLVKWidgetTree::SettingType::Boolean);
+        tree.defineSetting("RememberPassword",LLSD(false),LLVKWidgetTree::SettingType::Boolean);
+        tree.defineSetting("NextLoginLocation",LLSD("last"),LLVKWidgetTree::SettingType::String);
+        const auto login = scrollFactory.constructFile(tree,"panel_fs_nui_login.xml",0,error);
+        ensure("packaged login: "+error,login.has_value());
+        ensure("native login root",tree.get(*login)->panel.has_value());
+        ensure("native login stack layout",tree.prepareLayoutStacks(*login,0,error));
+        LLVKWidgetPaint::Input paintInput;
+        const auto paint = LLVKWidgetPaint::prepare(tree,*login,paintInput,error);
+        ensure("native login paint: "+error,paint.has_value());
+        ensure("login produces native paint commands",paint->commands.size() > 20);
+        ensure_equals("browser explicitly pending",paint->pendingBrowsers.size(),std::size_t(1));
+        bool logoPainted = false, buttonPainted = false, textPainted = false;
+        for (const auto& command : paint->commands)
+        {
+            const auto* owner = tree.get(command.owner);
+            logoPainted |= command.image && command.image->name() == "login_fs_logo";
+            buttonPainted |= owner->params.name == "connect_btn" && bool(command.image);
+            textPainted |= owner->params.name == "forgot_password_text" && command.text && !command.text->glyphs.empty();
+        }
+        ensure("actual login logo painted",logoPainted);
+        ensure("actual connect button painted",buttonPainted);
+        ensure("actual password link painted",textPainted);
+    }
+
+    template<> template<> void object::test<69>()
+    {
+        set_test_name("native line editor reshape stages cursor scroll with ancestor geometry");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKWidgetTree::Params view;
+        view.rect = {0,0,200,30};
+        auto parent = tree.create(view,0,error);
+        ensure(error,parent.has_value());
+        view.follows = LLVKWidgetTree::Left | LLVKWidgetTree::Right;
+        LLVKControl::Params control;
+        control.font = loadFont();
+        LLVKWidgetTree::LineEditorParams params;
+        params.text.defaultText = "A long editable line that must scroll";
+        params.text.leftPadding = params.text.rightPadding = 2;
+        auto editor = tree.createLineEditor(view,control,params,*parent,error);
+        ensure(error,editor.has_value());
+        auto expected = tree.get(*editor)->lineEditor->text;
+        ensure("reference text resize",expected.resize(25,error));
+        ensure("ancestor resize",tree.reshape(*parent,25,30,error));
+        ensure_equals("child geometry follows",tree.get(*editor)->params.rect.right,25);
+        ensure_equals("text scroll follows ancestor resize",tree.get(*editor)->lineEditor->text.scroll(),expected.scroll());
+        ensure_equals("text cursor retained",tree.get(*editor)->lineEditor->text.cursor(),expected.cursor());
+        const auto before = tree.get(*parent)->params.rect;
+        const auto scroll = tree.get(*editor)->lineEditor->text.scroll();
+        ensure("negative child text width fails transaction",!tree.reshape(*parent,-1,30,error));
+        ensure("parent geometry unchanged on failure",tree.get(*parent)->params.rect == before);
+        ensure_equals("text scroll unchanged on failure",tree.get(*editor)->lineEditor->text.scroll(),scroll);
+        ensure("explicit shape update",tree.setShape(*editor,{4,5,104,35},error));
+        ensure("expected explicit width",expected.resize(100,error));
+        ensure_equals("shape update synchronizes text scroll",tree.get(*editor)->lineEditor->text.scroll(),expected.scroll());
+        const auto border = tree.get(*editor)->lineEditor->border;
+        ensure_equals("border width follows editor",tree.get(border)->params.rect.right,99);
+    }
+
+    template<> template<> void object::test<68>()
+    {
+        set_test_name("native Unicode edits dirty the editor and preserve validation rollback ordering");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKControl::Params control;
+        control.font = loadFont();
+        control.initialValue = LLSD("ab");
+        LLVKWidgetTree::LineEditorParams params;
+        params.text.maximumBytes = 3;
+        std::vector<std::string> events;
+        params.keystroke.function = [&](auto,const LLSD& value) { events.push_back("key:"+value.asString()); };
+        params.prevalidator = [](auto text) { return text.find(U'x') == text.npos; };
+        auto id = tree.createLineEditor({},control,params,0,error);
+        ensure(error,id.has_value());
+        LLVKWidgetTree::Events effects;
+        effects.badKeystroke = [&](auto) { events.push_back("bad"); };
+        effects.hideCursor = [&](auto) { events.push_back("hide"); };
+        tree.setEvents(*id,effects);
+        ensure("unfocused ignores Unicode",!tree.lineEditorUnicode(*id,U'c',false,error));
+        tree.setKeyboardFocus(*id,false,false,error);
+        ensure("character inserted",tree.lineEditorUnicode(*id,U'c',false,error));
+        ensure_equals("typed value",tree.value(*id).asString(),std::string("abc"));
+        ensure("typing dirty",tree.dirty(*id));
+        ensure("effects before callback",events == std::vector<std::string>{"hide","key:abc"});
+        events.clear();
+        tree.lineEditorUnicode(*id,U'd',false,error);
+        ensure_equals("byte cap retains text",tree.value(*id).asString(),std::string("abc"));
+        ensure("limited input still callback",events == std::vector<std::string>{"bad","hide","key:abc"});
+        events.clear();
+        tree.setValue(*id,LLSD("ab"));
+        tree.lineEditorUnicode(*id,U'x',false,error);
+        ensure_equals("invalid input rolled back",tree.value(*id).asString(),std::string("ab"));
+        ensure("rollback baseline reset",!tree.dirty(*id));
+        ensure("rollback no keystroke callback",events == std::vector<std::string>{"hide","bad"});
+        params.text.selectOnFocus = true;
+        auto selected = tree.createLineEditor({},control,params,0,error);
+        ensure(error,selected.has_value());
+        tree.requestControlFocus(*selected,true,error);
+        ensure("focus selects but finishes dragging",!tree.get(*selected)->lineEditor->text.selecting());
+        tree.lineEditorUnicode(*selected,U'Q',false,error);
+        ensure_equals("typed selection replaced",tree.value(*selected).asString(),std::string("Q"));
+        params.inputPrevalidator = [&](auto) { std::string ignored; tree.eraseControl(*selected,ignored); return true; };
+        params.keystroke.function = [&](auto target,const LLSD&) { std::string ignored; tree.eraseControl(target,ignored); };
+        auto deleting = tree.createLineEditor({},control,params,0,error);
+        ensure(error,deleting.has_value());
+        tree.setKeyboardFocus(*deleting,false,false,error);
+        ensure("self deleting callback handled",tree.lineEditorUnicode(*deleting,U'Q',false,error));
+        ensure("keystroke owner removed",!tree.get(*deleting));
+    }
+
+    template<> template<> void object::test<67>()
+    {
+        set_test_name("native line editor language input precedes focus-loss commit and teardown suppresses commit");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKControl::Params control;
+        control.font = loadFont();
+        control.initialValue = LLSD("history");
+        std::vector<std::string> events;
+        control.commit.function = [&](auto,const LLSD&) { events.push_back("commit"); };
+        LLVKWidgetTree::LineEditorParams params;
+        auto id = tree.createLineEditor({},control,params,0,error);
+        ensure(error,id.has_value());
+        LLVKWidgetTree::Events callbacks;
+        callbacks.languageInput = [&](auto,bool enabled) { events.push_back(enabled ? "language on" : "language off"); };
+        callbacks.focusReceived = [&](auto) { events.push_back("focus received"); };
+        callbacks.focusLost = [&](auto) { events.push_back("focus lost"); };
+        tree.setEvents(*id,callbacks);
+        tree.setKeyboardFocus(*id,false,false,error);
+        ensure("language enable after focus callback",events == std::vector<std::string>{"focus received","language on"});
+        events.clear();
+        tree.enableLineHistory(*id,true);
+        tree.commit(*id);
+        tree.commit(*id);
+        ensure("history duplicate suppressed",tree.get(*id)->lineEditor->history == std::vector<std::string>{"history",""});
+        tree.clearLineEditor(*id,error);
+        events.clear();
+        tree.setKeyboardFocus(0,false,false,error);
+        ensure("language shutdown before commit before base callback",events == std::vector<std::string>{"language off","commit","focus lost"});
+        ensure("commit resets baseline",!tree.dirty(*id));
+        tree.setValue(*id,LLSD("changed"));
+        tree.setKeyboardFocus(*id,false,false,error);
+        tree.clearLineEditor(*id,error);
+        events.clear();
+        tree.eraseControl(*id,error);
+        ensure("destructor suppresses commit",events == std::vector<std::string>{"language off","focus lost"});
+        params.text.password = true;
+        id = tree.createLineEditor({},control,params,0,error);
+        ensure(error,id.has_value());
+        tree.setEvents(*id,callbacks);
+        events.clear();
+        tree.setKeyboardFocus(*id,false,false,error);
+        ensure("Windows password disables IME",events == std::vector<std::string>{"focus received","language off"});
+    }
+
+    template<> template<> void object::test<66>()
+    {
+        set_test_name("native line editor owns border before init and disabled state is read-only");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKWidgetTree::Params view;
+        view.rect = {5,6,105,36};
+        view.enabled = false;
+        LLVKControl::Params control;
+        control.font = loadFont();
+        control.initialValue = LLSD("long initial description");
+        tree.defineSetting("enabled",LLSD(true),LLVKWidgetTree::SettingType::Boolean);
+        control.enabledSetting = "enabled";
+        control.init.function = [&](auto id,const LLSD&)
+        {
+            const auto* node = tree.get(id);
+            ensure("real line editor before init",node->lineEditor.has_value());
+            ensure("native border already attached",tree.get(node->lineEditor->border)->border.has_value());
+            ensure("binding applied before init",!node->lineEditor->readOnly);
+            ensure_equals("identical initial assignment does not retruncate",tree.value(id).asString(),std::string("long initial description"));
+        };
+        LLVKWidgetTree::LineEditorParams editor;
+        editor.text.maximumBytes = 4;
+        auto id = tree.createLineEditor(view,control,editor,0,error);
+        ensure(error,id.has_value());
+        ensure("base remains enabled",tree.get(*id)->params.enabled);
+        ensure("explicit enabled reapplied after init",tree.get(*id)->lineEditor->readOnly);
+        ensure("readonly not in tab order",!tree.get(*id)->control->params.tabStop);
+        const auto border = tree.get(*id)->lineEditor->border;
+        ensure("border inset top and right",tree.get(border)->params.rect == LLVKWidgetTree::Rect{0,0,99,29});
+        ensure("border inward",tree.get(border)->border->params.bevel == LLVKBorder::Bevel::In);
+        ensure("setValue routes native text state",tree.setValue(*id,LLSD("abcdef")));
+        ensure_equals("subsequent value respects byte limit",tree.value(*id).asString(),std::string("abcd"));
+        ensure("assigned value clean",!tree.dirty(*id));
+        ensure("clear changes baseline",tree.clearLineEditor(*id,error));
+        ensure("dirty forwarded",tree.dirty(*id));
+        tree.resetDirty(*id);
+        ensure("dirty reset forwarded",!tree.dirty(*id));
+        tree.setEnabled(*id,true);
+        ensure("writable tab stop restored",!tree.get(*id)->lineEditor->readOnly && tree.get(*id)->control->params.tabStop);
+        tree.eraseControl(*id,error);
+        ensure("border retired with editor",!tree.get(border));
+    }
+
+    template<> template<> void object::test<65>()
+    {
+        set_test_name("native line editor text initialization selection dirty baseline and password hit testing");
+        auto font = loadFont();
+        LLVKLineEditor::Params params;
+        params.width = 100;
+        params.maximumBytes = 4;
+        params.defaultText = "abcdef";
+        std::string error;
+        auto editor = LLVKLineEditor::create(font,params,std::nullopt,{},error);
+        ensure(error,editor.has_value());
+        ensure_equals("default text limited",editor->text(),std::string("abcd"));
+        ensure_equals("constructor cursor at end",editor->cursor(),std::size_t(4));
+        ensure("constructor clean",!editor->dirty());
+        editor = LLVKLineEditor::create(font,params,std::string("descriptive initial value"),{},error);
+        ensure(error,editor.has_value());
+        ensure_equals("constructor initial ignores limit",editor->text(),std::string("descriptive initial value"));
+        ensure("select all",editor->selectAll(error));
+        ensure("replace selected value",editor->assign("new",true,false,{},error));
+        ensure_equals("whole selection retained",editor->selectionStart(),std::size_t(3));
+        ensure_equals("selected cursor at zero",editor->cursor(),std::size_t(0));
+        ensure("assignment resets dirty baseline",!editor->dirty());
+        ensure("identical text keeps selection",editor->assign("new",true,false,{},error));
+        ensure("selection unchanged",editor->selecting());
+        ensure("clear",editor->clear(error));
+        ensure("clear differs from prior baseline",editor->dirty());
+        editor->resetDirty();
+        ensure("reset dirty",!editor->dirty());
+        params.maximumBytes = 100;
+        params.maximumCharacters = 2;
+        params.defaultText = "A\xc3\xa9Z";
+        editor = LLVKLineEditor::create(font,params,std::nullopt,{},error);
+        ensure(error,editor.has_value());
+        ensure("character cap preserves Unicode scalar",editor->display() == U"A\u00e9");
+        params.maximumCharacters = 0;
+        params.defaultText = "WWWW";
+        params.password = true;
+        editor = LLVKLineEditor::create(font,params,std::nullopt,{},error);
+        ensure(error,editor.has_value());
+        auto expected = font->hitTest(U"\u2022\u2022\u2022\u2022",0,10,101,4,1,true,false,error);
+        ensure(error,expected.has_value());
+        auto hit = editor->hitTest(10,error);
+        ensure(error,hit.has_value());
+        ensure_equals("password uses bullets for hit test",*hit,*expected);
+        ensure("negative width rejected",!editor->resize(-1,error));
+        ensure_equals("failure retains text",editor->text(),std::string("WWWW"));
+    }
+
+    template<> template<> void object::test<64>()
+    {
+        set_test_name("native image aliases share immutable pixel storage but retain separate metadata and names");
+        LLVKSkinFiles::Configuration configuration;
+        configuration.skinBaseDirectory = std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.userAppDirectory = "unused-profile";
+        auto files = std::make_shared<LLVKSkinFiles>(configuration);
+        LLVKSkinImages catalog(files);
+        std::string error;
+        ensure("packaged declarations",catalog.loadDeclarations(error));
+        const auto filename = catalog.declaration("PushButton_Off")->filename;
+        const std::string metadata[]{"<textures version='101'><texture name='first' file_name='"+filename+"'/>"
+            "<texture name='second' file_name='"+filename+"' clip.left='1' clip.bottom='1' clip.right='4' clip.top='5'/></textures>"};
+        ensure("alias declarations",catalog.loadDeclarations(metadata,error));
+        auto first = catalog.image("first",error);
+        ensure(error,first != nullptr);
+        const auto resident = catalog.residentBytes();
+        auto second = catalog.image("second",error);
+        ensure(error,second != nullptr);
+        ensure("named views have distinct identities",first != second);
+        ensure("decoded pixel storage shared",first->bottomUpRgba().data() == second->bottomUpRgba().data());
+        ensure_equals("second view clip width",second->width(),3u);
+        ensure_equals("second view clip height",second->height(),4u);
+        ensure("first view unchanged",first->width() > second->width());
+        ensure_equals("aliased pixels counted once",catalog.residentBytes(),resident);
+        ensure_equals("first logical name",first->name(),std::string("first"));
+        ensure_equals("second logical name",second->name(),std::string("second"));
+        first.reset();
+        ensure("remaining view retains pixel owner",!second->bottomUpRgba().empty());
+    }
+
+    template<> template<> void object::test<63>()
+    {
+        set_test_name("native J2C local decoder owns pixels and rejects incomplete codestreams");
+        std::ifstream stream(std::string(LLVK_WIDGET_SKIN_FIXTURE)+"/textures/rounded_square.j2c",std::ios::binary);
+        ensure("J2C fixture exists",stream.good());
+        std::vector<std::uint8_t> encoded{std::istreambuf_iterator<char>(stream),{}};
+        std::string error;
+        const auto image = LLVKWidgetImage::decodeJ2c("rounded",encoded,error);
+        ensure(error,image != nullptr);
+        ensure("decoded local dimensions",image->width() > 1 && image->height() > 1);
+        const auto skin = LLVKWidgetImage::decodeSkin("skin",encoded,{},error);
+        ensure(error,skin != nullptr);
+        ensure_equals("skin logical size",skin->width(),image->width());
+        ensure("truncated header fails",!LLVKWidgetImage::decodeJ2c("bad",std::span(encoded).first(20),error));
+        ensure("truncated codestream fails",!LLVKWidgetImage::decodeJ2c("bad",std::span(encoded).first(encoded.size()/2),error));
+        const std::uint8_t invalid[]{0xff,0x4f,0xff,0x51};
+        ensure("invalid codestream fails",!LLVKWidgetImage::decodeJ2c("bad",invalid,error));
+    }
+
+    template<> template<> void object::test<62>()
+    {
+        set_test_name("native decoder qualifies every available packaged local image declaration");
+        LLVKSkinFiles::Configuration configuration;
+        configuration.skinBaseDirectory = std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.userAppDirectory = "unused-profile";
+        auto files = std::make_shared<LLVKSkinFiles>(configuration);
+        LLVKSkinImages catalog(files);
+        std::string error;
+        const bool loaded = catalog.loadDeclarations(error);
+        ensure(error,loaded);
+        std::size_t decoded = 0, missing = 0, unsupported = 0;
+        for (const auto& [name,declaration] : catalog.declarations())
+        {
+            const auto filename = declaration.filename.empty() ? name : declaration.filename;
+            const auto extension = std::filesystem::path(filename).extension().string();
+            if (extension != ".png" && extension != ".tga" && extension != ".jpg" && extension != ".jpeg" && extension != ".j2c")
+            { ++unsupported; continue; }
+            const auto paths = files->find("textures",filename,LLVKSkinFiles::Policy::Current,error);
+            ensure(error,paths.has_value());
+            if (paths->empty()) { ++missing; continue; }
+            auto image = catalog.image(name,error);
+            ensure(name+": "+error,image != nullptr);
+            ensure_equals("published bytes match pixel extent",image->bottomUpRgba().size(),
+                std::size_t(image->pixelWidth())*image->pixelHeight()*4);
+            ensure("nonempty logical extent",image->width() > 0 && image->height() > 0);
+            ++decoded;
+        }
+        ensure("substantial packaged declaration coverage",decoded > 500);
+        ensure_equals("all declared image formats implemented",unsupported,std::size_t(0));
+        std::cout << "Native skin qualification: decoded=" << decoded << " missing=" << missing
+                  << " other_formats=" << unsupported << " bytes=" << catalog.residentBytes() << '\n';
+    }
+
+    template<> template<> void object::test<61>()
+    {
+        set_test_name("native TGA decoder preserves orientation RLE palette rounding and padding alpha");
+        const auto header = [](std::uint8_t type,std::uint8_t depth,std::uint8_t flags)
+        {
+            std::vector<std::uint8_t> bytes(18,0);
+            bytes[2] = type; bytes[12] = 1; bytes[14] = 2; bytes[16] = depth; bytes[17] = flags;
+            return bytes;
+        };
+        std::string error;
+        auto bytes = header(2,32,0);
+        bytes.insert(bytes.end(),{255,0,0,255,0,0,255,255});
+        auto image = LLVKWidgetImage::decodeTga("raw",bytes,error);
+        ensure(error,image != nullptr);
+        ensure_equals("bottom blue",unsigned(image->bottomUpRgba()[2]),255u);
+        ensure_equals("top red",unsigned(image->bottomUpRgba()[4]),255u);
+        auto skin = LLVKWidgetImage::decodeSkin("skin",bytes,{},error);
+        ensure(error,skin != nullptr);
+        ensure_equals("all opaque TGA compacted before padding",unsigned(skin->bottomUpRgba()[7]),255u);
+        bytes[21] = 127;
+        skin = LLVKWidgetImage::decodeSkin("skin",bytes,{},error);
+        ensure(error,skin != nullptr);
+        ensure_equals("alpha retained means transparent padding",unsigned(skin->bottomUpRgba()[7]),0u);
+        bytes[17] = 0x20;
+        image = LLVKWidgetImage::decodeTga("top",bytes,error);
+        ensure(error,image != nullptr);
+        ensure_equals("top origin reverses input",unsigned(image->bottomUpRgba()[0]),255u);
+        auto rle = header(10,24,0);
+        rle.insert(rle.end(),{0x81,0,255,0});
+        image = LLVKWidgetImage::decodeTga("rle",rle,error);
+        ensure(error,image != nullptr);
+        ensure_equals("repeated green",unsigned(image->bottomUpRgba()[5]),255u);
+        rle[18] = 0x82;
+        ensure("packet overflow rejected",!LLVKWidgetImage::decodeTga("bad",rle,error));
+        auto palette = header(1,8,0);
+        palette[1] = 1; palette[3] = 5; palette[5] = 2; palette[7] = 24;
+        palette.insert(palette.end(),{255,0,0,0,0,255,5,255});
+        image = LLVKWidgetImage::decodeTga("palette",palette,error);
+        ensure(error,image != nullptr);
+        ensure_equals("palette origin normalized",unsigned(image->bottomUpRgba()[2]),255u);
+        ensure_equals("out of range palette index clamps last",unsigned(image->bottomUpRgba()[4]),255u);
+        auto rgb16 = header(2,16,0);
+        rgb16.insert(rgb16.end(),{0x08,0x21,0x08,0x21});
+        image = LLVKWidgetImage::decodeTga("rgb16",rgb16,error);
+        ensure(error,image != nullptr);
+        ensure_equals("5bit rounded not truncated",unsigned(image->bottomUpRgba()[0]),66u);
+        ensure("truncated packet rejected",!LLVKWidgetImage::decodeTga("bad",std::span(bytes).first(20),error));
+        LLVKSkinFiles::Configuration configuration;
+        configuration.skinBaseDirectory = std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.userAppDirectory = "unused-profile";
+        LLVKSkinImages catalog(std::make_shared<LLVKSkinFiles>(configuration));
+        ensure("catalog declarations",catalog.loadDeclarations(error));
+        const auto actual = catalog.image("Folder_Arrow",error);
+        ensure(error,actual != nullptr);
+        ensure("actual skin TGA has dimensions",actual->width() > 1 && actual->height() > 1);
+    }
+
+    template<> template<> void object::test<60>()
+    {
+        set_test_name("native JPEG decodes bottom-up opaque RGB and rejects corrupt payloads");
+        jpeg_compress_struct encoder{};
+        jpeg_error_mgr errors{};
+        encoder.err = jpeg_std_error(&errors);
+        jpeg_create_compress(&encoder);
+        unsigned char* buffer = nullptr;
+        unsigned long size = 0;
+        jpeg_mem_dest(&encoder,&buffer,&size);
+        encoder.image_width = 8;
+        encoder.image_height = 16;
+        encoder.input_components = 3;
+        encoder.in_color_space = JCS_RGB;
+        jpeg_set_defaults(&encoder);
+        jpeg_set_quality(&encoder,100,TRUE);
+        jpeg_start_compress(&encoder,TRUE);
+        std::vector<std::uint8_t> row(8*3);
+        while (encoder.next_scanline < encoder.image_height)
+        {
+            for (std::size_t pixel = 0; pixel < 8; ++pixel)
+            {
+                row[pixel*3] = encoder.next_scanline < 8 ? 255 : 0;
+                row[pixel*3+1] = 0;
+                row[pixel*3+2] = encoder.next_scanline < 8 ? 0 : 255;
+            }
+            JSAMPROW scanline = row.data();
+            jpeg_write_scanlines(&encoder,&scanline,1);
+        }
+        jpeg_finish_compress(&encoder);
+        jpeg_destroy_compress(&encoder);
+        std::unique_ptr<unsigned char,decltype(&std::free)> owner(buffer,&std::free);
+        std::string error;
+        const std::span<const std::uint8_t> bytes(buffer,size);
+        auto image = LLVKWidgetImage::decodeJpeg("jpeg",bytes,error);
+        ensure(error,image != nullptr);
+        ensure_equals("decoded height",image->height(),16u);
+        const auto pixels = image->bottomUpRgba();
+        ensure("bottom source blue",pixels[2] > 240 && pixels[0] < 15);
+        ensure("top source red",pixels[15*8*4] > 240 && pixels[15*8*4+2] < 15);
+        for (std::size_t alpha = 3; alpha < pixels.size(); alpha += 4) ensure_equals("opaque JPEG alpha",unsigned(pixels[alpha]),255u);
+        auto skin = LLVKWidgetImage::decodeSkin("skin",bytes,{},error);
+        ensure(error,skin != nullptr);
+        ensure_equals("skin dispatch preserves height",skin->height(),16u);
+        ensure("truncated header rejects",!LLVKWidgetImage::decodeJpeg("bad",bytes.first(20),error));
+        ensure("truncated end rejects warning",!LLVKWidgetImage::decodeJpeg("bad",bytes.first(bytes.size()-2),error));
+        LLVKSkinFiles::Configuration configuration;
+        configuration.skinBaseDirectory = std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.userAppDirectory = "unused-profile";
+        auto files = std::make_shared<LLVKSkinFiles>(configuration);
+        LLVKSkinImages catalog(files);
+        auto actual = catalog.image("windows/first_login_image.jpg",error);
+        ensure(error,actual != nullptr);
+        ensure("packaged JPEG decoded",actual->width() > 8 && actual->height() > 8);
+    }
+
+    template<> template<> void object::test<59>()
+    {
+        set_test_name("native font descriptors resolve after all attributes with alias and fallback precedence");
+        std::string error;
+        LLVKFontRegistry::Configuration configuration;
+        configuration.platform = "windows";
+        configuration.searchDirectories = {std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path()};
+        const std::string documents[]{"<fonts><font_size name='Small' size='10'/><font_size name='Large' size='18'/>"
+            "<font name='Test' font_style='NORMAL'><file>Roboto-Regular.ttf</file></font>"
+            "<font name='Test' font_style='BOLD'><file>Roboto-Regular.ttf</file></font></fonts>"};
+        LLVKWidgetFactory::Resources resources;
+        resources.fontRegistry = LLVKFontRegistry::create(documents,configuration,error);
+        ensure(error,resources.fontRegistry != nullptr);
+        resources.defaultFontRequest = {"Test","Small",0,false};
+        resources.fonts["Alias"] = loadFont();
+        resources.fallbackFont = resources.fonts.at("Alias");
+        LLVKWidgetTree tree;
+        LLVKWidgetFactory factory({}, {}, {}, {}, resources);
+        auto first = factory.construct(tree,"<button font.size='Large' font.style='BOLD' font='Test'/>",0,error);
+        ensure(error,first.has_value());
+        auto second = factory.construct(tree,"<button font='Test' font.style='BOLD' font.size='Large'/>",0,error);
+        ensure(error,second.has_value());
+        ensure("attribute order does not change descriptor",tree.get(*first)->control->params.font == tree.get(*second)->control->params.font);
+        ensure("requested descriptor retained",tree.get(*first)->control->params.fontRequest->style == 1);
+        const auto expected = resources.fontRegistry->resolve({"Test","Large",1,false},error);
+        ensure(error,expected != nullptr);
+        ensure("native registry supplies font",tree.get(*first)->control->params.font == expected);
+        auto alias = factory.construct(tree,"<button font='Alias' font.size='Large' font.style='BOLD'/>",0,error);
+        ensure(error,alias.has_value());
+        ensure("named alias overrides descriptor fields",tree.get(*alias)->control->params.font == resources.fonts.at("Alias"));
+        auto fallback = factory.construct(tree,"<button font='Missing' font.size='Missing'/>",0,error);
+        ensure(error,fallback.has_value());
+        ensure("explicit native fallback on resolution failure",tree.get(*fallback)->control->params.font == resources.fallbackFont);
+        auto lower = factory.construct(tree,"<button font='Test' font.style='bold'/>",0,error);
+        ensure(error,lower.has_value());
+        ensure_equals("source style matching remains case-sensitive",unsigned(tree.get(*lower)->control->params.fontRequest->style),0u);
+    }
+
+    template<> template<> void object::test<58>()
+    {
+        set_test_name("native widget constructors resolve real named assets and reject failed image publication");
+        LLVKSkinFiles::Configuration configuration;
+        configuration.skinBaseDirectory = std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.userAppDirectory = "unused-profile";
+        auto files = std::make_shared<LLVKSkinFiles>(configuration);
+        auto images = std::make_shared<LLVKSkinImages>(files);
+        std::string error;
+        const bool loaded = images->loadDeclarations(error);
+        ensure(error,loaded);
+        LLVKWidgetTree tree;
+        tree.setSkinImages(images);
+        LLVKWidgetFactory::Resources resources;
+        resources.skinFiles = files;
+        resources.fonts["SansSerifSmall"] = loadFont();
+        resources.colors = std::make_shared<LLVKColorTable>();
+        const auto colors = files->read("","colors.xml",LLVKSkinFiles::Policy::All,error);
+        ensure(error,colors.has_value());
+        std::vector<std::string> warnings;
+        for (const auto& file : *colors) ensure("colors load",resources.colors->load(file,LLVKColorTable::Layer::Loaded,warnings,error));
+        LLVKWidgetFactory factory({}, {}, {}, {}, resources);
+        const bool defaults = factory.loadDefaultsFile(tree,"widgets/button.xml",error);
+        ensure(error,defaults);
+        auto button = factory.construct(tree,"<button label='Real assets' width='100'/>",0,error);
+        ensure(error,button.has_value());
+        const auto original = tree.get(*button)->button->images.unselected;
+        ensure("decoded image available at construction",original && original->width() > 1);
+        ensure("default disabled image not replaced",tree.get(*button)->button->images.disabled != original);
+        auto icon = factory.construct(tree,"<icon font='SansSerifSmall' image_name='PushButton_Off'/>",0,error);
+        ensure(error,icon.has_value());
+        ensure("icon uses same native cached image",tree.get(*icon)->icon->image == original);
+        ensure("icon value resolves another native asset",tree.setValue(*icon,LLSD("PushButton_Selected")));
+        ensure("icon updated owner",tree.get(*icon)->icon->image == tree.get(*button)->button->images.selected);
+        const auto value = tree.value(*icon);
+        ensure("bad image assignment rejected",!tree.setValue(*icon,LLSD("missing.png")));
+        ensure_equals("failed assignment keeps value",tree.value(*icon).asString(),value.asString());
+        const auto size = tree.size();
+        ensure("missing declared image rejects constructor",!factory.construct(tree,"<button image_unselected='missing.png'/>",0,error));
+        ensure_equals("failed constructor no partial widget",tree.size(),size);
+        auto none = factory.construct(tree,"<button image_unselected='none'/>",0,error);
+        ensure(error,none.has_value());
+        ensure("explicit none remains valid",!tree.get(*none)->button->images.unselected);
+    }
+
+    template<> template<> void object::test<57>()
+    {
+        set_test_name("native image declarations merge provided fields and load real skin PNG ownership");
+        LLVKSkinFiles::Configuration configuration;
+        configuration.skinBaseDirectory = std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.userAppDirectory = "unused-profile";
+        auto files = std::make_shared<LLVKSkinFiles>(configuration);
+        LLVKSkinImages catalog(files);
+        std::string error;
+        const std::string declarations[]{
+            "<textures version='101'><texture name='image' file_name='old.png' preload='true' scale.left='1' scale.bottom='2' scale.right='3' scale.top='4'/></textures>",
+            "<textures><texture name='image' file_name='new.png' use_mips='true' scale.left='9' scale_type='scale_outer'/></textures>"};
+        ensure("metadata layers",catalog.loadDeclarations(declarations,error));
+        const auto* entry = catalog.declaration("image");
+        ensure("declaration exists",entry != nullptr);
+        ensure_equals("filename override",entry->filename,std::string("new.png"));
+        ensure("absent preload retained",entry->preload);
+        ensure("mip flag retained as source metadata",entry->useMips);
+        ensure("partial scale rect ignored",entry->metadata.scale == LLVKWidgetImage::Rect{1,2,3,4});
+        ensure("scale style override",entry->metadata.style == LLVKWidgetImage::Scale::Outer);
+        const bool loaded = catalog.loadDeclarations(error);
+        ensure(error,loaded);
+        auto button = catalog.image("PushButton_Off",error);
+        ensure(error,button != nullptr);
+        ensure("real button has multiple pixels",button->width() > 1 && button->height() > 1);
+        ensure("actual nine-slice metadata",button->scaleRegion().left > 0.f && button->scaleRegion().right < 1.f);
+        ensure("same named image stable owner",button == catalog.image("PushButton_Off",error));
+        const auto resident = catalog.residentBytes();
+        ensure_equals("cache hit no allocation",resident,button->bottomUpRgba().size());
+        ensure("none is an explicit null",!catalog.image("none",error) && error.empty());
+        ensure("published metadata cannot be replaced silently",!catalog.loadDeclarations(declarations,error));
+        LLVKSkinImages limited(files,1);
+        ensure("limited declarations load",limited.loadDeclarations(error));
+        ensure("residency failure explicit",!limited.image("PushButton_Off",error));
+        ensure_equals("failed image not published",limited.residentBytes(),std::size_t(0));
+    }
+
+    template<> template<> void object::test<56>()
+    {
+        set_test_name("native skin pixels preserve padded extent alpha and clipped logical dimensions");
+        std::string error;
+        for (const bool alpha : {false,true})
+        {
+            png_image encoder{};
+            encoder.version = PNG_IMAGE_VERSION;
+            encoder.width = 3;
+            encoder.height = 2;
+            encoder.format = alpha ? PNG_FORMAT_RGBA : PNG_FORMAT_RGB;
+            const std::vector<std::uint8_t> pixels(3*2*(alpha ? 4 : 3),127);
+            png_alloc_size_t length = 0;
+            ensure("encoded size",png_image_write_to_memory(&encoder,nullptr,&length,0,pixels.data(),0,nullptr) != 0);
+            std::vector<std::uint8_t> encoded(length);
+            ensure("encode skin pixels",png_image_write_to_memory(&encoder,encoded.data(),&length,0,pixels.data(),0,nullptr) != 0);
+            png_image_free(&encoder);
+            auto decoded = LLVKWidgetImage::decodeSkinPng("native",encoded,{},error);
+            ensure(error,decoded != nullptr);
+            ensure_equals("logical width preserves original",decoded->width(),3u);
+            ensure_equals("logical height preserves original",decoded->height(),2u);
+            ensure_equals("padded pixel width",decoded->pixelWidth(),4u);
+            ensure_equals("padded pixel height",decoded->pixelHeight(),4u);
+            ensure_equals("original right UV",decoded->clipRegion().right,0.75f);
+            ensure_equals("original top UV",decoded->clipRegion().top,0.5f);
+            const auto rgba = decoded->bottomUpRgba();
+            ensure_equals("padded pixel bytes",rgba.size(),std::size_t(64));
+            ensure_equals("padding RGB black",unsigned(rgba[12]),0u);
+            ensure_equals("padding alpha follows source components",unsigned(rgba[15]),alpha ? 0u : 255u);
+            LLVKWidgetImage::Metadata metadata;
+            metadata.clip = LLVKWidgetImage::Rect{1,0,3,2};
+            metadata.scale = LLVKWidgetImage::Rect{1,-3,8,1};
+            metadata.style = LLVKWidgetImage::Scale::Outer;
+            decoded = LLVKWidgetImage::decodeSkinPng("clipped",encoded,metadata,error);
+            ensure(error,decoded != nullptr);
+            ensure_equals("clipped width",decoded->width(),2u);
+            ensure_equals("clip coordinate based on padded extent",decoded->clipRegion().left,0.25f);
+            ensure_equals("scale based on logical width",decoded->scaleRegion().left,0.5f);
+            ensure_equals("scale right clamped",decoded->scaleRegion().right,1.f);
+            ensure_equals("scale bottom clamped",decoded->scaleRegion().bottom,0.f);
+            ensure("outer scaling retained",decoded->scaleStyle() == LLVKWidgetImage::Scale::Outer);
+            metadata.clip = LLVKWidgetImage::Rect{3,0,1,2};
+            ensure("inverted clip explicit",!LLVKWidgetImage::decodeSkinPng("bad",encoded,metadata,error));
+        }
+    }
+
+    template<> template<> void object::test<55>()
+    {
+        set_test_name("native factory loads packaged widget templates through owned skin IO");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKSkinFiles::Configuration configuration;
+        configuration.skinBaseDirectory = std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.userAppDirectory = "unused-profile";
+        LLVKWidgetFactory::Resources resources;
+        resources.skinFiles = std::make_shared<LLVKSkinFiles>(configuration);
+        resources.colors = std::make_shared<LLVKColorTable>();
+        resources.fonts["SansSerifSmall"] = loadFont();
+        const auto colors = resources.skinFiles->read("","colors.xml",LLVKSkinFiles::Policy::All,error);
+        ensure(error,colors.has_value());
+        std::vector<std::string> warnings;
+        for (const auto& file : *colors)
+        {
+            const bool loaded = resources.colors->load(file,LLVKColorTable::Layer::Loaded,warnings,error);
+            ensure(error,loaded);
+        }
+        LLVKWidgetFactory::PanelDefaults panelDefaults;
+        panelDefaults.control.font = resources.fonts.at("SansSerifSmall");
+        LLVKWidgetFactory::IconDefaults iconDefaults;
+        iconDefaults.control.font = resources.fonts.at("SansSerifSmall");
+        LLVKWidgetFactory factory({},iconDefaults,{}, {},resources,panelDefaults);
+        for (const auto* file : {"widgets/view_border.xml","widgets/badge.xml","widgets/button.xml","widgets/icon.xml","widgets/panel.xml"})
+        {
+            const bool loaded = factory.loadDefaultsFile(tree,file,error);
+            ensure(error,loaded);
+        }
+        auto panel = factory.construct(tree,
+            "<panel width='200' height='100' border='true'><button name='action' label='Ready' width='80'/></panel>",0,error);
+        ensure(error,panel.has_value());
+        const auto button = tree.get(*panel)->children.front();
+        ensure("button font from packaged template",tree.get(button)->control->params.font == resources.fonts.at("SansSerifSmall"));
+        ensure("panel theme loaded from packaged template",tree.get(*panel)->panel->params.opaqueColor == *resources.colors->find("PanelFocusBackgroundColor"));
+        ensure("panel border theme loaded",tree.get(tree.get(*panel)->panel->border)->border->params.highlightLight == *resources.colors->find("DefaultHighlightLight"));
+        ensure_equals("packaged button height",tree.get(button)->params.rect.top-tree.get(button)->params.rect.bottom,23);
+        ensure("no image substitution for unavailable assets",!tree.get(button)->button->images.unselected);
+    }
+
+    template<> template<> void object::test<54>()
+    {
+        set_test_name("native skin lookup selects default and current language independently");
+        LLVKSkinFiles::Configuration configuration;
+        configuration.executableDirectory = "app";
+        configuration.workingDirectory = "app";
+        configuration.skinBaseDirectory = "skins";
+        configuration.userAppDirectory = "profile";
+        configuration.skin = "custom";
+        configuration.theme = "theme";
+        configuration.language = "fr";
+        std::set<std::string> files{
+            "skins/default/xui/en", "skins/default/xui/en/panel.xml", "skins/default/xui/fr/panel.xml",
+            "skins/custom/xui/en/panel.xml", "skins/custom/themes/theme/xui/fr/panel.xml",
+            "profile/skins/default/xui/en/panel.xml", "profile/skins/custom/xui/fr/panel.xml",
+            "skins/default/textures/image.png", "skins/custom/themes/theme/textures/image.png"};
+        unsigned probes = 0;
+        LLVKSkinFiles resolver(configuration,[&](const auto& path)
+        { ++probes; return files.contains(path.generic_string()); });
+        std::string error;
+        auto paths = resolver.find("xui","panel.xml",LLVKSkinFiles::Policy::Current,error);
+        ensure(error,paths.has_value());
+        ensure_equals("two independent choices",paths->size(),std::size_t(2));
+        ensure_equals("user default language override",paths->front().generic_string(),std::string("profile/skins/default/xui/en/panel.xml"));
+        ensure_equals("user current language override",paths->back().generic_string(),std::string("profile/skins/custom/xui/fr/panel.xml"));
+        const auto count = probes;
+        paths = resolver.find("xui","panel.xml",LLVKSkinFiles::Policy::All,error);
+        ensure(error,paths.has_value());
+        ensure_equals("all skin paths preserved in search order",paths->size(),std::size_t(6));
+        ensure_equals("existence results cached",probes,count);
+        files.erase("profile/skins/custom/xui/fr/panel.xml");
+        resolver.invalidate();
+        paths = resolver.find("xui","panel.xml",LLVKSkinFiles::Policy::Current,error);
+        ensure(error,paths.has_value());
+        ensure_equals("explicit invalidation discovers theme fallback",paths->back().generic_string(),std::string("skins/custom/themes/theme/xui/fr/panel.xml"));
+        paths = resolver.find("textures","image.png",LLVKSkinFiles::Policy::Current,error);
+        ensure(error,paths.has_value());
+        ensure_equals("textures unlocalized",paths->size(),std::size_t(1));
+        ensure("parent traversal rejected",!resolver.find("xui","../panel.xml",LLVKSkinFiles::Policy::Current,error));
+        ensure("absolute path rejected",!resolver.find("xui","C:/panel.xml",LLVKSkinFiles::Policy::Current,error));
+        configuration.skinBaseDirectory = std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.skin = "default";
+        configuration.theme.clear();
+        configuration.language = "en";
+        LLVKSkinFiles actual(configuration);
+        const auto documents = actual.read("xui","widgets/button.xml",LLVKSkinFiles::Policy::Current,error);
+        ensure(error,documents.has_value());
+        ensure_equals("packaged default path deduplicated",documents->size(),std::size_t(1));
+        ensure("actual file read",documents->front().find("PushButton_Off") != std::string::npos);
+    }
+
+    template<> template<> void object::test<53>()
+    {
+        set_test_name("native layered files feed construction references and widget defaults");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKWidgetFactory::PanelDefaults panelDefaults;
+        panelDefaults.control.font = loadFont();
+        LLVKWidgetFactory::Resources resources;
+        resources.fonts["Font"] = panelDefaults.control.font;
+        resources.declarations["base"] = "<panel name='localized' width='100' height='50'>"
+            "<string name='caption'>Base</string><button name='action' font='Font' label='Base' width='30'/></panel>";
+        resources.declarations["locale"] = "<panel name='localized' width='150'>"
+            "<string name='caption'>Localized &amp; preserved</string><button name='action' label='Localized'/></panel>";
+        resources.declarationLayers["panel.xml"] = {"base","","locale","base"};
+        resources.declarations["buttonBase"] = "<button name='default' font='Font' pad_left='4' height='23'/>";
+        resources.declarations["buttonLocale"] = "<button name='default' pad_left='9'/>";
+        resources.declarationLayers["widgets/button.xml"] = {"buttonBase","buttonLocale"};
+        LLVKWidgetFactory factory({}, {}, {}, {}, resources, panelDefaults);
+        ensure("layered defaults load",factory.loadDefaultsFile(tree,"widgets/button.xml",error));
+        auto panel = factory.constructFile(tree,"panel.xml",0,error);
+        ensure(error,panel.has_value());
+        ensure_equals("locale width",tree.get(*panel)->params.rect.right,150);
+        const auto button = tree.get(*panel)->children.front();
+        ensure("locale label",tree.get(button)->button->params.label == U"Localized");
+        ensure_equals("layered defaults inherited",tree.get(button)->button->leftPad,9);
+        auto caption = tree.panelString(*panel,"caption",{},error);
+        ensure(error,caption.has_value());
+        ensure_equals("body and entity survive merge",*caption,std::string("Localized & preserved"));
+        auto referenced = factory.construct(tree,"<panel filename='panel.xml' width='200'/>",0,error);
+        ensure(error,referenced.has_value());
+        ensure_equals("outer reference overrides layered dimensions",tree.get(*referenced)->params.rect.right,200);
+        caption = tree.panelString(*referenced,"caption",{},error);
+        ensure(error,caption.has_value());
+        ensure_equals("references consume layered strings",*caption,std::string("Localized & preserved"));
+        const auto size = tree.size();
+        ensure("missing logical file rejects",!factory.constructFile(tree,"missing",0,error));
+        ensure_equals("missing file leaves owners alone",tree.size(),size);
+    }
+
+    template<> template<> void object::test<52>()
+    {
+        set_test_name("native XML layers preserve source attribute and keyed child update rules");
+        std::string error;
+        const std::string_view layers[]{
+            "<view name='root' width='100'><view name='same' tool_tip='first'/><view name='same' tool_tip='second'/>"
+            "<view name='last' tool_tip='old'/></view>",
+            "<other name='root' width='200' height='999'><other name='same' tool_tip='one'/>"
+            "<other name='same' tool_tip='two'/><view name='unmatched'/><view name='last' tool_tip='new'/></other>"};
+        auto merged = LLVKXmlLayers::merge(layers,error);
+        ensure(error,merged.has_value());
+        LLVKWidgetTree tree;
+        LLVKWidgetFactory factory({});
+        auto root = factory.construct(tree,*merged,0,error);
+        ensure(error,root.has_value());
+        ensure_equals("existing attribute updated",tree.get(*root)->params.rect.right,200);
+        ensure_equals("new attribute not added",tree.get(*root)->params.rect.top,0);
+        const auto& children = tree.get(*root)->children;
+        ensure_equals("unmatched nodes not appended",children.size(),std::size_t(3));
+        ensure_equals("first duplicate matched first",tree.get(children[2])->params.tooltip,std::string("one"));
+        ensure_equals("rotating duplicate match",tree.get(children[1])->params.tooltip,std::string("two"));
+        ensure_equals("search continues after missing key",tree.get(children[0])->params.tooltip,std::string("new"));
+        const std::string_view combo[]{"<combo name='box'><item value='one' label='old'/></combo>",
+            "<combo name='box'><item value='one' label='new'/></combo>"};
+        merged = LLVKXmlLayers::merge(combo,error);
+        ensure(error,merged.has_value());
+        ensure("value-key matching",merged->find("label=\"new\"") != std::string::npos);
+        const std::string_view mismatch[]{"<view name='base' width='10'/>","<view name='other' width='20'/>"};
+        merged = LLVKXmlLayers::merge(mismatch,error);
+        ensure(error,merged.has_value());
+        ensure("root name mismatch ignored",merged->find("width=\"10\"") != std::string::npos);
+        const std::string_view invalid[]{"<view/>","<view>"};
+        ensure("bad overlay rejects entire merge",!LLVKXmlLayers::merge(invalid,error));
+        const std::string_view entities[]{"<!DOCTYPE view [<!ENTITY bad 'text'>]><view/>"};
+        ensure("DTD rejected",!LLVKXmlLayers::merge(entities,error));
+    }
+
+    template<> template<> void object::test<51>()
+    {
+        set_test_name("native border declarations preserve packaged defaults and panel overrides");
+        LLVKWidgetTree tree;
+        std::string error;
+        std::vector<std::string> warnings;
+        LLVKWidgetFactory::Resources resources;
+        resources.colors = std::make_shared<LLVKColorTable>();
+        std::ifstream colors(std::string(LLVK_WIDGET_SKIN_FIXTURE)+"/colors.xml",std::ios::binary);
+        ensure("colors fixture exists",colors.good());
+        const std::string colorXml{std::istreambuf_iterator<char>(colors),{}};
+        const bool loaded = resources.colors->load(colorXml,LLVKColorTable::Layer::Loaded,warnings,error);
+        ensure(error,loaded);
+        LLVKWidgetFactory::PanelDefaults defaults;
+        defaults.control.font = loadFont();
+        LLVKWidgetFactory factory({}, {}, {}, {}, resources, defaults);
+        std::ifstream borderFile(std::string(LLVK_WIDGET_SKIN_FIXTURE)+"/xui/en/widgets/view_border.xml",std::ios::binary);
+        ensure("border fixture exists",borderFile.good());
+        const std::string borderXml{std::istreambuf_iterator<char>(borderFile),{}};
+        ensure("packaged border defaults",factory.loadDefaults(tree,borderXml,error));
+        auto border = factory.construct(tree,"<view_border width='40' height='20'/>",0,error);
+        ensure(error,border.has_value());
+        ensure("real border not generic view",tree.get(*border)->border.has_value());
+        ensure("border not a control",!tree.get(*border)->control);
+        ensure("default color reference retained",tree.get(*border)->border->params.highlightLight == *resources.colors->find("DefaultHighlightLight"));
+        ensure("border follows all",tree.get(*border)->params.follows == 15);
+        auto panel = factory.construct(tree,"<panel width='80' height='30' border='true' bevel_style='in' thickness='2'/>",0,error);
+        ensure(error,panel.has_value());
+        const auto* child = tree.get(tree.get(*panel)->panel->border);
+        ensure_equals("panel border override thickness",child->border->params.thickness,2);
+        ensure("panel border override bevel",child->border->params.bevel == LLVKBorder::Bevel::In);
+        ensure("panel border native theme reference",child->border->params.shadowDark == *resources.colors->find("DefaultShadowDark"));
+        const auto size = tree.size();
+        ensure("unsupported border width rejects",!factory.construct(tree,"<view_border thickness='7'/>",0,error));
+        ensure_equals("failed border construction atomic",tree.size(),size);
+    }
+
+    template<> template<> void object::test<50>()
+    {
+        set_test_name("native post-build construction inherits scopes and expires with its owner operation");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKWidgetFactory::PanelDefaults defaults;
+        defaults.control.font = loadFont();
+        LLVKWidgetFactory::Resources resources;
+        resources.fonts["Font"] = defaults.control.font;
+        LLVKWidgetFactory::Construction saved;
+        LLVKWidgetTree::Id dynamicButton = 0;
+        std::vector<std::string> events;
+        resources.panelClasses["Dynamic"] = [&](auto& widgets,const auto& params,const auto&,std::string& problem)
+        {
+            LLVKWidgetFactory::PanelInstance result;
+            auto id = widgets.constructPanel(params.view.view,params.control,params.panel,problem);
+            if (!id) return result;
+            result.id = *id;
+            result.callbacks = std::make_shared<LLVKWidgetFactory::Callbacks>();
+            result.callbacks->actions["OnlyLocal"] = [&](auto,const LLSD&) { events.push_back("local"); };
+            result.postBuild = [&](auto& owner,auto target,const LLVKWidgetFactory::Construction& context,std::string& failure)
+            {
+                saved = context;
+                auto button = context.construct(
+                    "<button name='dynamic' font='Font'><button.commit_callback function='OnlyLocal'/></button>",target,failure);
+                if (!button) return false;
+                dynamicButton = *button;
+                return owner.postBuildControl(target);
+            };
+            return result;
+        };
+        LLVKWidgetFactory factory({}, {}, {}, {}, resources, defaults);
+        auto panel = factory.construct(tree,"<panel class='Dynamic'/>",0,error);
+        ensure(error,panel.has_value());
+        ensure_equals("dynamic child attached",tree.get(dynamicButton)->parent,*panel);
+        ensure("dynamic handler retained",tree.buttonReturn(dynamicButton,0,false,error));
+        ensure("post-build inherited local registry",events == std::vector<std::string>{"local"});
+        const auto size = tree.size();
+        ensure("retained construction context expires",!saved.construct("<view/>",*panel,error));
+        ensure_equals("expired context creates nothing",tree.size(),size);
+        resources.panelClasses["Recurse"] = [&](auto& widgets,const auto& params,const LLVKWidgetFactory::Construction& context,std::string& problem)
+        {
+            LLVKWidgetFactory::PanelInstance result;
+            auto id = widgets.constructPanel(params.view.view,params.control,params.panel,problem);
+            if (!id) return result;
+            const auto nested = context.construct("<panel class='Recurse'/>",*id,problem);
+            if (!nested) { std::string cleanup; widgets.erase(*id,cleanup); return result; }
+            result.id = *id;
+            return result;
+        };
+        LLVKWidgetFactory recursive({}, {}, {}, {}, resources, defaults);
+        ensure("recursive constructor bounded",!recursive.construct(tree,"<panel class='Recurse'/>",0,error));
+        ensure_equals("recursive partial construction cleaned",tree.size(),size);
+    }
+
+    template<> template<> void object::test<49>()
+    {
+        set_test_name("native panel constructor scopes preserve callback and named factory precedence");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKWidgetFactory::PanelDefaults defaults;
+        defaults.control.font = loadFont();
+        unsigned initialized = 0;
+        defaults.control.init.function = [&](auto,const LLSD&) { ++initialized; };
+        LLVKWidgetFactory::Resources resources;
+        resources.fonts["Font"] = defaults.control.font;
+        std::vector<std::string> events;
+        const auto constructor = [&](std::string tag) -> LLVKWidgetFactory::PanelConstructor
+        {
+            return [&,tag](LLVKWidgetTree& widgets,const LLVKWidgetFactory::PanelDefaults& params,const LLVKWidgetFactory::Construction&,std::string& problem)
+            {
+                LLVKWidgetFactory::PanelInstance result;
+                auto id = widgets.constructPanel(params.view.view,params.control,params.panel,problem);
+                if (!id) return result;
+                result.id = *id;
+                result.callbacks = std::make_shared<LLVKWidgetFactory::Callbacks>();
+                result.callbacks->actions["Action"] = [&,tag](auto,const LLSD&) { events.push_back(tag); };
+                result.postBuild = [&,tag](auto& owner,auto target,const auto&,std::string&)
+                { events.push_back("post:"+tag); return owner.postBuildControl(target); };
+                events.push_back("construct:"+tag);
+                return result;
+            };
+        };
+        resources.panelClasses["Outer"] = [&,make = constructor("outer")](auto& owner,const auto& params,const auto& context,std::string& problem)
+        {
+            auto result = make(owner,params,context,problem);
+            result.childFactories["slot"] = constructor("outer-slot");
+            return result;
+        };
+        resources.panelClasses["Inner"] = [&,make = constructor("inner")](auto& owner,const auto& params,const auto& context,std::string& problem)
+        {
+            auto result = make(owner,params,context,problem);
+            result.childFactories["slot"] = constructor("inner-slot");
+            return result;
+        };
+        LLVKWidgetFactory::Callbacks callbacks;
+        callbacks.actions["Action"] = [&](auto,const LLSD&) { events.push_back("global"); };
+        LLVKWidgetFactory factory({}, {}, {}, callbacks, resources, defaults);
+        auto root = factory.construct(tree,
+            "<panel class='Outer'><button name='before' font='Font'><button.commit_callback function='Action'/></button>"
+            "<panel class='Inner' name='inner'><button name='inside' font='Font'><button.commit_callback function='Action'/></button>"
+            "<panel name='slot'/></panel><button name='after' font='Font'><button.commit_callback function='Action'/></button></panel>",0,error);
+        ensure(error,root.has_value());
+        ensure_equals("constructor-only classes initialize once",initialized,3u);
+        ensure("outer named factory takes precedence",std::find(events.begin(),events.end(),"construct:outer-slot") != events.end());
+        ensure("inner named factory not selected",std::find(events.begin(),events.end(),"construct:inner-slot") == events.end());
+        ensure_equals("outer post-build last",events.back(),std::string("post:outer"));
+        std::map<std::string,LLVKWidgetTree::Id> buttons;
+        std::function<void(LLVKWidgetTree::Id)> collect = [&](auto id)
+        {
+            const auto* node = tree.get(id);
+            if (node->button) buttons[node->params.name] = id;
+            for (auto child : node->children) collect(child);
+        };
+        collect(*root);
+        events.clear();
+        for (const auto* name : {"before","inside","after"}) tree.buttonReturn(buttons.at(name),0,false,error);
+        ensure("innermost callback wins and outer scope resumes",events == std::vector<std::string>{"outer","inner","outer"});
+        const auto size = tree.size();
+        ensure("missing scoped callback fails",!factory.construct(tree,
+            "<panel class='Outer'><button font='Font'><button.commit_callback function='missing'/></button></panel>",0,error));
+        ensure_equals("failed scoped construction rolls back",tree.size(),size);
+        auto standalone = factory.construct(tree,"<button font='Font'><button.commit_callback function='Action'/></button>",0,error);
+        ensure(error,standalone.has_value());
+        events.clear();
+        tree.buttonReturn(*standalone,0,false,error);
+        ensure("scope does not leak",events == std::vector<std::string>{"global"});
+    }
+
+    template<> template<> void object::test<48>()
+    {
+        set_test_name("native named callbacks resolve at construction instead of default parsing");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKWidgetFactory::ButtonDefaults defaults;
+        defaults.control.font = loadFont();
+        LLVKWidgetFactory::Callbacks callbacks;
+        std::string argument;
+        callbacks.actions["known"] = [&](auto,const LLSD& value) { argument = value.asString(); };
+        LLVKWidgetFactory factory({}, {}, defaults, callbacks);
+        ensure("unresolved names retained in defaults",factory.loadDefaults(tree,
+            "<button><button.commit_callback function='missing'/></button>",error));
+        ensure_equals("default parsing creates nothing",tree.size(),std::size_t(0));
+        ensure("missing handler rejects actual construction",!factory.construct(tree,"<button/>",0,error));
+        ensure_equals("failed resolution creates nothing",tree.size(),std::size_t(0));
+        ensure("known callback overrides deferred name",factory.loadDefaults(tree,
+            "<button><button.commit_callback function='known' parameter='resolved'/></button>",error));
+        auto button = factory.construct(tree,"<button/>",0,error);
+        ensure(error,button.has_value());
+        tree.buttonReturn(*button,0,false,error);
+        ensure_equals("resolved callable and fixed argument",argument,std::string("resolved"));
+        defaults.control.commit.functionName = "missing";
+        defaults.control.commit.function = [&](auto,const LLSD&) { argument = "direct"; };
+        LLVKWidgetFactory direct({}, {}, defaults, {});
+        button = direct.construct(tree,"<button/>",0,error);
+        ensure(error,button.has_value());
+        tree.buttonReturn(*button,0,false,error);
+        ensure_equals("direct function precedes name",argument,std::string("direct"));
+    }
+
+    template<> template<> void object::test<47>()
+    {
+        set_test_name("native referenced panel builds file children before outer initialization and overrides");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKWidgetFactory::Resources resources;
+        resources.fonts["Font"] = loadFont();
+        resources.declarations["panel.xml"] =
+            "<panel width='100' height='80' background_visible='true'><string name='message'>reference</string>"
+            "<button font='Font' name='referenced' layout='topleft' left='0' top='0' width='20' height='20' follows='all'>"
+            "<button.init_callback function='reference_child'/></button></panel>";
+        resources.declarations["cycle.xml"] = "<panel><panel filename='cycle.xml'/></panel>";
+        LLVKWidgetFactory::PanelDefaults defaults;
+        defaults.control.font = resources.fonts.at("Font");
+        std::vector<std::string> events;
+        LLVKWidgetTree::Id panelId = 0;
+        LLVKWidgetTree::Id referencedChild = 0;
+        defaults.control.init.function = [&](auto id,const LLSD&) { panelId = id; };
+        LLVKWidgetFactory::Callbacks callbacks;
+        callbacks.actions["reference_child"] = [&](auto id,const LLSD&)
+        {
+            referencedChild = id;
+            ensure_equals("reference dimensions before children",tree.get(panelId)->params.rect.right-tree.get(panelId)->params.rect.left,100);
+            ensure_equals("filename visible to referenced children",tree.get(panelId)->panel->params.filename,std::string("panel.xml"));
+            ensure("reference strings not installed yet",tree.get(panelId)->panel->strings.empty());
+            events.push_back("reference child");
+        };
+        callbacks.actions["outer_init"] = [&](auto id,const LLSD&)
+        {
+            ensure("referenced child exists before outer init",tree.get(referencedChild) != nullptr);
+            ensure_equals("outer init still at reference width",tree.get(id)->params.rect.right-tree.get(id)->params.rect.left,100);
+            events.push_back("outer init");
+        };
+        callbacks.actions["outer_child"] = [&](auto,const LLSD&)
+        {
+            ensure_equals("outer child uses final width",tree.get(panelId)->params.rect.right-tree.get(panelId)->params.rect.left,200);
+            events.push_back("outer child");
+        };
+        LLVKWidgetFactory factory({}, {}, {}, callbacks, resources, defaults);
+        auto panel = factory.construct(tree,
+            "<panel filename='panel.xml' width='200' height='120' background_visible='false'>"
+            "<panel.init_callback function='outer_init'/><string name='message'>override</string>"
+            "<button font='Font'><button.init_callback function='outer_child'/></button></panel>",0,error);
+        ensure(error,panel.has_value());
+        ensure("construction order",events == std::vector<std::string>{"reference child","outer init","outer child"});
+        ensure("outer scalar overrides reference",!tree.get(*panel)->panel->params.backgroundVisible);
+        auto message = tree.panelString(*panel,"message",{},error);
+        ensure(error,message.has_value());
+        ensure_equals("outer string overrides reference",*message,std::string("override"));
+        ensure_equals("referenced child follows resize",tree.get(referencedChild)->params.rect.right-tree.get(referencedChild)->params.rect.left,120);
+        ensure_equals("both sets of children retained",tree.get(*panel)->children.size(),std::size_t(2));
+        const auto size = tree.size();
+        ensure("missing file rejects",!factory.construct(tree,"<panel filename='missing.xml'/>",0,error));
+        ensure_equals("missing file no orphan default panel",tree.size(),size);
+        ensure("cycle rejects",!factory.construct(tree,"<panel filename='cycle.xml'/>",0,error));
+        ensure_equals("cycle removes every partial nested panel",tree.size(),size);
+    }
+
+    template<> template<> void object::test<46>()
+    {
+        set_test_name("native panel string declarations preserve body and attribute sanitation");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKWidgetFactory::Resources resources;
+        resources.fonts["Font"] = loadFont();
+        LLVKWidgetFactory::PanelDefaults defaults;
+        defaults.control.font = resources.fonts.at("Font");
+        LLVKWidgetTree::Id owner = 0;
+        LLVKWidgetFactory::Callbacks callbacks;
+        callbacks.actions["init"] = [&](auto id,const LLSD&)
+        { owner = id; ensure("declared strings not yet installed",!tree.get(id)->panel->strings.contains("trimmed")); };
+        callbacks.actions["child"] = [&](auto,const LLSD&)
+        { ensure("panel strings before children",tree.get(owner)->panel->strings.contains("trimmed")); };
+        LLVKWidgetFactory factory({}, {}, {}, callbacks, resources, defaults);
+        auto panel = factory.construct(tree,
+            "<panel><panel.init_callback function='init'/>"
+            "<string name='trimmed'> \n Hello [NAME] &amp; viewer \n </string>"
+            "<panel.string name='attribute' value='  preserved  '/>"
+            "<string name='overridden' value='attribute'>body</string>"
+            "<string name='quoted'> &quot;  padded  &quot; </string>"
+            "<string name='lines'>&quot;one&quot; &quot;two&quot;</string>"
+            "<string name='escaped'>&quot;a\\&quot;b&quot;</string>"
+            "<string name='cr'>a&#13;b</string>"
+            "<string name='empty' value=''/><string name='duplicate' value='first'/>"
+            "<string name='duplicate' value='last'/>"
+            "<button font='Font'><button.init_callback function='child'/></button></panel>",0,error);
+        ensure(error,panel.has_value());
+        const auto lookup = [&](const std::string& name)
+        {
+            const auto value = tree.panelString(*panel,name,{{"NAME","native"}},error);
+            ensure(error,value.has_value());
+            return *value;
+        };
+        ensure_equals("trimmed and substituted",lookup("trimmed"),std::string("Hello native & viewer"));
+        ensure_equals("attribute keeps whitespace",lookup("attribute"),std::string("  preserved  "));
+        ensure_equals("body overrides attribute",lookup("overridden"),std::string("body"));
+        ensure_equals("quoted keeps whitespace",lookup("quoted"),std::string("  padded  "));
+        ensure_equals("quoted multiline trailing newline",lookup("lines"),std::string("one\ntwo\n"));
+        ensure_equals("quoted escapes",lookup("escaped"),std::string("a\"b"));
+        ensure_equals("embedded CR removed",lookup("cr"),std::string("ab"));
+        ensure("explicit empty string",lookup("empty").empty());
+        ensure_equals("last duplicate wins",lookup("duplicate"),std::string("last"));
+        const auto size = tree.size();
+        ensure("nested string elements rejected",!factory.construct(tree,"<panel><string name='bad'><view/></string></panel>",0,error));
+        ensure_equals("bad declaration creates nothing",tree.size(),size);
+    }
+
+    template<> template<> void object::test<45>()
+    {
+        set_test_name("native panel XML performs default init before declared init and retains signal connections");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKWidgetFactory::PanelDefaults defaults;
+        defaults.control.font = loadFont();
+        defaults.view.geometry.width = {10,true};
+        defaults.view.geometry.height = {20,true};
+        std::vector<std::string> events;
+        LLVKWidgetTree::Id original = 0;
+        defaults.control.init.function = [&](auto id,const LLSD&)
+        {
+            original = id;
+            ensure_equals("default init name",tree.get(id)->params.name,std::string("panel"));
+            ensure_equals("default init geometry",tree.get(id)->params.rect.right-tree.get(id)->params.rect.left,10);
+            events.push_back("default init");
+        };
+        defaults.control.commit.function = [&](auto,const LLSD&) { events.push_back("default commit"); };
+        defaults.control.validate.function = [&](auto,const LLSD&) { events.push_back("default validate"); return false; };
+        LLVKWidgetFactory::Callbacks callbacks;
+        callbacks.actions["declared_init"] = [&](auto id,const LLSD&)
+        {
+            ensure_equals("same owner reinitialized",id,original);
+            ensure_equals("declared name before init",tree.get(id)->params.name,std::string("declared"));
+            ensure_equals("declared rectangle not applied before callback",tree.get(id)->params.rect.right-tree.get(id)->params.rect.left,10);
+            events.push_back("declared init");
+        };
+        callbacks.actions["declared_commit"] = [&](auto,const LLSD&) { events.push_back("declared commit"); };
+        callbacks.predicates["declared_validate"] = [&](auto,const LLSD&) { events.push_back("declared validate"); return true; };
+        LLVKWidgetFactory factory({}, {}, {}, callbacks, {}, defaults);
+        auto panel = factory.construct(tree,
+            "<panel name='declared' width='80' height='40'><panel.init_callback function='declared_init'/>"
+            "<panel.commit_callback function='declared_commit'/><panel.validate_callback function='declared_validate'/></panel>",0,error);
+        ensure(error,panel.has_value());
+        ensure("both initialization phases",events == std::vector<std::string>{"default init","declared init"});
+        ensure_equals("declared geometry after init",tree.get(*panel)->params.rect.right-tree.get(*panel)->params.rect.left,80);
+        events.clear();
+        tree.commit(*panel);
+        ensure("commit connections retained",events == std::vector<std::string>{"default commit","declared commit"});
+        events.clear();
+        ensure("combined validation false",!tree.validate(*panel));
+        ensure("all validators evaluated",events == std::vector<std::string>{"default validate","declared validate"});
+    }
+
+    template<> template<> void object::test<44>()
+    {
+        set_test_name("native panel XML keeps constructor state and attaches after child initialization");
+        LLVKWidgetTree tree;
+        std::string error;
+        LLVKWidgetTree::Params view;
+        view.visible = false;
+        view.rect = {0,0,300,200};
+        auto parent = tree.create(view,0,error);
+        ensure(error,parent.has_value());
+        auto prior = tree.create({},*parent,error);
+        ensure(error,prior.has_value());
+        tree.reparent(*prior,*parent,false,7,error);
+        LLVKWidgetFactory::Resources resources;
+        resources.fonts["Font"] = loadFont();
+        LLVKWidgetTree::Id panelId = 0;
+        LLVKWidgetFactory::Callbacks callbacks;
+        callbacks.actions["panel_init"] = [&](auto id,const LLSD&)
+        {
+            panelId = id;
+            ensure("constructor default before init",!tree.get(id)->panel->params.backgroundVisible);
+            ensure_equals("no declared border before init",tree.get(id)->panel->border,LLVKWidgetTree::Id(0));
+            ensure_equals("panel not attached",tree.get(id)->parent,LLVKWidgetTree::Id(0));
+        };
+        callbacks.actions["child_init"] = [&](auto,const LLSD&)
+        {
+            ensure_equals("panel remains detached while constructing children",tree.get(panelId)->parent,LLVKWidgetTree::Id(0));
+            ensure("external hidden ancestor not connected yet",tree.visibleInChain(panelId));
+            ensure("declared panel state installed before children",tree.get(panelId)->panel->params.backgroundVisible);
+            ensure("declared border installed before children",tree.get(tree.get(panelId)->panel->border) != nullptr);
+        };
+        LLVKWidgetFactory::PanelDefaults panelDefaults;
+        panelDefaults.control.font = resources.fonts.at("Font");
+        LLVKWidgetFactory factory({}, {}, {}, callbacks, resources, panelDefaults);
+        auto panel = factory.construct(tree,
+            "<panel font='Font' width='100' height='60' border='true' background_visible='true'>"
+            "<panel.init_callback function='panel_init'/><button font='Font' width='30' height='20'>"
+            "<button.init_callback function='child_init'/></button></panel>",*parent,error);
+        ensure(error,panel.has_value());
+        ensure_equals("parent attached after children",tree.get(*panel)->parent,*parent);
+        ensure("now in hidden hierarchy",!tree.visibleInChain(*panel));
+        ensure_equals("panel inherits parent last tab group",tree.get(*panel)->params.tabGroup.value_or(-1),7);
+        ensure("actual panel component",tree.get(*panel)->panel.has_value());
+        const auto size = tree.size();
+        ensure("unknown custom panel is not silently generic",!factory.construct(tree,"<panel font='Font' class='missing'/>",*parent,error));
+        ensure_equals("rejection leaves tree unchanged",tree.size(),size);
+    }
 
     template<> template<> void object::test<43>()
     {

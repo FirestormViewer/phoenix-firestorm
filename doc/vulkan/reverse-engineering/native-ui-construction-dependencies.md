@@ -13,6 +13,1239 @@ choices below authorizes reuse until its outgoing constructor/helper targets clo
 
 ## Native construction implementation (2026-09-10)
 
+Login password visibility binding (NV-00/01/12/17): source
+FSPanelLogin::onShowHidePasswordClick/syncShowHidePasswordButton and
+LLLineEditor::setDrawAsterixes switch transient masking, swap eye-button visibility
+and update language-input permission without changing text/cursor. Native login
+owner installs independent commit callbacks after construction; text hit-testing
+and paint masking change together. Test127 checks both toggles and retained value/
+cursor. Native Win32 Ctrl+A uses the existing source-backed selectAll operation.
+
+Actual-viewer popup input regression: opening the arrow and then separately
+clicking a row failed because root traversal tested ancestor rectangles before
+the popup extending outside them. Source top-control dispatch is independent
+of normal LLView traversal (which excludes the top control). Native routePointer
+now gives uncaptured top-control bounds first dispatch and dismisses an outside
+combo press. Test117 exercises separate arrow release and row click, not only
+the earlier drag-release selection. Actual viewer resize and masked typing were
+observed before this fix; popup selection must be reverified after it.
+
+Native simple combo popup paint (NV-00/01/12/17): source LLComboBox constructor
+disables stripes; LLScrollListCtrl::drawItems, LLScrollListItem::draw and
+LLScrollListText::draw choose enabled/selected/hover colors, selection supersedes
+whole-row hover, bottom-aligned text starts one pixel into the cell with ellipsis.
+Native combo params retain live packaged color references; paint list defers visible
+popup commands until after the main tree with root/item clips. Test127 opens the
+actual location combo and checks all three rows and topmost command ownership.
+Long-list scrollbar chrome, type-ahead substring highlight, multi-column content
+and popup keyboard interaction remain open; this is the login simple-row path.
+
+Native login resource owner (NV-00/01/12/17): source LLFontGL::initClass selects
+an install/user descriptor before skin fallback; existing native font/skin/color/
+factory contracts supply independent consumers. LLVKLoginUi takes that selection,
+font search paths/DPI and settings explicitly rather than reading GL globals.
+It owns a native tree and actual descriptor-resolved fonts, loads required widget
+templates, constructs the unchanged default login and validates required controls.
+Test127 uses real packaged fonts with no fallback font substitution and checks
+different requested sizes and bound Home location. Startup descriptor selection,
+user colors/settings persistence, login service callbacks and actual boot remain
+separate obligations; this owner does not claim those services are implemented.
+
+Native login paint list (NV-00/01/06/11/12/17): source LLView::drawChildren
+reverse traversal/visible/root-overlap tests, LLPanel::draw background/transparency,
+and preceding native button/editor/text/icon preparation contracts. Q1 preserve
+parent background before reverse child painter order and explicit text/stack clips.
+Q2 LLVKWidgetPaint emits retained native image/solid/glyph commands in bottom-up
+screen coordinates, keeping browser-not-ready IDs explicit. Q3 CPU preparation
+is separate from resource publication/packet recording; callbacks use native IDs
+and recheck lifetime. Test70 prepares the actual login and asserts logo/connect/
+password-link commands and pending browser. Visible unsupported border/scroll/
+badge/popup list consumers fail explicitly and remain open. Dirty-region rendering,
+full scale/alpha policy, browser fit policy, popup painting and GPU consumption are
+not closed by this paint-list test.
+
+Native editor preparation (NV-00/01/06/12/17): source 1819c5fecf
+LLLineEditor::drawBackground/draw/findPixelNearestPos, non-spellchecked login
+configuration. Q1 background precedence readonly/focus/normal, alpha replacement
+for text versus multiplication for solid background, preedit before letters,
+three selection runs, hidden programmatic border, application-focus/read-only/
+one-second-delay caret gating, overwrite inversion, watermark and IME position.
+Q2 native display text (password already masked) and native font layout produce
+ordered image/rectangle/glyph parts. Q3 tree owns preparation; caller supplies
+explicit application focus and elapsed keystroke time, and consumes IME output.
+Test126 checks masked glyphs, focus image, alpha and caret gating. Spellchecking,
+custom highlighted text color, platform IME delivery and actual GPU painter remain
+open. No reuse of GL-owned editor's historical getVkTextState/getVkBackground.
+
+Native button preparation (NV-00/01/06/12/17): source 1819c5fecf LLButton::draw,
+drawBorder/getOverlayImageSize and setToggleState. Q1 image/disabled overrides
+precede toggle callback; labels follow its mutation; focus outline precedes base
+image/glow, then overlay and trimmed text. Hover/flash interpolate at 0.05 seconds,
+pressed label shifts x only, overlay scales down to fit. Q2 explicit native input
+state and retained image/color/text primitives, no GL draw callback. Q3 prepare in
+the native tree where focus/capture/settings/callback lifetimes are owned; GPU
+consumer handles primitives and native font output. Test125 checks image-before
+callback/label-after, focus order, pressed x and disabled selected override.
+Search-highlight override, checkbox-control-panel child, solid-mask GPU mode and
+full frame/visual parity remain open. No button draw-completion claim yet.
+
+Packaged login construction probe: test70 now consumes panel_fs_nui_login.xml
+unchanged, with native widget templates/resources and three explicit bound login
+settings. This falsifies missing declaration-path assumptions; success only proves
+construction/layout, not FSPanelLogin service callbacks, browser navigation or
+viewer startup. The fixture font fallback is not a font-size parity oracle.
+
+Browser declaration construction (2026-09-11, NV-00/01/12/17): source 1819c5fecf
+LLMediaCtrl::Params/constructor/postBuild, parent LLPanel contract already recorded.
+Q1: typed panel construction retains home URL/MIME/error URL, trust/focus policy,
+decoupled texture sizing; empty home URL does not create media. Q2 independently
+owned native browser component is installed before native control init, with an
+independent panel base, and runtime browser owner consumes policy separately.
+Q3 typed construction avoids plain LLPanel's two-phase XML reinitialization.
+Test124 checks empty-home/trust state before init and border metadata. Notification
+shade, native auth/file dialogs, media-ID routing, caret color and visibility
+refresh callbacks remain open; typed component registration is not their closure.
+
+Native skin geometry (2026-09-11, NV-00/01/06/11/12/17): source 1819c5fecf
+LLUIImage::draw/drawSolid/drawBorder (lluiimage.inl), both border overloads and
+zero-angle gl_draw_scaled_rotated_image in llrender2dutils.cpp. Q1: clipped UVs
+define natural size, scale region defines nine patches, inner scaling stretches
+the center and uniformly shrinks borders if undersized; outer scaling keeps the
+center fixed up to target fit. Inner coordinates round after UI transform while
+outer edges remain fractional. Unbordered scaling instead rounds its extent.
+Q2: image owner prepares bounded CPU quads with explicit target/UI transform and
+separate bottom-up UVs. Q3: at most nine quads, no ambient GL state or API handles;
+consumer supplies tint/blending/shader and coordinate-system conversion. Test122
+checks borders, undersized target, fractional scaling and outer-center behavior.
+Negative targets/transforms and empty outer centers reject explicitly; no parity
+claim for those inputs. GPU publication and solid-mask shader consumer remain open.
+
+Login literal text declaration path (2026-09-11, NV-00/01/12/17): source
+1819c5fecf LLTextBase constructor/initFromParams, LLTextBox::setText/setTextArg,
+LLUrlRegistry::findUrl/stringHasUrl/stringHasJira and packaged widgets/text.xml.
+Q1: native document child, resolved text value before init, dirty reset/read-only
+override afterward, bounded UTF8 bytes, alignment/padding and live color slots;
+URL registry returns immediately when neither URL nor issue candidates exist.
+Q2: native factory defaults and Expat body declarations feed the independently
+owned text document/font; the candidate-free path is CPU-only. Q3: retain the
+candidate policy in the text owner so post-construction substitutions/updates
+cannot bypass it. Candidate content currently fails explicitly and atomically,
+rather than silently dropping links or embedded content. Test121 checks text
+body, alignment, reflow, failed-update retention and explicit parse_urls=false;
+test70 consumes the packaged text template. Rich candidate resolution, scrolling,
+ellipsis, background/border, shadow modes other than none and full text parity
+remain open, not disabled in the reference. This is not full text closure.
+
+Literal login link input (2026-09-11, NV-00/01/12/17): source at construction
+checkpoint 1819c5fecf, Windows, LLTextBox::handleMouseDown/handleMouseUp/handleHover
+and LLTextBase counterparts. Q1: base segment/child handling precedes sound,
+capture is taken only when unowned (except modal override), captured release
+clears capture before the callback, and base-handled release suppresses the
+label callback. Hover uses a hand only for unhandled clickable text. Q2: these
+are CPU input transitions with native tree IDs, independently owned callbacks
+and native cursor/sound event outputs; no GL widgets or resources participate.
+Q3: extend the existing literal text owner and tree dispatch rather than create
+another visual wrapper. Reacquire IDs after outgoing callbacks and copy the
+final callback so it may destroy its owner. Test120 checks cursor, sound,
+capture ordering and destructive release. URL segments, triple-click timer and
+modal override are still open; this is literal-owner input, not full text closure
+or native login boot. GPU safety is N/A for this CPU-only change.
+
+Login integration refinements (2026-09-11): LLComboBox::onTextCommit calls
+setSimple which uses case-insensitive label lookup, then commits item value and
+canonical label. Native commit now shares that byte-folding rule with typing.
+LLLayoutStack::Params resolves unspecified border_size from UIResizeBarHeight;
+native factory retains an unspecified marker until native construction settings
+are available. Test119 separates explicit zero from configured spacing and typed
+mixed-case label from canonical committed item value. Runtime world-map behavior
+and its independent test expectations remain unchanged.
+
+Login combo XML record (2026-09-11, NV-00/01/12/17): source LLComboBox::Params,
+ItemParams/constructor/postBuild and widgets/combo_box.xml. Q1 button/dropdown,
+editor/list blocks configure internal typed children; dotted editor attributes
+combine with nested blocks; items carry separate label/value/enabled state;
+postBuild reapplies bound setting after default first-item selection. Q2 native
+owned defaults/parameter declarations and native resources/callback registries.
+Q3 heap-owned ComboDefaults avoids recursive frame inflation, resolveCombo loads
+real images/fonts, construction binds native text validators then creates owned
+combo. Extended test70 consumes packaged combo template, nested editor overrides,
+ASCII validation, real arrow image and explicit Home selection. List multi-column
+metadata, allow_new_values=true and full inherited template loading remain open;
+the login uses simple items with allow_new_values default false.
+
+Login combo typing record (2026-09-11, NV-00/01/12/17): Q1 onTextEntry invokes
+text-entry callback before classifying current key; left/right return, deletion
+matches exact label without completion, ordinary text calls updateSelection.
+Exact label matching lowercases encoded bytes and rejects empty labels. Prefix/
+substring matching lowercases wide text, trims item labels, selects enabled rows,
+retains typed prefix and selects generated suffix via LLLineEditor::setSelection.
+One-character input invokes prearrange before searching; no match removes earlier
+completion and marks tentative. Q2 native editor retains originating native key,
+combo owns matching/selection and native callbacks, no global GL keyboard access.
+Q3 keystroke callback connects actual editor mutation to refreshComboText with
+staged selection/text and lifetime rechecks. Test118 types through native input,
+replaces generated suffix, clears stale selected values, tests tentative/deletion
+and callback counts. Up/down popup navigation and committed case folding still
+require follow-up; non-Windows wide classification has not been parity-qualified.
+
+Login combo popup record (2026-09-11, NV-00/01/12/17): Q1 LLComboBox showList/
+hideList/onButtonMouseDown/onItemSelected plus LLScrollListCtrl fitContents/
+calcMaxContentWidth/hitItem/handleMouseUp. Simple text rows use font height+2,
+two-pixel list border and column text width+15. Popup width clamps to control..
+max(control,500), height to window-50; preferred above/below flips for available
+space. Source focus precedes visibility; button capture transfers to list and
+selection returns focus/selected text to editor before close/commit. Q2 native
+owned list-ID/item state, measured popup and capture/focus transactions, no GL
+list controls. Q3 show/hide and list-pointer methods use existing native tree
+dispatch, checking IDs across callbacks. Test117 clicks actual native combo arrow
+then Home row and verifies value/focus/capture/visibility. Popup rows' prepared
+draw consumer, scrolling long lists, prearrange callbacks, force-pressed visual,
+outside-click popup dismissal and autocomplete remain required follow-up work.
+
+Login combo owner record (2026-09-11, NV-00/01/12/17): Q1 LLComboBox constructor/
+createLineEditor/initFromParams/getValue/setValue/updateLabel/onCommit/onTextCommit
+and LLScrollListCtrl::setSelectedByValue. Combo constructs button, hidden list,
+then optional editor before init; editor width excludes max(8,arrow width)+two
+button shadows. Selected value is the item's value while editor shows its label;
+unmatched value clears selection without replacing text. Commit chooses selected
+value or typed text. Q2 native composite IDs and owned single-column item data,
+native editor/button children and callbacks, no GL list or combo owner. Q3 typed
+createCombo plus checked selection/commit paths; test116 exercises actual child
+ownership, labels/values, typed commit, disabled selection and teardown.
+This increment does not implement popup list rows/drawing, autocomplete/key
+classification, list sorting, dynamic prearrange or full list control behavior.
+Those are required next consumers before native login combo closure. Binary
+values compare bounded equal-length vectors, not source's unchecked prefix read.
+
+Login layout frame record (2026-09-11, NV-00/01/12/17): Q1 stack reshape marks
+dirty; panel visibility marks its owner; animatePanels interpolates visibility
+with open/close half-life and snaps above0.99/below0.001. Its shared per-frame
+animation flag permits only the first changing panel to interpolate per call.
+Native preparation uses explicit delta, retains visible amounts, and marks dirty
+through resize publication. Parent-first prepareLayoutStacks updates nested
+geometry in one traversal. Test115 covers resizing, dirty state, both half-lives
+and settled visibility. updateResizeBarLimits shows no resize bars when every
+panel has user_resize=false (login configuration). Collapse/user resizing and
+same-frame repeated external preparation remain explicit open coverage, not login
+completion. Native frame owner must call preparation once before draw collection.
+
+Login stack declaration record (2026-09-11, NV-00/01/12/17): Q1 registry maps
+layout_stack to LLView-derived owner and layout_panel to typed LLPanel construction,
+not LLPanel::fromXML; init clears follows then stack attachment sets orientation,
+fractions and resize ownership before descendants construct. Q2 native factory
+uses typed native panel/init and ordered stack attachment. Q3 independent stack
+defaults and explicit min/max aliases, rejecting interactive resize/persistence
+not used by login. Test114 checks login proportions, nested rows, exactly-once
+typed init before attachment, cleared follows and rejected child cleanup.
+Animation settings are retained but frame transitions remain pending; initial
+visible panels are already fully visible in source. Resize-bar omission is not
+declared closure; login non-user-resizable bar visibility must still be qualified.
+
+Login stack record (2026-09-11, NV-00/01/12/17): source revision
+3abd661f498329babaf87b49ffab910fcb5f0e6c, LLLayoutPanel constructor/setOrientation/
+getRelevantMinDim/getVisibleDim, LLLayoutStack updateFractionalSizes/
+normalizeFractionalSizes/updateLayout. Q1 flexible fractions derive from initial
+dimension minus minimum, floor1e-5 and normalization; layout assigns minima then
+distributes rounded positive extra space and a single leftover-pixel pass. Fixed
+targets retain dimensions. Horizontal starts at left, vertical at top; hidden
+panels occupy zero visible extent. Q2 native stack owns ordered panel IDs and
+native panel sizing state, with checked geometry plans and native panel children.
+Q3 attach initializes fractions; updateLayoutStack stages and publishes panel
+shapes through existing native resize ownership. Test113 uses the packaged login
+dimensions1024/970/27 and vertical row86/152, wider-window and visibility cases.
+This slice implements settled noncollapsed layout. Animation/collapse, interactive
+resize bars and persistence remain open; they cannot be claimed implemented by
+this static layout check. Login XML integration is the next required consumer.
+
+Panel key record (2026-09-11, NV-00/01/12/17): Q1 LLPanel::handleKeyHere/
+setDefaultBtn(pointer), LLUICtrl::findRootMostFocusRoot/getParentUICtrl and audited
+native focus/commit contracts. Escape defocuses; unmodified/Shift Tab uses the
+root-most focus-root control reached while tab stops permit ascent, skipping
+non-control ancestors. Return yields to a focused Return-capturing button, else
+commits a locally visible/enabled default, else a text-input control. Q2 native
+IDs, focus-root params and independently owned commits; no GL focus/default-button
+pointer. Q3 panelKey composes native focus/commit paths, rootMostFocusRoot matches
+ascent, and default-button lookup tolerates deletion. Factory parses focus_root/
+default_tab_group and preserves them in panel reinit. Test112 covers default
+precedence, disabled visibility, Tab wrap/reverse, modifiers and Escape. Named
+default-button resolution, concrete subclass overrides and OS event routing remain
+open; native key entrypoints alone do not close application keyboard integration.
+
+Panel focus handoff record (2026-09-11, NV-00/01/12/17): Q1 LLPanel::setFocus
+first invokes base focus on itself when entering, then focusFirstItem; already
+focused subtrees only use the base call. Preemptive self-focus prevents recursion
+when the query returns the panel itself. Q2 native requestControlFocus applies
+the same handoff using native tree/tab-entry owners, rechecking after focus
+callbacks. Q3 no extra panel focus wrapper or GL call; reuse native focusFirst.
+Test111 covers self-focus before child, editor select-all, repeat preservation and
+empty-panel termination. This closes the currently implemented panel handoff,
+not focus-root discovery or missing concrete panel subclass overrides.
+
+Container navigation record (2026-09-11, NV-00/01/12/17): Q1
+LLScrollContainer::handleKeyHere checks ignore_arrow_keys before document
+delegation, then tries vertical/horizontal bars, calling updateScroll only for
+a handled bar. LLPanel and LLView handleKeyHere return false for the eight
+navigation keys; native line-editor/scrollbar/container documents have independent
+implementations. Q2 typed native navigation input and explicit per-owner dispatch.
+Q3 scrollContainerKey preserves document-first and axis ordering, including both
+bars moving on an unhandled Page key, with ID rechecks. Factory now accepts
+ignore_arrow_keys=true because this gate is implemented. Test110 checks Page
+semantics, axis priority, ignore gate and editor delegation. Return/Escape/Tab
+and generic OS key routing remain separate open obligations.
+
+Directional focus record (2026-09-11, NV-00/01/12/17): Q1 LLUICtrl::focusNextItem/
+focusPrevItem add the text-input prefilter when requested or TabToTextFieldsOnly;
+LLView::focusNext scans query in reverse, focusPrev forward, wrapping after current
+focused subtree. Forward movement invokes onTabInto even for a sole already
+focused candidate; backward skips duplicate entry. LLLineEditor accepts text
+input, but read-only setEnabled removes its tab stop. Q2 native candidate query
+with integrated text-only predicate and native settings. Q3 shared enterFocus
+performs native transfer/selection/notification/flash; moveFocus only chooses
+the ordered target. Test109 checks order, wrap, settings and singleton asymmetry.
+Additional native text-input widget types and OS Tab delivery remain open.
+
+First-focus operation record (2026-09-11, NV-00/01/12/17): Q1
+LLUICtrl::focusFirstItem selects result.back, skips work when already focused,
+then setFocus/onTabInto/triggerFocusFlash. Its repeated text-preference queries
+cannot change an empty result for the currently audited pure filters.
+LLLineEditor::onTabInto performs input-validated selectAll then base forwarding;
+LLView::onUpdateScrollToChild forwards to ancestors, whose concrete accordion
+overrides remain open. LLFocusMgr flash resets a timer and decays over0.3s.
+Q2 native tab query/focus/editor state and native tabInto event, with owned tree
+time for flash. Q3 focusFirst rechecks target after callback-capable operations;
+prepareScrollContainer executes it for captured bars instead of emitting an
+unfulfilled request flag. Test108 checks selection/notification/flash ordering,
+repeat-focus no-op, decay and callback deletion; test106 now requires actual
+native descendant focus. Accordion scroll forwarding, other widget onTabInto
+overrides and platform focus delivery remain open.
+
+Native tab-query record (2026-09-11, NV-00/01/12/17): Q1 LLView::getTabOrderQuery,
+CompareByTabOrder/SortByTabOrder, LLViewQuery::run/filterChildren/runFilters,
+LLVisibleFilter/LLEnabledFilter/LLTabStopFilter/LLLeavesFilter. Base views allow
+descent; LLUICtrl::canFocusChildren returns hasTabStop (the local tab-stop flag).
+Hidden/disabled nodes prune branches. Matching controls are returned only if
+no matching descendants survive. Stable front-order sorting places groups below
+default first, descending within partitions, so focusFirstItem takes result.back.
+Q2 native immutable traversal of owned IDs/params; Q3 tabOrder computes candidates
+without shared query globals or callbacks and exposes default group explicitly.
+Test107 distinguishes default-group partition, same-group stability, leaf versus
+parent matches, gated descendants and hidden roots. Concrete subclass overrides,
+focus transfer/onTabInto/scroll forwarding and focus-flash timing remain open;
+this query alone is not focusFirstItem closure.
+
+Container preparation record (2026-09-11, NV-00/01/06/12/17): Q1
+LLScrollContainer::draw paints inner background with control-transparency alpha,
+updates scroll, clips only the document to inner edges minus bar strips, prepares
+border focus, then traverses visible non-document children back-to-front. Its
+focusFirstItem call when a bar captures without descendant focus is still an open
+native traversal dependency. Q2 native background/clip/document/chrome packet,
+with an explicit requestFocusFirst flag rather than GL focus traversal. Q3
+prepareScrollContainer retains source clip origin (different from content-window
+origin when border is visible), checks coordinates/colors, and updates border
+focus only after successful preparation. Test106 checks exact clip/background,
+alpha-only modulation, painter order and focus request state. GPU clip consumers,
+native focus traversal fulfillment and once-per-frame acceleration scheduling
+remain open; producing a packet does not close those responsibilities.
+
+Scroll-container XML record (2026-09-11, NV-00/01/12/17): source roots are
+LLScrollContainer::Params/constructor/addChild, ScrollContainerRegistry and
+packaged widgets/scroll_container.xml at investigation revision
+3abd661f498329babaf87b49ffab910fcb5f0e6c. Q1 templates define native-representable
+size/border/background/rate policy; scrollbar children use separate scrollbar
+defaults, and registered panel children attach only after their own XML build.
+Q2 independent native defaults/resources produce typed container/chrome owners.
+Q3 heap-owned container defaults avoid recursive stack growth; panel attachment
+dispatches to native attachScrollContent, preserving delayed attachment and bars
+in front. Extended test70 loads packaged templates and checks real document,
+rates, child ordering, visible bars and working native wheel movement. Requires
+explicit prior loading of scrollbar defaults. container_view/scrolling_panel_list
+constructors, automatic recursive template loading, ignore_arrow_keys=true and
+background GPU consumption remain open; unsupported children fail explicitly.
+
+Auto-scroll record (2026-09-11, NV-00/01/12/17): Q1 LLScrollContainer::autoScroll/
+canAutoScroll and draw frame update. Zones use root-local extents intersected with
+inner width/height minus visible strips, limited to one third and max zone.
+Horizontal left/right precede vertical bottom/top; range eligibility can activate
+scrolling even if rounded rate*frameDelta is zero. Draw accelerates active rate by
+120*dt capped at max, otherwise resets to min, then clears active flag. Q2 explicit
+native root-local rect/delta, native rate/state and callback-safe range updates.
+Q3 separate advanceScrollFrame from query/apply autoScroll so preparation, input
+and query mutation are explicit. Test105 checks first-frame zero rate, query
+purity, diagonal edges, root exclusion, acceleration and idle reset. Native
+root-coordinate producer and drag/drop event routing remain open; ordinary draw
+must still consume the native frame update exactly once per UI frame.
+
+Scrollbar XML record (2026-09-11, NV-00/01/12/17): Q1 LLScrollbar::Params/
+constructor and packaged widgets/scroll_bar.xml define orientation/range/thickness,
+four images/colors and up/down/left/right nested LLButton parameter blocks. Native
+parser owns these blocks as parameters, resolves assets/fonts without GL and
+selects the appropriate button pair for typed construction. Q2 explicit native
+defaults/resources and named native callback registry. Q3 heap-owned defaults and
+per-build state avoid enlarging every recursive frame; resource resolution remains
+separate from callback binding. Extended test70 loads the packaged template and
+constructs both orientations with real arrow/track/thumb assets and a named native
+position callback. Full recursive inherited defaults, nested badges and GPU image
+consumer parity remain open; XML registration alone does not close construction.
+
+Scrollbar preparation record (2026-09-11, NV-00/01/06/12/17): Q1 LLScrollbar::draw
+chooses literal fallback rectangles with asymmetric ends, or image track/focus/
+thumb/additive-glow order, after optional background. Source fallback selection
+tests both thumb images for vertical, both track images for horizontal, which
+does not guarantee selected dereferences are valid. Native reports incomplete
+image branch rather than reproducing null dereference. Hover glow targets0.15
+using LLSmoothInterpolation calcInterpolant=clamp(1-pow(2,-dt/0.05),0,1); explicit
+native frame delta replaces its global timer/cache. LLUIImage::draw/drawSolid
+both call gl_draw_scaled_image_with_border with false/true solid flag; this is
+not blanket permission to treat drawSolid as an untextured rectangle. Rect color
+helpers assign supplied alpha directly. Q2 native prepared screen-space commands
+retain colors/images/solid and additive modes, then child IDs, without GL draw.
+Q3 prepareScrollbar stages checked primitives and commits glow only after success.
+Test104 checks fallback/image geometry difference, focus/glow order, alpha, decay
+and retained image lifetime. Bordered-image shader/alpha transitive closure,
+LLView child alpha/draw policy and GPU compositor consumer remain open; this CPU
+packet is not rendered parity or full scrollbar closure.
+
+Container resize completion record (2026-09-11, NV-00/01/12/17): Q1
+LLScrollContainer::reshape applies base child geometry, recomputes inner border
+rect, sets vertical document/page then horizontal document/page, then updateScroll.
+Q2 native shape planning records container completion in child-first order;
+completeShapes publishes geometry before native callback-capable range updates.
+Q3 all existing shape-owning callers use completion and recheck owners where
+subsequent access is needed. Test103 resizes an ancestor and an explicit container
+shape, requiring page/visibility/position/document updates without a later query.
+Native batching publishes planned sibling geometry before completion callbacks;
+cross-sibling callbacks that observe partially reshaped GL siblings remain an
+unverified temporal difference, not a claimed full layout parity result.
+
+Scroll callback publication check (2026-09-11, NV-00/12/17, CPU ownership):
+updateScroll's callback-capable axis resets can invalidate an already planned
+other-axis descendant. Native publication verifies every planned ID still exists
+before applying that plan. Test102 removes only the horizontal arrow from a
+vertical reset callback and requires an explicit failure instead of stale map
+access or recreating callback-deleted state. Geometry already published before
+the callback remains source-ordered; this is not rollback of external mutations.
+
+Reveal record (2026-09-11, NV-00/01/12/17): Q1 LLScrollContainer::scrollToShowRect
+first updates content window, clips target dimensions to constraint with top-left
+bias, clamps current scroll to allowed interval, updates vertical document/page/
+position then horizontal, and applies scroll. It converts adjusted target with
+container localRectToScreen and notifyParent; base LLView notifyParent recursively
+forwards and concrete accordion consumers remain untraced. Q2 CPU native rects
+and native range setters; Q3 scrollToReveal returns the parent-notification rect
+as native data instead of calling the GL parent chain. Checked intervals and IDs
+guard publication/callback lifetime. Test101 checks minimal and repeated reveal,
+oversized top-left bias, exact returned coordinates and inverted constraints.
+Concrete parent notification handling remains open; returned data is not closure
+of that downstream responsibility or platform scrolling parity.
+
+Wheel routing record (2026-09-11, NV-00/01/12/17): Q1 LLView handleScrollWheel/
+handleScrollHWheel/childrenHandleMouseEvent(allow_mouse_block=false) traverses
+front-order locally visible/enabled containing children. LLScrollContainer first
+offers children; then visible enabled vertical consumes ordinary wheel even at
+range boundary, otherwise horizontal returns actual movement. Horizontal wheel
+only targets horizontal fallback. Fallback movement calls updateScroll; a handled
+child returns directly. Q2 native coordinate-checked traversal and scrollbar
+state, independent of mouse capture and GL callbacks. Q3 routeWheel/handleWheel
+reuse native contains/range ownership, rechecking after callbacks. Test100 checks
+offset coordinates, opaque passive content, axis priority, document translation
+and differing boundary propagation. Source event-recorder/logMouseEvent hooks,
+non-scrollbar widget-specific wheel consumers and OS delivery remain open.
+
+Scroll update record (2026-09-11, NV-00/01/12/17): Q1 LLScrollContainer::
+updateScroll/getContentWindowRect/scrollHorizontal/scrollVertical/getBorderWidth.
+Hidden/no-document update returns. Visibility calculation precedes top-left
+document translation and bar visibility/shape; hidden axes reset position. Range
+setters execute horizontal document/page then vertical document/page. Shape
+reserves the optional corner. Content window starts at border X and horizontal
+bar top when shown, preserving its source origin rather than assuming symmetry.
+Q2 native geometry plans plus checked native scrollbar setter callbacks, no GL
+view translation. Q3 preflight all extents then execute source-ordered mutations,
+rechecking IDs after callback-capable operations. Negative page dimensions fail
+explicitly. Test98 checks cross-axis negotiation, content window, scrolling and
+large-to-small reset. Callback reentrancy, detached content, resize lifecycle and
+clip/input consumer coverage still require follow-up tests; no full parity claim.
+Test99 adds reserved-corner geometry/page distinction, deletion of the entire
+container during hidden-axis reset, rejection of oversized document rectangles
+at the tree boundary and hidden queries at the maximum valid extent. Update
+checks document parent/identity after callbacks; broader
+reentrant geometry changes and descendant-only deletion remain open.
+
+Scroll-container ownership record (2026-09-11, NV-00/01/12/17): same source
+revision/configuration as the scrollbar pointer record. Q1 LLScrollContainer
+constructor/destructor/addChild owns an inward border and hidden vertical then
+horizontal scrollbars before init. The first content add becomes scrolled view;
+horizontal then vertical are brought forward. Q2 native tree owns independent
+border/scrollbar/button nodes and stores document/chrome IDs, resolving explicit
+size or native UIScrollbarSize. Q3 constructor configuration is retained on the
+heap across child callbacks; partial construction cleans up via native subtree
+ownership. Explicit attachScrollContent distinguishes document content from
+chrome and rejects cycles via native reparent. Test97 checks before-init owners,
+initial ranges, front ordering, first-content policy and teardown. Scroll updating,
+Bar controls use explicit native defaults independently of parent control state,
+and both steps are16 (source VERTICAL_MULTIPLE); test97 checks both properties.
+Clipping, scroll callback configuration and full template inheritance
+remain open; this is not a completed scroll container.
+
+Scrollbar pointer record (2026-09-11, NV-00/01/12/17): investigation revision
+3abd661f498329babaf87b49ffab910fcb5f0e6c, Windows RelWithDebInfo. Q1 roots:
+LLScrollbar::handleMouseDown/handleHover/handleMouseUp/handleDoubleClick plus
+pageUp/pageDown/changeLine/setDocPos and native-audited child/capture contracts.
+Children get down first; thumb captures with original pixel rect and origin;
+track pages by full page, double-click repeats down. Drag permits one-pixel edge
+overshoot, maps float ratio to clamped document position and suppresses thumb
+refresh for responsive pixel motion. Same delta only recomputes after document
+change. Hover clears documentChanged after cursor dispatch; release does not
+snap the thumb. Q2 native CPU state/capture/child dispatch, no GL mouse handlers.
+Q3 store original thumb and signed64 delta in native scrollbar, retain pixel
+publication separately from range updates, check IDs after callbacks. Test96
+checks both axes, rounded positions, repeated hover, release, double-click and
+callback destruction. Native OS pointer routing, visual glow and full scroller
+integration remain open; source overflow is not reproduced.
+
+Scrollbar key/wheel record (NV-00/01/12/17): Q1 LLScrollbar::handleKeyHere,
+handleScrollWheel/handleScrollHWheel/pageUp/pageDown/changeLine at the investigation
+revision below. Only hidden+zero-range skips all keys; Home/End/Up/Down report
+handled even at bounds, Page keys move by page-1 but report unhandled. Ordinary
+wheel moves by clicks*step and returns actual change; horizontal wheel excludes
+vertical bars. Q2 explicit native key/wheel inputs and the native range owner.
+Q3 reuse setScrollPosition callback/refresh semantics with widened arithmetic and
+clamping. Test95 checks propagation, overlap, visibility gate and extreme wheel
+input. OS routing, drag/track interactions and native scroll-container dispatch
+remain open; source arithmetic overflow is not reproduced as defined behavior.
+
+Scrollbar reshape record (NV-00/01/12/17): Q1 LLScrollbar::reshape returns on equal
+dimensions, otherwise applies LLView follows, limits arrow length to min(half
+container length,thickness), anchors arrows to the two ends and updates thumb.
+Q2 native shape plan stages final button rectangles and native thumb alongside
+all other dependent widget geometry. Q3 add thumb values to the existing atomic
+ShapeChanges publication, keeping callbacks outside geometry computation. Test94
+checks short vertical/horizontal bars, explicit shape and failure rollback for
+parent/buttons/thumb. Source draw/input and full scroll-container ownership remain
+open; this closes only the typed scrollbar's geometry publication path.
+
+Scrollbar constructor/range record (NV-00/01/12/17): Q1 LLScrollbar constructor,
+setDocPos/setDocSize/setPageSize/setValue, changeLine/onLineUpBtnPressed/
+onLineDownBtnPressed. Constructor initializes thumb then owns two non-tab-stop
+buttons with orientation-specific rect/follows, click and held callbacks before
+control init. Position clamps to max(0,doc-page); mutation/change callback precedes
+optional thumb refresh. Size/page changes reclamp position then refresh even if
+position stayed unchanged. Q2 native optional scrollbar state, immutable shared
+button configuration and real native child owners; explicit scalar settings
+resolve thickness, no GL registry/button/callback. Q3 native range methods retain
+callbacks and recheck IDs before post-callback work; wide step arithmetic avoids
+source overflow. Test93 checks children-before-init, callback/thumb order, no-op,
+clamping, button steps and callback destruction. Native scrollbar reshape, pointer/
+wheel/key behavior, images/colors/draw and XML/default templates remain open.
+
+Thumb geometry record (NV-00/01/12/17/18): Q1 LLScrollbar::updateThumbRect uses
+track=max(0,length-2*thickness), integer proportional length with minimum16 capped
+to track, visible=min(document,page), and integer positional travel. Vertical
+origin is top-down with its own minimum-start clamp; horizontal is left-right.
+Zero document fills track. Q2 explicit native CPU range/orientation/extent values.
+Q3 LLVKScrollLayout::thumb uses signed64 intermediate products, preserving defined
+integer rounding and zero-track behavior; it does not emulate source signed
+multiplication overflow. Test92 checks both ends/midpoint, empty doc, short track,
+large dimensions and negative-size failure. Range state setters, change callback
+timing, native button children, drag/wheel/key handling and draw remain open.
+
+Scroll visibility record (NV-00/01/12/17): Q1 LLScrollContainer::calcVisibleSize
+at the investigation revision below consumes document/view extents, visible border
+width and explicit size or UIScrollbarSize. It removes both border edges, tolerates
+one pixel overflow, checks vertical then horizontal, and checks vertical again if
+horizontal consumed height. Hidden bars reserve no space. Q2 native CPU dimensions
+and flags with explicit resolved size/border inputs, not GL scroller/view getters.
+Q3 LLVKScrollLayout::visible implements checked signed arithmetic, preserving
+negative inner dimensions of small valid windows rather than silently clamping.
+Test91 covers exact overflow allowance, both dependency directions, hidden bars,
+border handling and arithmetic failure. Native scrollbar constructors, owner
+callbacks, document translation, updateScroll and scrolling input remain open;
+this calculation is a prerequisite, not a completed scroll-container widget.
+
+Plain styled append record (NV-00/01/12/17): Q1 LLTextBase::appendText empty-input/
+prepend-newline branch, appendAndHighlightText newline splitting and the
+non-highlight/non-markdown normal-segment branch of appendAndHighlightTextImpl.
+Each LF owns a line-break segment; literal spans use supplied style, while the
+terminal normal EOF owner remains independently styled. Q2 native appendPlain
+consumes already-resolved literal scalar text/style, not a substitute for URL/
+markdown/highlight parsing. Q3 build the complete segment vector in one pass and
+publish via the native document transaction, bounding scalar and segment counts.
+Test90 covers empty append, consecutive/trailing newlines, explicit prepend,
+font ownership, reflow and atomic segment-budget rejection. Parser selection,
+cursor/selection restoration and source zero-length style segments remain open.
+
+Styled truncation record (NV-00/01/12/17): Q1 LLTextBase::truncate determines UTF-8
+byte length, applies utf8str_truncate, converts the safe prefix to a character
+count and removes the tail with removeStringNoUndo to preserve styles. The early
+length/4 check is only a fast path. Q2 native validated scalar text determines
+UTF-8 length without transient encoding allocations. Q3 truncate calls the same
+native atomic range removal, returning whether anything changed. Test89 covers
+every byte limit across1/2/3/4-byte scalars, clipped highlight styles, empty EOF
+and idempotence. Caller timing (setText deferred truncation versus immediate
+append/edit), application callbacks and complete rich-text construction remain
+open; this is not a new fixed cap policy for the future native widget.
+
+Styled text edit record (NV-00/01/12/17): Q1 LLTextBase::insertStringNoUndo and
+removeStringNoUndo range handling at the investigation revision below. Insertion
+snaps increasing through noneditable interiors, extends an editable containing
+span (including predecessor at its end), or inserts a default editable span;
+later ranges shift. Removal clamps to document length, clips overlapping spans,
+removes covered ones and shifts the tail, retaining EOF. Q2 native document edits
+stage Unicode and complete range parameters together. Q3 publishEdit rebuilds
+validated segments before swapping text/ranges and invalidates layout from edit
+position; Edit returns actual position/counts to the future cursor/view-model
+owner. Test88 covers noneditable snapping, boundary style preservation, cross-span
+removal, empty EOF, leading default insertion and atomic invalid Unicode failure.
+This is the range-edit core only: supplied special spans, emoji splitting,
+max-byte truncation, before/onValueChange, undo/selection and inline unlink/lifetime
+callbacks remain open. No GL view-model/segment callbacks are shared.
+
+Styled document range record (NV-00/01/12/17): Q1 LLTextBase createDefaultSegment/
+clearSegments/insertSegment/getSegIterContaining/getEditableSegIterContaining/
+getEditableIndex. Default normal segment covers text plus EOF; overlays split
+containing segments, remove fully overlapped spans and retain clipped suffixes.
+Splitting inside an existing span creates a normal remainder using that style.
+Reflow invalidates from the old containing segment start. Interior noneditable
+indices snap to begin/end by direction; insertion exactly at noneditable start
+prefers an editable predecessor. Q2 native document owns Unicode text, ordered
+native segments, layout and invalidation index, without shared index-segment
+globals or GL view model. Q3 staged vector replacement provides atomic validation
+and stable full coverage, with10000-segment budget and native shared font/image
+ownership. Test87 checks overlay coverage, overlapping spans, editable boundaries,
+reflow invalidation, default restoration and rejected mutation. Source inline
+link/unlink/deferred destruction callbacks are still open; this range owner does
+not claim to own referenced inline widgets or replace the full rich widget.
+
+Base segment flag audit: LLTextSegment constructor defaults mPermitsEmoji=true
+independently of its canEdit=false. LLInlineViewSegment and highlighted normal
+segments explicitly disable splitting; image/newline segments retain the base
+flag. Native flags now preserve this distinction, checked in tests84/85 before
+document editing/special-segment insertion is added.
+
+Segmented line-loop record (NV-00/01/12/17): Q1 LLTextBase::reflow inner segment
+loop at the investigation revision below rounds remaining pixels before fitting,
+accumulates float widths/max segment heights, ceils total line width once, and
+uses getLeftOffset for alignment. Partial segments wrap without advancing paragraph
+number; explicit breaks advance it and update the segment-relative signed line
+index (initially -1). Spacing uses rounded maximum line height plus configured
+pixel/font adjustment. Q2 native full line rebuild over contiguous immutable
+segment snapshots including EOF, no GL document/scroller callbacks. Q3 reflow in
+the native segment module reuses established native line/options values with a
+bounded-progress guard and checked geometry, preserving signed relative indices.
+Test86 compares normal/newline output with existing native plain-layout lines and
+tests mixed inline heights, forced split and missing coverage rejection. Outer
+reflow responsibilities (partial invalidation, two-pass scrollbar negotiation,
+anchor/cursor preservation, updateRects and inline updateLayout) remain open;
+this implements the source line loop, not the entire LLTextBase reflow lifecycle.
+
+Image/inline segment metric record (NV-00/01/12/17): Q1 LLImageTextSegment and
+LLInlineViewSegment constructors/getDimensionsF32/getNumChars at the investigation
+revision below. Image dimensions add3 pixels to width and height versus font
+height; absent image retains font height. Midline fit is strictly greater than
+image width+3, while first-line-position always takes one placeholder. Inline
+dimensions use explicit widget extent plus four pads. Empty offset/count yields
+zero dimensions, or default-font height and line break when force_newline. Forced
+inline rejects line index0; otherwise a midline exact-width fit is allowed and
+the entire replacement-text span is indivisible. Q2 native immutable metric input
+includes widget identity/extent and retained native image, no GL LLView/LLUIImage.
+Q3 extend the same native segment kind rather than a parallel hierarchy, validating
+padding overflow before publication. Test85 discriminates thresholds, first-line
+progress, force-newline and indivisibility. Native document owns the future widget
+attachment/updateLayout/draw/retirement responsibilities; those are not implemented
+by an extent snapshot. Source tooltip/clone/image readiness paths remain open.
+
+Styled-segment metric record (NV-00/01/12/17): Q1 LLNormalTextSegment constructors,
+getDimensionsF32/getNumChars/getOffset and LLLineBreakTextSegment constructors/
+getDimensionsF32/getNumChars at the investigation revision below. Normal segments
+retain style font/height and reserve style-image logical width during fitting;
+highlight background disables editing/emoji splitting. Nonempty runs measure font
+width and contribute height, including EOF. Fit uses WordsWhenPossible at line
+start, WordsOnly otherwise, forces one character at line start and includes EOF
+when reaching the document end. Hit testing retains font count-minus-one semantics.
+Line-break segments occupy one newline, zero width and font height, forcing a break.
+Q2 native retained font/image/range parameters and CPU measurement; Q3 value-owned
+LLVKStyledTextSegment with validated ranges and independent native font calls.
+Test84 distinguishes line-start/midline progress, EOF fit/height, hit count,
+highlight flags, newline and stale-range rejection. Source image-loaded callbacks
+to needsReflow, complete style data/draw, rich document editing/reflow, URL parsing,
+markdown, emoji and inline widget/image segments remain open. This is a segment
+metric building block, not a completed text widget or rich-text parity claim.
+
+Checkbox spacing record (NV-00/01/12/17): Q1 LLCheckBoxCtrl constructor samples
+UICheckboxctrlHPad (S32, packaged value2) when deriving wrapped label width from
+outer width minus button width minus padding. Cached spacing/vpad are declared
+but not used in that body; reshape instead computes width minus label-left.
+Q2 read the audited native scalar settings table during native construction,
+without sharing LLUICachedControl or installing GL visual subscribers. Q3 copy
+the available setting into construction state, retaining explicitly supplied
+native padding when absent. Test83 distinguishes new-construction sampling after
+a settings update from unrequested reactive reshaping of existing labels.
+
+Checkbox declaration record (NV-00/01/12/17): Q1 LLCheckBoxCtrl::Params/constructor,
+WordWrap::declareValues and packaged widgets/check_box.xml at the revision below.
+label_text/check_button are parameter blocks, not ordinary child tags; typed
+constructor creates label then button, overrides label with outer provided font,
+forces button click/return/follows and boolean initial value. Q2 native factory
+owns independent parameter declarations and resolves native fonts/colors/images
+before calling existing native createCheckBox. Q3 bounded nested parameter nodes
+and heap-owned optional checkbox build state avoid inflating every recursive
+construction frame; the existing reentrant depth-limit test remains a required
+regression check as parameter bundles grow. Parsing continues
+reusing native attribute parsing, no LLTextBox/LLButton/registry callbacks. Test70
+now also loads the actual packaged checkbox template, resolves real images and
+constructs actual native label/toggle children with initial value and label text.
+Test82 additionally checks XML embedded value binding, named on_check/commit,
+outer provided font override, nested button font retention and atomic rejection
+of missing callbacks/invalid booleans against the typed constructor contract.
+Rich label semantics, full text-label parameter coverage, recursive base defaults,
+checkbox spacing settings and nested button badge construction remain open; this
+declaration path does not establish full checkbox or construction parity.
+
+Preedit geometry record (NV-00/01/11/12/17): Q1 LLLineEditor::getPreeditLocation/
+getPreeditRange/getPreeditFontSize/findPixelNearestPos, LLView localRectToScreen/
+localPointToScreen, LLUI screenPointToGL/screenRectToGL and LLFontGL getLineHeight.
+Visible queries are within active composition and at/after scroll; negative offset
+uses cursor. Measured text positions include left padding, composition bounds clamp
+right to width-border, caret Y uses integer half height. Pixel conversion rounds
+logical coordinates times per-axis UI scale. getPreeditLocation passes getRect()
+to localRectToScreen for its control output, adding the local rect offset twice;
+native preserves this defined returned value distinctly from actual screen bounds.
+Font size rounds (ceil(ascender/scaleY)+ceil(descender/scaleY))*scaleY.
+Q2 CPU-native font measurement and native ancestry coordinates, explicit scale;
+no GL coordinate/helper or font owner. Q3 immutable PreeditLocation return with
+checked ranges and scaled signed32 outputs, local pixelPosition helper reuses
+native font contract. Test81 covers nested offset/scale, range, bounds, source
+control offset and overflow rejection. Candidate-window/IMM consumer mapping and
+visual/runtime parity remain open; scale is supplied by the future native window.
+
+Preedit-state record (NV-00/01/12/15/17): Q1 LLLineEditor::hasPreeditString/
+resetPreedit/updatePreedit/markAsPreedit/getPreeditRange, plus caller
+LLWindowWin32 composition update at the investigation revision below. Window
+converts UTF-16 clauses/caret to scalar counts, resets old composition before
+results/new composition, and supplies one segment when missing. Editor retains
+absolute clause positions/emphasis and overwritten text, inserts without normal
+caps/validators, moves caret first to end then requested offset, and notifies once.
+Reset restores overwritten text, clears active positions, and does not notify;
+selection is deleted via input validation unless preedit already exists, when it
+is deselected. Marked reconversion remembers original text only in overwrite mode.
+Q2 native CPU composition state and native-tree mode, with no GL preeditor pointer,
+font-buffer reset or window ownership. Q3 transactional native Preedit value,
+bounded1Mi-scalar/4096-clause inputs, consistent segment/caret validation before
+publication, same native keystroke callback. Test80 covers clause boundaries,
+ordinary-limit/validator bypass, reset ordering, overwrite restoration, reconversion
+and read-only refusal. Invalid/stale spans fail explicitly rather than reproduce
+source out-of-range state. IMM message decoding, reconversion OS buffers, candidate
+window placement, font-size query, composition commit and native drawing remain
+open. No platform IME runtime claim is made from this state-only test.
+
+Pointer record (NV-00/01/12/17), same investigation configuration: Q1 roots
+LLLineEditor handleMouseDown/Up/Hover/DoubleClick/MiddleMouseDown/RightMouseDown,
+setCursorAtLocalPos/calcCursorPos/findPixelNearestPos, onMouseCaptureLost/
+endSelection/startSelection/selectAll. Child dispatch precedes left-down and
+uncaptured hover/up. Shift preserves selection anchor; ordinary down hit-tests,
+deselects and captures before focus. Select-on-focus first click skips capture.
+Hover drag input-validates selection, scrolls at0.05s intervals and requests I-beam.
+Capture release ends selection before up checks it, so up must not re-hit-test an
+already-ended drag. Double click selects word or whole line; next click within
+0.3s selects all. Source word scans bypass input validation except selectAll.
+Middle uses primary paste; right focus/base dispatch precedes context-menu work.
+Q2 native text/font CPU preparation, explicit pointer/time inputs, capture/focus
+owners and textCursor effect. Q3 reuse native hitTest and copied text transactions;
+capture teardown updates native selection before external capture callback. Test79
+checks screen/local mapping, drag, I-beam, release ordering and word/triple clicks.
+The drag check exposed a native caller count error: LLFontGL::charFromPixelOffset
+uses max_chars-1 for its scan limit; calcCursorPos leaves the default unlimited
+count. Native editor hitTest must therefore include one terminator position in
+its bounded count to allow selection through the final character. The font
+contract itself is unchanged; the native editor caller now supplies that count.
+Native context menu on right-down, caret timing and platform cursor delivery remain
+open; right-down currently executes focus/base behavior only. Auto-scroll timing
+and source initial timer state need additional parity qualification. Primary copy
+is attempted only when the native transport advertises availability; Windows has
+no primary selection. No shared GL input/layout callbacks are called.
+
+Clipboard-command record (NV-00/01/12/17), same source below: Q1 canCut/canCopy/
+canPaste/cut/copy/copyPrimary/paste/pastePrimary. Password suppresses copy/cut,
+not paste; read-only suppresses cut/paste, not copy. Cut input-validates selection,
+writes clipboard, then deleteSelection validates removal again; full-text rollback
+does not undo the clipboard write. Source ignores clipboard-write failure and may
+still delete; native preserves that text behavior while returning the transport
+failure explicitly. Q2 native editor commands retain LLVKClipboard owners and
+native text/validators, never call GL edit-menu/clipboard singletons. Q3 tree-owned
+transport plus checked IDs after callback boundaries; paste feeds the existing
+native text transaction. Test78 covers password nondisclosure, ordinary and
+read-only commands, cut rollback/clipboard persistence, primary availability and
+reentrant widget destruction/transport detachment. No system clipboard contents
+are altered by this test. Real window transport integration, native menu routing
+and OS event delivery remain open.
+
+Clipboard owner record (NV-00/01/03/12/15/17): Q1 LLClipboard text copy/add/
+paste/isTextAvailable dispatch through LLView::getWindow to LLWindowWin32
+isClipboardTextAvailable/pasteTextFromClipboard/copyTextToClipboard. UTF-32 text
+maps through ll_convert to UTF-16; source addCRLF inserts CR before every LF,
+removeWindowsCR removes only CR immediately preceding LF. Base LLWindow primary
+methods return false on Windows. Win32 uses CF_UNICODETEXT, Open/CloseClipboard,
+GlobalAlloc/Lock/Unlock and SetClipboardData ownership transfer. UTF conversion
+helpers in llcommon/llstring.cpp are audited nonvisual scalar/encoding loops,
+with no font/window/GL state; invalid surrogate input is checked before calling
+the legacy decoder. Q2 native LLVKClipboard owner borrows an explicit HWND and
+uses Win32 directly, no LLClipboard/LLView/LLWindow owner or GL callback. Q3 small
+native transport interface supports platform implementations and deterministic
+consumer tests; RAII closes access/unlocks memory/frees allocation until ownership
+transfers. Window/process/thread validity is checked on every operation. Prepare
+and validate before opening/emptying clipboard to avoid allocation-failure loss;
+unlike the source, failed transfer frees the owned allocation. Primary and
+non-Windows transports remain explicit failures. Test77 checks exact newlines,
+supplementary Unicode, malformed input, budgets and invalid-window rejection.
+No test writes the user's clipboard. Actual Win32 clipboard round trip, native
+window lifecycle consumer and clipboard contention/failure injection remain open.
+
+Paste-text record (NV-00/01/12/15/17/18): Q1 LLLineEditor::pasteHelper,
+prevalidateInput/deleteSelection, LLWStringUtil::replaceTabsWithSpaces(1)/
+replaceChar and UTF-8 length/truncation at the revision/configuration below.
+Writable nonempty paste removes disallowed emoji before input validation, then
+checks selection removal only for ordinary paste. Tabs become one space, LF
+becomes space or U+00B6, and lone CR remains. Capacity counts encoded bytes then
+characters; source reports bad-keystroke whenever a character cap is configured,
+even without truncation. Primary inserts without replacing selection. Full-text
+validation can restore the prior text/cursor/selection and reset baseline.
+Q2 CPU-native text transaction with native validator/effect callbacks; system
+clipboard access is a separate still-open owner. Q3 pasteLineEditorText stages
+cleaning/insertion and byte-safe scalar-prefix truncation in LLVKLineEditor::paste.
+Test76 distinguishes pre-clean validation, removal validation, multibyte truncation,
+primary semantics, paragraph substitution, configured-cap effect and rollback.
+Safety limit: existing text already beyond the selected cap rejects explicitly
+instead of adopting source unsigned-capacity wraparound; no parity claim is made
+for that exceptional state. Text is bounded to1Mi scalars, invalid scalars/NUL
+reject. Clipboard transport and platform round trips remain open.
+
+Delete-command record (NV-00/01/12/17): Q1 LLLineEditor::canDoDelete/doDelete,
+removeChar/deleteSelection and rollback, at the investigation revision/config
+below. Writable plus passDelete/selection/cursor controls availability. Empty text
+does nothing; at end, a nonempty default field still validates/notifies. Forward
+deletion calls input prevalidation before cursor advancement and again through
+removeChar; first refusal notifies immediately, second refusal retains advanced
+cursor. Selection deletion invokes input validation once. Q2 native CPU text and
+explicit command availability, no GL edit-menu global. Q3 deleteLineEditor owns
+the transaction and uses the same native finishLineEdit validation/rollback/
+callback publication as Unicode and key edits; IDs are rechecked after callbacks.
+Test75 distinguishes the two prevalidator calls, refusal cursor state, callback,
+read-only and pass-through rules. Spellcheck scheduling and native menu/OS command
+delivery remain open; the command implementation is not proof of their closure.
+
+History/special-key record (NV-00/01/12/17), same source configuration below:
+Q1 LLLineEditor::updateHistory/onCommit and handleSpecialKey Up/Down/Return/
+Escape/Insert branches. Nonempty history updates deduplicate the last entry,
+append a blank draft and reset the iterator. Up saves the current draft before
+decrement; Down recalls without saving. Text recall directly assigns LLUIString
+and moves cursor to end without changing mPrevText. Return updates history but
+returns unhandled; Escape setText(mPrevText) optionally invokes onKeystroke and
+also returns unhandled. LLKeyboard construction initializes INSERT; its
+toggleInsertMode flips only on unmodified Insert, though modified Insert is
+handled. Q2 native history/text owners and native-tree insert mode replace the
+GL keyboard global; native recall owns label resolution and preserves baseline.
+Q3 one updateLineHistory helper is used by both native commit and Return, with
+history changes retained if later full-text validation rolls back the text, as
+in the source. Test74 covers Return/commit dedupe, draft round trip, Escape
+baseline/propagation/callback, and native shared insert mode. No GL callbacks are
+invoked. OS key routing, error notifications and spelling/caret timing remain
+open; history resource exhaustion and application-specific limits are unqualified.
+
+Keyboard edit record (NV-00/01/12/17), investigation revision/configuration as
+below. Q1 roots: LLLineEditor::handleKeyHere/handleSelectionKey/handleSpecialKey,
+startSelection/extendSelection/deselect, prevWordPos/nextWordPos/removeWord,
+removeChar/deleteSelection and LLLineEditorRollback constructor/doRollback.
+Shift navigation precedes writable-only special handling. Selection extension
+starts an anchor before input validation; left/right move one then skip words
+with Control. Word membership is underscore or ambient CRT wide alphanumeric;
+only literal spaces are skipped. Nonshift selection collapse includes cursor+/-1.
+Backspace removes a selection or character with input validation; Ctrl-word
+removal skips input validation. Ctrl-Delete is handled here; plain Delete belongs
+to the separate edit-command route. Arrow-ignore/Alt gates and boundaries are
+explicit. Handled input deselects unless selection-modifying, validates full text,
+rolls back cursor/scroll/selection/text and resets the baseline on failure, then
+notifies only accepted keystrokes. The source read-only check also rolls back an
+unchanged-text Shift selection. Q2: native CPU text transactions, followed by
+native effect/callback dispatch, no GL keyboard globals or font-buffer reset.
+Q3: own key/modifier values, staged text edits and ID rechecks across callbacks;
+word/selection helpers operate only on native text. Test73 exercises selection,
+word deletion, boundary effects, callback counts, validator and read-only rollback.
+Timer/spellcheck effects, context menu, Insert/Return/Escape/history keys, generic
+Delete routing and OS keyboard delivery remain open. Invalid wide-domain scalars
+are not narrowed for CRT word classification. No rendering parity is claimed.
+
+Numeric/alphanumeric validator record (NV-00/01/12/17/18), same investigation
+revision and Windows configuration as the ASCII record below. Q1 roots:
+ValidatorFloat/Int/PositiveS32/NonNegativeS32/AlphaNum/AlphaNumSpace::validate;
+LLLocale construction/destruction in llresmgr.cpp temporarily set LC_ALL to
+English_United States.1252 (same fallback on Windows), then restore it.
+LLStringUtilBase::trimHead/trimTail use CRT iswspace; LLStringOps digit/alnum
+delegate to iswdigit/iswalnum. Float's LLResMgr::getDecimalPoint reads
+localeconv()->decimal_point[0], which is '.' in that configured locale. Int/float
+allow empty text and lone minus; float allows repeated dots, not exponent/plus.
+Positive rejects empty, leading zero/minus, nondigits and strtol results <=0;
+nonnegative accepts empty and leading zeros. Windows strtol saturates positive
+overflow at 32-bit LONG_MAX, so these are not strict range validators.
+Q2: native CPU predicates own a private CRT locale via _create_locale/_free_locale
+and use _iswspace_l/_iswdigit_l/_iswalnum_l, without LLResMgr, LLLocale or mutation
+of process locale. With digits already checked, positive strtol's boolean result
+is determined by the first ASCII digit; nonnegative cannot become negative on
+this platform. No GPU resources or publication are involved.
+Q3: retain locale ownership in predicate closures so copies outlive widgets safely;
+allocation/locale failure cannot publish an unresolved validator. Reject values
+outside the Windows wide classification domain instead of narrowing invalid input.
+Test72 discriminates intermediate states, whitespace, decimal/exponent syntax,
+leading zero, positive overflow, Latin-1 classification and retained closures.
+Non-Windows locale/integer conversion behavior and validation error presentation
+remain open; those platforms explicitly leave these six names unresolved rather
+than silently assume Windows semantics. This is CPU test evidence, not UI parity.
+
+ASCII validator record (NV-00/01/12/17): source investigation revision
+3abd661f498329babaf87b49ffab910fcb5f0e6c, Windows RelWithDebInfo. Roots are
+LLTextValidate::Validators::declareValues and the validate overloads of
+ValidatorASCII, ValidatorASCIIWithNewLine, ValidatorASCIIPrintableNoPipe and
+ValidatorASCIIPrintableNoSpace in lltextvalidate.cpp. Q1: predicates scan UTF-32
+input, accept empty strings, accept 0x20..0x7f for ascii, additionally LF for
+ascii_with_newline, and require alphanumeric/punctuation (or allowed space) for
+the printable variants. No-pipe excludes '|'; no-space excludes whitespace.
+LLStringOps wide classification delegates directly to CRT iswalnum/iswpunct/
+iswspace; within the admitted ASCII range the native predicate uses the same
+independently available CRT classification without the viewer wrapper. Source
+failure also records a reverse-scan character index/error token; resetError and
+showLastErrorUsingTimeout/LLTrans/LLNotificationsUtil presentation remain open.
+Q2: accept/reject is native CPU preparation, with no Vulkan commands/resources.
+Q3: a private factory resolver supplies stateless native predicates when no native
+scoped registration exists, avoiding GL validator globals and notification owners.
+Unknown names still fail before widget publication. Test71 discriminates all256
+byte values, empty/non-ASCII/invalid-scalar input and both XML validator slots,
+plus explicit native registration precedence. This implements boolean ASCII
+validation only; error presentation, numeric/alphanumeric locale contracts and
+source runtime parity are not closed by the test.
+
+Native line_editor XML now dispatches to typed native editor construction, resolves
+packaged background/color/font defaults, input/whole-text validators from native
+scopes, keystroke callbacks and documented parameter synonyms. Source MaxLength
+Choice uses bytes4096/chars0 defaults; choosing one restores the other's default.
+Test70 loads actual packaged line_editor/view_border templates and real images,
+constructs a numeric field, types through its native validator/callback and checks
+readonly/password and unknown-validator rejection. Spellcheck=true is still
+explicitly unsupported pending a native service; clipboard, IME composition,
+remaining keyboard/mouse interactions and concrete built-in validators remain open.
+No line-editor rendering or startup parity is claimed by this construction test.
+
+Native shape planning now includes LLLineEditor::reshape/updateTextPadding/setCursor
+responsibilities, not only node rectangles. Every planned editor stages reclamped
+padding and cursor/scroll state before no-fail publication; normal reshape, explicit
+shape, panel reinitialization, badge attachment and document resize share that
+publication. Test69 checks ancestor follows, explicit shape, border resize and
+all-or-nothing failure on invalid editor width. Font measurement remains native
+CPU preparation; it is not a GL reshape callback or an implicit GPU mutation.
+
+Native Unicode line input Q1: LLLineEditor::handleUnicodeCharHere/addChar/
+deleteSelection/LLLineEditorRollback, setFocus's completed select-all state.
+Input requires direct focus/local visibility/writability and rejects control/DEL.
+Input validator precedes editing; selection or overwrite deletion precedes byte/
+character limits; whole-text validator failure restores snapshot and resets dirty
+baseline, omitting the keystroke callback. Successful user edits preserve the old
+baseline and become dirty. Q2/Q3: staged native buffer edits and ID-rechecked native
+effects/validators/keystroke handlers. Test68 covers ordering, byte cap, rollback,
+selection replacement, focus state and self-deletion. Autoreplace, spellcheck timer,
+prevalidator error display and native OS cursor hiding remain consumer obligations;
+the native hideCursor/badKeystroke effects do not invoke GL UI helpers.
+
+Native line-editor focus/commit Q1: LLLineEditor::onFocusReceived/onFocusLost/
+setFocus/updateAllowingLanguageInput/onCommit/updateHistory/destructor. Language
+input shutdown precedes focus-loss dirty check/commit, which precedes base lost
+callbacks. Commit records distinct nonempty history plus a blank tail, writes its
+binding, invokes callbacks, resets dirty and selects all unless disabled/rejected
+by input validation. Direct editor destruction disables focus-loss commit first.
+Q2/Q3: native ID-aware effects and retained callback snapshots with deletion checks;
+Windows IME eligibility is focused/writable/nonpassword/no-prevalidator. Test67
+checks exact order, history deduplication, baseline reset, teardown and password
+eligibility. Native OS IME consumer, SDL policy, edit-menu ownership, cursor-show
+effects and full text-input validation remain separate open integration work.
+
+Native typed line-editor construction installs owned editor text and an inward,
+all-follows native border inset one pixel at top/right before control init. Source
+LLLineEditor::setEnabled changes read-only/tab-stop, not LLView enabled; init reapplies
+explicit enabled after base settings callbacks. Native setValue/dirty/resetDirty/
+clear route to the editor's previous-text baseline. Test66 observes border/value
+before init, settings versus explicit read-only precedence and teardown. Focus,
+language input, validators, history/commit and XML remain required follow-on paths;
+this record is typed constructor evidence, not full interactive editor closure.
+
+Native line-editor text state Q1: LLLineEditor constructor/setText/setCursor/
+findPixelNearestPos/calcCursorPos/updateTextPadding/selectAll/deselect/clear/
+isDirty/resetDirty and native font fitting contracts. Constructor limits default
+text but permits descriptive initial text before control init; cursor starts at end.
+Equal assignment preserves selection/cursor, other assignment preserves whole-field
+selection or deselects and resets previous-text baseline; clear does not reset it.
+Cursor scrolling measures real text, password hit-testing substitutes U+2022.
+Q2/Q3: native owned text/source/selection/cursor plus native font metrics, staged
+state updates on failures. Test65 covers those paths and bounds. Character-count
+truncation is scalar-safe rather than retaining the inspected source helper's
+mid-UTF8 truncation defect; this difference requires qualification, not a byte-parity
+claim. Native tree constructor, prevalidators, focus/IME/editing/history/clipboard,
+border/assets and full line_editor XML remain open follow-on work.
+
+Native named image aliases now mirror source separation between LLUIImage identity
+and fetched-file texture ownership: one resolved physical path owns immutable padded
+pixels, while each UI name owns independent clip/scale/style metadata and logical
+dimensions. Metadata views retain the pixel owner, never mutate it, and residency
+counts the physical bytes once. Test64 distinguishes names/identities, shared byte
+addresses, differing logical regions and retention. Normalized GPU sampler/image
+publication must retain both metadata snapshots and pixel ownership when the native
+UI draw consumer is connected; this CPU cache does not imply GPU residency.
+
+Native local J2C Q1: LLImageJ2COJ/JPEG2KDecode full-resolution component extraction,
+and LLImageGL luminance/luminance-alpha/RGB/RGBA channel meaning. Source component
+planes are copied bottom-up; native output expands luminance and opaque alpha while
+retaining alpha for two/four components. Q2/Q3: private direct OpenJPEG codec/stream/
+image owners with bounded memory callbacks, checked tile/component dimensions and
+full unsigned8-bit local pixels. No viewer JPEG2000 wrapper or GL texture code is
+called. Strict local codestream completion rejects partial data instead of exposing
+the source network progressive-decode policy. Test63 checks a real rounded_square
+codestream, skin dispatch and truncation; test62 now covers all packaged declared
+formats including J2C. Signed/high-precision/subsampled/network/discard-level decode
+remains explicitly outside this local UI path. Kakadu-versus-OpenJPEG lossy byte
+parity and runtime visual sampling require separate measured qualification.
+
+Test62 attempts every available packaged PNG/JPEG/TGA texture declaration through
+the native catalog and checks pixel byte counts and nonempty logical dimensions.
+Missing source files and other formats are counted separately, not treated as
+decoded or substituted. This is source-asset decoder qualification, not rendered
+GL/native parity, async asset lifecycle closure or completion of widget construction.
+Single-channel TGA output uses RGB luminance expansion, matching LLImageGL's
+components1 GL_LUMINANCE selection and RGB swizzle; it is not an alpha-only mask.
+
+Native TGA Q1: LLImageTGA::updateData/decode/decodeTruecolor/decodeColorMap and
+their pixel/RLE helpers. Truecolor supports 8/15/16/24/32 bits, monochrome8,
+palette8 indices and RLE. Right-origin rejects. Truecolor orientation follows top
+flag; source palette RLE flips unconditionally. Palette indices subtract start and
+clamp; 15/16-bit RGB rounds 5-bit expansion; truecolor all-opaque32 compacts alpha
+before skin padding, while palette32 retains it. Q2/Q3: independently compiled
+stb_image2.30 TGA-only/no-stdio/static implementation pinned at
+2c980bb59875b0d32144a71867fbdebb2f77cd20 with verified archive SHA256. Its TGA path,
+memory access, allocation, format conversion and orientation helpers were inspected;
+native preflight validates all encoded packets and pixel/byte limits before library
+decode, normalizes palette start/indices and corrects source channel rounding.
+Test61 covers raw/RLE, orientation, alpha-padding, palette clamp, 16-bit rounding,
+truncation and packaged Folder_Arrow. Interleaved input is explicitly unsupported;
+source undefined malformed-buffer behavior is not reproduced. Build downloads the
+pinned source via CMake FetchContent; offline builds may supply FETCHCONTENT_SOURCE_DIR_LLVK_STB.
+The library's dual public-domain/MIT terms remain in its upstream source archive;
+no GL viewer decoder or callback is linked into the native adapter.
+
+Native JPEG Q1: LLImageJPEG::decode plus source/error callbacks force JCS_RGB,
+write scanlines bottom-up and reject corrupt-data warnings. Q2/Q3: directly audited
+libjpeg-turbo memory decoding in private per-operation state, never LLImageJPEG,
+LLImageRaw or global setjmp state; errors longjmp only over trivial locals into
+the owner's scope. Native opaque RGBA pixels reuse the checked skin extent/metadata
+publication step. Header/pixel/encoded byte limits bound allocation and no partial
+image publishes on warning/failure. Test60 uses generated red/blue scanlines,
+truncated payloads, auto format dispatch and the actual packaged login JPEG.
+TGA remains open; source unsupported JPEG color conversions remain explicit library
+errors rather than native approximations. Native non-GL target links libjpeg only.
+
+Native font parameter Q1: ParamValue<const LLFontGL*>::updateValueFromBlock/
+updateBlockFromValue, LLFontGL::getFontByName/getStyleFromString. Named font aliases
+precede descriptor size/style; style uses case-sensitive BOLD/ITALIC/UNDERLINE
+substrings; missing descriptors fall back to the configured default font. Q2/Q3:
+native control parameters retain a complete LLVKFontRegistry request; resolution
+runs after XML attributes, uses explicit native alias/default/fallback inputs and
+native font owners. Test59 distinguishes attribute order, native cache identity,
+alias precedence, fallback and case matching. Native application setup must supply
+the source alias set/default request/fallback, not GL static font getters. Direct
+typed fonts without a request retain existing ownership. Current-source aliases
+and platform font discovery remain explicit application setup obligations.
+
+Native constructors now resolve image names through an explicitly attached native
+skin catalog before publishing declarations/defaults. LLUIImage parameter name
+"none" and empty names remain explicit nulls; registered test images take precedence
+over skin lookup. Icon value changes stage resource resolution before changing
+value/image state. Test58 loads actual texture metadata and button defaults, checks
+shared cached named identity across button/icon, live value replacement, failure
+retention and no partial widget on missing assets. This establishes synchronous
+local PNG constructor readiness, not asynchronous GL texture callback parity or
+network image availability; those source paths remain distinct open obligations.
+
+Native skin image catalog Q1: current LLUIImageDecls::load/mergeFile/readRectAttr,
+LLUIImageList::getUIImage/loadUIImageByName/preloadUIImage and existing local-file
+pixel contract. All-skin texture metadata layers overwrite only provided fields;
+nonempty filenames replace, incomplete clip/scale rectangles are ignored, and
+scale_outer selects outer mode. Name fallback permits direct filenames. Q2/Q3:
+independent bounded Expat catalog and native skin resolver/decode cache; each name
+retains a stable immutable owner under an explicit aggregate byte budget. Test57
+checks metadata overlays and actual PushButton_Off PNG/scale data, cache identity,
+explicit null and failed-publication budget. Current native loading is synchronous
+PNG; source async preload/loaded callbacks, TGA/JPEG/network sources and shared
+underlying pixel storage across aliases remain open. The existing UI-owned
+LLUIImageDecls implementation is inspected only, not reused despite its historical
+shared-helper comments. Malformed metadata fails transactionally rather than
+silently continuing an invalid layer.
+
+Native skin image layout Q1: local-file branch in LLViewerFetchedTexture,
+LLImageRaw::expandToPowerOfTwo/expandDimToPowerOfTwo/scale(false),
+LLUIImageList::onUIImageLoaded and LLUIImage::getWidth/getHeight. UI local pixels
+expand (or crop at max4096) to powers of two starting at4, anchored bottom-left,
+zero-filling ORIGINAL components. Thus RGB padding is opaque black after RGBA
+expansion while RGBA padding has alpha zero. Original dimensions define default
+clip UV; explicit clips clamp to padded bounds, then logical size rounds the clip
+extent. Scale regions clamp against logical dimensions, separately from clip UV.
+Q2/Q3: native immutable pixel owner carries padded/logical extents and normalized
+clip/scale/style metadata; native decoder performs copies, not GL image operations.
+Test56 verifies pixel bytes, alpha distinction, clip/scale units and invalid clips.
+Native invalid zero/inverted clips reject rather than permitting divide-by-zero.
+GPU image consumers must use pixelWidth/pixelHeight for upload and logical dimensions
+for layout; skin publication/sampling and nine-slice consumers remain open.
+
+Native factory file consumers now fall back to LLVKSkinFiles for logical XUI paths,
+read source-selected files and merge locale layers before parsing. Explicit fixture
+declarations/layer lists take precedence when supplied. Test55 reads packaged
+colors and view_border/badge/button/icon/panel templates through native filesystem
+selection and constructs native controls with native fonts/colors. Missing images
+remain absent; the test explicitly does not substitute pixels or claim rendering.
+Native skin image acquisition/metadata and the remaining widget templates still
+need their own construction/resource consumers.
+
+Native skin files Q1: LLDir::setSkinFolder/addSearchSkinDir/findSkinnedFilenames/
+walkSearchSkinDirs. Directory order is executable fallback when working directory
+differs, default/selected/theme installation roots, then default/selected user
+roots, deduplicated. Unlocalized root/textures bypass language probing; other
+subdirectories discover en then en-us in default skin. Current policy selects each
+language independently at the most-specific existing root; All preserves every
+match in root/language order. Q2/Q3: native owned configuration/cache with injected
+existence probe and standard filesystem reads, no LLDir skin globals or chat-log
+mutation. Test54 checks policy/order, caching, invalidation, texture lookup and real
+packaged button IO. Input filenames reject traversal and absolute paths. Native
+cache invalidation is explicit rather than preserving stale process-global caches;
+root-directory case comparison currently folds ASCII, with non-ASCII Windows path
+case qualification open. Nonvisual chat-log updates from setSkinFolder are not a
+responsibility of this native visual file resolver.
+
+Native logical declaration files now carry explicit ordered physical-key lists.
+Source LLXMLNode::getLayeredXMLNode skips empty overlay paths and repeated base
+paths, parses every other layer and fails on missing/invalid files. Native
+constructFile/loadDefaultsFile and panel filename resolution all use LLVKXmlLayers
+with the same order and cumulative budget, retaining normal native construction
+rollback. Test53 covers locale label/string/geometry updates, default-template
+inheritance, repeated-base skipping, references to layered panels and missing files.
+The in-memory physical-key store is an explicit input, not OS path discovery:
+skin/theme/language search and file IO still require native resolver integration.
+
+Layered XML Q1: LLXMLNode::getLayeredXMLNode/updateNode: matching root name values
+permit updates regardless of root tag. Body text replaces unconditionally; only
+existing attributes update. Child matching uses name then value fallback, ignores
+tags, never appends unmatched nodes and rotates the search after a match. Q2/Q3:
+bounded native Expat element tree with owned attributes/text/children, source update
+algorithm and escaped serialization into native declaration consumers. Limits are
+4MiB/layer, 64MiB total input/output, 10000 nodes/layer and depth64; no DTD/external
+entities. Test52 distinguishes attribute addition from update, duplicate-key
+rotation, missing-key continuation, value keys, root mismatch and parse rollback.
+Path selection/repeated base filename skipping belongs to native resolver wiring,
+not this in-memory merge. This implementation calls no LLXMLNode or GL XUI helper.
+
+Native view_border declaration construction uses LLViewBorder::Params enum values,
+thickness/style synonyms and existing native border constructor contract. The
+factory parses the packaged border template into non-control defaults; panel border
+fields use the same parser and preserve live color identity. Test51 loads actual
+colors/view_border declarations and checks standalone type, follows, panel overrides
+and rejection cleanup. Border rasterization, dynamic focus highlights and nested
+base-view border parameter overrides remain separate obligations, not covered by
+this constructor test.
+
+Reentrant native constructor/post-build child creation now receives an explicit
+Construction context instead of relying on process-global registry state. Q1:
+source panel scopes remain active through initPanelXML and virtual postBuild,
+including factory calls made within those hooks. Q2/Q3: synchronous nested native
+construction shares the active registry/factory stack and cumulative budget through
+a weak-lifetime context; use after its owning build returns fails without touching
+the tree. Every build entry has a 64-level depth guard, including constructor
+recursion before panels are parented. Test50 creates a scoped button in post-build,
+checks retained handler ownership, expired-context rejection and recursive-hook
+cleanup. Each concrete native constructor remains responsible for cleanup if it
+fails before transferring its newly created panel; this matches explicit ownership
+rather than guessing which unrelated callback-created nodes to erase.
+
+Native panel-constructor scopes Q1: LLPanel::fromXML/createFactoryPanel,
+LLRegisterPanelClass dispatch and LLRegistry::addScope/getValue. Registered class
+construction precedes scoped XML initialization. New callback scopes go to the
+front, but panel factory maps are pushed at the back and searched from the front:
+innermost callback wins, outermost named child factory wins. Q2/Q3: native
+PanelConstructor returns a newly owned detached panel, local callback table,
+native child factories and optional native post-build routine. constructPanel
+performs constructor-only ownership without running init callbacks; regular plain
+panels retain their distinct default typed-init/post-build path. ID boundaries
+prevent adoption/deletion of pre-existing widgets; RAII limits scopes to building
+the panel, referenced children and post-build. Test49 checks both precedence rules,
+single initialization for custom constructors, retained callable snapshots and
+failure cleanup. Unknown native class names fail explicitly. Concrete application
+panel classes and reentrant factory entry from custom hooks still need their own
+source-backed migration; this mechanism alone does not close those dependencies.
+
+Named callback construction Q1: LLUICtrl::initFromParams/initCommitCallback/
+initEnableCallback resolve callback names at constructor/init time, not while XUI
+default parameters are parsed; direct supplied functions take precedence. Q2/Q3:
+native Callback/Validation parameters retain optional names and fixed arguments,
+and factory construction resolves owned callable snapshots without a GL registry.
+Test48 distinguishes deferred default loading, missing-handler construction failure,
+fixed argument binding and direct-function precedence. This is the prerequisite
+for native constructor-local registry scopes; scope installation and concrete
+custom-panel migration remain open rather than assumed from global resolution.
+
+Native referenced-panel path Q1: LLPanel::initPanelXML filename branch,
+setXMLFilename/setShape, LLUICtrlFactory::createChildren and the ordinary panel
+records. Constructor-owned filename wins; otherwise the outer declaration supplies
+it. Referenced parameters set raw owner dimensions and their children construct
+before outer XML initialization. Then explicit outer fields/callbacks/strings
+override reference values, final panel init reshapes existing children, outer
+children construct, and external parenting/post-build finish. Q2/Q3: explicit native
+declaration table, bounded Expat parse, checked native shape assignment and tracked
+reference expansion; missing files/cycles/64MiB cumulative expansion fail with
+partial-owner cleanup. Test47 distinguishes dimensions, filename visibility,
+callback order, override precedence, retained child sets and rollback. Supplied
+documents are expected to be selected by a future native skin/locale resolver;
+LLXMLNode layered-file merge and custom panel factories remain open. Source's
+ignored initPanelXML failure is not reproduced as a successful partial native panel.
+
+Panel string XML Q1: LLPanel::LocalizedString/initFromParams/getString,
+LLXUIParser::readXUI/readStringValue, LLXMLNode::getSanitizedValue/getTextContents,
+utf8str_removeCRLF. Attribute strings keep XML-normalized whitespace. Nonempty body
+text overrides value attributes; unquoted bodies trim space/tab/LF then remove CR.
+Quoted bodies remove escape slashes, retain interior whitespace and append line
+feeds (single completed line drops its final LF). Last repeated name wins. Q2/Q3:
+native Expat data handling plus owned native string values, installed after control
+init and before child construction; no GL-owned LLXMLNode/LLUIString calls.
+Test46 covers each form, substitution, installation order, duplicates, malformed
+nesting and no partial widgets. Missing mandatory string values reject explicitly;
+full malformed-parameter source tolerance remains an open qualification item.
+
+Plain panel transitive correction: LLPanel::createFactoryPanel falls back to
+LLUICtrlFactory::create<LLPanel>, which performs default typed init AND post-build
+before fromXML calls initPanelXML. LLView::initFromParams changes name/layout but
+does not install declared rect; LLPanel installs that after control init. The
+native factory now creates a default native panel, runs default post-build, then
+initializes that SAME ID from declaration before children/attachment/final post-build.
+Existing action callbacks remain connected in order; validators all run and AND
+their results (llboost.h::boost_boolean_combiner does not short-circuit). Test45
+checks both init phases, names/rectangles, retained commit and validation connections.
+Source-dependent custom class factories and filename children remain explicitly
+open. Earlier single-phase panel-description text is superseded by this transitive
+record; test44 still covers delayed external parenting and border timing.
+
+Post-1819c5fecf plain panel XML Q1: LLPanel::fromXML/createFactoryPanel/
+initPanelXML/initFromParams (ordinary unclassified panel with no filename), plus
+the existing typed panel/control/border records. Source constructor defaults remain
+in panel-specific state while the control init callback runs; declared panel state
+and optional border apply afterward. Child constructors run while the panel is
+detached from its external parent, then attachment inherits the parent's last tab
+group unless explicitly provided, followed by post-build. Q2/Q3: a distinct native
+panel declaration branch carries constructor and initialization parameter snapshots,
+uses native children and delays parent attachment. Test44 observes state/border
+timing, external hidden-parent isolation and tab-group inheritance. Nonempty class
+and filename remain explicitly rejected pending native class/factory scopes and
+referenced-file support; they are not silently treated as generic panels. This is
+plain-panel evidence, not closure of every panel subclass or factory callback.
+
 Native visibility propagation Q1: LLView::setVisible/onVisibilityChange,
 LLPanel::onVisibilityChange/initFromParams, LLButton::onVisibilityChange. Equal
 local values do not notify; changes below an invisible ancestor do not propagate.

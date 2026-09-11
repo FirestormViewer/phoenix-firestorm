@@ -24,6 +24,10 @@
 
 #include <string>
 #include <vector>
+#include <span>
+#include <memory>
+
+class LLVKGlyphImage;
 
 class LLVKContext
 {
@@ -82,6 +86,24 @@ public:
     // Close the current 2D frame (end rendering, transition to present, submit,
     // present). Returns false on failure.
     bool end2DFrame();
+    struct UiVertex
+    {
+        float positionX, positionY, textureU, textureV;
+        float red, green, blue, alpha;
+    };
+    struct UiDraw
+    {
+        uint32_t firstVertex = 0, vertexCount = 0;
+        VkRect2D clip{};
+        VkDescriptorSet texture = VK_NULL_HANDLE;
+        Blend2D blend = Blend2D::Alpha;
+        std::shared_ptr<const LLVKGlyphImage> image;
+        bool alphaMask = false;
+    };
+    bool recordUiPacket(std::span<const UiVertex> vertices, std::span<const UiDraw> draws);
+    enum class FrameResult { Ready, Unavailable, OutOfDate, Fatal };
+    FrameResult frameResult() const noexcept { return mFrameResult; }
+    const std::string& frameError() const noexcept { return mFrameError; }
 
     // Read the most recently presented swapchain image back into out_rgba
     // (row-major RGBA8). For the GL<->Vulkan screenshot-diff harness.
@@ -121,14 +143,20 @@ public:
     VkPhysicalDevice physicalDevice() const { return mPhysicalDevice; }
     VmaAllocator allocator() const { return mAllocator; }
     VkQueue graphicsQueue() const { return mGraphicsQueue; }
+    uint32_t graphicsQueueFamily() const { return mGraphicsQueueFamily; }
     const std::string& deviceName() const { return mDeviceName; }
 
 private:
+    friend struct LLVKContextFrameTest;
     struct FrameSync
     {
         VkCommandBuffer cmd = VK_NULL_HANDLE;
         VkSemaphore imageAvailable = VK_NULL_HANDLE;
         VkFence inFlight = VK_NULL_HANDLE;
+        VkBuffer vertices = VK_NULL_HANDLE;
+        VmaAllocation vertexAllocation = VK_NULL_HANDLE;
+        VkDeviceSize vertexCapacity = 0;
+        std::vector<std::shared_ptr<const LLVKGlyphImage>> images;
     };
 
     void destroySwapchain();
@@ -169,6 +197,7 @@ private:
     VkPipelineLayout mPipelineLayout2D = VK_NULL_HANDLE;
     // [blend][topology]: topology 0 = TRIANGLE_LIST, 1 = LINE_STRIP.
     VkPipeline       mPipeline2D[(int)Blend2D::Count][2] = {};
+    VkPipeline       mMaskPipeline2D[(int)Blend2D::Count] = {};
     VkShaderModule   mShader2DVert = VK_NULL_HANDLE;
     VkShaderModule   mShader2DFrag = VK_NULL_HANDLE;
     VkDescriptorSetLayout mDescSetLayout2D = VK_NULL_HANDLE;
@@ -179,6 +208,9 @@ private:
     uint32_t         mAcquiredImageIndex = 0;
     uint32_t         mLastPresentedImageIndex = 0;
     bool             mFrameActive = false;
+    FrameResult      mFrameResult = FrameResult::Unavailable;
+    std::string      mFrameError;
+    bool             mPacketRecorded = false;
 
     bool        mValidation = false;
     std::string mDeviceName;

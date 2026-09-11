@@ -2,6 +2,7 @@
 #define LLVKWIDGETFACTORY_H
 
 #include "llvkwidgetlayout.h"
+#include "llvkskinfiles.h"
 #include <string_view>
 
 class LLVKWidgetFactory final
@@ -39,17 +40,122 @@ public:
     {
         std::map<std::string,std::function<void(LLVKWidgetTree::Id,const LLSD&)>> actions;
         std::map<std::string,std::function<bool(LLVKWidgetTree::Id,const LLSD&)>> predicates;
+        std::map<std::string,std::function<bool(std::u32string_view)>> textValidators;
+    };
+    struct LineEditorDefaults
+    {
+        Defaults view;
+        LLVKControl::Params control;
+        LLVKWidgetTree::LineEditorParams editor;
+        bool borderProvided = false;
+        LineEditorDefaults();
+    };
+    struct CheckBoxDefaults
+    {
+        Defaults view, labelView, buttonView;
+        LLVKControl::Params control;
+        LLVKWidgetTree::CheckBoxConstruction construction;
+    };
+    struct PanelDefaults
+    {
+        Defaults view;
+        LLVKControl::Params control;
+        LLVKPanel::Params panel;
+        Defaults borderView;
+        PanelDefaults();
+    };
+    struct ScrollbarDefaults
+    {
+        Defaults view;
+        LLVKControl::Params control;
+        LLVKWidgetTree::ScrollbarParams scrollbar;
+        LLVKControl::Callback changed;
+        std::map<std::string,ButtonDefaults> buttons;
+    };
+    struct ScrollContainerDefaults
+    {
+        Defaults view;
+        LLVKControl::Params control;
+        LLVKWidgetTree::ScrollContainerParams container;
+        LLVKControl::Callback scrolled;
+    };
+    struct LayoutDefaults
+    {
+        Defaults view;
+        LLVKWidgetTree::Node::LayoutStack stack;
+        LayoutDefaults() { stack.spacing = -1; }
+    };
+    struct ComboDefaults
+    {
+        Defaults view;
+        LLVKControl::Params control;
+        LLVKWidgetTree::ComboParams combo;
+        ButtonDefaults button, dropDown;
+        LineEditorDefaults editor;
+        bool initialized = false;
+    };
+    struct TextDefaults
+    {
+        Defaults view;
+        LLVKControl::Params control;
+        LLVKPlainControl::Params text;
+        TextDefaults()
+        {
+            view.view.mouseOpaque = false;
+            view.view.soundFlags = 0;
+            control.tabStop = false;
+        }
+    };
+    struct BrowserDefaults
+    {
+        PanelDefaults panel;
+        LLVKWidgetTree::Node::Browser browser;
+    };
+    class Construction
+    {
+    public:
+        using Function = std::function<std::optional<LLVKWidgetTree::Id>(std::string_view,LLVKWidgetTree::Id,std::string&)>;
+        Construction() = default;
+        explicit Construction(Function function) : mFunction(std::move(function)) {}
+        std::optional<LLVKWidgetTree::Id> construct(std::string_view xml, LLVKWidgetTree::Id parent, std::string& error) const
+        {
+            error.clear();
+            if (!mFunction) { error = "Native construction context is unavailable"; return std::nullopt; }
+            return mFunction(xml,parent,error);
+        }
+    private:
+        Function mFunction;
+    };
+    struct PanelInstance;
+    using PanelConstructor = std::function<PanelInstance(LLVKWidgetTree&,const PanelDefaults&,const Construction&,std::string&)>;
+    struct PanelInstance
+    {
+        LLVKWidgetTree::Id id = 0;
+        std::shared_ptr<Callbacks> callbacks;
+        std::map<std::string,PanelConstructor> childFactories;
+        std::function<bool(LLVKWidgetTree&,LLVKWidgetTree::Id,const Construction&,std::string&)> postBuild;
     };
     struct Resources
     {
+        std::shared_ptr<LLVKSkinFiles> skinFiles;
         std::shared_ptr<LLVKColorTable> colors;
         std::map<std::string,std::shared_ptr<LLVKFont>> fonts;
+        std::shared_ptr<LLVKFontRegistry> fontRegistry;
+        LLVKFontRegistry::Request defaultFontRequest;
+        std::shared_ptr<LLVKFont> fallbackFont;
+        std::map<std::string,std::string> declarations;
+        std::map<std::string,std::vector<std::string>> declarationLayers;
+        std::map<std::string,PanelConstructor> panelClasses;
+        std::map<std::string,PanelConstructor> panelFactories;
     };
     explicit LLVKWidgetFactory(Defaults defaults);
     LLVKWidgetFactory(Defaults defaults, IconDefaults iconDefaults);
     LLVKWidgetFactory(Defaults defaults, IconDefaults iconDefaults, ButtonDefaults buttonDefaults, Callbacks callbacks,
-                       Resources resources = {});
+                       Resources resources = {}, PanelDefaults panelDefaults = {}, LineEditorDefaults lineDefaults = {}, CheckBoxDefaults checkDefaults = {});
     bool loadDefaults(const LLVKWidgetTree& tree, std::string_view xml, std::string& error);
+    bool loadDefaultsFile(const LLVKWidgetTree& tree, const std::string& filename, std::string& error);
+    std::optional<LLVKWidgetTree::Id> constructFile(LLVKWidgetTree& tree, const std::string& filename,
+                                                  LLVKWidgetTree::Id parent, std::string& error) const;
     std::optional<LLVKWidgetTree::Id> construct(LLVKWidgetTree& tree, std::string_view xml,
                                               LLVKWidgetTree::Id parent, std::string& error) const;
     std::optional<LLVKWidgetTree::Id> construct(LLVKWidgetTree& tree,
@@ -61,6 +167,15 @@ private:
     ButtonDefaults mButtonDefaults;
     Callbacks mCallbacks;
     Resources mResources;
+    PanelDefaults mPanelDefaults;
+    LineEditorDefaults mLineDefaults;
+    CheckBoxDefaults mCheckDefaults;
+    std::shared_ptr<const ScrollbarDefaults> mScrollDefaults = std::make_shared<ScrollbarDefaults>();
+    std::shared_ptr<const ScrollContainerDefaults> mContainerDefaults = std::make_shared<ScrollContainerDefaults>();
+    LayoutDefaults mLayoutDefaults;
+    std::shared_ptr<const ComboDefaults> mComboDefaults = std::make_shared<ComboDefaults>();
+    std::shared_ptr<const TextDefaults> mTextDefaults = std::make_shared<TextDefaults>();
+    std::shared_ptr<const BrowserDefaults> mBrowserDefaults = std::make_shared<BrowserDefaults>();
 };
 
 #endif

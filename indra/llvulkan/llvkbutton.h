@@ -74,6 +74,8 @@ struct LLVKButton
     bool fadeWhenDisabled = false;
     bool flashing = false;
     bool highlighted = false;
+    bool forcePressed = false;
+    float glow = 0.f;
     struct FlashTimer
     {
         std::uint64_t limit = 0;
