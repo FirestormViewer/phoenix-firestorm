@@ -22,6 +22,7 @@ include(JPEG)
 include(OpenJPEG)
 include(ZLIBNG)
 include(EXPAT)
+include(Hunspell)
 
 include(FetchContent)
 FetchContent_Declare(llvk_stb
@@ -34,17 +35,18 @@ add_library(llvkwidgets llvkwidgettree.cpp llvkwidgettree.h llvkwidgetlayout.cpp
     llvkwidgetfactory.cpp llvkwidgetfactory.h llvkcontrol.cpp llvkcontrol.h
     llvkwidgetimage.cpp llvkwidgetimage.h llvkicon.cpp llvkicon.h llvkbutton.cpp llvkbutton.h
     llvkwidgetinput.cpp llvkbadge.cpp llvkbadge.h llvklabel.cpp llvklabel.h
-    llvkplaintextlayout.cpp llvkplaintextlayout.h llvkplaincontrol.cpp llvkplaincontrol.h llvkcheckbox.cpp llvkcolorswatch.cpp
+    llvkplaintextlayout.cpp llvkplaintextlayout.h llvkplaincontrol.cpp llvkplaincontrol.h llvkcheckbox.cpp llvkcolorswatch.cpp llvkscrolllist.cpp
     llvkcolor.cpp llvkcolor.h llvkborder.h llvkpanel.cpp llvkpanel.h llvkxmllayers.cpp llvkxmllayers.h
     llvkskinfiles.cpp llvkskinfiles.h llvkskinimages.cpp llvkskinimages.h llvkwidgetjpeg.cpp llvkwidgettga.cpp llvkwidgetj2c.cpp
     llvklineeditor.cpp llvklineeditor.h llvkclipboard.cpp llvkclipboard.h llvkstyledtext.cpp llvkstyledtext.h
     llvkscroll.cpp llvkscroll.h llvkcombo.cpp llvkbrowsersurface.cpp llvkbrowsersurface.h llvkwidgetpaint.cpp llvkwidgetpaint.h
     llvkloginui.cpp llvkloginui.h llvkstartupsettings.cpp llvkstartupsettings.h llvkloginmenu.cpp llvkloginmenu.h llvkfloater.cpp llvkfloater.h llvklogindialogs.cpp llvkspinner.cpp llvkradiogroup.cpp)
 target_link_libraries(llvkwidgets PRIVATE llmath)
-target_sources(llvkwidgets PRIVATE llvkslider.cpp)
+target_sources(llvkwidgets PRIVATE llvkslider.cpp llvkspellcheck.cpp llvkspellcheck.h llvktranslation.cpp llvktranslation.h)
+target_sources(llvkwidgets PRIVATE llvkkeybindings.cpp llvkkeybindings.h)
 target_include_directories(llvkwidgets PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(llvkwidgets SYSTEM PRIVATE ${llvk_stb_SOURCE_DIR})
-target_link_libraries(llvkwidgets PRIVATE ll::expat ll::libpng ll::zlib-ng ll::libjpeg ll::openjpeg)
+target_link_libraries(llvkwidgets PRIVATE ll::expat ll::libpng ll::zlib-ng ll::libjpeg ll::openjpeg ll::hunspell)
 target_link_libraries(llvkwidgets PUBLIC llcommon)
 if (WINDOWS)
     include(OpenSSL)
@@ -115,7 +117,7 @@ if (WINDOWS)
         LLVK_VIEWER_MAJOR="${VIEWER_VERSION_MAJOR}" LLVK_VIEWER_MINOR="${VIEWER_VERSION_MINOR}"
         LLVK_VIEWER_PATCH="${VIEWER_VERSION_PATCH}" LLVK_VIEWER_BUILD="${VIEWER_VERSION_REVISION}"
         LLVK_VIEWER_UPSTREAM="${VIEWER_VERSION_LL}" LLVK_VIEWER_CHANNEL="${VIEWER_CHANNEL}")
-    target_link_libraries(llvkloginwindow PUBLIC llvkuipacket llvkbrowser PRIVATE ll::libcurl user32 shell32 ole32 psapi)
+    target_link_libraries(llvkloginwindow PUBLIC llvkuipacket llvkbrowser PRIVATE ll::libcurl user32 shell32 ole32 psapi comdlg32)
     add_dependencies(llvkloginwindow llvk_ui_shaders)
 endif ()
 

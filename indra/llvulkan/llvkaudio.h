@@ -3,6 +3,8 @@
 
 #include <memory>
 #include <optional>
+#include <span>
+#include <cstdint>
 #include <string>
 
 class LLVKAudio final
@@ -21,6 +23,10 @@ public:
     };
     bool setVolume(const Volume& volume, std::string& error);
     std::optional<float> listenerGain(std::string& error) const;
+    bool playUiWav(std::span<const std::uint8_t> wav, std::string& error);
+    bool setUiGain(float gain, bool muted, std::string& error);
+    bool update(std::string& error);
+    std::size_t activeUiSounds() const noexcept;
     bool active() const noexcept;
     std::string driverName() const;
 private:

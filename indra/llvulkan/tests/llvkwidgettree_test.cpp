@@ -14,6 +14,10 @@
 #include "llvkwidgetpaint.h"
 #include "llvkloginui.h"
 #include "llvkstartupsettings.h"
+#include "llvkspellcheck.h"
+#include "llvktranslation.h"
+#include "llvkkeybindings.h"
+#include "llsdutil.h"
 #include "lluri.h"
 #include "llvkstyledtext.h"
 #include "llvkscroll.h"
@@ -68,6 +72,369 @@ namespace tut
     typedef test_group<widgettree_data,200> widgettree_group;
     typedef widgettree_group::object object;
     widgettree_group widgettree_tests("llvkwidgettree");
+
+        template<> template<> void object::test<152>()
+        {
+            set_test_name("native keybinding conflicts preserve reservations and script click priority");
+            LLVKKeyBindings keys;
+            using Mode=LLVKKeyBindings::Mode;
+            LLVKKeyBindings::Controls controls;
+            controls["script_trigger_lbutton"].binding.addKeyData(CLICK_LEFT,KEY_NONE,MASK_NONE,true);
+            controls["reserved"].binding.addKeyData(CLICK_NONE,'R',MASK_CONTROL,true);
+            controls["reserved"].assignable=false;
+            controls["prior"].binding.addKeyData(CLICK_NONE,'R',MASK_CONTROL,true);
+            keys.setControls(Mode::ThirdPerson,controls);
+            ensure("reserved conflict veto",!keys.assign(Mode::ThirdPerson,"new",0,LLKeyData(CLICK_NONE,'R',MASK_CONTROL,true)));
+            ensure("veto preserves earlier conflict",keys.handles(Mode::ThirdPerson,"prior",CLICK_NONE,'R',MASK_CONTROL));
+            ensure("click to walk assigned",keys.setClickAction("walk_to",CLICK_LEFT,true));
+            ensure("script click retains nonconflicting binding",keys.handles(Mode::ThirdPerson,"script_trigger_lbutton",CLICK_LEFT,KEY_NONE,0));
+            ensure("walk handles additional modifiers",keys.handles(Mode::ThirdPerson,"walk_to",CLICK_LEFT,KEY_NONE,MASK_SHIFT));
+            ensure("double-click walk assigned",keys.setClickAction("walk_to",CLICK_DOUBLELEFT,true));
+            ensure("teleport displaces double-click walk",keys.setClickAction("teleport_to",CLICK_DOUBLELEFT,true));
+            ensure("prior double-click removed",!keys.handles(Mode::ThirdPerson,"walk_to",CLICK_DOUBLELEFT,KEY_NONE,0));
+            ensure("single-click walk retained",keys.handles(Mode::ThirdPerson,"walk_to",CLICK_LEFT,KEY_NONE,0));
+            ensure("menu reservation callback veto",!keys.assign(Mode::ThirdPerson,"action",0,LLKeyData(CLICK_NONE,'Q',MASK_CONTROL,true),[](const auto&) { return true; }));
+            keys.setControls(Mode::FirstPerson,{});
+            ensure("first person teleport unavailable",!keys.assign(Mode::FirstPerson,"teleport_to",0,LLKeyData(CLICK_DOUBLELEFT,KEY_NONE,0,true)));
+            ensure("disable teleport click",keys.setClickAction("teleport_to",CLICK_DOUBLELEFT,false));
+            ensure("disabled click no longer handled",!keys.handles(Mode::ThirdPerson,"teleport_to",CLICK_DOUBLELEFT,KEY_NONE,0));
+            std::string error;
+            const auto original=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path()/"app_settings"/"key_bindings.xml";
+            ensure("original bindings load natively",keys.loadFile(original,error));
+            ensure("original movement binding",keys.handles(Mode::ThirdPerson,"push_forward",CLICK_NONE,'W',MASK_NONE));
+            ensure("original modifier binding",keys.handles(Mode::ThirdPerson,"slide_left",CLICK_NONE,'A',MASK_SHIFT));
+            ensure("original first-person binding",keys.handles(Mode::FirstPerson,"slide_left",CLICK_NONE,'A',MASK_NONE));
+            ensure("bad binding name rejected",!keys.load("<keys><third_person><binding command='walk_to' key='UnknownKey' mask='NONE'/></third_person></keys>",error));
+            ensure("failed load retains existing bindings",keys.handles(Mode::ThirdPerson,"push_forward",CLICK_NONE,'W',MASK_NONE));
+            ensure("add accepted click to loaded bindings",keys.setClickAction("teleport_to",CLICK_DOUBLELEFT,true));
+            const auto xml=keys.serialize(error);
+            ensure(error,xml.has_value());
+            LLVKKeyBindings roundTrip;
+            ensure("serialized native bindings reload",roundTrip.load(*xml,error));
+            ensure("round trip keeps added click",roundTrip.handles(Mode::ThirdPerson,"teleport_to",CLICK_DOUBLELEFT,KEY_NONE,0));
+            ensure("round trip preserves unrelated mode",roundTrip.handles(Mode::FirstPerson,"slide_left",CLICK_NONE,'A',0));
+            ensure("round trip preserves source modifiers",roundTrip.handles(Mode::ThirdPerson,"slide_left",CLICK_NONE,'A',MASK_SHIFT));
+            ensure("round trip preserves script mouse",roundTrip.handles(Mode::ThirdPerson,"script_trigger_lbutton",CLICK_LEFT,KEY_NONE,0));
+            const auto directory=std::filesystem::temp_directory_path()/("vulkanstorm-bindings-test-"+LLUUID::generateNewID().asString());
+            struct Cleanup { std::filesystem::path directory; ~Cleanup() { std::error_code ignored; std::filesystem::remove_all(directory,ignored); } } cleanup{directory};
+            const auto saved=directory/"key_bindings.xml";
+            ensure("save accepted native bindings",keys.saveFile(saved,error));
+            LLVKKeyBindings loaded;
+            ensure("reload accepted native bindings",loaded.loadFile(saved,error));
+            ensure("persisted click remains active",loaded.handles(Mode::ThirdPerson,"teleport_to",CLICK_DOUBLELEFT,KEY_NONE,0));
+            auto staging=saved; staging+=".native-write";
+            ensure("simulate concurrent binding writer",std::filesystem::create_directory(staging));
+            ensure("edit in-memory binding preview",keys.setClickAction("teleport_to",CLICK_DOUBLELEFT,false));
+            ensure("busy writer does not overwrite accepted file",!keys.saveFile(saved,error));
+            ensure("accepted file still reloads",loaded.loadFile(saved,error));
+            ensure("failed write preserved accepted click",loaded.handles(Mode::ThirdPerson,"teleport_to",CLICK_DOUBLELEFT,KEY_NONE,0));
+        }
+
+        template<> template<> void object::test<151>()
+        {
+            set_test_name("native translation verification requests preserve provider response contracts");
+            std::string error;
+            LLSD azure; azure["endpoint"]="https://api.cognitive.microsofttranslator.com"; azure["id"]="fixture"; azure["region"]="westus";
+            const auto request=LLVKTranslation::verification("azure",azure,error);
+            ensure(error,request.has_value());
+            ensure("Azure verification is POST",request->post);
+            ensure_equals("Azure intentionally invalid body",request->body,std::string("[{\"intentionally_invalid_400\"}]"));
+            ensure("Azure expects JSON error status",LLVKTranslation::verified("azure",400,"{\"error\":{\"code\":400000}}"));
+            ensure("Azure rejects unauthorized",!LLVKTranslation::verified("azure",401,"{}"));
+            ensure("Azure rejects nonJSON error",!LLVKTranslation::verified("azure",400,"not JSON"));
+            azure["id"]="fixture\r\nInjected: value";
+            ensure("header injection rejected",!LLVKTranslation::verification("azure",azure,error));
+            azure["id"]="fixture"; azure["endpoint"]="";
+            ensure("empty endpoint rejected safely",!LLVKTranslation::verification("azure",azure,error));
+            const auto google=LLVKTranslation::verification("google",LLSD("fixture&other=value"),error);
+            ensure(error,google.has_value());
+            ensure("Google key remains one query value",google->url.find("fixture%26other%3Dvalue")!=std::string::npos);
+            LLSD deepl; deepl["domain"]="https://api-free.deepl.com/"; deepl["id"]="fixture";
+            const auto deepRequest=LLVKTranslation::verification("deepl",deepl,error);
+            ensure(error,deepRequest.has_value());
+            ensure_equals("DeepL verification body",deepRequest->body,std::string("text=&target_lang=EN"));
+            ensure("DeepL success status",LLVKTranslation::verified("deepl",200,""));
+            ensure("Google rejects forbidden",!LLVKTranslation::verified("google",403,"{}"));
+        }
+
+        template<> template<> void object::test<150>()
+        {
+                set_test_name("native spelling owns Hunspell and ordered dictionary sources");
+                const auto directory=std::filesystem::temp_directory_path()/"vulkanstorm-spelling-test";
+                std::filesystem::create_directories(directory/"app");
+                std::filesystem::create_directories(directory/"user");
+                struct Cleanup { std::filesystem::path directory; ~Cleanup() { std::error_code ignored; std::filesystem::remove_all(directory,ignored); } } cleanup{directory};
+                { std::ofstream file(directory/"app"/"dictionaries.xml");
+                    file << "<llsd><array><map><key>name</key><string>sample</string><key>language</key><string>Sample</string>"
+                        "<key>is_primary</key><boolean>true</boolean></map></array></llsd>"; }
+                { std::ofstream file(directory/"app"/"sample.aff"); file << "SET UTF-8\n"; }
+                { std::ofstream file(directory/"app"/"sample.dic"); file << "2\nhello\nworld\n"; }
+                { std::ofstream file(directory/"user"/"user_ignore.dic"); file << "1\nMyIgnoredWord\n"; }
+                LLVKSpellCheck spelling(directory/"app",directory/"user");
+                std::string error;
+                ensure("native catalog loads",spelling.refresh(error));
+                ensure("installed dictionary detected",spelling.dictionary("Sample") && (*spelling.dictionary("Sample"))["installed"].asBoolean());
+                ensure("native Hunspell activates",spelling.activate("Sample",{},error));
+                ensure("actual native engine active",spelling.active());
+                ensure("known word accepted",spelling.check("hello"));
+                ensure("unknown word rejected",!spelling.check("wrold"));
+                const auto suggestions=spelling.suggestions("wrold");
+                ensure("Hunspell provides correction",std::find(suggestions.begin(),suggestions.end(),"world")!=suggestions.end());
+                ensure("case-insensitive persisted ignore",spelling.check("MYIGNOREDWORD"));
+                ensure("short source token bypass",spelling.check("zz"));
+                ensure("packaged dictionary cannot be removed",!spelling.canRemove("Sample"));
+                ensure("disable native spelling",spelling.activate("",{},error));
+                ensure("disabled engine released",!spelling.active());
+                ensure("disabled accepts input",spelling.check("wrold"));
+                { std::ofstream file(directory/"app"/"extra.dic"); file << "1\nvulkanstorm\n"; }
+                ensure("import secondary dictionary",spelling.importDictionary(directory/"app"/"extra.dic"," Extra ",error));
+                ensure("import is user-owned and secondary",spelling.dictionary("Extra") &&
+                    (*spelling.dictionary("Extra"))["user_installed"].asBoolean() && !(*spelling.dictionary("Extra"))["is_primary"].asBoolean());
+                ensure("activate secondary dictionary",spelling.activate("Sample",{"Extra"},error));
+                ensure("secondary dictionary affects actual engine",spelling.check("vulkanstorm"));
+                ensure("active secondary cannot be removed",!spelling.canRemove("Extra") && !spelling.remove("Extra",error));
+                ensure("remove from active secondary set",spelling.activate("Sample",{},error));
+                ensure("recreated engine drops secondary words",!spelling.check("vulkanstorm"));
+                ensure("inactive user dictionary removable",spelling.canRemove("Extra"));
+                ensure("remove inactive dictionary",spelling.remove("Extra",error));
+                ensure("user dictionary file removed",!std::filesystem::exists(directory/"user"/"extra.dic"));
+                ensure("packaged input untouched",std::filesystem::exists(directory/"app"/"extra.dic"));
+                { std::ofstream file(directory/"app"/"package.xcu");
+                    file << "<oor:component-data xmlns:oor='http://openoffice.org/2001/registry'><node oor:name='ServiceManager'>"
+                        "<node oor:name='Dictionaries'><node oor:name='NotSpelling'><prop oor:name='Format'><value>DICT_HYPH</value></prop>"
+                        "<prop oor:name='Locations'><value>%origin%/wrong.dic</value></prop></node><node oor:name='Spelling'>"
+                        "<prop oor:name='Locations'><value>%origin%/extra.aff %origin%/extra.dic</value></prop>"
+                        "<prop oor:name='Format'><value>DICT_SPELL</value></prop></node></node></node></oor:component-data>"; }
+                const auto resolved=LLVKSpellCheck::resolveImportPath(directory/"app"/"package.xcu",error);
+                ensure(error,resolved.has_value());
+                ensure("XCU chooses spelling dic with origin substitution",*resolved==directory/"app"/"extra.dic");
+        }
+
+        template<> template<> void object::test<149>()
+    {
+        set_test_name("native AutoReplace settings retain priority and isolated dialog drafts");
+        LLVKAutoReplaceSettings settings;
+        LLSD first=LLSD::emptyMap(); first["name"]="First"; first["replacements"]=LLSD::emptyMap();
+        first["replacements"]["word"]="first";
+        LLSD second=first; second["name"]="Second"; second["replacements"]["word"]="second";
+        ensure("first list accepted",settings.add(first)==LLVKAutoReplaceSettings::AddResult::Added);
+        ensure("second list accepted",settings.add(second)==LLVKAutoReplaceSettings::AddResult::Added);
+        ensure("duplicate is explicit",settings.add(first)==LLVKAutoReplaceSettings::AddResult::DuplicateName);
+        ensure_equals("first list wins",settings.replaceWord("word",true),std::string("first"));
+        ensure_equals("disabled retains input",settings.replaceWord("word",false),std::string("word"));
+        auto draft=settings;
+        ensure("raise second list",draft.move("Second",true));
+        ensure_equals("priority changes result",draft.replaceWord("word",true),std::string("second"));
+        ensure_equals("active settings isolated",settings.replaceWord("word",true),std::string("first"));
+        ensure("source keyword punctuation accepted",draft.setEntry("Second","(test),a-b.c_d","multiple words"));
+        ensure("space in keyword rejected",!draft.setEntry("Second","two words","replacement"));
+        ensure("empty replacement rejected",!draft.setEntry("Second","word",""));
+        ensure("unchanged previous entry",draft.replaceWord("word",true)=="second");
+        ensure("replace list preserves position",draft.add(first,true)==LLVKAutoReplaceSettings::AddResult::Added);
+        LLSD invalid=first; invalid["replacements"]["word"]=17;
+        ensure("nonstring value rejected",draft.add(invalid)==LLVKAutoReplaceSettings::AddResult::InvalidList);
+        ensure("invalid whole settings rejected",!draft.set(invalid));
+        ensure_equals("invalid load retains draft",draft.replaceWord("word",true),std::string("second"));
+        ensure("remove entry",draft.removeEntry("Second","word"));
+        ensure_equals("lower priority fallback",draft.replaceWord("word",true),std::string("first"));
+        ensure("remove list",draft.remove("Second"));
+        ensure("deleted list absent",draft.find("Second")==nullptr);
+        ensure("active copy still has deleted list",settings.find("Second")!=nullptr);
+        const auto directory=std::filesystem::temp_directory_path()/"vulkanstorm-autoreplace-test";
+        const auto path=directory/"autoreplace.xml", exported=directory/"exported.xml";
+        struct Cleanup
+        {
+            std::filesystem::path directory;
+            ~Cleanup() { std::error_code ignored; std::filesystem::remove(directory/"autoreplace.xml",ignored);
+                std::filesystem::remove(directory/"exported.xml",ignored); std::filesystem::remove(directory,ignored); }
+        } cleanup{directory};
+        std::string error;
+        ensure("persist native lists",settings.saveFile(path,error));
+        LLVKAutoReplaceSettings loaded;
+        ensure("reload native lists",loaded.loadFile(path,error));
+        ensure("round-trip exact LLSD",llsd_equals(loaded.lists(),settings.lists()));
+        ensure("export one list",LLVKAutoReplaceSettings::writeListFile(exported,*loaded.find("First"),error));
+        const auto imported=LLVKAutoReplaceSettings::readListFile(exported,error);
+        ensure(error,imported.has_value());
+        ensure("export/import exact list",llsd_equals(*imported,*loaded.find("First")));
+        ensure("array is not a single import list",!LLVKAutoReplaceSettings::readListFile(path,error));
+    }
+
+    template<> template<> void object::test<148>()
+    {
+        set_test_name("native scroll list owns row scrolling and enabled value selection");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view; view.rect={0,0,220,80};
+        LLVKControl::Params control; control.font=loadFont();
+        int commits=0; control.commit.function=[&](auto,const LLSD&) { ++commits; };
+        LLVKWidgetTree::ScrollListParams list;
+        list.scrollbarControl.font=control.font;
+        list.scrollbar.decreaseControl.font=list.scrollbar.increaseControl.font=control.font;
+        list.columns={{"keyword","Keyword",60},{"replacement","Replacement",-1,0.7f}};
+        for (int index=0; index<12; ++index) list.rows.push_back({LLSD(index),{"key"+std::to_string(index),"replacement"},index!=2,false});
+        std::string error;
+        const auto id=tree.createScrollList(view,control,list,0,error);
+        ensure(error,id.has_value());
+        const auto scrollbar=tree.get(*id)->scrollList->scrollbar;
+        ensure("overflow uses row scrollbar",tree.get(scrollbar)->params.visible);
+        ensure_equals("scroll document counts rows",tree.get(scrollbar)->scrollbar->documentSize,12);
+        ensure("select enabled row",tree.selectScrollListValue(*id,LLSD(3),true,error));
+        ensure_equals("selected public value",tree.value(*id).asInteger(),3);
+        ensure_equals("programmatic selection default does not commit",commits,0);
+        ensure("disabled row cannot be selected",!tree.selectScrollListValue(*id,LLSD(2),true,error));
+        ensure("single selection clears before disabled lookup",tree.value(*id).isUndefined());
+        ensure("row scrollbar advances",tree.setScrollPosition(scrollbar,3,true,error));
+        ensure_equals("owner tracks first row",tree.get(*id)->scrollList->firstRow,3);
+        LLVKWidgetTree::PointerEvent click;
+        click.kind=LLVKWidgetTree::PointerKind::LeftDown; click.x=10; click.y=75;
+        ensure("list row press",tree.routePointer(*id,click,error));
+        ensure_equals("row press selects",tree.value(*id).asInteger(),3);
+        ensure_equals("press does not commit by default",commits,0);
+        click.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("list row release",tree.routePointer(*id,click,error));
+        ensure_equals("completed click commits",commits,1);
+        ensure("Down selects next enabled row",tree.scrollListKey(*id,LLVKWidgetTree::ScrollKey::Down,{},error));
+        ensure_equals("keyboard selects following value",tree.value(*id).asInteger(),4);
+        ensure_equals("keyboard movement commits",commits,2);
+        const auto paint=LLVKWidgetPaint::prepare(tree,*id,{},error);
+        ensure(error,paint.has_value());
+        ensure("native row text painted",std::any_of(paint->commands.begin(),paint->commands.end(),[&](const auto& command)
+        { return command.owner==*id && command.text && command.clip.left==2 && command.clip.bottom==2; }));
+        ensure("replace with short row set",tree.setScrollListRows(*id,{{LLSD("only"),{"one","row"}}},error));
+        ensure("short list hides scrollbar",!tree.get(scrollbar)->params.visible);
+        ensure("replace with sortable rows",tree.setScrollListRows(*id,{
+            {LLSD("first"),{"item10","same"}}, {LLSD("second"),{"item2","same"}},
+            {LLSD("third"),{"item1","other"}}},error));
+        ensure("retain row selection through sort",tree.selectScrollListValue(*id,LLSD("first"),true,error));
+        ensure("dictionary sort",tree.sortScrollList(*id,0,true,error));
+        ensure_equals("numeric dictionary order",tree.get(*id)->scrollList->rows[1].value.asString(),std::string("second"));
+        ensure_equals("selected identity survives sorting",tree.value(*id).asString(),std::string("first"));
+        ensure_equals("anchor follows selected row",tree.get(*id)->scrollList->anchor,2);
+        ensure("second column primary",tree.sortScrollList(*id,1,false,error));
+        ensure_equals("previous column breaks ties",tree.get(*id)->scrollList->rows[0].value.asString(),std::string("second"));
+        ensure_equals("sorting does not commit selection",commits,2);
+        ensure("invalid sort rejected",!tree.sortScrollList(*id,2,true,error));
+        list.heading=true;
+        list.rows={{LLSD("z"),{"z","first"}},{LLSD("a"),{"a","second"}}};
+        const auto headed=tree.createScrollList(view,control,list,0,error);
+        ensure(error,headed.has_value());
+        const auto header=tree.get(*headed)->scrollList->headers.front();
+        ensure("native heading is a button",tree.get(header)->button.has_value());
+        ensure("heading is excluded from keyboard tab traversal",!tree.get(header)->control->params.tabStop);
+        ensure("first header click",tree.buttonReturn(header,0,false,error));
+        ensure_equals("first click ascending",tree.get(*headed)->scrollList->rows.front().value.asString(),std::string("a"));
+        ensure("second header click",tree.buttonReturn(header,0,false,error));
+        ensure_equals("second click descending",tree.get(*headed)->scrollList->rows.front().value.asString(),std::string("z"));
+        const auto headedPaint=LLVKWidgetPaint::prepare(tree,*headed,{},error);
+        ensure(error,headedPaint.has_value());
+        ensure("header text reaches native painter",std::any_of(headedPaint->commands.begin(),headedPaint->commands.end(),
+            [header](const auto& command) { return command.owner==header && command.text.has_value(); }));
+        list.heading=false; list.sortColumn=0; list.sortAscending=true;
+        const auto sorted=tree.createScrollList(view,control,list,0,error);
+        ensure(error,sorted.has_value());
+        ensure_equals("initial sort applied to incoming rows",tree.get(*sorted)->scrollList->rows.front().value.asString(),std::string("a"));
+        LLVKWidgetTree::Events events;
+        events.focusReceived=[&](auto owner) { tree.setScrollListRows(owner,{},error); };
+        tree.setEvents(*sorted,events);
+        click.kind=LLVKWidgetTree::PointerKind::LeftDown; click.x=10; click.y=75;
+        ensure("focus callback may replace rows",tree.routePointer(*sorted,click,error));
+        ensure("removed focus row is not selected",tree.value(*sorted).isUndefined());
+        ensure("restore row after focus callback",tree.setScrollListRows(*sorted,{{LLSD("row"),{"row"}}},error));
+        events.focusReceived={}; events.captureLost=[&](auto owner) { tree.setScrollListRows(owner,{},error); };
+        tree.setEvents(*sorted,events);
+        ensure("capture replacement row",tree.routePointer(*sorted,click,error));
+        click.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("capture-loss callback may remove rows",tree.routePointer(*sorted,click,error));
+        ensure("capture-loss row is not reused",tree.value(*sorted).isUndefined());
+        list.selection=LLVKWidgetTree::ScrollListParams::Selection::Header;
+        list.heading=true; list.canSort=false; list.rows={{LLSD("action"),{"Action","Primary"}}};
+        const auto controls=tree.createScrollList(view,control,list,0,error);
+        ensure(error,controls.has_value());
+        click.kind=LLVKWidgetTree::PointerKind::LeftDown; click.x=85; click.y=50;
+        ensure("binding cell press",tree.routePointer(*controls,click,error));
+        click.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("binding cell release",tree.routePointer(*controls,click,error));
+        ensure_equals("binding column selection",tree.get(*controls)->scrollList->rows.front().selectedCell,1);
+        const auto cellPaint=LLVKWidgetPaint::prepare(tree,*controls,{},error);
+        ensure(error,cellPaint.has_value());
+        ensure("selected cell highlight begins in second column",std::any_of(cellPaint->commands.begin(),cellPaint->commands.end(),[&](const auto& command)
+        { return command.owner==*controls && !command.text && command.rectangle.left==67 && command.color==list.selectedBackground.get(); }));
+        const auto controlsHeader=tree.get(*controls)->scrollList->headers.front();
+        ensure("non-sortable heading activation",tree.buttonReturn(controlsHeader,0,false,error));
+        ensure_equals("non-sortable header retains primary criterion",tree.get(*controls)->scrollList->sortColumns.back().first,std::size_t(0));
+    }
+
+    template<> template<> void object::test<147>()
+    {
+        set_test_name("native multiline editor drafts commit on focus loss and preserve literal input");
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params view; view.rect={0,0,200,80};
+        LLVKControl::Params control; control.font=loadFont(); control.valueSetting="FSKeywords";
+        ensure("keyword setting",tree.defineSetting("FSKeywords",LLSD("word"),LLVKWidgetTree::SettingType::String));
+        int commits=0;
+        control.commit.function=[&](auto,const LLSD& value)
+        { ensure_equals("setting written before callback",tree.setting("FSKeywords")->asString(),value.asString()); ++commits; };
+        LLVKPlainControl::Params params; params.maximumBytes=32; params.commitOnFocusLost=true;
+        params.layout.wrap=true;
+        LLVKWidgetTree::ScrollContainerParams scroll; scroll.size=16; scroll.scrollbarControl.font=control.font;
+        scroll.vertical.decreaseControl.font=scroll.vertical.increaseControl.font=control.font;
+        scroll.horizontal.decreaseControl.font=scroll.horizontal.increaseControl.font=control.font;
+        std::string error;
+        const auto editor=tree.createTextEditor(view,control,params,scroll,true,0,error);
+        ensure(error,editor.has_value());
+        ensure("editor focus",tree.requestControlFocus(*editor,true,error));
+        ensure("replace selected text",tree.selectAllPlainText(*editor));
+        ensure("insert literal multiline draft",tree.insertTextEditorText(*editor,U"[APP_NAME]\nkeyword",error));
+        ensure_equals("no substitution in user draft",tree.value(*editor).asString(),std::string("[APP_NAME]\nkeyword"));
+        ensure_equals("draft does not yet publish setting",tree.setting("FSKeywords")->asString(),std::string("word"));
+        ensure("undo multiline selection replacement",tree.undoTextEditor(*editor,false,error));
+        ensure_equals("undo restores original text",tree.value(*editor).asString(),std::string("word"));
+        ensure("redo multiline edit",tree.undoTextEditor(*editor,true,error));
+        ensure("delete previous word",tree.deleteTextEditor(*editor,true,true,error));
+        ensure_equals("word deletion retains newline",tree.value(*editor).asString(),std::string("[APP_NAME]\n"));
+        ensure("undo deletion",tree.undoTextEditor(*editor,false,error));
+        ensure_equals("undo restores word",tree.value(*editor).asString(),std::string("[APP_NAME]\nkeyword"));
+        ensure("new edit clears redo branch",tree.insertTextEditorText(*editor,U"!",error));
+        ensure("redo no longer available",!tree.undoTextEditor(*editor,true,error));
+        ensure("undo new edit",tree.undoTextEditor(*editor,false,error));
+        ensure("editable Home",tree.textEditorKey(*editor,LLVKWidgetTree::ScrollKey::Home,{},error));
+        const auto body=tree.get(*editor)->textEditor->body;
+        ensure_equals("Home reaches current line start",tree.get(body)->plainText->cursor,std::size_t(11));
+        ensure("editable End",tree.textEditorKey(*editor,LLVKWidgetTree::ScrollKey::End,{},error));
+        ensure_equals("End reaches current line end",tree.get(body)->plainText->cursor,std::size_t(18));
+        ensure("Up moves to preceding line",tree.textEditorKey(*editor,LLVKWidgetTree::ScrollKey::Up,{},error));
+        ensure("Up cursor lies on first line",tree.get(body)->plainText->cursor<11);
+        ensure("Shift Down selects next line",tree.textEditorKey(*editor,LLVKWidgetTree::ScrollKey::Down,{true,false,false},error));
+        ensure_equals("desired column restored",tree.get(body)->plainText->cursor,std::size_t(18));
+        ensure("vertical selection exists",tree.get(body)->plainText->selectionStart!=tree.get(body)->plainText->selectionEnd);
+        tree.deselectPlainText(*editor);
+        ensure("caret geometry",tree.plainTextCaretRect(body,error).has_value());
+        ensure("caret paints in editable text",LLVKWidgetPaint::prepare(tree,*editor,{},error).has_value());
+        struct Clipboard final : LLVKClipboard
+        {
+            std::u32string content=U"one\ttwo\rthree";
+            bool available(bool) const override { return true; }
+            std::optional<std::u32string> read(bool,std::string&) override { return content; }
+            bool write(std::u32string_view text,bool,std::string&) override { content=text; return true; }
+        };
+        auto clipboard=std::make_shared<Clipboard>(); tree.setClipboard(clipboard);
+        tree.selectAllPlainText(*editor);
+        ensure("paste multiline clipboard",tree.pasteTextEditor(*editor,error));
+        ensure("paste preserves line breaks",tree.value(*editor).asString().find("\nthree")!=std::string::npos);
+        tree.selectAllPlainText(*editor);
+        ensure("cut multiline selection",tree.cutTextEditor(*editor,error));
+        ensure_equals("cut empties editor",tree.value(*editor).asString(),std::string());
+        ensure("cut copied content",!clipboard->content.empty());
+        ensure("undo cut",tree.undoTextEditor(*editor,false,error));
+        ensure("undo paste",tree.undoTextEditor(*editor,false,error));
+        ensure("byte limit is handled",tree.insertTextEditorText(*editor,std::u32string(40,U'x'),error));
+        ensure_equals("oversize input does not mutate",tree.value(*editor).asString(),std::string("[APP_NAME]\nkeyword"));
+        ensure("leaving editor commits draft",tree.setKeyboardFocus(0,false,false,error));
+        ensure_equals("one focus-loss commit",commits,1);
+        ensure_equals("setting now contains draft",tree.setting("FSKeywords")->asString(),std::string("[APP_NAME]\nkeyword"));
+        tree.setEnabled(*editor,false);
+        ensure("readonly insertion rejected",!tree.insertTextEditorText(*editor,U"x",error));
+    }
 
     template<> template<> void object::test<146>()
     {
@@ -861,14 +1228,42 @@ namespace tut
         configuration.settings["UsePeopleAPI"]=LLSD(false);
         configuration.settings["UseDisplayNames"]=LLSD(true);
         configuration.settingDefaults["RememberPassword"]=LLSD(false);
+        configuration.settings["UISndClick"]=LLSD("00000000-0000-0000-0000-000000000001");
+        configuration.settings["PlayModeUISndClick"]=LLSD(false);
         configuration.settings["ShowAdultSims"]=LLSD(true);
+        configuration.settings["AutoReplace"]=LLSD(false);
+        configuration.settings["SpellCheck"]=LLSD(true);
+        configuration.settings["SpellCheckDictionary"]=LLSD("English (United States),Second Life Glossary");
+        configuration.settings["TranslateChat"]=LLSD(true); configuration.settings["TranslateLanguage"]=LLSD("en");
+        configuration.settings["TranslationService"]=LLSD("google"); configuration.settings["GoogleTranslateAPIKey"]=LLSD("");
+        configuration.settings["AzureTranslateAPIKey"]=LLSD(); configuration.settings["DeepLTranslateAPIKey"]=LLSD();
+        configuration.dictionaryDirectory=std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS).parent_path()/"dictionaries";
+        LLVKStartupSettings accountSettings;
+        std::string accountError;
+        ensure("original account defaults",accountSettings.loadFile(configuration.skin.skinBaseDirectory.parent_path()/"app_settings"/"settings_per_account.xml",true,true,true,accountError));
+        configuration.accountSettings=accountSettings.values(); configuration.accountDefaults=accountSettings.defaults();
         configuration.appliedSettingsMode="settings_firestorm.xml";
         std::map<std::string,LLSD> saved;
         configuration.savePreferences = [&](const auto& values,std::string&) { saved=values; return true; };
+        LLSD savedAutoReplace;
+        configuration.saveAutoReplace=[&](const LLSD& lists,std::string&) { savedAutoReplace=lists; return true; };
         std::string error;
         auto login = LLVKLoginUi::create(configuration,error);
         ensure(error,login != nullptr);
         auto& tree=login->tree();
+        ensure("native account default exists",tree.setting("UISndFSKeywordSound").has_value());
+        const auto accountSound=tree.setting("UISndFSKeywordSound")->asString();
+        ensure("edit native account setting",tree.updateSetting("UISndFSKeywordSound",LLSD("00000000-0000-0000-0000-000000000001")));
+        ensure("reset native account setting",login->resetAccountPreference("UISndFSKeywordSound",error));
+        ensure_equals("account reset uses declared default",tree.setting("UISndFSKeywordSound")->asString(),accountSound);
+        ensure("global default cannot reset account control",!login->resetPreference("UISndFSKeywordSound",error));
+        std::string previewed;
+        login->setUiSoundPlayer([&](const std::string& asset,std::string&) { previewed=asset; return true; });
+        ensure("forced sound preview bypasses play mode",login->previewUiSound("UISndClick",error));
+        ensure_equals("preview resolves setting UUID",previewed,std::string("00000000-0000-0000-0000-000000000001"));
+        tree.updateSetting("UISndClick",LLSD("00000000-0000-0000-0000-000000000000")); previewed.clear();
+        ensure("null UI sound is silent",login->previewUiSound("UISndClick",error));
+        ensure("null sound never invokes player",previewed.empty());
         ensure("RLVa startup does not fabricate an activation notice",login->takeNotices().empty());
         ensure("RLVa pre-login preference enabled",tree.updateSetting("RestrainedLove",LLSD(true)));
         auto rlvNotices=login->takeNotices();
@@ -893,6 +1288,175 @@ namespace tut
         ensure("notice delay elapses",login->advanceNotices(1.5,error));
         ensure("Return dismisses notice",login->noticeKey(true,false,error));
         ensure_equals("notice closed",login->modalNotice(),LLVKWidgetTree::Id(0));
+        LLSD noticeArguments; noticeArguments["DUPNAME"]="Existing";
+        ensure("native original name-conflict prompt",login->queueNotice("RenameAutoReplaceList",noticeArguments,{},error));
+        const auto renameNotices=login->takeNotices();
+        ensure_equals("one name-conflict notice",renameNotices.size(),std::size_t(1));
+        ensure("source message substitution",renameNotices.front().message.find("'Existing'")!=std::string::npos);
+        ensure_equals("source form text field",renameNotices.front().inputName,std::string("listname"));
+        ensure_equals("source form buttons",renameNotices.front().buttons.size(),std::size_t(2));
+        ensure_equals("replace option",renameNotices.front().buttons.front().option,0);
+        ensure("new-name default action",renameNotices.front().buttons.back().isDefault && renameNotices.front().buttons.back().option==1);
+        int responseOption=-1;
+        std::string responseName;
+        ensure("queue editable native form",login->queueNotice("AddAutoReplaceList",{},[&](int option,const LLSD& values)
+        {
+            ensure("response after modal teardown",login->modalNotice()==0);
+            responseOption=option; responseName=values["listname"].asString();
+        },error));
+        ensure("construct native form",login->advanceNotices(2.0,error));
+        const auto noticeInput=login->find("notification_input");
+        ensure("form input owns native focus",tree.keyboardFocus()==noticeInput && tree.get(noticeInput)->lineEditor.has_value());
+        for (const auto character : U"My List") if (character) ensure("edit native form",tree.lineEditorUnicode(noticeInput,character,error));
+        ensure("input notice paints",login->preparePaint({},error).has_value());
+        ensure("form default delay",login->noticeKey(true,false,error));
+        ensure_equals("early default does not respond",responseOption,-1);
+        ensure("form delay elapsed",login->advanceNotices(2.5,error));
+        ensure("form default response",login->noticeKey(true,false,error));
+        ensure_equals("declared default index",responseOption,1);
+        ensure_equals("native input response value",responseName,std::string("My List"));
+        const bool autoReplaceOpened=login->showAutoReplace(error);
+        ensure(error,autoReplaceOpened);
+        ensure("original AutoReplace native list",tree.get(login->find("autoreplace_list_name"))->scrollList.has_value());
+        ensure("original AutoReplace native editor",tree.get(login->find("autoreplace_keyword"))->lineEditor.has_value());
+        const auto dictionaryCombo=login->find("start_location_combo");
+        const auto originalItems=tree.get(dictionaryCombo)->combo->items;
+        ensure("replace dynamic native combo rows",tree.replaceComboItems(dictionaryCombo,{{"Sample",LLSD("sample")}},error));
+        ensure("replacement clears stale combo selection",!tree.get(dictionaryCombo)->combo->selected && tree.value(dictionaryCombo).asString().empty());
+        ensure("select replacement combo row",tree.setComboValue(dictionaryCombo,LLSD("sample"),error));
+        ensure_equals("new combo value",tree.value(dictionaryCombo).asString(),std::string("sample"));
+        ensure("restore login combo fixture",tree.replaceComboItems(dictionaryCombo,originalItems,error));
+        ensure("empty selection makes entry read-only",tree.get(login->find("autoreplace_keyword"))->lineEditor->readOnly);
+        ensure("empty selection disables saving",!tree.get(login->find("autoreplace_save_entry"))->params.enabled);
+        ensure("new-list action",tree.commit(login->find("autoreplace_new_list")));
+        ensure("new-list form",login->advanceNotices(3.0,error));
+        ensure("new-list input",tree.setValue(login->find("notification_input"),LLSD("My Replacements")));
+        ensure("new-list delay",login->advanceNotices(3.5,error));
+        ensure("new-list accept",login->noticeKey(true,false,error));
+        ensure_equals("new list selected",tree.value(login->find("autoreplace_list_name")).asString(),std::string("My Replacements"));
+        ensure("add entry",tree.commit(login->find("autoreplace_add_entry")));
+        ensure("keyword entry",tree.setValue(login->find("autoreplace_keyword"),LLSD("typo")));
+        ensure("replacement entry",tree.setValue(login->find("autoreplace_replacement"),LLSD("correct")));
+        ensure("save entry in draft",tree.commit(login->find("autoreplace_save_entry")));
+        ensure(login->dialogError(),login->dialogError().empty());
+        ensure_equals("draft contains replacement",tree.get(login->find("autoreplace_list_replacements"))->scrollList->rows.size(),std::size_t(1));
+        ensure("AutoReplace painter",login->preparePaint({},error).has_value());
+        const auto autoReplaceId=login->activeFloater();
+        const auto expandedRect=tree.get(autoReplaceId)->params.rect;
+        const auto minimizeRect=tree.screenRect(login->find("floater_minimize"),error);
+        ensure(error,minimizeRect.has_value());
+        LLVKWidgetTree::PointerEvent minimizeClick;
+        minimizeClick.x=(minimizeRect->left+minimizeRect->right)/2;
+        minimizeClick.y=(minimizeRect->bottom+minimizeRect->top)/2;
+        minimizeClick.kind=LLVKWidgetTree::PointerKind::LeftDown;
+        ensure("minimize button pointer press",login->floaterPointer(minimizeClick,error) || tree.routePointer(login->root(),minimizeClick,error));
+        minimizeClick.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("minimize button pointer release",login->floaterPointer(minimizeClick,error) || tree.routePointer(login->root(),minimizeClick,error));
+        ensure_equals("minimized header height",tree.get(autoReplaceId)->params.rect.top-tree.get(autoReplaceId)->params.rect.bottom,25);
+        ensure("minimized content hidden",!tree.get(login->find("autoreplace_list_name"))->params.visible);
+        ensure("minimized native paint",login->preparePaint({},error).has_value());
+        ensure("restore minimized dialog",tree.commit(login->find("floater_restore")));
+        ensure("restore exact expanded geometry",tree.get(autoReplaceId)->params.rect==expandedRect);
+        ensure("restore content visibility",tree.get(login->find("autoreplace_list_name"))->params.visible);
+        ensure_equals("minimize retains draft",tree.get(login->find("autoreplace_list_replacements"))->scrollList->rows.size(),std::size_t(1));
+        ensure("cancel AutoReplace",tree.commit(login->find("autoreplace_cancel")));
+        ensure("reopen original AutoReplace",login->showAutoReplace(error));
+        ensure("cancel discarded list draft",tree.get(login->find("autoreplace_list_name"))->scrollList->rows.empty());
+        const auto autoReplaceDirectory=std::filesystem::temp_directory_path()/"vulkanstorm-autoreplace-dialog-test";
+        const auto importPath=autoReplaceDirectory/"import.xml",exportPath=autoReplaceDirectory/"export.xml";
+        struct AutoReplaceCleanup
+        {
+            std::filesystem::path directory;
+            ~AutoReplaceCleanup() { std::error_code ignored; std::filesystem::remove(directory/"import.xml",ignored);
+                std::filesystem::remove(directory/"export.xml",ignored); std::filesystem::remove(directory,ignored); }
+        } autoReplaceCleanup{autoReplaceDirectory};
+        LLSD importList; importList["name"]="Imported"; importList["replacements"]["typo"]="correct";
+        ensure("prepare import file",LLVKAutoReplaceSettings::writeListFile(importPath,importList,error));
+        LLVKLoginUi::XmlFileResult fileResult;
+        std::string proposedName;
+        login->setXmlFilePicker([&](bool save,const std::string& name,auto response,std::string&)
+        { proposedName=name; fileResult=std::move(response); return true; });
+        ensure("original Import action",tree.commit(login->find("autoreplace_import_list")));
+        ensure("picker receives completion",static_cast<bool>(fileResult));
+        fileResult(importPath,{}); fileResult={};
+        ensure_equals("import selected list",tree.value(login->find("autoreplace_list_name")).asString(),std::string("Imported"));
+        ensure("original Export action",tree.commit(login->find("autoreplace_export_list")));
+        ensure_equals("source export filename",proposedName,std::string("Imported.xml"));
+        fileResult(exportPath,{}); fileResult={};
+        const auto exportedList=LLVKAutoReplaceSettings::readListFile(exportPath,error);
+        ensure(error,exportedList.has_value());
+        ensure("export contains selected draft",llsd_equals(*exportedList,importList));
+        ensure("toggle draft enabled",tree.setValue(login->find("autoreplace_enable"),LLSD(true)));
+        ensure("Save Changes action",tree.commit(login->find("autoreplace_save_changes")));
+        ensure(login->dialogError(),login->dialogError().empty());
+        ensure_equals("saved one ordered list",savedAutoReplace.size(),std::size_t(1));
+        ensure("saved enable setting",saved.at("AutoReplace").asBoolean() && tree.setting("AutoReplace")->asBoolean());
+        saved.clear();
+        ensure("reopen saved AutoReplace",login->showAutoReplace(error));
+        ensure_equals("accepted list survives reopen",tree.get(login->find("autoreplace_list_name"))->scrollList->rows.size(),std::size_t(1));
+        ensure("close AutoReplace",login->closeFloater(error));
+        const bool spellOpened=login->showSpellCheck(error);
+        ensure(error,spellOpened);
+        ensure_equals("text body wins over unused base label",tree.value(login->find("spellcheck_additional")).asString(),std::string("Additional dictionaries:"));
+        ensure("native spelling service active in dialog",login->spellCheck().active());
+        ensure_equals("original primary selection",tree.value(login->find("spellcheck_main_combo")).asString(),std::string("English (United States)"));
+        ensure("packaged primary choices populated",!tree.get(login->find("spellcheck_main_combo"))->combo->items.empty());
+        ensure("original secondary list populated",!tree.get(login->find("spellcheck_active_list"))->scrollList->rows.empty());
+        ensure("native Spell Checker painter",login->preparePaint({},error).has_value());
+        ensure("live disable native spelling",tree.updateSetting("SpellCheck",LLSD(false)));
+        ensure("disable releases actual engine",!login->spellCheck().active());
+        ensure("disabled dictionary list",!tree.get(login->find("spellcheck_available_list"))->params.enabled);
+        ensure("live reenable native spelling",tree.updateSetting("SpellCheck",LLSD(true)));
+        ensure("native spelling reactivated",login->spellCheck().active());
+        ensure("original dictionary import dialog",tree.commit(login->find("spellcheck_import_btn")));
+        ensure(login->dialogError(),login->dialogError().empty());
+        ensure("dictionary import native fields",tree.get(login->find("dictionary_language"))->lineEditor.has_value());
+        ensure("dictionary import painter",login->preparePaint({},error).has_value());
+        ensure("close dictionary import",login->closeFloater(error));
+        ensure("close Spell Checker",login->closeFloater(error));
+        saved.clear();
+        std::function<void(bool,int)> verifiedTranslation;
+        login->setTranslationVerifier([&](const std::string& service,const LLSD& key,auto response,std::string&)
+        { ensure_equals("selected verification service",service,std::string("google")); verifiedTranslation=std::move(response); return true; });
+        const bool translationOpened=login->showTranslation(error);
+        ensure(error,translationOpened);
+        ensure("unverified service cannot accept enabled translation",!tree.get(login->find("ok_btn"))->params.enabled);
+        const auto googleKey=login->find("google_api_key");
+        ensure("focus tentative API editor",tree.requestControlFocus(googleKey,true,error));
+        ensure("tentative prompt cleared",tree.value(googleKey).asString().empty() && !tree.get(googleKey)->control->tentative);
+        ensure("enter fixture key",tree.lineEditorUnicode(googleKey,U'x',error));
+        ensure("verification action enabled",tree.get(login->find("verify_google_api_key_btn"))->params.enabled);
+        ensure("verify selected service",tree.commit(login->find("verify_google_api_key_btn")));
+        ensure("verification requested",static_cast<bool>(verifiedTranslation));
+        const auto staleVerification=verifiedTranslation;
+        ensure("edit invalidates in-flight verification",tree.lineEditorUnicode(googleKey,U'y',error));
+        staleVerification(true,200);
+        ensure("stale verification cannot enable OK",!tree.get(login->find("ok_btn"))->params.enabled);
+        ensure("verify current draft",tree.commit(login->find("verify_google_api_key_btn")));
+        verifiedTranslation(true,200);
+        ensure("verified service enables OK",tree.get(login->find("ok_btn"))->params.enabled);
+        ensure("native translating account state",tree.setting("TranslatingEnabled")->asBoolean());
+        login->takeNotices();
+        ensure("Translation Settings paints",login->preparePaint({},error).has_value());
+        ensure("cancel translation draft",tree.commit(login->find("cancel_btn")));
+        ensure_equals("cancel preserves saved API key",tree.setting("GoogleTranslateAPIKey")->asString(),std::string(""));
+        ensure("cancel translation does not persist",saved.empty());
+        const auto chatPanel=login->constructPreferencePanel("panel_preferences_chat.xml",login->root(),error);
+        ensure(error,chatPanel.has_value());
+        ensure_equals("source panel body retained as nondisplayed value",tree.value(login->find("tab-CmdLine")).asString(),std::string("."));
+        ensure("original keyword editor integrated",tree.get(login->find("FSKeywords"))->textEditor.has_value());
+        const auto keywordSwatch=login->find("colorswatch");
+        ensure_equals("keyword swatch child border disabled",tree.get(tree.get(keywordSwatch)->colorSwatch->border)->border->params.thickness,0);
+        ensure("pre-login keyword master remains unavailable",!tree.get(login->find("FSKeywordOn"))->params.enabled);
+        ensure("pre-login email checkbox hidden",!tree.get(login->find("send_im_to_email"))->params.visible);
+        ensure("pre-login email link hidden",!tree.get(login->find("email_settings"))->params.visible);
+        ensure("pre-login email message visible",tree.get(login->find("email_settings_login_to_change"))->params.visible);
+        ensure("original Chat Preferences paints",login->preparePaint({},error).has_value());
+        ensure("original Chat AutoReplace callback",tree.commit(login->find("autoreplace_showgui")));
+        ensure(login->dialogError(),login->dialogError().empty());
+        ensure_equals("Chat opens original AutoReplace",tree.get(login->activeFloater())->params.name,std::string("autoreplace_floater"));
+        ensure("close Chat auxiliary",login->closeFloater(error));
+        ensure("remove tested Chat panel",tree.erase(*chatPanel,error));
         ensure_equals("notice restores editor focus",tree.keyboardFocus(),password);
         ensure("Preferences shortcut",login->menu().shortcut("P",true,false,false));
         ensure(login->dialogError(),login->dialogError().empty());
@@ -3589,6 +4153,43 @@ namespace tut
             ensure_equals("declared native callback",scrollPosition,12);
         }
         ensure("container packaged template",scrollFactory.loadDefaultsFile(tree,"widgets/scroll_container.xml",error));
+        ensure("original header template",scrollFactory.loadDefaultsFile(tree,"widgets/scroll_column_header.xml",error));
+        ensure("original scroll list template",scrollFactory.loadDefaultsFile(tree,"widgets/scroll_list.xml",error));
+        auto contents=std::make_unique<LLVKWidgetTree::ScrollListParams>();
+        ensure("original Controls columns",scrollFactory.loadListContents(tree,"control_table_contents_columns_basic.xml",*contents,error));
+        ensure("original Controls movement rows",scrollFactory.loadListContents(tree,"control_table_contents_movement.xml",*contents,error));
+        ensure_equals("four original binding columns",contents->columns.size(),std::size_t(4));
+        ensure("section label retained",!contents->rows.empty() && contents->rows.front().cells.front()=="Move Actions");
+        ensure("section icon retained",contents->rows.front().styles.front().image &&
+            contents->rows.front().styles.front().type==LLVKWidgetTree::ListCellStyle::Type::IconText);
+        ensure("action identity distinct from label",contents->rows[1].value.asString()=="walk_to" && contents->rows[1].cells.front()=="Walk to");
+        const auto replacementList=scrollFactory.construct(tree,
+            "<scroll_list name='autoreplace_list_replacements' width='370' height='120' column_padding='0' draw_heading='true' multi_select='true' search_column='0'>"
+            "<scroll_list.columns label='Keyword' name='keyword' relative_width='0.30'/>"
+            "<scroll_list.columns label='Replacement' name='replacement' relative_width='0.70'/></scroll_list>",0,error);
+        ensure(error,replacementList.has_value());
+        ensure_equals("original replacement columns",tree.get(*replacementList)->scrollList->columns.size(),std::size_t(2));
+        ensure("populate native original list",tree.setScrollListRows(*replacementList,{{LLSD("typo"),{"typo","replacement"}}},error));
+        ensure("paint native original list",LLVKWidgetPaint::prepare(tree,*replacementList,{},error).has_value());
+        const auto replacementHeader=tree.get(*replacementList)->scrollList->headers.front();
+        ensure_equals("source header skin",tree.get(replacementHeader)->button->images.unselected->name(),std::string("SegmentedBtn_Middle_Selected"));
+        ensure("source header click sorts",tree.buttonReturn(replacementHeader,0,false,error));
+        ensure("paint sorted native list",LLVKWidgetPaint::prepare(tree,*replacementList,{},error).has_value());
+        ensure_equals("source ascending arrow",tree.get(replacementHeader)->button->images.overlay->name(),std::string("up_arrow.tga"));
+        auto controlContents=std::make_unique<LLVKWidgetTree::ScrollListParams>(*tree.get(*replacementList)->scrollList->params);
+        controlContents->columns=contents->columns; controlContents->rows=contents->rows;
+        controlContents->selection=LLVKWidgetTree::ScrollListParams::Selection::Header;
+        controlContents->canSort=false;
+        LLVKWidgetTree::Params controlsView; controlsView.rect={0,0,500,300};
+        const auto controlRows=tree.createScrollList(controlsView,tree.get(*replacementList)->control->params,*controlContents,0,error);
+        ensure(error,controlRows.has_value());
+        const auto controlsPaint=LLVKWidgetPaint::prepare(tree,*controlRows,{},error);
+        ensure(error,controlsPaint.has_value());
+        const auto sectionImage=contents->rows.front().styles.front().image;
+        ensure("source section icon paints natively",std::any_of(controlsPaint->commands.begin(),controlsPaint->commands.end(),[&](const auto& command)
+        { return command.owner==*controlRows && command.image==sectionImage; }));
+        ensure("source section font sets row metrics",tree.get(*controlRows)->scrollList->lineHeight>=
+            static_cast<int>(std::ceil(contents->rows.front().styles.front().font->metrics().lineHeight))+controlContents->rowPadding);
         ensure("base text editor template",scrollFactory.loadDefaultsFile(tree,"widgets/simple_text_editor.xml",error));
         ensure("search editor template",scrollFactory.loadDefaultsFile(tree,"widgets/search_editor.xml",error));
         ensure("color swatch template",scrollFactory.loadDefaultsFile(tree,"widgets/color_swatch.xml",error));
@@ -3629,6 +4230,22 @@ namespace tut
         ensure("editor constructor is composite",tree.get(*aboutEditor)->textEditor.has_value());
         ensure_equals("original editor body",tree.value(*aboutEditor).asString(),std::string("Original editor contents"));
         ensure_equals("source editor padding",tree.get(tree.get(*aboutEditor)->textEditor->body)->plainText->params.layout.horizontalPadding,6);
+        ensure("keyword enabled binding",tree.defineSetting("FSKeywordOn",LLSD(true),LLVKWidgetTree::SettingType::Boolean));
+        ensure("keyword text binding",tree.defineSetting("FSKeywords",LLSD("original"),LLVKWidgetTree::SettingType::String));
+        const auto keywords=scrollFactory.construct(tree,
+            "<text_editor enabled='false' border_visible='true' bg_readonly_color='MouseGray' enabled_control='FSKeywordOn' "
+            "commit_on_focus_lost='true' follows='left|top' layout='topleft' left='20' max_length='20480' height='55' "
+            "name='FSKeywords' control_name='FSKeywords' width='400' use_ellipses='false' word_wrap='true'/>",0,error);
+        ensure(error,keywords.has_value());
+        ensure("bound enabled state overrides initial readonly",!tree.get(*keywords)->textEditor->readOnly);
+        ensure("original keyword field focused",tree.requestControlFocus(*keywords,true,error));
+        tree.selectAllPlainText(*keywords);
+        ensure("type through original keyword control",tree.insertTextEditorText(*keywords,U"one, two",error));
+        ensure("original focus loss commits",tree.setKeyboardFocus(0,false,false,error));
+        ensure_equals("original keyword setting updated",tree.setting("FSKeywords")->asString(),std::string("one, two"));
+        ensure("keyword feature disabled",tree.updateSetting("FSKeywordOn",LLSD(false)));
+        ensure("original editor becomes readonly",tree.get(*keywords)->textEditor->readOnly);
+        ensure("readonly keyword draft blocked",!tree.insertTextEditorText(*keywords,U"x",error));
         ensure("panel construction font default",scrollFactory.loadDefaults(tree,"<panel font='SansSerifSmall'/>",error));
         ensure("spinner editor defaults",scrollFactory.loadDefaultsFile(tree,"widgets/line_editor.xml",error));
         ensure("packaged spinner template",scrollFactory.loadDefaultsFile(tree,"widgets/spinner.xml",error));

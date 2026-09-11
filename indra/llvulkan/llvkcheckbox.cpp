@@ -92,6 +92,11 @@ LLSD LLVKWidgetTree::value(Id id) const
 {
     const auto* node = get(id);
     if (node && node->searchEditor) return value(node->searchEditor->editor);
+    if (node && node->scrollList)
+    {
+        for (const auto& row : node->scrollList->rows) if (row.selected) return row.value;
+        return LLSD();
+    }
     if (node && node->radioGroup)
     {
         const auto& radio=*node->radioGroup;

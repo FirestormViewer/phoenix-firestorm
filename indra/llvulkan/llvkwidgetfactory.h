@@ -87,6 +87,14 @@ public:
         LLVKWidgetTree::ScrollContainerParams container;
         LLVKControl::Callback scrolled;
     };
+    struct ScrollListDefaults
+    {
+        Defaults view;
+        LLVKControl::Params control;
+        LLVKWidgetTree::ScrollListParams list;
+        ScrollbarDefaults scrollbar;
+        bool initialized = false;
+    };
     struct LayoutDefaults
     {
         Defaults view;
@@ -200,6 +208,8 @@ public:
         std::shared_ptr<const TabDefaults> tabs = std::make_shared<TabDefaults>();
         std::shared_ptr<const SpinnerDefaults> spinner = std::make_shared<SpinnerDefaults>();
         std::shared_ptr<const SearchEditorDefaults> searchEditor = std::make_shared<SearchEditorDefaults>();
+        std::shared_ptr<const ScrollListDefaults> scrollList = std::make_shared<ScrollListDefaults>();
+        std::shared_ptr<const ButtonDefaults> scrollColumnHeader;
         std::shared_ptr<const ColorSwatchDefaults> colorSwatch = std::make_shared<ColorSwatchDefaults>();
         std::shared_ptr<const SliderDefaults> slider = std::make_shared<SliderDefaults>();
         std::shared_ptr<const SliderControlDefaults> sliderControl = std::make_shared<SliderControlDefaults>();
@@ -223,6 +233,8 @@ public:
                        Resources resources = {}, PanelDefaults panelDefaults = {}, LineEditorDefaults lineDefaults = {}, CheckBoxDefaults checkDefaults = {});
     bool loadDefaults(const LLVKWidgetTree& tree, std::string_view xml, std::string& error);
     bool loadDefaultsFile(const LLVKWidgetTree& tree, const std::string& filename, std::string& error);
+    bool loadListContents(const LLVKWidgetTree& tree, const std::string& filename,
+        LLVKWidgetTree::ScrollListParams& contents, std::string& error) const;
     std::optional<LLVKWidgetTree::Id> constructFile(LLVKWidgetTree& tree, const std::string& filename,
                                                   LLVKWidgetTree::Id parent, std::string& error) const;
     std::optional<LLVKWidgetTree::Id> construct(LLVKWidgetTree& tree, std::string_view xml,

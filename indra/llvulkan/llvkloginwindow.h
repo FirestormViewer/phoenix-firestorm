@@ -11,6 +11,7 @@ struct LLVKLoginWindow
         LLVKLoginUi::Configuration ui;
         LLVKBrowser::Configuration browser;
         std::string loginPage;
+        std::filesystem::path soundCacheDirectory;
         bool validation = true;
         std::uint32_t stopAfterFrames = 0;
         std::function<void(LLVKLoginUi&)> bindServices;

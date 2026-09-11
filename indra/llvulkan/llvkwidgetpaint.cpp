@@ -19,6 +19,12 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
     {
         const auto* node = tree.get(id);
         if (!node || !node->params.visible) return true;
+        if (node->scrollList)
+        {
+            if (!tree.layoutScrollList(id,error)) return false;
+            node=tree.get(id);
+            if (!node) return true;
+        }
         if (node->searchEditor)
         {
             if (!tree.refreshSearchEditor(id,error)) return false;
@@ -60,6 +66,74 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             return true;
         };
         const auto width = screen->right-screen->left, height = screen->top-screen->bottom;
+        if (node->scrollList)
+        {
+            const auto state=*node->scrollList;
+            const auto& params=*state.params;
+            const auto tint=[&](LLVKColor::Value color) { color[3]*=input.button.transparency; return color; };
+            if (params.background && !append({0,0,width,height},tint(tree.enabledInChain(id) ? params.writableBackground.get() : params.readonlyBackground.get()))) return false;
+            const auto outerClip=clip;
+            clip=intersect(clip,{screen->left+state.content.left,screen->bottom+state.content.bottom,screen->left+state.content.right,screen->bottom+state.content.top});
+            for (int index=state.firstRow; index<static_cast<int>(state.rows.size()) && index<=state.firstRow+state.pageLines; ++index)
+            {
+                const auto& row=state.rows[index];
+                const auto top=state.content.top-(index-state.firstRow)*state.lineHeight,bottom=top-state.lineHeight;
+                if (params.stripes && index%2 && !append({state.content.left,bottom,state.content.right,top},tint(params.stripeColor.get()))) return false;
+                if (state.hovered==index && state.hoveredCell<0 && !append({state.content.left,bottom,state.content.right,top},tint(params.hoveredColor.get()))) return false;
+                if (row.selected && row.selectedCell<0 && !append({state.content.left,bottom,state.content.right,top},tint(params.selectedBackground.get()))) return false;
+                const auto color=tint(!row.enabled ? params.disabledForeground.get() : row.selected ? params.selectedForeground.get() : params.foreground.get());
+                auto left=state.content.left;
+                for (std::size_t column=0; column<state.widths.size(); ++column)
+                {
+                    const Rect cellRect{left,bottom,left+state.widths[column],top-params.rowPadding};
+                    if (row.selected && row.selectedCell==static_cast<int>(column))
+                    { if (!append(cellRect,tint(params.selectedBackground.get()))) return false; }
+                    else if (state.hovered==index && state.hoveredCell==static_cast<int>(column))
+                    { if (!append(cellRect,tint(params.hoveredColor.get()))) return false; }
+                    if (column<row.cells.size() && state.widths[column]>0)
+                    {
+                        const auto* style=column<row.styles.size() ? &row.styles[column] : nullptr;
+                        const auto font=style && style->font ? style->font : node->control->params.font;
+                        const bool iconOnly=style && style->type==LLVKWidgetTree::ListCellStyle::Type::Icon;
+                        const bool iconText=style && style->type==LLVKWidgetTree::ListCellStyle::Type::IconText;
+                        const auto align=style ? style->alignment : LLVKButton::Align::Left;
+                        const auto iconHeight=iconOnly && style->image ? static_cast<int>(style->image->height()) : static_cast<int>(std::ceil(font->metrics().lineHeight));
+                        const auto iconWidth=iconOnly && style->image ? static_cast<int>(style->image->width()) : iconHeight;
+                        const int iconSpace=iconText && style->image ? iconHeight+4 : 0;
+                        const auto wide=utf8str_to_wstring(row.cells[column]);
+                        const std::u32string text(wide.begin(),wide.end());
+                        if (style && style->image)
+                        {
+                            int iconLeft=left+(iconText ? 1 : 0);
+                            if (iconOnly && align==LLVKButton::Align::Right) iconLeft=left+state.widths[column]-iconWidth;
+                            else if (iconOnly && align==LLVKButton::Align::Center) iconLeft=left+(state.widths[column]-iconWidth)/2;
+                            else if (iconText && align!=LLVKButton::Align::Left)
+                            {
+                                const auto measured=font->measureRun(text,0,text.size(),1.f,true,false,error);
+                                if (!measured) return false;
+                                iconLeft=align==LLVKButton::Align::Right ? left+state.widths[column]-static_cast<int>(measured->width)-iconSpace :
+                                    left+(state.widths[column]-static_cast<int>(measured->width)-iconSpace)/2;
+                            }
+                            if (!append({iconLeft,bottom,iconLeft+iconWidth,bottom+iconHeight},tint(style->imageColor.get()),style->image)) return false;
+                        }
+                        if (!iconOnly)
+                        {
+                            LLVKFont::LineOptions options; options.x=float(left+iconSpace+(iconText ? 1 : 0)); options.y=float(bottom);
+                            if (align==LLVKButton::Align::Right) { options.x=float(left+state.widths[column]); options.horizontal=LLVKFont::HorizontalAlign::Right; }
+                            else if (align==LLVKButton::Align::Center) { options.x=float(left)+(state.widths[column]+iconSpace)*0.5f; options.horizontal=LLVKFont::HorizontalAlign::Center; }
+                            options.vertical=LLVKFont::VerticalAlign::Bottom; options.maxPixels=std::max(0,state.widths[column]-iconSpace); options.ellipses=true;
+                            const auto line=font->layoutLine(text,0,text.size(),options,error);
+                            if (!line || !append({},color,{},*line)) return false;
+                        }
+                    }
+                    left+=state.widths[column]+params.columnPadding;
+                }
+            }
+            clip=outerClip;
+            for (auto child=node->children.rbegin(); child!=node->children.rend(); ++child)
+                if (!self(self,*child,clip)) return false;
+            return true;
+        }
         if (node->colorSwatch)
         {
             if (!tree.refreshColorSwatch(id,error)) return false;
@@ -312,7 +386,10 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                         { foreground = link->query ? text.params.queryColor.get() : text.params.linkColor.get(); foreground[3] *= input.button.drawAlpha; }
                         if (highlighted) { foreground = text.params.selectionColor.get(); foreground[3] *= input.button.drawAlpha; }
                         if (!append({},foreground,{},std::move(part))) return false;
-                        if (link)
+                        const auto hoveredLink=text.params.skipLinkUnderline ? tree.plainTextLinkAt(id,
+                            input.button.mouseX-screen->left,input.button.mouseY-screen->bottom,error) : std::optional<std::size_t>();
+                        if (!error.empty()) return false;
+                        if (link && (!text.params.skipLinkUnderline || (hoveredLink && &text.links[*hoveredLink]==link)))
                         {
                             const auto& initial = line->glyphs[first];
                             const auto& final = line->glyphs[last-1];
@@ -324,6 +401,14 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                         first = last;
                     }
                 }
+            }
+            if (text.params.selectable && !text.readOnly && tree.keyboardFocus()==id && input.editor.applicationFocused &&
+                (input.editor.secondsSinceKeystroke<1.0 || static_cast<int>(input.editor.secondsSinceKeystroke*2)&1))
+            {
+                const auto caret=tree.plainTextCaretRect(id,error);
+                if (!caret) return false;
+                auto cursor=text.params.cursorColor.get(); cursor[3]*=input.button.drawAlpha;
+                if (!append(*caret,cursor)) return false;
             }
             return true;
         }

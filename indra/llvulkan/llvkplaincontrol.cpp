@@ -1,5 +1,6 @@
 #include "llvkwidgettree.h"
 #include "llstring.h"
+#include "llvkclipboard.h"
 
 #include <algorithm>
 #include <cmath>
@@ -83,6 +84,7 @@ bool LLVKWidgetTree::plainTextPointer(Id id, const PointerEvent& event, std::str
                 text.selecting = true;
             }
             text.cursor = text.selectionEnd = *index;
+            text.desiredCursorX.reset();
             if (text.selectionStart != text.selectionEnd) text.pressedLink.reset();
             if (up)
             {
@@ -287,7 +289,7 @@ bool LLVKWidgetTree::updatePlainText(Id id, LLVKLabel source, const LLVKLabel::C
 std::optional<LLVKPlainControl> LLVKWidgetTree::resolvePlainText(const LLVKPlainControl& state,
     LLVKLabel source, const LLVKLabel::Context& context, std::string& error) const
 {
-    auto resolved = source.resolve(context);
+    auto resolved = state.params.literal ? source.original() : source.resolve(context);
     std::erase(resolved,'\r');
     if (state.params.parseUrls && !state.params.parseWebLinks && requiresRichText(resolved))
     { error = "Native text requires rich URL/issue/embedded-content processing, which is not implemented"; return std::nullopt; }
@@ -365,6 +367,7 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createTextEditor(const Params&
     mNodes.at(*id).textEditor.emplace();
     const bool readOnly=text.readOnly.value_or(!input.enabled);
     mNodes.at(*id).textEditor->readOnly=readOnly;
+    mNodes.at(*id).textEditor->commitOnFocusLost=text.commitOnFocusLost;
     const auto discard=[&] { std::string ignored; if (get(*id)) erase(*id,ignored); };
     try
     {
@@ -386,6 +389,7 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createTextEditor(const Params&
         child.name="text contents";
         auto bodyParams=text;
         bodyParams.selectable=true; bodyParams.readOnly=readOnly;
+        bodyParams.literal=!bodyParams.parseUrls;
         const auto body=createPlainText(child,childControl,bodyParams,*document,error);
         if (!body) { discard(); return std::nullopt; }
         mNodes.at(*id).textEditor->body=*body;
@@ -399,6 +403,8 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createTextEditor(const Params&
         if (control.valueSetting && mSettings.contains(*control.valueSetting)) value=mSettings.at(*control.valueSetting);
         mNodes.at(*id).control->params=control;
         if (!setTextEditorText(*id,value.asString(),error)) { discard(); return std::nullopt; }
+        applyControlSettings(*id);
+        if (!get(*id)) { error="Native editor removed while applying settings"; return std::nullopt; }
         if (control.init.function) control.init.function(*id,control.init.parameter.value_or(LLSD()));
         if (!get(*id)) { error="Native text editor removed during initialization"; return std::nullopt; }
         return id;
@@ -413,6 +419,166 @@ bool LLVKWidgetTree::setTextEditorText(Id id,const std::string& text,std::string
     if (!setPlainText(node->textEditor->body,text,error)) return false;
     mNodes.at(id).control->value=value(node->textEditor->body);
     return layoutTextEditor(id,error);
+}
+
+bool LLVKWidgetTree::insertTextEditorText(Id id,std::u32string_view input,std::string& error)
+{
+    error.clear();
+    const auto* owner=get(id);
+    if (!owner || !owner->textEditor || owner->textEditor->readOnly) return false;
+    const auto body=owner->textEditor->body;
+    if (!get(body) || !get(body)->plainText) return false;
+    const auto before=*get(body)->plainText;
+    if (before.params.parseUrls)
+    { error="Native rich editor input requires segment-preserving editing"; return false; }
+    for (const auto character : input)
+        if (!character || character>0x10ffff || (character>=0xd800 && character<=0xdfff))
+        { error="Invalid scalar in native editor input"; return false; }
+    const auto begin=std::min(before.selectionStart,before.selectionEnd);
+    const auto end=std::max(before.selectionStart,before.selectionEnd);
+    const auto position=begin==end ? before.cursor : begin;
+    if (position>before.text.size() || end>before.text.size()) return false;
+    auto text=before.text;
+    text.replace(position,end-begin,input);
+    const auto encoded=wstring_to_utf8str(LLWString(text.begin(),text.end()));
+    if (encoded.size()>before.params.maximumBytes)
+    { notify(body,&Events::badKeystroke); return true; }
+    const auto oldValue=value(id);
+    const auto history=owner->textEditor->history;
+    const auto historyBytes=oldValue.asString().size()+encoded.size();
+    if (historyBytes>16*1024*1024)
+    { error="Native editor change exceeds history budget"; return false; }
+    Node::TextEditor::Revision revision{oldValue.asString(),encoded,before.cursor,position+input.size()};
+    if (!setTextEditorText(id,encoded,error))
+    {
+        if (get(body)) mNodes.at(body).plainText=before;
+        if (get(id)) mNodes.at(id).control->value=oldValue;
+        return false;
+    }
+    if (!get(id) || !get(body)) return true;
+    auto& current=*mNodes.at(body).plainText;
+    current.cursor=position+input.size();
+    current.selectionStart=current.selectionEnd=0;
+    mNodes.at(id).control->dirty=true;
+    while (history->revisions.size()>history->position)
+    {
+        const auto& removed=history->revisions.back();
+        history->bytes-=removed.before.size()+removed.after.size();
+        history->revisions.pop_back();
+    }
+    while (!history->revisions.empty() && (history->bytes+historyBytes>16*1024*1024 || history->revisions.size()>=256))
+    {
+        const auto& removed=history->revisions.front();
+        history->bytes-=removed.before.size()+removed.after.size();
+        history->revisions.erase(history->revisions.begin());
+        --history->position;
+    }
+    history->revisions.push_back(std::move(revision));
+    history->bytes+=historyBytes; ++history->position;
+    current.desiredCursorX.reset();
+    if (!revealTextEditorCursor(id,error)) return false;
+    notify(body,&Events::hideCursor);
+    return true;
+}
+
+bool LLVKWidgetTree::undoTextEditor(Id id,bool redo,std::string& error)
+{
+    error.clear();
+    const auto* owner=get(id);
+    if (!owner || !owner->textEditor || owner->textEditor->readOnly) return false;
+    const auto history=owner->textEditor->history;
+    if (redo ? history->position==history->revisions.size() : history->position==0) return false;
+    const auto& revision=history->revisions[redo ? history->position : history->position-1];
+    if (!setTextEditorText(id,redo ? revision.after : revision.before,error)) return false;
+    if (!get(id)) return true;
+    const auto body=get(id)->textEditor->body;
+    if (!get(body)) return false;
+    mNodes.at(body).plainText->cursor=redo ? revision.cursorAfter : revision.cursorBefore;
+    if (redo) ++history->position; else --history->position;
+    mNodes.at(id).control->dirty=true;
+    return revealTextEditorCursor(id,error);
+}
+
+bool LLVKWidgetTree::deleteTextEditor(Id id,bool backward,bool word,std::string& error)
+{
+    error.clear();
+    const auto* owner=get(id);
+    if (!owner || !owner->textEditor || owner->textEditor->readOnly) return false;
+    const auto body=owner->textEditor->body;
+    if (!get(body) || !get(body)->plainText) return false;
+    auto& state=*mNodes.at(body).plainText;
+    if (state.selectionStart!=state.selectionEnd) return insertTextEditorText(id,U"",error);
+    const auto cursor=state.cursor;
+    if (cursor>state.text.size()) return false;
+    if (backward ? cursor==0 : cursor==state.text.size())
+    { notify(body,&Events::badKeystroke); return true; }
+    auto target=backward ? cursor-1 : cursor+1;
+    if (word)
+    {
+        if (backward)
+        {
+            while (target && state.text[target-1]==U' ') --target;
+            while (target && LLWStringUtil::isPartOfWord(static_cast<llwchar>(state.text[target-1]))) --target;
+        }
+        else
+        {
+            while (target<state.text.size() && LLWStringUtil::isPartOfWord(static_cast<llwchar>(state.text[target]))) ++target;
+            while (target<state.text.size() && state.text[target]==U' ') ++target;
+        }
+    }
+    state.selectionStart=cursor; state.selectionEnd=target;
+    return insertTextEditorText(id,U"",error);
+}
+
+bool LLVKWidgetTree::commitTextEditor(Id id,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->textEditor) return false;
+    writeBoundValue(id,value(id));
+    return !get(id) || dispatchControl(id,&LLVKControl::Params::commit);
+}
+
+bool LLVKWidgetTree::cutTextEditor(Id id,std::string& error)
+{
+    error.clear();
+    const auto* node=get(id);
+    if (!node || !node->textEditor || node->textEditor->readOnly) return false;
+    const auto body=node->textEditor->body;
+    if (!get(body) || !get(body)->plainText) return false;
+    const auto before=*get(body)->plainText;
+    if (!copyPlainText(id,error)) return false;
+    if (!get(id) || !get(body)) return true;
+    const auto& current=*get(body)->plainText;
+    if (current.textGeneration!=before.textGeneration || current.selectionStart!=before.selectionStart || current.selectionEnd!=before.selectionEnd) return true;
+    return insertTextEditorText(id,U"",error);
+}
+
+bool LLVKWidgetTree::pasteTextEditor(Id id,std::string& error)
+{
+    error.clear();
+    const auto* node=get(id);
+    if (!node || !node->textEditor || node->textEditor->readOnly || !mClipboard) return false;
+    const auto clipboard=mClipboard;
+    if (!clipboard->available(false)) return false;
+    const auto input=clipboard->read(false,error);
+    if (!input) return false;
+    node=get(id);
+    if (!node || !node->textEditor || node->textEditor->readOnly) return true;
+    const auto body=node->textEditor->body;
+    if (!get(body) || !get(body)->plainText) return false;
+    LLWString clean(input->begin(),input->end());
+    std::replace(clean.begin(),clean.end(),L'\r',L'\n');
+    LLWStringUtil::replaceTabsWithSpaces(clean,4);
+    const auto& text=*get(body)->plainText;
+    const auto begin=std::min(text.selectionStart,text.selectionEnd), end=std::max(text.selectionStart,text.selectionEnd);
+    auto remaining=text.text;
+    if (end>remaining.size()) return false;
+    remaining.erase(begin,end-begin);
+    const auto used=wstring_to_utf8str(LLWString(remaining.begin(),remaining.end())).size();
+    const auto available=text.params.maximumBytes-std::min(used,text.params.maximumBytes);
+    const auto encoded=wstring_to_utf8str(clean);
+    const auto truncated=utf8str_to_wstring(utf8str_truncate(encoded,static_cast<int>(available)));
+    return insertTextEditorText(id,std::u32string(truncated.begin(),truncated.end()),error);
 }
 
 bool LLVKWidgetTree::layoutTextEditor(Id id,std::string& error)
@@ -454,25 +620,64 @@ bool LLVKWidgetTree::layoutTextEditor(Id id,std::string& error)
     return true;
 }
 
+std::optional<LLVKWidgetTree::Rect> LLVKWidgetTree::plainTextCaretRect(Id body,std::string& error) const
+{
+    error.clear();
+    const auto* node=get(body);
+    if (!node || !node->plainText || !node->plainText->layout) return std::nullopt;
+    const auto& text=*node->plainText;
+    const auto* document=get(text.document);
+    if (!document) return std::nullopt;
+    const auto& lines=text.layout->lines;
+    for (std::size_t index=0; index<lines.size(); ++index)
+        if (index+1==lines.size() || text.cursor<lines[index+1].begin)
+        {
+            const auto& line=lines[index];
+            const auto position=std::clamp(text.cursor,line.begin,std::min(line.end,text.text.size()));
+            const auto measured=node->control->params.font->measureRun(text.text,line.begin,position-line.begin,
+                text.params.layout.scaleX,false,text.params.layout.tabularNumbers,error);
+            if (!measured) return std::nullopt;
+            const auto left=line.left+document->params.rect.left+static_cast<int>(measured->advancePixels)-1;
+            return Rect{left,line.bottom+document->params.rect.bottom,left+2,line.top+document->params.rect.bottom};
+        }
+    return std::nullopt;
+}
+
+bool LLVKWidgetTree::revealTextEditorCursor(Id id,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->textEditor || !layoutTextEditor(id,error)) return false;
+    const auto state=*get(id)->textEditor;
+    if (!reflowPlainText(state.body,error)) return false;
+    const auto caret=plainTextCaretRect(state.body,error);
+    const auto window=scrollContentWindow(state.scroller,error);
+    if (!caret || !window) return false;
+    return scrollToReveal(state.scroller,*caret,{0,0,window->right-window->left,window->top-window->bottom},error).has_value();
+}
+
 bool LLVKWidgetTree::textEditorKey(Id id,ScrollKey key,LLVKLineEditor::Modifiers modifiers,std::string& error)
 {
     error.clear();
     const auto* node=get(id);
-    if (!node || !node->textEditor || !node->textEditor->readOnly) return false;
+    if (!node || !node->textEditor) return false;
+    const bool readOnly=node->textEditor->readOnly;
     if (!layoutTextEditor(id,error)) return false;
     const auto scroller=get(id)->textEditor->scroller;
-    if (scrollContainerKey(scroller,key,modifiers,error)) return true;
+    if (readOnly && scrollContainerKey(scroller,key,modifiers,error)) return true;
     if (!error.empty() || !get(id)) return false;
     const auto body=get(id)->textEditor->body;
     if (!get(body) || !get(body)->plainText) return false;
+    if (!reflowPlainText(body,error)) return false;
     auto& text=*mNodes.at(body).plainText;
     const auto length=text.text.size();
     const auto previous=std::min(text.cursor,length);
     auto position=previous;
     if (key==ScrollKey::Left || key==ScrollKey::Right)
     {
-        if (!modifiers.shift && !modifiers.control) return false;
-        if (key==ScrollKey::Left && position)
+        if (!modifiers.shift && !modifiers.control && readOnly) return false;
+        if (!modifiers.shift && !modifiers.control && text.selectionStart!=text.selectionEnd)
+            position=key==ScrollKey::Left ? std::min(text.selectionStart,text.selectionEnd) : std::max(text.selectionStart,text.selectionEnd);
+        else if (key==ScrollKey::Left && position)
         {
             --position;
             if (modifiers.control)
@@ -493,6 +698,35 @@ bool LLVKWidgetTree::textEditorKey(Id id,ScrollKey key,LLVKLineEditor::Modifiers
     }
     else if ((key==ScrollKey::Home || key==ScrollKey::End) && modifiers.control)
         position=key==ScrollKey::Home ? 0 : length;
+    else if (!readOnly && (key==ScrollKey::Home || key==ScrollKey::End))
+    {
+        if (!reflowPlainText(body,error)) return false;
+        const auto& lines=get(body)->plainText->layout->lines;
+        for (std::size_t index=0; index<lines.size(); ++index)
+            if (index+1==lines.size() || previous<lines[index+1].begin)
+            {
+                position=key==ScrollKey::Home ? lines[index].begin : index+1==lines.size() ? length : lines[index+1].begin-1;
+                break;
+            }
+    }
+        else if ((!readOnly || modifiers.shift) && (key==ScrollKey::Up || key==ScrollKey::Down))
+        {
+            const auto caret=plainTextCaretRect(body,error);
+            if (!caret) return false;
+            const auto* document=get(text.document);
+            const auto& lines=text.layout->lines;
+            std::size_t lineIndex=0;
+            while (lineIndex+1<lines.size() && previous>=lines[lineIndex+1].begin) ++lineIndex;
+            if (!text.desiredCursorX) text.desiredCursorX=float(caret->left+1-document->params.rect.left);
+            const auto target=key==ScrollKey::Up ? (lineIndex ? lineIndex-1 : lineIndex) : std::min(lineIndex+1,lines.size()-1);
+            const auto& line=lines[target];
+            auto end=std::min(line.end,length);
+            if (end>line.begin && text.text[end-1]==U'\n') --end;
+            const auto offset=get(body)->control->params.font->hitTest(text.text,line.begin,std::max(0.f,*text.desiredCursorX-line.left),
+                float(std::max(0,line.right-line.left)),end-line.begin+1,text.params.layout.scaleX,true,text.params.layout.tabularNumbers,error);
+            if (!offset) return false;
+            position=line.begin+*offset;
+        }
     else return false;
     if (modifiers.shift)
     {
@@ -503,7 +737,8 @@ bool LLVKWidgetTree::textEditorKey(Id id,ScrollKey key,LLVKLineEditor::Modifiers
     text.cursor=position;
     text.selecting=false;
     text.pressedLink.reset();
-    return true;
+    if (key!=ScrollKey::Up && key!=ScrollKey::Down) text.desiredCursorX.reset();
+    return revealTextEditorCursor(id,error);
 }
 
 bool LLVKWidgetTree::startTextEditorDocument(Id id,std::string& error)

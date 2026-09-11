@@ -75,6 +75,16 @@ std::unique_ptr<LLVKLoginUi> LLVKLoginUi::create(const Configuration& configurat
         else if (value.isString()) type = LLVKWidgetTree::SettingType::String;
         if (!ui->mTree.defineSetting(name,value,type)) { error = "Invalid native login setting: "+name; return nullptr; }
     }
+    for (const auto& [name,value] : configuration.accountSettings)
+    {
+        if (ui->mTree.setting(name)) { error="Native account setting conflicts with global setting: "+name; return nullptr; }
+        auto type=LLVKWidgetTree::SettingType::Opaque;
+        if (value.isBoolean()) type=LLVKWidgetTree::SettingType::Boolean;
+        else if (value.isInteger()) type=LLVKWidgetTree::SettingType::Integer;
+        else if (value.isReal()) type=LLVKWidgetTree::SettingType::Real;
+        else if (value.isString()) type=LLVKWidgetTree::SettingType::String;
+        if (!ui->mTree.defineSetting(name,value,type)) { error="Invalid native account setting: "+name; return nullptr; }
+    }
     LLVKWidgetFactory::Resources resources;
     resources.skinFiles = ui->mSkin;
     resources.fontRegistry = ui->mFonts;
@@ -88,8 +98,19 @@ std::unique_ptr<LLVKLoginUi> LLVKLoginUi::create(const Configuration& configurat
     panel.control.fontRequest = resources.defaultFontRequest;
     LLVKWidgetFactory::Callbacks callbacks;
     ui->mSettingDefaults=configuration.settingDefaults;
+    ui->mAccountDefaults=configuration.accountDefaults;
     callbacks.actions["ResetControl"]=[owner=ui.get()](auto,const LLSD& parameter)
     { owner->resetPreference(parameter.asString(),owner->mDialogError); };
+    callbacks.actions["ResetPerAccountControl"]=[owner=ui.get()](auto,const LLSD& parameter)
+    { owner->resetAccountPreference(parameter.asString(),owner->mDialogError); };
+    callbacks.actions["PreviewUISound"]=[owner=ui.get()](auto,const LLSD& parameter)
+    { owner->previewUiSound(parameter.asString(),owner->mDialogError); };
+    callbacks.actions["Pref.AutoReplace"]=[owner=ui.get()](auto,const LLSD&)
+    { owner->showAutoReplace(owner->mDialogError); };
+    callbacks.actions["Pref.SpellChecker"]=[owner=ui.get()](auto,const LLSD&)
+    { owner->showSpellCheck(owner->mDialogError); };
+    callbacks.actions["Pref.TranslationSettings"]=[owner=ui.get()](auto,const LLSD&)
+    { owner->showTranslation(owner->mDialogError); };
     resources.panelClasses["panel_preference"]=[owner=ui.get()](auto& tree,const auto& defaults,const auto&,std::string& problem)
     {
         LLVKWidgetFactory::PanelInstance instance;
@@ -126,7 +147,7 @@ std::unique_ptr<LLVKLoginUi> LLVKLoginUi::create(const Configuration& configurat
     };
     LLVKWidgetFactory factory({}, {}, {}, callbacks,resources,panel);
     for (const std::string widget : {"view_border","button","icon","line_editor","check_box","scroll_bar",
-        "scroll_container","combo_box","text","web_browser","layout_stack","tab_container","simple_text_editor","text_editor","spinner","color_swatch","search_editor","slider_bar","slider","radio_item","radio_group"})
+        "scroll_container","scroll_column_header","scroll_list","combo_box","text","web_browser","layout_stack","tab_container","simple_text_editor","text_editor","spinner","color_swatch","search_editor","slider_bar","slider","radio_item","radio_group"})
         if (!factory.loadDefaultsFile(ui->mTree,"widgets/"+widget+".xml",error))
         { error = "Native login "+widget+": "+error; return nullptr; }
     const auto root = factory.constructFile(ui->mTree,"panel_fs_nui_login.xml",0,error);
@@ -174,6 +195,7 @@ std::unique_ptr<LLVKLoginUi> LLVKLoginUi::create(const Configuration& configurat
 
 std::optional<LLVKWidgetPaint> LLVKLoginUi::preparePaint(const LLVKWidgetPaint::Input& input,std::string& error)
 {
+    updateSpellRemoval();
     auto paint = LLVKWidgetPaint::prepare(mTree,mRoot,input,error);
     if (!paint) return std::nullopt;
     const auto viewport = mTree.screenRect(mRoot,error);

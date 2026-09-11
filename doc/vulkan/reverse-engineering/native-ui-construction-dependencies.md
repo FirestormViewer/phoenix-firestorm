@@ -34,6 +34,233 @@ and screenshots do not close any outstanding behavior above.
 
 ## Native construction implementation (2026-09-10)
 
+Post-18701018f4 integration work (2026-09-11, NV-00/01/12/15/17): the requested
+partial checkpoint was committed as18701018f4. Full Preferences and RLVa
+integration remain the active gate, not completed by these changes.
+
+Continuation after18701018f4 (Windows RelWithDebInfo, NV-00/01/03/12/15/17):
+the nonverbose build-driven widget runner exhausted its stack in test50 while
+the verbose runner passed. LLDB identified recursive native panel construction,
+not an assertion failure. Heap-owning the nested Parser in the construction
+callback restored the unchanged depth-limit/cleanup regression. Neither the
+thread stack size nor the test depth was changed. The canonical build runner
+now passes149 tests; verbose-only success was not used as closure evidence.
+
+List source roots are LLScrollListCtrl constructor/updateLayout/updateColumns/
+setSelectedByValue/drawItems/handleMouseDown/handleMouseUp/handleKeyHere/
+setSort/updateSort/onClickColumn and SortScrollListItem, plus
+LLScrollColumnHeader constructor/onClick/draw policy. Q1: lists retain ordered
+rows, enabled selection, row-unit scrolling, column widths, stable dictionary
+sorting with previous sort keys, and button-owned column headers. Q2: these are
+CPU layout/input/data decisions; native font/image/button owners produce the
+existing ordered Vulkan UI packet. Q3: the native ScrollList owns rows, columns,
+selection anchors, sort keys and child header/scrollbar IDs; immutable parameters
+retain resolved original templates. LLStringUtil::compareDict is nonvisual
+string ordering, not a GL visual wrapper. Tests70/148 cover original list/header
+XML and skin assets, row clipping/scrolling, enabled selection, stable sort and
+anchor identity. Alternate/custom sorting, sorting-column redirects, heading
+resize, all cell types, type-ahead/filtering and full reentrant rollback remain
+open. The current implementation is not complete scroll-list parity.
+
+AutoReplace source roots are LLFloaterAutoReplaceSettings postBuild, selection/
+entry/list/priority callbacks, import/export/name-conflict/delete confirmation,
+onSaveChanges/onCancel; LLAutoReplace loadFromSettings/saveToUserSettings and
+LLAutoReplaceSettings validation/mutation/replaceWord. Q1: ordered named LLSD
+replacement maps are copied into a dialog draft, list priority selects the first
+matching replacement, Save writes the draft and enable flag, and Cancel discards
+the draft. Import/export operate on one list, preserving duplicate-name choices.
+Q2: native LLVKAutoReplaceSettings owns those nonvisual values independently;
+the unchanged floater_autoreplace.xml creates native controls and callbacks.
+Q3: native dialog fields and a generation token protect queued prompt/file-picker
+responses across close/reopen. No GL floater, file picker, settings singleton or
+notification callback is invoked. The source's punctuation-aware keyword check
+uses audited LLWStringUtil character classification. Native startup loads the
+user file before app defaults/examples and binds actual accepted-file writes.
+LLSD file IO is bounded and replacement is staged; list and enable settings are
+two ordered writes, not a cross-file atomic transaction. Tests131/149 exercise
+draft edits, New List, imported/exported files, Save/Cancel and exact LLSD round
+trips. Text-input AutoReplace consumers and the full Chat Preferences owner are
+not yet integrated; model replaceWord alone does not establish that integration.
+
+AutoReplace notice source roots are the five original notifications.xml forms,
+LLToastAlertPanel form parsing/layout/default delay/onButtonPressed, and native
+modal focus ownership. Native declarations preserve message substitutions,
+input names, button labels/defaults/response indices. The native presenter owns
+the input and button controls and tears down its modal before responding; Win32
+routes ordinary editing and Tab within the modal without invoking menu shortcuts.
+Tests131 preserve the RLVa GenericAlert case and exercise editable form response.
+This is not the complete notification framework: arbitrary forms, caution/title
+policies, exact layout parity and alert sound closure remain open.
+
+File-picker source roots are LLFilePicker getOpenFile/getSaveFile,
+check_local_file_access_enabled and LLFilePickerReplyThread startPicker/notify.
+Native Windows XML selection uses its own worker, COM apartment, OPENFILENAMEW,
+XML filter, overwrite confirmation and optional-path cancellation result. Worker
+completion is delivered on the native main loop; the service disconnects before
+destruction, requests cancellation through its dialog hook, and services Windows
+owner messages while joining. Actual integrated window/audio2/2 passed with
+AutoReplace and a real XML picker active through six Vulkan frames and shutdown,
+with no OpenGL parent module. Automated accepted native file-dialog selection,
+shell-extension failures and all shutdown interleavings remain unqualified.
+
+AutoReplace's original can_close/can_minimize declarations also exposed native
+floater policy gaps. Source LLFloater initFloater/setMinimized/closeFloater and
+LLFloaterView getMinimizePosition define the behavior. Native chrome now closes,
+minimizes/restores the source header height and expanded geometry, and preserves
+child visibility/draft contents. Tests131 drive the real minimize pointer route.
+Multiple minimized-window slot packing, remembered dragged-minimized positions,
+dependent floaters, saved-rectangle registry, full resize policy and window sounds
+remain open. Source declarations and GL implementation were left unchanged.
+
+Original Chat FSKeywords requires editable multiline text and focus-loss commit.
+Controls/Move & View continuation (NV-00/01/12/15/17, source18701018f4):
+LLFloaterPreference updateClickActionControls/updateClickActionViews dispatch
+through LLPanelPreferenceControls, not independent boolean settings. Source
+LLKeyConflictHandler registerControl/removeConflicts/generatePlaceholders and
+loadFromSettings/saveToSettings define mode restrictions, exact-combination
+conflicts, reservation veto, the nonconflicting script-left-click mask and
+four-mode XML storage. LLKeyData/LLKeyBind were inspected through their LLSD,
+matching, duplicate replacement, reset and trim methods: these are independent
+nonvisual value algorithms in llcommon and may be reused without LLKeyboard,
+LLViewerInput or GL UI owners. Native LLVKKeyBindings owns the mode maps and
+stages conflict changes before publication; its bounded Expat parser has an
+independent key/mouse/modifier name table. Structured Boost.PropertyTree XML
+serialization and staged file replacement retain modes and accepted bindings.
+Tests152 verify reservations before mutation, mode restrictions, click conflicts,
+the original binding XML, invalid-input nonmutation and serialized round trips.
+The file writer also passes an actual disk round trip and a staging-contention
+test proving that a failed write preserves the accepted file. No native Controls
+controller, runtime dispatch or Move & View callback
+is connected yet; the settings-file temporary preview protocol, localized labels,
+key-capture dialog, menu reservation wiring and reset workflows remain open.
+
+Controls table source roots are LLPanelPreferenceControls addControlTableColumns/
+addControlTableRows/populateControlTable, LLScrollListCtrl selection_type and
+LLScrollListItem/LLScrollListIcon/LLScrollListIconText draw/metrics. Native lists
+now retain selected binding-cell indices and per-cell highlights; non-sortable
+headers do not change sorting. Native text/icon/icon-text styles retain fonts,
+images and alignment, and row metrics account for those cells. Factory
+loadListContents reads the unchanged columns/rows files into native data through
+the existing skin-layer selection and independently owned Expat state. Tests70
+load original four binding columns and movement section/action rows and paint
+the native section icon with source font metrics; tests148
+exercise pointer cell selection and highlight geometry. An initial Expat handle
+ownership defect was caught by the executable regression: a copied temporary
+freed the parser early. The loader now constructs a noncopyable parser directly
+in its final unique owner; the canonical152/152 suite passes afterward. Full
+cell-type coverage, exact text/icon raster parity, content-loader attribute
+coverage and the live Controls panel remain open.
+
+The actual viewer7.2.5.79283 was relinked after canonical widget152/152 and
+integrated window/audio2/2 passed with the latest native libraries. The viewer
+link used BuildProjectReferences=false after those focused dependency builds;
+this is not a full all-target build or measured parity result. The viewer was
+not launched for a new live-user workflow capture at this increment.
+
+The later Chat integration now constructs panel_preferences_chat.xml through the
+production panel_preference owner with native AutoReplace/SpellChecker/
+TranslationSettings and ResetPerAccountControl callbacks. Native startup loads
+the original per-account defaults separately from global defaults; account reset
+uses only that default group, with no account persistence before account login.
+Conflicting global/account names currently fail explicitly, not a full namespaced
+setting resolver. Source LLFloaterPreference postBuild hides the offline-email
+checkbox/link before personal info and leaves the login-required label visible;
+the native owner applies those states. Keyword master availability follows the
+original pre-login XML; post-login enabling remains unimplemented.
+
+Source LLXUIParser::readXUIImpl submits direct body text as value. The CmdLine
+panel's literal dot is therefore retained as a nondisplayed native control value,
+not removed from the source file. Native inline control commit_callback.function
+and parameter/userdata use the same deferred slot as nested callback elements.
+Text label is accepted as the unused LLUICtrl base parameter, preserving displayed
+body text; skip_link_underline selects hover-only native link underlines.
+The keyword swatch's zero border thickness applies to its child bevel border,
+not its separate fixed outline. Tests131 exercise these source declarations.
+
+Native spelling source roots are LLSpellChecker dictionary discovery/activation/
+checkSpelling/getSuggestions/ignore loading/setSecondaryDictionaries/removal,
+LLFloaterSpellCheckerSettings postBuild/refreshDictionaries/commitChanges/move/
+remove/onClose, and LLFloaterSpellCheckerImport browse/import/parseXcuFile.
+Q1: dictionary metadata overlays user entries by language, installed word files
+may come from user or app paths, primary activation requires an affix/word pair,
+secondary removal rebuilds Hunspell, and only inactive user dictionaries can be
+removed. The settings floater applies dictionary choices immediately and commits
+on close, unlike AutoReplace's isolated draft. Q2/Q3: LLVKSpellCheck independently
+owns the packaged third-party Hunspell engine, catalog, primary/secondary names,
+ignore data and filesystem paths; no LLSpellChecker/LLUI singleton is reused.
+Original Spell Checker/import floaters use native controls and callbacks, live
+settings subscriptions and the native dictionary-filtered Windows picker.
+XCU resolution is bounded Expat parsing of ServiceManager/Dictionaries entries,
+DICT_SPELL format, .dic location and %origin% substitution. Tests150 verify real
+spelling/suggestions, ignore data, secondary activation/removal, source-file
+preservation and XCU resolution. Tests131 use actual packaged dictionaries and
+both original floaters. Custom/ignore editing APIs, editor misspelling consumers,
+encoding/Unicode-path qualification, complete import error/rollback handling,
+signal multiplicity and full import-dialog source parity remain open.
+
+Native translation source roots are LLFloaterTranslationSettings postBuild/
+onOpen/updateControlsEnabledState/key getters/verify callbacks/onClose/onBtnOK
+and LLTranslationAPIHandler::verifyKeyCoro with Azure/Google/DeepL verification
+URL/header/body/response methods. Q1: tentative key editors clear on focus,
+service selection controls field availability, enabled translation requires a
+verified selected service, saved keys are checked on open, Cancel leaves saved
+keys unchanged, and the account TranslatingEnabled flag follows verification.
+Azure expects400 plus valid JSON from its intentionally malformed probe; Google
+and DeepL expect200. Q2/Q3: independent native dialog draft state and generation
+tokens reject stale responses after edits/reopen; LLVKTranslation produces native
+request data and checks provider results. Window-owned libcurl multi requests
+retain body/headers/callbacks until completion, remove requests before callbacks,
+and cancel outstanding requests before UI destruction. Responses are bounded
+to1MiB, eight pending requests and30second timeout. Keys/URLs/bodies are not logged.
+SECURITY DIFFERENCE, not parity closure: native verification requires HTTPS and
+certificate/hostname validation and currently refuses redirects; the inspected
+source disables peer verification and follows redirects. Header injection and
+empty endpoints are rejected instead of preserving unsafe/undefined source paths.
+The packaged curl uses CURLOPT_PROTOCOLS, not newer CURLOPT_PROTOCOLS_STR.
+Tests151 verify request/response contracts without external requests or real keys;
+tests131 verify original dialog controls, stale responses and Cancel using an
+injected verifier. Real provider acceptance, redirect policy, proxy integration,
+network fault/completion qualification and actual chat translation remain open.
+
+Latest evidence after this continuation: canonical widget151/151 and integrated
+window/audio2/2 pass. The window fixture prepares every original Chat subtab on
+CPU, then hides that panel; it does not submit every subtab to Vulkan. Native
+Spell Checker/Translation/AutoReplace and existing dialogs are included in the
+presentation lifecycle with the real XML picker active. Full Preferences root
+remains the reduced provisional implementation, RLVa handler/enforcement remains
+absent, and no full startup-UI parity or full viewer rebuild is claimed here.
+
+Source LLTextEditor::handleUnicodeCharHere/addChar/deleteSelection/cut/pasteHelper/
+undo/redo/onCommit/focusLostHelper and LLTextBase cursor/line navigation define the
+local edit contract. Native plain multiline input now owns draft text, selection,
+bounded undo/redo revisions, literal non-URL input, UTF-8 limits, clipboard
+normalization, caret geometry, horizontal/vertical navigation and cursor reveal.
+Commit publishes the bound setting before the callback; construction applies
+enabled_control after composite children exist. Win32 routes native multiline
+typing, Return, deletion, clipboard and history commands before parent controls.
+Tests70/147 exercise actual FSKeywords attributes, live enable/read-only changes,
+draft-before-commit, clipboard, selection, history and caret geometry. Rich editing,
+source undo grouping, overwrite/IME, complete page navigation, autoindent,
+autoscroll/context menus and allocation/reentrant rollback closure remain open.
+History currently has explicit256-revision/16MiB limits; this bounded policy is
+not a claim of source unlimited-history parity.
+
+Source LLFloaterPreference::onClickPreviewUISound calls make_ui_sound with forced
+play mode; find_ui_sound resolves a UUID and null means silence. Source UI audio
+uses nonspatial UI gain; decoded assets are WAV files named UUID.dsf in the sound
+cache. Native previewUiSound/PreviewUISound resolves the actual setting and calls
+the owned native sound service, bypassing only play-mode suppression. LLVKAudio
+uses ALUT file-image decoding and owns each OpenAL source/buffer until completion
+or shutdown. UI secondary gain/mute updates active sources; the window pumps
+retirement and disconnects the player before audio destruction. Startup selects
+FSSoundCacheLocation, CacheLocation or the LocalAppData build-profile directory;
+the caller already supplies the_x64 suffix. Cached file reads are UUID-restricted
+and bounded. Missing decoded assets explicitly identify the still-unimplemented
+asset-fetch path, not playback success. Tests verify forced/null callback behavior
+and actual silent-WAV playback/source retention/shutdown with window/audio2/2.
+Fetch/decode cache population, preloads, priority/channel stealing, full cache
+failure fallback, non-UI channels and streaming remain open.
+
 Integration follow-up (2026-09-11, source d28b718b12, NV-00/01/03/12/15/17):
 the user's acceptance gate remains full Preferences and RLVa parity. The live
 Preferences window is still the reduced implementation and does not meet that

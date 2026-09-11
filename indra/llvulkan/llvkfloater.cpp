@@ -38,6 +38,8 @@ std::unique_ptr<LLVKFloater> LLVKFloater::createFile(LLVKWidgetTree& tree,LLVKWi
     if (!node || !node->floater) { error="Native floater file did not create a floater"; return nullptr; }
     const auto title=node->floater->title;
     const auto font=node->control->params.font;
+    floater->mCanClose=node->floater->canClose;
+    floater->mCanMinimize=node->floater->canMinimize;
     tree.setVisible(*id,false);
     if (!floater->createChrome(factory,title,font,error)) return nullptr;
     return floater;
@@ -56,15 +58,38 @@ bool LLVKFloater::createChrome(LLVKWidgetFactory& factory,const std::string& tit
     view.name = "floater_title"; view.visible = true; view.mouseOpaque = false;
     view.rect = {8,height-23,width-30,height-3}; view.follows = LLVKWidgetTree::Left|LLVKWidgetTree::Right|LLVKWidgetTree::Top;
     control.tabStop = false; control.initialValue = std::move(title);
-    if (!tree.createPlainText(view,control,label,id,error)) return false;
+    const auto titleId=tree.createPlainText(view,control,label,id,error);
+    if (!titleId) return false;
+    mTitle=*titleId;
     const auto close = factory.construct(tree,
         "<button name='floater_close' layout='bottomleft' left='"+std::to_string(width-23)+"' bottom='"+std::to_string(height-22)+
         "' width='18' height='18' follows='right|top' tab_stop='false' image_unselected='Icon_Close_Foreground' "
         "image_selected='Icon_Close_Foreground' image_pressed='Icon_Close_Press' label='' />",id,error);
     if (!close) return false;
+    mCloseButton=*close;
+    tree.setVisible(*close,mCanClose);
     LLVKControl::Callback callback;
     callback.function = [this](auto,const LLSD&) { std::string problem; this->close(problem); };
     tree.setControlCommit(*close,std::move(callback));
+    if (mCanMinimize)
+    {
+        for (const bool restore : {false,true})
+        {
+            const std::string name=restore ? "restore" : "minimize";
+            const std::string icon=restore ? "Restore" : "Minimize";
+            const auto button=factory.construct(tree,"<button name='floater_"+name+"' layout='bottomleft' left='"+
+                std::to_string(width-(mCanClose ? 44 : 23))+"' bottom='"+std::to_string(height-22)+
+                "' width='18' height='18' follows='right|top' tab_stop='false' image_unselected='Icon_"+icon+
+                "_Foreground' image_selected='Icon_"+icon+"_Foreground' image_pressed='Icon_"+icon+"_Press' label=''/>",id,error);
+            if (!button) return false;
+            (restore ? mRestoreButton : mMinimizeButton)=*button;
+            tree.setVisible(*button,!restore);
+            LLVKControl::Callback action;
+            action.function=[this,restore](auto,const LLSD&) { std::string problem; setMinimized(!restore,problem); };
+            tree.setControlCommit(*button,std::move(action));
+        }
+        if (!tree.setShape(mTitle,{8,height-23,width-(mCanClose ? 51 : 30),height-3},error)) return false;
+    }
     return true;
 }
 
@@ -74,6 +99,7 @@ bool LLVKFloater::open(std::string& error)
 {
     error.clear();
     if (!mTree.get(mId) || !mTree.get(mRoot)) { error = "Native floater owner is missing"; return false; }
+    if (mMinimized && !setMinimized(false,error)) return false;
     if (!visible())
     {
         mPreviousFocus = mTree.keyboardFocus();
@@ -90,7 +116,8 @@ bool LLVKFloater::open(std::string& error)
 bool LLVKFloater::close(std::string& error)
 {
     error.clear();
-    if (!visible()) return true;
+    if (!mCanClose || !visible()) return true;
+    if (mMinimized && !setMinimized(false,error)) return false;
     const auto callback = mClose;
     for (Id capture = mTree.mouseCapture(); capture && mTree.get(capture); capture = mTree.get(capture)->parent)
         if (capture == mId) { mTree.setMouseCapture(0,error); break; }
@@ -103,6 +130,47 @@ bool LLVKFloater::close(std::string& error)
     if (callback) callback();
     return focused;
 }
+bool LLVKFloater::setMinimized(bool minimized,std::string& error)
+{
+    error.clear();
+    if (minimized==mMinimized) return true;
+    if (!mCanMinimize || !mTree.get(mId) || !mTree.get(mRoot)) return false;
+    if (minimized)
+    {
+        const auto width=mTree.setting("UIMinimizedWidth").value_or(LLSD(160)).asInteger();
+        if (width<60) { error="Invalid native minimized floater width"; return false; }
+        mExpandedRect=mTree.get(mId)->params.rect;
+        const auto children=mTree.get(mId)->children;
+        mExpandedVisibility.clear();
+        for (const auto child : children)
+        {
+            if (child==mTitle || child==mCloseButton || child==mMinimizeButton || child==mRestoreButton) continue;
+            mExpandedVisibility[child]=mTree.get(child)->params.visible;
+            mTree.setVisible(child,false);
+        }
+        const auto root=mTree.get(mRoot)->params.rect;
+        const bool legacy=mTree.setting("FSLegacyMinimize").value_or(LLSD(false)).asBoolean();
+        const auto offset=(mTree.setting("ShowNavbarFavoritesPanel").value_or(LLSD(false)).asBoolean() ? 20 : 0)+
+            (mTree.setting("ShowNavbarNavigationPanel").value_or(LLSD(false)).asBoolean() ? 30 : 0);
+        const int bottom=legacy ? 0 : std::max(0,root.top-root.bottom-18-25-offset);
+        if (!mTree.setShape(mId,{0,bottom,width,bottom+25},error))
+        {
+            for (const auto& [child,visible] : mExpandedVisibility) mTree.setVisible(child,visible);
+            mExpandedVisibility.clear(); return false;
+        }
+        mTree.setKeyboardFocus(0,false,false,error);
+    }
+    else
+    {
+        if (!mTree.setShape(mId,mExpandedRect,error)) return false;
+        for (const auto& [child,visible] : mExpandedVisibility) mTree.setVisible(child,visible);
+        mExpandedVisibility.clear();
+    }
+    mMinimized=minimized;
+    mTree.setVisible(mMinimizeButton,!minimized); mTree.setVisible(mRestoreButton,minimized);
+    return error.empty();
+}
+
 bool LLVKFloater::pointer(const LLVKWidgetTree::PointerEvent& event,std::string& error)
 {
     if (!visible()) return false;
@@ -124,7 +192,8 @@ bool LLVKFloater::pointer(const LLVKWidgetTree::PointerEvent& event,std::string&
         }
         return true;
     }
-    if (event.kind == Kind::LeftDown && event.x >= rect->left && event.x < rect->right-26 && event.y >= rect->top-25 && event.y < rect->top)
+    const auto dragRight=rect->right-3-(mCanClose ? 23 : 0)-(mCanMinimize ? 21 : 0);
+    if (event.kind == Kind::LeftDown && event.x >= rect->left && event.x < dragRight && event.y >= rect->top-25 && event.y < rect->top)
     {
         mDragX = event.x-rect->left; mDragY = event.y-rect->bottom;
         mDragging = mTree.setMouseCapture(mId,error);

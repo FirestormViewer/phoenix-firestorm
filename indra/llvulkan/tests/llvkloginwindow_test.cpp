@@ -48,7 +48,21 @@ namespace tut
         LLVKAudio conflict;
         ensure("cannot steal context",!conflict.start(false,error));
         ensure("original audio unaffected",audio.active());
+        std::vector<std::uint8_t> silence(44+44100*2,0);
+        const auto bytes=[&](std::size_t offset,std::string_view value)
+        { std::copy(value.begin(),value.end(),silence.begin()+offset); };
+        const auto little=[&](std::size_t offset,std::uint32_t value,int count)
+        { for (int index=0; index<count; ++index) silence[offset+index]=static_cast<std::uint8_t>(value>>(index*8)); };
+        bytes(0,"RIFF"); little(4,static_cast<std::uint32_t>(silence.size()-8),4); bytes(8,"WAVEfmt ");
+        little(16,16,4); little(20,1,2); little(22,1,2); little(24,44100,4); little(28,88200,4);
+        little(32,2,2); little(34,16,2); bytes(36,"data"); little(40,88200,4);
+        ensure("native UI gain",audio.setUiGain(0.5f,false,error));
+        ensure("decode and play silent WAV fixture",audio.playUiWav(silence,error));
+        ensure_equals("source and buffer retained while playing",audio.activeUiSounds(),std::size_t(1));
+        ensure("live UI mute",audio.setUiGain(0.5f,true,error));
+        ensure("native audio pump",audio.update(error));
         ensure("clean audio shutdown",audio.stop(error));
+        ensure_equals("shutdown retires UI audio resources",audio.activeUiSounds(),std::size_t(0));
         ensure("audio no longer active",!audio.active());
         ensure("idempotent shutdown",audio.stop(error));
     }
@@ -78,6 +92,10 @@ namespace tut
         configuration.ui.fonts.searchDirectories = {viewer/"fonts",std::filesystem::path(LLVK_LOGIN_PACKAGED_FONTS)};
         configuration.ui.settings = settings.values();
         configuration.ui.settingDefaults = settings.defaults();
+        LLVKStartupSettings accountSettings;
+        ensure("native account declaration load",accountSettings.loadFile(viewer/"app_settings"/"settings_per_account.xml",true,true,true,error));
+        configuration.ui.accountSettings=accountSettings.values(); configuration.ui.accountDefaults=accountSettings.defaults();
+        configuration.ui.dictionaryDirectory=std::filesystem::path(LLVK_LOGIN_PACKAGED_FONTS).parent_path()/"dictionaries";
         configuration.browser.helperDirectory = directory;
         configuration.browser.localesDirectory = directory/"locales";
         configuration.browser.cacheDirectory = profile.path/"browser";
@@ -105,8 +123,31 @@ namespace tut
             ensure(problem,colors.has_value());
             ui.tree().setVisible(*general,false);
             ui.tree().setVisible(*colors,false);
+            const auto chat=ui.constructPreferencePanel("panel_preferences_chat.xml",ui.root(),problem);
+            ensure(problem,chat.has_value());
+            std::vector<LLVKWidgetTree::Id> pending{*chat};
+            for (std::size_t index=0; index<pending.size(); ++index)
+            {
+                const auto* node=ui.tree().get(pending[index]);
+                pending.insert(pending.end(),node->children.begin(),node->children.end());
+                if (!node->tabContainer) continue;
+                const auto tabs=node->tabContainer->tabs;
+                for (const auto& tab : tabs)
+                {
+                    ensure("original Chat subtab selects",ui.tree().selectTabPanel(pending[index],tab.panel,problem));
+                    const auto paint=ui.preparePaint({},problem);
+                    ensure(problem,paint.has_value());
+                }
+            }
+            ui.tree().setVisible(*chat,false);
+            ensure("original Spell Checker in presentation",ui.showSpellCheck(problem));
+            ensure("actual dictionary service active",ui.spellCheck().active());
+            ensure("original Translation Settings in presentation",ui.showTranslation(problem));
             const bool wasEnabled=ui.tree().setting("RestrainedLove")->asBoolean();
             ensure("RLVa original setting change",ui.tree().updateSetting("RestrainedLove",LLSD(!wasEnabled)));
+            ensure("original AutoReplace in native presentation",ui.showAutoReplace(problem));
+            ensure("native asynchronous XML picker starts",ui.tree().commit(ui.find("autoreplace_import_list")));
+            ensure(ui.dialogError(),ui.dialogError().empty());
         };
         const bool ran = LLVKLoginWindow::run(configuration,error);
         ensure(error,ran);

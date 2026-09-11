@@ -207,6 +207,9 @@ bool LLVKWidgetTree::canReceiveFocus(Id id) const noexcept
 
 void LLVKWidgetTree::notify(Id id, std::function<void(Id)> Events::* event)
 {
+    if (event==&Events::focusLost && get(id) && get(id)->textEditor &&
+        get(id)->textEditor->commitOnFocusLost && canReceiveFocus(id))
+    { std::string error; commitTextEditor(id,error); }
     if (event == &Events::focusLost && get(id) && get(id)->lineEditor)
     {
         lineLanguageInput(id);

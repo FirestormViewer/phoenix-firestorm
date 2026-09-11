@@ -22,7 +22,11 @@ struct LLVKPlainControl
         bool showHandCursor = true;
         bool parseUrls = false;
         bool parseWebLinks = false;
+        bool skipLinkUnderline = false;
         bool selectable = false;
+        bool literal = false;
+        bool commitOnFocusLost = false;
+        LLVKColor cursorColor{1,1,1,1};
         LLVKColor selectionColor{1,1,1,1}, selectionBackground{0.2f,0.4f,0.7f,1};
         LLVKColor linkColor{0.2f,0.6f,1,1}, queryColor{0.5f,0.5f,0.5f,1};
         std::function<void(std::uint64_t,const std::string&)> linkClicked;
@@ -39,6 +43,7 @@ struct LLVKPlainControl
     std::string value;
     std::uint64_t document = 0;
     std::size_t cursor = 0;
+    std::optional<float> desiredCursorX;
     std::size_t selectionStart = 0;
     std::size_t selectionEnd = 0;
     bool readOnly = false;

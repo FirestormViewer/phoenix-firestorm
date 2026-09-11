@@ -21,6 +21,12 @@ bool LLVKWidgetTree::handleWheel(Id id, std::int32_t x, std::int32_t y, std::int
     if (!node) return false;
     if (node->slider && node->slider->params->vertical) return sliderStep(id,-clicks,error);
     if (node->scrollbar) return scrollbarWheel(id,clicks,horizontal,error);
+    if (node->scrollList)
+    {
+        const auto state=*node->scrollList;
+        const bool changed=scrollbarWheel(state.scrollbar,clicks,horizontal,error);
+        return error.empty() && (changed || state.params->wheelOpaque);
+    }
     if (node->tabContainer && node->tabContainer->layout && !node->tabContainer->layout->hidden &&
         !node->tabContainer->tabs.empty())
     {
@@ -184,6 +190,7 @@ bool LLVKWidgetTree::handlePointer(Id id, PointerEvent event, std::string& error
     if (node->slider) return sliderPointer(id,event,error);
     if (node->colorSwatch) return colorSwatchPointer(id,event,error);
     if (node->colorPicker) return colorPickerPointer(id,event,error);
+    if (node->scrollList) return scrollListPointer(id,event,error);
     if (node->comboListOwner) return comboListPointer(id,event,error);
     if (node->lineEditor) return lineEditorPointer(id,event,error);
     if (node->scrollbar) return scrollbarPointer(id,event,error);

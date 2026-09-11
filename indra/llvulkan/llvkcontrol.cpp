@@ -424,6 +424,7 @@ bool LLVKWidgetTree::setValue(Id id, const LLSD& value)
 {
     auto found = mNodes.find(id);
     if (found == mNodes.end() || !found->second.control) return false;
+    if (found->second.scrollList) { std::string error; return selectScrollListValue(id,value,true,error); }
     if (found->second.colorSwatch) { std::string error; return setColorSwatchValue(id,value,error); }
     if (found->second.searchEditor) return setValue(found->second.searchEditor->editor,value);
     if (found->second.textEditor) { std::string error; return setTextEditorText(id,value.asString(),error); }
@@ -512,6 +513,7 @@ bool LLVKWidgetTree::dispatchControl(Id id, LLVKControl::Callback LLVKControl::P
 bool LLVKWidgetTree::commit(Id id)
 {
     const auto* node = get(id);
+    if (node && node->textEditor) { std::string error; return commitTextEditor(id,error); }
     if (node && node->spinner) { std::string error; return commitSpinner(id,error); }
     if (node && node->combo) return commitCombo(id);
     if (node && node->button) { std::string error; return activateButton(id,error); }

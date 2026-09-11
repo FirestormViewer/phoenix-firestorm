@@ -44,6 +44,13 @@ bool LLVKWidgetTree::clearLineEditor(Id id, std::string& error)
     return true;
 }
 
+bool LLVKWidgetTree::setLineEditorKeystroke(Id id,LLVKControl::Callback callback)
+{
+    if (!get(id) || !get(id)->lineEditor) return false;
+    mNodes.at(id).lineEditor->params.keystroke=std::move(callback);
+    return true;
+}
+
 bool LLVKWidgetTree::setLineEditorPassword(Id id, bool password)
 {
     const auto found = mNodes.find(id);

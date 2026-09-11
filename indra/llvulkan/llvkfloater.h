@@ -16,6 +16,8 @@ public:
     bool visible() const;
     bool open(std::string& error);
     bool close(std::string& error);
+    bool setMinimized(bool minimized, std::string& error);
+    bool minimized() const noexcept { return mMinimized; }
     bool pointer(const LLVKWidgetTree::PointerEvent& event, std::string& error);
     void onClose(std::function<void()> callback) { mClose = std::move(callback); }
 private:
@@ -23,6 +25,10 @@ private:
     explicit LLVKFloater(LLVKWidgetTree& tree) : mTree(tree) {}
     LLVKWidgetTree& mTree;
     Id mId = 0, mRoot = 0, mPreviousFocus = 0;
+    Id mTitle = 0, mCloseButton = 0, mMinimizeButton = 0, mRestoreButton = 0;
+    bool mCanClose = true, mCanMinimize = false, mMinimized = false;
+    LLVKWidgetTree::Rect mExpandedRect;
+    std::map<Id,bool> mExpandedVisibility;
     bool mDragging = false;
     int mDragX = 0, mDragY = 0;
     std::function<void()> mClose;

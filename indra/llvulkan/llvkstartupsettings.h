@@ -7,6 +7,28 @@
 #include <optional>
 #include <string_view>
 
+class LLVKAutoReplaceSettings final
+{
+public:
+    enum class AddResult { Added, DuplicateName, InvalidList };
+    bool set(const LLSD& lists);
+    const LLSD& lists() const noexcept { return mLists; }
+    const LLSD* find(const std::string& name) const;
+    AddResult add(const LLSD& list, bool replace = false);
+    bool remove(const std::string& name);
+    bool move(const std::string& name, bool up);
+    bool setEntry(const std::string& name, const std::string& keyword, const std::string& replacement);
+    bool removeEntry(const std::string& name, const std::string& keyword);
+    std::string replaceWord(const std::string& word, bool enabled) const;
+    static bool validList(const LLSD& list);
+    bool loadFile(const std::filesystem::path& path, std::string& error);
+    bool saveFile(const std::filesystem::path& path, std::string& error) const;
+    static std::optional<LLSD> readListFile(const std::filesystem::path& path, std::string& error);
+    static bool writeListFile(const std::filesystem::path& path, const LLSD& list, std::string& error);
+private:
+    LLSD mLists = LLSD::emptyArray();
+};
+
 class LLVKStartupSettings final
 {
 public:

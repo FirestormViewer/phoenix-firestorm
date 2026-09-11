@@ -135,6 +135,44 @@ public:
         Id editor = 0, search = 0, clear = 0;
         std::shared_ptr<const SearchEditorParams> params;
     };
+    struct ListColumn
+    {
+        std::string name, label;
+        std::int32_t width = -1;
+        float relativeWidth = -1.f;
+    };
+    struct ListCellStyle
+    {
+        enum class Type { Text, Icon, IconText };
+        Type type = Type::Text;
+        std::shared_ptr<LLVKFont> font;
+        std::shared_ptr<const LLVKWidgetImage> image;
+        LLVKButton::Align alignment = LLVKButton::Align::Left;
+        LLVKColor imageColor{1,1,1,1};
+        std::string tooltip;
+    };
+    struct ListRow
+    {
+        LLSD value;
+        std::vector<std::string> cells;
+        bool enabled = true, selected = false;
+        std::int32_t selectedCell = -1;
+        std::vector<ListCellStyle> styles;
+    };
+    struct ScrollListParams;
+    struct ScrollList
+    {
+        std::shared_ptr<const ScrollListParams> params;
+        std::vector<ListRow> rows;
+        std::vector<ListColumn> columns;
+        std::vector<std::int32_t> widths;
+        std::vector<std::pair<std::size_t,bool>> sortColumns;
+        std::vector<Id> headers;
+        Id scrollbar = 0, border = 0;
+        Rect content;
+        std::int32_t lineHeight = 0, firstRow = 0, pageLines = 0, hovered = -1, anchor = -1;
+        std::int32_t hoveredCell = -1;
+    };
     struct ColorSwatchParams
     {
         LLVKColor color{1,1,1,1}, borderColor{1,1,1,1};
@@ -222,6 +260,34 @@ public:
         bool backgroundVisible = false;
         std::function<void(Id,std::int32_t)> changed;
     };
+    struct ListHeaderParams
+    {
+        LLVKControl::Params control;
+        LLVKButton::Params button;
+        std::shared_ptr<const LLVKWidgetImage> ascendingImage, descendingImage;
+    };
+    struct ScrollListParams
+    {
+        std::vector<ListColumn> columns;
+        std::vector<ListRow> rows;
+        ScrollbarParams scrollbar;
+        LLVKControl::Params scrollbarControl;
+        LLVKBorder::Params border;
+        std::shared_ptr<const ListHeaderParams> header;
+        bool multiSelect = false, heading = false, drawBorder = false, background = true, stripes = true;
+        bool commitOnSelection = false, commitOnKeyboard = true, wheelOpaque = true;
+        std::int32_t searchColumn = 0;
+        std::int32_t sortColumn = -1;
+        bool sortAscending = true;
+        enum class Selection { Row, Cell, Header };
+        Selection selection = Selection::Row;
+        bool canSort = true;
+        LLVKColor highlightedColor{1,1,1,1};
+        std::int32_t headingHeight = 23, rowPadding = 2, columnPadding = 5, scrollbarSize = 16;
+        LLVKColor foreground{1,1,1,1}, selectedForeground{1,1,1,1}, disabledForeground{0.5f,0.5f,0.5f,1};
+        LLVKColor selectedBackground{0.2f,0.4f,0.7f,1}, writableBackground{0,0,0,1}, readonlyBackground{0,0,0,1};
+        LLVKColor stripeColor{0.1f,0.1f,0.1f,1}, hoveredColor{0.3f,0.3f,0.3f,1};
+    };
     struct Scrollbar
     {
         std::shared_ptr<const ScrollbarParams> params;
@@ -305,12 +371,17 @@ public:
             std::string title, positioning;
             std::int32_t legacyHeaderHeight = 18;
             bool saveRect = false, singleInstance = false;
+            bool canClose = true, canMinimize = true;
         };
         std::optional<Floater> floater;
         struct TextEditor
         {
+            struct Revision { std::string before, after; std::size_t cursorBefore=0, cursorAfter=0; };
+            struct History { std::vector<Revision> revisions; std::size_t position=0, bytes=0; };
+            std::shared_ptr<History> history=std::make_shared<History>();
             Id scroller = 0, document = 0, body = 0, border = 0;
             bool readOnly = true;
+            bool commitOnFocusLost = false;
             std::uint64_t laidOutGeneration = UINT64_MAX;
             std::int32_t width = -1, height = -1;
         };
@@ -378,6 +449,7 @@ public:
         std::optional<LLVKBorder> border;
         std::optional<LineEditor> lineEditor;
         std::optional<SearchEditor> searchEditor;
+        std::optional<ScrollList> scrollList;
         std::optional<ColorSwatch> colorSwatch;
         std::optional<ColorPicker> colorPicker;
         std::vector<Id> preferenceLocalValues;
@@ -504,6 +576,7 @@ public:
     std::optional<Id> createCombo(const Params& view, const LLVKControl::Params& control, const ComboParams& params, Id parent, std::string& error);
     bool selectComboItem(Id id, std::optional<std::size_t> index, std::string& error);
     bool setComboValue(Id id, const LLSD& value, std::string& error);
+    bool replaceComboItems(Id id, std::vector<ComboItem> items, std::string& error);
     bool commitCombo(Id id);
     bool postBuildCombo(Id id, std::string& error);
     bool showComboList(Id id, std::string& error);
@@ -529,6 +602,7 @@ public:
                                       const LineEditorParams& editor, Id parent, std::string& error);
     bool clearLineEditor(Id id, std::string& error);
     bool setLineEditorPassword(Id id, bool password);
+    bool setLineEditorKeystroke(Id id, LLVKControl::Callback callback);
     bool selectLineEditorAll(Id id, std::string& error);
     bool setControlCommit(Id id, LLVKControl::Callback callback);
     std::optional<Id> createSpinner(const Params& view, const LLVKControl::Params& control,
@@ -677,6 +751,15 @@ public:
         const SearchEditorParams& params, Id parent, std::string& error);
     bool refreshSearchEditor(Id id, std::string& error);
     bool clearSearchEditor(Id id, std::string& error);
+    std::optional<Id> createScrollList(const Params& view, const LLVKControl::Params& control,
+        const ScrollListParams& params, Id parent, std::string& error);
+    bool setScrollListRows(Id id, std::vector<ListRow> rows, std::string& error);
+    bool layoutScrollList(Id id, std::string& error);
+    bool sortScrollList(Id id, std::size_t column, bool ascending, std::string& error);
+    bool setScrollListCommitOnSelection(Id id, bool enabled);
+    bool selectScrollListValue(Id id, const LLSD& value, bool selected, std::string& error);
+    bool scrollListPointer(Id id, const PointerEvent& event, std::string& error);
+    bool scrollListKey(Id id, ScrollKey key, LLVKLineEditor::Modifiers modifiers, std::string& error);
     std::optional<Id> createColorSwatch(const Params& view, const LLVKControl::Params& control,
         const ColorSwatchParams& params, Id parent, std::string& error);
     bool setColorSwatchValue(Id id, const LLSD& value, std::string& error);
@@ -699,6 +782,14 @@ public:
         Id parent, std::string& error);
     bool layoutTextEditor(Id id, std::string& error);
     bool setTextEditorText(Id id, const std::string& text, std::string& error);
+    bool insertTextEditorText(Id id, std::u32string_view text, std::string& error);
+    bool commitTextEditor(Id id, std::string& error);
+    bool undoTextEditor(Id id, bool redo, std::string& error);
+    bool deleteTextEditor(Id id, bool backward, bool word, std::string& error);
+    bool pasteTextEditor(Id id, std::string& error);
+    bool cutTextEditor(Id id, std::string& error);
+    std::optional<Rect> plainTextCaretRect(Id body, std::string& error) const;
+    bool revealTextEditorCursor(Id id, std::string& error);
     bool startTextEditorDocument(Id id, std::string& error);
     bool textEditorKey(Id id, ScrollKey key, LLVKLineEditor::Modifiers modifiers, std::string& error);
     std::optional<Id> createCheckBox(const Params& view, const LLVKControl::Params& control,

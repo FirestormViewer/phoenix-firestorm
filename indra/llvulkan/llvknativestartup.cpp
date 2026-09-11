@@ -2,6 +2,7 @@
 #include "llvkloginwindow.h"
 #include "llvkstartupsettings.h"
 #include "llstring.h"
+#include "llerror.h"
 #include <windows.h>
 #include <shellapi.h>
 #include <shlobj.h>
@@ -86,10 +87,47 @@ std::optional<int> llvkNativeStartup(const std::wstring& commandLine,const std::
     LLVKLoginWindow::Configuration configuration;
     configuration.ui.settings = values;
     configuration.ui.settingDefaults = settings.defaults();
+    LLVKStartupSettings accountSettings;
+    if (!accountSettings.loadFile(directory/"app_settings"/"settings_per_account.xml",true,true,true,error)) return fail(error);
+    configuration.ui.accountSettings=accountSettings.values();
+    configuration.ui.accountDefaults=accountSettings.defaults();
+    const auto soundCache=stringValue("FSSoundCacheLocation",stringValue("CacheLocation"));
+    if (!soundCache.empty()) configuration.soundCacheDirectory=std::filesystem::path(std::u8string(soundCache.begin(),soundCache.end()));
+    else
+    {
+        PWSTR local=nullptr;
+        if (FAILED(SHGetKnownFolderPath(FOLDERID_LocalAppData,0,nullptr,&local))) return fail("Cannot resolve native sound cache directory");
+        configuration.soundCacheDirectory=std::filesystem::path(local)/std::filesystem::path(std::u8string(profileName.begin(),profileName.end()));
+        CoTaskMemFree(local);
+    }
     configuration.ui.appliedSettingsMode = appliedSettingsMode;
     const auto preferenceFile=userSettings/std::filesystem::path(std::u8string(settingsFile.begin(),settingsFile.end()));
     configuration.ui.savePreferences=[&settings,preferenceFile](const auto& changes,std::string& problem)
     { return settings.saveChanges(preferenceFile,changes,problem); };
+    LLVKAutoReplaceSettings autoReplace;
+    const auto autoReplaceFile=userSettings/"autoreplace.xml";
+    if (std::filesystem::exists(autoReplaceFile))
+    {
+        if (!autoReplace.loadFile(autoReplaceFile,error))
+        { LL_WARNS("AutoReplace") << error << LL_ENDL; error.clear(); }
+    }
+    else if (!autoReplace.loadFile(directory/"app_settings"/"autoreplace.xml",error))
+    {
+        LL_WARNS("AutoReplace") << error << "; using example lists" << LL_ENDL;
+        error.clear();
+        LLSD first; first["name"]="Example List 1"; first["replacements"]["keyword1"]="replacement string 1";
+        first["replacements"]["keyword2"]="replacement string 2";
+        LLSD second; second["name"]="Example List 2"; second["replacements"]["mistake1"]="correction 1";
+        second["replacements"]["mistake2"]="correction 2";
+        autoReplace.add(first); autoReplace.add(second);
+    }
+    configuration.ui.autoReplaceLists=autoReplace.lists();
+    configuration.ui.saveAutoReplace=[autoReplaceFile](const LLSD& lists,std::string& problem)
+    {
+        LLVKAutoReplaceSettings pending;
+        if (!pending.set(lists)) { problem="Invalid AutoReplace settings update"; return false; }
+        return pending.saveFile(autoReplaceFile,problem);
+    };
     configuration.ui.skin.executableDirectory = directory;
     configuration.ui.skin.workingDirectory = std::filesystem::current_path();
     configuration.ui.skin.skinBaseDirectory = directory/"skins";

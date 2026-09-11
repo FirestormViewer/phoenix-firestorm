@@ -152,6 +152,21 @@ bool LLVKWidgetTree::selectComboItem(Id id, std::optional<std::size_t> index, st
     return true;
 }
 
+bool LLVKWidgetTree::replaceComboItems(Id id,std::vector<ComboItem> items,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->combo || items.size()>10000)
+    { error="Invalid native combo row replacement"; return false; }
+    hideComboList(id);
+    if (!get(id)) { error="Native combo removed while closing its list"; return false; }
+    auto& combo=*mNodes.at(id).combo;
+    const auto button=combo.button,editor=combo.editor;
+    combo.items=std::move(items); combo.selected.reset(); combo.hovered.reset(); combo.firstRow=0; combo.autocompleted=false;
+    if (!setButtonLabel(button,U"")) return false;
+    if (editor && !setValue(editor,LLSD(""))) return false;
+    return true;
+}
+
 bool LLVKWidgetTree::setComboValue(Id id, const LLSD& value, std::string& error)
 {
     error.clear();
