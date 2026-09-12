@@ -1,7 +1,8 @@
 # Native Vulkan viewer roadmap
 
-Date: 2026-09-10. Status: replacement development roadmap following the requested
-rollback. No implementation milestone below is marked complete by this document.
+Established 2026-09-10; work plan updated 2026-09-13 after PR #43 merged.
+Status: replacement development roadmap following the requested rollback.
+No implementation milestone below is marked complete by this document.
 
 **Implementation checkpoint:** PR #41,
 `90af5a7220f1fec28e3c909c051b6ee7e062f10b`.
@@ -17,12 +18,14 @@ not the separate [OpenGL modernization strategy](opengl_modernization_strategy.m
 
 ## Service-first sequencing (2026-09-13)
 
-Following the native service survey and draft
+Following the native service survey and merged
 [PR #43](https://github.com/anne-skydancer/vulkanstorm/pull/43), the user selected the
 following execution order. This refines near-term sequencing; it does not mark the
 R0-Rn milestones below complete, change the GL oracle or waive native invariants.
 Current implementation/status evidence is in the
-[native services handoff](native-services-handoff.md), checkpoint `a9e9ead2bd`.
+[native services handoff](native-services-handoff.md). The starting baseline is
+merged `master` at `1b68d3afa1`, containing implementation checkpoint `a9e9ead2bd`
+and documentation checkpoint `7e2aac6c6c`. The historical GL oracle is unchanged.
 
 | Phase | Scope | Exit evidence |
 |---|---|---|
@@ -43,6 +46,177 @@ exact UI/effects parity and the full material/color/alpha/depth/composition cont
 CPU-only API-independent functionality may be shared after audit; GL-exclusive visual
 functions, including coupled CPU preparation, remain forbidden. No calendar or
 completion-percentage estimate is established by this sequencing decision.
+
+## Detailed execution plan (2026-09-13)
+
+This is planned work, not a record of implementation. Reuse the existing native UI,
+browser, settings, cache and GPU foundations after checking their actual contracts
+and consumers. Their presence and existing test counts do not establish readiness
+for authentication, world services or world rendering.
+
+### Preparation: native error messaging
+
+Implement this on the dedicated `native-error-messaging` branch before adding
+authentication failure paths. Keep session/network/world implementation on subsequent
+focused branches; this planning document does not create those branches.
+
+- Define a structured error contract: stable code, operation, severity, recoverability,
+  localized user-message key, redacted technical details and request/session identity.
+- Provide native presentation before UI startup, during normal UI operation and after
+  renderer failure. Reporting must not depend on the subsystem that failed.
+- Supply logging, duplicate suppression and explicit Retry/Cancel/Close behavior.
+  Services report facts; the session owner decides whether and how to recover.
+- Test missing resources, cache/permission errors, network/TLS failures, renderer
+  failures and late errors after cancellation. Never put credentials, tokens or
+  sensitive response bodies in diagnostics, copied reports or test artifacts.
+
+Exit: actionable errors are delivered at each lifecycle stage, retries obey owner
+policy, and reporting failure cannot recursively invoke the failed visual service.
+
+### Phase 1: native session owner
+
+1. Recover the applicable lifecycle from [LLStartUp](../../indra/newview/llstartup.cpp)
+   and [LLAppViewer](../../indra/newview/llappviewer.cpp), including callbacks,
+   agreements, deadlines, retry and teardown. Record the NV-00 three answers and
+   unresolved dependencies before implementing each behavior family.
+2. Own explicit pre-login, authenticating, awaiting-agreement, region-connecting,
+   connected, disconnecting and stopped states. Track login-attempt generations and
+   region epochs; publish account/session identity only at defined transitions.
+3. Separate application-, account/session- and region-lifetime services. Serialize
+   state transitions on the owner thread; workers return bounded, generation-tagged
+   results rather than mutating UI or service lifetimes directly.
+4. Wire the owner into native startup. UI submits commands and observes snapshots.
+   Cancellation invalidates pending results. Shutdown rejects new work, retires
+   callbacks and drains dependencies in reverse ownership order, including partial
+   initialization and failure exits.
+
+Exit: deterministic tests cover valid/invalid transitions, duplicate requests,
+cancellation at every stage, reordered/stale responses, retry, partial cleanup and
+idempotent shutdown. Structural state-machine tests are not proof of working login.
+
+### Phase 2: nonvisual network and data services
+
+1. Audit transport, protected credential storage, protocol/LLSD parsing, event queues
+   and caches through constructors, globals, callbacks and teardown. Share independent
+   code; do not wrap GL-coupled viewer owners to obtain nominally nonvisual functions.
+2. Establish TLS verification, proxy policy, deadlines, bounded queues/payloads,
+   cancellation, retry/backoff, error mapping and secret-safe logging.
+3. Implement account/grid/start-location selection, login requests and responses,
+   supported challenge/redirect flows and TOS/critical-message replies. Wire native
+   login controls, progress, cancellation and actionable failure/retry UI.
+4. Establish region session/circuit setup, seed capabilities, capability discovery,
+   message dispatch, event queues, acknowledgements/keepalives and disconnection.
+5. Provide common data-request infrastructure: asset identity and permission context,
+   scheduling, cache lookup, cancellation and result publication. Feature-specific
+   inventory, texture and audio consumers follow in phase 3.
+
+Exit: controlled protocol tests and a live authenticate/connect/maintain/logout
+workflow in the native process, without entering the GL lifecycle. Authentication
+and region connection are a joint acceptance gate across phases 1 and 2; no world
+image is required. Keep authenticated, region-connected, services-ready and
+world-visible conditions distinct. Do not label a transport connection STATE_STARTED
+merely to satisfy a test; define and verify the applicable viewer-readiness contract.
+
+### Phase 3: authentication-dependent services
+
+Each group requires a real session, a native consumer and a disconnect/reconnect
+test. Complete the required subset explicitly rather than implying that a successful
+login integrates all dependent services.
+
+| Group | Work package | Workflow gate |
+|---|---|---|
+| Account and agent | Account directories/settings/persistence, identity, permissions, position, region state and crossings | Account isolation; region changes reject stale data and do not leak prior-session state |
+| Notifications | Native template/channel processing, ignore rules, responses, expiry, persistence and presentation | Service events reach the correct native UI; response and disconnect cleanup execute once |
+| Inventory and assets | Inventory/library acquisition and updates, permission checks, asset requests, cache/decode/publication | Browse and perform agreed mutations; fetch permitted content and handle misses, denial and cancellation |
+| Names and profiles | Resolution, caches, profile requests and inspector data | Real identities populate native UI and refresh without stale-account publication |
+| Chat and IM | Send/receive, session membership, unread state, history, mute/filter policy and persistence | Two-party workflows survive disconnect/reconnect without duplicate or misrouted messages |
+| Voice | Authorization, provisioning, channel join/leave, device state and teardown | Actual selected voice-session modes work; microphone testing requires explicit operator consent |
+
+Before implementation, agree inventory mutations, chat/IM modes, notification classes
+and voice modes required for this milestone. Economy, purchases, uploads, scripting
+and editing are not implicitly added by a button or incidental dependency. Follow
+dependencies between these groups rather than treating table order as proof that
+they can be implemented independently.
+
+### Phase 4: minimal connected environment
+
+1. Verify the selected-device/resource foundation for world use: capabilities,
+   budgets, uploads, barriers/layouts, descriptors, all-use in-flight retirement,
+   noncoherent memory, WSI recovery and reproducible shader/CPU ABI packaging.
+2. Decode actual region terrain patches, ground-material inputs, water level and
+   environment settings into versioned native CPU records. Handle region changes and
+   origin shifts without reading GL visual owners.
+3. Establish native camera and view policy: coordinate conventions, projection,
+   movement/input, culling and explicit main/auxiliary views. Camera ownership must
+   not require avatar rendering.
+4. Implement terrain geometry/materials, sky/atmosphere and water, including lighting,
+   above/below-water policy, transparency ordering and reflection/refraction passes
+   required for the accepted result. Newly discovered passes are explicit dependencies,
+   not permission to silently approximate or expand the accepted scene scope.
+5. Implement the applicable postprocessing dependency graph, including exposure,
+   tone mapping, glow, AA and any other agreed effects. Preserve history invalidation,
+   material/color/alpha/depth contracts and keep UI outside world exposure.
+6. Integrate the agreed in-world status/toolbars, camera/environment controls and
+   phase-3 UI. Implement the snapshot floater: requested resolution/aspect/crop,
+   selection overlays, inclusion/exclusion policy, frozen view/history, native
+   capture, preview, encoding and output.
+
+Exit: connected-region data renders correctly, environment and camera changes
+propagate, native UI remains interactive, and snapshots preserve the requested view,
+resolution, color/alpha and overlay policy. Compare stage outputs and temporal
+sequences against the pinned reference, not just the final screenshot.
+
+Agree the initial in-world UI set, postprocessing effects and snapshot destinations
+before this phase. Local PNG is the recommended first output, not an approved limit
+on the overall snapshot objective; other destinations require their own services.
+
+### Cross-cutting objective: UI and menu integration
+
+Integrate UI and menu functions as their services enter the viewer. Do not defer
+service consumers to a separate final UI phase or call isolated component tests
+workflow completion. Reuse and complete suitable existing native widgets/dialogs.
+
+| Work phase | Accompanying UI/menu work |
+|---|---|
+| Error messaging | Startup errors, in-app failures, diagnostic details and Retry/Cancel/Close actions |
+| Session/network | Login/account/grid/start-location controls, progress, agreements, cancellation and logout |
+| Authenticated services | Inventory, chat/IM, notifications, profiles/inspectors, voice controls and applicable Preferences actions |
+| Minimal world | Camera/environment controls, in-world menus/toolbars, snapshot floater and overlays |
+
+Every increment's gate includes production bindings to the actual service; correct
+visibility, enablement, checkmarks, loading and error states; mouse/keyboard input,
+focus and dependent-dialog behavior; cancellation and disconnect/reconnect; and
+teardown without stale callbacks. Require source-defined visual/effects/interaction
+parity within the implemented scope. A component is not workflow-complete until its
+relevant UI and menu actions work end to end.
+
+### Delivery and validation
+
+- Deliver focused branches/PRs per behavior package. The sequence is source contract,
+  native design, discriminating test, implementation, production wiring, runtime
+  acceptance and measured parity. Publish exact remaining gaps at each checkpoint.
+- Reuse passed evidence unless relevant changes invalidate it. Use isolated profiles,
+  fake clocks, controlled protocol responses and fault injection first; never test
+  destructive operations against the operator's real profile.
+- Use the smallest relevant existing widget/browser/window/GPU/link gates. Add
+  session/protocol tests within repository conventions and GL/Zink regression checks
+  where shared nonvisual code changes. Module imports alone do not prove GL execution
+  or its absence; qualify selected-native runtime behavior separately.
+- Notify the operator before full viewer launches and allow manual login time.
+  Full-viewer acceptance requires actual STATE_STARTED readiness, a 75-second
+  uninterrupted settle period, graceful WM_CLOSE, exit zero and Goodbye! Never
+  force-stop the viewer. Pre-readiness failure/cancellation fixtures are separate
+  tests, not a substitute for the completed full-viewer acceptance run.
+- Keep exact UI acceptance and approved reference-derived numerical comparisons
+  distinct. Do not change the oracle or tolerances to hide mismatches. A minimal
+  milestone narrows features, not correctness within those features.
+
+Critical path: error messaging, session lifecycle, authentication/region transport,
+required account/data services, native environment scene, in-world UI/snapshots,
+then workflow/parity qualification. Source audits, protocol fixtures and auxiliary
+view design can begin earlier, but implementation must respect ownership dependencies.
+Do not infer calendar estimates or completion percentages from lines of code or
+test counts; estimate packages after the initial reuse/ownership audits.
 
 ## Foundation: three questions for every function and helper
 

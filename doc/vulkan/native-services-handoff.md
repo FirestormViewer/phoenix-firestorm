@@ -1,14 +1,17 @@
 # Native services handoff
 
-Updated 2026-09-13 after the service survey and publication of draft PR #43.
+Updated 2026-09-13 after PR #43 merged and the detailed work plan was agreed.
 This is a continuation checkpoint, not a completion or parity claim.
 
 ## Current checkpoint and evidence
 
-Implementation checkpoint: `a9e9ead2bd` on `native-vulkan-ui`, committed and pushed
-to `origin/native-vulkan-ui`. [Draft PR #43](https://github.com/anne-skydancer/vulkanstorm/pull/43)
-targets the fork's `master` and includes the full native UI/service branch. The
-latest commit is `Extend native menus, browser views and UI diagnostics`.
+Merged baseline: `master` at `1b68d3afa1`, containing implementation checkpoint
+`a9e9ead2bd` and documentation checkpoint `7e2aac6c6c` from
+[PR #43](https://github.com/anne-skydancer/vulkanstorm/pull/43). The local
+`native-vulkan-ui` branch was removed after merge; `native-error-messaging` was
+created from this baseline for the error-reporting prerequisite. Creating that
+branch did not implement error messaging. The detailed plan is documented on master;
+subsequent implementation branches must incorporate it before continuing.
 
 The production native path is a pre-login application with real local services and
 Vulkan UI presentation, not the complete OpenGL viewer with a replacement renderer.
@@ -129,6 +132,14 @@ Reference policy distinctions:
 The service-first sequence supersedes menu-by-menu work as the immediate priority;
 the full menu remains a downstream objective. See the dated sequencing section in
 the [native viewer roadmap](native_viewer_roadmap.md).
+
+The roadmap's detailed execution plan adds native error messaging as the first
+prerequisite, work packages and exit gates for all four phases, scope decisions and
+validation/branch discipline. UI and menu integration is cross-cutting: every
+service increment must include its relevant production UI bindings, state feedback,
+input, cancellation/reconnect and teardown tests. Component completion is not
+workflow completion. This requirement does not turn unrelated unfinished menu
+actions into prerequisites for each individual service slice.
 
 1. Native session owner: explicit state, lifetime, cancellation, stale-response guards,
    failure/retry and orderly disconnection. Structural tests are not working login.
