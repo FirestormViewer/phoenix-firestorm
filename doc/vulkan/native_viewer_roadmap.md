@@ -15,6 +15,35 @@ Authority: [native Vulkan invariants](native_vulkan_invariants.md), particularly
 NV-00. This roadmap supersedes implementation sequencing in older native plans,
 not the separate [OpenGL modernization strategy](opengl_modernization_strategy.md).
 
+## Service-first sequencing (2026-09-13)
+
+Following the native service survey and draft
+[PR #43](https://github.com/anne-skydancer/vulkanstorm/pull/43), the user selected the
+following execution order. This refines near-term sequencing; it does not mark the
+R0-Rn milestones below complete, change the GL oracle or waive native invariants.
+Current implementation/status evidence is in the
+[native services handoff](native-services-handoff.md), checkpoint `a9e9ead2bd`.
+
+| Phase | Scope | Exit evidence |
+|---|---|---|
+| 1. Native session owner | Pre-login/authenticating/agreement/connecting/connected/disconnecting/stopped states; account/session identity, cancellation and owner teardown | Controlled state transitions, retry, stale-response rejection and partial-startup cleanup; not authentication merely because a state machine exists |
+| 2. Nonvisual network and data services | Independently audit/reuse transport, protected credentials, login requests/replies, capabilities, event/message processing and asset/data foundations; wire native login/TOS UI | Authenticate, establish and maintain a region connection, then log out cleanly without entering GL lifecycle; this gate spans phases 1 and 2 |
+| 3. Authentication-dependent services | Explicitly prioritize account persistence, agent/region state, inventory/assets, names/profiles, chat/IM, notifications and voice provisioning | Each selected live workflow and its disconnect/reconnect behavior; authentication alone does not qualify consumers |
+| 4. Minimal in-world environment | Connected-region ground/terrain and materials, sky/environment, water, applicable postprocessing, camera/view ownership, in-world UI, snapshot floater and overlays | Region-derived scene, propagated environment changes, interactive native UI, correct snapshot view/resolution/overlay policy, preview and agreed output path |
+
+Agree the required phase-3 service subset and phase-4 UI/snapshot outputs before
+implementation: neither phrase silently authorizes the entire viewer. General scene
+objects, avatars, vegetation, particles and world editing are outside the initial
+minimal-environment milestone unless explicitly added. Real region terrain/water/sky
+must not be replaced by placeholders and described as parity.
+
+Proceed in vertical slices: source contract, owner, service, native consumer, focused
+tests, runtime acceptance and measured parity. Selected scope remains subject to
+exact UI/effects parity and the full material/color/alpha/depth/composition contracts.
+CPU-only API-independent functionality may be shared after audit; GL-exclusive visual
+functions, including coupled CPU preparation, remain forbidden. No calendar or
+completion-percentage estimate is established by this sequencing decision.
+
 ## Foundation: three questions for every function and helper
 
 1. **What is the OpenGL function doing?**
@@ -90,10 +119,12 @@ experimental test once passed.
 
 ## Architecture decisions and constraints
 
-The user's confirmed runtime boundary is **one viewer executable and one OS
-process**, selecting an independent GL/Zink or native Vulkan lifecycle before
-incompatible application initialization. Independent lifecycle does not mean a
-second executable, another instance of the executable, or GL-owned constructors
+The user's confirmed runtime boundary is **one viewer executable with its 3D
+renderer in the viewer process**, selecting an independent GL/Zink or native
+Vulkan lifecycle before incompatible application initialization. As clarified
+on 2026-09-11, Dullahan/CEF browser helpers and the slvoice helper are permitted; the one-process
+rule is strictly for the viewer's 3D portion. Independent lifecycle does not mean a
+separate 3D renderer executable/process, another viewer instance, or GL-owned constructors
 followed by a late native display branch. Common process/static initialization
 must be audited too; early branching alone does not prove absence of GL effects.
 
@@ -102,7 +133,7 @@ The following alternatives remain decision work, not silently adopted changes:
 | Alternative | Feasibility question and required decision |
 |---|---|
 | Build-time GL/Zink versus Vulkan | Can CMake source/target closures and autobuild configurations select each lifecycle under the same executable target? Define settings/packaging behavior when a backend is compiled out. Do not just add a flag while linking GL owners |
-| Semantic abstractions | Which model, layout, asset-byte and application-action contracts are genuinely neutral? Share those after helper closure, not GL handles or callbacks |
+| Dependency suitability | Existing GL-exclusive visual functions cannot serve the native path. Share audited nonvisual services; independently assess API-independent third-party functionality under clarified NV-01. Implement native visual equivalents without changing or extracting shared services from GL |
 | Shared low-level RHI | Does it actually improve native ownership, or only preserve GL procedures? Present an explicit alternative design; current NV-01 prohibits GL-call translation/shared dispatch |
 | GL/Vulkan interop | Requires shared external memory as well as semaphores, compatible devices/drivers, formats/layouts and both APIs' completion. A hybrid strategy would require explicit NV-01/NV-03 amendment; hardware feasibility is unverified |
 | Compile GL out of native builds | Useful enforceable boundary after neutral dependencies are separated; it does not implement the missing viewer. Preserve the independently buildable GL reference, not delete it wholesale |
@@ -146,8 +177,9 @@ neutral, and which belongs exclusively to the selected lifecycle. Evaluate the
 architecture alternatives above before coding their selection mechanism.
 
 Exit: reviewed lifecycle state diagram, owner graph and build decision; tests of
-settings precedence and failure behavior against the reference; one executable,
-one process, no GL initialization on the native route, unchanged GL/Zink route.
+settings precedence and failure behavior against the reference; one viewer
+executable with in-process 3D rendering (browser and slvoice helpers permitted), no GL
+initialization on the native route, unchanged GL/Zink route.
 A diagnostic rejecting the requested route is containment, not this exit gate.
 Packaging/updater paths must not be left pointing to an incomplete scaffold.
 
@@ -259,8 +291,12 @@ image capture or partially populated window cannot stand in for this gate.
 ## Working rules and immediate next task
 
 Keep each change reviewable around one behavior contract. Implement and validate
-the smallest native operation before expanding to adjacent consumers. Reuse neutral
-libraries only after checking initialization, global state and teardown requirements.
+the smallest native operation before expanding to adjacent consumers. Share audited
+nonvisual functionality under clarified NV-01. Existing CPU visual helpers are not
+neutral merely because their bodies contain no direct GL call. Independently audited
+API-independent third-party functionality is not categorically forbidden. Leave the
+OpenGL implementation untouched; independently implement native visual equivalents.
+Check initialization, global state, callbacks and teardown for every dependency.
 Do not reintroduce wrappers around GL owners or create disconnected test executables
 as substitutes for the application's selected lifecycle.
 

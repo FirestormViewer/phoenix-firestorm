@@ -26,8 +26,16 @@ They do not change the separate OpenGL modernization roadmap.
 - Implement equivalent results with native scene/view/material/resource data.
   Do not transpose GL calls, add an LLRender-dispatch/shared low-level RHI, invoke
   GL-coupled draw callbacks, or display a GL-produced frame as native Vulkan.
-- Keep the selected backend GL-free and process-exclusive. Share neutral inputs,
-  not GL handles/state. Do not expand existing GL-library/type coupling.
+- Keep the selected backend GL-free and process-exclusive. Do not reuse existing
+  GL-exclusive visual functions, including CPU UI/layout/input, fonts, textures,
+  meshes, scene preparation and postprocessing. Audit transitive dependencies, not
+  just direct GL calls. Nonvisual functionality may be shared after audit.
+  Independently audited API-independent third-party functionality is not banned
+  merely because both paths use it; this does not permit GL-coupled wrappers or
+  shared extraction from the GL visual implementation. Follow clarified NV-01.
+- Leave the OpenGL implementation untouched. Build independently owned native
+  visual equivalents, not shared extractions, GL-owner wrappers or backend branches
+  in GL functions. Do not expand existing GL-library/type coupling.
 - Preserve material/color/alpha/depth contracts, water/transparency/post ordering,
   per-view policy and versioned history. Changing representation requires
   coordinated producer/consumer changes and evidence, not silent approximation.

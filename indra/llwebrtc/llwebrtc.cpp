@@ -416,40 +416,43 @@ void LLWebRTCImpl::init()
 
 bool LLWebRTCImpl::terminate()
 {
+    mStopping.store(true);
     // Run all blocking WebRTC shutdown calls on a separate thread so that a
     // hung BlockingCall cannot block the viewer shutdown indefinitely.
     // Webrtc is not mission critical, we need to save personal data.
     auto done_promise = std::make_shared<std::promise<void> >();
     std::future<void> done_future = done_promise->get_future();
 
-    // Hand ownership of the connections to the shutdown thread.  Nothing on
-    // this thread may touch them afterwards -- in the timeout case below the
-    // shutdown thread is detached and may still be working through them.
-    std::vector<webrtc::scoped_refptr<LLWebRTCPeerConnectionImpl>> connections;
-    connections.swap(mPeerConnections);
-
-    // Explicitely unregister observers before shutting down the threads.
-    // shutdown_thread, if detached, can outlive observer.
-    mWorkerThread->BlockingCall([this]()
     {
-        if (mDeviceModule)
-        {
-            mDeviceModule->SetObserver(nullptr);
-        }
-    });
-    mVoiceDevicesObserverList.clear();
+        std::lock_guard observerLock(mDevicesObserverMutex);
+        mVoiceDevicesObserverList.clear();
+    }
 
-    // shutdown_thread can be detached, then LLWebRTCImpl will be nulled out.
-    // Capture what's needed in lambda, don't rely on [this].
     std::thread shutdown_thread(
-        [networkThread = std::move(mNetworkThread),
-        workerThread = std::move(mWorkerThread),
-        signalingThread = std::move(mSignalingThread),
-        deviceModule = std::move(mDeviceModule),
-        factory = std::move(mPeerConnectionFactory),
-        connections = std::move(connections),
-        done_promise]() mutable
+        [this, done_promise]()
     {
+        auto& networkThread = mNetworkThread;
+        auto& workerThread = mWorkerThread;
+        auto& signalingThread = mSignalingThread;
+        auto& deviceModule = mDeviceModule;
+        auto& factory = mPeerConnectionFactory;
+        std::vector<webrtc::scoped_refptr<LLWebRTCPeerConnectionImpl>> connections;
+        if (workerThread)
+        {
+            workerThread->BlockingCall([&deviceModule]()
+            {
+                if (deviceModule) deviceModule->SetObserver(nullptr);
+            });
+        }
+        if (signalingThread) signalingThread->BlockingCall([]() {});
+        if (workerThread) workerThread->BlockingCall([]() {});
+        if (signalingThread)
+        {
+            signalingThread->BlockingCall([this, &connections]()
+            {
+                connections.swap(mPeerConnections);
+            });
+        }
         // Stop the capture/render devices alongside the connection teardown
         // below rather than ahead of it.  Both of these calls end in a
         // WaitForSingleObject on a WASAPI thread with a 2s timeout apiece
@@ -470,7 +473,7 @@ bool LLWebRTCImpl::terminate()
         // of this lambda can't run until this task has finished.  Any
         // worker-thread work the signaling close does is likewise ordered
         // after it, so nothing sees the device module half torn down.
-        workerThread->PostTask(
+        if (workerThread) workerThread->PostTask(
             [&deviceModule]()
         {
             if (deviceModule)
@@ -491,7 +494,7 @@ bool LLWebRTCImpl::terminate()
         // callback inline, and that callback calls back into the viewer's
         // signaling observers.  Those observers are only valid until
         // llwebrtc::terminate() returns.
-        signalingThread->BlockingCall(
+        if (signalingThread) signalingThread->BlockingCall(
             [&connections]()
             {
                 for (auto& connection : connections)
@@ -504,13 +507,13 @@ bool LLWebRTCImpl::terminate()
             });
 
         // Drain anything the closes posted before dropping the factory.
-        signalingThread->BlockingCall([]() {});
+        if (signalingThread) signalingThread->BlockingCall([]() {});
 
-        signalingThread->BlockingCall([&factory]() {
+        if (signalingThread) signalingThread->BlockingCall([&factory]() {
             factory = nullptr;
         });
 
-        workerThread->BlockingCall(
+        if (workerThread) workerThread->BlockingCall(
             [&deviceModule]()
         {
             if (deviceModule)
@@ -546,9 +549,6 @@ bool LLWebRTCImpl::terminate()
         // BlockingCall).  Instead we report the failure so the caller leaks this
         // object rather than deleting it; the process is exiting anyway and our
         // priority is saving cache and personal data.
-        //
-        // mPeerConnections is already empty -- the detached thread owns the
-        // connections now and must be left to finish with them.
         //
         // The log sink is unhooked here (and deliberately not deleted, since the
         // detached thread may still log) because the viewer-side log callback
@@ -640,13 +640,19 @@ void LLWebRTCImpl::workerDisableBuiltInAudioProcessing()
 
 void LLWebRTCImpl::refreshDevices()
 {
+    if (mStopping.load()) return;
     mWorkerThread->PostTask([this]() { updateDevices(); });
 }
 
-void LLWebRTCImpl::setDevicesObserver(LLWebRTCDevicesObserver *observer) { mVoiceDevicesObserverList.emplace_back(observer); }
+void LLWebRTCImpl::setDevicesObserver(LLWebRTCDevicesObserver *observer)
+{
+    std::lock_guard observerLock(mDevicesObserverMutex);
+    mVoiceDevicesObserverList.emplace_back(observer);
+}
 
 void LLWebRTCImpl::unsetDevicesObserver(LLWebRTCDevicesObserver *observer)
 {
+    std::lock_guard observerLock(mDevicesObserverMutex);
     std::vector<LLWebRTCDevicesObserver *>::iterator it =
         std::find(mVoiceDevicesObserverList.begin(), mVoiceDevicesObserverList.end(), observer);
     if (it != mVoiceDevicesObserverList.end())
@@ -663,6 +669,7 @@ void LLWebRTCImpl::unsetDevicesObserver(LLWebRTCDevicesObserver *observer)
 // clean re-select; voice off goes through setVoiceEnabled(false).
 void LLWebRTCImpl::workerStartRecording()
 {
+    if (mStopping.load()) return;
     // Only run capture while voice is enabled, and never cold-start it when
     // it's already running (that would cause the unmute hiss).
     if (!mDeviceModule || !mVoiceEnabled || mDeviceModule->Recording())
@@ -729,6 +736,7 @@ void LLWebRTCImpl::workerStartRecording()
 // changes go through workerDeployDevices(), which stops playout first.
 void LLWebRTCImpl::workerStartPlayout()
 {
+    if (mStopping.load()) return;
     // Only run playout while voice is enabled and there's a connection to
     // render (running the output device otherwise is heard as a buzz).
     // <FS:TJ> Fix default voice output device always being used instead of the chosen device
@@ -806,6 +814,7 @@ void LLWebRTCImpl::workerStartPlayout()
 // workerOpenPlayout() directly -- see startPlayout().
 void LLWebRTCImpl::workerDeployDevices()
 {
+    if (mStopping.load()) return;
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
     try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
     {
@@ -842,6 +851,7 @@ void LLWebRTCImpl::workerDeployDevices()
     mSignalingThread->PostTask(
         [this]
         {
+            if (mStopping.load()) return;
             for (auto& connection : mPeerConnections)
             {
                 if (mTuningMode)
@@ -914,11 +924,12 @@ void LLWebRTCImpl::setRenderDevice(const std::string &id)
 
 void LLWebRTCImpl::setVoiceEnabled(bool enable)
 {
+    if (mStopping.load()) return;
     mVoiceEnabled = enable;
     mWorkerThread->PostTask(
         [this, enable]()
         {
-            if (!mDeviceModule)
+            if (mStopping.load() || !mDeviceModule)
             {
                 return;
             }
@@ -944,6 +955,7 @@ void LLWebRTCImpl::setVoiceEnabled(bool enable)
 // updateDevices needs to happen on the worker thread.
 void LLWebRTCImpl::updateDevices()
 {
+    if (mStopping.load()) return;
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
     try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
     {
@@ -1009,9 +1021,12 @@ void LLWebRTCImpl::updateDevices()
     // Flag the device is no longer being interacted with for the Co-routine in case something goes wrong.
     gWebRTCUpdateDevices = false;
     // </FS:minerjr> [FIRE-36022]
-    for (auto &observer : mVoiceDevicesObserverList)
     {
-        observer->OnDevicesChanged(mPlayoutDeviceList, mRecordingDeviceList);
+        std::lock_guard observerLock(mDevicesObserverMutex);
+        const auto observers=mVoiceDevicesObserverList;
+        for (auto* observer : observers)
+            if (observer && std::find(mVoiceDevicesObserverList.begin(),mVoiceDevicesObserverList.end(),observer)!=mVoiceDevicesObserverList.end())
+                observer->OnDevicesChanged(mPlayoutDeviceList, mRecordingDeviceList);
     }
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
     }
@@ -1051,6 +1066,7 @@ void LLWebRTCImpl::updateDevices()
 
 void LLWebRTCImpl::OnDevicesUpdated()
 {
+    if (mStopping.load()) return;
     // OnDevicesUpdated() is called on macOS CoreAudio's device-change callback
     // thread.  Calling updateDevices() on that thread causes a deadlock.
     mWorkerThread->PostTask([this] { updateDevices(); });
@@ -1059,6 +1075,7 @@ void LLWebRTCImpl::OnDevicesUpdated()
 
 void LLWebRTCImpl::setTuningMode(bool enable)
 {
+    if (mStopping.load()) return;
     mTuningMode = enable;
     if (!mTuningMode
         && !mMute
@@ -1070,6 +1087,7 @@ void LLWebRTCImpl::setTuningMode(bool enable)
     mWorkerThread->PostTask(
         [this]
         {
+            if (mStopping.load() || !mDeviceModule) return;
             mDeviceModule->SetTuning(mTuningMode, mMute);
             if (!mTuningMode)
             {
@@ -1081,6 +1099,7 @@ void LLWebRTCImpl::setTuningMode(bool enable)
             mSignalingThread->PostTask(
                 [this]
                 {
+                    if (mStopping.load()) return;
                     for (auto& connection : mPeerConnections)
                     {
                         if (mTuningMode)
@@ -1099,6 +1118,7 @@ void LLWebRTCImpl::setTuningMode(bool enable)
 
 void LLWebRTCImpl::deployDevices()
 {
+    if (mStopping.load()) return;
     if (0 < mDevicesDeploying.fetch_add(1, std::memory_order_relaxed))
     {
         return;
@@ -1223,6 +1243,7 @@ void LLWebRTCImpl::freePeerConnection(LLWebRTCPeerConnectionInterface* peer_conn
 
 void LLWebRTCImpl::startPlayout()
 {
+    if (mStopping.load()) return;
     // Called when a connection's audio is established.  Only playout is started
     // here: it's gated on there being a connection to render, because running
     // the output device with no engine data is heard as a buzz.  Capture is

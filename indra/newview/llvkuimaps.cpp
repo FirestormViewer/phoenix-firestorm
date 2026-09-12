@@ -75,7 +75,7 @@
 
 #include "llvkuirender.h"
 #include "llvkuiimage.h"
-#include "llvktext.h"
+#include "llvklegacytext.h"
 #include "llvkui2d.h"
 
 // ---------------------------------------------------------------------------

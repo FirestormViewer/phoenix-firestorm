@@ -133,3 +133,9 @@ checks.json
 
 # Local agent/tooling scratch (ffmpeg, helper scripts, etc.)
 .codex-tools/
+
+# Excluded test paths (ignore rules do not suppress already tracked changes).
+/indra/llui/tests/llmarkdown_test.cpp
+/indra/llui/tests/llurlmatch_test.cpp
+/indra/newview/tests/llworldmap_test.cpp
+/indra/newview/tests/llworldmipmap_test.cpp

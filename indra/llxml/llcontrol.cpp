@@ -1126,6 +1126,12 @@ U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_v
         return loadFromFileLegacy(filename, true, TYPE_STRING);
     }
 
+    return loadFromLLSD(settings,filename,set_default_values,save_values,error_when_no_comment);
+}
+
+U32 LLControlGroup::loadFromLLSD(const LLSD& settings,const std::string& filename,
+    bool set_default_values,bool save_values,bool error_when_no_comment)
+{
     U32 validitems = 0;
     bool hidefromsettingseditor = false;
 

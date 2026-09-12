@@ -52,7 +52,7 @@
 #include "llvkcontext.h"
 #include "llvkui2d.h"
 #include "llvkuiimage.h"        // LLVKUIImage registry (GL-free)
-#include "llvktext.h"           // independent FreeType/Vulkan text atlas
+#include "llvklegacytext.h"
 #include "lluiimage.h"          // LLUIImage (regions)
 #include "llvkuirenderinternal.h" // shared walker context for chrome passes
 #include "llvkuiwidgets.h"      // additional per-widget chrome passes

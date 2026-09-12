@@ -22,7 +22,7 @@
 #include "llvkgpufacts.h"
 #include "llvkui2d.h"
 #include "llvkuiimage.h"
-#include "llvktext.h"
+#include "llvklegacytext.h"
 #include "llvkuirender.h"
 #include "llvkuitestscene.h"
 #include "llwindow.h"

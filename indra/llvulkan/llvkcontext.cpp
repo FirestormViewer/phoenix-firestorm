@@ -8,10 +8,13 @@
  */
 
 #include "llvkcontext.h"
+#include <cmath>
+#include <cstring>
 
 #include "llerror.h"
 #include "llformat.h"
 #include "llfile.h"
+#include "llvkglyphupload.h"
 
 #include <algorithm>
 #include <cstring>
@@ -325,13 +328,21 @@ VkSurfaceKHR LLVKContext::createSurface(void* native_window, void* native_instan
 #endif
 }
 
-bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t height, std::string& error)
+VkPresentModeKHR LLVKContext::choosePresentMode(bool synchronized, std::span<const VkPresentModeKHR> available) noexcept
 {
+    if (!synchronized && std::find(available.begin(),available.end(),VK_PRESENT_MODE_IMMEDIATE_KHR) != available.end())
+        return VK_PRESENT_MODE_IMMEDIATE_KHR;
+    return VK_PRESENT_MODE_FIFO_KHR;
+}
+
+bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t height, std::string& error, bool synchronized)
+{
+    error.clear();
     mSurface = surface;
 
     if (mSwapchain != VK_NULL_HANDLE)
     {
-        vkDeviceWaitIdle(mDevice);
+        LL_VK_CHECK(vkDeviceWaitIdle(mDevice), error, "Swapchain retirement failed");
         destroySwapchain();
     }
 
@@ -365,9 +376,11 @@ bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t
 
     // Present modes supported on this surface.
     uint32_t pm_count = 0;
-    vkGetPhysicalDeviceSurfacePresentModesKHR(mPhysicalDevice, surface, &pm_count, nullptr);
+    LL_VK_CHECK(vkGetPhysicalDeviceSurfacePresentModesKHR(mPhysicalDevice, surface, &pm_count, nullptr), error, "Present-mode count query failed");
+    if (!pm_count) { error = "Selected surface has no presentation modes"; return false; }
     std::vector<VkPresentModeKHR> pmodes(pm_count);
-    if (pm_count) vkGetPhysicalDeviceSurfacePresentModesKHR(mPhysicalDevice, surface, &pm_count, pmodes.data());
+    LL_VK_CHECK(vkGetPhysicalDeviceSurfacePresentModesKHR(mPhysicalDevice, surface, &pm_count, pmodes.data()), error, "Present-mode query failed");
+    pmodes.resize(pm_count);
     std::string pm_list;
     for (auto m : pmodes) { pm_list += " " + std::to_string((int)m); }
     LL_INFOS("Vulkan") << "Present modes (" << pm_count << "):" << pm_list << LL_ENDL;
@@ -378,8 +391,9 @@ bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t
     LL_INFOS("Vulkan") << "Queue families: graphics=" << mGraphicsQueueFamily << " present=" << mPresentQueueFamily
                        << " presentSupportedOnSurface=" << (present_ok ? "yes" : "no") << LL_ENDL;
 
-    // Present mode: FIFO (vsync) is guaranteed; use it for Phase 1.
-    VkPresentModeKHR present_mode = VK_PRESENT_MODE_FIFO_KHR;
+    const auto present_mode = choosePresentMode(synchronized,pmodes);
+    if (!synchronized && present_mode == VK_PRESENT_MODE_FIFO_KHR)
+        LL_WARNS("Vulkan") << "Unsynchronized presentation unavailable on selected surface; using FIFO" << LL_ENDL;
 
     VkExtent2D extent = caps.currentExtent;
     if (extent.width == UINT32_MAX)
@@ -432,6 +446,8 @@ bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t
 
     mSwapchainFormat = chosen_format.format;
     mSwapchainExtent = extent;
+    mPresentMode = present_mode;
+    mSynchronizedPresentation = synchronized;
 
     uint32_t actual_count = 0;
     vkGetSwapchainImagesKHR(mDevice, mSwapchain, &actual_count, nullptr);
@@ -786,7 +802,8 @@ void LLVKContext::destroy()
 {
     if (mDevice != VK_NULL_HANDLE)
     {
-        vkDeviceWaitIdle(mDevice);
+        const auto result = vkDeviceWaitIdle(mDevice);
+        if (result != VK_SUCCESS && result != VK_ERROR_DEVICE_LOST) std::terminate();
     }
 
     destroySwapchain();
@@ -803,6 +820,7 @@ void LLVKContext::destroy()
     for (uint32_t i = 0; i < kFramesInFlight; ++i)
     {
         FrameSync& f = mFrames[i];
+        if (f.vertices != VK_NULL_HANDLE) vmaDestroyBuffer(mAllocator, f.vertices, f.vertexAllocation);
         if (mDevice != VK_NULL_HANDLE)
         {
             if (f.imageAvailable != VK_NULL_HANDLE) vkDestroySemaphore(mDevice, f.imageAvailable, nullptr);
@@ -878,6 +896,7 @@ bool LLVKContext::create2DPipeline(std::string& error)
     // (Re)create the graphics pipelines against the current swapchain format.
     for (int i = 0; i < (int)Blend2D::Count; ++i)
     {
+        if (mMaskPipeline2D[i] != VK_NULL_HANDLE) { vkDestroyPipeline(mDevice,mMaskPipeline2D[i],nullptr); mMaskPipeline2D[i] = VK_NULL_HANDLE; }
         for (int t = 0; t < 2; ++t)
         {
             if (mPipeline2D[i][t] != VK_NULL_HANDLE) { vkDestroyPipeline(mDevice, mPipeline2D[i][t], nullptr); mPipeline2D[i][t] = VK_NULL_HANDLE; }
@@ -937,7 +956,7 @@ bool LLVKContext::create2DPipeline(std::string& error)
         bind0.binding = 0;
         bind0.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         bind0.descriptorCount = 1;
-        bind0.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        bind0.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_COMPUTE_BIT;
         VkDescriptorSetLayoutCreateInfo dli{};
         dli.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
         dli.bindingCount = 1;
@@ -1103,6 +1122,13 @@ bool LLVKContext::create2DPipeline(std::string& error)
             gp.pInputAssemblyState = &ia;
             LL_VK_CHECK(vkCreateGraphicsPipelines(mDevice, VK_NULL_HANDLE, 1, &gp, nullptr, &mPipeline2D[b][topo]), error, "vkCreateGraphicsPipelines (2D) failed");
         }
+        const VkBool32 maskEnabled = VK_TRUE;
+        const VkSpecializationMapEntry maskEntry{0,0,sizeof(maskEnabled)};
+        const VkSpecializationInfo maskInfo{1,&maskEntry,sizeof(maskEnabled),&maskEnabled};
+        stages[1].pSpecializationInfo = &maskInfo;
+        ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        LL_VK_CHECK(vkCreateGraphicsPipelines(mDevice,VK_NULL_HANDLE,1,&gp,nullptr,&mMaskPipeline2D[b]),error,"Native UI alpha-mask pipeline failed");
+        stages[1].pSpecializationInfo = nullptr;
     }
 
     // 1x1 white texture bound for solid (untextured) quads so the fragment
@@ -1129,6 +1155,7 @@ void LLVKContext::destroy2DPipeline()
     if (mSampler2DLinear != VK_NULL_HANDLE) { vkDestroySampler(mDevice, mSampler2DLinear, nullptr); mSampler2DLinear = VK_NULL_HANDLE; }
     for (int i = 0; i < (int)Blend2D::Count; ++i)
     {
+        if (mMaskPipeline2D[i] != VK_NULL_HANDLE) { vkDestroyPipeline(mDevice,mMaskPipeline2D[i],nullptr); mMaskPipeline2D[i] = VK_NULL_HANDLE; }
         for (int t = 0; t < 2; ++t)
         {
             if (mPipeline2D[i][t] != VK_NULL_HANDLE) { vkDestroyPipeline(mDevice, mPipeline2D[i][t], nullptr); mPipeline2D[i][t] = VK_NULL_HANDLE; }
@@ -1141,7 +1168,20 @@ void LLVKContext::destroy2DPipeline()
 
 VkCommandBuffer LLVKContext::begin2DFrame(float clear_r, float clear_g, float clear_b, float clear_a)
 {
-    if (mDevice == VK_NULL_HANDLE || mSwapchain == VK_NULL_HANDLE || mPipeline2D[(int)Blend2D::Alpha][0] == VK_NULL_HANDLE) return VK_NULL_HANDLE;
+    if (mFrameResult == FrameResult::Fatal) return VK_NULL_HANDLE;
+    mFrameError.clear();
+    mFrameResult = FrameResult::Unavailable;
+    if (mFrameActive)
+    {
+        mFrameResult = FrameResult::Fatal;
+        mFrameError = "A native Vulkan frame is already active";
+        return VK_NULL_HANDLE;
+    }
+    if (mDevice == VK_NULL_HANDLE || mSwapchain == VK_NULL_HANDLE || mPipeline2D[(int)Blend2D::Alpha][0] == VK_NULL_HANDLE)
+    {
+        mFrameError = "Native Vulkan frame resources are unavailable";
+        return VK_NULL_HANDLE;
+    }
 
     // Degenerate extent (window not yet sized / minimized): nothing valid to
     // render into; skip the frame. Avoids the VUID renderArea>0 violation.
@@ -1151,19 +1191,31 @@ VkCommandBuffer LLVKContext::begin2DFrame(float clear_r, float clear_g, float cl
     }
 
     FrameSync& f = mFrames[mFrameIndex];
-    vkWaitForFences(mDevice, 1, &f.inFlight, VK_TRUE, UINT64_MAX);
+    const auto failed = [&](VkResult result, const char* operation)
+    {
+        if (result == VK_SUCCESS) return false;
+        mFrameResult = FrameResult::Fatal;
+        mFrameError = std::string(operation) + " failed with VkResult " + std::to_string(result);
+        return true;
+    };
+    if (failed(vkWaitForFences(mDevice, 1, &f.inFlight, VK_TRUE, UINT64_MAX), "Frame fence wait")) return VK_NULL_HANDLE;
+    f.images.clear();
 
     VkResult acquire = vkAcquireNextImageKHR(mDevice, mSwapchain, UINT64_MAX, f.imageAvailable, VK_NULL_HANDLE, &mAcquiredImageIndex);
-    if (acquire == VK_ERROR_OUT_OF_DATE_KHR) return VK_NULL_HANDLE; // caller recreates swapchain
-    if (acquire != VK_SUCCESS && acquire != VK_SUBOPTIMAL_KHR) return VK_NULL_HANDLE;
+    if (acquire == VK_ERROR_OUT_OF_DATE_KHR)
+    {
+        mFrameResult = FrameResult::OutOfDate;
+        mFrameError = "Native Vulkan swapchain requires recreation";
+        return VK_NULL_HANDLE;
+    }
+    if (acquire != VK_SUBOPTIMAL_KHR && failed(acquire, "Swapchain acquire")) return VK_NULL_HANDLE;
 
-    vkResetFences(mDevice, 1, &f.inFlight);
-    vkResetCommandBuffer(f.cmd, 0);
+    if (failed(vkResetCommandBuffer(f.cmd, 0), "Frame command-buffer reset")) return VK_NULL_HANDLE;
 
     VkCommandBufferBeginInfo begin{};
     begin.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-    vkBeginCommandBuffer(f.cmd, &begin);
+    if (failed(vkBeginCommandBuffer(f.cmd, &begin), "Frame command-buffer begin")) return VK_NULL_HANDLE;
 
     // UNDEFINED -> COLOR_ATTACHMENT_OPTIMAL.
     VkImageMemoryBarrier to_attach{};
@@ -1212,12 +1264,14 @@ VkCommandBuffer LLVKContext::begin2DFrame(float clear_r, float clear_g, float cl
 
     vkCmdBindPipeline(f.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, mPipeline2D[(int)Blend2D::Alpha][0]);
     mFrameActive = true;
+    mPacketRecorded = false;
+    mFrameResult = acquire == VK_SUBOPTIMAL_KHR ? FrameResult::OutOfDate : FrameResult::Ready;
     return f.cmd;
 }
 
 bool LLVKContext::end2DFrame()
 {
-    if (!mFrameActive) return false;
+    if (mFrameResult == FrameResult::Fatal || !mFrameActive) return false;
     FrameSync& f = mFrames[mFrameIndex];
 
     vkCmdEndRendering(f.cmd);
@@ -1236,7 +1290,15 @@ bool LLVKContext::end2DFrame()
     to_present.dstAccessMask = 0;
     vkCmdPipelineBarrier(f.cmd, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 1, &to_present);
 
-    vkEndCommandBuffer(f.cmd);
+    const auto failed = [&](VkResult result, const char* operation)
+    {
+        if (result == VK_SUCCESS) return false;
+        mFrameActive = false;
+        mFrameResult = FrameResult::Fatal;
+        mFrameError = std::string(operation) + " failed with VkResult " + std::to_string(result);
+        return true;
+    };
+    if (failed(vkEndCommandBuffer(f.cmd), "Frame command-buffer end")) return false;
 
     VkSemaphore present_sem = mImagePresentSem[mAcquiredImageIndex];
     VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
@@ -1249,11 +1311,8 @@ bool LLVKContext::end2DFrame()
     submit.pCommandBuffers = &f.cmd;
     submit.signalSemaphoreCount = 1;
     submit.pSignalSemaphores = &present_sem;
-    if (vkQueueSubmit(mGraphicsQueue, 1, &submit, f.inFlight) != VK_SUCCESS)
-    {
-        mFrameActive = false;
-        return false;
-    }
+    if (failed(vkResetFences(mDevice, 1, &f.inFlight), "Frame fence reset")) return false;
+    if (failed(vkQueueSubmit(mGraphicsQueue, 1, &submit, f.inFlight), "Frame queue submission")) return false;
 
     VkPresentInfoKHR present{};
     present.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -1267,7 +1326,94 @@ bool LLVKContext::end2DFrame()
     mLastPresentedImageIndex = mAcquiredImageIndex;
     mFrameActive = false;
     mFrameIndex = (mFrameIndex + 1) % kFramesInFlight;
+    if (pres == VK_ERROR_OUT_OF_DATE_KHR || pres == VK_SUBOPTIMAL_KHR)
+    {
+        mFrameResult = FrameResult::OutOfDate;
+        mFrameError = "Native Vulkan presentation requires swapchain recreation";
+        return pres == VK_SUBOPTIMAL_KHR;
+    }
+    if (failed(pres, "Swapchain presentation")) return false;
     return (pres == VK_SUCCESS || pres == VK_SUBOPTIMAL_KHR);
+}
+
+bool LLVKContext::recordUiPacket(std::span<const UiVertex> vertices, std::span<const UiDraw> draws)
+{
+    static_assert(sizeof(UiVertex) == 8*sizeof(float));
+    const auto fail = [&](const char* message)
+    {
+        mFrameResult = FrameResult::Fatal;
+        mFrameError = message;
+        return false;
+    };
+    if (mFrameResult == FrameResult::Fatal) return false;
+    if (!mFrameActive || mPacketRecorded) return fail("Native UI packet requires a fresh active frame");
+    if (vertices.size() > 1024*1024 || draws.size() > 65536) return fail("Native UI packet exceeds frame budget");
+    for (const auto& vertex : vertices)
+        for (const float value : {vertex.positionX,vertex.positionY,vertex.textureU,vertex.textureV,
+            vertex.red,vertex.green,vertex.blue,vertex.alpha})
+            if (!std::isfinite(value)) return fail("Native UI vertex contains a nonfinite value");
+    for (const auto& draw : draws)
+    {
+        if (draw.image && (draw.texture != VK_NULL_HANDLE ||
+            !draw.image->compatibleWith(mDevice,mAllocator,mGraphicsQueue,mGraphicsQueueFamily)))
+            return fail("Native UI image requires the same device and queue, without a raw descriptor override");
+        if (draw.firstVertex > vertices.size() || draw.vertexCount > vertices.size()-draw.firstVertex || draw.vertexCount%3 ||
+            static_cast<unsigned>(draw.blend) >= static_cast<unsigned>(Blend2D::Count))
+            return fail("Native UI draw range or blend mode is invalid");
+        if (draw.clip.offset.x < 0 || draw.clip.offset.y < 0 ||
+            uint64_t(draw.clip.offset.x)+draw.clip.extent.width > mSwapchainExtent.width ||
+            uint64_t(draw.clip.offset.y)+draw.clip.extent.height > mSwapchainExtent.height)
+            return fail("Native UI clip exceeds the acquired image");
+    }
+    if (vertices.empty()) { mPacketRecorded = true; return true; }
+    auto& frame = mFrames[mFrameIndex];
+    std::vector<std::shared_ptr<const LLVKGlyphImage>> images;
+    images.reserve(draws.size());
+    for (const auto& draw : draws)
+        if (draw.image && draw.vertexCount && draw.clip.extent.width && draw.clip.extent.height)
+            images.push_back(draw.image);
+    frame.images = std::move(images);
+    const VkDeviceSize bytes = vertices.size_bytes();
+    if (frame.vertexCapacity < bytes)
+    {
+        VkBufferCreateInfo bufferInfo{};
+        bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        bufferInfo.size = bytes;
+        bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+        bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        VmaAllocationCreateInfo allocationInfo{};
+        allocationInfo.usage = VMA_MEMORY_USAGE_AUTO;
+        allocationInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT | VMA_ALLOCATION_CREATE_MAPPED_BIT;
+        VkBuffer buffer = VK_NULL_HANDLE;
+        VmaAllocation allocation = VK_NULL_HANDLE;
+        if (vmaCreateBuffer(mAllocator,&bufferInfo,&allocationInfo,&buffer,&allocation,nullptr) != VK_SUCCESS)
+            return fail("Native UI frame vertex allocation failed");
+        if (frame.vertices != VK_NULL_HANDLE) vmaDestroyBuffer(mAllocator,frame.vertices,frame.vertexAllocation);
+        frame.vertices = buffer;
+        frame.vertexAllocation = allocation;
+        frame.vertexCapacity = bytes;
+    }
+    VmaAllocationInfo mapped{};
+    vmaGetAllocationInfo(mAllocator,frame.vertexAllocation,&mapped);
+    if (!mapped.pMappedData) return fail("Native UI frame vertex mapping is unavailable");
+    std::memcpy(mapped.pMappedData,vertices.data(),vertices.size_bytes());
+    if (vmaFlushAllocation(mAllocator,frame.vertexAllocation,0,bytes) != VK_SUCCESS)
+        return fail("Native UI frame vertex flush failed");
+    const float width = static_cast<float>(mSwapchainExtent.width), height = static_cast<float>(mSwapchainExtent.height);
+    const float projection[16] = {2.f/width,0,0,0, 0,2.f/height,0,0, 0,0,-1,0, -1,-1,0,1};
+    vkCmdPushConstants(frame.cmd,mPipelineLayout2D,VK_SHADER_STAGE_VERTEX_BIT,0,sizeof(projection),projection);
+    const VkDeviceSize offset = 0;
+    vkCmdBindVertexBuffers(frame.cmd,0,1,&frame.vertices,&offset);
+    for (const auto& draw : draws)
+    {
+        if (!draw.vertexCount || !draw.clip.extent.width || !draw.clip.extent.height) continue;
+        vkCmdSetScissor(frame.cmd,0,1,&draw.clip);
+        vkCmdBindPipeline(frame.cmd,VK_PIPELINE_BIND_POINT_GRAPHICS,draw.alphaMask ? mMaskPipeline2D[static_cast<unsigned>(draw.blend)] : pipeline2D(draw.blend));
+        bindTexture2D(frame.cmd,draw.image ? draw.image->descriptor() : draw.texture == VK_NULL_HANDLE ? whiteTextureDescriptor() : draw.texture);
+        vkCmdDraw(frame.cmd,draw.vertexCount,1,draw.firstVertex,0);
+    }
+    mPacketRecorded = true;
+    return true;
 }
 
 bool LLVKContext::readbackSwapchain(std::vector<uint8_t>& out_rgba, uint32_t& out_w, uint32_t& out_h)

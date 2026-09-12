@@ -28,7 +28,7 @@
 #include "llvkuirender.h"
 #include "llvkuirenderinternal.h"
 #include "llvkuiimage.h"
-#include "llvktext.h"
+#include "llvklegacytext.h"
 
 #include "llview.h"
 #include "llprogressbar.h"

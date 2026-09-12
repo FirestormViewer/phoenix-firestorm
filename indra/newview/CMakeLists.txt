@@ -2316,7 +2316,7 @@ if (WINDOWS)
     set_target_properties(${VIEWER_BINARY_NAME}
         PROPERTIES
         # *TODO -reenable this once we get server usage sorted out
-        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /LARGEADDRESSAWARE /NOEXP /NOIMPLIB /DELAYLOAD:opengl32.dll /DELAYLOAD:glu32.dll delayimp.lib" # <VulkanStorm> delay-load GL so selectGLBackend() can redirect opengl32 to Mesa Zink before first import
+        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /LARGEADDRESSAWARE /NOEXP /NOIMPLIB /DELAYLOAD:opengl32.dll /DELAYLOAD:glu32.dll /DELAYLOAD:libcef.dll delayimp.lib" # <VulkanStorm> delay-load GL so selectGLBackend() can redirect opengl32 to Mesa Zink before first import
         LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO /LARGEADDRESSAWARE /NOEXP /NOIMPLIB"
         LINK_FLAGS_RELEASE "/FORCE:MULTIPLE /MAP\"secondlife-bin.MAP\" /OPT:REF /LARGEADDRESSAWARE /NOEXP /NOIMPLIB"
         )
@@ -2433,6 +2433,8 @@ if (WINDOWS)
         --viewer_flavor=${ND_VIEWER_FLAVOR}
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
+        ${CMAKE_SOURCE_DIR}/../doc/contributions.txt
+        ${CMAKE_CURRENT_BINARY_DIR}/packages-info.txt
         stage_third_party_libs
         llwebrtc
         ${COPY_INPUT_DEPENDENCIES}
@@ -2660,6 +2662,21 @@ target_link_libraries(${VIEWER_BINARY_NAME}
 
 if (USE_DISCORD)
    target_link_libraries(${VIEWER_BINARY_NAME} ll::discord_sdk )
+endif ()
+
+if (WINDOWS)
+  target_link_libraries(${VIEWER_BINARY_NAME} llvkwindowmgr)
+  add_dependencies(${VIEWER_BINARY_NAME} llvk_ui_shaders)
+  add_custom_command(TARGET ${VIEWER_BINARY_NAME} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "$<TARGET_FILE:llwebrtc>"
+        "$<TARGET_FILE_DIR:${VIEWER_BINARY_NAME}>"
+      COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:${VIEWER_BINARY_NAME}>/shaders/compiled"
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+          "${CMAKE_BINARY_DIR}/llvulkan/compiled_ui/ui2d.vert.spv"
+          "${CMAKE_BINARY_DIR}/llvulkan/compiled_ui/ui2d.frag.spv"
+          "$<TARGET_FILE_DIR:${VIEWER_BINARY_NAME}>/shaders/compiled"
+      VERBATIM)
 endif ()
 
 if (TARGET ll::velopack)

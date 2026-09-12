@@ -48,6 +48,12 @@
 #include "llviewercontrol.h"
 #include "lldxhardware.h"
 #include "llvkprobe.h" // <VulkanStorm> Zink backend requires a Vulkan device
+#include "llvkstartup.h"
+#include "NACLantispam.h"
+#include "llsechandler_basic.h"
+#include "llmachineid.h"
+#include "llsdutil.h"
+#include "fsversionvalues.h"
 
 #include "nvapi/nvapi.h"
 #include "nvapi/NvApiDriverSettings.h"
@@ -518,6 +524,64 @@ void ll_nvapi_init(NvDRSSessionHandle hSession)
 #   define WINMAIN wWinMain
 #endif
 
+extern std::string SafeFileName(std::string filename);
+
+static LLVKProxy::CredentialServices nativeProxyCredentials(const std::filesystem::path& file)
+{
+    const bool identityReady=LLMachineID::init()==0;
+    const auto bytes=file.u8string();
+    const std::string filename(bytes.begin(),bytes.end());
+    LLVKProxy::CredentialServices services;
+    services.load=[filename,identityReady](std::string& error) -> std::optional<LLVKProxy::Credentials>
+    {
+        error.clear();
+        if (!identityReady) { error="Protected credential machine identity is unavailable"; return {}; }
+        try
+        {
+            LLSecAPIBasicHandler handler(filename,"");
+            handler.init();
+            const auto record=handler.getProtectedData("credential","SOCKS5");
+            if (record.isUndefined()) return LLVKProxy::Credentials{};
+            if (!record.isMap() || record["identifier"]["type"].asString()!="SOCKS5" ||
+                record["authenticator"]["type"].asString()!="SOCKS5")
+            { error="Invalid protected SOCKS5 credential record"; return {}; }
+            return LLVKProxy::Credentials{record["identifier"]["username"].asString(),record["authenticator"]["creds"].asString()};
+        }
+        catch (...) { error="Cannot read protected proxy credentials"; return {}; }
+    };
+    services.save=[file,identityReady](const std::optional<LLVKProxy::Credentials>& credentials,std::string& error)
+    {
+        if (!identityReady) { error="Protected credential machine identity is unavailable"; return false; }
+        return LLVKProxy::saveCredentialFile(file,credentials,[](const auto& staged,const auto& value,std::string& problem)
+        {
+            try
+            {
+                const auto bytes=staged.u8string();
+                const std::string filename(bytes.begin(),bytes.end());
+                LLSecAPIBasicHandler handler(filename,"");
+                handler.init();
+                LLSD expected;
+                if (value)
+                {
+                    expected["identifier"]["type"]="SOCKS5";
+                    expected["identifier"]["username"]=value->username;
+                    expected["authenticator"]["type"]="SOCKS5";
+                    expected["authenticator"]["creds"]=value->password;
+                    handler.saveCredential(handler.createCredential("SOCKS5",expected["identifier"],expected["authenticator"]),true);
+                }
+                else handler.deleteCredential(new LLCredential("SOCKS5"));
+                LLSecAPIBasicHandler verification(filename,"");
+                verification.init();
+                if (!llsd_equals(verification.getProtectedData("credential","SOCKS5"),expected))
+                { problem="Protected proxy credentials could not be verified after writing"; return false; }
+                return true;
+            }
+            catch (...) { problem="Cannot write protected proxy credentials"; return false; }
+        },error);
+    };
+    return services;
+}
+
 int APIENTRY WINMAIN(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      PWSTR     pCmdLine,
@@ -533,6 +597,12 @@ int APIENTRY WINMAIN(HINSTANCE hInstance,
         return 0;
     }
 #endif
+
+    if (const auto native = llvkStartup(pCmdLine,APP_NAME + "_x64",
+        std::to_string(LL_VIEWER_VERSION_MAJOR)+"."+std::to_string(LL_VIEWER_VERSION_MINOR)+"."+std::to_string(LL_VIEWER_VERSION_PATCH),
+        gSavedSettings,gSavedPerAccountSettings,gCrashSettings,gWarningSettings,nativeProxyCredentials,
+        [] { NACLAntiSpamRegistry::instance().purgeAllQueues(); },SafeFileName(APP_NAME)+".exec_marker"))
+        return *native;
 
     // Call Tracy first thing to have it allocate memory
     // https://github.com/wolfpld/tracy/issues/196

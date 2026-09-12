@@ -112,10 +112,21 @@ namespace tut
         ensure("timer took too long to expire", iterations_until_expiration <= 10);
     }
 
-/*
     template<> template<>
     void frametimer_object_t::test<4>()
     {
+        set_test_name("stop then reset preserves stopped state");
+
+        LLFrameTimer timer;
+        timer.start();
+        ensure("start enables timer", timer.getStarted());
+        timer.stop();
+        ensure("stop disables timer", !timer.getStarted());
+        timer.reset();
+        ensure("reset does not restart stopped timer", !timer.getStarted());
+        timer.start();
+        ensure("explicit start re-enables timer", timer.getStarted());
+        timer.reset();
+        ensure("reset does not stop running timer", timer.getStarted());
     }
-*/
 }

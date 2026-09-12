@@ -1,447 +1,673 @@
-/**
- * @file llvktext.cpp
- * @brief Independent Vulkan text rasterizer and atlas.
- */
-#include "linden_common.h"
-
 #include "llvktext.h"
 
-#include "llerror.h"
-#include "llmath.h"
-#include "llvkcontext.h"
-#include "llvkui2d.h"
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include FT_MULTIPLE_MASTERS_H
-
 #include <algorithm>
-#include <map>
-#include <memory>
-#include <vector>
+#include <cmath>
+#include <limits>
+#include "llsd.h"
+#include "llstring.h"
+#include "lluri.h"
+#include "lluriparser.h"
+#include <boost/regex.hpp>
 
-namespace
+std::optional<std::vector<LLVKPlainTextLayout::Line>> LLVKPlainTextLayout::plain(std::u32string_view text,
+    LLVKFont& font, const Options& options, std::string& error)
 {
-    constexpr U32 ATLAS_SIZE = 512;
-    constexpr U32 ATLAS_GAP = 1;
-
-    struct Glyph
+    error.clear();
+    if (text.size() > 1024 * 1024 || text.find(U'\0') != std::u32string_view::npos ||
+        options.width < 0 || !std::isfinite(options.spacingMultiple) || options.spacingMultiple < 0.f ||
+        !std::isfinite(options.scaleX) || options.scaleX <= 0.f ||
+        !std::isfinite(options.scaleY) || options.scaleY <= 0.f)
+    { error = "Invalid native plain text layout input"; return std::nullopt; }
+    if (options.alignment != LLVKFont::HorizontalAlign::Left && options.alignment != LLVKFont::HorizontalAlign::Center &&
+        options.alignment != LLVKFont::HorizontalAlign::Right)
+    { error = "Invalid native text alignment"; return std::nullopt; }
+    const double heightValue = std::ceil(font.metrics().ascender/options.scaleY) + std::ceil(font.metrics().descender/options.scaleY);
+    if (!std::isfinite(heightValue) || heightValue < 0 || heightValue > INT32_MAX)
+    { error = "Native text line height overflow"; return std::nullopt; }
+    const auto height = static_cast<std::int32_t>(heightValue);
+    const double stepValue = std::floor(static_cast<float>(height)*options.spacingMultiple + 0.5f) +
+                             double(options.spacingPixels) + options.fontSpacingAdjustment;
+    if (!std::isfinite(stepValue) || stepValue < INT32_MIN || stepValue > INT32_MAX)
+    { error = "Native text line spacing overflow"; return std::nullopt; }
+    const auto step = static_cast<std::int64_t>(stepValue);
+    const auto available = std::int64_t(options.width)-options.horizontalPadding;
+    if (available < INT32_MIN || available > INT32_MAX)
+    { error = "Native text available width overflow"; return std::nullopt; }
+    std::vector<Line> lines;
+    std::size_t begin = 0;
+    std::size_t paragraph = 0;
+    std::int64_t top = 0;
+    auto newline = text.find(U'\n');
+    for (;;)
     {
-        S32 width = 0, height = 0;
-        S32 bearing_x = 0, bearing_y = 0;
-        F32 advance = 0.f;
-        S32 lsb_delta = 0, rsb_delta = 0;
-        U32 glyph_index = 0;
-        F32 u0 = 0.f, v0 = 0.f, u1 = 0.f, v1 = 0.f;
-    };
-
-    struct Font
-    {
-        FT_Face face = nullptr;
-        // <VulkanStorm> Fallback face for glyphs the primary face cannot
-        // rasterize (color-emoji/bitmap fonts like Twitter Color Emoji have no
-        // outline ASCII glyphs). Loaded lazily from the default UI font.
-        FT_Face fallback_face = nullptr;
-        std::string fallback_filename;
-        FT_F26Dot6 fallback_size = 0;
-        // </VulkanStorm>
-        std::map<llwchar, Glyph> glyphs;
-        std::vector<U8> pixels;
-        U32 pen_x = 1, pen_y = 1, row_h = 0;
-        bool dirty = false;
-        LLVKContext::Texture2D texture;
-    };
-
-    LLVKContext* s_context = nullptr;
-    FT_Library s_library = nullptr;
-    std::map<const LLFontGL*, std::unique_ptr<Font>> s_fonts;
-
-    void setWeight(FT_Face face, S32 weight)
-    {
-        if (!face || weight < 0 || !FT_HAS_MULTIPLE_MASTERS(face)) return;
-        FT_MM_Var* mm = nullptr;
-        if (FT_Get_MM_Var(face, &mm) || !mm) return;
-        std::vector<FT_Fixed> coords(mm->num_axis);
-        if (FT_Get_Var_Design_Coordinates(face, mm->num_axis, coords.data()))
+        const auto segmentEnd = newline == std::u32string_view::npos ? text.size() : newline;
+        const auto remaining = segmentEnd-begin;
+        std::size_t count = remaining;
+        if (options.wrap && remaining)
         {
-            for (FT_UInt i = 0; i < mm->num_axis; ++i) coords[i] = mm->axis[i].def;
+            auto fitted = font.fitCharacters(text.substr(begin),static_cast<float>(std::max<std::int64_t>(0,available)),
+                remaining,options.scaleX,LLVKFont::Wrap::WordsWhenPossible,options.tabularNumbers,error);
+            if (!fitted) return std::nullopt;
+            count = std::max<std::size_t>(1,*fitted);
         }
-        for (FT_UInt i = 0; i < mm->num_axis; ++i)
+        auto measured = font.measureRun(text,begin,count,options.scaleX,true,options.tabularNumbers,error);
+        if (!measured) return std::nullopt;
+        const float remainingPixels = static_cast<float>(available)-measured->width;
+        const double widthValue = std::ceil(static_cast<float>(available)-remainingPixels);
+        if (!std::isfinite(widthValue) || widthValue < INT32_MIN || widthValue > INT32_MAX)
+        { error = "Native text line width overflow"; return std::nullopt; }
+        const auto width = static_cast<std::int64_t>(widthValue);
+        std::int64_t left = options.horizontalPadding;
+        if (options.alignment == LLVKFont::HorizontalAlign::Center)
+            left += std::max<std::int64_t>(0,(std::int64_t(options.width)-width-options.horizontalPadding)/2);
+        else if (options.alignment == LLVKFont::HorizontalAlign::Right)
+            left = std::max<std::int64_t>(left,std::int64_t(options.width)-width-1);
+        if (left < INT32_MIN || left > INT32_MAX || left+width < INT32_MIN || left+width > INT32_MAX ||
+            top < INT32_MIN || top > INT32_MAX || top-height < INT32_MIN || top-height > INT32_MAX)
+        { error = "Native text line rectangle overflow"; return std::nullopt; }
+        const bool completeSegment = count == remaining;
+        const auto end = begin+count+(completeSegment ? 1 : 0);
+        lines.push_back({begin,end,paragraph,static_cast<std::int32_t>(left),static_cast<std::int32_t>(top),
+                         static_cast<std::int32_t>(left+width),static_cast<std::int32_t>(top-height)});
+        if (completeSegment && newline == std::u32string_view::npos) break;
+        begin = end;
+        if (completeSegment)
         {
-            if (mm->axis[i].tag == FT_MAKE_TAG('w','g','h','t'))
-                coords[i] = (FT_Fixed)weight << 16;
+            ++paragraph;
+            newline = text.find(U'\n',begin);
         }
-        FT_Set_Var_Design_Coordinates(face, mm->num_axis, coords.data());
-        FT_Done_MM_Var(s_library, mm);
+        top -= step;
     }
-
-    Font* getFont(const LLFontGL* font)
-    {
-        if (!font || !s_library) return nullptr;
-        auto found = s_fonts.find(font);
-        if (found != s_fonts.end()) return found->second.get();
-
-        LLFontGL::VkFaceInfo info;
-        if (!font->getVkFaceInfo(info)) return nullptr;
-        std::unique_ptr<Font> created(new Font());
-        if (FT_New_Face(s_library, info.filename.c_str(), 0, &created->face))
-        {
-            LL_WARNS("Vulkan") << "LLVKText: cannot load " << info.filename << LL_ENDL;
-            return nullptr;
-        }
-        setWeight(created->face, info.weight);
-        FT_Set_Char_Size(created->face, 0, (FT_F26Dot6)ll_round(info.point_size * 64.f),
-                        (FT_UInt)LLFontGL::sHorizDPI, (FT_UInt)LLFontGL::sVertDPI);
-        created->pixels.assign(ATLAS_SIZE * ATLAS_SIZE * 4, 0);
-        Font* result = created.get();
-        s_fonts[font] = std::move(created);
-        // <VulkanStorm> prepare the fallback face (default UI font) so
-        // bitmap/emoji-only fonts can render plain text glyphs. The default
-        // SansSerif face is the same source the working menu text uses.
-        LLFontGL* fallback_gl = LLFontGL::getFontSansSerif();
-        if (fallback_gl && fallback_gl != font)
-        {
-            LLFontGL::VkFaceInfo fb;
-            if (fallback_gl->getVkFaceInfo(fb) && fb.filename != info.filename)
-            {
-                result->fallback_filename = fb.filename;
-                result->fallback_size = (FT_F26Dot6)ll_round(fb.point_size * 64.f);
-            }
-        }
-        // </VulkanStorm>
-        return result;
-    }
-
-    const Glyph* ensureGlyph(Font& font, llwchar ch)
-    {
-        auto old = font.glyphs.find(ch);
-        if (old != font.glyphs.end()) return &old->second;
-        FT_UInt index = FT_Get_Char_Index(font.face, (FT_ULong)ch);
-
-        FT_Int32 load_flags = FT_LOAD_FORCE_AUTOHINT;
-        if (FT_Load_Glyph(font.face, index, load_flags) ||
-            FT_Render_Glyph(font.face->glyph, FT_RENDER_MODE_NORMAL))
-            return nullptr;
-        FT_GlyphSlot slot = font.face->glyph;
-        // The primary face cannot rasterize this glyph (color/bitmap emoji
-        // fonts have no outline ASCII). Fall back to the default UI font face.
-        if (slot->advance.x == 0 && slot->bitmap.width == 0 &&
-            !font.fallback_filename.empty())
-        {
-            if (!font.fallback_face)
-            {
-                if (FT_New_Face(s_library, font.fallback_filename.c_str(), 0,
-                                &font.fallback_face))
-                {
-                    font.fallback_face = nullptr;
-                }
-                else
-                {
-                    FT_Set_Char_Size(font.fallback_face, 0, font.fallback_size,
-                                     (FT_UInt)LLFontGL::sHorizDPI, (FT_UInt)LLFontGL::sVertDPI);
-                }
-            }
-            if (font.fallback_face)
-            {
-                FT_UInt fb_index = FT_Get_Char_Index(font.fallback_face, (FT_ULong)ch);
-                if (FT_Load_Glyph(font.fallback_face, fb_index, FT_LOAD_FORCE_AUTOHINT) ||
-                    FT_Render_Glyph(font.fallback_face->glyph, FT_RENDER_MODE_NORMAL))
-                    return nullptr;
-                slot = font.fallback_face->glyph;
-            }
-            else
-            {
-                return nullptr;
-            }
-        }
-        // </VulkanStorm>
-
-        const U32 width = slot->bitmap.width;
-        const U32 height = slot->bitmap.rows;
-        if (font.pen_x + width + ATLAS_GAP >= ATLAS_SIZE)
-        {
-            font.pen_x = 1;
-            font.pen_y += font.row_h + ATLAS_GAP;
-            font.row_h = 0;
-        }
-        if (font.pen_y + height + ATLAS_GAP >= ATLAS_SIZE)
-        {
-            LL_WARNS("Vulkan") << "LLVKText: atlas full" << LL_ENDL;
-            return nullptr;
-        }
-
-        Glyph glyph;
-        glyph.width = (S32)width;
-        glyph.height = (S32)height;
-        glyph.bearing_x = slot->bitmap_left;
-        glyph.bearing_y = slot->bitmap_top;
-        glyph.advance = (F32)slot->advance.x / 64.f;
-        glyph.lsb_delta = slot->lsb_delta;
-        glyph.rsb_delta = slot->rsb_delta;
-        glyph.glyph_index = index;
-        // <VulkanStorm> trace zero-advance / empty glyphs (dropdown smear).
-        static const bool s_dbg_adv = getenv("VULKANSTORM_ADV_DEBUG") != nullptr;
-        if (s_dbg_adv && (slot->advance.x == 0 || width == 0))
-        {
-            LL_INFOS("Vulkan") << "VKGLYPH ch='" << (char)ch
-                               << "' adv_x=" << slot->advance.x
-                               << " w=" << width << " h=" << height
-                               << " size_metrics.x_ppem=" << font.face->size->metrics.x_ppem
-                               << " face=" << (font.face->family_name ? font.face->family_name : "?") << LL_ENDL;
-        }
-        // </VulkanStorm>
-        glyph.u0 = (F32)font.pen_x / ATLAS_SIZE;
-        glyph.v0 = (F32)font.pen_y / ATLAS_SIZE;
-        glyph.u1 = (F32)(font.pen_x + width) / ATLAS_SIZE;
-        glyph.v1 = (F32)(font.pen_y + height) / ATLAS_SIZE;
-
-        for (U32 row = 0; row < height; ++row)
-        {
-            const U8* src = slot->bitmap.buffer + row * slot->bitmap.pitch;
-            for (U32 col = 0; col < width; ++col)
-            {
-                U8* dst = &font.pixels[((font.pen_y + row) * ATLAS_SIZE + font.pen_x + col) * 4];
-                dst[0] = dst[1] = dst[2] = 255;
-                dst[3] = src[col];
-            }
-        }
-        font.pen_x += width + ATLAS_GAP;
-        font.row_h = llmax(font.row_h, height);
-        font.dirty = true;
-        return &font.glyphs.emplace(ch, glyph).first->second;
-    }
-
-    bool upload(Font& font)
-    {
-        if (!font.dirty) return font.texture.descriptor != VK_NULL_HANDLE;
-        std::string error;
-        if (font.texture.descriptor == VK_NULL_HANDLE)
-        {
-            if (!s_context->createTexture2D(font.pixels.data(), ATLAS_SIZE,
-                                             ATLAS_SIZE, font.texture, error,
-                                             true))
-            {
-                LL_WARNS("Vulkan") << "LLVKText: atlas upload failed: "
-                                    << error << LL_ENDL;
-                return false;
-            }
-        }
-        else if (!s_context->updateTexture2D(font.pixels.data(), ATLAS_SIZE,
-                                              ATLAS_SIZE, font.texture, error))
-        {
-            LL_WARNS("Vulkan") << "LLVKText: atlas update failed: "
-                                << error << LL_ENDL;
-            return false;
-        }
-        font.dirty = false;
-        return true;
-    }
-
-    F32 kern(Font& font, const Glyph* left, const Glyph* right)
-    {
-        if (!left || !right) return 0.f;
-        FT_Vector delta{0, 0};
-        if (FT_HAS_KERNING(font.face))
-            FT_Get_Kerning(font.face, left->glyph_index, right->glyph_index, FT_KERNING_UNFITTED, &delta);
-        F32 result = (F32)delta.x / 64.f;
-        if (left->rsb_delta - right->lsb_delta >= 32) result -= 1.f;
-        else if (left->rsb_delta - right->lsb_delta < -32) result += 1.f;
-        return result;
-    }
-
-    F32 measure(Font& font, const LLWString& text)
-    {
-        F32 x = 0.f;
-        const Glyph* previous = nullptr;
-        for (llwchar ch : text)
-        {
-            const Glyph* glyph = ensureGlyph(font, ch);
-            if (!glyph) continue;
-            if (previous) x += kern(font, previous, glyph);
-            x += glyph->advance;
-            x = (F32)ll_round(x);
-            previous = glyph;
-        }
-        return x;
-    }
-
-    void appendQuad(std::vector<F32>& xy, std::vector<F32>& uv, std::vector<F32>& rgba,
-                    F32 l, F32 t, F32 r, F32 b, const Glyph& g, const LLColor4& color)
-    {
-        const F32 vx[6] = {l,r,r,l,r,l};
-        const F32 vy[6] = {t,t,b,t,b,b};
-        const F32 tu[6] = {g.u0,g.u1,g.u1,g.u0,g.u1,g.u0};
-        const F32 tv[6] = {g.v0,g.v0,g.v1,g.v0,g.v1,g.v1};
-        for (S32 i = 0; i < 6; ++i)
-        {
-            xy.push_back(vx[i]); xy.push_back(vy[i]);
-            uv.push_back(tu[i]); uv.push_back(tv[i]);
-            for (S32 c = 0; c < 4; ++c) rgba.push_back(color.mV[c]);
-        }
-    }
+    return lines;
 }
 
-namespace LLVKText
+std::optional<LLVKPlainTextLayout::Document> LLVKPlainTextLayout::document(std::u32string_view text,
+    LLVKFont& font, const Options& options, std::int32_t height, std::int32_t verticalPadding,
+    LLVKFont::VerticalAlign alignment, std::string& error)
 {
-    void init(LLVKContext* context)
+    error.clear();
+    if (height < 0 || (alignment != LLVKFont::VerticalAlign::Top && alignment != LLVKFont::VerticalAlign::Center &&
+        alignment != LLVKFont::VerticalAlign::Bottom && alignment != LLVKFont::VerticalAlign::Baseline))
+    { error = "Invalid native text document dimensions or alignment"; return std::nullopt; }
+    auto lines = plain(text,font,options,error);
+    if (!lines) return std::nullopt;
+    std::int64_t left = lines->front().left, right = lines->front().right;
+    std::int64_t bottom = lines->front().bottom, top = lines->front().top;
+    for (const auto& line : *lines)
     {
-        if (s_context == context && s_library) return;
-        shutdown();
-        s_context = context;
-        if (FT_Init_FreeType(&s_library))
+        left = std::min<std::int64_t>(left,line.left);
+        right = std::max<std::int64_t>(right,line.right);
+        bottom = std::min<std::int64_t>(bottom,line.bottom);
+        top = std::max<std::int64_t>(top,line.top);
+    }
+    top += verticalPadding;
+    std::int64_t translation = 0;
+    if (alignment == LLVKFont::VerticalAlign::Top) translation = std::max(height-top,-bottom);
+    else if (alignment == LLVKFont::VerticalAlign::Center) translation = (std::max(height-top,-bottom)-bottom)/2;
+    else if (alignment == LLVKFont::VerticalAlign::Bottom) translation = -bottom;
+    bottom += translation;
+    top += translation;
+    auto documentBottom = std::min<std::int64_t>(0,bottom);
+    auto documentTop = std::max<std::int64_t>(height,top-bottom)+documentBottom;
+    if (alignment == LLVKFont::VerticalAlign::Top)
+    {
+        documentBottom += height-documentTop;
+        documentTop = height;
+    }
+    else if (alignment == LLVKFont::VerticalAlign::Center)
+    {
+        const auto shift = (height-documentTop)/2;
+        documentTop += shift;
+        documentBottom += shift;
+    }
+    const auto fitWidth = right-left+2*std::int64_t(options.horizontalPadding)+1;
+    const auto fitHeight = top-bottom+2*std::int64_t(verticalPadding);
+    for (const auto value : {left,right,bottom,top,documentBottom,documentTop,fitWidth,fitHeight})
+        if (value < INT32_MIN || value > INT32_MAX)
+        { error = "Native text document rectangle overflow"; return std::nullopt; }
+    for (auto& line : *lines)
+    {
+        const auto lineTop = line.top+translation;
+        const auto lineBottom = line.bottom+translation;
+        if (lineTop < INT32_MIN || lineTop > INT32_MAX || lineBottom < INT32_MIN || lineBottom > INT32_MAX)
+        { error = "Native text document line translation overflow"; return std::nullopt; }
+        line.top = static_cast<std::int32_t>(lineTop);
+        line.bottom = static_cast<std::int32_t>(lineBottom);
+    }
+    Document result;
+    result.lines = std::move(*lines);
+    result.bounds = {static_cast<std::int32_t>(left),static_cast<std::int32_t>(bottom),
+                     static_cast<std::int32_t>(right),static_cast<std::int32_t>(top)};
+    result.rectangle = {0,static_cast<std::int32_t>(documentBottom),options.width,static_cast<std::int32_t>(documentTop)};
+    result.fitWidth = static_cast<std::int32_t>(fitWidth);
+    result.fitHeight = static_cast<std::int32_t>(fitHeight);
+    return result;
+}
+std::optional<LLVKWebText> LLVKWebText::parse(std::string_view markup, std::string& error)
+{
+    error.clear();
+    if (markup.size() > 65536 || markup.find('\0') != markup.npos)
+    { error = "Native web text exceeds its input budget or contains NUL"; return std::nullopt; }
+    static const boost::regex pattern(
+        "<nolink>.*?</nolink>|\\[(?:https?|ftp|secondlife|hop)://[^\\s]+[ \\t]+[^\\]]+\\]|(?:https?|ftp)://([^\\s/?\\.#]+\\.?)+\\.\\w+(:\\d+)?(/[^\\s]*)?",
+        boost::regex::perl|boost::regex::icase);
+    static const boost::regex webLabel("(?:https?|ftp)://|www\\.",boost::regex::perl|boost::regex::icase);
+    static const std::string allowed = []
+    {
+        std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~!$?&()*+,@:;=/%#";
+        std::sort(chars.begin(),chars.end());
+        return chars;
+    }();
+    LLVKWebText result;
+    const auto append = [&](std::string_view value,const std::string& target = {},bool query = false)
+    {
+        const auto wide = utf8str_to_wstring(std::string(value));
+        const auto begin = result.text.size();
+        result.text.append(wide.begin(),wide.end());
+        if (!target.empty() && begin != result.text.size()) result.links.push_back({begin,result.text.size(),target,query});
+    };
+    const std::string source(markup);
+    auto begin = source.cbegin();
+    const auto end = source.cend();
+    boost::match_results<std::string::const_iterator> match;
+    try
+    {
+        while (boost::regex_search(begin,end,match,pattern))
         {
-            s_library = nullptr;
-            s_context = nullptr;
-            LL_WARNS("Vulkan") << "LLVKText: FreeType initialization failed" << LL_ENDL;
+            if (result.links.size() >= 1024) { error = "Native web text link budget exceeded"; return std::nullopt; }
+            append(std::string(begin,match[0].first));
+            std::string found(match[0].first,match[0].second);
+            begin = match[0].second;
+            if (found.front() == '<') { append(std::string_view(found).substr(8,found.size()-17)); continue; }
+            if (found.front() == '[')
+            {
+                const auto split = found.find_first_of(" \t");
+                const auto labelBegin = found.find_first_not_of(" \t",split);
+                const auto target = LLURI::escape(found.substr(1,split-1),allowed,true);
+                auto label = LLURI::unescape(found.substr(labelBegin,found.size()-labelBegin-1));
+                if (boost::regex_search(label,webLabel)) label = target;
+                append(label,target);
+                continue;
+            }
+            std::string trailing;
+            while (!found.empty() && (found.back()=='.' || found.back()==','))
+            { trailing.insert(trailing.begin(),found.back()); found.pop_back(); }
+            const auto target = LLURI::escape(found,allowed,true);
+            LLUriParser normalized(target);
+            if (!normalized.normalize()) { append(found); append(trailing); continue; }
+            normalized.extractParts();
+            std::string label;
+            normalized.glueFirst(label);
+            LLUriParser original(target);
+            original.extractParts();
+            std::string host;
+            original.glueFirst(host,false);
+            const auto offset = target.find(host);
+            append(LLURI::unescape(label),target);
+            if (offset != std::string::npos) append(LLURI::unescape(target.substr(offset+host.size())),target,true);
+            append(trailing);
+        }
+        append(std::string(begin,end));
+    }
+    catch (const std::runtime_error& exception)
+    { error = "Native web text parsing failed: "+std::string(exception.what()); return std::nullopt; }
+    return result;
+}
+
+std::optional<LLVKStyledTextSegment> LLVKStyledTextSegment::create(const Params& params,
+    std::u32string_view text, std::string& error)
+{
+    error.clear();
+    if (!params.font || text.size() > 1024*1024 || params.begin > text.size() || params.end <= params.begin ||
+        params.end > text.size()+1 || !std::isfinite(params.scaleX) || params.scaleX <= 0 ||
+        !std::isfinite(params.scaleY) || params.scaleY <= 0 ||
+        (params.kind != Kind::Normal && params.kind != Kind::LineBreak && params.kind != Kind::Image && params.kind != Kind::InlineWidget) ||
+        text.find(U'\0') != std::u32string_view::npos)
+    { error = "Invalid native styled text segment"; return std::nullopt; }
+    if (params.kind == Kind::LineBreak &&
+        (params.end != params.begin+1 || params.begin == text.size() || text[params.begin] != U'\n'))
+    { error = "Native line-break segment requires one newline"; return std::nullopt; }
+    if (params.kind == Kind::Image && (params.end != params.begin+1 || params.end > text.size()))
+    { error = "Native image segment requires one placeholder character"; return std::nullopt; }
+    if (params.kind == Kind::InlineWidget)
+    {
+        const auto width = std::int64_t(params.widgetWidth)+params.leftPad+params.rightPad;
+        const auto height = std::int64_t(params.widgetHeight)+params.bottomPad+params.topPad;
+        if (!params.widget || params.widgetWidth < 0 || params.widgetHeight < 0 ||
+            width < 0 || width > INT32_MAX || height < 0 || height > INT32_MAX || params.end > text.size())
+        { error = "Invalid native inline widget identity, extent or padding"; return std::nullopt; }
+    }
+    const auto& metrics = params.font->metrics();
+    const double height = std::ceil(metrics.ascender/params.scaleY)+std::ceil(metrics.descender/params.scaleY);
+    if (!std::isfinite(height) || height < 0 || height > INT32_MAX)
+    { error = "Native styled text height overflows"; return std::nullopt; }
+    LLVKStyledTextSegment segment;
+    segment.mParams = params;
+    segment.mHeight = static_cast<std::int32_t>(height);
+    return segment;
+}
+
+bool LLVKStyledTextSegment::validRange(std::u32string_view text, std::size_t offset, std::size_t count, std::string& error) const
+{
+    error.clear();
+    if (text.size() > 1024*1024 || mParams.end > text.size()+1 || offset > mParams.end-mParams.begin ||
+        count > mParams.end-mParams.begin-offset || mParams.begin+offset > text.size())
+    { error = "Native styled text range is invalid or stale"; return false; }
+    return true;
+}
+
+std::optional<LLVKStyledTextSegment::Dimensions> LLVKStyledTextSegment::measure(std::u32string_view text,
+    std::size_t offset, std::size_t count, std::string& error) const
+{
+    if (!validRange(text,offset,count,error)) return std::nullopt;
+    if (mParams.kind == Kind::LineBreak) return Dimensions{0.f,mHeight,true};
+    if (mParams.kind == Kind::Image)
+    {
+        if (!count || !mParams.image) return Dimensions{0.f,mHeight,false};
+        return Dimensions{float(mParams.image->width()+3),std::max(mHeight,static_cast<std::int32_t>(mParams.image->height()+3)),false};
+    }
+    if (mParams.kind == Kind::InlineWidget)
+    {
+        if (!offset && !count) return Dimensions{0.f,mParams.forceNewLine ? mHeight : 0,mParams.forceNewLine};
+        return Dimensions{float(std::int64_t(mParams.widgetWidth)+mParams.leftPad+mParams.rightPad),
+            static_cast<std::int32_t>(std::int64_t(mParams.widgetHeight)+mParams.topPad+mParams.bottomPad),false};
+    }
+    if (!count) return Dimensions{};
+    const auto width = mParams.font->measureRun(text,mParams.begin+offset,count,mParams.scaleX,true,mParams.tabularNumbers,error);
+    if (!width) return std::nullopt;
+    return Dimensions{width->width,mHeight,false};
+}
+
+std::optional<std::size_t> LLVKStyledTextSegment::fit(std::u32string_view text, std::int32_t pixels,
+    std::size_t offset, std::size_t lineOffset, std::size_t maximum, std::string& error, std::int64_t lineIndex) const
+{
+    if (!validRange(text,offset,0,error)) return std::nullopt;
+    if (mParams.kind == Kind::LineBreak) return 1;
+    if (mParams.kind == Kind::Image)
+        return !mParams.image || !lineOffset || std::int64_t(pixels) > std::int64_t(mParams.image->width())+3 ? 1 : 0;
+    if (mParams.kind == Kind::InlineWidget)
+    {
+        if (mParams.forceNewLine && !lineIndex) return 0;
+        const auto width = std::int64_t(mParams.widgetWidth)+mParams.leftPad+mParams.rightPad;
+        return lineOffset && pixels < width ? 0 : mParams.end-mParams.begin;
+    }
+    const auto begin = mParams.begin+offset;
+    maximum = std::min(maximum,mParams.end-begin);
+    const auto available = std::max<std::int64_t>(0,std::int64_t(pixels)-(mParams.image ? mParams.image->width() : 0));
+    const auto fitted = mParams.font->fitCharacters(text.substr(begin),static_cast<float>(available),maximum,mParams.scaleX,
+        lineOffset ? LLVKFont::Wrap::WordsOnly : LLVKFont::Wrap::WordsWhenPossible,mParams.tabularNumbers,error);
+    if (!fitted) return std::nullopt;
+    auto count = *fitted;
+    if (!count && !lineOffset && maximum) count = 1;
+    if (begin+count < mParams.end && begin+count >= text.size()) ++count;
+    return count;
+}
+
+std::optional<std::size_t> LLVKStyledTextSegment::hit(std::u32string_view text, std::int32_t pixels,
+    std::size_t offset, std::size_t count, bool nearest, std::string& error) const
+{
+    if (!validRange(text,offset,count,error)) return std::nullopt;
+    if (mParams.kind != Kind::Normal) { error = "Native line-break hit testing requires line placement"; return std::nullopt; }
+    return mParams.font->hitTest(text,mParams.begin+offset,float(pixels),std::numeric_limits<float>::max()/mParams.scaleX,
+        count,mParams.scaleX,nearest,mParams.tabularNumbers,error);
+}
+
+std::optional<std::vector<LLVKPlainTextLayout::Line>> LLVKStyledTextSegment::reflow(std::u32string_view text,
+    std::span<const LLVKStyledTextSegment> segments, const LLVKPlainTextLayout::Options& options, std::string& error)
+{
+    error.clear();
+    if (text.size() > 1024*1024 || segments.empty() || segments.size() > 10000 || options.width < 0 ||
+        !std::isfinite(options.spacingMultiple) || options.spacingMultiple < 0.f ||
+        (options.alignment != LLVKFont::HorizontalAlign::Left && options.alignment != LLVKFont::HorizontalAlign::Center &&
+         options.alignment != LLVKFont::HorizontalAlign::Right))
+    { error = "Invalid native styled reflow inputs"; return std::nullopt; }
+    std::size_t covered = 0;
+    for (const auto& segment : segments)
+    {
+        if (segment.mParams.begin != covered || !segment.validRange(text,0,segment.mParams.end-segment.mParams.begin,error))
+        { error = "Native styled segments must cover text contiguously"; return std::nullopt; }
+        covered = segment.mParams.end;
+    }
+    if (covered != text.size()+1 || segments.back().mParams.kind != Kind::Normal)
+    { error = "Native styled document requires a terminal normal EOF segment"; return std::nullopt; }
+    const auto availableValue = std::int64_t(options.width)-options.horizontalPadding;
+    if (availableValue < INT32_MIN || availableValue > INT32_MAX)
+    { error = "Native styled reflow width overflows"; return std::nullopt; }
+    const float available = static_cast<float>(availableValue);
+    float remaining = available;
+    std::int64_t top = 0, paragraph = 0, segmentLine = 1;
+    std::int32_t height = 0;
+    std::size_t segmentIndex = 0, offset = 0, lineBegin = 0, iterations = 0;
+    std::vector<LLVKPlainTextLayout::Line> lines;
+    while (segmentIndex < segments.size())
+    {
+        if (++iterations > 4*(text.size()+segments.size()+1))
+        { error = "Native styled reflow failed to make bounded progress"; return std::nullopt; }
+        const auto& segment = segments[segmentIndex];
+        const auto current = segment.mParams.begin+offset;
+        const double rounded = options.wrap ? std::max(0.0,std::floor(double(remaining)+0.5)) : double(INT32_MAX);
+        if (!std::isfinite(rounded) || rounded > INT32_MAX)
+        { error = "Native styled reflow remaining width overflows"; return std::nullopt; }
+        const auto count = segment.fit(text,static_cast<std::int32_t>(rounded),offset,current-lineBegin,
+            segment.mParams.end-current,error,paragraph-segmentLine);
+        if (!count) return std::nullopt;
+        const auto dimensions = segment.measure(text,offset,*count,error);
+        if (!dimensions) return std::nullopt;
+        height = std::max(height,dimensions->height);
+        remaining -= dimensions->width;
+        offset += *count;
+        const auto end = segment.mParams.begin+offset;
+        const bool partial = end < segment.mParams.end;
+        const bool last = segmentIndex+1 == segments.size();
+        if (partial || last || dimensions->lineBreak)
+        {
+            const double measured = std::ceil(available-remaining);
+            if (!std::isfinite(measured) || measured < 0 || measured > INT32_MAX)
+            { error = "Native styled line width overflows"; return std::nullopt; }
+            const auto width = static_cast<std::int64_t>(measured);
+            std::int64_t left = options.horizontalPadding;
+            if (options.alignment == LLVKFont::HorizontalAlign::Center)
+                left += std::max<std::int64_t>(0,(std::int64_t(options.width)-width-options.horizontalPadding)/2);
+            else if (options.alignment == LLVKFont::HorizontalAlign::Right)
+                left = std::max<std::int64_t>(left,std::int64_t(options.width)-width-1);
+            for (const auto coordinate : {left,left+width,top,top-height})
+                if (coordinate < INT32_MIN || coordinate > INT32_MAX)
+                { error = "Native styled line rectangle overflows"; return std::nullopt; }
+            lines.push_back({lineBegin,end,static_cast<std::size_t>(paragraph),static_cast<std::int32_t>(left),
+                static_cast<std::int32_t>(top),static_cast<std::int32_t>(left+width),static_cast<std::int32_t>(top-height)});
+            if (!partial && last) break;
+            lineBegin = end;
+            const double step = std::floor(float(height)*options.spacingMultiple+0.5f)+
+                double(options.spacingPixels)+options.fontSpacingAdjustment;
+            if (!std::isfinite(step) || step < INT32_MIN || step > INT32_MAX)
+            { error = "Native styled line step overflows"; return std::nullopt; }
+            top -= static_cast<std::int64_t>(step);
+            remaining = available;
+            height = 0;
+        }
+        if (!partial)
+        {
+            ++segmentIndex;
+            offset = 0;
+            segmentLine = dimensions->lineBreak ? paragraph+1 : paragraph;
+        }
+        if (dimensions->lineBreak) ++paragraph;
+    }
+    return lines;
+}
+
+std::optional<LLVKStyledTextDocument> LLVKStyledTextDocument::create(std::u32string text,
+    LLVKStyledTextSegment::Params defaults, std::string& error)
+{
+    error.clear();
+    if (text.size() > 1024*1024 || std::any_of(text.begin(),text.end(),[](char32_t character)
+        { return !character || character > 0x10ffff || (character >= 0xd800 && character <= 0xdfff); }))
+    { error = "Native styled document requires bounded Unicode scalar text"; return std::nullopt; }
+    LLVKStyledTextDocument document;
+    document.mText = std::move(text);
+    document.mDefaults = std::move(defaults);
+    if (!document.resetSegments(error)) return std::nullopt;
+    return document;
+}
+
+bool LLVKStyledTextDocument::resetSegments(std::string& error)
+{
+    auto defaults = mDefaults;
+    defaults.begin = 0;
+    defaults.end = mText.size()+1;
+    defaults.kind = LLVKStyledTextSegment::Kind::Normal;
+    const auto segment = LLVKStyledTextSegment::create(defaults,mText,error);
+    if (!segment) return false;
+    std::vector<LLVKStyledTextSegment> segments{*segment};
+    mSegments = std::move(segments);
+    mLines.reset();
+    mReflowIndex = 0;
+    return true;
+}
+
+bool LLVKStyledTextDocument::overlay(const LLVKStyledTextSegment::Params& params, std::string& error)
+{
+    error.clear();
+    const auto incoming = LLVKStyledTextSegment::create(params,mText,error);
+    if (!incoming) return false;
+    if (params.kind != LLVKStyledTextSegment::Kind::Normal && params.end > mText.size())
+    { error = "Native special segment cannot replace EOF"; return false; }
+    std::vector<LLVKStyledTextSegment> segments;
+    segments.reserve(mSegments.size()+2);
+    bool inserted = false;
+    auto reflow = params.begin;
+    const auto append = [&](const LLVKStyledTextSegment::Params& value)
+    {
+        auto segment = LLVKStyledTextSegment::create(value,mText,error);
+        if (!segment) return false;
+        segments.push_back(std::move(*segment));
+        return true;
+    };
+    for (const auto& current : mSegments)
+    {
+        const auto& range = current.params();
+        if (range.end <= params.begin || range.begin >= params.end)
+        {
+            if (!inserted && range.begin >= params.end) { segments.push_back(*incoming); inserted = true; }
+            segments.push_back(current);
+            continue;
+        }
+        reflow = std::min(reflow,range.begin);
+        if (range.begin < params.begin)
+        {
+            auto prefix = range;
+            prefix.end = params.begin;
+            if (!append(prefix)) return false;
+        }
+        if (!inserted) { segments.push_back(*incoming); inserted = true; }
+        if (range.end > params.end)
+        {
+            auto suffix = range;
+            suffix.begin = params.end;
+            if (range.begin < params.begin) suffix.kind = LLVKStyledTextSegment::Kind::Normal;
+            if (!append(suffix)) return false;
         }
     }
+    if (!inserted || segments.size() > 10000)
+    { error = "Native segment overlay exceeds document coverage or segment budget"; return false; }
+    mSegments = std::move(segments);
+    mLines.reset();
+    mReflowIndex = std::min(mReflowIndex.value_or(reflow),reflow);
+    return true;
+}
 
-    void shutdown()
+std::optional<std::size_t> LLVKStyledTextDocument::editableSegment(std::size_t index) const
+{
+    if (index > mText.size()) return std::nullopt;
+    const auto found = std::upper_bound(mSegments.begin(),mSegments.end(),index,
+        [](std::size_t position,const auto& segment) { return position < segment.params().end; });
+    if (found == mSegments.end()) return std::nullopt;
+    const auto offset = static_cast<std::size_t>(found-mSegments.begin());
+    if (!found->editable() && found->params().begin == index && offset && mSegments[offset-1].editable()) return offset-1;
+    return offset;
+}
+
+std::size_t LLVKStyledTextDocument::editableIndex(std::size_t index, bool forward) const
+{
+    if (index > mText.size()) return 0;
+    const auto found = std::upper_bound(mSegments.begin(),mSegments.end(),index,
+        [](std::size_t position,const auto& segment) { return position < segment.params().end; });
+    if (found == mSegments.end()) return 0;
+    const auto& params = found->params();
+    if (!found->editable() && params.begin < index && index < params.end) return forward ? params.end : params.begin;
+    return index;
+}
+
+bool LLVKStyledTextDocument::reflow(const LLVKPlainTextLayout::Options& options, std::string& error)
+{
+    auto lines = LLVKStyledTextSegment::reflow(mText,mSegments,options,error);
+    if (!lines) return false;
+    mLines = std::move(lines);
+    mReflowIndex.reset();
+    return true;
+}
+
+bool LLVKStyledTextDocument::publishEdit(std::u32string text, const std::vector<LLVKStyledTextSegment::Params>& params,
+    std::size_t position, std::string& error)
+{
+    if (params.empty() || params.size() > 10000) { error = "Native edited segment count is invalid"; return false; }
+    std::vector<LLVKStyledTextSegment> segments;
+    segments.reserve(params.size());
+    std::size_t covered = 0;
+    for (const auto& input : params)
     {
-        if (s_context)
+        if (input.begin != covered) { error = "Native edited segments are not contiguous"; return false; }
+        auto segment = LLVKStyledTextSegment::create(input,text,error);
+        if (!segment) return false;
+        covered = input.end;
+        segments.push_back(std::move(*segment));
+    }
+    if (covered != text.size()+1 || params.back().kind != LLVKStyledTextSegment::Kind::Normal)
+    { error = "Native edited segments lost EOF coverage"; return false; }
+    mText = std::move(text);
+    mSegments = std::move(segments);
+    mLines.reset();
+    mReflowIndex = std::min(mReflowIndex.value_or(position),position);
+    return true;
+}
+
+std::optional<LLVKStyledTextDocument::Edit> LLVKStyledTextDocument::insert(std::size_t position,
+    std::u32string_view inserted, std::string& error)
+{
+    error.clear();
+    if (inserted.size() > 1024*1024-mText.size() || std::any_of(inserted.begin(),inserted.end(),[](char32_t character)
+        { return !character || character > 0x10ffff || (character >= 0xd800 && character <= 0xdfff); }))
+    { error = "Native styled insertion exceeds scalar budget or contains invalid text"; return std::nullopt; }
+    position = editableIndex(std::min(position,mText.size()),true);
+    const auto containing = editableSegment(position);
+    if (!containing) { error = "Native styled insertion has no containing segment"; return std::nullopt; }
+    if (inserted.empty()) return Edit{position,0,0};
+    auto text = mText;
+    text.insert(position,inserted);
+    std::vector<LLVKStyledTextSegment::Params> segments;
+    segments.reserve(mSegments.size()+1);
+    for (std::size_t index = 0; index < mSegments.size(); ++index)
+    {
+        auto params = mSegments[index].params();
+        if (index == *containing)
         {
-            for (auto& pair : s_fonts)
+            if (mSegments[index].editable()) params.end += inserted.size();
+            else
             {
-                Font& font = *pair.second;
-                s_context->destroyTexture2D(font.texture);
+                auto defaults = mDefaults;
+                defaults.kind = LLVKStyledTextSegment::Kind::Normal;
+                defaults.begin = position;
+                defaults.end = position+inserted.size();
+                segments.push_back(std::move(defaults));
+                params.begin += inserted.size();
+                params.end += inserted.size();
             }
         }
-        for (auto& pair : s_fonts)
+        else if (index > *containing)
         {
-            if (pair.second->face) FT_Done_Face(pair.second->face);
-            if (pair.second->fallback_face) FT_Done_Face(pair.second->fallback_face); // <VulkanStorm/>
+            params.begin += inserted.size();
+            params.end += inserted.size();
         }
-        s_fonts.clear();
-        if (s_library) FT_Done_FreeType(s_library);
-        s_library = nullptr;
-        s_context = nullptr;
+        segments.push_back(std::move(params));
     }
+    if (!publishEdit(std::move(text),segments,position,error)) return std::nullopt;
+    return Edit{position,0,inserted.size()};
+}
 
-    bool ready() { return s_context && s_library; }
-
-    void prepare(const LLFontGL* fontp, const LLWString& text)
+std::optional<LLVKStyledTextDocument::Edit> LLVKStyledTextDocument::erase(std::size_t position,
+    std::size_t count, std::string& error)
+{
+    error.clear();
+    if (position >= mText.size() || !count) return Edit{std::min(position,mText.size()),0,0};
+    count = std::min(count,mText.size()-position);
+    const auto end = position+count;
+    auto text = mText;
+    text.erase(position,count);
+    std::vector<LLVKStyledTextSegment::Params> segments;
+    segments.reserve(mSegments.size());
+    for (const auto& segment : mSegments)
     {
-        if (!ready() || !fontp || text.empty() || !LLFontGL::sDisplayFont)
-            return;
-        Font* font = getFont(fontp);
-        if (!font) return;
-        measure(*font, text);
+        auto params = segment.params();
+        if (params.end <= position) { segments.push_back(std::move(params)); continue; }
+        if (params.begin < position) params.end = params.end > end ? params.end-count : position;
+        else if (params.begin < end)
+        {
+            if (params.end <= end) continue;
+            params.begin = position;
+            params.end -= count;
+        }
+        else
+        {
+            params.begin -= count;
+            params.end -= count;
+        }
+        segments.push_back(std::move(params));
     }
+    if (!publishEdit(std::move(text),segments,position,error)) return std::nullopt;
+    return Edit{position,count,0};
+}
 
-    void flushPrepared()
+std::optional<bool> LLVKStyledTextDocument::truncate(std::size_t maximumBytes, std::string& error)
+{
+    error.clear();
+    std::size_t bytes = 0, characters = 0;
+    for (const auto character : mText)
     {
-        if (!ready()) return;
-        for (auto& pair : s_fonts)
-        {
-            Font& font = *pair.second;
-            if (font.dirty) upload(font);
-        }
+        const std::size_t length = character <= 0x7f ? 1 : character <= 0x7ff ? 2 : character <= 0xffff ? 3 : 4;
+        if (length > maximumBytes-bytes) break;
+        bytes += length;
+        ++characters;
     }
+    if (characters == mText.size()) return false;
+    if (!erase(characters,mText.size()-characters,error)) return std::nullopt;
+    return true;
+}
 
-    // <VulkanStorm>
-    S32 debugGlyphCount(const LLFontGL* fontp)
+bool LLVKStyledTextDocument::appendPlain(std::u32string_view appended, const LLVKStyledTextSegment::Params& style,
+    bool prependNewline, std::string& error)
+{
+    error.clear();
+    if (appended.empty()) return true;
+    const auto extra = prependNewline ? 1u : 0u;
+    if (appended.size() > 1024*1024-mText.size() || extra > 1024*1024-mText.size()-appended.size() ||
+        std::any_of(appended.begin(),appended.end(),[](char32_t character)
+        { return !character || character > 0x10ffff || (character >= 0xd800 && character <= 0xdfff); }))
+    { error = "Native styled append exceeds scalar budget or contains invalid text"; return false; }
+    auto text = mText;
+    if (prependNewline) text.push_back(U'\n');
+    text.append(appended);
+    std::vector<LLVKStyledTextSegment::Params> segments;
+    segments.reserve(std::min<std::size_t>(10000,mSegments.size()+8));
+    for (const auto& segment : mSegments)
     {
-        if (!ready() || !fontp) return -1;
-        auto found = s_fonts.find(fontp);
-        if (found == s_fonts.end()) return -1;
-        return (S32)found->second->glyphs.size();
+        auto params = segment.params();
+        params.end = std::min(params.end,mText.size());
+        if (params.begin < params.end) segments.push_back(std::move(params));
     }
-
-    F32 debugMeasureAdvance(const LLFontGL* fontp, const LLWString& text)
+    std::size_t begin = mText.size();
+    while (begin < text.size())
     {
-        if (!ready() || !fontp) return -1.f;
-        Font* font = getFont(fontp);
-        if (!font) return -1.f;
-        return measure(*font, text);
+        const auto newline = text.find(U'\n',begin);
+        const auto end = newline == std::u32string::npos ? text.size() : newline;
+        if (begin < end)
+        {
+            auto params = style;
+            params.kind = LLVKStyledTextSegment::Kind::Normal;
+            params.begin = begin; params.end = end;
+            segments.push_back(std::move(params));
+        }
+        if (newline != std::u32string::npos)
+        {
+            auto params = style;
+            params.kind = LLVKStyledTextSegment::Kind::LineBreak;
+            params.begin = newline; params.end = newline+1;
+            segments.push_back(std::move(params));
+        }
+        if (segments.size() >= 10000) { error = "Native styled append exceeds segment budget"; return false; }
+        begin = newline == std::u32string::npos ? text.size() : newline+1;
     }
-    // </VulkanStorm>
-
-    S32 render(const LLFontGL* fontp, const LLWString& source,
-               F32 x, F32 y, const LLColor4& color,
-               LLFontGL::HAlign halign, LLFontGL::VAlign valign,
-               S32 max_pixels, bool ellipses, LLFontGL::ShadowType shadow)
-    {
-        if (!ready() || !fontp || source.empty() || !LLFontGL::sDisplayFont) return 0;
-        Font* font = getFont(fontp);
-        if (!font) return 0;
-
-        LLWString text = source;
-        const F32 sx = LLFontGL::sScaleX, sy = LLFontGL::sScaleY;
-        const F32 physical_limit = max_pixels == S32_MAX ? F32_MAX : (F32)max_pixels * sx;
-        F32 width = measure(*font, text);
-        if (ellipses && width > physical_limit)
-        {
-            const LLWString dots(3, L'.');
-            const F32 dot_width = measure(*font, dots);
-            while (!text.empty() && measure(*font, text) + dot_width > physical_limit) text.pop_back();
-            text += dots;
-            width = measure(*font, text);
-        }
-        // Glyph discovery/upload belongs to prepareFrame(), before dynamic
-        // rendering starts. Queue submission here would occur inside the
-        // swapchain render pass and can make later UI text disappear.
-        if (font->dirty || font->texture.descriptor == VK_NULL_HANDLE)
-        {
-            // <VulkanStorm> diagnostic: VULKANSTORM_TEXT_DEBUG=1 logs text
-            // that is dropped because the atlas isn't uploaded/ready.
-            static const bool s_dbg = getenv("VULKANSTORM_TEXT_DEBUG") != nullptr;
-            static int s_dbg_n = 0;
-            if (s_dbg && s_dbg_n < 24)
-            {
-                ++s_dbg_n;
-                LL_INFOS("Vulkan") << "VKTEXT-DROP dirty=" << (font->dirty ? 1 : 0)
-                                   << " desc=" << (font->texture.descriptor != VK_NULL_HANDLE ? 1 : 0)
-                                   << " x=" << x << " y=" << y
-                                   << " text='" << wstring_to_utf8str(text) << "'" << LL_ENDL;
-            }
-            // </VulkanStorm>
-            return 0;
-        }
-
-        F32 px = x * sx;
-        F32 py = y * sy;
-        const F32 asc = (F32)font->face->size->metrics.ascender / 64.f;
-        const F32 desc = -(F32)font->face->size->metrics.descender / 64.f;
-        if (valign == LLFontGL::TOP) py -= ceilf(asc);
-        else if (valign == LLFontGL::BOTTOM) py += ceilf(desc);
-        else if (valign == LLFontGL::VCENTER) py -= ceilf((ceilf(asc) - ceilf(desc)) * .5f);
-        if (halign == LLFontGL::RIGHT) px -= llmin(width, physical_limit);
-        else if (halign == LLFontGL::HCENTER) px -= llmin(width, physical_limit) * .5f;
-
-        std::vector<F32> xy, uv, rgba;
-        xy.reserve(text.size() * 12); uv.reserve(text.size() * 12); rgba.reserve(text.size() * 24);
-        const F32 device_h = (F32)s_context->swapchainExtent().height;
-        const Glyph* previous = nullptr;
-        S32 drawn = 0;
-        for (llwchar ch : text)
-        {
-            const Glyph* glyph = ensureGlyph(*font, ch);
-            if (!glyph) continue;
-            if (previous) px += kern(*font, previous, glyph);
-            if (px + glyph->bearing_x + glyph->width > x * sx + physical_limit) break;
-            const F32 left = (F32)ll_round(px + glyph->bearing_x);
-            const F32 top = (F32)ll_round(py + glyph->bearing_y);
-            LLColor4 glyph_color = color;
-            const F32 l = left / sx, r = (left + glyph->width) / sx;
-            const F32 t = (device_h - top) / sy, b = (device_h - (top - glyph->height)) / sy;
-            if (shadow != LLFontGL::NO_SHADOW)
-            {
-                LLColor4 sc = LLFontGL::sShadowColor;
-                sc.mV[VALPHA] *= color.mV[VALPHA];
-                appendQuad(xy, uv, rgba, l + 1.f / sx, t + 1.f / sy,
-                           r + 1.f / sx, b + 1.f / sy, *glyph, sc);
-            }
-            appendQuad(xy, uv, rgba, l, t, r, b, *glyph, glyph_color);
-            px += glyph->advance;
-            px = (F32)ll_round(px);
-            previous = glyph;
-            ++drawn;
-        }
-        if (!xy.empty())
-        {
-            LLVKUI2DSink::get().setTexture(font->texture.descriptor);
-            LLVKUI2DSink::get().texturedBatchPreTransformed(xy.data(), uv.data(), rgba.data(), (S32)(xy.size() / 2));
-        }
-        return drawn;
-    }
+    auto eof = mSegments.back().params();
+    eof.begin = text.size(); eof.end = text.size()+1;
+    segments.push_back(std::move(eof));
+    return publishEdit(std::move(text),segments,mText.size(),error);
 }

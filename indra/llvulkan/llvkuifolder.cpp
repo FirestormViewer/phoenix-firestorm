@@ -27,7 +27,7 @@
 #include "llvkuirender.h"          // LLVKUIRender::emitScreenRect
 #include "llvkuirenderinternal.h"  // RenderCtx, emitBorderLine
 #include "llvkuiimage.h"           // LLVKUIImage::getSize
-#include "llvktext.h"              // LLVKText::prepare/render
+#include "llvklegacytext.h"
 
 using LLVKUIRenderInternal::RenderCtx;
 using LLVKUIRenderInternal::emitBorderLine;
