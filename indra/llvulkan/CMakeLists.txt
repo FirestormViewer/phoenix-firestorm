@@ -35,13 +35,14 @@ add_library(llvkwidgets llvkwidgettree.cpp llvkwidgettree.h llvkwidgetlayout.cpp
     llvkwidgetfactory.cpp llvkwidgetfactory.h llvkcontrol.cpp llvkcontrol.h
     llvkwidgetimage.cpp llvkwidgetimage.h llvkicon.cpp llvkicon.h llvkbutton.cpp llvkbutton.h
     llvkwidgetinput.cpp llvkbadge.cpp llvkbadge.h llvklabel.cpp llvklabel.h
-    llvkplaintextlayout.cpp llvkplaintextlayout.h llvkplaincontrol.cpp llvkplaincontrol.h llvkcheckbox.cpp llvkcolorswatch.cpp llvkscrolllist.cpp
+    llvktext.cpp llvkplaintextlayout.h llvkplaincontrol.cpp llvkplaincontrol.h llvkcheckbox.cpp llvkcolorswatch.cpp llvkscrolllist.cpp
     llvkcolor.cpp llvkcolor.h llvkborder.h llvkpanel.cpp llvkpanel.h llvkxmllayers.cpp llvkxmllayers.h
     llvkskinfiles.cpp llvkskinfiles.h llvkskinimages.cpp llvkskinimages.h llvkwidgetjpeg.cpp llvkwidgettga.cpp llvkwidgetj2c.cpp
-    llvklineeditor.cpp llvklineeditor.h llvkclipboard.cpp llvkclipboard.h llvkstyledtext.cpp llvkstyledtext.h
+    llvklineeditor.cpp llvklineeditor.h llvkclipboard.cpp llvkclipboard.h llvkstyledtext.h
     llvkscroll.cpp llvkscroll.h llvkcombo.cpp llvkbrowsersurface.cpp llvkbrowsersurface.h llvkwidgetpaint.cpp llvkwidgetpaint.h
     llvkviewerui.cpp llvkviewerui.h llvksettingsmgr.cpp llvksettingsmgr.h llvkmenu.cpp llvkmenu.h llvkfloater.cpp llvkfloater.h llvkdialogs.cpp llvkspinner.cpp llvkradiogroup.cpp)
 target_link_libraries(llvkwidgets PRIVATE llmath PUBLIC llxml)
+target_sources(llvkwidgets PRIVATE llvktext.h)
 target_sources(llvkwidgets PRIVATE llvkslider.cpp llvkspellcheck.cpp llvkspellcheck.h llvktranslation.cpp llvktranslation.h)
 target_sources(llvkwidgets PRIVATE llvkkeybindings.cpp llvkkeybindings.h)
 target_sources(llvkwidgets PRIVATE llvkmediafilter.cpp llvkmediafilter.h)
@@ -241,7 +242,7 @@ set(llvulkan_SOURCE_FILES
     llvkuirender.cpp
     llvkuiwidgets.cpp
     llvkuifolder.cpp
-    llvktext.cpp
+    llvklegacytext.cpp
     llvkuitestscene.cpp
     ${VULKAN_SDK_VOLK_SOURCE}
     )
@@ -260,7 +261,7 @@ set(llvulkan_HEADER_FILES
     llvkuirenderinternal.h
     llvkuiwidgets.h
     llvkuifolder.h
-    llvktext.h
+    llvklegacytext.h
     llvkuitestscene.h
     )
 

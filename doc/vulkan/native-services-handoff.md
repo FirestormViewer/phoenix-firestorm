@@ -93,6 +93,20 @@ services remain open dependencies, not evidence of shutdown parity or exemptions
 
 ## Immediate next step
 
+Native text module consolidation (uncommitted after c7523c3efc): llvktext.h now owns
+the current native plain layout, web-text, styled-segment and styled-document
+declarations. The old llvkplaintextlayout.h/llvkstyledtext.h forward to it; algorithms
+and public type names are unchanged. GL-font atlas declarations moved to
+llvklegacytext.h, with all existing legacy consumers retargeted. llvktext.cpp now
+combines the native plain and styled implementation bodies, compiled by llvkwidgets.
+The superseded llvkplaintextlayout.cpp and llvkstyledtext.cpp were removed; their
+compatibility headers remain. llvklegacytext.cpp preserves the former LLVKText atlas
+implementation unchanged and is compiled separately by llvulkan. Exact native body
+comparisons and the renamed legacy source SHA256 check passed. No legacy text
+renderer is newly invoked by native startup. Widget192/192 with a header dependency
+guard, Window6/6, native core build and viewer link passed. New shaping/bidi/grapheme
+support and algorithm unification are not implemented or claimed. No full viewer run.
+
 Latest increment (uncommitted, Window6/6 and viewer link passed):
 - Explicit readOnly cache configuration opens existing metadata and shared lock
   files without fast-cache creation, pruning, repair, validation updates or writes.

@@ -1,3 +1,7 @@
+#include "llvktext.h"
+#if defined(LL_LLFONTGL_H) || defined(LLVKCONTEXT_H) || defined(LLVKLEGACYTEXT_H)
+#error Native text declarations must not depend on legacy fonts or renderer submission
+#endif
 #include "linden_common.h"
 #include "llvkwidgettree.h"
 #include "llvkwidgetlayout.h"

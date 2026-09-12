@@ -15,6 +15,35 @@ choices below authorizes reuse until its outgoing constructor/helper targets clo
 
 ### Continuation from 9089558822 (2026-09-12)
 
+Native text public-header consolidation (NV-00/01/03/12/17, c7523c3efc plus working
+tree, Windows RelWithDebInfo): the existing llvktext.h exposed LLFontGL-based atlas
+preparation and rendering, unlike the independently implemented plain/styled layout
+and editing services. These are separate ownership contracts, not interchangeable
+font APIs. The canonical llvktext.h now owns LLVKPlainTextLayout, LLVKWebText,
+LLVKStyledTextSegment and LLVKStyledTextDocument declarations with explicit native
+font/image and standard-library dependencies. UTF-32 source ranges, shared line/options
+types, immutable image references, error/optional results, edit invalidation and
+existing plain/styled algorithms remain unchanged. The former native headers forward
+to it for source compatibility. Their implementations are now combined in llvktext.cpp,
+compiled by llvkwidgets; the two superseded native .cpp files were removed.
+
+The old renderer declarations moved to llvklegacytext.h; the legacy LLVKText namespace,
+function signatures and implementation remain unchanged, and existing session/UI/map
+callers now include that explicit legacy header. The old atlas renderer moved unchanged
+to llvklegacytext.cpp, compiled by llvulkan separately from the native layout module.
+This change neither approves legacy visual reuse by native startup nor removes that
+historical renderer. No GL implementation behavior, GPU ABI or resource timing changes.
+The widget suite includes llvktext.h before other headers and rejects transitive legacy
+font/context/header inclusion at compile time. Widget192/192 including the guard,
+Window6/6, native core build and viewer link passed. No new shaping, bidi,
+grapheme handling, layout-algorithm unification or measured typography parity is claimed.
+
+Implementation consolidation validation: exact comparisons preserved both native
+implementation bodies, and the renamed legacy source retained its SHA256. After
+updating source ownership, Widget192/192, Window6/6, native core build and viewer link
+passed again. This is source-file consolidation with the existing public interfaces,
+not routing plain text through styled documents or changing allocation/render policy.
+
 Read-only cache and startup policy follow-up (NV-00/01/03/09/17; 3a73d29462 plus
 working tree, Windows RelWithDebInfo): source LLTextureCache::initCache invokes
 header pruning and openFastCache; nominal mReadOnly does not make those paths safe
