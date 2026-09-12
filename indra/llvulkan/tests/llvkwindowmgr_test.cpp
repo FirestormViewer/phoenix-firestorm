@@ -13,6 +13,61 @@ namespace tut
     typedef loginwindow_group::object loginwindow_object;
     loginwindow_group loginwindow_tests("llvkwindowmgr");
 
+    template<> template<> void loginwindow_object::test<4>()
+    {
+        set_test_name("native voice service shares WebRTC independently of any widget tree");
+        LLVKVoice voice;
+        std::string error;
+        LLVKVoice::AudioConfig processing;
+        processing.mEchoCancellation=false;
+        processing.mAGC=false;
+        processing.mNoiseSuppressionLevel=LLVKVoice::AudioConfig::NOISE_SUPPRESSION_LEVEL_LOW;
+        ensure("configure without starting device engine",voice.configure(processing,error));
+        ensure("configuration does not acquire shared engine",llwebrtc::getDeviceInterface()==nullptr);
+        ensure("voice enumeration without UI",voice.refresh(error));
+        const auto state = voice.state(error);
+        ensure("voice snapshot without capture",state && !state->tuning && state->energy == 0.f);
+        ensure("pending configuration submitted at startup",!state->audioConfig.mEchoCancellation && !state->audioConfig.mAGC &&
+            state->audioConfig.mNoiseSuppressionLevel==processing.mNoiseSuppressionLevel);
+        processing.mNoiseSuppressionLevel=static_cast<LLVKVoice::AudioConfig::ENoiseSuppressionLevel>(5);
+        ensure("invalid processing rejected",!voice.configure(processing,error));
+        ensure("invalid processing preserves prior request",voice.state(error)->audioConfig.mNoiseSuppressionLevel==
+            LLVKVoice::AudioConfig::NOISE_SUPPRESSION_LEVEL_LOW);
+        for (int level=0; level<=4; ++level)
+        {
+            processing.mNoiseSuppressionLevel=static_cast<LLVKVoice::AudioConfig::ENoiseSuppressionLevel>(level);
+            ensure("live software processing update without capture",voice.configure(processing,error));
+        }
+        ensure("restore default processing after override",voice.configure(LLVKVoice::AudioConfig{},error));
+        const auto restored=voice.state(error);
+        ensure("default processing restored",restored && restored->audioConfig.mAGC && restored->audioConfig.mEchoCancellation &&
+            restored->audioConfig.mNoiseSuppressionLevel==LLVKVoice::AudioConfig::NOISE_SUPPRESSION_LEVEL_VERY_HIGH);
+        LLVKVoice conflict;
+        ensure("second owner cannot steal shared engine",!conflict.refresh(error));
+        ensure("conflicting owner shutdown leaves engine intact",conflict.stop(error) && voice.state(error).has_value());
+        ensure("invalid tuning gain rejected",!voice.tune(false,-1.f,error));
+        ensure("disabled tuning is valid",voice.tune(false,1.f,error));
+        ensure("voice teardown drains callbacks",voice.stop(error));
+        ensure("voice teardown idempotent",voice.stop(error));
+        ensure("stopped owner cannot restart implicitly",!voice.refresh(error));
+        ensure("stopped owner rejects configuration",!voice.configure(processing,error));
+        LLVKVoice unused;
+        ensure("never-started owner teardown",unused.stop(error));
+        for (int iteration=0; iteration<8; ++iteration)
+        {
+            LLVKVoice restarted;
+            ensure("new owner after prior shutdown",restarted.refresh(error));
+            for (int request=0; request<4; ++request)
+            {
+                ensure("queue input deployment without capture",restarted.select(true,request%2 ? "Default" : "",error));
+                ensure("queue output deployment without capture",restarted.select(false,request%2 ? "Default" : "",error));
+                ensure("queue enumeration before immediate shutdown",restarted.refresh(error));
+                ensure("tuning remains disabled",restarted.tune(false,1.f,error));
+            }
+            ensure("queued cross-thread work drains before owner destruction",restarted.stop(error));
+        }
+    }
+
     template<> template<> void loginwindow_object::test<3>()
     {
         set_test_name("native joystick owns DirectInput enumeration and bounded device state");
@@ -128,9 +183,12 @@ namespace tut
         configuration.browser.cacheDirectory = profile.path/"browser";
         configuration.loginPage = "data:text/html,<html><body style='margin:0;background:rgb(45,90,120)'><h1>Native browser validation</h1></body></html>";
         configuration.stopAfterFrames = 6;
-        configuration.bindServices=[](LLVKViewerUi& ui)
+        configuration.bindServices=[&settings](LLVKViewerUi& ui)
         {
             std::string problem;
+            ensure("authoritative echo cancellation override",settings.set("VoiceEchoCancellation",LLSD(false),false,problem));
+            ensure("authoritative automatic gain override",settings.set("VoiceAutomaticGainControl",LLSD(false),false,problem));
+            ensure("authoritative noise suppression override",settings.set("VoiceNoiseSuppressionLevel",LLSD(2),false,problem));
             ensure("native Preferences in presentation",ui.showPreferences(problem));
             ensure("native About in presentation",ui.showAbout(problem));
             const auto tabs=ui.tree().get(ui.find("about_tab"));
@@ -229,6 +287,22 @@ namespace tut
             ensure("present original Backup controls",ui.tree().selectTabPanel(core,ui.find("backup",core),problem));
             const auto preferencesPaint=ui.preparePaint({},problem);
             ensure(problem,preferencesPaint.has_value());
+            const auto viewerPanel=ui.find("firestorm",preferences);
+            ensure("open original beam color editor in native window",ui.showBeamColor(viewerPanel,problem));
+            const auto beamPaint=ui.preparePaint({},problem);
+            ensure(problem,beamPaint.has_value());
+            ensure("beam hue image reaches native paint publication",std::any_of(beamPaint->commands.begin(),beamPaint->commands.end(),[](const auto& command)
+            { return command.image && command.image->name()=="native-beam-color-strip"; }));
+            const auto graphics=ui.find("display",preferences);
+            ensure("open original graphics preset Save in native window",ui.showGraphicPreset(graphics,"PrefSave",problem));
+            const auto presetPaint=ui.preparePaint({},problem);
+            ensure(problem,presetPaint.has_value());
+            ensure("original Save preset editor exists",ui.find("preset_combo",ui.activeFloater())!=0);
+            ensure("open original beam shape editor in native window",ui.showBeamShape(viewerPanel,problem));
+            const auto shapePaint=ui.preparePaint({},problem);
+            ensure(problem,shapePaint.has_value());
+            ensure("shape image reaches native publication",std::any_of(shapePaint->commands.begin(),shapePaint->commands.end(),[](const auto& command)
+            { return command.image && command.image->name()=="native-beam-shape"; }));
         };
         const bool ran = LLVKWindowMgr::run(configuration,error);
         ensure(error,ran);

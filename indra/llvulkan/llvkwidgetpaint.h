@@ -13,6 +13,8 @@ public:
         LLVKWidgetTree::ButtonView button;
         LLVKWidgetTree::EditorView editor;
         std::map<Id,std::shared_ptr<const LLVKWidgetImage>> browsers;
+        LLVKColor searchBackground{1,0,0,1},searchFont{1,0,0,1};
+        std::map<Id,std::uint64_t> browserEpochs;
     };
     struct Command
     {
@@ -24,6 +26,7 @@ public:
         bool alphaMask = false, additive = false, shadow = false;
         bool streamingImage = false;
         std::optional<std::array<float,6>> triangle;
+        std::uint64_t imageEpoch = 0;
     };
     std::vector<Command> commands;
     std::vector<Id> pendingBrowsers;

@@ -1,6 +1,7 @@
 #include "llvkstartup.h"
 #include "llvkwindowmgr.h"
 #include "llvksettingsmgr.h"
+#include "llvkpreferencesbackup.h"
 #include "llstring.h"
 #include "llerror.h"
 #include <windows.h>
@@ -9,7 +10,7 @@
 
 std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string& profileName,const std::string& shortVersion,
     LLControlGroup& globalGroup,LLControlGroup& accountGroup,LLControlGroup& crashGroup,LLControlGroup& warningGroup,
-    const LLVKProxy::CredentialFactory& proxyCredentials)
+    const LLVKProxy::CredentialFactory& proxyCredentials,const std::function<void()>& clearSpamQueues)
 {
     int count = 0;
     auto arguments = CommandLineToArgvW((L"viewer "+commandLine).c_str(),&count);
@@ -102,6 +103,7 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     if (!SetDllDirectoryW(browserDirectory.c_str())) return fail("Native browser DLL directory could not be selected.");
     struct DllDirectory { ~DllDirectory() { SetDllDirectoryW(nullptr); } } dllDirectory;
     LLVKWindowMgr::Configuration configuration;
+    configuration.ui.clearSpamQueues=clearSpamQueues;
     if (proxyCredentials)
     {
         auto credentials=proxyCredentials(userSettings/"bin_conf.dat");
@@ -147,8 +149,34 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
         std::filesystem::path(std::u8string(soundCache.begin(),soundCache.end()));
     configuration.ui.appliedSettingsMode = appliedSettingsMode;
     const auto preferenceFile=userSettings/std::filesystem::path(std::u8string(settingsFile.begin(),settingsFile.end()));
+    if (const auto requested=settings.find("FSStartupClearBrowserCache"); requested && requested->getValue().asBoolean())
+    {
+        if (!settings.consumeBrowserCacheClear(profile,preferenceFile,error)) return fail(error);
+        configuration.ui.settings["FSStartupClearBrowserCache"]=false;
+    }
     configuration.ui.savePreferences=[&settings,preferenceFile](const auto& changes,std::string& problem)
     { return settings.saveChanges(preferenceFile,changes,problem); };
+    configuration.ui.backupHandler=[&settings,userSettings,directory,preferenceFile](const LLVKViewerUi::BackupRequest& request,std::string& problem)
+    {
+        if (request.accountSettings) { problem="Account backup requires an authenticated account directory"; return false; }
+        if (request.restore)
+        {
+            std::map<std::string,LLSD> generated;
+            if (request.globalSettings)
+            {
+                if (request.recommendedGraphics.empty()) { problem="Global settings restore requires native hardware recommendations"; return false; }
+                if (preferenceFile.parent_path()!=userSettings) { problem="Restore requires a profile-local settings file"; return false; }
+                const auto restored=LLVKPreferencesBackup::restoredSettings(directory/"app_settings"/"settings.xml",
+                    request.directory/"settings.xml",request.recommendedGraphics,problem);
+                if (!restored) return false;
+                const auto filename=preferenceFile.filename().u8string();
+                generated[std::string(filename.begin(),filename.end())]=*restored;
+            }
+            return LLVKPreferencesBackup::copy(request.directory,userSettings,request.globalFiles,request.folders,generated,problem);
+        }
+        return LLVKPreferencesBackup::copy(userSettings,request.directory,request.globalFiles,request.folders,
+            {{"settings.xml",LLVKPreferencesBackup::settings(settings.group())}},problem);
+    };
     configuration.ui.saveKeyBindings=[path=userSettings/"key_bindings.xml"](const LLVKKeyBindings& bindings,std::string& problem)
     { return bindings.saveFile(path,problem); };
     LLVKAutoReplaceSettings autoReplace;

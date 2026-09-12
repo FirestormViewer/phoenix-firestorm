@@ -398,8 +398,12 @@ std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint:
 {
     if (!refreshVoiceDevices(error)) return std::nullopt;
     if (mJoystick && mJoystick->visible() && !updateJoystickPreview(error)) return std::nullopt;
+    if (mBeamColor && mBeamColor->visible() && !updateBeamColorPreview(error)) return std::nullopt;
     updateSpellRemoval();
-    auto paint = LLVKWidgetPaint::prepare(mTree,mRoot,input,error);
+    auto paintInput=input;
+    if (const auto color=mColors->find("SearchableControlHighlightBgColor")) paintInput.searchBackground=*color;
+    if (const auto color=mColors->find("SearchableControlHighlightFontColor")) paintInput.searchFont=*color;
+    auto paint = LLVKWidgetPaint::prepare(mTree,mRoot,paintInput,error);
     if (!paint) return std::nullopt;
     const auto viewport = mTree.screenRect(mRoot,error);
     if (!viewport || !mMenu->paint(*paint,*viewport,error)) return std::nullopt;

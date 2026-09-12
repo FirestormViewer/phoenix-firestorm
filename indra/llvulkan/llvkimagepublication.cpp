@@ -1,5 +1,11 @@
 #include "llvkimagepublication.h"
 
+void LLVKImagePublication::invalidate() noexcept
+{
+    mCurrent = {};
+    mDiscardUpload = bool(mUpload);
+}
+
 bool LLVKImagePublication::waitPendingUpload(std::uint64_t timeout,std::string& error)
 {
     error=mFailure;
@@ -14,16 +20,17 @@ bool LLVKImagePublication::advance(std::shared_ptr<const LLVKWidgetImage> latest
 {
     error = mFailure;
     if (!error.empty()) return false;
-    if (!latest) mCurrent = {};
+    if (!latest) invalidate();
     if (mUpload)
     {
         const auto status = mUpload->poll(error);
         if (status == LLVKGlyphUpload::Status::Failed) { mFailure = error; return false; }
         if (status == LLVKGlyphUpload::Status::Pending) return true;
-        if (latest && latest->pixelWidth() == mUploading->pixelWidth() && latest->pixelHeight() == mUploading->pixelHeight())
+        if (!mDiscardUpload && latest && latest->pixelWidth() == mUploading->pixelWidth() && latest->pixelHeight() == mUploading->pixelHeight())
             mCurrent = {mUploading,mUpload->published()};
         mUpload.reset();
         mUploading.reset();
+        mDiscardUpload = false;
     }
     if (!latest || latest == mCurrent.source) return true;
     mUpload = LLVKGlyphUpload::submit(mDevice,{latest->pixelWidth(),latest->pixelHeight()},latest->bottomUpRgba(),error,

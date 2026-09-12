@@ -49,6 +49,7 @@
 #include "lldxhardware.h"
 #include "llvkprobe.h" // <VulkanStorm> Zink backend requires a Vulkan device
 #include "llvkstartup.h"
+#include "NACLantispam.h"
 #include "llsechandler_basic.h"
 #include "llmachineid.h"
 #include "llsdutil.h"
@@ -597,7 +598,8 @@ int APIENTRY WINMAIN(HINSTANCE hInstance,
 
     if (const auto native = llvkStartup(pCmdLine,APP_NAME + "_x64",
         std::to_string(LL_VIEWER_VERSION_MAJOR)+"."+std::to_string(LL_VIEWER_VERSION_MINOR)+"."+std::to_string(LL_VIEWER_VERSION_PATCH),
-        gSavedSettings,gSavedPerAccountSettings,gCrashSettings,gWarningSettings,nativeProxyCredentials))
+        gSavedSettings,gSavedPerAccountSettings,gCrashSettings,gWarningSettings,nativeProxyCredentials,
+        [] { NACLAntiSpamRegistry::instance().purgeAllQueues(); }))
         return *native;
 
     // Call Tracy first thing to have it allocate memory

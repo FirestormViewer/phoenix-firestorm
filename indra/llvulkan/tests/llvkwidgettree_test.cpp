@@ -16,11 +16,17 @@
 #include "llvkmediafilter.h"
 #include "llvkmutelist.h"
 #include "llvkproxy.h"
+#include "llvkbeamcolor.h"
+#include "llvkbeamshape.h"
+#include "llvkgraphicpresets.h"
+#include "llvkpreferencesbackup.h"
+#include "llvkgraphicspolicy.h"
 #include "llvksettingsmgr.h"
 #include "llvkspellcheck.h"
 #include "llvktranslation.h"
 #include "llvkkeybindings.h"
 #include "llsdutil.h"
+#include "llsdserialize.h"
 #include "lluri.h"
 #include "llvkstyledtext.h"
 #include "llvkscroll.h"
@@ -129,6 +135,678 @@ namespace tut
     typedef widgettree_group::object object;
     widgettree_group widgettree_tests("llvkwidgettree");
 
+    template<> template<> void object::test<191>()
+    {
+        set_test_name("native browser cache clear stays inside the native profile cache");
+        const auto profile=std::filesystem::temp_directory_path()/("native-cache-test-"+LLUUID::generateNewID().asString());
+        struct Cleanup
+        {
+            std::filesystem::path profile;
+            ~Cleanup()
+            {
+                std::error_code ignored;
+                for (const auto file : {"native_browser/Default/Cache/data","native_browser/Local State","user_settings/keep.xml","user_settings/settings.xml"}) std::filesystem::remove(profile/file,ignored);
+                for (const auto folder : {"native_browser/Default/Cache","native_browser/Default","native_browser","user_settings"}) std::filesystem::remove(profile/folder,ignored);
+                std::filesystem::remove(profile,ignored);
+            }
+        } cleanup{profile};
+        std::filesystem::create_directories(profile/"native_browser"/"Default"/"Cache");
+        std::filesystem::create_directories(profile/"user_settings");
+        std::ofstream(profile/"native_browser"/"Default"/"Cache"/"data")<<"cache fixture";
+        std::ofstream(profile/"native_browser"/"Local State")<<"browser fixture";
+        std::ofstream(profile/"user_settings"/"keep.xml")<<"unrelated settings";
+        std::string error;
+        ensure("clear private browser cache",LLVKSettingsMgr::clearBrowserCache(profile,error));
+        ensure("cache tree removed",!std::filesystem::exists(profile/"native_browser"));
+        ensure("unrelated settings untouched",std::filesystem::is_regular_file(profile/"user_settings"/"keep.xml"));
+        ensure("missing cache is successful",LLVKSettingsMgr::clearBrowserCache(profile,error));
+        ensure("relative profile rejected",!LLVKSettingsMgr::clearBrowserCache("relative-profile",error));
+        std::ofstream(profile/"native_browser")<<"not a cache directory";
+        ensure("invalid cache root rejected",!LLVKSettingsMgr::clearBrowserCache(profile,error));
+        ensure("invalid root is not deleted",std::filesystem::is_regular_file(profile/"native_browser"));
+        LLVKSettingsMgr settings;
+        const auto defaults=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path()/"app_settings"/"settings.xml";
+        const auto settingsFile=profile/"user_settings"/"settings.xml";
+        ensure("load setting declarations",settings.loadFile(defaults,true,true,true,error));
+        ensure("save clearing request",settings.saveChanges(settingsFile,{{"FSStartupClearBrowserCache",LLSD(true)}},error));
+        ensure("failed clear retains request",!settings.consumeBrowserCacheClear(profile,settingsFile,error) && settings.find("FSStartupClearBrowserCache")->getValue().asBoolean());
+        std::filesystem::remove(profile/"native_browser");
+        std::filesystem::create_directories(profile/"native_browser"/"Default"/"Cache");
+        std::ofstream(profile/"native_browser"/"Default"/"Cache"/"data")<<"retry cache fixture";
+        ensure("successful retry consumes request",settings.consumeBrowserCacheClear(profile,settingsFile,error));
+        ensure("retry removed browser data",!std::filesystem::exists(profile/"native_browser"));
+        LLVKSettingsMgr reopened;
+        ensure("reload persisted state",reopened.loadFile(defaults,true,true,true,error) && reopened.loadFile(settingsFile,true,false,true,error));
+        ensure("request cleared on disk only after success",!reopened.find("FSStartupClearBrowserCache")->getValue().asBoolean());
+    }
+
+    template<> template<> void object::test<190>()
+    {
+        set_test_name("live beam shape editor point input clear and preset roundtrip");
+        const auto directory=std::filesystem::temp_directory_path()/("native-shape-test-"+LLUUID::generateNewID().asString());
+        std::filesystem::create_directory(directory);
+        struct Cleanup { std::filesystem::path path; ~Cleanup() { std::error_code ignored; std::filesystem::remove(path/"shape.xml",ignored); std::filesystem::remove(path/"late.xml",ignored); std::filesystem::remove(path,ignored); } } cleanup{directory};
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::string error; auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        ensure("open live Preferences",ui->showPreferences(error));
+        auto& tree=ui->tree(); const auto owner=ui->find("firestorm",ui->activeFloater());
+        ensure("original Create action",tree.commit(ui->find("custom_beam_btn",owner)));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        const auto dialog=ui->activeFloater(),canvas=ui->find("native_beam_shape",dialog);
+        ensure_equals("original shape dialog",tree.get(dialog)->params.name,std::string("BeamCreator"));
+        const auto initial=tree.get(canvas)->button->images.unselected;
+        const auto screen=tree.screenRect(dialog,error); ensure(error,screen.has_value());
+        LLVKWidgetTree::PointerEvent event; event.x=screen->left+200; event.y=screen->bottom+190;
+        event.kind=LLVKWidgetTree::PointerKind::LeftDown;
+        ensure("add point through native input",tree.routePointer(dialog,event,error));
+        event.kind=LLVKWidgetTree::PointerKind::LeftUp; tree.routePointer(dialog,event,error);
+        const auto painted=tree.get(canvas)->button->images.unselected;
+        ensure("point publishes new preview",painted!=initial);
+        LLVKViewerUi::XmlFileResult response;
+        bool saving=false;
+        ui->setXmlFilePicker([&](bool save,const std::string&,auto callback,std::string&) { saving=save; response=std::move(callback); return true; });
+        ensure("Save opens picker",tree.commit(ui->find("beamshape_save",dialog)) && saving);
+        response(directory/"shape.xml",{});
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("shape Save leaves editor open",ui->activeFloater()==dialog);
+        LLSD document; std::ifstream file(directory/"shape.xml"); ensure("load saved shape",LLSDSerialize::fromXML(document,file)>0); file.close();
+        ensure_equals("point exported",document["data"].size(),1);
+        ensure("source red point color",document["data"][0]["color"][0].asReal()==1. && document["data"][0]["color"][1].asReal()==0.);
+        ensure_equals("shape selection updated",tree.setting("FSBeamShape")->asString(),std::string("shape"));
+        ensure("Clear original action",tree.commit(ui->find("beamshape_clear",dialog)));
+        const auto cleared=tree.get(canvas)->button->images.unselected;
+        ensure("Load opens picker",tree.commit(ui->find("beamshape_load",dialog)) && !saving);
+        response(directory/"shape.xml",{});
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("loaded point updates preview",tree.get(canvas)->button->images.unselected!=cleared);
+        ensure("shape editor paints",ui->preparePaint({},error).has_value());
+        event.kind=LLVKWidgetTree::PointerKind::RightDown; ensure("right input deletes point",tree.routePointer(dialog,event,error));
+        event.kind=LLVKWidgetTree::PointerKind::RightUp; tree.routePointer(dialog,event,error);
+        ensure("save deletion",tree.commit(ui->find("beamshape_save",dialog)));
+        response(directory/"shape.xml",{});
+        file.open(directory/"shape.xml"); ensure("reload empty shape",LLSDSerialize::fromXML(document,file)>0); file.close();
+        ensure_equals("point removed",document["data"].size(),0);
+        ensure("pending Save",tree.commit(ui->find("beamshape_save",dialog)));
+        ensure("Cancel original action",tree.commit(ui->find("cancel",dialog)));
+        response(directory/"late.xml",{});
+        ensure("late save cannot write",!std::filesystem::exists(directory/"late.xml"));
+    }
+
+    template<> template<> void object::test<189>()
+    {
+        set_test_name("native beam shape point selection and source scale serialization");
+        LLVKBeamShape shape; std::string error;
+        ensure("source boundaries excluded",!shape.select(16,100,false,{1,0,0,1}) && !shape.select(100,317,false,{1,0,0,1}));
+        ensure("add colored point",shape.select(205,190,false,{0,1,0,1}));
+        ensure("add second point",shape.select(212,190,false,{1,0,0,1}));
+        ensure("remove within radius",shape.select(205,190,true,{}));
+        ensure_equals("exact radius point retained",shape.points.size(),std::size_t(1));
+        const auto document=shape.serialize(5,40,400,300);
+        ensure_equals("source center offset",document["data"][0]["offset"][1].asReal(),7.);
+        LLVKBeamShape loaded;
+        ensure("source document loads",loaded.load(document,5,40,400,300,error));
+        ensure_equals("point roundtrip",loaded.points.front().horizontal,212);
+        ensure("color roundtrip",loaded.points.front().color==shape.points.front().color);
+        auto malformed=document; malformed["scale"]=-1.;
+        ensure("invalid scale does not discard draft",!loaded.load(malformed,5,40,400,300,error) && loaded.points.size()==1);
+    }
+
+    template<> template<> void object::test<188>()
+    {
+        set_test_name("native search highlights paint without changing text values or geometry");
+        LLVKWidgetTree tree; std::string error;
+        LLVKWidgetTree::Params view; view.rect={0,0,300,180};
+        LLVKControl::Params control; control.font=loadFont();
+        const auto root=tree.createPanel(view,control,{},0,error); ensure(error,root.has_value());
+        view.rect={10,10,160,40}; view.name="search_button";
+        LLVKButton::Params button; button.label=U"Matched button";
+        const auto action=tree.createButton(view,control,button,*root,error); ensure(error,action.has_value());
+        view.rect={10,60,280,90}; view.name="search_label";
+        control.initialValue="Matched text";
+        LLVKPlainControl::Params text;
+        const auto label=tree.createPlainText(view,control,text,*root,error); ensure(error,label.has_value());
+        const auto rectangle=tree.get(*label)->params.rect;
+        const auto original=tree.value(*label);
+        LLVKWidgetPaint::Input input;
+        input.searchBackground=LLVKColor{0.25f,0.5f,0.75f,1.f};
+        input.searchFont=LLVKColor{0.75f,0.25f,0.5f,1.f};
+        ensure("set transient highlights",tree.setSearchHighlighted(*action,true) && tree.setSearchHighlighted(*label,true));
+        const auto paint=LLVKWidgetPaint::prepare(tree,*root,input,error); ensure(error,paint.has_value());
+        ensure("button uses search font color",std::any_of(paint->commands.begin(),paint->commands.end(),[&](const auto& command)
+        { return command.owner==*action && command.text && command.color==input.searchFont.get(); }));
+        ensure("text uses search background color",std::any_of(paint->commands.begin(),paint->commands.end(),[&](const auto& command)
+        { return command.owner==*label && !command.text && command.color==input.searchBackground.get(); }));
+        ensure("highlight does not change value or geometry",llsd_equals(tree.value(*label),original) && tree.get(*label)->params.rect==rectangle);
+        ensure("clear highlights",tree.setSearchHighlighted(*action,false) && tree.setSearchHighlighted(*label,false));
+        const auto cleared=LLVKWidgetPaint::prepare(tree,*root,input,error); ensure(error,cleared.has_value());
+        ensure("highlight background removed",std::none_of(cleared->commands.begin(),cleared->commands.end(),[&](const auto& command)
+        { return command.owner==*label && !command.text && command.color==input.searchBackground.get(); }));
+    }
+
+    template<> template<> void object::test<187>()
+    {
+        set_test_name("live Viewer anti-spam reset invokes the shared nonvisual service");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        int purges=0,writes=0;
+        configuration.clearSpamQueues=[&] { ++purges; };
+        configuration.savePreferences=[&](const auto&,std::string&) { ++writes; return true; };
+        std::string error; auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        ensure("open live Preferences",ui->showPreferences(error));
+        auto& tree=ui->tree();
+        std::vector<LLVKWidgetTree::Id> pending{ui->find("firestorm",ui->activeFloater())};
+        LLVKWidgetTree::Id button=0;
+        for (std::size_t index=0; index<pending.size(); ++index)
+        {
+            const auto* node=tree.get(pending[index]); pending.insert(pending.end(),node->children.begin(),node->children.end());
+            if (node->control && node->control->params.commit.functionName==std::optional<std::string>("NACL.AntiSpamUnblock")) button=pending[index];
+        }
+        ensure("original reset button wired",button && tree.commit(button));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure_equals("purges exactly once",purges,1);
+        ensure_equals("reset does not write preferences",writes,0);
+        ensure("source reset adds no notice",ui->takeNotices().empty());
+    }
+
+    template<> template<> void object::test<186>()
+    {
+        set_test_name("live Graphics quality and recommended actions update the shared transaction");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::map<std::string,LLSD> saved;
+        configuration.savePreferences=[&](const auto& changes,std::string&) { saved=changes; return true; };
+        std::string error; auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        LLVKGraphicsPolicy::Device device; device.vendor=0x1002; device.videoBytes=16ull*1024*1024*1024; device.systemBytes=32ull*1024*1024*1024;
+        ui->setGraphicsDevice(device);
+        ensure("open live Graphics",ui->showPreferences(error));
+        auto& tree=ui->tree(); const auto panel=ui->find("display",ui->activeFloater());
+        const auto original=tree.setting("RenderFarClip")->asReal();
+        LLVKWidgetTree::Id quality=0,recommended=0;
+        std::vector<LLVKWidgetTree::Id> pending{panel};
+        for (std::size_t index=0; index<pending.size(); ++index)
+        {
+            const auto* node=tree.get(pending[index]); pending.insert(pending.end(),node->children.begin(),node->children.end());
+            if (!node->control) continue;
+            if (node->control->params.commit.functionName==std::optional<std::string>("Pref.QualityPerformance")) quality=pending[index];
+            if (node->control->params.commit.functionName==std::optional<std::string>("Pref.HardwareDefaults")) recommended=pending[index];
+        }
+        ensure("source actions found",quality && recommended);
+        ensure("choose Low quality",tree.setValue(quality,LLSD(0)) && tree.commit(quality));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure_equals("Low applies source draw distance",tree.setting("RenderFarClip")->asReal(),64.);
+        ensure("Cancel quality transaction",ui->closeFloater(error));
+        ensure_equals("Cancel restores draw distance",tree.setting("RenderFarClip")->asReal(),original);
+        ensure("reopen Graphics",ui->showPreferences(error));
+        ensure("request recommended settings",tree.commit(recommended));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure_equals("native unavailable-bandwidth classification",tree.setting("RenderQualityPerformance")->asInteger(),3);
+        ensure("accept recommendation",ui->applyPreferences(error));
+        ensure("accepted recommendations persist",saved.contains("RenderQualityPerformance"));
+    }
+
+    template<> template<> void object::test<185>()
+    {
+        set_test_name("native graphics policy applies source quality masks without GL state");
+        const auto viewer=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path();
+        LLVKGraphicsPolicy policy; std::string error;
+        ensure("load original feature table",policy.initialize(viewer/"featuretable.txt",viewer/"app_settings"/"settings.xml",error));
+        LLVKGraphicsPolicy::Device device;
+        device.vendor=0x1002; device.videoBytes=16ull*1024*1024*1024; device.systemBytes=32ull*1024*1024*1024;
+        ensure_equals("explicit native unavailable-bandwidth fallback",LLVKGraphicsPolicy::recommendedLevel(device),3);
+        device.bandwidth=256.f; device.classOneBandwidth=16.f;
+        ensure_equals("source high-bandwidth class",LLVKGraphicsPolicy::recommendedLevel(device),5);
+        device.skipBenchmark=true; ensure_equals("source benchmark skip class",LLVKGraphicsPolicy::recommendedLevel(device),1); device.skipBenchmark=false;
+        for (int level=0; level<7; ++level)
+        {
+            const auto values=policy.settings(level,device,false,error); ensure(error,values.has_value());
+            ensure_equals("requested quality retained",values->at("RenderQualityPerformance").asInteger(),level);
+            ensure("GL-only settings not transposed",!values->contains("RenderGLContextCoreProfile") && !values->contains("RenderVBOEnable"));
+            ensure("slider preserves skipped preference",!values->contains("RenderAnisotropic"));
+        }
+        ensure_equals("source Low draw distance",policy.settings(0,device,false,error)->at("RenderFarClip").asReal(),64.);
+        ensure_equals("source Ultra draw distance",policy.settings(6,device,false,error)->at("RenderFarClip").asReal(),256.);
+        const auto recommended=policy.settings(0,device,true,error); ensure(error,recommended.has_value());
+        ensure_equals("recommendation uses classified level",recommended->at("RenderQualityPerformance").asInteger(),5);
+        ensure("recommendation includes anisotropy",recommended->contains("RenderAnisotropic"));
+    }
+
+    template<> template<> void object::test<184>()
+    {
+        set_test_name("live Backup confirmation exports through native storage and reports completion");
+        const auto root=std::filesystem::temp_directory_path()/("native-backup-ui-"+LLUUID::generateNewID().asString());
+        struct Cleanup
+        {
+            std::filesystem::path root;
+            ~Cleanup()
+            {
+                std::error_code ignored;
+                for (const auto file : {"profile/user_settings/colors.xml","profile/user_settings/settings.xml","backup/settings.xml","backup/colors.xml"}) std::filesystem::remove(root/file,ignored);
+                for (const auto folder : {"profile/user_settings","profile","backup"}) std::filesystem::remove(root/folder,ignored);
+                std::filesystem::remove(root,ignored);
+            }
+        } cleanup{root};
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.skin.userAppDirectory=root/"profile";
+        configuration.userColorsFile=root/"profile"/"user_settings"/"colors.xml";
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        LLVKSettingsMgr settings; std::string error;
+        const auto app=configuration.skin.skinBaseDirectory.parent_path()/"app_settings";
+        ensure("load shared setting group",settings.loadFile(app/"settings.xml",true,true,true,error));
+        configuration.settingsGroup=&settings.group();
+        int operations=0;
+        bool quit=false;
+        configuration.savePreferences=[](const auto&,std::string&) { return true; };
+        configuration.backupHandler=[&](const auto& request,std::string& problem)
+        {
+            ++operations;
+            if (request.restore)
+            {
+                const auto restored=LLVKPreferencesBackup::restoredSettings(app/"settings.xml",request.directory/"settings.xml",request.recommendedGraphics,problem);
+                if (!restored) return false;
+                return LLVKPreferencesBackup::copy(request.directory,root/"profile"/"user_settings",request.globalFiles,request.folders,{{"settings.xml",*restored}},problem);
+            }
+            return LLVKPreferencesBackup::copy(root/"profile"/"user_settings",request.directory,request.globalFiles,request.folders,
+                {{"settings.xml",LLVKPreferencesBackup::settings(settings.group())}},problem);
+        };
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        LLVKGraphicsPolicy::Device device; device.vendor=0x1002; device.videoBytes=16ull*1024*1024*1024; device.systemBytes=32ull*1024*1024*1024;
+        ui->setGraphicsDevice(device);
+        ui->setQuitRequestHandler([&] { quit=true; });
+        ensure("open real Preferences",ui->showPreferences(error));
+        auto& tree=ui->tree();
+        const auto panel=ui->find("backup",ui->activeFloater());
+        const auto destination=(root/"backup").u8string();
+        ensure("choose backup directory",tree.updateSetting("SettingsBackupPath",LLSD(std::string(destination.begin(),destination.end()))));
+        ensure("change live graphics setting",tree.updateSetting("RenderFarClip",LLSD(123.)));
+        ensure("original Backup action",tree.commit(ui->find("backup_settings",panel)));
+        auto notices=ui->takeNotices();
+        ensure("confirmation before storage",notices.size()==1 && operations==0);
+        notices.front().response(1,{});
+        ensure_equals("Cancel never starts backup",operations,0);
+        ensure("confirm backup",tree.commit(ui->find("backup_settings",panel)));
+        notices=ui->takeNotices(); notices.front().response(0,{});
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure_equals("one storage operation",operations,1);
+        ensure("global settings exported",std::filesystem::is_regular_file(root/"backup"/"settings.xml"));
+        ensure("live colors written before copy",std::filesystem::is_regular_file(root/"backup"/"colors.xml"));
+        notices=ui->takeNotices();
+        ensure("original completion notification",notices.size()==1 && notices.front().name=="BackupFinished");
+        ensure("change current value before restore",tree.updateSetting("RenderFarClip",LLSD(456.)));
+        ensure("select global settings restore",tree.updateSetting("RestoreGlobalSettings",LLSD(true)));
+        ensure("original Restore action",tree.commit(ui->find("restore_settings",panel)));
+        notices=ui->takeNotices();
+        ensure("restore confirmation gates operation",notices.size()==1 && notices.front().name=="SettingsRestoreNeedsLogout" && operations==1);
+        notices.front().response(0,{});
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure_equals("one restore operation",operations,2);
+        ensure("restore does not quit before completion acknowledgement",!quit);
+        LLVKSettingsMgr restored;
+        ensure("load defaults to inspect restored settings",restored.loadFile(app/"settings.xml",true,true,true,error));
+        ensure("load restored file",restored.loadFile(root/"profile"/"user_settings"/"settings.xml",true,false,true,error));
+        ensure_equals("backup overrides recommendations and current value",restored.find("RenderFarClip")->getValue().asReal(),123.);
+        ensure("first-run restore marker persisted",restored.find("FSFirstRunAfterSettingsRestore")->getValue().asBoolean());
+        notices=ui->takeNotices();
+        ensure("original RestoreFinished notice",notices.size()==1 && notices.front().name=="RestoreFinished");
+        notices.front().response(0,{});
+        ensure("acknowledgement requests native shutdown",quit);
+    }
+
+    template<> template<> void object::test<183>()
+    {
+        set_test_name("native Preferences backup filters settings and copies bounded source folders");
+        const auto root=std::filesystem::temp_directory_path()/("native-backup-test-"+LLUUID::generateNewID().asString());
+        struct Cleanup
+        {
+            std::filesystem::path root;
+            ~Cleanup()
+            {
+                std::error_code ignored;
+                for (const auto side : {"source","backup","restore"})
+                {
+                    for (const auto name : {"colors.xml","settings.xml","beams/shape.xml","beams/nested/skip.xml","presets/graphic/example.xml"}) std::filesystem::remove(root/side/name,ignored);
+                    for (const auto name : {"beams/nested","beams","presets/graphic","presets"}) std::filesystem::remove(root/side/name,ignored);
+                    std::filesystem::remove(root/side,ignored);
+                }
+                std::filesystem::remove(root,ignored);
+            }
+        } cleanup{root};
+        const auto source=root/"source",backup=root/"backup",restore=root/"restore";
+        std::filesystem::create_directories(source/"beams"/"nested");
+        std::filesystem::create_directories(source/"presets"/"graphic");
+        for (const auto file : {"colors.xml","beams/shape.xml","beams/nested/skip.xml","presets/graphic/example.xml"}) std::ofstream(source/file)<<"fixture";
+        LLVKSettingsMgr settings; std::string error;
+        const auto app=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path()/"app_settings";
+        ensure("load settings service",settings.loadFile(app/"settings.xml",true,true,true,error));
+        ensure("set nondefault backup value",settings.set("RenderFarClip",LLSD(123.),false,error));
+        settings.find("RenderFarClip")->setBackupable(true);
+        ensure("set excluded value",settings.set("RememberPassword",LLSD(!settings.find("RememberPassword")->getValue().asBoolean()),false,error));
+        settings.find("RememberPassword")->setBackupable(false);
+        const auto document=LLVKPreferencesBackup::settings(settings.group());
+        ensure("changed backupable setting exported",document.has("RenderFarClip"));
+        ensure("unsafe setting excluded",!document.has("RememberPassword"));
+        ensure("backup selected files and presets",LLVKPreferencesBackup::copy(source,backup,{"colors.xml","missing.xml"},{"beams","presets"},{{"settings.xml",document}},error));
+        ensure("global file copied",std::filesystem::is_regular_file(backup/"colors.xml"));
+        ensure("generated settings copied",std::filesystem::is_regular_file(backup/"settings.xml"));
+        ensure("folder is not recursively copied",!std::filesystem::exists(backup/"beams"/"nested"));
+        ensure("graphic presets explicitly copied",std::filesystem::is_regular_file(backup/"presets"/"graphic"/"example.xml"));
+        ensure("selected restore files copied",LLVKPreferencesBackup::copy(backup,restore,{"colors.xml"},{},{},error));
+        ensure("unselected settings not restored",!std::filesystem::exists(restore/"settings.xml"));
+        ensure("overlap rejected",!LLVKPreferencesBackup::copy(source,source/"backup",{},{},{},error));
+        ensure("traversal rejected before writes",!LLVKPreferencesBackup::copy(source,backup,{"../outside"},{},{},error));
+    }
+
+    template<> template<> void object::test<182>()
+    {
+        set_test_name("live Graphics preset dialogs save load cancel and delete");
+        const auto profile=std::filesystem::temp_directory_path()/("native-preset-ui-"+LLUUID::generateNewID().asString());
+        const auto directory=profile/"user_settings"/"presets"/"graphic";
+        struct Cleanup
+        {
+            std::filesystem::path profile;
+            ~Cleanup()
+            {
+                std::error_code ignored;
+                const auto directory=profile/"user_settings"/"presets"/"graphic";
+                std::filesystem::remove(directory/"Live%20Preset.xml",ignored);
+                std::filesystem::remove(directory,ignored);
+                std::filesystem::remove(directory.parent_path(),ignored);
+                std::filesystem::remove(profile/"user_settings",ignored);
+                std::filesystem::remove(profile,ignored);
+            }
+        } cleanup{profile};
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.skin.userAppDirectory=profile;
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::map<std::string,LLSD> saved;
+        configuration.savePreferences=[&](const auto& changes,std::string&) { saved=changes; return true; };
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        ensure("open live Preferences",ui->showPreferences(error));
+        auto& tree=ui->tree();
+        const auto preferences=ui->activeFloater(),graphics=ui->find("display",preferences);
+        const auto before=tree.setting("RenderFarClip")->asReal();
+        const auto chosen=before==128. ? 256. : 128.;
+        ensure("change graphics setting",tree.updateSetting("RenderFarClip",LLSD(chosen)));
+        LLVKWidgetTree::Id saveAction=0;
+        std::vector<LLVKWidgetTree::Id> pending{graphics};
+        for (std::size_t index=0; index<pending.size(); ++index)
+        {
+            const auto* node=tree.get(pending[index]);
+            pending.insert(pending.end(),node->children.begin(),node->children.end());
+            if (node->control && node->control->params.commit.functionName==std::optional<std::string>("Pref.PrefSave")) saveAction=pending[index];
+        }
+        ensure("original Graphics Save action",saveAction && tree.commit(saveAction));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        const auto saveDialog=ui->activeFloater(),combo=ui->find("preset_combo",saveDialog);
+        ensure_equals("original Save dialog",tree.get(saveDialog)->params.name,std::string("save_pref_preset"));
+        const auto editor=tree.get(combo)->combo->editor;
+        ensure("type preset name",editor && tree.setValue(editor,LLSD("Live Preset")));
+        ensure("save through editable combo commit",tree.commit(combo));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("preset saved in original directory",std::filesystem::is_regular_file(directory/"Live%20Preset.xml"));
+        ensure_equals("active preset label updated",tree.value(ui->find("preset_text",graphics)).asString(),std::string("Live Preset"));
+        ensure("manual graphics edit",tree.updateSetting("RenderFarClip",LLSD(chosen+32.)));
+        ensure("manual edit clears active preset",tree.setting("PresetGraphicActive")->asString().empty());
+        ensure("cancel parent transaction",ui->closeFloater(error));
+        ensure_equals("Cancel restores graphic value",tree.setting("RenderFarClip")->asReal(),before);
+        ensure("reopen parent",ui->showPreferences(error));
+        ensure("open original Load",ui->showGraphicPreset(graphics,"PrefLoad",error));
+        const auto loadDialog=ui->activeFloater();
+        ensure("select saved preset",tree.setValue(ui->find("preset_combo",loadDialog),LLSD("Live Preset")));
+        ensure("load via original OK",tree.commit(ui->find("ok",loadDialog)));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure_equals("load applies live graphic value",tree.setting("RenderFarClip")->asReal(),chosen);
+        ensure("accept loaded preferences",ui->applyPreferences(error));
+        ensure_equals("loaded values reach global writer",saved.at("RenderFarClip").asReal(),chosen);
+        ensure("preset active name persisted",saved.contains("PresetGraphicActive"));
+        ensure("reopen for Delete",ui->showPreferences(error) && ui->showGraphicPreset(graphics,"PrefDelete",error));
+        const auto deleteDialog=ui->activeFloater();
+        ensure("select preset for deletion",tree.setValue(ui->find("preset_combo",deleteDialog),LLSD("Live Preset")));
+        ensure("original Delete button",tree.commit(ui->find("delete",deleteDialog)));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("selected preset deleted",!std::filesystem::exists(directory/"Live%20Preset.xml"));
+        ensure("active name cleared",tree.setting("PresetGraphicActive")->asString().empty());
+        ensure("empty Delete dialog remains usable",ui->showGraphicPreset(graphics,"PrefDelete",error) && ui->preparePaint({},error).has_value());
+        ensure("empty catalog disables Delete",!tree.get(ui->find("delete",ui->activeFloater()))->params.enabled);
+    }
+
+    template<> template<> void object::test<181>()
+    {
+        set_test_name("native graphics presets preserve source format and setting boundaries");
+        const auto directory=std::filesystem::temp_directory_path()/("native-presets-"+LLUUID::generateNewID().asString());
+        struct Cleanup { std::filesystem::path path; ~Cleanup() { std::error_code ignored; std::filesystem::remove(path/"Test%20Preset.xml",ignored); std::filesystem::remove(path/"Default.xml",ignored); std::filesystem::remove(path,ignored); } } cleanup{directory};
+        const auto app=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path().parent_path()/"app_settings";
+        LLVKGraphicPresets presets; LLVKSettingsMgr settings; std::string error;
+        ensure("load source preset schema",presets.initialize(app,directory,error));
+        ensure("load source settings",settings.loadFile(app/"settings.xml",true,true,true,error));
+        auto values=settings.values(); values["RenderFarClip"]=128.; values["RememberPassword"]=true;
+        ensure("save named preset",presets.save("Test Preset",values,error));
+        ensure("source name encoding",std::filesystem::is_regular_file(directory/"Test%20Preset.xml"));
+        const auto names=presets.names(true,error);
+        ensure("catalog decodes name",names && names->size()==1 && names->front()=="Test Preset");
+        const auto loaded=presets.load("Test Preset",error); ensure(error,loaded.has_value());
+        ensure_equals("graphics value retained",loaded->at("RenderFarClip").asReal(),128.);
+        ensure("unrelated setting excluded",!loaded->contains("RememberPassword"));
+        ensure("Default protected",!presets.save("Default",values,error) && !presets.remove("Default",error));
+        ensure("traversal rejected",!presets.save("../outside",values,error));
+        LLSD invalid;
+        invalid["RenderFarClip"]["Type"]="String"; invalid["RenderFarClip"]["Value"]="wrong type";
+        {
+            std::ofstream output(directory/"Test%20Preset.xml"); LLSDSerialize::toXML(invalid,output);
+        }
+        ensure("malformed setting type rejected",!presets.load("Test Preset",error));
+        ensure_equals("loading never changes schema or live settings",settings.values().at("RenderFarClip").asReal(),settings.defaults().at("RenderFarClip").asReal());
+        ensure("delete selected preset",presets.remove("Test Preset",error));
+        ensure("catalog refreshed",presets.names(false,error)->empty());
+        ensure("create protected Default",presets.createDefault(values,error));
+        values["RenderFarClip"]=64.;
+        ensure("Default creation is idempotent",presets.createDefault(values,error));
+        ensure_equals("existing Default preserved",presets.load("Default",error)->at("RenderFarClip").asReal(),128.);
+        ensure("Default hidden from Save Delete lists",presets.names(false,error)->empty());
+        ensure("Default included first for Load",presets.names(true,error)->front()=="Default");
+    }
+
+    template<> template<> void object::test<180>()
+    {
+        set_test_name("live beam color editor pointer preview and preset save load");
+        const auto directory=std::filesystem::temp_directory_path()/("native-beam-editor-"+LLUUID::generateNewID().asString());
+        std::filesystem::create_directories(directory);
+        struct Cleanup
+        {
+            std::filesystem::path path;
+            ~Cleanup() { std::error_code ignored; std::filesystem::remove(path/"preset.xml",ignored); std::filesystem::remove(path/"stale.xml",ignored); std::filesystem::remove(path,ignored); }
+        } cleanup{directory};
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        ensure("open live Preferences",ui->showPreferences(error));
+        auto& tree=ui->tree();
+        const auto owner=ui->find("firestorm",ui->activeFloater());
+        ensure("open through original New button",tree.commit(ui->find("BeamColor_new",owner)));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        const auto dialog=ui->activeFloater();
+        ensure_equals("original beam editor",tree.get(dialog)->params.name,std::string("BeamColor"));
+        const auto strip=ui->find("native_beam_hues",dialog);
+        const auto initialImage=tree.get(strip)->button->images.unselected;
+        ensure("hue bitmap exists",initialImage && initialImage->width()==410 && initialImage->height()==76);
+        const auto rectangle=tree.screenRect(strip,error); ensure(error,rectangle.has_value());
+        LLVKWidgetTree::PointerEvent event;
+        event.x=rectangle->left+72; event.y=rectangle->bottom+37; event.kind=LLVKWidgetTree::PointerKind::LeftDown;
+        ensure("left pointer selects start",tree.routePointer(dialog,event,error));
+        event.kind=LLVKWidgetTree::PointerKind::LeftUp; tree.routePointer(dialog,event,error);
+        ensure("selection publishes new immutable strip",tree.get(strip)->button->images.unselected!=initialImage);
+        event.x=rectangle->left+138; event.kind=LLVKWidgetTree::PointerKind::RightDown;
+        ensure("right pointer selects end",tree.routePointer(dialog,event,error));
+        event.kind=LLVKWidgetTree::PointerKind::RightUp; tree.routePointer(dialog,event,error);
+        const auto speed=ui->find("BeamColor_Speed",dialog);
+        ensure("set rotation speed",tree.setValue(speed,LLSD(150.)) && tree.commit(speed));
+        ensure("advance preview",ui->advanceNotices(1.,error) && ui->preparePaint({},error).has_value());
+        const auto preview=ui->find("BeamColor_Preview",dialog);
+        const auto before=tree.value(preview);
+        ensure("animate preview",ui->advanceNotices(2.,error) && ui->preparePaint({},error).has_value());
+        ensure("preview color changes",!llsd_equals(tree.value(preview),before));
+        LLVKViewerUi::XmlFileResult response;
+        bool saving=false;
+        ui->setXmlFilePicker([&](bool save,const std::string&,auto callback,std::string&)
+        { saving=save; response=std::move(callback); return true; });
+        ensure("original Save opens picker",tree.commit(ui->find("BeamColor_Save",dialog)) && saving);
+        response(directory,{});
+        ensure("invalid save keeps editor open",!ui->dialogError().empty() && ui->activeFloater()==dialog);
+        ensure("retry Save picker",tree.commit(ui->find("BeamColor_Save",dialog)) && saving);
+        response(directory/"preset.xml",{});
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("save closes editor",ui->activeFloater()!=dialog);
+        LLSD stored;
+        std::ifstream file(directory/"preset.xml");
+        ensure("saved XML readable",LLSDSerialize::fromXML(stored,file)>0); file.close();
+        ensure_equals("saved start endpoint",stored["startHue"].asReal(),120.);
+        ensure_equals("saved end endpoint",stored["endHue"].asReal(),240.);
+        ensure_equals("saved speed",stored["rotateSpeed"].asReal(),1.5);
+        ensure_equals("saved filename selects preset",tree.setting("FSBeamColorFile")->asString(),std::string("preset"));
+        ensure("reopen editor",ui->showBeamColor(owner,error));
+        ensure("change speed",tree.setValue(speed,LLSD(250.)) && tree.commit(speed));
+        ensure("original Load picker",tree.commit(ui->find("BeamColor_Load",dialog)) && !saving);
+        response(directory/"preset.xml",{});
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure_equals("loaded speed restored",tree.value(speed).asReal(),150.);
+        ensure("pending Save picker",tree.commit(ui->find("BeamColor_Save",dialog)));
+        const auto stale=response;
+        ensure("Cancel editor",tree.commit(ui->find("BeamColor_Cancel",dialog)));
+        stale(directory/"stale.xml",{});
+        ensure("cancelled picker cannot write",!std::filesystem::exists(directory/"stale.xml"));
+        ensure("open dependent editor",ui->showBeamColor(owner,error));
+        ensure("start dependent file selection",tree.commit(ui->find("BeamColor_Save",dialog)));
+        const auto parentStale=response;
+        ensure("bring parent forward",ui->showPreferences(error));
+        ensure("close parent Preferences",ui->closeFloater(error));
+        ensure("parent close hides dependent editor",!tree.get(dialog)->params.visible);
+        parentStale(directory/"stale.xml",{});
+        ensure("parent close invalidates picker callback",!std::filesystem::exists(directory/"stale.xml"));
+    }
+
+    template<> template<> void object::test<179>()
+    {
+        set_test_name("native beam color editor state and timed preview contracts");
+        LLVKBeamColor color;
+        std::string error;
+        ensure("default full spectrum starts red",color.preview(0)==std::optional(LLVKColor::Value{1,0,0,1}));
+        const auto later=color.preview(1.);
+        ensure("preview changes over time",later && later!=color.preview(0));
+        ensure("exact vertical endpoints excluded",!color.select(100,161,false) && !color.select(100,237,true));
+        ensure("start selection",color.select(204,200,false));
+        ensure_equals("midpoint is second hue cycle",color.startHue,360.f);
+        ensure("end clamps at strip right",color.select(450,200,true));
+        ensure_equals("end clamped",color.endHue,720.f);
+        ensure("reversed selection swaps endpoints",color.select(6,200,true));
+        ensure_equals("swapped start",color.startHue,0.f);
+        ensure_equals("swapped end",color.endHue,360.f);
+        ensure("slider percentage conversion",color.setSpeed(250.f) && color.rotateSpeed==2.5f);
+        LLVKBeamColor restored;
+        ensure("preset roundtrip",restored.load(color.serialize(),error) && llsd_equals(restored.serialize(),color.serialize()));
+        auto invalid=color.serialize(); invalid["startHue"]=721.;
+        ensure("invalid preset rejected without mutation",!restored.load(invalid,error) && llsd_equals(restored.serialize(),color.serialize()));
+        ensure("missing fields use defaults",restored.load(LLSD::emptyMap(),error) && restored.endHue==360.f && restored.rotateSpeed==1.f);
+        restored.startHue=restored.endHue=120.f;
+        ensure("zero-width range remains green",restored.preview(0)==std::optional(LLVKColor::Value{0,1,0,1}) && restored.preview(30)==restored.preview(0));
+        ensure_equals("hue position roundtrip",LLVKBeamColor::position(360.f),204);
+    }
+
+    template<> template<> void object::test<178>()
+    {
+        set_test_name("live Viewer beam deletion removes selected profile presets and refreshes controls");
+        const auto profile=std::filesystem::temp_directory_path()/("native-beam-test-"+LLUUID::generateNewID().asString());
+        const std::string name="fixture-"+LLUUID::generateNewID().asString();
+        struct Cleanup
+        {
+            std::filesystem::path profile;
+            std::string name;
+            ~Cleanup()
+            {
+                std::error_code ignored;
+                for (const auto folder : {"beams","beamsColors"})
+                {
+                    std::filesystem::remove(profile/"user_settings"/folder/(name+".xml"),ignored);
+                    std::filesystem::remove(profile/"user_settings"/folder/"keep.xml",ignored);
+                    std::filesystem::remove(profile/"user_settings"/folder,ignored);
+                }
+                std::filesystem::remove(profile/"user_settings",ignored);
+                std::filesystem::remove(profile,ignored);
+            }
+        } cleanup{profile,name};
+        for (const auto folder : {"beams","beamsColors"})
+        {
+            std::filesystem::create_directories(profile/"user_settings"/folder);
+            std::ofstream(profile/"user_settings"/folder/(name+".xml"))<<"<llsd><map/></llsd>";
+            std::ofstream(profile/"user_settings"/folder/"keep.xml")<<"<llsd><map/></llsd>";
+        }
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.skin.userAppDirectory=profile;
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        ensure("open live Preferences",ui->showPreferences(error));
+        auto& tree=ui->tree();
+        const auto panel=ui->find("firestorm",ui->activeFloater());
+        for (const auto& [folder,combo,setting,button] : {
+            std::tuple{"beams","FSBeamShape_combo","FSBeamShape","delete_beam"},
+            std::tuple{"beamsColors","BeamColor_combo","FSBeamColorFile","BeamColor_delete"}})
+        {
+            const auto control=ui->find(combo,panel);
+            ensure("select fixture preset",tree.setValue(control,LLSD(name)) && tree.commit(control));
+            ensure("invoke original Delete button",tree.commit(ui->find(button,panel)));
+            ensure(ui->dialogError(),ui->dialogError().empty());
+            ensure("selected file removed",!std::filesystem::exists(profile/"user_settings"/folder/(name+".xml")));
+            ensure("other file retained",std::filesystem::exists(profile/"user_settings"/folder/"keep.xml"));
+            ensure("selection cleared",tree.setting(setting)->asString().empty());
+            const auto& items=tree.get(control)->combo->items;
+            ensure("catalog refreshed",std::none_of(items.begin(),items.end(),[&](const auto& item) { return item.value.asString()==name; }));
+            ensure("delete Off is harmless",tree.commit(ui->find(button,panel)) && ui->dialogError().empty());
+            ensure("inject invalid catalog value",tree.replaceComboItems(control,{{"invalid",LLSD("../keep")}},error) &&
+                tree.setValue(control,LLSD("../keep")) && tree.commit(control));
+            ensure("invoke invalid selection",tree.commit(ui->find(button,panel)));
+            ensure("path traversal rejected",ui->dialogError()=="Invalid native beam preset name");
+            ensure("invalid selection preserves unrelated file",std::filesystem::exists(profile/"user_settings"/folder/"keep.xml"));
+            std::filesystem::create_directory(profile/"user_settings"/folder/(name+".xml"));
+            ensure("inject non-file entry",tree.replaceComboItems(control,{{name,LLSD(name)}},error) &&
+                tree.setValue(control,LLSD(name)) && tree.commit(control));
+            ensure("invoke non-file selection",tree.commit(ui->find(button,panel)));
+            ensure("non-file entry reported",ui->dialogError()=="Beam preset is not a regular file");
+            ensure_equals("failed deletion retains setting",tree.setting(setting)->asString(),name);
+            ensure("directory was not removed",std::filesystem::is_directory(profile/"user_settings"/folder/(name+".xml")));
+            std::filesystem::remove(profile/"user_settings"/folder/(name+".xml"));
+        }
+    }
+
     template<> template<> void object::test<177>()
     {
         set_test_name("live external editor selection respects Preferences transaction lifetime");
@@ -166,6 +844,38 @@ namespace tut
         response(std::filesystem::path("C:/Editor With Spaces/editor.exe"),{});
         ensure("OK persists selected editor",ui->applyPreferences(error));
         ensure_equals("global writer receives quoted executable",saved.at("ExternalEditor").asString(),std::string("\"C:/Editor With Spaces/editor.exe\""));
+        ui->setDirectoryPicker([&](const auto&,auto callback,std::string&)
+        { response=std::move(callback); return true; });
+        for (const auto& [action,setting] : {
+            std::pair{"Pref.SetBackupSettingsPath","SettingsBackupPath"},
+            std::pair{"NACL.SetPreprocInclude","_NACL_PreProcHDDIncludeLocation"},
+            std::pair{"Pref.SetCache","NewCacheLocation"},
+            std::pair{"Pref.SetSoundCache","FSSoundCacheLocation"}})
+        {
+            ensure("open directory transaction",ui->showPreferences(error));
+            const auto before=tree.setting(setting)->asString();
+            LLVKWidgetTree::Id browse=0;
+            std::vector<LLVKWidgetTree::Id> controls{ui->activeFloater()};
+            for (std::size_t index=0; index<controls.size(); ++index)
+            {
+                const auto* node=tree.get(controls[index]);
+                controls.insert(controls.end(),node->children.begin(),node->children.end());
+                if (node->control && node->control->params.commit.functionName==std::optional<std::string>(action)) browse=controls[index];
+            }
+            ensure(std::string("directory action bound: ")+action,browse!=0 && tree.commit(browse));
+            const auto oldResponse=response;
+            ensure("cancel pending directory selection",ui->closeFloater(error));
+            ensure("reopen while old directory picker pending",ui->showPreferences(error));
+            oldResponse(std::filesystem::path("C:/late-directory-fixture"),{});
+            ensure_equals("late directory selection ignored",tree.setting(setting)->asString(),before);
+            oldResponse({},"late-directory-error");
+            ensure("late error cannot affect new transaction",ui->dialogError().empty());
+            ensure("request current directory picker",tree.commit(browse));
+            response(std::filesystem::path("C:/current-directory-fixture"),{});
+            ensure_equals("current directory selection accepted",tree.setting(setting)->asString(),std::string("C:/current-directory-fixture"));
+            ui->takeNotices();
+            ensure("close current directory transaction",ui->closeFloater(error));
+        }
     }
 
     template<> template<> void object::test<176>()
@@ -443,11 +1153,21 @@ namespace tut
         ensure("search keeps Graphics",!tree.get(core)->tabContainer->hiddenPanels.contains(graphics));
         ensure_equals("search selects matching tab",tree.get(core)->tabContainer->selected,graphics);
         ensure("search removes unrelated tabs",!tree.get(core)->tabContainer->hiddenPanels.empty());
+        std::vector<LLVKWidgetTree::Id> searchNodes{core};
+        std::size_t highlighted=0;
+        for (std::size_t index=0; index<searchNodes.size(); ++index)
+        {
+            const auto* node=tree.get(searchNodes[index]);
+            searchNodes.insert(searchNodes.end(),node->children.begin(),node->children.end());
+            highlighted+=node->searchHighlighted ? 1 : 0;
+        }
+        ensure("matching controls highlighted",highlighted>0);
         ensure("filtered hierarchy paints",ui->preparePaint({},error).has_value());
         ensure("unmatched query",tree.setValue(search,LLSD("no-such-setting-fixture-93842")) && tree.commit(search));
         ensure("no result leaves no selected tab",tree.get(core)->tabContainer->selected==0);
         ensure("clear search restores tabs",tree.clearSearchEditor(search,error));
         ensure("all root tabs restored",tree.get(core)->tabContainer->hiddenPanels.empty());
+        ensure("clear removes all search highlights",std::all_of(searchNodes.begin(),searchNodes.end(),[&](auto id) { return !tree.get(id) || !tree.get(id)->searchHighlighted; }));
         struct Clipboard final : LLVKClipboard
         {
             std::u32string value;

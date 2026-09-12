@@ -41,6 +41,8 @@ namespace
 
 bool LLVKViewerUi::initializeDialogs(const Configuration& configuration,std::string& error)
 {
+    mBackupHandler=configuration.backupHandler;
+    mClearSpamQueues=configuration.clearSpamQueues;
     mLoadProxyCredentials=configuration.loadProxyCredentials;
     mSaveProxyCredentials=configuration.saveProxyCredentials;
     if (!mMediaFilter.load(configuration.mediaFilterRules,error)) return false;
@@ -107,7 +109,8 @@ bool LLVKViewerUi::initializeDialogs(const Configuration& configuration,std::str
                         name=="FirestormClearSettingsPrompt" || name=="SettingsWillClear" || name=="okcancelbuttons" || name=="AddToMediaList" ||
                         name=="ConfirmClearCache" || name=="ConfirmClearWebBrowserCache" || name=="CacheWillClear" || name=="CacheWillBeMoved" ||
                         name=="SoundCacheWillBeMoved" || name=="DisableJavascriptBreaksSearch" || name=="ChangeSkin" || name=="SkinDefaultsChangeSettings" || name=="ChangeRenderBackend" ||
-                        name=="SettingsConfirmBackup" || name=="SettingsRestoreNeedsLogout" || name=="BackupPathEmpty")
+                        name=="SettingsConfirmBackup" || name=="SettingsRestoreNeedsLogout" || name=="BackupPathEmpty" ||
+                        name=="BackupFinished" || name=="RestoreFinished" || name=="okbutton")
                     { state.notice=Notice{name,{}}; state.noticeDepth=static_cast<int>(state.stack.size()); }
                     state.formTemplate=std::string_view(tag)=="template";
                 }
@@ -1666,9 +1669,9 @@ void LLVKViewerUi::backupPreferenceAction(LLVKWidgetTree::Id panel,const std::st
     if (action=="SetBackupSettingsPath")
     {
         if (!mDirectoryPicker) { mDialogError="Native directory picker is unavailable"; return; }
-        mDirectoryPicker(std::filesystem::path(std::u8string(path.begin(),path.end())),[this,panel](auto selected,std::string error)
+        mDirectoryPicker(std::filesystem::path(std::u8string(path.begin(),path.end())),[this,panel,generation=mPreferenceGeneration](auto selected,std::string error)
         {
-            if (!mTree.get(panel)) return;
+            if (generation!=mPreferenceGeneration || !mTree.get(panel)) return;
             if (!error.empty()) { mDialogError=std::move(error); return; }
             if (!selected || selected->empty()) return;
             const auto bytes=selected->u8string();
@@ -1690,6 +1693,12 @@ void LLVKViewerUi::backupPreferenceAction(LLVKWidgetTree::Id panel,const std::st
         request.directory=std::filesystem::path(std::u8string(path.begin(),path.end()));
         request.restore=restore;
         request.globalSettings=!restore || mTree.setting("RestoreGlobalSettings").value_or(LLSD(false)).asBoolean();
+        if (restore && request.globalSettings)
+        {
+            const auto recommended=graphicsPolicyValues(0,true,mDialogError);
+            if (!recommended) return;
+            request.recommendedGraphics=*recommended;
+        }
         request.accountSettings=!mTree.setting("PerAccountSettingsFile").value_or(LLSD("")).asString().empty() &&
             (!restore || mTree.setting("RestorePerAccountSettings").value_or(LLSD(false)).asBoolean());
         for (const auto& [name,output] : {std::pair{"restore_global_files_list",&request.globalFiles},
@@ -1697,8 +1706,10 @@ void LLVKViewerUi::backupPreferenceAction(LLVKWidgetTree::Id panel,const std::st
             for (const auto& row : mTree.get(fields.at(name))->scrollList->rows)
                 if (row.cells.size()>=3 && (!restore || row.cells[0]=="true" || row.cells[0]=="1")) output->push_back(row.cells[2]);
         if (restore && mPreferences && mPreferences->visible() && !applyPreferences(mDialogError)) return;
+        if (!restore && !mUserColorsFile.empty() && !mColors->saveUserFile(mUserColorsFile,mDialogError)) return;
         if (!mBackupHandler(request,mDialogError)) return;
-        if (restore) mQuitRequest();
+        if (restore) queueNotice("RestoreFinished",{},[this](int,const LLSD&) { if (mQuitRequest) mQuitRequest(); },mDialogError);
+        else queueNotice("BackupFinished",{},{},mDialogError);
     },mDialogError);
 }
 
@@ -1763,6 +1774,14 @@ void LLVKViewerUi::viewerPreferenceAction(LLVKWidgetTree::Id panel,const std::st
 {
     mDialogError.clear();
     if (action=="Pref.PermsDefault") { showDefaultPermissions(mDialogError); return; }
+    if (action=="NACL.AntiSpamUnblock")
+    {
+        if (!mClearSpamQueues) { mDialogError="Native anti-spam queue service is unavailable"; return; }
+        mClearSpamQueues();
+        return;
+    }
+    if (action=="BeamColor_new") { showBeamColor(panel,mDialogError); return; }
+    if (action=="custom_beam_btn") { showBeamShape(panel,mDialogError); return; }
     if (action=="Pref.SetExternalEditor")
     {
         if (!mExecutableFilePicker) { mDialogError="Native executable picker is unavailable"; return; }
@@ -1780,13 +1799,53 @@ void LLVKViewerUi::viewerPreferenceAction(LLVKWidgetTree::Id panel,const std::st
         return;
     }
     if (action=="refresh_beams" || action=="BeamColor_refresh") { refreshBeamPreferences(panel,mDialogError); return; }
+    if (action=="delete_beam" || action=="BeamColor_delete")
+    {
+        const bool color=action=="BeamColor_delete";
+        const auto fields=preferenceFields(mTree,panel);
+        const auto selected=fields.find(color ? "BeamColor_combo" : "FSBeamShape_combo");
+        if (selected==fields.end()) { mDialogError="Native beam selection is missing"; return; }
+        const auto name=mTree.value(selected->second).asString();
+        if (name.empty()) return;
+        if (name=="." || name==".." || name.find_first_of("/\\:")!=std::string::npos || name.find('\0')!=std::string::npos)
+        { mDialogError="Invalid native beam preset name"; return; }
+        const auto filename=std::filesystem::path(std::u8string(name.begin(),name.end())+u8".xml");
+        const auto folder=color ? "beamsColors" : "beams";
+        bool removed=false;
+        std::string failure;
+        for (const auto& root : {mSkinBaseDirectory.parent_path()/"app_settings",mProfileDirectory/"user_settings"})
+        {
+            if (!root.is_absolute()) { failure="Native beam directory must be absolute"; continue; }
+            const auto path=root/folder/filename;
+            try
+            {
+                bool linked=false;
+                for (auto component=path; !component.empty();)
+                {
+                    if (std::filesystem::is_symlink(std::filesystem::symlink_status(component))) { linked=true; break; }
+                    const auto parent=component.parent_path();
+                    if (parent==component) break;
+                    component=parent;
+                }
+                if (linked) { failure="Linked beam preset paths cannot be deleted"; continue; }
+                if (!std::filesystem::exists(path)) continue;
+                if (!std::filesystem::is_regular_file(path)) { failure="Beam preset is not a regular file"; continue; }
+                removed=std::filesystem::remove(path)||removed;
+            }
+            catch (const std::filesystem::filesystem_error&) { failure="Cannot delete native beam preset"; }
+        }
+        if (removed) mTree.updateSetting(color ? "FSBeamColorFile" : "FSBeamShape",LLSD(""));
+        refreshBeamPreferences(panel,mDialogError);
+        if (!failure.empty()) mDialogError=std::move(failure);
+        return;
+    }
     if (action=="NACL.SetPreprocInclude")
     {
         if (!mDirectoryPicker) { mDialogError="Native directory picker is unavailable"; return; }
         const auto current=mTree.setting("_NACL_PreProcHDDIncludeLocation").value_or(LLSD("")).asString();
-        mDirectoryPicker(std::filesystem::path(std::u8string(current.begin(),current.end())),[this,panel](auto selected,std::string error)
+        mDirectoryPicker(std::filesystem::path(std::u8string(current.begin(),current.end())),[this,panel,generation=mPreferenceGeneration](auto selected,std::string error)
         {
-            if (!mTree.get(panel)) return;
+            if (generation!=mPreferenceGeneration || !mTree.get(panel)) return;
             if (!error.empty()) { mDialogError=std::move(error); return; }
             if (!selected || selected->empty()) return;
             const auto bytes=selected->u8string();
@@ -1808,6 +1867,250 @@ void LLVKViewerUi::viewerPreferenceAction(LLVKWidgetTree::Id panel,const std::st
     }
     if (!mViewerPreferenceHandler) { mDialogError="Native Viewer preference service is not bound: "+action; return; }
     mViewerPreferenceHandler(action,mDialogError);
+}
+
+bool LLVKViewerUi::updateBeamShapeImage(std::string& error)
+{
+    const auto panel=find("beamshape_draw",mBeamShape->id());
+    const auto rect=mTree.get(panel)->params.rect;
+    const int width=rect.right-rect.left,height=rect.top-rect.bottom;
+    if (width<=0 || height<=0 || width>2048 || height>2048) { error="Invalid native beam drawing dimensions"; return false; }
+    std::vector<std::uint8_t> pixels(static_cast<std::size_t>(width)*height*4,0);
+    const auto pixel=[&](int column,int row,const LLVKColor::Value& color)
+    {
+        if (column<0 || column>=width || row<0 || row>=height) return;
+        const auto offset=(row*width+column)*4;
+        for (int channel=0; channel<4; ++channel) pixels[offset+channel]=static_cast<std::uint8_t>(std::clamp(color[channel],0.f,1.f)*255.f+0.5f);
+    };
+    for (int row=0; row<height; ++row)
+        for (int column=0; column<width; ++column)
+        {
+            const float dx=static_cast<float>(column-width/2),dy=static_cast<float>(row-height/2);
+            const float distance=std::sqrt(dx*dx+dy*dy);
+            for (int ring=0; ring<5; ++ring)
+                if (std::abs(distance-(ring==0 ? 2.f : 30.f*ring))<0.6f)
+                    pixel(column,row,ring%2 ? LLVKColor::Value{0,0,0,1} : LLVKColor::Value{1,1,1,1});
+        }
+    for (const auto& point : mBeamShapeDraft.points)
+    {
+        const auto centerX=point.horizontal-rect.left,centerY=point.vertical-rect.bottom;
+        for (int row=std::max(0,centerY-9); row<std::min(height,centerY+10); ++row)
+            for (int column=std::max(0,centerX-9); column<std::min(width,centerX+10); ++column)
+            {
+                const int dx=column-centerX,dy=row-centerY,squared=dx*dx+dy*dy;
+                if (squared<=81) pixel(column,row,squared<=49 ? point.color : squared<=64 ? LLVKColor::Value{0,0,0,1} : LLVKColor::Value{1,1,1,1});
+            }
+    }
+    const auto image=LLVKWidgetImage::fromRgba("native-beam-shape",width,height,pixels,error);
+    return image && mTree.setButtonImages(mBeamShapeCanvas,image,image);
+}
+
+bool LLVKViewerUi::showBeamShape(LLVKWidgetTree::Id owner,std::string& error)
+{
+    error.clear();
+    if (!mTree.get(owner)) { error="Native beam editor owner is missing"; return false; }
+    if (!mBeamShape)
+    {
+        mBeamShape=LLVKFloater::createFile(mTree,*mDialogFactory,mRoot,"floater_beamshape.xml",error);
+        if (!mBeamShape) return false;
+        const auto panel=find("beamshape_draw",mBeamShape->id());
+        if (!panel) { error="Original beam drawing panel is missing"; mBeamShape.reset(); return false; }
+        const auto rect=mTree.get(panel)->params.rect;
+        const auto canvas=mDialogFactory->construct(mTree,"<button name='native_beam_shape' left='0' bottom='0' width='400' height='300' follows='all' label='' hover_glow_amount='0' display_pressed_state='false'/>",panel,error);
+        if (!canvas) { mBeamShape.reset(); return false; }
+        mBeamShapeCanvas=*canvas;
+        if (!mTree.setShape(*canvas,{0,0,rect.right-rect.left,rect.top-rect.bottom},error)) { mBeamShape.reset(); return false; }
+        LLSD red=LLSD::emptyArray(); for (const auto channel : {1.,0.,0.,1.}) red.append(channel);
+        mTree.setColorSwatchValue(find("beam_color_swatch",mBeamShape->id()),red,error);
+        LLVKWidgetTree::Events events;
+        events.pointer=[this,panel](auto,const auto& event)
+        {
+            if (event.kind!=LLVKWidgetTree::PointerKind::LeftDown && event.kind!=LLVKWidgetTree::PointerKind::RightDown) return;
+            const auto rect=mTree.get(panel)->params.rect;
+            const auto swatch=mTree.get(find("beam_color_swatch",mBeamShape->id()));
+            if (mBeamShapeDraft.select(event.x+rect.left,event.y+rect.bottom,event.kind==LLVKWidgetTree::PointerKind::RightDown,swatch->colorSwatch->color))
+                updateBeamShapeImage(mDialogError);
+        };
+        mTree.setEvents(*canvas,std::move(events));
+        for (const auto name : {"beamshape_save","beamshape_load","beamshape_clear","cancel"})
+        {
+            LLVKControl::Callback callback;
+            callback.function=[this,name=std::string(name)](auto,const LLSD&)
+            {
+                if (name=="cancel") mBeamShape->close(mDialogError);
+                else if (name=="beamshape_clear") { mBeamShapeDraft.points.clear(); updateBeamShapeImage(mDialogError); }
+                else beamShapeFile(name=="beamshape_save");
+            };
+            mTree.setControlCommit(find(name,mBeamShape->id()),std::move(callback));
+        }
+        mBeamShape->onClose([this] { ++mBeamShapeGeneration; });
+    }
+    mBeamShapeOwner=owner;
+    if (!mBeamShape->visible()) { ++mBeamShapeGeneration; if (!updateBeamShapeImage(error)) return false; }
+    mActiveFloater=mBeamShape.get();
+    return mBeamShape->open(error);
+}
+
+void LLVKViewerUi::beamShapeFile(bool save)
+{
+    mDialogError.clear();
+    if (!mXmlFilePicker) { mDialogError="Native XML picker is unavailable"; return; }
+    const auto initial=(mProfileDirectory/"user_settings"/"beams"/"NewBeam.xml").u8string();
+    mXmlFilePicker(save,save ? std::string(initial.begin(),initial.end()) : "",[this,save,generation=mBeamShapeGeneration](auto path,std::string problem)
+    {
+        if (!mBeamShape || !mBeamShape->visible() || generation!=mBeamShapeGeneration) return;
+        if (!problem.empty()) { mDialogError=std::move(problem); return; }
+        if (!path || path->empty()) return;
+        const auto rect=mTree.get(find("beamshape_draw",mBeamShape->id()))->params.rect;
+        const auto width=rect.right-rect.left,height=rect.top-rect.bottom;
+        if (save)
+        {
+            if (!llvkSaveBeamPreset(*path,mBeamShapeDraft.serialize(rect.left,rect.bottom,width,height),mDialogError)) return;
+            const auto name=path->stem().u8string(); mTree.updateSetting("FSBeamShape",LLSD(std::string(name.begin(),name.end())));
+            if (mTree.get(mBeamShapeOwner)) refreshBeamPreferences(mBeamShapeOwner,mDialogError);
+        }
+        else
+        {
+            const auto xml=readText(*path); if (!xml) { mDialogError="Cannot read beam shape preset"; return; }
+            std::istringstream input(*xml); LLSD document;
+            if (LLSDSerialize::fromXML(document,input)<=0) { mDialogError="Invalid beam shape preset XML"; return; }
+            if (mBeamShapeDraft.load(document,rect.left,rect.bottom,width,height,mDialogError)) updateBeamShapeImage(mDialogError);
+        }
+    },mDialogError);
+}
+
+bool LLVKViewerUi::updateBeamColorStrip(std::string& error)
+{
+    std::vector<std::uint8_t> pixels(410*76*4,0);
+    const auto pixel=[&](int column,int row,const LLVKColor::Value& color)
+    {
+        if (column<0 || column>=410 || row<0 || row>=76) return;
+        const auto offset=(row*410+column)*4;
+        for (int channel=0; channel<4; ++channel) pixels[offset+channel]=static_cast<std::uint8_t>(std::clamp(color[channel],0.f,1.f)*255.f+0.5f);
+    };
+    for (int degrees=0; degrees<=720; ++degrees)
+        for (int row=0; row<76; ++row) pixel(LLVKBeamColor::position(static_cast<float>(degrees)),row,LLVKBeamColor::hue(static_cast<float>(degrees)));
+    for (const float hue : {mBeamColorDraft.startHue,mBeamColorDraft.endHue})
+    {
+        const auto center=LLVKBeamColor::position(hue);
+        for (int row=0; row<76; ++row)
+            for (int column=std::max(0,center-26); column<std::min(410,center+27); ++column)
+            {
+                const int dx=column-center,dy=row-37;
+                const float radius=std::sqrt(static_cast<float>(dx*dx+dy*dy));
+                const bool circle=radius>=6.5f && radius<=9.5f;
+                const bool cross=(std::abs(dx)<=1 && std::abs(dy)<=28) || (std::abs(dy)<=1 && std::abs(dx)<=25);
+                if (!circle && !cross) continue;
+                const bool black=circle ? radius>=7.5f && radius<8.5f : dx==0 || dy==0;
+                pixel(column,row,black ? LLVKColor::Value{0,0,0,1} : LLVKColor::Value{1,1,1,1});
+            }
+    }
+    const auto image=LLVKWidgetImage::fromRgba("native-beam-color-strip",410,76,pixels,error);
+    if (!image || !mTree.setButtonImages(mBeamColorStrip,image,image)) return false;
+    for (const auto& [name,hue] : {std::pair{"native_start_hue",mBeamColorDraft.startHue},std::pair{"native_end_hue",mBeamColorDraft.endHue}})
+    {
+        const auto label=find(name,mBeamColor->id());
+        const auto center=LLVKBeamColor::position(hue);
+        if (!mTree.setShape(label,{center-40,165,center+40,181},error)) return false;
+    }
+    return true;
+}
+
+bool LLVKViewerUi::updateBeamColorPreview(std::string& error)
+{
+    const auto color=mBeamColorDraft.preview(mNoticeTime);
+    if (!color) { error="Invalid native beam preview time"; return false; }
+    LLSD value=LLSD::emptyArray();
+    for (const auto channel : *color) value.append(channel);
+    return mTree.setColorSwatchValue(find("BeamColor_Preview",mBeamColor->id()),value,error);
+}
+
+bool LLVKViewerUi::showBeamColor(LLVKWidgetTree::Id owner,std::string& error)
+{
+    error.clear();
+    if (!mTree.get(owner)) { error="Native beam editor owner is missing"; return false; }
+    if (!mBeamColor)
+    {
+        mBeamColor=LLVKFloater::createFile(mTree,*mDialogFactory,mRoot,"floater_beamcolor.xml",error);
+        if (!mBeamColor) return false;
+        const auto discard=[&] { mBeamColor.reset(); return false; };
+        const auto strip=mDialogFactory->construct(mTree,
+            "<button name='native_beam_hues' left='0' bottom='161' width='410' height='76' label='' hover_glow_amount='0' display_pressed_state='false'/>" ,mBeamColor->id(),error);
+        if (!strip) return discard();
+        mBeamColorStrip=*strip;
+        for (const auto& [name,key] : {std::pair{"native_start_hue","start_hue"},std::pair{"native_end_hue","end_hue"}})
+        {
+            const auto label=mDialogFactory->construct(mTree,std::string("<text name='")+name+"' width='80' height='16' halign='center' mouse_opaque='false'/>",mBeamColor->id(),error);
+            const auto text=mTree.panelString(mBeamColor->id(),key,{},error);
+            if (!label || !text || !mTree.setValue(*label,LLSD(*text))) return discard();
+        }
+        LLVKWidgetTree::Events events;
+        events.pointer=[this](auto,const auto& event)
+        {
+            if (event.kind!=LLVKWidgetTree::PointerKind::LeftDown && event.kind!=LLVKWidgetTree::PointerKind::RightDown) return;
+            if (mBeamColorDraft.select(event.x,event.y+161,event.kind==LLVKWidgetTree::PointerKind::RightDown)) updateBeamColorStrip(mDialogError);
+        };
+        mTree.setEvents(mBeamColorStrip,std::move(events));
+        for (const auto name : {"BeamColor_Save","BeamColor_Load","BeamColor_Cancel","BeamColor_Speed"})
+        {
+            const auto control=find(name,mBeamColor->id());
+            if (!control) { error="Original beam editor control is missing"; return discard(); }
+            LLVKControl::Callback callback;
+            callback.function=[this,name=std::string(name)](auto id,const LLSD&)
+            {
+                if (name=="BeamColor_Cancel") mBeamColor->close(mDialogError);
+                else if (name=="BeamColor_Speed")
+                {
+                    if (!mBeamColorDraft.setSpeed(static_cast<float>(mTree.value(id).asReal()))) mDialogError="Invalid beam rotation speed";
+                    else updateBeamColorStrip(mDialogError);
+                }
+                else beamColorFile(name=="BeamColor_Save");
+            };
+            mTree.setControlCommit(control,std::move(callback));
+        }
+        mBeamColor->onClose([this] { ++mBeamColorGeneration; });
+    }
+    mBeamColorOwner=owner;
+    if (!mBeamColor->visible())
+    {
+        ++mBeamColorGeneration;
+        if (!mTree.setValue(find("BeamColor_Speed",mBeamColor->id()),LLSD(mBeamColorDraft.rotateSpeed*100.f)) || !updateBeamColorStrip(error)) return false;
+    }
+    mActiveFloater=mBeamColor.get();
+    return mBeamColor->open(error);
+}
+
+void LLVKViewerUi::beamColorFile(bool save)
+{
+    mDialogError.clear();
+    if (!mXmlFilePicker) { mDialogError="Native XML picker is unavailable"; return; }
+    const auto destination=mProfileDirectory/"user_settings"/"beamsColors"/"NewBeamColor.xml";
+    const auto bytes=destination.u8string();
+    mXmlFilePicker(save,save ? std::string(bytes.begin(),bytes.end()) : "",
+        [this,save,generation=mBeamColorGeneration](auto path,std::string problem)
+    {
+        if (!mBeamColor || !mBeamColor->visible() || generation!=mBeamColorGeneration) return;
+        if (!problem.empty()) { mDialogError=std::move(problem); return; }
+        if (!path || path->empty()) return;
+        if (save)
+        {
+            if (!mBeamColorDraft.saveFile(*path,mDialogError)) return;
+            const auto bytes=path->stem().u8string();
+            mTree.updateSetting("FSBeamColorFile",LLSD(std::string(bytes.begin(),bytes.end())));
+            if (mTree.get(mBeamColorOwner) && !refreshBeamPreferences(mBeamColorOwner,mDialogError)) return;
+            mBeamColor->close(mDialogError);
+        }
+        else
+        {
+            const auto xml=readText(*path);
+            if (!xml) { mDialogError="Cannot read native beam color preset"; return; }
+            std::istringstream input(*xml); LLSD value;
+            if (LLSDSerialize::fromXML(value,input)<=0) { mDialogError="Invalid beam color preset XML"; return; }
+            if (!mBeamColorDraft.load(value,mDialogError)) return;
+            mTree.setValue(find("BeamColor_Speed",mBeamColor->id()),LLSD(mBeamColorDraft.rotateSpeed*100.f));
+            updateBeamColorStrip(mDialogError);
+        }
+    },mDialogError);
 }
 
 bool LLVKViewerUi::showDefaultPermissions(std::string& error)
@@ -1874,6 +2177,149 @@ bool LLVKViewerUi::acceptDefaultPermissions(std::string& error)
     return mDefaultPermissions->close(error);
 }
 
+bool LLVKViewerUi::refreshGraphicPresetDialogs(std::string& error)
+{
+    for (const auto& [action,dialog] : mGraphicPresetDialogs)
+    {
+        const auto names=mGraphicPresets->names(action=="PrefLoad",error);
+        if (!names) return false;
+        std::vector<LLVKWidgetTree::ComboItem> items;
+        for (const auto& name : *names) items.push_back({name=="Default" ? mAboutStrings["Default"] : name,LLSD(name)});
+        const auto combo=find("preset_combo",dialog->id());
+        if (!mTree.replaceComboItems(combo,std::move(items),error)) return false;
+        const auto active=mTree.setting("PresetGraphicActive").value_or(LLSD("")).asString();
+        if (std::find(names->begin(),names->end(),active)!=names->end()) mTree.setValue(combo,LLSD(active));
+        else if (!names->empty()) mTree.setValue(combo,LLSD(names->front()));
+        if (action=="PrefSave")
+            mTree.setEnabled(find("save",dialog->id()),!mTree.value(combo).asString().empty());
+        else mTree.setEnabled(find(action=="PrefLoad" ? "ok" : "delete",dialog->id()),!names->empty());
+    }
+    const auto label=find("preset_text",mGraphicPresetOwner);
+    const auto name=mTree.setting("PresetGraphicActive").value_or(LLSD("")).asString();
+    if (label) mTree.setValue(label,LLSD(name.empty() ? mAboutStrings["none_paren_cap"] : name=="Default" ? mAboutStrings["Default"] : name));
+    return true;
+}
+
+bool LLVKViewerUi::showGraphicPreset(LLVKWidgetTree::Id owner,const std::string& action,std::string& error)
+{
+    error.clear();
+    if (action!="PrefSave" && action!="PrefLoad" && action!="PrefDelete") { error="Invalid graphics preset action"; return false; }
+    if (!mGraphicPresets)
+    {
+        auto presets=std::make_unique<LLVKGraphicPresets>();
+        if (!presets->initialize(mSkinBaseDirectory.parent_path()/"app_settings",mProfileDirectory/"user_settings"/"presets"/"graphic",error)) return false;
+        mGraphicPresets=std::move(presets);
+        for (const auto& control : mGraphicPresets->controls())
+            if (mTree.setting(control)) mTree.subscribeSetting(control,[this](const LLSD&,const LLSD&)
+            {
+                if (mLoadingGraphicPreset) return;
+                mTree.updateSetting("PresetGraphicActive",LLSD(""));
+                const auto label=find("preset_text",mGraphicPresetOwner);
+                if (label) mTree.setValue(label,LLSD(mAboutStrings["none_paren_cap"]));
+            });
+    }
+    mGraphicPresetOwner=owner;
+    if (mGraphicsDevice)
+    {
+        auto defaults=graphicsPolicyValues(0,true,error);
+        if (!defaults) return false;
+        for (const auto& control : mGraphicPresets->controls())
+            if (!defaults->contains(control)) if (const auto value=mTree.setting(control)) (*defaults)[control]=*value;
+        if (!mGraphicPresets->createDefault(*defaults,error)) return false;
+    }
+    auto& dialog=mGraphicPresetDialogs[action];
+    if (!dialog)
+    {
+        const auto file=action=="PrefSave" ? "floater_save_pref_preset.xml" : action=="PrefLoad" ? "floater_load_pref_preset.xml" : "floater_delete_pref_preset.xml";
+        dialog=LLVKFloater::createFile(mTree,*mDialogFactory,mRoot,file,error);
+        if (!dialog) { mGraphicPresetDialogs.erase(action); return false; }
+        const auto id=dialog->id();
+        LLVKControl::Callback accept;
+        accept.function=[this,action](auto,const LLSD&) { acceptGraphicPreset(action,mDialogError); };
+        mTree.setControlCommit(find(action=="PrefSave" ? "save" : action=="PrefLoad" ? "ok" : "delete",id),accept);
+        LLVKControl::Callback cancel;
+        cancel.function=[this,action](auto,const LLSD&) { mGraphicPresetDialogs.at(action)->close(mDialogError); };
+        mTree.setControlCommit(find("cancel",id),std::move(cancel));
+        if (action=="PrefSave")
+        {
+            const auto combo=find("preset_combo",id);
+            mTree.setControlCommit(combo,std::move(accept));
+            const auto editor=mTree.get(combo)->combo->editor;
+            const auto previous=editor ? mTree.get(editor)->lineEditor->params.keystroke : LLVKControl::Callback{};
+            LLVKControl::Callback changed;
+            changed.function=[this,id,previous](auto editor,const LLSD& value)
+            {
+                if (previous.function) previous.function(editor,previous.parameter.value_or(value));
+                if (mTree.get(editor)) mTree.setEnabled(find("save",id),!mTree.value(editor).asString().empty());
+            };
+            if (editor) mTree.setLineEditorKeystroke(editor,std::move(changed));
+        }
+    }
+    if (!refreshGraphicPresetDialogs(error)) return false;
+    mActiveFloater=dialog.get();
+    return dialog->open(error);
+}
+
+bool LLVKViewerUi::acceptGraphicPreset(const std::string& action,std::string& error)
+{
+    error.clear();
+    const auto found=mGraphicPresetDialogs.find(action);
+    if (found==mGraphicPresetDialogs.end() || !found->second->visible()) return false;
+    const auto combo=find("preset_combo",found->second->id());
+    const auto* state=mTree.get(combo);
+    const auto name=state->combo->editor ? mTree.value(state->combo->editor).asString() : mTree.value(combo).asString();
+    if (name.empty()) return false;
+    if ((action=="PrefSave" || action=="PrefDelete") && name==mAboutStrings["Default"])
+    { error="The Default graphics preset is protected"; return false; }
+    if (action=="PrefSave")
+    {
+        std::map<std::string,LLSD> values;
+        for (const auto& control : mGraphicPresets->controls())
+            if (const auto value=mTree.setting(control)) values[control]=*value;
+        if (!mGraphicPresets->save(name,values,error)) return false;
+        mTree.updateSetting("PresetGraphicActive",LLSD(name));
+    }
+    else if (action=="PrefLoad")
+    {
+        const auto values=mGraphicPresets->load(name,error);
+        if (!values) return false;
+        struct Loading { bool& flag; bool previous; explicit Loading(bool& value) : flag(value),previous(value) { flag=true; } ~Loading() { flag=previous; } } loading(mLoadingGraphicPreset);
+        for (const auto& [control,value] : *values)
+        {
+            const auto before=mTree.setting(control);
+            if (!before) continue;
+            if (mPreferences && mPreferences->visible()) mPreferenceSnapshot.settings.try_emplace(control,*before);
+            if (!mTree.updateSetting(control,value)) { error="Cannot apply graphics preset setting: "+control; return false; }
+        }
+        mTree.updateSetting("PresetGraphicActive",LLSD(name));
+        if (!initializeGraphicsPreferences(mGraphicPresetOwner,error)) return false;
+    }
+    else
+    {
+        if (!mGraphicPresets->remove(name,error)) return false;
+        if (mTree.setting("PresetGraphicActive").value_or(LLSD()).asString()==name) mTree.updateSetting("PresetGraphicActive",LLSD(""));
+    }
+    if (!refreshGraphicPresetDialogs(error)) return false;
+    return found->second->close(error);
+}
+
+std::optional<std::map<std::string,LLSD>> LLVKViewerUi::graphicsPolicyValues(int level,bool recommended,std::string& error)
+{
+    if (!mGraphicsDevice) { error="Native graphics device facts are unavailable"; return {}; }
+    if (!mGraphicsPolicy)
+    {
+        auto policy=std::make_unique<LLVKGraphicsPolicy>();
+        const auto viewer=mSkinBaseDirectory.parent_path();
+        if (!policy->initialize(viewer/"featuretable.txt",viewer/"app_settings"/"settings.xml",error)) return {};
+        mGraphicsPolicy=std::move(policy);
+    }
+    auto device=*mGraphicsDevice;
+    device.skipBenchmark=mTree.setting("SkipBenchmark").value_or(LLSD(false)).asBoolean();
+    if (mTree.setting("NoHardwareProbe").value_or(LLSD(false)).asBoolean()) device.bandwidth=-1.f;
+    if (const auto threshold=mTree.setting("RenderClass1MemoryBandwidth")) device.classOneBandwidth=static_cast<float>(threshold->asReal());
+    return mGraphicsPolicy->settings(level,device,recommended,error);
+}
+
 bool LLVKViewerUi::initializeGraphicsPreferences(LLVKWidgetTree::Id panel,std::string& error)
 {
     error.clear();
@@ -1910,6 +2356,21 @@ bool LLVKViewerUi::initializeGraphicsPreferences(LLVKWidgetTree::Id panel,std::s
 void LLVKViewerUi::graphicsPreferenceAction(LLVKWidgetTree::Id panel,const std::string& action,const LLSD& value)
 {
     mDialogError.clear();
+    if (action=="PrefSave" || action=="PrefLoad" || action=="PrefDelete") { showGraphicPreset(panel,action,mDialogError); return; }
+    if (action=="HardwareDefaults" || action=="QualityPerformance")
+    {
+        const auto values=graphicsPolicyValues(value.asInteger(),action=="HardwareDefaults",mDialogError);
+        if (!values) return;
+        for (const auto& [name,setting] : *values)
+        {
+            const auto before=mTree.setting(name); if (!before) continue;
+            if (mPreferences && mPreferences->visible()) mPreferenceSnapshot.settings.try_emplace(name,*before);
+            if (!mTree.updateSetting(name,setting)) { mDialogError="Cannot apply native graphics setting: "+name; return; }
+        }
+        mTree.updateSetting("PresetGraphicActive",LLSD(""));
+        initializeGraphicsPreferences(panel,mDialogError);
+        return;
+    }
     const auto fields=preferenceFields(mTree,panel);
     const auto boolean=[&](const char* name) { return mTree.setting(name).value_or(LLSD(false)).asBoolean(); };
     if (action=="Backend")
@@ -2078,9 +2539,9 @@ void LLVKViewerUi::networkPreferenceAction(LLVKWidgetTree::Id panel,const std::s
         if (!mDirectoryPicker) { mDialogError="Native directory picker is unavailable"; return; }
         const bool sound=action=="SetSoundCache";
         const auto current=settingPath(sound ? "FSSoundCacheLocation" : "CacheLocation");
-        mDirectoryPicker(current,[this,panel,sound,current,pathValue](auto selected,std::string problem)
+        mDirectoryPicker(current,[this,panel,sound,current,pathValue,generation=mPreferenceGeneration](auto selected,std::string problem)
         {
-            if (!mTree.get(panel)) return;
+            if (generation!=mPreferenceGeneration || !mTree.get(panel)) return;
             if (!problem.empty()) { mDialogError=std::move(problem); return; }
             if (!selected || selected->empty() || *selected==current) return;
             if (!selected->is_absolute()) { mDialogError="Native cache directory must be absolute"; return; }
@@ -2964,6 +3425,7 @@ bool LLVKViewerUi::filterPreferences(std::string& error)
     {
         const auto* node=mTree.get(id);
         if (!node) return false;
+        mTree.setSearchHighlighted(id,false);
         bool match=query.empty();
         if (node->tabContainer)
         {
@@ -2990,7 +3452,9 @@ bool LLVKViewerUi::filterPreferences(std::string& error)
             if (node->plainText) text+=" "+mTree.value(id).asString();
             if (node->combo) for (const auto& item : node->combo->items) text+=" "+item.label;
             if (node->control->params.valueSetting) text+=" "+*node->control->params.valueSetting;
-            match|=matches(text);
+            const bool matched=matches(text);
+            mTree.setSearchHighlighted(id,!query.empty() && matched);
+            match|=matched;
         }
         const auto children=node->children;
         for (const auto child : children) match|=self(self,child);
@@ -3014,6 +3478,9 @@ bool LLVKViewerUi::showPreferences(std::string& error)
         mPreferences->onClose([this]
         {
             ++mPreferenceGeneration;
+            if (mBeamColor && mBeamColor->visible()) mBeamColor->close(mDialogError);
+            if (mBeamShape && mBeamShape->visible()) mBeamShape->close(mDialogError);
+            for (const auto& [action,dialog] : mGraphicPresetDialogs) if (dialog->visible()) dialog->close(mDialogError);
             const auto core=find("pref core",mPreferences->id());
             const auto* tabs=mTree.get(core);
             std::optional<int> lastTab;
@@ -3025,6 +3492,7 @@ bool LLVKViewerUi::showPreferences(std::string& error)
             }
             if (!mPreferencesAccepted)
             {
+                struct Loading { bool& flag; bool previous; explicit Loading(bool& value) : flag(value),previous(value) { flag=true; } ~Loading() { flag=previous; } } loading(mLoadingGraphicPreset);
                 if (mBindingSnapshot) mBindings=*mBindingSnapshot;
                 for (const auto& [name,value] : mWarningSnapshot)
                     if (auto control=mWarningSettings->getControl(name)) control->setValue(value,false);
@@ -3033,6 +3501,7 @@ bool LLVKViewerUi::showPreferences(std::string& error)
                     if (mTree.get(panel)) refreshCrashPreferences(panel,true,mDialogError);
                 for (const auto& [panel,draft] : mSkinDrafts)
                     if (mTree.get(panel)) refreshSkinPreferences(panel,true,false,mDialogError);
+                if (mGraphicPresets) refreshGraphicPresetDialogs(mDialogError);
             }
             mBindingSnapshot.reset();
             mPreferenceSnapshot={};
@@ -3051,6 +3520,7 @@ bool LLVKViewerUi::showPreferences(std::string& error)
         const auto snapshot=mTree.snapshotPreferences(mPreferences->id(),error);
         if (!snapshot) return false;
         mPreferenceSnapshot=*snapshot;
+        if (const auto preset=mTree.setting("PresetGraphicActive")) mPreferenceSnapshot.settings["PresetGraphicActive"]=*preset;
         mBindingSnapshot=mBindings;
         const auto colors=mColors->serializeUser(error);
         if (!colors) return false;
@@ -3377,6 +3847,9 @@ std::vector<LLVKFloater*> LLVKViewerUi::floaters() const
 {
     std::vector<LLVKFloater*> result{mPreferences.get(),mAbout.get(),mAutoReplace.get(),mSpellCheck.get(),mSpellImport.get(),mTranslation.get(),mKeyCapture.get(),mJoystick.get(),mProxy.get(),mMediaLists.get(),mBlockObjectName.get(),mBlockList.get()};
     result.push_back(mDefaultPermissions.get());
+    result.push_back(mBeamColor.get());
+    result.push_back(mBeamShape.get());
+    for (const auto& [action,dialog] : mGraphicPresetDialogs) result.push_back(dialog.get());
     for (const auto& [swatch,picker] : mColorPickers) result.push_back(picker.get());
     return result;
 }

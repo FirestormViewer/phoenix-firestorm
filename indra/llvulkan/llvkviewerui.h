@@ -1,6 +1,8 @@
 #ifndef LLVKVIEWERUI_H
 #define LLVKVIEWERUI_H
 
+#include "llvkvoice.h"
+
 #include "llvkwidgetfactory.h"
 #include "llvkwidgetpaint.h"
 #include "llvkmenu.h"
@@ -12,10 +14,15 @@
 #include "llvkmediafilter.h"
 #include "llvkmutelist.h"
 #include "llvkproxy.h"
+#include "llvkbeamcolor.h"
+#include "llvkbeamshape.h"
+#include "llvkgraphicpresets.h"
+#include "llvkgraphicspolicy.h"
 
 class LLVKViewerUi final
 {
 public:
+    struct BackupRequest;
     struct Configuration
     {
         LLVKSkinFiles::Configuration skin;
@@ -49,6 +56,8 @@ public:
         std::function<bool(const std::optional<LLVKProxy::Credentials>&,std::string&)> saveProxyCredentials;
         std::filesystem::path cacheDirectory, defaultCacheDirectory;
         std::filesystem::path userColorsFile;
+        std::function<bool(const BackupRequest&,std::string&)> backupHandler;
+        std::function<void()> clearSpamQueues;
     };
     static std::unique_ptr<LLVKViewerUi> create(const Configuration& configuration, std::string& error);
     struct Page
@@ -79,6 +88,7 @@ public:
     void setQuitRequestHandler(std::function<void()> handler) { mQuitRequest=std::move(handler); }
     void setGraphicsPreferenceHandler(std::function<bool(const std::string&,const LLSD&,std::string&)> handler)
     { mGraphicsPreferenceHandler=std::move(handler); }
+    void setGraphicsDevice(const LLVKGraphicsPolicy::Device& device) { mGraphicsDevice=device; }
     void setViewerPreferenceHandler(std::function<bool(const std::string&,std::string&)> handler)
     { mViewerPreferenceHandler=std::move(handler); }
     struct BackupRequest
@@ -86,6 +96,7 @@ public:
         std::filesystem::path directory;
         bool restore = false, globalSettings = true, accountSettings = false;
         std::vector<std::string> globalFiles, accountFiles, folders;
+        std::map<std::string,LLSD> recommendedGraphics;
     };
     void setBackupHandler(std::function<bool(const BackupRequest&,std::string&)> handler) { mBackupHandler=std::move(handler); }
     bool showSpellCheck(std::string& error);
@@ -94,6 +105,9 @@ public:
     void setTranslationVerifier(TranslationVerifier verifier) { mTranslationVerifier=std::move(verifier); }
     bool showTranslation(std::string& error);
     bool showDefaultPermissions(std::string& error);
+    bool showBeamColor(LLVKWidgetTree::Id owner,std::string& error);
+    bool showBeamShape(LLVKWidgetTree::Id owner,std::string& error);
+    bool showGraphicPreset(LLVKWidgetTree::Id owner,const std::string& action,std::string& error);
     struct JoystickServices
     {
         std::function<std::optional<std::vector<LLVKJoystick::Device>>(std::string&)> enumerate;
@@ -110,14 +124,7 @@ public:
     void setPrivacyActionHandler(std::function<bool(const std::string&,std::string&)> handler) { mPrivacyActionHandler=std::move(handler); }
     const LLVKMediaFilter& mediaFilter() const noexcept { return mMediaFilter; }
     LLVKMuteList& muteList() noexcept { return mMuteList; }
-    struct VoiceDeviceState
-    {
-        struct Device { std::string label, id; };
-        std::vector<Device> inputs, outputs;
-        std::uint64_t generation = 0;
-        bool tuning = false;
-        float energy = 0.f;
-    };
+    using VoiceDeviceState = LLVKVoice::State;
     struct VoiceDeviceServices
     {
         std::function<bool(std::string&)> refresh;
@@ -264,12 +271,35 @@ private:
     std::string mUserColorsSnapshot;
     XmlFilePicker mExecutableFilePicker;
     std::uint64_t mPreferenceGeneration = 0;
+    std::function<void()> mClearSpamQueues;
     std::unique_ptr<LLVKMenu> mMenu;
     std::unique_ptr<LLVKFloater> mPreferences, mAbout;
     std::unique_ptr<LLVKFloater> mKeyCapture;
     std::unique_ptr<LLVKFloater> mJoystick;
     std::unique_ptr<LLVKFloater> mProxy;
     std::unique_ptr<LLVKFloater> mDefaultPermissions;
+    std::unique_ptr<LLVKFloater> mBeamColor;
+    std::unique_ptr<LLVKFloater> mBeamShape;
+    LLVKBeamShape mBeamShapeDraft;
+    LLVKWidgetTree::Id mBeamShapeOwner=0,mBeamShapeCanvas=0;
+    std::uint64_t mBeamShapeGeneration=0;
+    bool updateBeamShapeImage(std::string& error);
+    void beamShapeFile(bool save);
+    std::unique_ptr<LLVKGraphicPresets> mGraphicPresets;
+    std::map<std::string,std::unique_ptr<LLVKFloater>> mGraphicPresetDialogs;
+    LLVKWidgetTree::Id mGraphicPresetOwner=0;
+    bool mLoadingGraphicPreset=false;
+    std::optional<LLVKGraphicsPolicy::Device> mGraphicsDevice;
+    std::unique_ptr<LLVKGraphicsPolicy> mGraphicsPolicy;
+    std::optional<std::map<std::string,LLSD>> graphicsPolicyValues(int level,bool recommended,std::string& error);
+    bool refreshGraphicPresetDialogs(std::string& error);
+    bool acceptGraphicPreset(const std::string& action,std::string& error);
+    LLVKBeamColor mBeamColorDraft;
+    LLVKWidgetTree::Id mBeamColorOwner=0, mBeamColorStrip=0;
+    std::uint64_t mBeamColorGeneration=0;
+    bool updateBeamColorStrip(std::string& error);
+    bool updateBeamColorPreview(std::string& error);
+    void beamColorFile(bool save);
     LLVKWidgetTree::PreferenceSnapshot mDefaultPermissionsSnapshot;
     bool mDefaultPermissionsAccepted = false;
     bool acceptDefaultPermissions(std::string& error);

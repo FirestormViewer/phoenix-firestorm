@@ -12,6 +12,34 @@
 
 namespace
 {
+    bool browserCachePathUnlinked(const std::filesystem::path& path,std::string& error)
+    {
+        for (auto component=path; !component.empty();)
+        {
+#ifdef _WIN32
+            const auto attributes=GetFileAttributesW(component.c_str());
+            if (attributes!=INVALID_FILE_ATTRIBUTES && (attributes&FILE_ATTRIBUTE_REPARSE_POINT))
+            { error="Native browser cache contains a linked path"; return false; }
+            if (attributes==INVALID_FILE_ATTRIBUTES)
+            {
+                const auto failure=GetLastError();
+                if (failure!=ERROR_FILE_NOT_FOUND && failure!=ERROR_PATH_NOT_FOUND)
+                { error="Cannot inspect native browser cache path"; return false; }
+            }
+#else
+            std::error_code status;
+            const auto type=std::filesystem::symlink_status(component,status);
+            if (status && status!=std::errc::no_such_file_or_directory)
+            { error="Cannot inspect native browser cache path"; return false; }
+            if (std::filesystem::is_symlink(type)) { error="Native browser cache contains a linked path"; return false; }
+#endif
+            const auto parent=component.parent_path();
+            if (parent==component) break;
+            component=parent;
+        }
+        return true;
+    }
+
     std::optional<LLSD> readAutoReplaceDocument(const std::filesystem::path& path,std::string& error)
     {
         error.clear();
@@ -242,6 +270,52 @@ bool LLVKSettingsMgr::loadFile(const std::filesystem::path& path,bool required,b
     stream.seekg(0);
     if (!stream.read(xml.data(),size)) { error = "Native settings file read failed"; return false; }
     return load(xml,defaults,saved,error);
+}
+
+bool LLVKSettingsMgr::consumeBrowserCacheClear(const std::filesystem::path& profile,const std::filesystem::path& settingsFile,std::string& error)
+{
+    error.clear();
+    const auto requested=find("FSStartupClearBrowserCache");
+    if (!requested || !requested->getValue().asBoolean()) return true;
+    if (!clearBrowserCache(profile,error)) return false;
+    return saveChanges(settingsFile,{{"FSStartupClearBrowserCache",LLSD(false)}},error);
+}
+
+bool LLVKSettingsMgr::clearBrowserCache(const std::filesystem::path& profile,std::string& error)
+{
+    error.clear();
+    if (!profile.is_absolute() || profile==profile.root_path() || profile.lexically_normal()!=profile)
+    { error="Native browser cache requires an absolute profile directory"; return false; }
+    const auto cache=profile/"native_browser";
+    if (!browserCachePathUnlinked(cache,error)) return false;
+    try
+    {
+        if (!std::filesystem::exists(cache)) return true;
+        if (!std::filesystem::is_directory(cache)) { error="Native browser cache is not a directory"; return false; }
+        std::vector<std::filesystem::path> paths{cache};
+        for (std::size_t index=0; index<paths.size(); ++index)
+        {
+            if (!std::filesystem::is_directory(paths[index])) continue;
+            for (const auto& entry : std::filesystem::directory_iterator(paths[index]))
+            {
+                if (paths.size()>=100000) { error="Native browser cache exceeds entry limit"; return false; }
+                if (!browserCachePathUnlinked(entry.path(),error)) return false;
+                const auto relative=entry.path().lexically_relative(cache);
+                if (std::distance(relative.begin(),relative.end())>64) { error="Native browser cache exceeds depth limit"; return false; }
+                if (!entry.is_regular_file() && !entry.is_directory()) { error="Unexpected native browser cache entry"; return false; }
+                paths.push_back(entry.path());
+            }
+        }
+        for (auto entry=paths.rbegin(); entry!=paths.rend(); ++entry)
+        {
+            if (!browserCachePathUnlinked(*entry,error)) return false;
+            std::error_code status;
+            std::filesystem::remove(*entry,status);
+            if (status) { error="Cannot remove native browser cache entry; request retained for retry"; return false; }
+        }
+        return true;
+    }
+    catch (const std::filesystem::filesystem_error&) { error="Cannot clear native browser cache; request retained for retry"; return false; }
 }
 
 bool LLVKSettingsMgr::scheduleReset(const std::filesystem::path& profile,std::string& error)

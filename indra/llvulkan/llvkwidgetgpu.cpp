@@ -53,6 +53,11 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
             auto& stream = mStreams[command.owner];
             stream.used = mFrame;
             if (!stream.publication) stream.publication = std::make_unique<LLVKImagePublication>(mDevice);
+            if (stream.epoch != command.imageEpoch)
+            {
+                stream.publication->invalidate();
+                stream.epoch = command.imageEpoch;
+            }
             if (!stream.publication->advance(command.image,error)) return Status::Failed;
             const auto& current = stream.publication->current();
             pending |= !current.image || current.source->pixelWidth() != command.image->pixelWidth() || current.source->pixelHeight() != command.image->pixelHeight();

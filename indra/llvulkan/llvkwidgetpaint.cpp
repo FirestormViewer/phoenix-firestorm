@@ -75,6 +75,12 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             return true;
         };
         const auto width = screen->right-screen->left, height = screen->top-screen->bottom;
+        bool searchHighlighted=false;
+        for (auto ancestor=id; ancestor && tree.get(ancestor); ancestor=tree.get(ancestor)->parent)
+        {
+            if (tree.get(ancestor)->searchHighlighted) { searchHighlighted=true; break; }
+            if (ancestor==root) break;
+        }
         if (node->statBar)
         {
             if (!tree.advanceStatBar(id,input.button.frameDelta,error)) return false;
@@ -448,6 +454,8 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             {
                 if (!append({0,0,width,height},{1,1,1,input.button.drawAlpha},browser->second)) return false;
                 output.commands.back().streamingImage = true;
+                const auto epoch = input.browserEpochs.find(id);
+                if (epoch != input.browserEpochs.end()) output.commands.back().imageEpoch = epoch->second;
             }
         }
         else if (node->button)
@@ -471,7 +479,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             if (!draw->label.empty())
             {
                 auto line = draw->font->layoutLine(draw->label,0,draw->label.size(),draw->text,error);
-                if (!line || !append({},draw->labelColor,{},std::move(line),false,false,draw->shadow)) return false;
+                if (!line || !append({},searchHighlighted ? input.searchFont.get() : draw->labelColor,{},std::move(line),false,false,draw->shadow)) return false;
             }
         }
         else if (node->lineEditor)
@@ -493,6 +501,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                 background[3]*=input.button.drawAlpha;
                 if (!append({0,0,width,height},background)) return false;
             }
+            if (searchHighlighted && !append({0,0,width,height},input.searchBackground.get())) return false;
             const auto* document = tree.get(text.document);
             if (!document || !text.layout) { error = "Native text paint document is missing"; return false; }
             clip = intersect(clip,*screen);

@@ -48,6 +48,14 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createControl(const Params& in
     return createControlImpl(inputView,inputControl,std::nullopt,parent,error);
 }
 
+bool LLVKWidgetTree::setSearchHighlighted(Id id,bool highlighted)
+{
+    const auto found=mNodes.find(id);
+    if (found==mNodes.end()) return false;
+    found->second.searchHighlighted=highlighted;
+    return true;
+}
+
 bool LLVKWidgetTree::setControlCommit(Id id, LLVKControl::Callback callback)
 {
     const auto found = mNodes.find(id);

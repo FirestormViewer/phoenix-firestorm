@@ -13,6 +13,290 @@ choices below authorizes reuse until its outgoing constructor/helper targets clo
 
 ## UI checkpoint status (2026-09-11)
 
+### Continuation from 9089558822 (2026-09-12)
+
+Shared WebRTC shutdown correction (NV-00/01/03/17, 9089558822 plus working tree,
+Windows RelWithDebInfo): roots LLWebRTCImpl::terminate, updateDevices,
+workerDeployDevices, setVoiceEnabled, setTuningMode, OnDevicesUpdated and
+LLVKVoice::stop. The existing nonvisual service queues worker-to-signaling-to-worker
+device deployment and worker-to-signaling tuning callbacks. Moving thread members
+after only a worker barrier invalidates owners still accessed by these callbacks;
+swapping the connection list on the caller also races signaling iteration.
+The native route shares this API-independent audio service; no Vulkan resources or
+GL visual functions participate. Keep thread/resource members owned by LLWebRTCImpl
+until shutdown finishes, gate device/tuning work and rescheduling with an atomic
+stop flag, drain worker/signaling/worker before signaling-thread connection transfer,
+then close connections, release factory/device and stop threads in dependency order.
+Drains belong inside the ten-second shutdown budget, not before it; timeout retains
+the implementation as the existing caller requires. Null thread checks cover absent
+owners, not proof of all platform initialization failures. The immediate discriminating
+check is Window test4 plus the existing live Preferences binding test1, with capture
+disabled. Window4/4 passed after the correction, including eight rapid owner restart
+cycles with queued refresh/device changes and never-started teardown. Active session observers,
+driver hangs, partial initialization failure injection and non-Windows hotplug remain
+unverified. This is a shared lifetime correction, not voice-session integration or
+measured UI parity.
+
+Voice ownership separation (NV-00/01/03/17): the previously audited device/tuning
+route through llwebrtc remains shared, not reimplemented for Vulkan. LLVKVoice now
+owns that route independently of LLVKViewerUi: thread-bound lazy init, device
+selection, mutex-protected observer snapshots, explicit tuning, muted/capture-disabled
+startup and observer removal before terminate. The window's VoiceDevices only binds
+UI callbacks and detaches them before destroying the service. Source voice energy
+mapping and tuning gain range remain unchanged. No peer-connection/session service
+is claimed. Window test4 exercises the same owner without a widget tree and never
+enables recording; test1 still exercises the live Preferences binding. OpenAL/ALUT
+libraries remain shared. LLAudioEngine wholesale reuse is NOT approved: its asset
+route invokes external viewer request_sound, and its full owner/callback closure
+remains open. No duplicate codec/protocol or GL backend branches were introduced.
+Window4/4 passed after the shared lifetime correction; Widget191/191 passed again.
+
+Voice processing configuration (NV-00/01/03/17, same source/configuration):
+LLWebRTCVoiceClient::updateSettings forwards VoiceEchoCancellation,
+VoiceAutomaticGainControl and VoiceNoiseSuppressionLevel to
+LLWebRTCImpl::setAudioConfig while enabled. That helper applies software APM
+configuration and queues workerDisableBuiltInAudioProcessing; both operate on
+audio resources only, with no visual callbacks. LLVKVoice shares AudioConfig and
+the existing APM implementation, validates the noise-level domain and retains
+configuration before lazy startup without enabling capture. Live updates forward
+changed values, including return to defaults, rather than inheriting the reference
+caller's default-comparison omission. State reports the submitted configuration,
+not measured acoustic output. Window test4 covers pending/live/default/invalid and
+stopped-owner behavior without capture; Window4/4 passed. The native window now owns
+LLVKVoice directly and its VoiceDevices object is only a detachable UI binding.
+It reads the authoritative native LLControlGroup (initial configuration map fallback),
+then synchronizes processing before UI work each frame, independently of Preferences
+visibility. These audited control lookups read CPU values without invoking GL setting
+callbacks. The window test changes all three settings after binding and exercises
+this live loop with capture disabled; no APM readback or acoustic comparison is claimed.
+Microphone effects and full session transport remain unverified.
+
+Final resumed gates: Window4/4, Widget191/191, native core build and viewer link
+passed on Windows RelWithDebInfo. The first viewer link found a stale native core
+archive for the existing createSwapchain signature; a focused core rebuild resolved
+it without renderer source changes. No full viewer process or microphone capture was
+started. No new context/parity result is claimed by these audio/service changes.
+
+Native scene selection component (NV-00/01/04/05/11/12/17): 9089558822,
+LLViewerWindow::pickAsync/schedulePick/performPick/pickImmediate/cursorIntersect
+and LLToolPipette::pickCallback. The source queries HUD before world geometry,
+filters object/face/transparent/rigged/unselectable/probe candidates and returns
+object/face/surface results to CPU callbacks. Native LLVKSceneSelection accepts
+explicit already-transformed triangles and near-clipped world/HUD segments in a
+versioned origin space, preserving identities and interpolated UVs. It owns immutable
+snapshots and rejects stale selection results. API-independent llmath ray_triangle,
+ray_plane and vector arithmetic are shared unchanged: their complete invoked bodies
+operate only on caller values, with no context, allocation, callback or visual owner.
+Geometry validation rejects nonfinite/degenerate inputs; same-distance ties retain
+input order. This component supports opaque/fully transparent triangles only, not
+alpha-mask sampling, smooth normal/tangent extraction, particles, terrain-special
+results, native scene production, input queue ordering, RLVa policy or highlight
+rendering. Those source edges remain OPEN, not approximated as full picking parity.
+Context test10 covers identity, HUD priority, UVs, segment clipping, snapshot lifetime,
+transparency, invalid publication and origin/revision rejection. Component tests do
+not constitute production world integration; runtime validation pending.
+
+Presentation configuration (NV-00/01/03/14/15/17): 9089558822 Windows source
+handleVSyncChanged calls LLWindowWin32::toggleVSync (WGL interval 0/1), updates
+LLPerfStats tuning state and clamps TargetFPS when enabled. Only the API-exposed
+presentation operation is implemented here: native createSwapchain chooses FIFO
+for synchronization or supported IMMEDIATE for disabled synchronization, explicitly
+logging FIFO fallback. It records requested and effective modes separately. The live
+window reads the existing authoritative setting at frame boundaries and recreates
+after checked device completion, including same-size policy changes. Existing
+GL callbacks are untouched/not invoked. CPU frame-tuner/TargetFPS integration is
+still open, as are world render-setting consumers. Context test9 covers mode policy;
+test8 recreates and presents on the actual selected surface in both policies.
+Runtime validation pending for this slice.
+
+Image publication cancellation (NV-00/01/03/09/13/14/17): source revision
+9089558822, Windows RelWithDebInfo, LLViewerMediaImpl::preMediaTexUpdate,
+doMediaTexUpdate and updateMediaImage. The source guards missing producers,
+clips dirty rectangles, replaces invalidated textures and publishes after upload;
+its GL texture operations and wrappers are not shared. The native bounded RGBA
+publisher already owns staging flush, layout barriers and fence-observed publication
+through LLVKGlyphUpload, with consuming submissions retaining immutable images.
+Explicit invalidate now clears current ownership and marks pending work for discard
+without destroying or waiting on that work. Ordinary same-stream coalescing remains
+allowed. Context test8 cancels an upload and supplies a same-size replacement: no
+cancelled image may become current even when its upload completes. This is a local
+publication contract, not full asset streaming, media protocol or world parity.
+Context9/9 passed on the RX9070XT for explicit cancellation. Live browser surface
+epochs now change on resize and differ between producer instances; ordinary frames
+retain their epoch. Window paint carries this token to the streaming publisher,
+which invalidates old residency before accepting a new epoch. Context test8 also
+checks same-size epoch replacement. Dullahan/CEF remains the shared independent
+browser engine (GPU/WebGL disabled); native code owns immutable CPU frame copies,
+orientation conversion and Vulkan presentation. This does not establish temporal
+identity of same-size stale callbacks inside CEF, nor general parcel-media support.
+
+Restart browser-cache consumer: source LLAppViewer startup FSStartupClearBrowserCache
+branch removes its cef_cache before initializing media. Native startup now consumes
+the same request for the independently owned profile/native_browser directory only,
+before CEF starts. LLVKSettingsMgr::clearBrowserCache preflights the fixed subtree
+for links/reparse points, entry types, 100000-entry and 64-component depth bounds;
+it removes children before parents without following links. consumeBrowserCacheClear
+persists false only after successful deletion. Errors keep the request for retry;
+concurrent path replacement/process ownership is not proven by preflight. Test191
+uses temporary nested cache files, verifies unrelated settings survive, rejects
+non-directory/relative roots, and reloads the request after failure/successful retry.
+Widget191/191 and window3/3 passed. No user cache was cleared during these tests.
+
+Nearby source checks: sound-cache directory is installed by LLAppViewer startup,
+not a live FSSoundCacheLocation subscriber; the native playback path remains fixed
+until restart accordingly. Cache relocation also purges the old asset-cache owner,
+so NewCacheLocation consumption remains with that unfinished native service rather
+than an incidental settings-only update. Privacy Clear History is prelogin-disabled
+in original XML; its source callback also clears account history stores and cookies.
+The source CEF plugin does not implement the forwarded clear_cache message. This
+does not authorize removing a live CEF directory or claiming complete history reset.
+
+Texture-picker investigation started at original floater_texture_ctrl.xml and
+LLFloaterTexturePicker postBuild/default/blank/transparent/none/UUID/select/cancel:
+asset_filtered_inv_panel requires a native inventory tree, permission-aware selection,
+asset previews, local-texture tracking, and bake/pipette scene consumers. The existing
+native swatch selection/rollback primitive is not a completed picker. No replacement
+UUID-only dialog or disabled-mode scaffold was added as closure of that UI gap.
+
+Search highlighting and shape-editor increment: widget190/190 and native window3/3
+pass. Source ll::ui::SearchableControl highlight colors, LLButton label rendering,
+LLTextBase background rendering and Preferences search traversal were inspected.
+Native transient Node::searchHighlighted flags drive skin-colored button labels and
+text backgrounds, including compound-control text children; they do not change
+settings or layout. Test171 checks matched/cleared state; test188 checks paint colors
+and nonmutation. Exact text-content rectangle/disabled-alpha parity remains open.
+
+Source lggBeamMapFloater postBuild/draw/left/right input/Save/Load/Clear/setData and
+serialization were inspected. LLVKBeamShape independently owns bounded colored
+points, seven-pixel removal and source panel-relative offsets/8-per-width scaling.
+Original floater_beamshape.xml now opens from the live Viewer Create action, with
+native immutable guide/point bitmap, existing native point-color swatch, Clear,
+Save/Load/Cancel and parent closure/picker invalidation. The staged beam-file writer
+is shared with the native color editor; the GL owner is untouched. Tests189/190
+cover state, scale, actual pointer routing, saved point color, clear/load, empty
+shape and stale Save suppression. Window3/3 includes shape-image GPU publication.
+Source postBuild requests back_color_swatch but the original XML does not contain
+it; that absent/dormant control was not invented. Context-cone and polygon-exact
+guide rasterization parity are not claimed; native world beam rendering is separate.
+
+Latest increment: widget187/187 and native window3/3 pass. Default graphics preset
+creation is now connected to the native recommendation policy and preserves an
+existing Default file; test181 verifies protection/idempotence. Global Restore
+uses the same tested restoredSettings operation as startup, with defaults then
+recommendations then backup overrides; test184 checks the saved restore marker
+and shutdown only after original RestoreFinished acknowledgement. Test186 exercises
+live quality/Recommended actions and Cancel; policy application alone is not proof
+that all world-rendering consumers are implemented.
+
+Anti-spam reset: inspected LLFloaterPreference::onClickClearSpamList and
+NACLAntiSpamRegistry constructor/destructor/purgeAllQueues/purgeGlobalEntries plus
+NACLAntiSpamQueue construction/destruction/purgeEntries. This route only reads
+existing settings, disconnects outstanding name callbacks, and deletes queue/data
+entries. It is shared as an audited nonvisual operation, injected from the viewer
+entry point through native startup; no GL UI controller is called. Test187 checks
+the live Viewer button invokes the service once without setting writes or invented
+notifications. The full registry's notification/delivery routes are not approved
+for native reuse by this narrow audit. Actual postlogin message enforcement remains
+a separate integration obligation.
+
+Graphics presets and backup continuation (NV-00/01/03/15/17): source roots
+LLPresetsManager initGraphicPresetControlNames/savePreset/loadPreset/deletePreset/
+handleGraphicPresetControlChanged and original Save/Load/Delete floater callbacks
+were inspected. LLVKGraphicPresets reads the original graphic_preset_controls.xml
+and typed settings metadata, uses URI-escaped filenames under presets/graphic,
+stages writes, protects Default, and validates complete load documents before live
+publication. Original dialogs are wired from Graphics; load captures otherwise
+unbound settings for parent Cancel, updates indirect controls and active label;
+manual changes clear the active label. Preset load/rollback suppress their own dirty
+notifications. Existing combo completion callbacks are preserved. Tests181/182
+cover format, protection, malformed type rejection and the live Save/Load/Delete/
+Cancel workflow. Default presets are created once using native recommendations.
+Automatic-tuning/draw-distance-step exceptions, initial dirty subscriptions before
+first preset-dialog use, localized title refresh and arbitrary legacy preset fields
+outside the graphic control list remain qualification work.
+
+LLVKGraphicsPolicy independently parses the source featuretable.txt and applies
+base/device/quality masks with source minimum-value semantics and numeric types.
+Source LLFeatureManager applyFeatures/applyRecommendedSettings/setGraphicsLevel/
+applyBaseMasks/getRecommendedSettingsMap/loadGPUClass were inspected, not called:
+their branches still reach GL globals/shader/UI owners. Native policy excludes GL
+context/VBO settings and does not apply GL-version-specific capability masks.
+Selected Vulkan-device vendor/memory and system-memory facts are supplied by the
+native window. Quality and Recommended update the live settings transaction, with
+hidden settings included for rollback. Tests185/186 cover seven levels, source
+classification thresholds/fallback, skipped controls and live acceptance/Cancel.
+The existing measureMemoryBandwidthGBps body was inspected but NOT invoked: it
+has unchecked command-buffer results and repeated destination writes without a
+transfer dependency. Bandwidth remains explicitly unavailable and the source's
+native class-3 fallback (with memory downgrade/SkipBenchmark rules) is used.
+This is not measured device-performance parity. Native renderer feature consumers,
+complete capability gating and low-memory quality warning remain open.
+
+Backup source FSPanelPreferenceBackup postBuild/doBackupSettings/doRestoreSettings/
+onQuitConfirmed and LLControlGroup backup flags were inspected. Native backup
+exports changed persistent backupable controls, writes user colors first, and copies
+original selected file/folder lists. Ordinary folders are one level deep; presets
+explicitly includes graphic/camera. All source bytes are read and outputs staged
+before publication, with 64MiB per-file/256MiB total/10000-file limits. Invalid,
+overlapping and linked paths are rejected; missing optional files are skipped.
+Publication is atomic per file, NOT across the whole backup; late IO failure may
+leave a partial set and is reported. This bounded IO currently runs on the UI thread.
+Global Restore builds a fresh existing settings-service group, applies defaults,
+native recommendations then backup settings, marks FSFirstRunAfterSettingsRestore,
+and publishes the result to the selected profile-local settings file. Original
+RestoreFinished acknowledgement requests shutdown; native lifecycle has no general
+exit saver that overwrites restored files. Account backup/restore remains gated
+pending authenticated account ownership; concurrent path races and shutdown while
+other asynchronous services run still need broader qualification. Tests183/184
+cover file bounds/traversal shape, export filtering and live confirmation through
+backup/restore and deferred quit in isolated directories. No real profile was
+backed up or restored in tests. Original okbutton notification template was added
+for RestoreFinished. Widget186/186 and window3/3 passed after these integrations.
+
+Beam preset actions (NV-00/01/03/12/15/17, Windows RelWithDebInfo): inspected
+FSPanelPrefs::onBeamDelete/onBeamColorDelete/refreshBeamLists and the beam catalog
+filename paths. Native Viewer Delete actions now remove the selected regular-file
+preset from app_settings and user_settings beam folders, clear its setting after
+a successful removal, and refresh both lists. Off is a no-op. Invalid path components,
+symlink paths, non-file entries and filesystem failures are reported; unlike the
+source, a failed removal does not claim success by clearing the setting. Test178
+uses unique temporary profile fixtures only, checking both catalogs, unrelated-file
+preservation, traversal rejection and non-file failure. Multi-location removal is
+not atomic; Windows reparse races and source filename unescaping inconsistencies
+remain open. No installed or user presets were deleted during validation.
+
+Beam color editor: inspected lggBeamColorMapFloater postBuild/draw/input/fixOrder/
+setData/Save/Load callbacks, lggBeamsColors serialization/defaults,
+lggBeamMaps::beamColorFromData/hueToRgb/hslToRgb and LLColor4U::setVecScaleClamp.
+Native LLVKBeamColor owns the 0..720 degree range, speed conversion, LLSD preset
+and time-driven preview. A dialog-owned native bitmap represents the hue strip
+and endpoint markers, rebuilt on selection only; preview updates a native swatch
+using the existing frame clock. Immutable image publication/retirement uses the
+existing native UI path; no GL draw callback or visual helper is reused.
+Original floater_beamcolor.xml opens from the live Viewer New action, with left/
+right endpoint selection, speed, animated preview, Save/Load/Cancel, catalog refresh,
+and closure with parent Preferences. XML save uses staged replacement and failure
+retains the editor; close invalidates outstanding picker callbacks. Input rejects
+nonfinite/out-of-editor-range presets explicitly rather than entering unbounded
+source hue wrapping. Context-cone drawing and pixel-exact marker/text parity are
+not implemented/claimed; the world beam consumer is still a separate open service.
+
+Tests179/180 cover state/preview math, original live action, pointer events,
+immutable strip replacement, speed, Save/Load roundtrip, invalid save retry and
+late callback rejection after child/parent close. Widget180/180 and window3/3 passed,
+including hue-image publication and six native frames with the editor presented.
+Window output included CEF GCM endpoint/auth diagnostics, but all test assertions
+passed; these messages are not Vulkan validation errors. MSVC /bigobj is scoped to
+the widget test target after its translation unit exceeded the COFF section limit.
+
+Directory-picker callbacks now use the same Preferences generation as the executable
+picker. Backup path, script include path, cache path and sound-cache path ignore
+late success/error results after Preferences closes/reopens. Extended test177
+exercises all four live routes. Native worker ownership is unchanged. The pending
+NewCacheLocation settings remain outside the widget snapshot, and their acceptance/
+startup persistence needs the cache-service integration contract; no incidental
+Cancel-policy change was made here.
+
 ### End-of-session checkpoint (2026-09-12)
 
 The user requested a commit and pause after successful validation. The live menu

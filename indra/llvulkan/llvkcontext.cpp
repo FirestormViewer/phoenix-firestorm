@@ -328,13 +328,21 @@ VkSurfaceKHR LLVKContext::createSurface(void* native_window, void* native_instan
 #endif
 }
 
-bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t height, std::string& error)
+VkPresentModeKHR LLVKContext::choosePresentMode(bool synchronized, std::span<const VkPresentModeKHR> available) noexcept
 {
+    if (!synchronized && std::find(available.begin(),available.end(),VK_PRESENT_MODE_IMMEDIATE_KHR) != available.end())
+        return VK_PRESENT_MODE_IMMEDIATE_KHR;
+    return VK_PRESENT_MODE_FIFO_KHR;
+}
+
+bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t height, std::string& error, bool synchronized)
+{
+    error.clear();
     mSurface = surface;
 
     if (mSwapchain != VK_NULL_HANDLE)
     {
-        vkDeviceWaitIdle(mDevice);
+        LL_VK_CHECK(vkDeviceWaitIdle(mDevice), error, "Swapchain retirement failed");
         destroySwapchain();
     }
 
@@ -368,9 +376,11 @@ bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t
 
     // Present modes supported on this surface.
     uint32_t pm_count = 0;
-    vkGetPhysicalDeviceSurfacePresentModesKHR(mPhysicalDevice, surface, &pm_count, nullptr);
+    LL_VK_CHECK(vkGetPhysicalDeviceSurfacePresentModesKHR(mPhysicalDevice, surface, &pm_count, nullptr), error, "Present-mode count query failed");
+    if (!pm_count) { error = "Selected surface has no presentation modes"; return false; }
     std::vector<VkPresentModeKHR> pmodes(pm_count);
-    if (pm_count) vkGetPhysicalDeviceSurfacePresentModesKHR(mPhysicalDevice, surface, &pm_count, pmodes.data());
+    LL_VK_CHECK(vkGetPhysicalDeviceSurfacePresentModesKHR(mPhysicalDevice, surface, &pm_count, pmodes.data()), error, "Present-mode query failed");
+    pmodes.resize(pm_count);
     std::string pm_list;
     for (auto m : pmodes) { pm_list += " " + std::to_string((int)m); }
     LL_INFOS("Vulkan") << "Present modes (" << pm_count << "):" << pm_list << LL_ENDL;
@@ -381,8 +391,9 @@ bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t
     LL_INFOS("Vulkan") << "Queue families: graphics=" << mGraphicsQueueFamily << " present=" << mPresentQueueFamily
                        << " presentSupportedOnSurface=" << (present_ok ? "yes" : "no") << LL_ENDL;
 
-    // Present mode: FIFO (vsync) is guaranteed; use it for Phase 1.
-    VkPresentModeKHR present_mode = VK_PRESENT_MODE_FIFO_KHR;
+    const auto present_mode = choosePresentMode(synchronized,pmodes);
+    if (!synchronized && present_mode == VK_PRESENT_MODE_FIFO_KHR)
+        LL_WARNS("Vulkan") << "Unsynchronized presentation unavailable on selected surface; using FIFO" << LL_ENDL;
 
     VkExtent2D extent = caps.currentExtent;
     if (extent.width == UINT32_MAX)
@@ -435,6 +446,8 @@ bool LLVKContext::createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t
 
     mSwapchainFormat = chosen_format.format;
     mSwapchainExtent = extent;
+    mPresentMode = present_mode;
+    mSynchronizedPresentation = synchronized;
 
     uint32_t actual_count = 0;
     vkGetSwapchainImagesKHR(mDevice, mSwapchain, &actual_count, nullptr);

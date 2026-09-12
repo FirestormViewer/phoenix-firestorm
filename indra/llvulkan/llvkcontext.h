@@ -54,7 +54,10 @@ public:
 
     // Attach the platform surface and (re)create the swapchain for the given
     // extent. Call on window resize with the new extent.
-    bool createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t height, std::string& error);
+    bool createSwapchain(VkSurfaceKHR surface, uint32_t width, uint32_t height, std::string& error, bool synchronized = true);
+    static VkPresentModeKHR choosePresentMode(bool synchronized, std::span<const VkPresentModeKHR> available) noexcept;
+    VkPresentModeKHR presentMode() const noexcept { return mPresentMode; }
+    bool synchronizedPresentationRequested() const noexcept { return mSynchronizedPresentation; }
 
     // Record + submit one frame that clears the swapchain image to the given
     // color and presents it. Returns false on failure.
@@ -178,6 +181,8 @@ private:
     VkSwapchainKHR mSwapchain = VK_NULL_HANDLE;
     VkFormat       mSwapchainFormat = VK_FORMAT_UNDEFINED;
     VkExtent2D     mSwapchainExtent{ 0, 0 };
+    VkPresentModeKHR mPresentMode = VK_PRESENT_MODE_FIFO_KHR;
+    bool mSynchronizedPresentation = true;
     std::vector<VkImage>     mSwapchainImages;
     std::vector<VkImageView> mSwapchainViews;
 

@@ -33,6 +33,7 @@ private:
     {
         std::unique_ptr<LLVKImagePublication> publication;
         std::uint64_t used = 0;
+        std::uint64_t epoch = 0;
     };
     std::map<LLVKWidgetTree::Id,Stream> mStreams;
     std::map<const LLVKWidgetImage*,Image> mImages;

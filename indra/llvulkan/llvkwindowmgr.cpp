@@ -4,6 +4,7 @@
 #include "llvktranslation.h"
 #include "llvkjoystick.h"
 #include "llwebrtc.h"
+#include "llcontrol.h"
 #include <mutex>
 #include <cmath>
 #include <fstream>
@@ -41,88 +42,28 @@ namespace
         return found==keys.end() ? KEY_NONE : found->second;
     }
 
-    class VoiceDevices final : public llwebrtc::LLWebRTCDevicesObserver, public llwebrtc::LLWebRTCLogCallback
+    class VoiceDevices final
     {
     public:
-        explicit VoiceDevices(LLVKViewerUi& ui) : mUi(ui)
+        VoiceDevices(LLVKViewerUi& ui,LLVKVoice& voice) : mUi(ui), mVoice(voice)
         {
             LLVKViewerUi::VoiceDeviceServices services;
             services.refresh=[this](std::string& error)
-            { if (!start(error)) return false; mDevice->refreshDevices(); return true; };
-            services.state=[this](std::string& error) -> std::optional<LLVKViewerUi::VoiceDeviceState>
-            {
-                if (!start(error)) return std::nullopt;
-                LLVKViewerUi::VoiceDeviceState state;
-                { std::lock_guard lock(mMutex); state=mState; }
-                state.tuning=mTuning;
-                if (mTuning)
-                {
-                    const auto level=mDevice->getTuningAudioLevel();
-                    state.energy=std::isfinite(level) ? 0.8f-0.01f*level : 0.f;
-                }
-                return state;
-            };
+            { return mVoice.refresh(error); };
+            services.state=[this](std::string& error) { return mVoice.state(error); };
             services.select=[this](bool input,const std::string& device,std::string& error)
-            {
-                if (!start(error)) return false;
-                if (input) mDevice->setCaptureDevice(device); else mDevice->setRenderDevice(device);
-                return true;
-            };
+            { return mVoice.select(input,device,error); };
             services.tune=[this](bool enabled,float gain,std::string& error)
-            {
-                if (!std::isfinite(gain) || gain<0.f || gain>2.f) { error="Invalid native voice tuning gain"; return false; }
-                if (!enabled && !mDevice) return true;
-                if (!start(error)) return false;
-                if (mTuning!=enabled)
-                {
-                    mDevice->setVoiceEnabled(enabled);
-                    mDevice->setTuningMode(enabled);
-                    mTuning=enabled;
-                }
-                if (enabled) mDevice->setTuningMicGain(gain);
-                return true;
-            };
+            { return mVoice.tune(enabled,gain,error); };
             mUi.setVoiceDeviceServices(std::move(services));
         }
         ~VoiceDevices()
         {
             mUi.setVoiceDeviceServices({});
-            if (!mDevice) return;
-            mDevice->unsetDevicesObserver(this);
-            mDevice->setTuningMode(false);
-            mDevice->setVoiceEnabled(false);
-            llwebrtc::terminate();
         }
-        void OnDevicesChanged(const llwebrtc::LLWebRTCVoiceDeviceList& outputs,const llwebrtc::LLWebRTCVoiceDeviceList& inputs) override
-        {
-            LLVKViewerUi::VoiceDeviceState state;
-            for (const auto& device : inputs) state.inputs.push_back({device.mDisplayName,device.mID});
-            for (const auto& device : outputs) state.outputs.push_back({device.mDisplayName,device.mID});
-            std::lock_guard lock(mMutex);
-            state.generation=mState.generation+1; mState=std::move(state);
-        }
-        void LogMessage(LogLevel,const std::string&) override {}
     private:
-        bool start(std::string& error)
-        {
-            error.clear();
-            if (mDevice) return true;
-            if (llwebrtc::getDeviceInterface()) { error="Voice device engine already has an owner"; return false; }
-            llwebrtc::init(this);
-            mDevice=llwebrtc::getDeviceInterface();
-            if (!mDevice) { error="Native voice device engine initialization failed"; return false; }
-            mDevice->setDevicesObserver(this);
-            mDevice->setMute(true);
-            mDevice->setCaptureDevice(mUi.tree().setting("VoiceInputAudioDevice").value_or(LLSD("Default")).asString());
-            mDevice->setRenderDevice(mUi.tree().setting("VoiceOutputAudioDevice").value_or(LLSD("Default")).asString());
-            mDevice->refreshDevices();
-            return true;
-        }
         LLVKViewerUi& mUi;
-        llwebrtc::LLWebRTCDeviceInterface* mDevice = nullptr;
-        std::mutex mMutex;
-        LLVKViewerUi::VoiceDeviceState mState;
-        bool mTuning = false;
+        LLVKVoice& mVoice;
     };
 
     class TranslationVerification
@@ -792,7 +733,8 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     if (!surface) { error = "Native login Vulkan surface creation failed"; return false; }
     if (!renderer.pickPhysicalDevice(surface,error) || !renderer.createDevice(surface,error))
     { vkDestroySurfaceKHR(renderer.instance(),surface,nullptr); return false; }
-    if (!renderer.createSwapchain(surface,state.width,state.height,error) || !renderer.create2DPipeline(error)) return false;
+    const auto synchronizedPresentation = [&] { return ui->tree().setting("RenderVSyncEnable").value_or(LLSD(false)).asBoolean(); };
+    if (!renderer.createSwapchain(surface,state.width,state.height,error,synchronizedPresentation()) || !renderer.create2DPipeline(error)) return false;
     VkPhysicalDeviceProperties properties{};
     vkGetPhysicalDeviceProperties(renderer.physicalDevice(),&properties);
     LLSD aboutInfo;
@@ -845,6 +787,12 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         if (deviceMemory.memoryHeaps[heap].flags&VK_MEMORY_HEAP_DEVICE_LOCAL_BIT) localBytes+=deviceMemory.memoryHeaps[heap].size;
     aboutInfo["GRAPHICS_CARD_MEMORY"]=std::to_string(localBytes/(1024*1024));
     aboutInfo["GRAPHICS_CARD_MEMORY_DETECTED"]=aboutInfo["GRAPHICS_CARD_MEMORY"];
+    LLVKGraphicsPolicy::Device graphicsDevice;
+    graphicsDevice.vendor=properties.vendorID;
+    graphicsDevice.videoBytes=localBytes;
+    MEMORYSTATUSEX memoryStatus{}; memoryStatus.dwLength=sizeof(memoryStatus);
+    if (GlobalMemoryStatusEx(&memoryStatus)) graphicsDevice.systemBytes=memoryStatus.ullTotalPhys;
+    ui->setGraphicsDevice(graphicsDevice);
     aboutInfo["RENDERING_API"]="Vulkan";
     aboutInfo["AUDIO_DRIVER_VERSION"]=audio.driverName();
     aboutInfo["LIBCURL_VERSION"]=curl_version();
@@ -956,7 +904,27 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         ~JoystickBindings() { ui.setJoystickServices({}); }
     } joystickBindings{*ui};
     TranslationVerification translationVerification(*ui,configuration.ui.skin.executableDirectory/"ca-bundle.crt");
-    VoiceDevices voiceDevices(*ui);
+    const auto voiceSetting=[&](const std::string& name,const LLSD& fallback)
+    {
+        if (configuration.ui.settingsGroup)
+            if (const auto control=configuration.ui.settingsGroup->getControl(name)) return control->getValue();
+        const auto found=configuration.ui.settings.find(name);
+        return found==configuration.ui.settings.end() ? fallback : found->second;
+    };
+    LLVKVoice voice(voiceSetting("VoiceInputAudioDevice",LLSD("Default")).asString(),
+        voiceSetting("VoiceOutputAudioDevice",LLSD("Default")).asString());
+    const auto updateVoice=[&]()
+    {
+        LLVKVoice::AudioConfig processing;
+        processing.mEchoCancellation=voiceSetting("VoiceEchoCancellation",LLSD(true)).asBoolean();
+        processing.mAGC=voiceSetting("VoiceAutomaticGainControl",LLSD(true)).asBoolean();
+        const auto level=voiceSetting("VoiceNoiseSuppressionLevel",LLSD(4)).asInteger();
+        if (level<0 || level>4) { error="Invalid native voice noise suppression setting"; return false; }
+        processing.mNoiseSuppressionLevel=static_cast<LLVKVoice::AudioConfig::ENoiseSuppressionLevel>(level);
+        return voice.configure(processing,error);
+    };
+    if (!updateVoice()) return false;
+    VoiceDevices voiceDevices(*ui,voice);
     XmlFilePicker xmlFilePicker(*ui,state.window);
     ShowWindow(state.window,SW_SHOW);
     if (configuration.bindServices) configuration.bindServices(*ui);
@@ -968,6 +936,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         xmlFilePicker.pump();
         if (!translationVerification.pump(error)) return false;
         if (!audio.update(error)) return false;
+        if (!updateVoice()) return false;
         if (!ui->advanceNotices(state.elapsed(),error)) return false;
         MSG message;
         while (PeekMessageW(&message,nullptr,0,0,PM_REMOVE))
@@ -978,10 +947,10 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         if (!browser.update(error)) return false;
         for (const auto& event : browser.takeEvents())
             if (event.kind == LLVKBrowser::EventKind::LoadError) { error = "Native login page failed: "+event.detail; return false; }
-        if (state.resize && state.width && state.height)
+        if ((state.resize || renderer.synchronizedPresentationRequested() != synchronizedPresentation()) && state.width && state.height)
         {
             ui->menu().dismiss();
-            if (!renderer.createSwapchain(surface,state.width,state.height,error) ||
+            if (!renderer.createSwapchain(surface,state.width,state.height,error,synchronizedPresentation()) ||
                 !ui->tree().reshape(ui->root(),renderer.swapchainExtent().width,renderer.swapchainExtent().height,error)) return false;
             if (!ui->tree().prepareLayoutStacks(ui->root(),0,error)) return false;
             browserRect = ui->tree().screenRect(browserId,error);
@@ -998,6 +967,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         state.input.button.returnDown = bool(GetKeyState(VK_RETURN)&0x8000);
         state.input.editor.secondsSinceKeystroke = std::chrono::duration<double>(now-state.keystroke).count();
         state.input.browsers[browserId] = browser.surface().frame();
+        state.input.browserEpochs[browserId] = browser.surface().epoch();
         ui->tree().setInputModifiers({bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_CONTROL)&0x8000),bool(GetKeyState(VK_MENU)&0x8000)});
         ui->tree().advanceTime(state.elapsed(),error);
         if (state.width && state.height)

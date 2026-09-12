@@ -4,10 +4,64 @@
 #include "llvkuipacket.h"
 #include "llvkskinimages.h"
 #include "llvkimagepublication.h"
+#include "llvksceneselection.h"
 #include "llvkwidgetgpu.h"
 #include "lltut.h"
 #include <fstream>
 #include <iterator>
+namespace tut
+{
+    void verifyNativeSceneSelection()
+    {
+        LLVKSceneSelection selection;
+        LLVKSceneSelection::Triangle triangle;
+        triangle.object = LLUUID("11111111-1111-1111-1111-111111111111");
+        triangle.face = 3;
+        triangle.positions = {LLVector3(-1,-1,2),LLVector3(1,-1,2),LLVector3(0,1,2)};
+        triangle.uv = {LLVector2(0,0),LLVector2(1,0),LLVector2(0.5f,1)};
+        LLVKSceneSelection::Scene scene{1,7,{triangle}};
+        std::string error;
+        ensure("native scene accepted",selection.publish(scene,error));
+        LLVKSceneSelection::Request request;
+        request.originEpoch = 7;
+        request.world = {LLVector3(0,0,0),LLVector3(0,0,10)};
+        std::optional<LLVKSceneSelection::Hit> hit;
+        ensure("world triangle hit",selection.pick(request,hit,error) && hit.has_value());
+        ensure("stable face and object identity",hit->object == triangle.object && hit->face == 3 && !hit->hud);
+        ensure("surface UV interpolation",std::abs(hit->uv.mV[0]-0.5f) < 0.00001f && std::abs(hit->uv.mV[1]-0.5f) < 0.00001f);
+        ensure("selection accepted",selection.select(*hit,error) && selection.selected().has_value());
+        const auto oldHit = *hit;
+        const auto oldScene = selection.scene();
+        scene.revision = 2;
+        triangle.hud = true;
+        for (auto& position : triangle.positions) position.mV[2] = 8.f;
+        scene.triangles.push_back(triangle);
+        ensure("replacement scene accepted",selection.publish(scene,error) && !selection.selected());
+        ensure("previous snapshot stays immutable",oldScene->triangles.size() == 1);
+        ensure("stale pick rejected",!selection.select(oldHit,error));
+        request.hud = request.world;
+        ensure("HUD wins before closer world geometry",selection.pick(request,hit,error) && hit && hit->hud);
+        request.hud.reset();
+        request.face = 4;
+        ensure("face filter misses",selection.pick(request,hit,error) && !hit);
+        request.face = -1;
+        request.originEpoch = 8;
+        ensure("origin mismatch is not an ordinary miss",!selection.pick(request,hit,error) && !error.empty());
+        request.originEpoch = 7;
+        request.world.end = LLVector3(0,0,1);
+        ensure("segment length bounds the pick",selection.pick(request,hit,error) && !hit);
+        scene.revision = 3;
+        scene.triangles[0].transparent = true;
+        ensure("transparent scene accepted",selection.publish(scene,error));
+        request.world.end = LLVector3(0,0,10);
+        ensure("transparent geometry filtered",selection.pick(request,hit,error) && !hit);
+        request.transparent = true;
+        ensure("transparent geometry selectable explicitly",selection.pick(request,hit,error) && hit);
+        scene.revision = 4;
+        scene.triangles[0].positions[1] = scene.triangles[0].positions[0];
+        ensure("invalid publication preserves previous scene",!selection.publish(scene,error) && selection.scene()->revision == 3);
+    }
+}
 #if defined(LLVK_CONTEXT_PRESENT_TEST)
 #include <windows.h>
 #endif
@@ -164,9 +218,19 @@ namespace tut
         ensure("second packet rejected",!context.recordUiPacket({},{}));
         ensure("explicit duplicate error",context.frameError().find("fresh active frame") != std::string::npos);
     }
+    template<> template<> void context_object::test<10>()
+    {
+        set_test_name("native scene queries preserve identity, HUD priority and origin epochs");
+        verifyNativeSceneSelection();
+    }
     template<> template<> void context_object::test<9>()
     {
         set_test_name("native UI packet rejects invalid draws without changing painter order");
+        const VkPresentModeKHR modes[]{VK_PRESENT_MODE_MAILBOX_KHR,VK_PRESENT_MODE_IMMEDIATE_KHR,VK_PRESENT_MODE_FIFO_KHR};
+        ensure("synchronized policy chooses FIFO",LLVKContext::choosePresentMode(true,modes) == VK_PRESENT_MODE_FIFO_KHR);
+        ensure("unsynchronized policy chooses immediate",LLVKContext::choosePresentMode(false,modes) == VK_PRESENT_MODE_IMMEDIATE_KHR);
+        const VkPresentModeKHR limited[]{VK_PRESENT_MODE_MAILBOX_KHR,VK_PRESENT_MODE_FIFO_KHR};
+        ensure("unavailable immediate falls back to FIFO",LLVKContext::choosePresentMode(false,limited) == VK_PRESENT_MODE_FIFO_KHR);
         LLVKUiPacket packet({100,80});
         std::string error;
         const VkRect2D clip{{2,3},{90,70}};
@@ -227,6 +291,13 @@ namespace tut
         renderer.waitIdle();
         const LLVKGlyphUpload::Device uploadDevice{renderer.physicalDevice(),renderer.device(),renderer.allocator(),
             renderer.graphicsQueue(),renderer.graphicsQueueFamily()};
+        ensure("native unsynchronized recreation",renderer.createSwapchain(surface,256,256,error,false));
+        ensure("requested policy is retained",!renderer.synchronizedPresentationRequested());
+        ensure("negotiated present mode reported",renderer.presentMode() == VK_PRESENT_MODE_IMMEDIATE_KHR || renderer.presentMode() == VK_PRESENT_MODE_FIFO_KHR);
+        ensure("frame acquired after policy change",renderer.begin2DFrame(0,0,0,1) != VK_NULL_HANDLE);
+        ensure("frame submitted after policy change",renderer.end2DFrame());
+        ensure("native synchronized recreation",renderer.createSwapchain(surface,256,256,error,true));
+        ensure("FIFO restored",renderer.synchronizedPresentationRequested() && renderer.presentMode() == VK_PRESENT_MODE_FIFO_KHR);
         LLVKSkinFiles::Configuration skinConfiguration;
         skinConfiguration.skinBaseDirectory = std::filesystem::path(LLVK_CONTEXT_SKIN_FIXTURE).parent_path();
         LLVKSkinImages skin(std::make_shared<LLVKSkinFiles>(skinConfiguration));
@@ -312,6 +383,16 @@ namespace tut
         ensure("replacement publishes",publication.advance(browserFrame,error));
         ensure("new image paired to browser frame",publication.current().source == browserFrame && publication.current().image != oldImage);
         ensure("invalidation clears publication",publication.advance({},error) && !publication.current().image);
+        ensure("cancelled upload begins",publication.advance(browserFrame,error));
+        publication.invalidate();
+        ensure("invalidation retains pending upload for retirement",publication.pending() && !publication.current().image);
+        ensure("cancelled upload completes",publication.waitPendingUpload(5000000000ull,error));
+        auto replacementFrame = LLVKWidgetImage::browserFrame(1,1,browserPixel,error);
+        ensure("same-size replacement starts",publication.advance(replacementFrame,error));
+        ensure("cancelled source never publishes",!publication.current().image && publication.pending());
+        ensure("replacement completes",publication.waitPendingUpload(5000000000ull,error));
+        ensure("replacement publishes after cancellation",publication.advance(replacementFrame,error));
+        ensure("replacement source is authoritative",publication.current().source == replacementFrame && publication.current().image);
         LLVKWidgetPaint paint;
         const LLVKWidgetTree::Rect paintClip{0,0,static_cast<std::int32_t>(renderer.swapchainExtent().width),static_cast<std::int32_t>(renderer.swapchainExtent().height)};
         paint.commands.push_back({1,{8,8,133,133},paintClip,{1,1,1,1},logo});
@@ -338,6 +419,13 @@ namespace tut
         const auto streamed=widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error);
         ensure("new frame publication status="+std::to_string(static_cast<int>(streamed))+": "+error,streamed == LLVKWidgetGpu::Status::Ready);
         ensure("browser packet owns a completed image",widgetPacket.draws()[0].image != nullptr);
+        const auto priorStreamImage = widgetPacket.draws()[0].image;
+        ensure("old stream upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
+        ++paint.commands[0].imageEpoch;
+        ensure("same-size new surface waits for its own image",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Pending);
+        ensure("new surface upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
+        ensure("new surface becomes ready",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Ready);
+        ensure("new surface cannot reuse retired epoch",widgetPacket.draws()[0].image != priorStreamImage);
         LLVKWidgetTree scrollTree;
         LLVKWidgetTree::Params scrollView;
         scrollView.rect={0,0,120,100};

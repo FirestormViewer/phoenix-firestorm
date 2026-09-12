@@ -380,6 +380,7 @@ public:
     };
     struct Node
     {
+        bool searchHighlighted = false;
         struct InventoryDropTarget
         {
             struct Item
@@ -657,6 +658,7 @@ public:
     bool setLineEditorKeystroke(Id id, LLVKControl::Callback callback);
     bool selectLineEditorAll(Id id, std::string& error);
     bool setControlCommit(Id id, LLVKControl::Callback callback);
+    bool setSearchHighlighted(Id id, bool highlighted);
     std::optional<Id> createSpinner(const Params& view, const LLVKControl::Params& control,
         const SpinnerParams& params, Id parent, std::string& error);
     bool commitSpinner(Id id, std::string& error);
