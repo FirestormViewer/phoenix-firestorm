@@ -15,6 +15,242 @@ choices below authorizes reuse until its outgoing constructor/helper targets clo
 
 ### Continuation from 9089558822 (2026-09-12)
 
+Top-menu continuation (NV-00/01/03/12/17, a1628b9922 plus working tree, Windows):
+FSFloaterWhiteListHelper::postBuild/populateWhitelistInfo resolves executable,
+profile/cache, voice/plugin/browser-helper paths and populates original editors;
+it does not configure antivirus. Native showWhitelist independently constructs
+floater_whitelist.xml with native text owners, preserves path ordering and menu
+Floater.Show dispatch, and participates in existing close/minimize/shutdown ownership.
+The window supplies actual executable/helper paths; no GL floater/global directory
+initialization is invoked. update_grid_help in the reference hides grid Help/About
+and their separator when OPENSIM is not compiled; existing native menu creation already
+applies that policy and the new test covers it, not a generic hide-unimplemented rule. Widget193 is the discriminating check
+for original menu activation, path values, native painting, close/reopen and visibility.
+OpenSim grid services and other top-menu actions remain separate obligations.
+
+Report Problem: source handle_report_bug calls FSData::getSystemInfo and
+LLAgentUI::buildSLURL, URI-escapes environment/location and substitutes ReportBugURL
+before browser launch. The source collector reaches LLAppViewer/GL device state and
+is not shared. Native reportProblem uses an explicit native diagnostic snapshot from
+setAboutInfo, formats labelled environment fields, substitutes both tokens through
+shared LLURI/LLStringUtil, validates HTTP(S) and invokes the existing user-confirmed
+external-browser service. Native Vulkan device facts and unavailable fields remain
+explicit; the report is not byte-identical to FSData's GL-specific English payload.
+Account location stays absent until a real native session supplies it. Tests capture
+the menu-generated URL and verify escaping, data availability and invalid-scheme
+rejection without browser/network effects. Report content freshness follows the native
+About snapshot updates, not a new process-wide diagnostic poll. The submission site
+and full report-field parity remain unverified.
+
+Guidebook investigation: LLToggleHowTo toggles/brings forward LLFloaterHowTo, which
+derives from web content and loads GuidebookURL in an embedded view with fixed content
+size and F1 close. It must not be replaced with an external URL or by navigating the
+login page away. Current LLVKBrowser/Dullahan owns one CEF initialization and one view;
+Guidebook requires a shared browser runtime with independent view/input/frame lifetime.
+That dependency, full menu predicates/tear-off/debug actions and OpenSim grid help
+remain open. Whitelist and Report Problem do not establish full top-menu functionality.
+
+Native menu check/enable callbacks now evaluate explicit bound predicates on input
+and paint, without legacy view_listener_t ownership. Existing static states remain
+the fallback for unbound predicates. Nested Right enters the selected submenu and
+Left returns to its parent selection instead of always switching top-level menus.
+The original Develop.SetLoggingLevel/CheckLoggingLevel handlers only call shared
+LLError setDefaultLevel/getDefaultLevel; the native bindings reuse those nonvisual
+functions with bounded enum parsing. Tests193/194 cover actual original logging
+submenu dispatch/checkmarks and synthetic live enable predicates plus nested keyboard
+entry/exit. Visibility predicates, complete jump-key/tear-off semantics and general
+dynamic enable-policy coverage remain open. No legacy menu implementation changed.
+
+### Guidebook embedded-view continuation, 2026-09-12
+
+Latest continuation (NV-00/01/03/12/14/17, a1628b9922 plus working tree,
+Windows RelWithDebInfo/non-OpenSim): the prior inline-cell failure is resolved.
+LLScrollListCell::Params declares column and adds name as a synonym; native parsing
+normalizes those keys in declaration order and retains strict unknown-column checks.
+LLCheckBoxCtrl constructor reads label_text.text_color/text_readonly_color; native
+dotted parameters now populate the existing label color fields. Widget200 verifies
+original sample cells and colors; Window1 opens Widgets and routes its embedded menu.
+
+Font diagnostics contract: LLFontGL::dumpFonts delegates to registry metadata output;
+LLFontRegistry::dumpTextures delegates to CPU bitmap encoders through font owners.
+Native registry diagnostics snapshot definitions, sizes and resolved cache entries
+under its mutex without resolving/rasterizing new fonts. The native texture action
+reads LLVKWidgetGpu's retained LLVKGlyphAtlas CPU pages on its owning UI thread,
+encodes bottom-up RGBA with independently used libpng, and writes a unique log
+subdirectory with widget/part/page/encoding identities. Representation follows the
+native per-draw atlas ownership rather than pretending to be legacy per-font packing.
+No GPU resource mutation, barrier/layout changes or GPU waits/readbacks are added.
+Widget206 checks exact PNG bytes/orientation/alpha and malformed dimensions; the
+window fixture decodes actual generated atlas files containing glyph coverage.
+
+XUI Preview source roots: LLFloaterUIPreview::postBuild/refreshList/addFloaterEntry/
+displayFloater/onClose, LLLocalizationResetForcer, LLPreviewedFloater::selectElement,
+LLOverlapPanel::draw and LLLayoutStack::updatePanelRect/updateResizeBarLimits.
+Native owners replace global language mutation with per-preview LLVKSkinFiles;
+primary and secondary previews use separate native floaters and scoped factories.
+Panel previews receive native floater wrappers. Menu-file preview has no active
+reference implementation; Save/Save All do not serialize files and schema export is
+commented out. Those facts must not be converted into new exporter requirements.
+
+Overlap state holds widget IDs and native fonts. Selection computes sibling overlap
+with the source's two-pixel geometry rule; diagnostic copies are native paint data,
+never calls to GL draw functions. Inspector-containing sources are rejected to prevent
+recursive snapshots. Snapshot layout can still mutate native widget state; zero frame
+delta avoids a second animation advance but does not establish full temporal parity.
+IDs for copied commands belong to the inspector. Complete stream-image identity,
+hidden-source display, highlight/tooltip/bounds and localized parity remain open.
+
+Native divider state captures adjacent visible resizable panels and clamps pair sizes
+against minimum/maximum constraints, then updates auto-resize fractions. Tests cover
+horizontal pair dragging, clamping, release and hidden neighbor eligibility. Vertical,
+animated/mixed-panel and visual resize-bar/cursor parity remain unqualified.
+
+Evidence: Widget207/207; Window7/7 plus cold-cache regression; viewer link and source
+diagnostics passed. XUI Preview test covers catalog, independent owners, language
+nonmutation, panel wrapper and overlap copies; the window fixture presents the
+overlap stage after Win32 selection. No measured GL reference capture or tolerance
+change. Remaining preview handlers (external editor, diff, reload/fade, debug rects,
+full overlap behavior) and notification/session services prevent overall completion.
+The LLDB-confirmed recursive factory stack overflow introduced by a large local
+font parameter was fixed by heap allocation, retaining the existing depth guard.
+
+Resume delta (NV-00/01/03/14/17, a1628b9922 plus uncommitted native work,
+Windows/non-OpenSim): LLFloaterWebContent::matchesKey and LLWeb::loadURLInternal
+define named-target reuse. Native showMediaBrowser reuses a live named owner before
+window-limit eviction; blank targets remain independent (Widget203). The pending
+live address/Back sequence passed Window7/7 before later Widgets changes.
+
+LLMenuGL::createJumpKeys/handleJumpKey and menu-item draw define CPU assignment,
+activation and underline behavior. Native assignment preserves explicit keys and
+skips shared sibling words; disabled/hidden entries cannot execute. Widget204 and
+Win32 Help/Guidebook input passed. Alt-trigger timing, tear-off and locale/visual
+parity remain open. Embedded menu declarations use the independent native parser,
+widget ownership, normal bar paint order and a final dropdown overlay pass; draw
+commands use widget identities to avoid collisions with the main menu cache.
+
+Widgets contracts: LLFlyoutButton constructor/postBuild/action-click define split
+action/arrow geometry, fixed label and deselect-before-commit behavior; registration
+is in llui.cpp. Native combo/factory provides independent controls and skin defaults.
+Generic LLFloater::setCanDock/setDocked changes state, restores minimized state and
+updates button visibility; specialized dock positioning is not part of this base
+sample. LLStatBar::setStat leaves missing names unbound and draw displays zero with
+no graph. The literal sample name "stat" is missing; native retains it and explicitly
+rejects recognized live named counters until recording semantics are implemented.
+LLScrollListCtrl::updateColumnWidths divides remaining width after fixed columns
+and padding; dynamic_width maps to the existing native policy.
+
+Component test205 passed. Full Widgets test currently fails at inline-cell column
+resolution (Widget204/205); implementation and exact visual parity are NOT closed.
+Work paused at the required factory repair limit. The failing gate is retained,
+not removed or marked passing. No GL implementation changes or wrapper reuse.
+
+Subsequent menu groups (in progress, same source revision/configuration):
+LLFloaterWindowSize::initWindowSizeControls/onClickSet/onClickCancel and
+LLViewerWindow::movieSize define client-size selection, digit/separator parsing,
+settings and chrome-adjusted sizing. Native showWindowSize plus an explicit Win32
+callback implement these without calling LLViewerWindow; overflow and native
+browser capacity are rejected explicitly. LLFileEnableCloseWindow/LLFileCloseWindow
+select closable floaters subject to alert policy; native closeMenuWindow performs
+the corresponding native-owner operation. Snapshot-floater selection stays open.
+LLToggleControl/LLCheckControl are CPU settings operations; native bindings use the
+audited setting service and live menu predicates. Inactive commented XML is excluded.
+
+LLFloaterSettingsDebug postBuild/onUpdateFilter/updateControl/onCommitSettings,
+onClickDefault/onCopyToClipboard and SanityCheck::onSanity/onFixIt supply the typed
+editor, metadata, hidden controls and native-notification contracts. Native retained
+LLControlVariable handles share nonvisual metadata/value services, while all UI,
+filtering, type presentation, callbacks, clipboard and notice ownership are native.
+LLFloaterSettingsColor postBuild/updateList/updateControl/onCommitSettings,
+onClickDefault/setSearchFilter/isSettingHidden define the separate native palette
+editor; LLUIColorTable is not invoked. Palette mutation retains native references
+and existing native color persistence. Full typed extremes, sanity-notice suppression,
+all live changed-list updates and measured visual parity still need qualification.
+
+Generic registrations test_textbox/test_text_editor use LLFloater; font_test's
+LLFloaterFontTest adds no behavior. Native generic floater owners consume their XML.
+LLTextBase::getVisibleLines/drawText define explicit clip_partial and final-line
+ellipsis width; LLTextEditor::setText and edit rollback define prevalidation.
+Explicit native clipping and numeric rejection are tested. Default clipping remains
+open after a default=true probe regressed the existing login password link; no
+reference asset or test expectation was weakened. LLUI font ParamValue fallback
+calls getFontDefault (SansSerif) on unresolved names; native widget construction
+supplies its independent SansSerif Medium fallback while the registry stays strict.
+
+Affected NV-00/01/03/14/15/17. No GL functions changed. Native UI commands retain
+existing packet/publication ownership; no shader ABI/barrier change. Widget201/201
+and Window7/7 plus cold-cache regression are component/runtime evidence, not exact
+GL output parity. Viewport resize rebuilds the native swapchain and browser surface.
+Remaining live-login/world, media browser and diagnostic tooling are not closed.
+
+Contract/review record: NV-00/01/03/13/14/15/17; Windows RelWithDebInfo, non-OpenSim,
+source roots inspected at a1628b9922 plus the current native menu increment. The
+historical GL oracle remains 59108e15a1f8f94d2da7c674d937d19f5cf9450d; no measured
+comparison with that oracle or tolerance change is claimed.
+
+1. Source result: LLToggleHowTo toggles/brings forward the guidebook instance.
+  LLFloaterHowTo::onOpen selects GuidebookURL via LLWeb::expandURLSubstitutions,
+  disables browser chrome and sizes stack1 to 300x505; page title changes are
+  disabled and F1 closes. LLFloaterWebContent::postBuild/open_media/onOpen/onClose
+  own browser observation, navigation, loading/failure text, chrome visibility,
+  proxy-window notification and destruction. Its XML supplies the browser and
+  controls; floater_how_to.xml overrides the root to 310x525 and requests saved
+  relative placement/visibility. LLFloater::storeVisibilityControl distinguishes
+  normal close from application quit. LL_COORD_FLOATER conversion and
+  LLFloaterReg::declarePosXControl/declarePosYControl/declareVisibilityControl
+  define normalized placement and setting identities. These visual owners are
+  inspected as contracts, not invoked by native code. LLWeb substitutions,
+  general media event handling and proxy-window integration are still open edges.
+2. Native design: compose neutral XML with native PropertyTree/XML-layer parsing,
+  native widget construction, chrome/input and native settings ownership. Different
+  root names require explicit attribute overlay, not ordinary named-node merging.
+  Construct the final Guidebook stack dimensions before children to avoid invalid
+  failure-text geometry in the base declaration's temporary 40-pixel panel. Hidden
+  chrome panels retain layout identities but do not construct unused chrome
+  controls. CPU browser BGRA frames become immutable bottom-up RGBA sources in the
+  existing per-widget native publication path; alpha, sampler and shader ABI do
+  not change. No GL UI/media wrapper or GL-produced image is used.
+3. Ownership choice: keep the pinned independent Dullahan/CEF139 dependency rather
+  than replacing its browser engine. The native-only generated implementation
+  retains one CefApp owner, counts live views and calls CefShutdown only after the
+  last view's OnBeforeClose completion. Browser creation failure releases acquired
+  runtime ownership. Adapter process settings must agree, all views use the owning
+  UI thread, and final shutdown remains nonrestartable. Each LLVKBrowser owns its
+  callbacks, event queue and surface. Guidebook close detaches widget callbacks and
+  publication immediately; the window pumps closing owners until completion,
+  bounding pending Guidebook views to four. Shutdown clears all Guidebook owners
+  before login and before native UI/GPU/window destruction. Existing 15-second
+  browser-destructor timeout behavior remains fail-stop, not a new recovery claim.
+
+GPU safety: unchanged LLVKWidgetGpu streams are keyed by widget owner, with epoch
+invalidation and LLVKImagePublication completion-based replacement. Removed-widget
+streams drain pending publication and retire through existing packet resource
+ownership. No new Vulkan barriers, descriptors, image formats or shader variants.
+The window test runs the existing validation-enabled Vulkan integration target;
+browser frame assertions inspect CPU publication after presentation callbacks, not
+a new GPU readback or a byte-exact GL screenshot comparison. Device/driver parity
+qualification and performance measurements are N/A to this evidence, not asserted.
+
+Validation: Native Vulkan Browser Validation passed1/1; Widget Validation passed
+195/195; Window Validation passed7/7 and the standalone cold-cache regression;
+Native Viewer Link Validation passed. Browser test covers two distinct pages,
+first-owner shutdown, surviving input, subsequent view creation and final shutdown.
+Window fixture serves local HTTP content, opens the original Help action, exercises
+real mouse/key/wheel/F1 events, checks independent exact solid-color page pixels,
+closes/reopens while the old view retires, and reloads saved visibility/position
+from disk. No full viewer/profile launch, public Guidebook service acceptance,
+microphone use or tolerance relaxation. Chromium GCM/WidgetHost messages occurred
+in a passing run; their wider significance remains unqualified.
+
+Limits/change class: native parity implementation in progress, not contract-closed
+Guidebook parity. URL-template expansion, general popup/custom-scheme dispatch,
+authenticated world links, browser context menus/cursor/tooltips, media policy and
+failure presentation, inherited localized child overrides, full-viewer startup
+restoration and exact visual/effects parity remain open. Saving fixed Guidebook
+dimensions is unnecessary to resize behavior because this floater cannot resize;
+full generic floater save_rect behavior is not supplied by this increment. The
+shared CEF lifetime capability enables later browser-related menu work, but does
+not implement their individual dialogs or behavior contracts automatically.
+
 Native lifecycle status presenter (NV-00/01/03/12/17, 88baf039b5 plus working tree,
 Windows RelWithDebInfo): LLAppViewer::initCache updates the splash with
 StartupInitializingTextureCache before cache initialization. LLAppViewer::cleanup

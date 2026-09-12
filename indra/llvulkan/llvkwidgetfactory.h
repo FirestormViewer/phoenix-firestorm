@@ -106,7 +106,7 @@ public:
         Defaults view;
         LLVKControl::Params control;
         LLVKWidgetTree::ComboParams combo;
-        ButtonDefaults button, dropDown;
+        ButtonDefaults button, dropDown, action;
         LineEditorDefaults editor;
         bool initialized = false;
     };
@@ -212,6 +212,8 @@ public:
     };
     struct Resources
     {
+        std::shared_ptr<const ComboDefaults> flyout;
+        LLVKWidgetTree::Node::ProgressBar progress;
         std::shared_ptr<LLVKSkinFiles> skinFiles;
         std::shared_ptr<LLVKColorTable> colors;
         std::shared_ptr<const TabDefaults> tabs = std::make_shared<TabDefaults>();
@@ -246,6 +248,9 @@ public:
     LLVKWidgetFactory(Defaults defaults, IconDefaults iconDefaults, ButtonDefaults buttonDefaults, Callbacks callbacks,
                        Resources resources = {}, PanelDefaults panelDefaults = {}, LineEditorDefaults lineDefaults = {}, CheckBoxDefaults checkDefaults = {});
     bool loadDefaults(const LLVKWidgetTree& tree, std::string_view xml, std::string& error);
+    void setSkinFiles(std::shared_ptr<LLVKSkinFiles> skin) { mResources.skinFiles=std::move(skin); }
+    void bindAction(std::string name,std::function<void(LLVKWidgetTree::Id,const LLSD&)> action)
+    { mCallbacks.actions.insert_or_assign(std::move(name),std::move(action)); }
     bool loadDefaultsFile(const LLVKWidgetTree& tree, const std::string& filename, std::string& error);
     bool loadListContents(const LLVKWidgetTree& tree, const std::string& filename,
         LLVKWidgetTree::ScrollListParams& contents, std::string& error) const;

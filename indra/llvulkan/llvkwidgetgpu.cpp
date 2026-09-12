@@ -1,6 +1,37 @@
 #include "llvkwidgetgpu.h"
 #include <algorithm>
 #include <cmath>
+#include <fstream>
+
+std::optional<std::vector<std::filesystem::path>> LLVKWidgetGpu::dumpFontAtlases(const std::filesystem::path& directory,std::string& error) const
+{
+    error.clear();
+    if (!directory.is_absolute()) { error="Native font atlas dump requires an absolute directory"; return std::nullopt; }
+    std::error_code status;
+    std::filesystem::create_directories(directory.parent_path(),status);
+    if (status || !std::filesystem::create_directory(directory,status))
+    { error="Cannot create a new native font atlas dump directory: "+directory.string(); return std::nullopt; }
+    std::vector<std::filesystem::path> files;
+    for (const auto& [key,text] : mTexts)
+    {
+        if (!text.atlas) continue;
+        const auto size=text.atlas->pageSize();
+        std::size_t index=0;
+        for (const auto& page : text.atlas->pages())
+        {
+            const auto encoded=LLVKWidgetImage::encodePng(size,size,page.rgba,error);
+            if (!encoded) return std::nullopt;
+            const auto path=directory/("native-glyph-"+std::to_string(key.first)+"-"+std::to_string(key.second)+"-"+
+                std::to_string(index++)+(page.encoding==LLVKFontFace::PixelEncoding::Coverage8 ? "-coverage.png" : "-color.png"));
+            std::ofstream output(path,std::ios::binary|std::ios::trunc);
+            output.write(reinterpret_cast<const char*>(encoded->data()),static_cast<std::streamsize>(encoded->size()));
+            output.close();
+            if (!output) { error="Native font atlas write failed: "+path.string(); return std::nullopt; }
+            files.push_back(path);
+        }
+    }
+    return files;
+}
 
 bool LLVKWidgetGpu::waitPendingUploads(std::uint64_t timeout,std::string& error)
 {

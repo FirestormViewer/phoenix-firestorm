@@ -73,8 +73,66 @@ namespace tut
         ensure("old browser frame retained",first->bottomUpRgba()[(std::size_t(59)*64+4)*4] == 255);
         ensure("browser resize",browser.resize(80,48,error));
         ensure("resized browser pixels",pumpUntil([&] { return matches(80,48,true); }));
+        LLVKBrowser second;
+        auto conflicting = configuration;
+        conflicting.cookiesEnabled = !configuration.cookiesEnabled;
+        ensure("conflicting process settings rejected",!second.start(conflicting,error));
+        ensure("independent second browser starts",second.start(configuration,error));
+        ensure("second page navigation",second.navigate(
+            "data:text/html,<body style='margin:0;background:rgb(255,255,0)' "
+            "onclick='this.style.background=\"rgb(0,255,255)\"'>second</body>",error));
+        const auto secondMatches = [&](bool clicked)
+        {
+            const auto frame = second.surface().frame();
+            if (!frame) return false;
+            const auto pixels = frame->bottomUpRgba();
+            return pixels[0] == (clicked ? 0 : 255) && pixels[1] == 255 && pixels[2] == (clicked ? 255 : 0);
+        };
+        ensure("independent second page pixels",pumpUntil([&] { return secondMatches(false); }));
+        ensure("first page remains unchanged",matches(80,48,true));
+        ensure("second history page",second.navigate("data:text/html,<body style='background:rgb(0,0,0)'>history</body>",error));
+        ensure("second history navigation completes",pumpUntil([&]
+        {
+            const auto state=second.navigation(error);
+            return state && state->back && !state->loading && !secondMatches(false);
+        }));
+        ensure("native back command",second.command(LLVKBrowser::Command::Back,error));
+        ensure("back restores second page",pumpUntil([&] { return secondMatches(false); }));
+        ensure("forward is available",second.navigation(error)->forward);
+        ensure("reload command",second.command(LLVKBrowser::Command::Reload,error));
+        ensure("reload completes",pumpUntil([&] { return !second.navigation(error)->loading && secondMatches(false); }));
         ensure("request asynchronous close",browser.requestClose(error));
         ensure("close completes before owner release",pumpUntil([&] { return browser.state() == LLVKBrowser::State::Closed; }));
-        std::cout << "Native browser: real CPU pixels, pointer, resize and close verified\n";
+        const auto pumpSecond = [&](const auto& condition)
+        {
+            const auto deadline = std::chrono::steady_clock::now()+std::chrono::seconds(20);
+            while (std::chrono::steady_clock::now() < deadline)
+            {
+                MSG message;
+                while (PeekMessageW(&message,nullptr,0,0,PM_REMOVE))
+                { TranslateMessage(&message); DispatchMessageW(&message); }
+                ensure("second runtime pump",second.update(error));
+                if (condition()) return true;
+                MsgWaitForMultipleObjectsEx(0,nullptr,10,QS_ALLINPUT,MWMO_INPUTAVAILABLE);
+            }
+            return false;
+        };
+        ensure("second pointer down after first close",second.pointer(8,8,0,true,error));
+        ensure("second pointer up after first close",second.pointer(8,8,0,false,error));
+        ensure("second remains interactive after initial owner closes",pumpSecond([&] { return secondMatches(true); }));
+        LLVKBrowser reopened;
+        ensure("new view after original owner closes",reopened.start(configuration,error));
+        ensure("new view close",reopened.requestClose(error));
+        ensure("new view retires independently",pumpSecond([&]
+        {
+            ensure("new view update",reopened.update(error));
+            return reopened.state() == LLVKBrowser::State::Closed;
+        }));
+        ensure("final browser close",second.requestClose(error));
+        ensure("final runtime retirement",pumpSecond([&] { return second.state() == LLVKBrowser::State::Closed; }));
+        LLVKBrowser afterShutdown;
+        ensure("CEF restart remains forbidden",!afterShutdown.start(configuration,error));
+        ensure("multiple views did not load OpenGL",GetModuleHandleW(L"opengl32.dll") == nullptr);
+        std::cout << "Native browser: independent views, pixels, input, resize and last-view shutdown verified\n";
     }
 }

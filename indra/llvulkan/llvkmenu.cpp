@@ -3,6 +3,7 @@
 #include <expat/expat.h>
 #include <algorithm>
 #include <cmath>
+#include <boost/tokenizer.hpp>
 
 namespace
 {
@@ -54,6 +55,10 @@ std::unique_ptr<LLVKMenu> LLVKMenu::create(std::string_view xml,std::shared_ptr<
                         else if (attribute == "label") entry.label = value;
                         else if (attribute == "shortcut") entry.shortcut = value;
                         else if (attribute == "visible") entry.visible = value != "false" && value != "0";
+                        else if (attribute == "enabled") entry.enabled = value != "false" && value != "0";
+                        else if (attribute == "create_jump_keys") entry.createJumpKeys = value == "true" || value == "1";
+                        else if (attribute == "jump_key" && value.size()==1)
+                            entry.jumpKey=static_cast<unsigned char>(LLStringOps::toUpper(value.front()));
                     }
                     const auto index = state.menu.mItems.size();
                     state.menu.mItems.push_back(std::move(entry));
@@ -98,15 +103,98 @@ std::unique_ptr<LLVKMenu> LLVKMenu::create(std::string_view xml,std::shared_ptr<
         if (item.name == "Debug") item.visible = debug;
         LLVKLabel label; label.assign(item.label); label.setArgument("[APP_NAME]","Vulkanstorm");
         item.label = label.resolve(menu->mLabels);
+        if (!item.branch && !item.separator && item.action.empty()) item.invoke=[] {};
     }
+    for (const auto& item : menu->mItems)
+        if (item.createJumpKeys) menu->assignJumpKeys(item.children);
     return menu;
+}
+
+std::optional<int> LLVKMenu::barWidth(std::string& error) const
+{
+    int width=0;
+    for (const auto root : mRoots)
+    {
+        if (!itemVisible(root) || !mItems[root].branch) continue;
+        const auto wide=utf8str_to_wstring(mItems[root].label);
+        const std::u32string label(wide.begin(),wide.end());
+        const auto measured=mFont->measureRun(label,0,label.size(),1,true,false,error);
+        if (!measured) return std::nullopt;
+        if (measured->width>INT32_MAX-width-25) { error="Native menu bar width overflows"; return std::nullopt; }
+        width+=static_cast<int>(std::floor(measured->width+.5f))+25;
+    }
+    return width;
+}
+
+void LLVKMenu::assignJumpKeys(const std::vector<std::size_t>& siblings)
+{
+    using Tokens=boost::tokenizer<boost::char_separator<char>>;
+    const boost::char_separator<char> separator(" ");
+    std::set<std::string> unique,shared;
+    std::set<unsigned char> assigned;
+    for (const auto index : siblings)
+    {
+        auto label=mItems[index].label; LLStringUtil::toUpper(label);
+        for (const auto& word : Tokens(label,separator))
+            if (!unique.insert(word).second) shared.insert(word);
+        auto& key=mItems[index].jumpKey;
+        if (key && !assigned.insert(key).second) key=0;
+    }
+    for (const auto index : siblings)
+    {
+        auto& item=mItems[index];
+        if (item.jumpKey || item.separator) continue;
+        auto label=item.label; LLStringUtil::toUpper(label);
+        for (const auto& word : Tokens(label,separator))
+        {
+            if (shared.contains(word)) continue;
+            for (const unsigned char candidate : word)
+                if ((candidate>='0' && candidate<='9') ||
+                    (candidate>='A' && candidate<='Z' && !assigned.contains(candidate)))
+                { item.jumpKey=candidate; assigned.insert(candidate); break; }
+            if (item.jumpKey) break;
+        }
+    }
+}
+
+bool LLVKMenu::character(char32_t character)
+{
+    if (!open()) return false;
+    if (std::any_of(mOpen.begin(),mOpen.end(),[this](auto item) { return !enabled(item); }))
+    { dismiss(); return false; }
+    mKeyboardMode=true;
+    if (character>127) return true;
+    const auto key=static_cast<unsigned char>(LLStringOps::toUpper(static_cast<char>(character)));
+    for (const auto item : mItems[mOpen.back()].children)
+        if (mItems[item].jumpKey==key && key)
+        {
+            if (enabled(item)) activate(item,mOpen.size());
+            break;
+        }
+    return true;
 }
 
 void LLVKMenu::bind(std::string action,Handler handler) { mHandlers.insert_or_assign(std::move(action),std::move(handler)); }
 void LLVKMenu::bindItem(std::string action,std::string parameter,Handler handler)
 { mItemHandlers.insert_or_assign({std::move(action),std::move(parameter)},std::move(handler)); }
+void LLVKMenu::bindPredicate(std::string action,Predicate predicate)
+{ mPredicates.insert_or_assign(std::move(action),std::move(predicate)); }
+bool LLVKMenu::itemChecked(std::size_t item) const
+{
+    if (item>=mItems.size() || !mItems[item].checkable) return false;
+    const auto& entry=mItems[item];
+    const auto predicate=mPredicates.find(entry.checkAction);
+    return predicate!=mPredicates.end() && predicate->second ? predicate->second(entry.checkParameter) : entry.checked;
+}
 void LLVKMenu::setVisible(std::string_view name,bool visible)
 { for (auto& item : mItems) if (item.name == name) item.visible = visible; }
+bool LLVKMenu::itemVisible(std::size_t item) const
+{
+    if (item>=mItems.size() || !mItems[item].visible) return false;
+    const auto& entry=mItems[item];
+    const auto predicate=mPredicates.find(entry.visibleAction);
+    return predicate==mPredicates.end() || !predicate->second || predicate->second(entry.visibleParameter);
+}
 bool LLVKMenu::shortcut(std::string key,bool control,bool shift,bool alt)
 {
     std::string shortcut;
@@ -116,7 +204,7 @@ bool LLVKMenu::shortcut(std::string key,bool control,bool shift,bool alt)
     shortcut += key;
     const auto visit = [&](const auto& self,std::size_t item) -> bool
     {
-        if (!mItems[item].visible) return false;
+        if (!itemVisible(item) || !enabled(item)) return false;
         if (mItems[item].shortcut == shortcut && enabled(item) && !mItems[item].branch)
         { activate(item,0); return true; }
         for (auto child : mItems[item].children) if (self(self,child)) return true;
@@ -127,8 +215,10 @@ bool LLVKMenu::shortcut(std::string key,bool control,bool shift,bool alt)
 }
 bool LLVKMenu::enabled(std::size_t item) const
 {
-    if (!mItems[item].enabled) return false;
+    if (!itemVisible(item) || !mItems[item].enabled) return false;
     const auto& entry = mItems[item];
+    const auto predicate=mPredicates.find(entry.enableAction);
+    if (predicate!=mPredicates.end() && predicate->second && !predicate->second(entry.enableParameter)) return false;
     const auto specific = mItemHandlers.find({entry.action,entry.parameter});
     const auto handler = mHandlers.find(entry.action);
     return entry.branch || (!entry.separator && (bool(entry.invoke) || (specific != mItemHandlers.end() && bool(specific->second)) ||
@@ -160,7 +250,7 @@ bool LLVKMenu::showPopup(std::vector<Item> items,LLVKWidgetTree::Rect anchor,con
 
 void LLVKMenu::dismiss()
 {
-    mOpen.clear(); mHovered.reset(); mHits.clear(); mPressed=false;
+    mOpen.clear(); mHovered.reset(); mHits.clear(); mPressed=false; mKeyboardMode=false;
     if (mContextRoot) { mItems.resize(*mContextRoot); mContextRoot.reset(); }
     mPopupPosition.clear();
     auto callback=std::move(mDismissed); mDismissed={};
@@ -182,6 +272,9 @@ void LLVKMenu::activate(std::size_t item,std::size_t level)
 
 bool LLVKMenu::pointer(const LLVKWidgetTree::PointerEvent& event)
 {
+    mKeyboardMode=false;
+    if (std::any_of(mOpen.begin(),mOpen.end(),[this](auto item) { return !itemVisible(item); }))
+    { dismiss(); return false; }
     using Kind = LLVKWidgetTree::PointerKind;
     auto hit = std::find_if(mHits.rbegin(),mHits.rend(),[&](const Hit& hit)
         { return event.x >= hit.rect.left && event.x < hit.rect.right && event.y >= hit.rect.bottom && event.y < hit.rect.top; });
@@ -204,27 +297,34 @@ bool LLVKMenu::pointer(const LLVKWidgetTree::PointerEvent& event)
     if (open())
     { if (event.kind == Kind::LeftDown || event.kind == Kind::RightDown) dismiss(); return true; }
     if (event.kind == Kind::Hover) mHovered.reset();
-    return event.y >= mViewport.top-18 && event.y < mViewport.top;
+    return event.x>=mBar.left && event.x<mBar.right && event.y>=mBar.bottom && event.y<mBar.top;
 }
 
 bool LLVKMenu::key(Key key)
 {
+    if (std::any_of(mOpen.begin(),mOpen.end(),[this](auto item) { return !itemVisible(item); })) dismiss();
     if (key == Key::Activate)
-    { for (auto item : mRoots) if (mItems[item].visible && mItems[item].branch) { activate(item,0); return true; } return false; }
+    { for (auto item : mRoots) if (enabled(item) && mItems[item].branch) { mKeyboardMode=true; activate(item,0); return true; } return false; }
     if (!open()) return false;
+    mKeyboardMode=true;
     if (key == Key::Escape) { dismiss(); return true; }
     if (key == Key::Left || key == Key::Right)
     {
         if (mContextRoot) return true;
+        if (key==Key::Right && mHovered && *mHovered!=mOpen.back() && mItems[*mHovered].branch && enabled(*mHovered))
+        { activate(*mHovered,mOpen.size()); return true; }
+        if (key==Key::Left && mOpen.size()>1)
+        { mHovered=mOpen.back(); mOpen.pop_back(); return true; }
         std::vector<std::size_t> roots;
-        for (auto item : mRoots) if (mItems[item].visible && mItems[item].branch) roots.push_back(item);
+        for (auto item : mRoots) if (enabled(item) && mItems[item].branch) roots.push_back(item);
+        if (roots.empty()) { dismiss(); return false; }
         const auto position = std::find(roots.begin(),roots.end(),mOpen.front())-roots.begin();
         activate(roots[(position+roots.size()+(key == Key::Left ? -1 : 1))%roots.size()],0); return true;
     }
     if (key == Key::Up || key == Key::Down)
     {
         std::vector<std::size_t> rows;
-        for (auto item : mItems[mOpen.back()].children) if (mItems[item].visible && enabled(item)) rows.push_back(item);
+        for (auto item : mItems[mOpen.back()].children) if (enabled(item)) rows.push_back(item);
         if (rows.empty()) return true;
         auto found = mHovered ? std::find(rows.begin(),rows.end(),*mHovered) : rows.end();
         const auto position = found == rows.end() ? (key == Key::Down ? rows.size()-1 : 0) : std::size_t(found-rows.begin());
@@ -234,9 +334,12 @@ bool LLVKMenu::key(Key key)
     return true;
 }
 
-bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::string& error)
+bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::string& error,
+    std::optional<LLVKWidgetTree::Rect> bar,bool dropdowns)
 {
     error.clear(); mViewport = viewport; mHits.clear();
+    mBar=bar.value_or(LLVKWidgetTree::Rect{viewport.left,viewport.top-18,viewport.right,viewport.top});
+    if (std::any_of(mOpen.begin(),mOpen.end(),[this](auto item) { return !itemVisible(item); })) dismiss();
     using Rect = LLVKWidgetTree::Rect;
     if (viewport.right-viewport.left < 100 || viewport.top-viewport.bottom < 18) { error = "Native menu viewport too small"; return false; }
     const auto color = [&](const char* name,LLVKColor::Value fallback)
@@ -262,14 +365,14 @@ bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::
         const auto measured = mFont->measureRun(string,0,string.size(),1,true,false,error);
         return measured ? static_cast<int>(std::floor(measured->width+0.5f)) : 0;
     };
-    solid(mItems.size(),{viewport.left,viewport.top-18,viewport.right,viewport.top},color("MenuBarBgColor",background));
-    int left = viewport.left;
+    solid(mItems.size(),mBar,color("MenuBarBgColor",background));
+    int left = mBar.left;
     for (auto item : mRoots)
     {
-        if (!mItems[item].visible || !mItems[item].branch) continue;
+        if (!itemVisible(item) || !mItems[item].branch) continue;
         const int width = measure(mItems[item].label)+25;
         if (!error.empty()) return false;
-        const Rect rect{left,viewport.top-18,left+width,viewport.top};
+        const Rect rect{left,mBar.bottom,left+width,mBar.top};
         mHits.push_back({item,0,rect});
         const bool selected = (!mOpen.empty() && mOpen[0] == item) || mHovered == item;
         if (selected) solid(item,rect,highlight);
@@ -277,6 +380,7 @@ bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::
         left += width;
     }
     const int rowHeight = static_cast<int>(mFont->metrics().lineHeight)+4;
+    if (!dropdowns) return true;
     if (mContextRoot) mHits.push_back({*mContextRoot,0,mContextAnchor});
     for (std::size_t level = 0; level < mOpen.size(); ++level)
     {
@@ -284,7 +388,7 @@ bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::
         if (parent == mHits.end()) break;
         const auto parentRect = parent->rect;
         int width = 80, height = 4;
-        for (auto item : mItems[mOpen[level]].children) if (mItems[item].visible)
+        for (auto item : mItems[mOpen[level]].children) if (itemVisible(item))
         { width = std::max(width,measure(mItems[item].label)+measure(shortcutLabel(mItems[item].shortcut))+65); height += mItems[item].separator ? 8 : rowHeight; }
         if (!error.empty()) return false;
         width = std::min(width,viewport.right-viewport.left);
@@ -304,14 +408,26 @@ bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::
         top -= 2;
         for (auto item : mItems[mOpen[level]].children)
         {
-            const auto& entry = mItems[item]; if (!entry.visible) continue;
+            const auto& entry = mItems[item]; if (!itemVisible(item)) continue;
             if (entry.separator) { solid(item,{left+3,top-4,left+width-3,top-3},disabled); top -= 8; continue; }
             const Rect rect{left,top-rowHeight,left+width,top}; mHits.push_back({item,level+1,rect});
             const bool selected = mHovered == item && enabled(item);
             if (selected) solid(item,rect,highlight);
             const auto tint = enabled(item) ? (selected ? foreground : normal) : disabled;
-            if (entry.checkable && entry.checked && !text(item,"\xE2\x9C\x94",left+2.f,rect.bottom+2.f,tint,LLVKFont::HorizontalAlign::Left)) return false;
+            if (itemChecked(item) && !text(item,"\xE2\x9C\x94",left+2.f,rect.bottom+2.f,tint,LLVKFont::HorizontalAlign::Left)) return false;
             if (!text(item,entry.label,left+18.f,rect.bottom+2.f,tint,LLVKFont::HorizontalAlign::Left)) return false;
+            if (mKeyboardMode && level+1==mOpen.size() && entry.jumpKey)
+            {
+                auto label=entry.label; LLStringUtil::toUpper(label);
+                const auto offset=label.find(static_cast<char>(entry.jumpKey));
+                if (offset!=std::string::npos)
+                {
+                    const auto start=left+18+measure(entry.label.substr(0,offset));
+                    const auto end=left+18+measure(entry.label.substr(0,offset+1));
+                    if (!error.empty()) return false;
+                    solid(item,{start,rect.bottom+3,end,rect.bottom+4},tint);
+                }
+            }
             if (!entry.shortcut.empty() && !text(item,shortcutLabel(entry.shortcut),left+width-7.f,rect.bottom+2.f,tint,LLVKFont::HorizontalAlign::Right)) return false;
             if (entry.branch && !text(item,">",left+width-7.f,rect.bottom+2.f,tint,LLVKFont::HorizontalAlign::Right)) return false;
             top -= rowHeight;

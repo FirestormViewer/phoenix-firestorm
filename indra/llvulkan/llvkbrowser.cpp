@@ -1,12 +1,16 @@
 #include "llvkbrowser.h"
 #include <dullahan.h>
-#include <atomic>
+#include <mutex>
+#include <optional>
 #include <chrono>
 #include <windows.h>
 
 namespace
 {
-    std::atomic<bool> browserInitialized{false};
+    std::mutex runtimeMutex;
+    std::optional<LLVKBrowser::Configuration> runtimeConfiguration;
+    std::thread::id runtimeThread;
+    std::size_t runtimeViews = 0;
     std::string utf8Path(const std::filesystem::path& path)
     {
         const auto bytes = path.u8string();
@@ -62,6 +66,19 @@ bool LLVKBrowser::start(const Configuration& configuration, std::string& error)
 {
     if (!onThread(error)) return false;
     if (mState != State::Fresh) { error = "Native browser cannot be restarted"; return false; }
+    std::lock_guard runtimeLock(runtimeMutex);
+    if (runtimeConfiguration)
+    {
+        const auto& active = *runtimeConfiguration;
+        if (runtimeThread != mThread || !runtimeViews)
+        { error = "Native CEF runtime cannot change threads or restart after final shutdown"; return false; }
+        if (active.helperDirectory != configuration.helperDirectory || active.localesDirectory != configuration.localesDirectory ||
+            active.cacheDirectory != configuration.cacheDirectory || active.language != configuration.language ||
+            active.userAgent != configuration.userAgent || active.cookiesEnabled != configuration.cookiesEnabled ||
+            active.proxy.type != configuration.proxy.type || active.proxy.host != configuration.proxy.host ||
+            active.proxy.port != configuration.proxy.port)
+        { error = "Native browser views must share CEF process configuration"; return false; }
+    }
     if (!configuration.helperDirectory.is_absolute() || !configuration.localesDirectory.is_absolute() ||
         !configuration.cacheDirectory.is_absolute() ||
         !std::filesystem::is_regular_file(configuration.helperDirectory/"dullahan_host.exe") ||
@@ -131,11 +148,14 @@ bool LLVKBrowser::start(const Configuration& configuration, std::string& error)
     settings.cookies_enabled = configuration.cookiesEnabled;
     settings.disable_web_security = settings.file_access_from_file_urls = false;
     settings.frame_rate = 60;
-    bool expected = false;
-    if (!browserInitialized.compare_exchange_strong(expected,true))
-    { error = "CEF initialization is process-global and may only run once"; return false; }
+    if (!runtimeConfiguration)
+    {
+        runtimeConfiguration = configuration;
+        runtimeThread = mThread;
+    }
     if (!mEngine->init(settings))
     { mState = State::Failed; error = "Native Dullahan initialization failed"; return false; }
+    ++runtimeViews;
     mInitialized = true;
     mState = State::Running;
     return true;
@@ -152,6 +172,8 @@ bool LLVKBrowser::update(std::string& error)
         mInitialized = false;
         mEngine.reset();
         mState = State::Closed;
+        std::lock_guard runtimeLock(runtimeMutex);
+        --runtimeViews;
     }
     if (mCallbackFailed) { error = "Native browser callback publication failed or exceeded its budget"; return false; }
     return true;
@@ -164,6 +186,26 @@ bool LLVKBrowser::navigate(const std::string& url, std::string& error)
     { error = "Invalid native browser navigation URL"; return false; }
     mEngine->navigate(url);
     return true;
+}
+
+bool LLVKBrowser::command(Command command,std::string& error)
+{
+    if (!running(error)) return false;
+    switch (command)
+    {
+    case Command::Back: if (mEngine->canGoBack()) mEngine->goBack(); break;
+    case Command::Forward: if (mEngine->canGoForward()) mEngine->goForward(); break;
+    case Command::Reload: mEngine->reload(true); break;
+    case Command::Stop: mEngine->stop(); break;
+    default: error="Unknown native browser navigation command"; return false;
+    }
+    return true;
+}
+
+std::optional<LLVKBrowser::Navigation> LLVKBrowser::navigation(std::string& error) const
+{
+    if (!running(error)) return std::nullopt;
+    return Navigation{mEngine->canGoBack(),mEngine->canGoForward(),mEngine->isLoading()};
 }
 
 bool LLVKBrowser::resize(std::uint32_t width,std::uint32_t height,std::string& error)

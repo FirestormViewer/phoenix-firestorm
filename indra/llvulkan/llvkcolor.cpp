@@ -313,6 +313,14 @@ bool LLVKColorTable::setRuntime(const std::string& name,LLVKColor::Value color)
     return true;
 }
 
+std::vector<std::string> LLVKColorTable::names() const
+{
+    std::set<std::string> names;
+    for (const auto& [name,color] : mLoaded) names.insert(name);
+    for (const auto& [name,color] : mUser) names.insert(name);
+    return {names.begin(),names.end()};
+}
+
 bool LLVKColorTable::define(const std::string& name, LLVKColor::Value color)
 {
     if (name.empty() || !std::all_of(color.begin(),color.end(),[](float channel) { return std::isfinite(channel); })) return false;

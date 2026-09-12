@@ -9,6 +9,7 @@
 #include "lltut.h"
 #include <fstream>
 #include <windows.h>
+#include <boost/asio.hpp>
 
 namespace tut
 {
@@ -381,6 +382,7 @@ namespace tut
         configuration.ui.fonts.searchDirectories = {viewer/"fonts",std::filesystem::path(LLVK_LOGIN_PACKAGED_FONTS)};
         configuration.ui.settings = settings.values();
         configuration.ui.settingsGroup=&settings.group();
+        configuration.ui.cacheDirectory=profile.path/"cache";
         configuration.ui.savePreferences=[&settings,path=profile.path/"settings.xml"](const auto& changes,std::string& problem)
         { return settings.saveChanges(path,changes,problem); };
         configuration.ui.settingDefaults = settings.defaults();
@@ -396,7 +398,153 @@ namespace tut
         configuration.browser.localesDirectory = directory/"locales";
         configuration.browser.cacheDirectory = profile.path/"browser";
         configuration.loginPage = "data:text/html,<html><body style='margin:0;background:rgb(45,90,120)'><h1>Native browser validation</h1></body></html>";
-        configuration.stopAfterFrames = 6;
+        struct GuidebookServer
+        {
+            boost::asio::io_context context;
+            boost::asio::ip::tcp::acceptor acceptor{context,{boost::asio::ip::address_v4::loopback(),0}};
+            std::atomic<bool> stopping{false};
+            std::thread worker;
+            GuidebookServer() : worker([this]
+            {
+                while (!stopping)
+                {
+                    boost::system::error_code problem;
+                    boost::asio::ip::tcp::socket client(context);
+                    acceptor.accept(client,problem);
+                    if (problem || stopping) break;
+                    const DWORD timeout=1000;
+                    setsockopt(client.native_handle(),SOL_SOCKET,SO_RCVTIMEO,reinterpret_cast<const char*>(&timeout),sizeof(timeout));
+                    boost::asio::streambuf request(16384);
+                    boost::asio::read_until(client,request,"\r\n\r\n",problem);
+                    if (problem) continue;
+                    const std::string body="<html><body style='margin:0;background:rgb(255,255,0);height:2000px'>"
+                        "<script>document.onclick=()=>document.body.style.background='rgb(0,255,255)';"
+                        "document.onkeydown=()=>document.body.style.background='rgb(255,0,255)';"
+                        "document.onwheel=()=>document.body.style.background='rgb(0,0,255)';</script></body></html>";
+                    const auto response="HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\nContent-Length: "+
+                        std::to_string(body.size())+"\r\n\r\n"+body;
+                    boost::asio::write(client,boost::asio::buffer(response),problem);
+                }
+            }) {}
+            ~GuidebookServer()
+            {
+                stopping=true;
+                boost::system::error_code ignored;
+                boost::asio::ip::tcp::socket wake(context);
+                wake.connect(acceptor.local_endpoint(),ignored);
+                worker.join();
+            }
+            std::string url() const { return "http://127.0.0.1:"+std::to_string(acceptor.local_endpoint().port())+"/guidebook"; }
+        } guidebookServer;
+        ensure("loopback Guidebook URL",settings.set("GuidebookURL",LLSD(guidebookServer.url()),false,error));
+        configuration.ui.settings["GuidebookURL"]=guidebookServer.url();
+        int guidebookStage=0;
+        LLVKWidgetTree::Id originalGuidebook=0;
+        const auto guidebookDeadline=std::chrono::steady_clock::now()+std::chrono::seconds(60);
+        configuration.presentedFrame=[&](LLVKViewerUi& ui,const LLVKWidgetPaint::Input& input)
+        {
+            ensure("bounded integrated Guidebook completion",std::chrono::steady_clock::now()<guidebookDeadline);
+            if (guidebookStage==8)
+            {
+                const auto inspector=ui.find("overlap_panel");
+                ensure("overlap diagnostic reaches presented frame",inspector && ui.tree().get(inspector)->params.visible &&
+                    !ui.tree().get(inspector)->overlapPanel->elements.empty());
+                ++guidebookStage;
+                PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
+                return;
+            }
+            const auto id=ui.find("webbrowser",guidebookStage>=5 ? ui.activeFloater() : ui.guidebook());
+            const auto found=input.browsers.find(id);
+            if (found==input.browsers.end() || !found->second) return;
+            const auto pixels=found->second->bottomUpRgba();
+            const std::array<std::array<int,3>,8> expected{{{255,255,0},{0,255,255},{255,0,255},{0,0,255},{255,255,0},{255,255,0},{255,255,0},{255,255,0}}};
+            if (guidebookStage>=8) return;
+            const auto color=expected[guidebookStage];
+            if (pixels[0]!=color[0] || pixels[1]!=color[1] || pixels[2]!=color[2]) return;
+            std::string problem;
+            const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+            const auto rect=ui.tree().screenRect(id,problem);
+            ensure("visible browser bounds",rect.has_value());
+            RECT client{}; GetClientRect(window,&client);
+            const auto mouse=MAKELPARAM(rect->left+30,client.bottom-rect->top+30);
+            if (guidebookStage==0)
+            {
+                const bool dumped=ui.dumpFontTextures(problem); ensure(problem,dumped);
+                std::size_t pages=0;
+                bool visibleGlyphs=false;
+                for (const auto& file : std::filesystem::recursive_directory_iterator(profile.path/"logs"))
+                {
+                    if (!file.is_regular_file() || file.path().extension()!=".png") continue;
+                    std::ifstream input(file.path(),std::ios::binary);
+                    const std::vector<std::uint8_t> encoded{std::istreambuf_iterator<char>(input),std::istreambuf_iterator<char>()};
+                    const auto image=LLVKWidgetImage::decodePng("dumped-atlas",encoded,problem); ensure(problem,image!=nullptr);
+                    ensure("dumped native atlas dimensions",image->pixelWidth()==256 && image->pixelHeight()==256);
+                    const auto rgba=image->bottomUpRgba();
+                    for (std::size_t offset=3; offset<rgba.size(); offset+=4) visibleGlyphs|=rgba[offset]!=0;
+                    ++pages;
+                }
+                ensure("native atlas diagnostic writes real glyph pages",pages>0 && visibleGlyphs);
+                originalGuidebook=ui.guidebook();
+                SendMessageW(window,WM_LBUTTONDOWN,MK_LBUTTON,mouse);
+                SendMessageW(window,WM_LBUTTONUP,0,mouse);
+                ensure_equals("Guidebook owns keyboard focus",ui.tree().keyboardFocus(),id);
+            }
+            else if (guidebookStage==1) SendMessageW(window,WM_KEYDOWN,'J',1);
+            else if (guidebookStage==2)
+            {
+                POINT point{rect->left+30,client.bottom-rect->top+30}; ClientToScreen(window,&point);
+                SendMessageW(window,WM_MOUSEWHEEL,MAKEWPARAM(0,-WHEEL_DELTA),MAKELPARAM(point.x,point.y));
+            }
+            else if (guidebookStage==3)
+            {
+                SendMessageW(window,WM_KEYDOWN,VK_F1,1);
+                ensure("F1 closes embedded Guidebook",ui.guidebook()==0);
+                ensure("immediate reopen while old view closes",ui.toggleGuidebook(problem));
+                ensure("fresh Guidebook identity",ui.guidebook()!=originalGuidebook);
+            }
+            else if (guidebookStage==4)
+            {
+                const auto login=input.browsers.find(ui.find("login_html"));
+                ensure("login browser retained",login!=input.browsers.end() && login->second);
+                const auto loginPixels=login->second->bottomUpRgba();
+                ensure("Guidebook input never navigates or repaints login",loginPixels[0]==45 && loginPixels[1]==90 && loginPixels[2]==120);
+                const bool opened=ui.showMediaBrowser(guidebookServer.url(),problem); ensure(problem,opened);
+            }
+            else if (guidebookStage==5)
+            {
+                const auto address=ui.find("address",ui.activeFloater());
+                const auto editor=ui.tree().get(address)->combo->editor;
+                ensure("live Media Browser address edit",ui.tree().setValue(editor,LLSD(guidebookServer.url()+"?next")));
+                ensure("live address navigation",ui.tree().commit(editor));
+            }
+            else if (guidebookStage==6)
+            {
+                const auto address=ui.find("address",ui.activeFloater());
+                if (ui.tree().value(address).asString()!=guidebookServer.url()+"?next" ||
+                    ui.tree().get(ui.find("stop",ui.activeFloater()))->params.visible) return;
+                const auto back=ui.find("back",ui.activeFloater());
+                if (!ui.tree().get(back)->params.enabled) return;
+                ensure("live Back command",ui.tree().commit(back));
+            }
+            else
+            {
+                const auto address=ui.find("address",ui.activeFloater());
+                if (ui.tree().value(address).asString()!=guidebookServer.url() ||
+                    ui.tree().get(ui.find("stop",ui.activeFloater()))->params.visible) return;
+                ensure("live Media Browser closes",ui.closeMenuWindow(problem));
+                const bool opened=ui.showUiPreview(problem); ensure(problem,opened);
+                const auto tool=ui.activeFloater();
+                ensure("select integrated XUI preview",ui.tree().selectScrollListValue(ui.find("name_list",tool),LLSD("floater_test_textbox.xml"),true,problem));
+                ensure("open integrated primary",ui.tree().commit(ui.find("display_floater",tool)));
+                ensure(ui.dialogError(),ui.dialogError().empty());
+                ensure("show overlap diagnostic",ui.tree().commit(ui.find("toggle_overlap_panel",tool)));
+                const auto label=ui.find("left_aligned_text",ui.activeFloater());
+                const auto labelRect=ui.tree().screenRect(label,problem); ensure(problem,labelRect.has_value());
+                SendMessageW(window,WM_RBUTTONDOWN,MK_RBUTTON,
+                    MAKELPARAM(labelRect->left+2,client.bottom-1-(labelRect->bottom+2)));
+            }
+            ++guidebookStage;
+        };
         LLVKTextureCache textureCache;
         LLVKTextureCache::Configuration cacheConfiguration;
         cacheConfiguration.directory=profile.path/"textures";
@@ -427,6 +575,36 @@ namespace tut
             ensure("authoritative noise suppression override",settings.set("VoiceNoiseSuppressionLevel",LLSD(2),false,problem));
             ensure("native Preferences in presentation",ui.showPreferences(problem));
             ensure("native About in presentation",ui.showAbout(problem));
+            const bool debugOpened=ui.showDebugSettings(problem); ensure(problem,debugOpened);
+            ui.takeNotices();
+            const auto debug=ui.activeFloater();
+            const auto search=ui.find("search_settings_input",debug);
+            ensure("search live settings in native window",ui.tree().setValue(search,LLSD("RenderFarClip")) && ui.tree().commit(search));
+            ensure("live Debug Settings paint",ui.preparePaint({},problem).has_value());
+            ensure("close Debug Settings",ui.closeMenuWindow(problem));
+            const bool colorsOpened=ui.showColorSettings(problem); ensure(problem,colorsOpened);
+            ensure("live Color Settings paint",ui.preparePaint({},problem).has_value());
+            ensure("close Color Settings",ui.closeMenuWindow(problem));
+            const bool widgetsOpened=ui.showUiTest("test_widgets",problem); ensure(problem,widgetsOpened);
+            ensure("original Widgets native paint",ui.preparePaint({},problem).has_value());
+            const auto widgetMenu=ui.find("test_menu_bar",ui.activeFloater());
+            const auto menuRect=ui.tree().screenRect(widgetMenu,problem);
+            ensure("embedded Widgets menu bounds",menuRect.has_value());
+            const auto widgetWindow=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+            RECT widgetClient{}; GetClientRect(widgetWindow,&widgetClient);
+            const auto menuPoint=MAKELPARAM(menuRect->left+10,widgetClient.bottom-1-(menuRect->bottom+3));
+            SendMessageW(widgetWindow,WM_LBUTTONDOWN,MK_LBUTTON,menuPoint);
+            SendMessageW(widgetWindow,WM_LBUTTONUP,0,menuPoint);
+            ensure("embedded Widgets menu opens through Win32",ui.tree().get(widgetMenu)->menu->open());
+            SendMessageW(widgetWindow,WM_KEYDOWN,VK_ESCAPE,1);
+            ensure("embedded Widgets menu consumes Escape",!ui.tree().get(widgetMenu)->menu->open());
+            ensure("close original Widgets dialog",ui.closeMenuWindow(problem));
+            const bool whitelistOpened=ui.showWhitelist(problem);
+            ensure(problem,whitelistOpened);
+            ensure("original whitelist in native window",ui.find("whitelist_folders_editor",ui.activeFloater())!=0);
+            ensure("native whitelist presentation",ui.preparePaint({},problem).has_value());
+            ensure("close integrated whitelist",ui.closeFloater(problem));
+            ensure("return to About",ui.showAbout(problem));
             const auto tabs=ui.tree().get(ui.find("about_tab"));
             ensure("original About tabs",tabs && tabs->tabContainer && tabs->tabContainer->tabs.size()==4);
             ensure("native credits selected",ui.tree().commit(tabs->tabContainer->tabs[2].button));
@@ -471,11 +649,17 @@ namespace tut
             ensure("original key capture visible",ui.keyCaptureDialog()!=0);
             const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
             ensure("native capture window exists",window!=nullptr);
-            RECT client{};
-            ensure("read normal native client geometry",GetClientRect(window,&client)!=FALSE);
-            expectedWidth=client.right-client.left; expectedHeight=client.bottom-client.top;
             SendMessageW(window,WM_KEYDOWN,'J',1);
             ensure("Windows input closes key capture",ui.keyCaptureDialog()==0);
+            ensure("resize dialog opens in actual window",ui.showWindowSize(problem));
+            const auto sizeDialog=ui.activeFloater(),sizeCombo=ui.find("window_size_combo",sizeDialog);
+            ensure("edit native client dimensions",ui.tree().setValue(ui.tree().get(sizeCombo)->combo->editor,LLSD("1100 x 800")));
+            ensure("apply actual Win32 client dimensions",ui.tree().commit(ui.find("set_btn",sizeDialog)));
+            ensure(ui.dialogError(),ui.dialogError().empty());
+            RECT client{};
+            ensure("read normal native client geometry",GetClientRect(window,&client)!=FALSE);
+            ensure("exact requested client size",client.right-client.left==1100 && client.bottom-client.top==800);
+            expectedWidth=client.right-client.left; expectedHeight=client.bottom-client.top;
             const auto& updated=ui.tree().get(list)->scrollList->rows;
             const auto walk=std::find_if(updated.begin(),updated.end(),[](const auto& row) { return row.value.asString()=="walk_to"; });
             ensure("Windows input updates binding table",walk!=updated.end() && walk->cells[1]=="J");
@@ -598,15 +782,27 @@ namespace tut
             while (previews.status(*missing)!=LLVKTexturePreview::Status::Failed || previews.failure(*missing).find("incomplete")!=std::string::npos);
             ensure("malformed bytes stored without fake success",corruptWrite.get().success && !previews.failure(*missing).empty() &&
                 !ui.tree().get(*missing)->textureControl->preview);
+            ui.menu().key(LLVKMenu::Key::Activate); ui.menu().key(LLVKMenu::Key::Right);
+            SendMessageW(window,WM_CHAR,'g',1);
+            ensure("Help jump key consumed and menu closed",!ui.menu().open());
+            ensure(ui.dialogError(),ui.guidebook()!=0 && ui.dialogError().empty());
         };
         const bool ran = LLVKWindowMgr::run(configuration,error);
         ensure(error,ran);
+        ensure_equals("browser and XUI preview sequence verified",guidebookStage,9);
         const bool cacheStopped=textureCache.stop(error);
         ensure(error,cacheStopped);
         ensure("orderly quit destroys HWND",FindWindowW(L"VulkanstormNativeLogin",nullptr)==nullptr);
         ensure_equals("native shutdown persists client width",settings.find("WindowWidth")->getSaveValue().asInteger(),expectedWidth);
         ensure_equals("native shutdown persists client height",settings.find("WindowHeight")->getSaveValue().asInteger(),expectedHeight);
+        LLVKSettingsMgr reloaded;
+        ensure("reload saved native window state",reloaded.loadFile(profile.path/"settings.xml",true,false,true,error));
+        ensure("Guidebook visibility survives disk roundtrip",reloaded.find("floater_vis_guidebook") &&
+            reloaded.find("floater_vis_guidebook")->getValue().asBoolean());
+        ensure("Guidebook position survives disk roundtrip",reloaded.find("floater_pos_guidebook_x") &&
+            reloaded.find("floater_pos_guidebook_x")->getValue().asReal()>=-1. &&
+            reloaded.find("floater_pos_guidebook_x")->getValue().asReal()<=1.);
         ensure("no OpenGL parent module",GetModuleHandleW(L"opengl32.dll") == nullptr);
-        std::cout << "Native login window presented six frames with real widgets, fonts, skin and browser\n";
+        std::cout << "Native login and Guidebook presented with independent mouse, keyboard, wheel, F1 close and reopen\n";
     }
 }

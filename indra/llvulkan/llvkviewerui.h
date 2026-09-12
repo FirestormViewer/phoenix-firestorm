@@ -55,6 +55,7 @@ public:
         std::function<std::optional<LLVKProxy::Credentials>(std::string&)> loadProxyCredentials;
         std::function<bool(const std::optional<LLVKProxy::Credentials>&,std::string&)> saveProxyCredentials;
         std::filesystem::path cacheDirectory, defaultCacheDirectory;
+        std::filesystem::path viewerExecutable, pluginLauncher, browserHelper, voiceExecutable;
         std::filesystem::path userColorsFile;
         std::function<bool(const BackupRequest&,std::string&)> backupHandler;
         std::function<void()> clearSpamQueues;
@@ -70,12 +71,35 @@ public:
     LLVKWidgetTree& tree() noexcept { return mTree; }
     LLVKWidgetTree::Id root() const noexcept { return mRoot; }
     LLVKWidgetTree::Id find(std::string_view name,LLVKWidgetTree::Id within = 0) const;
-    LLVKMenu& menu() noexcept { return *mMenu; }
+    LLVKMenu& menu() noexcept;
     std::optional<LLVKWidgetPaint> preparePaint(const LLVKWidgetPaint::Input& input, std::string& error);
     bool showPreferences(std::string& error);
     std::optional<LLVKWidgetTree::Id> constructPreferencePanel(const std::string& filename,
         LLVKWidgetTree::Id parent, std::string& error);
     bool showAbout(std::string& error);
+    bool showWhitelist(std::string& error);
+    using WindowSizeService = std::function<bool(int,int,std::string&)>;
+    void setWindowSizeService(WindowSizeService service) { mWindowSizeService=std::move(service); }
+    bool showWindowSize(std::string& error);
+    bool showDebugSettings(std::string& error);
+    bool showColorSettings(std::string& error);
+    bool showUiTest(const std::string& name,std::string& error);
+    bool showUiPreview(std::string& error);
+    bool previewPointer(int x,int y,std::string& error);
+    std::string fontDiagnostics() const { return mFonts->diagnostics(); }
+    void setFontTextureDumpHandler(std::function<bool(std::string&)> handler) { mFontTextureDump=std::move(handler); }
+    bool dumpFontTextures(std::string& error);
+    bool canCloseMenuWindow() const;
+    bool closeMenuWindow(std::string& error);
+    using GuidebookOpen = std::function<bool(LLVKWidgetTree::Id,const std::string&,std::string&)>;
+    void setGuidebookService(GuidebookOpen open, std::function<void(LLVKWidgetTree::Id)> close);
+    bool toggleGuidebook(std::string& error);
+    LLVKWidgetTree::Id guidebook() const;
+    using BrowserCommand = std::function<bool(LLVKWidgetTree::Id,const std::string&,const std::string&,std::string&)>;
+    void setBrowserCommand(BrowserCommand command) { mBrowserCommand=std::move(command); }
+    bool showMediaBrowser(const std::string& url,std::string& error,const std::string& target = {});
+    void webBrowserEvent(LLVKWidgetTree::Id browser,const std::string& kind,const std::string& text,bool back,bool forward);
+    bool reportProblem(std::string& error);
     bool showAutoReplace(std::string& error);
     using XmlFileResult = std::function<void(std::optional<std::filesystem::path>,std::string)>;
     using XmlFilePicker = std::function<bool(bool,const std::string&,XmlFileResult,std::string&)>;
@@ -279,6 +303,50 @@ private:
     std::function<void()> mClearSpamQueues;
     std::unique_ptr<LLVKMenu> mMenu;
     std::unique_ptr<LLVKFloater> mPreferences, mAbout;
+    std::unique_ptr<LLVKFloater> mWhitelist;
+    std::unique_ptr<LLVKFloater> mWindowSize;
+    WindowSizeService mWindowSizeService;
+    std::unique_ptr<LLVKFloater> mDebugSettings;
+    std::map<std::string,LLControlVariablePtr> mDebugControls;
+    std::set<std::string> mDebugAccountNames;
+    std::map<std::string,LLSD> mDebugChanges;
+    std::map<std::string,LLVKWidgetTree::Id> mDebugFields;
+    LLControlVariablePtr mDebugSelected;
+    std::string mDebugFilter;
+    bool mDebugHideDefault=false;
+    bool refreshDebugSettings(bool filter,std::string& error);
+    void debugSettingsAction(const std::string& action);
+    std::unique_ptr<LLVKFloater> mColorSettings;
+    std::map<std::string,LLVKWidgetTree::Id> mColorSettingFields;
+    std::string mColorSettingsFilter;
+    bool mColorSettingsHideDefault=false;
+    bool refreshColorSettings(bool rebuild,std::string& error);
+    void colorSettingsAction(bool reset);
+    std::map<std::string,std::unique_ptr<LLVKFloater>> mUiTests;
+    std::unique_ptr<LLVKFloater> mUiPreview;
+    std::array<std::unique_ptr<LLVKFloater>,2> mPreviewFloaters;
+    LLVKSkinFiles::Configuration mPreviewSkin;
+    std::map<std::string,LLVKWidgetTree::Id> mPreviewFields;
+    bool refreshUiPreview(std::string& error);
+    bool displayUiPreview(std::size_t slot,std::string& error);
+    bool mPreviewOverlaps=false;
+    std::function<bool(std::string&)> mFontTextureDump;
+    std::unique_ptr<LLVKFloater> mGuidebook;
+    GuidebookOpen mGuidebookOpen;
+    std::function<void(LLVKWidgetTree::Id)> mGuidebookClose;
+    void recordGuidebookState(bool visible);
+    std::map<std::string,LLSD> mGuidebookChanges;
+    struct WebDialog
+    {
+        std::unique_ptr<LLVKFloater> floater;
+        std::map<std::string,LLVKWidgetTree::Id> fields;
+        std::string url, target;
+    };
+    std::map<LLVKWidgetTree::Id,WebDialog> mWebDialogs;
+    BrowserCommand mBrowserCommand;
+    void webBrowserAction(LLVKWidgetTree::Id browser,const std::string& action,const std::string& parameter);
+    std::filesystem::path mViewerExecutable, mPluginLauncher, mBrowserHelper, mVoiceExecutable;
+    LLSD mDiagnosticInfo;
     std::unique_ptr<LLVKFloater> mKeyCapture;
     std::unique_ptr<LLVKFloater> mJoystick;
     std::unique_ptr<LLVKFloater> mProxy;

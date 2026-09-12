@@ -88,12 +88,23 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
         if (!ui->mTree.defineSetting(name,value,type)) { error="Invalid native account setting: "+name; return nullptr; }
     }
     LLVKWidgetFactory::Resources resources;
+    for (const auto& [name,value] : std::map<std::string,LLSD>{{"floater_vis_guidebook",false},
+        {"floater_pos_guidebook_x",10.},{"floater_pos_guidebook_y",10.}})
+    {
+        if (configuration.settingsGroup && !configuration.settingsGroup->controlExists(name))
+            configuration.settingsGroup->declareControl(name,value.isBoolean() ? TYPE_BOOLEAN : TYPE_F32,value,
+                "Guidebook window state",SANITY_TYPE_NONE,{},"",LLControlVariable::PERSIST_NONDFT);
+        if (!ui->mTree.setting(name)) ui->mTree.defineSetting(name,value,value.isBoolean() ?
+            LLVKWidgetTree::SettingType::Boolean : LLVKWidgetTree::SettingType::Real);
+    }
     if (configuration.settingsGroup && !ui->mTree.bindSettings(*configuration.settingsGroup,error)) return nullptr;
     if (configuration.accountSettingsGroup && !ui->mTree.bindSettings(*configuration.accountSettingsGroup,error)) return nullptr;
     resources.skinFiles = ui->mSkin;
     resources.fontRegistry = ui->mFonts;
     resources.colors = ui->mColors;
     resources.defaultFontRequest = {"SansSerif","Small"};
+    resources.fallbackFont=ui->mFonts->resolve({"SansSerif","Medium"},error);
+    if (!resources.fallbackFont) return nullptr;
     resources.webLinkHandler = [owner=ui.get()](auto,const std::string& url)
     { if (owner->mOpenUrl) owner->mOpenUrl(url); else owner->mDialogError="Native web link service is not bound"; };
     resources.colorPickerHandler=[owner=ui.get()](auto swatch,bool takeFocus)
@@ -348,7 +359,7 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
 #endif
     LLVKWidgetFactory factory({}, {}, {}, callbacks,resources,panel);
     for (const std::string widget : {"view_border","button","icon","line_editor","check_box","scroll_bar",
-        "scroll_container","scroll_column_header","scroll_list","combo_box","text","web_browser","layout_stack","tab_container","simple_text_editor","text_editor","spinner","color_swatch","texture_picker","search_editor","filter_editor","slider_bar","slider","radio_item","radio_group"})
+        "scroll_container","scroll_column_header","scroll_list","combo_box","flyout_button","text","web_browser","layout_stack","tab_container","simple_text_editor","text_editor","spinner","color_swatch","texture_picker","search_editor","filter_editor","slider_bar","slider","radio_item","radio_group","progress_bar"})
         if (!factory.loadDefaultsFile(ui->mTree,"widgets/"+widget+".xml",error))
         { error = "Native login "+widget+": "+error; return nullptr; }
     const auto root = factory.constructFile(ui->mTree,"panel_fs_nui_login.xml",0,error);
@@ -397,6 +408,8 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
 std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint::Input& input,std::string& error)
 {
     if (!refreshVoiceDevices(error)) return std::nullopt;
+    if (mDebugSettings && mDebugSettings->visible() && !refreshDebugSettings(false,error)) return std::nullopt;
+    if (mColorSettings && mColorSettings->visible() && !refreshColorSettings(false,error)) return std::nullopt;
     if (mJoystick && mJoystick->visible() && !updateJoystickPreview(error)) return std::nullopt;
     if (mBeamColor && mBeamColor->visible() && !updateBeamColorPreview(error)) return std::nullopt;
     updateSpellRemoval();
@@ -408,6 +421,13 @@ std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint:
     const auto viewport = mTree.screenRect(mRoot,error);
     if (!viewport || !mMenu->paint(*paint,*viewport,error)) return std::nullopt;
     return paint;
+}
+
+LLVKMenu& LLVKViewerUi::menu() noexcept
+{
+    for (auto id=mTree.keyboardFocus(); mTree.get(id); id=mTree.get(id)->parent)
+        if (const auto& menu=mTree.get(id)->menu; menu && menu->open()) return *menu;
+    return *mMenu;
 }
 
 LLVKWidgetTree::Id LLVKViewerUi::find(std::string_view name,LLVKWidgetTree::Id within) const

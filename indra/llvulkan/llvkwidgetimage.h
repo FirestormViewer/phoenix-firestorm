@@ -40,6 +40,8 @@ public:
         float translateX, float translateY, std::string& error) const;
     static std::shared_ptr<const LLVKWidgetImage> decodePng(std::string name,
         std::span<const std::uint8_t> encoded, std::string& error);
+    static std::optional<std::vector<std::uint8_t>> encodePng(std::uint32_t width,std::uint32_t height,
+        std::span<const std::uint8_t> bottomUpRgba,std::string& error);
     static std::shared_ptr<const LLVKWidgetImage> browserFrame(std::uint32_t width, std::uint32_t height,
         std::span<const std::uint8_t> topDownBgra, std::string& error);
     static std::shared_ptr<const LLVKWidgetImage> fromRgba(std::string name, std::uint32_t width,

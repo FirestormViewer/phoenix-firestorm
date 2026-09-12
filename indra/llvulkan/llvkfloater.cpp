@@ -32,6 +32,19 @@ std::unique_ptr<LLVKFloater> LLVKFloater::createFile(LLVKWidgetTree& tree,LLVKWi
 {
     const auto id=factory.constructFile(tree,filename,root,error);
     if (!id) return nullptr;
+    return adopt(tree,factory,root,*id,error);
+}
+
+std::unique_ptr<LLVKFloater> LLVKFloater::createXml(LLVKWidgetTree& tree,LLVKWidgetFactory& factory,Id root,
+    const std::string& xml,std::string& error)
+{
+    const auto id=factory.construct(tree,xml,root,error);
+    return id ? adopt(tree,factory,root,*id,error) : nullptr;
+}
+
+std::unique_ptr<LLVKFloater> LLVKFloater::adopt(LLVKWidgetTree& tree,LLVKWidgetFactory& factory,Id root,Id widget,std::string& error)
+{
+    const auto id=std::optional<Id>(widget);
     auto floater=std::unique_ptr<LLVKFloater>(new LLVKFloater(tree));
     floater->mRoot=root; floater->mId=*id;
     const auto* node=tree.get(*id);
@@ -96,7 +109,32 @@ bool LLVKFloater::createChrome(LLVKWidgetFactory& factory,const std::string& tit
         }
         if (!tree.setShape(mTitle,{8,height-23,width-(mCanClose ? 51 : 30),height-3},error)) return false;
     }
+    if (tree.get(mId)->floater && tree.get(mId)->floater->canDock)
+    {
+        const auto right=width-23-21*(static_cast<int>(mCanClose)+static_cast<int>(mCanMinimize));
+        const auto dock=factory.construct(tree,"<button name='floater_dock' layout='bottomleft' left='"+std::to_string(right)+
+            "' bottom='"+std::to_string(height-22)+"' width='18' height='18' follows='right|top' tab_stop='false' "
+            "image_unselected='Icon_Dock_Foreground' image_selected='Icon_Dock_Foreground' image_pressed='Icon_Dock_Press' label=''/>",id,error);
+        if (!dock) return false;
+        mDockButton=*dock;
+        LLVKControl::Callback action;
+        action.function=[this](auto,const LLSD&) { std::string problem; setDocked(true,problem); };
+        tree.setControlCommit(*dock,std::move(action));
+        if (!tree.setShape(mTitle,{8,height-23,right-7,height-3},error)) return false;
+    }
     return true;
+}
+
+bool LLVKFloater::setDocked(bool docked,std::string& error)
+{
+    error.clear();
+    const auto* node=mTree.get(mId);
+    if (!node || !node->floater || !node->floater->canDock) return false;
+    if (docked && !setMinimized(false,error)) return false;
+    auto state=*mTree.get(mId)->floater;
+    state.docked=docked;
+    if (!mTree.initializeFloater(mId,state,error)) return false;
+    return mTree.setVisible(mDockButton,!docked);
 }
 
 LLVKFloater::~LLVKFloater() { if (mId) { std::string error; mTree.erase(mId,error); } }
@@ -112,6 +150,17 @@ bool LLVKFloater::open(std::string& error)
         const auto root = mTree.get(mRoot)->params.rect, rect = mTree.get(mId)->params.rect;
         const auto width = rect.right-rect.left, height = rect.top-rect.bottom;
         auto left = std::max(0,(root.right-root.left-width)/2), bottom = std::max(0,(root.top-root.bottom-height)/2);
+        if (const auto& params=mTree.get(mId)->floater; params && params->relativeX && params->relativeY)
+        {
+            const auto position=[](float relative,int available,int extent)
+            {
+                if (relative < -.5f) return static_cast<int>(std::floor((relative+.5f)*2.f*(extent-16)+.5f));
+                if (relative > .5f) return available-extent+static_cast<int>(std::floor((relative-.5f)*2.f*(extent-16)+.5f));
+                return static_cast<int>(std::floor((relative+.5f)*(available-extent)+.5f));
+            };
+            left=position(*params->relativeX,root.right-root.left,width);
+            bottom=position(*params->relativeY,root.top-root.bottom,height);
+        }
         if (mTree.get(mId)->floater && mTree.get(mId)->floater->positioning=="cascading")
         {
             left=0; bottom=std::max(0,root.top-root.bottom-18-height);
@@ -246,7 +295,8 @@ bool LLVKFloater::pointer(const LLVKWidgetTree::PointerEvent& event,std::string&
         }
         return true;
     }
-    const auto dragRight=rect->right-3-(mCanClose ? 23 : 0)-(mCanMinimize ? 21 : 0);
+    const auto dragRight=rect->right-3-(mCanClose ? 23 : 0)-(mCanMinimize ? 21 : 0)-
+        (mDockButton && mTree.get(mDockButton)->params.visible ? 21 : 0);
     if (event.kind == Kind::LeftDown && event.x >= rect->left && event.x < dragRight && event.y >= rect->top-25 && event.y < rect->top)
     {
         mDragX = event.x-rect->left; mDragY = event.y-rect->bottom;

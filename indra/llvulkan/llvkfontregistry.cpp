@@ -12,6 +12,7 @@
 #include <exception>
 #include <fstream>
 #include <tuple>
+#include <sstream>
 
 namespace
 {
@@ -167,6 +168,27 @@ struct LLVKFontRegistry::Impl
 
 LLVKFontRegistry::LLVKFontRegistry(std::unique_ptr<Impl> impl) : mImpl(std::move(impl)) {}
 LLVKFontRegistry::~LLVKFontRegistry() = default;
+
+std::string LLVKFontRegistry::diagnostics() const
+{
+    std::lock_guard lock(mImpl->mutex);
+    std::ostringstream output;
+    output << "Native font registry dump:\n";
+    for (const auto& [name,size] : mImpl->sizes) output << "Size: " << name << " => " << size << '\n';
+    for (const auto& [key,files] : mImpl->definitions)
+    {
+        const auto& [name,style,size]=key;
+        output << "Font: name=" << name << " style=[" << static_cast<int>(style) << "] size=[" << size << "] fileNames=\n";
+        for (const auto& file : files) output << "  file: " << file.name << '\n';
+    }
+    for (const auto& [request,cached] : mImpl->cache)
+    {
+        output << "Resolved: name=" << request.name << " size=[" << request.size << "] style=[" << static_cast<int>(request.style)
+            << "] tabular=" << request.tabularNumbers << " glyphs=" << (cached.first ? cached.first->cachedGlyphCount() : 0) << '\n';
+        if (!cached.second.empty()) output << "  diagnostic: " << cached.second << '\n';
+    }
+    return output.str();
+}
 
 LLVKFontRegistry::Request LLVKFontRegistry::normalize(Request request)
 {

@@ -15,6 +15,7 @@ public:
         std::map<Id,std::shared_ptr<const LLVKWidgetImage>> browsers;
         LLVKColor searchBackground{1,0,0,1},searchFont{1,0,0,1};
         std::map<Id,std::uint64_t> browserEpochs;
+        double animationSeconds=0;
     };
     struct Command
     {

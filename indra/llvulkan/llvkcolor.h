@@ -41,6 +41,7 @@ public:
     bool setRuntime(const std::string& name, LLVKColor::Value color);
     std::optional<LLVKColor> find(const std::string& name) const;
     bool isDefault(const std::string& name) const;
+    std::vector<std::string> names() const;
     bool resetToDefault(const std::string& name);
     void clear();
     enum class Layer { Loaded, User };

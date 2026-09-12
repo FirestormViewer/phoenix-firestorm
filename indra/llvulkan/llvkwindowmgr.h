@@ -16,6 +16,7 @@ struct LLVKWindowMgr
         bool validation = true;
         std::uint32_t stopAfterFrames = 0;
         std::function<void(LLVKViewerUi&)> bindServices;
+        std::function<void(LLVKViewerUi&,const LLVKWidgetPaint::Input&)> presentedFrame;
         LLVKTextureCache* textureCache=nullptr;
     };
     static bool run(const Configuration& configuration, std::string& error);

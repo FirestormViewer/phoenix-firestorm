@@ -45,6 +45,28 @@ std::shared_ptr<const LLVKWidgetImage> LLVKWidgetImage::decodePng(std::string na
     return decode(std::move(name),encoded,error);
 }
 
+std::optional<std::vector<std::uint8_t>> LLVKWidgetImage::encodePng(std::uint32_t width,std::uint32_t height,
+    std::span<const std::uint8_t> pixels,std::string& error)
+{
+    error.clear();
+    const auto count=std::uint64_t(width)*height;
+    if (!width || !height || width>8192 || height>8192 || count>16*1024*1024 || pixels.size()!=count*4)
+    { error="Native PNG image has invalid dimensions or byte count"; return std::nullopt; }
+    png_image image{};
+    image.version=PNG_IMAGE_VERSION; image.width=width; image.height=height; image.format=PNG_FORMAT_RGBA;
+    struct Cleanup { png_image& image; ~Cleanup() { png_image_free(&image); } } cleanup{image};
+    png_alloc_size_t length=0;
+    const auto stride=-static_cast<png_int_32>(width*4);
+    if (!png_image_write_to_memory(&image,nullptr,&length,0,pixels.data(),stride,nullptr))
+    { error=image.message; return std::nullopt; }
+    if (length>128*1024*1024) { error="Native PNG output exceeds byte budget"; return std::nullopt; }
+    std::vector<std::uint8_t> encoded(length);
+    if (!png_image_write_to_memory(&image,encoded.data(),&length,0,pixels.data(),stride,nullptr))
+    { error=image.message; return std::nullopt; }
+    encoded.resize(length);
+    return encoded;
+}
+
 std::shared_ptr<const LLVKWidgetImage> LLVKWidgetImage::fromRgba(std::string name,std::uint32_t width,
     std::uint32_t height,std::span<const std::uint8_t> pixels,std::string& error)
 {

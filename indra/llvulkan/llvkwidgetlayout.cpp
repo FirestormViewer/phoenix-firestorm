@@ -164,6 +164,74 @@ bool LLVKWidgetTree::updateLayoutStack(Id id, std::string& error, float frameDel
     return true;
 }
 
+bool LLVKWidgetTree::layoutStackPointer(Id id,const PointerEvent& event,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->layoutStack) return false;
+    auto& stack=*mNodes.at(id).layoutStack;
+    if (stack.resizeFirst && mouseCapture()!=id) stack.resizeFirst=stack.resizeSecond=0;
+    const auto coordinate=stack.vertical ? -std::int64_t(event.y) : std::int64_t(event.x);
+    if (stack.resizeFirst)
+    {
+        if (event.kind==PointerKind::LeftUp)
+        { stack.resizeFirst=stack.resizeSecond=0; setMouseCapture(0,error); return true; }
+        if (event.kind!=PointerKind::Hover) return true;
+        const auto first=get(stack.resizeFirst),second=get(stack.resizeSecond);
+        if (!first || !second || !first->params.visible || !second->params.visible)
+        { stack.resizeFirst=stack.resizeSecond=0; setMouseCapture(0,error); return true; }
+        const auto& firstState=*first->layoutPanel;
+        const auto& secondState=*second->layoutPanel;
+        const auto total=std::int64_t(stack.resizeFirstSize)+stack.resizeSecondSize;
+        const auto minimum=std::max<std::int64_t>(std::max(firstState.minimum,firstState.expandedMinimum),total-secondState.maximum);
+        const auto maximum=std::min<std::int64_t>(firstState.maximum,total-std::max(secondState.minimum,secondState.expandedMinimum));
+        if (minimum>maximum) return true;
+        const auto size=std::clamp(std::int64_t(stack.resizeFirstSize)+coordinate-stack.resizeOrigin,minimum,maximum);
+        mNodes.at(stack.resizeFirst).layoutPanel->target=static_cast<int>(size);
+        mNodes.at(stack.resizeSecond).layoutPanel->target=static_cast<int>(total-size);
+        float totalWeight=0;
+        for (const auto panel : stack.panels)
+        {
+            auto& state=*mNodes.at(panel).layoutPanel;
+            if (!state.autoResize) continue;
+            state.fraction=std::max(.00001f,static_cast<float>(state.target-state.expandedMinimum));
+            totalWeight+=state.fraction;
+        }
+        if (totalWeight>0)
+            for (const auto panel : stack.panels)
+                if (auto& state=*mNodes.at(panel).layoutPanel; state.autoResize) state.fraction/=totalWeight;
+        stack.needsLayout=true;
+        return updateLayoutStack(id,error);
+    }
+    if (event.kind!=PointerKind::LeftDown && event.kind!=PointerKind::Hover) return false;
+    Id previous=0;
+    for (const auto panel : stack.panels)
+    {
+        const auto* current=get(panel);
+        if (!current || !current->params.visible) continue;
+        if (previous)
+        {
+            const auto* first=get(previous);
+            const auto& firstState=*first->layoutPanel;
+            const auto& secondState=*current->layoutPanel;
+            const auto start=stack.vertical ? -first->params.rect.bottom : first->params.rect.right;
+            const auto end=stack.vertical ? -current->params.rect.top : current->params.rect.left;
+            if (coordinate>=start && coordinate<end && (firstState.userResize || secondState.userResize) &&
+                (firstState.autoResize || firstState.userResize) && (secondState.autoResize || secondState.userResize))
+            {
+                if (event.kind==PointerKind::LeftDown)
+                {
+                    stack.resizeFirst=previous; stack.resizeSecond=panel; stack.resizeOrigin=static_cast<int>(coordinate);
+                    stack.resizeFirstSize=firstState.target; stack.resizeSecondSize=secondState.target;
+                    if (!setMouseCapture(id,error)) { stack.resizeFirst=stack.resizeSecond=0; return false; }
+                }
+                return true;
+            }
+        }
+        previous=panel;
+    }
+    return false;
+}
+
 bool LLVKWidgetTree::prepareLayoutStacks(Id root, float frameDelta, std::string& error)
 {
     error.clear();

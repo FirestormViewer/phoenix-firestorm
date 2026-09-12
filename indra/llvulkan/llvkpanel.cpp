@@ -340,6 +340,36 @@ bool LLVKWidgetTree::initializeTabContainer(Id panel, std::string& error)
     return true;
 }
 
+bool LLVKWidgetTree::initializeOverlapPanel(Id id,const Node::OverlapPanel& params,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !params.font || params.minimumWidth<0)
+    { error="Invalid native overlap panel"; return false; }
+    mNodes.at(id).overlapPanel=params;
+    return setOverlapElements(id,params.elements,error);
+}
+
+bool LLVKWidgetTree::setOverlapElements(Id id,std::vector<Id> elements,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->overlapPanel || elements.size()>128)
+    { error="Invalid native overlap inspection list"; return false; }
+    for (const auto source : elements)
+    {
+        if (!get(source) || get(source)->overlapPanel || hasAncestor(id,source))
+        { error="Invalid or recursive native overlap source"; return false; }
+        std::vector<Id> pending{source};
+        for (std::size_t index=0; index<pending.size(); ++index)
+        {
+            const auto* node=get(pending[index]);
+            if (node->overlapPanel) { error="Native overlap source contains an inspector"; return false; }
+            pending.insert(pending.end(),node->children.begin(),node->children.end());
+        }
+    }
+    mNodes.at(id).overlapPanel->elements=std::move(elements);
+    return true;
+}
+
 bool LLVKWidgetTree::initializeStatBar(Id id,const Node::StatBar& params,std::string& error)
 {
     error.clear();

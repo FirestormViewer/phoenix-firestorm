@@ -1,4 +1,5 @@
 #include "llvkwidgetpaint.h"
+#include "llvkmenu.h"
 #include "v3color.h"
 #include "llstring.h"
 #include <algorithm>
@@ -14,6 +15,18 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
     if (!rootRect) return std::nullopt;
     LLVKWidgetPaint output;
     std::vector<Id> popups;
+    std::vector<Id> menuPopups;
+    const auto paintMenu=[&](Id id,bool dropdowns) -> bool
+    {
+        const auto node=tree.get(id);
+        const auto screen=tree.screenRect(id,error);
+        if (!node || !node->menu || !screen) return false;
+        LLVKWidgetPaint menuPaint;
+        if (!node->menu->paint(menuPaint,*rootRect,error,*screen,dropdowns)) return false;
+        for (auto& command : menuPaint.commands)
+        { command.owner=id; output.commands.push_back(std::move(command)); }
+        return true;
+    };
     bool paintingPopups = false;
     const auto intersect = [](Rect first,Rect second)
     { return Rect{std::max(first.left,second.left),std::max(first.bottom,second.bottom),std::min(first.right,second.right),std::min(first.top,second.top)}; };
@@ -54,6 +67,11 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             if (!node) return true;
         }
         if (node->comboListOwner && !paintingPopups) { popups.push_back(id); return true; }
+        if (node->menu)
+        {
+            if (node->menu->open()) menuPopups.push_back(id);
+            return paintMenu(id,false);
+        }
         const auto screen = tree.screenRect(id,error);
         if (!screen) return false;
         const auto overlap = intersect(*screen,*rootRect);
@@ -81,7 +99,28 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             if (tree.get(ancestor)->searchHighlighted) { searchHighlighted=true; break; }
             if (ancestor==root) break;
         }
-        if (node->statBar)
+        if (node->progressBar)
+        {
+            const auto progress=*node->progressBar;
+            const auto value=tree.value(id).asReal();
+            if (!std::isfinite(value) || !std::isfinite(input.animationSeconds) || input.animationSeconds<0)
+            { error="Invalid native progress animation state"; return false; }
+            auto background=progress.background.get(); background[3]=input.button.drawAlpha;
+            auto fill=progress.fill.get();
+            fill[3]*=input.button.drawAlpha*static_cast<float>(.75+.25*std::sin(3.*input.animationSeconds));
+            if (!progress.imageBar.empty())
+            {
+                const auto image=tree.findImage(progress.imageBar,error);
+                if (!error.empty() || (image && !append({0,0,width,height},background,image))) return false;
+            }
+            if (!progress.imageFill.empty())
+            {
+                const auto image=tree.findImage(progress.imageFill,error);
+                const auto filled=static_cast<int>(std::floor(width*std::clamp(value,0.,100.)/100.+.5));
+                if (!error.empty() || (image && filled>0 && !append({0,0,filled,height},fill,image))) return false;
+            }
+        }
+        else if (node->statBar)
         {
             if (!tree.advanceStatBar(id,input.button.frameDelta,error)) return false;
             const auto bar=*tree.get(id)->statBar;
@@ -414,6 +453,54 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             color[3] *= input.button.transparency;
             if (!append({0,0,width,height},color,image)) return false;
         }
+        if (node->overlapPanel)
+        {
+            const auto state=*node->overlapPanel;
+            int top=height-20;
+            const auto label=[&](const std::string& value) -> bool
+            {
+                const auto wide=utf8str_to_wstring(value);
+                const std::u32string text(wide.begin(),wide.end());
+                LLVKFont::LineOptions options; options.x=5; options.y=static_cast<float>(top);
+                const auto line=state.font->layoutLine(text,0,text.size(),options,error);
+                return line && append({},{.5f,.5f,.5f,1.f},{},*line);
+            };
+            if (state.elements.empty()) return label("Current selection: ");
+            bool first=true;
+            for (const auto source : state.elements)
+            {
+                const auto* sourceNode=tree.get(source);
+                if (!sourceNode) continue;
+                if (!first)
+                {
+                    top-=10;
+                    if (!append({5,top,width-5,top+1},{192.f/255,192.f/255,192.f/255,1.f})) return false;
+                    top-=10;
+                }
+                if (!label(std::string(first ? "Current selection: " : "Overlapper: ")+sourceNode->params.name)) return false;
+                const auto rectangle=tree.screenRect(source,error);
+                if (!rectangle) return false;
+                top-=10+rectangle->top-rectangle->bottom;
+                auto snapshotInput=input; snapshotInput.button.frameDelta=0;
+                const auto snapshot=LLVKWidgetPaint::prepare(tree,source,snapshotInput,error);
+                if (!snapshot) return false;
+                const auto dx=screen->left+5-rectangle->left,dy=screen->bottom+top-rectangle->bottom;
+                for (auto command : snapshot->commands)
+                {
+                    command.owner=id;
+                    command.rectangle={command.rectangle.left+dx,command.rectangle.bottom+dy,command.rectangle.right+dx,command.rectangle.top+dy};
+                    command.clip=intersect(clip,{command.clip.left+dx,command.clip.bottom+dy,command.clip.right+dx,command.clip.top+dy});
+                    if (command.text)
+                        for (auto& glyph : command.text->glyphs) { glyph.left+=dx; glyph.right+=dx; glyph.bottom+=dy; glyph.top+=dy; }
+                    if (command.triangle)
+                        for (std::size_t coordinate=0; coordinate<command.triangle->size(); coordinate+=2)
+                        { (*command.triangle)[coordinate]+=dx; (*command.triangle)[coordinate+1]+=dy; }
+                    output.commands.push_back(std::move(command));
+                }
+                first=false;
+            }
+            return true;
+        }
         if (node->comboListOwner)
         {
             const auto* owner = tree.get(node->comboListOwner);
@@ -507,8 +594,20 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             clip = intersect(clip,*screen);
             auto color = text.readOnly ? text.params.readOnlyColor.get() : text.params.textColor.get();
             color[3] *= input.button.drawAlpha;
-            for (const auto& sourceLine : text.layout->lines)
+            std::optional<std::size_t> lastVisible;
+            for (std::size_t index=0; index<text.layout->lines.size(); ++index)
             {
+                const auto& line=text.layout->lines[index];
+                const auto bottom=line.bottom+document->params.rect.bottom+screen->bottom;
+                const auto top=line.top+document->params.rect.bottom+screen->bottom;
+                if (text.params.clipPartial ? bottom>=clip.bottom && top<=clip.top : bottom<clip.top && top>clip.bottom) lastVisible=index;
+            }
+            for (std::size_t index=0; index<text.layout->lines.size(); ++index)
+            {
+                const auto& sourceLine=text.layout->lines[index];
+                const auto bottom=sourceLine.bottom+document->params.rect.bottom+screen->bottom;
+                const auto top=sourceLine.top+document->params.rect.bottom+screen->bottom;
+                if (text.params.clipPartial ? bottom<clip.bottom || top>clip.top : bottom>=clip.top || top<=clip.bottom) continue;
                 const auto begin = std::min(sourceLine.begin,text.text.size()), end = std::min(sourceLine.end,text.text.size());
                 auto count = end-begin;
                 if (count && text.text[begin+count-1] == U'\n') --count;
@@ -520,6 +619,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                 {
                     options.ellipses=true;
                     options.maxPixels=std::max(0,width-text.params.layout.horizontalPadding-sourceLine.left-document->params.rect.left);
+                    if (lastVisible==index && index+1<text.layout->lines.size()) options.maxPixels=std::max(0,options.maxPixels-2);
                 }
                 const auto selectionBegin = std::min(text.selectionStart,text.selectionEnd);
                 const auto selectionEnd = std::max(text.selectionStart,text.selectionEnd);
@@ -711,5 +811,6 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
     if (!visit(visit,root,*rootRect)) return std::nullopt;
     paintingPopups = true;
     for (const auto popup : popups) if (!visit(visit,popup,*rootRect)) return std::nullopt;
+    for (const auto popup : menuPopups) if (!paintMenu(popup,true)) return std::nullopt;
     return output;
 }

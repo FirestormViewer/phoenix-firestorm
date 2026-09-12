@@ -1,6 +1,14 @@
 #include "llvkwidgettree.h"
+#include "llvkmenu.h"
 
 #include <cmath>
+
+bool LLVKWidgetTree::setMenu(Id id,std::shared_ptr<LLVKMenu> menu)
+{
+    if (!get(id)) return false;
+    mNodes.at(id).menu=std::move(menu);
+    return true;
+}
 
 bool LLVKWidgetTree::routeWheel(Id root, std::int32_t x, std::int32_t y, std::int32_t clicks,
     bool horizontal, std::string& error)
@@ -187,6 +195,18 @@ bool LLVKWidgetTree::handlePointer(Id id, PointerEvent event, std::string& error
 {
     const auto* node = get(id);
     if (!node) return false;
+    if (node->layoutStack && layoutStackPointer(id,event,error)) return true;
+    if (!error.empty()) return false;
+    if (node->menu)
+    {
+        const auto menu=node->menu;
+        const auto rect=screenRect(id,error);
+        if (!rect) return false;
+        event.x+=rect->left; event.y+=rect->bottom;
+        const bool handled=menu->pointer(event);
+        if (handled && event.kind==PointerKind::LeftDown) setKeyboardFocus(id,false,false,error);
+        return handled;
+    }
     if (node->slider) return sliderPointer(id,event,error);
     if (node->colorSwatch) return colorSwatchPointer(id,event,error);
     if (node->textureControl) return textureControlPointer(id,event,error);

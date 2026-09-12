@@ -388,6 +388,7 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createTextEditor(const Params&
         mNodes.at(*id).textEditor->document=*document;
         child.name="text contents";
         auto bodyParams=text;
+        bodyParams.clipPartial=false;
         bodyParams.selectable=true; bodyParams.readOnly=readOnly;
         bodyParams.literal=!bodyParams.parseUrls;
         const auto body=createPlainText(child,childControl,bodyParams,*document,error);
@@ -416,6 +417,14 @@ bool LLVKWidgetTree::setTextEditorText(Id id,const std::string& text,std::string
 {
     const auto* node=get(id);
     if (!node || !node->textEditor) return false;
+    const auto body=node->textEditor->body;
+    const auto validate=get(body)->plainText->params.prevalidator;
+    if (validate)
+    {
+        const auto wide=utf8str_to_wstring(text);
+        if (!validate(std::u32string(wide.begin(),wide.end())))
+        { notify(body,&Events::badKeystroke); return layoutTextEditor(id,error); }
+    }
     if (!setPlainText(node->textEditor->body,text,error)) return false;
     mNodes.at(id).control->value=value(node->textEditor->body);
     return layoutTextEditor(id,error);
@@ -440,6 +449,8 @@ bool LLVKWidgetTree::insertTextEditorText(Id id,std::u32string_view input,std::s
     if (position>before.text.size() || end>before.text.size()) return false;
     auto text=before.text;
     text.replace(position,end-begin,input);
+    if (before.params.prevalidator && !before.params.prevalidator(text))
+    { notify(body,&Events::badKeystroke); return true; }
     const auto encoded=wstring_to_utf8str(LLWString(text.begin(),text.end()));
     if (encoded.size()>before.params.maximumBytes)
     { notify(body,&Events::badKeystroke); return true; }

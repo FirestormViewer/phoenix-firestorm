@@ -3,6 +3,7 @@
 #error Native text declarations must not depend on legacy fonts or renderer submission
 #endif
 #include "linden_common.h"
+#include "llerrorcontrol.h"
 #include "llvkwidgettree.h"
 #include "llvkwidgetlayout.h"
 #include "llvkwidgetfactory.h"
@@ -135,9 +136,683 @@ namespace tut
             return result;
         }
     };
-    typedef test_group<widgettree_data,200> widgettree_group;
+    typedef test_group<widgettree_data,220> widgettree_group;
     typedef widgettree_group::object object;
     widgettree_group widgettree_tests("llvkwidgettree");
+
+    template<> template<> void object::test<207>()
+    {
+        set_test_name("native XUI Preview has independent primary and secondary owners");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        const bool opened=ui->showUiPreview(error); ensure(error,opened);
+        const auto tool=ui->activeFloater(),list=ui->find("name_list",tool);
+        ensure("preview catalog contains original files",ui->tree().get(list)->scrollList->rows.size()>100);
+        ensure("select preview file",ui->tree().selectScrollListValue(list,LLSD("floater_test_textbox.xml"),true,error));
+        const auto originalLanguage=ui->tree().setting("Language");
+        ensure("show primary preview",ui->tree().commit(ui->find("display_floater",tool)));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        const auto primary=ui->activeFloater();
+        ensure("primary is independently owned",primary!=0 && primary!=tool);
+        ensure("primary contains original Textbox controls",ui->find("left_aligned_text",primary)!=0);
+        ensure("show secondary preview",ui->tree().commit(ui->find("display_floater_2",tool)));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        const auto secondary=ui->activeFloater();
+        ensure("secondary has separate identity",secondary!=tool && secondary!=primary);
+        ensure("preview language does not mutate global setting",ui->tree().setting("Language")==originalLanguage);
+        ensure("preview paint",ui->preparePaint({},error).has_value());
+        ensure("enable overlap inspection",ui->tree().commit(ui->find("toggle_overlap_panel",tool)));
+        const auto label=ui->find("left_aligned_text",secondary);
+        const auto bounds=ui->tree().screenRect(label,error); ensure(error,bounds.has_value());
+        ensure("select native preview element",ui->previewPointer(bounds->left+2,bounds->bottom+2,error));
+        const auto inspector=ui->find("overlap_panel",tool);
+        ensure("inspector holds selected widget",!ui->tree().get(inspector)->overlapPanel->elements.empty());
+        ensure("native overlap copies paint",ui->preparePaint({},error).has_value());
+        ensure("recursive overlap source rejected",!ui->tree().setOverlapElements(inspector,{tool},error));
+        ensure("hide primary only",ui->tree().commit(ui->find("close_displayed_floater",tool)) &&
+            !ui->tree().get(primary)->params.visible && ui->tree().get(secondary)->params.visible);
+        ensure("bring preview tool forward",ui->showUiPreview(error));
+        ensure("closing tool closes dependent preview",ui->closeMenuWindow(error) && !ui->tree().get(secondary)->params.visible);
+        ensure("reopen preview tool",ui->showUiPreview(error));
+        ensure("select panel file",ui->tree().selectScrollListValue(list,LLSD("panel_notifications_channel.xml"),true,error));
+        ensure("show panel in native wrapper",ui->tree().commit(ui->find("display_floater",tool)));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        const auto panelPreview=ui->activeFloater();
+        ensure("panel preview has original list",ui->find("notifications_list",panelPreview)!=0);
+        ensure("wrapped panel paint",ui->preparePaint({},error).has_value());
+    }
+
+    template<> template<> void object::test<206>()
+    {
+        set_test_name("native diagnostic PNG preserves bottom-up RGBA bytes");
+        std::string error;
+        const std::vector<std::uint8_t> pixels{255,0,0,255,0,255,0,128,0,0,255,64,10,20,30,0};
+        const auto encoded=LLVKWidgetImage::encodePng(2,2,pixels,error); ensure(error,encoded.has_value());
+        const auto decoded=LLVKWidgetImage::decodePng("diagnostic",*encoded,error); ensure(error,decoded!=nullptr);
+        ensure_equals("diagnostic PNG width",decoded->pixelWidth(),std::uint32_t(2));
+        ensure_equals("diagnostic PNG height",decoded->pixelHeight(),std::uint32_t(2));
+        ensure("diagnostic PNG byte-exact roundtrip",std::ranges::equal(decoded->bottomUpRgba(),pixels));
+        ensure("invalid dimensions rejected",!LLVKWidgetImage::encodePng(0,2,pixels,error));
+        ensure("truncated RGBA rejected",!LLVKWidgetImage::encodePng(3,2,pixels,error));
+    }
+
+    template<> template<> void object::test<196>()
+    {
+        set_test_name("native window size dialog parses applies cancels and rejects invalid sizes");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        int calls=0,width=0,height=0;
+        ui->setWindowSizeService([&](int requestedWidth,int requestedHeight,std::string&)
+        { ++calls; width=requestedWidth; height=requestedHeight; return true; });
+        const bool opened=ui->showWindowSize(error); ensure(error,opened);
+        const auto floater=ui->activeFloater(),combo=ui->find("window_size_combo",floater);
+        const auto editor=ui->tree().get(combo)->combo->editor;
+        ensure("original window-size dialog paints",ui->preparePaint({},error).has_value());
+        const auto apply=[&](const std::string& text)
+        {
+            ensure("reopen size dialog",ui->showWindowSize(error));
+            ensure("edit requested size",ui->tree().setValue(editor,LLSD(text)));
+            ensure("click Set",ui->tree().commit(ui->find("set_btn",floater)));
+        };
+        apply("1280 x 720");
+        ensure("resize service called",calls==1 && width==1280 && height==720);
+        ensure("dimensions update settings",ui->tree().setting("WindowWidth")->asInteger()==1280 && ui->tree().setting("WindowHeight")->asInteger()==720);
+        ensure("Set closes dialog",!ui->activeFloater());
+        apply("not a resolution"); ensure("malformed input closes without resize",calls==1 && !ui->activeFloater());
+        apply("0 x 720"); ensure("unsupported dimensions leave dialog open",calls==1 && ui->activeFloater()==floater && !ui->takeDialogError().empty());
+        ensure("Cancel closes unchanged",ui->tree().commit(ui->find("cancel_btn",floater)) && calls==1 && !ui->activeFloater());
+        apply("999999999999999999 x 720"); ensure("overflow cannot resize",calls==1);
+        apply("1024 by 768"); ensure("reference separator grammar retained",calls==2 && width==1024 && height==768);
+        ensure("close command initially disabled",!ui->canCloseMenuWindow());
+        ensure("size floater close eligible",ui->showWindowSize(error) && ui->canCloseMenuWindow());
+        ensure("menu close targets frontmost floater",ui->closeMenuWindow(error) && !ui->canCloseMenuWindow());
+        ensure("live Debug visibility setting",ui->tree().updateSetting("UseDebugMenus",LLSD(true)));
+        auto& menu=ui->menu();
+        menu.setVisible("Show Grid Picker",true);
+        menu.key(LLVKMenu::Key::Activate);
+        bool selected=false;
+        for (std::size_t attempt=0; attempt<menu.items().size(); ++attempt)
+        {
+            menu.key(LLVKMenu::Key::Down);
+            const auto item=menu.selectedItem();
+            if (item && menu.items()[*item].parameter=="ForceShowGrid") { selected=true; break; }
+        }
+        ensure("original settings toggle available in fixture",selected);
+        const auto previous=ui->tree().setting("ForceShowGrid")->asBoolean();
+        menu.key(LLVKMenu::Key::Return);
+        ensure("generic toggle updates live setting",ui->tree().setting("ForceShowGrid")->asBoolean()!=previous);
+    }
+
+    template<> template<> void object::test<205>()
+    {
+        set_test_name("native flyout has independent action and list selection semantics");
+        std::string error;
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params rootView; rootView.rect={0,0,400,400};
+        const auto root=tree.create(rootView,0,error); ensure(error,root.has_value());
+        LLVKWidgetTree::Params view; view.rect={10,200,110,223};
+        LLVKControl::Params control; control.font=loadFont();
+        LLVKWidgetTree::ComboParams params;
+        params.flyout=true; params.label="Flyout";
+        params.buttonControl=params.actionControl=params.listControl=control;
+        params.items={{"Item 1",LLSD("shout")},{"Item 2",LLSD("say")}};
+        int calls=0; LLSD committed;
+        control.commit.function=[&](auto id,const LLSD&) { ++calls; committed=tree.value(id); };
+        const auto id=tree.createCombo(view,control,params,*root,error); ensure(error,id.has_value());
+        const auto state=*tree.get(*id)->combo;
+        ensure("split action exists",state.action!=0);
+        ensure_equals("fixed action width",tree.get(state.action)->params.rect.right,74);
+        ensure_equals("arrow starts after action",tree.get(state.button)->params.rect.left,74);
+        ensure("select list value",tree.selectComboItem(*id,1,error) && tree.commitCombo(*id));
+        ensure("list selection commits value",calls==1 && committed.asString()=="say");
+        ensure("action commits independently",tree.commit(state.action));
+        ensure("action clears previous list selection",calls==2 && !tree.get(*id)->combo->selected && committed.asString().empty());
+        ensure("action does not open list",!tree.get(state.list)->params.visible);
+        ensure("dropdown still opens",tree.showComboList(*id,error) && tree.get(state.list)->params.visible);
+        ensure("split control paints",LLVKWidgetPaint::prepare(tree,*root,{},error).has_value());
+        LLVKWidgetFactory::ButtonDefaults buttons; buttons.control.font=control.font;
+        LLVKWidgetFactory::LineEditorDefaults editor; editor.control.font=control.font;
+        LLVKWidgetFactory::Resources resources; resources.fallbackFont=control.font;
+        LLVKWidgetFactory factory({}, {},buttons,{},resources,{},editor);
+        const auto parsed=factory.construct(tree,"<flyout_button label='Flyout' width='100' height='23' top='100'>"
+            "<action_button label='Action'/><flyout_button.item label='Choice' value='chosen'/></flyout_button>",*root,error);
+        ensure(error,parsed.has_value());
+        ensure("XUI flyout has split child",tree.get(*parsed)->combo->action!=0 && tree.get(*parsed)->combo->items.size()==1);
+        int menuCalls=0;
+        factory.bindAction("Fixture.Action",[&](auto,const LLSD&) { ++menuCalls; });
+        const auto bar=factory.construct(tree,"<menu_bar name='embedded' left='10' top='20' height='18'>"
+            "<menu label='Menu' create_jump_keys='true'><menu_item_call label='Action'>"
+            "<on_click function='Fixture.Action'/></menu_item_call></menu></menu_bar>",*root,error);
+        ensure(error,bar.has_value());
+        ensure("embedded menu owned by widget",tree.get(*bar)->menu!=nullptr);
+        ensure("embedded menu bar paints",LLVKWidgetPaint::prepare(tree,*root,{},error).has_value());
+        const auto bounds=tree.screenRect(*bar,error);
+        LLVKWidgetTree::PointerEvent click;
+        click.kind=LLVKWidgetTree::PointerKind::LeftDown;
+        click.x=bounds->left+5; click.y=bounds->bottom+5;
+        ensure("embedded menu receives pointer",tree.routePointer(*root,click,error));
+        ensure("embedded menu opens",tree.get(*bar)->menu->open());
+        ensure_equals("embedded menu owns keyboard focus",tree.keyboardFocus(),*bar);
+        ensure("embedded dropdown paint",LLVKWidgetPaint::prepare(tree,*root,{},error).has_value());
+        ensure("embedded jump action",tree.get(*bar)->menu->character(U'a') && menuCalls==1);
+    }
+
+    template<> template<> void object::test<204>()
+    {
+        set_test_name("native menu jump keys follow sibling word assignment and live eligibility");
+        std::string error;
+        auto menu=LLVKMenu::create("<menu_bar><menu label='Root' create_jump_keys='true'>"
+            "<menu_item_call name='alpha' label='Show Alpha'><on_click function='Alpha'/></menu_item_call>"
+            "<menu_item_call name='beta' label='Show Beta'><on_click function='Beta'/></menu_item_call>"
+            "<menu name='nested' label='Nested' create_jump_keys='true'>"
+            "<menu_item_call name='child' label='Child' jump_key='X'><on_click function='Child'/></menu_item_call></menu>"
+            "<menu_item_call name='disabled' label='Disabled' enabled='false'><on_click function='Disabled'/></menu_item_call>"
+            "</menu></menu_bar>",loadFont(),nullptr,{},false,error);
+        ensure(error,menu!=nullptr);
+        std::string invoked;
+        for (const auto action : {"Alpha","Beta","Child","Disabled"})
+            menu->bind(action,[&](const auto& action,const auto&) { invoked=action; });
+        ensure("closed menu leaves characters alone",!menu->character(U'a'));
+        for (const auto& item : menu->items())
+            if (item.name=="alpha" || item.name=="beta")
+                ensure("shared word skipped",item.jumpKey==(item.name=="alpha" ? 'A' : 'B'));
+        menu->key(LLVKMenu::Key::Activate);
+        LLVKWidgetPaint paint;
+        ensure("keyboard jump underlines paint",menu->paint(paint,{0,0,500,400},error));
+        ensure("case insensitive jump invokes leaf",menu->character(U'a') && invoked=="Alpha" && !menu->open());
+        menu->key(LLVKMenu::Key::Activate);
+        ensure("disabled jump consumed without action",menu->character(U'd') && invoked=="Alpha" && menu->open());
+        ensure("jump opens submenu",menu->character(U'n') && menu->open());
+        ensure("explicit child key invokes action",menu->character(U'x') && invoked=="Child" && !menu->open());
+        menu->setVisible("alpha",false); menu->key(LLVKMenu::Key::Activate);
+        ensure("hidden jump cannot execute",menu->character(U'a') && invoked=="Child");
+        ensure("unmatched input consumed by menu",menu->character(U'z'));
+    }
+
+    template<> template<> void object::test<203>()
+    {
+        set_test_name("native Media Browser constructs original chrome and dispatches navigation");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::string error,command,url; LLVKWidgetTree::Id browser=0; int closed=0;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        ui->setGuidebookService([&](auto id,const auto& page,std::string&) { browser=id; url=page; return true; },[&](auto) { ++closed; });
+        ui->setBrowserCommand([&](auto id,const auto& action,const auto& page,std::string&)
+        { ensure_equals("command browser owner",id,browser); command=action; url=page; return true; });
+        const bool opened=ui->showMediaBrowser("https://example.test/first",error); ensure(error,opened);
+        const auto floater=ui->activeFloater();
+        ensure("original navigation chrome",ui->find("nav_controls",floater)!=0 && ui->find("statusbarprogress",floater)!=0);
+        ui->webBrowserEvent(browser,"LoadStart","",false,false);
+        ensure("load start shows browser",ui->tree().get(browser)->params.visible);
+        ui->webBrowserEvent(browser,"LoadEnd","",true,false);
+        ensure("load complete hides progress",!ui->tree().get(ui->find("statusbarprogress",floater))->params.visible);
+        ensure("back action",ui->tree().commit(ui->find("back",floater)) && command=="Back");
+        const auto address=ui->find("address",floater);
+        ui->tree().setValue(ui->tree().get(address)->combo->editor,LLSD("https://example.test/next"));
+        ensure("address action",ui->tree().commit(ui->tree().get(address)->combo->editor) && command=="Navigate" && url=="https://example.test/next");
+        ui->webBrowserEvent(browser,"Title","Fixture title",true,true);
+        ensure_equals("page title",ui->tree().value(ui->find("floater_title",floater)).asString(),std::string("Fixture title"));
+        ensure("media browser paint",ui->preparePaint({},error).has_value());
+        ensure("media browser close retires view",ui->closeMenuWindow(error) && closed==1);
+        ensure("named popup opens",ui->showMediaBrowser("https://example.test/named",error,"help"));
+        const auto named=ui->activeFloater(),namedBrowser=browser;
+        ensure("named popup reuses live owner",ui->showMediaBrowser("https://example.test/reused",error,"help") &&
+            ui->activeFloater()==named && browser==namedBrowser && command=="Navigate" && url=="https://example.test/reused");
+        ensure("blank popup opens distinct view",ui->showMediaBrowser("https://example.test/blank",error,"_blank") && ui->activeFloater()!=named);
+        ensure("blank popup closes",ui->closeMenuWindow(error));
+        browser=namedBrowser;
+        ensure("named popup brought forward",ui->showMediaBrowser("https://example.test/again",error,"help") && ui->activeFloater()==named);
+        ui->webBrowserEvent(namedBrowser,"Closed","",false,false);
+        ensure("browser close request hides matching floater",!ui->tree().get(named)->params.visible);
+        ensure("closed target gets fresh owner",ui->showMediaBrowser("https://example.test/new",error,"help") && browser!=namedBrowser);
+    }
+
+    template<> template<> void object::test<202>()
+    {
+        set_test_name("native progress bar clamps fill width and preserves alpha pulse");
+        std::string error;
+        LLVKWidgetTree tree;
+        auto track=image("progress-track"),fill=image("progress-fill");
+        ensure("progress track registered",tree.registerImage(track));
+        ensure("progress fill registered",tree.registerImage(fill));
+        LLVKWidgetTree::Params view; view.rect={0,0,100,20};
+        LLVKControl::Params control; control.initialValue=37.; control.font=loadFont();
+        LLVKWidgetTree::Node::ProgressBar progress;
+        progress.imageBar="progress-track"; progress.imageFill="progress-fill";
+        progress.fill=LLVKColor{1,1,1,.8f}; progress.background=LLVKColor{1,1,1,.1f};
+        const auto id=tree.createProgressBar(view,control,progress,0,error); ensure(error,id.has_value());
+        LLVKWidgetPaint::Input input; input.button.drawAlpha=.5f;
+        auto paint=LLVKWidgetPaint::prepare(tree,*id,input,error); ensure(error,paint.has_value());
+        ensure_equals("rounded fill width",paint->commands.back().rectangle.right,37);
+        ensure_equals("background replaces alpha",paint->commands.front().color[3],.5f);
+        ensure("fill pulse at zero",std::abs(paint->commands.back().color[3]-.3f)<.00001f);
+        input.animationSeconds=3.141592653589793/6.;
+        tree.setValue(*id,LLSD(150.));
+        paint=LLVKWidgetPaint::prepare(tree,*id,input,error); ensure(error,paint.has_value());
+        ensure_equals("fill percentage clamped",paint->commands.back().rectangle.right,100);
+        ensure("pulse maximum",std::abs(paint->commands.back().color[3]-.4f)<.00001f);
+    }
+
+    template<> template<> void object::test<201>()
+    {
+        set_test_name("explicit partial-line clipping suppresses cut text lines");
+        std::string error;
+        LLVKWidgetTree tree;
+        LLVKWidgetTree::Params root; root.rect={0,0,300,200};
+        const auto parent=tree.create(root,0,error); ensure(error,parent.has_value());
+        LLVKControl::Params control; control.font=loadFont(); control.initialValue="first\nsecond";
+        LLVKPlainControl::Params text; text.literal=true; text.clipPartial=true;
+        const auto lineHeight=static_cast<int>(std::ceil(control.font->metrics().lineHeight));
+        LLVKWidgetTree::Params view; view.rect={0,0,200,lineHeight+lineHeight/2};
+        const auto clipped=tree.createPlainText(view,control,text,*parent,error); ensure(error,clipped.has_value());
+        const auto first=LLVKWidgetPaint::prepare(tree,*parent,{},error); ensure(error,first.has_value());
+        const auto count=[&](const LLVKWidgetPaint& paint,auto id)
+        { return std::count_if(paint.commands.begin(),paint.commands.end(),[&](const auto& command) { return command.owner==id && command.text && !command.text->glyphs.empty(); }); };
+        ensure_equals("only complete line painted",count(*first,*clipped),std::ptrdiff_t(1));
+        text.clipPartial=false; view.rect.left=10; view.rect.right=210;
+        const auto partial=tree.createPlainText(view,control,text,*parent,error); ensure(error,partial.has_value());
+        const auto second=LLVKWidgetPaint::prepare(tree,*parent,{},error); ensure(error,second.has_value());
+        ensure_equals("partial line can paint when requested",count(*second,*partial),std::ptrdiff_t(2));
+    }
+
+    template<> template<> void object::test<200>()
+    {
+        set_test_name("native original text and font test dialogs open edit paint and reopen");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        for (const auto name : {"test_textbox","test_text_editor","font_test","test_widgets"})
+        {
+            const bool opened=ui->showUiTest(name,error); ensure(std::string(name)+": "+error,opened);
+            const auto floater=ui->activeFloater();
+            const auto paint=ui->preparePaint({},error); ensure(std::string(name)+": "+error,paint.has_value());
+            if (std::string_view(name)=="test_widgets")
+            {
+                const auto dock=ui->find("floater_dock",floater);
+                ensure("original dock capability",dock && ui->tree().get(dock)->params.visible);
+                ensure("base floater docking state",ui->tree().commit(dock) && ui->tree().get(floater)->floater->docked);
+                ensure("dock action hides when docked",!ui->tree().get(dock)->params.visible);
+                const auto flyout=ui->find("fly_btn",floater);
+                ensure("original flyout built",flyout && ui->tree().get(flyout)->combo->action);
+                const auto bar=ui->find("test_menu_bar",floater);
+                ensure("original embedded menu built",bar && ui->tree().get(bar)->menu);
+                const auto enabled=ui->find("text_enabled_color_checkbox",floater);
+                const auto disabled=ui->find("text_disabled_color_checkbox",floater);
+                ensure("dotted enabled label color resolved",ui->tree().get(enabled)->checkBox->construction.labelText.textColor.get()==
+                    LLVKColor::Value{.56f,.36f,.25f,1.f});
+                ensure("dotted disabled label color resolved",ui->tree().get(disabled)->checkBox->construction.labelText.readOnlyColor.get()==
+                    LLVKColor::Value{.950f,.412f,.173f,.35f});
+                std::vector<LLVKWidgetTree::Id> pending{floater};
+                bool columnsChecked=false;
+                for (std::size_t index=0; index<pending.size(); ++index)
+                {
+                    const auto* node=ui->tree().get(pending[index]);
+                    pending.insert(pending.end(),node->children.begin(),node->children.end());
+                    if (node->scrollList && node->scrollList->columns.size()==2 && node->scrollList->columns[0].name=="first_column")
+                    {
+                        ensure("dynamic columns get equal positive widths",node->scrollList->widths[0]>0 &&
+                            node->scrollList->widths[0]==node->scrollList->widths[1]);
+                        ensure("canonical column attributes route body text",node->scrollList->rows.size()==2 &&
+                            node->scrollList->rows[0].cells[0]=="short text" && node->scrollList->rows[0].cells[1]=="more short text" &&
+                            node->scrollList->rows[1].cells[0]=="this is some longer text" &&
+                            node->scrollList->rows[1].cells[1]=="and here is some more long text");
+                        columnsChecked=true;
+                    }
+                }
+                ensure("original dynamic columns checked",columnsChecked);
+            }
+            if (std::string_view(name)=="test_text_editor")
+            {
+                const auto editor=ui->find("test_text_editor",floater);
+                ensure("original editable text control",editor && !ui->tree().get(editor)->textEditor->readOnly);
+                ensure("text entry",ui->tree().insertTextEditorText(editor,U"fixture",error));
+                ensure("text entry affects original editor",ui->tree().value(editor).asString().find("fixture")!=std::string::npos);
+                const auto numeric=ui->find("numeric_text_editor",floater);
+                ensure("numeric initial invalid text rejected",ui->tree().value(numeric).asString().empty());
+                ensure("numeric valid input",ui->tree().insertTextEditorText(numeric,U"123",error));
+                ensure("numeric invalid input handled",ui->tree().insertTextEditorText(numeric,U"x",error));
+                ensure_equals("invalid input leaves numeric document unchanged",ui->tree().value(numeric).asString(),std::string("123"));
+            }
+            ensure("close native UI test",ui->closeMenuWindow(error));
+            ensure("reopen native UI test",ui->showUiTest(name,error) && ui->activeFloater()==floater);
+            ensure("close reopened test",ui->closeMenuWindow(error));
+        }
+        const auto fontDump=ui->fontDiagnostics();
+        ensure("font dump includes native size declarations",fontDump.find("Size: Medium => ")!=std::string::npos);
+        ensure("font dump includes native families",fontDump.find("Font: name=SansSerif")!=std::string::npos);
+        ensure("font dump includes resolved instances",fontDump.find("Resolved: name=")!=std::string::npos);
+        ensure_equals("font dump does not rasterize or mutate registry",ui->fontDiagnostics(),fontDump);
+    }
+
+    template<> template<> void object::test<199>()
+    {
+        set_test_name("native Color Settings searches edits alpha and resets live palette values");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        const bool opened=ui->showColorSettings(error); ensure(error,opened);
+        const auto floater=ui->activeFloater();
+        const auto filter=ui->find("filter_input",floater),list=ui->find("setting_list",floater);
+        ensure("search palette",ui->tree().setValue(filter,LLSD("MenuBarBgColor")) && ui->tree().commit(filter));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("matching color selected",ui->tree().get(list)->scrollList->rows.size()==1 && ui->tree().get(list)->scrollList->rows[0].selected);
+        const auto alpha=ui->find("alpha_spinner",floater),swatch=ui->find("color_swatch",floater);
+        const auto original=ui->tree().value(swatch);
+        ensure("edit alpha",ui->tree().setSpinnerValue(alpha,LLSD(.375),true,error) && ui->tree().commit(alpha));
+        ensure_equals("live palette alpha",ui->tree().value(swatch)[3].asReal(),.375);
+        ensure("native color settings paints",ui->preparePaint({},error).has_value());
+        ensure("reset palette",ui->tree().commit(ui->find("default_btn",floater)));
+        ensure("original palette restored",llsd_equals(ui->tree().value(swatch),original));
+        ensure("no match search",ui->tree().setValue(filter,LLSD("no_such_palette_fixture")) && ui->tree().commit(filter));
+        ensure("no-match row",ui->tree().get(list)->scrollList->rows[0].cells[1]=="No matching colors.");
+        ensure("no-match editor hidden",!ui->tree().get(swatch)->params.visible);
+        ensure("clear palette filter",ui->tree().setValue(filter,LLSD("")) && ui->tree().commit(filter));
+        ensure("select unfiltered color",ui->tree().selectScrollListValue(list,LLSD("MenuBarBgColor"),true,error) && ui->tree().commit(list));
+        ensure("unfiltered color edit",ui->tree().setSpinnerValue(alpha,LLSD(.25),true,error) && ui->tree().commit(alpha));
+        ensure("unfiltered edit retains selection",std::any_of(ui->tree().get(list)->scrollList->rows.begin(),
+            ui->tree().get(list)->scrollList->rows.end(),[](const auto& row) { return row.selected && row.value.asString()=="MenuBarBgColor"; }));
+    }
+
+    template<> template<> void object::test<198>()
+    {
+        set_test_name("native Debug Settings edits typed controls without legacy UI owners");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        LLControlGroup controls("native-debug-fixture");
+        auto scalar=controls.declareControl("FixtureFloat",TYPE_F32,LLSD(1.),"fixture scalar",SANITY_TYPE_NONE,{},"",LLControlVariable::PERSIST_NONDFT);
+        auto boolean=controls.declareControl("FixtureBool",TYPE_BOOLEAN,LLSD(false),"fixture boolean",SANITY_TYPE_NONE,{},"",LLControlVariable::PERSIST_NONDFT);
+        auto hidden=controls.declareControl("FixtureHidden",TYPE_STRING,LLSD("secret"),"hidden setting",SANITY_TYPE_NONE,{},"",LLControlVariable::PERSIST_NONDFT);
+        hidden->setHiddenFromSettingsEditor(true);
+        const auto declare=[&](const std::string& name,eControlType type,const LLSD& value)
+        { return controls.declareControl(name,type,value,"typed fixture",SANITY_TYPE_NONE,{},"",LLControlVariable::PERSIST_NONDFT); };
+        LLSD vector=LLSD::emptyArray(); vector.append(1.); vector.append(2.); vector.append(3.);
+        auto vectorControl=declare("FixtureVector",TYPE_VEC3,vector);
+        auto stringControl=declare("FixtureString",TYPE_STRING,LLSD("original"));
+        auto signedControl=declare("FixtureSigned",TYPE_S32,LLSD(-4));
+        LLSD color=vector; color[0]=.2; color[1]=.3; color[2]=.4; color.append(.5);
+        auto colorControl=declare("FixtureColor",TYPE_COL4,color);
+        std::map<std::string,LLSD> saved;
+        configuration.savePreferences=[&](const auto& changes,std::string&) { saved=changes; return true; };
+        configuration.settingsGroup=&controls;
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        const bool opened=ui->showDebugSettings(error); ensure(error,opened);
+        ui->takeNotices();
+        const auto floater=ui->activeFloater();
+        const auto search=ui->find("search_settings_input",floater),list=ui->find("settings_scroll_list",floater);
+        const auto select=[&](const std::string& text)
+        {
+            ensure("set debug filter",ui->tree().setValue(search,LLSD(text)));
+            ensure("filter callback",ui->tree().commit(search));
+            ensure(ui->dialogError(),ui->dialogError().empty());
+        };
+        select("FixtureFloat");
+        const auto spinner=ui->find("val_spinner_1",floater);
+        ensure("scalar editor visible",ui->tree().get(spinner)->params.visible);
+        ensure("edit float",ui->tree().setSpinnerValue(spinner,LLSD(2.5),true,error));
+        ensure("commit float",ui->tree().commit(spinner));
+        ensure_equals("shared control receives value",scalar->getValue().asReal(),2.5);
+        scalar->setValue(LLSD(3.25),true);
+        ensure("live external edit paint",ui->preparePaint({},error).has_value());
+        ensure_equals("editor follows external update",ui->tree().value(spinner).asReal(),3.25);
+        ensure("reset original action",ui->tree().commit(ui->find("default_btn",floater)));
+        ensure_equals("reset default",scalar->getValue().asReal(),1.);
+        select("FixtureBool");
+        const auto radio=ui->find("boolean_combo",floater);
+        ensure("boolean editor visible",ui->tree().get(radio)->params.visible);
+        ensure("choose true",ui->tree().setRadioValue(radio,LLSD("true"),error));
+        ensure("commit boolean",ui->tree().commit(radio) && boolean->getValue().asBoolean());
+        select("FixtureHidden");
+        ensure("hidden setting excluded",ui->tree().get(list)->scrollList->rows.empty());
+        select("fixture scalar");
+        ensure("comment search selects control",ui->tree().get(list)->scrollList->rows.size()==1);
+        ensure("native original Debug Settings paints",ui->preparePaint({},error).has_value());
+        ensure("focus scalar editor",ui->tree().setKeyboardFocus(ui->tree().get(spinner)->spinner->editor,false,false,error));
+        ensure("paint retains edit focus",ui->preparePaint({},error).has_value() && ui->tree().keyboardFocus()==ui->tree().get(spinner)->spinner->editor);
+        ui->tree().setKeyboardFocus(search,false,false,error);
+        select("FixtureVector");
+        const auto second=ui->find("val_spinner_2",floater);
+        ensure("edit vector component",ui->tree().setSpinnerValue(second,LLSD(7.5),true,error) && ui->tree().commit(second));
+        ensure_equals("vector component retained",vectorControl->getValue()[1].asReal(),7.5);
+        select("FixtureString");
+        const auto text=ui->find("val_text",floater);
+        ensure("edit string",ui->tree().setValue(text,LLSD("updated")) && ui->tree().commit(text));
+        ensure_equals("string value retained",stringControl->getValue().asString(),std::string("updated"));
+        select("FixtureSigned");
+        ensure("signed edit",ui->tree().setSpinnerValue(spinner,LLSD(-9),true,error) && ui->tree().commit(spinner));
+        ensure_equals("signed value",signedControl->getValue().asInteger(),-9);
+        select("FixtureColor");
+        const auto alpha=ui->find("val_spinner_4",floater);
+        ensure("alpha edit",ui->tree().setSpinnerValue(alpha,LLSD(.75),true,error) && ui->tree().commit(alpha));
+        ensure_equals("color alpha retained",colorControl->getValue()[3].asReal(),.75);
+        select("FixtureFloat");
+        scalar->setHiddenFromSettingsEditor(true);
+        ensure("hide editor while selected",ui->preparePaint({},error).has_value() && !ui->tree().get(spinner)->params.enabled);
+        ensure("hidden control commit cannot mutate",ui->tree().setSpinnerValue(spinner,LLSD(9.),true,error));
+        ui->tree().commit(spinner);
+        ensure_equals("hidden value unchanged",scalar->getValue().asReal(),1.);
+        ensure("debug shutdown persistence",ui->prepareShutdown(error)==LLVKViewerUi::ShutdownStatus::Ready);
+        ensure_equals("debug change saved",saved.at("FixtureString").asString(),std::string("updated"));
+    }
+
+    template<> template<> void object::test<197>()
+    {
+        set_test_name("menu visibility predicates gate input and open submenu lifetime");
+        std::string error;
+        auto menu=LLVKMenu::create("<menu_bar><menu name='Root' label='Root'><on_visible function='Visible'/>"
+            "<menu_item_call name='action' label='Action' shortcut='control|J'><on_click function='Do'/></menu_item_call>"
+            "</menu></menu_bar>",loadFont(),nullptr,{},false,error);
+        ensure(error,menu!=nullptr);
+        bool visible=true; int calls=0;
+        menu->bindPredicate("Visible",[&](const auto&) { return visible; });
+        menu->bind("Do",[&](const auto&,const auto&) { ++calls; });
+        ensure("visible accelerator",menu->shortcut("J",true,false,false) && calls==1);
+        menu->key(LLVKMenu::Key::Activate);
+        visible=false;
+        ensure("hidden ancestor gates accelerator",!menu->shortcut("J",true,false,false) && calls==1);
+        menu->key(LLVKMenu::Key::Down);
+        ensure("hidden open menu dismissed",!menu->open());
+        LLVKWidgetPaint paint;
+        ensure("hidden menu paint",menu->paint(paint,{0,0,500,500},error));
+        ensure("hidden predicate suppresses item",!menu->itemVisible(0));
+    }
+
+    template<> template<> void object::test<194>()
+    {
+        set_test_name("native nested menus use live checked and enabled predicates");
+        std::string error;
+        auto menu=LLVKMenu::create("<menu_bar><menu name='root' label='Root'><menu name='nested' label='Nested'>"
+            "<menu_item_check name='action' label='Action' shortcut='control|J'><on_click function='Do'/>"
+            "<on_check function='Checked' parameter='state'/><on_enable function='Enabled' parameter='state'/>"
+            "</menu_item_check></menu></menu></menu_bar>",loadFont(),nullptr,{},false,error);
+        ensure(error,menu!=nullptr);
+        bool enabled=false,checked=false; int calls=0;
+        menu->bind("Do",[&](const auto&,const auto&) { ++calls; checked=!checked; });
+        menu->bindPredicate("Enabled",[&](const auto& parameter) { return parameter=="state" && enabled; });
+        menu->bindPredicate("Checked",[&](const auto& parameter) { return parameter=="state" && checked; });
+        ensure("disabled predicate blocks accelerator",!menu->shortcut("J",true,false,false) && calls==0);
+        enabled=true;
+        menu->key(LLVKMenu::Key::Activate); menu->key(LLVKMenu::Key::Down);
+        ensure("right enters selected submenu",menu->key(LLVKMenu::Key::Right));
+        menu->key(LLVKMenu::Key::Down); menu->key(LLVKMenu::Key::Return);
+        ensure_equals("submenu invokes leaf action",calls,1);
+        const auto found=std::find_if(menu->items().begin(),menu->items().end(),[](const auto& item) { return item.name=="action"; });
+        const auto index=static_cast<std::size_t>(found-menu->items().begin());
+        ensure("check predicate sees current state",menu->itemChecked(index));
+        checked=false; ensure("checkmark refresh does not need rebuilding menu",!menu->itemChecked(index));
+        menu->key(LLVKMenu::Key::Activate); menu->key(LLVKMenu::Key::Down); menu->key(LLVKMenu::Key::Right);
+        menu->key(LLVKMenu::Key::Left); menu->key(LLVKMenu::Key::Right);
+        menu->key(LLVKMenu::Key::Down); menu->key(LLVKMenu::Key::Return);
+        ensure_equals("left returns to parent submenu selection",calls,2);
+    }
+
+    template<> template<> void object::test<193>()
+    {
+        set_test_name("native Help menu opens original Whitelist adviser with explicit runtime paths");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        const auto root=std::filesystem::temp_directory_path()/"native whitelist paths";
+        configuration.viewerExecutable=root/"bin"/"viewer.exe";
+        configuration.pluginLauncher=root/"bin"/"slplugin.exe";
+        configuration.voiceExecutable=root/"bin"/"SLVoice.exe";
+        configuration.browserHelper=root/"browser"/"dullahan_host.exe";
+        configuration.skin.userAppDirectory=root/"profile";
+        configuration.cacheDirectory=root/"cache";
+        completePreferenceSettings(configuration);
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        auto& menu=ui->menu();
+        ensure("open top menu",menu.key(LLVKMenu::Key::Activate));
+        ensure("select Help",menu.key(LLVKMenu::Key::Right));
+        ensure("select bound Whitelist adviser",menu.key(LLVKMenu::Key::Down));
+        ensure("activate original menu action",menu.key(LLVKMenu::Key::Return));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        const auto floater=ui->activeFloater();
+        const auto folders=ui->find("whitelist_folders_editor",floater);
+        const auto executables=ui->find("whitelist_exes_editor",floater);
+        ensure("original hierarchy opened",floater && folders && executables);
+        const auto text=[](const std::filesystem::path& path) { const auto bytes=path.u8string(); return std::string(bytes.begin(),bytes.end()); };
+        ensure_equals("exact folder values",ui->tree().value(folders).asString(),
+            text(root/"bin")+"\n"+text(root/"profile")+"\n"+text(root/"cache"));
+        ensure_equals("exact executable values",ui->tree().value(executables).asString(),
+            "viewer.exe\n"+text(configuration.viewerExecutable)+"\nSLVoice.exe\n"+text(configuration.voiceExecutable)+
+            "\nslplugin.exe\n"+text(configuration.pluginLauncher)+"\ndullahan_host.exe\n"+text(configuration.browserHelper));
+        ensure("native whitelist paints",ui->preparePaint({},error).has_value());
+        ensure("close whitelist",ui->closeFloater(error));
+        ensure("reopen same owner",ui->showWhitelist(error) && ui->activeFloater()==floater);
+        std::string report;
+        ui->setOpenUrl([&](const std::string& url) { report=url; });
+        ensure("report cannot fabricate unavailable diagnostic state",!ui->reportProblem(error) && report.empty());
+        LLSD facts=LLSD::emptyMap(); facts["VIEWER_VERSION"]=LLSD::emptyArray();
+        facts["VIEWER_VERSION"].append(7); facts["VIEWER_VERSION"].append(2);
+        facts["GRAPHICS_CARD"]="Fixture GPU & device"; facts["RENDERING_API"]="Vulkan";
+        facts["LOCATION_URL"]="https://example.test/region/1/2/3";
+        ensure("native report facts",ui->setAboutInfo(facts,error));
+        ensure("configured report template",ui->tree().updateSetting("ReportBugURL",LLSD("https://example.test/report?environment=[ENVIRONMENT]&location=[LOCATION]")));
+        menu.key(LLVKMenu::Key::Activate); menu.key(LLVKMenu::Key::Right);
+        menu.key(LLVKMenu::Key::Down); menu.key(LLVKMenu::Key::Down);
+        ensure("invoke Report Problem from Help",menu.key(LLVKMenu::Key::Return));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        const auto query=LLURI(report).queryMap();
+        ensure("native renderer facts substituted",query["environment"].asString().find("Rendering API: Vulkan")!=std::string::npos);
+        ensure("report environment escapes ampersand",query["environment"].asString().find("Fixture GPU & device")!=std::string::npos);
+        ensure_equals("report location escaped exactly once",query["location"].asString(),facts["LOCATION_URL"].asString());
+        ensure("unsafe report URL setting",ui->tree().updateSetting("ReportBugURL",LLSD("file:///unwanted")));
+        ensure("non-web report endpoint rejected",!ui->reportProblem(error));
+        struct RestoreLogging
+        {
+            LLError::ELevel level=LLError::getDefaultLevel();
+            ~RestoreLogging() { LLError::setDefaultLevel(level); }
+        } restoreLogging;
+        LLError::setDefaultLevel(LLError::LEVEL_WARN);
+        menu.setVisible("Debug",true);
+        menu.key(LLVKMenu::Key::Activate); menu.key(LLVKMenu::Key::Right); menu.key(LLVKMenu::Key::Right);
+        bool loggingSelected=false;
+        for (std::size_t attempt=0; attempt<menu.items().size(); ++attempt)
+        {
+            menu.key(LLVKMenu::Key::Down);
+            const auto selected=menu.selectedItem();
+            if (selected && menu.items()[*selected].name=="Set Logging Level") { loggingSelected=true; break; }
+        }
+        ensure("find original logging submenu through keyboard",loggingSelected);
+        menu.key(LLVKMenu::Key::Right); menu.key(LLVKMenu::Key::Down); menu.key(LLVKMenu::Key::Down);
+        ensure("original logging submenu invokes shared logger",menu.key(LLVKMenu::Key::Return));
+        ensure("logging level really changed",LLError::getDefaultLevel()==LLError::LEVEL_INFO);
+        for (std::size_t index=0; index<menu.items().size(); ++index)
+            if (menu.items()[index].checkAction=="Develop.CheckLoggingLevel")
+                ensure("original logging radio checks follow service",menu.itemChecked(index)==(menu.items()[index].checkParameter=="1"));
+#ifndef OPENSIM
+        for (const auto& item : menu.items())
+            if (item.name=="current_grid_help_login" || item.name=="current_grid_about_login" || item.name=="grid_help_seperator_login")
+                ensure("SL-only build hides grid-specific entries as reference does",!item.visible);
+#endif
+    }
+
+    template<> template<> void object::test<195>()
+    {
+        set_test_name("Guidebook uses original embedded floater and independent browser lifecycle");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::map<std::string,LLSD> saved;
+        configuration.savePreferences=[&](const auto& changes,std::string&) { saved=changes; return true; };
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        int opens=0,closes=0;
+        LLVKWidgetTree::Id browser=0;
+        ui->setGuidebookService([&](auto id,const auto& url,std::string&)
+        {
+            browser=id; ++opens;
+            ensure_equals("configured Guidebook page",url,ui->tree().setting("GuidebookURL")->asString());
+            return true;
+        },[&](auto id) { ensure_equals("matching close owner",id,browser); ++closes; });
+        const bool opened=ui->toggleGuidebook(error);
+        ensure(error,opened);
+        const auto floater=ui->guidebook();
+        const auto& frame=ui->tree().get(floater)->params;
+        ensure_equals("Guidebook overrides inherited root",frame.name,std::string("floater_how_to"));
+        ensure_equals("original floater width",frame.rect.right-frame.rect.left,310);
+        ensure_equals("original floater height",frame.rect.top-frame.rect.bottom,525);
+        ensure("original browser widget",browser && ui->tree().get(browser)->browser);
+        ensure("separate from login widget",browser!=ui->find("login_html"));
+        const auto stack=ui->tree().get(ui->find("stack1",floater))->params.rect;
+        ensure_equals("source content width",stack.right-stack.left,300);
+        ensure_equals("source content height",stack.top-stack.bottom,505);
+        for (const auto name : {"nav_controls","debug_controls","status_bar","plugin_fail_text"})
+            ensure("source chrome hidden",!ui->tree().get(ui->find(name,floater))->params.visible);
+        ensure("Guidebook paint",ui->preparePaint({},error).has_value());
+        ensure("move original Guidebook",ui->tree().setShape(floater,{100,75,410,600},error));
+        ensure("toggle closes foreground Guidebook",ui->toggleGuidebook(error) && !ui->guidebook());
+        ensure_equals("close releases browser view",closes,1);
+        ensure("reopen",ui->toggleGuidebook(error));
+        ensure_equals("reopen creates new page",opens,2);
+        ensure("new native hierarchy on reopen",ui->guidebook()!=floater);
+        ensure("position survives reopen",ui->tree().get(ui->guidebook())->params.rect==LLVKWidgetTree::Rect{100,75,410,600});
+        ensure("ordinary close",ui->closeFloater(error));
+        ensure_equals("second view close",closes,2);
+        ensure("ordinary close records hidden",!ui->tree().setting("floater_vis_guidebook")->asBoolean());
+        ensure("reopen for application shutdown",ui->toggleGuidebook(error));
+        ensure("shutdown saves Guidebook state",ui->prepareShutdown(error)==LLVKViewerUi::ShutdownStatus::Ready);
+        ensure("quit preserves open visibility",saved.at("floater_vis_guidebook").asBoolean());
+        ensure("quit persists normalized placement",saved.at("floater_pos_guidebook_x").asReal()>=-.5 &&
+            saved.at("floater_pos_guidebook_x").asReal()<=.5);
+    }
 
     template<> template<> void object::test<192>()
     {
@@ -4601,7 +5276,24 @@ namespace tut
         const auto count = tree.size();
         ensure("wrong child type rejects",!factory.construct(tree,"<layout_stack><panel/></layout_stack>",0,error));
         ensure_equals("rejected construction atomic",tree.size(),count);
-        ensure("unimplemented user resizing explicit",!factory.construct(tree,"<layout_stack><layout_panel user_resize='true'/></layout_stack>",0,error));
+        const auto resizable=factory.construct(tree,"<layout_stack width='204' height='60' orientation='horizontal' animate='false' border_size='4'>"
+            "<layout_panel width='100' height='60' min_width='30' user_resize='true'/>"
+            "<layout_panel width='100' height='60' min_width='30'/></layout_stack>",0,error);
+        ensure(error,resizable.has_value());
+        const auto pair=tree.get(*resizable)->layoutStack->panels;
+        LLVKWidgetTree::PointerEvent event; event.kind=LLVKWidgetTree::PointerKind::LeftDown; event.x=102; event.y=20;
+        ensure("divider captures pointer",tree.routePointer(*resizable,event,error) && tree.mouseCapture()==*resizable);
+        event.kind=LLVKWidgetTree::PointerKind::Hover; event.x=122;
+        ensure("divider drag",tree.routePointer(*resizable,event,error));
+        ensure_equals("first panel expands by drag",tree.get(pair[0])->params.rect.right,120);
+        ensure_equals("second panel retains pair total",tree.get(pair[1])->params.rect.right-tree.get(pair[1])->params.rect.left,80);
+        event.x=400; ensure("divider clamps",tree.routePointer(*resizable,event,error));
+        ensure_equals("neighbor minimum retained",tree.get(pair[1])->params.rect.right-tree.get(pair[1])->params.rect.left,30);
+        event.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("divider releases capture",tree.routePointer(*resizable,event,error) && !tree.mouseCapture());
+        tree.setVisible(pair[1],false); tree.prepareLayoutStacks(*resizable,0,error);
+        event.kind=LLVKWidgetTree::PointerKind::LeftDown; event.x=172;
+        ensure("no divider to hidden panel",!tree.layoutStackPointer(*resizable,event,error) && !tree.mouseCapture());
     }
 
     template<> template<> void object::test<113>()

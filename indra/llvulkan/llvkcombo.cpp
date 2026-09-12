@@ -33,15 +33,15 @@ bool LLVKWidgetTree::constructComboChildren(Id id, std::string& error)
     const auto params = get(id)->combo->params;
     const auto rect = get(id)->params.rect;
     const auto width = std::int64_t(rect.right)-rect.left, height = std::int64_t(rect.top)-rect.bottom;
-    const auto arrowWidth = std::int64_t(std::max<std::uint32_t>(8,params->button.images.unselected ? params->button.images.unselected->width() : 0))+
+    const auto arrowWidth = std::int64_t(std::max<std::uint32_t>(params->flyout ? 22 : 8,params->button.images.unselected ? params->button.images.unselected->width() : 0))+
         2*std::int64_t(params->buttonShadow);
-    if (width < 0 || height < 0 || width > INT32_MAX || height > INT32_MAX || (params->allowTextEntry && arrowWidth > width))
+    if (width < 0 || height < 0 || width > INT32_MAX || height > INT32_MAX || ((params->allowTextEntry || params->flyout) && arrowWidth > width))
     { error = "Native combo '" + get(id)->params.name + "' dimensions cannot fit its arrow"; return false; }
     Params buttonView;
     buttonView.name = "Combobox Button";
-    buttonView.rect = {params->allowTextEntry ? static_cast<std::int32_t>(width-arrowWidth) : 0,0,
+    buttonView.rect = {(params->allowTextEntry || params->flyout) ? static_cast<std::int32_t>(width-arrowWidth) : 0,0,
         static_cast<std::int32_t>(width),static_cast<std::int32_t>(height)};
-    buttonView.follows = params->allowTextEntry ? Right | Top | Bottom : Left | Bottom | Right;
+    buttonView.follows = (params->allowTextEntry || params->flyout) ? Right | Top | Bottom : Left | Bottom | Right;
     auto buttonParams = params->button;
     buttonParams.mouseDown.function = [this,id](Id,const LLSD&)
     {
@@ -116,11 +116,29 @@ bool LLVKWidgetTree::constructComboChildren(Id id, std::string& error)
         mNodes.at(id).combo->editor = *editor;
         if (!setValue(*editor,LLSD(""))) { error = "Native combo rejected empty initial editor text"; return false; }
     }
-    else
+    else if (!params->flyout)
     {
         const auto label = utf8str_to_wstring(params->label);
         if (!setButtonLabel(*button,std::u32string(label.begin(),label.end())))
         { error = "Native combo button rejected label"; return false; }
+    }
+    if (params->flyout)
+    {
+        Params actionView;
+        actionView.name=params->label;
+        actionView.rect={0,0,static_cast<std::int32_t>(width-22-2*params->buttonShadow),static_cast<std::int32_t>(height)};
+        actionView.follows=Left|Right|Top|Bottom;
+        auto actionControl=params->actionControl;
+        actionControl.commit.function=[this,id](Id,const LLSD&)
+        {
+            std::string problem;
+            if (selectComboItem(id,std::nullopt,problem)) commitCombo(id);
+        };
+        const auto action=createButton(actionView,actionControl,params->actionButton,id,error);
+        if (!action || !postBuildButton(*action,error)) return false;
+        mNodes.at(id).combo->action=*action;
+        const auto label=utf8str_to_wstring(params->label);
+        if (!setButtonLabel(*action,std::u32string(label.begin(),label.end())) || !setButtonLabel(*button,U"")) return false;
     }
     return true;
 }
@@ -140,7 +158,7 @@ bool LLVKWidgetTree::selectComboItem(Id id, std::optional<std::size_t> index, st
             if (!setValue(combo.editor,LLSD(label))) { error = "Native combo editor rejected selected label"; return false; }
             setTentative(combo.editor,false);
         }
-        else
+        else if (!combo.params->flyout)
         {
             const auto wide = utf8str_to_wstring(label);
             if (!setButtonLabel(combo.button,std::u32string(wide.begin(),wide.end())))

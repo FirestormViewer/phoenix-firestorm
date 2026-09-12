@@ -116,6 +116,18 @@ bool LLVKWidgetTree::setSpinnerRange(Id id,float minimum,float maximum,std::stri
     return setSpinnerValue(id,value(id),true,error);
 }
 
+bool LLVKWidgetTree::setSpinnerFormat(Id id,const std::string& label,int precision,float increment,std::string& error)
+{
+    error.clear();
+    if (!get(id) || !get(id)->spinner || precision<0 || precision>9 || !std::isfinite(increment) || increment<=0)
+    { error="Invalid native spinner format"; return false; }
+    auto params=std::make_shared<SpinnerParams>(*get(id)->spinner->params);
+    params->label=label; params->precision=precision; params->increment=increment;
+    mNodes.at(id).spinner->params=std::move(params);
+    if (const auto text=get(id)->spinner->label) setValue(text,LLSD(label));
+    return refreshSpinnerEditor(id,error);
+}
+
 bool LLVKWidgetTree::setSpinnerValue(Id id,const LLSD& value,bool forceEditor,std::string& error)
 {
     error.clear();

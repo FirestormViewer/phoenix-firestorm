@@ -1,4 +1,6 @@
 #include "llvkwidgetfactory.h"
+#include "llvkmenu.h"
+#include "lltrace.h"
 #include "llvkxmllayers.h"
 #include "llstring.h"
 
@@ -101,6 +103,7 @@ namespace
             std::vector<std::pair<std::string,std::string>> attributes;
         };
         std::string tag;
+        std::string menuXml;
         std::vector<std::pair<std::string,std::string>> attributes;
         std::vector<CallbackDeclaration> panelCallbacks;
         std::map<std::string,std::string> panelStrings;
@@ -113,6 +116,8 @@ namespace
         std::optional<LLVKWidgetTree::Node::Floater> floater;
         std::shared_ptr<LLVKWidgetTree::Node::ContainerView> containerView;
         std::shared_ptr<LLVKWidgetTree::Node::StatBar> statBar;
+        std::optional<LLVKWidgetTree::Node::OverlapPanel> overlapPanel;
+        std::optional<LLVKWidgetTree::Node::ProgressBar> progress;
         std::shared_ptr<LLVKWidgetFactory::SearchEditorDefaults> searchEditor;
         std::map<std::string,std::unique_ptr<Declaration>> searchButtons;
         std::string menuFilename, menuPosition = "bottomleft";
@@ -268,6 +273,8 @@ namespace
         std::string error;
         std::exception_ptr exception;
         std::size_t nodes = 0;
+        std::string_view source;
+        std::size_t menuStart=0,menuDepth=0;
         bool callbackElement = false;
         struct PanelString
         {
@@ -328,7 +335,8 @@ namespace
 
         Declaration* comboPart(Declaration& owner, std::string_view name)
         {
-            if (!owner.combo || (name != "combo_editor" && name != "combo_button" && name != "drop_down_button" && name != "combo_list")) return nullptr;
+            if (!owner.combo || (name != "combo_editor" && name != "combo_button" && name != "drop_down_button" && name != "combo_list" &&
+                !(name=="action_button" && owner.combo->combo.flyout))) return nullptr;
             auto& part = owner.comboParts[std::string(name)];
             if (!part)
             {
@@ -348,7 +356,7 @@ namespace
                 }
                 else
                 {
-                    const auto& defaults = name == "combo_button" ? owner.combo->button : owner.combo->dropDown;
+                    const auto& defaults = name == "action_button" ? owner.combo->action : name == "combo_button" ? owner.combo->button : owner.combo->dropDown;
                     part->params = defaults.view;
                     part->control = defaults.control;
                     part->button = defaults.button;
@@ -361,10 +369,12 @@ namespace
         {
             auto& view = declaration.params.view;
             auto& geometry = declaration.params.geometry;
+            if (declaration.overlapPanel && name=="min_width") return integer(text,declaration.overlapPanel->minimumWidth);
             if (declaration.statBar)
             {
                 auto& bar=*declaration.statBar;
                 if (name=="label") { bar.label=text; return true; }
+                if (name=="stat") { bar.statName=text; return true; }
                 if (name=="show_bar") return boolean(text,bar.showBar);
                 if (name=="show_history") return boolean(text,bar.showHistory);
                 if (name=="max_height") return integer(text,bar.maximumHeight);
@@ -421,6 +431,7 @@ namespace
                     else return false;
                     return true;
                 }
+                if (name=="label") { list.label=text; return true; }
                 if (name=="fg_unselected_color") return color(text,list.foreground);
                 if (name=="fg_selected_color") return color(text,list.selectedForeground);
                 if (name=="fg_disable_color") return color(text,list.disabledForeground);
@@ -509,13 +520,22 @@ namespace
                 auto& floater=*declaration.floater;
                 if (name=="title") { floater.title=text; return true; }
                 if (name=="positioning") { floater.positioning=text; return text=="centered" || text=="cascading"; }
-                if (name=="save_visibility") { bool enabled; return boolean(text,enabled) && !enabled; }
+                if (name=="save_visibility") return boolean(text,floater.saveVisibility);
+                if (name=="rel_x" || name=="rel_y")
+                {
+                    float value=0;
+                    const auto parsed=std::from_chars(text.data(),text.data()+text.size(),value);
+                    if (parsed.ec!=std::errc() || parsed.ptr!=text.data()+text.size() || !std::isfinite(value) || value < -1.f || value > 1.f) return false;
+                    (name=="rel_x" ? floater.relativeX : floater.relativeY)=value;
+                    return true;
+                }
                 if (name=="reuse_instance") { bool enabled; return boolean(text,enabled) && enabled; }
                 if (name=="legacy_header_height") return integer(text,floater.legacyHeaderHeight);
                 if (name=="save_rect") return boolean(text,floater.saveRect);
                 if (name=="single_instance") return boolean(text,floater.singleInstance);
                 if (name=="can_close") return boolean(text,floater.canClose);
                 if (name=="can_minimize") return boolean(text,floater.canMinimize);
+                if (name=="can_dock") return boolean(text,floater.canDock);
                 if (name=="can_drag_on_left") { bool enabled; return boolean(text,enabled) && !enabled; }
                 if (name=="can_resize") return boolean(text,floater.canResize);
                 if (name=="min_width") return integer(text,floater.minWidth) && floater.minWidth>=0;
@@ -526,6 +546,8 @@ namespace
                         if (declaration.textEditor)
                         {
                             auto& editor=*declaration.textEditor;
+                            if (name=="prevalidator" || name=="prevalidate_callback" || name=="text_type")
+                            { declaration.plainLabel->prevalidator=builtinTextValidator(text); return bool(declaration.plainLabel->prevalidator); }
                             if (name=="border_visible") return boolean(text,editor.borderVisible);
                             if (name=="bg_visible") return boolean(text,declaration.plainLabel->backgroundVisible);
                             if (name=="bg_readonly_color") return color(text,declaration.plainLabel->readOnlyBackground);
@@ -661,7 +683,7 @@ namespace
                 auto& combo = declaration.combo->combo;
                 if (name == "label") { combo.label = text; return true; }
                 if (name == "value" || name == "initial_value") { declaration.control->initialValue=std::string(text); return true; }
-                if (name == "allow_text_entry") return boolean(text,combo.allowTextEntry);
+                if (name == "allow_text_entry") return boolean(text,combo.allowTextEntry) && (!combo.flyout || !combo.allowTextEntry);
                 if (name == "show_text_as_tentative") return boolean(text,combo.tentativeText);
                 if (name == "force_disable_fulltext_search") return boolean(text,combo.forceDisableSubstring);
                 if (name == "allow_new_values") { bool enabled; return boolean(text,enabled) && !enabled; }
@@ -708,7 +730,7 @@ namespace
             {
                 auto& panel = *declaration.layoutPanel;
                 if (name == "auto_resize") return boolean(text,panel.autoResize);
-                if (name == "user_resize") { bool enabled; return boolean(text,enabled) && !enabled; }
+                if (name == "user_resize") return boolean(text,panel.userResize);
                 if (name == "min_dim" || name == "min_width" || name == "min_height")
                 {
                     std::int32_t value;
@@ -786,6 +808,8 @@ namespace
             if (declaration.checkBox)
             {
                 auto& check = declaration.checkBox->construction;
+                if (name=="label_text.text_color") return color(text,check.labelText.textColor);
+                if (name=="label_text.text_readonly_color") return color(text,check.labelText.readOnlyColor);
                 if (name=="label_text.halign")
                 {
                     if (text=="left") check.labelText.layout.alignment=LLVKFont::HorizontalAlign::Left;
@@ -813,10 +837,29 @@ namespace
                 if (name == "radio_style") { bool ignored; return boolean(text,ignored); }
                 if (name == "font") check.fontProvided = true;
             }
+            if (declaration.progress)
+            {
+                auto& progress=*declaration.progress;
+                if (name=="image_bar") { progress.imageBar=text; return true; }
+                if (name=="image_fill") { progress.imageFill=text; return true; }
+                if (name=="color_bar") return color(text,progress.fill);
+                if (name=="color_bg") return color(text,progress.background);
+                if (name.starts_with("color_bar.") || name.starts_with("color_bg."))
+                {
+                    const auto component=name.substr(name.find('.')+1);
+                    const auto index=component=="red" ? 0 : component=="green" ? 1 : component=="blue" ? 2 : component=="alpha" ? 3 : -1;
+                    float value=0;
+                    const auto parsed=std::from_chars(text.data(),text.data()+text.size(),value);
+                    if (index<0 || parsed.ec!=std::errc() || parsed.ptr!=text.data()+text.size() || !std::isfinite(value)) return false;
+                    auto& target=name.starts_with("color_bar.") ? progress.fill : progress.background;
+                    auto channels=target.get(); channels[index]=value; target=LLVKColor(channels); return true;
+                }
+            }
             if (declaration.plainLabel)
             {
                 auto& label = *declaration.plainLabel;
                 if (name=="use_ellipses") return boolean(text,label.useEllipses);
+                if (name=="clip_partial") return boolean(text,label.clipPartial);
                 if (name == "label") return true;
                 if (name == "skip_link_underline") return boolean(text,label.skipLinkUnderline);
                 if (name == "bg_readonly_color") return color(text,label.readOnlyBackground);
@@ -955,7 +998,7 @@ namespace
                 { std::int32_t dimension; return integer(text,dimension); }
                 if (name == "border_thickness" || name == "thickness") return integer(text,panel.border.thickness);
             }
-            if ((name == "font" || name == "font.name" || name == "font.size" || name == "font.style") && declaration.control)
+            if ((name == "font" || name == "font.name" || name == "font.size" || name == "font.style" || name == "font.style.") && declaration.control)
             {
                 auto& request = declaration.control->fontRequest;
                 if (!request) request = resources.defaultFontRequest;
@@ -1197,7 +1240,8 @@ namespace
                 (declaration.badge && prefix != "badge") || (declaration.panel && prefix != (declaration.tabs ? "tab_container" : declaration.browser ? "web_browser" : declaration.layoutPanel ? "layout_panel" : "panel")) ||
                 (declaration.lineEditor && prefix != (declaration.searchEditor ? declaration.tag : "line_editor")) || (declaration.checkBox && prefix != (declaration.radioItem ? "radio_item" : "check_box")) ||
                 (declaration.scrollbar && prefix != "scroll_bar") ||
-                (declaration.scrollContainer && prefix != "scroll_container") || (declaration.combo && prefix != "combo_box")) return false;
+                (declaration.scrollContainer && prefix != "scroll_container") ||
+                (declaration.combo && prefix != "combo_box" && !(declaration.combo->combo.flyout && prefix=="flyout_button"))) return false;
             const auto name = tag.substr(separator+1);
             const auto remember = [&]
             {
@@ -1271,6 +1315,11 @@ namespace
             auto& state = *static_cast<Parser*>(pointer);
             state.guarded([&]
             {
+                if (state.menuDepth)
+                {
+                    if (++state.menuDepth>LLVKWidgetTree::maximumDepth) { state.reject("Native menu exceeds depth limit"); }
+                    return;
+                }
                 if (state.panelString) { state.reject("Native panel strings cannot contain nested elements"); return; }
                 if (state.callbackElement) { state.reject("Nested native callback declarations are unsupported"); return; }
                 if (!state.stack.empty() && state.stack.back()->scrollList &&
@@ -1294,9 +1343,13 @@ namespace
                     if (state.inlineCell || (std::string_view(tag)!="column" && std::string_view(tag)!="scroll_list.column"))
                     { state.reject("Unsupported nested native list cell"); return; }
                     std::map<std::string,std::string> fields;
-                    for (std::size_t index=0; attributes[index]; index+=2) fields.emplace(attributes[index],attributes[index+1]);
+                    for (std::size_t index=0; attributes[index]; index+=2)
+                    {
+                        const std::string name=std::string_view(attributes[index])=="name" ? "column" : attributes[index];
+                        fields.insert_or_assign(name,attributes[index+1]);
+                    }
                     const auto& columns=state.stack.back()->scrollList->list.columns;
-                    const auto found=std::find_if(columns.begin(),columns.end(),[&](const auto& column) { return column.name==fields["name"]; });
+                    const auto found=std::find_if(columns.begin(),columns.end(),[&](const auto& column) { return column.name==fields["column"]; });
                     if (found==columns.end()) { state.reject("Native inline cell references unknown column"); return; }
                     const auto index=static_cast<std::size_t>(found-columns.begin());
                     state.inlineRow->cells.resize(columns.size()); state.inlineRow->styles.resize(columns.size());
@@ -1322,6 +1375,12 @@ namespace
                         const std::string_view name(attributes[index]),value(attributes[index+1]);
                         if (name=="name") column.name=value;
                         else if (name=="label") column.label=value;
+                        else if (name=="dynamic_width")
+                        {
+                            bool dynamic=false;
+                            if (!boolean(value,dynamic)) { state.reject("Invalid native dynamic column width"); return; }
+                            column.width=dynamic ? -1 : 0; column.relativeWidth=-1.f; column.hidden=false;
+                        }
                         else if (name=="width")
                         { if (!integer(value,column.width)) { state.reject("Invalid native list column width"); return; } column.hidden=column.width<0; }
                         else if (name=="relative_width" || name=="relwidth")
@@ -1419,6 +1478,7 @@ namespace
                 {
                     std::string_view name(tag);
                     if (name.starts_with("combo_box.")) name.remove_prefix(10);
+                    if (name.starts_with("flyout_button.")) name.remove_prefix(14);
                     if (name == "item" || name == "combo_item")
                     {
                         LLVKWidgetTree::ComboItem item;
@@ -1600,11 +1660,13 @@ namespace
                 const bool icon = std::string_view(tag) == "icon";
                 const bool containerView = std::string_view(tag)=="container_view" || std::string_view(tag)=="stat_view";
                 const bool statBar = std::string_view(tag)=="stat_bar";
+                const bool progress = std::string_view(tag)=="progress_bar";
                 const bool button = std::string_view(tag) == "button" || std::string_view(tag) == "scroll_column_header" || std::string_view(tag)=="menu_button";
                 const bool badge = std::string_view(tag) == "badge";
                 const bool tabs = std::string_view(tag) == "tab_container";
                 const bool floater = std::string_view(tag) == "floater";
-                const bool panel = std::string_view(tag) == "panel" || tabs || floater;
+                const bool overlapPanel = std::string_view(tag)=="overlap_panel";
+                const bool panel = std::string_view(tag) == "panel" || tabs || floater || overlapPanel;
                 const bool border = std::string_view(tag) == "view_border";
                 const bool searchEditor = std::string_view(tag) == "search_editor" || std::string_view(tag) == "filter_editor";
                 const bool colorSwatch = std::string_view(tag) == "color_swatch";
@@ -1619,21 +1681,39 @@ namespace
                 const bool container = std::string_view(tag) == "scroll_container";
                 const bool layoutStack = std::string_view(tag) == "layout_stack";
                 const bool layoutPanel = std::string_view(tag) == "layout_panel";
-                const bool combo = std::string_view(tag) == "combo_box";
+                const bool flyout = std::string_view(tag) == "flyout_button";
+                const bool combo = std::string_view(tag) == "combo_box" || flyout;
+                const bool menuBar = std::string_view(tag) == "menu_bar";
                 const bool textEditor = std::string_view(tag) == "text_editor" || std::string_view(tag) == "simple_text_editor";
                 const bool textWidget = std::string_view(tag) == "text" || std::string_view(tag)=="fs_embedded_item_drop_target" || textEditor;
                 const bool browser = std::string_view(tag) == "web_browser";
                 const bool spinner = std::string_view(tag) == "spinner";
                 const bool sliderControl = std::string_view(tag) == "slider";
                 const bool slider = std::string_view(tag) == "slider_bar" || sliderControl;
-                if (std::string_view(tag) != "view" && std::string_view(tag)!="locate" && !statBar && !containerView && !icon && !button && !badge && !panel && !border && !editor && !check && !scroll && !container && !layoutStack && !layoutPanel && !combo && !textWidget && !browser && !spinner && !radioGroup && !slider && !colorSwatch && !scrollList && !texture)
+                if (std::string_view(tag) != "view" && std::string_view(tag)!="locate" && !menuBar && !progress && !statBar && !containerView && !icon && !button && !badge && !panel && !border && !editor && !check && !scroll && !container && !layoutStack && !layoutPanel && !combo && !textWidget && !browser && !spinner && !radioGroup && !slider && !colorSwatch && !scrollList && !texture)
                 { state.reject("Native constructor not implemented for tag: " + std::string(tag)); return; }
                 if (++state.nodes > LLVKWidgetTree::maximumNodes || state.stack.size() >= LLVKWidgetTree::maximumDepth)
                 { state.reject("Native widget declaration exceeds node/depth limits"); return; }
                 auto declaration = std::make_unique<Declaration>();
                 declaration->tag = tag;
+                if (overlapPanel) declaration->overlapPanel.emplace();
+                if (menuBar)
+                {
+                    declaration->control=state.panelDefaults.control;
+                    declaration->control->fontRequest=state.resources.defaultFontRequest;
+                    state.menuStart=static_cast<std::size_t>(XML_GetCurrentByteIndex(state.parser));
+                    state.menuDepth=1;
+                }
                 if (containerView) declaration->containerView=std::make_shared<LLVKWidgetTree::Node::ContainerView>();
                 if (statBar) declaration->statBar=std::make_shared<LLVKWidgetTree::Node::StatBar>();
+                if (progress)
+                {
+                    declaration->progress=state.resources.progress;
+                    declaration->control=LLVKControl::Params{};
+                    declaration->control->fontRequest=state.resources.defaultFontRequest;
+                    declaration->control->tabStop=false;
+                    declaration->control->initialValue=LLSD(0.);
+                }
                 declaration->params = icon ? state.iconDefaults.view : button ? state.buttonDefaults.view :
                                       badge ? state.buttonDefaults.badge.view : panel ? state.panelDefaults.view :
                                       border ? state.panelDefaults.borderView : editor ? state.lineDefaults.view : check ? state.checkDefaults.view :
@@ -1762,7 +1842,11 @@ namespace
                     }
                 if (combo)
                 {
-                    declaration->combo = std::make_shared<LLVKWidgetFactory::ComboDefaults>(state.comboDefaults);
+                    declaration->combo = std::make_shared<LLVKWidgetFactory::ComboDefaults>(flyout && state.resources.flyout ?
+                        *state.resources.flyout : state.comboDefaults);
+                    declaration->combo->combo.flyout=flyout;
+                    if (flyout && !state.resources.flyout) declaration->combo->action=state.buttonDefaults;
+                    if (flyout) { declaration->combo->combo.allowTextEntry=false; declaration->params=declaration->combo->view; }
                     if (!declaration->combo->initialized)
                     {
                         declaration->combo->button = state.buttonDefaults;
@@ -1780,7 +1864,7 @@ namespace
                         }
                         declaration->combo->initialized = true;
                     }
-                    declaration->control = state.comboDefaults.control;
+                    declaration->control = declaration->combo->control;
                     if (!declaration->control->font && !declaration->control->fontRequest) declaration->control->fontRequest = state.resources.defaultFontRequest;
                 }
                 if (layoutStack) declaration->layoutStack = state.layoutDefaults.stack;
@@ -1910,6 +1994,17 @@ namespace
         static void XMLCALL end(void* pointer, const XML_Char* tag)
         {
             auto& state = *static_cast<Parser*>(pointer);
+            if (state.menuDepth)
+            {
+                if (--state.menuDepth) return;
+                state.guarded([&]
+                {
+                    const auto end=static_cast<std::size_t>(XML_GetCurrentByteIndex(state.parser)+XML_GetCurrentByteCount(state.parser));
+                    state.stack.back()->menuXml=state.source.substr(state.menuStart,end-state.menuStart);
+                    state.stack.pop_back();
+                });
+                return;
+            }
             if (state.inlineRow)
             {
                 state.guarded([&]
@@ -1961,6 +2056,7 @@ namespace
             auto& state = *static_cast<Parser*>(pointer);
             state.guarded([&]
             {
+                if (state.menuDepth) return;
                 if (state.panelString) { state.panelString->body.append(text,length); return; }
                 if (state.inlineCell) { state.inlineCellText.append(text,length); return; }
                 if (!state.callbackElement && !state.stack.empty() && (state.stack.back()->plainLabel || state.stack.back()->panel || state.stack.back()->lineEditor))
@@ -1983,6 +2079,7 @@ namespace
         if (xml.size() > 4 * 1024 * 1024)
         { error = "Native widget declaration exceeds byte budget"; return false; }
         state.parser = XML_ParserCreate(nullptr);
+        state.source=xml;
         if (!state.parser) { error = "Native widget parser allocation failed"; return false; }
         XML_SetUserData(state.parser,&state);
         XML_SetElementHandler(state.parser,Parser::start,Parser::end);
@@ -2349,14 +2446,15 @@ namespace
             }
             else
             {
-                auto& button = name == "combo_button" ? defaults.button : defaults.dropDown;
+                auto& button = name == "action_button" ? defaults.action : name == "combo_button" ? defaults.button : defaults.dropDown;
                 button.control = *part->control;
                 button.button = *part->button;
                 for (const auto& [attribute,imageName] : part->buttonImages) *buttonImage(button.button.images,attribute) = tree.findImage(imageName);
                 button.button.defaultImages = button.button.images;
             }
         }
-        return resolveFont(defaults.editor.control,resources,error) && resolveFont(defaults.button.control,resources,error) &&
+        return (!defaults.combo.flyout || resolveFont(defaults.action.control,resources,error)) &&
+            resolveFont(defaults.editor.control,resources,error) && resolveFont(defaults.button.control,resources,error) &&
             resolveFont(defaults.dropDown.control,resources,error) && resolveFont(defaults.combo.listControl,resources,error);
     }
 
@@ -2524,6 +2622,13 @@ namespace
             combo->combo.editor = editor;
             combo->combo.buttonControl = childButton.control;
             combo->combo.button = childButton.button;
+            if (combo->combo.flyout)
+            {
+                if (!resolveControl(combo->action.control,callbacks,environment.resources,error) ||
+                    !resolveButton(combo->action.button,callbacks,error)) return std::nullopt;
+                combo->combo.actionControl=combo->action.control;
+                combo->combo.actionButton=combo->action.button;
+            }
         }
         auto container = declaration.scrollContainer ? std::make_unique<LLVKWidgetFactory::ScrollContainerDefaults>(*declaration.scrollContainer) : nullptr;
         if (container)
@@ -2739,6 +2844,7 @@ namespace
                panel ? tree.createPanel(constructorView,constructorControl,constructorPanel,0,error) :
                declaration.layoutStack ? tree.createLayoutStack(params,declaration.layoutStack->vertical,declaration.layoutStack->spacing,declaration.layoutStack->clip,owningParent,error) :
                    sliderControl ? tree.createSliderControl(params,*control,sliderControl->slider,owningParent,error) :
+                   declaration.progress ? tree.createProgressBar(params,*control,*declaration.progress,owningParent,error) :
                    slider ? tree.createSlider(params,*control,slider->slider,owningParent,error) :
                    declaration.radioGroup ? tree.createRadioGroup(params,*control,radioItems,declaration.allowDeselect,owningParent,error) :
                    spinner ? tree.createSpinner(params,*control,spinner->spinner,owningParent,error) :
@@ -2758,9 +2864,22 @@ namespace
                        badge ? tree.createBadge(params,*control,*badge,0,owningParent,error) :
                        icon ? tree.createIcon(params,*control,*icon,owningParent,error) :
                        declaration.border ? tree.createBorder(params,*declaration.border,owningParent,error) :
-                       declaration.tag=="locate" ? tree.createControl(params,*control,owningParent,error) :
+                       (declaration.tag=="locate" || !declaration.menuXml.empty()) ? tree.createControl(params,*control,owningParent,error) :
                        tree.create(params,owningParent,error);
         if (!id) return std::nullopt;
+        if (!declaration.menuXml.empty())
+        {
+            auto menu=LLVKMenu::create(declaration.menuXml,control->font,environment.resources.colors,{},false,error);
+            if (!menu) { std::string ignored; tree.erase(*id,ignored); return std::nullopt; }
+            const auto width=menu->barWidth(error);
+            if (!width || !tree.reshape(*id,*width,18,error))
+            { std::string ignored; tree.erase(*id,ignored); return std::nullopt; }
+            for (const auto& [name,handler] : callbacks.actions)
+                menu->bind(name,[handler,owner=*id](const auto&,const auto& parameter) { handler(owner,LLSD(parameter)); });
+            for (const auto& [name,predicate] : callbacks.predicates)
+                menu->bindPredicate(name,[predicate,owner=*id](const auto& parameter) { return predicate(owner,LLSD(parameter)); });
+            tree.setMenu(*id,std::move(menu));
+        }
         if (declaration.tag=="menu_button" && !declaration.menuFilename.empty())
         {
             if (!environment.resources.menuHandler)
@@ -2879,11 +2998,25 @@ namespace
             if (declaration.statBar)
             {
                 auto params=std::make_unique<LLVKWidgetTree::Node::StatBar>(*declaration.statBar);
+                if (!params->statName.empty() &&
+                    (LLTrace::StatType<LLTrace::CountAccumulator>::getInstance(params->statName) ||
+                     LLTrace::StatType<LLTrace::EventAccumulator>::getInstance(params->statName) ||
+                     LLTrace::StatType<LLTrace::SampleAccumulator>::getInstance(params->statName)))
+                { error="Native live named-stat recording is not implemented: "+params->statName; std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
                 auto label=std::make_unique<LLVKControl::Params>();
                 label->fontRequest=LLVKFontRegistry::Request{"Monospace","Medium"};
                 if (!resolveFont(*label,environment.resources,error)) { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
                 params->font=label->font;
                 if (!tree.initializeStatBar(*id,*params,error)) { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
+            }
+            if (declaration.overlapPanel)
+            {
+                auto params=*declaration.overlapPanel;
+                auto text=std::make_unique<LLVKControl::Params>();
+                text->fontRequest=LLVKFontRegistry::Request{"SansSerif","Small"};
+                if (!resolveFont(*text,environment.resources,error)) { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
+                params.font=text->font;
+                if (!tree.initializeOverlapPanel(*id,params,error)) { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
             }
             if (declaration.containerView)
             {
@@ -3106,6 +3239,10 @@ bool LLVKWidgetFactory::loadDefaults(const LLVKWidgetTree& tree, std::string_vie
         defaults->control=*declaration.control;
         mResources.sliderControl=std::move(defaults);
     }
+    else if (declaration.progress)
+    {
+        mResources.progress=*declaration.progress;
+    }
     else if (declaration.slider)
     {
         auto defaults=std::make_shared<SliderDefaults>(*declaration.slider);
@@ -3205,7 +3342,8 @@ bool LLVKWidgetFactory::loadDefaults(const LLVKWidgetTree& tree, std::string_vie
         if (!resolveCombo(declaration,*defaults,tree,mResources,error)) return false;
         defaults->view = declaration.params;
         defaults->control = *declaration.control;
-        mComboDefaults = std::move(defaults);
+        if (defaults->combo.flyout) mResources.flyout=std::move(defaults);
+        else mComboDefaults = std::move(defaults);
     }
     else if (declaration.layoutStack)
     {

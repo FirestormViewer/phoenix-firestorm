@@ -299,6 +299,17 @@ void LLVKWidgetTree::applyControlSettings(Id id)
     }
 }
 
+std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createProgressBar(const Params& view,const LLVKControl::Params& control,
+    const Node::ProgressBar& progress,Id parent,std::string& error)
+{
+    for (const auto& color : {progress.background,progress.fill})
+        for (const auto component : color.get()) if (!std::isfinite(component))
+        { error="Invalid native progress color"; return std::nullopt; }
+    const auto id=createControl(view,control,parent,error);
+    if (id) mNodes.at(*id).progressBar=progress;
+    return id;
+}
+
 bool LLVKWidgetTree::defineSetting(const std::string& name, const LLSD& value, SettingType type)
 {
     if (name.empty() || mSettings.contains(name)) return false;

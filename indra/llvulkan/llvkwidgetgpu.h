@@ -4,6 +4,7 @@
 #include "llvkwidgetpaint.h"
 #include "llvkuipacket.h"
 #include "llvkimagepublication.h"
+#include <filesystem>
 
 class LLVKWidgetGpu final
 {
@@ -12,6 +13,7 @@ public:
     explicit LLVKWidgetGpu(LLVKGlyphUpload::Device device) : mDevice(device) {}
     Status prepare(const LLVKWidgetPaint& paint, VkExtent2D extent, LLVKUiPacket& packet, std::string& error);
     bool waitPendingUploads(std::uint64_t timeout, std::string& error);
+    std::optional<std::vector<std::filesystem::path>> dumpFontAtlases(const std::filesystem::path& directory,std::string& error) const;
 private:
     struct Image
     {

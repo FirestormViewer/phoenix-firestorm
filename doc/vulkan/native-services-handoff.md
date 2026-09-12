@@ -1,7 +1,200 @@
 # Native services handoff
 
-Updated 2026-09-12 after read-only cache, startup policy and cache-backed previews.
+Updated 2026-09-12 after Widgets repair, font diagnostics and initial XUI Preview.
 This is a continuation checkpoint, not a completion or parity claim.
+
+## Active continuation: remaining menu groups
+
+Latest resume checkpoint, 2026-09-12: the user authorized continued investigation.
+Inline cells now use the canonical `column` parameter with `name` as its alias,
+matching LLScrollListCell::Params. The Checkbox tab's dotted enabled/disabled label
+colors are also resolved. The original Widgets sample now constructs and paints;
+tests verify exact cell text, colors, flyout/menu children and dock-state behavior.
+The window fixture opens Widgets and dispatches embedded-menu input through Win32.
+
+Current gates: Widget207/207; Window7/7 plus standalone cold-cache regression;
+RelWithDebInfo viewer link; source diagnostics passed. The window sequence includes
+font PNG output and a presented XUI Preview overlap stage. No full viewer/profile
+launch or measured GL parity. No commit or push; all exclusions remain intact.
+
+Fonts menu: native registry diagnostic snapshot logs size/family/file declarations
+and resolved instances without populating glyphs. Dump Font Textures writes actual
+retained CPU atlas pages from LLVKWidgetGpu into a unique directory under logs.
+The PNG encoder has an asymmetric byte-exact RGBA/orientation roundtrip test; the
+window fixture decodes nonempty 256x256 dumped atlas pages. Native packing and names
+differ from legacy font atlases by design; no GPU readback or GL font calls occur.
+
+XUI Preview is partial, not a completed menu entry. Implemented: original tool XML,
+language/file catalog, independent primary/secondary floater previews, panel wrappers,
+Show/Hide/Refresh/default/double-click routes, language-scoped skin loading, dependent
+close, overlap panel selection and native diagnostic copies. The reference menu-file
+preview branch is empty; Save only warns that saving was removed, and schema export
+is commented out. Native handlers for Save warning, editor/diff file operations,
+live reload/fade, rectangle/diff/overlap highlighting, complete inspector geometry
+and tooltip behavior still need implementation/qualification. Arbitrary preview
+files remain constrained by native factory support; no exhaustive XUI coverage claim.
+
+User-resizable layout panel dividers now capture drags, clamp adjacent visible pairs
+and update resize fractions; the old reject-only test was replaced with drag/minimum/
+release/hidden-panel checks. Complete vertical/animated/mixed-panel and resize-cursor
+parity are still unqualified. The notification-channel panel can now be previewed;
+this does not implement notification channels themselves.
+
+Diagnostic correction: adding a stack-local LLVKControl::Params in recursive factory
+build caused test50 to overflow at depth63 (0xc00000fd, LLDB __chkstk/Parser::attribute).
+Moving that temporary to heap storage restored the existing recursion-limit test.
+Only the crashed widget test was stopped in LLDB; no viewer process was killed.
+
+Service blockers to full menu functionality: the notification console requires the
+ten-channel notification graph and response/snapshot lifecycle. LLNotifications is
+not reusable unchanged: constructor/ignore/template paths access LLUI setting groups,
+register UI callbacks and use LLTrans. Native alerts currently provide only a bounded
+template subset and queued modal path. Inspectors and TOS/Critical additionally require
+native region/object/profile and login-reply services. Implementing those owners is
+service work beyond merely wiring menus. Tear-off, Alt-trigger timing and exact UI
+parity also remain open. Do not mark the overall menu task complete.
+
+Earlier in this resume: the pending Media Browser history test passed Window7/7
+plus cold-cache regression. Named popup targets now reuse visible native dialogs;
+blank and closed targets allocate fresh views (Widget203). Native menu jump keys
+use sibling words and explicit keys; test204 covers disabled/hidden states and
+keyboard underlines. WM_CHAR/WM_SYSCHAR route to the open menu, and the window
+fixture passed opening original Help/Guidebook via its jump key.
+
+Widgets dependencies added: native flyout split action/list behavior and shipped
+skin defaults; embedded menu subtree parsing, widget-owned menu state/draw identity,
+bar painting in widget order and dropdown popup overlays, focused-menu keyboard
+routing. Component test205 passed before full sample activation. LLFlyoutButton
+registration is in llui.cpp. Generic dock behavior updates state and button
+visibility without specialized positioning. The sample's missing stat="stat"
+retains zero/no-graph behavior; recognized named LLTrace counters are explicitly
+unsupported pending native recording semantics. Dynamic columns use the existing
+equal remaining-width distribution. The former inline-cell blocker is resolved by
+the latest checkpoint above. Existing uncommitted work, exclusions and local tasks preserved.
+
+User directive: proceed incrementally in logical groups without stopping at partial
+menu milestones. Full menu functionality is still the objective; do not call this
+task complete. Current uncommitted work now also includes:
+
+- Window Size: original XML, editable resolution parsing, overflow/capability bounds,
+  actual native Win32 client resize, saved width/height, Cancel/default action.
+  Window fixture verifies 1100x800 client dimensions after key-capture modal closes.
+- Close Window: frontmost closable native floater, with notice/key-capture guards.
+- ToggleControl/CheckControl and live UseDebugMenus visibility. RegInClient is inside
+  an XML comment and is NOT an active menu requirement. LLVKMenu now evaluates
+  visibility predicates in paint/keyboard/accelerators and rejects stale hidden hits.
+- Debug Settings: original floater over retained shared control metadata; name/comment
+  search, changed-only policy, scalar/bool/string/vector/rect/quaternion/color controls,
+  reset/copy/native sanity notices, live selected-value updates, hidden-write guard,
+  and current-value exit persistence with account guards. Scoped factory callbacks
+  avoid UpdateFilter/CommitSettings collisions with Preferences or Color Settings.
+- Color Settings: native palette catalog, original search/list/swatch/alpha/reset
+  controls, live palette mutation and existing user-color persistence. Selected rows
+  survive unfiltered edits. Native color catalog excludes runtime-only overrides.
+- Textbox, Text Editor and Font Test original generic XML floaters. Text Editor
+  prevalidators use native validators before text/history mutation. Explicit
+  clip_partial is implemented in native painting and tested; native default clipping
+  remains unchanged because applying reference default=true hid the existing login
+  password link. Default text metric/clipping parity is therefore still open.
+  Font Test's font.style. spelling follows reference dot tokenization; missing Script
+  font falls back at the UI boundary to SansSerif Medium, as LLUI font parameters do.
+
+Latest gates: Widget201/201 passed after the unfiltered Color Settings selection fix;
+Window7/7 and cold-cache regression passed with resize, Debug Settings and Color
+Settings integrated (before that last selection-only fix). Viewer has NOT yet been
+relinked for these groups. No full viewer/profile launch and no parity claim.
+No commit/push; ignored test sources, mcp-Vulkan and edited local tasks preserved.
+
+Next local anchor: Media Browser / Widgets need native progress_bar. Source
+LLProgressBar::draw uses optional ProgressTrack/ProgressBar images, clamps percentage
+0..100, rounds fill width, sets track alpha to draw alpha, and modulates fill alpha
+by 0.75+0.25*sin(3*time). Original defaults are widgets/progress_bar.xml. Native
+factory does not support this type yet. Build the actual control, not a dummy panel.
+Then complete browser chrome/navigation/popup policies, UI Preview, remaining Widgets
+types, font dumps, notifications console, menu jump keys/tear-off as applicable.
+
+Service dependencies remain explicit: LLInspectObject::onOpen promotes gObjectList
+objects into LLSelectMgr network-backed family selection and resolves media; avatar
+inspectors query region/profile services. LLFloaterTOS Continue/Cancel posts to a
+login reply pump; Cancel also calls login_alert_done through a notification. TOS
+page readiness uses loading-page completion plus asynchronous HTTP probe before
+enabling agreement. Full native authenticated login/region/world services remain
+absent. Those actions cannot be declared functional by merely showing a dialog.
+Critical XML is floater_critical.xml, not floater_message_critical.xml. Textbox and
+Text Editor have no dedicated source classes; registration uses LLFloater directly.
+
+## Latest increment: embedded Guidebook
+
+Guidebook now opens from the original Help menu in an independently owned native
+browser floater. It no longer depends on a second process-wide CEF initialization
+or replacement of the login page. Native-only generated Dullahan sources retain the
+initial CEF application owner until the last browser closes; view starts reject
+conflicting process settings, cross-thread use and restart after final shutdown.
+The legacy media plugin and GL implementation are unchanged.
+
+The native dialog composes the original web-content and Guidebook XML, explicitly
+applies the differently named Guidebook root attributes (310x525), and prepares its
+300x505 stack before constructing children. Navigation/debug/status panels are
+hidden and their inactive children are not constructed. Native per-widget browser
+input, immutable frame publication, asynchronous close and immediate reopen are
+wired into the window owner. F1 closes the foreground Guidebook before login Help
+shortcuts. Normal close records hidden state; application quit preserves open state.
+Normalized position and visibility use the reference guidebook setting names and
+the shared settings writer; startup restores saved visibility.
+
+Evidence: Browser1/1 tests real independent pages, initial-owner close, surviving
+input, another view joining the runtime, conflicting settings and final retirement.
+Widget195/195 tests original dialog dimensions, chrome policy, toggle/reopen,
+position retention and quit-save semantics. Window7/7 plus the cold-cache regression
+passed. The window test uses a loopback HTTP fixture and actual Win32 input to check
+Guidebook page pixels after click, key and wheel, F1 close, immediate reopen, unchanged
+login pixels and saved-state disk reload. RelWithDebInfo viewer link and source
+diagnostics passed. No full viewer/profile launch was performed.
+
+This is an implemented embedded-page increment, not full Guidebook or menu parity.
+Public-site behavior, URL-template substitutions from LLWeb, popup/custom-scheme
+dispatch, authenticated world actions, full media policy/failure UI, browser cursor
+and tooltip feedback, restored visibility in a fresh full viewer process, and exact
+GL visual/effects parity remain unverified or unimplemented. Chromium emitted GCM
+deprecated-endpoint and WidgetHost messages in the passing integration run; they
+were not classified as Vulkan validation failures or proven harmless globally.
+Remaining menu work should proceed by shared capability families (browser dialogs,
+settings/debug tools, session-dependent actions), then per-action acceptance checks.
+Existing uncommitted menu work and exclusions remain intact; no commit or push.
+
+## Latest checkpoint: top-menu actions
+
+HEAD is a1628b9922. Earlier lifecycle/cache work was committed in c7523c3efc,
+text consolidation in 88baf039b5, and cold startup/status presenters in a1628b9922.
+The uncommitted descriptions below are historical checkpoints, superseded by this
+commit status. Current menu changes remain uncommitted; no push was performed.
+
+The current user objective is full top-menu functionality. This increment implements
+Whitelist adviser from the unchanged floater_whitelist.xml with explicit runtime
+folder/executable paths; Report Problem with escaped native diagnostic facts and the
+configured report URL through the existing external-browser confirmation callback;
+and logging-level actions/checkmarks through audited shared LLError services.
+Native menu predicates now support live check/enable state, and nested keyboard
+Right/Left navigation enters/exits submenus. Existing non-OpenSim grid Help/About
+visibility policy is retained and tested, not newly introduced.
+
+Verification: Widget194/194, Window7/7, standalone cold-cache startup regression,
+and RelWithDebInfo viewer link passed. Source diagnostics and git diff --check passed.
+Tests exercise original menu dispatch, Whitelist values/reopen/paint, report URL
+escaping/rejection, real logging changes/checkmarks with restored global state, and
+synthetic nested navigation/live enable predicates. No full viewer launch, external
+report submission, microphone capture or measured visual parity was performed.
+
+Next: implement Guidebook as its original embedded browser floater. The current
+Dullahan adapter owns process CEF initialization/shutdown per browser and permits
+only one initialization; it needs a correctly owned shared runtime and independent
+views first. Do not initialize CEF twice, navigate the login browser away, or replace
+Guidebook with a generic external URL. Remaining Debug dialogs/tools, visibility
+predicates, tear-off/jump-key behavior and dynamic grid services remain open. Report
+facts currently follow the About snapshot, with unavailable native session/location
+fields explicit; legacy report field parity and live refresh are not established.
+The source/native contract is recorded in
+[native UI construction dependencies](reverse-engineering/native-ui-construction-dependencies.md).
 
 ## Current objective
 

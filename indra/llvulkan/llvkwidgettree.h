@@ -24,6 +24,7 @@
 #include <set>
 
 struct LLVKWidgetLayout;
+class LLVKMenu;
 
 class LLVKWidgetTree final
 {
@@ -234,6 +235,9 @@ public:
         LineEditorParams editor;
         std::vector<ComboItem> items;
         std::string label;
+        bool flyout = false;
+        LLVKButton::Params actionButton;
+        LLVKControl::Params actionControl;
         bool allowTextEntry = false, tentativeText = true;
         std::size_t maximumBytes = 20;
         std::int32_t buttonShadow = 2;
@@ -250,7 +254,7 @@ public:
         std::shared_ptr<const ComboParams> params;
         std::vector<ComboItem> items;
         std::optional<std::size_t> selected;
-        Id button = 0, list = 0, editor = 0;
+        Id button = 0, list = 0, editor = 0, action = 0;
         bool dirty = false;
         std::int32_t rowHeight = 0;
         std::size_t firstRow = 0;
@@ -277,6 +281,7 @@ public:
     };
     struct ScrollListParams
     {
+        std::string label;
         std::vector<ListColumn> columns;
         std::vector<ListRow> rows;
         ScrollbarParams scrollbar;
@@ -402,9 +407,16 @@ public:
             std::shared_ptr<LLVKFont> font;
         };
         std::optional<ContainerView> containerView;
+        struct OverlapPanel
+        {
+            std::vector<Id> elements;
+            std::shared_ptr<LLVKFont> font;
+            std::int32_t minimumWidth=0;
+        };
+        std::optional<OverlapPanel> overlapPanel;
         struct StatBar
         {
-            std::string label;
+            std::string label, statName;
             std::shared_ptr<LLVKFont> font;
             float minimum = 0.f, maximum = 0.f, currentMinimum = 0.f, currentMaximum = 0.f, tickSpacing = 0.f;
             bool showBar = false, showHistory = false;
@@ -412,16 +424,25 @@ public:
             std::vector<float> samples;
         };
         std::optional<StatBar> statBar;
+        struct ProgressBar
+        {
+            std::string imageBar,imageFill;
+            LLVKColor background{1,1,1,1},fill{1,1,1,1};
+        };
+        std::optional<ProgressBar> progressBar;
         struct Floater
         {
             std::string title, positioning;
             std::int32_t legacyHeaderHeight = 18;
-            bool saveRect = false, singleInstance = false;
+            bool saveRect = false, singleInstance = false, saveVisibility = false;
+            std::optional<float> relativeX, relativeY;
             bool canClose = true, canMinimize = true;
+            bool canDock = false, docked = false;
             bool canResize = false;
             std::int32_t minWidth = 0, minHeight = 0;
         };
         std::optional<Floater> floater;
+        std::shared_ptr<LLVKMenu> menu;
         std::optional<LLVKTextureCtrl> textureControl;
         struct TextEditor
         {
@@ -473,6 +494,7 @@ public:
         struct LayoutPanel
         {
             bool autoResize = true;
+            bool userResize = false;
             std::int32_t minimum = 0, expandedMinimum = 0, maximum = INT32_MAX, target = 0;
             float fraction = 0.f;
             float visibleAmount = 1.f;
@@ -485,6 +507,8 @@ public:
             bool animate = true;
             float openTime = 0.02f, closeTime = 0.03f;
             bool needsLayout = true;
+            Id resizeFirst=0,resizeSecond=0;
+            std::int32_t resizeOrigin=0,resizeFirstSize=0,resizeSecondSize=0;
         };
         std::optional<LayoutPanel> layoutPanel;
         std::optional<LayoutStack> layoutStack;
@@ -542,6 +566,8 @@ public:
         std::uint64_t frame = 0;
     };
     bool routePointer(Id root, const PointerEvent& screenEvent, std::string& error);
+    bool setMenu(Id id,std::shared_ptr<LLVKMenu> menu);
+    bool layoutStackPointer(Id id,const PointerEvent& event,std::string& error);
     std::optional<Id> createBrowser(const Params& view, const LLVKControl::Params& control,
         const LLVKPanel::Params& panel, const Node::Browser& browser, Id parent, std::string& error);
     bool routeWheel(Id root, std::int32_t x, std::int32_t y, std::int32_t clicks, bool horizontal, std::string& error);
@@ -666,6 +692,9 @@ public:
     void setInputModifiers(LLVKLineEditor::Modifiers modifiers) { mInputModifiers = modifiers; }
     bool setSpinnerValue(Id id, const LLSD& value, bool forceEditor, std::string& error);
     bool setSpinnerRange(Id id, float minimum, float maximum, std::string& error);
+    bool setSpinnerFormat(Id id,const std::string& label,int precision,float increment,std::string& error);
+    std::optional<Id> createProgressBar(const Params& view,const LLVKControl::Params& control,
+        const Node::ProgressBar& progress,Id parent,std::string& error);
     bool setIconColor(Id id, LLVKColor color);
     std::optional<Id> createRadioGroup(const Params& view, const LLVKControl::Params& control,
         std::span<const RadioItemParams> items, bool allowDeselect, Id parent, std::string& error);
@@ -815,6 +844,8 @@ public:
     bool layoutContainerView(Id id, std::int32_t width, std::int32_t minimumHeight, std::string& error);
     bool setContainerExpanded(Id id, bool expanded, std::string& error);
     bool initializeStatBar(Id id, const Node::StatBar& params, std::string& error);
+    bool initializeOverlapPanel(Id id,const Node::OverlapPanel& params,std::string& error);
+    bool setOverlapElements(Id id,std::vector<Id> elements,std::string& error);
     bool sampleStatBar(Id id, float value, std::string& error);
     bool setStatBarRange(Id id, float minimum, float maximum, std::string& error);
     bool cycleStatBar(Id id, std::string& error);

@@ -35,6 +35,10 @@ public:
     bool start(const Configuration& configuration, std::string& error);
     bool update(std::string& error);
     bool navigate(const std::string& url, std::string& error);
+    enum class Command { Back, Forward, Reload, Stop };
+    struct Navigation { bool back=false,forward=false,loading=false; };
+    bool command(Command command,std::string& error);
+    std::optional<Navigation> navigation(std::string& error) const;
     bool resize(std::uint32_t width, std::uint32_t height, std::string& error);
     bool requestClose(std::string& error);
     bool pointer(int x, int y, int button, bool down, std::string& error);

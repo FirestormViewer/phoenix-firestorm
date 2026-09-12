@@ -343,6 +343,7 @@ namespace
         HWND window = nullptr;
         LLVKViewerUi* ui = nullptr;
         LLVKBrowser* browser = nullptr;
+        std::map<LLVKWidgetTree::Id,LLVKBrowser*> browserViews;
         LLVKWidgetPaint::Input input;
         std::function<void()> audioVolumeChanged;
         std::string error;
@@ -352,6 +353,27 @@ namespace
         std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now(), keystroke = start;
         ~WindowState() { if (window) DestroyWindow(window); }
         double elapsed() const { return std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count(); }
+        LLVKWidgetTree::Id browserAt(int x,int y)
+        {
+            if (!ui || ui->modalNotice() || ui->tree().topControl()) return 0;
+            const auto overFloater=ui->pointOverFloater(x,y);
+            for (const auto& [id,view] : browserViews)
+            {
+                if (view->state()!=LLVKBrowser::State::Running) continue;
+                auto parent=id;
+                bool visible=true;
+                while (const auto* node=ui->tree().get(parent))
+                {
+                    if (!node->params.visible) { visible=false; break; }
+                    if (node->floater) break;
+                    parent=node->parent;
+                }
+                if (!visible || (overFloater ? parent!=ui->activeFloater() : parent!=0)) continue;
+                const auto rect=ui->tree().screenRect(id,error);
+                if (rect && x>=rect->left && x<rect->right && y>=rect->bottom && y<rect->top) return id;
+            }
+            return 0;
+        }
         LRESULT message(UINT message, WPARAM parameter, LPARAM data)
         {
             if (message == WM_CLOSE) { quitRequested = true; return 0; }
@@ -412,6 +434,8 @@ namespace
             }
             if (message == WM_CAPTURECHANGED)
             { if (reinterpret_cast<HWND>(data) != window) tree.setMouseCapture(0,error); return 0; }
+            if (message==WM_RBUTTONDOWN && !ui->modalNotice() && !tree.topControl() && !tree.mouseCapture() &&
+                ui->previewPointer(GET_X_LPARAM(data),static_cast<int>(height)-1-GET_Y_LPARAM(data),error)) return 0;
             if (message == WM_MOUSEMOVE || message == WM_LBUTTONDOWN || message == WM_LBUTTONUP || message == WM_LBUTTONDBLCLK)
             {
                 LLVKWidgetTree::PointerEvent event;
@@ -434,14 +458,18 @@ namespace
                     if (ui->menu().open() && tree.topControl()) tree.setTopControl(0,error);
                     return 0;
                 }
-                if (!ui->floaterPointer(event,error)) tree.routePointer(ui->root(),event,error);
+                if (!ui->floaterPointer(event,error))
+                {
+                    const auto target=browserAt(event.x,event.y);
+                    tree.routePointer(target ? target : ui->root(),event,error);
+                }
                 if (tree.mouseCapture()) SetCapture(window); else if (GetCapture() == window) ReleaseCapture();
                 if (message != WM_MOUSEMOVE) keystroke = std::chrono::steady_clock::now();
-                if (message == WM_MOUSEMOVE && browser && !tree.topControl() && !ui->pointOverFloater(event.x,event.y))
+                if (message == WM_MOUSEMOVE)
                 {
-                    const auto rectangle = tree.screenRect(ui->find("login_html"),error);
-                    if (rectangle && event.x >= rectangle->left && event.x < rectangle->right && event.y >= rectangle->bottom && event.y < rectangle->top)
-                        browser->hover(event.x-rectangle->left,rectangle->top-1-event.y,error);
+                    const auto id=browserAt(event.x,event.y);
+                    const auto rectangle=id ? tree.screenRect(id,error) : std::nullopt;
+                    if (rectangle) browserViews.at(id)->hover(event.x-rectangle->left,rectangle->top-1-event.y,error);
                 }
                 return 0;
             }
@@ -452,12 +480,20 @@ namespace
                 ScreenToClient(window,&point);
                 const auto bottom=static_cast<std::int32_t>(height)-1-point.y;
                 const auto clicks=-GET_WHEEL_DELTA_WPARAM(parameter)/WHEEL_DELTA;
+                if (const auto id=browserAt(point.x,bottom))
+                {
+                    const auto rect=tree.screenRect(id,error);
+                    if (rect) browserViews.at(id)->wheel(point.x-rect->left,rect->top-1-bottom,0,GET_WHEEL_DELTA_WPARAM(parameter),error);
+                    return 0;
+                }
                 if (!ui->floaterWheel(point.x,bottom,clicks,error) && !ui->pointOverFloater(point.x,bottom))
                     tree.routeWheel(ui->root(),point.x,bottom,clicks,false,error);
                 return 0;
             }
             if (!ui->modalNotice() && (message == WM_KEYDOWN || message == WM_SYSKEYDOWN))
             {
+                if (ui->guidebook() && ui->activeFloater()==ui->guidebook() && (parameter==VK_F1 || parameter==VK_ESCAPE))
+                { ui->closeFloater(error); return 0; }
                 std::string shortcut;
                 if (parameter >= 'A' && parameter <= 'Z') shortcut.assign(1,static_cast<char>(parameter));
                 else if (parameter >= VK_F1 && parameter <= VK_F12) shortcut = "F"+std::to_string(parameter-VK_F1+1);
@@ -479,10 +515,13 @@ namespace
                     return 0;
                 }
             }
-            if (ui->menu().open() && (message == WM_CHAR || message == WM_KEYUP || message == WM_SYSCHAR || message == WM_SYSKEYUP)) return 0;
+            if (ui->menu().open() && (message == WM_CHAR || message == WM_SYSCHAR))
+            { ui->menu().character(static_cast<char32_t>(parameter)); return 0; }
+            if (ui->menu().open() && (message == WM_KEYUP || message == WM_SYSKEYUP)) return 0;
             if ((message == WM_KEYDOWN || message == WM_KEYUP || message == WM_CHAR || message == WM_SYSKEYDOWN || message == WM_SYSKEYUP) && focus && focus->browser)
             {
-                if (browser) browser->keyboard(message,static_cast<std::uint32_t>(parameter),static_cast<std::uint64_t>(data),error);
+                const auto target=browserViews.find(focused);
+                if (target!=browserViews.end()) target->second->keyboard(message,static_cast<std::uint32_t>(parameter),static_cast<std::uint64_t>(data),error);
                 return 0;
             }
             if (message == WM_CHAR && focus && (focus->lineEditor || multiline))
@@ -635,12 +674,18 @@ namespace
                 mRetirementAttempted=true;
                 mWindow.ui=nullptr;
                 mWindow.browser=nullptr;
+                mWindow.browserViews.clear();
                 if (ui)
                 {
+                    ui->setGuidebookService({},{});
+                    ui->setFontTextureDumpHandler({});
+                    ui->setBrowserCommand({});
+                    for (const auto& [id,view] : guidebookViews) ui->tree().setEvents(id,{});
                     ui->tree().setEvents(ui->find("login_html"),{});
                     ui->tree().setClipboard({});
                     ui->setDialogClipboard({});
                 }
+                guidebookViews.clear();
                 browser.reset();
                 if (renderer.device()!=VK_NULL_HANDLE)
                 {
@@ -683,6 +728,7 @@ namespace
         VkSurfaceKHR surface=VK_NULL_HANDLE;
         std::unique_ptr<LLVKWidgetGpu> gpu;
         std::unique_ptr<LLVKBrowser> browser;
+        std::map<LLVKWidgetTree::Id,std::unique_ptr<LLVKBrowser>> guidebookViews;
     private:
         WindowState& mWindow;
         bool mRetirementAttempted=false;
@@ -695,6 +741,13 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     error.clear();
     WindowState state;
     auto uiConfiguration=configuration.ui;
+    wchar_t executablePath[32768]{};
+    const auto executableLength=GetModuleFileNameW(nullptr,executablePath,32768);
+    if (!executableLength || executableLength>=32768) { error="Native executable path is unavailable"; return false; }
+    uiConfiguration.viewerExecutable=std::filesystem::path(executablePath);
+    uiConfiguration.pluginLauncher=uiConfiguration.viewerExecutable.parent_path()/"SLPlugin.exe";
+    uiConfiguration.voiceExecutable=uiConfiguration.viewerExecutable.parent_path()/"SLVoice.exe";
+    uiConfiguration.browserHelper=configuration.browser.helperDirectory/"dullahan_host.exe";
     const auto save=uiConfiguration.savePreferences;
     uiConfiguration.savePreferences=[&state,save](const auto& changes,std::string& problem)
     {
@@ -717,6 +770,21 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     auto& ui=visuals.ui;
     ui->menu().bind("File.Quit",[&state](const auto&,const auto&) { state.quitRequested = true; });
     ui->setQuitRequestHandler([&state] { state.quitRequested=true; });
+    ui->setWindowSizeService([&state](int width,int height,std::string& problem)
+    {
+        if (IsZoomed(state.window)) ShowWindow(state.window,SW_RESTORE);
+        RECT rectangle{0,0,width,height};
+        const auto style=static_cast<DWORD>(GetWindowLongPtrW(state.window,GWL_STYLE));
+        const auto extended=static_cast<DWORD>(GetWindowLongPtrW(state.window,GWL_EXSTYLE));
+        if (!AdjustWindowRectEx(&rectangle,style,GetMenu(state.window)!=nullptr,extended) ||
+            !SetWindowPos(state.window,nullptr,0,0,rectangle.right-rectangle.left,rectangle.bottom-rectangle.top,
+                SWP_NOMOVE|SWP_NOZORDER|SWP_NOACTIVATE))
+        { problem="Native window resize failed: "+std::to_string(GetLastError()); return false; }
+        RECT client{};
+        if (!GetClientRect(state.window,&client) || client.right-client.left!=width || client.bottom-client.top!=height)
+        { problem="The operating system could not apply the requested client dimensions"; return false; }
+        return true;
+    });
     const auto openUrl=[&state](const std::string& url)
     {
         const LLURI uri(url);
@@ -855,6 +923,13 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         aboutInfo["OS_VERSION"]="Windows "+std::to_string(os.dwMajorVersion)+"."+std::to_string(os.dwMinorVersion)+" (Build "+std::to_string(os.dwBuildNumber)+") 64-bit";
     aboutInfo["CONCURRENCY"]=static_cast<int>(std::thread::hardware_concurrency());
     aboutInfo["GRAPHICS_CARD"]=properties.deviceName;
+    switch (properties.vendorID)
+    {
+        case 0x1002: aboutInfo["GRAPHICS_CARD_VENDOR"]="AMD"; break;
+        case 0x10de: aboutInfo["GRAPHICS_CARD_VENDOR"]="NVIDIA"; break;
+        case 0x8086: aboutInfo["GRAPHICS_CARD_VENDOR"]="Intel"; break;
+        default: aboutInfo["GRAPHICS_CARD_VENDOR"]="Vulkan vendor ID "+std::to_string(properties.vendorID); break;
+    }
     VkPhysicalDeviceMemoryProperties deviceMemory{};
     vkGetPhysicalDeviceMemoryProperties(renderer.physicalDevice(),&deviceMemory);
     std::uint64_t localBytes=0;
@@ -885,6 +960,14 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     aboutInfo["THEME"]=configuration.ui.skin.theme;
     if (!ui->setAboutInfo(aboutInfo,error)) return false;
     auto& gpu=*visuals.gpu;
+    ui->setFontTextureDumpHandler([&gpu,logs=configuration.ui.skin.userAppDirectory/"logs"](std::string& problem)
+    {
+        const auto directory=logs/("native-font-atlases-"+LLUUID::generateNewID().asString());
+        const auto files=gpu.dumpFontAtlases(directory,problem);
+        if (!files) return false;
+        LL_INFOS("NativeFonts") << "Saved " << files->size() << " native font atlas pages to " << directory.string() << LL_ENDL;
+        return true;
+    });
     auto browserConfiguration = configuration.browser;
     const auto browserProxy=LLVKProxy::select(configuration.ui.settings,true,error);
     if (!browserProxy) return false;
@@ -900,18 +983,59 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     auto& browser=*visuals.browser;
     aboutInfo["LIBCEF_VERSION"]=browser.versionInfo(error);
     if (!error.empty() || !ui->setAboutInfo(aboutInfo,error)) return false;
-    LLVKWidgetTree::Events events;
-    events.pointer = [&](auto id,const auto& event)
+    const auto bindBrowser=[&](LLVKWidgetTree::Id widget,LLVKBrowser& view)
     {
-        const auto* node = ui->tree().get(id);
-        if (!node) return;
-        const auto height = node->params.rect.top-node->params.rect.bottom;
-        if (event.kind == LLVKWidgetTree::PointerKind::LeftDown)
-        { ui->tree().setKeyboardFocus(id,false,false,state.error); ui->tree().setMouseCapture(id,state.error); browser.pointer(event.x,height-1-event.y,0,true,state.error); }
-        else if (event.kind == LLVKWidgetTree::PointerKind::LeftUp)
-        { browser.pointer(event.x,height-1-event.y,0,false,state.error); ui->tree().setMouseCapture(0,state.error); }
+        state.browserViews[widget]=&view;
+        LLVKWidgetTree::Events events;
+        events.pointer = [&](auto id,const auto& event)
+        {
+            const auto* node = ui->tree().get(id);
+            const auto target=state.browserViews.find(id);
+            if (!node || target==state.browserViews.end() || target->second->state()!=LLVKBrowser::State::Running) return;
+            const auto height = node->params.rect.top-node->params.rect.bottom;
+            if (event.kind == LLVKWidgetTree::PointerKind::LeftDown || event.kind == LLVKWidgetTree::PointerKind::DoubleClick)
+            { ui->tree().setKeyboardFocus(id,false,false,state.error); ui->tree().setMouseCapture(id,state.error); target->second->pointer(event.x,height-1-event.y,0,true,state.error); }
+            else if (event.kind == LLVKWidgetTree::PointerKind::LeftUp)
+            { target->second->pointer(event.x,height-1-event.y,0,false,state.error); ui->tree().setMouseCapture(0,state.error); }
+        };
+        ui->tree().setEvents(widget,std::move(events));
     };
-    ui->tree().setEvents(browserId,std::move(events));
+    bindBrowser(browserId,browser);
+    ui->setGuidebookService([&](auto id,const std::string& url,std::string& problem)
+    {
+        if (visuals.guidebookViews.size()>=16) { problem="Native embedded browser view limit reached"; return false; }
+        const auto rect=ui->tree().screenRect(id,problem);
+        if (!rect) return false;
+        auto settings=browserConfiguration;
+        settings.width=rect->right-rect->left; settings.height=rect->top-rect->bottom;
+        auto view=std::make_unique<LLVKBrowser>();
+        if (!view->start(settings,problem) || !view->navigate(url,problem)) return false;
+        bindBrowser(id,*view);
+        visuals.guidebookViews.emplace(id,std::move(view));
+        return true;
+    },[&](auto id)
+    {
+        ui->tree().setEvents(id,{});
+        state.browserViews.erase(id);
+        state.input.browsers.erase(id);
+        state.input.browserEpochs.erase(id);
+        const auto view=visuals.guidebookViews.find(id);
+        if (view!=visuals.guidebookViews.end()) view->second->requestClose(state.error);
+    });
+    ui->setBrowserCommand([&](auto id,const std::string& action,const std::string& url,std::string& problem)
+    {
+        const auto found=visuals.guidebookViews.find(id);
+        if (found==visuals.guidebookViews.end()) { problem="Native browser owner is unavailable"; return false; }
+        auto& view=*found->second;
+        if (action=="Navigate") return view.navigate(url,problem);
+        using Command=LLVKBrowser::Command;
+        if (action=="Back") return view.command(Command::Back,problem);
+        if (action=="Forward") return view.command(Command::Forward,problem);
+        if (action=="Reload") return view.command(Command::Reload,problem);
+        if (action=="Stop") return view.command(Command::Stop,problem);
+        problem="Unknown native browser action"; return false;
+    });
+    if (ui->tree().setting("floater_vis_guidebook").value_or(LLSD(false)).asBoolean() && !ui->toggleGuidebook(error)) return false;
     LLVKJoystick joystick;
     bool joystickStarted=false;
     LLVKViewerUi::JoystickServices joystickServices;
@@ -1039,6 +1163,59 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         if (!browser.update(error)) return false;
         for (const auto& event : browser.takeEvents())
             if (event.kind == LLVKBrowser::EventKind::LoadError) { error = "Native login page failed: "+event.detail; return false; }
+        std::vector<std::pair<std::string,std::string>> popups;
+        for (auto iterator=visuals.guidebookViews.begin(); iterator!=visuals.guidebookViews.end(); )
+        {
+            const auto id=iterator->first;
+            auto& view=*iterator->second;
+            if (!view.update(error)) return false;
+            if (view.state()==LLVKBrowser::State::Closed)
+            {
+                ui->webBrowserEvent(id,"Closed","",false,false);
+                state.browserViews.erase(id); state.input.browsers.erase(id); state.input.browserEpochs.erase(id);
+                iterator=visuals.guidebookViews.erase(iterator); continue;
+            }
+            const auto navigation=view.state()==LLVKBrowser::State::Running ? view.navigation(error) : std::nullopt;
+            for (const auto& event : view.takeEvents())
+            {
+                if (event.kind==LLVKBrowser::EventKind::LoadError && event.code!=-3)
+                    LL_WARNS("NativeGuidebook") << event.code << ": " << event.detail << LL_ENDL;
+                if (!navigation) continue;
+                std::string kind;
+                using Event=LLVKBrowser::EventKind;
+                switch (event.kind)
+                {
+                case Event::Address: kind="Address"; break;
+                case Event::Title: kind="Title"; break;
+                case Event::Status: kind="Status"; break;
+                case Event::LoadStart: kind="LoadStart"; break;
+                case Event::LoadEnd: kind="LoadEnd"; break;
+                case Event::Popup: popups.emplace_back(event.text,event.detail); break;
+                default: break;
+                }
+                if (!kind.empty()) ui->webBrowserEvent(id,kind,event.text,navigation->back,navigation->forward);
+            }
+            if (view.state()==LLVKBrowser::State::Running && ui->tree().get(id))
+            {
+                const auto rectangle=ui->tree().screenRect(id,error);
+                if (!rectangle) return false;
+                const auto width=rectangle->right-rectangle->left,height=rectangle->top-rectangle->bottom;
+                if (width>0 && height>0 && (view.surface().width()!=static_cast<std::uint32_t>(width) ||
+                    view.surface().height()!=static_cast<std::uint32_t>(height)) && !view.resize(width,height,error)) return false;
+                state.input.browsers[id]=view.surface().frame();
+                state.input.browserEpochs[id]=view.surface().epoch();
+            }
+            ++iterator;
+        }
+        for (const auto& [url,target] : popups)
+        {
+            if (target=="_external") openUrl(url);
+            else
+            {
+                std::string problem;
+                if (!ui->showMediaBrowser(url,problem,target)) LL_WARNS("NativeBrowser") << problem << LL_ENDL;
+            }
+        }
         if ((state.resize || renderer.synchronizedPresentationRequested() != synchronizedPresentation()) && state.width && state.height)
         {
             ui->menu().dismiss();
@@ -1054,6 +1231,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         }
         const auto now = std::chrono::steady_clock::now();
         state.input.button.frameDelta = std::chrono::duration<float>(now-previous).count();
+        state.input.animationSeconds=state.elapsed();
         previous = now;
         state.input.button.spaceDown = bool(GetKeyState(VK_SPACE)&0x8000);
         state.input.button.returnDown = bool(GetKeyState(VK_RETURN)&0x8000);
@@ -1075,6 +1253,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
                     if (!renderer.recordUiPacket(packet.vertices(),packet.draws())) { error = renderer.frameError(); return false; }
                     if (!renderer.end2DFrame() && renderer.frameResult() != LLVKContext::FrameResult::OutOfDate)
                     { error = renderer.frameError(); return false; }
+                    if (configuration.presentedFrame) configuration.presentedFrame(*ui,state.input);
                     if (configuration.stopAfterFrames && ++frames >= configuration.stopAfterFrames &&
                         !PostMessageW(state.window,WM_CLOSE,0,0))
                     { error="Native test close request failed"; return false; }

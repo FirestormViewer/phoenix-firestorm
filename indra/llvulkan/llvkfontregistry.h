@@ -29,6 +29,7 @@ public:
     static std::unique_ptr<LLVKFontRegistry> create(std::span<const std::string> documents,
                                                    Configuration configuration, std::string& error);
     std::shared_ptr<LLVKFont> resolve(const Request& request, std::string& error);
+    std::string diagnostics() const;
     ~LLVKFontRegistry();
 private:
     struct Impl;
