@@ -1,9 +1,175 @@
 # Native services handoff
 
-Updated 2026-09-12 after Widgets repair, font diagnostics and initial XUI Preview.
+Updated 2026-09-13 after the service survey and publication of draft PR #43.
 This is a continuation checkpoint, not a completion or parity claim.
 
-## Active continuation: remaining menu groups
+## Current checkpoint and evidence
+
+Implementation checkpoint: `a9e9ead2bd` on `native-vulkan-ui`, committed and pushed
+to `origin/native-vulkan-ui`. [Draft PR #43](https://github.com/anne-skydancer/vulkanstorm/pull/43)
+targets the fork's `master` and includes the full native UI/service branch. The
+latest commit is `Extend native menus, browser views and UI diagnostics`.
+
+The production native path is a pre-login application with real local services and
+Vulkan UI presentation, not the complete OpenGL viewer with a replacement renderer.
+[Windows entry](../../indra/newview/llappviewerwin32.cpp) calls
+[llvkStartup](../../indra/llvulkan/llvkstartup.cpp) and returns before constructing
+LLAppViewerWin32. [LLVKWindowMgr](../../indra/llvulkan/llvkwindowmgr.cpp) runs its own
+service/input/browser/2D loop. The native login button is constructed but has no
+production authentication binding; no native authenticated STATE_STARTED or region
+loop is established. Legacy LLVKSession paths and standalone components do not
+count as production integrations merely because they compile or exist in this tree.
+
+Last passed evidence, collected 2026-09-12 against the implementation now committed:
+
+- Native Vulkan Widget Validation: 207/207, including original Widgets construction,
+  cell aliases, checkbox colors, PNG roundtrip, XUI Preview and divider behavior.
+- Native Vulkan Window Validation: 7/7 plus standalone cold-cache startup regression;
+  temporary-profile and loopback fixtures exercise Win32 input, browser isolation,
+  resize, Widgets menus, atlas PNG output and overlap presentation.
+- Native Vulkan Browser Validation: earlier passed 1/1 lifecycle/navigation evidence,
+  retained rather than rerun without a change invalidating it.
+- RelWithDebInfo viewer link, source diagnostics and diff whitespace checks passed.
+  Windows/MSVC, AVX2, non-OpenSim, no BugSplat configuration; this is not a portability
+  or release-packaging qualification.
+- No new full viewer/profile launch, authenticated session acceptance or measured
+  exact GL visual/effects parity was performed. GitHub CI success is not asserted.
+  Chromium GCM/WidgetHost messages appeared in passing fixtures; their wider
+  significance is unqualified, not declared harmless.
+
+The earlier inline-column failure and recursive factory stack overflow are fixed;
+the retained historical failure records below are not current failures. Prior
+uncommitted/no-push statements below describe their dated checkpoints, not HEAD.
+
+## Production service inventory
+
+Wired means reachable from production startup; it does not mean parity-qualified.
+The source-backed survey is bounded to startup, service bindings, consumers and
+shutdown, not an exhaustive transitive audit of the whole repository.
+
+| Service | Live native integration | Remaining gap |
+|---|---|---|
+| Settings/profile | Defaults, user overrides, warning/crash preferences, reset, keybindings, backup/restore and exit writes | No authenticated account directory/loading/save callback; broader process policy remains incomplete |
+| Window/input | Win32 window, keyboard/mouse, clipboard, asynchronous file/directory pickers, placement/resize and orderly close | Full DPI, multi-monitor, IME/input and window behavior qualification |
+| Native visual UI | Independent font/text/image/skin pipeline, widgets, menus, Preferences and auxiliary floaters | Incomplete XUI coverage and exact rendering/interaction parity |
+| Notifications | Selected templates, ignore preferences and queued modal alerts/responses | Full channel graph, persistence, tips/toasts and console |
+| Texture cache | Shared audited storage with native runtime ownership, startup policy, worker IO and shutdown drain | Cache coordination/relocation/purge gaps; storage is not fetching or world residency |
+| Texture previews | Bounded cache/local encoded reads, native decode, generation-checked publication | Network fetch, progressive textures, bake/material/world pipeline |
+| Browsers | Login page, Guidebook, Media Browser, shared CEF lifetime, navigation and named targets | General media policy, authenticated URLs, parcel/object media, feedback and lifecycle parity |
+| Audio | OpenAL device, master/UI gain/mute and already-decoded cached UI sounds | Sound fetching, spatial world sources, parcel audio and full streaming |
+| Voice | WebRTC device enumeration/selection, processing configuration and tuning path | Authentication/provisioning, region/channels and conversational sessions; microphone capture not acceptance-tested |
+| Joystick | Enumeration, selection, polling and configuration/preview | Agent/camera/world consumers |
+| Text assistance | Native spelling/dictionaries and AutoReplace editing/persistence | End-to-end native chat/IM consumers |
+| Translation/proxy | Real translation-key verification transport, proxy settings and protected SOCKS credentials | General viewer networking/translated chat; browser proxy capabilities differ |
+| Diagnostics | About/device facts, settings/color editors, font registry/atlas dumps, partial XUI Preview | Complete diagnostic tools and live session-derived facts |
+| Shutdown | Owned pre-login modal resolution, persistence, browser/audio/voice/GPU/cache retirement | Logout/reply handling, pending asset/metrics uploads, history drain, world snapshot and world editor closure |
+
+Important interfaces that exist but are not production integrations:
+
+- setGraphicsPreferenceHandler, setViewerPreferenceHandler and setPrivacyActionHandler
+  are not bound by native startup. Editors/policy calculations may work while their
+  downstream effects report an unavailable service. VSync is separately consumed by
+  the live swapchain; that does not establish world graphics-setting integration.
+- Production does not supply media-filter load/save data/callbacks or authenticated
+  account persistence. Constructed Media Lists/Block List UI is not server integration.
+- LLVKSceneSelection has a native scene/picking component but no production world
+  producer publishing region geometry. Compiled GPU foundations are not a live world.
+- Conditional Velopack entry handling precedes backend selection, but native bypasses
+  much of normal LLAppViewer bootstrap. Crash preference persistence does not establish
+  crash-handler, marker, logging, updater or multiple-instance lifecycle parity.
+- The anti-spam purge callback is shared after audit; it is not an integrated incoming
+  chat/message/anti-spam pipeline.
+
+Reference comparison roots are [LLAppViewer](../../indra/newview/llappviewer.cpp)
+(initialization, workers, network idle and shutdown) and
+[LLStartUp](../../indra/newview/llstartup.cpp) (authentication, world/agent setup and
+inventory stages). Native does not invoke those GL-coupled visual owners to obtain
+their services. Reuse is permitted only for independently audited nonvisual code.
+
+## UI completion inventory
+
+This inventory describes the current login menu and associated UI. A hidden or
+unbound entry is not counted as implemented, nor automatically a parity failure if
+the same build policy intentionally hides it in the reference.
+
+| UI family | Implemented checkpoint | Missing or unqualified |
+|---|---|---|
+| Login | Native original control hierarchy, browser, password visibility and settings-mode display | Authentication dispatch, credentials/account workflow, grid/session lifecycle and agreement handling |
+| Viewer/Help actions | Preferences, quit/close handler, Window Size, wiki/troubleshooting URL route, About, Whitelist, Report Problem | External-site acceptance; complete current report facts/location and field parity |
+| Guidebook | Independent embedded view, toggle/bring forward, F1 close, reopen, normalized placement/visibility persistence | URL substitutions, authenticated/custom-scheme actions, general media/failure/feedback policy, full-process restore and exact visual parity |
+| Media Browser | Original chrome, address/history controls, Back/Forward/Reload/Stop, load state and named-target reuse | Full external/internal routing policy, shared persistent URL history, context menus, cursor/tooltips, script-window and error behavior qualification |
+| Debug tools | Debug/Color Settings, logging actions, font test and registry/atlas dumps | Complete downstream settings effects; native atlas output intentionally differs in packing/filenames from GL |
+| UI Tests | Textbox, Text Editor, Font Test and Widgets original XML, native controls and embedded menus | Exact skin/text/interaction parity; recognized live LLTrace stat bindings remain unsupported |
+| XUI Preview | Catalog/languages, two preview owners, panel wrappers, Show/Hide/Refresh/default/double-click, overlap selection/copies | Editor/browse/diff handlers, live reload/fade, rectangle/diff/overlap highlighting, full bounds/tooltips and arbitrary-XUI support; language fallback/callback effects need qualification |
+| Inspectors | No functional native authenticated inspector workflow | Object/agent selection, profile/name/region/media data and action services |
+| TOS/Critical | No functional native login-linked dialogs | Login reply owner, page/probe readiness, agreement enablement, Continue/Cancel and retry behavior |
+| Notifications Console | No native channel console; its panel can be previewed | Channel events/history, template catalog, add, inspect/respond and snapshot lifetime |
+| Preferences | Broad native construction, editing, local persistence and selected real services | Unbound graphics/viewer/privacy actions; account-dependent actions and world effects; complete nested-dialog and visual acceptance |
+| Menu/window mechanics | Predicates, nested keys/jump keys, generic floater dock state, embedded bars and divider dragging | Tear-off menus, Alt activation timing, full locale/accelerator semantics, generic saved floater state, mixed/animated/vertical divider and cursor parity |
+| In-world UI/snapshots | Not integrated into the native production loop | HUD/toolbars/chat/inventory/world-dependent UI, snapshot floater/overlays, capture/preview/output workflow |
+
+Reference policy distinctions:
+
+- Close Window, Show Grid Picker and Show Debug Menu controls are hidden in original
+  login XML; their handlers/tests do not imply changing that visibility policy.
+- Notifications Console is also hidden in original login XML. Its missing service
+  remains recorded without enabling a fake console.
+- Non-OpenSim builds hide grid Help/About/separator; OpenSim dynamic-grid services
+  have not been implemented or qualified by these tests.
+- RegInClient is commented out in the menu, not an active requirement.
+- XUI Preview Save/Save All do not serialize in the reference: they display a removal
+  warning after preview operations. The matching native warning handlers remain open.
+  Reference schema export is commented out and menu-file preview has an empty branch;
+  do not invent exporters or count dormant code as a required feature.
+- Explicit clip_partial is supported, but default text clipping/metrics parity remains
+  open after the reference default hid a native login link. Do not relax acceptance.
+
+## Agreed next sequence
+
+The service-first sequence supersedes menu-by-menu work as the immediate priority;
+the full menu remains a downstream objective. See the dated sequencing section in
+the [native viewer roadmap](native_viewer_roadmap.md).
+
+1. Native session owner: explicit state, lifetime, cancellation, stale-response guards,
+   failure/retry and orderly disconnection. Structural tests are not working login.
+2. Audited nonvisual network/data services: supply transport and login responses,
+   capabilities/messages, account and asset foundations. End-to-end authentication
+   and region connection are an acceptance gate across phases 1 and 2.
+3. Authentication-dependent services: prioritize account state, agent/region data,
+   inventory/assets, profiles/names, chat/IM, notifications and voice in testable
+   workflows. Agree the required subset; this phase is not automatically the whole viewer.
+4. Minimal connected environment: real region ground/terrain, sky, water, applicable
+   postprocessing, native camera/view ownership, in-world UI and snapshot floater,
+   overlays, capture/preview and an agreed output path. General objects/avatars,
+   vegetation/particles and editing tools are not implied by this initial scene scope.
+
+The gap is large: pre-login UI and local services are substantial, while authenticated
+viewer behavior and production world rendering are largely unwired. No defensible
+percentage or schedule follows from widget counts or lines of code. Minimal limits
+scope, never correctness or exact visual/effects parity within the accepted scope.
+
+## Preservation and resumption
+
+- Keep `mcp-Vulkan/` untracked and untouched; retain ignored local VS Code changes.
+- The four explicitly untracked legacy tests retain local copies and exact ignore
+  entries: llui llmarkdown/llurlmatch and newview llworldmap/llworldmipmap tests.
+- Do not restore unused llvktextlayout files or conflate native text with legacy
+  LLFontGL-based llvklegacytext. No shared GL visual wrappers/extractions are allowed.
+- Reuse passed evidence unless a relevant change invalidates it. Notify the operator
+  before any full viewer launch and allow manual login time. Full-viewer acceptance
+  requires STATE_STARTED, 75 seconds uninterrupted settling, graceful WM_CLOSE,
+  exit zero and Goodbye!; never force-stop a viewer. Native STATE_STARTED is currently
+  missing, so component/window fixtures do not satisfy that acceptance procedure.
+- Keep implementation, live wiring, runtime verification and measured parity separate.
+  Follow NV-00 source-contract/design/check records before further implementation.
+
+## Historical implementation journal
+
+The sections below retain the progression and debugging evidence from 2026-09-12.
+Statements about uncommitted work, failing gates, missing progress controls or next
+menu anchors are historical and superseded by the current inventory above.
+
+### Widgets repair and initial XUI Preview
 
 Latest resume checkpoint, 2026-09-12: the user authorized continued investigation.
 Inline cells now use the canonical `column` parameter with `name` as its alias,

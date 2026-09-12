@@ -15,6 +15,35 @@ Authority: [native Vulkan invariants](native_vulkan_invariants.md), particularly
 NV-00. This roadmap supersedes implementation sequencing in older native plans,
 not the separate [OpenGL modernization strategy](opengl_modernization_strategy.md).
 
+## Service-first sequencing (2026-09-13)
+
+Following the native service survey and draft
+[PR #43](https://github.com/anne-skydancer/vulkanstorm/pull/43), the user selected the
+following execution order. This refines near-term sequencing; it does not mark the
+R0-Rn milestones below complete, change the GL oracle or waive native invariants.
+Current implementation/status evidence is in the
+[native services handoff](native-services-handoff.md), checkpoint `a9e9ead2bd`.
+
+| Phase | Scope | Exit evidence |
+|---|---|---|
+| 1. Native session owner | Pre-login/authenticating/agreement/connecting/connected/disconnecting/stopped states; account/session identity, cancellation and owner teardown | Controlled state transitions, retry, stale-response rejection and partial-startup cleanup; not authentication merely because a state machine exists |
+| 2. Nonvisual network and data services | Independently audit/reuse transport, protected credentials, login requests/replies, capabilities, event/message processing and asset/data foundations; wire native login/TOS UI | Authenticate, establish and maintain a region connection, then log out cleanly without entering GL lifecycle; this gate spans phases 1 and 2 |
+| 3. Authentication-dependent services | Explicitly prioritize account persistence, agent/region state, inventory/assets, names/profiles, chat/IM, notifications and voice provisioning | Each selected live workflow and its disconnect/reconnect behavior; authentication alone does not qualify consumers |
+| 4. Minimal in-world environment | Connected-region ground/terrain and materials, sky/environment, water, applicable postprocessing, camera/view ownership, in-world UI, snapshot floater and overlays | Region-derived scene, propagated environment changes, interactive native UI, correct snapshot view/resolution/overlay policy, preview and agreed output path |
+
+Agree the required phase-3 service subset and phase-4 UI/snapshot outputs before
+implementation: neither phrase silently authorizes the entire viewer. General scene
+objects, avatars, vegetation, particles and world editing are outside the initial
+minimal-environment milestone unless explicitly added. Real region terrain/water/sky
+must not be replaced by placeholders and described as parity.
+
+Proceed in vertical slices: source contract, owner, service, native consumer, focused
+tests, runtime acceptance and measured parity. Selected scope remains subject to
+exact UI/effects parity and the full material/color/alpha/depth/composition contracts.
+CPU-only API-independent functionality may be shared after audit; GL-exclusive visual
+functions, including coupled CPU preparation, remain forbidden. No calendar or
+completion-percentage estimate is established by this sequencing decision.
+
 ## Foundation: three questions for every function and helper
 
 1. **What is the OpenGL function doing?**
