@@ -524,6 +524,8 @@ void ll_nvapi_init(NvDRSSessionHandle hSession)
 #   define WINMAIN wWinMain
 #endif
 
+extern std::string SafeFileName(std::string filename);
+
 static LLVKProxy::CredentialServices nativeProxyCredentials(const std::filesystem::path& file)
 {
     const bool identityReady=LLMachineID::init()==0;
@@ -599,7 +601,7 @@ int APIENTRY WINMAIN(HINSTANCE hInstance,
     if (const auto native = llvkStartup(pCmdLine,APP_NAME + "_x64",
         std::to_string(LL_VIEWER_VERSION_MAJOR)+"."+std::to_string(LL_VIEWER_VERSION_MINOR)+"."+std::to_string(LL_VIEWER_VERSION_PATCH),
         gSavedSettings,gSavedPerAccountSettings,gCrashSettings,gWarningSettings,nativeProxyCredentials,
-        [] { NACLAntiSpamRegistry::instance().purgeAllQueues(); }))
+        [] { NACLAntiSpamRegistry::instance().purgeAllQueues(); },SafeFileName(APP_NAME)+".exec_marker"))
         return *native;
 
     // Call Tracy first thing to have it allocate memory

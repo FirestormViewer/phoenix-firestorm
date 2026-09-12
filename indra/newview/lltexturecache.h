@@ -33,6 +33,8 @@
 #include "lluuid.h"
 
 #include "llworkerthread.h"
+#include "llframetimer.h"
+#include <functional>
 
 class LLImageFormatted;
 class LLTextureCacheWorker;
@@ -111,6 +113,16 @@ public:
     };
 
     LLTextureCache(bool threaded);
+    struct Environment
+    {
+        std::function<std::string(ELLPath,const std::string&,const std::string&)> path;
+        std::function<void()> pauseWatchdog, resumeWatchdog;
+        std::function<U32()> validationIndex;
+        std::function<void(U32)> saveValidationIndex;
+        std::string workerName="TextureCache";
+        U32 encodedReadLimit=0;
+    };
+    LLTextureCache(bool threaded, Environment environment);
     ~LLTextureCache();
 
     /*virtual*/ size_t update(F32 max_time_ms);
@@ -118,6 +130,7 @@ public:
     void purgeCache(ELLPath location, bool remove_dir = true);
     void setReadOnly(bool read_only) ;
     S64 initCache(ELLPath location, S64 maxsize, bool texture_cache_mismatch);
+    bool initReadOnlyCache(ELLPath location);
 
     handle_t readFromCache(const std::string& local_filename, const LLUUID& id, S32 offset, S32 size,
                            ReadResponder* responder);
@@ -129,6 +142,7 @@ public:
                           WriteResponder* responder);
     LLPointer<LLImageRaw> readFromFastCache(const LLUUID& id, S32& discardlevel);
     bool writeComplete(handle_t handle, bool abort = false);
+    handle_t writeEncoded(const LLUUID& id, const U8* data, S32 size, S32 imageSize, WriteResponder* responder);
     void prioritizeWrite(handle_t handle);
 
     bool removeFromCache(const LLUUID& id);
@@ -189,9 +203,11 @@ private:
     void openFastCache(bool first_time = false);
     void closeFastCache(bool forced = false);
     bool writeToFastCache(LLUUID image_id, S32 cache_id, LLPointer<LLImageRaw> raw, S32 discardlevel);
+    bool invalidateFastCache(S32 cache_id);
 
 private:
     // Internal
+    Environment mEnvironment;
     LLMutex mWorkersMutex;
     LLMutex mHeaderMutex;
     LLMutex mHeaderIDMapMutex; // To avoid deadlocks, never lock mFastCacheMutex after mHeaderIDMapMutex.

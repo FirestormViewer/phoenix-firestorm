@@ -1708,7 +1708,11 @@ void LLVKViewerUi::backupPreferenceAction(LLVKWidgetTree::Id panel,const std::st
         if (restore && mPreferences && mPreferences->visible() && !applyPreferences(mDialogError)) return;
         if (!restore && !mUserColorsFile.empty() && !mColors->saveUserFile(mUserColorsFile,mDialogError)) return;
         if (!mBackupHandler(request,mDialogError)) return;
-        if (restore) queueNotice("RestoreFinished",{},[this](int,const LLSD&) { if (mQuitRequest) mQuitRequest(); },mDialogError);
+        if (restore)
+        {
+            mSaveSettingsOnExit=false;
+            queueNotice("RestoreFinished",{},[this](int,const LLSD&) { if (mQuitRequest) mQuitRequest(); },mDialogError);
+        }
         else queueNotice("BackupFinished",{},{},mDialogError);
     },mDialogError);
 }
@@ -3490,7 +3494,7 @@ bool LLVKViewerUi::showPreferences(std::string& error)
                 const auto selected=std::find_if(entries.begin(),entries.end(),[&](const auto& tab) { return tab.panel==tabs->tabContainer->selected; });
                 if (selected!=entries.end()) lastTab=static_cast<int>(selected-entries.begin());
             }
-            if (!mPreferencesAccepted)
+            if (!mPreferencesAccepted && !mApplicationQuitting)
             {
                 struct Loading { bool& flag; bool previous; explicit Loading(bool& value) : flag(value),previous(value) { flag=true; } ~Loading() { flag=previous; } } loading(mLoadingGraphicPreset);
                 if (mBindingSnapshot) mBindings=*mBindingSnapshot;
@@ -3508,7 +3512,7 @@ bool LLVKViewerUi::showPreferences(std::string& error)
             mWarningSnapshot.clear();
             if (lastTab && mTree.setting("LastPrefTab").value_or(LLSD(0)).asInteger()!=*lastTab)
             {
-                if (!mSavePreferences || mSavePreferences({{"LastPrefTab",LLSD(*lastTab)}},mDialogError))
+                if (mApplicationQuitting || !mSaveSettingsOnExit || !mSavePreferences || mSavePreferences({{"LastPrefTab",LLSD(*lastTab)}},mDialogError))
                     mTree.updateSetting("LastPrefTab",LLSD(*lastTab));
             }
         });
@@ -3878,6 +3882,59 @@ bool LLVKViewerUi::closeFloater(std::string& error)
     for (auto* floater : floaters())
         if (floater && floater->id()==active) return floater->close(error);
     return false;
+}
+LLVKViewerUi::ShutdownStatus LLVKViewerUi::prepareShutdown(std::string& error,const std::map<std::string,LLSD>& applicationSettings)
+{
+    error.clear();
+    if (mShutdownPrepared) return ShutdownStatus::Ready;
+    if (mNoticePanel || !mNotices.empty()) return ShutdownStatus::Pending;
+    if (!mApplicationQuitting)
+    {
+        mShutdownSnapshot=mPreferenceSnapshot.settings;
+        mShutdownWarnings=mWarningSnapshot;
+        if (const auto last=mTree.setting("LastPrefTab")) mShutdownSnapshot["LastPrefTab"]=*last;
+        mApplicationQuitting=true;
+        ++mPreferenceGeneration;
+    }
+    mMenu->dismiss();
+    auto dialogs=floaters();
+    for (auto iterator=dialogs.rbegin(); iterator!=dialogs.rend(); ++iterator)
+    {
+        auto* dialog=*iterator;
+        if (!dialog || !dialog->visible()) continue;
+        if (!dialog->close(error)) return ShutdownStatus::Failed;
+        if (!mDialogError.empty()) { error=std::exchange(mDialogError,{}); return ShutdownStatus::Failed; }
+    }
+    if (mVoiceDeviceServices.tune && !mVoiceDeviceServices.tune(false,1.f,error)) return ShutdownStatus::Failed;
+    if (mSaveSettingsOnExit)
+    {
+        std::map<std::string,LLSD> changed=applicationSettings,account;
+        for (const auto& [name,previous] : mShutdownSnapshot)
+        {
+            if (name=="RenderBackendPending") continue;
+            const auto current=mTree.setting(name);
+            if (!current || llsd_equals(*current,previous)) continue;
+            if (mAccountSettingNames.contains(name))
+            {
+                if (mAccountSettingsLoaded) account[name]=*current;
+            }
+            else changed[name]=*current;
+        }
+        if (!changed.empty() && (!mSavePreferences || !mSavePreferences(changed,error)))
+        { if (error.empty()) error="Native exit preference persistence is unavailable"; return ShutdownStatus::Failed; }
+        if (!account.empty() && (!mSaveAccountPreferences || !mSaveAccountPreferences(account,error)))
+        { if (error.empty()) error="Native account exit persistence is unavailable"; return ShutdownStatus::Failed; }
+        std::map<std::string,LLSD> warnings;
+        for (const auto& [name,previous] : mShutdownWarnings)
+            if (const auto control=mWarningSettings->getControl(name); control && !llsd_equals(control->getValue(),previous))
+                warnings[name]=control->getValue();
+        if (!warnings.empty() && (!mSaveWarningPreferences || !mSaveWarningPreferences(warnings,error)))
+        { if (error.empty()) error="Native warning exit persistence is unavailable"; return ShutdownStatus::Failed; }
+        for (const auto& [name,value] : warnings) mWarningSettings->getControl(name)->setValue(value,true);
+        if (!mUserColorsFile.empty() && !mColors->saveUserFile(mUserColorsFile,error)) return ShutdownStatus::Failed;
+    }
+    mShutdownPrepared=true;
+    return ShutdownStatus::Ready;
 }
 bool LLVKViewerUi::floaterPointer(const LLVKWidgetTree::PointerEvent& event,std::string& error)
 {

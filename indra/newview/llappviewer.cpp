@@ -2627,6 +2627,15 @@ void LLAppViewer::initGeneralThread()
     mGeneralThreadPool->start();
 }
 
+LLTextureCache::LLTextureCache(bool threaded) : LLTextureCache(threaded, Environment{
+    [](ELLPath location,const std::string& directory,const std::string& filename)
+    { return gDirUtilp->getExpandedFilename(location,directory,filename); },
+    [] { LLAppViewer::instance()->pauseMainloopTimeout(); },
+    [] { LLAppViewer::instance()->resumeMainloopTimeout(); },
+    [] { return gSavedSettings.getU32("CacheValidateCounter"); },
+    [](U32 value) { gSavedSettings.setU32("CacheValidateCounter",value); }})
+{}
+
 bool LLAppViewer::initThreads()
 {
     LL_PROFILE_ZONE_SCOPED;

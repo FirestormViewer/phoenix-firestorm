@@ -24,7 +24,7 @@
  * $/LicenseInfo$
  */
 
-#include "llviewerprecompiledheaders.h"
+#include "linden_common.h"
 
 #include "lltexturecache.h"
 
@@ -33,10 +33,8 @@
 #include "llimage.h"
 #include "llimagej2c.h" // for version control
 #include "lllfsthread.h"
-#include "llviewercontrol.h"
 
 // Included to allow LLTextureCache::purgeTextures() to pause watchdog timeout
-#include "llappviewer.h"
 #include "llmemory.h"
 
 // Cache organization:
@@ -182,6 +180,9 @@ bool LLTextureCacheLocalFileWorker::doRead()
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     S32 local_size = LLAPRFile::size(mFileName, mCache->getLocalAPRFilePool());
 
+    if (mCache->mEnvironment.encodedReadLimit && local_size>0 &&
+        static_cast<U32>(local_size)>mCache->mEnvironment.encodedReadLimit)
+    { mDataSize=0; return true; }
     if (local_size > 0 && mFileName.size() > 4)
     {
         mDataSize = local_size; // Only a complete file is valid
@@ -544,7 +545,7 @@ bool LLTextureCacheRemoteWorker::doWrite()
             || (mDataSize <= 0) // Things will go badly wrong if mDataSize is nul or negative...
             || (mImageSize < mDataSize)
             || (mRawDiscardLevel < 0)
-            || (mRawImage->isBufferInvalid())) // decode failed or malfunctioned, don't write
+            || (mRawImage.notNull() && mRawImage->isBufferInvalid())) // decode failed or malfunctioned, don't write
         {
             LL_WARNS() << "INIT state check failed for image: " << mID << " Size: " << mImageSize << " DataSize: " << mDataSize << " Discard:" << mRawDiscardLevel << LL_ENDL;
             mDataSize = -1; // failed
@@ -575,7 +576,7 @@ bool LLTextureCacheRemoteWorker::doWrite()
                 // mRawImage is not entirely safe here since it is a pointer to one owned by cache worker,
                 // it could have been retrieved via getRequestFinished() and then modified.
                 // If writeToFastCache crashes, something is wrong around fetch worker.
-                if(!mCache->writeToFastCache(mID, idx, mRawImage, mRawDiscardLevel))
+                if(mRawImage.notNull() && !mCache->writeToFastCache(mID, idx, mRawImage, mRawDiscardLevel))
                 {
                     LL_WARNS() << "writeToFastCache failed" << LL_ENDL;
                     mDataSize = -1; // failed
@@ -586,6 +587,11 @@ bool LLTextureCacheRemoteWorker::doWrite()
         else
         {
             alreadyCached = mCache->updateEntry(idx, entry, mImageSize, mDataSize); // update the existing entry.
+        }
+        if (idx>=0 && mRawImage.isNull() && !mCache->invalidateFastCache(idx))
+        {
+            mDataSize=-1;
+            return true;
         }
 
         if (!done)
@@ -789,8 +795,9 @@ void LLTextureCacheWorker::endWork(S32 param, bool aborted)
 
 //////////////////////////////////////////////////////////////////////////////
 
-LLTextureCache::LLTextureCache(bool threaded)
-    : LLWorkerThread("TextureCache", threaded),
+LLTextureCache::LLTextureCache(bool threaded, Environment environment)
+    : LLWorkerThread(environment.workerName, threaded),
+    mEnvironment(std::move(environment)),
       mWorkersMutex(),
       mHeaderMutex(),
       mListMutex(),
@@ -860,7 +867,7 @@ std::string LLTextureCache::getLocalFileName(const LLUUID& id)
     // Does not include extension
     std::string idstr = id.asString();
     // TODO: should we be storing cached textures in skin directory?
-    std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_LOCAL_ASSETS, idstr);
+    std::string filename = mEnvironment.path(LL_PATH_LOCAL_ASSETS, idstr, "");
     return filename;
 }
 
@@ -945,11 +952,11 @@ void LLTextureCache::setDirNames(ELLPath location)
 {
     std::string delem = gDirUtilp->getDirDelimiter();
 
-    mCacheParentDirName = gDirUtilp->getExpandedFilename(location,"");
-    mHeaderEntriesFileName = gDirUtilp->getExpandedFilename(location, textures_dirname, entries_filename);
-    mHeaderDataFileName = gDirUtilp->getExpandedFilename(location, textures_dirname, cache_filename);
-    mTexturesDirName = gDirUtilp->getExpandedFilename(location, textures_dirname);
-    mFastCacheFileName =  gDirUtilp->getExpandedFilename(location, textures_dirname, fast_cache_filename);
+    mCacheParentDirName = mEnvironment.path(location,"","");
+    mHeaderEntriesFileName = mEnvironment.path(location, textures_dirname, entries_filename);
+    mHeaderDataFileName = mEnvironment.path(location, textures_dirname, cache_filename);
+    mTexturesDirName = mEnvironment.path(location, textures_dirname, "");
+    mFastCacheFileName = mEnvironment.path(location, textures_dirname, fast_cache_filename);
 }
 
 void LLTextureCache::purgeCache(ELLPath location, bool remove_dir)
@@ -963,14 +970,14 @@ void LLTextureCache::purgeCache(ELLPath location, bool remove_dir)
 
         //remove the legacy cache if exists
         std::string texture_dir = mTexturesDirName ;
-        mTexturesDirName = gDirUtilp->getExpandedFilename(location, old_textures_dirname);
+        mTexturesDirName = mEnvironment.path(location, old_textures_dirname, "");
         if(LLFile::isdir(mTexturesDirName))
         {
-            std::string file_name = gDirUtilp->getExpandedFilename(location, entries_filename);
+            std::string file_name = mEnvironment.path(location, entries_filename, "");
             // mHeaderAPRFilePoolp because we are under header mutex, and can be in main thread
             LLAPRFile::remove(file_name, mHeaderAPRFilePoolp);
 
-            file_name = gDirUtilp->getExpandedFilename(location, cache_filename);
+            file_name = mEnvironment.path(location, cache_filename, "");
             LLAPRFile::remove(file_name, mHeaderAPRFilePoolp);
 
             purgeAllTextures(true);
@@ -1046,6 +1053,28 @@ S64 LLTextureCache::initCache(ELLPath location, S64 max_size, bool texture_cache
     openFastCache(true);
 
     return max_size; // unused cache space
+}
+
+bool LLTextureCache::initReadOnlyCache(ELLPath location)
+{
+    llassert_always(getPending()==0);
+    mReadOnly=true;
+    setDirNames(location);
+    const auto size=LLAPRFile::size(mHeaderEntriesFileName,mHeaderAPRFilePoolp);
+    if (size<static_cast<S32>(sizeof(EntriesInfo)) ||
+        LLAPRFile::readEx(mHeaderEntriesFileName,reinterpret_cast<U8*>(&mHeaderEntriesInfo),0,
+            sizeof(EntriesInfo),mHeaderAPRFilePoolp)!=sizeof(EntriesInfo)) return false;
+    if (mHeaderEntriesInfo.mVersion!=sHeaderCacheVersion ||
+        mHeaderEntriesInfo.mAdressSize!=sHeaderCacheAddressSize ||
+        sHeaderCacheEncoderVersion.size()>=sHeaderEncoderStringSize ||
+        strncmp(mHeaderEntriesInfo.mEncoderVersion,sHeaderCacheEncoderVersion.c_str(),sHeaderEncoderStringSize)!=0 ||
+        mHeaderEntriesInfo.mEntries>1024*1024 ||
+        sizeof(EntriesInfo)+static_cast<U64>(mHeaderEntriesInfo.mEntries)*sizeof(Entry)>static_cast<U64>(size)) return false;
+    std::vector<Entry> entries;
+    if (openAndReadEntries(entries)!=mHeaderEntriesInfo.mEntries) return false;
+    for (const auto& entry : entries)
+        if (entry.mImageSize>0 && (entry.mBodySize<0 || entry.mBodySize>entry.mImageSize)) return false;
+    return true;
 }
 
 //----------------------------------------------------------------------------
@@ -1693,7 +1722,7 @@ void LLTextureCache::purgeTexturesLazy(F32 time_limit_sec)
 
     if (!mThreaded)
     {
-        LLAppViewer::instance()->pauseMainloopTimeout();
+        if (mEnvironment.pauseWatchdog) mEnvironment.pauseWatchdog();
     }
 
     // time_limit doesn't account for lock time
@@ -1785,7 +1814,7 @@ void LLTextureCache::purgeTextures(bool validate)
     if (!mThreaded)
     {
         // *FIX:Mani - watchdog off.
-        LLAppViewer::instance()->pauseMainloopTimeout();
+        if (mEnvironment.pauseWatchdog) mEnvironment.pauseWatchdog();
     }
 
     LLMutexLock lock(&mHeaderMutex);
@@ -1827,9 +1856,9 @@ void LLTextureCache::purgeTextures(bool validate)
     U32 validate_idx = 0;
     if (validate)
     {
-        validate_idx = gSavedSettings.getU32("CacheValidateCounter");
+        validate_idx = mEnvironment.validationIndex ? mEnvironment.validationIndex() : 0;
         U32 next_idx = (validate_idx + 1) % 256;
-        gSavedSettings.setU32("CacheValidateCounter", next_idx);
+        if (mEnvironment.saveValidationIndex) mEnvironment.saveValidationIndex(next_idx);
         LL_DEBUGS("TextureCache") << "TEXTURE CACHE: Validating: " << validate_idx << LL_ENDL;
     }
 
@@ -1883,7 +1912,7 @@ void LLTextureCache::purgeTextures(bool validate)
     writeEntriesAndClose(entries);
 
     // *FIX:Mani - watchdog back on.
-    LLAppViewer::instance()->resumeMainloopTimeout();
+    if (mEnvironment.resumeWatchdog) mEnvironment.resumeWatchdog();
 
     LL_INFOS("TextureCache") << "TEXTURE CACHE:"
             << " PURGED: " << purge_count
@@ -2068,6 +2097,26 @@ LLTextureCache::handle_t LLTextureCache::writeToCache(const LLUUID& id,
     return handle;
 }
 
+LLTextureCache::handle_t LLTextureCache::writeEncoded(const LLUUID& id, const U8* data,
+    S32 size, S32 imageSize, WriteResponder* responder)
+{
+    if (mReadOnly || !data || size<=0 || imageSize<size)
+    {
+        delete responder;
+        return nullHandle();
+    }
+    if (mDoPurge)
+    {
+        purgeTexturesLazy(TEXTURE_LAZY_PURGE_TIME_LIMIT);
+        mDoPurge=!mPurgeEntryList.empty();
+    }
+    LLMutexLock lock(&mWorkersMutex);
+    auto* worker=new LLTextureCacheRemoteWorker(this,id,data,size,0,imageSize,nullptr,0,responder);
+    const auto handle=worker->write();
+    mWriters[handle]=worker;
+    return handle;
+}
+
 //called in the main thread
 LLPointer<LLImageRaw> LLTextureCache::readFromFastCache(const LLUUID& id, S32& discardlevel)
 {
@@ -2150,6 +2199,17 @@ LLPointer<LLImageRaw> LLTextureCache::readFromFastCache(const LLUUID& id, S32& d
     // </FS:minerjr>
 
     return raw;
+}
+
+bool LLTextureCache::invalidateFastCache(S32 cache_id)
+{
+    LLMutexLock lock(&mFastCacheMutex);
+    openFastCache();
+    const S32 empty[4]{};
+    mFastCachep->seek(APR_SET,cache_id*TEXTURE_FAST_CACHE_ENTRY_SIZE);
+    const bool written=mFastCachep->write(empty,sizeof(empty))==sizeof(empty);
+    closeFastCache(true);
+    return written;
 }
 
 //return the fast cache location

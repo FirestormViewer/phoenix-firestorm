@@ -135,6 +135,62 @@ namespace tut
     typedef widgettree_group::object object;
     widgettree_group widgettree_tests("llvkwidgettree");
 
+    template<> template<> void object::test<192>()
+    {
+        set_test_name("native shutdown waits for modals and preserves application-quit preferences");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        LLControlGroup warnings("native-shutdown-warnings");
+        configuration.warningSettingsGroup=&warnings;
+        std::map<std::string,LLSD> savedWarnings;
+        configuration.saveWarningPreferences=[&](const auto& changes,std::string&)
+        { savedWarnings=changes; return true; };
+        int accountWrites=0;
+        configuration.saveAccountPreferences=[&](const auto&,std::string&) { ++accountWrites; return true; };
+        bool reject=false;
+        int writes=0;
+        std::map<std::string,LLSD> saved;
+        configuration.savePreferences=[&](const auto& changes,std::string& problem)
+        {
+            if (reject) { problem="fixture persistence failure"; return false; }
+            ++writes; saved.insert(changes.begin(),changes.end()); return true;
+        };
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        ensure("open Preferences",ui->showPreferences(error));
+        const auto original=ui->tree().setting("RenderFarClip")->asReal();
+        ensure("edit bound preference",ui->tree().updateSetting("RenderFarClip",LLSD(123.)));
+        ensure("ordinary close",ui->closeFloater(error));
+        ensure_equals("ordinary close still rolls back",ui->tree().setting("RenderFarClip")->asReal(),original);
+        ensure("reopen for application quit",ui->showPreferences(error));
+        ensure("edit live quit value",ui->tree().updateSetting("RenderFarClip",LLSD(456.)));
+        warnings.setBOOL("OutboxFolderCreated",false);
+        ensure("queue existing modal",ui->queueNotice("BackupFinished",{},{},error));
+        using Status=LLVKViewerUi::ShutdownStatus;
+        ensure("queued notice delays shutdown",ui->prepareShutdown(error)==Status::Pending);
+        ensure("display existing modal",ui->advanceNotices(1.,error));
+        ensure("active notice delays shutdown",ui->prepareShutdown(error)==Status::Pending);
+        ensure("advance modal click guard",ui->advanceNotices(1.5,error));
+        ensure("acknowledge existing modal",ui->noticeKey(true,false,error));
+        reject=true;
+        ensure("save failure is not successful shutdown",ui->prepareShutdown(error)==Status::Failed);
+        ensure_equals("save failure retained",error,std::string("fixture persistence failure"));
+        ensure_equals("application quit does not cancel live value",ui->tree().setting("RenderFarClip")->asReal(),456.);
+        reject=false;
+        ensure("shutdown persistence can be retried",ui->prepareShutdown(error)==Status::Ready);
+        ensure_equals("live setting persisted",saved.at("RenderFarClip").asReal(),456.);
+        ensure("warning changes survive Preferences closure",savedWarnings.contains("OutboxFolderCreated") && !savedWarnings.at("OutboxFolderCreated").asBoolean());
+        ensure_equals("pre-login shutdown never saves an account",accountWrites,0);
+        ensure("all floaters closed",ui->activeFloater()==0);
+        const auto completedWrites=writes;
+        ensure("shutdown idempotent",ui->prepareShutdown(error)==Status::Ready);
+        ensure_equals("idempotent shutdown does not save twice",writes,completedWrites);
+    }
+
     template<> template<> void object::test<191>()
     {
         set_test_name("native browser cache clear stays inside the native profile cache");
@@ -412,7 +468,8 @@ namespace tut
         configuration.settingsGroup=&settings.group();
         int operations=0;
         bool quit=false;
-        configuration.savePreferences=[](const auto&,std::string&) { return true; };
+        int preferenceWrites=0;
+        configuration.savePreferences=[&](const auto&,std::string&) { ++preferenceWrites; return true; };
         configuration.backupHandler=[&](const auto& request,std::string& problem)
         {
             ++operations;
@@ -466,6 +523,11 @@ namespace tut
         ensure("original RestoreFinished notice",notices.size()==1 && notices.front().name=="RestoreFinished");
         notices.front().response(0,{});
         ensure("acknowledgement requests native shutdown",quit);
+        const auto beforeShutdown=preferenceWrites;
+        ensure("shutdown after restore",ui->prepareShutdown(error)==LLVKViewerUi::ShutdownStatus::Ready);
+        ensure_equals("restore suppresses exit preference writes",preferenceWrites,beforeShutdown);
+        ensure("reload restored file after shutdown",restored.loadFile(root/"profile"/"user_settings"/"settings.xml",true,false,true,error));
+        ensure_equals("shutdown cannot overwrite restored settings",restored.find("RenderFarClip")->getValue().asReal(),123.);
     }
 
     template<> template<> void object::test<183>()

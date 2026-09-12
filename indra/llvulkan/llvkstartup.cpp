@@ -10,7 +10,8 @@
 
 std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string& profileName,const std::string& shortVersion,
     LLControlGroup& globalGroup,LLControlGroup& accountGroup,LLControlGroup& crashGroup,LLControlGroup& warningGroup,
-    const LLVKProxy::CredentialFactory& proxyCredentials,const std::function<void()>& clearSpamQueues)
+    const LLVKProxy::CredentialFactory& proxyCredentials,const std::function<void()>& clearSpamQueues,
+    const std::string& executionMarkerName)
 {
     int count = 0;
     auto arguments = CommandLineToArgvW((L"viewer "+commandLine).c_str(),&count);
@@ -79,9 +80,12 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     if (backend != "Vulkan") return std::nullopt;
     const auto fail = [&](const std::string& problem) -> std::optional<int>
     {
+        LL_WARNS("NativeStartup") << problem << LL_ENDL;
         MessageBoxW(nullptr,ll_convert<std::wstring>(problem).c_str(),L"Vulkanstorm native startup",MB_OK|MB_ICONERROR);
         return -1;
     };
+    try
+    {
     if (!defaults) return fail(error.empty() ? "Native default settings could not be loaded" : error);
     if (!modeError.empty()) return fail("Native settings mode could not be applied: "+modeError);
     if (unsupported) return fail("This native startup path does not yet support one or more supplied command-line options.");
@@ -149,6 +153,20 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
         std::filesystem::path(std::u8string(soundCache.begin(),soundCache.end()));
     configuration.ui.appliedSettingsMode = appliedSettingsMode;
     const auto preferenceFile=userSettings/std::filesystem::path(std::u8string(settingsFile.begin(),settingsFile.end()));
+    if (executionMarkerName.empty() || std::filesystem::path(executionMarkerName).filename()!=executionMarkerName)
+        return fail("Native texture cache requires the viewer execution marker identity");
+    LLVKTextureCache textureCache;
+    auto cachePlan=LLVKTextureCache::planStartup(settings.values(),configuration.ui.defaultCacheDirectory,
+        directory/"local_assets",profile/"logs"/executionMarkerName,false,error);
+    if (!cachePlan) return fail(error);
+    const auto& cacheConfiguration=cachePlan->configuration;
+    if (!textureCache.start(cacheConfiguration,error)) return fail(error);
+    cachePlan->metadata["CacheValidateCounter"]=LLSD(static_cast<int>(textureCache.validationIndex()));
+    if (!settings.saveChanges(preferenceFile,cachePlan->metadata,error)) return fail(error);
+    configuration.ui.cacheDirectory=cacheConfiguration.directory;
+    if (soundCache.empty()) configuration.soundCacheDirectory=cacheConfiguration.directory;
+    configuration.ui.settings=settings.values();
+    configuration.textureCache=&textureCache;
     if (const auto requested=settings.find("FSStartupClearBrowserCache"); requested && requested->getValue().asBoolean())
     {
         if (!settings.consumeBrowserCacheClear(profile,preferenceFile,error)) return fail(error);
@@ -234,10 +252,11 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     page.theme = configuration.ui.skin.theme;
     page.settings = values;
     configuration.loginPage = LLVKViewerUi::pageUrl(page);
-    try
-    {
-        if (!LLVKWindowMgr::run(configuration,error)) return fail(error);
+    if (!LLVKWindowMgr::run(configuration,error)) return fail(error);
+    if (!textureCache.stop(error)) return fail(error);
+    LL_INFOS("NativeStartup") << "Goodbye!" << LL_ENDL;
+    return 0;
     }
     catch (const std::exception& exception) { return fail(exception.what()); }
-    return 0;
+    catch (...) { return fail("Native viewer startup or shutdown failed with an unknown exception"); }
 }

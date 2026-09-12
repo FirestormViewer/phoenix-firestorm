@@ -1,5 +1,6 @@
 #include "llvkwindowmgr.h"
 #include "llvkwidgetgpu.h"
+#include "llvktexturepreview.h"
 #include "llvkaudio.h"
 #include "llvktranslation.h"
 #include "llvkjoystick.h"
@@ -345,7 +346,7 @@ namespace
         LLVKWidgetPaint::Input input;
         std::function<void()> audioVolumeChanged;
         std::string error;
-        bool close = false, resize = true;
+        bool close = false, quitRequested = false, resize = true;
         std::uint32_t width = 1024, height = 768;
         char32_t surrogate = 0;
         std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now(), keystroke = start;
@@ -353,7 +354,7 @@ namespace
         double elapsed() const { return std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count(); }
         LRESULT message(UINT message, WPARAM parameter, LPARAM data)
         {
-            if (message == WM_CLOSE) { close = true; return 0; }
+            if (message == WM_CLOSE) { quitRequested = true; return 0; }
             if (message == WM_SIZE) { width = LOWORD(data); height = HIWORD(data); resize = true; return 0; }
             if (!ui) return DefWindowProcW(window,message,parameter,data);
             auto& tree = ui->tree();
@@ -614,6 +615,79 @@ namespace
             catch (...) { state->close = true; state->error = "Native window event failed"; return 0; }
         }
     };
+
+    class VisualServices final
+    {
+    public:
+        explicit VisualServices(WindowState& window) : mWindow(window) {}
+        ~VisualServices()
+        {
+            std::string error;
+            if (!prepareShutdown(error)) LL_WARNS("NativeShutdown") << error << LL_ENDL;
+            gpu.reset();
+            ui.reset();
+            renderer.destroy();
+        }
+        bool prepareShutdown(std::string& error)
+        {
+            if (!mRetirementAttempted)
+            {
+                mRetirementAttempted=true;
+                mWindow.ui=nullptr;
+                mWindow.browser=nullptr;
+                if (ui)
+                {
+                    ui->tree().setEvents(ui->find("login_html"),{});
+                    ui->tree().setClipboard({});
+                    ui->setDialogClipboard({});
+                }
+                browser.reset();
+                if (renderer.device()!=VK_NULL_HANDLE)
+                {
+                    const auto result=vkDeviceWaitIdle(renderer.device());
+                    if (result!=VK_SUCCESS) mRetirementError="Native GPU retirement failed: "+std::to_string(result);
+                }
+            }
+            error=mRetirementError;
+            return error.empty();
+        }
+        bool initializeUi(const LLVKViewerUi::Configuration& configuration,std::string& error)
+        {
+            ui=LLVKViewerUi::create(configuration,error);
+            if (!ui) return false;
+            mWindow.ui=ui.get();
+            return true;
+        }
+        bool initializeRenderer(bool validation,std::string& error)
+        {
+            if (!renderer.createInstance(validation,error)) return false;
+            surface=renderer.createSurface(mWindow.window,GetModuleHandleW(nullptr));
+            if (!surface) { error="Native login Vulkan surface creation failed"; return false; }
+            if (!renderer.pickPhysicalDevice(surface,error) || !renderer.createDevice(surface,error))
+            { vkDestroySurfaceKHR(renderer.instance(),surface,nullptr); return false; }
+            const auto synchronized=ui->tree().setting("RenderVSyncEnable").value_or(LLSD(false)).asBoolean();
+            if (!renderer.createSwapchain(surface,mWindow.width,mWindow.height,error,synchronized) ||
+                !renderer.create2DPipeline(error)) return false;
+            gpu=std::make_unique<LLVKWidgetGpu>(LLVKGlyphUpload::Device{renderer.physicalDevice(),renderer.device(),
+                renderer.allocator(),renderer.graphicsQueue(),renderer.graphicsQueueFamily()});
+            return true;
+        }
+        bool initializeBrowser(const LLVKBrowser::Configuration& configuration,const std::string& page,std::string& error)
+        {
+            browser=std::make_unique<LLVKBrowser>();
+            mWindow.browser=browser.get();
+            return browser->start(configuration,error) && browser->navigate(page,error);
+        }
+        std::unique_ptr<LLVKViewerUi> ui;
+        LLVKContext renderer;
+        VkSurfaceKHR surface=VK_NULL_HANDLE;
+        std::unique_ptr<LLVKWidgetGpu> gpu;
+        std::unique_ptr<LLVKBrowser> browser;
+    private:
+        WindowState& mWindow;
+        bool mRetirementAttempted=false;
+        std::string mRetirementError;
+    };
 }
 
 bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
@@ -635,15 +709,14 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             { problem="Renderer change cancelled. Preferences were not saved."; return false; }
         }
         if (!save || !save(changes,problem)) { if (problem.empty()) problem="Native preference persistence is unavailable"; return false; }
-        if (restart) state.close=true;
+        if (restart) state.quitRequested=true;
         return true;
     };
-    auto ui = LLVKViewerUi::create(uiConfiguration,error);
-    if (!ui) return false;
-    state.ui = ui.get();
-    struct DetachUi { WindowState& state; ~DetachUi() { state.ui=nullptr; } } detachUi{state};
-    ui->menu().bind("File.Quit",[&state](const auto&,const auto&) { state.close = true; });
-    ui->setQuitRequestHandler([&state] { state.close=true; });
+    VisualServices visuals(state);
+    if (!visuals.initializeUi(uiConfiguration,error)) return false;
+    auto& ui=visuals.ui;
+    ui->menu().bind("File.Quit",[&state](const auto&,const auto&) { state.quitRequested = true; });
+    ui->setQuitRequestHandler([&state] { state.quitRequested=true; });
     const auto openUrl=[&state](const std::string& url)
     {
         const LLURI uri(url);
@@ -670,9 +743,15 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     windowClass.lpszClassName = L"VulkanstormNativeLogin";
     if (!RegisterClassW(&windowClass) && GetLastError() != ERROR_CLASS_ALREADY_EXISTS)
     { error = "Native login window class registration failed"; return false; }
-    RECT rectangle{0,0,1024,768};
+    const auto savedWidth=ui->tree().setting("WindowWidth").value_or(LLSD(1024)).asInteger();
+    const auto savedHeight=ui->tree().setting("WindowHeight").value_or(LLSD(768)).asInteger();
+    if (savedWidth<=0 || savedHeight<=0 || savedWidth>16384 || savedHeight>16384)
+    { error="Native window dimensions are invalid"; return false; }
+    RECT rectangle{0,0,savedWidth,savedHeight};
     AdjustWindowRect(&rectangle,WS_OVERLAPPEDWINDOW,FALSE);
-    if (!CreateWindowExW(0,windowClass.lpszClassName,L"Vulkanstorm",WS_OVERLAPPEDWINDOW,CW_USEDEFAULT,CW_USEDEFAULT,
+    const auto windowX=ui->tree().setting("WindowX").value_or(LLSD(CW_USEDEFAULT)).asInteger();
+    const auto windowY=ui->tree().setting("WindowY").value_or(LLSD(CW_USEDEFAULT)).asInteger();
+    if (!CreateWindowExW(0,windowClass.lpszClassName,L"Vulkanstorm",WS_OVERLAPPEDWINDOW,windowX,windowY,
         rectangle.right-rectangle.left,rectangle.bottom-rectangle.top,nullptr,nullptr,windowClass.hInstance,&state))
     { error = "Native login window creation failed"; return false; }
     LLVKAudio audio;
@@ -727,14 +806,10 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     if (!clipboard) return false;
     ui->setDialogClipboard(clipboard);
     ui->tree().setClipboard(std::move(clipboard));
-    LLVKContext renderer;
-    if (!renderer.createInstance(configuration.validation,error)) return false;
-    const auto surface = renderer.createSurface(state.window,windowClass.hInstance);
-    if (!surface) { error = "Native login Vulkan surface creation failed"; return false; }
-    if (!renderer.pickPhysicalDevice(surface,error) || !renderer.createDevice(surface,error))
-    { vkDestroySurfaceKHR(renderer.instance(),surface,nullptr); return false; }
+    auto& renderer=visuals.renderer;
+    if (!visuals.initializeRenderer(configuration.validation,error)) return false;
+    const auto surface=visuals.surface;
     const auto synchronizedPresentation = [&] { return ui->tree().setting("RenderVSyncEnable").value_or(LLSD(false)).asBoolean(); };
-    if (!renderer.createSwapchain(surface,state.width,state.height,error,synchronizedPresentation()) || !renderer.create2DPipeline(error)) return false;
     VkPhysicalDeviceProperties properties{};
     vkGetPhysicalDeviceProperties(renderer.physicalDevice(),&properties);
     LLSD aboutInfo;
@@ -809,22 +884,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     aboutInfo["SKIN"]=configuration.ui.skin.skin;
     aboutInfo["THEME"]=configuration.ui.skin.theme;
     if (!ui->setAboutInfo(aboutInfo,error)) return false;
-    LLVKWidgetGpu gpu({renderer.physicalDevice(),renderer.device(),renderer.allocator(),renderer.graphicsQueue(),renderer.graphicsQueueFamily()});
-    LLVKBrowser browser;
-    state.browser = &browser;
-    struct DetachWindow
-    {
-        WindowState& state;
-        LLVKViewerUi& ui;
-        ~DetachWindow()
-        {
-            state.browser = nullptr;
-            state.ui = nullptr;
-            ui.tree().setEvents(ui.find("login_html"),{});
-            ui.tree().setClipboard({});
-            ui.setDialogClipboard({});
-        }
-    } detach{state,*ui};
+    auto& gpu=*visuals.gpu;
     auto browserConfiguration = configuration.browser;
     const auto browserProxy=LLVKProxy::select(configuration.ui.settings,true,error);
     if (!browserProxy) return false;
@@ -836,7 +896,8 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     if (!browserRect) return false;
     browserConfiguration.width = browserRect->right-browserRect->left;
     browserConfiguration.height = browserRect->top-browserRect->bottom;
-    if (!browser.start(browserConfiguration,error) || !browser.navigate(configuration.loginPage,error)) return false;
+    if (!visuals.initializeBrowser(browserConfiguration,configuration.loginPage,error)) return false;
+    auto& browser=*visuals.browser;
     aboutInfo["LIBCEF_VERSION"]=browser.versionInfo(error);
     if (!error.empty() || !ui->setAboutInfo(aboutInfo,error)) return false;
     LLVKWidgetTree::Events events;
@@ -926,13 +987,22 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     if (!updateVoice()) return false;
     VoiceDevices voiceDevices(*ui,voice);
     XmlFilePicker xmlFilePicker(*ui,state.window);
-    ShowWindow(state.window,SW_SHOW);
+    std::unique_ptr<LLVKTexturePreview> texturePreviews;
+    if (configuration.textureCache)
+        texturePreviews=std::make_unique<LLVKTexturePreview>(*configuration.textureCache,ui->tree(),ui->root());
+    struct DetachInput
+    {
+        WindowState& state;
+        ~DetachInput() { state.ui=nullptr; state.browser=nullptr; state.audioVolumeChanged={}; }
+    } detachInput{state};
+    ShowWindow(state.window,ui->tree().setting("WindowMaximized").value_or(LLSD(false)).asBoolean() ? SW_SHOWMAXIMIZED : SW_SHOW);
     if (configuration.bindServices) configuration.bindServices(*ui);
     LLVKUiPacket packet(renderer.swapchainExtent());
     std::uint32_t frames = 0;
     auto previous = std::chrono::steady_clock::now();
     while (!state.close)
     {
+        if (texturePreviews && !texturePreviews->update(error)) return false;
         xmlFilePicker.pump();
         if (!translationVerification.pump(error)) return false;
         if (!audio.update(error)) return false;
@@ -940,8 +1010,30 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         if (!ui->advanceNotices(state.elapsed(),error)) return false;
         MSG message;
         while (PeekMessageW(&message,nullptr,0,0,PM_REMOVE))
-        { if (message.message == WM_QUIT) state.close = true; TranslateMessage(&message); DispatchMessageW(&message); }
+        { if (message.message == WM_QUIT) state.quitRequested = true; TranslateMessage(&message); DispatchMessageW(&message); }
         if (!state.error.empty()) { error = state.error; return false; }
+        if (state.quitRequested)
+        {
+            std::map<std::string,LLSD> placement;
+            if (!IsIconic(state.window))
+            {
+                const bool maximized=IsZoomed(state.window)!=FALSE;
+                placement["WindowMaximized"]=maximized;
+                if (!maximized)
+                {
+                    RECT bounds{},client{};
+                    if (!GetWindowRect(state.window,&bounds) || !GetClientRect(state.window,&client))
+                    { error="Native window placement could not be saved"; return false; }
+                    placement["WindowX"]=static_cast<int>(bounds.left);
+                    placement["WindowY"]=static_cast<int>(bounds.top);
+                    placement["WindowWidth"]=static_cast<int>(client.right-client.left);
+                    placement["WindowHeight"]=static_cast<int>(client.bottom-client.top);
+                }
+            }
+            const auto shutdown=ui->prepareShutdown(error,placement);
+            if (shutdown==LLVKViewerUi::ShutdownStatus::Failed) return false;
+            if (shutdown==LLVKViewerUi::ShutdownStatus::Ready) break;
+        }
         if (const auto problem=ui->takeDialogError(); !problem.empty())
             MessageBoxW(state.window,ll_convert<std::wstring>(problem).c_str(),L"Vulkanstorm",MB_OK|MB_ICONWARNING);
         if (!browser.update(error)) return false;
@@ -983,7 +1075,9 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
                     if (!renderer.recordUiPacket(packet.vertices(),packet.draws())) { error = renderer.frameError(); return false; }
                     if (!renderer.end2DFrame() && renderer.frameResult() != LLVKContext::FrameResult::OutOfDate)
                     { error = renderer.frameError(); return false; }
-                    if (configuration.stopAfterFrames && ++frames >= configuration.stopAfterFrames) state.close = true;
+                    if (configuration.stopAfterFrames && ++frames >= configuration.stopAfterFrames &&
+                        !PostMessageW(state.window,WM_CLOSE,0,0))
+                    { error="Native test close request failed"; return false; }
                 }
                 if (renderer.frameResult() == LLVKContext::FrameResult::OutOfDate) state.resize = true;
                 else if (renderer.frameResult() == LLVKContext::FrameResult::Fatal) { error = renderer.frameError(); return false; }
@@ -991,6 +1085,5 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         }
         MsgWaitForMultipleObjectsEx(0,nullptr,16,QS_ALLINPUT,MWMO_INPUTAVAILABLE);
     }
-    renderer.waitIdle();
-    return audio.stop(error);
+    return voice.stop(error) && audio.stop(error) && visuals.prepareShutdown(error);
 }

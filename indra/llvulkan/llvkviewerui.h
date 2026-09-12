@@ -144,6 +144,8 @@ public:
     bool previewUiSound(const std::string& name, std::string& error);
     void setUiSoundPlayer(std::function<bool(const std::string&,std::string&)> player) { mUiSoundPlayer=std::move(player); }
     bool closeFloater(std::string& error);
+    enum class ShutdownStatus { Pending, Ready, Failed };
+    ShutdownStatus prepareShutdown(std::string& error,const std::map<std::string,LLSD>& applicationSettings = {});
     bool floaterPointer(const LLVKWidgetTree::PointerEvent& event,std::string& error);
     bool floaterWheel(int x,int y,int clicks,std::string& error);
     LLVKWidgetTree::Id activeFloater() const;
@@ -271,6 +273,9 @@ private:
     std::string mUserColorsSnapshot;
     XmlFilePicker mExecutableFilePicker;
     std::uint64_t mPreferenceGeneration = 0;
+    bool mApplicationQuitting=false, mShutdownPrepared=false, mSaveSettingsOnExit=true;
+    std::map<std::string,LLSD> mShutdownSnapshot;
+    std::map<std::string,LLSD> mShutdownWarnings;
     std::function<void()> mClearSpamQueues;
     std::unique_ptr<LLVKMenu> mMenu;
     std::unique_ptr<LLVKFloater> mPreferences, mAbout;

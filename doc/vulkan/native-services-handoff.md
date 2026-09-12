@@ -1,6 +1,6 @@
 # Native services handoff
 
-Updated 2026-09-12 after resumed WebRTC lifetime and voice configuration work.
+Updated 2026-09-12 after read-only cache, startup policy and cache-backed previews.
 This is a continuation checkpoint, not a completion or parity claim.
 
 ## Current objective
@@ -11,10 +11,135 @@ audio/media/voice. Share audited API-independent code. Preferences is a client
 of these services, not their lifetime owner. Full Preferences integration remains
 the product goal; do not manufacture settings-only substitutes for missing services.
 
-Latest user request resumes service integration, starting with shared WebRTC
-shutdown and capture-disabled Window Validation. No commit or push was requested.
+The service fixes were committed as 3a73d29462 at the user's request, without a
+push. The user then requested implementation of shared nonvisual startup, native
+visual initialization, and applicable parity with existing viewer shutdown.
+The lifecycle changes below are uncommitted; no additional commit was requested.
+
+## Lifecycle direction
+
+This direction is partially implemented under NV-00/01/03/14/15/17, not full
+lifecycle parity. The source survey used checkpoint 3a73d29462 on Windows. Its roots were
+[Windows entry](../../indra/newview/llappviewerwin32.cpp),
+[application startup and shutdown](../../indra/newview/llappviewer.cpp),
+[login/world startup](../../indra/newview/llstartup.cpp), and
+[view/GL destruction](../../indra/newview/llviewerwindow.cpp).
+
+- Startup: share nonvisual services only after auditing constructors, callbacks,
+  registered work and teardown. Independently initialize native UI services,
+  fonts, images, notifications, floaters and tools. A native startup entry point
+  should orchestrate explicit owners and initialization phases, not wrap the
+  legacy LLUI/LLViewerWindow initialization or introduce a shared low-level RHI.
+  Reuse existing native components and audited independent libraries.
+- Shutdown: preserve applicable quit confirmation/editor resolution, account/history
+  persistence, final snapshot, upload/metrics drain, logout/reply/deadline handling,
+  service shutdown, GPU retirement and final process cleanup. Preserve settings
+  save ordering, successful-login account guards and restore-without-overwrite.
+  Rendering/capture and visual destruction require native equivalents; ordinary
+  IO, protocol and other independent operations may be shared after audit.
+- Applicability depends on actual lifecycle state: pre-login close, partial login,
+  normal logout, initialization failure and crash termination are distinct paths.
+  An absent native implementation is an open obligation, not a parity exemption.
+  Never clean up a legacy singleton merely to mimic ordering if it was not started.
+- Validation must distinguish component behavior, actual lifecycle wiring and
+  end-to-end verification. Require initialization-failure unwind and shutdown-order
+  checks, late-callback rejection, persistence guards and completion-based GPU
+  retirement. Existing window/voice tests do not establish full viewer shutdown.
+
+The current native entry returns before LLAppViewerWin32 construction. Its scoped
+window/service cleanup does not yet replace the complete viewer startup,
+authenticated quit/logout and final process cleanup contracts.
+
+## Lifecycle implementation and evidence
+
+- Native VisualServices in llvkwindowmgr.cpp now owns actual UI construction,
+  renderer/GPU-cache creation and browser startup as separate phases. Existing
+  native font/image/notification/floater/input implementations are reused, not
+  legacy GL visual initialization. Settings, IO and voice continue using the
+  previously audited shared nonvisual code.
+- Teardown detaches native input and callbacks before file-picker destruction can
+  pump messages, closes the browser, checks GPU idle, releases GPU/UI owners, then
+  destroys context and HWND. Normal shutdown reports GPU retirement failure;
+  partial startup and error exits use the same owner ordering. Driver-loss and
+  browser-shutdown timeout behavior are not runtime-verified.
+- WM_CLOSE, menu quit, restart requests and the test frame limit use orderly quit.
+  Native queued/active modals delay closure. Preferences application quit preserves
+  live bound values, matching LLFloaterPreference::onClose(true); ordinary close
+  still cancels. Global, loaded-account and warning changes use existing persistence
+  callbacks; successful Restore suppresses exit writes. This is not blanket Apply
+  for unaccepted child-dialog drafts or a complete general exit-save implementation.
+- Startup restores saved normal window geometry/maximization. Shutdown captures
+  live normal placement before HWND destruction, without replacing normal size
+  with maximized/minimized dimensions. Offscreen/multi-monitor/DPI/fullscreen and
+  maximized/minimized runtime qualification remain open.
+- Selected-native startup now catches failures through configuration and visual
+  startup/shutdown, logs failure via the shared logging API, and emits Goodbye!
+  only after the owned window/services return successfully. Preselection failures,
+  complete application logging/markers/crash handling and update cleanup remain open.
+- Window4/4 passed: rejected browser helper after native UI/device initialization,
+  complete HWND unwind, subsequent successful startup, six presented frames, real
+  WM_CLOSE, persisted normal client geometry and no GL parent module. No microphone
+  capture was enabled. The interaction fixture consumes its informational notices;
+  modal blocking is explicitly exercised by the widget shutdown test.
+- Widget192/192 passed: ordinary-close rollback versus application-quit preservation,
+  queued/active modal waits, save failure/retry, idempotence, warning persistence,
+  pre-login account guard and Restore no-overwrite. Viewer link passed. The production
+  entry and Goodbye! were compiled, not exercised through a full viewer launch.
+
+Next lifecycle obligations include the remaining nonvisual process startup/termination
+services, broader exit persistence, authenticated session ownership, upload/logout
+coordination, native final-world capture and world-editor/tool closure. Missing
+services remain open dependencies, not evidence of shutdown parity or exemptions.
 
 ## Immediate next step
+
+Latest increment (uncommitted, Window6/6 and viewer link passed):
+- Explicit readOnly cache configuration opens existing metadata and shared lock
+  files without fast-cache creation, pruning, repair, validation updates or writes.
+  Tests compare file bytes before/after and reject missing/incompatible/truncated
+  indexes. Unique native worker names permit multiple readers. This is a component;
+  production still starts writable, and readers cannot coexist with an active writer.
+  Automatic secondary-viewer operation and cross-process/legacy concurrency stay open.
+- planStartup now owns the source-backed capacity/version/encoder/purge/location
+  policy and is used by actual startup. Tests cover signed bounds, current versus
+  requested location, no read-only metadata writes, and retaining the global purge
+  request. Old-cache removal and complete relocation/purge acceptance are unfinished.
+- LLVKTexturePreview is wired into the native window loop. It reads cache/local
+  encoded bytes, schedules at most two native decode jobs and generation-checks
+  publication to native texture controls. Fixture evidence includes exact TGA RGBA,
+  alpha, identity replacement, native paint, misses, incomplete/corrupt bytes and
+  retry after cache writes. Existing native J2C/JPEG/TGA decoders are reused.
+- Local UUID reads explicitly route through the shared file reader: the original
+  UUID reader's LOCAL branch is disabled. Native file reads have a preallocation
+  byte bound. No GL texture-fetch wrapper is invoked. The successful decode fixture
+  is TGA; general progressive decoding or ready-image hot reload is not completed.
+
+Next asset-delivery dependency: native authenticated region/capability ownership.
+LLTextureFetch resolves ViewerAsset/texture URLs through the current LLViewerRegion
+and distinguishes waiting for capabilities from disconnect. That native producer is
+absent; do not use a generic downloader as a substitute for live asset integration.
+HTTP cache-miss delivery, retry/cancellation across region changes, progressive decode,
+world texture sampling/mips/residency, and bake/material previews remain open. No full
+viewer, real profile cache, microphone capture or network asset request was exercised.
+
+Persistent texture-cache integration is now implemented in the working tree:
+LLVKTextureCache owns shared LLTextureCache through explicit path/watchdog/settings
+dependencies, starts in llvkStartup before visual services, pumps from the native
+window loop, and drains/stops after visual teardown. Window5/5 passed with real
+isolated persistent write/read/reopen, misses, exclusive-owner rejection, purge,
+version reset and fast-cache invalidation. Read/write futures return encoded bytes;
+network fetch, progressive world decoding and Vulkan world-texture residency are not integrated.
+Do not mistake UI GPU caching or these disk-cache tests for those consumers.
+
+Production uses the existing cache paths, capacity clamp, version/encoder identity
+and purge flags. A pending relocation selects the new directory without deleting
+the old one. The global one-shot purge request is retained until the other caches
+are integrated. Native secondary instances currently fail explicitly on ownership
+conflict; automatic read-only secondary startup, full crash-marker handling, old renamed
+cache deletion, path-race hardening and cross-profile legacy concurrency remain open.
+No full viewer/profile-cache run was performed. The source contract records the
+shared-library audit and timeout/IO limitations. Final viewer relink passed;
+focused source diagnostics and patch hygiene checks passed.
 
 1. Preserve the now-validated shared WebRTC shutdown correction. The source-confirmed
   defect was worker-to-signaling-to-worker deployment surviving the single worker
@@ -26,8 +151,9 @@ shutdown and capture-disabled Window Validation. No commit or push was requested
   wiring. Test4 now covers eight rapid restart cycles, queued device selection and
   refresh, never-started/idempotent stop, and processing configuration. Capture
   remains disabled; do not repeat these passed states without a new technical need.
-3. Continue viewer-wide services from the source contracts, not Preferences-only
-  substitutes. Voice session transport remains open; a useful next bounded audit
+3. Continue the remaining lifecycle obligations above before expanding session-dependent
+  services. Continue from source contracts, not Preferences-only substitutes.
+  Voice session transport remains open; a subsequent bounded audit
   is session-independent enabled/muted/gain ownership versus tuning transitions,
   before connecting it to authenticated session transport. Asset delivery/residency,
   live scene producers/picking and renderer consumers also remain open.
@@ -38,14 +164,15 @@ shutdown and capture-disabled Window Validation. No commit or push was requested
 
 ## Saved work and evidence
 
-- Base/checkpoint: 9089558822, branch native-vulkan-ui (recheck HEAD on resume).
-- Extensive subsequent work is uncommitted, including new untracked source files.
-  Preserve it; do not reset, clean, checkout, or discard files.
+- Current service checkpoint: 3a73d29462, based on 9089558822, branch native-vulkan-ui
+  (recheck HEAD on resume). The accumulated native fixes are committed.
+- Unrelated excluded changes remain uncommitted. Preserve them and any subsequent
+  work; do not reset, clean, checkout, or discard files.
 - Preferences opens the original hierarchy through the real native menu. Earlier
   notes describing a provisional window are historical, not current status.
-- Preferences/widget gate: 191/191 passed again after the resumed voice changes.
+- Preferences/widget gate: 192/192 passed after lifecycle changes.
 - Latest reported context gate: 10/10 passed after scene-selection component work.
-- Current window gate: 4/4 passed with the live settings loop and real device engine;
+- Current window gate: 6/6 passed with cache policy/read-only access, previews and lifecycle coverage;
   no microphone capture, full viewer launch or acoustic/visual parity claim.
 - Native core build and Viewer Link Validation passed. The first link exposed a
   stale llvulkan.lib missing the existing working-tree createSwapchain(...,bool)
@@ -80,7 +207,7 @@ shutdown and capture-disabled Window Validation. No commit or push was requested
 - RGBA UI uploads are NOT a complete world-texture residency implementation:
   world formats, sampling/mips, progressive asset delivery and consumers remain.
 
-## Other uncommitted Preferences work
+## Other checkpointed Preferences work
 
 Source and tests contain beam color/shape editors, preset deletion, directory picker
 generation guards, graphics preset Save/Load/Delete/Default, quality-mask policy,

@@ -15,6 +15,205 @@ choices below authorizes reuse until its outgoing constructor/helper targets clo
 
 ### Continuation from 9089558822 (2026-09-12)
 
+Read-only cache and startup policy follow-up (NV-00/01/03/09/17; 3a73d29462 plus
+working tree, Windows RelWithDebInfo): source LLTextureCache::initCache invokes
+header pruning and openFastCache; nominal mReadOnly does not make those paths safe
+for nonmutating initialization. The new explicit initReadOnlyCache entry validates
+the header version/address size/bounded encoder string, index size/count and body
+sizes before exposing entries. It does not create/open the fast-cache file, resize
+the cache, prune, repair, advance validation or write metadata. Failed initialization
+cannot accept native read/write requests. Legacy initCache is unchanged.
+
+Native readOnly configuration opens existing lock files with read access and shared
+APR locks; writable owners retain exclusive locks. Multiple native readers can
+coexist, but an active writer and readers exclude each other. This is a tested
+component, NOT automatic second-viewer wiring or a snapshot protocol for concurrent
+legacy writes. The runtime test exposed the shared TextureCache queue name as a
+process-global restriction: Environment now supplies a name, defaulting to the
+unchanged legacy name while native owners use distinct names. Shared cache capacity
+statics remain debt for independent concurrent writable stores; read-only initialization
+does not update them. Existing cross-profile/legacy-locking limitations still apply.
+
+LLVKTextureCache::planStartup is now called by production llvkStartup. This CPU-only
+policy validates required settings, absolute paths and the 0..255 validation counter,
+clamps signed capacity before unsigned conversion, and separates writable pending
+relocation/purge/metadata from read-only current-location inspection with no metadata
+writes. Writable metadata is still saved only after storage start succeeds. The global
+one-shot purge flag is not consumed for a texture-only purge. Production still selects
+writable mode: read-only policy tests do not imply secondary startup support. Removal
+of old caches, all-cache purge completion and persisted picker relocation acceptance
+remain separate open work.
+
+Window6/6 passed: test5 compares all fixture cache-file bytes before/after two readers,
+checks writer exclusion, rejects writes/missing paths/version mismatch/truncated index
+without repair, and rejects requests after failed startup. Test6 exercises the same
+startup policy used by the executable, including default relocation, bounds, missing
+settings, encoder change and read-only no-mutation. These are isolated in-process tests,
+not a cross-process/native-versus-GL concurrency qualification.
+
+Cache-backed texture-control previews (NV-00/01/03/09/12/14/17, 3a73d29462 plus
+working tree): LLTextureCtrl::draw ordinary-asset branch requests a fetched texture,
+boosts preview priority and retains full-resolution raw data; baked and material
+branches use separate visual services. Native LLVKTexturePreview implements only
+the ordinary cache/local-file subset, using shared encoded IO and existing native
+J2C/JPEG/TGA decoders. At most two read/decode requests are active; async decode
+captures only owned bytes and identity, never UI pointers. Main-thread publication
+uses asset/generation checks, rejecting obsolete results; missing/incomplete/corrupt
+data remain distinct from ready images. Existing native paint/GPU publication handles
+the actual texture image. The window owns this service and destroys it before cache
+or UI teardown. No GL texture wrappers are used. This is live preview wiring, not
+HTTP retrieval, progressive decoding, bake/material previews or world residency.
+LLTextureFetch's HTTP route requires region ViewerAsset/texture capability ownership;
+that authenticated native producer remains absent and open, not replaced by a generic
+unauthenticated downloader. Focused window tests are the first validation gate.
+
+Preview follow-up: the shared UUID reader's LOCAL branch is compile-disabled, so
+native zero-offset reads explicitly select existing UUID-named .j2c/.jpg/.tga files
+under local_assets and use the shared explicit-file reader. A native Environment
+byte limit is enforced before that worker allocates; legacy callers keep limit zero
+and their original behavior. Local files are complete-file reads, not byte-range
+responses; generic offset reads still use persistent encoded storage. Native preview
+decoders consume full payloads only. Successful cache writes advance a revision so
+misses/failed previews retry when new bytes are published. Ready images are not a
+general same-UUID replacement subscription; local-file hot reload, per-asset fetch
+retry and fully versioned progressive publication remain open.
+
+Window6/6 and viewer link passed after live preview wiring. The window fixture uses
+the real preview component to read local TGA bytes on cache workers and decode on an
+async task, changes identity while work is pending, checks exact replacement RGBA,
+alpha classification and native paint publication, then tests miss-to-incomplete and
+malformed-complete transitions after real cache writes. Existing native window frames
+present the prepared UI; this does not establish measured screenshot parity or full
+world residency. The service is wired into the actual window loop; component pumping
+inside the fixture is not a production account/network test. Native J2C/JPEG paths
+reuse their existing decoders but this increment's successful decode fixture is TGA.
+Source diagnostics and patch hygiene passed. No real profile, full viewer run,
+microphone capture or network asset request was performed.
+
+Persistent texture-cache startup (NV-00/01/03/09/17; 3a73d29462 plus working tree,
+Windows RelWithDebInfo): inspected LLAppViewer::initThreads/initCache,
+LLTextureCache construction/initCache/update/readFromCache/writeToCache,
+worker doRead/doWrite/finishWork/endWork, header/fast-cache operations and purge,
+LLQueuedThread updateQueue/run/shutdown, APR initialization and file locks.
+The reference initializes persistent encoded headers/bodies and decoded fast-cache
+storage, derives capacity/version/purge policy from settings, dispatches callbacks
+on update, and stops workers before cache destruction flushes metadata. Its cache
+body has application watchdog/global-path dependencies even without GL calls.
+
+The shared LLTextureCache now accepts an explicit Environment for path resolution,
+watchdog and validation-counter callbacks. The original bool constructor is defined
+beside the legacy application owner and supplies the original callbacks; no GL visual
+function is extracted, invoked or changed. Shared storage is compiled for native
+window tests without viewer PCH/application linkage. LLImage remains a link dependency
+of that translation unit, not permission to use all image/visual helpers. Native byte
+reads override ReadResponder::setData and take ownership of aligned encoded buffers;
+they never call its LLImageFormatted construction path. The encoder-version query
+is reused for the unchanged on-disk codec identity. Native writeEncoded is a distinct
+entry point, preserving legacy writeToCache validation and decoded-image behavior.
+It invalidates the fast-cache header rather than fabricating preview pixels; header
+and body storage use the existing format. Native decoded fast-cache access is absent.
+
+LLVKTextureCache owns the shared worker and bounded encoded requests (64 outstanding,
+16MiB per request), retaining write bytes until completion. Caller-thread update
+delivers futures and retires read/write handles. Shutdown drains accepted requests,
+then suppresses new periodic tasks before draining the queue and invoking shared
+shutdown. This ordering was required by an observed test failure: calling update just
+before LLQueuedThread::shutdown can leave its queue nonempty and prevent immediate
+close. The native adapter alone exposes quiescence; shared worker behavior is unchanged.
+Drain/worker timeout is reported, and destructor failure retains the implementation,
+buffers, locks and APR runtime instead of freeing a worker's dependencies. Deadline
+handling for actual stuck disk IO remains unverified. APR is reference-counted across
+native cache owners and borrowed when already initialized; test runtime uses the
+borrowed branch, not proof of fresh-process APR initialization.
+
+Production llvkStartup now initializes the cache before VisualServices, passes it
+to the native frame loop for pumping, and stops it after the window/services return,
+before Goodbye!. Paths use CacheLocation/NewCacheLocation and local_assets, capacity
+uses the source 256MiB..100GiB clamp, LocalCacheVersion 9 and the existing codec ID
+control invalidation, and CacheValidateCounter is persisted after initialization.
+The Windows entry shares the pure SafeFileName(APP_NAME) operation to select the
+same execution-marker identity. The owner acquires an APR exclusive nonblocking
+execution-marker lock plus a native per-directory lock before cache initialization.
+It reports ownership conflicts rather than pretending to support a read-only second
+instance: existing openFastCache requests writes even for nominal read-only owners.
+Locks do not implement full legacy crash-marker processing, SLURL handoff or protection
+from an older viewer using another profile and the same custom cache directory.
+Existing marker bytes are not truncated and marker interpretation/cleanup remains
+part of the wider process lifecycle work.
+
+Relocation selects/initializes the requested directory and preserves the old cache;
+it does not delete unrelated disk/object/sound caches. PurgeCacheOnNextStartup remains
+pending because the broader purge is not implemented. Source Windows cache purging
+may retain renamed old texture directories; their asynchronous deletion service is
+not integrated. Permissions, corrupt-file recovery and purge IO errors retain the
+shared cache implementation's limitations; file-existence checks are not full storage
+integrity/durability proof. Reparse/path-race hardening and cross-process GL/native
+concurrency qualification remain open.
+
+Window5/5 passed: real cache write, pending-write shutdown, reopen/byte-exact read,
+cache miss, conflicting owner, fast-slot invalidation, explicit purge, version reset,
+invalid relative path and no GL module. Window test1 starts cache before visual startup
+failure/retry, pumps it during real presentation and stops after HWND teardown. Fixtures
+use unique temporary directories, not profile data. Final viewer link, source diagnostics
+and patch hygiene checks passed. No network/decode/world-texture consumer
+or full viewer launch was exercised, and no Vulkan residency/parity completion is claimed.
+
+Lifecycle development from 3a73d29462 (NV-00/01/03/14/17): source roots
+LLAppViewer::init/cleanup and LLViewerWindow::shutdownViews/shutdownGL interleave
+nonvisual services with visual owners. Native LLVKWindowMgr::run already owns
+independent UI/font/image/browser/GPU components, but its explicit idle wait covered
+only normal loop exit. A scoped GPU retirement guard now precedes destruction of
+the GPU cache on every exit after cache creation, including exceptions and frame
+errors. Browser destruction and event detachment occur before this guard; context
+and window owners outlive it. This preserves the reference's resource-before-context
+teardown responsibility without invoking GL cleanup. Window Validation is the first
+check; fault-path coverage and complete startup/shutdown service orchestration remain
+in progress. No authenticated logout or final-world-snapshot parity is implied.
+
+The native visual startup owner now groups actual UI construction (native fonts,
+skin images, notification/dialog factories and input), selected-device renderer/GPU
+cache creation, and browser startup. It reuses the existing native implementations,
+not GL startup wrappers. The owner detaches input/browser/clipboard routes, closes
+the browser, waits for GPU work, releases cache/UI and destroys the context before
+WindowState destroys the HWND. This ordering also covers incomplete startup. Existing
+nonvisual settings and native service bindings remain outside the visual owner.
+Window test1 first rejects a missing browser helper after UI/device creation, asserts
+the HWND was destroyed, then performs normal startup in the same process. Full world
+tools and authenticated service startup remain separate open implementations.
+
+Orderly pre-login quit: LLFloaterPreference::onClose(app_quitting) skips cancel
+rollback during application quit, unlike ordinary close. Native prepareShutdown
+now waits for native queued/active modals, closes existing native dialogs with the
+Preferences application-quit distinction, stops tuning and persists changed bound
+global/account values through existing audited settings callbacks. Account writes
+remain gated on loaded account ownership. Successful Restore suppresses exit writes;
+failure is explicit and cannot report a successful shutdown. WM_CLOSE, menu quit,
+restart requests and the integration frame limit now enter this path. No legacy
+visual close/destroy callback is invoked. The native helper does not imply complete
+world-editor resolution, general application persistence or session logout parity.
+
+Final lifecycle increment: the initial retirement guard is subsumed by VisualServices,
+whose idempotent retirement operation checks vkDeviceWaitIdle and reports failure
+on normal shutdown. Input is detached before picker teardown can pump messages.
+Warning snapshots survive Preferences closure and use existing warning persistence.
+Source LLAppViewer::cleanupSavedSettings preserves normal window placement; native
+startup now reads saved WindowX/Y/Width/Height/Maximized and normal shutdown publishes
+current placement through the same restore-guarded save path. Maximized/minimized
+dimensions do not overwrite the normal size. The selected-native startup catch covers
+configuration as well as visual initialization; shared logging reports failure or
+Goodbye! after successful owner teardown. It does not install the full legacy
+logging/marker/crash services or claim their parity.
+
+Widget192/192 and Window4/4 passed after these changes; viewer link passed. Widget192
+checks modal waits, ordinary Cancel versus application quit, save failure/retry,
+idempotence, warning changes and the pre-login account guard; test184 checks Restore
+suppression. Window test1 proves partial initialization cleanup and subsequent start,
+then posts WM_CLOSE after six frames and verifies HWND destruction and persisted
+normal geometry. Its interaction fixture consumes queued informational notices;
+modal-wait behavior is tested separately. No full viewer run, microphone capture,
+device-loss injection, authenticated logout, final-world capture or measured parity
+was performed. Full process startup and world/session services remain open.
+
 Shared WebRTC shutdown correction (NV-00/01/03/17, 9089558822 plus working tree,
 Windows RelWithDebInfo): roots LLWebRTCImpl::terminate, updateDevices,
 workerDeployDevices, setVoiceEnabled, setTuningMode, OnDevicesUpdated and

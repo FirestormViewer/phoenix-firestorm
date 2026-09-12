@@ -3,6 +3,7 @@
 
 #include "llvkviewerui.h"
 #include "llvkbrowser.h"
+#include "llvktexturecache.h"
 
 struct LLVKWindowMgr
 {
@@ -15,6 +16,7 @@ struct LLVKWindowMgr
         bool validation = true;
         std::uint32_t stopAfterFrames = 0;
         std::function<void(LLVKViewerUi&)> bindServices;
+        LLVKTextureCache* textureCache=nullptr;
     };
     static bool run(const Configuration& configuration, std::string& error);
 };
