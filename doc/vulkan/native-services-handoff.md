@@ -93,6 +93,44 @@ services remain open dependencies, not evidence of shutdown parity or exemptions
 
 ## Immediate next step
 
+Startup/shutdown presenter added after the operator's visual check (uncommitted):
+LLVKStartupStatus uses the existing SPLASHSCREEN resource and native localized string
+loading without invoking LLSplashScreen/LLWindow visual wrappers. Cache initialization
+now has a visible status (clearing for explicit purge); final shutdown reopens it with
+ShuttingDown after LLVKWindowMgr returns and before persistent-cache drain/stop. It
+hides before Goodbye! and on scope exit. No artificial delay; fast cleanup may show
+only briefly. In-cache purge-to-initialize subphase reporting remains open.
+Window7/7, including real resource visibility/text/hide/reopen and pending cache write
+retirement under the shutdown dialog, plus the cold-start regression and viewer link
+passed. No full viewer/profile relaunch or screenshot parity measurement was performed.
+The top-menu observation remains open: Guidebook, Whitelist adviser, Report Problem
+and grid Help/About need native handlers and underlying services. Do not substitute
+generic URLs for original dialog/system-info/location behavior or mark these complete.
+
+Cold-start crash correction after 88baf039b5 (2026-09-12, uncommitted): the operator's
+13:24:33 launch exited before creating a window. Windows Event 1000 reported
+0xc0000005 at executable RVA 0x404e15e, resolved with the matching PDB to
+LLMutex::isSelfLocked. A separate cold-process cache regression reproduced the crash;
+LLDB showed LLThread::threadRun constructing a child ThreadRecorder with a null master
+and crashing in addChildRecorder's mutex. Prior window tests initialized LLCommon
+through their harness and therefore did not cover the missing startup prerequisite.
+
+The native cache's reference-counted runtime now creates a shared LLTrace master
+recorder when absent, borrows an existing recorder otherwise, and retires an owned
+recorder only after cache workers stop. Timeout retention keeps this dependency alive
+with retained workers. No GL visual initialization was added. The new standalone
+INTEGRATION_TEST_llvktexturecache_startup executable is built/run as a dependency of
+Window Validation and intentionally has no LLCommon-initializing test harness.
+It failed with the original access violation before the fix, then passed cold startup,
+pending write drain and owned-recorder teardown. Window6/6 also passed afterward.
+
+Deployment correction: the actual viewer directory contained a September 9 WebRTC
+DLL, unlike the tested sharedlibs/build DLL. The viewer POST_BUILD step now copies
+the DLL from the llwebrtc target. Viewer relink passed, deployed/built SHA256 matched,
+and vulkanstorm-bin.exe was last written 2026-09-12 13:34:53 local time. The full
+viewer/profile has NOT been relaunched by the agent; visible-window confirmation is
+still pending. No commit or push was made. Source diagnostics and whitespace passed.
+
 Native text module consolidation (uncommitted after c7523c3efc): llvktext.h now owns
 the current native plain layout, web-text, styled-segment and styled-document
 declarations. The old llvkplaintextlayout.h/llvkstyledtext.h forward to it; algorithms

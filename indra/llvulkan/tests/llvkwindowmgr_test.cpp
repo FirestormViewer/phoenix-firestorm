@@ -5,6 +5,7 @@
 #include "llvkjoystick.h"
 #include "llvktexturecache.h"
 #include "llvktexturepreview.h"
+#include "llvkstartupstatus.h"
 #include "lltut.h"
 #include <fstream>
 #include <windows.h>
@@ -15,6 +16,55 @@ namespace tut
     typedef test_group<loginwindow_data> loginwindow_group;
     typedef loginwindow_group::object loginwindow_object;
     loginwindow_group loginwindow_tests("llvkwindowmgr");
+
+    template<> template<> void loginwindow_object::test<7>()
+    {
+        set_test_name("native startup and shutdown present the original localized status resource");
+        LLVKSkinFiles::Configuration skin;
+        skin.skinBaseDirectory=std::filesystem::path(LLVK_LOGIN_SOURCE)/"skins";
+        skin.language="en";
+        std::string error;
+        const auto title="Native cache status fixture "+std::to_string(GetCurrentProcessId());
+        const auto wide=std::wstring(title.begin(),title.end());
+        {
+            LLVKStartupStatus status;
+            ensure("load original startup strings",status.load(skin,title,error));
+            ensure("show initialization phase",status.show("StartupInitializingTextureCache",error));
+            const auto window=FindWindowW(L"#32770",wide.c_str());
+            ensure("actual startup dialog is visible",window && IsWindowVisible(window));
+            wchar_t text[256]{};
+            GetDlgItemTextW(window,666,text,256);
+            ensure("original initialization text",std::wstring(text)==L"Initializing texture cache...");
+            ensure("show clearing phase",status.show("StartupClearingTextureCache",error));
+            GetDlgItemTextW(window,666,text,256);
+            ensure("original clearing text",std::wstring(text)==L"Clearing texture cache...");
+            ensure("unknown phase fails explicitly",!status.show("UnknownPhase",error));
+            status.hide();
+            ensure("startup presenter closes before viewer use",FindWindowW(L"#32770",wide.c_str())==nullptr);
+            const auto root=std::filesystem::temp_directory_path()/("native-shutdown-status-"+LLUUID::generateNewID().asString());
+            struct Cleanup { std::filesystem::path root; ~Cleanup() { std::error_code ignored; std::filesystem::remove_all(root,ignored); } } cleanup{root};
+            LLVKTextureCache cache;
+            LLVKTextureCache::Configuration configuration;
+            configuration.directory=root/"cache"; configuration.localAssets=root/"assets";
+            configuration.bytes=256ull*1024*1024;
+            const bool started=cache.start(configuration,error); ensure(error,started);
+            auto write=cache.write(LLUUID::generateNewID(),std::vector<std::uint8_t>(2048,42),2048,error);
+            ensure("pending shutdown work accepted",write.valid());
+            ensure("reopen presenter for shutdown",status.show("ShuttingDown",error));
+            const auto shutdownWindow=FindWindowW(L"#32770",wide.c_str());
+            ensure("shutdown dialog visible",shutdownWindow && IsWindowVisible(shutdownWindow));
+            GetDlgItemTextW(shutdownWindow,666,text,256);
+            ensure("original shutdown message",std::wstring(text)==L"Shutting down...");
+            const bool stopped=cache.stop(error); ensure(error,stopped);
+            ensure("shutdown drains accepted write",write.get().success);
+            ensure("status remains visible through cache retirement",IsWindowVisible(shutdownWindow)!=FALSE);
+            status.hide();
+            status.hide();
+            ensure("explicit shutdown hide is idempotent",FindWindowW(L"#32770",wide.c_str())==nullptr);
+            ensure("shutdown can reopen after hide",status.show("ShuttingDown",error));
+        }
+        ensure("status closes on scope exit",FindWindowW(L"#32770",wide.c_str())==nullptr);
+    }
 
     template<> template<> void loginwindow_object::test<6>()
     {

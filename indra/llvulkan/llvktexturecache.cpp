@@ -4,6 +4,7 @@
 #include "llimagej2c.h"
 #include "lltexturecache.h"
 #include "llmemory.h"
+#include "lltracethreadrecorder.h"
 #include <chrono>
 #include <mutex>
 #include <thread>
@@ -13,8 +14,25 @@ namespace
     struct CacheAprRuntime
     {
         bool owned=!ll_apr_is_initialized();
-        CacheAprRuntime() { if (owned) ll_init_apr(); }
-        ~CacheAprRuntime() { if (owned) ll_cleanup_apr(); }
+        std::unique_ptr<LLTrace::ThreadRecorder> recorder;
+        CacheAprRuntime()
+        {
+            if (owned) ll_init_apr();
+            if (!LLTrace::get_master_thread_recorder())
+            {
+                recorder=std::make_unique<LLTrace::ThreadRecorder>();
+                LLTrace::set_master_thread_recorder(recorder.get());
+            }
+        }
+        ~CacheAprRuntime()
+        {
+            if (recorder)
+            {
+                recorder.reset();
+                LLTrace::set_master_thread_recorder(nullptr);
+            }
+            if (owned) ll_cleanup_apr();
+        }
         static std::shared_ptr<CacheAprRuntime> acquire()
         {
             static std::mutex mutex;

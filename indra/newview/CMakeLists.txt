@@ -2668,6 +2668,9 @@ if (WINDOWS)
   target_link_libraries(${VIEWER_BINARY_NAME} llvkwindowmgr)
   add_dependencies(${VIEWER_BINARY_NAME} llvk_ui_shaders)
   add_custom_command(TARGET ${VIEWER_BINARY_NAME} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "$<TARGET_FILE:llwebrtc>"
+        "$<TARGET_FILE_DIR:${VIEWER_BINARY_NAME}>"
       COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:${VIEWER_BINARY_NAME}>/shaders/compiled"
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
           "${CMAKE_BINARY_DIR}/llvulkan/compiled_ui/ui2d.vert.spv"

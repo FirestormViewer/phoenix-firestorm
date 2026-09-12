@@ -2,6 +2,7 @@
 #include "llvkwindowmgr.h"
 #include "llvksettingsmgr.h"
 #include "llvkpreferencesbackup.h"
+#include "llvkstartupstatus.h"
 #include "llstring.h"
 #include "llerror.h"
 #include <windows.h>
@@ -160,7 +161,21 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
         directory/"local_assets",profile/"logs"/executionMarkerName,false,error);
     if (!cachePlan) return fail(error);
     const auto& cacheConfiguration=cachePlan->configuration;
+    LLVKSkinFiles::Configuration startupSkin;
+    startupSkin.executableDirectory=directory;
+    startupSkin.workingDirectory=std::filesystem::current_path();
+    startupSkin.skinBaseDirectory=directory/"skins";
+    startupSkin.userAppDirectory=profile;
+    startupSkin.skin=stringValue("SkinCurrent","default");
+    startupSkin.theme=stringValue("SkinCurrentTheme");
+    startupSkin.language=stringValue("Language","en");
+    if (startupSkin.language=="default") startupSkin.language="en";
+    LLVKStartupStatus startupStatus;
+    if (!startupStatus.load(startupSkin,"Vulkanstorm",error) ||
+        !startupStatus.show(cacheConfiguration.purge ? "StartupClearingTextureCache" : "StartupInitializingTextureCache",error))
+        return fail(error);
     if (!textureCache.start(cacheConfiguration,error)) return fail(error);
+    startupStatus.hide();
     cachePlan->metadata["CacheValidateCounter"]=LLSD(static_cast<int>(textureCache.validationIndex()));
     if (!settings.saveChanges(preferenceFile,cachePlan->metadata,error)) return fail(error);
     configuration.ui.cacheDirectory=cacheConfiguration.directory;
@@ -253,7 +268,9 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     page.settings = values;
     configuration.loginPage = LLVKViewerUi::pageUrl(page);
     if (!LLVKWindowMgr::run(configuration,error)) return fail(error);
+    if (!startupStatus.show("ShuttingDown",error)) return fail(error);
     if (!textureCache.stop(error)) return fail(error);
+    startupStatus.hide();
     LL_INFOS("NativeStartup") << "Goodbye!" << LL_ENDL;
     return 0;
     }

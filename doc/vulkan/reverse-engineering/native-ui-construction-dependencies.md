@@ -15,6 +15,69 @@ choices below authorizes reuse until its outgoing constructor/helper targets clo
 
 ### Continuation from 9089558822 (2026-09-12)
 
+Native lifecycle status presenter (NV-00/01/03/12/17, 88baf039b5 plus working tree,
+Windows RelWithDebInfo): LLAppViewer::initCache updates the splash with
+StartupInitializingTextureCache before cache initialization. LLAppViewer::cleanup
+shows ShuttingDown after deleting the viewer window and hides it near final cleanup.
+LLSplashScreenWin32 creates the SPLASHSCREEN resource, sets child 666's text and
+destroys the dialog. Those existing visual functions are not invoked by native code.
+LLVKStartupStatus independently owns a Win32 dialog using the unchanged resource
+declaration (same icon, font and geometry), with strings resolved through native
+skin/XML layering and parsed via Boost.PropertyTree after native XML validation.
+Synchronous child repaint makes the phase visible before blocking cache work begins;
+there is no artificial dwell. This OS-native presenter requires neither GL nor a
+Vulkan device and can run before creation or after destruction of visual services.
+
+Production llvkStartup shows cache initialization (or clearing when an explicit purge
+is requested) around LLVKTextureCache::start. On successful window-loop return, after
+the HWND and visual owners are gone, it reopens the same presenter with ShuttingDown,
+drains/stops the persistent cache, then hides it before Goodbye!. Scope cleanup hides
+the dialog on failure/exception as well. This is the final shutdown splash, not the
+authenticated logout/upload progress interface. Purge-to-initialize subphase changes
+inside the shared cache remain uninstrumented; no full startup phase parity is claimed.
+
+Window7/7 and the cold-cache regression passed. Test7 loads the real localized strings
+and original configured viewer resource, inspects visible Win32 dialog text for cache
+initialization/clearing/shutdown, exercises hide/reopen and idempotent/destructor hide,
+and retires a pending real cache write with the shutdown dialog visible. The resource
+is configured for test version placeholders just as the viewer resource is; the source
+resource remains unchanged. Viewer link and focused editor diagnostics passed. No
+full profile viewer was launched and no pixel/effects parity measurement was performed.
+The operator's top-menu finding is separate: Guidebook, Whitelist adviser, Report
+Problem and grid help/about still lack native handlers/services; no substitute URL
+or success-shaped binding was added. Report Problem also requires source system-info
+and location substitution, not merely opening a fixed URL.
+
+Cold native cache startup failure (NV-00/01/03/17, 88baf039b5 plus working tree,
+Windows RelWithDebInfo): LLApp construction normally calls LLCommon::initClass,
+which establishes APR, timers and the master LLTrace recorder. The early native
+entry bypasses LLApp. CacheAprRuntime previously established only APR, but every
+LLThread::threadRun immediately constructs a recorder from the global master.
+The 2026-09-12 operator launch crashed with 0xc0000005 before the window; the matching
+PDB resolved RVA 0x404e15e to LLMutex::isSelfLocked. The new cold-process regression
+reproduced it, and LLDB showed addChildRecorder(this=null) through ThreadRecorder(parent=null)
+and LLThread::threadRun. This is evidence of a shared runtime initialization defect,
+not a rendering or font-layout failure.
+
+Native runtime acquisition now constructs/publishes a shared ThreadRecorder only
+when the master is absent. Construction/init and teardown operate on CPU trace
+buffers, timers, TLS and mutexes, without GL resources or visual callbacks. Existing
+application/test masters are borrowed. The same runtime lease already retaining APR
+now retains the owned recorder through all cache workers, including the existing
+timeout leak path, then removes it after worker shutdown. No legacy LLApp/visual
+initialization is invoked or modified. Separate LLCommon timer/configuration and
+process-global ownership audits remain open; this closes the reproduced dependency,
+not the full application lifecycle.
+
+The standalone startup regression does not use the usual test harness: before the
+fix it exited -1073741819, after the fix it passes cold cache start, worker write/drain
+and master-recorder retirement. Window6/6 passes with the preinitialized borrowed
+runtime. A secondary deployment defect was verified by unequal WebRTC DLL SHA256s:
+focused viewer linking had left an old DLL beside the executable. The viewer's
+POST_BUILD now stages TARGET_FILE:llwebrtc along with native shaders. Final viewer
+link and deployed/built hash comparison passed. Full viewer visual confirmation is
+pending; no profile test run, GPU parity or new world-service completion is claimed.
+
 Native text public-header consolidation (NV-00/01/03/12/17, c7523c3efc plus working
 tree, Windows RelWithDebInfo): the existing llvktext.h exposed LLFontGL-based atlas
 preparation and rendering, unlike the independently implemented plain/styled layout
