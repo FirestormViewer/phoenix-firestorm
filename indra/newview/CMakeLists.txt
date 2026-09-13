@@ -938,6 +938,40 @@ else (OPENSIM)
         )
 endif (OPENSIM)
 
+list(APPEND viewer_SOURCE_FILES mkopluginmanager.cpp)
+list(APPEND viewer_SOURCE_FILES llpanelpluginsettings.cpp)
+
+# <Mko> Optional Lua plugin add-on (libmkolua). Built only when Lua is found.
+option(MKO_WITH_LUA "Build the Manikineko Lua plugin add-on (libmkolua)" ON)
+if (MKO_WITH_LUA)
+    find_package(PkgConfig QUIET)
+    if (PKG_CONFIG_FOUND)
+        pkg_search_module(LUA QUIET lua5.4 lua-5.4 lua5.3 lua-5.3 lua5.2 lua-5.2 lua5.1 lua-5.1 lua)
+    endif ()
+    if (NOT LUA_FOUND)
+        find_package(Lua QUIET)
+    endif ()
+
+    if (LUA_FOUND)
+        set(MKOLUA_SRCS mkolua.cpp mko_plugin_api.h)
+        add_library(mkolua SHARED ${MKOLUA_SRCS})
+        target_include_directories(mkolua PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+        if (LUA_INCLUDE_DIRS)
+            target_include_directories(mkolua PRIVATE ${LUA_INCLUDE_DIRS})
+        elseif (LUA_INCLUDE_DIR)
+            target_include_directories(mkolua PRIVATE ${LUA_INCLUDE_DIR})
+        endif ()
+        if (LUA_LIBRARIES)
+            target_link_libraries(mkolua ${LUA_LIBRARIES})
+        elseif (LUA_LIBRARY)
+            target_link_libraries(mkolua ${LUA_LIBRARY})
+        endif ()
+        message(STATUS "Building Manikineko Lua plugin add-on (libmkolua)")
+    else ()
+        message(WARNING "MKO_WITH_LUA enabled but Lua not found; skipping libmkolua")
+    endif ()
+endif ()
+
 set(VIEWER_BINARY_NAME "firestorm-bin" CACHE STRING
     "The name of the viewer executable to create.")
 
@@ -1789,7 +1823,7 @@ set(viewer_GLTF_HEADER_FILES
     )
 
 source_group("Header Files\\GLTF" FILES ${viewer_GLTF_HEADER_FILES})
-list(APPEND viewer_HEADER_FILES ${viewer_GLTF_HEADER_FILES})
+list(APPEND viewer_HEADER_FILES ${viewer_GLTF_HEADER_FILES} mkopluginmanager.h mko_plugin_api.h llpanelpluginsettings.h)
 # </FS:Ansariel> Group GLTF files into their subfolders
 
 if (USE_BUGSPLAT)
@@ -1955,7 +1989,7 @@ if (LINUX)
     # Replace the icons with the appropriate ones for the channel
     # ('test' is the default)
     set(ICON_PATH "private")
-    string(TOLOWER ${VIEWER_CHANNEL} channel_lower)
+    string(TOLOWER "${VIEWER_CHANNEL}" channel_lower)
     if(channel_lower MATCHES "release")
         set(ICON_PATH "release")
     elseif(channel_lower MATCHES "beta")
@@ -2008,7 +2042,7 @@ if (WINDOWS)
     # ('test' is the default)
     set(ICON_PATH "private")
     #set(VIEWER_MACOSX_PHASE "d") # <FS:Ansariel> Moved to OSX section
-    string(TOLOWER ${VIEWER_CHANNEL} channel_lower)
+    string(TOLOWER "${VIEWER_CHANNEL}" channel_lower)
     if(channel_lower MATCHES "release")
         set(ICON_PATH "release")
         #set(VIEWER_MACOSX_PHASE "f") # <FS:Ansariel> Moved to OSX section
@@ -2795,7 +2829,7 @@ endif (LINUX)
 if (DARWIN)
     # <FS:Ansariel> Moved from Windows section
     set(VIEWER_MACOSX_PHASE "d")
-    string(TOLOWER ${VIEWER_CHANNEL} channel_lower)
+    string(TOLOWER "${VIEWER_CHANNEL}" channel_lower)
     if(channel_lower MATCHES "release")
         set(VIEWER_MACOSX_PHASE "f")
     elseif(channel_lower MATCHES "beta")
