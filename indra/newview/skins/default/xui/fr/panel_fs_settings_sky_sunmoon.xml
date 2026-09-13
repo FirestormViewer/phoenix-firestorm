@@ -4,7 +4,7 @@
 		<text name="T_Sun_Header" value="Couleur du Soleil &amp; de la Lune"/>
 	</panel>
 	<panel name="P_SM_Color">
-		<text name="color_label">
+		<text name="color_label" width="145">
 			Couleur Soleil/Lune :
 		</text>
 	</panel>
@@ -16,11 +16,11 @@
 			Image :
 		</text>
 		<check_box label="Afficher balise" name="sunbeacon"/>
-		<text name="glow_focus_label">
+		<text name="glow_focus_label" width="94">
 			Foyer lumineux :
 		</text>
 		<text name="glow_size_label">
-			Taille de l'éclat :
+			Taille éclat :
 		</text>
 		<text name="star_brightness_label">
 			Lum. étoiles :

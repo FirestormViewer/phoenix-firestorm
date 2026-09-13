@@ -777,7 +777,7 @@
 				 left="5"
 				 top_pad="10"
 				 tool_tip="Controls the visibility range for reflections, affecting reflection detail and performance across reflection probes, mirrors, and screen space reflections. Higher values increase the distance at which reflections are visible, enhancing detail but increasing performance cost."
-				 width="70">
+				 width="80">
 					Reflect. Dist.
 				</text>
 				<slider_bar
@@ -791,7 +791,7 @@
 				 min_val="0"
 				 max_val="4096"
 				 top_delta="-2"
-				 width="127"/>
+				 width="117"/>
 				<spinner
 				 name="S_Reflection_Distance"
 				 control_name="RenderReflectionProbeDrawDistance"
@@ -1441,7 +1441,7 @@
 				 control_name="RenderDeferredSSAO"
 				 enabled_control="RenderDeferred"
 				 height="16"
-				 label="Enable Ambient Occlusion (Depth Perception)"
+				 label="Ambient Occlusion (Depth Perception)"
 				 layout="topleft"
 				 left="3"
 				 name="UseSSAO"
@@ -2707,7 +2707,7 @@
 				 left="5"
 				 top_pad="10"
 				 tool_tip="Sets the maximum distance at which objects are rendered in the scene. Increasing this value allows you to see farther into the environment, enhancing detail in large landscapes or distant objects. However, higher values significantly impact performance, reducing FPS, especially in complex areas. For better performance, use lower values in crowded regions or when using older hardware."
-				 width="70">
+				 width="90">
 					Draw Dist.
 				</text>
 				<slider_bar
@@ -2721,7 +2721,7 @@
 				 min_val="32"
 				 max_val="4096"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Draw_Distance"
 				 control_name="RenderFarClip"
@@ -2756,7 +2756,7 @@
 				 left="5"
 				 top_pad="5"
 				 tool_tip="Controls the maximum number of avatars rendered in the scene. Limiting this number improves performance, especially in crowded events or busy locations. Lower values reduce visual clutter and increase FPS, while higher values allow more avatars to be visible but may slow performance in large gatherings."
-				 width="70">
+				 width="90">
 					Avi Count
 				</text>
 				<slider_bar
@@ -2770,7 +2770,7 @@
 				 min_val="0"
 				 max_val="66"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Avi_Count"
 				 control_name="IndirectMaxNonImpostors"
@@ -2805,7 +2805,7 @@
 				 left="5"
 				 top_pad="5"
 				 tool_tip="Adjusts the level of detail (LOD) for avatars. Higher values improve visual quality, making legacy avatars appear more detailed even at greater distances. Lower values reduce detail to improve performance, which is useful in high-density areas or on lower-end systems. This setting primarily affects legacy (system) avatars. Mesh avatars are less affected by this setting as their detail levels are controlled by their own LOD settings within the mesh and further influenced by the Avatar Complexity settings found in the Graphics panel of the Preferences floater."
-				 width="70">
+				 width="90">
 					Avi Detail
 				</text>
 				<slider_bar
@@ -2819,7 +2819,7 @@
 				 min_val="0"
 				 max_val="10"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Avi_Detail"
 				 control_name="RenderAvatarLODFactor"
@@ -2854,7 +2854,7 @@
 				 left="5"
 				 top_pad="5"
 				 tool_tip="Controls the level of detail for avatar physics effects, such as breast physics and other mesh deformation behaviors. Higher values provide smoother, more realistic motion at the cost of performance. Lower values reduce the complexity of physics calculations, improving performance in crowded areas."
-				 width="70">
+				 width="90">
 					Avi Physics
 				</text>
 				<slider_bar
@@ -2868,7 +2868,7 @@
 				 min_val="0"
 				 max_val="1"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Avi_Physics"
 				 control_name="RenderAvatarPhysicsLODFactor"
@@ -2903,7 +2903,7 @@
 				 left="5"
 				 top_pad="5"
 				 tool_tip="Sets the maximum number of particles the viewer will render at once. This affects effects like smoke, fire, magic spells, ropes, chains and particle-based animations. Higher values allow more particles for detailed visual effects but may reduce performance in particle-heavy environments."
-				 width="70">
+				 width="90">
 					Particle Cnt.
 				</text>
 				<slider_bar
@@ -2917,7 +2917,7 @@
 				 min_val="0"
 				 max_val="8192"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Particle_Cnt"
 				 control_name="RenderMaxPartCount"
@@ -2952,7 +2952,7 @@
 				 left="5"
 				 top_pad="5"
 				 tool_tip="Determines the scaling factor for the default ground (terrain) texture, affecting how stretched or detailed the terrain appears. Higher values create finer, more detailed textures, while lower values reduce detail but can improve performance."
-				 width="70">
+				 width="90">
 					Terrain Scale
 				</text>
 				<slider_bar
@@ -2966,7 +2966,7 @@
 				 min_val="0"
 				 max_val="24"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Terrain_Scale"
 				 control_name="RenderTerrainScale"
@@ -3001,7 +3001,7 @@
 				 left="5"
 				 top_pad="5"
 				 tool_tip="Controls the level of detail (LOD) factor for terrain rendering. Higher values provide more detailed terrain, especially at greater distances, enhancing realism. Lower values simplify terrain detail for better performance in large regions."
-				 width="70">
+				 width="90">
 					Terrain Qual.
 				</text>
 				<slider_bar
@@ -3015,7 +3015,7 @@
 				 min_val="0"
 				 max_val="8"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Terrain_Quality"
 				 control_name="RenderTerrainLODFactor"
@@ -3050,7 +3050,7 @@
 				 left="5"
 				 top_pad="5"
 				 tool_tip="Adjusts the level of detail (LOD) for in-world objects. Higher values maintain high-quality object details even at greater distances but may reduce performance, especially in complex environments. Lower values trigger simpler object models (LODs) sooner, improving FPS but potentially reducing visual fidelity."
-				 width="70">
+				 width="90">
 					Object Detail
 				</text>
 				<slider_bar
@@ -3064,7 +3064,7 @@
 				 min_val="0"
 				 max_val="8.0"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Object_Detail"
 				 control_name="RenderVolumeLODFactor"
@@ -3099,7 +3099,7 @@
 				 left="5"
 				 top_pad="5"
 				 tool_tip="Controls the level of detail for flexible (flexi) objects like flowing hair, flags, and ropes. Higher values produce smoother, more realistic motion but may affect performance. Lower values simplify movement calculations for faster rendering."
-				 width="70">
+				 width="90">
 					Flexiprims
 				</text>
 				<slider_bar
@@ -3113,7 +3113,7 @@
 				 min_val="0"
 				 max_val="10"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Flexi_Detail"
 				 control_name="RenderFlexTimeFactor"
@@ -3148,7 +3148,7 @@
 				 left="5"
 				 top_pad="5"
 				 tool_tip="Sets the level of detail (LOD) for trees and other vegetation. Higher values result in more complex, detailed foliage, while lower values simplify tree geometry for improved performance, especially in densely vegetated regions. This setting applies specifically to system (legacy) trees and does not affect non-system or mesh-based trees, which manage their detail through their own LOD settings."
-				 width="70">
+				 width="90">
 					Tree Detail
 				</text>
 				<slider_bar
@@ -3162,7 +3162,7 @@
 				 min_val="0"
 				 max_val="8"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Tree_Detail"
 				 control_name="RenderTreeLODFactor"
@@ -3197,7 +3197,7 @@
 				 left="5"
 				 top_pad="5"
 				 tool_tip="Controls the vertex detail of the Enviroment sky, affecting the smoothness of gradients, cloud shapes, and atmospheric effects. Higher values enhance sky realism but may reduce performance. Lower values improve FPS but may make the sky appear blocky or less detailed."
-				 width="70">
+				 width="90">
 					Sky Detail
 				</text>
 				<slider_bar
@@ -3211,7 +3211,7 @@
 				 min_val="4"
 				 max_val="512"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Sky_Detail"
 				 control_name="WLSkyDetail"
@@ -3238,6 +3238,7 @@
 					 function="ResetControl"
 					 parameter="WLSkyDetail"/>
 				</button>
+
 				<text
 				 name="T_Sharpening"
 				 follows="left|top"
@@ -3245,7 +3246,7 @@
 				 left="5"
 				 tool_tip="Adjusts the sharpness of the overall image using Contrast-Adaptive Sharpening (CAS). Higher values enhance image clarity by increasing contrast around edges, which can improve visual detail. Excessive sharpening may introduce artifacts or make the image look harsh."
 				 top_pad="5"
-				 width="70">
+				 width="90">
 					Sharpening
 				</text>
 				<slider_bar
@@ -3259,7 +3260,7 @@
 				 min_val="0"
 				 max_val="1"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Sharpening"
 				 control_name="RenderCASSharpness"
@@ -3286,6 +3287,7 @@
 					 function="ResetControl"
 					 parameter="RenderCASSharpness"/>
 				</button>
+
 				<text
 				 name="T_Exposure"
 				 follows="left|top"
@@ -3293,7 +3295,7 @@
 				 left="5"
 				 tool_tip="Controls the overall brightness of the scene, simulating camera exposure settings. Higher values make the image brighter, useful for dark environments, while lower values darken the scene, enhancing contrast in bright areas. Adjust carefully to prevent washed-out highlights or overly dark shadows."
 				 top_pad="5"
-				 width="70">
+				 width="90">
 					Exposure
 				</text>
 				<slider_bar
@@ -3307,7 +3309,7 @@
 				 min_val="0"
 				 max_val="10"
 				 top_delta="-2"
-				 width="127"/>
+				 width="107"/>
 				<spinner
 				 name="S_Exposure"
 				 control_name="RenderExposure"

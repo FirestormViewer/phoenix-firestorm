@@ -5608,6 +5608,14 @@ Aby uzyskać szczegółowe instrukcje dotyczące umieszczania [APP_NAME]a na bia
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+	<notification name="ViewerProcessRunningAsAdmin">
+		Jeden lub więcej procesów przeglądarki działa obecnie z uprawnieniami administratora. Jest to znana przyczyna wielu problemów oraz zakłóceń w działaniu multimediów i stron internetowych.
+
+Upewnij się, że żaden z procesów przeglądarki nie jest skonfigurowany do uruchamiania z uprawnieniami administratora. Więcej informacji znajdziesz tutaj:
+
+https://wiki.firestormviewer.org/fs_media#one_or_more_viewer_processes_are_currently_running_as_administrator_error_message
+		<usetemplate ignoretext="Ostrzegaj mnie, gdy przeglądarka działa z uprawnieniami administratora" name="okignore" />
+	</notification>
 	<notification label="Potwierdź nadpisanie pozy" name="ConfirmPoserOverwrite">
 		Nadpisać istniejącą pozę “[POSE_NAME]”?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK" />
@@ -5764,5 +5772,39 @@ Nazwa zostanie zweryfikowana przed zapisaniem przypisania.
 		<form name="form">
 			<button name="Cancel" text="Anuluj" />
 		</form>
+	</notification>
+
+
+
+	<notification name="FSWearableFavoritesNewFolder">
+		Wprowadź nazwę nowego folderu ulubionych rzeczy:
+		<form name="form">
+			<input name="message">
+				Nowy folder
+			</input>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesRenameFolder">
+		Wprowadź nową nazwę dla folderu ulubionych rzeczy [FOLDER_NAME]:
+		<form name="form">
+			<input name="message">
+				[FOLDER_NAME]
+			</input>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesDeleteFolder">
+		Usunąć folder ulubionych rzeczy "[FOLDER_NAME]"?
+
+Spowoduje to usunięcie folderu oraz znajdujących się w nim linków. Oryginalne przedmioty w szafie nie zostaną usunięte. 
+		<form name="form">
+			<button name="Delete" text="Usuń" />
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesFolderInvalidName">
+		Nie udało się utworzyć folderu ulubionych rzeczy "[FOLDER_NAME]".
+Nazwy folderów nie mogą zawierać znaków / ani \. 
 	</notification>
 </notifications>

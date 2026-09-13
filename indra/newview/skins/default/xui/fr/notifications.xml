@@ -5750,6 +5750,14 @@ Pour obtenir des instructions détaillées sur la manière de mettre [APP_NAME] 
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+	<notification name="ViewerProcessRunningAsAdmin">
+Un ou plusieurs processus du client s'exécutent actuellement en tant qu'administrateur. Cela peut entraîner un certain nombre de problèmes et empêcher le bon fonctionnement des fichiers multimédias et des pages Web au sein de celui-ci.
+
+Veuillez vous assurer qu'aucun processus du client n'est configuré pour s'exécuter en tant qu'administrateur. Pour plus d'informations, veuillez consulter la page suivante :
+
+https://wiki.firestormviewer.org/fs_media#one_or_more_viewer_processes_are_currently_running_as_administrator_error_message
+		 <usetemplate ignoretext="M'avertir lorsque le client est exécuté avec les droits d'administrateur" name="okignore" yestext="OK" />
+	</notification>
 	<notification label="Confirmer le remplacement de la pose" name="ConfirmPoserOverwrite">
 		Remplacer la pose “[POSE_NAME]”?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Ok"/>
@@ -5903,5 +5911,36 @@ Vous pouvez activer l'enregistrement des transcriptions dans Préférences &gt; 
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Annuler"/>
 		</form>
+	</notification>
+	<notification name="FSWearableFavoritesNewFolder">
+		Saisissez un nom pour le nouveau dossier des éléments portables favoris :
+		<form name="form">
+			<input name="message" type="text">
+				Nouveau dossier
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesRenameFolder">
+		Entrez un nouveau nom pour le dossier des éléments portables favoris [FOLDER_NAME]:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesDeleteFolder">
+		Supprimer le dossier d'éléments portables favoris "[FOLDER_NAME]"?
+
+Cela supprime uniquement le dossier et ses liens favoris. Les éléments originaux ne sont pas supprimés.
+		<form name="form">
+			<button name="Delete" text="Supprimer"/>
+			<button name="Cancel" text="Annumer"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesFolderInvalidName">
+		Impossible de créer le dossier d'éléments portables favoris "[FOLDER_NAME]".
+Les noms de dossier ne doivent pas contenir / ou \.
+			<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 </notifications>

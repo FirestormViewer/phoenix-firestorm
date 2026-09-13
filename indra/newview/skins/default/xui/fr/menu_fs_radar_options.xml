@@ -2,7 +2,7 @@
 <toggleable_menu name="menu_group_plus">
 	<menu_item_check label="Afficher la Minicarte au-dessus de la liste" name="ShowRadarMinimap"/>
 	<menu_item_check label="Limiter les résultats au rayon spécifié" name="LimitRadarByRange"/>
-	<menu_item_check label="Afficher les résidents ignorés et Blacklistés" name="FSRadarShowMutedAndDerendered"/>
+	<menu_item_check label="Afficher les résidents bloqués et Blacklistés" name="FSRadarShowMutedAndDerendered"/>
 	<context_menu label="Format des noms du radar" name="radarNameFormat">
 		<menu_item_check label="Nom d'affichage" name="radarFmtDN"/>
 		<menu_item_check label="Nom d'utilisateur" name="radarFmtUN"/>

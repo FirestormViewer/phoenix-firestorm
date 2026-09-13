@@ -7,6 +7,9 @@
 		沒有找到比對的物件。
 	</floater.string>
 	<panel name="buttons_panel">
+		<button name="new_folder_btn" tool_tip="建立新的收藏資料夾"/>
+		<button name="rename_folder_btn" tool_tip="重新命名選取的收藏資料夾"/>
+		<button name="delete_folder_btn" tool_tip="刪除選取的收藏資料夾"/>
 		<filter_editor label="篩選裝扮收藏夾" name="wearable_filter_input" />
 		<menu_button name="options_btn" tool_tip="裝扮收藏夾選項" />
 		<button name="remove_btn" tool_tip="從裝扮收藏夾中移除裝扮" />

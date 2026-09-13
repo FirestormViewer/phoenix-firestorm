@@ -6,7 +6,13 @@
 	<floater.string name="search_no_items">
 		Nie znaleziono pasujących rzeczy.
 	</floater.string>
+	<floater.string name="root_folder_label">
+		Ulubione
+	</floater.string>
 	<panel name="buttons_panel">
+		<button name="new_folder_btn" tool_tip="Utwórz nowy folder ulubionych" />
+		<button name="rename_folder_btn" tool_tip="Zmień nazwę wybranego folderu ulubionych" />
+		<button name="delete_folder_btn" tool_tip="Usuń wybrany folder ulubionych" />
 		<filter_editor label="Filtruj rzeczy" name="wearable_filter_input" />
 		<menu_button name="options_btn" tool_tip="Opcje ulubionych rzeczy" />
 		<button name="remove_btn" tool_tip="Usuń rzecz z listy ulubionych" />

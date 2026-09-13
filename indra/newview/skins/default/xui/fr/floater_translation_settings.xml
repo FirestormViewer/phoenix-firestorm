@@ -41,10 +41,10 @@
 	 <text name="azure_api_region_label">Région :</text>
 	<line_editor default_text="Peut être laissé vide pour les services globaux" name="azure_api_region"/>
 	<button label="Vérifier" name="verify_azure_api_key_btn"/>
-	<text name="google_api_key_label">Google [http://code.google.com/apis/language/translate/v2/getting_started.html#auth API key] :</text>
+	<text name="google_api_key_label">Google [https://docs.cloud.google.com/translate/docs/authentication#api-keys API key] :</text>
 	<line_editor default_text="Saisissez votre Google API key" name="google_api_key"/>
 	<button label="Vérification" name="verify_google_api_key_btn"/>
-	<text name="google_links_text">[http://code.google.com/apis/language/translate/v2/pricing.html Prix] | [https://code.google.com/apis/console Stats] </text>
+	<text name="google_links_text">[https://cloud.google.com/products/translate/pricing Prix] | [https://console.cloud.google.com/apis/dashboard Stats] </text>
 	<text name="deepl_api_domain_label">Point final :</text>
 	<combo_box name="deepl_api_domain_combo">
 		<combo_box.item label="DeepL gratuit" name="global"/>

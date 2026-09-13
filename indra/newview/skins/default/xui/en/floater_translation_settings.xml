@@ -274,7 +274,7 @@
   top_pad="53"
   type="string"
   width="95">
-  Google [http://code.google.com/apis/language/translate/v2/getting_started.html#auth API key]:
+  Google [https://docs.cloud.google.com/translate/docs/authentication#api-keys API key]:
  </text>
  <line_editor
   default_text="Enter Google API key and click &quot;Verify&quot;"
@@ -306,7 +306,7 @@
   top_delta="-23"
   type="string"
   width="100">
-  [http://code.google.com/apis/language/translate/v2/pricing.html Pricing] | [https://code.google.com/apis/console Stats] 
+  [https://cloud.google.com/products/translate/pricing Pricing] | [https://console.cloud.google.com/apis/dashboard Stats] 
  </text>
 
     <text

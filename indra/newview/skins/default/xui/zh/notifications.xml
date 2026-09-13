@@ -5867,6 +5867,14 @@ gzip級別6壓縮的測試結果，對[FILE]檔案大小[SIZE] KB：
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+	<notification name="ViewerProcessRunningAsAdmin">
+		目前有一個或多個檢視器程序正在以管理員身分執行。已知這可能會導致一些問題，例如媒體和網頁無法正常顯示。
+
+請確保檢視器程序未以管理員身分執行。如需更多資訊，請參閱
+
+https://wiki.firestormviewer.org/fs_media#one_or_more_viewer_processes_are_currently_running_as_administrator_error_message
+		<usetemplate ignoretext="當檢視器以管理員身分執行時發出警告" name="okignore" yestext="確定" />
+	</notification>
 	<notification label="確認覆蓋姿勢" name="ConfirmPoserOverwrite">
 		是否覆蓋現有的姿勢「[POSE_NAME]」？
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
@@ -6035,5 +6043,39 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 			<button name="OK" text="確定"/>
 			<button name="Cancel" text="取消"/>
 		</form>
+	</notification>
+	<notification name="FSWearableFavoritesNewFolder">
+		請輸入新裝扮收藏資料夾的名稱：
+		<form name="form">
+			<input name="message">
+				New Folder
+			</input>
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesRenameFolder">
+		請輸入裝扮收藏資料夾的新名稱：[FOLDER_NAME]
+		<form name="form">
+			<input name="message">
+				[FOLDER_NAME]
+			</input>
+			<button name="OK" text="確定"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesDeleteFolder">
+		確定要刪除裝扮收藏資料夾「[FOLDER_NAME]」嗎？
+
+此操作只會刪除該資料夾及其中的收藏聯結。庫存中的原始物件不會被刪除。
+		<form name="form">
+			<button name="Delete" text="刪除"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesFolderInvalidName">
+		無法建立裝扮收藏資料夾「[FOLDER_NAME]」。
+資料夾名稱不能包含 / 或 \。
+		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 </notifications>

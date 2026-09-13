@@ -65,12 +65,12 @@
 	<line_editor default_text="對全球服務可選" name="azure_api_region" />
 	<button label="驗證" name="verify_azure_api_key_btn" />
 	<text name="google_api_key_label">
-		Google-[http://code.google.com/apis/language/translate/v2/getting_started.html#auth API 金鑰]:
+		Google-[https://docs.cloud.google.com/translate/docs/authentication#api-keys API 金鑰]:
 	</text>
 	<line_editor default_text="輸入 API 金鑰 &amp; 點選&quot;驗證&quot;" name="google_api_key" />
 	<button label="驗證" name="verify_google_api_key_btn" />
 	<text name="google_links_text">
-		[http://code.google.com/apis/language/translate/v2/pricing.html 價格] | [https://code.google.com/apis/console 統計]
+		[https://cloud.google.com/products/translate/pricing 價格] | [https://console.cloud.google.com/apis/dashboard 統計]
 	</text>
 	<text name="deepl_api_domain_label">
 		API端點：

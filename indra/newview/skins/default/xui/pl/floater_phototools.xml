@@ -160,7 +160,7 @@
 				</text>
 			</panel>
 			<panel name="P_Amb_Occ_Settings">
-				<check_box label="Włącz okluzję otoczenia (percepcję głębi)" name="UseSSAO" tool_tip="Okluzja otoczenia symuluje miękkie cienie pojawiające się w załamaniach, rogach i miejscach, gdzie obiekty są blisko siebie, zwiększając głębię i realizm poprzez naśladowanie naturalnego zasłonięcia światła otoczenia. Chociaż funkcja okluzji działa skutecznie samodzielnie, ustawienia 'efekt' i 'wygadzanie' pomagają precyzyjnie dostroić intensywność i gładkość cieniowania. Okluzja przyczynia się do bardziej realistycznego obrazu w dowolnej rozdzielczości, chociaż jego subtelne szczegóły są bardziej zauważalne w wyższych rozdzielczościach, takich jak 2048 pikseli i więcej." />
+				<check_box label="Okluzja otoczenia (percepcja głębi)" name="UseSSAO" tool_tip="Okluzja otoczenia symuluje miękkie cienie pojawiające się w załamaniach, rogach i miejscach, gdzie obiekty są blisko siebie, zwiększając głębię i realizm poprzez naśladowanie naturalnego zasłonięcia światła otoczenia. Chociaż funkcja okluzji działa skutecznie samodzielnie, ustawienia 'efekt' i 'wygadzanie' pomagają precyzyjnie dostroić intensywność i gładkość cieniowania. Okluzja przyczynia się do bardziej realistycznego obrazu w dowolnej rozdzielczości, chociaż jego subtelne szczegóły są bardziej zauważalne w wyższych rozdzielczościach, takich jak 2048 pikseli i więcej." />
 			</panel>
 			<panel name="P_Scale">
 				<text name="T_Scale" tool_tip="Steruje rozmiarem obszaru próbkowania używanego do okluzji otoczenia. Większe wartości zwiększają dokładność cieni i szczegółowość, ale mogą mieć wpływ na wydajność. Najlepiej stosować z korektami rozmycia cieni, aby uzyskać delikatniejsze efekty cieniowania.">
