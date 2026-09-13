@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
+	<string name="NativeErrorTitle">Erro nativo do Vulkanstorm</string>
+	<string name="NativeErrorCloseViewer">Confirme esta mensagem para fechar o visualizador.</string>
+	<string name="NativeErrorCopy">Copiar detalhes</string>
+	<string name="NativeErrorRetryCleanup">Tentar limpeza novamente</string>
+	<string name="NativeErrorRetryLogin">Tentar login novamente</string>
+	<string name="NativeAgreementAccept">Aceitar</string>
+	<string name="NativeAgreementReject">Recusar</string>
+	<string name="NativeErrorUnexpected">Ocorreu um erro inesperado no visualizador nativo. Feche o visualizador e entre em contato com o suporte se isso acontecer novamente.</string>
+	<string name="NativeErrorDefaultSettings">Não foi possível carregar as configurações padrão necessárias. Repare a instalação antes de iniciar novamente.</string>
+	<string name="NativeErrorSettingsMode">Não foi possível carregar o modo de configuração selecionado. Verifique os arquivos de configuração instalados antes de iniciar novamente.</string>
+	<string name="NativeErrorUnsupportedArguments">Uma ou mais opções de linha de comando não são compatíveis com a inicialização nativa. Remova as opções não compatíveis antes de iniciar novamente.</string>
+	<string name="NativeErrorSettingsRead">Não foi possível ler ou aplicar as configurações necessárias. Verifique os arquivos de configuração e as permissões de acesso antes de iniciar novamente.</string>
+	<string name="NativeErrorSettingsWrite">Não foi possível salvar as configurações. Verifique o espaço disponível em disco e as permissões de gravação antes de iniciar novamente.</string>
+	<string name="NativeErrorCacheUnavailable">Não foi possível inicializar o cache. Verifique a localização do cache, as permissões de acesso e o espaço disponível em disco antes de iniciar novamente.</string>
+	<string name="NativeErrorStartupResources">Os recursos necessários para a inicialização não estão disponíveis. Repare a instalação antes de iniciar novamente.</string>
+	<string name="NativeErrorWindowUnavailable">A janela nativa não está disponível ou não conseguiu concluir uma operação. Verifique a disponibilidade da tela e as configurações da janela antes de iniciar novamente.</string>
+	<string name="NativeErrorRendererUnavailable">O renderizador Vulkan nativo não está disponível ou parou. Verifique o suporte a Vulkan no driver antes de iniciar novamente. Não houve troca de renderizador nem nova tentativa.</string>
+	<string name="NativeErrorBrowserUnavailable">O navegador integrado não conseguiu iniciar ou carregar a página. Verifique a instalação e a configuração de rede antes de iniciar novamente.</string>
+	<string name="NativeErrorShutdownFailed">O encerramento nativo não foi concluído normalmente. Verifique o acesso às configurações e ao cache antes de iniciar novamente.</string>
+	<string name="NativeErrorOperationFailed">Não foi possível concluir a operação solicitada. Feche esta mensagem para voltar ao visualizador. Nenhuma nova tentativa foi realizada.</string>
+	<string name="NativeErrorOptionalSettings">Não foi possível carregar as configurações opcionais. O visualizador continuará com os valores padrão disponíveis.</string>
+	<string name="NativeErrorNetworkUnavailable">Não foi possível concluir a solicitação de rede. Verifique a conexão. A recuperação exige a intervenção do componente responsável pela operação; nenhuma nova tentativa foi realizada.</string>
+	<string name="NativeErrorTlsRejected">Não foi possível verificar a conexão segura. Verifique o relógio do sistema e a configuração de rede. A verificação do certificado não foi ignorada.</string>
+	<string name="NativeErrorTransportUnavailable">A autenticação nativa não está disponível nesta compilação. Nenhuma solicitação de login foi enviada.</string>
+	<string name="NativeErrorSessionCleanupFailed">Não foi possível concluir a limpeza da sessão. Os recursos continuam sob o controle do componente responsável. Tente a limpeza novamente para finalizar a operação.</string>
+	<string name="NativeErrorAuthenticationFailed">A autenticação falhou. Nenhuma sessão conectada foi estabelecida.</string>
+	<string name="NativeErrorConnectionFailed">A conexão com a região falhou. A recuperação exige a intervenção do componente responsável pela sessão.</string>
+	<string name="NativeErrorSessionTimeout">O tempo limite da solicitação de sessão foi excedido. A recuperação exige a intervenção do componente responsável pela sessão.</string>
+	<string name="NativeErrorSessionFailed">Não foi possível concluir a operação da sessão. A recuperação exige a intervenção do componente responsável pela sessão.</string>
 	<string name="SECOND_LIFE_GRID">
 		Grid do Second Life:
 	</string>

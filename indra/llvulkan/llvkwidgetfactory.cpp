@@ -2556,7 +2556,8 @@ namespace
         params.rect = *rect;
         params.layout = declaration.params.geometry.layout.empty() ? parentLayout : declaration.params.geometry.layout;
         auto icon = declaration.icon;
-        auto control = declaration.control;
+        const auto controlStorage = std::make_unique<std::optional<LLVKControl::Params>>(declaration.control);
+        auto& control = *controlStorage;
         if (control && !declaration.panel && !resolveControl(*control,callbacks,environment.resources,error)) return std::nullopt;
         if (icon && declaration.imageName) icon->image = tree.findImage(*declaration.imageName);
         auto button = declaration.button;

@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
+	<string name="NativeErrorTitle">Vulkanstorm ネイティブエラー</string>
+	<string name="NativeErrorCloseViewer">このメッセージを確認すると、ビューアが終了します。</string>
+	<string name="NativeErrorCopy">詳細をコピー</string>
+	<string name="NativeErrorRetryCleanup">クリーンアップを再試行</string>
+	<string name="NativeErrorRetryLogin">ログインを再試行</string>
+	<string name="NativeAgreementAccept">同意する</string>
+	<string name="NativeAgreementReject">同意しない</string>
+	<string name="NativeErrorUnexpected">ネイティブビューアで予期しないエラーが発生しました。ビューアを終了し、再発する場合はサポートにお問い合わせください。</string>
+	<string name="NativeErrorDefaultSettings">必要な既定の設定を読み込めませんでした。再起動する前にインストールを修復してください。</string>
+	<string name="NativeErrorSettingsMode">選択した設定モードを読み込めませんでした。再起動する前にインストール済みの設定ファイルを確認してください。</string>
+	<string name="NativeErrorUnsupportedArguments">ネイティブ起動でサポートされていないコマンドラインオプションがあります。再起動する前に、サポートされていないオプションを削除してください。</string>
+	<string name="NativeErrorSettingsRead">必要な設定を読み込むか適用することができませんでした。再起動する前に設定ファイルとアクセス権限を確認してください。</string>
+	<string name="NativeErrorSettingsWrite">設定を保存できませんでした。再起動する前にディスクの空き容量と書き込み権限を確認してください。</string>
+	<string name="NativeErrorCacheUnavailable">キャッシュを初期化できませんでした。再起動する前にキャッシュの場所、アクセス権限、ディスクの空き容量を確認してください。</string>
+	<string name="NativeErrorStartupResources">起動に必要なリソースを利用できません。再起動する前にインストールを修復してください。</string>
+	<string name="NativeErrorWindowUnavailable">ネイティブウィンドウを利用できないか、操作を完了できませんでした。再起動する前にディスプレイが利用可能かどうかとウィンドウ設定を確認してください。</string>
+	<string name="NativeErrorRendererUnavailable">ネイティブ Vulkan レンダラーを利用できないか、停止しました。再起動する前にドライバの Vulkan 対応を確認してください。レンダラーの切り替えや再試行は行われていません。</string>
+	<string name="NativeErrorBrowserUnavailable">内蔵ブラウザを起動できないか、ページを読み込めませんでした。再起動する前にインストールとネットワーク設定を確認してください。</string>
+	<string name="NativeErrorShutdownFailed">ネイティブビューアの終了処理を正常に完了できませんでした。再起動する前に設定とキャッシュへのアクセスを確認してください。</string>
+	<string name="NativeErrorOperationFailed">要求された操作を完了できませんでした。このメッセージを閉じるとビューアに戻ります。再試行は行われていません。</string>
+	<string name="NativeErrorOptionalSettings">任意の設定を読み込めませんでした。ビューアは利用可能な既定値で続行します。</string>
+	<string name="NativeErrorNetworkUnavailable">ネットワーク要求を完了できませんでした。接続を確認してください。復旧には操作の管理元による対応が必要です。再試行は行われていません。</string>
+	<string name="NativeErrorTlsRejected">安全な接続を検証できませんでした。システム時刻とネットワーク設定を確認してください。証明書の検証は省略されていません。</string>
+	<string name="NativeErrorTransportUnavailable">このビルドではネイティブ認証を利用できません。ログイン要求は送信されていません。</string>
+	<string name="NativeErrorSessionCleanupFailed">セッションのクリーンアップを完了できませんでした。リソースは引き続き管理元が保持しています。操作を完了するにはクリーンアップを再試行してください。</string>
+	<string name="NativeErrorAuthenticationFailed">認証に失敗しました。接続済みのセッションは確立されていません。</string>
+	<string name="NativeErrorConnectionFailed">リージョンへの接続に失敗しました。復旧にはセッションの管理元による対応が必要です。</string>
+	<string name="NativeErrorSessionTimeout">セッション要求がタイムアウトしました。復旧にはセッションの管理元による対応が必要です。</string>
+	<string name="NativeErrorSessionFailed">セッションの操作を完了できませんでした。復旧にはセッションの管理元による対応が必要です。</string>
 	<string name="SUPPORT_SITE">
 		Firestormサポートポータル
 	</string>

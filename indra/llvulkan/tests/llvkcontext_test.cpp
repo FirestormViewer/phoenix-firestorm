@@ -369,19 +369,27 @@ namespace tut
         LLVKImagePublication publication(uploadDevice);
         ensure("asynchronous image begins",publication.advance(logo,error));
         ensure("not published before completion observation",!publication.current().image && publication.pending());
-        ensure_equals("test waits only to observe completion",vkQueueWaitIdle(renderer.graphicsQueue()),VK_SUCCESS);
+        ensure("test observes initial upload fence",publication.waitPendingUpload(5000000000ull,error));
         const bool published = publication.advance(logo,error);
         ensure(error,published);
         ensure("matching source and image published",publication.current().source == logo && publication.current().image);
-        const auto oldImage = publication.current().image;
         const std::uint8_t browserPixel[]{1,2,3,4};
-        auto browserFrame = LLVKWidgetImage::browserFrame(1,1,browserPixel,error);
-        ensure(error,browserFrame != nullptr);
-        ensure("replacement upload begins",publication.advance(browserFrame,error));
-        ensure("prior image valid during upload",publication.current().image == oldImage);
-        ensure_equals("replacement upload completes",vkQueueWaitIdle(renderer.graphicsQueue()),VK_SUCCESS);
-        ensure("replacement publishes",publication.advance(browserFrame,error));
-        ensure("new image paired to browser frame",publication.current().source == browserFrame && publication.current().image != oldImage);
+        std::shared_ptr<const LLVKWidgetImage> browserFrame;
+        for (std::uint32_t replacement=0; replacement<64; ++replacement)
+        {
+            const auto oldImage = publication.current().image;
+            browserFrame = LLVKWidgetImage::browserFrame(1,1,browserPixel,error);
+            ensure(error,browserFrame != nullptr);
+            ensure("replacement upload begins",publication.advance(browserFrame,error));
+            ensure("prior image valid during upload",publication.current().image == oldImage);
+            ensure("replacement upload fence completes",publication.waitPendingUpload(5000000000ull,error));
+            ensure("replacement publishes",publication.advance(browserFrame,error));
+            ensure("new image paired to browser frame: replacement="+std::to_string(replacement)+
+                " pending="+std::to_string(publication.pending())+
+                " source="+std::to_string(publication.current().source == browserFrame)+
+                " image="+std::to_string(publication.current().image != oldImage),
+                publication.current().source == browserFrame && publication.current().image != oldImage);
+        }
         ensure("invalidation clears publication",publication.advance({},error) && !publication.current().image);
         ensure("cancelled upload begins",publication.advance(browserFrame,error));
         publication.invalidate();

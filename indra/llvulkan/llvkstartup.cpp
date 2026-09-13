@@ -3,11 +3,54 @@
 #include "llvksettingsmgr.h"
 #include "llvkpreferencesbackup.h"
 #include "llvkstartupstatus.h"
+#include "llvkerror.h"
 #include "llstring.h"
 #include "llerror.h"
 #include <windows.h>
 #include <shellapi.h>
 #include <shlobj.h>
+
+LLVKSessionOwner::Code LLVKApplicationCache::acquire(const LLVKSessionOwner::Context&)
+{
+    std::string error;
+    return mCache.start(mConfiguration,error) ? LLVKSessionOwner::Code::Ok : LLVKSessionOwner::Code::ServiceFailed;
+}
+
+LLVKSessionOwner::Code LLVKApplicationCache::retire()
+{
+    std::string error;
+    struct Hide
+    {
+        std::shared_ptr<LLVKStartupStatus> status;
+        ~Hide() { if (status) status->hide(); }
+    } hide{mStatus};
+    if (mStatus)
+    {
+        try { mStatus->show("ShuttingDown",error); }
+        catch (...) {}
+    }
+    return mCache.stop(error) ? LLVKSessionOwner::Code::Ok : LLVKSessionOwner::Code::CleanupFailed;
+}
+
+namespace
+{
+    struct ApplicationSession
+    {
+        std::unique_ptr<LLVKSessionOwner> owner=std::make_unique<LLVKSessionOwner>();
+        ~ApplicationSession()
+        {
+            try
+            {
+                const auto snapshot=owner->snapshot();
+                if (snapshot.state==LLVKSessionOwner::State::Stopped) return;
+                if (snapshot.state!=LLVKSessionOwner::State::Disconnecting && owner->shutdown().ok()) return;
+            }
+            catch (...) {}
+            owner.release();
+            llvkPresentErrorFallback({LLVKError::Code::ShutdownFailed,LLVKError::Operation::Shutdown,1,0});
+        }
+    };
+}
 
 std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string& profileName,const std::string& shortVersion,
     LLControlGroup& globalGroup,LLControlGroup& accountGroup,LLControlGroup& crashGroup,LLControlGroup& warningGroup,
@@ -79,35 +122,47 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     const auto* savedBackend = settings.find("RenderBackend");
     const auto backend = explicitBackend != overrides.end() ? explicitBackend->second : savedBackend ? savedBackend->getValue().asString() : std::string();
     if (backend != "Vulkan") return std::nullopt;
-    const auto fail = [&](const std::string& problem) -> std::optional<int>
+    using Code = LLVKError::Code;
+    using Operation = LLVKError::Operation;
+    LLVKErrorGate errorGate;
+    const auto fail = [&](Code code, Operation operation = Operation::Bootstrap) -> std::optional<int>
     {
-        LL_WARNS("NativeStartup") << problem << LL_ENDL;
-        MessageBoxW(nullptr,ll_convert<std::wstring>(problem).c_str(),L"Vulkanstorm native startup",MB_OK|MB_ICONERROR);
+        errorGate.begin(operation,1);
+        const LLVKError failure{code,operation,1,1};
+        if (errorGate.accept(failure))
+        {
+            try { LL_WARNS("NativeStartup") << failure.diagnostic() << LL_ENDL; }
+            catch (...) {}
+            llvkPresentErrorFallback(failure);
+        }
         return -1;
     };
     try
     {
-    if (!defaults) return fail(error.empty() ? "Native default settings could not be loaded" : error);
-    if (!modeError.empty()) return fail("Native settings mode could not be applied: "+modeError);
-    if (unsupported) return fail("This native startup path does not yet support one or more supplied command-line options.");
+    if (!defaults) return fail(Code::DefaultSettings,Operation::Settings);
+    if (!modeError.empty()) return fail(Code::SettingsMode,Operation::Settings);
+    if (unsupported) return fail(Code::UnsupportedArguments);
     settings=LLVKSettingsMgr(globalGroup);
-    if (!loadSettings()) return fail(error);
+    if (!loadSettings()) return fail(Code::DefaultSettings,Operation::Settings);
     const auto reset=LLVKSettingsMgr::consumeReset(profile,std::filesystem::path(std::u8string(settingsFile.begin(),settingsFile.end())),error);
-    if (!reset) return fail(error);
+    if (!reset) return fail(Code::SettingsWrite,Operation::Settings);
     if (*reset)
     {
-        if (!loadSettings()) return fail(error);
-        if (!modeError.empty()) return fail("Native settings mode could not be applied after reset: "+modeError);
-        if (!settings.set("RenderBackend",LLSD("Vulkan"),false,error)) return fail(error);
+        if (!loadSettings()) return fail(Code::DefaultSettings,Operation::Settings);
+        if (!modeError.empty()) return fail(Code::SettingsMode,Operation::Settings);
+        if (!settings.set("RenderBackend",LLSD("Vulkan"),false,error)) return fail(Code::SettingsRead,Operation::Settings);
     }
-    for (const auto& [name,value] : overrides) if (!settings.set(name,LLSD(value),false,error)) return fail(error);
+    for (const auto& [name,value] : overrides)
+        if (!settings.set(name,LLSD(value),false,error)) return fail(Code::SettingsRead,Operation::Settings);
     const auto values = settings.values();
     const auto stringValue = [&](const char* name,const std::string& fallback = {})
     { const auto found = values.find(name); return found == values.end() || found->second.asString().empty() ? fallback : found->second.asString(); };
     const auto browserDirectory = directory/"llplugin";
-    if (!SetDllDirectoryW(browserDirectory.c_str())) return fail("Native browser DLL directory could not be selected.");
+    if (!SetDllDirectoryW(browserDirectory.c_str())) return fail(Code::BrowserUnavailable,Operation::Browser);
     struct DllDirectory { ~DllDirectory() { SetDllDirectoryW(nullptr); } } dllDirectory;
     LLVKWindowMgr::Configuration configuration;
+    Code windowFailure = Code::WindowUnavailable;
+    configuration.failureCode = &windowFailure;
     configuration.ui.clearSpamQueues=clearSpamQueues;
     if (proxyCredentials)
     {
@@ -121,19 +176,19 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     configuration.ui.accountSettingsGroup=&accountGroup;
     LLVKSettingsMgr warnings(warningGroup);
     const auto warningsFile=userSettings/"ignorable_dialogs.xml";
-    if (!warnings.loadFile(warningsFile,false,false,true,error)) return fail(error);
+    if (!warnings.loadFile(warningsFile,false,false,true,error)) return fail(Code::SettingsRead,Operation::Settings);
     configuration.ui.warningSettingsGroup=&warningGroup;
     configuration.ui.saveWarningPreferences=[&warnings,warningsFile](const auto& changes,std::string& problem)
     { return warnings.saveChanges(warningsFile,changes,problem); };
     configuration.ui.settingDefaults = settings.defaults();
     LLVKSettingsMgr accountSettings(accountGroup);
-    if (!accountSettings.loadFile(directory/"app_settings"/"settings_per_account.xml",true,true,true,error)) return fail(error);
+    if (!accountSettings.loadFile(directory/"app_settings"/"settings_per_account.xml",true,true,true,error)) return fail(Code::SettingsRead,Operation::Settings);
     configuration.ui.accountSettings=accountSettings.values();
     configuration.ui.accountDefaults=accountSettings.defaults();
     LLVKSettingsMgr crashSettings(crashGroup);
     const auto crashFile=userSettings/"settings_crash_behavior.xml";
     if (!crashSettings.loadFile(directory/"app_settings"/"settings_crash_behavior.xml",true,true,true,error) ||
-        !crashSettings.loadFile(crashFile,false,false,true,error)) return fail(error);
+        !crashSettings.loadFile(crashFile,false,false,true,error)) return fail(Code::SettingsRead,Operation::Settings);
     configuration.ui.crashSettings=crashSettings.values();
     configuration.ui.saveCrashPreferences=[&crashSettings,crashFile](const auto& changes,std::string& problem)
     { return crashSettings.saveChanges(crashFile,changes,problem); };
@@ -143,7 +198,7 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     configuration.ui.crashSettingsRequireRestart=true;
 #endif
     PWSTR local=nullptr;
-    if (FAILED(SHGetKnownFolderPath(FOLDERID_LocalAppData,0,nullptr,&local))) return fail("Cannot resolve native cache directory");
+    if (FAILED(SHGetKnownFolderPath(FOLDERID_LocalAppData,0,nullptr,&local))) return fail(Code::CacheUnavailable,Operation::Cache);
     configuration.ui.defaultCacheDirectory=std::filesystem::path(local)/std::filesystem::path(std::u8string(profileName.begin(),profileName.end()));
     CoTaskMemFree(local);
     const auto cache=stringValue("CacheLocation");
@@ -155,12 +210,17 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     configuration.ui.appliedSettingsMode = appliedSettingsMode;
     const auto preferenceFile=userSettings/std::filesystem::path(std::u8string(settingsFile.begin(),settingsFile.end()));
     if (executionMarkerName.empty() || std::filesystem::path(executionMarkerName).filename()!=executionMarkerName)
-        return fail("Native texture cache requires the viewer execution marker identity");
-    LLVKTextureCache textureCache;
+        return fail(Code::CacheUnavailable,Operation::Cache);
     auto cachePlan=LLVKTextureCache::planStartup(settings.values(),configuration.ui.defaultCacheDirectory,
         directory/"local_assets",profile/"logs"/executionMarkerName,false,error);
-    if (!cachePlan) return fail(error);
+    if (!cachePlan) return fail(Code::CacheUnavailable,Operation::Cache);
     const auto& cacheConfiguration=cachePlan->configuration;
+    ApplicationSession session;
+    auto startupStatus=std::make_shared<LLVKStartupStatus>();
+    auto cacheService=std::make_unique<LLVKApplicationCache>(cacheConfiguration,startupStatus);
+    auto& textureCache=cacheService->cache();
+    std::unique_ptr<LLVKSessionOwner::Service> applicationCache=std::move(cacheService);
+    configuration.sessionOwner=session.owner.get();
     LLVKSkinFiles::Configuration startupSkin;
     startupSkin.executableDirectory=directory;
     startupSkin.workingDirectory=std::filesystem::current_path();
@@ -170,21 +230,21 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     startupSkin.theme=stringValue("SkinCurrentTheme");
     startupSkin.language=stringValue("Language","en");
     if (startupSkin.language=="default") startupSkin.language="en";
-    LLVKStartupStatus startupStatus;
-    if (!startupStatus.load(startupSkin,"Vulkanstorm",error) ||
-        !startupStatus.show(cacheConfiguration.purge ? "StartupClearingTextureCache" : "StartupInitializingTextureCache",error))
-        return fail(error);
-    if (!textureCache.start(cacheConfiguration,error)) return fail(error);
-    startupStatus.hide();
+    if (!startupStatus->load(startupSkin,"Vulkanstorm",error) ||
+        !startupStatus->show(cacheConfiguration.purge ? "StartupClearingTextureCache" : "StartupInitializingTextureCache",error))
+        return fail(Code::StartupResources);
+    if (!session.owner->install(LLVKSessionOwner::Lifetime::Application,1,applicationCache).ok())
+    { startupStatus->hide(); return fail(Code::CacheUnavailable,Operation::Cache); }
+    startupStatus->hide();
     cachePlan->metadata["CacheValidateCounter"]=LLSD(static_cast<int>(textureCache.validationIndex()));
-    if (!settings.saveChanges(preferenceFile,cachePlan->metadata,error)) return fail(error);
+    if (!settings.saveChanges(preferenceFile,cachePlan->metadata,error)) return fail(Code::SettingsWrite,Operation::Settings);
     configuration.ui.cacheDirectory=cacheConfiguration.directory;
     if (soundCache.empty()) configuration.soundCacheDirectory=cacheConfiguration.directory;
     configuration.ui.settings=settings.values();
     configuration.textureCache=&textureCache;
     if (const auto requested=settings.find("FSStartupClearBrowserCache"); requested && requested->getValue().asBoolean())
     {
-        if (!settings.consumeBrowserCacheClear(profile,preferenceFile,error)) return fail(error);
+        if (!settings.consumeBrowserCacheClear(profile,preferenceFile,error)) return fail(Code::SettingsWrite,Operation::Cache);
         configuration.ui.settings["FSStartupClearBrowserCache"]=false;
     }
     configuration.ui.savePreferences=[&settings,preferenceFile](const auto& changes,std::string& problem)
@@ -217,11 +277,11 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     if (std::filesystem::exists(autoReplaceFile))
     {
         if (!autoReplace.loadFile(autoReplaceFile,error))
-        { LL_WARNS("AutoReplace") << error << LL_ENDL; error.clear(); }
+        { LL_WARNS("AutoReplace") << (LLVKError{Code::OptionalSettings,Operation::Settings,1,1}).diagnostic() << LL_ENDL; error.clear(); }
     }
     else if (!autoReplace.loadFile(directory/"app_settings"/"autoreplace.xml",error))
     {
-        LL_WARNS("AutoReplace") << error << "; using example lists" << LL_ENDL;
+        LL_WARNS("AutoReplace") << (LLVKError{Code::OptionalSettings,Operation::Settings,1,1}).diagnostic() << LL_ENDL;
         error.clear();
         LLSD first; first["name"]="Example List 1"; first["replacements"]["keyword1"]="replacement string 1";
         first["replacements"]["keyword2"]="replacement string 2";
@@ -267,13 +327,14 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     page.theme = configuration.ui.skin.theme;
     page.settings = values;
     configuration.loginPage = LLVKViewerUi::pageUrl(page);
-    if (!LLVKWindowMgr::run(configuration,error)) return fail(error);
-    if (!startupStatus.show("ShuttingDown",error)) return fail(error);
-    if (!textureCache.stop(error)) return fail(error);
-    startupStatus.hide();
+    if (!LLVKWindowMgr::run(configuration,error))
+        return fail(windowFailure,windowFailure == Code::RendererUnavailable ? Operation::Renderer :
+            windowFailure == Code::BrowserUnavailable ? Operation::Browser :
+            windowFailure == Code::ShutdownFailed ? Operation::Shutdown : Operation::Window);
+    if (session.owner->snapshot().state!=LLVKSessionOwner::State::Stopped)
+        return fail(Code::ShutdownFailed,Operation::Shutdown);
     LL_INFOS("NativeStartup") << "Goodbye!" << LL_ENDL;
     return 0;
     }
-    catch (const std::exception& exception) { return fail(exception.what()); }
-    catch (...) { return fail("Native viewer startup or shutdown failed with an unknown exception"); }
+    catch (...) { return fail(Code::Unexpected); }
 }

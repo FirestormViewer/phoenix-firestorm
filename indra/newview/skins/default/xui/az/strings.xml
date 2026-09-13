@@ -4,6 +4,35 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
+	<string name="NativeErrorTitle">Vulkanstorm yerli rejim xətası</string>
+	<string name="NativeErrorCloseViewer">Baxış proqramını bağlamaq üçün bu bildirişi təsdiqləyin.</string>
+	<string name="NativeErrorCopy">Təfərrüatları köçür</string>
+	<string name="NativeErrorRetryCleanup">Təmizləməni yenidən sına</string>
+	<string name="NativeErrorRetryLogin">Girişi yenidən sına</string>
+	<string name="NativeAgreementAccept">Qəbul et</string>
+	<string name="NativeAgreementReject">İmtina et</string>
+	<string name="NativeErrorUnexpected">Yerli rejimdə işləyən baxış proqramında gözlənilməz xəta baş verdi. Proqramı bağlayın və bu hal təkrarlanarsa, dəstək xidməti ilə əlaqə saxlayın.</string>
+	<string name="NativeErrorDefaultSettings">Tələb olunan standart parametrlər yüklənə bilmədi. Yenidən başlatmazdan əvvəl quraşdırmanı bərpa edin.</string>
+	<string name="NativeErrorSettingsMode">Seçilmiş parametr rejimi yüklənə bilmədi. Yenidən başlatmazdan əvvəl quraşdırılmış parametr fayllarını yoxlayın.</string>
+	<string name="NativeErrorUnsupportedArguments">Bir və ya bir neçə əmr sətri seçimi yerli rejimdə başlatma zamanı dəstəklənmir. Yenidən başlatmazdan əvvəl dəstəklənməyən seçimləri silin.</string>
+	<string name="NativeErrorSettingsRead">Tələb olunan parametrlər oxuna və ya tətbiq edilə bilmədi. Yenidən başlatmazdan əvvəl parametr fayllarını və giriş icazələrini yoxlayın.</string>
+	<string name="NativeErrorSettingsWrite">Parametrlər saxlanıla bilmədi. Yenidən başlatmazdan əvvəl diskdəki boş yeri və yazma icazələrini yoxlayın.</string>
+	<string name="NativeErrorCacheUnavailable">Keş işə hazırlana bilmədi. Yenidən başlatmazdan əvvəl keşin yerini, giriş icazələrini və diskdəki boş yeri yoxlayın.</string>
+	<string name="NativeErrorStartupResources">Başlatma üçün tələb olunan resurslar əlçatan deyil. Yenidən başlatmazdan əvvəl quraşdırmanı bərpa edin.</string>
+	<string name="NativeErrorWindowUnavailable">Yerli rejim pəncərəsi əlçatan deyil və ya əməliyyatı tamamlaya bilmədi. Yenidən başlatmazdan əvvəl ekranın əlçatanlığını və pəncərə parametrlərini yoxlayın.</string>
+	<string name="NativeErrorRendererUnavailable">Yerli Vulkan render sistemi əlçatan deyil və ya dayanıb. Yenidən başlatmazdan əvvəl sürücünün Vulkan dəstəyini yoxlayın. Render sistemi dəyişdirilməyib və təkrar cəhd edilməyib.</string>
+	<string name="NativeErrorBrowserUnavailable">Daxili brauzer işə düşə və ya səhifəsini yükləyə bilmədi. Yenidən başlatmazdan əvvəl quraşdırmanı və şəbəkə parametrlərini yoxlayın.</string>
+	<string name="NativeErrorShutdownFailed">Yerli rejimdə bağlanma normal tamamlana bilmədi. Yenidən başlatmazdan əvvəl parametrlərə və keşə girişi yoxlayın.</string>
+	<string name="NativeErrorOperationFailed">Tələb olunan əməliyyat tamamlana bilmədi. Baxış proqramına qayıtmaq üçün bu bildirişi bağlayın. Təkrar cəhd edilməyib.</string>
+	<string name="NativeErrorOptionalSettings">İxtiyari parametrlər yüklənə bilmədi. Baxış proqramı mövcud standart dəyərlərlə davam edəcək.</string>
+	<string name="NativeErrorNetworkUnavailable">Şəbəkə sorğusu tamamlana bilmədi. Bağlantını yoxlayın. Bərpa üçün əməliyyatı idarə edən komponentin müdaxiləsi tələb olunur; təkrar cəhd edilməyib.</string>
+	<string name="NativeErrorTlsRejected">Təhlükəsiz bağlantı doğrulana bilmədi. Sistem saatını və şəbəkə parametrlərini yoxlayın. Sertifikat yoxlaması ötürülməyib.</string>
+	<string name="NativeErrorTransportUnavailable">Bu yığımda yerli autentifikasiya mövcud deyil. Giriş sorğusu göndərilməyib.</string>
+	<string name="NativeErrorSessionCleanupFailed">Sessiyanın təmizlənməsi tamamlana bilmədi. Resurslar onları idarə edən komponentin nəzarətində qalır. Əməliyyatı bitirmək üçün təmizləməni yenidən sınayın.</string>
+	<string name="NativeErrorAuthenticationFailed">Autentifikasiya uğursuz oldu. Qoşulmuş sessiya yaradılmayıb.</string>
+	<string name="NativeErrorConnectionFailed">Regiona bağlantı uğursuz oldu. Bərpa üçün sessiyanı idarə edən komponentin müdaxiləsi tələb olunur.</string>
+	<string name="NativeErrorSessionTimeout">Sessiya sorğusunun gözləmə müddəti bitdi. Bərpa üçün sessiyanı idarə edən komponentin müdaxiləsi tələb olunur.</string>
+	<string name="NativeErrorSessionFailed">Sessiya əməliyyatı tamamlana bilmədi. Bərpa üçün sessiyanı idarə edən komponentin müdaxiləsi tələb olunur.</string>
 	<string name="SECOND_LIFE_GRID">
 		Second Life şəbəkəsi
 	</string>

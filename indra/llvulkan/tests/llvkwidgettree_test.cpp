@@ -140,6 +140,229 @@ namespace tut
     typedef widgettree_group::object object;
     widgettree_group widgettree_tests("llvkwidgettree");
 
+    template<> template<> void object::test<209>()
+    {
+        set_test_name("native session UI uses owner snapshots and rejects delayed recovery actions");
+        using Owner=LLVKSessionOwner;
+        struct Transport final : Owner::Transport
+        {
+            std::shared_ptr<Owner::Inbox> inbox;
+            unsigned requests=0,drains=0;
+            bool failCleanup=false;
+            Owner::Code begin(const Owner::Request&,const std::shared_ptr<Owner::Inbox>& replies) override
+            { inbox=replies; ++requests; return Owner::Code::Ok; }
+            Owner::Code quiesce(std::uint64_t) override
+            {
+                ++drains;
+                if (failCleanup) { failCleanup=false; return Owner::Code::CleanupFailed; }
+                return Owner::Code::Ok;
+            }
+        };
+        auto transport=std::make_shared<Transport>();
+        Owner owner(transport);
+        struct Cleanup { Owner& owner; ~Cleanup() { owner.shutdown(); } } cleanup{owner};
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        ui->setSessionOwner(&owner);
+        ensure("login command reaches owner",ui->tree().commit(ui->find("connect_btn")));
+        ensure("actual owner is authenticating",owner.snapshot().state==Owner::State::Authenticating);
+        ensure("snapshot observed by UI",ui->sessionSnapshot().tag==owner.snapshot().tag);
+        ensure("login inputs disabled during attempt",!ui->tree().get(ui->find("connect_btn"))->params.enabled);
+        auto notices=ui->takeNotices();
+        ensure("progress has owner cancellation",notices.size()==1 && notices.front().buttons.front().name=="cancel");
+        const auto oldCancel=notices.front().response;
+        const auto first=owner.snapshot().tag;
+        Owner::Response failure;
+        failure.tag=first; failure.failure=Owner::Code::AuthenticationFailed;
+        ensure("controlled failure accepted",transport->inbox->post(failure)==Owner::Code::Ok);
+        owner.pumpOne();
+        ensure("failure observed",ui->refreshSession(error));
+        notices=ui->takeNotices();
+        ensure("retry login offered by owner",notices.size()==1 && notices.front().buttons.front().name=="retry_login");
+        const auto oldRetry=notices.front().response;
+        oldRetry(2,{});
+        const auto second=owner.snapshot().tag;
+        ensure("retry advances owner attempt",second.generation>first.generation && transport->requests==2);
+        oldRetry(2,{}); oldCancel(1,{});
+        ensure("delayed retry and cancel leave newer attempt intact",owner.snapshot().tag==second &&
+            owner.snapshot().state==Owner::State::Authenticating && transport->requests==2);
+        notices=ui->takeNotices();
+        ensure("new attempt progress",notices.size()==1 && notices.front().name=="NativeSessionProgress");
+        transport->failCleanup=true;
+        notices.front().response(1,{});
+        ensure("failed cancellation retains disconnect",owner.snapshot().state==Owner::State::Disconnecting);
+        notices=ui->takeNotices();
+        ensure("cleanup recovery comes from owner",notices.size()==1 && notices.front().buttons.front().name=="retry_cleanup");
+        const auto oldCleanup=notices.front().response;
+        const auto drains=transport->drains;
+        ensure("unchanged failure snapshot is deduplicated",ui->refreshSession(error) && ui->takeNotices().empty());
+        ensure_equals("observing does not retry cleanup",transport->drains,drains);
+        oldCleanup(1,{});
+        ensure("explicit cleanup returns to prelogin",owner.snapshot().state==Owner::State::PreLogin);
+        ensure("new login after cleanup",ui->tree().commit(ui->find("connect_btn")));
+        const auto third=owner.snapshot().tag;
+        oldCleanup(1,{});
+        ensure("obsolete cleanup cannot touch new attempt",owner.snapshot().tag==third && transport->drains==drains+1);
+        ui->takeNotices();
+        Owner::Response agreement;
+        agreement.kind=Owner::Response::Kind::AgreementRequired;
+        agreement.tag=third;
+        agreement.agreement={17,3,"Agreement supplied by the service.\n"};
+        for (unsigned paragraph=0; paragraph<100; ++paragraph) agreement.agreement.text+="A complete paragraph that must remain accessible by scrolling.\n";
+        ensure("agreement delivered",transport->inbox->post(agreement)==Owner::Code::Ok && owner.pumpOne().ok());
+        ensure("agreement observed",ui->refreshSession(error));
+        notices=ui->takeNotices();
+        ensure("actual agreement and explicit decisions",notices.size()==1 && notices.front().name=="NativeSessionAgreement" &&
+            notices.front().message==agreement.agreement.text && notices.front().buttons[0].name=="reject" &&
+            notices.front().buttons[0].isDefault && notices.front().buttons[1].name=="accept" && !notices.front().buttons[1].isDefault);
+        const auto oldAgreement=notices.front().response;
+        ensure("agreement queued for actual modal",ui->refreshSession(error,true) && ui->advanceNotices(1.,error));
+        const auto modal=ui->modalNotice();
+        const auto body=ui->find("Alert message",modal);
+        ensure("scrollable agreement contains exact content",body && ui->tree().get(body)->textEditor &&
+            ui->tree().value(body).asString()==agreement.agreement.text);
+        const auto rootRect=ui->tree().get(ui->root())->params.rect;
+        const auto modalRect=ui->tree().get(modal)->params.rect;
+        ensure("long agreement fits viewport",modalRect.bottom>=0 && modalRect.top<=rootRect.top-rootRect.bottom);
+        const auto acceptButton=ui->find("accept",modal);
+        ensure("explicit agreement acceptance through actual button",acceptButton && ui->tree().commit(acceptButton));
+        const auto acceptedTag=owner.snapshot().tag;
+        ensure("acceptance reaches owner and removes modal",acceptedTag.request>third.request &&
+            owner.snapshot().state==Owner::State::Authenticating && !ui->modalNotice());
+        oldAgreement(0,{});
+        ensure("stale agreement decline cannot cancel next request",owner.snapshot().tag==acceptedTag &&
+            owner.snapshot().state==Owner::State::Authenticating);
+        agreement.tag=acceptedTag;
+        ++agreement.agreement.revision;
+        ensure("revised agreement delivered",transport->inbox->post(agreement)==Owner::Code::Ok && owner.pumpOne().ok());
+        ensure("revised agreement displayed",ui->refreshSession(error) && ui->advanceNotices(2.,error));
+        ensure("default response delay elapsed",ui->advanceNotices(3.,error));
+        ensure("Enter explicitly declines rather than accepting",ui->noticeKey(true,false,error) &&
+            owner.snapshot().state==Owner::State::PreLogin && owner.snapshot().status.code==Owner::Code::AgreementRejected);
+        ensure("login after agreement rejection",ui->tree().commit(ui->find("connect_btn")));
+        failure.tag=owner.snapshot().tag; failure.failure=Owner::Code::TransportUnavailable;
+        ensure("installed transport failure accepted",transport->inbox->post(failure)==Owner::Code::Ok);
+        owner.pumpOne();
+        ensure("installed transport failure observed",ui->refreshSession(error));
+        notices=ui->takeNotices();
+        ensure("installed transport failure is not absent authentication",notices.size()==1 &&
+            notices.front().message.find("network request")!=std::string::npos &&
+            notices.front().message.find("No login request")==std::string::npos);
+        ui->setSessionOwner(nullptr);
+        ensure("shutdown",owner.shutdown().ok());
+    }
+
+    template<> template<> void object::test<208>()
+    {
+        set_test_name("native localized errors deduplicate copy safe details and report unavailable authentication");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.skin.language="de";
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        struct Clipboard final : LLVKClipboard
+        {
+            std::u32string value;
+            bool fail=false;
+            bool available(bool) const override { return true; }
+            std::optional<std::u32string> read(bool,std::string&) override { return value; }
+            bool write(std::u32string_view text,bool,std::string& error) override
+            { if (fail) { error="clipboard fixture failure"; return false; } value=text; return true; }
+        };
+        auto clipboard=std::make_shared<Clipboard>(); ui->setDialogClipboard(clipboard);
+        const LLVKError failure{LLVKError::Code::OperationFailed,LLVKError::Operation::Window,7,1};
+        ensure("queue generic failure",ui->showError(failure,error) && ui->showError(failure,error));
+        auto notices=ui->takeNotices();
+        ensure("duplicate is suppressed",notices.size()==1);
+        ensure("selected catalog title",notices.front().message.starts_with("Vulkanstorm-Fehler"));
+        ensure("generic failure offers no recovery",notices.front().buttons.size()==2 && notices.front().buttons.front().name=="close");
+        notices.front().response(-1,{});
+        const auto diagnostic=failure.diagnostic();
+        ensure("copy includes only structured diagnostic",clipboard->value==std::u32string(diagnostic.begin(),diagnostic.end()));
+        notices=ui->takeNotices();
+        ensure("copy keeps notice available",notices.size()==1 && notices.front().buttons.size()==2);
+        clipboard->fail=true;
+        notices.front().response(-1,{});
+        ensure("copy failure keeps original notice",ui->takeNotices().size()==1);
+        ensure("copy failure reported independently",!ui->takeDialogError().empty());
+        clipboard->fail=false;
+        LLVKSessionOwner owner;
+        ui->setSessionOwner(&owner);
+        ensure("login invokes unavailable transport",ui->tree().commit(ui->find("connect_btn")));
+        ensure("no invented authentication",owner.snapshot().state==LLVKSessionOwner::State::PreLogin && !owner.snapshot().identity);
+        notices=ui->takeNotices();
+        ensure("localized unavailable message",notices.size()==1 && notices.front().message.find("Die native Anmeldung")!=std::string::npos);
+        ensure("unavailable transport has no retry",notices.front().buttons.size()==2 && notices.front().buttons.front().name=="close");
+        ensure("force redisplay for modal test",ui->refreshSession(error,true));
+        const auto focus=ui->tree().keyboardFocus();
+        ensure("existing native modal opens",ui->advanceNotices(1.,error) && ui->modalNotice()!=0);
+        const auto panel=ui->modalNotice();
+        ensure("default action delay retained",ui->noticeKey(true,false,error) && ui->modalNotice()==panel);
+        ensure("advance click guard",ui->advanceNotices(1.5,error));
+        ensure("close acknowledges without quitting",ui->noticeKey(true,false,error) && ui->modalNotice()==0);
+        ensure("previous focus restored",ui->tree().keyboardFocus()==focus);
+        ui->setSessionOwner(nullptr);
+        ensure("empty application shutdown",owner.shutdown().ok());
+
+        struct LocaleCase
+        {
+            const char* language;
+            std::u8string_view title,body,copy,closeViewer;
+        };
+        const LocaleCase locales[]{
+            {"fr",u8"Erreur native de Vulkanstorm",
+                u8"L'op\u00e9ration demand\u00e9e n'a pas pu \u00eatre termin\u00e9e. Fermez ce message pour revenir au visualiseur. Aucune nouvelle tentative n'a eu lieu.",
+                u8"Copier les d\u00e9tails",u8"Confirmez ce message pour fermer le visualiseur."},
+            {"ja",u8"Vulkanstorm \u30cd\u30a4\u30c6\u30a3\u30d6\u30a8\u30e9\u30fc",
+                u8"\u8981\u6c42\u3055\u308c\u305f\u64cd\u4f5c\u3092\u5b8c\u4e86\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002"
+                u8"\u3053\u306e\u30e1\u30c3\u30bb\u30fc\u30b8\u3092\u9589\u3058\u308b\u3068\u30d3\u30e5\u30fc\u30a2\u306b\u623b\u308a\u307e\u3059\u3002"
+                u8"\u518d\u8a66\u884c\u306f\u884c\u308f\u308c\u3066\u3044\u307e\u305b\u3093\u3002",
+                u8"\u8a73\u7d30\u3092\u30b3\u30d4\u30fc",
+                u8"\u3053\u306e\u30e1\u30c3\u30bb\u30fc\u30b8\u3092\u78ba\u8a8d\u3059\u308b\u3068\u3001\u30d3\u30e5\u30fc\u30a2\u304c\u7d42\u4e86\u3057\u307e\u3059\u3002"},
+            {"zz",u8"Vulkanstorm native error",
+                u8"The requested operation could not be completed. Dismiss this message to return to the viewer. No retry has been performed.",
+                u8"Copy details",u8"Acknowledge this message to close the viewer."}
+        };
+        const auto utf8=[](std::u8string_view value) { return std::string(value.begin(),value.end()); };
+        ui.reset();
+        for (const auto& locale : locales)
+        {
+            configuration.skin.language=locale.language;
+            const auto scope=std::string(locale.language)+": ";
+            if (configuration.skin.language=="zz")
+                ensure("fallback locale has no shipped catalog",!std::filesystem::exists(
+                    configuration.skin.skinBaseDirectory/"default"/"xui"/locale.language/"strings.xml"));
+            auto localizedUi=LLVKViewerUi::create(configuration,error);
+            ensure(scope+error,localizedUi!=nullptr);
+            localizedUi->setDialogClipboard(clipboard);
+            ensure(scope+"queue localized error",localizedUi->showError(failure,error));
+            auto localizedNotices=localizedUi->takeNotices();
+            ensure_equals(scope+"one localized notice",localizedNotices.size(),std::size_t{1});
+            ensure_equals(scope+"exact native catalog title body and safe diagnostic",localizedNotices.front().message,
+                utf8(locale.title)+"\n\n"+utf8(locale.body)+"\n\n"+failure.diagnostic());
+            ensure(scope+"no invented recovery",localizedNotices.front().buttons.size()==2 &&
+                localizedNotices.front().buttons.front().name=="close" && localizedNotices.front().buttons.back().name=="copy");
+            ensure_equals(scope+"localized copy label",localizedNotices.front().buttons.back().label,utf8(locale.copy));
+            const LLVKError fatal{LLVKError::Code::RendererUnavailable,LLVKError::Operation::Renderer,8,1};
+            ensure(scope+"queue fatal error",localizedUi->showError(fatal,error));
+            localizedNotices=localizedUi->takeNotices();
+            ensure_equals(scope+"one fatal notice",localizedNotices.size(),std::size_t{1});
+            ensure(scope+"localized fatal title",localizedNotices.front().message.starts_with(utf8(locale.title)+"\n\n"));
+            ensure(scope+"localized fatal acknowledgement and invariant diagnostic",
+                localizedNotices.front().message.ends_with("\n\n"+utf8(locale.closeViewer)+"\n\n"+fatal.diagnostic()));
+        }
+    }
+
     template<> template<> void object::test<207>()
     {
         set_test_name("native XUI Preview has independent primary and secondary owners");

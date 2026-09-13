@@ -4,6 +4,35 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
+	<string name="NativeErrorTitle">Erreur native de Vulkanstorm</string>
+	<string name="NativeErrorCloseViewer">Confirmez ce message pour fermer le visualiseur.</string>
+	<string name="NativeErrorCopy">Copier les détails</string>
+	<string name="NativeErrorRetryCleanup">Réessayer le nettoyage</string>
+	<string name="NativeErrorRetryLogin">Réessayer la connexion</string>
+	<string name="NativeAgreementAccept">Accepter</string>
+	<string name="NativeAgreementReject">Refuser</string>
+	<string name="NativeErrorUnexpected">Une erreur inattendue s'est produite dans le visualiseur natif. Fermez le visualiseur et contactez l'assistance si cela se reproduit.</string>
+	<string name="NativeErrorDefaultSettings">Les paramètres par défaut requis n'ont pas pu être chargés. Réparez l'installation avant de redémarrer le visualiseur.</string>
+	<string name="NativeErrorSettingsMode">Le mode de configuration sélectionné n'a pas pu être chargé. Vérifiez les fichiers de configuration installés avant de redémarrer le visualiseur.</string>
+	<string name="NativeErrorUnsupportedArguments">Une ou plusieurs options de ligne de commande ne sont pas prises en charge par le démarrage natif. Supprimez les options non prises en charge avant de redémarrer le visualiseur.</string>
+	<string name="NativeErrorSettingsRead">Les paramètres requis n'ont pas pu être lus ou appliqués. Vérifiez les fichiers de configuration et les droits d'accès avant de redémarrer le visualiseur.</string>
+	<string name="NativeErrorSettingsWrite">Les paramètres n'ont pas pu être enregistrés. Vérifiez l'espace disque disponible et les droits d'écriture avant de redémarrer le visualiseur.</string>
+	<string name="NativeErrorCacheUnavailable">Le cache n'a pas pu être initialisé. Vérifiez son emplacement, les droits d'accès et l'espace disque disponible avant de redémarrer le visualiseur.</string>
+	<string name="NativeErrorStartupResources">Les ressources requises au démarrage sont indisponibles. Réparez l'installation avant de redémarrer le visualiseur.</string>
+	<string name="NativeErrorWindowUnavailable">La fenêtre native est indisponible ou n'a pas pu terminer une opération. Vérifiez la disponibilité de l'écran et les paramètres de la fenêtre avant de redémarrer le visualiseur.</string>
+	<string name="NativeErrorRendererUnavailable">Le moteur de rendu Vulkan natif est indisponible ou s'est arrêté. Vérifiez la prise en charge de Vulkan par le pilote avant de redémarrer le visualiseur. Aucun changement de moteur de rendu ni aucune nouvelle tentative n'ont eu lieu.</string>
+	<string name="NativeErrorBrowserUnavailable">Le navigateur intégré n'a pas pu démarrer ou charger sa page. Vérifiez l'installation et la configuration réseau avant de redémarrer le visualiseur.</string>
+	<string name="NativeErrorShutdownFailed">L'arrêt natif n'a pas pu se terminer normalement. Vérifiez l'accès aux paramètres et au cache avant de redémarrer le visualiseur.</string>
+	<string name="NativeErrorOperationFailed">L'opération demandée n'a pas pu être terminée. Fermez ce message pour revenir au visualiseur. Aucune nouvelle tentative n'a eu lieu.</string>
+	<string name="NativeErrorOptionalSettings">Les paramètres facultatifs n'ont pas pu être chargés. Le visualiseur continuera avec les valeurs par défaut disponibles.</string>
+	<string name="NativeErrorNetworkUnavailable">La requête réseau n'a pas pu être terminée. Vérifiez la connexion. La récupération nécessite l'intervention du composant responsable de l'opération ; aucune nouvelle tentative n'a eu lieu.</string>
+	<string name="NativeErrorTlsRejected">La connexion sécurisée n'a pas pu être vérifiée. Vérifiez l'horloge système et la configuration réseau. La vérification du certificat n'a pas été contournée.</string>
+	<string name="NativeErrorTransportUnavailable">L'authentification native n'est pas disponible dans cette version. Aucune demande de connexion n'a été envoyée.</string>
+	<string name="NativeErrorSessionCleanupFailed">Le nettoyage de la session n'a pas pu être terminé. Les ressources restent sous le contrôle du composant responsable. Réessayez le nettoyage pour terminer l'opération.</string>
+	<string name="NativeErrorAuthenticationFailed">L'authentification a échoué. Aucune session connectée n'a été établie.</string>
+	<string name="NativeErrorConnectionFailed">La connexion à la région a échoué. La récupération nécessite l'intervention du composant responsable de la session.</string>
+	<string name="NativeErrorSessionTimeout">La requête de session a expiré. La récupération nécessite l'intervention du composant responsable de la session.</string>
+	<string name="NativeErrorSessionFailed">L'opération de session n'a pas pu être terminée. La récupération nécessite l'intervention du composant responsable de la session.</string>
 	<string name="SECOND_LIFE_GRID">
 		Grille de Second Life
 	</string>

@@ -324,7 +324,7 @@ namespace
                     if (selected) mPath=std::filesystem::path(filename.data());
                     else if (const auto failure=CommDlgExtendedError()) mError="Native file picker failed: "+std::to_string(failure);
                 }
-                catch (const std::exception& exception) { mError=exception.what(); }
+                catch (...) { mError="Native file picker operation failed"; }
                 mDone.store(true);
             });
             return true;
@@ -655,6 +655,118 @@ namespace
         }
     };
 
+    class ApplicationServices final : public LLVKSessionOwner::Service
+    {
+    public:
+        using Code=LLVKSessionOwner::Code;
+        struct Access { ApplicationServices* service=nullptr; };
+        explicit ApplicationServices(WindowState& window) : access(std::make_shared<Access>()),mWindow(&window)
+        { access->service=this; }
+        ~ApplicationServices() override { access->service=nullptr; }
+        Code acquire(const LLVKSessionOwner::Context&) override { return Code::Ok; }
+        void detach()
+        {
+            if (!mWindow) return;
+            auto& window=*mWindow;
+            auto* ui=window.ui;
+            window.audioVolumeChanged={};
+            if (ui)
+            {
+                ui->setUiSoundPlayer({});
+                for (const auto subscription : audioSubscriptions) ui->tree().unsubscribeSetting(subscription);
+                ui->setJoystickServices({});
+                ui->setGuidebookService({},{});
+                ui->setBrowserCommand({});
+                for (const auto& [id,view] : window.browserViews)
+                {
+                    ui->tree().setEvents(id,{});
+                    ui->tree().setVisible(id,false);
+                }
+            }
+            audioSubscriptions.clear();
+            window.browser=nullptr;
+            window.browserViews.clear();
+            window.input.browsers.clear();
+            window.input.browserEpochs.clear();
+            voiceDevices.reset();
+            translation.reset();
+            previews.reset();
+            picker.reset();
+            mWindow=nullptr;
+        }
+        Code retire() override
+        {
+            detach();
+            std::string error;
+            if (!mCloseDeadline) mCloseDeadline=std::chrono::steady_clock::now()+std::chrono::seconds(15);
+            bool pending=false,failed=false;
+            const auto close=[&](std::unique_ptr<LLVKBrowser>& view)
+            {
+                if (!view) return;
+                if (view->state()==LLVKBrowser::State::Fresh || view->state()==LLVKBrowser::State::Failed ||
+                    view->state()==LLVKBrowser::State::Closed) { view.reset(); return; }
+                const bool requested=view->requestClose(error);
+                const bool updated=view->update(error);
+                if (view->state()==LLVKBrowser::State::Closed) view.reset();
+                else { pending=true; failed|=!requested || !updated; }
+            };
+            for (auto& [id,view] : browsers) close(view);
+            std::erase_if(browsers,[](const auto& entry) { return !entry.second; });
+            close(browser);
+            if (failed || (pending && std::chrono::steady_clock::now()>=*mCloseDeadline))
+            { mCloseDeadline.reset(); return Code::CleanupFailed; }
+            if (pending) return Code::Pending;
+            if (voice && !voice->stop(error)) return Code::CleanupFailed;
+            voice.reset();
+            if (audio && !audio->stop(error)) return Code::CleanupFailed;
+            audio.reset();
+            if (joystick) joystick->stop();
+            joystick.reset();
+            return Code::Ok;
+        }
+        bool active() const { return mWindow!=nullptr; }
+        std::shared_ptr<Access> access;
+        std::unique_ptr<LLVKAudio> audio;
+        std::unique_ptr<LLVKVoice> voice;
+        std::unique_ptr<LLVKJoystick> joystick;
+        std::unique_ptr<VoiceDevices> voiceDevices;
+        std::unique_ptr<TranslationVerification> translation;
+        std::unique_ptr<XmlFilePicker> picker;
+        std::unique_ptr<LLVKTexturePreview> previews;
+        std::unique_ptr<LLVKBrowser> browser;
+        std::map<LLVKWidgetTree::Id,std::unique_ptr<LLVKBrowser>> browsers;
+        std::vector<std::uint64_t> audioSubscriptions;
+    private:
+        WindowState* mWindow;
+        std::optional<std::chrono::steady_clock::time_point> mCloseDeadline;
+    };
+
+    struct ApplicationRun final
+    {
+        std::unique_ptr<LLVKSessionOwner> local;
+        LLVKSessionOwner* owner=nullptr;
+        std::shared_ptr<ApplicationServices::Access> access;
+        LLVKViewerUi& ui;
+        ~ApplicationRun()
+        {
+            ui.setSessionOwner(nullptr);
+            if (access && access->service) access->service->detach();
+            if (!owner) return;
+            try
+            {
+                const auto snapshot=owner->snapshot();
+                if (snapshot.state!=LLVKSessionOwner::State::Stopped && snapshot.state!=LLVKSessionOwner::State::Disconnecting)
+                    owner->shutdown();
+                if (local && owner->snapshot().state!=LLVKSessionOwner::State::Stopped)
+                {
+                    local.release();
+                    llvkPresentErrorFallback({LLVKError::Code::ShutdownFailed,LLVKError::Operation::Shutdown,1,0});
+                }
+            }
+            catch (...) { local.release(); }
+        }
+    };
+
     class VisualServices final
     {
     public:
@@ -662,7 +774,8 @@ namespace
         ~VisualServices()
         {
             std::string error;
-            if (!prepareShutdown(error)) LL_WARNS("NativeShutdown") << error << LL_ENDL;
+            if (!prepareShutdown(error))
+                LL_WARNS("NativeShutdown") << (LLVKError{LLVKError::Code::ShutdownFailed,LLVKError::Operation::Shutdown,1,0}).diagnostic() << LL_ENDL;
             gpu.reset();
             ui.reset();
             renderer.destroy();
@@ -677,16 +790,10 @@ namespace
                 mWindow.browserViews.clear();
                 if (ui)
                 {
-                    ui->setGuidebookService({},{});
                     ui->setFontTextureDumpHandler({});
-                    ui->setBrowserCommand({});
-                    for (const auto& [id,view] : guidebookViews) ui->tree().setEvents(id,{});
-                    ui->tree().setEvents(ui->find("login_html"),{});
                     ui->tree().setClipboard({});
                     ui->setDialogClipboard({});
                 }
-                guidebookViews.clear();
-                browser.reset();
                 if (renderer.device()!=VK_NULL_HANDLE)
                 {
                     const auto result=vkDeviceWaitIdle(renderer.device());
@@ -717,18 +824,10 @@ namespace
                 renderer.allocator(),renderer.graphicsQueue(),renderer.graphicsQueueFamily()});
             return true;
         }
-        bool initializeBrowser(const LLVKBrowser::Configuration& configuration,const std::string& page,std::string& error)
-        {
-            browser=std::make_unique<LLVKBrowser>();
-            mWindow.browser=browser.get();
-            return browser->start(configuration,error) && browser->navigate(page,error);
-        }
         std::unique_ptr<LLVKViewerUi> ui;
         LLVKContext renderer;
         VkSurfaceKHR surface=VK_NULL_HANDLE;
         std::unique_ptr<LLVKWidgetGpu> gpu;
-        std::unique_ptr<LLVKBrowser> browser;
-        std::map<LLVKWidgetTree::Id,std::unique_ptr<LLVKBrowser>> guidebookViews;
     private:
         WindowState& mWindow;
         bool mRetirementAttempted=false;
@@ -739,7 +838,25 @@ namespace
 bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
 {
     error.clear();
+    using Code = LLVKError::Code;
+    using Operation = LLVKError::Operation;
+    if (configuration.failureCode) *configuration.failureCode = Code::WindowUnavailable;
+    const auto fail = [&](Code code)
+    {
+        if (configuration.failureCode) *configuration.failureCode = code;
+        return false;
+    };
     WindowState state;
+    std::uint64_t noticeGeneration = 0;
+    const auto notice = [&](Code code)
+    {
+        const LLVKError failure{code,Operation::Window,++noticeGeneration,0};
+        try { LL_WARNS("NativeWindow") << failure.diagnostic() << LL_ENDL; }
+        catch (...) {}
+        std::string problem;
+        if (!state.ui || !state.ui->showError(failure,problem))
+            llvkPresentErrorFallback(failure,state.window);
+    };
     auto uiConfiguration=configuration.ui;
     wchar_t executablePath[32768]{};
     const auto executableLength=GetModuleFileNameW(nullptr,executablePath,32768);
@@ -766,8 +883,21 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         return true;
     };
     VisualServices visuals(state);
-    if (!visuals.initializeUi(uiConfiguration,error)) return false;
+    if (!visuals.initializeUi(uiConfiguration,error)) return fail(Code::StartupResources);
     auto& ui=visuals.ui;
+    ApplicationRun application{{},configuration.sessionOwner,{},*ui};
+    if (!application.owner)
+    {
+        application.local=std::make_unique<LLVKSessionOwner>();
+        application.owner=application.local.get();
+    }
+    auto ownedServices=std::make_unique<ApplicationServices>(state);
+    application.access=ownedServices->access;
+    auto& services=*ownedServices;
+    std::unique_ptr<LLVKSessionOwner::Service> adoptedServices=std::move(ownedServices);
+    if (!application.owner->install(LLVKSessionOwner::Lifetime::Application,LLVKWindowMgr::applicationServiceId,adoptedServices).ok())
+    { error="Native application service adoption failed"; return fail(Code::StartupResources); }
+    ui->setSessionOwner(application.owner);
     ui->menu().bind("File.Quit",[&state](const auto&,const auto&) { state.quitRequested = true; });
     ui->setQuitRequestHandler([&state] { state.quitRequested=true; });
     ui->setWindowSizeService([&state](int width,int height,std::string& problem)
@@ -785,7 +915,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         { problem="The operating system could not apply the requested client dimensions"; return false; }
         return true;
     });
-    const auto openUrl=[&state](const std::string& url)
+    const auto openUrl=[&state,&notice](const std::string& url)
     {
         const LLURI uri(url);
         auto scheme = uri.scheme();
@@ -794,7 +924,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         const auto wide = ll_convert<std::wstring>(url);
         if (MessageBoxW(state.window,(L"Open this page in your web browser?\n\n"+wide).c_str(),L"Vulkanstorm",MB_YESNO|MB_ICONQUESTION) == IDYES)
             if (reinterpret_cast<INT_PTR>(ShellExecuteW(state.window,L"open",wide.c_str(),nullptr,nullptr,SW_SHOWNORMAL)) <= 32)
-                MessageBoxW(state.window,L"The web browser could not be opened.",L"Vulkanstorm",MB_OK|MB_ICONERROR);
+                notice(Code::OperationFailed);
     };
     ui->setOpenUrl(openUrl);
     ui->setPointerCursor([](bool hand) { SetCursor(LoadCursorW(nullptr,hand ? IDC_HAND : IDC_ARROW)); });
@@ -822,23 +952,11 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     if (!CreateWindowExW(0,windowClass.lpszClassName,L"Vulkanstorm",WS_OVERLAPPEDWINDOW,windowX,windowY,
         rectangle.right-rectangle.left,rectangle.bottom-rectangle.top,nullptr,nullptr,windowClass.hInstance,&state))
     { error = "Native login window creation failed"; return false; }
-    LLVKAudio audio;
+    services.audio=std::make_unique<LLVKAudio>();
+    auto& audio=*services.audio;
     std::string audioError;
     if (!audio.start(ui->tree().setting("NoAudio").value_or(LLSD(false)).asBoolean(),audioError))
-        LL_WARNS("NativeAudio") << audioError << LL_ENDL;
-    struct AudioBindings
-    {
-        LLVKWidgetTree& tree;
-        LLVKViewerUi& ui;
-        WindowState& window;
-        std::vector<std::uint64_t> subscriptions;
-        ~AudioBindings()
-        {
-            window.audioVolumeChanged={};
-            ui.setUiSoundPlayer({});
-            for (const auto subscription : subscriptions) tree.unsubscribeSetting(subscription);
-        }
-    } audioBindings{ui->tree(),*ui,state};
+        LL_WARNS("NativeAudio") << (LLVKError{Code::OperationFailed,Operation::Window,1,0}).diagnostic() << LL_ENDL;
     state.audioVolumeChanged=[&]
     {
         LLVKAudio::Volume volume;
@@ -847,14 +965,14 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         volume.muteWhenInactive=ui->tree().setting("MuteWhenMinimized").value_or(LLSD(false)).asBoolean();
         volume.windowActive=state.input.editor.applicationFocused;
         std::string problem;
-        if (!audio.setVolume(volume,problem)) LL_WARNS("NativeAudio") << problem << LL_ENDL;
+        if (!audio.setVolume(volume,problem)) LL_WARNS("NativeAudio") << (LLVKError{Code::OperationFailed,Operation::Window,1,0}).diagnostic() << LL_ENDL;
         const auto uiGain=static_cast<float>(ui->tree().setting("AudioLevelUI").value_or(LLSD(1.f)).asReal());
         const auto uiMuted=ui->tree().setting("MuteUI").value_or(LLSD(false)).asBoolean();
-        if (!audio.setUiGain(uiGain,uiMuted,problem)) LL_WARNS("NativeAudio") << problem << LL_ENDL;
+        if (!audio.setUiGain(uiGain,uiMuted,problem)) LL_WARNS("NativeAudio") << (LLVKError{Code::OperationFailed,Operation::Window,1,0}).diagnostic() << LL_ENDL;
     };
     for (const auto name : {"AudioLevelMaster","MuteAudio","MuteWhenMinimized","AudioLevelUI","MuteUI"})
         if (const auto subscription=ui->tree().subscribeSetting(name,[&](const LLSD&,const LLSD&) { state.audioVolumeChanged(); }))
-            audioBindings.subscriptions.push_back(*subscription);
+            services.audioSubscriptions.push_back(*subscription);
     state.audioVolumeChanged();
     ui->setUiSoundPlayer([&](const std::string& asset,std::string& problem)
     {
@@ -875,7 +993,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     ui->setDialogClipboard(clipboard);
     ui->tree().setClipboard(std::move(clipboard));
     auto& renderer=visuals.renderer;
-    if (!visuals.initializeRenderer(configuration.validation,error)) return false;
+    if (!visuals.initializeRenderer(configuration.validation,error)) return fail(Code::RendererUnavailable);
     const auto surface=visuals.surface;
     const auto synchronizedPresentation = [&] { return ui->tree().setting("RenderVSyncEnable").value_or(LLSD(false)).asBoolean(); };
     VkPhysicalDeviceProperties properties{};
@@ -979,8 +1097,10 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     if (!browserRect) return false;
     browserConfiguration.width = browserRect->right-browserRect->left;
     browserConfiguration.height = browserRect->top-browserRect->bottom;
-    if (!visuals.initializeBrowser(browserConfiguration,configuration.loginPage,error)) return false;
-    auto& browser=*visuals.browser;
+    services.browser=std::make_unique<LLVKBrowser>();
+    auto& browser=*services.browser;
+    state.browser=&browser;
+    if (!browser.start(browserConfiguration,error) || !browser.navigate(configuration.loginPage,error)) return fail(Code::BrowserUnavailable);
     aboutInfo["LIBCEF_VERSION"]=browser.versionInfo(error);
     if (!error.empty() || !ui->setAboutInfo(aboutInfo,error)) return false;
     const auto bindBrowser=[&](LLVKWidgetTree::Id widget,LLVKBrowser& view)
@@ -1003,15 +1123,16 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     bindBrowser(browserId,browser);
     ui->setGuidebookService([&](auto id,const std::string& url,std::string& problem)
     {
-        if (visuals.guidebookViews.size()>=16) { problem="Native embedded browser view limit reached"; return false; }
+        if (services.browsers.size()>=16) { problem="Native embedded browser view limit reached"; return false; }
         const auto rect=ui->tree().screenRect(id,problem);
         if (!rect) return false;
         auto settings=browserConfiguration;
         settings.width=rect->right-rect->left; settings.height=rect->top-rect->bottom;
-        auto view=std::make_unique<LLVKBrowser>();
-        if (!view->start(settings,problem) || !view->navigate(url,problem)) return false;
-        bindBrowser(id,*view);
-        visuals.guidebookViews.emplace(id,std::move(view));
+        const auto [entry,inserted]=services.browsers.try_emplace(id,std::make_unique<LLVKBrowser>());
+        if (!inserted) { problem="Native embedded browser already has an owner"; return false; }
+        auto& view=*entry->second;
+        if (!view.start(settings,problem) || !view.navigate(url,problem)) return false;
+        bindBrowser(id,view);
         return true;
     },[&](auto id)
     {
@@ -1019,13 +1140,13 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         state.browserViews.erase(id);
         state.input.browsers.erase(id);
         state.input.browserEpochs.erase(id);
-        const auto view=visuals.guidebookViews.find(id);
-        if (view!=visuals.guidebookViews.end()) view->second->requestClose(state.error);
+        const auto view=services.browsers.find(id);
+        if (view!=services.browsers.end()) view->second->requestClose(state.error);
     });
     ui->setBrowserCommand([&](auto id,const std::string& action,const std::string& url,std::string& problem)
     {
-        const auto found=visuals.guidebookViews.find(id);
-        if (found==visuals.guidebookViews.end()) { problem="Native browser owner is unavailable"; return false; }
+        const auto found=services.browsers.find(id);
+        if (found==services.browsers.end()) { problem="Native browser owner is unavailable"; return false; }
         auto& view=*found->second;
         if (action=="Navigate") return view.navigate(url,problem);
         using Command=LLVKBrowser::Command;
@@ -1036,7 +1157,8 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         problem="Unknown native browser action"; return false;
     });
     if (ui->tree().setting("floater_vis_guidebook").value_or(LLSD(false)).asBoolean() && !ui->toggleGuidebook(error)) return false;
-    LLVKJoystick joystick;
+    services.joystick=std::make_unique<LLVKJoystick>();
+    auto& joystick=*services.joystick;
     bool joystickStarted=false;
     LLVKViewerUi::JoystickServices joystickServices;
     const auto startJoystick=[&](std::string& problem)
@@ -1083,12 +1205,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         return joystick.state();
     };
     ui->setJoystickServices(std::move(joystickServices));
-    struct JoystickBindings
-    {
-        LLVKViewerUi& ui;
-        ~JoystickBindings() { ui.setJoystickServices({}); }
-    } joystickBindings{*ui};
-    TranslationVerification translationVerification(*ui,configuration.ui.skin.executableDirectory/"ca-bundle.crt");
+    services.translation=std::make_unique<TranslationVerification>(*ui,configuration.ui.skin.executableDirectory/"ca-bundle.crt");
     const auto voiceSetting=[&](const std::string& name,const LLSD& fallback)
     {
         if (configuration.ui.settingsGroup)
@@ -1096,8 +1213,9 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         const auto found=configuration.ui.settings.find(name);
         return found==configuration.ui.settings.end() ? fallback : found->second;
     };
-    LLVKVoice voice(voiceSetting("VoiceInputAudioDevice",LLSD("Default")).asString(),
+    services.voice=std::make_unique<LLVKVoice>(voiceSetting("VoiceInputAudioDevice",LLSD("Default")).asString(),
         voiceSetting("VoiceOutputAudioDevice",LLSD("Default")).asString());
+    auto& voice=*services.voice;
     const auto updateVoice=[&]()
     {
         LLVKVoice::AudioConfig processing;
@@ -1109,16 +1227,10 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         return voice.configure(processing,error);
     };
     if (!updateVoice()) return false;
-    VoiceDevices voiceDevices(*ui,voice);
-    XmlFilePicker xmlFilePicker(*ui,state.window);
-    std::unique_ptr<LLVKTexturePreview> texturePreviews;
+    services.voiceDevices=std::make_unique<VoiceDevices>(*ui,voice);
+    services.picker=std::make_unique<XmlFilePicker>(*ui,state.window);
     if (configuration.textureCache)
-        texturePreviews=std::make_unique<LLVKTexturePreview>(*configuration.textureCache,ui->tree(),ui->root());
-    struct DetachInput
-    {
-        WindowState& state;
-        ~DetachInput() { state.ui=nullptr; state.browser=nullptr; state.audioVolumeChanged={}; }
-    } detachInput{state};
+        services.previews=std::make_unique<LLVKTexturePreview>(*configuration.textureCache,ui->tree(),ui->root());
     ShowWindow(state.window,ui->tree().setting("WindowMaximized").value_or(LLSD(false)).asBoolean() ? SW_SHOWMAXIMIZED : SW_SHOW);
     if (configuration.bindServices) configuration.bindServices(*ui);
     LLVKUiPacket packet(renderer.swapchainExtent());
@@ -1126,11 +1238,23 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     auto previous = std::chrono::steady_clock::now();
     while (!state.close)
     {
-        if (texturePreviews && !texturePreviews->update(error)) return false;
-        xmlFilePicker.pump();
-        if (!translationVerification.pump(error)) return false;
-        if (!audio.update(error)) return false;
-        if (!updateVoice()) return false;
+        {
+            const auto snapshot=application.owner->snapshot();
+            if (snapshot.state==LLVKSessionOwner::State::Stopped) break;
+            if (snapshot.state==LLVKSessionOwner::State::Disconnecting && snapshot.cleanup.action==LLVKSessionOwner::Action::Wait)
+                application.owner->retryCleanup(snapshot.tag);
+            else application.owner->pumpOne();
+            if (!ui->refreshSession(error)) return fail(Code::StartupResources);
+            if (application.owner->snapshot().state==LLVKSessionOwner::State::Stopped) break;
+        }
+        if (application.access->service && application.access->service->active())
+        {
+            if (services.previews && !services.previews->update(error)) return false;
+            services.picker->pump();
+            if (!services.translation->pump(error)) return false;
+            if (!audio.update(error)) return false;
+            if (!updateVoice()) return false;
+        }
         if (!ui->advanceNotices(state.elapsed(),error)) return false;
         MSG message;
         while (PeekMessageW(&message,nullptr,0,0,PM_REMOVE))
@@ -1156,15 +1280,26 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             }
             const auto shutdown=ui->prepareShutdown(error,placement);
             if (shutdown==LLVKViewerUi::ShutdownStatus::Failed) return false;
-            if (shutdown==LLVKViewerUi::ShutdownStatus::Ready) break;
+            if (shutdown==LLVKViewerUi::ShutdownStatus::Ready)
+            {
+                if (application.owner->snapshot().state!=LLVKSessionOwner::State::Disconnecting)
+                    application.owner->shutdown();
+                if (application.owner->snapshot().state==LLVKSessionOwner::State::Stopped) break;
+                state.quitRequested=false;
+                if (!ui->refreshSession(error,true)) return fail(Code::StartupResources);
+            }
         }
         if (const auto problem=ui->takeDialogError(); !problem.empty())
-            MessageBoxW(state.window,ll_convert<std::wstring>(problem).c_str(),L"Vulkanstorm",MB_OK|MB_ICONWARNING);
-        if (!browser.update(error)) return false;
+            notice(Code::OperationFailed);
+        if (application.owner->snapshot().state==LLVKSessionOwner::State::Stopped) break;
+        if (application.access->service && application.access->service->active())
+        {
+        if (!browser.update(error)) return fail(Code::BrowserUnavailable);
         for (const auto& event : browser.takeEvents())
-            if (event.kind == LLVKBrowser::EventKind::LoadError) { error = "Native login page failed: "+event.detail; return false; }
+            if (event.kind == LLVKBrowser::EventKind::LoadError)
+            { error = "Native login page failed"; return fail(Code::BrowserUnavailable); }
         std::vector<std::pair<std::string,std::string>> popups;
-        for (auto iterator=visuals.guidebookViews.begin(); iterator!=visuals.guidebookViews.end(); )
+        for (auto iterator=services.browsers.begin(); iterator!=services.browsers.end(); )
         {
             const auto id=iterator->first;
             auto& view=*iterator->second;
@@ -1173,13 +1308,13 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             {
                 ui->webBrowserEvent(id,"Closed","",false,false);
                 state.browserViews.erase(id); state.input.browsers.erase(id); state.input.browserEpochs.erase(id);
-                iterator=visuals.guidebookViews.erase(iterator); continue;
+                iterator=services.browsers.erase(iterator); continue;
             }
             const auto navigation=view.state()==LLVKBrowser::State::Running ? view.navigation(error) : std::nullopt;
             for (const auto& event : view.takeEvents())
             {
                 if (event.kind==LLVKBrowser::EventKind::LoadError && event.code!=-3)
-                    LL_WARNS("NativeGuidebook") << event.code << ": " << event.detail << LL_ENDL;
+                    LL_WARNS("NativeGuidebook") << (LLVKError{Code::OperationFailed,Operation::Browser,1,0}).diagnostic() << LL_ENDL;
                 if (!navigation) continue;
                 std::string kind;
                 using Event=LLVKBrowser::EventKind;
@@ -1213,17 +1348,21 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             else
             {
                 std::string problem;
-                if (!ui->showMediaBrowser(url,problem,target)) LL_WARNS("NativeBrowser") << problem << LL_ENDL;
+                if (!ui->showMediaBrowser(url,problem,target))
+                    LL_WARNS("NativeBrowser") << (LLVKError{Code::OperationFailed,Operation::Browser,1,0}).diagnostic() << LL_ENDL;
             }
+        }
         }
         if ((state.resize || renderer.synchronizedPresentationRequested() != synchronizedPresentation()) && state.width && state.height)
         {
             ui->menu().dismiss();
-            if (!renderer.createSwapchain(surface,state.width,state.height,error,synchronizedPresentation()) ||
-                !ui->tree().reshape(ui->root(),renderer.swapchainExtent().width,renderer.swapchainExtent().height,error)) return false;
+            if (!renderer.createSwapchain(surface,state.width,state.height,error,synchronizedPresentation())) return fail(Code::RendererUnavailable);
+            if (!ui->tree().reshape(ui->root(),renderer.swapchainExtent().width,renderer.swapchainExtent().height,error)) return false;
             if (!ui->tree().prepareLayoutStacks(ui->root(),0,error)) return false;
             browserRect = ui->tree().screenRect(browserId,error);
-            if (!browserRect || !browser.resize(browserRect->right-browserRect->left,browserRect->top-browserRect->bottom,error)) return false;
+            if (!browserRect) return false;
+            if (application.access->service && application.access->service->active() &&
+                !browser.resize(browserRect->right-browserRect->left,browserRect->top-browserRect->bottom,error)) return false;
             state.resize = false;
             aboutInfo["WINDOW_WIDTH"]=static_cast<int>(renderer.swapchainExtent().width);
             aboutInfo["WINDOW_HEIGHT"]=static_cast<int>(renderer.swapchainExtent().height);
@@ -1236,8 +1375,11 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         state.input.button.spaceDown = bool(GetKeyState(VK_SPACE)&0x8000);
         state.input.button.returnDown = bool(GetKeyState(VK_RETURN)&0x8000);
         state.input.editor.secondsSinceKeystroke = std::chrono::duration<double>(now-state.keystroke).count();
-        state.input.browsers[browserId] = browser.surface().frame();
-        state.input.browserEpochs[browserId] = browser.surface().epoch();
+        if (application.access->service && application.access->service->active())
+        {
+            state.input.browsers[browserId] = browser.surface().frame();
+            state.input.browserEpochs[browserId] = browser.surface().epoch();
+        }
         ui->tree().setInputModifiers({bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_CONTROL)&0x8000),bool(GetKeyState(VK_MENU)&0x8000)});
         ui->tree().advanceTime(state.elapsed(),error);
         if (state.width && state.height)
@@ -1245,24 +1387,28 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             const auto paint = ui->preparePaint(state.input,error);
             if (!paint) return false;
             const auto ready = gpu.prepare(*paint,renderer.swapchainExtent(),packet,error);
-            if (ready == LLVKWidgetGpu::Status::Failed) return false;
+            if (ready == LLVKWidgetGpu::Status::Failed) return fail(Code::RendererUnavailable);
             if (ready == LLVKWidgetGpu::Status::Ready)
             {
                 if (renderer.begin2DFrame(0.16f,0.16f,0.16f,1))
                 {
-                    if (!renderer.recordUiPacket(packet.vertices(),packet.draws())) { error = renderer.frameError(); return false; }
+                    if (!renderer.recordUiPacket(packet.vertices(),packet.draws())) { error = renderer.frameError(); return fail(Code::RendererUnavailable); }
                     if (!renderer.end2DFrame() && renderer.frameResult() != LLVKContext::FrameResult::OutOfDate)
-                    { error = renderer.frameError(); return false; }
+                    { error = renderer.frameError(); return fail(Code::RendererUnavailable); }
                     if (configuration.presentedFrame) configuration.presentedFrame(*ui,state.input);
                     if (configuration.stopAfterFrames && ++frames >= configuration.stopAfterFrames &&
                         !PostMessageW(state.window,WM_CLOSE,0,0))
                     { error="Native test close request failed"; return false; }
                 }
                 if (renderer.frameResult() == LLVKContext::FrameResult::OutOfDate) state.resize = true;
-                else if (renderer.frameResult() == LLVKContext::FrameResult::Fatal) { error = renderer.frameError(); return false; }
+                else if (renderer.frameResult() == LLVKContext::FrameResult::Fatal) { error = renderer.frameError(); return fail(Code::RendererUnavailable); }
             }
         }
         MsgWaitForMultipleObjectsEx(0,nullptr,16,QS_ALLINPUT,MWMO_INPUTAVAILABLE);
     }
-    return voice.stop(error) && audio.stop(error) && visuals.prepareShutdown(error);
+    if (application.owner->snapshot().state!=LLVKSessionOwner::State::Stopped)
+    { error="Native window exited before application retirement completed"; return fail(Code::ShutdownFailed); }
+    ui->setSessionOwner(nullptr);
+    if (!visuals.prepareShutdown(error)) return fail(Code::ShutdownFailed);
+    return true;
 }

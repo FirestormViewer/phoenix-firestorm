@@ -6,6 +6,7 @@
 #include "llvktexturecache.h"
 #include "llvktexturepreview.h"
 #include "llvkstartupstatus.h"
+#include "llvkstartup.h"
 #include "lltut.h"
 #include <fstream>
 #include <windows.h>
@@ -44,11 +45,15 @@ namespace tut
             ensure("startup presenter closes before viewer use",FindWindowW(L"#32770",wide.c_str())==nullptr);
             const auto root=std::filesystem::temp_directory_path()/("native-shutdown-status-"+LLUUID::generateNewID().asString());
             struct Cleanup { std::filesystem::path root; ~Cleanup() { std::error_code ignored; std::filesystem::remove_all(root,ignored); } } cleanup{root};
-            LLVKTextureCache cache;
+            LLVKSessionOwner session;
             LLVKTextureCache::Configuration configuration;
             configuration.directory=root/"cache"; configuration.localAssets=root/"assets";
             configuration.bytes=256ull*1024*1024;
-            const bool started=cache.start(configuration,error); ensure(error,started);
+            auto ownedCache=std::make_unique<LLVKApplicationCache>(configuration);
+            auto& cache=ownedCache->cache();
+            std::unique_ptr<LLVKSessionOwner::Service> service=std::move(ownedCache);
+            const bool started=session.install(LLVKSessionOwner::Lifetime::Application,1,service).ok(); ensure(error,started);
+            ensure("production cache is adopted",!service && session.snapshot().owned[0]==1);
             auto write=cache.write(LLUUID::generateNewID(),std::vector<std::uint8_t>(2048,42),2048,error);
             ensure("pending shutdown work accepted",write.valid());
             ensure("reopen presenter for shutdown",status.show("ShuttingDown",error));
@@ -56,13 +61,32 @@ namespace tut
             ensure("shutdown dialog visible",shutdownWindow && IsWindowVisible(shutdownWindow));
             GetDlgItemTextW(shutdownWindow,666,text,256);
             ensure("original shutdown message",std::wstring(text)==L"Shutting down...");
-            const bool stopped=cache.stop(error); ensure(error,stopped);
+            const bool stopped=session.shutdown().ok(); ensure(error,stopped);
+            ensure("owner retires production cache",session.snapshot().state==LLVKSessionOwner::State::Stopped && session.snapshot().owned[0]==0);
             ensure("shutdown drains accepted write",write.get().success);
             ensure("status remains visible through cache retirement",IsWindowVisible(shutdownWindow)!=FALSE);
             status.hide();
             status.hide();
             ensure("explicit shutdown hide is idempotent",FindWindowW(L"#32770",wide.c_str())==nullptr);
             ensure("shutdown can reopen after hide",status.show("ShuttingDown",error));
+            LLVKSessionOwner partial;
+            configuration.directory="relative-cache";
+            service=std::make_unique<LLVKApplicationCache>(configuration);
+            ensure("failed acquisition is not successful startup",!partial.install(LLVKSessionOwner::Lifetime::Application,1,service).ok());
+            ensure("partial cache adoption is fully retired",!service && partial.snapshot().state==LLVKSessionOwner::State::Stopped && partial.snapshot().owned[0]==0);
+            status.hide();
+            auto ownedStatus=std::make_shared<LLVKStartupStatus>();
+            const auto ownedTitle=title+" owned";
+            ensure("load service-owned shutdown presenter",ownedStatus->load(skin,ownedTitle,error));
+            LLVKSessionOwner application;
+            configuration.directory=root/"owned-cache";
+            service=std::make_unique<LLVKApplicationCache>(configuration,ownedStatus);
+            ensure("acquire cache with retained status",application.install(LLVKSessionOwner::Lifetime::Application,1,service).ok());
+            ensure("service retains its presenter",ownedStatus.use_count()==2);
+            ensure("retire cache and status together",application.shutdown().ok());
+            ensure("status ownership released after retirement",ownedStatus.use_count()==1);
+            const auto ownedWide=std::wstring(ownedTitle.begin(),ownedTitle.end());
+            ensure("service shutdown hides status before recovery UI",FindWindowW(L"#32770",ownedWide.c_str())==nullptr);
         }
         ensure("status closes on scope exit",FindWindowW(L"#32770",wide.c_str())==nullptr);
     }
@@ -439,11 +463,46 @@ namespace tut
         ensure("loopback Guidebook URL",settings.set("GuidebookURL",LLSD(guidebookServer.url()),false,error));
         configuration.ui.settings["GuidebookURL"]=guidebookServer.url();
         int guidebookStage=0;
+        LLVKSessionOwner session;
+        struct CleanupState { int attempts=0,frames=0; bool destroyed=false; };
+        auto cleanupState=std::make_shared<CleanupState>();
+        struct CleanupGate final : LLVKSessionOwner::Service
+        {
+            std::shared_ptr<CleanupState> state;
+            explicit CleanupGate(std::shared_ptr<CleanupState> value) : state(std::move(value)) {}
+            ~CleanupGate() override { state->destroyed=true; }
+            LLVKSessionOwner::Code acquire(const LLVKSessionOwner::Context&) override { return LLVKSessionOwner::Code::Ok; }
+            LLVKSessionOwner::Code retire() override
+            {
+                ++state->attempts;
+                return state->attempts==1 ? LLVKSessionOwner::Code::Pending : state->attempts==2 ?
+                    LLVKSessionOwner::Code::CleanupFailed : LLVKSessionOwner::Code::Ok;
+            }
+        };
         LLVKWidgetTree::Id originalGuidebook=0;
         const auto guidebookDeadline=std::chrono::steady_clock::now()+std::chrono::seconds(60);
         configuration.presentedFrame=[&](LLVKViewerUi& ui,const LLVKWidgetPaint::Input& input)
         {
             ensure("bounded integrated Guidebook completion",std::chrono::steady_clock::now()<guidebookDeadline);
+            const auto snapshot=session.snapshot();
+            if (snapshot.state==LLVKSessionOwner::State::Disconnecting)
+            {
+                if (!cleanupState->attempts) return;
+                ensure("application producers retire before cache dependency",snapshot.owned[0]==2 && input.browsers.empty());
+                ensure("voice engine drained before dependency retry",llwebrtc::getDeviceInterface()==nullptr);
+                ensure("owner snapshot reaches live recovery UI",ui.sessionSnapshot().state==LLVKSessionOwner::State::Disconnecting);
+                ensure("retired audio callback is cleared",!ui.previewUiSound("UISndClick",error));
+                ui.takeDialogError();
+                if (snapshot.cleanup.action!=LLVKSessionOwner::Action::RetryCleanup) return;
+                ensure_equals("failed retirement is never retried automatically",cleanupState->attempts,2);
+                if (++cleanupState->frames<3) return;
+                const auto retry=ui.find("retry_cleanup",ui.modalNotice());
+                ensure("cleanup action presented in surviving visual host",retry!=0);
+                ensure("retry through actual modal button",ui.tree().commit(retry));
+                ensure("UI action completes owner shutdown",session.snapshot().state==LLVKSessionOwner::State::Stopped);
+                return;
+            }
+            ensure("cache gate and real window services adopted",snapshot.owned[0]==3);
             if (guidebookStage==8)
             {
                 const auto inspector=ui.find("overlap_panel");
@@ -545,7 +604,6 @@ namespace tut
             }
             ++guidebookStage;
         };
-        LLVKTextureCache textureCache;
         LLVKTextureCache::Configuration cacheConfiguration;
         cacheConfiguration.directory=profile.path/"textures";
         cacheConfiguration.localAssets=profile.path/"assets";
@@ -559,13 +617,22 @@ namespace tut
             std::ofstream file(cacheConfiguration.localAssets/(asset.asString()+".tga"),std::ios::binary);
             file.write(reinterpret_cast<const char*>(tga.data()),tga.size());
         }
-        ensure("cache starts before visual services",textureCache.start(cacheConfiguration,error));
+        auto cacheService=std::make_unique<LLVKApplicationCache>(cacheConfiguration);
+        auto& textureCache=cacheService->cache();
+        std::unique_ptr<LLVKSessionOwner::Service> adoptedCache=std::move(cacheService);
+        ensure("cache adopted before visual services",session.install(LLVKSessionOwner::Lifetime::Application,1,adoptedCache).ok());
         configuration.textureCache=&textureCache;
         auto rejected=configuration;
+        auto failureCode=LLVKError::Code::Unexpected;
+        rejected.failureCode=&failureCode;
         rejected.browser.helperDirectory=profile.path/"missing-browser-helper";
         ensure("partial visual startup reports browser failure",!LLVKWindowMgr::run(rejected,error));
+        ensure("startup presenter receives the typed browser failure",failureCode==LLVKError::Code::BrowserUnavailable);
         ensure("partial startup preserves error",error.find("Native browser requires absolute helper")!=std::string::npos);
         ensure("partial startup destroys native window",FindWindowW(L"VulkanstormNativeLogin",nullptr)==nullptr);
+        std::unique_ptr<LLVKSessionOwner::Service> cleanupGate=std::make_unique<CleanupGate>(cleanupState);
+        ensure("install controlled cleanup dependency",session.install(LLVKSessionOwner::Lifetime::Application,3,cleanupGate).ok());
+        configuration.sessionOwner=&session;
         int expectedWidth=0,expectedHeight=0;
         configuration.bindServices=[&settings,&expectedWidth,&expectedHeight,&textureCache,previewAsset,replacementAsset](LLVKViewerUi& ui)
         {
@@ -790,8 +857,10 @@ namespace tut
         const bool ran = LLVKWindowMgr::run(configuration,error);
         ensure(error,ran);
         ensure_equals("browser and XUI preview sequence verified",guidebookStage,9);
-        const bool cacheStopped=textureCache.stop(error);
-        ensure(error,cacheStopped);
+        ensure("application and cache retirement completed",session.snapshot().state==LLVKSessionOwner::State::Stopped &&
+            session.snapshot().owned[0]==0 && cleanupState->destroyed);
+        ensure_equals("one pending poll and one explicit retry",cleanupState->attempts,3);
+        ensure_equals("recovery remained presentable across frames",cleanupState->frames,3);
         ensure("orderly quit destroys HWND",FindWindowW(L"VulkanstormNativeLogin",nullptr)==nullptr);
         ensure_equals("native shutdown persists client width",settings.find("WindowWidth")->getSaveValue().asInteger(),expectedWidth);
         ensure_equals("native shutdown persists client height",settings.find("WindowHeight")->getSaveValue().asInteger(),expectedHeight);

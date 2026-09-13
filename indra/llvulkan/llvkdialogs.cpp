@@ -334,6 +334,166 @@ bool LLVKViewerUi::queueNotice(const std::string& name,const LLSD& arguments,
     return true;
 }
 
+std::string LLVKViewerUi::errorString(std::string_view key,std::string_view fallback) const
+{
+    const auto found=mAboutStrings.find(std::string(key));
+    auto value=found==mAboutStrings.end() || found->second.empty() ? std::string(fallback) : found->second;
+    for (auto& character : value) if (character=='\n' || character=='\r' || character=='\t') character=' ';
+    return value;
+}
+
+bool LLVKViewerUi::queueError(const LLVKError& failure,std::vector<Notice::Button> actions,
+    std::function<void(int)> response,std::string& error,std::string name)
+{
+    error.clear();
+    if (mNotices.size()>=64) { error="Native error notice queue is full"; return false; }
+    const auto message=failure.format([this](std::string_view key) { return errorString(key,{}); });
+    Notice notice;
+    notice.name=name;
+    notice.message=message.title+"\n\n"+message.body;
+    notice.buttons=std::move(actions);
+    notice.buttons.push_back({"close",errorString("implicitclosebutton","Close"),0,true});
+    if (mDialogClipboard)
+        notice.buttons.push_back({"copy",errorString("NativeErrorCopy","Copy details"),-1,false});
+    notice.response=[this,failure,name,diagnostic=message.diagnostic,actions=notice.buttons,response=std::move(response)](int option,const LLSD&)
+    {
+        if (option==-1)
+        {
+            const auto wide=utf8str_to_wstring(diagnostic);
+            std::string copyError;
+            if (mDialogClipboard) mDialogClipboard->write(std::u32string(wide.begin(),wide.end()),false,copyError);
+            auto repeated=actions;
+            std::erase_if(repeated,[](const auto& button) { return button.option==0 || button.option==-1; });
+            if (!queueError(failure,std::move(repeated),response,mDialogError,name)) mReportedSession.reset();
+            else if (!copyError.empty()) mDialogError=std::move(copyError);
+        }
+        else if (response) response(option);
+    };
+    mNotices.push_back(std::move(notice));
+    return true;
+}
+
+bool LLVKViewerUi::showError(const LLVKError& failure,std::string& error)
+{
+    error.clear();
+    auto gate=mErrorGate;
+    if (!gate.begin(failure.operation,failure.generation) || !gate.accept(failure)) return true;
+    if (!queueError(failure,{},[this,failure](int option)
+    { if (!option && failure.policy().recovery==LLVKError::Recovery::Stop && mQuitRequest) mQuitRequest(); },error)) return false;
+    mErrorGate=gate;
+    return true;
+}
+
+void LLVKViewerUi::setSessionOwner(LLVKSessionOwner* owner)
+{
+    mSessionOwner=owner;
+    mReportedSession.reset();
+    LLVKControl::Callback login;
+    if (owner) login.function=[this,owner](auto,const LLSD&)
+    {
+        if (mSessionOwner!=owner) return;
+        owner->beginLogin();
+        mReportedSession.reset();
+        refreshSession(mDialogError);
+    };
+    mTree.setControlCommit(find("connect_btn"),std::move(login));
+}
+
+bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
+{
+    error.clear();
+    if (!mSessionOwner) return true;
+    if (repeat) mReportedSession.reset();
+    using Owner=LLVKSessionOwner;
+    mSessionSnapshot=mSessionOwner->snapshot();
+    const auto snapshot=mSessionSnapshot;
+    const bool prelogin=snapshot.state==Owner::State::PreLogin;
+    for (const auto name : {"connect_btn","username_combo","password_edit","server_combo","start_location_combo"})
+        mTree.setEnabled(find(name),prelogin);
+    const auto same=[](const Owner::Status& left,const Owner::Status& right)
+    { return left.code==right.code && left.action==right.action && left.operation==right.operation &&
+        left.generation==right.generation && left.service==right.service; };
+    if (mReportedSession && mReportedSession->tag==snapshot.tag && mReportedSession->state==snapshot.state &&
+        same(mReportedSession->status,snapshot.status) && same(mReportedSession->cleanup,snapshot.cleanup)) return true;
+    if (mActiveNotice && (mActiveNotice->name=="NativeSessionError" || mActiveNotice->name=="NativeSessionProgress" ||
+        mActiveNotice->name=="NativeSessionAgreement"))
+        if (!dismissNotice(error)) return false;
+    std::erase_if(mNotices,[](const auto& notice)
+    { return notice.name=="NativeSessionError" || notice.name=="NativeSessionProgress" || notice.name=="NativeSessionAgreement"; });
+    if (snapshot.state==Owner::State::AwaitingAgreement && snapshot.agreement)
+    {
+        if (mNotices.size()>=64) { error="Native session notice queue is full"; return false; }
+        Notice notice;
+        notice.name="NativeSessionAgreement";
+        notice.message=snapshot.agreement->text;
+        notice.buttons.push_back({"reject",errorString("NativeAgreementReject","Decline"),0,true});
+        notice.buttons.push_back({"accept",errorString("NativeAgreementAccept","Accept"),1,false});
+        notice.response=[this,owner=mSessionOwner,tag=snapshot.tag,agreement=*snapshot.agreement](int option,const LLSD&)
+        {
+            if (mSessionOwner!=owner || (option!=0 && option!=1)) return;
+            owner->decideAgreement(tag,agreement,option==1);
+            refreshSession(mDialogError);
+        };
+        mNotices.push_back(std::move(notice));
+        mReportedSession=snapshot;
+        return true;
+    }
+    const bool cleaning=snapshot.state==Owner::State::Disconnecting;
+    const auto status=cleaning ? snapshot.cleanup : snapshot.status;
+    if (status.code==Owner::Code::Ok || status.code==Owner::Code::Cancelled || status.code==Owner::Code::Pending)
+    {
+        const bool active=snapshot.state==Owner::State::Authenticating || snapshot.state==Owner::State::Connecting;
+        if (active)
+        {
+            if (mNotices.size()>=64) { error="Native session notice queue is full"; return false; }
+            Notice notice;
+            notice.name="NativeSessionProgress";
+            notice.message=errorString(snapshot.state==Owner::State::Connecting ? "LoginConnectingToRegion" :
+                "LoginInProgress","Login in progress...");
+            notice.buttons.push_back({"cancel",errorString("Cancel","Cancel"),1,true});
+            notice.response=[this,owner=mSessionOwner,tag=snapshot.tag](int option,const LLSD&)
+            {
+                if (option!=1 || mSessionOwner!=owner) return;
+                owner->cancel(tag);
+                refreshSession(mDialogError);
+            };
+            mNotices.push_back(std::move(notice));
+        }
+        mReportedSession=snapshot;
+        return true;
+    }
+    auto code=LLVKError::Code::SessionFailed;
+    if (cleaning) code=LLVKError::Code::SessionCleanupFailed;
+    else switch (status.code)
+    {
+        case Owner::Code::TransportUnavailable:
+            code=status.action==Owner::Action::Close ? LLVKError::Code::TransportUnavailable : LLVKError::Code::NetworkUnavailable;
+            break;
+        case Owner::Code::AuthenticationFailed: code=LLVKError::Code::AuthenticationFailed; break;
+        case Owner::Code::ConnectionFailed: code=LLVKError::Code::ConnectionFailed; break;
+        case Owner::Code::Timeout: code=LLVKError::Code::SessionTimeout; break;
+        default: break;
+    }
+    const LLVKError failure{code,LLVKError::Operation::Session,snapshot.tag.generation,snapshot.tag.request};
+    std::vector<Notice::Button> actions;
+    if (cleaning && status.action==Owner::Action::RetryCleanup)
+        actions.push_back({"retry_cleanup",errorString("NativeErrorRetryCleanup","Retry cleanup"),1,false});
+    if (prelogin && status.action==Owner::Action::RetryLogin)
+        actions.push_back({"retry_login",errorString("NativeErrorRetryLogin","Retry login"),2,false});
+    if (!queueError(failure,std::move(actions),[this,owner=mSessionOwner,snapshot](int option)
+    {
+        if (!option || mSessionOwner!=owner || owner->snapshot().tag!=snapshot.tag) return;
+        if (option==1 && snapshot.cleanup.action==Owner::Action::RetryCleanup) owner->retryCleanup(snapshot.tag);
+        else if (option==2 && snapshot.status.action==Owner::Action::RetryLogin) owner->beginLogin();
+        else return;
+        mReportedSession.reset();
+        refreshSession(mDialogError);
+    },error,"NativeSessionError")) return false;
+    try { LL_WARNS("NativeSession") << failure.diagnostic() << LL_ENDL; } catch (...) {}
+    mReportedSession=snapshot;
+    return true;
+}
+
 bool LLVKViewerUi::advanceNotices(double time,std::string& error)
 {
     error.clear();
@@ -362,8 +522,9 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
     if (notice.buttons.empty()) notice.buttons.push_back({"close",mAboutStrings.at("implicitclosebutton"),0,true});
     const auto font=mFonts->resolve({"SansSerif","Medium"},error);
     if (!font) return false;
+    const auto root=mTree.get(mRoot)->params.rect;
     const auto wide=utf8str_to_wstring(mNotices.front().message);
-    LLVKPlainTextLayout::Options options; options.width=400; options.wrap=true;
+    LLVKPlainTextLayout::Options options; options.width=std::max(1,std::min(400,root.right-root.left-70)); options.wrap=true;
     const auto document=LLVKPlainTextLayout::document(std::u32string(wide.begin(),wide.end()),*font,options,0,0,LLVKFont::VerticalAlign::Top,error);
     if (!document) return false;
     const auto padding=font->measureRun(U"OO",0,2,1.f,true,false,error);
@@ -378,10 +539,9 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
         buttonWidth=std::max(buttonWidth,static_cast<int>(measured->width+0.99f)+static_cast<int>(padding->width)+20);
     }
     const auto totalButtons=buttonWidth*static_cast<int>(notice.buttons.size())+10*static_cast<int>(notice.buttons.size()-1);
-    const auto textWidth=std::min(400,document->fitWidth+25);
-    const auto textHeight=document->fitHeight;
+    const auto textWidth=std::min(static_cast<int>(options.width),document->fitWidth+25);
+    const auto textHeight=std::min(document->fitHeight,std::max(40,root.top-root.bottom-120));
     const auto width=std::max(totalButtons,textWidth)+50, height=textHeight+48+23+(notice.inputName.empty() ? 0 : 36);
-    const auto root=mTree.get(mRoot)->params.rect;
     const auto left=std::max(0,(root.right-root.left-width)/2),bottom=std::max(0,(root.top-root.bottom-height)/2);
     LLVKWidgetTree::Params view; view.name=notice.name; view.rect={left,bottom,left+width,bottom+height};
     view.focusRoot=true;
@@ -400,13 +560,27 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
     text.linkClicked=[this](auto,const std::string& url) { if (mOpenUrl) mOpenUrl(url); };
     if (const auto color=mColors->find("HTMLLinkColor")) text.linkColor=*color;
     if (const auto color=mColors->find("LabelTextColor")) text.textColor=text.readOnlyColor=*color;
-    if (!mTree.createPlainText(view,control,text,*panel,error)) { discard(); return false; }
+    if (notice.name=="NativeSessionAgreement" || textHeight<document->fitHeight)
+    {
+        const auto body=mDialogFactory->construct(mTree,
+            "<text_editor name='Alert message' read_only='true' word_wrap='true' max_length='65536' parse_urls='false'/>",*panel,error);
+        if (!body || !mTree.setShape(*body,view.rect,error) || !mTree.setValue(*body,LLSD(notice.message)))
+        { discard(); return false; }
+    }
+    else if (!mTree.createPlainText(view,control,text,*panel,error)) { discard(); return false; }
     std::map<LLVKWidgetTree::Id,int> optionsById;
     LLVKWidgetTree::Id defaultButton=0,editor=0;
     int buttonLeft=(width-totalButtons)/2;
+    const auto buttonFactory=std::make_unique<LLVKWidgetFactory>(*mDialogFactory);
+    if (!buttonFactory->loadDefaultsFile(mTree,"alert_button.xml",error)) { discard(); return false; }
     for (const auto& option : notice.buttons)
     {
-        const auto button=mDialogFactory->constructFile(mTree,"alert_button.xml",*panel,error);
+        auto name=option.name;
+        LLStringUtil::replaceString(name,"&","&amp;");
+        LLStringUtil::replaceString(name,"'","&apos;");
+        LLStringUtil::replaceString(name,"<","&lt;");
+        LLStringUtil::replaceString(name,">","&gt;");
+        const auto button=buttonFactory->construct(mTree,"<button name='"+name+"'/>",*panel,error);
         if (!button) { discard(); return false; }
         if (!mTree.setShape(*button,{buttonLeft,16,buttonLeft+buttonWidth,39},error)) { discard(); return false; }
         const auto wideLabel=utf8str_to_wstring(option.label);

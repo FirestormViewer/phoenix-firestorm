@@ -18,6 +18,8 @@
 #include "llvkbeamshape.h"
 #include "llvkgraphicpresets.h"
 #include "llvkgraphicspolicy.h"
+#include "llvkerror.h"
+#include "llvksessionowner.h"
 
 class LLVKViewerUi final
 {
@@ -195,7 +197,18 @@ public:
     bool advanceNotices(double time, std::string& error);
     bool noticeKey(bool returnKey, bool modified, std::string& error);
     LLVKWidgetTree::Id modalNotice() const noexcept { return mNoticePanel; }
+    bool showError(const LLVKError& failure, std::string& error);
+    void setSessionOwner(LLVKSessionOwner* owner);
+    bool refreshSession(std::string& error, bool repeat = false);
+    const LLVKSessionOwner::Snapshot& sessionSnapshot() const noexcept { return mSessionSnapshot; }
 private:
+    std::string errorString(std::string_view key, std::string_view fallback) const;
+    bool queueError(const LLVKError& failure, std::vector<Notice::Button> actions,
+        std::function<void(int)> response, std::string& error, std::string name = "NativeError");
+    LLVKErrorGate mErrorGate;
+    LLVKSessionOwner* mSessionOwner = nullptr;
+    LLVKSessionOwner::Snapshot mSessionSnapshot;
+    std::optional<LLVKSessionOwner::Snapshot> mReportedSession;
     bool initializeDialogs(const Configuration& configuration,std::string& error);
     bool updateAboutText(std::string& error);
     bool initializeStartupPreferencePanel(LLVKWidgetTree::Id panel, std::string& error);

@@ -4,6 +4,35 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
+	<string name="NativeErrorTitle">Ошибка нативного режима Vulkanstorm</string>
+	<string name="NativeErrorCloseViewer">Подтвердите это сообщение, чтобы закрыть просмотрщик.</string>
+	<string name="NativeErrorCopy">Копировать подробности</string>
+	<string name="NativeErrorRetryCleanup">Повторить очистку</string>
+	<string name="NativeErrorRetryLogin">Повторить вход</string>
+	<string name="NativeAgreementAccept">Принять</string>
+	<string name="NativeAgreementReject">Отклонить</string>
+	<string name="NativeErrorUnexpected">В нативном просмотрщике произошла непредвиденная ошибка. Закройте просмотрщик и обратитесь в службу поддержки, если ошибка повторится.</string>
+	<string name="NativeErrorDefaultSettings">Не удалось загрузить необходимые настройки по умолчанию. Восстановите установку перед повторным запуском.</string>
+	<string name="NativeErrorSettingsMode">Не удалось загрузить выбранный режим настроек. Проверьте установленные файлы настроек перед повторным запуском.</string>
+	<string name="NativeErrorUnsupportedArguments">Один или несколько параметров командной строки не поддерживаются при нативном запуске. Удалите неподдерживаемые параметры перед повторным запуском.</string>
+	<string name="NativeErrorSettingsRead">Не удалось прочитать или применить необходимые настройки. Проверьте файлы настроек и права доступа перед повторным запуском.</string>
+	<string name="NativeErrorSettingsWrite">Не удалось сохранить настройки. Проверьте свободное место на диске и права на запись перед повторным запуском.</string>
+	<string name="NativeErrorCacheUnavailable">Не удалось инициализировать кэш. Проверьте расположение кэша, права доступа и свободное место на диске перед повторным запуском.</string>
+	<string name="NativeErrorStartupResources">Необходимые для запуска ресурсы недоступны. Восстановите установку перед повторным запуском.</string>
+	<string name="NativeErrorWindowUnavailable">Нативное окно недоступно или не смогло завершить операцию. Проверьте доступность дисплея и настройки окна перед повторным запуском.</string>
+	<string name="NativeErrorRendererUnavailable">Нативный модуль рендеринга Vulkan недоступен или остановлен. Проверьте поддержку Vulkan драйвером перед повторным запуском. Переключение модуля рендеринга и повторная попытка не выполнялись.</string>
+	<string name="NativeErrorBrowserUnavailable">Не удалось запустить встроенный браузер или загрузить его страницу. Проверьте установку и конфигурацию сети перед повторным запуском.</string>
+	<string name="NativeErrorShutdownFailed">Не удалось нормально завершить работу в нативном режиме. Проверьте доступ к настройкам и кэшу перед повторным запуском.</string>
+	<string name="NativeErrorOperationFailed">Не удалось завершить запрошенную операцию. Закройте это сообщение, чтобы вернуться в просмотрщик. Повторная попытка не выполнялась.</string>
+	<string name="NativeErrorOptionalSettings">Не удалось загрузить необязательные настройки. Просмотрщик продолжит работу с доступными значениями по умолчанию.</string>
+	<string name="NativeErrorNetworkUnavailable">Не удалось завершить сетевой запрос. Проверьте соединение. Восстановление требует участия компонента, управляющего операцией; повторная попытка не выполнялась.</string>
+	<string name="NativeErrorTlsRejected">Не удалось проверить защищённое соединение. Проверьте системные часы и конфигурацию сети. Проверка сертификата не была обойдена.</string>
+	<string name="NativeErrorTransportUnavailable">Нативная аутентификация недоступна в этой сборке. Запрос на вход не отправлялся.</string>
+	<string name="NativeErrorSessionCleanupFailed">Не удалось завершить очистку сеанса. Ресурсы остаются под контролем ответственного компонента. Повторите очистку, чтобы завершить операцию.</string>
+	<string name="NativeErrorAuthenticationFailed">Ошибка аутентификации. Подключённый сеанс не был установлен.</string>
+	<string name="NativeErrorConnectionFailed">Не удалось подключиться к региону. Восстановление требует участия компонента, управляющего сеансом.</string>
+	<string name="NativeErrorSessionTimeout">Время ожидания запроса сеанса истекло. Восстановление требует участия компонента, управляющего сеансом.</string>
+	<string name="NativeErrorSessionFailed">Не удалось завершить операцию сеанса. Восстановление требует участия компонента, управляющего сеансом.</string>
 	<string name="SECOND_LIFE">
 		[CURRENT_GRID]
 	</string>
