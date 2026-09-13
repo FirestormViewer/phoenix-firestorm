@@ -10,6 +10,12 @@
 	<string name="NativeErrorRetryCleanup">Bereinigung wiederholen</string>
 	<string name="NativeErrorRetryLogin">Anmeldung wiederholen</string>
 	<string name="NativeAgreementAccept">Akzeptieren</string>
+	<string name="NativeErrorOutOfMemory">Der Viewer hat nicht genügend Arbeitsspeicher. Schließen Sie vor dem Neustart andere Anwendungen.</string>
+	<string name="NativeErrorMissingFiles">Erforderliche Dateien fehlen oder sind nicht zugänglich. Reparieren Sie die Installation und prüfen Sie die Dateiberechtigungen.</string>
+	<string name="NativeErrorAudioFailed">Der Audiodienst ist ausgefallen. Prüfen Sie vor dem Neustart das Audiogerät und die Einstellungen.</string>
+	<string name="NativeErrorVoiceFailed">Der Sprachgerätedienst ist ausgefallen. Prüfen Sie vor dem Neustart die Sprachverarbeitung und die ausgewählten Geräte.</string>
+	<string name="NativeErrorTranslationFailed">Die Übersetzungsprüfung ist fehlgeschlagen. Prüfen Sie vor dem Neustart die Netzwerk- und Proxy-Einstellungen.</string>
+	<string name="NativeErrorPreviewFailed">Die Texturvorschau ist ausgefallen. Prüfen Sie vor dem Neustart den Cache-Zugriff und das ausgewählte Bild.</string>
 	<string name="NativeAgreementReject">Ablehnen</string>
 	<string name="NativeErrorUnexpected">Ein unerwarteter Fehler ist aufgetreten. Schließen Sie den Viewer. Wenden Sie sich bei erneutem Auftreten an den Support.</string>
 	<string name="NativeErrorDefaultSettings">Erforderliche Standardeinstellungen konnten nicht geladen werden. Reparieren Sie die Installation vor dem nächsten Start.</string>

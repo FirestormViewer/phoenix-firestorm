@@ -10,6 +10,12 @@
   <string name="NativeErrorRetryCleanup">Retry cleanup</string>
   <string name="NativeErrorRetryLogin">Retry login</string>
   <string name="NativeAgreementAccept">Accept</string>
+  <string name="NativeErrorOutOfMemory">The viewer has run out of memory. Close other applications before restarting.</string>
+  <string name="NativeErrorMissingFiles">Required files are missing or inaccessible. Repair the installation and check file permissions.</string>
+  <string name="NativeErrorAudioFailed">The audio service failed. Check the audio device and settings before restarting.</string>
+  <string name="NativeErrorVoiceFailed">The voice device service failed. Check voice processing settings and selected devices before restarting.</string>
+  <string name="NativeErrorTranslationFailed">Translation verification failed. Check network and proxy settings before restarting.</string>
+  <string name="NativeErrorPreviewFailed">The texture preview service failed. Check cache access and the selected image before restarting.</string>
   <string name="NativeAgreementReject">Decline</string>
   <string name="NativeErrorUnexpected">An unexpected native viewer error occurred. Close the viewer and contact support if this happens again.</string>
   <string name="NativeErrorDefaultSettings">Required default settings could not be loaded. Repair the installation before starting again.</string>

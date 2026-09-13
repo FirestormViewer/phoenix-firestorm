@@ -747,6 +747,7 @@ namespace
         LLVKSessionOwner* owner=nullptr;
         std::shared_ptr<ApplicationServices::Access> access;
         LLVKViewerUi& ui;
+        LLVKError::Resolver errorResolver;
         ~ApplicationRun()
         {
             ui.setSessionOwner(nullptr);
@@ -760,7 +761,7 @@ namespace
                 if (local && owner->snapshot().state!=LLVKSessionOwner::State::Stopped)
                 {
                     local.release();
-                    llvkPresentErrorFallback({LLVKError::Code::ShutdownFailed,LLVKError::Operation::Shutdown,1,0});
+                    llvkPresentErrorFallback({LLVKError::Code::ShutdownFailed,LLVKError::Operation::Shutdown,1,0},nullptr,errorResolver);
                 }
             }
             catch (...) { local.release(); }
@@ -855,7 +856,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         catch (...) {}
         std::string problem;
         if (!state.ui || !state.ui->showError(failure,problem))
-            llvkPresentErrorFallback(failure,state.window);
+            llvkPresentErrorFallback(failure,state.window,configuration.errorResolver);
     };
     auto uiConfiguration=configuration.ui;
     wchar_t executablePath[32768]{};
@@ -885,7 +886,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     VisualServices visuals(state);
     if (!visuals.initializeUi(uiConfiguration,error)) return fail(Code::StartupResources);
     auto& ui=visuals.ui;
-    ApplicationRun application{{},configuration.sessionOwner,{},*ui};
+    ApplicationRun application{{},configuration.sessionOwner,{},*ui,configuration.errorResolver};
     if (!application.owner)
     {
         application.local=std::make_unique<LLVKSessionOwner>();
@@ -1226,7 +1227,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         processing.mNoiseSuppressionLevel=static_cast<LLVKVoice::AudioConfig::ENoiseSuppressionLevel>(level);
         return voice.configure(processing,error);
     };
-    if (!updateVoice()) return false;
+    if (!updateVoice()) return fail(Code::VoiceFailed);
     services.voiceDevices=std::make_unique<VoiceDevices>(*ui,voice);
     services.picker=std::make_unique<XmlFilePicker>(*ui,state.window);
     if (configuration.textureCache)
@@ -1238,6 +1239,8 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     auto previous = std::chrono::steady_clock::now();
     while (!state.close)
     {
+        if (configuration.fatalError)
+            if (const auto failure=configuration.fatalError()) return fail(*failure);
         {
             const auto snapshot=application.owner->snapshot();
             if (snapshot.state==LLVKSessionOwner::State::Stopped) break;
@@ -1249,11 +1252,11 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         }
         if (application.access->service && application.access->service->active())
         {
-            if (services.previews && !services.previews->update(error)) return false;
+            if (services.previews && !services.previews->update(error)) return fail(Code::PreviewFailed);
             services.picker->pump();
-            if (!services.translation->pump(error)) return false;
-            if (!audio.update(error)) return false;
-            if (!updateVoice()) return false;
+            if (!services.translation->pump(error)) return fail(Code::TranslationFailed);
+            if (!audio.update(error)) return fail(Code::AudioFailed);
+            if (!updateVoice()) return fail(Code::VoiceFailed);
         }
         if (!ui->advanceNotices(state.elapsed(),error)) return false;
         MSG message;
@@ -1279,7 +1282,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
                 }
             }
             const auto shutdown=ui->prepareShutdown(error,placement);
-            if (shutdown==LLVKViewerUi::ShutdownStatus::Failed) return false;
+            if (shutdown==LLVKViewerUi::ShutdownStatus::Failed) return fail(Code::SettingsWrite);
             if (shutdown==LLVKViewerUi::ShutdownStatus::Ready)
             {
                 if (application.owner->snapshot().state!=LLVKSessionOwner::State::Disconnecting)
@@ -1303,7 +1306,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         {
             const auto id=iterator->first;
             auto& view=*iterator->second;
-            if (!view.update(error)) return false;
+            if (!view.update(error)) return fail(Code::BrowserUnavailable);
             if (view.state()==LLVKBrowser::State::Closed)
             {
                 ui->webBrowserEvent(id,"Closed","",false,false);
@@ -1385,7 +1388,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         if (state.width && state.height)
         {
             const auto paint = ui->preparePaint(state.input,error);
-            if (!paint) return false;
+            if (!paint) return fail(Code::StartupResources);
             const auto ready = gpu.prepare(*paint,renderer.swapchainExtent(),packet,error);
             if (ready == LLVKWidgetGpu::Status::Failed) return fail(Code::RendererUnavailable);
             if (ready == LLVKWidgetGpu::Status::Ready)

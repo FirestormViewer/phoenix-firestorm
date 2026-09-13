@@ -10,6 +10,12 @@
 	<string name="NativeErrorRetryCleanup">Réessayer le nettoyage</string>
 	<string name="NativeErrorRetryLogin">Réessayer la connexion</string>
 	<string name="NativeAgreementAccept">Accepter</string>
+	<string name="NativeErrorOutOfMemory">Le visualiseur manque de mémoire. Fermez d'autres applications avant de redémarrer.</string>
+	<string name="NativeErrorMissingFiles">Des fichiers requis sont absents ou inaccessibles. Réparez l'installation et vérifiez les autorisations des fichiers.</string>
+	<string name="NativeErrorAudioFailed">Le service audio a échoué. Vérifiez le périphérique audio et les paramètres avant de redémarrer.</string>
+	<string name="NativeErrorVoiceFailed">Le service des périphériques vocaux a échoué. Vérifiez les paramètres vocaux et les périphériques sélectionnés avant de redémarrer.</string>
+	<string name="NativeErrorTranslationFailed">La vérification de traduction a échoué. Vérifiez les paramètres réseau et proxy avant de redémarrer.</string>
+	<string name="NativeErrorPreviewFailed">Le service d'aperçu des textures a échoué. Vérifiez l'accès au cache et l'image sélectionnée avant de redémarrer.</string>
 	<string name="NativeAgreementReject">Refuser</string>
 	<string name="NativeErrorUnexpected">Une erreur inattendue s'est produite dans le visualiseur natif. Fermez le visualiseur et contactez l'assistance si cela se reproduit.</string>
 	<string name="NativeErrorDefaultSettings">Les paramètres par défaut requis n'ont pas pu être chargés. Réparez l'installation avant de redémarrer le visualiseur.</string>

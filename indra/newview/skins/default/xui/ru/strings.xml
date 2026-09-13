@@ -10,6 +10,12 @@
 	<string name="NativeErrorRetryCleanup">Повторить очистку</string>
 	<string name="NativeErrorRetryLogin">Повторить вход</string>
 	<string name="NativeAgreementAccept">Принять</string>
+	<string name="NativeErrorOutOfMemory">Программе не хватает памяти. Закройте другие приложения перед перезапуском.</string>
+	<string name="NativeErrorMissingFiles">Необходимые файлы отсутствуют или недоступны. Восстановите установку и проверьте права доступа.</string>
+	<string name="NativeErrorAudioFailed">Сбой службы звука. Проверьте звуковое устройство и настройки перед перезапуском.</string>
+	<string name="NativeErrorVoiceFailed">Сбой службы голосовых устройств. Проверьте настройки голоса и выбранные устройства перед перезапуском.</string>
+	<string name="NativeErrorTranslationFailed">Проверка перевода не удалась. Проверьте настройки сети и прокси перед перезапуском.</string>
+	<string name="NativeErrorPreviewFailed">Сбой службы предпросмотра текстур. Проверьте доступ к кэшу и выбранное изображение перед перезапуском.</string>
 	<string name="NativeAgreementReject">Отклонить</string>
 	<string name="NativeErrorUnexpected">В нативном просмотрщике произошла непредвиденная ошибка. Закройте просмотрщик и обратитесь в службу поддержки, если ошибка повторится.</string>
 	<string name="NativeErrorDefaultSettings">Не удалось загрузить необходимые настройки по умолчанию. Восстановите установку перед повторным запуском.</string>

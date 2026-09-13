@@ -10,6 +10,12 @@
 	<string name="NativeErrorRetryCleanup">Temizlemeyi yeniden dene</string>
 	<string name="NativeErrorRetryLogin">Girişi yeniden dene</string>
 	<string name="NativeAgreementAccept">Kabul et</string>
+	<string name="NativeErrorOutOfMemory">Görüntüleyicinin belleği tükendi. Yeniden başlatmadan önce diğer uygulamaları kapatın.</string>
+	<string name="NativeErrorMissingFiles">Gerekli dosyalar eksik veya erişilemiyor. Kurulumu onarın ve dosya izinlerini kontrol edin.</string>
+	<string name="NativeErrorAudioFailed">Ses hizmeti başarısız oldu. Yeniden başlatmadan önce ses aygıtını ve ayarları kontrol edin.</string>
+	<string name="NativeErrorVoiceFailed">Sesli iletişim aygıt hizmeti başarısız oldu. Yeniden başlatmadan önce sesli iletişim ayarlarını ve seçili aygıtları kontrol edin.</string>
+	<string name="NativeErrorTranslationFailed">Çeviri doğrulaması başarısız oldu. Yeniden başlatmadan önce ağ ve vekil sunucu ayarlarını kontrol edin.</string>
+	<string name="NativeErrorPreviewFailed">Doku önizleme hizmeti başarısız oldu. Yeniden başlatmadan önce önbellek erişimini ve seçili resmi kontrol edin.</string>
 	<string name="NativeAgreementReject">Reddet</string>
 	<string name="NativeErrorUnexpected">Yerel görüntüleyicide beklenmeyen bir hata oluştu. Görüntüleyiciyi kapatın ve bu durum tekrarlanırsa destek ekibiyle iletişime geçin.</string>
 	<string name="NativeErrorDefaultSettings">Gerekli varsayılan ayarlar yüklenemedi. Yeniden başlatmadan önce kurulumu onarın.</string>

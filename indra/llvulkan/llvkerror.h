@@ -25,6 +25,12 @@ struct LLVKError
         ShutdownFailed = 1011,
         OperationFailed = 1012,
         OptionalSettings = 1013,
+        OutOfMemory = 1014,
+        MissingFiles = 1015,
+        AudioFailed = 1016,
+        VoiceFailed = 1017,
+        TranslationFailed = 1018,
+        PreviewFailed = 1019,
         NetworkUnavailable = 2000,
         TlsRejected = 2001,
         TransportUnavailable = 2002,
@@ -87,7 +93,8 @@ private:
 };
 
 #ifdef _WIN32
-bool llvkPresentErrorFallback(const LLVKError& error, void* owner = nullptr) noexcept;
+bool llvkPresentErrorFallback(const LLVKError& error, void* owner = nullptr,
+    const LLVKError::Resolver& resolver = {}) noexcept;
 #endif
 
 #endif

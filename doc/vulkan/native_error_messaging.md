@@ -1,5 +1,122 @@
 # Native error messaging
 
+## Accepted local-service scope (2026-09-13)
+
+The user accepted completing reporting for services already present in the native
+viewer, with transport/authenticated reporting delivered alongside those services.
+This supersedes the earlier pending-scope paragraph below, not the requirement for
+measured visual parity. No new authentication/world service or GL visual code is
+introduced by this increment. Affected invariants: NV-00/01/03/15/17.
+
+The local reporting implementation now includes:
+
+- Localized independent OS fallback before visual service initialization and after
+   teardown, with immutable catalog snapshots, strict UTF-8 decoding and English
+   fallback when no valid catalog is available. Reporting cannot depend on the failed
+   renderer. Missing/default-settings discovery before catalog loading remains English.
+- Scoped fatal log and `LLUserWarningMsg` handling. Missing files and OOM use stable
+   codes 1015 and 1014 rather than arbitrary warning text. Fixed diagnostic literals
+   can be written without formatting allocation. The OS presenter has a fixed OOM
+   message if formatting allocation fails. Actual exhausted-memory execution is not
+   claimed by controlled warning injection.
+- An atomic fatal-state signal stops the native window's normal service loop after
+   a fatal warning; startup avoids presenting it a second time. LL_ERRS still obeys
+   its existing fatal termination contract. Prior warning handlers and preallocated
+   OOM strings are restored after native ownership. Registration failure removes any
+   installed recorder before unwinding.
+- The shared CPU-only `LLUserWarningMsg` API now exposes snapshots of its handler
+   and OOM strings and serializes invocation/configuration with a recursive mutex.
+   This closes the worker-callback versus handler-retirement race. Existing GL
+   callbacks, message selection and rendering are unchanged. No GL warning handler
+   is called by native startup. Setup/teardown occurs at the application owner, not
+   per dialog. Concurrent backend ownership remains forbidden.
+- Runtime audio, voice, translation verification and preview failures report codes
+   1016-1019 with cause-specific advice instead of WindowUnavailable. Auxiliary browser
+   failures preserve BrowserUnavailable; failed shutdown persistence reports
+   SettingsWrite. These retain their existing stop policy and do not invent retries.
+   All six added message keys exist in all 13 shipped catalogs (78 XML entries).
+- Existing native local notices now share bounded admission (64 queued plus one
+   active) and one-shot queued responses. A rejected admission never invokes its
+   callback. Ignore/default-response policy remains before queue admission, and saved
+   ignore settings retain their existing persistence path. Error copy requeues a new
+   notice; session recovery retains exact request-tag checks.
+
+Source check: all 29 notification declarations on the native parser's allowlist
+are alert/alertmodal with no persistence, duration, expireOption or unique policy.
+They therefore stay transient rather than replaying callbacks against expired
+owners after restart. This does not implement the full GL notification channel
+graph, persistent offers or timed toasts for future authenticated services.
+
+Verification: standalone real OS-dialog/formatter tests passed; configured native
+Window7/7 plus cold-cache regression passed; Widget209/209 passed; shared llerror
+regression18/18 passed. Worker warning fixtures exercise both missing files and
+OOM, typed fatal state, one-shot reporting and restoration. Catalog tests cover
+reload/destruction, Unicode and invalid-byte fallback; all 78 added entries parse,
+are unique/nonempty and fit the formatter limit. Source diagnostics and whitespace
+checks passed. Native Viewer Link Validation completed successfully after rebuilding
+the consumers of the shared warning header.
+
+Not claimed: exhaustive detail classification of every legacy dialog error, a
+minidump/crash-upload service, real OOM exhaustion, full-viewer runtime acceptance,
+translation review or measured exact visual/effects parity. Future transport/TLS/MFA
+and account/world service increments must supply their own producer identity,
+recovery policy and native consumer; fixture errors cannot satisfy those gates.
+
+## Fatal and fallback contract follow-up (2026-09-13)
+
+NV-00/01/03/15/17, source `74a22e59bf`, Windows native selection. GL roots remain
+`errorCallback/errorHandler` in LLAppViewer: localize before OS presentation, record
+fatal context and markers, then preserve the logger's fatal termination. Native
+uses independent OS presentation and a scoped CPU-only LLError recorder. Audited
+`addRecorder/removeRecorder/log` serialize recorder access under mRecorderMutex;
+native callbacks never log or mutate registrations. Raw fatal text is deliberately
+not copied to the native report. The existing logger and its other recorders are
+unchanged and are not claimed to redact their own outputs.
+
+Native design: preload immutable selected-skin error strings before service startup;
+retain snapshots independent of UI, font and renderer owners. Strict UTF-8 conversion
+falls back to English on invalid catalog bytes. Fatal logging writes a per-process
+native record through Win32 file IO, then invokes the independent presenter once.
+The recorder does not swallow the existing fatal function or turn LL_ERRS into a
+recoverable condition. Registration lives across native startup and teardown and is
+removed before its state is destroyed. No GL crash marker namespace is reused.
+
+Discriminating checks: real OS dialog Unicode/invalid-byte/recursive fallback;
+catalog reload/destruction retains old snapshot; controlled LL_ERRS exercises actual
+recorder delivery, one-shot presentation, secret-free record and removal while the
+test-only fatal function throws. This does not implement OOM/global warning hooks,
+minidumps/crash submission or live network protocol reporting.
+
+Implemented and verified in the working tree after `74a22e59bf`:
+
+- Native OS fallback resolves selected-skin strings and converts UTF-8 strictly;
+   invalid data or unavailable catalogs use the English fallback. Catalog snapshots
+   remain valid after reload or destruction of the loader. Startup loads them before
+   browser/cache/service initialization; failures before valid settings/catalog load
+   necessarily remain English. Shutdown and window fallback retain the snapshot.
+- `LLVKFatalReporting` installs an independent scoped recorder after native backend
+   selection. It writes `logs/native-fatal-<pid>.log` with CREATE_NEW, records only
+   stable numeric facts and flushes before presentation. Existing records are not
+   overwritten. File failure emits a fixed debugger diagnostic and does not suppress
+   presentation. An atomic immutable resolver snapshot supports worker reporting;
+   an atomic one-shot gate suppresses recursive/repeated fatal presentation.
+- Standalone formatter/real OS-dialog tests passed for translated Unicode, invalid
+   UTF-8 and recursive fallback. Configured Window7/7, error and cold-cache tests
+   passed. Window7 checks catalog lifetime and actual LL_ERRS recorder delivery,
+   structured record contents, one-shot behavior and deregistration using a test-only
+   throwing fatal function. Native Viewer Link Validation and source diagnostics
+   passed. No full viewer or real profile was used.
+
+Full reporting parity is NOT closed. Outstanding local work includes OOM and
+LLUserWarningMsg lifecycle hooks, richer producer-specific diagnostics, full native
+notification channels/expiry/persistence and visual qualification. Reporting for
+actual authentication/TLS/MFA, protocol retry/backoff and authenticated services
+depends on the unimplemented Phase 2 transport and the Phase 3 service subset that
+the roadmap requires agreeing before implementation. Those services cannot be
+represented as complete by fixture messages. Crash submission/minidump parity is
+also not established by the native numeric fatal record. Changes remain uncommitted
+pending full-task scope resolution; the prior `74a22e59bf` commit is unchanged.
+
 ## Production recovery follow-up (2026-09-13)
 
 The later [session integration](native_session_owner.md) report supersedes earlier

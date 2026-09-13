@@ -22,6 +22,8 @@ struct LLVKWindowMgr
         LLVKTextureCache* textureCache=nullptr;
         LLVKSessionOwner* sessionOwner=nullptr;
         LLVKError::Code* failureCode=nullptr;
+        LLVKError::Resolver errorResolver;
+        std::function<std::optional<LLVKError::Code>()> fatalError;
     };
     static bool run(const Configuration& configuration, std::string& error);
 };

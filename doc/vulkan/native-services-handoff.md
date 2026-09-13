@@ -5,6 +5,32 @@ This is a continuation checkpoint, not a completion or parity claim.
 
 ## Current checkpoint and evidence
 
+### Existing-service reporting (2026-09-13)
+
+The user accepted finishing native reporting for existing services, then requiring
+reporting as each transport/authenticated service is integrated. See
+[the accepted reporting scope](native_error_messaging.md) for NV-00 contracts and
+the distinction from complete GL notification/crash-service parity.
+
+- Independent OS fallback now uses retained selected-skin translations with strict
+  Unicode handling; unavailable/invalid catalogs retain English fallback.
+- Scoped native fatal logging and missing-file/OOM warning hooks produce safe
+  records and a fatal-state signal. Normal window work stops after a fatal warning.
+  Warning callbacks are synchronized with retirement; previous shared handler and
+  OOM strings are restored. No GL visual implementation or callback is reused.
+- Existing runtime audio/voice/translation/preview failures have distinct stable
+  causes. Six new messages are present in all 13 catalogs. Local notices are bounded
+  and queued responses run once. Existing ignore preferences remain persistent;
+  the 29 admitted local alert templates do not request persistence or expiry.
+- Configured Widget209/209, Window7/7 plus error/cold-cache checks, standalone
+  OS-dialog checks, shared llerror18/18 and Native Viewer Link Validation passed.
+  No full viewer, credentials,
+  microphone or operator-profile tests were run.
+
+Live transport/authentication reporting remains with Phase 2; authenticated
+notifications remain with their Phase 3 services. Exact UI parity, crash submission
+and exhaustive legacy producer-detail classification are not established here.
+
 ### Production lifecycle follow-up (2026-09-13)
 
 Supersedes the cache-only and no-agreement-consumer limitations in the historical

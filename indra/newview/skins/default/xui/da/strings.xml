@@ -6,6 +6,12 @@
 	<string name="NativeErrorRetryCleanup">Prøv oprydning igen</string>
 	<string name="NativeErrorRetryLogin">Prøv login igen</string>
 	<string name="NativeAgreementAccept">Accepter</string>
+	<string name="NativeErrorOutOfMemory">Fremviseren er løbet tør for hukommelse. Luk andre programmer før genstart.</string>
+	<string name="NativeErrorMissingFiles">Nødvendige filer mangler eller er utilgængelige. Reparer installationen og kontroller filrettighederne.</string>
+	<string name="NativeErrorAudioFailed">Lydtjenesten fejlede. Kontroller lydenheden og indstillingerne før genstart.</string>
+	<string name="NativeErrorVoiceFailed">Taleenhedstjenesten fejlede. Kontroller taleindstillingerne og de valgte enheder før genstart.</string>
+	<string name="NativeErrorTranslationFailed">Kontrol af oversættelse mislykkedes. Kontroller netværks- og proxyindstillingerne før genstart.</string>
+	<string name="NativeErrorPreviewFailed">Forhåndsvisning af teksturer fejlede. Kontroller adgangen til cachen og det valgte billede før genstart.</string>
 	<string name="NativeAgreementReject">Afvis</string>
 	<string name="NativeErrorUnexpected">Der opstod en uventet fejl i den native viewer. Luk vieweren, og kontakt support, hvis det sker igen.</string>
 	<string name="NativeErrorDefaultSettings">De nødvendige standardindstillinger kunne ikke indlæses. Reparér installationen, før du starter igen.</string>

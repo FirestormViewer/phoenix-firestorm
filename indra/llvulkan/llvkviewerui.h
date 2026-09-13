@@ -203,6 +203,7 @@ public:
     const LLVKSessionOwner::Snapshot& sessionSnapshot() const noexcept { return mSessionSnapshot; }
 private:
     std::string errorString(std::string_view key, std::string_view fallback) const;
+    bool enqueueNotice(Notice notice, std::string& error);
     bool queueError(const LLVKError& failure, std::vector<Notice::Button> actions,
         std::function<void(int)> response, std::string& error, std::string name = "NativeError");
     LLVKErrorGate mErrorGate;

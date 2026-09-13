@@ -314,6 +314,20 @@ namespace tut
         ui->setSessionOwner(nullptr);
         ensure("empty application shutdown",owner.shutdown().ok());
 
+        unsigned responses=0;
+        for (unsigned notice=0; notice<64; ++notice)
+            ensure("bounded local notice accepted",ui->queueNotice("BackupPathEmpty",{},
+                [&](int,const LLSD&) { ++responses; },error));
+        ensure("full local notice queue rejects without callback",!ui->queueNotice("BackupPathEmpty",{},
+            [&](int,const LLSD&) { ++responses; },error) && responses==0);
+        notices=ui->takeNotices();
+        ensure_equals("notice queue remains bounded",notices.size(),std::size_t{64});
+        notices.front().response(0,{});
+        notices.front().response(0,{});
+        ensure_equals("local notice response delivered once",responses,1u);
+        ensure("new notice allowed after drain",ui->queueNotice("BackupPathEmpty",{},{},error));
+        ui->takeNotices();
+
         struct LocaleCase
         {
             const char* language;

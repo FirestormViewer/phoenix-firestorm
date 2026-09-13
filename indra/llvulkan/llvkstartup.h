@@ -6,6 +6,22 @@
 #include "llvkproxy.h"
 #include "llvktexturecache.h"
 #include "llvksessionowner.h"
+#include "llvkerror.h"
+
+class LLVKFatalReporting final
+{
+public:
+    using Presenter=std::function<void(const LLVKError&)>;
+    LLVKFatalReporting(const std::filesystem::path& record,Presenter presenter);
+    ~LLVKFatalReporting();
+    void setErrorResolver(LLVKError::Resolver resolver);
+    std::optional<LLVKError::Code> failure() const noexcept;
+    LLVKFatalReporting(const LLVKFatalReporting&)=delete;
+    LLVKFatalReporting& operator=(const LLVKFatalReporting&)=delete;
+private:
+    struct Impl;
+    std::unique_ptr<Impl> mImpl;
+};
 
 class LLVKStartupStatus;
 class LLVKApplicationCache final : public LLVKSessionOwner::Service

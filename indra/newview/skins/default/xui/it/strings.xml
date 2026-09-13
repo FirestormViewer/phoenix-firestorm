@@ -6,6 +6,12 @@
 	<string name="NativeErrorRetryCleanup">Riprova la pulizia</string>
 	<string name="NativeErrorRetryLogin">Riprova l'accesso</string>
 	<string name="NativeAgreementAccept">Accetta</string>
+	<string name="NativeErrorOutOfMemory">La memoria disponibile per il visualizzatore è esaurita. Chiudi altre applicazioni prima di riavviare.</string>
+	<string name="NativeErrorMissingFiles">Alcuni file necessari sono mancanti o inaccessibili. Ripara l'installazione e controlla le autorizzazioni.</string>
+	<string name="NativeErrorAudioFailed">Il servizio audio ha smesso di funzionare. Controlla il dispositivo e le impostazioni audio prima di riavviare.</string>
+	<string name="NativeErrorVoiceFailed">Il servizio dei dispositivi vocali ha smesso di funzionare. Controlla le impostazioni vocali e i dispositivi selezionati prima di riavviare.</string>
+	<string name="NativeErrorTranslationFailed">La verifica della traduzione non è riuscita. Controlla le impostazioni di rete e proxy prima di riavviare.</string>
+	<string name="NativeErrorPreviewFailed">Il servizio di anteprima delle texture ha smesso di funzionare. Controlla l'accesso alla cache e l'immagine selezionata prima di riavviare.</string>
 	<string name="NativeAgreementReject">Rifiuta</string>
 	<string name="NativeErrorUnexpected">Si è verificato un errore imprevisto nel visualizzatore nativo. Chiudi il visualizzatore e contatta l'assistenza se il problema si ripresenta.</string>
 	<string name="NativeErrorDefaultSettings">Impossibile caricare le impostazioni predefinite necessarie. Ripara l'installazione prima di riavviare il visualizzatore.</string>

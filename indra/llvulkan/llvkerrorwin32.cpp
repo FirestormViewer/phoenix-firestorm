@@ -4,6 +4,15 @@
 
 namespace
 {
+    std::wstring unicode(const std::string& text)
+    {
+        const int size=MultiByteToWideChar(CP_UTF8,MB_ERR_INVALID_CHARS,text.data(),static_cast<int>(text.size()),nullptr,0);
+        if (!size) return {};
+        std::wstring result(size,L'\0');
+        if (!MultiByteToWideChar(CP_UTF8,MB_ERR_INVALID_CHARS,text.data(),static_cast<int>(text.size()),result.data(),size)) return {};
+        return result;
+    }
+
     void unavailable() noexcept
     {
         constexpr auto message = "native-error: operating-system error presentation unavailable\n";
@@ -12,7 +21,7 @@ namespace
     }
 }
 
-bool llvkPresentErrorFallback(const LLVKError& error, void* owner) noexcept
+bool llvkPresentErrorFallback(const LLVKError& error, void* owner, const LLVKError::Resolver& resolver) noexcept
 {
     static thread_local bool presenting = false;
     if (presenting) { unavailable(); return false; }
@@ -26,15 +35,24 @@ bool llvkPresentErrorFallback(const LLVKError& error, void* owner) noexcept
     if (window && !IsWindow(window)) window = nullptr;
     try
     {
-        const auto message = error.format();
-        const std::wstring title(message.title.begin(), message.title.end());
-        const std::wstring body(message.body.begin(), message.body.end());
+        const auto message = error.format(resolver);
+        auto title = unicode(message.title);
+        auto body = unicode(message.body);
+        if (title.empty() || body.empty())
+        {
+            const auto fallback=error.format();
+            title=unicode(fallback.title);
+            body=unicode(fallback.body);
+        }
         const auto icon = error.policy().severity == LLVKError::Severity::Warning ? MB_ICONWARNING : MB_ICONERROR;
         if (MessageBoxW(window, body.c_str(), title.c_str(), MB_OK | icon | MB_TASKMODAL) == IDOK) return true;
     }
     catch (...)
     {
-        if (MessageBoxW(window, L"A native viewer error occurred. Acknowledge this message to return to the caller. No retry has been performed.",
+        const auto body=error.code==LLVKError::Code::OutOfMemory ?
+            L"The viewer has run out of memory and must close. Close other applications before restarting." :
+            L"A native viewer error occurred. Acknowledge this message to return to the caller. No retry has been performed.";
+        if (MessageBoxW(window, body,
             L"Vulkanstorm native error", MB_OK | MB_ICONERROR | MB_TASKMODAL) == IDOK) return true;
     }
     unavailable();

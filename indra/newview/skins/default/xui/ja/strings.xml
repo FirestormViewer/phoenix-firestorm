@@ -6,6 +6,12 @@
 	<string name="NativeErrorRetryCleanup">クリーンアップを再試行</string>
 	<string name="NativeErrorRetryLogin">ログインを再試行</string>
 	<string name="NativeAgreementAccept">同意する</string>
+	<string name="NativeErrorOutOfMemory">ビューアーのメモリが不足しています。再起動する前に他のアプリケーションを閉じてください。</string>
+	<string name="NativeErrorMissingFiles">必要なファイルがないか、アクセスできません。インストールを修復し、ファイルのアクセス権を確認してください。</string>
+	<string name="NativeErrorAudioFailed">音声サービスに障害が発生しました。再起動する前にオーディオ機器と設定を確認してください。</string>
+	<string name="NativeErrorVoiceFailed">ボイス機器サービスに障害が発生しました。再起動する前にボイス設定と選択した機器を確認してください。</string>
+	<string name="NativeErrorTranslationFailed">翻訳の検証に失敗しました。再起動する前にネットワークとプロキシの設定を確認してください。</string>
+	<string name="NativeErrorPreviewFailed">テクスチャのプレビューに障害が発生しました。再起動する前にキャッシュへのアクセスと選択した画像を確認してください。</string>
 	<string name="NativeAgreementReject">同意しない</string>
 	<string name="NativeErrorUnexpected">ネイティブビューアで予期しないエラーが発生しました。ビューアを終了し、再発する場合はサポートにお問い合わせください。</string>
 	<string name="NativeErrorDefaultSettings">必要な既定の設定を読み込めませんでした。再起動する前にインストールを修復してください。</string>

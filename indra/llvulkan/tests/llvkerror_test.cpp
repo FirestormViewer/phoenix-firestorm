@@ -18,6 +18,7 @@ namespace
     unsigned dialogs = 0;
     bool closeOnly = false;
     bool recursionRejected = false;
+    std::wstring displayedBody;
     void CALLBACK dismiss(HWND window, UINT, UINT_PTR timer, DWORD)
     {
         KillTimer(window, timer);
@@ -32,6 +33,9 @@ namespace
             {
                 ++dialogs;
                 closeOnly = !GetDlgItem(window, IDCANCEL) && !GetDlgItem(window, IDRETRY);
+                wchar_t text[8192]{};
+                GetDlgItemTextW(window,0xffff,text,8192);
+                displayedBody=text;
                 recursionRejected = !llvkPresentErrorFallback({LLVKError::Code::Unexpected});
                 SetTimer(window, 1, 10, dismiss);
             }
@@ -65,6 +69,16 @@ int main()
         check(error.format().body.find("access permissions") != std::string::npos, "cache permission advice");
         error.code = Code::RendererUnavailable;
         check(error.policy().recovery == LLVKError::Recovery::Stop, "renderer must stop");
+        for (const auto code : {Code::OutOfMemory,Code::MissingFiles,Code::AudioFailed,Code::VoiceFailed,
+            Code::TranslationFailed,Code::PreviewFailed})
+        {
+            error.code=code;
+            check(error.policy().severity==LLVKError::Severity::Fatal && error.policy().recovery==LLVKError::Recovery::Stop,
+                "local fatal causes preserve stop policy");
+            check(error.diagnostic().find("code="+std::to_string(static_cast<unsigned>(code)))!=std::string::npos,
+                "local cause preserves its stable code");
+            check(error.format().body.find("unexpected")==std::string::npos,"local cause has specific advice");
+        }
         error.code = Code::TransportUnavailable;
         check(error.policy().recovery == LLVKError::Recovery::Continue &&
             error.format().body.find("No login request") != std::string::npos, "absent transport is not a network retry");
@@ -125,8 +139,18 @@ int main()
         const auto hook = SetWindowsHookExW(WH_CBT, acknowledge, nullptr, GetCurrentThreadId());
         check(hook != nullptr, "install automatic acknowledgement hook");
         const bool presented = llvkPresentErrorFallback({Code::RendererUnavailable, Operation::Renderer, 1, 1});
+        const LLVKError localizedError{Code::RendererUnavailable,Operation::Renderer,1,1};
+        const bool localized=llvkPresentErrorFallback(localizedError,nullptr,[](auto key)
+        { return key=="NativeErrorRendererUnavailable" ? std::string("\xc3\x89" "chec du rendu") : std::string(); });
+        const bool unicodePreserved=displayedBody.find(L"\u00c9chec du rendu")!=std::wstring::npos;
+        const bool invalid=llvkPresentErrorFallback(localizedError,nullptr,[](auto)
+        { return std::string("invalid \xff UTF-8"); });
+        const auto fallbackBody=localizedError.format().body;
+        const bool englishPreserved=displayedBody==std::wstring(fallbackBody.begin(),fallbackBody.end());
         UnhookWindowsHookEx(hook);
-        check(presented && dialogs == 1 && closeOnly && recursionRejected, "GPU-free close-only OS fallback and recursion guard");
+        check(presented && dialogs == 3 && closeOnly && recursionRejected, "GPU-free close-only OS fallback and recursion guard");
+        check(localized && unicodePreserved,"localized OS dialog preserves UTF-8");
+        check(invalid && englishPreserved,"invalid UTF-8 catalog uses English fallback");
     #endif
         std::cout << "Native error formatting, policy, duplicate and generation tests passed\n";
         return 0;

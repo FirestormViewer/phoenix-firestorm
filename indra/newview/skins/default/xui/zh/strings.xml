@@ -10,6 +10,12 @@
 	<string name="NativeErrorRetryCleanup">重試清理</string>
 	<string name="NativeErrorRetryLogin">重試登入</string>
 	<string name="NativeAgreementAccept">接受</string>
+	<string name="NativeErrorOutOfMemory">檢視器記憶體不足。重新啟動前請關閉其他應用程式。</string>
+	<string name="NativeErrorMissingFiles">必要的檔案遺失或無法存取。請修復安裝並檢查檔案權限。</string>
+	<string name="NativeErrorAudioFailed">音效服務發生錯誤。重新啟動前請檢查音效裝置與設定。</string>
+	<string name="NativeErrorVoiceFailed">語音裝置服務發生錯誤。重新啟動前請檢查語音設定與所選裝置。</string>
+	<string name="NativeErrorTranslationFailed">翻譯驗證失敗。重新啟動前請檢查網路與代理伺服器設定。</string>
+	<string name="NativeErrorPreviewFailed">材質預覽服務發生錯誤。重新啟動前請檢查快取存取權限與所選圖片。</string>
 	<string name="NativeAgreementReject">拒絕</string>
 	<string name="NativeErrorUnexpected">原生檢視器發生非預期的錯誤。請關閉檢視器，若再次發生，請聯絡支援服務。</string>
 	<string name="NativeErrorDefaultSettings">無法載入必要的預設設定。請先修復安裝，再重新啟動。</string>

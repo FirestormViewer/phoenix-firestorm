@@ -7,6 +7,7 @@
 #include "llvktexturepreview.h"
 #include "llvkstartupstatus.h"
 #include "llvkstartup.h"
+#include "llerrorcontrol.h"
 #include "lltut.h"
 #include <fstream>
 #include <windows.h>
@@ -89,6 +90,75 @@ namespace tut
             ensure("service shutdown hides status before recovery UI",FindWindowW(L"#32770",ownedWide.c_str())==nullptr);
         }
         ensure("status closes on scope exit",FindWindowW(L"#32770",wide.c_str())==nullptr);
+        LLVKError::Resolver retained;
+        {
+            LLVKStartupStatus localized;
+            skin.language="de";
+            ensure("load localized error catalog without visual UI",localized.load(skin,title,error));
+            retained=localized.errorResolver();
+            ensure("German native error text",retained("NativeErrorRetryCleanup")=="Bereinigung wiederholen");
+            skin.language="fr";
+            ensure("reload distinct catalog",localized.load(skin,title,error));
+            ensure("prior snapshot is immutable",retained("NativeErrorRetryCleanup")=="Bereinigung wiederholen");
+            ensure("new snapshot uses new locale",localized.errorResolver()("NativeErrorRetryCleanup")!="Bereinigung wiederholen");
+        }
+        ensure("error catalog outlives loader and window",retained("NativeErrorRetryCleanup")=="Bereinigung wiederholen");
+        ensure("missing catalog entry permits English fallback",retained("MissingNativeError").empty());
+        const auto fatalRoot=std::filesystem::temp_directory_path()/("native-fatal-test-"+LLUUID::generateNewID().asString());
+        struct Remove { std::filesystem::path path; ~Remove() { std::error_code ignored; std::filesystem::remove_all(path,ignored); } } remove{fatalRoot};
+        unsigned reports=0;
+        struct ExpectedFatal {};
+        LLError::OverrideFatalFunction controlled([](const std::string&) { throw ExpectedFatal{}; });
+        const auto emit=[]
+        {
+            try { LL_ERRS("NativeFatalFixture") << "synthetic-private-payload" << LL_ENDL; }
+            catch (const ExpectedFatal&) { return; }
+            ensure("fatal logger must retain termination contract",false);
+        };
+        {
+            LLVKFatalReporting reporting(fatalRoot/"fatal.log",[&](const LLVKError& failure)
+            { ++reports; ensure("fatal callback has stable code",failure.code==LLVKError::Code::Unexpected); });
+            emit(); emit();
+            ensure_equals("fatal reporting occurs only once",reports,1u);
+            std::ifstream record(fatalRoot/"fatal.log");
+            const std::string content((std::istreambuf_iterator<char>(record)),std::istreambuf_iterator<char>());
+            ensure("fatal record contains safe structured facts",content.starts_with("native-error code=1000 ") &&
+                content.find("synthetic-private-payload")==std::string::npos);
+        }
+        emit();
+        ensure_equals("fatal callback removed on owner destruction",reports,1u);
+        const auto priorWarning=LLError::LLUserWarningMsg::getHandler();
+        std::string priorTitle,priorMessage;
+        LLError::LLUserWarningMsg::getOutOfMemoryStrings(priorTitle,priorMessage);
+        unsigned restoredWarnings=0;
+        LLError::LLUserWarningMsg::setHandler([&](const std::string&,const std::string&,S32) { ++restoredWarnings; });
+        struct RestoreWarning
+        {
+            LLError::LLUserWarningMsg::Handler handler;
+            ~RestoreWarning() { LLError::LLUserWarningMsg::setHandler(handler); }
+        } restoreWarning{priorWarning};
+        for (const auto expected : {LLVKError::Code::OutOfMemory,LLVKError::Code::MissingFiles})
+        {
+            LLVKError::Code observed=LLVKError::Code::Unexpected;
+            {
+                LLVKFatalReporting reporting(fatalRoot/(expected==LLVKError::Code::OutOfMemory ? "oom.log" : "missing.log"),
+                    [&](const LLVKError& failure) { observed=failure.code; });
+                std::vector<std::thread> workers;
+                for (unsigned worker=0; worker<4; ++worker) workers.emplace_back([expected]
+                {
+                    if (expected==LLVKError::Code::OutOfMemory) LLError::LLUserWarningMsg::showOutOfMemory();
+                    else LLError::LLUserWarningMsg::showMissingFiles();
+                });
+                for (auto& worker : workers) worker.join();
+                ensure("native warning retains typed cause",observed==expected);
+                ensure("fatal warning tells native loop to stop",reporting.failure()==expected);
+            }
+            LLError::LLUserWarningMsg::show("restored warning fixture");
+        }
+        ensure_equals("warning handler restored after native scope",restoredWarnings,2u);
+        std::string restoredTitle,restoredMessage;
+        LLError::LLUserWarningMsg::getOutOfMemoryStrings(restoredTitle,restoredMessage);
+        ensure("prior OOM strings restored",restoredTitle==priorTitle && restoredMessage==priorMessage);
     }
 
     template<> template<> void loginwindow_object::test<6>()

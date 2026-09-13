@@ -10,6 +10,12 @@
 	<string name="NativeErrorRetryCleanup">Təmizləməni yenidən sına</string>
 	<string name="NativeErrorRetryLogin">Girişi yenidən sına</string>
 	<string name="NativeAgreementAccept">Qəbul et</string>
+	<string name="NativeErrorOutOfMemory">Görüntüləyicinin yaddaşı tükənib. Yenidən başlatmazdan əvvəl digər tətbiqləri bağlayın.</string>
+	<string name="NativeErrorMissingFiles">Lazımi fayllar yoxdur və ya əlçatmazdır. Quraşdırmanı bərpa edin və fayl icazələrini yoxlayın.</string>
+	<string name="NativeErrorAudioFailed">Səs xidməti uğursuz oldu. Yenidən başlatmazdan əvvəl səs cihazını və parametrləri yoxlayın.</string>
+	<string name="NativeErrorVoiceFailed">Səsli əlaqə cihazı xidməti uğursuz oldu. Yenidən başlatmazdan əvvəl səsli əlaqə parametrlərini və seçilmiş cihazları yoxlayın.</string>
+	<string name="NativeErrorTranslationFailed">Tərcümə yoxlaması uğursuz oldu. Yenidən başlatmazdan əvvəl şəbəkə və proksi parametrlərini yoxlayın.</string>
+	<string name="NativeErrorPreviewFailed">Tekstura önizləmə xidməti uğursuz oldu. Yenidən başlatmazdan əvvəl keşə girişi və seçilmiş şəkli yoxlayın.</string>
 	<string name="NativeAgreementReject">İmtina et</string>
 	<string name="NativeErrorUnexpected">Yerli rejimdə işləyən baxış proqramında gözlənilməz xəta baş verdi. Proqramı bağlayın və bu hal təkrarlanarsa, dəstək xidməti ilə əlaqə saxlayın.</string>
 	<string name="NativeErrorDefaultSettings">Tələb olunan standart parametrlər yüklənə bilmədi. Yenidən başlatmazdan əvvəl quraşdırmanı bərpa edin.</string>

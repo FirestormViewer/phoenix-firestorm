@@ -1617,6 +1617,15 @@ namespace LLError
         return out << boost::stacktrace::stacktrace();
     }
 
+    namespace
+    {
+        std::recursive_mutex& userWarningMutex()
+        {
+            static std::recursive_mutex mutex;
+            return mutex;
+        }
+    }
+
     // LLOutOfMemoryWarning
     std::string LLUserWarningMsg::sLocalizedOutOfMemoryTitle;
     std::string LLUserWarningMsg::sLocalizedOutOfMemoryWarning;
@@ -1624,6 +1633,7 @@ namespace LLError
 
     void LLUserWarningMsg::show(const std::string& message, S32 error_code)
     {
+        const std::lock_guard lock(userWarningMutex());
         if (sHandler)
         {
             sHandler(std::string(), message, error_code);
@@ -1632,6 +1642,7 @@ namespace LLError
 
     void LLUserWarningMsg::showOutOfMemory()
     {
+        const std::lock_guard lock(userWarningMutex());
         if (sHandler && !sLocalizedOutOfMemoryTitle.empty())
         {
             sHandler(sLocalizedOutOfMemoryTitle, sLocalizedOutOfMemoryWarning, ERROR_BAD_ALLOC);
@@ -1640,6 +1651,7 @@ namespace LLError
 
     void LLUserWarningMsg::showMissingFiles()
     {
+        const std::lock_guard lock(userWarningMutex());
         // Files Are missing, likely can't localize.
         const std::string error_string =
             "Firestorm couldn't access some of the files it needs and will be closed."
@@ -1650,12 +1662,27 @@ namespace LLError
 
     void LLUserWarningMsg::setHandler(const LLUserWarningMsg::Handler &handler)
     {
+        const std::lock_guard lock(userWarningMutex());
         sHandler = handler;
+    }
+
+    LLUserWarningMsg::Handler LLUserWarningMsg::getHandler()
+    {
+        const std::lock_guard lock(userWarningMutex());
+        return sHandler;
     }
 
     void LLUserWarningMsg::setOutOfMemoryStrings(const std::string& title, const std::string& message)
     {
+        const std::lock_guard lock(userWarningMutex());
         sLocalizedOutOfMemoryTitle = title;
         sLocalizedOutOfMemoryWarning = message;
+    }
+
+    void LLUserWarningMsg::getOutOfMemoryStrings(std::string& title, std::string& message)
+    {
+        const std::lock_guard lock(userWarningMutex());
+        title = sLocalizedOutOfMemoryTitle;
+        message = sLocalizedOutOfMemoryWarning;
     }
 }

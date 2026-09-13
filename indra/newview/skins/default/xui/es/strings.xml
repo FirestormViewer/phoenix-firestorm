@@ -6,6 +6,12 @@
 	<string name="NativeErrorRetryCleanup">Reintentar limpieza</string>
 	<string name="NativeErrorRetryLogin">Reintentar inicio de sesión</string>
 	<string name="NativeAgreementAccept">Aceptar</string>
+	<string name="NativeErrorOutOfMemory">El visor se ha quedado sin memoria. Cierra otras aplicaciones antes de reiniciarlo.</string>
+	<string name="NativeErrorMissingFiles">Faltan archivos necesarios o no son accesibles. Repara la instalación y comprueba los permisos.</string>
+	<string name="NativeErrorAudioFailed">El servicio de audio ha fallado. Comprueba el dispositivo y la configuración de audio antes de reiniciar.</string>
+	<string name="NativeErrorVoiceFailed">El servicio de dispositivos de voz ha fallado. Comprueba la configuración de voz y los dispositivos seleccionados antes de reiniciar.</string>
+	<string name="NativeErrorTranslationFailed">La verificación de traducción ha fallado. Comprueba la configuración de red y proxy antes de reiniciar.</string>
+	<string name="NativeErrorPreviewFailed">La vista previa de texturas ha fallado. Comprueba el acceso a la caché y la imagen seleccionada antes de reiniciar.</string>
 	<string name="NativeAgreementReject">Rechazar</string>
 	<string name="NativeErrorUnexpected">Se ha producido un error inesperado en el visor nativo. Cierra el visor y contacta con el servicio de asistencia si vuelve a ocurrir.</string>
 	<string name="NativeErrorDefaultSettings">No se pudieron cargar los ajustes predeterminados necesarios. Repara la instalación antes de volver a iniciar el visor.</string>

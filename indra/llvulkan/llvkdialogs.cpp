@@ -284,7 +284,7 @@ bool LLVKViewerUi::initializeDialogs(const Configuration& configuration,std::str
             LLStringUtil::format_map_t arguments;
             arguments["[STATE]"]=mAboutStrings.at(value.asBoolean() ? "RLVaToggleEnabled" : "RLVaToggleDisabled");
             LLStringUtil::format(message,arguments);
-            mNotices.push_back({"GenericAlert",std::move(message)});
+            enqueueNotice({"GenericAlert",std::move(message)},mDialogError);
         });
         if (!subscription) { error="Cannot subscribe native RLVa startup setting"; return false; }
     }
@@ -330,6 +330,23 @@ bool LLVKViewerUi::queueNotice(const std::string& name,const LLSD& arguments,
     LLStringUtil::format(notice.message,substitutions);
     for (auto& button : notice.buttons) LLStringUtil::format(button.label,substitutions);
     notice.response=std::move(response);
+    return enqueueNotice(std::move(notice),error);
+}
+
+bool LLVKViewerUi::enqueueNotice(Notice notice,std::string& error)
+{
+    error.clear();
+    if (mNotices.size()>=64) { error="Native notice queue is full"; return false; }
+    if (notice.response)
+    {
+        auto delivered=std::make_shared<bool>(false);
+        notice.response=[delivered,response=std::move(notice.response)](int option,const LLSD& values)
+        {
+            if (*delivered) return;
+            *delivered=true;
+            response(option,values);
+        };
+    }
     mNotices.push_back(std::move(notice));
     return true;
 }
@@ -369,8 +386,7 @@ bool LLVKViewerUi::queueError(const LLVKError& failure,std::vector<Notice::Butto
         }
         else if (response) response(option);
     };
-    mNotices.push_back(std::move(notice));
-    return true;
+    return enqueueNotice(std::move(notice),error);
 }
 
 bool LLVKViewerUi::showError(const LLVKError& failure,std::string& error)
@@ -434,7 +450,7 @@ bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
             owner->decideAgreement(tag,agreement,option==1);
             refreshSession(mDialogError);
         };
-        mNotices.push_back(std::move(notice));
+        if (!enqueueNotice(std::move(notice),error)) return false;
         mReportedSession=snapshot;
         return true;
     }
@@ -457,7 +473,7 @@ bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
                 owner->cancel(tag);
                 refreshSession(mDialogError);
             };
-            mNotices.push_back(std::move(notice));
+            if (!enqueueNotice(std::move(notice),error)) return false;
         }
         mReportedSession=snapshot;
         return true;
@@ -3329,7 +3345,7 @@ void LLVKViewerUi::verifyTranslation(const std::string& service,bool alert)
         {
             const auto message=mTree.panelString(mTranslation->id(),service+(verified ? "_api_key_verified" : "_api_key_not_verified"),
                 {{"STATUS",std::to_string(status)}},mDialogError);
-            if (message) mNotices.push_back({"GenericAlert",*message});
+            if (message) enqueueNotice({"GenericAlert",*message},mDialogError);
         }
     },mDialogError);
 }

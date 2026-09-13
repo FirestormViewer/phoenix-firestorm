@@ -6,9 +6,101 @@
 #include "llvkerror.h"
 #include "llstring.h"
 #include "llerror.h"
+#include "llerrorcontrol.h"
+#include <atomic>
+#include <cstring>
 #include <windows.h>
 #include <shellapi.h>
 #include <shlobj.h>
+
+struct LLVKFatalReporting::Impl
+{
+    std::filesystem::path record;
+    Presenter presenter;
+    std::atomic<std::shared_ptr<const LLVKError::Resolver>> resolver;
+    std::atomic_flag reported=ATOMIC_FLAG_INIT;
+    std::atomic<std::uint32_t> failure{0};
+    LLError::RecorderPtr recorder;
+    LLError::LLUserWarningMsg::Handler previousWarning;
+    std::string previousOomTitle,previousOomMessage;
+    void report(LLVKError::Code code=LLVKError::Code::Unexpected) noexcept
+    {
+        if (reported.test_and_set()) return;
+        failure.store(static_cast<std::uint32_t>(code));
+        const char* diagnostic=code==LLVKError::Code::OutOfMemory ?
+            "native-error code=1014 operation=bootstrap generation=1 attempt=0 severity=2 recovery=0\n" :
+            code==LLVKError::Code::MissingFiles ?
+            "native-error code=1015 operation=bootstrap generation=1 attempt=0 severity=2 recovery=0\n" :
+            "native-error code=1000 operation=bootstrap generation=1 attempt=0 severity=2 recovery=0\n";
+        const auto bytes=static_cast<DWORD>(std::strlen(diagnostic));
+        const auto file=CreateFileW(record.c_str(),GENERIC_WRITE,FILE_SHARE_READ,nullptr,CREATE_NEW,FILE_ATTRIBUTE_NORMAL,nullptr);
+        if (file!=INVALID_HANDLE_VALUE)
+        {
+            DWORD written=0;
+            if (!WriteFile(file,diagnostic,bytes,&written,nullptr) || written!=bytes || !FlushFileBuffers(file))
+                OutputDebugStringA("native-error: fatal record write failed\n");
+            CloseHandle(file);
+        }
+        else OutputDebugStringA("native-error: fatal record unavailable\n");
+        try
+        {
+            const LLVKError failure{code,LLVKError::Operation::Bootstrap,1,0};
+            if (presenter) presenter(failure);
+            else
+            {
+                const auto catalog=resolver.load();
+                llvkPresentErrorFallback(failure,nullptr,catalog ? *catalog : LLVKError::Resolver{});
+            }
+        }
+        catch (...) { OutputDebugStringA("native-error: fatal presentation failed\n"); }
+    }
+};
+
+LLVKFatalReporting::LLVKFatalReporting(const std::filesystem::path& record,Presenter presenter)
+    : mImpl(std::make_unique<Impl>())
+{
+    mImpl->record=record;
+    mImpl->presenter=std::move(presenter);
+    std::error_code ignored;
+    std::filesystem::create_directories(record.parent_path(),ignored);
+    mImpl->previousWarning=LLError::LLUserWarningMsg::getHandler();
+    LLError::LLUserWarningMsg::getOutOfMemoryStrings(mImpl->previousOomTitle,mImpl->previousOomMessage);
+    try
+    {
+        LLError::LLUserWarningMsg::setOutOfMemoryStrings("Vulkanstorm native error","The viewer has run out of memory.");
+        mImpl->recorder=LLError::addGenericRecorder([state=mImpl.get()](LLError::ELevel level,const std::string&)
+        { if (level==LLError::LEVEL_ERROR) state->report(); });
+        LLError::LLUserWarningMsg::setHandler([state=mImpl.get()](const std::string&,const std::string&,S32 code)
+        {
+            state->report(code==LLError::LLUserWarningMsg::ERROR_BAD_ALLOC ? LLVKError::Code::OutOfMemory :
+                code==LLError::LLUserWarningMsg::ERROR_MISSING_FILES ? LLVKError::Code::MissingFiles : LLVKError::Code::Unexpected);
+        });
+    }
+    catch (...)
+    {
+        LLError::removeRecorder(mImpl->recorder);
+        LLError::LLUserWarningMsg::setOutOfMemoryStrings(mImpl->previousOomTitle,mImpl->previousOomMessage);
+        throw;
+    }
+}
+
+LLVKFatalReporting::~LLVKFatalReporting()
+{
+    LLError::LLUserWarningMsg::setHandler(mImpl->previousWarning);
+    LLError::LLUserWarningMsg::setOutOfMemoryStrings(mImpl->previousOomTitle,mImpl->previousOomMessage);
+    LLError::removeRecorder(mImpl->recorder);
+}
+
+void LLVKFatalReporting::setErrorResolver(LLVKError::Resolver resolver)
+{
+    mImpl->resolver.store(std::make_shared<const LLVKError::Resolver>(std::move(resolver)));
+}
+
+std::optional<LLVKError::Code> LLVKFatalReporting::failure() const noexcept
+{
+    const auto value=mImpl->failure.load();
+    return value ? std::optional(static_cast<LLVKError::Code>(value)) : std::nullopt;
+}
 
 LLVKSessionOwner::Code LLVKApplicationCache::acquire(const LLVKSessionOwner::Context&)
 {
@@ -37,6 +129,7 @@ namespace
     struct ApplicationSession
     {
         std::unique_ptr<LLVKSessionOwner> owner=std::make_unique<LLVKSessionOwner>();
+        LLVKError::Resolver errorResolver;
         ~ApplicationSession()
         {
             try
@@ -47,7 +140,7 @@ namespace
             }
             catch (...) {}
             owner.release();
-            llvkPresentErrorFallback({LLVKError::Code::ShutdownFailed,LLVKError::Operation::Shutdown,1,0});
+            llvkPresentErrorFallback({LLVKError::Code::ShutdownFailed,LLVKError::Operation::Shutdown,1,0},nullptr,errorResolver);
         }
     };
 }
@@ -125,15 +218,18 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     using Code = LLVKError::Code;
     using Operation = LLVKError::Operation;
     LLVKErrorGate errorGate;
+    LLVKError::Resolver errorResolver;
+    LLVKFatalReporting fatalReporting(profile/"logs"/("native-fatal-"+std::to_string(GetCurrentProcessId())+".log"),{});
     const auto fail = [&](Code code, Operation operation = Operation::Bootstrap) -> std::optional<int>
     {
+        if (fatalReporting.failure()) return -1;
         errorGate.begin(operation,1);
         const LLVKError failure{code,operation,1,1};
         if (errorGate.accept(failure))
         {
             try { LL_WARNS("NativeStartup") << failure.diagnostic() << LL_ENDL; }
             catch (...) {}
-            llvkPresentErrorFallback(failure);
+            llvkPresentErrorFallback(failure,nullptr,errorResolver);
         }
         return -1;
     };
@@ -157,10 +253,25 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     const auto values = settings.values();
     const auto stringValue = [&](const char* name,const std::string& fallback = {})
     { const auto found = values.find(name); return found == values.end() || found->second.asString().empty() ? fallback : found->second.asString(); };
+    auto startupStatus=std::make_shared<LLVKStartupStatus>();
+    LLVKSkinFiles::Configuration startupSkin;
+    startupSkin.executableDirectory=directory;
+    startupSkin.workingDirectory=std::filesystem::current_path();
+    startupSkin.skinBaseDirectory=directory/"skins";
+    startupSkin.userAppDirectory=profile;
+    startupSkin.skin=stringValue("SkinCurrent","default");
+    startupSkin.theme=stringValue("SkinCurrentTheme");
+    startupSkin.language=stringValue("Language","en");
+    if (startupSkin.language=="default") startupSkin.language="en";
+    if (!startupStatus->load(startupSkin,"Vulkanstorm",error)) return fail(Code::StartupResources);
+    errorResolver=startupStatus->errorResolver();
+    fatalReporting.setErrorResolver(errorResolver);
     const auto browserDirectory = directory/"llplugin";
     if (!SetDllDirectoryW(browserDirectory.c_str())) return fail(Code::BrowserUnavailable,Operation::Browser);
     struct DllDirectory { ~DllDirectory() { SetDllDirectoryW(nullptr); } } dllDirectory;
     LLVKWindowMgr::Configuration configuration;
+    configuration.errorResolver=errorResolver;
+    configuration.fatalError=[&fatalReporting] { return fatalReporting.failure(); };
     Code windowFailure = Code::WindowUnavailable;
     configuration.failureCode = &windowFailure;
     configuration.ui.clearSpamQueues=clearSpamQueues;
@@ -216,22 +327,12 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     if (!cachePlan) return fail(Code::CacheUnavailable,Operation::Cache);
     const auto& cacheConfiguration=cachePlan->configuration;
     ApplicationSession session;
-    auto startupStatus=std::make_shared<LLVKStartupStatus>();
+    session.errorResolver=errorResolver;
     auto cacheService=std::make_unique<LLVKApplicationCache>(cacheConfiguration,startupStatus);
     auto& textureCache=cacheService->cache();
     std::unique_ptr<LLVKSessionOwner::Service> applicationCache=std::move(cacheService);
     configuration.sessionOwner=session.owner.get();
-    LLVKSkinFiles::Configuration startupSkin;
-    startupSkin.executableDirectory=directory;
-    startupSkin.workingDirectory=std::filesystem::current_path();
-    startupSkin.skinBaseDirectory=directory/"skins";
-    startupSkin.userAppDirectory=profile;
-    startupSkin.skin=stringValue("SkinCurrent","default");
-    startupSkin.theme=stringValue("SkinCurrentTheme");
-    startupSkin.language=stringValue("Language","en");
-    if (startupSkin.language=="default") startupSkin.language="en";
-    if (!startupStatus->load(startupSkin,"Vulkanstorm",error) ||
-        !startupStatus->show(cacheConfiguration.purge ? "StartupClearingTextureCache" : "StartupInitializingTextureCache",error))
+    if (!startupStatus->show(cacheConfiguration.purge ? "StartupClearingTextureCache" : "StartupInitializingTextureCache",error))
         return fail(Code::StartupResources);
     if (!session.owner->install(LLVKSessionOwner::Lifetime::Application,1,applicationCache).ok())
     { startupStatus->hide(); return fail(Code::CacheUnavailable,Operation::Cache); }
@@ -336,5 +437,6 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     LL_INFOS("NativeStartup") << "Goodbye!" << LL_ENDL;
     return 0;
     }
+    catch (const std::bad_alloc&) { return fail(Code::OutOfMemory); }
     catch (...) { return fail(Code::Unexpected); }
 }
