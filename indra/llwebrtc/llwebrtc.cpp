@@ -829,8 +829,14 @@ void LLWebRTCImpl::workerDeployDevices()
 
     // Stop first so the start helpers (which no-op when already running) will
     // re-select the now-current device.
-    mDeviceModule->StopPlayout();
-    mDeviceModule->ForceStopRecording();
+    if (mDeviceModule->Playing())
+    {
+        mDeviceModule->StopPlayout();
+    }
+    if (mDeviceModule->Recording())
+    {
+        mDeviceModule->ForceStopRecording();
+    }
 
     workerStartRecording();
     workerStartPlayout();
@@ -1210,7 +1216,10 @@ void LLWebRTCImpl::freePeerConnection(LLWebRTCPeerConnectionInterface* peer_conn
                 {
                     if (mDeviceModule)
                     {
-                        mDeviceModule->StopPlayout();
+                        if (mDeviceModule->Playing())
+                        {
+                            mDeviceModule->StopPlayout();
+                        }
                         if (!mVoiceEnabled)
                         {
                             mDeviceModule->ForceStopRecording();
