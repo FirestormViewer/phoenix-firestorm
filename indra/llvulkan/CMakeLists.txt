@@ -162,6 +162,14 @@ option(LL_VULKAN_GPU_TESTS "Run native glyph GPU tests requiring Vulkan validati
 option(LL_VULKAN_BROWSER_TESTS "Run native browser lifecycle tests requiring packaged CEF helpers" OFF)
 if (LL_TESTS)
     include(LLAddBuildTest)
+    if (WINDOWS)
+        add_executable(notification_capture ../../tools/vulkan/notification_capture.cpp)
+        target_link_libraries(notification_capture PRIVATE d3d11 dxgi dwmapi windowsapp)
+        add_executable(notification_leap ../../tools/vulkan/notification_leap.cpp)
+        target_link_libraries(notification_leap PRIVATE llxml llcommon)
+        add_custom_command(TARGET notification_leap POST_BUILD
+            COMMAND "$<TARGET_FILE:notification_leap>" --self-test VERBATIM)
+    endif ()
     add_executable(INTEGRATION_TEST_llvksessionowner tests/llvksessionowner_test.cpp)
     target_link_libraries(INTEGRATION_TEST_llvksessionowner PRIVATE llvksessionowner)
     add_custom_command(TARGET INTEGRATION_TEST_llvksessionowner POST_BUILD
@@ -192,7 +200,9 @@ if (LL_TESTS)
             target_sources(INTEGRATION_TEST_llvkwindowmgr PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/native_status_test.rc)
             target_include_directories(INTEGRATION_TEST_llvkwindowmgr PRIVATE ${CMAKE_SOURCE_DIR}/newview/res)
             target_compile_definitions(INTEGRATION_TEST_llvkwindowmgr PRIVATE VK_USE_PLATFORM_WIN32_KHR
-                LLVK_LOGIN_SOURCE="${CMAKE_SOURCE_DIR}/newview" LLVK_LOGIN_PACKAGED_FONTS="${LIBS_PREBUILT_DIR}/fonts")
+                LLVK_LOGIN_SOURCE="${CMAKE_SOURCE_DIR}/newview" LLVK_LOGIN_PACKAGED_FONTS="${LIBS_PREBUILT_DIR}/fonts"
+                LLVK_NOTIFICATION_CAPTURE_EXE="$<TARGET_FILE:notification_capture>")
+            add_dependencies(INTEGRATION_TEST_llvkwindowmgr notification_capture)
             list(APPEND native_browser_test_targets INTEGRATION_TEST_llvkwindowmgr)
             foreach(stage vert frag)
                 add_custom_command(TARGET INTEGRATION_TEST_llvkwindowmgr PRE_BUILD

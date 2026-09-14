@@ -394,6 +394,12 @@ private:
     LLVKWidgetTree::PreferenceSnapshot mProxySnapshot;
     bool mProxyAccepted = false;
     void updateProxyControls();
+    void updateLoginControls();
+    bool initializeNoticeLayout(std::string& error);
+    LLVKWidgetTree::Rect noticeRectangle(int width,int height) const;
+    int mNoticeMenuHeight=19,mNoticeBottomHeight=60,mNoticeStackSpacing=3,mNoticeChicletInset=70;
+    int mNoticeRightPad=5,mNoticeTopPad=7;
+    bool mNoticeTopRight=false;
     bool acceptProxy(std::string& error);
     void networkPreferenceAction(LLVKWidgetTree::Id panel,const std::string& action);
     DirectoryPicker mDirectoryPicker;
@@ -492,6 +498,7 @@ private:
     std::optional<Notice> mActiveNotice;
     std::map<LLVKWidgetTree::Id,int> mNoticeOptions;
     LLVKWidgetTree::Id mNoticeEditor = 0;
+    LLVKWidgetTree::Id mNoticeIgnore = 0;
     LLVKWidgetTree::Id mNoticePanel = 0, mNoticeButton = 0, mNoticePreviousFocus = 0;
     double mNoticeOpened = 0.0, mNoticeTime = 0.0;
     bool dismissNotice(std::string& error);

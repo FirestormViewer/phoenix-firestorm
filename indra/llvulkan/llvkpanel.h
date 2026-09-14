@@ -23,6 +23,7 @@ struct LLVKPanel
         std::string filename;
         std::map<std::string,std::string> strings;
         LLVKControl::Callback visible;
+        std::optional<LLVKColor> alertShadowColor;
     };
     Params params;
     std::uint64_t border = 0;

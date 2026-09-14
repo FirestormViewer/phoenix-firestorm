@@ -1100,10 +1100,25 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     browserConfiguration.height = browserRect->top-browserRect->bottom;
     services.browser=std::make_unique<LLVKBrowser>();
     auto& browser=*services.browser;
-    state.browser=&browser;
-    if (!browser.start(browserConfiguration,error) || !browser.navigate(configuration.loginPage,error)) return fail(Code::BrowserUnavailable);
-    aboutInfo["LIBCEF_VERSION"]=browser.versionInfo(error);
-    if (!error.empty() || !ui->setAboutInfo(aboutInfo,error)) return false;
+    const auto browserLaunchFailed=[&](LLVKWidgetTree::Id widget,std::string& problem)
+    {
+        ui->tree().setVisible(widget,false);
+        LLSD arguments;
+        arguments["PLUGIN"]="media_plugin_cef";
+        return ui->queueNotice("MediaPluginFailed",arguments,{},problem);
+    };
+    const bool loginBrowserStarted=browser.start(browserConfiguration,error);
+    if (!loginBrowserStarted)
+    {
+        if (!browserLaunchFailed(browserId,error)) return fail(Code::BrowserUnavailable);
+    }
+    else
+    {
+        state.browser=&browser;
+        if (!browser.navigate(configuration.loginPage,error)) return fail(Code::BrowserUnavailable);
+        aboutInfo["LIBCEF_VERSION"]=browser.versionInfo(error);
+        if (!error.empty() || !ui->setAboutInfo(aboutInfo,error)) return false;
+    }
     const auto bindBrowser=[&](LLVKWidgetTree::Id widget,LLVKBrowser& view)
     {
         state.browserViews[widget]=&view;
@@ -1121,7 +1136,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         };
         ui->tree().setEvents(widget,std::move(events));
     };
-    bindBrowser(browserId,browser);
+    if (loginBrowserStarted) bindBrowser(browserId,browser);
     ui->setGuidebookService([&](auto id,const std::string& url,std::string& problem)
     {
         if (services.browsers.size()>=16) { problem="Native embedded browser view limit reached"; return false; }
@@ -1132,7 +1147,12 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         const auto [entry,inserted]=services.browsers.try_emplace(id,std::make_unique<LLVKBrowser>());
         if (!inserted) { problem="Native embedded browser already has an owner"; return false; }
         auto& view=*entry->second;
-        if (!view.start(settings,problem) || !view.navigate(url,problem)) return false;
+        if (!view.start(settings,problem))
+        {
+            services.browsers.erase(entry);
+            return browserLaunchFailed(id,problem);
+        }
+        if (!view.navigate(url,problem)) return false;
         bindBrowser(id,view);
         return true;
     },[&](auto id)
@@ -1297,7 +1317,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         if (application.owner->snapshot().state==LLVKSessionOwner::State::Stopped) break;
         if (application.access->service && application.access->service->active())
         {
-        if (!browser.update(error)) return fail(Code::BrowserUnavailable);
+        if (loginBrowserStarted && !browser.update(error)) return fail(Code::BrowserUnavailable);
         for (const auto& event : browser.takeEvents())
             if (event.kind == LLVKBrowser::EventKind::LoadError)
             { error = "Native login page failed"; return fail(Code::BrowserUnavailable); }
@@ -1364,7 +1384,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             if (!ui->tree().prepareLayoutStacks(ui->root(),0,error)) return false;
             browserRect = ui->tree().screenRect(browserId,error);
             if (!browserRect) return false;
-            if (application.access->service && application.access->service->active() &&
+            if (loginBrowserStarted && application.access->service && application.access->service->active() &&
                 !browser.resize(browserRect->right-browserRect->left,browserRect->top-browserRect->bottom,error)) return false;
             state.resize = false;
             aboutInfo["WINDOW_WIDTH"]=static_cast<int>(renderer.swapchainExtent().width);
@@ -1378,7 +1398,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         state.input.button.spaceDown = bool(GetKeyState(VK_SPACE)&0x8000);
         state.input.button.returnDown = bool(GetKeyState(VK_RETURN)&0x8000);
         state.input.editor.secondsSinceKeystroke = std::chrono::duration<double>(now-state.keystroke).count();
-        if (application.access->service && application.access->service->active())
+        if (loginBrowserStarted && application.access->service && application.access->service->active())
         {
             state.input.browsers[browserId] = browser.surface().frame();
             state.input.browserEpochs[browserId] = browser.surface().epoch();

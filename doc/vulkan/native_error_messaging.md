@@ -1,5 +1,451 @@
 # Native error messaging
 
+## Focus encoding and exact captured modal match (2026-09-14)
+
+NV-00/01/02/06/12/14/17: the pinned GL button focus-border path uses
+LLButton::drawBorder, LLUIImage::drawSolid and LLRender::color4f. Final tint
+channels are clamped and truncated to UNORM8 after focus/transparency are applied.
+Native button preparation now independently encodes that final border tint in
+the same way, retaining float storage of the normalized byte values. The skin
+focus RGB (0.56,0.36,0.25) becomes (142,91,63)/255. Nonfinite channels are rejected;
+unrelated image/text colors, shader ABI, uploads and resource retirement are
+unchanged. No GL implementation or fixture background was modified.
+
+Widget209/209 tests the focus RGB conversion and alpha multiplication before
+encoding, while checking image alpha is unaffected. Window7/7, viewer relink and
+editor diagnostics pass. The known Window LNK4020 debug-symbol warning remains.
+New maximized 2560x1369 native evidence is in
+`glref-build/captures/native-focus-unorm-7`; both settled frames are byte-identical.
+Against preserved `layout-probe-16`, the unchanged top-origin region
+[1043,1518) x [559,747), containing the entire dialog and shadow, has ZERO
+differing pixels out of 89300 and maximum RGBA errors 0/0/0/0. All 632 remaining
+Close-button/focus-border discrepancies are eliminated. Geometry remains
+(1053,632)-(1503,800) in bottom-origin coordinates.
+
+This establishes exact visual parity for the captured settled MediaPluginFailed
+state, not all notification templates, input/focus transitions or the complete
+login screen. The full-frame comparison still has 1025739 differing pixels
+outside this region. No alignment, rescaling, masking within the tested region,
+or tolerance changes were used; all previous captures remain intact.
+
+## Shadow vertex-color encoding correction (2026-09-14)
+
+NV-00/01/02/06/12/17: pinned GL `gl_drop_shadow` supplies float colors through
+`LLRender::color4fv`/`color4f`. The latter clamps each channel to [0,1], multiplies
+by 255 and truncates to GLubyte before vertex interpolation. Thus shadow alpha
+0.5 is represented as 127/255, not 0.5. Native's full-precision shadow alpha made
+the captured shadow one RGB level too dark. Native shadow paint now performs
+the same independently owned CPU encoding after transparency multiplication and
+before interpolation, retaining native float vertex storage and existing shaders.
+No GL helper, texture modification, screenshot correction or tolerance is used.
+Finite-value checks precede encoding; resource ownership and retirement are unchanged.
+
+Widget209/209 verifies 127/255 at the native shadow producer, Window7/7 and viewer
+relink pass, and editor diagnostics are clean. New evidence in
+`glref-build/captures/native-shadow-unorm-6` is maximized 2560x1369 and byte-stable
+between settled captures. Against preserved `layout-probe-16`, every outer-shadow
+pixel and the three former panel-corner discrepancies now match exactly. The
+top-origin sample (1504,572) is (17,17,17,255) on both backends, and the panel
+background sample remains (32,32,32,255). Within the unchanged dialog/shadow region
+[1043,1518) x [559,747), only 632 Close-button/focus-border pixels differ, each by
+at most one RGB level. Message, checkbox, other panel pixels and outer shadow have
+zero differences. Full parity remains open for that button and separate login UI
+differences. The existing Window LNK4020 debug-symbol warning remains.
+
+## Modal background composition correction (2026-09-14)
+
+NV-00/01/02/12/14/17, pinned GL revision
+`59108e15a1f8f94d2da7c674d937d19f5cf9450d`: `LLView::drawChildren`
+does not exclude registered popups. The visible modal toast is painted under
+LLFloaterView, then `LLPopupView::draw` paints that same toast again at its screen
+position. Registration through LLModalDialog/LLFloaterView does not reparent it.
+This defined two-pass composition was missing in native, which painted it once.
+The PNG bytes match between the staged GL reference and native source;
+Toast_Over's center is RGBA (32,32,32,204), and GL explicitly disables UI texture
+compression. One blend over RGB 41 yields 34, whereas the reference's repeated
+composition yields 32. Changing the texture or hard-coding RGB 32 is not the fix.
+
+Native now appends the active modal subtree's already-prepared commands after
+normal UI/menu preparation, preserving texture, tint, text, shadows, clipping
+and order. CPU layout, callbacks and animation are not executed again. This is
+native prepared-data composition, not a GL draw callback or shared visual helper.
+The 65536-command budget is checked before append; image ownership and the
+existing packet/upload/completion lifetimes remain unchanged. General popup
+parity outside the native active notice is not claimed by this scoped change.
+
+Widget209/209 verifies both background passes and identical resource, tint,
+geometry and shadow colors. Window7/7, viewer relink and editor diagnostics pass.
+New maximized native evidence is in `glref-build/captures/native-modal-composition-5`;
+both settled frames are byte-identical, and panel geometry is unchanged at
+(1053,632)-(1503,800). Against preserved `layout-probe-16`, the fixed top-origin
+region [1043,1518) x [559,747), including the whole shadow, improves from 78137
+differing pixels to 1237 of 89300. All residual channel errors are at most
+1/255 RGB, alpha exact. The background sample at (1100,575) now matches exactly
+at (32,32,32,255), and the nearby background at (1000,600) matches (41,41,41,255).
+Residuals include 635 pixels inside the panel bounds and 602 outside. Full exact
+pixel/effects parity remains open; no masks, alignment or tolerance changes were
+used. The pre-existing Window LNK4020 debug-symbol warning remains.
+
+## Login state and measured placement correction (2026-09-14)
+
+NV-00/01/02/12/17: the pinned `FSPanelLogin::updateLocationSelectorsVisibility`
+sets grid-panel visibility from ForceShowGrid; `updateLoginButtons` requires
+nonempty username and password. Native now derives those states from its own
+settings and editable controls, additionally requiring the session owner's
+PreLogin state. Creation, paint preparation and session refresh apply the rule;
+the login callback checks it again. No credentials are logged or authentication
+implementation added. Tests use synthetic text in the combo editor, not a
+nonexistent selected combo item.
+
+The external LEAP driver now records bounded read-only LLWindow getInfo results.
+`glref-build/captures/layout-probe-16/gl-layout.xml` measures the GL visible toast
+wrapper at (1053,632)-(1503,800), outer toast 455x175, snap region y=63..1350,
+and notification channel height 1252. The GL pre-login hidden toolbar retains its
+60-pixel bottom panel plus 3-pixel layout spacing; the channel adds its 35-pixel
+margin and excludes the 19-pixel menu bar. `showToastsCentre` uses this channel
+height, ToastGap and outer-toast integer rounding, not full-window centering.
+GL startup also copies ShowGroupNoticesTopRight into its internal session flag;
+using the internal declaration default directly was incorrect.
+
+Native independently reads the relevant layered skin dimensions and snapshots
+the saved notices-position preference. Its channel calculation uses the live
+ToastGap and ChannelBottomPanelMargin settings and preserves bounded tall-dialog
+placement. This is the pre-login single-alert contract, not in-world toolbar,
+teleport progress-view or multiple-toast composition certification. All layout
+work remains CPU-only; GPU ownership, shaders and publication are unchanged.
+
+Widget209/209 and Window7/7 pass, including grid visibility toggles, partial and
+cleared credentials, session-state enablement, maximize/restore and tall agreement
+containment. Viewer relink and editor diagnostics pass. The known Window PDB
+LNK4020 warning remains. Native capture `native-login-layout-4` measures exactly
+(1053,632)-(1503,800), matching the GL wrapper; its two 2560x1369 maximized frames
+are byte-identical. Image inspection confirms the hidden grid row and disabled
+empty-credential Log In button. GL probe exited zero with response and Goodbye.
+This verifies panel geometry and the two login behaviors, not full pixel/effects
+parity. The location placeholder and remaining decoration differences remain open.
+
+## Maximized parity rerun (2026-09-14)
+
+Result: FAIL. New GL evidence is in
+`glref-build/captures/attempt-15-maximized-http`; rebuilt native evidence is in
+`glref-build/captures/native-maximized-3`. Both clients are maximized at 2560x1369,
+and each backend's settled pair has zero differing pixels. The full-client
+zero-tolerance comparison in `glref-build/captures/maximized-parity-15-native-3`
+reports 1121198 differing pixels, maximum RGBA errors 229/229/229/0. This count
+includes differing login controls and is not a notification-only score.
+
+The GL driver now enumerates already-visible notifications at STATE_LOGIN_WAIT,
+responds to WarnForceLoginURL through the existing notification API without
+resetting the fixture URL, and verifies its absence before submitting the target.
+The saved preflight notification list is empty; image inspection confirms the
+URL warning is absent. Driver build/framing self-test and editor diagnostics pass.
+GL records the target response, exit zero and Goodbye. Native Window7/7 passes.
+
+Native's recorded bottom-origin panel rectangle is 1052,597,1502,765. The new
+shadow and corrected controls are visible, but the native alert remains lower
+than the GL alert and its shadow appearance differs. The prior focused-centering
+hypothesis therefore does not establish placement parity. No images were aligned,
+resized or masked, no tolerances changed, and previous evidence is preserved.
+Further renderer correction is separate from this requested capture rerun.
+
+## Native alert decoration correction (2026-09-13)
+
+Requested scope: correct native decoration and placement, then repeat the
+maximized parity capture separately. No new parity claim or reference capture is
+made by this change. Previous evidence remains intact.
+
+NV-00 source contract, pinned GL revision
+`59108e15a1f8f94d2da7c674d937d19f5cf9450d`, Windows/default skin:
+
+- `LLToastAlertPanel` sizes buttons with measured label plus `OO` plus two
+   4-pixel pads, with 8 pixels between buttons. `LLCheckBoxToastPanel::setCheckBox`
+   adds label line count times line height plus half a line, and places the check
+   above the 23-pixel buttons and 16-pixel bottom padding. Font line height is
+   `ceil(ascender) + ceil(descender)`, not the font's baseline advance.
+- `LLToast` owns an invisible outer rectangle, 5 pixels wider and 7 pixels taller
+   than its visible wrapper. `LLModalDialog::onAppFocusGained` centers that outer
+   rectangle through `centerOnScreen`/`LLView::centerWithin`. Native opening and
+   resize use these outer dimensions for the focused capture state. The separate
+   initial `LLScreenChannel::showToastsCentre` stacking/progress-view policy is not
+   certified by this focused single-alert placement correction.
+- Wrapper background precedes `LLToastAlertPanel::draw`'s shadow and controls;
+   `LLToast::draw` then adds the wrapper shadow with a one-pixel inset. Each shadow
+   has interpolated alpha on right/bottom edges and corner triangles, a one-pixel
+   overlap, and five-pixel outward reach. The first uses `ColorDropShadow` directly;
+   the second applies current transparency. No uniform ring approximation is used.
+- `LLFocusMgr` interpolates `FocusColor` toward white during the focus flash,
+   rounds border width from 1 to 2 pixels, and multiplies alpha by 0.4 when the
+   application is unfocused. The pinned `LLPanel::updateDefaultBtn` is empty:
+   default-button activation after 0.5 seconds is keyboard state, not an extra
+   visual border. Actual focus drives the button border.
+
+Native design (NV-01/02/03/12/14): native font/layout owns the CPU dimensions;
+the native alert panel opts into two ordered shadow meshes in widget paint.
+Optional per-vertex colors flow through `LLVKWidgetGpu` into `LLVKUiPacket`.
+The existing UiVertex color attributes and alpha-blended shader interpolate them;
+there is no shader ABI change, new GPU resource, GL callback, or GL visual reuse.
+Uniform triangle callers retain their interface. Packet checks reject nonfinite
+colors/coordinates, invalid scissors and geometry-budget overflow before append.
+Existing frame submission, resource publication and completion retirement remain
+unchanged. The GL reference worktree has no source diff.
+
+Discriminating checks passed: Widget209/209 covers font-derived check geometry,
+maximize/restore with outer-toast padding, twenty gradient triangles, alpha
+endpoints and shadow reach, and delayed default-button state. GPU10/10 covers
+per-vertex alpha through widget GPU preparation, invalid-color rollback, and
+native recording/presentation. Window7/7 passes the actual alert lifecycle and
+native browser/input integration. Editor diagnostics and diff whitespace checks
+are clean. The existing Window target LNK4020 PDB warning remains; debugger symbol
+integrity is not certified. Exact pixels, focus transitions and broader alert
+states still require the next matched maximized parity capture.
+
+## Both-backend maximized captures (2026-09-13)
+
+The requested maximized capture set now includes both backends at 2560x1369.
+The passed GL pair in `glref-build/captures/attempt-11-maximized` was preserved;
+native was recaptured in `glref-build/captures/native-maximized-1` with
+LLVK_NOTIFICATION_CAPTURE_MAXIMIZED enabled and IsZoomed asserted at capture time.
+Both pairs have zero differing pixels within their own backend. Native Window7/7
+passed and the capture-enabled fixture exited zero; no capture processes remained.
+
+The full-client cross-backend comparison is retained in
+`glref-build/captures/maximized-gl-native-comparison`: 3421375 differing pixels,
+maximum channel differences 229/229/229/0. This is NOT a notification-only score:
+GL has live browser content while the missing-helper native fixture has none.
+Image inspection additionally shows the native modal retaining its pre-maximize
+rectangle (295,287,728,480 in bottom-origin UI coordinates) instead of recentering,
+plus differing panel/button/text appearance and the missing reference shadow.
+Thus capture rerun and per-backend repeatability are complete, but parity fails;
+no image scaling, masking or tolerance changes were used. Previous captures remain
+untouched. The build still reports the existing LNK4020 debug-symbol warning;
+these results do not certify debugger symbol integrity. No commit was made.
+
+## GL fixture verification result (2026-09-13)
+
+Pinned reference `59108e15a1f8f94d2da7c674d937d19f5cf9450d` built without source
+modifications in the isolated `glref-build` directory. Capture attempt 9 successfully
+launched the external LEAP driver, submitted MediaPluginFailed with media_plugin_cef,
+captured the visible reference alert through Windows Graphics Capture, recorded
+`close=true, ignore=false`, and exited zero with Goodbye. No viewer/driver remained.
+Evidence is retained in `glref-build/captures/attempt-9`, including the executable
+hash manifest, request/response XML, raw images and repeatability comparison.
+
+Qualification FAILED: the two GL frames differ at 166075 pixels (maximum RGB errors
+242/242/242, alpha error 0). Visual inspection shows changing live login-page content
+behind the alert. Actual GL client extent is 2560x1369, not the requested 1024x738
+or the retained native capture extent. The user confirmed that they manually
+maximized the GL client during this run. This explains the extent mismatch and is
+not evidence that the fixture failed to apply its initial window-size settings.
+Do not resize/mask these images or count them
+as a matched reference. The fixture's submission, capture and graceful-close path
+works, but captures must use matching actual client dimensions and a stable background
+before reference repeatability and cross-backend parity can pass. Phase 1 stays gated.
+
+Driver corrections verified offline: derive setting types/encodings from the pinned
+declarations; load nonpersistent LeapCommand through the profile-local default file;
+use forward slashes because LLLeap's tokenizer treats backslashes as escapes; send
+notation LLSD to the viewer while accepting its binary LLSD output. The pinned
+llleap.cpp explicitly requires notation from children. Earlier failed attempts are
+retained; they produced no accepted reference captures. Pending quit confirmations
+were acknowledged normally, never force-stopped. Completed native repeatability
+evidence remains unchanged.
+
+## Notification capture acceptance protocol (2026-09-13)
+
+Scope update: the user explicitly deferred world-dependent notification validation
+to the corresponding stages. Phase 2 owns real authentication/TLS/connection error
+captures; Phase 3 owns account-linked offers, IM/chat/inventory/voice notifications,
+their persistence and reconnect behavior; Phase 4 owns composition over world,
+water/postprocessing and in-world overlays. Local alert/template/input/suppression
+captures remain in the current gate and do not require world.
+
+Fixture implementation in progress: `notification_capture` uses external Windows
+Graphics Capture and D3D11 staging-map completion, not the legacy Vulkan readback.
+Its self-test passed physical client cropping and BGRA-to-RGBA conversion on a known
+window. Output has an 8-byte little-endian width/height header and TOP-origin RGBA8
+(unlike historical bottom-origin files). Existing files are never overwritten.
+The native window regression accepts `LLVK_NOTIFICATION_CAPTURE_DIR` to capture two
+settled MediaPluginFailed states with the production renderer and separate capture
+processes. Capture evidence is supplementary until paired with the pinned GL oracle.
+
+Sequence requested by the user: define capture validation, validate existing
+notifications if feasible, then proceed to Phase 1 only after the notification gate
+passes. Existing component passes are reused; they are not capture acceptance.
+NV-00/02/03/12/14/15/17 apply. This protocol does not require authentication for
+local notification fixtures and does not waive the separate full-viewer run policy.
+
+### Matched inputs and coverage
+
+Use separate backend-exclusive processes. The GL fixture must instantiate the
+unchanged reference notification/template/channel/alert implementation; the native
+fixture must use the actual native queue, widget factory, paint and GPU submission.
+Never use a GL-owned view or GL-produced pixels as the native implementation.
+Pin the historical GL oracle `59108e15a1f8f94d2da7c674d937d19f5cf9450d`; a current
+GL build is supplementary evidence unless a reference update is explicitly approved.
+
+For each capture, record source revision plus dirty-patch hash, executable hash,
+template/payload hash, skin/theme/font/catalog hashes, locale, UI scale, DPI,
+client/render extent, device/driver, render format, color space, capture mechanism,
+warning preferences, focus/cursor state and notification-relative time. Use temporary
+profiles and synthetic local inputs without secrets. Match backgrounds because
+alpha and shadows cannot be compared against different underlying pixels.
+
+Enumerate all 30 admitted reference notification templates, not only
+MediaPluginFailed. Group by construction/behavior to organize the work, but retain a
+result per template. Include at least media launch failure for login and auxiliary
+browsers, AutoReplace invalid entry/import, confirmation and editable forms, and
+ignore/default/saved-response variants. Native-only structured error notices and
+session agreements have no identical GL template; validate their mapped source
+contract separately rather than inventing a pixel oracle for their wording.
+
+Capture each applicable state: initial appearance before default activation;
+settled appearance after the 0.5-second guard; hover, press and keyboard focus;
+checked/unchecked ignore control; entered/selected text; long-text scroll positions;
+stacked notifications over an existing dialog; acknowledgement/focus restoration;
+ignored redisplay; persistence failure and retry. Include English and the currently
+tested German/French/Japanese locales, other shipped locale fit checks, and normal
+and constrained client extents at agreed DPI/UI scales. Transition sequences must
+be sampled at matching notification-relative times, not matching frame counts.
+
+### Capture and comparison
+
+Prefer a dedicated controlled fixture using application-owned offscreen targets:
+GL readback before swap, and native attachment-to-staging copy before release with
+explicit layouts, completion fences and noncoherent invalidation. Alternatively,
+use the same external lossless Windows capture path for both visible clients;
+exclude occlusion and mismatched compositor/HDR/scaling state. External capture
+proves displayed composition, not raw attachment alpha. Either path must capture
+the full client plus a notification region including its entire shadow, never just
+the message rectangle. OS fallback dialogs are a separate native Win32 capture set.
+
+Repeat GL states to establish reproducibility before comparing native output. Keep
+original bytes and metadata. Permit only documented row-origin/channel-order
+normalization; do not resize, align away geometry differences, mask discrepant
+pixels, blur or alter gamma to improve scores. With the current exact UI acceptance
+rule, require zero unexplained pixel differences and matching geometry, clipping,
+text/icons, ordering, colors, alpha composition and effects. Reference variability
+blocks that state until controlled; it does not authorize widening a tolerance.
+Historical opaque/alpha tolerance notes are not new approval under NV-17.
+
+Produce difference images, differing-pixel counts and channel-error maxima alongside
+original images. Inspect the originals and differences, and assert callback counts,
+selected actions, suppression persistence, stale-response rejection and restored
+focus. A matching still image alone does not pass interaction or transition states.
+Retain completed state evidence across retries; invalidate only states affected by
+the implementation or input changes. Missing captures are UNVERIFIED, mismatches
+are FAIL, and only complete applicable evidence is PASS.
+
+### Current preflight result
+
+The approach is feasible, but the checked-in capture path is not currently an
+executable matched-notification acceptance harness:
+
+- `gl_capture_frame_once` in `indra/newview/llviewerdisplay.cpp` is one-shot after
+   90 frames at/after STATE_LOGIN_SHOW. It does not trigger or sequence notification
+   states and does not establish the pinned reference executable's identity.
+- `captureFrameOnce` in legacy `indra/llvulkan/llvksession.cpp` is not wired into
+   the current native LLVKWindowMgr loop. Its `readbackSwapchain` dependency selects
+   the last presented image after device idle, without reacquiring it. NV-15 forbids
+   treating idle as renewed ownership of a presented swapchain image. Do not invoke
+   this helper as valid native acceptance capture.
+- The historical diff script cited by the old UI plan is not present in the
+   current workspace search, and `tools/vulkan` is empty. Existing root captures
+   gl_login.rgba/vk_login.rgba date from September 3 and vulkan_capture.rgba from
+   September 2; they predate the current implementation and lack a matched current
+   notification manifest. They are retained, not counted or overwritten.
+- Source preflight identifies unresolved alert presentation: GL
+   `LLToastAlertPanel::draw` explicitly emits `gl_drop_shadow`; native
+   `advanceNotices` builds a plain panel and children. Inspection of the panel branch
+   in `indra/llvulkan/llvkwidgetpaint.cpp` confirms only the panel-sized background
+   draw, with no external alert drop-shadow primitive. This is a source-level
+   presentation mismatch, not a measured pixel result.
+- The only registered worktrees are the current native-error-messaging checkout
+   and native-session-owner at `485967401a`; neither is the pinned GL oracle.
+   Existing Release/RelWithDebInfo viewer binaries are not established as oracle
+   executables merely by their presence. No dedicated notification fixture was found.
+
+Status: no matched notification capture pair accepted; capture validation remains
+UNVERIFIED, not passed. Previous Widget209/209, Window7/7 and link results establish
+only their recorded behavioral/build coverage. No full viewer was launched and no
+unsafe capture helper was run. Phase 1 progression is held by the requested gate.
+Next prerequisite is a reproducible reference fixture plus safe native capture (or
+matched external capture), followed by repair of any observed presentation mismatch.
+
+## Browser launch notification contract (2026-09-13)
+
+NV-00/01/03/15/17, source `9e2f4548b1`, Windows native browser. Reference:
+`LLViewerMediaImpl::handleMediaEvent`, MEDIA_EVENT_PLUGIN_FAILED_LAUNCH, marks the
+media source failed and queues `MediaPluginFailed`; it does not terminate the viewer.
+The `notifications.xml` template is alertmodal with an ignore preference and plugin
+substitution. Runtime plugin-crash notification is explicitly disabled in the GL
+source to avoid flooding; page-navigation failure is a different error-page contract.
+
+Native design: consume the original localized notification data through the native
+parser and modal owner, retaining ignore policy. Browser launch failure must remove
+the unavailable browser from paint/input participation while leaving the viewer and
+notification responsive. Do not convert page-load failures into plugin-launch alerts
+or expose raw browser error strings. Adopted browser owners still retire normally.
+Discriminating checks: template substitution/ignore handling and an actual missing-
+helper window fixture that presents one acknowledgement and exits normally on close.
+These checks are behavioral evidence, not measured alert visual/effects parity.
+
+Implemented follow-up:
+
+- Both login and auxiliary native browser launch failures queue the original
+   `MediaPluginFailed` template with `media_plugin_cef`, matching the reference MIME
+   implementation label. They no longer terminate the viewer solely because launch
+   failed. Unavailable browser widgets are excluded from painting/input, so the
+   acknowledgement remains presentable; auxiliary Media Browser retains its original
+   `plugin_fail_text` fallback. Failed auxiliary owners are released without consuming
+   the live-view limit. Page-navigation errors remain separate, unchanged paths.
+- Native modal alerts now construct `alert_check_box.xml` independently, using the
+   reference `skipnexttime`, `skipnexttimesessiononly` or `alwayschoose` strings as
+   selected by their parsed ignore policy. Reference roots are
+   `LLCheckBoxToastPanel::setCheckBoxes/setCheckBox` and
+   `LLToastAlertPanel::onButtonPressed`. Acknowledgement records the ignore choice
+   and applicable saved response through existing native warning settings. Failed
+   persistence keeps the dialog open and does not change suppression; successful
+   retry dismisses it. Queued responses retain one-shot delivery.
+- AutoReplace already queues `InvalidAutoReplaceEntry` and `InvalidAutoReplaceList`.
+   Existing UI fixtures now explicitly exercise invalid entry submission and invalid
+   file import, asserting the reference notification names, retained valid entries,
+   and absence of a duplicate generic error. Startup AutoReplace logging is unchanged.
+
+Validation: Widget209/209 and Window7/7 passed; the latter uses an actually missing
+browser helper, presents and acknowledges both login and auxiliary failure alerts,
+keeps login controls enabled, and closes normally. Widget checks cover localized
+plugin substitution, saved suppression, the actual ignore checkbox and failed-save
+retry. Native Viewer Link Validation and touched-source diagnostics passed.
+No full viewer/profile run, GL implementation edit, commit or push was performed.
+
+Remaining qualification: matched reference captures for exact alert geometry,
+clipping, shadows, text and interaction effects have not been produced. Behavioral
+fixture results are not full visual parity. `NoPlugin` belongs to MIME-plugin
+selection, which native CEF-only support does not implement; it is not fabricated
+for ordinary page-load errors. Browser error-page and texture-fallback contracts
+remain outside this notification-specific change. Earlier scope counts of 29
+admitted templates predate the addition of `MediaPluginFailed` (now 30).
+
+## Log-only reporting parity (user clarification, 2026-09-13)
+
+Native error reporting to the log is accepted as reporting parity where the
+corresponding OpenGL service path is also log-only. Absence of a native notification
+is not a gap for those paths; do not add popups solely to claim reporting coverage.
+This accepts the reporting channel, not exact diagnostic text or complete service
+behavior/visual parity.
+
+In particular, audio-engine initialization and AutoReplace startup settings loading
+are accepted as log-only reporting parity. Their source references are
+`idle_startup` in `indra/newview/llstartup.cpp` and
+`LLAutoReplace::loadFromSettings` in `indra/newview/llautoreplace.cpp`. Native audio
+gain warnings likewise do not require an added notification where the GL path has
+none. AutoReplace import/edit validation remains a separate notification workflow.
+
+For browsers and textures, assess each failure path separately: browser error pages,
+plugin-launch notifications and texture fallback/loading states remain applicable
+consumer contracts. Logging alone does not replace a user-visible response supplied
+by the corresponding GL path. An internal unconsumed error is not a logged error.
+
 ## Accepted local-service scope (2026-09-13)
 
 The user accepted completing reporting for services already present in the native

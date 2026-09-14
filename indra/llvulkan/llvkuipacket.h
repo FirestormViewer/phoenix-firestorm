@@ -23,6 +23,8 @@ public:
         const LLVKColor::Value& color, std::string& error);
     bool triangle(const std::array<float,6>& points, VkRect2D clip,
         const LLVKColor::Value& color, std::string& error);
+    bool gradientTriangle(const std::array<float,6>& points, VkRect2D clip,
+        const std::array<LLVKColor::Value,3>& colors, std::string& error);
     bool text(const LLVKGlyphAtlas& atlas, std::span<const std::shared_ptr<const LLVKGlyphImage>> pages,
         float deviceOriginX, float deviceOriginY, VkRect2D clip, const LLVKTextDraw::Style& style, std::string& error);
     std::span<const LLVKContext::UiVertex> vertices() const noexcept { return mVertices; }

@@ -198,6 +198,13 @@ its UI/menu consumers. Reporting is part of the service's exit gate, not a later
 cleanup phase. The existing reporting infrastructure is a foundation, not evidence
 that a new producer's failure paths are covered.
 
+User clarification (2026-09-13): log-only native reporting counts as reporting
+parity where the corresponding OpenGL path is log-only. User-visible messages,
+localization and presentation gates below apply where that source contract requires
+them; do not introduce a popup merely to satisfy this requirement. Browser error
+pages, texture fallback states and explicit notifications remain distinct observable
+contracts. This does not waive safe diagnostics or required recovery behavior.
+
 - Recover the source-defined failure contract under NV-00, including asynchronous
   callbacks, partial initialization, cancellation, timeouts and teardown. Identify
   which failures are recoverable, fatal or expected user cancellation.

@@ -170,6 +170,24 @@ namespace tut
         std::string error;
         auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
         ui->setSessionOwner(&owner);
+        ensure("empty credentials disable login",!ui->tree().get(ui->find("connect_btn"))->params.enabled);
+        ensure("grid selector hidden by default",!ui->tree().get(ui->find("grid_panel"))->params.visible);
+        ensure("enable grid selector setting",ui->tree().updateSetting("ForceShowGrid",LLSD(true)));
+        ensure("refresh login visibility",ui->preparePaint({},error).has_value());
+        ensure("grid selector follows live setting",ui->tree().get(ui->find("grid_panel"))->params.visible);
+        ensure("set synthetic username",ui->tree().setValue(ui->tree().get(ui->find("username_combo"))->combo->editor,LLSD("fixture-user")));
+        ensure("refresh username-only state",ui->preparePaint({},error).has_value());
+        ensure("password still required",!ui->tree().get(ui->find("connect_btn"))->params.enabled);
+        ensure("set synthetic password",ui->tree().setValue(ui->find("password_edit"),LLSD("fixture-only")));
+        ensure("refresh complete credentials",ui->preparePaint({},error).has_value());
+        ensure("complete credentials enable login",ui->tree().get(ui->find("connect_btn"))->params.enabled);
+        ensure("clear synthetic password",ui->tree().setValue(ui->find("password_edit"),LLSD("")));
+        ensure("refresh cleared credentials",ui->preparePaint({},error).has_value());
+        ensure("clearing password disables login",!ui->tree().get(ui->find("connect_btn"))->params.enabled);
+        ensure("restore synthetic password",ui->tree().setValue(ui->find("password_edit"),LLSD("fixture-only")));
+        ensure("hide grid selector setting",ui->tree().updateSetting("ForceShowGrid",LLSD(false)));
+        ensure("refresh restored credentials",ui->preparePaint({},error).has_value());
+        ensure("grid selector hides after toggle",!ui->tree().get(ui->find("grid_panel"))->params.visible);
         ensure("login command reaches owner",ui->tree().commit(ui->find("connect_btn")));
         ensure("actual owner is authenticating",owner.snapshot().state==Owner::State::Authenticating);
         ensure("snapshot observed by UI",ui->sessionSnapshot().tag==owner.snapshot().tag);
@@ -265,6 +283,16 @@ namespace tut
         const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
         configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
         configuration.skin.language="de";
+        LLControlGroup reportingWarnings("native-reporting-warnings");
+        configuration.warningSettingsGroup=&reportingWarnings;
+        bool failWarningSave=false;
+        std::map<std::string,LLSD> savedWarnings;
+        configuration.saveWarningPreferences=[&](const auto& changes,std::string& problem)
+        {
+            if (failWarningSave) { problem="warning save fixture failure"; return false; }
+            savedWarnings=changes;
+            return true;
+        };
         configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
         configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
         completePreferenceSettings(configuration);
@@ -298,6 +326,9 @@ namespace tut
         clipboard->fail=false;
         LLVKSessionOwner owner;
         ui->setSessionOwner(&owner);
+        ensure("set reporting fixture username",ui->tree().setValue(ui->tree().get(ui->find("username_combo"))->combo->editor,LLSD("fixture-user")));
+        ensure("set reporting fixture password",ui->tree().setValue(ui->find("password_edit"),LLSD("fixture-only")));
+        ensure("refresh reporting login controls",ui->preparePaint({},error).has_value());
         ensure("login invokes unavailable transport",ui->tree().commit(ui->find("connect_btn")));
         ensure("no invented authentication",owner.snapshot().state==LLVKSessionOwner::State::PreLogin && !owner.snapshot().identity);
         notices=ui->takeNotices();
@@ -313,6 +344,69 @@ namespace tut
         ensure("previous focus restored",ui->tree().keyboardFocus()==focus);
         ui->setSessionOwner(nullptr);
         ensure("empty application shutdown",owner.shutdown().ok());
+
+        LLSD pluginArguments;
+        pluginArguments["PLUGIN"]="media_plugin_cef";
+        ensure("reference media failure template available",ui->queueNotice("MediaPluginFailed",pluginArguments,{},error));
+        notices=ui->takeNotices();
+        ensure("localized media failure preserves plugin identity",notices.size()==1 &&
+            notices.front().name=="MediaPluginFailed" && notices.front().message.find("media_plugin_cef")!=std::string::npos &&
+            notices.front().message.find("[PLUGIN]")==std::string::npos);
+        ensure("media failure ignore setting declared",reportingWarnings.getControl("MediaPluginFailed")!=nullptr);
+        reportingWarnings.setBOOL("MediaPluginFailed",false);
+        ensure("ignored media failure does not display",ui->queueNotice("MediaPluginFailed",pluginArguments,{},error) && ui->takeNotices().empty());
+        reportingWarnings.setBOOL("MediaPluginFailed",true);
+        ensure("queue media failure with ignore choice",ui->queueNotice("MediaPluginFailed",pluginArguments,{},error));
+        const bool mediaNoticeOpened=ui->advanceNotices(2.,error);
+        ensure(error,mediaNoticeOpened);
+        const auto originalRoot=ui->tree().get(ui->root())->params.rect;
+        const auto originalNotice=ui->tree().get(ui->modalNotice())->params.rect;
+        ensure("maximize notification viewport",ui->tree().reshape(ui->root(),2560,1369,error));
+        ensure("prepare maximized notification",ui->preparePaint({},error).has_value());
+        const auto maximizedNotice=ui->tree().get(ui->modalNotice())->params.rect;
+        ensure_equals("notice centers outer toast width",maximizedNotice.left,2560/2-(originalNotice.right-originalNotice.left+5)/2);
+        ensure_equals("notice follows pre-login channel",maximizedNotice.bottom,(1369-19-60-3-35)/2+7-(originalNotice.top-originalNotice.bottom+7)%2);
+        ensure("restore notification viewport",ui->tree().reshape(ui->root(),originalRoot.right-originalRoot.left,originalRoot.top-originalRoot.bottom,error));
+        ensure("prepare restored notification",ui->preparePaint({},error).has_value());
+        ensure("restore keeps same notice and geometry",ui->tree().get(ui->modalNotice())->params.rect==originalNotice);
+        const auto ignore=ui->find("notification_ignore",ui->modalNotice());
+        ensure("native ignore checkbox is present",ignore && ui->tree().get(ignore)->checkBox.has_value());
+        const auto ignoreNode=ui->tree().get(ignore);
+        const auto& metrics=ignoreNode->control->params.font->metrics();
+        const auto lineHeight=static_cast<int>(std::ceil(metrics.ascender)+std::ceil(metrics.descender));
+        ensure_equals("alert checkbox follows font line height",ignoreNode->params.rect.bottom,39+lineHeight/2);
+        ensure_equals("single-line alert checkbox height",ignoreNode->params.rect.top-ignoreNode->params.rect.bottom,lineHeight);
+        const auto decorated=ui->preparePaint({},error);
+        ensure(error,decorated.has_value());
+        std::vector<const LLVKWidgetPaint::Command*> shadows;
+        for (const auto& command : decorated->commands)
+            if (command.owner==ui->modalNotice() && command.triangleColors) shadows.push_back(&command);
+        ensure_equals("tree and popup passes retain both shadow meshes",shadows.size(),std::size_t(40));
+        ensure("popup shadow preserves geometry",shadows[0]->triangle==shadows[20]->triangle);
+        ensure("popup shadow preserves colors",shadows[0]->triangleColors==shadows[20]->triangleColors);
+        std::vector<const LLVKWidgetPaint::Command*> backgrounds;
+        for (const auto& command : decorated->commands)
+            if (command.owner==ui->modalNotice() && command.image) backgrounds.push_back(&command);
+        ensure_equals("modal background is composed in tree and popup passes",backgrounds.size(),std::size_t(2));
+        ensure("popup uses identical background resource",backgrounds[0]->image==backgrounds[1]->image);
+        ensure("popup preserves background tint and rectangle",backgrounds[0]->color==backgrounds[1]->color &&
+            backgrounds[0]->rectangle==backgrounds[1]->rectangle);
+        ensure_equals("shadow starts one pixel inside right edge",(*shadows.front()->triangle)[0],float(originalNotice.right-1));
+        ensure_equals("shadow extends five pixels past right edge",(*shadows.front()->triangle)[4],float(originalNotice.right+5));
+        ensure_equals("shadow alpha truncates to reference UNORM8 before interpolation",(*shadows.front()->triangleColors)[0][3],127.f/255.f);
+        ensure_equals("shadow outer alpha",(*shadows.front()->triangleColors)[2][3],0.f);
+        ensure("select ignore on actual alert",ui->tree().setValue(ignore,LLSD(true)));
+        ensure("media acknowledgement delay",ui->advanceNotices(3.,error));
+        ensure("default button activated after delay",ui->tree().get(ui->modalNotice())->panel->defaultButton!=0);
+        failWarningSave=true;
+        ensure("failed warning save retains alert",ui->noticeKey(true,false,error) && ui->modalNotice()!=0 && !error.empty());
+        ensure("failed warning save does not suppress future alerts",reportingWarnings.getBOOL("MediaPluginFailed"));
+        failWarningSave=false;
+        ensure("acknowledge media failure with suppression",ui->noticeKey(true,false,error) && !ui->modalNotice());
+        ensure("suppression reaches persistence service",savedWarnings.contains("MediaPluginFailed") && !savedWarnings.at("MediaPluginFailed").asBoolean());
+        ensure("alert suppression updates warning preference",!reportingWarnings.getBOOL("MediaPluginFailed"));
+        ensure("suppressed media launch does not reappear",ui->queueNotice("MediaPluginFailed",pluginArguments,{},error) && ui->takeNotices().empty());
+        reportingWarnings.setBOOL("MediaPluginFailed",true);
 
         unsigned responses=0;
         for (unsigned notice=0; notice<64; ++notice)
@@ -4539,6 +4633,12 @@ namespace tut
         ensure("save entry in draft",tree.commit(login->find("autoreplace_save_entry")));
         ensure(login->dialogError(),login->dialogError().empty());
         ensure_equals("draft contains replacement",tree.get(login->find("autoreplace_list_replacements"))->scrollList->rows.size(),std::size_t(1));
+        ensure("begin invalid entry",tree.commit(login->find("autoreplace_add_entry")));
+        ensure("invalid keyword",tree.setValue(login->find("autoreplace_keyword"),LLSD("two words")));
+        ensure("invalid replacement action",tree.commit(login->find("autoreplace_save_entry")));
+        auto invalidNotices=login->takeNotices();
+        ensure("invalid entry produces reference notification",invalidNotices.size()==1 && invalidNotices.front().name=="InvalidAutoReplaceEntry");
+        ensure_equals("invalid new entry leaves existing row",tree.get(login->find("autoreplace_list_replacements"))->scrollList->rows.size(),std::size_t(1));
         ensure("AutoReplace painter",login->preparePaint({},error).has_value());
         const auto autoReplaceId=login->activeFloater();
         const auto expandedRect=tree.get(autoReplaceId)->params.rect;
@@ -4577,6 +4677,11 @@ namespace tut
         { proposedName=name; fileResult=std::move(response); return true; });
         ensure("original Import action",tree.commit(login->find("autoreplace_import_list")));
         ensure("picker receives completion",static_cast<bool>(fileResult));
+        fileResult(autoReplaceDirectory/"missing.xml",{}); fileResult={};
+        invalidNotices=login->takeNotices();
+        ensure("invalid import produces reference notification",invalidNotices.size()==1 && invalidNotices.front().name=="InvalidAutoReplaceList");
+        ensure("invalid import does not emit duplicate generic error",login->dialogError().empty());
+        ensure("retry Import action",tree.commit(login->find("autoreplace_import_list")));
         fileResult(importPath,{}); fileResult={};
         ensure_equals("import selected list",tree.value(login->find("autoreplace_list_name")).asString(),std::string("Imported"));
         ensure("original Export action",tree.commit(login->find("autoreplace_export_list")));
@@ -5115,8 +5220,12 @@ namespace tut
         ensure_equals("selected label color",first->labelColor[1],1.f);
         tree.setKeyboardFocus(*button,false,false,error);
         input.spaceDown = true;
+        input.focusColor={0.56f,0.36f,0.25f,0.5f};
+        input.drawAlpha=0.5f;
         const auto pressed = tree.prepareButton(*button,input,error);
         ensure(error,pressed.has_value());
+        ensure("focus RGB truncates to reference UNORM8",pressed->primitives[0].color==LLVKColor::Value{142.f/255.f,91.f/255.f,63.f/255.f,63.f/255.f});
+        ensure_equals("image alpha is unaffected by focus encoding",pressed->primitives[1].color[3],0.5f);
         ensure_equals("focused border precedes image",pressed->primitives[1].image->name(),std::string("pressed-selected"));
         ensure_equals("pressed text x offset",pressed->text.x,first->text.x+1.f);
         tree.setEnabled(*button,false);

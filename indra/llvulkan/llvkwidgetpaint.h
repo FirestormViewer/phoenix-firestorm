@@ -28,6 +28,7 @@ public:
         bool streamingImage = false;
         std::optional<std::array<float,6>> triangle;
         std::uint64_t imageEpoch = 0;
+        std::optional<std::array<LLVKColor::Value,3>> triangleColors;
     };
     std::vector<Command> commands;
     std::vector<Id> pendingBrowsers;

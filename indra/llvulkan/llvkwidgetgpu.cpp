@@ -158,7 +158,12 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
         const auto& rect = command.rectangle;
         if (command.triangle)
         {
-            if (command.image || command.text || !prepared.triangle(*command.triangle,clip,command.color,error)) return Status::Failed;
+            if (command.image || command.text) { error="Native triangle cannot contain image or text data"; return Status::Failed; }
+            if (command.triangleColors)
+            {
+                if (!prepared.gradientTriangle(*command.triangle,clip,*command.triangleColors,error)) return Status::Failed;
+            }
+            else if (!prepared.triangle(*command.triangle,clip,command.color,error)) return Status::Failed;
         }
         else if (command.image)
         {

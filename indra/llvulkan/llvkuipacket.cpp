@@ -34,6 +34,12 @@ bool LLVKUiPacket::solid(LLVKWidgetImage::Region deviceRectangle, VkRect2D clip,
 bool LLVKUiPacket::triangle(const std::array<float,6>& points,VkRect2D clip,
     const LLVKColor::Value& color,std::string& error)
 {
+    return gradientTriangle(points,clip,{color,color,color},error);
+}
+
+bool LLVKUiPacket::gradientTriangle(const std::array<float,6>& points,VkRect2D clip,
+    const std::array<LLVKColor::Value,3>& colors,std::string& error)
+{
     error.clear();
     if (!mExtent.width || !mExtent.height || mExtent.width>INT32_MAX || mExtent.height>INT32_MAX ||
         clip.offset.x<0 || clip.offset.y<0 || std::uint64_t(clip.offset.x)+clip.extent.width>mExtent.width ||
@@ -41,8 +47,9 @@ bool LLVKUiPacket::triangle(const std::array<float,6>& points,VkRect2D clip,
     { error="Native UI triangle clip or framebuffer extent is invalid"; return false; }
     for (const auto coordinate : points)
         if (!std::isfinite(coordinate)) { error="Native UI triangle has nonfinite coordinates"; return false; }
-    for (const auto channel : color)
-        if (!std::isfinite(channel)) { error="Native UI triangle has nonfinite color"; return false; }
+    for (const auto& color : colors)
+        for (const auto channel : color)
+            if (!std::isfinite(channel)) { error="Native UI triangle has nonfinite color"; return false; }
     if (!clip.extent.width || !clip.extent.height) return true;
     if (mDraws.size()>=65536 || mVertices.size()>1024*1024-3)
     { error="Native UI triangle exceeds frame geometry budget"; return false; }
@@ -51,6 +58,7 @@ bool LLVKUiPacket::triangle(const std::array<float,6>& points,VkRect2D clip,
     {
         const float y=float(mExtent.height)-points[index*2+1];
         if (!std::isfinite(y)) { error="Native UI triangle coordinate conversion overflows"; return false; }
+        const auto& color=colors[index];
         vertices[index]={points[index*2],y,0,0,color[0],color[1],color[2],color[3]};
     }
     LLVKContext::UiDraw draw;

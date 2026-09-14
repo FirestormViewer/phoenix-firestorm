@@ -539,8 +539,22 @@ namespace tut
         const auto verticesBefore=trianglePacket.vertices().size();
         ensure("invalid triangle clip rejected",!trianglePacket.triangle({0,0,1,0,0,1},{{-1,0},{1,1}},{1,1,1,1},error));
         ensure_equals("rejected triangle preserves packet",trianglePacket.vertices().size(),verticesBefore);
+        std::array<LLVKColor::Value,3> shadowColors{{{0,0,0,0.5f},{0,0,0,0},{0,0,0,0}}};
+        LLVKWidgetPaint shadowPaint;
+        LLVKWidgetPaint::Command shadow;
+        shadow.clip={0,0,static_cast<int>(renderer.swapchainExtent().width),static_cast<int>(renderer.swapchainExtent().height)};
+        shadow.triangle=std::array<float,6>{30,30,36,24,36,36};
+        shadow.triangleColors=shadowColors;
+        shadowPaint.commands.push_back(shadow);
+        LLVKUiPacket shadowPacket(renderer.swapchainExtent());
+        ensure("gradient traverses widget GPU preparation",widgetGpu.prepare(shadowPaint,renderer.swapchainExtent(),shadowPacket,error)==LLVKWidgetGpu::Status::Ready);
+        ensure_equals("shadow inner alpha preserved",shadowPacket.vertices()[0].alpha,0.5f);
+        ensure_equals("shadow outer alpha preserved",shadowPacket.vertices()[1].alpha,0.f);
+        shadowColors[2][3]=std::numeric_limits<float>::quiet_NaN();
+        ensure("nonfinite gradient rejected",!shadowPacket.gradientTriangle(*shadow.triangle,triangleClip,shadowColors,error));
+        ensure_equals("invalid gradient leaves packet intact",shadowPacket.vertices().size(),std::size_t(3));
         ensure("marker frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
-        ensure("marker triangle recorded",renderer.recordUiPacket(trianglePacket.vertices(),trianglePacket.draws()));
+        ensure("gradient triangle recorded",renderer.recordUiPacket(shadowPacket.vertices(),shadowPacket.draws()));
         ensure("marker triangle presented",renderer.end2DFrame());
         renderer.waitIdle();
     }

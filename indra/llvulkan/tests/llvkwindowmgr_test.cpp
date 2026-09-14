@@ -696,10 +696,88 @@ namespace tut
         auto failureCode=LLVKError::Code::Unexpected;
         rejected.failureCode=&failureCode;
         rejected.browser.helperDirectory=profile.path/"missing-browser-helper";
-        ensure("partial visual startup reports browser failure",!LLVKWindowMgr::run(rejected,error));
-        ensure("startup presenter receives the typed browser failure",failureCode==LLVKError::Code::BrowserUnavailable);
-        ensure("partial startup preserves error",error.find("Native browser requires absolute helper")!=std::string::npos);
-        ensure("partial startup destroys native window",FindWindowW(L"VulkanstormNativeLogin",nullptr)==nullptr);
+        rejected.bindServices={};
+        bool launchNoticePresented=false;
+        unsigned failureFrames=0;
+        unsigned failurePhase=0;
+        const auto captureDirectory=std::getenv("LLVK_NOTIFICATION_CAPTURE_DIR");
+        const bool captureMaximized=std::getenv("LLVK_NOTIFICATION_CAPTURE_MAXIMIZED")!=nullptr;
+        if (captureDirectory && captureMaximized)
+            rejected.bindServices=[](LLVKViewerUi&)
+            { ShowWindow(FindWindowW(L"VulkanstormNativeLogin",nullptr),SW_MAXIMIZE); };
+        std::future<DWORD> captureResult;
+        unsigned captures=0;
+        rejected.presentedFrame=[&](LLVKViewerUi& ui,const LLVKWidgetPaint::Input& input)
+        {
+            ++failureFrames;
+            ensure("failed login browser does not block native presentation",input.browsers.empty());
+            if (!launchNoticePresented)
+            {
+                const auto modal=ui.modalNotice();
+                ensure("actual browser launch failure presents reference notification",modal &&
+                    ui.tree().get(modal)->params.name=="MediaPluginFailed");
+                ensure("browser notification includes implementation name",
+                    ui.tree().value(ui.find("Alert message",modal)).asString().find("media_plugin_cef")!=std::string::npos);
+                ensure("login credential controls remain usable",ui.tree().get(ui.find("username_combo"))->params.enabled &&
+                    ui.tree().get(ui.find("password_edit"))->params.enabled);
+                ensure("empty credentials keep login disabled",!ui.tree().get(ui.find("connect_btn"))->params.enabled);
+                launchNoticePresented=true;
+            }
+            if (failureFrames<40) return;
+            if (captureDirectory && !failurePhase && captures<2)
+            {
+                if (!captureResult.valid())
+                {
+                    const auto directory=std::filesystem::path(captureDirectory);
+                    std::filesystem::create_directories(directory);
+                    const auto destination=directory/("native-MediaPluginFailed-settled-"+std::to_string(captures)+".rgba");
+                    const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+                    ensure("requested maximized native capture",!captureMaximized || IsZoomed(window));
+                    std::wstring command=L"\""+std::filesystem::path(LLVK_NOTIFICATION_CAPTURE_EXE).wstring()+L"\" "+
+                        std::to_wstring(reinterpret_cast<std::uintptr_t>(window))+L" \""+destination.wstring()+L"\"";
+                    captureResult=std::async(std::launch::async,[command=std::move(command)]() mutable
+                    {
+                        STARTUPINFOW startup{}; startup.cb=sizeof(startup);
+                        PROCESS_INFORMATION process{};
+                        if (!CreateProcessW(nullptr,command.data(),nullptr,nullptr,FALSE,CREATE_NO_WINDOW,nullptr,nullptr,&startup,&process))
+                            return GetLastError();
+                        CloseHandle(process.hThread);
+                        WaitForSingleObject(process.hProcess,INFINITE);
+                        DWORD code=1; GetExitCodeProcess(process.hProcess,&code);
+                        CloseHandle(process.hProcess);
+                        return code;
+                    });
+                    std::ofstream metadata(directory/("native-MediaPluginFailed-settled-"+std::to_string(captures)+".txt"));
+                    const auto rect=ui.tree().get(ui.modalNotice())->params.rect;
+                    metadata<<"backend=native\nnotification=MediaPluginFailed\nplugin=media_plugin_cef\nstate=settled\n"
+                        <<"capture=Windows.Graphics.Capture\nformat=RGBA8-top-origin-with-LE-width-height\n"
+                        <<"maximized="<<(IsZoomed(window) ? "true" : "false")<<"\n"
+                        <<"modal="<<rect.left<<","<<rect.bottom<<","<<rect.right<<","<<rect.top<<"\n";
+                }
+                if (captureResult.wait_for(std::chrono::seconds(0))!=std::future_status::ready) return;
+                ensure_equals("external native notification capture succeeds",captureResult.get(),DWORD{0});
+                ++captures;
+                return;
+            }
+            ensure("browser notification acknowledgement",ui.noticeKey(true,false,error));
+            ensure("acknowledgement does not close viewer",!ui.modalNotice());
+            if (!failurePhase)
+            {
+                ensure("failed auxiliary browser leaves floater usable",ui.showMediaBrowser("https://example.invalid/",error));
+                const auto floater=ui.activeFloater();
+                ensure("auxiliary failure shows existing failure text",ui.tree().get(ui.find("plugin_fail_text",floater))->params.visible);
+                ensure("auxiliary unavailable surface does not block paint",!ui.tree().get(ui.find("webbrowser",floater))->params.visible);
+                failureFrames=0;
+                launchNoticePresented=false;
+                ++failurePhase;
+                return;
+            }
+            PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
+        };
+        ensure("browser launch failure leaves viewer usable",LLVKWindowMgr::run(rejected,error));
+        ensure("browser notification was presented",launchNoticePresented);
+        ensure_equals("both login and auxiliary launch failures exercised",failurePhase,1u);
+        ensure("browser failure fixture closes native window",FindWindowW(L"VulkanstormNativeLogin",nullptr)==nullptr);
         std::unique_ptr<LLVKSessionOwner::Service> cleanupGate=std::make_unique<CleanupGate>(cleanupState);
         ensure("install controlled cleanup dependency",session.install(LLVKSessionOwner::Lifetime::Application,3,cleanupGate).ok());
         configuration.sessionOwner=&session;

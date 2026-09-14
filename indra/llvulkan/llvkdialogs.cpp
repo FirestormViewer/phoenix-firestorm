@@ -165,7 +165,7 @@ bool LLVKViewerUi::initializeDialogs(const Configuration& configuration,std::str
                         name=="SoundCacheWillBeMoved" || name=="DisableJavascriptBreaksSearch" || name=="ChangeSkin" || name=="SkinDefaultsChangeSettings" || name=="ChangeRenderBackend" ||
                         name=="SettingsConfirmBackup" || name=="SettingsRestoreNeedsLogout" || name=="BackupPathEmpty" ||
                         name=="BackupFinished" || name=="RestoreFinished" || name=="okbutton" ||
-                        name=="DebugSettingsWarning" || name=="ControlNameCopiedToClipboard" || name=="SanityCheck")
+                        name=="DebugSettingsWarning" || name=="ControlNameCopiedToClipboard" || name=="SanityCheck" || name=="MediaPluginFailed")
                     { state.notice=Notice{name,{}}; state.noticeDepth=static_cast<int>(state.stack.size()); }
                     state.formTemplate=std::string_view(tag)=="template";
                 }
@@ -407,12 +407,14 @@ void LLVKViewerUi::setSessionOwner(LLVKSessionOwner* owner)
     LLVKControl::Callback login;
     if (owner) login.function=[this,owner](auto,const LLSD&)
     {
-        if (mSessionOwner!=owner) return;
+        updateLoginControls();
+        if (mSessionOwner!=owner || !mTree.get(find("connect_btn"))->params.enabled) return;
         owner->beginLogin();
         mReportedSession.reset();
         refreshSession(mDialogError);
     };
     mTree.setControlCommit(find("connect_btn"),std::move(login));
+    updateLoginControls();
 }
 
 bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
@@ -426,6 +428,7 @@ bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
     const bool prelogin=snapshot.state==Owner::State::PreLogin;
     for (const auto name : {"connect_btn","username_combo","password_edit","server_combo","start_location_combo"})
         mTree.setEnabled(find(name),prelogin);
+    updateLoginControls();
     const auto same=[](const Owner::Status& left,const Owner::Status& right)
     { return left.code==right.code && left.action==right.action && left.operation==right.operation &&
         left.generation==right.generation && left.service==right.service; };
@@ -510,6 +513,66 @@ bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
     return true;
 }
 
+bool LLVKViewerUi::initializeNoticeLayout(std::string& error)
+{
+    mNoticeTopRight=mTree.setting("ShowGroupNoticesTopRight").value_or(LLSD(false)).asBoolean();
+    const auto declaration=[&](const char* file) -> std::optional<boost::property_tree::ptree>
+    {
+        const auto files=mSkin->read("xui",file,LLVKSkinFiles::Policy::Current,error);
+        if (!files) return {};
+        std::vector<std::string_view> layers;
+        for (const auto& text : *files) layers.push_back(text);
+        const auto xml=LLVKXmlLayers::merge(layers,error);
+        if (!xml) return {};
+        boost::property_tree::ptree parsed;
+        std::istringstream stream(*xml);
+        boost::property_tree::read_xml(stream,parsed);
+        return parsed;
+    };
+    const auto named=[](const auto& self,const boost::property_tree::ptree& node,std::string_view name) -> const boost::property_tree::ptree*
+    {
+        if (node.get<std::string>("<xmlattr>.name","")==name) return &node;
+        for (const auto& child : node)
+            if (child.first!="<xmlattr>") if (const auto found=self(self,child.second,name)) return found;
+        return nullptr;
+    };
+    try
+    {
+        const auto main=declaration("main_view.xml"),toolbar=declaration("panel_toolbar_view.xml"),toast=declaration("panel_toast.xml");
+        if (!main || !toolbar || !toast) return false;
+        const auto menu=named(named,*main,"status_bar_container");
+        const auto bottom=named(named,*toolbar,"bottom_toolbar_panel");
+        const auto stack=named(named,*toolbar,"bottom_toolbar_stack");
+        const auto chiclet=named(named,*toolbar,"chiclet_container");
+        const auto outer=named(named,*toast,"toast"),wrapper=named(named,*toast,"wrapper_panel");
+        if (!menu || !bottom || !stack || !chiclet || !outer || !wrapper)
+        { error="Native notification layout declaration is incomplete"; return false; }
+        mNoticeMenuHeight=menu->get<int>("<xmlattr>.height");
+        mNoticeBottomHeight=bottom->get<int>("<xmlattr>.height");
+        mNoticeStackSpacing=stack->get<int>("<xmlattr>.border_size",3);
+        mNoticeChicletInset=chiclet->get<int>("<xmlattr>.top")+chiclet->get<int>("<xmlattr>.height");
+        mNoticeRightPad=outer->get<int>("<xmlattr>.width")-wrapper->get<int>("<xmlattr>.width");
+        mNoticeTopPad=outer->get<int>("<xmlattr>.height")-wrapper->get<int>("<xmlattr>.height");
+        for (const auto value : {mNoticeMenuHeight,mNoticeBottomHeight,mNoticeStackSpacing,mNoticeChicletInset,mNoticeRightPad,mNoticeTopPad})
+            if (value<0 || value>16384) { error="Native notification layout dimension is invalid"; return false; }
+    }
+    catch (const boost::property_tree::ptree_error& failure) { error=failure.what(); return false; }
+    return true;
+}
+
+LLVKWidgetTree::Rect LLVKViewerUi::noticeRectangle(int width,int height) const
+{
+    const auto root=mTree.get(mRoot)->params.rect;
+    const auto margin=std::clamp(mTree.setting("ChannelBottomPanelMargin").value_or(LLSD(35)).asInteger(),0,16384);
+    const auto gap=std::clamp(mTree.setting("ToastGap").value_or(LLSD(7)).asInteger(),0,16384);
+    const auto topInset=mNoticeTopRight ? mNoticeChicletInset : 0;
+    const auto channelHeight=std::max(0,root.top-root.bottom-mNoticeMenuHeight-mNoticeBottomHeight-mNoticeStackSpacing-margin-topInset);
+    const auto outerHeight=height+mNoticeTopPad;
+    const auto left=std::max(0,(root.right-root.left)/2-(width+mNoticeRightPad)/2);
+    const auto bottom=std::clamp(channelHeight/2+gap+2*(outerHeight/2)-outerHeight,0,std::max(0,root.top-root.bottom-height-mNoticeTopPad));
+    return {left,bottom,left+width,bottom+height};
+}
+
 bool LLVKViewerUi::advanceNotices(double time,std::string& error)
 {
     error.clear();
@@ -533,10 +596,21 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
             mTree.value(mKeyCaptureFields.at("apply_all")).asBoolean(),error)) return false;
         mKeyCapture->close(error);
     }
-    if (mNoticePanel || mNotices.empty()) return true;
+    if (mNoticePanel)
+    {
+        if (time-mNoticeOpened>=0.5 && !mTree.setPanelDefaultButton(mNoticePanel,mNoticeButton,error)) return false;
+        return true;
+    }
+    if (mNotices.empty()) return true;
     auto notice=mNotices.front();
+    const auto preference=mNotificationPreferences.find(notice.name);
+    const bool hasIgnore=preference!=mNotificationPreferences.end();
+    std::string ignoreLabel;
+    if (hasIgnore)
+        ignoreLabel=mAboutStrings.at(preference->second.sessionOnly ? "skipnexttimesessiononly" :
+            preference->second.saveResponse ? "alwayschoose" : "skipnexttime");
     if (notice.buttons.empty()) notice.buttons.push_back({"close",mAboutStrings.at("implicitclosebutton"),0,true});
-    const auto font=mFonts->resolve({"SansSerif","Medium"},error);
+    const auto font=mFonts->resolve({"SansSerif","Default"},error);
     if (!font) return false;
     const auto root=mTree.get(mRoot)->params.rect;
     const auto wide=utf8str_to_wstring(mNotices.front().message);
@@ -552,18 +626,30 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
         const std::u32string label(wideLabel.begin(),wideLabel.end());
         const auto measured=font->measureRun(label,0,label.size(),1.f,true,false,error);
         if (!measured) return false;
-        buttonWidth=std::max(buttonWidth,static_cast<int>(measured->width+0.99f)+static_cast<int>(padding->width)+20);
+        buttonWidth=std::max(buttonWidth,static_cast<int>(measured->width+0.99f)+static_cast<int>(padding->width)+8);
     }
-    const auto totalButtons=buttonWidth*static_cast<int>(notice.buttons.size())+10*static_cast<int>(notice.buttons.size()-1);
+    const auto totalButtons=buttonWidth*static_cast<int>(notice.buttons.size())+8*static_cast<int>(notice.buttons.size()-1);
     const auto textWidth=std::min(static_cast<int>(options.width),document->fitWidth+25);
     const auto textHeight=std::min(document->fitHeight,std::max(40,root.top-root.bottom-120));
-    const auto width=std::max(totalButtons,textWidth)+50, height=textHeight+48+23+(notice.inputName.empty() ? 0 : 36);
-    const auto left=std::max(0,(root.right-root.left-width)/2),bottom=std::max(0,(root.top-root.bottom-height)/2);
-    LLVKWidgetTree::Params view; view.name=notice.name; view.rect={left,bottom,left+width,bottom+height};
+    const auto lineHeight=static_cast<int>(std::ceil(font->metrics().ascender)+std::ceil(font->metrics().descender));
+    const auto ignoreLines=1+static_cast<int>(std::count(ignoreLabel.begin(),ignoreLabel.end(),'\n'));
+    const int ignoreHeight=hasIgnore ? lineHeight*ignoreLines+lineHeight/2 : 0;
+    auto width=std::max(totalButtons,textWidth)+50;
+    if (hasIgnore)
+    {
+        const auto firstLine=utf8str_to_wstring(ignoreLabel.substr(0,ignoreLabel.find('\n')));
+        const std::u32string label(firstLine.begin(),firstLine.end());
+        const auto measured=font->measureRun(label,0,label.size(),1.f,true,false,error);
+        if (!measured) return false;
+        width=std::max(width,static_cast<int>(measured->width+0.99f)+16+50);
+    }
+    const auto height=textHeight+48+23+(notice.inputName.empty() ? 0 : 36)+ignoreHeight;
+    LLVKWidgetTree::Params view; view.name=notice.name; view.rect=noticeRectangle(width,height);
     view.focusRoot=true;
     LLVKControl::Params control; control.font=font;
     LLVKPanel::Params background; background.backgroundVisible=background.backgroundOpaque=true;
-    background.opaqueImage=mTree.findImage("Window_Foreground",error);
+    background.opaqueImage=mTree.findImage("Toast_Over",error);
+    background.alertShadowColor=mColors->find("ColorDropShadow");
     if (!error.empty()) return false;
     const auto panel=mTree.createPanel(view,control,background,mRoot,error);
     if (!panel) return false;
@@ -585,7 +671,7 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
     }
     else if (!mTree.createPlainText(view,control,text,*panel,error)) { discard(); return false; }
     std::map<LLVKWidgetTree::Id,int> optionsById;
-    LLVKWidgetTree::Id defaultButton=0,editor=0;
+    LLVKWidgetTree::Id defaultButton=0,editor=0,ignore=0;
     int buttonLeft=(width-totalButtons)/2;
     const auto buttonFactory=std::make_unique<LLVKWidgetFactory>(*mDialogFactory);
     if (!buttonFactory->loadDefaultsFile(mTree,"alert_button.xml",error)) { discard(); return false; }
@@ -596,7 +682,7 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
         LLStringUtil::replaceString(name,"'","&apos;");
         LLStringUtil::replaceString(name,"<","&lt;");
         LLStringUtil::replaceString(name,">","&gt;");
-        const auto button=buttonFactory->construct(mTree,"<button name='"+name+"'/>",*panel,error);
+        const auto button=buttonFactory->construct(mTree,"<button name='"+name+"' font='SansSerif'/>",*panel,error);
         if (!button) { discard(); return false; }
         if (!mTree.setShape(*button,{buttonLeft,16,buttonLeft+buttonWidth,39},error)) { discard(); return false; }
         const auto wideLabel=utf8str_to_wstring(option.label);
@@ -606,15 +692,29 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
         mTree.setControlCommit(*button,std::move(close));
         optionsById.emplace(*button,option.option);
         if (!defaultButton || option.isDefault) defaultButton=*button;
-        buttonLeft+=buttonWidth+10;
+        buttonLeft+=buttonWidth+8;
     }
     if (!notice.inputName.empty())
     {
         const auto inputFactory=std::make_unique<LLVKWidgetFactory>(*mDialogFactory);
         if (!inputFactory->loadDefaultsFile(mTree,"alert_line_editor.xml",error)) { discard(); return false; }
         const auto input=inputFactory->construct(mTree,"<line_editor name='notification_input' width='200' height='20' max_length_bytes='1023'/>",*panel,error);
-        if (!input || !mTree.setShape(*input,{25,47,width-25,67},error)) { discard(); return false; }
+        const auto inputBottom=47+(hasIgnore ? 20 : 0);
+        if (!input || !mTree.setShape(*input,{25,inputBottom,width-25,inputBottom+20},error)) { discard(); return false; }
         editor=*input;
+    }
+    if (hasIgnore)
+    {
+        LLStringUtil::replaceString(ignoreLabel,"&","&amp;");
+        LLStringUtil::replaceString(ignoreLabel,"'","&apos;");
+        LLStringUtil::replaceString(ignoreLabel,"<","&lt;");
+        LLStringUtil::replaceString(ignoreLabel,">","&gt;");
+        const auto checkFactory=std::make_unique<LLVKWidgetFactory>(*mDialogFactory);
+        if (!checkFactory->loadDefaultsFile(mTree,"alert_check_box.xml",error)) { discard(); return false; }
+        const auto check=checkFactory->construct(mTree,"<check_box name='notification_ignore' label='"+ignoreLabel+"' word_wrap='down'/>",*panel,error);
+        const auto checkBottom=39+lineHeight/2;
+        if (!check || !mTree.setShape(*check,{25,checkBottom,width-25,checkBottom+lineHeight*ignoreLines},error)) { discard(); return false; }
+        ignore=*check;
     }
     mNoticePreviousFocus=mTree.keyboardFocus();
     if (mTree.mouseCapture() && !mTree.setMouseCapture(0,error)) { discard(); return false; }
@@ -623,6 +723,7 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
     if (!mTree.setKeyboardFocus(*panel,true,false,error) || !mTree.requestControlFocus(editor ? editor : defaultButton,true,error))
     { mTree.unlockFocus(); discard(); return false; }
     mNoticePanel=*panel; mNoticeButton=defaultButton; mNoticeEditor=editor; mNoticeOpened=time;
+    mNoticeIgnore=ignore;
     mNoticeOptions=std::move(optionsById); mActiveNotice=std::move(notice);
     mNotices.erase(mNotices.begin());
     return true;
@@ -637,6 +738,24 @@ bool LLVKViewerUi::respondNotice(int option,std::string& error)
     if (found->first==mNoticeButton && mNoticeTime-mNoticeOpened<0.5) return true;
     LLSD values=LLSD::emptyMap();
     if (mNoticeEditor) values[mActiveNotice->inputName]=mTree.value(mNoticeEditor);
+    if (mNoticeIgnore)
+    {
+        const auto& preference=mNotificationPreferences.at(mActiveNotice->name);
+        const bool ignored=mTree.value(mNoticeIgnore).asBoolean();
+        values["ignore"]=ignored;
+        std::map<std::string,LLSD> changes;
+        if (preference.control.empty()) changes[mActiveNotice->name]=!ignored;
+        if (ignored && preference.saveResponse)
+        {
+            auto saved=preference.defaultResponse;
+            for (const auto& [name,index] : preference.responseOptions) saved[name]=index==option;
+            changes["Default"+mActiveNotice->name]=saved;
+        }
+        if (!preference.sessionOnly && mSaveWarningPreferences && !changes.empty() && !mSaveWarningPreferences(changes,error)) return false;
+        for (const auto& [name,value] : changes)
+            if (auto control=mWarningSettings->getControl(name)) control->setValue(value,!preference.sessionOnly);
+        if (!preference.control.empty()) mTree.updateSetting(preference.control,LLSD(preference.inverted ? ignored : !ignored));
+    }
     const auto response=mActiveNotice->response;
     if (!dismissNotice(error)) return false;
     if (response) response(option,values);
@@ -650,7 +769,7 @@ bool LLVKViewerUi::dismissNotice(std::string& error)
     const auto panel=mNoticePanel,focus=mNoticePreviousFocus;
     mTree.unlockFocus();
     mNoticePanel=mNoticeButton=mNoticePreviousFocus=0;
-    mNoticeEditor=0; mNoticeOptions.clear(); mActiveNotice.reset();
+    mNoticeEditor=mNoticeIgnore=0; mNoticeOptions.clear(); mActiveNotice.reset();
     if (!mTree.erase(panel,error)) return false;
     return !mTree.get(focus) || mTree.requestControlFocus(focus,true,error);
 }

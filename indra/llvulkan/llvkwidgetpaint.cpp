@@ -93,6 +93,42 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             return true;
         };
         const auto width = screen->right-screen->left, height = screen->top-screen->bottom;
+        const auto alertShadow=[&](int inset,float alpha) -> bool
+        {
+            if (!node->panel || !node->panel->params.alertShadowColor) return true;
+            auto inner=node->panel->params.alertShadowColor->get();
+            inner[3]*=alpha;
+            for (const auto channel : inner)
+                if (!std::isfinite(channel)) { error="Nonfinite native alert shadow color"; return false; }
+            for (auto& channel : inner)
+                channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+            if (output.commands.size()>65536-10) { error="Native alert shadow exceeds paint budget"; return false; }
+            auto outer=inner; outer[3]=0;
+            const float left=float(screen->left)+inset, right=float(screen->right)-inset-1;
+            const float bottom=float(screen->bottom)+inset+1, top=float(screen->top)-inset;
+            const std::array<std::array<float,2>,12> positions{{
+                {right,top-6},{right,bottom},{right+6,bottom},{right+6,top-6},
+                {left+6,bottom},{left+6,bottom-6},{right,bottom-6},{left,bottom},
+                {left+1,bottom-5},{right+5,bottom-5},{right+5,top-1},{right,top}}};
+            constexpr std::array<std::array<unsigned,3>,10> triangles{{
+                {0,1,2},{0,2,3},{1,4,5},{1,5,6},{4,7,8},
+                {4,8,5},{1,6,9},{1,9,2},{0,3,10},{0,10,11}}};
+            for (const auto& indices : triangles)
+            {
+                Command command;
+                command.owner=id; command.clip=clip;
+                command.triangle.emplace(); command.triangleColors.emplace();
+                for (std::size_t vertex=0; vertex<indices.size(); ++vertex)
+                {
+                    const auto index=indices[vertex];
+                    (*command.triangle)[vertex*2]=positions[index][0];
+                    (*command.triangle)[vertex*2+1]=positions[index][1];
+                    (*command.triangleColors)[vertex]=(index==0 || index==1 || index==4) ? inner : outer;
+                }
+                output.commands.push_back(std::move(command));
+            }
+            return true;
+        };
         bool searchHighlighted=false;
         for (auto ancestor=id; ancestor && tree.get(ancestor); ancestor=tree.get(ancestor)->parent)
         {
@@ -453,6 +489,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             color[3] *= input.button.transparency;
             if (!append({0,0,width,height},color,image)) return false;
         }
+        if (!alertShadow(0,1.f)) return false;
         if (node->overlapPanel)
         {
             const auto state=*node->overlapPanel;
@@ -767,6 +804,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             if (childClip.left < childClip.right && childClip.bottom < childClip.top && !self(self,*child,childClip)) return false;
         }
         node=tree.get(id);
+        if (node && !alertShadow(1,input.button.transparency)) return false;
         if (node && node->colorPicker)
         {
             const auto& picker=*node->colorPicker;

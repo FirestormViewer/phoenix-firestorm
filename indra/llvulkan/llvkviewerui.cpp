@@ -402,11 +402,29 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
 #endif
     ui->mDialogFactory = std::make_unique<LLVKWidgetFactory>(factory);
     if (!ui->initializeDialogs(configuration,error)) return nullptr;
+    if (!ui->initializeNoticeLayout(error)) return nullptr;
+    ui->updateLoginControls();
     return ui;
+}
+
+void LLVKViewerUi::updateLoginControls()
+{
+    mTree.setVisible(find("grid_panel"),mTree.setting("ForceShowGrid").value_or(LLSD(false)).asBoolean());
+    const bool prelogin=!mSessionOwner || mSessionOwner->snapshot().state==LLVKSessionOwner::State::PreLogin;
+    const bool credentials=!mTree.value(find("username_combo")).asString().empty() &&
+        !mTree.value(find("password_edit")).asString().empty();
+    mTree.setEnabled(find("connect_btn"),prelogin && credentials);
 }
 
 std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint::Input& input,std::string& error)
 {
+    updateLoginControls();
+    if (const auto notice=mTree.get(mNoticePanel))
+    {
+        const auto rectangle=notice->params.rect;
+        const auto width=rectangle.right-rectangle.left,height=rectangle.top-rectangle.bottom;
+        if (!mTree.setShape(mNoticePanel,noticeRectangle(width,height),error)) return std::nullopt;
+    }
     if (!refreshVoiceDevices(error)) return std::nullopt;
     if (mDebugSettings && mDebugSettings->visible() && !refreshDebugSettings(false,error)) return std::nullopt;
     if (mColorSettings && mColorSettings->visible() && !refreshColorSettings(false,error)) return std::nullopt;
@@ -414,12 +432,35 @@ std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint:
     if (mBeamColor && mBeamColor->visible() && !updateBeamColorPreview(error)) return std::nullopt;
     updateSpellRemoval();
     auto paintInput=input;
+    if (const auto color=mColors->find("FocusColor"))
+    {
+        auto focus=color->get();
+        const auto flash=mTree.focusFlashAmount();
+        for (std::size_t channel=0; channel<focus.size(); ++channel) focus[channel]+=(1.f-focus[channel])*flash;
+        if (!input.editor.applicationFocused) focus[3]*=0.4f;
+        paintInput.button.focusColor=paintInput.editor.focusColor=focus;
+        paintInput.button.focusWidth=paintInput.editor.focusWidth=static_cast<int>(std::floor(1.f+flash+0.5f));
+    }
     if (const auto color=mColors->find("SearchableControlHighlightBgColor")) paintInput.searchBackground=*color;
     if (const auto color=mColors->find("SearchableControlHighlightFontColor")) paintInput.searchFont=*color;
     auto paint = LLVKWidgetPaint::prepare(mTree,mRoot,paintInput,error);
     if (!paint) return std::nullopt;
     const auto viewport = mTree.screenRect(mRoot,error);
     if (!viewport || !mMenu->paint(*paint,*viewport,error)) return std::nullopt;
+    if (mNoticePanel)
+    {
+        std::vector<LLVKWidgetPaint::Command> modalPass;
+        for (const auto& command : paint->commands)
+            for (auto owner=command.owner; mTree.get(owner); owner=mTree.get(owner)->parent)
+                if (owner==mNoticePanel)
+                {
+                    modalPass.push_back(command);
+                    break;
+                }
+        if (modalPass.size()>65536-paint->commands.size())
+        { error="Native modal composition exceeds paint command budget"; return std::nullopt; }
+        paint->commands.insert(paint->commands.end(),modalPass.begin(),modalPass.end());
+    }
     return paint;
 }
 
