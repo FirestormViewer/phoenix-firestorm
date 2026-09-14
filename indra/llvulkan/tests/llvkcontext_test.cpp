@@ -290,7 +290,7 @@ namespace tut
         }
         renderer.waitIdle();
         const LLVKGlyphUpload::Device uploadDevice{renderer.physicalDevice(),renderer.device(),renderer.allocator(),
-            renderer.graphicsQueue(),renderer.graphicsQueueFamily()};
+            renderer.graphicsQueue(),renderer.graphicsQueueFamily(),renderer.samplerAnisotropyEnabled()};
         ensure("native unsynchronized recreation",renderer.createSwapchain(surface,256,256,error,false));
         ensure("requested policy is retained",!renderer.synchronizedPresentationRequested());
         ensure("negotiated present mode reported",renderer.presentMode() == VK_PRESENT_MODE_IMMEDIATE_KHR || renderer.presentMode() == VK_PRESENT_MODE_FIFO_KHR);
@@ -418,6 +418,28 @@ namespace tut
         ensure("widget packet recorded",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
         ensure("widget packet presented",renderer.end2DFrame());
         renderer.waitIdle();
+        auto disabledAnisotropy=uploadDevice;
+        disabledAnisotropy.samplerAnisotropyEnabled=false;
+        ensure("anisotropic sampler requires enabled device feature",!LLVKGlyphUpload::submit(disabledAnisotropy,
+            {logo->pixelWidth(),logo->pixelHeight()},logo->bottomUpRgba(),error,LLVKGlyphUpload::Sampling::SkinAnisotropicClamp));
+        if (renderer.samplerAnisotropyEnabled())
+        {
+            paint.skinAnisotropy=true;
+            ensure("sampling policy change requires new publication",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Pending);
+            ensure("anisotropic image upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
+            ensure("anisotropic image publishes",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+            ensure("sampler policy has distinct resource identity",widgetPacket.draws()[0].image!=imageIdentity);
+            ensure("anisotropic frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+            ensure("anisotropic packet recorded",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
+            ensure("anisotropic packet presented",renderer.end2DFrame());
+            renderer.waitIdle();
+            const auto anisotropicIdentity=widgetPacket.draws()[0].image;
+            paint.skinAnisotropy=false;
+            ensure("disabling anisotropy prepares a bilinear resource",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Pending);
+            ensure("bilinear replacement upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
+            ensure("bilinear replacement publishes",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+            ensure("off policy no longer uses anisotropic resource",widgetPacket.draws()[0].image!=anisotropicIdentity);
+        }
         paint.commands.resize(1);
         paint.commands[0].streamingImage = true;
         paint.commands[0].image = browserFrame;

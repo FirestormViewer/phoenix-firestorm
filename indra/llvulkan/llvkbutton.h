@@ -24,9 +24,9 @@ struct LLVKButton
         Images defaultImages;
         bool pressedProvided = false;
         bool pressedSelectedProvided = false;
-        std::int32_t leftPad = 0;
-        std::int32_t rightPad = 0;
-        std::int32_t originalHorizontalPad = 0;
+        std::int32_t leftPad = 4;
+        std::int32_t rightPad = 4;
+        std::int32_t originalHorizontalPad = 4;
         std::int32_t bottomPad = 0;
         std::int32_t overlayTopPad = 0;
         std::int32_t overlayBottomPad = 0;

@@ -425,10 +425,21 @@ namespace
                 }
                 if (message==WM_SYSCHAR || message==WM_SYSKEYDOWN || message==WM_SYSKEYUP || message==WM_MOUSEWHEEL) return 0;
             }
-            if (message == WM_ACTIVATEAPP)
+            if (message == WM_SETFOCUS || message == WM_KILLFOCUS)
             {
-                input.editor.applicationFocused = parameter != 0;
-                if (!parameter) ui->menu().dismiss();
+                const bool focused=message==WM_SETFOCUS;
+                if (focused && !input.editor.applicationFocused)
+                {
+                    tree.advanceTime(elapsed(),error);
+                    tree.triggerFocusFlash();
+                }
+                input.editor.applicationFocused=focused;
+                if (!focused)
+                {
+                    ui->menu().dismiss();
+                    tree.setMouseCapture(0,error);
+                    if (GetCapture()==window) ReleaseCapture();
+                }
                 if (audioVolumeChanged) audioVolumeChanged();
                 return 0;
             }
@@ -469,7 +480,12 @@ namespace
                 {
                     const auto id=browserAt(event.x,event.y);
                     const auto rectangle=id ? tree.screenRect(id,error) : std::nullopt;
-                    if (rectangle) browserViews.at(id)->hover(event.x-rectangle->left,rectangle->top-1-event.y,error);
+                    if (rectangle)
+                    {
+                        auto& browser=*browserViews.at(id);
+                        const auto display=LLVKBrowserSurface::displayRect(rectangle->right-rectangle->left,rectangle->top-rectangle->bottom,browser.surface().width(),browser.surface().height());
+                        browser.hover(event.x-rectangle->left-display.left,rectangle->bottom+display.top-1-event.y,error);
+                    }
                 }
                 return 0;
             }
@@ -483,7 +499,12 @@ namespace
                 if (const auto id=browserAt(point.x,bottom))
                 {
                     const auto rect=tree.screenRect(id,error);
-                    if (rect) browserViews.at(id)->wheel(point.x-rect->left,rect->top-1-bottom,0,GET_WHEEL_DELTA_WPARAM(parameter),error);
+                    if (rect)
+                    {
+                        auto& browser=*browserViews.at(id);
+                        const auto display=LLVKBrowserSurface::displayRect(rect->right-rect->left,rect->top-rect->bottom,browser.surface().width(),browser.surface().height());
+                        browser.wheel(point.x-rect->left-display.left,rect->bottom+display.top-1-bottom,0,GET_WHEEL_DELTA_WPARAM(parameter),error);
+                    }
                     return 0;
                 }
                 if (!ui->floaterWheel(point.x,bottom,clicks,error) && !ui->pointOverFloater(point.x,bottom))
@@ -822,7 +843,7 @@ namespace
             if (!renderer.createSwapchain(surface,mWindow.width,mWindow.height,error,synchronized) ||
                 !renderer.create2DPipeline(error)) return false;
             gpu=std::make_unique<LLVKWidgetGpu>(LLVKGlyphUpload::Device{renderer.physicalDevice(),renderer.device(),
-                renderer.allocator(),renderer.graphicsQueue(),renderer.graphicsQueueFamily()});
+                renderer.allocator(),renderer.graphicsQueue(),renderer.graphicsQueueFamily(),renderer.samplerAnisotropyEnabled()});
             return true;
         }
         std::unique_ptr<LLVKViewerUi> ui;
@@ -1129,10 +1150,12 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             const auto target=state.browserViews.find(id);
             if (!node || target==state.browserViews.end() || target->second->state()!=LLVKBrowser::State::Running) return;
             const auto height = node->params.rect.top-node->params.rect.bottom;
+            const auto display=LLVKBrowserSurface::displayRect(node->params.rect.right-node->params.rect.left,height,
+                target->second->surface().width(),target->second->surface().height());
             if (event.kind == LLVKWidgetTree::PointerKind::LeftDown || event.kind == LLVKWidgetTree::PointerKind::DoubleClick)
-            { ui->tree().setKeyboardFocus(id,false,false,state.error); ui->tree().setMouseCapture(id,state.error); target->second->pointer(event.x,height-1-event.y,0,true,state.error); }
+            { ui->tree().setKeyboardFocus(id,false,false,state.error); ui->tree().setMouseCapture(id,state.error); target->second->pointer(event.x-display.left,display.top-1-event.y,0,true,state.error); }
             else if (event.kind == LLVKWidgetTree::PointerKind::LeftUp)
-            { target->second->pointer(event.x,height-1-event.y,0,false,state.error); ui->tree().setMouseCapture(0,state.error); }
+            { target->second->pointer(event.x-display.left,display.top-1-event.y,0,false,state.error); ui->tree().setMouseCapture(0,state.error); }
         };
         ui->tree().setEvents(widget,std::move(events));
     };

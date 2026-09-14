@@ -613,9 +613,18 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
     const auto font=mFonts->resolve({"SansSerif","Default"},error);
     if (!font) return false;
     const auto root=mTree.get(mRoot)->params.rect;
-    const auto wide=utf8str_to_wstring(mNotices.front().message);
     LLVKPlainTextLayout::Options options; options.width=std::max(1,std::min(400,root.right-root.left-70)); options.wrap=true;
-    const auto document=LLVKPlainTextLayout::document(std::u32string(wide.begin(),wide.end()),*font,options,0,0,LLVKFont::VerticalAlign::Top,error);
+    const auto parsed=LLVKWebText::parse(mNotices.front().message,error);
+    if (!parsed) return false;
+    LLVKPlainControl message;
+    message.text=parsed->text;
+    for (const auto& icon : parsed->icons)
+    {
+        const auto image=mTree.findImage(icon.name,error);
+        if (!image) return false;
+        message.icons.emplace(icon.position,image);
+    }
+    const auto document=message.prepareDocument(font,options,0,error);
     if (!document) return false;
     const auto padding=font->measureRun(U"OO",0,2,1.f,true,false,error);
     if (!padding) return false;
@@ -629,7 +638,7 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
         buttonWidth=std::max(buttonWidth,static_cast<int>(measured->width+0.99f)+static_cast<int>(padding->width)+8);
     }
     const auto totalButtons=buttonWidth*static_cast<int>(notice.buttons.size())+8*static_cast<int>(notice.buttons.size()-1);
-    const auto textWidth=std::min(static_cast<int>(options.width),document->fitWidth+25);
+    const auto textWidth=std::min(static_cast<int>(options.width),document->bounds.right-document->bounds.left+25);
     const auto textHeight=std::min(document->fitHeight,std::max(40,root.top-root.bottom-120));
     const auto lineHeight=static_cast<int>(std::ceil(font->metrics().ascender)+std::ceil(font->metrics().descender));
     const auto ignoreLines=1+static_cast<int>(std::count(ignoreLabel.begin(),ignoreLabel.end(),'\n'));

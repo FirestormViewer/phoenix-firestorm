@@ -134,8 +134,10 @@ std::unique_ptr<LLVKGlyphUpload> LLVKGlyphUpload::submit(const Device& device, V
                                                       std::string& error, Sampling sampling)
 {
     error.clear();
-    if (sampling != Sampling::GlyphNearestRepeat && sampling != Sampling::SkinLinearClamp)
+    if (sampling != Sampling::GlyphNearestRepeat && sampling != Sampling::SkinLinearClamp && sampling != Sampling::SkinAnisotropicClamp)
     { error = "Invalid native image sampling policy"; return nullptr; }
+    if (sampling==Sampling::SkinAnisotropicClamp && !device.samplerAnisotropyEnabled)
+    { error="Native anisotropic skin sampling was not enabled on the device"; return nullptr; }
     if (!validQueue(device, error)) return nullptr;
     const std::uint64_t pixels = std::uint64_t(extent.width) * extent.height;
     if (!device.physical || !device.logical || !device.allocator || !device.queue ||
@@ -152,7 +154,7 @@ std::unique_ptr<LLVKGlyphUpload> LLVKGlyphUpload::submit(const Device& device, V
     vkGetPhysicalDeviceFormatProperties(device.physical, VK_FORMAT_R8G8B8A8_UNORM, &format);
     if (extent.width > support.maxExtent.width || extent.height > support.maxExtent.height ||
         !(format.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) ||
-        (sampling == Sampling::SkinLinearClamp && !(format.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT)))
+        (sampling != Sampling::GlyphNearestRepeat && !(format.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT)))
     {
         error = "Selected device cannot support glyph extent or sampling";
         return nullptr;
@@ -192,9 +194,16 @@ std::unique_ptr<LLVKGlyphUpload> LLVKGlyphUpload::submit(const Device& device, V
     view.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
     if (!checked(vkCreateImageView(device.logical, &view, nullptr, &resource->view), "glyph image view", error)) return nullptr;
     VkSamplerCreateInfo sampler{VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO};
-    sampler.magFilter = sampler.minFilter = sampling == Sampling::SkinLinearClamp ? VK_FILTER_LINEAR : VK_FILTER_NEAREST;
-    sampler.addressModeU = sampler.addressModeV = sampler.addressModeW = sampling == Sampling::SkinLinearClamp ?
+    sampler.magFilter = sampler.minFilter = sampling != Sampling::GlyphNearestRepeat ? VK_FILTER_LINEAR : VK_FILTER_NEAREST;
+    sampler.addressModeU = sampler.addressModeV = sampler.addressModeW = sampling != Sampling::GlyphNearestRepeat ?
         VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE : VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    if (sampling==Sampling::SkinAnisotropicClamp)
+    {
+        VkPhysicalDeviceProperties properties{};
+        vkGetPhysicalDeviceProperties(device.physical,&properties);
+        sampler.anisotropyEnable=VK_TRUE;
+        sampler.maxAnisotropy=properties.limits.maxSamplerAnisotropy;
+    }
     if (!checked(vkCreateSampler(device.logical, &sampler, nullptr, &resource->sampler), "glyph sampler", error)) return nullptr;
     VkDescriptorSetLayoutBinding binding{0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1,
                                         VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_COMPUTE_BIT, nullptr};

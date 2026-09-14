@@ -95,14 +95,15 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
         }
         else if (command.image)
         {
-            auto& image = mImages[command.image.get()];
+            const auto imageKey=std::pair{command.image.get(),paint.skinAnisotropy};
+            auto& image = mImages[imageKey];
             image.used = mFrame;
             if (!image.source)
             {
                 image.source = command.image;
                 image.upload = LLVKGlyphUpload::submit(mDevice,{command.image->pixelWidth(),command.image->pixelHeight()},
-                    command.image->bottomUpRgba(),error,LLVKGlyphUpload::Sampling::SkinLinearClamp);
-                if (!image.upload) { mImages.erase(command.image.get()); return Status::Failed; }
+                    command.image->bottomUpRgba(),error,paint.skinAnisotropy ? LLVKGlyphUpload::Sampling::SkinAnisotropicClamp : LLVKGlyphUpload::Sampling::SkinLinearClamp);
+                if (!image.upload) { mImages.erase(imageKey); return Status::Failed; }
             }
             pending |= !image.ready;
         }
@@ -168,7 +169,7 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
         else if (command.image)
         {
             const auto source = command.streamingImage ? mStreams.at(command.owner).publication->current().source : command.image;
-            const auto image = command.streamingImage ? mStreams.at(command.owner).publication->current().image : mImages.at(command.image.get()).ready;
+            const auto image = command.streamingImage ? mStreams.at(command.owner).publication->current().image : mImages.at({command.image.get(),paint.skinAnisotropy}).ready;
             if (!prepared.image(*source,image,{rect.left,rect.bottom,rect.right,rect.top},{},clip,
                 command.color,error,command.alphaMask,command.additive ? LLVKContext::Blend2D::AddWithAlpha : LLVKContext::Blend2D::Alpha)) return Status::Failed;
         }

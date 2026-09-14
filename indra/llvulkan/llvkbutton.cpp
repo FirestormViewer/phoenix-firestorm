@@ -264,7 +264,13 @@ std::optional<LLVKWidgetTree::ButtonDraw> LLVKWidgetTree::prepareButton(Id id, c
     if (image)
     {
         const float disabledFade = !enabled && button.fadeWhenDisabled ? 0.5f : 1.f;
-        output.primitives.push_back({imageRect,tint(enabled ? button.params.imageColor.get() : button.params.disabledImageColor.get(),alpha*disabledFade),image});
+        auto imageColor=tint(enabled ? button.params.imageColor.get() : button.params.disabledImageColor.get(),alpha*disabledFade);
+        for (auto& channel : imageColor)
+        {
+            if (!std::isfinite(channel)) { error="Native button image color is nonfinite"; return std::nullopt; }
+            channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+        }
+        output.primitives.push_back({imageRect,imageColor,image});
         if (button.glow > 0.01f && glowImage)
         {
             auto glowRect = imageRect;

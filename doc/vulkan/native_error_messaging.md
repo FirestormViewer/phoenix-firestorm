@@ -1,5 +1,448 @@
 # Native error messaging
 
+## Japanese retry and document-width correction (2026-09-14)
+
+The requested retry `native-locale-ja-44` reproduced the eight-pixel residual
+against retained `gl-locale-48-ja`. The earlier missing-glyph failure was a
+fixture defect: production startup searches Windows/Fonts, but the component
+fixture did not. Adding the production fallback directory restored Japanese
+glyphs; no reference font or asset was changed.
+
+NV-00/01/02/11/12/17: pinned LLTextBase::drawText clamps each text run's right
+edge to its document extent. LLNormalTextSegment passes that rectangle to
+LLFontGL::render, which uses its width to reject glyphs that do not fit. Native
+plain-text paint previously left maxPixels unlimited unless ellipses were on.
+It now supplies the document's remaining draw width in both cases, using the
+existing native font glyph-fit implementation. This is CPU text preparation;
+GPU formats, shaders, publication and retirement are unchanged.
+
+The Japanese Mode label has a 90-pixel measured line in a 75-pixel widget. The
+missing glyph-fit limit emitted eight extra foreground pixels over the adjacent
+dropdown. `native-locale-ja-45` now matches the entire maximized 2560x1369 GL
+frame with zero differing pixels, anisotropy off, UI scale 1.0. Report:
+`glref-build/captures/locale-ja-parity-48-45`; identical SHA256:
+F679D922CF22ED89882D67860473EEA9C87D24AE8691581C5971B9B82EE3398D.
+Widget209/209 includes a non-ellipsized overwide-glyph regression. Window7/7,
+viewer relink and edited diagnostics pass; the existing LNK4020 warning remains.
+The shared-paint change also passed a focused English baseline comparison in
+`text-bound-en-parity-17-46`, reusing the prior GL oracle rather than recapturing
+it. No login, commit or push was performed.
+
+Additional retained display results: French, Spanish and Italian pass in
+`locale-parity-48-42-*`. The 1024x738 normal-window comparison
+`display-normal-parity-47-41` still differs at 36 rounded lower-corner pixels
+with compositor alpha differences; it is not a pass and no masking was used.
+GL normal-window attempt46 remained maximized and is invalid for that case;
+the runner now explicitly restores/sizes and verifies its client dimensions.
+125-percent UI scaling remains a confirmed open native failure. These results
+do not close the broader no-login sweep, nested workflows or temporal gates.
+
+## Checked-ignore and display sweep continuation (2026-09-14)
+
+Direct Win32 input resolves the checked-ignore fixture blocker. The reference
+LEAP driver identifies its parent viewer window, places the physical pointer,
+sends mouse move/down/up, then verifies the checkbox value using getInfo before
+permitting capture. The pointer is restored and mouse released on driver exit.
+GL source remains untouched; prior failed LEAP click attempts are not parity
+evidence. `gl-ignore-checked-42` and `native-ignore-checked-37` both have stable
+settled pairs and identical full-frame SHA256
+9C7B2A3614CD0AE04CEFB89C3DF1D841B0317823732D0148B27542F80AC1C5A0.
+`ignore-checked-parity-42-37` reports zero differing pixels. GL exited zero with
+Goodbye; native Window7/7 passed and closed. This proves checked appearance, not
+yet restart persistence or nested-dialog behavior.
+
+Selected editable-form text also passes in retained `form-selected-parity-38-33`:
+native selection-background tint now follows source UNORM8 truncation. The
+reference input helper emits Unicode for ASCII key events even with modifiers;
+the qualified selection action uses Shift+Home, not Ctrl+A. Invalid attempts
+remain retained. The text and selection are synthetic and no list is created.
+
+The shared capture request now carries matched isolated display overrides.
+Native applies them to the private settings group before creating the window.
+`display-aniso-parity-43-38` (anisotropy on) and `display-de-parity-44-39`
+(German, anisotropy off) both pass exact full-frame parity at 2560x1369.
+These do not establish all settings combinations or all locales.
+
+125-percent scale FAILS: `display-scale-parity-45-40` reports 232000 differing
+pixels. The native image is byte-identical to its 100-percent baseline, while
+the reference honors UIScaleFactor=1.25. Native LLVKWindowMgr currently reshapes
+the UI to physical swapchain pixels, uses unscaled pointer coordinates and does
+not derive font DPI or GPU transforms from UI scale. Pinned GL
+LLViewerWindow::calcDisplayScale/calcScaledRect combines system UI size with
+UIScaleFactor, rounds logical bounds and reloads scaled fonts. A coordinated
+native logical/device coordinate, font and browser/input implementation is
+required; scaling an already rendered frame is not an acceptable correction.
+This remains an open confirmed failure. No tolerance or reference changed.
+
+## Initial local-template matrix and trusted links (2026-09-14)
+
+All 30 allowlisted local notification templates now have exact captured initial
+presentation evidence in the default skin/en, maximized 2560x1369, anisotropy-off
+configuration. This is not closure of edited/selected/scrolled/ignored/reopened
+states, nested workflows, animation timing, display variants or live side effects.
+Login-dependent tests remain deferred entirely.
+
+Preserved MediaPluginFailed evidence plus `local-add-phase-parity-29-21-*`,
+`local-parity-30-22-*`, passed `local-parity-31-23-*`,
+`local-secondary-parity-31-26`, `local-parity-32-27-*`,
+`local-parity-33-28-*`, `local-parity-34-29-*` and `local-parity-35-30-*`
+cover the matrix. Failed attempts remain under their original paths. Each new
+request/manifest records the synthetic substitutions and immutable source hashes.
+Every qualified GL run exited zero with Goodbye; native component runs passed
+Window7/7 and closed. The harness requests notifications with a test-owned reply,
+not the real reset/backup/restore/quit callback. No actual preference resets,
+cache clears, file imports, restores, credentials or authentication were used.
+
+NV-00/01/02/11/12/13/14/17 trusted-link correction: pinned
+LLUrlEntrySecondlifeURL/FirestormURL classify official hosts, LLTextUtil appends
+their icon, and LLImageTextSegment contributes image width/height plus three
+pixels to layout. Native LLVKWebText now provides independently classified icon
+metadata; LLVKPlainControl uses its existing native styled-image segments for
+reflow, and native paint emits retained skin images between glyph runs. Sizing
+and display use the same icon-aware document. Native hit-testing accounts for
+image advances and does not treat the icon itself as URL text. Glyphs align to
+the top of image-enlarged lines; inline images stay vertically centered. Link
+underlines reproduce the reference integer horizontal-line raster row. No GL
+URL/UI helper is called. Existing immutable image publication, descriptor and
+submission retention remain unchanged.
+
+Widget209/209 covers trusted-host boundaries (including a lookalike-host
+rejection), image/text hit ranges, plus existing text and image-segment tests.
+Window7/7 passes. SpellingDictIsSecondary now matches the full reference frame
+exactly, SHA256
+31DC85184D155689DD1D78BCB447DD01638A987CF7DF84C323C717CA3CDCCD65.
+The initial 15961-pixel failure, intermediate 3165-pixel glyph alignment failure
+and 708-pixel underline-row failure were corrected, not masked or tolerated.
+Other rich text forms, selected icon-bearing text and scale variants still need
+their own capture checks. The reference driver's occasional large getPaths
+response parse failure is retained as fixture history; modal queries now use
+the existing API's Floater View subtree limit instead of the entire viewer.
+
+## Local input-form corrections (2026-09-14)
+
+NV-00/01/02/11/12/17: pinned LLToastAlertPanel sizes from
+LLTextBox::getTextPixelWidth (text bounds), not reshapeToFitText's extra fitting
+pixel. Native notice sizing now uses its document bounds, leaving generic text
+fitting unchanged. AddAutoReplaceList is 203 pixels wide, not 204. Pinned
+LLLineEditor::drawBackground replaces focus alpha with draw transparency and
+passes its tint through byte-color image drawing; native now clamps/truncates
+that tint to UNORM8. LLLineEditor::mBorderThickness is initialized to zero and
+never changed; its content bounds are independent of its decorative border.
+Native caret/selection/preedit preparation now preserves that zero content inset.
+No shaders, uploads, descriptors or resource lifetimes change.
+
+Widget209/209 passes with input width, exact border channels, caret endpoints
+and existing input/response regressions. Window7/7 and isolated capture runs
+pass. The reference-only URL warning must be dismissed by visible control-path
+inspection before submitting a measured notification: the pinned notification
+list API alone can return an empty list while the warning is visible.
+`gl-local-add-27` is invalid for single-modal parity (warning behind the form).
+`gl-local-add-28` failed binary LLSD decoding before submission and closed via
+WM_CLOSE with Goodbye; the intermittent parser failure remains a fixture risk.
+The driver now reports only packet size/parse position on failure and the runner
+detects driver failure promptly. No packet contents or credentials are logged.
+
+Qualified `gl-local-add-29` versus `native-local-add-21` has zero differing
+pixels for both hidden and visible caret phases, across the entire 2560x1369
+frame. Visible-caret SHA256 is
+16FFA50E75A0B3E005B95997D21BF8B8817D1B2CCE7F6046ABCF82C2F2DECBBB;
+hidden-caret SHA256 is
+D758A3747A1318EC700E20C3960FC34C8F44EF73338BFC76456AAC43103B90AE.
+Reports are under `local-add-phase-parity-29-21-*`. These are matched visible
+states from preserved sequences, not proof of synchronized blink timing.
+
+Four more templates have exact full-frame captured-state passes in
+`glref-build/captures/local-parity-30-22-*`: RenameAutoReplaceList,
+RemoveAutoReplaceList, InvalidAutoReplaceEntry and AddToMediaList. Inputs and
+executable/page hashes are in each manifest and shared capture-request.xml.
+All runs were maximized, default skin/en, anisotropy off, synthetic local data,
+no authentication and clean exits. Form input editing/selection and nested
+workflow capture coverage remain open; initial-form pixels do not close them.
+
+## Login-independent verification sweep (2026-09-14)
+
+User scope: verify and correct login-independent behavior; defer every test that
+partially or fully depends on login. Prior passes remain valid and retained.
+This is an ongoing sweep, not completion of the local UI or later service gates.
+
+NV-00/01/02/11/12/17 focus correction: pinned GL LLWindowWin32 dispatches
+WM_KILLFOCUS/WM_SETFOCUS to LLViewerWindow::handleFocusLost/handleFocus, then
+LLFocusMgr::setAppHasFocus. Loss dims focus alpha and releases pointer capture;
+regain restarts the 0.3-second flash without changing the focused control.
+WM_ACTIVATEAPP instead reaches the joystick reset callback. Native now handles
+the keyboard-focus messages using its own input state, capture owner and widget
+clock. The CPU-only correction does not alter GPU data or resource lifetimes.
+Other callback obligations, including popup and modal restoration, remain open
+for their own local interaction cases; login-dependent agent/tool behavior is
+not exercised or claimed here.
+
+Widget209/209 and Window7/7 pass. The existing LNK4020 PDB warning remains.
+Widget test106 verifies flash start, 150ms midpoint, 300ms expiry, preserved
+keyboard focus and absence of a second tab-entry callback. New settled focus
+captures use the same pinned GL executable, static page, default skin/en,
+maximized 2560x1369, anisotropy off and zero tolerance as prior passes:
+
+| State | Reference | Native | Full-frame result |
+|---|---|---|---|
+| Focus lost | gl-login-focus-26 | native-login-focus-17 | PASS, zero differing pixels |
+| Focus regained | gl-login-focus-26 | native-login-focus-17 | PASS, zero differing pixels |
+
+Reports are `glref-build/captures/login-focus-lost-parity-26-17` and
+`login-focus-regained-parity-26-17`. These inject the actual keyboard-focus
+messages; real external-window activation and time-aligned animation pixels are
+not certified by settled frames. GL exited zero with Goodbye; native passed
+PreLogin/no-authentication assertions and closed its window.
+
+The existing capture harness now accepts a shared bounded LLSD request file for
+local notification names/substitutions. This exercises the original reference
+notification presentation and independent native queue, without service side
+effects. Input forms, nested dialogs, local persistence workflows, display
+configurations and offline browser cases remain pending until individually
+recorded. Authentication/TLS login tests, account workflows, reconnect and world
+composition are deferred entirely, including synthetic partial substitutes.
+
+## Held-press clipping correction verified (2026-09-14)
+
+The user confirmed the corrected reference/native images agree with their
+standalone observations. Those observations and the passed enabled/hover states
+were retained; only the affected native held-press capture was rerun.
+
+NV-00/01/02/11/12/14/17: pinned GL LLLayoutStack::draw establishes panel clipping
+through LLScreenClipRect::updateScissorRegion, whose rounded scissor dimensions
+include the right/top boundary pixel. Native layout-panel paint now represents
+that coverage by extending nonempty panel clips one pixel right/top where the
+parent permits it, before intersection. The parent/framebuffer bounds remain
+authoritative; empty or collapsed panel clips do not become visible strips.
+This CPU clip correction leaves the Vulkan half-open scissor API, image/vertex
+formats, shader code, uploads, descriptor ownership and retirement unchanged.
+No GL visual helper or screenshot-specific coordinate adjustment is used.
+
+Widget209/209 passes, including a layout edge-decoration regression checking the
+included right boundary and parent/framebuffer containment. Window7/7, viewer
+relink and edited-file diagnostics pass. The existing LNK4020 PDB warning remains.
+The isolated maximized native pressed-only run `native-login-pressed-16` passes
+pointer-capture, pointer-inside, PreLogin and release-outside assertions and exits
+zero; both settled frames are byte-identical. No authentication was submitted.
+
+Against preserved corrected GL `gl-login-pressed-25`, the complete 2560x1369
+frame PASSES with zero differing pixels and maximum RGBA errors 0/0/0/0.
+Both raw captures have SHA256
+864860977A131238BB8865D5E372A99654B1D72D42312206644D4112B5FF16ED.
+The report and PNGs are in
+`glref-build/captures/login-pressed-parity-25-16`. All 52 formerly missing
+right-edge focus-border pixels now match. Anisotropy remains off; the existing
+local page, synthetic input and pinned reference are unchanged. Enabled, hover
+and held-pressed settled states now have exact comparison evidence. Other
+timed transitions, display configurations and broader UI workflows are not
+certified by these captures. No tolerances, masks or alignment were changed.
+
+## Held-press failure source correction (2026-09-14)
+
+The earlier 7595-pixel held-press finding combined a reference-fixture state
+mismatch with a real native clipping defect. GL `gl-login-states-23` predates
+actual cursor placement: its nominal pressed capture renders the hover-style
+fill, differing from the qualified hover image at only 22 pixels inside the
+button. It is not a qualified held-pressed visual oracle. The earlier conclusion
+that the whole fill mismatch was a confirmed native renderer failure is withdrawn.
+
+The targeted GL-only rerun `glref-build/captures/gl-login-pressed-25` uses the
+existing corrected cursor-placement runner. Its settled pair is byte-identical,
+it stays in STATE_LOGIN_WAIT, and exits zero with Goodbye. Compared with the
+preserved, stable native held-press capture `native-login-pressed-15`, the fill
+and label match; only 52 pixels differ, all at top-origin x=1765, y=1242..1293.
+Maximum channel error is 102. No native renderer code changed during this trace.
+
+Source: LLLayoutStack::draw clips the login container through LLLocalClipRect.
+LLScreenClipRect::updateScissorRegion adds one pixel to the rounded width and
+height. Thus the GL scissor includes the right boundary at x=1765. Native
+LLVKWidgetPaint intersects with the unexpanded layout-panel rectangle, and
+LLVKWidgetGpu converts that to a Vulkan scissor with width right-left and height
+top-bottom. Its exclusive right edge removes that focus-border column. At
+(1765,1250), GL is (142,91,63,255), native is the background (40,40,40,255).
+This clipping-convention mismatch is the remaining confirmed held-press defect;
+it has been traced but not repaired here. Enabled and hover passes are retained.
+
+## Log In interaction-state test results (2026-09-14)
+
+Completed the requested enabled, hovered and held-pressed checks at 2560x1369,
+maximized, anisotropy off, with a working local-page browser and fixed synthetic
+credentials. The existing empty-credential/modal pass remains preserved. No
+production renderer changes were made for this test sequence.
+
+| State | GL evidence | Native evidence | Full-frame zero-tolerance result |
+|---|---|---|---|
+| Enabled, pointer away | gl-login-states-23 | native-login-states-14 | PASS, zero differing pixels |
+| Hover | gl-login-hover-24 | native-login-states-14 | PASS, zero differing pixels |
+| Held pressed, pointer inside | gl-login-states-23 | native-login-pressed-15 | FAIL, 7595 pixels; maximum RGBA errors 152/189/236/0 |
+
+All qualified settled pairs are individually byte-identical. Reports and original
+PNGs are under `glref-build/captures/login-enabled-parity-23-14`,
+`login-hover-parity-24-14`, and `login-pressed-parity-23-15`. Pressed differences
+are confined to Log In and its border, top-origin x=1625..1765, y=1241..1294
+(inclusive). Native input asserts enabled state, pointer capture and pointer
+inside the button. The pressed rendering mismatch is real; its production cause
+has not been isolated or corrected in this test-only work.
+
+Fixture changes: optional LoginButtonStates in the GL runner, selective ButtonStates
+retries, and LLVK_CAPTURE_LOGIN_BUTTON_STATES in the native component. The GL
+driver dismisses obstructing fixture warnings, enters username/password through
+acknowledged LLWindow pasteText calls, then verifies connect_btn is enabled. The
+runner applies hover/held-press input. Native uses Win32 input and asserts the
+session remains PreLogin. Mouse release occurs outside Log In, and temporary
+cursor movement is restored. Qualified GL logs remain at STATE_LOGIN_WAIT until
+shutdown; none enter authentication or STATE_STARTED. GL runs exit zero with
+Goodbye, native capture runs pass Window7/7 and close their windows. No real
+credentials or user-profile settings are used. The reference paste API temporarily
+uses the clipboard and restores it by its existing implementation.
+
+Earlier attempts are retained but invalid: 18 exhausted an overly broad optional
+layout probe; 19 encountered a stale PowerShell helper type; 20 retained a blocking
+URL warning; 21 typed into the wrong field due queued focus handling; 22 rejected
+a binary acknowledgement through the generic LLSD deserializer. The driver now
+uses a bounded explicit header-prefixed binary parser, with framing and minimal
+acknowledgement self-tests. The probe selects owner rectangles only. Synthetic
+WM_MOUSEMOVE alone did not qualify GL hover; actual cursor positioning did.
+Native pressed attempt 14 was unstable; retry 15 with physical cursor placement
+and pointer-inside assertions is stable and retains the mismatch. Enabled and
+hover passes were reused rather than recaptured. Runner syntax, driver self-test,
+Window7/7 and edited-file diagnostics pass; LNK4020 debug-symbol warnings remain.
+
+## Matched anisotropy-off full-frame parity (2026-09-14)
+
+Rechecked Log In against the pinned GL reference with the user's current
+anisotropy-off policy. The external runner now accepts Anisotropy=Off/On/Unchanged.
+For an explicit policy the LEAP driver sets RenderAnisotropic through the existing
+LLViewerControl API at STATE_LOGIN_WAIT and validates the returned value before
+submitting the modal. This changes only the isolated reference profile, not GL
+source or the user's preferences. Native records its live setting in capture
+metadata and does not force it on. NV-00/02/17 apply to matching these inputs.
+
+`glref-build/captures/gl-anisotropy-off-17/gl-anisotropy.xml` confirms value 0;
+`native-anisotropy-off-13` records anisotropy=off. Both clients are maximized at
+2560x1369 and use the same unchanged local HTML page with working browsers.
+Both settled pairs are byte-identical. The complete unmasked frame comparison
+in `glref-build/captures/full-login-parity-off-17-13/comparison.json` PASSES:
+zero differing pixels, maximum RGBA errors 0/0/0/0, and identical raw-image SHA256
+383FCC103AF0CEC2AE8F8796CC5E40BD2122448E9AFC1F80B724B1FEDF20CD5F.
+Log In, Mode, link text, menu, browser, background and modal all match in this state.
+
+The previous Log In edge residual compared GL anisotropy on against native off;
+no hard-coded color/UV correction is needed. Mode's inherited four-pixel button
+padding and visible-line text clipping (using each aligned line's actual right
+edge) are now capture-verified. The former nine "underline" pixels were clipped
+glyph descenders and now match. No resize, alignment, masks or relaxed tolerances
+were applied. Earlier captures remain intact under their original settings.
+
+Driver build/framing self-test and runner preflight passed. Native Window7/7
+passed and capture exited zero; GL recorded the response, exit zero and Goodbye.
+Earlier Widget209/209, GPU10/10 and viewer-link results cover the current native
+code. Existing Window LNK4020 debug-symbol warnings remain. This proves the
+captured settled pre-login state with empty credentials, the tested skin/locale,
+viewport and anisotropy off. Enabled/hovered/pressed Log In, other browser content,
+notification states, locales/DPI and anisotropy-on pixel parity remain separate
+verification gates. No full logged-in viewer run was performed.
+
+## Live anisotropy preference and pending detail checks (2026-09-14)
+
+The user confirmed RenderAnisotropic was enabled when the preserved GL reference
+was captured and is now disabled in Preferences. The reference's saved settings
+also record true; its declaration default of false is not its effective state.
+Do not force native on or alter the old evidence. New off-state visual comparisons
+require a matched off-state GL capture. The attempted hard-coded true override
+in the native capture fixture was removed before this update.
+
+NV-00/01/02/13/14/15/17: native startup binds its loaded global settings group;
+bindSettings publishes changes from that group into the widget tree. preparePaint
+reads RenderAnisotropic each frame. The renderer negotiates samplerAnisotropy on
+the selected physical device; enabled capability alone does not select its use.
+Off uses the existing linear/clamp skin sampler. On uses an anisotropic sampler
+at that device's maxSamplerAnisotropy limit. Requests without enabled capability
+fail explicitly. Glyph and streaming-browser sampling remain unchanged.
+
+Sampling policy is part of the skin-image cache key, so toggles publish distinct
+immutable image/sampler versions instead of mutating in-flight descriptors.
+Existing upload completion and submission-held resource lifetimes apply. This
+does not introduce GL visual helpers or change shaders/texture bytes.
+
+Widget209/209 verifies an authoritative off preference overrides a stale on
+startup copy and live off/on/off changes reach painting. GPU10/10 verifies
+unsupported-capability rejection, anisotropic publication/rendering, and switching
+back to a distinct bilinear resource. Window7/7 and viewer relink pass; diagnostics
+are clean. Existing LNK4020 debugger-symbol warnings remain. No user settings were
+written and no new matching-settings visual parity claim is made here.
+
+Related pending detail corrections: base button padding is now 4 pixels, matching
+LLButton::Params and fixing the Mode dropdown's displaced label. Non-scrolling
+text clipping now uses visible line rectangles (including aligned right edges),
+the reference top adjustment and inclusive scissor extent. The nine former
+"underline" residuals were glyph descenders clipped at the widget edge.
+`native-login-details-12` eliminated the dropdown and descender discrepancies but
+exposed a right-aligned Mode-label clip error, subsequently corrected to use each
+line's right edge. That final clip change needs a fresh matched-settings capture.
+The 30-pixel Log In edge difference was measured with mismatched anisotropy states;
+its closure remains unverified until both backends use the same preference.
+
+## Login defects and working-browser comparison (2026-09-14)
+
+Requested scope: five traced login defects and a working-browser comparison.
+NV-00/01/02/06/11/12/14/15/17; reference remains
+`59108e15a1f8f94d2da7c674d937d19f5cf9450d`, with no GL source edits.
+
+Source contracts and native changes:
+
+- LLPanel and LLButton image drawing pass final colors through color4f's clamped,
+   truncated UNORM8 representation. Native panel tints and button image tints now
+   use that encoding after transparency/fade multiplication. The login background
+   0.16 becomes 40/255; disabled-image alpha 0.5 becomes 127/255. Source assets,
+   shader layouts and resource lifetime contracts are unchanged.
+- LLMenuBarGL::arrange sizes the login menu to visible entries. Native's standalone
+   login bar now fits its entries over black header backing; supplied embedded bar
+   rectangles remain authoritative. Solid menu tints use UNORM8 precision too.
+- Native initializes the start-location combo from command-line, next-login and
+   saved login settings, choosing the existing last/home items or preserving
+   explicit location text. This fixes the observed default placeholder mismatch;
+   full grid-qualified SLURL validation/normalization remains part of login services.
+- Remove-user enablement requires a selected saved combo item whose label still
+   matches the editor, plus PreLogin. Typed or edited usernames do not enable it.
+   This does not add a credential-store implementation or certify deletion itself.
+- LLPluginClassMedia caps requested dimensions at 2048. LLMediaCtrl defaults to
+   stretch-to-fill with aspect preservation; calcOffsetsAndSize centers the result.
+   Native browser start/resize now cap surfaces at 2048 and skip redundant resizes.
+   Native displayRect owns the aspect-preserving geometry used by paint and pointer,
+   hover and wheel offset mapping. At 2560x1199 with 2048x1199 media it yields
+   x=256..2304. Surface epoch invalidation, borrowed-pixel copying, opaque RGB upload,
+   completion-based publication and GPU resource retirement remain unchanged.
+- The resulting capture exposed a one-pixel line-editor baseline error. Native now
+   uses the reference ceil(ascender)+ceil(descender) line height for vertical padding.
+
+The existing window fixture has an opt-in LLVK_NOTIFICATION_CAPTURE_PAGE mode:
+it starts a real native browser, queues the same synthetic MediaPluginFailed alert
+as the GL driver, and waits for a published expected page color and capped width.
+The original missing-helper regression stays unchanged outside that mode. The
+isolated mode explicitly shuts down its separate cache owner before returning.
+Early captures 8/9 terminated after image creation because that teardown was
+initially omitted; they are not accepted lifecycle evidence. A debugger attempt
+also failed while reading the existing damaged PDB; no backtrace was relied on.
+
+Verification: Widget209/209 includes menu extent, native browser paint geometry,
+wide/tall aspect calculations, last-location initialization, and saved/typed/edited
+username enablement. Window7/7 passes normal browser lifecycle, mouse/key/wheel and
+auxiliary-window workflows. The working-browser capture mode also exits zero with
+7/7 checks. Viewer relink and editor diagnostics pass. LNK4020 PDB warnings remain.
+
+Preserved GL `layout-probe-16` versus `native-working-browser-11`, both maximized
+2560x1369 and using the unchanged loopback notification_background.html, yields
+856 full-frame differing pixels (formerly 1025739). Native's settled pair is
+byte-identical. The browser area, exposed panel background, menu, logo, trash
+button, username/password/location fields and complete modal now match exactly.
+Remaining differences: 817 pixels in Mode-selector text, 30 at the Log In image's
+right edge (maximum channel error 3), and 9 in a link underline. Results and PNGs
+are in `glref-build/captures/full-login-parity-11`. Full-login exact parity is not
+claimed. Working browser parity is established for this static page/viewport;
+arbitrary web pages, other DPI/zoom/decoupled-size modes, popup dialogs and browser
+features require their own matched workflows. No tolerance, alignment or masking
+was used to make the full-frame result pass.
+
 ## Focus encoding and exact captured modal match (2026-09-14)
 
 NV-00/01/02/06/12/14/17: the pinned GL button focus-border path uses

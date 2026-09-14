@@ -212,10 +212,7 @@ std::optional<std::size_t> LLVKWidgetTree::plainTextIndexAt(Id id,std::int32_t x
         const auto begin = std::min(line.begin,text.text.size());
         auto end = std::min(line.end,text.text.size());
         if (end > begin && text.text[end-1] == U'\n') --end;
-        const auto offset = node->control->params.font->hitTest(text.text,begin,
-            float(std::max(0,x-line.left-document->params.rect.left)),float(std::max(0,line.right-line.left)),
-            end-begin+1,text.params.layout.scaleX,true,text.params.layout.tabularNumbers,error);
-        return offset ? std::optional(begin+*offset) : std::nullopt;
+        return text.hitIndex(*node->control->params.font,line,float(std::max(0,x-line.left-document->params.rect.left)),true,error);
     }
     return text.text.size();
 }
@@ -251,11 +248,9 @@ std::optional<std::size_t> LLVKWidgetTree::plainTextLinkAt(Id id,std::int32_t x,
         const auto left = line.left+document->params.rect.left;
         if (y < line.bottom+document->params.rect.bottom || y >= line.top+document->params.rect.bottom ||
             x < left || x >= line.right+document->params.rect.left) continue;
-        const auto count = std::min(line.end,text.text.size())-line.begin;
-        const auto offset = node->control->params.font->hitTest(text.text,line.begin,float(x-left),float(line.right-line.left),
-            count+1,text.params.layout.scaleX,false,text.params.layout.tabularNumbers,error);
+        const auto offset=text.hitIndex(*node->control->params.font,line,float(x-left),false,error);
         if (!offset) return std::nullopt;
-        const auto character = line.begin+*offset;
+        const auto character = *offset;
         for (std::size_t index = 0; index < text.links.size(); ++index)
             if (character >= text.links[index].begin && character < text.links[index].end) return index;
         return std::nullopt;
@@ -294,12 +289,19 @@ std::optional<LLVKPlainControl> LLVKWidgetTree::resolvePlainText(const LLVKPlain
     if (state.params.parseUrls && !state.params.parseWebLinks && requiresRichText(resolved))
     { error = "Native text requires rich URL/issue/embedded-content processing, which is not implemented"; return std::nullopt; }
     std::vector<LLVKWebText::Link> links;
+    std::map<std::size_t,std::shared_ptr<const LLVKWidgetImage>> icons;
     if (state.params.parseWebLinks)
     {
         auto parsed = LLVKWebText::parse(resolved,error);
         if (!parsed) return std::nullopt;
         resolved = wstring_to_utf8str(LLWString(parsed->text.begin(),parsed->text.end()));
         links = std::move(parsed->links);
+        for (const auto& icon : parsed->icons)
+        {
+            const auto image=findImage(icon.name,error);
+            if (!image) return std::nullopt;
+            icons.emplace(icon.position,image);
+        }
     }
     resolved = utf8str_truncate(resolved,static_cast<std::int32_t>(state.params.maximumBytes));
     const auto wide = utf8str_to_wstring(resolved);
@@ -312,6 +314,8 @@ std::optional<LLVKPlainControl> LLVKWidgetTree::resolvePlainText(const LLVKPlain
     for (auto& link : links) link.end = std::min(link.end,output.text.size());
     std::erase_if(links,[](const auto& link) { return link.begin >= link.end; });
     output.links = std::move(links);
+    std::erase_if(icons,[&](const auto& icon) { return icon.first>=output.text.size(); });
+    output.icons=std::move(icons);
     output.pressedLink.reset();
     output.value = std::move(resolved);
     output.layout.reset();
@@ -320,6 +324,62 @@ std::optional<LLVKPlainControl> LLVKWidgetTree::resolvePlainText(const LLVKPlain
     output.selecting = false;
     ++output.textGeneration;
     return output;
+}
+
+std::optional<LLVKPlainTextLayout::Document> LLVKPlainControl::prepareDocument(std::shared_ptr<LLVKFont> font,
+    const LLVKPlainTextLayout::Options& options, std::int32_t height, std::string& error) const
+{
+    if (icons.empty()) return LLVKPlainTextLayout::document(text,*font,options,height,params.verticalPadding,params.vertical,error);
+    LLVKStyledTextSegment::Params defaults;
+    defaults.font=font; defaults.scaleX=options.scaleX; defaults.scaleY=options.scaleY;
+    defaults.tabularNumbers=options.tabularNumbers;
+    auto styled=LLVKStyledTextDocument::create(text,defaults,error);
+    if (!styled) return std::nullopt;
+    for (const auto& [position,image] : icons)
+    {
+        auto segment=defaults;
+        segment.begin=position; segment.end=position+1;
+        segment.kind=LLVKStyledTextSegment::Kind::Image; segment.image=image;
+        if (!styled->overlay(segment,error)) return std::nullopt;
+    }
+    for (std::size_t position=0; position<text.size(); ++position)
+        if (text[position]==U'\n')
+        {
+            auto segment=defaults; segment.begin=position; segment.end=position+1;
+            segment.kind=LLVKStyledTextSegment::Kind::LineBreak;
+            if (!styled->overlay(segment,error)) return std::nullopt;
+        }
+    if (!styled->reflow(options,error)) return std::nullopt;
+    return LLVKPlainTextLayout::document(*styled->lines(),options,height,params.verticalPadding,params.vertical,error);
+}
+
+std::optional<std::size_t> LLVKPlainControl::hitIndex(LLVKFont& font,const LLVKPlainTextLayout::Line& line,
+    float pixels,bool nearest,std::string& error) const
+{
+    auto end=std::min(line.end,text.size());
+    if (end>line.begin && text[end-1]==U'\n') --end;
+    float left=0.f;
+    for (auto begin=line.begin; begin<end; )
+    {
+        const auto icon=icons.lower_bound(begin);
+        if (icon!=icons.end() && icon->first==begin)
+        {
+            const auto width=float(icon->second->width()+3);
+            if (pixels<left+width) return begin+(nearest && pixels-left>=width*0.5f ? 1 : 0);
+            left+=width; ++begin; continue;
+        }
+        const auto runEnd=icon==icons.end() ? end : std::min(end,icon->first);
+        const auto measured=font.measureRun(text,begin,runEnd-begin,params.layout.scaleX,true,params.layout.tabularNumbers,error);
+        if (!measured) return std::nullopt;
+        if (pixels<left+measured->width || runEnd==end)
+        {
+            const auto offset=font.hitTest(text,begin,std::max(0.f,pixels-left),measured->width,
+                runEnd-begin+1,params.layout.scaleX,nearest,params.layout.tabularNumbers,error);
+            return offset ? std::optional(begin+*offset) : std::nullopt;
+        }
+        left+=measured->width; begin=runEnd;
+    }
+    return end;
 }
 
 bool LLVKWidgetTree::reflowPlainText(Id id, std::string& error)
@@ -334,8 +394,7 @@ bool LLVKWidgetTree::reflowPlainText(Id id, std::string& error)
     { error = "Native plain text rectangle outside supported range"; return false; }
     auto options = node->plainText->params.layout;
     options.width = static_cast<std::int32_t>(width);
-    auto document = LLVKPlainTextLayout::document(node->plainText->text,*node->control->params.font,options,
-        static_cast<std::int32_t>(height),node->plainText->params.verticalPadding,node->plainText->params.vertical,error);
+    auto document = node->plainText->prepareDocument(node->control->params.font,options,static_cast<std::int32_t>(height),error);
     if (!document) return false;
     const auto rect = document->rectangle;
     const Id documentId = node->plainText->document;

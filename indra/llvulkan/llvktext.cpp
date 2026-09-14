@@ -91,6 +91,16 @@ std::optional<LLVKPlainTextLayout::Document> LLVKPlainTextLayout::document(std::
     { error = "Invalid native text document dimensions or alignment"; return std::nullopt; }
     auto lines = plain(text,font,options,error);
     if (!lines) return std::nullopt;
+    return document(std::move(*lines),options,height,verticalPadding,alignment,error);
+}
+
+std::optional<LLVKPlainTextLayout::Document> LLVKPlainTextLayout::document(std::vector<Line> prepared,
+    const Options& options, std::int32_t height, std::int32_t verticalPadding,
+    LLVKFont::VerticalAlign alignment, std::string& error)
+{
+    error.clear();
+    if (prepared.empty() || height<0) { error="Native text document requires lines and a nonnegative height"; return std::nullopt; }
+    auto lines=std::optional(std::move(prepared));
     std::int64_t left = lines->front().left, right = lines->front().right;
     std::int64_t bottom = lines->front().bottom, top = lines->front().top;
     for (const auto& line : *lines)
@@ -152,6 +162,8 @@ std::optional<LLVKWebText> LLVKWebText::parse(std::string_view markup, std::stri
         "<nolink>.*?</nolink>|\\[(?:https?|ftp|secondlife|hop)://[^\\s]+[ \\t]+[^\\]]+\\]|(?:https?|ftp)://([^\\s/?\\.#]+\\.?)+\\.\\w+(:\\d+)?(/[^\\s]*)?",
         boost::regex::perl|boost::regex::icase);
     static const boost::regex webLabel("(?:https?|ftp)://|www\\.",boost::regex::perl|boost::regex::icase);
+    static const boost::regex trustedSl("https?://([-\\w.]*\\.)?(secondlife\\.com|lindenlab\\.com|tilia-inc\\.com|secondlifegrid\\.net|secondlife\\.io|secondlife-status\\.statuspage\\.io)(?::[0-9]{1,5})?(?:/\\S*)?",boost::regex::perl|boost::regex::icase);
+    static const boost::regex trustedFs("https?://([-\\w.]*\\.)?(firestormviewer\\.org|phoenixviewer\\.com)(?::[0-9]{1,5})?(?:/\\S*)?",boost::regex::perl|boost::regex::icase);
     static const std::string allowed = []
     {
         std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~!$?&()*+,@:;=/%#";
@@ -195,6 +207,12 @@ std::optional<LLVKWebText> LLVKWebText::parse(std::string_view markup, std::stri
             const auto target = LLURI::escape(found,allowed,true);
             LLUriParser normalized(target);
             if (!normalized.normalize()) { append(found); append(trailing); continue; }
+            const auto icon=boost::regex_match(target,trustedSl) ? "Hand" : boost::regex_match(target,trustedFs) ? "fstrusted" : "";
+            if (*icon)
+            {
+                result.icons.push_back({result.text.size(),icon});
+                result.text.push_back(U' ');
+            }
             normalized.extractParts();
             std::string label;
             normalized.glueFirst(label);

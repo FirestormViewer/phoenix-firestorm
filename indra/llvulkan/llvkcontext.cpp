@@ -266,7 +266,12 @@ bool LLVKContext::createDevice(VkSurfaceKHR surface, std::string& error)
     dynamic_rendering.dynamicRendering = VK_TRUE;
 
     VkDeviceCreateInfo create_info{};
+    VkPhysicalDeviceFeatures supported{},enabled{};
+    vkGetPhysicalDeviceFeatures(mPhysicalDevice,&supported);
+    enabled.samplerAnisotropy=supported.samplerAnisotropy;
+    mSamplerAnisotropy=enabled.samplerAnisotropy==VK_TRUE;
     create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    create_info.pEnabledFeatures=&enabled;
     create_info.pNext = &dynamic_rendering;
     create_info.queueCreateInfoCount = (uint32_t)queue_infos.size();
     create_info.pQueueCreateInfos = queue_infos.data();

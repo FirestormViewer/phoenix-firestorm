@@ -1,5 +1,6 @@
 #include "llvkwidgetpaint.h"
 #include "llvkmenu.h"
+#include "llvkbrowsersurface.h"
 #include "v3color.h"
 #include "llstring.h"
 #include <algorithm>
@@ -487,6 +488,11 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             auto color = image ? (panel.backgroundOpaque ? panel.opaqueImageOverlay.get() : panel.transparentImageOverlay.get()) :
                 (panel.backgroundOpaque ? panel.opaqueColor.get() : panel.transparentColor.get());
             color[3] *= input.button.transparency;
+            for (auto& channel : color)
+            {
+                if (!std::isfinite(channel)) { error="Native panel color is nonfinite"; return false; }
+                channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+            }
             if (!append({0,0,width,height},color,image)) return false;
         }
         if (!alertShadow(0,1.f)) return false;
@@ -576,7 +582,8 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             if (browser == input.browsers.end() || !browser->second) output.pendingBrowsers.push_back(id);
             else
             {
-                if (!append({0,0,width,height},{1,1,1,input.button.drawAlpha},browser->second)) return false;
+                const auto display=LLVKBrowserSurface::displayRect(width,height,browser->second->width(),browser->second->height());
+                if (!append({display.left,display.bottom,display.right,display.top},{1,1,1,input.button.drawAlpha},browser->second)) return false;
                 output.commands.back().streamingImage = true;
                 const auto epoch = input.browserEpochs.find(id);
                 if (epoch != input.browserEpochs.end()) output.commands.back().imageEpoch = epoch->second;
@@ -628,30 +635,67 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             if (searchHighlighted && !append({0,0,width,height},input.searchBackground.get())) return false;
             const auto* document = tree.get(text.document);
             if (!document || !text.layout) { error = "Native text paint document is missing"; return false; }
-            clip = intersect(clip,*screen);
+            const auto visibleClip = intersect(clip,*screen);
             auto color = text.readOnly ? text.params.readOnlyColor.get() : text.params.textColor.get();
             color[3] *= input.button.drawAlpha;
             std::optional<std::size_t> lastVisible;
+            std::optional<Rect> visibleLines;
             for (std::size_t index=0; index<text.layout->lines.size(); ++index)
             {
                 const auto& line=text.layout->lines[index];
                 const auto bottom=line.bottom+document->params.rect.bottom+screen->bottom;
                 const auto top=line.top+document->params.rect.bottom+screen->bottom;
-                if (text.params.clipPartial ? bottom>=clip.bottom && top<=clip.top : bottom<clip.top && top>clip.bottom) lastVisible=index;
+                if (text.params.clipPartial ? bottom>=visibleClip.bottom && top<=visibleClip.top : bottom<visibleClip.top && top>visibleClip.bottom)
+                {
+                    lastVisible=index;
+                    const Rect lineRect{screen->left+document->params.rect.left+line.left,bottom,
+                        screen->left+document->params.rect.left+line.right,top};
+                    if (!visibleLines) visibleLines=lineRect;
+                    else visibleLines=Rect{std::min(visibleLines->left,lineRect.left),std::min(visibleLines->bottom,bottom),
+                        std::max(visibleLines->right,lineRect.right),std::max(visibleLines->top,top)};
+                }
+            }
+            if (visibleLines)
+            {
+                if (visibleLines->top-screen->bottom>2) visibleLines->top-=2;
+                ++visibleLines->right; ++visibleLines->top;
+                clip=intersect(clip,*visibleLines);
             }
             for (std::size_t index=0; index<text.layout->lines.size(); ++index)
             {
                 const auto& sourceLine=text.layout->lines[index];
                 const auto bottom=sourceLine.bottom+document->params.rect.bottom+screen->bottom;
                 const auto top=sourceLine.top+document->params.rect.bottom+screen->bottom;
-                if (text.params.clipPartial ? bottom<clip.bottom || top>clip.top : bottom>=clip.top || top<=clip.bottom) continue;
-                const auto begin = std::min(sourceLine.begin,text.text.size()), end = std::min(sourceLine.end,text.text.size());
+                if (text.params.clipPartial ? bottom<visibleClip.bottom || top>visibleClip.top : bottom>=visibleClip.top || top<=visibleClip.bottom) continue;
+                const auto lineEnd=std::min(sourceLine.end,text.text.size());
+                float runLeft=float(sourceLine.left+document->params.rect.left);
+                for (auto begin=std::min(sourceLine.begin,text.text.size()); begin<lineEnd; )
+                {
+                const auto icon=text.icons.lower_bound(begin);
+                if (icon!=text.icons.end() && icon->first==begin)
+                {
+                    const auto imageWidth=static_cast<int>(icon->second->width()),imageHeight=static_cast<int>(icon->second->height());
+                    const auto imageBottom=static_cast<int>((sourceLine.top+sourceLine.bottom)*0.5f)+document->params.rect.bottom-imageHeight/2;
+                    if (!append({static_cast<int>(runLeft),imageBottom,static_cast<int>(runLeft)+imageWidth,imageBottom+imageHeight},
+                        {1,1,1,input.button.drawAlpha},icon->second)) return false;
+                    runLeft+=imageWidth+3;
+                    ++begin;
+                    continue;
+                }
+                const auto end=icon==text.icons.end() ? lineEnd : std::min(lineEnd,icon->first);
                 auto count = end-begin;
                 if (count && text.text[begin+count-1] == U'\n') --count;
                 LLVKFont::LineOptions options;
-                options.x = float(sourceLine.left+document->params.rect.left);
+                options.x = runLeft;
                 options.y = float(sourceLine.bottom+document->params.rect.bottom);
                 options.vertical = LLVKFont::VerticalAlign::Bottom;
+                options.maxPixels=std::max(0,static_cast<int>(document->params.rect.right-runLeft));
+                if (!text.icons.empty())
+                {
+                    const auto& metrics=node->control->params.font->metrics();
+                    const auto fontHeight=static_cast<int>(std::ceil(metrics.ascender)+std::ceil(metrics.descender));
+                    options.y=float(sourceLine.top-fontHeight+document->params.rect.bottom);
+                }
                 if (text.params.useEllipses)
                 {
                     options.ellipses=true;
@@ -674,6 +718,9 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                 }
                 auto line = node->control->params.font->layoutLine(text.text,begin,count,options,error);
                 if (!line) return false;
+                const auto measured=node->control->params.font->measureRun(text.text,begin,count,1.f,true,text.params.layout.tabularNumbers,error);
+                if (!measured) return false;
+                runLeft+=measured->width;
                 if (text.links.empty() && !selection)
                 { if (!append({},color,{},std::move(line))) return false; }
                 else
@@ -709,10 +756,12 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                             const auto left = static_cast<std::int32_t>(std::floor(initial.left-initial.glyph->raster.bearingX+0.5f));
                             const auto right = static_cast<std::int32_t>(std::floor(final.left-final.glyph->raster.bearingX+final.glyph->raster.advanceX+0.5f));
                             const auto bottom = static_cast<std::int32_t>(std::floor(line->baselinePixelY-std::floor(node->control->params.font->metrics().descender)));
-                            if (right > left && !append({left,bottom,right,bottom+1},foreground)) return false;
+                            if (right > left && !append({left,bottom-1,right,bottom},foreground)) return false;
                         }
                         first = last;
                     }
+                }
+                begin=end;
                 }
             }
             if (text.params.selectable && !text.readOnly && tree.keyboardFocus()==id && input.editor.applicationFocused &&
@@ -799,6 +848,9 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                 const auto amount = current->layoutPanel->visibleAmount;
                 if (vertical) visible->bottom = visible->top-static_cast<std::int32_t>(std::floor((visible->top-visible->bottom)*amount+0.5f));
                 else visible->right = visible->left+static_cast<std::int32_t>(std::floor((visible->right-visible->left)*amount+0.5f));
+                if (visible->left>=visible->right || visible->bottom>=visible->top) continue;
+                if (visible->right<clip.right) ++visible->right;
+                if (visible->top<clip.top) ++visible->top;
                 childClip = intersect(childClip,*visible);
             }
             if (childClip.left < childClip.right && childClip.bottom < childClip.top && !self(self,*child,childClip)) return false;

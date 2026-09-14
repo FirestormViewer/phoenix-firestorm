@@ -31,6 +31,7 @@ public:
         std::optional<std::array<LLVKColor::Value,3>> triangleColors;
     };
     std::vector<Command> commands;
+    bool skinAnisotropy = false;
     std::vector<Id> pendingBrowsers;
     static std::optional<LLVKWidgetPaint> prepare(LLVKWidgetTree& tree, Id root, const Input& input, std::string& error);
 };

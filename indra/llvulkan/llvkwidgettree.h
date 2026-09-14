@@ -662,6 +662,7 @@ public:
     bool hideComboList(Id id);
     bool refreshComboText(Id id, std::optional<LLVKLineEditor::Key> key, std::string& error);
     float focusFlashAmount() const noexcept;
+    void triggerFocusFlash() noexcept;
     std::optional<Id> createIcon(const Params& view, const LLVKControl::Params& control,
                                  const LLVKIcon::Params& icon, Id parent, std::string& error);
     std::optional<Id> createButton(const Params& view, const LLVKControl::Params& control,

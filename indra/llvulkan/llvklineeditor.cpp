@@ -113,6 +113,7 @@ std::optional<LLVKWidgetTree::EditorDraw> LLVKWidgetTree::prepareLineEditor(Id i
             {
                 auto color = view.focusColor;
                 color[3] = view.transparency;
+                for (auto& channel : color) channel=static_cast<unsigned>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
                 output.parts.push_back({{-view.focusWidth,-view.focusWidth,width+view.focusWidth,height+view.focusWidth},color,image,true});
             }
             output.parts.push_back({{0,0,width,height},{1,1,1,view.transparency},image});
@@ -120,8 +121,8 @@ std::optional<LLVKWidgetTree::EditorDraw> LLVKWidgetTree::prepareLineEditor(Id i
     }
     auto color = editor.readOnly ? params.readOnlyColor.get() : node->control->tentative ? params.tentativeColor.get() : params.textColor.get();
     color[3] = view.drawAlpha;
-    const auto border = params.border.thickness;
-    const auto lineHeight = static_cast<std::int32_t>(std::floor(font->metrics().lineHeight+0.5f));
+    constexpr int border = 0;
+    const auto lineHeight = static_cast<std::int32_t>(std::ceil(font->metrics().ascender)+std::ceil(font->metrics().descender));
     const auto verticalPad = (height-2*border-lineHeight)/2;
     const auto cursorBottom = border+2, cursorTop = height-border-1;
     const float textBottom = float(border+verticalPad);
@@ -181,6 +182,7 @@ std::optional<LLVKWidgetTree::EditorDraw> LLVKWidgetTree::prepareLineEditor(Id i
             const auto selectedWidth = std::min(rounded(measured->width),text.rightEdge()-rounded(rightPixel));
             auto highlight = params.highlightColor.get();
             highlight[3] = view.drawAlpha;
+            for (auto& channel : highlight) channel=static_cast<unsigned>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
             output.parts.push_back({{rounded(rightPixel),cursorBottom,rounded(rightPixel)+selectedWidth,cursorTop},highlight});
             if (!run(display,text.scroll()+rendered,count,{1-color[0],1-color[1],1-color[2],view.drawAlpha})) return std::nullopt;
         }
@@ -617,7 +619,7 @@ std::optional<LLVKWidgetTree::PreeditLocation> LLVKWidgetTree::linePreeditLocati
     if (!rightPixel) return std::nullopt;
     const auto width = std::int64_t(node->params.rect.right)-node->params.rect.left;
     const auto height = std::int64_t(node->params.rect.top)-node->params.rect.bottom;
-    const auto right = std::max(std::int64_t(*leftPixel),std::min(std::int64_t(*rightPixel),width-node->lineEditor->params.border.thickness));
+    const auto right = std::max(std::int64_t(*leftPixel),std::min(std::int64_t(*rightPixel),width));
     const auto scaled = [&](std::int64_t coordinate, float scale, std::int32_t& output)
     {
         const double rounded = std::floor(double(float(coordinate)*scale)+0.5);

@@ -4,7 +4,19 @@ param(
     [Parameter(Mandatory=$true)][string]$CaptureHelper,
     [Parameter(Mandatory=$true)][string]$OutputDirectory,
     [switch]$PrepareOnly,
-    [switch]$Maximized
+    [switch]$Maximized,
+    [switch]$LoginButtonStates,
+    [ValidatePattern('^[A-Za-z][A-Za-z0-9]*$')][string]$Notification='MediaPluginFailed',
+    [hashtable]$Substitutions=@{PLUGIN='media_plugin_cef'},
+    [string]$InputText='',
+    [switch]$SelectInput,
+    [switch]$CheckIgnore,
+    [ValidatePattern('^[a-z]{2}(-[A-Z]{2})?$')][string]$Language='en',
+    [ValidateRange(640,7680)][int]$Width=1024,
+    [ValidateRange(480,4320)][int]$Height=738,
+    [ValidateRange(0.75,2.0)][double]$UiScale=1.0,
+    [ValidateSet('enabled','hover','pressed','focus-lost','focus-regained')][string[]]$ButtonStates=@('enabled','hover','pressed'),
+    [ValidateSet('Unchanged','Off','On')][string]$Anisotropy='Unchanged'
 )
 $ErrorActionPreference='Stop'
 foreach ($executable in $Viewer,$Driver,$CaptureHelper) {
@@ -12,6 +24,29 @@ foreach ($executable in $Viewer,$Driver,$CaptureHelper) {
 }
 if (Test-Path -LiteralPath $OutputDirectory) { throw 'Refusing to overwrite capture evidence.' }
 $root=[IO.Directory]::CreateDirectory($OutputDirectory).FullName
+$requestWriter=[Xml.XmlWriter]::Create((Join-Path $root 'capture-request.xml'))
+try {
+    $requestWriter.WriteStartElement('llsd'); $requestWriter.WriteStartElement('map')
+    $requestWriter.WriteElementString('key','name'); $requestWriter.WriteElementString('string',$Notification)
+    $requestWriter.WriteElementString('key','substitutions'); $requestWriter.WriteStartElement('map')
+    foreach ($key in ($Substitutions.Keys | Sort-Object)) {
+        $requestWriter.WriteElementString('key',[string]$key); $requestWriter.WriteElementString('string',[string]$Substitutions[$key])
+    }
+    $requestWriter.WriteEndElement()
+    if ($InputText) { $requestWriter.WriteElementString('key','input'); $requestWriter.WriteElementString('string',$InputText) }
+    if ($SelectInput) { $requestWriter.WriteElementString('key','select'); $requestWriter.WriteElementString('boolean','true') }
+    if ($CheckIgnore) { $requestWriter.WriteElementString('key','checkIgnore'); $requestWriter.WriteElementString('boolean','true') }
+    $requestWriter.WriteElementString('key','display'); $requestWriter.WriteStartElement('map')
+    $requestWriter.WriteElementString('key','Language'); $requestWriter.WriteElementString('string',$Language)
+    $requestWriter.WriteElementString('key','WindowWidth'); $requestWriter.WriteElementString('integer',[string]$Width)
+    $requestWriter.WriteElementString('key','WindowHeight'); $requestWriter.WriteElementString('integer',[string]$Height)
+    $requestWriter.WriteElementString('key','UIScaleFactor'); $requestWriter.WriteElementString('real',$UiScale.ToString([Globalization.CultureInfo]::InvariantCulture))
+    if ($Anisotropy -ne 'Unchanged') {
+        $requestWriter.WriteElementString('key','RenderAnisotropic'); $requestWriter.WriteElementString('boolean',($Anisotropy -eq 'On').ToString().ToLowerInvariant())
+    }
+    $requestWriter.WriteEndElement()
+    $requestWriter.WriteEndElement(); $requestWriter.WriteEndElement()
+} finally { $requestWriter.Dispose() }
 $pageServer=$null
 try {
 $pageStart=[Diagnostics.ProcessStartInfo]::new((Get-Command node -ErrorAction Stop).Source)
@@ -41,13 +76,17 @@ $start.Environment['APPDATA']=$roaming
 $start.Environment['LOCALAPPDATA']=$local
 $start.Environment.Remove('VULKANSTORM_CAPTURE') | Out-Null
 $start.Environment.Remove('VULKANSTORM_UITEST') | Out-Null
+$start.Environment.Remove('LLVK_CAPTURE_ANISOTROPY') | Out-Null
+$start.Environment.Remove('LLVK_CAPTURE_LOGIN_BUTTON_STATES') | Out-Null
+if ($LoginButtonStates) { $start.Environment['LLVK_CAPTURE_LOGIN_BUTTON_STATES']='1' }
+if ($Anisotropy -ne 'Unchanged') { $start.Environment['LLVK_CAPTURE_ANISOTROPY']=if ($Anisotropy -eq 'On') { '1' } else { '0' } }
 $settings=[ordered]@{
     RenderBackend=@('String','string','OpenGL'); AutoLogin=@('Boolean','boolean','false')
     NoAudio=@('Boolean','boolean','true'); EnableVoiceChat=@('Boolean','boolean','false')
     FirstRunThisInstall=@('Boolean','boolean','false'); WindowMaximized=@('Boolean','boolean',$Maximized.IsPresent.ToString().ToLowerInvariant())
-    WindowWidth=@('S32','integer','1024'); WindowHeight=@('S32','integer','738')
-    Language=@('String','string','en'); SkinCurrent=@('String','string','default')
-    SkinCurrentTheme=@('String','string','default'); UIScaleFactor=@('F32','real','1.0')
+    WindowWidth=@('S32','integer',[string]$Width); WindowHeight=@('S32','integer',[string]$Height)
+    Language=@('String','string',$Language); SkinCurrent=@('String','string','default')
+    SkinCurrentTheme=@('String','string','default'); UIScaleFactor=@('F32','real',$UiScale.ToString([Globalization.CultureInfo]::InvariantCulture))
     LoginPage=@('String','string','about:blank')
     ForceLoginURL=@('String','string',$pageUrl)
     FSShowWhitelistReminder=@('Boolean','boolean','false')
@@ -108,6 +147,9 @@ try {
     $deadline=[DateTime]::UtcNow.AddMinutes(3)
     while (!(Test-Path -LiteralPath $submission)) {
         if ($process.HasExited) { throw "Reference exited before notification: $($process.ExitCode)" }
+        if ((Test-Path -LiteralPath $log) -and (Select-String -LiteralPath $log -Pattern 'notification_leap.exe.*exited with code [1-9]' -Quiet)) {
+            throw 'Reference capture driver failed; retained log contains the diagnostic.'
+        }
         $remaining=[int]($deadline-[DateTime]::UtcNow).TotalMilliseconds
         if ($remaining -le 0) { throw 'No notification submission within three minutes.' }
         $watcher.WaitForChanged([IO.WatcherChangeTypes]::Created,[Math]::Min($remaining,1000)) | Out-Null
@@ -126,22 +168,116 @@ public static class NotificationCaptureWindowState {
 '@
     }
     [NotificationCaptureWindowState]::SetForegroundWindow($window) | Out-Null
+    if (!$Maximized) {
+        if (-not ('NotificationClientSize' -as [type])) { Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+public static class NotificationClientSize {
+    [StructLayout(LayoutKind.Sequential)] public struct Rect { public int left, top, right, bottom; }
+    [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr window,int command);
+    [DllImport("user32.dll")] public static extern bool GetClientRect(IntPtr window,out Rect rectangle);
+    [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr window,out Rect rectangle);
+    [DllImport("user32.dll")] public static extern bool SetWindowPos(IntPtr window,IntPtr after,int x,int y,int width,int height,uint flags);
+}
+'@
+        }
+        [NotificationClientSize]::ShowWindow($window,9) | Out-Null
+        $client=[NotificationClientSize+Rect]::new(); $outer=[NotificationClientSize+Rect]::new()
+        if (![NotificationClientSize]::GetClientRect($window,[ref]$client) -or ![NotificationClientSize]::GetWindowRect($window,[ref]$outer)) { throw 'Cannot query restored reference geometry.' }
+        if (![NotificationClientSize]::SetWindowPos($window,[IntPtr]::Zero,0,0,$Width+$outer.right-$outer.left-$client.right,$Height+$outer.bottom-$outer.top-$client.bottom,6)) { throw 'Cannot resize reference client.' }
+        if (![NotificationClientSize]::GetClientRect($window,[ref]$client) -or $client.right -ne $Width -or $client.bottom -ne $Height) { throw 'Reference client dimensions do not match request.' }
+    }
     $actualMaximized=[NotificationCaptureWindowState]::IsZoomed($window)
-    if ($Maximized -and !$actualMaximized) { throw 'Reference window is not maximized; refusing mismatched capture.' }
+    if ($Maximized.IsPresent -ne $actualMaximized) { throw 'Reference maximization state differs from request.' }
     $settledAfter=[DateTime]::UtcNow.AddSeconds(2)
     $index=0
     do {
-        $file=Join-Path $root ("gl-MediaPluginFailed-$index.rgba")
+        $file=Join-Path $root ("gl-$Notification-$index.rgba")
         & $CaptureHelper $window.ToInt64().ToString() $file
         if ($LASTEXITCODE -ne 0) { throw 'Windows Graphics Capture failed.' }
         ++$index
     } while ([DateTime]::UtcNow -lt $settledAfter -and $index -lt 30)
     foreach ($state in 0,1) {
-        & $CaptureHelper $window.ToInt64().ToString() (Join-Path $root "gl-MediaPluginFailed-settled-$state.rgba")
+        & $CaptureHelper $window.ToInt64().ToString() (Join-Path $root "gl-$Notification-settled-$state.rgba")
         if ($LASTEXITCODE -ne 0) { throw 'Settled capture failed.' }
     }
     [NotificationCaptureWindowState]::PostMessage($window,0x100,[IntPtr]13,[IntPtr]1) | Out-Null
     [NotificationCaptureWindowState]::PostMessage($window,0x101,[IntPtr]13,[IntPtr]1) | Out-Null
+    if ($LoginButtonStates) {
+        if (-not ('NotificationButtonInput' -as [type])) { Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+public static class NotificationButtonInput {
+    [DllImport("user32.dll")] public static extern IntPtr SendMessage(IntPtr window,uint message,IntPtr parameter,IntPtr data);
+}
+'@
+        }
+        $header=[IO.File]::ReadAllBytes((Join-Path $root "gl-$Notification-settled-0.rgba"))
+        if ([BitConverter]::ToUInt32($header,0) -ne 2560 -or [BitConverter]::ToUInt32($header,4) -ne 1369) {
+            throw 'Login button input fixture requires the verified 2560x1369 client layout.'
+        }
+        $responseWatcher=[IO.FileSystemWatcher]::new($root,'gl-login-ready.xml')
+        try {
+            $responseWatcher.EnableRaisingEvents=$true
+            if (!(Test-Path (Join-Path $root 'gl-login-ready.xml'))) {
+                $responseWatcher.WaitForChanged([IO.WatcherChangeTypes]::Created,10000) | Out-Null
+            }
+            if (!(Test-Path (Join-Path $root 'gl-login-ready.xml'))) { throw 'Login was not unobstructed before login-state input.' }
+        } finally { $responseWatcher.Dispose() }
+        $point={param([int]$horizontal,[int]$vertical) [IntPtr](($vertical -shl 16) -bor $horizontal)}
+        $outside=& $point 1280 900
+        if (-not ('NotificationCursorInput' -as [type])) { Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+public static class NotificationCursorInput {
+    [StructLayout(LayoutKind.Sequential)] public struct Point { public int x, y; }
+    [DllImport("user32.dll")] public static extern bool GetCursorPos(out Point point);
+    [DllImport("user32.dll")] public static extern bool ClientToScreen(IntPtr window,ref Point point);
+    [DllImport("user32.dll")] public static extern bool SetCursorPos(int x,int y);
+}
+'@
+        }
+        $savedCursor=[NotificationCursorInput+Point]::new()
+        [NotificationCursorInput]::GetCursorPos([ref]$savedCursor) | Out-Null
+        try {
+            foreach ($buttonState in $ButtonStates) {
+                $cursor=[NotificationCursorInput+Point]::new()
+                $cursor.x=if ($buttonState -eq 'enabled') { 1280 } else { 1695 }
+                $cursor.y=if ($buttonState -eq 'enabled') { 900 } else { 1266 }
+                [NotificationCursorInput]::ClientToScreen($window,[ref]$cursor) | Out-Null
+                [NotificationCursorInput]::SetCursorPos($cursor.x,$cursor.y) | Out-Null
+                $position=if ($buttonState -eq 'enabled') { $outside } else { & $point 1695 1266 }
+                [NotificationButtonInput]::SendMessage($window,0x200,[IntPtr]0,$position) | Out-Null
+                if ($buttonState -eq 'pressed') {
+                    [NotificationButtonInput]::SendMessage($window,0x201,[IntPtr]1,$position) | Out-Null
+                }
+                if ($buttonState -like 'focus-*') {
+                    [NotificationButtonInput]::SendMessage($window,0x201,[IntPtr]1,$position) | Out-Null
+                    [NotificationButtonInput]::SendMessage($window,0x200,[IntPtr]1,$outside) | Out-Null
+                    [NotificationButtonInput]::SendMessage($window,0x202,[IntPtr]0,$outside) | Out-Null
+                    [NotificationButtonInput]::SendMessage($window,0x8,[IntPtr]0,[IntPtr]0) | Out-Null
+                    if ($buttonState -eq 'focus-regained') {
+                        [NotificationButtonInput]::SendMessage($window,0x7,[IntPtr]0,[IntPtr]0) | Out-Null
+                    }
+                }
+                $settle=[DateTime]::UtcNow.AddSeconds(2)
+                $frame=0
+                do {
+                    & $CaptureHelper $window.ToInt64().ToString() (Join-Path $root "gl-login-$buttonState-transition-$frame.rgba")
+                    if ($LASTEXITCODE -ne 0) { throw 'Login-state capture failed.' }
+                    ++$frame
+                } while ([DateTime]::UtcNow -lt $settle)
+                foreach ($sample in 0,1) {
+                    & $CaptureHelper $window.ToInt64().ToString() (Join-Path $root "gl-login-$buttonState-settled-$sample.rgba")
+                    if ($LASTEXITCODE -ne 0) { throw 'Login-state settled capture failed.' }
+                }
+            }
+        } finally {
+            [NotificationButtonInput]::SendMessage($window,0x200,[IntPtr]1,$outside) | Out-Null
+            [NotificationButtonInput]::SendMessage($window,0x202,[IntPtr]0,$outside) | Out-Null
+            [NotificationCursorInput]::SetCursorPos($savedCursor.x,$savedCursor.y) | Out-Null
+        }
+    }
     $process.CloseMainWindow() | Out-Null
     if (!$process.WaitForExit(60000)) { throw 'Reference did not close within 60 seconds; no forced termination performed.' }
     $goodbye=(Test-Path $log) -and (Select-String -LiteralPath $log -SimpleMatch 'Goodbye!' -Quiet)
@@ -151,8 +287,14 @@ public static class NotificationCaptureWindowState {
         viewer=$start.FileName; viewerSha256=(Get-FileHash $Viewer).Hash
         driverSha256=(Get-FileHash $Driver).Hash; captureSha256=(Get-FileHash $CaptureHelper).Hash
         backgroundUrl=$pageUrl; backgroundSha256=(Get-FileHash (Join-Path $PSScriptRoot 'notification_background.html')).Hash
-        notification='MediaPluginFailed'; plugin='media_plugin_cef'; locale='en'
+        notification=$Notification; substitutions=$Substitutions; locale=$Language
+        requestedWidth=$Width; requestedHeight=$Height; requestedUiScale=$UiScale
+        requestSha256=(Get-FileHash (Join-Path $root 'capture-request.xml')).Hash
         requestedMaximized=$Maximized.IsPresent; actualMaximized=$actualMaximized
+        requestedAnisotropy=$Anisotropy
+        loginButtonStates=$LoginButtonStates.IsPresent
+        buttonStates=@($ButtonStates)
+        focusInput='injected WM_KILLFOCUS/WM_SETFOCUS; not external-window activation acceptance'
         pid=$process.Id; exitCode=$process.ExitCode; goodbye=$goodbye
         responseRecorded=(Test-Path (Join-Path $root 'gl-notification-response.xml'))
     }

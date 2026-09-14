@@ -38,7 +38,7 @@ private:
         std::uint64_t epoch = 0;
     };
     std::map<LLVKWidgetTree::Id,Stream> mStreams;
-    std::map<const LLVKWidgetImage*,Image> mImages;
+    std::map<std::pair<const LLVKWidgetImage*,bool>,Image> mImages;
     std::map<std::pair<LLVKWidgetTree::Id,std::size_t>,Text> mTexts;
     std::uint64_t mFrame = 0;
 };

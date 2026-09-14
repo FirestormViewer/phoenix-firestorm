@@ -792,3 +792,8 @@ float LLVKWidgetTree::focusFlashAmount() const noexcept
 {
     return std::clamp(1.f-static_cast<float>(mTime-mFocusFlashTime)/0.3f,0.f,1.f);
 }
+
+void LLVKWidgetTree::triggerFocusFlash() noexcept
+{
+    mFocusFlashTime=mTime;
+}

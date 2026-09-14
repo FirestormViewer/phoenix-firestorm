@@ -403,6 +403,19 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
     ui->mDialogFactory = std::make_unique<LLVKWidgetFactory>(factory);
     if (!ui->initializeDialogs(configuration,error)) return nullptr;
     if (!ui->initializeNoticeLayout(error)) return nullptr;
+    auto location=ui->mTree.setting("CmdLineLoginLocation").value_or(LLSD("")).asString();
+    if (location.empty()) location=ui->mTree.setting("NextLoginLocation").value_or(LLSD("")).asString();
+    if (location.empty()) location=ui->mTree.setting("LoginLocation").value_or(LLSD("last")).asString();
+    const auto locationId=ui->find("start_location_combo");
+    if (location=="last" || location=="home" || location.empty())
+    {
+        if (!ui->mTree.setComboValue(locationId,LLSD(location.empty() ? "home" : location),error)) return nullptr;
+    }
+    else
+    {
+        if (!ui->mTree.selectComboItem(locationId,std::nullopt,error) ||
+            !ui->mTree.setValue(ui->mTree.get(locationId)->combo->editor,LLSD(location))) return nullptr;
+    }
     ui->updateLoginControls();
     return ui;
 }
@@ -414,6 +427,15 @@ void LLVKViewerUi::updateLoginControls()
     const bool credentials=!mTree.value(find("username_combo")).asString().empty() &&
         !mTree.value(find("password_edit")).asString().empty();
     mTree.setEnabled(find("connect_btn"),prelogin && credentials);
+    const auto* username=mTree.get(find("username_combo"));
+    bool savedUsername=false;
+    if (username && username->combo && username->combo->selected)
+    {
+        const auto& item=username->combo->items[*username->combo->selected];
+        savedUsername=!item.value.asString().empty() &&
+            mTree.value(username->combo->editor).asString()==item.label;
+    }
+    mTree.setEnabled(find("remove_user_btn"),prelogin && savedUsername);
 }
 
 std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint::Input& input,std::string& error)
@@ -445,6 +467,7 @@ std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint:
     if (const auto color=mColors->find("SearchableControlHighlightFontColor")) paintInput.searchFont=*color;
     auto paint = LLVKWidgetPaint::prepare(mTree,mRoot,paintInput,error);
     if (!paint) return std::nullopt;
+    paint->skinAnisotropy=mTree.setting("RenderAnisotropic").value_or(LLSD(false)).asBoolean();
     const auto viewport = mTree.screenRect(mRoot,error);
     if (!viewport || !mMenu->paint(*paint,*viewport,error)) return std::nullopt;
     if (mNoticePanel)

@@ -350,7 +350,10 @@ bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::
     const auto highlight = color("MenuItemHighlightBgColor",{0.3f,0.3f,0.3f,1});
     const auto foreground = color("MenuItemHighlightFgColor",{1,1,1,1});
     const auto solid = [&](std::size_t item,Rect rect,LLVKColor::Value tint)
-    { output.commands.push_back({UINT64_MAX-item,rect,viewport,tint}); };
+    {
+        for (auto& channel : tint) channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+        output.commands.push_back({UINT64_MAX-item,rect,viewport,tint});
+    };
     const auto text = [&](std::size_t item,const std::string& label,float x,float y,LLVKColor::Value tint,LLVKFont::HorizontalAlign align) -> bool
     {
         const auto wide = utf8str_to_wstring(label); const std::u32string value(wide.begin(),wide.end());
@@ -365,6 +368,15 @@ bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::
         const auto measured = mFont->measureRun(string,0,string.size(),1,true,false,error);
         return measured ? static_cast<int>(std::floor(measured->width+0.5f)) : 0;
     };
+    if (!bar)
+    {
+        int width=0;
+        for (auto item : mRoots)
+            if (itemVisible(item) && mItems[item].branch) width+=measure(mItems[item].label)+25;
+        if (!error.empty()) return false;
+        solid(mItems.size(),mBar,{0,0,0,1});
+        mBar.right=mBar.left+width;
+    }
     solid(mItems.size(),mBar,color("MenuBarBgColor",background));
     int left = mBar.left;
     for (auto item : mRoots)

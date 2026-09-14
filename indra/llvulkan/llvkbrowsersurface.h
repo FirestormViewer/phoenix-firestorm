@@ -6,6 +6,7 @@
 class LLVKBrowserSurface final
 {
 public:
+    static LLVKWidgetImage::Rect displayRect(int width,int height,int mediaWidth,int mediaHeight);
     bool resize(std::uint32_t width, std::uint32_t height, std::string& error);
     bool publish(std::uint32_t width, std::uint32_t height, std::span<const std::uint8_t> topDownBgra, std::string& error);
     std::shared_ptr<const LLVKWidgetImage> frame() const noexcept { return mFrame; }

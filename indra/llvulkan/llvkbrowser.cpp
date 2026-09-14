@@ -84,7 +84,7 @@ bool LLVKBrowser::start(const Configuration& configuration, std::string& error)
         !std::filesystem::is_regular_file(configuration.helperDirectory/"dullahan_host.exe") ||
         !std::filesystem::is_directory(configuration.localesDirectory))
     { error = "Native browser requires absolute helper, locale and private cache paths"; return false; }
-    if (!mSurface.resize(configuration.width,configuration.height,error)) return false;
+    if (!mSurface.resize(std::min(configuration.width,2048u),std::min(configuration.height,2048u),error)) return false;
     std::error_code directoryError;
     std::filesystem::create_directories(configuration.cacheDirectory,directoryError);
     if (directoryError) { error = "Cannot create native browser cache directory: " + directoryError.message(); return false; }
@@ -124,8 +124,8 @@ bool LLVKBrowser::start(const Configuration& configuration, std::string& error)
     settings.locales_dir_path = utf8Path(configuration.localesDirectory);
     settings.root_cache_path = utf8Path(configuration.cacheDirectory);
     settings.log_file = utf8Path(configuration.cacheDirectory/"browser.log");
-    settings.initial_width = configuration.width;
-    settings.initial_height = configuration.height;
+    settings.initial_width = mSurface.width();
+    settings.initial_height = mSurface.height();
     settings.accept_language_list = configuration.language;
     if (configuration.proxy.type!=LLVKProxy::Type::None)
     {
@@ -210,6 +210,8 @@ std::optional<LLVKBrowser::Navigation> LLVKBrowser::navigation(std::string& erro
 
 bool LLVKBrowser::resize(std::uint32_t width,std::uint32_t height,std::string& error)
 {
+    width=std::min(width,2048u); height=std::min(height,2048u);
+    if (mSurface.width()==width && mSurface.height()==height) return running(error);
     if (!running(error) || !mSurface.resize(width,height,error)) return false;
     mEngine->setSize(int(width),int(height));
     return true;

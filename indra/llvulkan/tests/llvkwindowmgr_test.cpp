@@ -8,6 +8,7 @@
 #include "llvkstartupstatus.h"
 #include "llvkstartup.h"
 #include "llerrorcontrol.h"
+#include "llsdserialize.h"
 #include "lltut.h"
 #include <fstream>
 #include <windows.h>
@@ -474,6 +475,10 @@ namespace tut
         configuration.ui.fontDescription = viewer/"fonts"/"fonts.xml";
         configuration.ui.fonts.platform = "Windows";
         configuration.ui.fonts.searchDirectories = {viewer/"fonts",std::filesystem::path(LLVK_LOGIN_PACKAGED_FONTS)};
+        wchar_t windowsDirectory[MAX_PATH]{};
+        const auto windowsLength=GetWindowsDirectoryW(windowsDirectory,MAX_PATH);
+        ensure("native fixture resolves production system-font directory",windowsLength>0 && windowsLength<MAX_PATH);
+        configuration.ui.fonts.searchDirectories.push_back(std::filesystem::path(windowsDirectory)/"Fonts");
         configuration.ui.settings = settings.values();
         configuration.ui.settingsGroup=&settings.group();
         configuration.ui.cacheDirectory=profile.path/"cache";
@@ -701,36 +706,130 @@ namespace tut
         unsigned failureFrames=0;
         unsigned failurePhase=0;
         const auto captureDirectory=std::getenv("LLVK_NOTIFICATION_CAPTURE_DIR");
+        const auto capturePage=std::getenv("LLVK_NOTIFICATION_CAPTURE_PAGE");
+        LLSD captureRequest;
+        captureRequest["name"]="MediaPluginFailed";
+        captureRequest["substitutions"]["PLUGIN"]="media_plugin_cef";
+        if (const auto requestPath=std::getenv("LLVK_NOTIFICATION_CAPTURE_REQUEST"))
+        {
+            ensure("custom notification capture requires a working local page",captureDirectory && capturePage);
+            ensure("capture request is bounded",std::filesystem::file_size(requestPath)<=65536);
+            std::ifstream requestFile(requestPath);
+            ensure("capture request parses",LLSDSerialize::fromXML(captureRequest,requestFile)>0);
+            ensure("capture request contains a name and substitutions",captureRequest["name"].isString() &&
+                !captureRequest["name"].asString().empty() && captureRequest["substitutions"].isMap());
+        }
+        const auto captureName=captureRequest["name"].asString();
+        if (captureRequest.has("display"))
+        {
+            const auto& display=captureRequest["display"];
+            ensure("display overrides are a map",display.isMap());
+            for (const auto& name : {"Language","WindowWidth","WindowHeight","UIScaleFactor","RenderAnisotropic"})
+                if (display.has(name)) ensure("isolated display override",settings.set(name,display[name],false,error));
+            rejected.ui.settings=settings.values();
+            rejected.ui.skin.language=display["Language"].asString();
+        }
+        const bool buttonStates=std::getenv("LLVK_CAPTURE_LOGIN_BUTTON_STATES")!=nullptr;
+        const bool pressedOnly=buttonStates && std::string_view(std::getenv("LLVK_CAPTURE_LOGIN_BUTTON_STATES"))=="pressed";
+        const bool focusStates=buttonStates && std::string_view(std::getenv("LLVK_CAPTURE_LOGIN_BUTTON_STATES"))=="focus";
+        struct CursorRestore
+        {
+            POINT point{};
+            bool active=false;
+            ~CursorRestore() { if (active) SetCursorPos(point.x,point.y); }
+        } cursorRestore;
+        unsigned buttonPhase=0;
+        auto buttonSince=std::chrono::steady_clock::now();
+        const std::array<const char*,5> buttonStateNames{"enabled","hover","pressed","focus-lost","focus-regained"};
+        if (captureDirectory && capturePage)
+        {
+            rejected.browser.helperDirectory=configuration.browser.helperDirectory;
+            rejected.loginPage=capturePage;
+        }
         const bool captureMaximized=std::getenv("LLVK_NOTIFICATION_CAPTURE_MAXIMIZED")!=nullptr;
-        if (captureDirectory && captureMaximized)
-            rejected.bindServices=[](LLVKViewerUi&)
-            { ShowWindow(FindWindowW(L"VulkanstormNativeLogin",nullptr),SW_MAXIMIZE); };
+        if (captureDirectory)
+            rejected.bindServices=[&](LLVKViewerUi& ui)
+            {
+                if (captureMaximized) ShowWindow(FindWindowW(L"VulkanstormNativeLogin",nullptr),SW_MAXIMIZE);
+                if (capturePage)
+                {
+                    ensure("working-browser capture queues reference modal",ui.queueNotice(captureName,captureRequest["substitutions"],{},error));
+                }
+            };
         std::future<DWORD> captureResult;
         unsigned captures=0;
         rejected.presentedFrame=[&](LLVKViewerUi& ui,const LLVKWidgetPaint::Input& input)
         {
             ++failureFrames;
-            ensure("failed login browser does not block native presentation",input.browsers.empty());
-            if (!launchNoticePresented)
+            if (buttonStates && buttonPhase)
+            {
+                if (std::chrono::steady_clock::now()-buttonSince<std::chrono::seconds(2)) return;
+                ensure("synthetic credentials enable login",ui.tree().get(ui.find("connect_btn"))->params.enabled);
+                ensure("button state does not start authentication",ui.sessionSnapshot().state==LLVKSessionOwner::State::PreLogin);
+                if (buttonPhase>=4) ensure("activation event reaches native paint",input.editor.applicationFocused==(buttonPhase==5));
+                if (buttonPhase==3) ensure("pressed login owns pointer capture",ui.tree().mouseCapture()==ui.find("connect_btn"));
+                if (buttonPhase==3)
+                {
+                    const auto rect=ui.tree().screenRect(ui.find("connect_btn"),error);
+                    ensure("pressed pointer stays inside login",rect && input.button.mouseX>=rect->left && input.button.mouseX<rect->right &&
+                        input.button.mouseY>=rect->bottom && input.button.mouseY<rect->top);
+                }
+            }
+            if (!capturePage) ensure("failed login browser does not block native presentation",input.browsers.empty());
+            else
+            {
+                const auto frame=input.browsers.find(ui.find("login_html"));
+                if (frame==input.browsers.end() || !frame->second) return;
+                if (captureMaximized && frame->second->width()!=2048) return;
+                const auto pixels=frame->second->bottomUpRgba();
+                const auto middle=4*(frame->second->pixelWidth()*(frame->second->pixelHeight()/2)+frame->second->pixelWidth()/2);
+                if (pixels[middle]!=41 || pixels[middle+1]!=41 || pixels[middle+2]!=41) return;
+            }
+            if (!launchNoticePresented && !buttonPhase)
             {
                 const auto modal=ui.modalNotice();
                 ensure("actual browser launch failure presents reference notification",modal &&
-                    ui.tree().get(modal)->params.name=="MediaPluginFailed");
-                ensure("browser notification includes implementation name",
+                    ui.tree().get(modal)->params.name==captureName);
+                if (captureName=="MediaPluginFailed") ensure("browser notification includes implementation name",
                     ui.tree().value(ui.find("Alert message",modal)).asString().find("media_plugin_cef")!=std::string::npos);
                 ensure("login credential controls remain usable",ui.tree().get(ui.find("username_combo"))->params.enabled &&
                     ui.tree().get(ui.find("password_edit"))->params.enabled);
                 ensure("empty credentials keep login disabled",!ui.tree().get(ui.find("connect_btn"))->params.enabled);
                 launchNoticePresented=true;
+                if (captureRequest.has("input"))
+                {
+                    const auto editor=ui.find("notification_input",modal);
+                    ensure("notification input exists",editor!=0);
+                    const auto value=captureRequest["input"].asString();
+                    const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+                    for (const auto character : value) SendMessageW(window,WM_CHAR,static_cast<unsigned char>(character),1);
+                    ensure_equals("notification text input applied",ui.tree().value(editor).asString(),value);
+                    if (captureRequest["select"].asBoolean()) ensure("notification select-all applied",ui.tree().selectLineEditorAll(editor,error));
+                }
+                if (captureRequest["checkIgnore"].asBoolean())
+                {
+                    const auto check=ui.find("notification_ignore",modal);
+                    const auto rect=ui.tree().screenRect(check,error);
+                    ensure("notification ignore control exists",rect.has_value());
+                    const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+                    RECT client{}; GetClientRect(window,&client);
+                    const auto point=MAKELPARAM(rect->left+5,client.bottom-1-(rect->bottom+7));
+                    SendMessageW(window,WM_LBUTTONDOWN,MK_LBUTTON,point);
+                    SendMessageW(window,WM_LBUTTONUP,0,point);
+                    ensure("notification ignore checked",ui.tree().value(check).asBoolean());
+                }
+                if (captureRequest.has("input") || captureRequest["checkIgnore"].asBoolean())
+                { failureFrames=0; return; }
             }
             if (failureFrames<40) return;
-            if (captureDirectory && !failurePhase && captures<2)
+            if (captureDirectory && !failurePhase && captures<2 && !(pressedOnly && buttonPhase<3) && !(focusStates && buttonPhase<4))
             {
                 if (!captureResult.valid())
                 {
                     const auto directory=std::filesystem::path(captureDirectory);
                     std::filesystem::create_directories(directory);
-                    const auto destination=directory/("native-MediaPluginFailed-settled-"+std::to_string(captures)+".rgba");
+                    const auto stateName=buttonPhase ? std::string("native-login-")+buttonStateNames[buttonPhase-1]+"-settled-" : "native-"+captureName+"-settled-";
+                    const auto destination=directory/(stateName+std::to_string(captures)+".rgba");
                     const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
                     ensure("requested maximized native capture",!captureMaximized || IsZoomed(window));
                     std::wstring command=L"\""+std::filesystem::path(LLVK_NOTIFICATION_CAPTURE_EXE).wstring()+L"\" "+
@@ -747,20 +846,87 @@ namespace tut
                         CloseHandle(process.hProcess);
                         return code;
                     });
-                    std::ofstream metadata(directory/("native-MediaPluginFailed-settled-"+std::to_string(captures)+".txt"));
-                    const auto rect=ui.tree().get(ui.modalNotice())->params.rect;
-                    metadata<<"backend=native\nnotification=MediaPluginFailed\nplugin=media_plugin_cef\nstate=settled\n"
+                    std::ofstream metadata(directory/(stateName+std::to_string(captures)+".txt"));
+                    const auto rect=ui.tree().get(buttonPhase ? ui.find("connect_btn") : ui.modalNotice())->params.rect;
+                    metadata<<"backend=native\nnotification="<<captureName<<"\nstate=settled\n"
                         <<"capture=Windows.Graphics.Capture\nformat=RGBA8-top-origin-with-LE-width-height\n"
                         <<"maximized="<<(IsZoomed(window) ? "true" : "false")<<"\n"
+                        <<"anisotropy="<<(ui.tree().setting("RenderAnisotropic").value_or(LLSD(false)).asBoolean() ? "on" : "off")<<"\n"
                         <<"modal="<<rect.left<<","<<rect.bottom<<","<<rect.right<<","<<rect.top<<"\n";
+                    if (buttonPhase) metadata<<"buttonState="<<buttonStateNames[buttonPhase-1]<<"\n";
+                    const auto modeLabel=ui.find("mode_selection_text");
+                    const auto modeRect=ui.tree().screenRect(modeLabel,error);
+                    if (modeRect && ui.tree().get(modeLabel)->plainText->layout)
+                    {
+                        metadata<<"modeLabel="<<modeRect->left<<","<<modeRect->bottom<<","<<modeRect->right<<","<<modeRect->top<<"\n";
+                        for (const auto& line : ui.tree().get(modeLabel)->plainText->layout->lines)
+                            metadata<<"modeLine="<<line.left<<","<<line.bottom<<","<<line.right<<","<<line.top<<"\n";
+                    }
                 }
                 if (captureResult.wait_for(std::chrono::seconds(0))!=std::future_status::ready) return;
                 ensure_equals("external native notification capture succeeds",captureResult.get(),DWORD{0});
                 ++captures;
                 return;
             }
-            ensure("browser notification acknowledgement",ui.noticeKey(true,false,error));
-            ensure("acknowledgement does not close viewer",!ui.modalNotice());
+            if (!buttonPhase)
+            {
+                ensure("browser notification acknowledgement",ui.noticeKey(true,false,error));
+                ensure("acknowledgement does not close viewer",!ui.modalNotice());
+            }
+            if (buttonStates && capturePage)
+            {
+                const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+                RECT client{}; GetClientRect(window,&client);
+                ensure("button fixture uses verified maximized extent",client.right==2560 && client.bottom==1369);
+                const auto outside=MAKELPARAM(1280,900),buttonPoint=MAKELPARAM(1695,1266);
+                if (!buttonPhase)
+                {
+                    for (const auto& field : {std::pair{MAKELPARAM(1000,1255),"fixture-user"},std::pair{MAKELPARAM(1250,1255),"fixture-only"}})
+                    {
+                        SendMessageW(window,WM_LBUTTONDOWN,MK_LBUTTON,field.first);
+                        SendMessageW(window,WM_LBUTTONUP,0,field.first);
+                        for (const char* character=field.second; *character; ++character) SendMessageW(window,WM_CHAR,*character,1);
+                    }
+                    SendMessageW(window,WM_LBUTTONDOWN,MK_LBUTTON,outside);
+                    SendMessageW(window,WM_LBUTTONUP,0,outside);
+                    SendMessageW(window,WM_MOUSEMOVE,0,outside);
+                }
+                else if (buttonPhase==1) SendMessageW(window,WM_MOUSEMOVE,0,buttonPoint);
+                else if (buttonPhase==2)
+                {
+                    cursorRestore.active=GetCursorPos(&cursorRestore.point)!=FALSE;
+                    POINT point{1695,1266}; ClientToScreen(window,&point);
+                    SetCursorPos(point.x,point.y);
+                    SendMessageW(window,WM_MOUSEMOVE,0,buttonPoint);
+                    SendMessageW(window,WM_LBUTTONDOWN,MK_LBUTTON,buttonPoint);
+                }
+                else if (focusStates && buttonPhase==3)
+                {
+                    SendMessageW(window,WM_MOUSEMOVE,MK_LBUTTON,outside);
+                    SendMessageW(window,WM_LBUTTONUP,0,outside);
+                    SendMessageW(window,WM_KILLFOCUS,0,0);
+                }
+                else if (focusStates && buttonPhase==4) SendMessageW(window,WM_SETFOCUS,0,0);
+                else
+                {
+                    SendMessageW(window,WM_MOUSEMOVE,MK_LBUTTON,outside);
+                    SendMessageW(window,WM_LBUTTONUP,0,outside);
+                    ensure("release outside does not authenticate",ui.sessionSnapshot().state==LLVKSessionOwner::State::PreLogin && !ui.modalNotice());
+                    failurePhase=1;
+                    PostMessageW(window,WM_CLOSE,0,0);
+                    return;
+                }
+                ++buttonPhase;
+                captures=0;
+                buttonSince=std::chrono::steady_clock::now();
+                return;
+            }
+            if (capturePage)
+            {
+                failurePhase=1;
+                PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
+                return;
+            }
             if (!failurePhase)
             {
                 ensure("failed auxiliary browser leaves floater usable",ui.showMediaBrowser("https://example.invalid/",error));
@@ -778,6 +944,11 @@ namespace tut
         ensure("browser notification was presented",launchNoticePresented);
         ensure_equals("both login and auxiliary launch failures exercised",failurePhase,1u);
         ensure("browser failure fixture closes native window",FindWindowW(L"VulkanstormNativeLogin",nullptr)==nullptr);
+        if (captureDirectory && capturePage)
+        {
+            ensure("working browser capture retires cache owner",session.shutdown().ok());
+            return;
+        }
         std::unique_ptr<LLVKSessionOwner::Service> cleanupGate=std::make_unique<CleanupGate>(cleanupState);
         ensure("install controlled cleanup dependency",session.install(LLVKSessionOwner::Lifetime::Application,3,cleanupGate).ok());
         configuration.sessionOwner=&session;

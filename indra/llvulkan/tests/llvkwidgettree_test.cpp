@@ -168,9 +168,26 @@ namespace tut
         configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
         completePreferenceSettings(configuration);
         std::string error;
+        LLControlGroup samplingPreferences("native-login-sampling-preferences");
+        samplingPreferences.declareBOOL("RenderAnisotropic",false,"Native sampling test preference",LLControlVariable::PERSIST_NO);
+        configuration.settingsGroup=&samplingPreferences;
+        configuration.settings["RenderAnisotropic"]=true;
         auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        const auto offPaint=ui->preparePaint({},error);
+        ensure("authoritative off preference overrides stale startup copy",offPaint && !offPaint->skinAnisotropy);
+        samplingPreferences.setBOOL("RenderAnisotropic",true);
+        const auto onPaint=ui->preparePaint({},error);
+        ensure("live preference enables anisotropic skin sampling",onPaint && onPaint->skinAnisotropy);
+        samplingPreferences.setBOOL("RenderAnisotropic",false);
+        const auto restoredPaint=ui->preparePaint({},error);
+        ensure("live preference disables anisotropic skin sampling",restoredPaint && !restoredPaint->skinAnisotropy);
         ui->setSessionOwner(&owner);
         ensure("empty credentials disable login",!ui->tree().get(ui->find("connect_btn"))->params.enabled);
+        ensure_equals("default start location selects last",ui->tree().value(ui->find("start_location_combo")).asString(),std::string("last"));
+        ensure("no saved username disables removal",!ui->tree().get(ui->find("remove_user_btn"))->params.enabled);
+        const auto modeButton=ui->tree().get(ui->tree().get(ui->find("mode_combo"))->combo->button);
+        ensure_equals("Mode inherits base button left padding",modeButton->button->leftPad,4);
+        ensure_equals("Mode preserves dropdown right padding",modeButton->button->rightPad,24);
         ensure("grid selector hidden by default",!ui->tree().get(ui->find("grid_panel"))->params.visible);
         ensure("enable grid selector setting",ui->tree().updateSetting("ForceShowGrid",LLSD(true)));
         ensure("refresh login visibility",ui->preparePaint({},error).has_value());
@@ -178,6 +195,14 @@ namespace tut
         ensure("set synthetic username",ui->tree().setValue(ui->tree().get(ui->find("username_combo"))->combo->editor,LLSD("fixture-user")));
         ensure("refresh username-only state",ui->preparePaint({},error).has_value());
         ensure("password still required",!ui->tree().get(ui->find("connect_btn"))->params.enabled);
+        ensure("typed username is not removable saved data",!ui->tree().get(ui->find("remove_user_btn"))->params.enabled);
+        ensure("supply saved username fixture",ui->tree().replaceComboItems(ui->find("username_combo"),{{"fixture-user",LLSD("fixture-user@grid"),true}},error));
+        ensure("select saved username fixture",ui->tree().selectComboItem(ui->find("username_combo"),0,error));
+        ensure("refresh saved username controls",ui->preparePaint({},error).has_value());
+        ensure("saved username enables removal",ui->tree().get(ui->find("remove_user_btn"))->params.enabled);
+        ensure("edit saved username",ui->tree().setValue(ui->tree().get(ui->find("username_combo"))->combo->editor,LLSD("different-user")));
+        ensure("refresh edited saved username",ui->preparePaint({},error).has_value());
+        ensure("edited username is not a saved selection",!ui->tree().get(ui->find("remove_user_btn"))->params.enabled);
         ensure("set synthetic password",ui->tree().setValue(ui->find("password_edit"),LLSD("fixture-only")));
         ensure("refresh complete credentials",ui->preparePaint({},error).has_value());
         ensure("complete credentials enable login",ui->tree().get(ui->find("connect_btn"))->params.enabled);
@@ -4239,7 +4264,39 @@ namespace tut
         ensure("application label",appLink && appLink->text==U"Interface");
         ensure_equals("application target preserved",appLink->links.front().target,std::string("secondlife:///app/openfloater/preferences?tab=ui"));
         ensure("bounded markup",!LLVKWebText::parse(std::string(65537,'a'),error));
+        const auto trusted=LLVKWebText::parse("See https://wiki.secondlife.com/wiki/Test https://www.firestormviewer.org/help https://secondlife.com.example.org/path",error);
+        ensure(error,trusted.has_value());
+        ensure_equals("only source trusted hosts receive icons",trusted->icons.size(),std::size_t(2));
+        ensure_equals("official domain icon",trusted->icons[0].name,std::string("Hand"));
+        ensure_equals("viewer domain icon",trusted->icons[1].name,std::string("fstrusted"));
+        ensure_equals("icon placeholder precedes link",trusted->links[0].begin,trusted->icons[0].position+1);
         ensure("embedded NUL rejected",!LLVKWebText::parse(std::string("a\0b",3),error));
+        LLVKPlainControl inlineText;
+        inlineText.text=U" x";
+        inlineText.icons.emplace(0,image("Hand"));
+        LLVKPlainTextLayout::Options inlineOptions;
+        inlineOptions.width=200; inlineOptions.wrap=true;
+        const auto inlineFont=loadFont();
+        const auto inlineDocument=inlineText.prepareDocument(inlineFont,inlineOptions,40,error);
+        ensure(error,inlineDocument.has_value());
+        const auto iconWidth=inlineText.icons.begin()->second->width()+3;
+        const auto iconHit=inlineText.hitIndex(*inlineFont,inlineDocument->lines.front(),1,false,error);
+        const auto textHit=inlineText.hitIndex(*inlineFont,inlineDocument->lines.front(),float(iconWidth+1),false,error);
+        ensure("inline icon has independent hit range",iconHit && *iconHit==0);
+        ensure("text hit accounts for image width and padding",textHit && *textHit==1);
+        {
+            LLVKWidgetTree boundedTree;
+            LLVKWidgetTree::Params boundedView; boundedView.rect={0,0,1,40};
+            LLVKControl::Params boundedControl; boundedControl.font=inlineFont;
+            boundedControl.initialValue="W";
+            LLVKPlainControl::Params boundedParams;
+            const auto boundedText=boundedTree.createPlainText(boundedView,boundedControl,boundedParams,0,error);
+            ensure(error,boundedText.has_value());
+            const auto boundedPaint=LLVKWidgetPaint::prepare(boundedTree,*boundedText,{},error);
+            ensure(error,boundedPaint.has_value());
+            ensure("non-ellipsized text rejects glyphs beyond document width",std::none_of(boundedPaint->commands.begin(),boundedPaint->commands.end(),
+                [](const auto& command) { return command.text && !command.text->glyphs.empty(); }));
+        }
         LLVKWidgetTree tree;
         LLVKWidgetTree::Params view;
         view.rect={0,0,180,70};
@@ -4598,6 +4655,8 @@ namespace tut
             responseOption=option; responseName=values["listname"].asString();
         },error));
         ensure("construct native form",login->advanceNotices(2.0,error));
+        const auto formRect=tree.get(login->modalNotice())->params.rect;
+        ensure_equals("input notification uses text bounds without reshape-to-fit margin",formRect.right-formRect.left,203);
         const auto noticeInput=login->find("notification_input");
         ensure("form input owns native focus",tree.keyboardFocus()==noticeInput && tree.get(noticeInput)->lineEditor.has_value());
         for (const auto character : U"My List") if (character) ensure("edit native form",tree.lineEditorUnicode(noticeInput,character,error));
@@ -5037,7 +5096,9 @@ namespace tut
         ensure("menu paint",menu->paint(paint,{0,0,1024,768},error));
         ensure_equals("menu bar top",paint.commands[0].rectangle.top,768);
         ensure_equals("menu bar height",paint.commands[0].rectangle.bottom,750);
-        ensure_equals("bar and two visible headings",paint.commands.size(),std::size_t(3));
+        ensure_equals("header backing, bar and two visible headings",paint.commands.size(),std::size_t(4));
+        ensure("unused header remains black",paint.commands[0].color==LLVKColor::Value{0,0,0,1});
+        ensure("bar shrinks to visible headings",paint.commands[1].rectangle.right<1024);
         LLVKWidgetTree::PointerEvent event;
         event.x = 15; event.y = 759; event.kind = LLVKWidgetTree::PointerKind::LeftDown;
         ensure("Viewer opens on press",menu->pointer(event) && menu->open());
@@ -5164,15 +5225,21 @@ namespace tut
         params.background = image("normal");
         params.focusedBackground = image("focused");
         params.textColor = LLVKColor{0.2f,0.4f,0.6f,0.1f};
+        params.highlightColor=LLVKColor{0.56f,0.36f,0.25f,1.f};
         std::string error;
         const auto editor = tree.createLineEditor(view,control,params,0,error);
         ensure(error,editor.has_value());
         tree.setKeyboardFocus(*editor,false,false,error);
         LLVKWidgetTree::EditorView input;
         input.drawAlpha = 0.75f;
+        input.focusColor={0.56f,0.36f,0.25f,0.4f};
+        input.transparency=0.5f;
         const auto prepared = tree.prepareLineEditor(*editor,input,error);
         ensure(error,prepared.has_value());
         ensure("caret visible initially",prepared->caretVisible);
+        ensure_equals("caret bottom uses content inset, not decorative border",prepared->parts.back().rectangle.bottom,2);
+        ensure_equals("caret top uses content inset, not decorative border",prepared->parts.back().rectangle.top,31);
+        ensure("editor focus tint follows source byte conversion",prepared->parts[0].color==LLVKColor::Value{142.f/255.f,91.f/255.f,63.f/255.f,127.f/255.f});
         ensure("focus image",prepared->parts[1].image->name() == "focused");
         ensure("programmatic border hidden",!tree.get(tree.get(*editor)->lineEditor->border)->params.visible);
         ensure_equals("text alpha replaces color alpha",prepared->parts[2].color[3],0.75f);
@@ -5188,6 +5255,11 @@ namespace tut
         const auto inactive = tree.prepareLineEditor(*editor,input,error);
         ensure(error,inactive.has_value());
         ensure("inactive application has no caret",!inactive->caretVisible);
+        ensure("select password contents",tree.selectLineEditorAll(*editor,error));
+        const auto selected=tree.prepareLineEditor(*editor,input,error);
+        ensure(error,selected.has_value());
+        ensure("selection background uses byte color",std::any_of(selected->parts.begin(),selected->parts.end(),[](const auto& part)
+        { return !part.image && !part.text && part.color==LLVKColor::Value{142.f/255.f,91.f/255.f,63.f/255.f,191.f/255.f}; }));
     }
 
     template<> template<> void object::test<125>()
@@ -5225,7 +5297,7 @@ namespace tut
         const auto pressed = tree.prepareButton(*button,input,error);
         ensure(error,pressed.has_value());
         ensure("focus RGB truncates to reference UNORM8",pressed->primitives[0].color==LLVKColor::Value{142.f/255.f,91.f/255.f,63.f/255.f,63.f/255.f});
-        ensure_equals("image alpha is unaffected by focus encoding",pressed->primitives[1].color[3],0.5f);
+        ensure_equals("image alpha uses reference UNORM8 encoding",pressed->primitives[1].color[3],127.f/255.f);
         ensure_equals("focused border precedes image",pressed->primitives[1].image->name(),std::string("pressed-selected"));
         ensure_equals("pressed text x offset",pressed->text.x,first->text.x+1.f);
         tree.setEnabled(*button,false);
@@ -5257,6 +5329,15 @@ namespace tut
         ensure("browser configuration before init",initialized);
         ensure("native panel base retained",tree.get(*browser)->panel.has_value());
         ensure("browser border policy retained",!tree.get(*browser)->browser->borderVisible);
+        ensure("maximize browser view",tree.reshape(*browser,2560,1199,error));
+        LLVKWidgetPaint::Input input;
+        std::vector<std::uint8_t> pixels(2048*1199*4,255);
+        input.browsers[*browser]=LLVKWidgetImage::fromRgba("capped browser",2048,1199,pixels,error);
+        const auto paint=LLVKWidgetPaint::prepare(tree,*browser,input,error);
+        ensure(error,paint.has_value());
+        const auto frame=std::find_if(paint->commands.begin(),paint->commands.end(),[](const auto& command) { return command.streamingImage; });
+        ensure("capped browser frame painted",frame!=paint->commands.end());
+        ensure("paint uses centered media geometry",frame->rectangle==LLVKWidgetTree::Rect{256,0,2304,1199});
     }
 
     template<> template<> void object::test<123>()
@@ -5264,6 +5345,10 @@ namespace tut
         set_test_name("native browser frames copy borrowed BGRA with opaque alpha and resize invalidation");
         LLVKBrowserSurface surface;
         std::string error;
+        const auto wideBrowser=LLVKBrowserSurface::displayRect(2560,1199,2048,1199);
+        ensure("wide browser preserves capped media aspect",wideBrowser.left==256 && wideBrowser.right==2304 && wideBrowser.bottom==0 && wideBrowser.top==1199);
+        const auto tallBrowser=LLVKBrowserSurface::displayRect(600,800,1200,800);
+        ensure("tall browser centers letterboxed media",tallBrowser.left==0 && tallBrowser.right==600 && tallBrowser.bottom==200 && tallBrowser.top==600);
         ensure("size accepted",surface.resize(2,2,error));
         std::vector<std::uint8_t> pixels{1,2,3,4, 5,6,7,8, 9,10,11,12, 13,14,15,16};
         ensure("frame published",surface.publish(2,2,pixels,error));
@@ -5673,9 +5758,27 @@ namespace tut
         tree.reshape(*stack,1200,152,error);
         ensure("wide login layout",tree.updateLayoutStack(*stack,error));
         ensure("elastic margins expanded equally",tree.get(*center)->params.rect == LLVKWidgetTree::Rect{115,0,1085,152});
+        LLVKPanel::Params background;
+        background.backgroundVisible=true;
+        view.rect={969,0,976,160};
+        const auto edge=tree.createPanel(view,control,background,*center,error);
+        ensure(error,edge.has_value());
+        const auto paint=LLVKWidgetPaint::prepare(tree,*stack,{},error);
+        ensure(error,paint.has_value());
+        const auto edgeCommand=std::find_if(paint->commands.begin(),paint->commands.end(),
+            [&](const auto& command) { return command.owner==*edge; });
+        ensure("edge decoration is painted",edgeCommand!=paint->commands.end());
+        ensure_equals("layout scissor includes right boundary pixel",edgeCommand->clip.right,1086);
+        ensure_equals("inclusive edge does not escape parent top",edgeCommand->clip.top,152);
         tree.setVisible(*right,false);
         ensure("hidden panel redistributes space",tree.updateLayoutStack(*stack,error));
         ensure_equals("single elastic margin",tree.get(*center)->params.rect.left,230);
+        const auto boundedPaint=LLVKWidgetPaint::prepare(tree,*stack,{},error);
+        ensure(error,boundedPaint.has_value());
+        const auto boundedEdge=std::find_if(boundedPaint->commands.begin(),boundedPaint->commands.end(),
+            [&](const auto& command) { return command.owner==*edge; });
+        ensure("edge at framebuffer remains painted",boundedEdge!=boundedPaint->commands.end());
+        ensure_equals("layout scissor cannot exceed framebuffer",boundedEdge->clip.right,1200);
         view.rect = {0,0,685,152};
         auto column = tree.createLayoutStack(view,true,0,false,0,error);
         ensure(error,column.has_value());
@@ -5886,6 +5989,14 @@ namespace tut
         ensure_equals("one tab notification",tabEvents,1);
         tree.advanceTime(1.3,error);
         ensure("flash decays",tree.focusFlashAmount() < 0.00001f);
+        tree.triggerFocusFlash();
+        ensure_equals("application focus regain restarts flash",tree.focusFlashAmount(),1.f);
+        ensure_equals("application focus regain preserves control",tree.keyboardFocus(),*editor);
+        ensure_equals("application focus regain does not reenter control",tabEvents,1);
+        tree.advanceTime(1.45,error);
+        ensure("regained focus flash has the reference midpoint",std::abs(tree.focusFlashAmount()-0.5f)<0.00001f);
+        tree.advanceTime(1.6,error);
+        ensure("regained focus flash expires",tree.focusFlashAmount()<0.00001f);
         events.tabInto = [&](auto id) { std::string failure; ensure("tab callback deletion",tree.erase(id,failure)); };
         tree.setEvents(*editor,events);
         tree.setKeyboardFocus(0,false,false,error);
