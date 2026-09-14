@@ -1,5 +1,204 @@
 # Native error messaging
 
+## GL-conformant focus cleanup and normal-window parity (2026-09-14)
+
+NV-00/01/02/12/17: traced pinned GL WM_KILLFOCUS through
+LLViewerWindow::handleFocusLost, LLFocusMgr::setAppHasFocus(false),
+LLUI::clearPopups and its registered LLPopupView::clearPopups callback. Popup
+entries are removed before onTopLost notification; pointer capture is released.
+LLButton uses the focus manager's alpha (reduced to 0.4 when unfocused), while
+focus regain restarts the existing flash without selecting a different control.
+Native already implements the focus tint/flash contract but omitted top-popup
+cleanup in its window handler. It now calls its independently owned
+setTopControl(0), closing combo popups and dispatching topLost before capture
+release. No GL helper, DWM color override or GPU representation is introduced.
+Window7/7 includes actual Win32-message assertions for top-popup removal,
+pointer-capture release, preserved keyboard focus and flash restart on regain.
+
+The reference runner's optional InactiveFocus input explicitly dispatches
+WM_KILLFOCUS and requires nonforeground state. The same shared request makes the
+native fixture transfer foreground to its isolated offscreen focus owner and
+dispatch WM_KILLFOCUS after modal construction. The fixture checks that painting
+receives applicationFocused=false. The common capture sidecars verify inactive
+state before/after both samples. This is a controlled focus-event test, not an
+exhaustive real Alt-Tab/focus-history acceptance sequence.
+
+New reference `gl-normal-inactive-focus-51` and native
+`native-normal-inactive-focus-60` PASS full-frame zero-tolerance comparison at
+1024x738, English/default skin, UI scale 1.0, anisotropy off and the unchanged
+local browser page. ALL four raw images have SHA256
+54E07A5ADBB64F02F5B81A48375E860E584BA7652B65A372283450885598976E.
+Report: `glref-build/captures/normal-inactive-focus-parity-51-60`.
+Both the earlier 36 DWM-corner pixels and the 1551 modal-focus-border differences
+are absent with matching window and keyboard-focus state. The original GL
+executable/source, tolerances, borders and images remain unchanged. Earlier
+unmatched-input failures remain retained and are not rewritten as passes.
+
+GL exited zero with Goodbye; native Window7/7 passed and exited zero. This closes
+the tested settled inactive normal-window state, not all active/inactive
+transitions, popup visuals or other no-login workflow gates. The 125-percent
+UI-scale failure remains separate and open. No commit or push was performed.
+
+## Corner mismatch explained by activation state (2026-09-14)
+
+GL remains the unchanged presentation reference. The remaining 36 corner pixels
+were compared under different actual window-activation states, not equivalent
+DWM inputs. The GL runner requested SetForegroundWindow but did not verify that
+Windows granted it. Common capture-boundary observations in
+`gl-corner-foreground-50` show foregroundBefore=0/foregroundAfter=0; native
+`native-corner-foreground-58` shows 1/1. Both reproduce the earlier respective
+RGBA hashes exactly. The inactive GL frame has neutral rounded edges; the active
+native frame has the configured DWM accent border and different edge alpha.
+
+Controlled native probe `native-corner-inactive-59` transferred actual foreground
+focus to a temporary offscreen fixture window. The capture helper verified 0/0.
+Against the unchanged inactive GL reference, ALL 36 lower-corner pixels now match
+exactly, including alpha. This resolves the cause of the original residual:
+unmatched activation selected different DWM border/rounded-edge composition.
+The prior inference of an unexplained Vulkan-versus-GL corner-alpha defect is
+superseded by this measured result. No border suppression, recoloring, masks,
+rescaling or GL changes are required to explain these pixels.
+
+The full inactive-probe comparison `corner-inactive-parity-50-59` is NOT a pass:
+1551 pixels differ at top-origin x=478..540, y=382..406, confined to the modal
+button's focus border. The real native focus transfer also changed keyboard/UI
+focus state; matching foreground alone did not reproduce the reference's full
+input history. That is a separate qualification requirement, not permission to
+force native focus colors or mark the normal-window workflow complete. The
+captured frame/state history must be matched for full-frame acceptance.
+
+Earlier controlled probes in this investigation were ineffective and removed:
+`native-corner-class-55` matched the GL Win32 class flags; `native-corner-styles-56`
+matched its window/extended styles; `native-corner-redirection-57` disabled the
+redirection bitmap. Each was byte-identical to the original active native frame.
+Thus none explained the observed corner difference. The temporary focus-owner
+probe was also removed after observation. Production window/presentation source
+is restored; only capture metadata and this record remain from this investigation.
+
+NV-00/01/02/12/17: the common Windows capture helper now writes a separate
+`.rgba.window.txt` sidecar with actual foreground state before/after capture and
+window styles. Raw RGBA bytes and the GL oracle are unchanged. Future fixtures
+must verify activation and UI focus/history rather than trusting an activation
+request. Diagnostics used isolated pre-login sessions and clean shutdown, with
+Window7/7 passes. Login-dependent tests remain deferred. No commit or push made.
+
+## Rounded-corner source isolated (2026-09-14)
+
+Investigation of the 36 normal-window residual pixels identifies a DWM accent
+border contribution after Vulkan rendering, not magenta emitted by native UI.
+All experiments used the retained fresh GL normal49 reference and isolated
+1024x738 native fixtures. They are diagnostics, not amended parity baselines.
+
+| Controlled experiment | Evidence | Result |
+|---|---|---|
+| Disable swapchain obscured-pixel clipping | native-corner-unclipped-49 | Byte-identical to unmodified native; not the cause in this run |
+| Fill HWND GDI backing surface green | native-corner-backing-green-50 | Byte-identical to unmodified native; no observed backing-fill contribution |
+| Copy acquired Vulkan frame before presentation | corner-prepresent-52.rgba and native-corner-prepresent-52 | Rendered corner is neutral gray; composed corner contains accent color |
+| Set only this HWND's DWM border to green | native-corner-border-green-53 | 30 colored corner pixels change; no pixel outside the corner regions changes |
+| Suppress only this HWND's DWM border | native-corner-border-none-54 | Magenta removed; 36 residuals remain, maximum RGBA errors 7/7/7/128 |
+
+Windows has accent coloring enabled with RGB (194,57,179), matching the magenta
+fringe. At top-origin (0,734), the actual pre-present Vulkan image is
+(40,40,40,255); ordinary Windows capture is (190,57,175,255); changing only
+DWMWA_BORDER_COLOR to green produces (1,249,1,255). The green intervention changes
+30 colored corner pixels; six other residual pixels have black RGB and differing
+edge alpha. This establishes the accent-border contribution causally, rather
+than inferring it from color similarity. No global Windows settings changed.
+
+The readiness-triggered pre-present copy and Windows capture have identical RGB
+everywhere outside the 36 corner pixels. Their alpha differs at 102232 pixels:
+raw render-target alpha is not the same contract as the opaque composed window
+surface. An initial 102254-pixel raw RGBA difference was therefore not evidence
+of a timing or orientation error; separate RGB/alpha analysis resolves it.
+The pre-present raw hash is
+6316F4F52229B24BE176AF59819D16B43302EC8CB970BB1FAA86CCC39F0BDAA0.
+`corner-rendered-vs-composed-52` retains images for this diagnostic distinction,
+not an acceptance comparison. `corner-border-none-diagnostic-49-54` retains the
+border-suppressed result; it still fails zero-tolerance parity.
+
+NV-00/01/02/11/12/13/14/15/17: the temporary readback negotiated supported
+TRANSFER_SRC swapchain usage and disabled obscured-pixel clipping. After dynamic
+rendering it transitioned the still-acquired image from color attachment to
+transfer source, copied to host-visible staging, applied transfer-to-host memory
+dependency, transitioned to present layout, submitted, waited for the frame
+fence and invalidated the allocation before reading. Readback happened before
+vkQueuePresentKHR, not via the invalid legacy post-present helper. The diagnostic
+waits and staging allocation were temporary, not added to the normal frame loop.
+
+The remaining presentation difference is not fully isolated: GL and native use
+different Win32 class/extended styles and graphics presentation paths. GL's
+dark-frame policy does not explain the current configuration (AppsUseLightTheme
+is 1). The evidence does not establish which driver/DWM/WGC interaction causes
+different rounded-edge alpha, nor justify removing the application's border as
+a production fix. Rendering colors, glyphs, skin assets and UI clipping must not
+be changed to compensate for these pixels. Normal-window exact parity remains
+open, although the source boundary and accent-color contribution are now known.
+
+All temporary renderer, backing-fill and DWM probes were removed after the runs;
+normal swapchain settings were restored and Window7/7 rebuilt/revalidated. The
+existing scale metadata from the earlier investigation remains. Captures are
+preserved, no login was performed, and no commit or push was made.
+
+## Fresh normal-window retry and scale diagnosis (2026-09-14)
+
+User request: retry 1024x738 with fresh captures and investigate the 125-percent
+UI-scale failure. No production rendering code was changed for this investigation.
+
+Fresh `gl-normal-fresh-49` and `native-normal-fresh-47` both captured a 1024x738
+nonmaximized client, English/default skin, anisotropy off, UI scale 1.0 and the
+same local page. Both settled pairs are independently byte-identical. GL exited
+zero with Goodbye; native Window7/7 passed and exited zero. Full-frame report
+`normal-fresh-parity-49-47` reproduces the previous 36-pixel FAIL, maximum RGBA
+errors 143/10/128/128. The new GL hash is
+FD8E1C3B73C4645B5D7E35EBBB9B94F1A056FE4005AA65F321D6DD8F1B6069CD;
+the new native hash is
+A999B7DF42E063674BD917439E2A5940416992CE81716A292DAAF2DA07F48422.
+These equal the earlier normal-size hashes, so the rounded lower-corner residual
+is reproducible, not removed by fresh captures. The cause of its compositor-alpha
+difference remains unresolved. No masks, rescaling or tolerance changes were used.
+
+NV-00/01/02/11/12/17 scale investigation: capture-only metadata now records the
+effective UI scale, physical client, UI-root bounds and configured font-registry
+DPI. `native-scale-diagnostic-48` consumes the retained 125-percent request and
+reports `uiScaleSetting=1.25`, `physicalClient=2560,1369`,
+`uiRoot=0,0,2560,1369`, `fontRegistryDpi=96,96`. Its image remains exactly the
+100-percent baseline (SHA256 383FCC103AF0CEC2AE8F8796CC5E40BD2122448E9AFC1F80B724B1FEDF20CD5F).
+Against retained GL scale45, `scale-diagnostic-parity-45-48` reproduces 232000
+differing pixels. This discriminates failed setting loading from missing scale
+consumption: the value is present but does not affect native visuals.
+
+Source-backed controlling paths:
+
+- Native startup supplies font search paths/descriptor, but does not derive
+   LLVKFontRegistry DPI from UIScaleFactor or FontScreenDPI. LLVKViewerUi::create
+   forwards the configuration to the registry, whose DPI defaults are 96/96.
+- LLVKWindowMgr's resize branch reshapes the root directly to swapchain extent;
+   there is no separate logical UI extent. Its named UIScaleFactor use populates
+   About information, not layout or rendering.
+- LLVKWidgetGpu::prepare converts clips directly to framebuffer scissors, passes
+   identity image transforms, and submits existing text/solid/triangle positions
+   without a display-scale transform.
+- WindowState pointer and wheel routes use physical client coordinates (with Y
+   inversion) directly for widgets and browser hit-testing. Browser resizing uses
+   those same widget dimensions. These consumers need coordinated conversion.
+- Pinned GL LLViewerWindow::calcDisplayScale combines/clamps user scale and system
+   UI size, with pixel-aspect policy. reshape derives rounded scaled-window bounds
+   and separately ceil-rounded root extents; at scale 1.25 and 2560x1369 these are
+   2048x1095 and 2048x1096, respectively. Its UI draw path scales geometry and input
+   callbacks divide coordinates by display scale. initFonts passes scale to
+   LLFontGL::initClass, which floors screen-DPI times scale for rasterization
+   (120 DPI for a 96-DPI base at 1.25).
+
+Root cause: the native viewer lacks an integrated logical-to-device display-scale
+contract, not a bad saved preference, stale swapchain, anisotropy setting or
+single shader constant. A correct fix needs native-owned scale state, logical
+layout, scale-specific glyph rasterization/measurement, geometry/scissor conversion,
+inverse input conversion and coordinated browser sizing/input. Scale changes must
+retain old GPU resources until submissions complete. Enlarging an already rendered
+frame, changing only font DPI, or only shrinking the root cannot close parity.
+This investigation does not claim implementation or live scale-change validation.
+Window7/7 validates the metadata addition; existing LNK4020 warnings remain.
+
 ## Japanese retry and document-width correction (2026-09-14)
 
 The requested retry `native-locale-ja-44` reproduced the eight-pixel residual

@@ -437,6 +437,7 @@ namespace
                 if (!focused)
                 {
                     ui->menu().dismiss();
+                    tree.setTopControl(0,error);
                     tree.setMouseCapture(0,error);
                     if (GetCapture()==window) ReleaseCapture();
                 }

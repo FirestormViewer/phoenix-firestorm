@@ -757,6 +757,11 @@ namespace tut
                 }
             };
         std::future<DWORD> captureResult;
+        struct InactiveFocusOwner
+        {
+            HWND window=nullptr;
+            ~InactiveFocusOwner() { if (window) DestroyWindow(window); }
+        } inactiveFocusOwner;
         unsigned captures=0;
         rejected.presentedFrame=[&](LLVKViewerUi& ui,const LLVKWidgetPaint::Input& input)
         {
@@ -796,6 +801,18 @@ namespace tut
                     ui.tree().get(ui.find("password_edit"))->params.enabled);
                 ensure("empty credentials keep login disabled",!ui.tree().get(ui.find("connect_btn"))->params.enabled);
                 launchNoticePresented=true;
+                if (captureRequest["inactiveFocus"].asBoolean())
+                {
+                    inactiveFocusOwner.window=CreateWindowExW(WS_EX_TOOLWINDOW,L"STATIC",L"Capture focus owner",WS_POPUP,
+                        -30000,-30000,1,1,nullptr,nullptr,GetModuleHandleW(nullptr),nullptr);
+                    ensure("inactive capture focus owner",inactiveFocusOwner.window!=nullptr);
+                    ShowWindow(inactiveFocusOwner.window,SW_SHOW);
+                    SetForegroundWindow(inactiveFocusOwner.window);
+                    ensure("inactive window state applied",GetForegroundWindow()==inactiveFocusOwner.window);
+                    SendMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_KILLFOCUS,0,0);
+                    failureFrames=0;
+                    return;
+                }
                 if (captureRequest.has("input"))
                 {
                     const auto editor=ui.find("notification_input",modal);
@@ -822,6 +839,11 @@ namespace tut
                 { failureFrames=0; return; }
             }
             if (failureFrames<40) return;
+            if (captureRequest["inactiveFocus"].asBoolean())
+            {
+                ensure("inactive keyboard focus reaches painting",!input.editor.applicationFocused);
+                ensure("inactive window stays nonforeground",GetForegroundWindow()!=FindWindowW(L"VulkanstormNativeLogin",nullptr));
+            }
             if (captureDirectory && !failurePhase && captures<2 && !(pressedOnly && buttonPhase<3) && !(focusStates && buttonPhase<4))
             {
                 if (!captureResult.valid())
@@ -854,6 +876,13 @@ namespace tut
                         <<"anisotropy="<<(ui.tree().setting("RenderAnisotropic").value_or(LLSD(false)).asBoolean() ? "on" : "off")<<"\n"
                         <<"modal="<<rect.left<<","<<rect.bottom<<","<<rect.right<<","<<rect.top<<"\n";
                     if (buttonPhase) metadata<<"buttonState="<<buttonStateNames[buttonPhase-1]<<"\n";
+                    RECT captureClient{};
+                    ensure("capture client geometry available",GetClientRect(window,&captureClient)!=FALSE);
+                    const auto rootRect=ui.tree().get(ui.root())->params.rect;
+                    metadata<<"uiScaleSetting="<<ui.tree().setting("UIScaleFactor").value_or(LLSD(1.0)).asReal()<<"\n"
+                        <<"physicalClient="<<captureClient.right-captureClient.left<<","<<captureClient.bottom-captureClient.top<<"\n"
+                        <<"uiRoot="<<rootRect.left<<","<<rootRect.bottom<<","<<rootRect.right<<","<<rootRect.top<<"\n"
+                        <<"fontRegistryDpi="<<rejected.ui.fonts.horizontalDpi<<","<<rejected.ui.fonts.verticalDpi<<"\n";
                     const auto modeLabel=ui.find("mode_selection_text");
                     const auto modeRect=ui.tree().screenRect(modeLabel,error);
                     if (modeRect && ui.tree().get(modeLabel)->plainText->layout)
@@ -957,6 +986,17 @@ namespace tut
         {
             std::string problem;
             ensure("authoritative echo cancellation override",settings.set("VoiceEchoCancellation",LLSD(false),false,problem));
+            const auto focusWindow=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+            const auto focusCombo=ui.find("mode_combo");
+            ensure("focus fixture opens mode popup",ui.tree().showComboList(focusCombo,problem));
+            ensure_equals("mode popup owns top control",ui.tree().topControl(),focusCombo);
+            const auto retainedFocus=ui.tree().keyboardFocus();
+            SendMessageW(focusWindow,WM_KILLFOCUS,0,0);
+            ensure_equals("focus loss clears top popup",ui.tree().topControl(),LLVKWidgetTree::Id(0));
+            ensure_equals("focus loss releases pointer capture",ui.tree().mouseCapture(),LLVKWidgetTree::Id(0));
+            ensure_equals("focus loss retains keyboard control",ui.tree().keyboardFocus(),retainedFocus);
+            SendMessageW(focusWindow,WM_SETFOCUS,0,0);
+            ensure_equals("focus regain restarts flash",ui.tree().focusFlashAmount(),1.f);
             ensure("authoritative automatic gain override",settings.set("VoiceAutomaticGainControl",LLSD(false),false,problem));
             ensure("authoritative noise suppression override",settings.set("VoiceNoiseSuppressionLevel",LLSD(2),false,problem));
             ensure("native Preferences in presentation",ui.showPreferences(problem));

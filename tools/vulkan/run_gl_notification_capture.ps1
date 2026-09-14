@@ -11,6 +11,7 @@ param(
     [string]$InputText='',
     [switch]$SelectInput,
     [switch]$CheckIgnore,
+    [switch]$InactiveFocus,
     [ValidatePattern('^[a-z]{2}(-[A-Z]{2})?$')][string]$Language='en',
     [ValidateRange(640,7680)][int]$Width=1024,
     [ValidateRange(480,4320)][int]$Height=738,
@@ -36,6 +37,7 @@ try {
     if ($InputText) { $requestWriter.WriteElementString('key','input'); $requestWriter.WriteElementString('string',$InputText) }
     if ($SelectInput) { $requestWriter.WriteElementString('key','select'); $requestWriter.WriteElementString('boolean','true') }
     if ($CheckIgnore) { $requestWriter.WriteElementString('key','checkIgnore'); $requestWriter.WriteElementString('boolean','true') }
+    if ($InactiveFocus) { $requestWriter.WriteElementString('key','inactiveFocus'); $requestWriter.WriteElementString('boolean','true') }
     $requestWriter.WriteElementString('key','display'); $requestWriter.WriteStartElement('map')
     $requestWriter.WriteElementString('key','Language'); $requestWriter.WriteElementString('string',$Language)
     $requestWriter.WriteElementString('key','WindowWidth'); $requestWriter.WriteElementString('integer',[string]$Width)
@@ -189,6 +191,19 @@ public static class NotificationClientSize {
     }
     $actualMaximized=[NotificationCaptureWindowState]::IsZoomed($window)
     if ($Maximized.IsPresent -ne $actualMaximized) { throw 'Reference maximization state differs from request.' }
+    if ($InactiveFocus) {
+        if (-not ('NotificationFocusState' -as [type])) { Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+public static class NotificationFocusState {
+    [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
+    [DllImport("user32.dll")] public static extern IntPtr SendMessage(IntPtr window,uint message,IntPtr parameter,IntPtr data);
+}
+'@
+        }
+        if ([NotificationFocusState]::GetForegroundWindow() -eq $window) { throw 'Inactive fixture requires a nonforeground reference window.' }
+        [NotificationFocusState]::SendMessage($window,0x8,[IntPtr]::Zero,[IntPtr]::Zero) | Out-Null
+    }
     $settledAfter=[DateTime]::UtcNow.AddSeconds(2)
     $index=0
     do {
@@ -200,6 +215,10 @@ public static class NotificationClientSize {
     foreach ($state in 0,1) {
         & $CaptureHelper $window.ToInt64().ToString() (Join-Path $root "gl-$Notification-settled-$state.rgba")
         if ($LASTEXITCODE -ne 0) { throw 'Settled capture failed.' }
+        if ($InactiveFocus) {
+            $observed=Get-Content (Join-Path $root "gl-$Notification-settled-$state.rgba.window.txt") -Raw
+            if ($observed -notmatch 'foregroundBefore=0' -or $observed -notmatch 'foregroundAfter=0') { throw 'Reference activation changed during inactive capture.' }
+        }
     }
     [NotificationCaptureWindowState]::PostMessage($window,0x100,[IntPtr]13,[IntPtr]1) | Out-Null
     [NotificationCaptureWindowState]::PostMessage($window,0x101,[IntPtr]13,[IntPtr]1) | Out-Null
@@ -289,6 +308,7 @@ public static class NotificationCursorInput {
         backgroundUrl=$pageUrl; backgroundSha256=(Get-FileHash (Join-Path $PSScriptRoot 'notification_background.html')).Hash
         notification=$Notification; substitutions=$Substitutions; locale=$Language
         requestedWidth=$Width; requestedHeight=$Height; requestedUiScale=$UiScale
+        inactiveFocus=$InactiveFocus.IsPresent
         requestSha256=(Get-FileHash (Join-Path $root 'capture-request.xml')).Hash
         requestedMaximized=$Maximized.IsPresent; actualMaximized=$actualMaximized
         requestedAnisotropy=$Anisotropy

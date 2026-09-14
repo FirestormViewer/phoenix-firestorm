@@ -166,8 +166,17 @@ int wmain(int count,wchar_t** arguments)
         }
         if (count!=3) throw std::runtime_error("Usage: notification_capture HWND output.rgba | --self-test");
         const auto window=reinterpret_cast<HWND>(std::stoull(arguments[1],nullptr,0));
+        const bool foregroundBefore=GetForegroundWindow()==window;
         const auto image=capture(window);
         save(image,arguments[2]);
+        const auto metadataPath=std::filesystem::path(std::wstring(arguments[2])+L".window.txt");
+        if (std::filesystem::exists(metadataPath)) throw std::runtime_error("Refusing to overwrite window metadata");
+        std::ofstream metadata(metadataPath);
+        metadata<<"foregroundBefore="<<foregroundBefore<<"\nforegroundAfter="<<(GetForegroundWindow()==window)
+            <<"\nstyle="<<std::hex<<GetWindowLongPtrW(window,GWL_STYLE)
+            <<"\nextended="<<GetWindowLongPtrW(window,GWL_EXSTYLE)<<"\n";
+        metadata.close();
+        if (!metadata) throw std::runtime_error("Window metadata write failed");
         std::cout<<"Captured top-origin RGBA8 client: "<<image.width<<"x"<<image.height<<"\n";
         return 0;
     }
