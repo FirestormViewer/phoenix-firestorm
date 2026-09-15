@@ -1122,10 +1122,49 @@ void LLInventoryPanel::initRootContent()
         // Default case: always add "My Inventory" root first, "Library" root second
         // If we run out of time, this still should create root folders
         buildNewViews(gInventory.getRootFolderID());        // My Inventory
-        buildNewViews(gInventory.getLibraryRootFolderID()); // Library
+        // <FS:TP> [FIRE-34881] Library root is now optional, toggled from the
+        // inventory gear menu, instead of being permanently disabled
+        //   buildNewViews(gInventory.getLibraryRootFolderID()); // Library
+        if (gSavedSettings.getBOOL("FSShowLibraryFolder"))
+        {
+            buildNewViews(gInventory.getLibraryRootFolderID()); // Library
+        }
+        // </FS:TP>
     }
 }
 
+// <FS:TP> [FIRE-34881] Build or tear down the Library root view live, without a restart.
+// Only touches this panel's folder VIEW - the underlying gInventory data for
+// Library stays loaded regardless, since other systems (default attachments,
+// outfit lookups, etc.) depend on being able to resolve the Library folder ID.
+void LLInventoryPanel::setLibraryFolderVisible(bool visible)
+{
+    const LLUUID library_id = gInventory.getLibraryRootFolderID();
+    if (library_id.isNull())
+    {
+        return;
+    }
+
+    LLFolderViewItem* library_view = getItemByID(library_id);
+    if (visible)
+    {
+        if (!library_view)
+        {
+            buildNewViews(library_id);
+        }
+    }
+    else
+    {
+        if (library_view)
+        {
+            // Same pattern used elsewhere in this file to tear down a folder's
+            // view: drop it from the item map, then destroy the UI element.
+            removeItemID(library_id);
+            library_view->destroyView();
+        }
+    }
+}
+// </FS:TP>
 
 LLFolderViewFolder * LLInventoryPanel::createFolderViewFolder(LLInvFVBridge * bridge, bool allow_drop)
 {

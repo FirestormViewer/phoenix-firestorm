@@ -2711,6 +2711,17 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
         gSavedSettings.setBOOL("InventoryShowFavoritesTab", visibility);
         mFilterTabs->setTabVisibility(mFavoritesPanel, visibility);
     }
+    // <FS:TP> [FIRE-34881] Show/hide the Library root folder live
+    if (command_name == "toggle_library")
+    {
+        bool visibility = !gSavedSettings.getBOOL("FSShowLibraryFolder");
+        gSavedSettings.setBOOL("FSShowLibraryFolder", visibility);
+        if (mAllItemsPanel)
+        {
+            mAllItemsPanel->setLibraryFolderVisible(visibility);
+        }
+    }
+    // </FS:TP>
 }
 
 void LLPanelMainInventory::onVisibilityChange( bool new_visibility )
@@ -2952,6 +2963,12 @@ bool LLPanelMainInventory::isActionChecked(const LLSD& userdata)
     {
         return mFilterTabs->getTabVisibility(mFavoritesPanel);
     }
+    // <FS:TP> [FIRE-34881] Reflect current Library root visibility in the gear menu checkmark
+    if (command_name == "library")
+    {
+        return gSavedSettings.getBOOL("FSShowLibraryFolder");
+    }
+    // </FS:TP>
 
     if (command_name == "add_objects_on_double_click")
     {
