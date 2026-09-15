@@ -720,6 +720,9 @@ namespace tut
                 !captureRequest["name"].asString().empty() && captureRequest["substitutions"].isMap());
         }
         const auto captureName=captureRequest["name"].asString();
+        const bool liveScale=std::getenv("LLVK_CAPTURE_LIVE_SCALE")!=nullptr;
+        const auto initialLiveScale=liveScale && captureRequest.has("display") &&
+            captureRequest["display"]["UIScaleFactor"].asReal()==1.0 ? 1.25f : 1.f;
         if (captureRequest.has("display"))
         {
             const auto& display=captureRequest["display"];
@@ -728,6 +731,12 @@ namespace tut
                 if (display.has(name)) ensure("isolated display override",settings.set(name,display[name],false,error));
             rejected.ui.settings=settings.values();
             rejected.ui.skin.language=display["Language"].asString();
+        }
+        if (liveScale)
+        {
+            ensure("live scale fixture has a target",captureRequest["display"].has("UIScaleFactor"));
+            ensure("live scale starts at a different value",settings.set("UIScaleFactor",LLSD(initialLiveScale),false,error));
+            rejected.ui.settings=settings.values();
         }
         const bool buttonStates=std::getenv("LLVK_CAPTURE_LOGIN_BUTTON_STATES")!=nullptr;
         const bool pressedOnly=buttonStates && std::string_view(std::getenv("LLVK_CAPTURE_LOGIN_BUTTON_STATES"))=="pressed";
@@ -801,6 +810,13 @@ namespace tut
                     ui.tree().get(ui.find("password_edit"))->params.enabled);
                 ensure("empty credentials keep login disabled",!ui.tree().get(ui.find("connect_btn"))->params.enabled);
                 launchNoticePresented=true;
+                if (liveScale)
+                {
+                    ensure_equals("live fixture begins at source scale",ui.displayScale(),initialLiveScale);
+                    ensure("live scale preference applied",settings.set("UIScaleFactor",captureRequest["display"]["UIScaleFactor"],false,error));
+                    failureFrames=0;
+                    return;
+                }
                 if (captureRequest["inactiveFocus"].asBoolean())
                 {
                     inactiveFocusOwner.window=CreateWindowExW(WS_EX_TOOLWINDOW,L"STATIC",L"Capture focus owner",WS_POPUP,
@@ -839,6 +855,7 @@ namespace tut
                 { failureFrames=0; return; }
             }
             if (failureFrames<40) return;
+            if (liveScale) ensure_equals("live scale reached presentation",ui.displayScale(),static_cast<float>(captureRequest["display"]["UIScaleFactor"].asReal()));
             if (captureRequest["inactiveFocus"].asBoolean())
             {
                 ensure("inactive keyboard focus reaches painting",!input.editor.applicationFocused);
@@ -952,6 +969,22 @@ namespace tut
             }
             if (capturePage)
             {
+                if (ui.displayScale()!=1.f)
+                {
+                    const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+                    const auto password=ui.find("password_edit");
+                    const auto rectangle=ui.tree().screenRect(password,error);
+                    ensure("scaled input rectangle",rectangle.has_value());
+                    RECT client{}; GetClientRect(window,&client);
+                    const auto horizontal=static_cast<int>(std::floor((rectangle->left+5)*ui.displayScale()+0.5f));
+                    const auto vertical=client.bottom-1-static_cast<int>(std::floor((rectangle->bottom+10)*ui.displayScale()+0.5f));
+                    SendMessageW(window,WM_LBUTTONDOWN,MK_LBUTTON,MAKELPARAM(horizontal,vertical));
+                    SendMessageW(window,WM_LBUTTONUP,0,MAKELPARAM(horizontal,vertical));
+                    ensure_equals("scaled pointer focuses password",ui.tree().keyboardFocus(),password);
+                    SendMessageW(window,WM_CHAR,'x',1);
+                    ensure_equals("scaled field receives text",ui.tree().value(password).asString(),std::string("x"));
+                    ensure("scaled input remains prelogin",ui.sessionSnapshot().state==LLVKSessionOwner::State::PreLogin);
+                }
                 failurePhase=1;
                 PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
                 return;

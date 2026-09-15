@@ -4660,6 +4660,18 @@ namespace tut
         const auto noticeInput=login->find("notification_input");
         ensure("form input owns native focus",tree.keyboardFocus()==noticeInput && tree.get(noticeInput)->lineEditor.has_value());
         for (const auto character : U"My List") if (character) ensure("edit native form",tree.lineEditorUnicode(noticeInput,character,error));
+        ensure("select form text before scaling",tree.selectLineEditorAll(noticeInput,error));
+        for (const auto scale : {1.25f,1.f})
+        {
+            ensure("change live UI scale",tree.updateSetting("UIScaleFactor",LLSD(scale)));
+            ensure("refresh live UI scale",login->refreshDisplayScale(error));
+            ensure_equals("live scale is authoritative",login->displayScale(),scale);
+            ensure_equals("scale change preserves form input",tree.value(login->find("notification_input")).asString(),std::string("My List"));
+            ensure_equals("scale change does not respond",responseOption,-1);
+            const auto& selected=tree.get(login->find("notification_input"))->lineEditor->text;
+            ensure_equals("scale change preserves selection length",std::max(selected.selectionStart(),selected.selectionEnd())-
+                std::min(selected.selectionStart(),selected.selectionEnd()),std::size_t(7));
+        }
         ensure("input notice paints",login->preparePaint({},error).has_value());
         ensure("form default delay",login->noticeKey(true,false,error));
         ensure_equals("early default does not respond",responseOption,-1);

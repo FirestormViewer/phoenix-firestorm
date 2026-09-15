@@ -133,6 +133,7 @@ struct LLVKFontRegistry::Impl
     };
     using Key = std::tuple<std::string,std::uint8_t,std::string>;
     Configuration configuration;
+    std::vector<std::string> documents;
     std::map<Key,std::vector<File>> definitions;
     std::map<std::string,float> sizes;
     std::map<Request,std::pair<std::shared_ptr<LLVKFont>,std::string>> cache;
@@ -216,10 +217,12 @@ std::unique_ptr<LLVKFontRegistry> LLVKFontRegistry::create(std::span<const std::
 {
     error.clear();
     if (!std::isfinite(configuration.sizeAdjustment) || !std::isfinite(configuration.horizontalDpi) ||
-        !std::isfinite(configuration.verticalDpi) || configuration.horizontalDpi < 1.f || configuration.verticalDpi < 1.f)
+        !std::isfinite(configuration.verticalDpi) || !std::isfinite(configuration.displayScale) || configuration.displayScale<=0.f ||
+        configuration.horizontalDpi < 1.f || configuration.verticalDpi < 1.f)
     { error = "Invalid native font registry configuration"; return nullptr; }
     auto impl = std::make_unique<Impl>();
     impl->configuration = std::move(configuration);
+    impl->documents.assign(documents.begin(),documents.end());
     for (const auto& document : documents)
     {
         if (document.size() > 4 * 1024 * 1024) { error = "Native font document exceeds limit"; return nullptr; }
@@ -320,8 +323,31 @@ std::shared_ptr<LLVKFont> LLVKFontRegistry::resolve(const Request& request,std::
         }
     }
     std::shared_ptr<LLVKFont> font;
-    if (primary) font = LLVKFont::create(*primary,fallbacks,mImpl->configuration.monochromeEmoji,error);
+    if (primary) font = LLVKFont::create(*primary,fallbacks,mImpl->configuration.monochromeEmoji,error,mImpl->configuration.displayScale);
     else error = "No usable native font file for " + normalized.name;
     mImpl->cache.emplace(request,std::make_pair(font,error));
     return font;
+}
+
+bool LLVKFontRegistry::setDisplayScale(float scale,float horizontalBaseDpi,float verticalBaseDpi,std::string& error)
+{
+    std::lock_guard lock(mImpl->mutex);
+    auto configuration=mImpl->configuration;
+    configuration.displayScale=scale;
+    configuration.horizontalDpi=std::floor(horizontalBaseDpi*scale);
+    configuration.verticalDpi=std::floor(verticalBaseDpi*scale);
+    auto replacement=create(mImpl->documents,configuration,error);
+    if (!replacement) return false;
+    for (const auto& [request,entry] : mImpl->cache)
+        if (entry.first && !replacement->resolve(request,error)) return false;
+    for (const auto& [request,entry] : mImpl->cache)
+        if (entry.first)
+        {
+            auto& next=replacement->mImpl->cache.at(request).first;
+            entry.first->replaceRasterState(*next);
+            next=entry.first;
+        }
+    mImpl->cache.swap(replacement->mImpl->cache);
+    mImpl->configuration=std::move(configuration);
+    return true;
 }

@@ -682,6 +682,7 @@ public:
                                       const LineEditorParams& editor, Id parent, std::string& error);
     bool clearLineEditor(Id id, std::string& error);
     bool setLineEditorPassword(Id id, bool password);
+    bool restoreLineEditorSelection(Id id,std::size_t anchor,std::size_t end,std::size_t cursor,bool selecting,std::string& error);
     bool setLineEditorKeystroke(Id id, LLVKControl::Callback callback);
     bool selectLineEditorAll(Id id, std::string& error);
     bool setControlCommit(Id id, LLVKControl::Callback callback);

@@ -71,6 +71,8 @@ public:
     };
     static std::string pageUrl(const Page& page);
     LLVKWidgetTree& tree() noexcept { return mTree; }
+    float displayScale() const noexcept { return mDisplayScale; }
+    bool refreshDisplayScale(std::string& error, float systemScale = 1.f);
     LLVKWidgetTree::Id root() const noexcept { return mRoot; }
     LLVKWidgetTree::Id find(std::string_view name,LLVKWidgetTree::Id within = 0) const;
     LLVKMenu& menu() noexcept;
@@ -397,6 +399,8 @@ private:
     void updateLoginControls();
     bool initializeNoticeLayout(std::string& error);
     LLVKWidgetTree::Rect noticeRectangle(int width,int height) const;
+    float mDisplayScale=1.f;
+    float mBaseFontDpiX=96.f,mBaseFontDpiY=96.f;
     int mNoticeMenuHeight=19,mNoticeBottomHeight=60,mNoticeStackSpacing=3,mNoticeChicletInset=70;
     int mNoticeRightPad=5,mNoticeTopPad=7;
     bool mNoticeTopRight=false;

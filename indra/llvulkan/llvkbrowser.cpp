@@ -3,6 +3,7 @@
 #include <mutex>
 #include <optional>
 #include <chrono>
+#include <cmath>
 #include <windows.h>
 
 namespace
@@ -206,6 +207,14 @@ std::optional<LLVKBrowser::Navigation> LLVKBrowser::navigation(std::string& erro
 {
     if (!running(error)) return std::nullopt;
     return Navigation{mEngine->canGoBack(),mEngine->canGoForward(),mEngine->isLoading()};
+}
+
+bool LLVKBrowser::setPageScale(float scale,std::string& error)
+{
+    if (!running(error)) return false;
+    if (!std::isfinite(scale) || scale<=0.f || scale>7.f) { error="Invalid native browser page scale"; return false; }
+    if (scale!=mPageScale) { mEngine->setPageZoom(scale); mPageScale=scale; }
+    return true;
 }
 
 bool LLVKBrowser::resize(std::uint32_t width,std::uint32_t height,std::string& error)

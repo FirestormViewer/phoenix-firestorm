@@ -50,6 +50,9 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
     LLVKUiPacket& packet, std::string& error)
 {
     error.clear();
+    const auto scale=paint.displayScale;
+    if (!std::isfinite(scale) || scale<=0.f || scale>8.f)
+    { error="Invalid native paint display scale"; return Status::Failed; }
     ++mFrame;
     bool pending = !paint.pendingBrowsers.empty();
     const auto poll = [&](std::unique_ptr<LLVKGlyphUpload>& upload,std::shared_ptr<const LLVKGlyphImage>& ready) -> bool
@@ -109,16 +112,23 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
         }
         if (command.text && !command.text->glyphs.empty())
         {
+            auto deviceText=*command.text;
+            if (scale!=1.f)
+                for (auto& glyph : deviceText.glyphs)
+                {
+                    glyph.left*=scale; glyph.right*=scale;
+                    glyph.bottom*=scale; glyph.top*=scale;
+                }
             auto& text = mTexts[key];
             text.used = mFrame;
-            if (!text.atlas || !same(text.layout,*command.text))
+            if (!text.atlas || !same(text.layout,deviceText))
             {
                 const bool uploading = std::any_of(text.uploads.begin(),text.uploads.end(),[](const auto& upload) { return bool(upload); });
                 if (uploading) { pending = true; continue; }
                 Text replacement;
                 replacement.used = mFrame;
-                replacement.layout = *command.text;
-                replacement.atlas = LLVKGlyphAtlas::prepare(*command.text,256,16*1024*1024,error);
+                replacement.layout = deviceText;
+                replacement.atlas = LLVKGlyphAtlas::prepare(deviceText,256,16*1024*1024,error);
                 if (!replacement.atlas) return Status::Failed;
                 for (const auto& page : replacement.atlas->pages())
                 {
@@ -150,27 +160,34 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
     for (const auto& command : paint.commands)
     {
         const auto key = std::pair{command.owner,parts[command.owner]++};
-        if (command.clip.left < 0 || command.clip.bottom < 0 || command.clip.right > std::int64_t(extent.width) ||
-            command.clip.top > std::int64_t(extent.height))
+        if (command.clip.left < 0 || command.clip.bottom < 0 || command.clip.right > std::ceil(extent.width/scale) ||
+            command.clip.top > std::ceil(extent.height/scale))
         { error = "Native widget paint clip is outside framebuffer"; return Status::Failed; }
         if (command.clip.right <= command.clip.left || command.clip.top <= command.clip.bottom) continue;
-        const VkRect2D clip{{command.clip.left,static_cast<std::int32_t>(extent.height)-command.clip.top},
-            {static_cast<std::uint32_t>(command.clip.right-command.clip.left),static_cast<std::uint32_t>(command.clip.top-command.clip.bottom)}};
+        const auto clipLeft=std::clamp(static_cast<int>(std::floor(command.clip.left*scale)),0,static_cast<int>(extent.width));
+        const auto clipRight=std::clamp(static_cast<int>(std::floor(command.clip.left*scale)+std::ceil((command.clip.right-command.clip.left-1)*scale)+1),0,static_cast<int>(extent.width));
+        const auto clipBottom=std::clamp(static_cast<int>(std::floor(command.clip.bottom*scale)),0,static_cast<int>(extent.height));
+        const auto clipTop=std::clamp(static_cast<int>(std::floor(command.clip.bottom*scale)+std::ceil((command.clip.top-command.clip.bottom-1)*scale)+1),0,static_cast<int>(extent.height));
+        if (clipRight<=clipLeft || clipTop<=clipBottom) continue;
+        const VkRect2D clip{{clipLeft,static_cast<int>(extent.height)-clipTop},
+            {static_cast<std::uint32_t>(clipRight-clipLeft),static_cast<std::uint32_t>(clipTop-clipBottom)}};
         const auto& rect = command.rectangle;
         if (command.triangle)
         {
+            auto points=*command.triangle;
+            for (auto& coordinate : points) coordinate*=scale;
             if (command.image || command.text) { error="Native triangle cannot contain image or text data"; return Status::Failed; }
             if (command.triangleColors)
             {
-                if (!prepared.gradientTriangle(*command.triangle,clip,*command.triangleColors,error)) return Status::Failed;
+                if (!prepared.gradientTriangle(points,clip,*command.triangleColors,error)) return Status::Failed;
             }
-            else if (!prepared.triangle(*command.triangle,clip,command.color,error)) return Status::Failed;
+            else if (!prepared.triangle(points,clip,command.color,error)) return Status::Failed;
         }
         else if (command.image)
         {
             const auto source = command.streamingImage ? mStreams.at(command.owner).publication->current().source : command.image;
             const auto image = command.streamingImage ? mStreams.at(command.owner).publication->current().image : mImages.at({command.image.get(),paint.skinAnisotropy}).ready;
-            if (!prepared.image(*source,image,{rect.left,rect.bottom,rect.right,rect.top},{},clip,
+            if (!prepared.image(*source,image,{rect.left,rect.bottom,rect.right,rect.top},{scale,scale,0,0},clip,
                 command.color,error,command.alphaMask,command.additive ? LLVKContext::Blend2D::AddWithAlpha : LLVKContext::Blend2D::Alpha)) return Status::Failed;
         }
         else if (command.text)
@@ -184,7 +201,7 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
             if (!prepared.text(*text.atlas,text.pages,0,0,clip,style,error)) return Status::Failed;
         }
         else if (rect.right > rect.left && rect.top > rect.bottom &&
-            !prepared.solid({float(rect.left),float(rect.bottom),float(rect.right),float(rect.top)},clip,command.color,error)) return Status::Failed;
+            !prepared.solid({rect.left*scale,rect.bottom*scale,rect.right*scale,rect.top*scale},clip,command.color,error)) return Status::Failed;
     }
     packet = std::move(prepared);
     return Status::Ready;

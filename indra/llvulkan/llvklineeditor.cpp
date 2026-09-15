@@ -61,6 +61,17 @@ bool LLVKWidgetTree::setLineEditorPassword(Id id, bool password)
     return get(id) != nullptr;
 }
 
+bool LLVKWidgetTree::restoreLineEditorSelection(Id id,std::size_t anchor,std::size_t end,std::size_t cursor,bool selecting,std::string& error)
+{
+    const auto found=mNodes.find(id);
+    if (found==mNodes.end() || !found->second.lineEditor) { error="Native selection owner is not an editor"; return false; }
+    auto text=found->second.lineEditor->text;
+    if (!text.setSelection(end,anchor,error) || !text.setCursor(cursor,error)) return false;
+    if (!selecting) text.finishSelection();
+    found->second.lineEditor->text=std::move(text);
+    return true;
+}
+
 bool LLVKWidgetTree::selectLineEditorAll(Id id, std::string& error)
 {
     error.clear();

@@ -1,5 +1,104 @@
 # Native error messaging
 
+## UI scaling implemented and 125-percent parity verified (2026-09-15)
+
+Today's scope is the UI-scale failure, not the remainder of the no-login parity
+sweep. The previously inert UIScaleFactor now drives native font rasterization,
+logical layout, device-space drawing/scissors, pointer coordinates and embedded
+browser surface size/page zoom. Startup at 125 percent and live 100-to-125 percent
+changes match the preserved pinned GL reference exactly; a live 125-to-100 percent
+reset returns to the preserved 100-percent reference. No GL code, capture image,
+mask, tolerance or reference setting was changed.
+
+### Source contract and native design
+
+NV-00/01/02/11/12/13/14/15/17 apply. Pinned source revision remains
+59108e15a1f8f94d2da7c674d937d19f5cf9450d. Controlling reference paths:
+LLViewerWindow::calcDisplayScale, reshape and initFonts; FSPanelLogin::show;
+LLFontGL::initClass/render/getWidth; LLScreenClipRect::updateScissorRegion;
+LLNormalTextSegment::drawClippedSegment; LLMenuItemBranchDownGL::draw; and
+LLMediaCtrl::reshape, calcOffsetsAndSize, convertInputCoords and draw.
+
+GL combines user scale and system UI size, clamps to 0.75..7.0, rasterizes fonts
+at floor(base DPI times scale), and measures controls in logical units. Its
+outer root is ceil-rounded, but the login panel is created from the separately
+rounded scaled-window rectangle. Glyph drawing floors the scaled widget origin
+before local placement and honors line vertical alignment. Scissors floor the
+origin and ceil the extent with an inclusive boundary pixel. Media textures use
+physical dimensions and page zoom; pointer coordinates cross the inverse scale
+boundary before widget routing. These are CPU layout/window responsibilities,
+not GL operations to be shared or translated.
+
+Native implementation:
+
+- LLVKFont owns explicit display scale, logical metrics and physical-resolution
+   glyph rasters. Its existing device-pixel layout/measurement code remains the
+   raster authority; public UI measurements and placements are logical units.
+   LLVKFontRegistry prepares replacement fonts before committing a live scale
+   change, preserving font-object identities held by controls. Retained old
+   glyph objects remain valid for existing atlases and submitted draws.
+- LLVKViewerUi derives scaled registry DPI from FontScreenDPI and effective
+   scale. The native window queries system DPI under the reference's process-
+   awareness policy, refreshes it on moves/DPI changes, and observes the live
+   authoritative UIScaleFactor. Missing platform DPI support follows the source
+   fallback. No GL window, font or UI wrapper is called.
+- The login panel uses rounded logical dimensions; the menu receives the
+   ceil-rounded outer viewport. Native paint preserves floored glyph origins,
+   text vertical alignment and menu-item local origins. Notification button
+   sizing uses the reference's integer font-width rounding.
+- LLVKWidgetGpu converts logical image/solid/triangle geometry and scissors to
+   physical pixels. Glyph atlases contain newly rasterized physical pixels,
+   never a stretched 100-percent bitmap. The existing shader/vertex ABI and
+   immutable image ownership remain unchanged. Old submitted resources stay
+   retained by frame ownership; a scale-only change does not recreate the
+   swapchain or introduce a device-idle wait into the UI loop.
+- Pointer and wheel coordinates are converted to logical UI units, then browser
+   input is converted to physical browser coordinates. Browser resize and
+   Dullahan setPageZoom follow effective scale; Dullahan retains the requested
+   zoom while its asynchronous CEF host becomes ready.
+- Live changes retain the widget tree and entered values. Open notification
+   presentation is rebuilt with its callback, text, cursor/selection, ignore
+   value and response-delay state preserved; changing scale never submits it.
+
+### Verification
+
+| State | Native capture | Retained GL | Exact full-frame result |
+|---|---|---|---|
+| Startup 125 percent | native-scale-125-65 | gl-display-scale-45 | PASS, zero differing pixels |
+| Live 100 to 125 percent | native-scale-live-67 | gl-display-scale-45 | PASS, zero differing pixels |
+| Live 125 to 100 percent | native-scale-reset-68 | gl-anisotropy-off-17 | PASS, zero differing pixels |
+
+All images are maximized 2560x1369, default skin/en, anisotropy off, with the
+unchanged controlled local browser page. Reports are
+`glref-build/captures/scale-125-parity-45-65`, `scale-live-parity-45-67`, and
+`scale-reset-parity-17-68`. The 125-percent SHA256 is
+B54CC6F286E5B23564918AC8A028AD31774E3E0E2399269226BBD512C08F63B1;
+reset SHA256 is
+383FCC103AF0CEC2AE8F8796CC5E40BD2122448E9AFC1F80B724B1FEDF20CD5F.
+Earlier attempts 61..64 remain retained as failures that isolated origin,
+alignment, rounding and outer/login viewport ownership mismatches.
+
+Font18/18 verifies 120-DPI raster ownership at 125 percent, logical measurement,
+live font identity preservation, old raster retention and invalid-scale rollback.
+Widget209/209 verifies live up/down scaling preserves edited notification text,
+selection and response behavior. GPU10/10 on RX 9070 XT covers physical geometry
+at scales 1.25, 1.0 and 0.75, invalid-scale rejection, and existing image/font
+publication and submission retention. Window7/7 passes. The live 125-percent
+capture also clicks a field using scaled physical coordinates, checks native
+keyboard focus and text entry, and asserts the session remains PreLogin.
+
+A temporary capture-fixture regression created an undefined LLSD display entry
+when live mode was disabled; the optional lookup is now guarded and ordinary
+Window7/7 passes again. This was a fixture issue, not a renderer failure.
+Existing LNK4020 PDB warnings remain unrelated and are not debugger certification.
+
+Limits: exact pixels are verified for these captured states, not all percentages,
+locales, themes, rich-text cases, browser pages or physical monitor configurations.
+System-DPI moves and browser-content zoom need their own measured parity cases;
+the controlled page here is static. Time-resolved scale transitions and broader
+no-login UI workflows remain in the second TODO. No authentication, full logged-in
+viewer run, commit or push was performed.
+
 ## GL-conformant focus cleanup and normal-window parity (2026-09-14)
 
 NV-00/01/02/12/17: traced pinned GL WM_KILLFOCUS through

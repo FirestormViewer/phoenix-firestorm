@@ -196,6 +196,14 @@ namespace tut
         ensure(error,font != nullptr);
         ensure("OS filter selected regular",!font->metrics().bold);
         auto again = registry->resolve({"NativeSans","Default"},error);
+        const auto oldGlyph=font->glyph(U'A',false,error);
+        ensure("live scaled registry prepares replacement",registry->setDisplayScale(1.25f,96.f,96.f,error));
+        ensure("live scale preserves control font identity",registry->resolve({"NativeSans","Default"},error)==font);
+        const auto scaledGlyph=font->glyph(U'A',false,error);
+        ensure("live scale publishes a new raster version",scaledGlyph && oldGlyph && scaledGlyph!=oldGlyph);
+        ensure("old raster remains owned for submitted draws",!oldGlyph->raster.bottomUpPixels.empty());
+        ensure("invalid scale leaves current font intact",!registry->setDisplayScale(0.f,96.f,96.f,error) && font->displayScale()==1.25f);
+        ensure("restore scale",registry->setDisplayScale(1.f,96.f,96.f,error));
         ensure("cache identity",again == font);
         LLVKFontFace::Options options;
         options.pointSize = 12.5f;
@@ -330,6 +338,22 @@ namespace tut
         ensure_equals("glyph width", line->glyphs.front().right - line->glyphs.front().left, float(leftGlyph->width));
         font.reset();
         ensure("layout retains raster", !line->glyphs.front().glyph->raster.bottomUpPixels.empty());
+        LLVKFontFace::Options scaledFace;
+        scaledFace.horizontalDpi=scaledFace.verticalDpi=120.f;
+        const auto deviceFont=LLVKFont::create({bytes,scaledFace},{},false,error);
+        const auto logicalFont=LLVKFont::create({bytes,scaledFace},{},false,error,1.25f);
+        ensure(error,deviceFont && logicalFont);
+        LLVKFont::LineOptions logicalOptions;
+        logicalOptions.x=8.f; logicalOptions.y=20.f;
+        auto deviceOptions=logicalOptions; deviceOptions.scaleX=deviceOptions.scaleY=1.25f;
+        const auto deviceLine=deviceFont->layoutLine(U"AV",0,2,deviceOptions,error);
+        const auto logicalLine=logicalFont->layoutLine(U"AV",0,2,logicalOptions,error);
+        ensure(error,deviceLine && logicalLine);
+        ensure_equals("logical glyph maps to scaled raster",logicalLine->glyphs[0].left*1.25f,deviceLine->glyphs[0].left);
+        ensure_equals("scaled raster stays full resolution",logicalLine->glyphs[0].glyph->raster.width,deviceLine->glyphs[0].glyph->raster.width);
+        const auto deviceWidth=deviceFont->measureRun(U"AV",0,2,1.25f,true,false,error);
+        const auto logicalWidth=logicalFont->measureRun(U"AV",0,2,1.f,true,false,error);
+        ensure("logical widths use scaled glyph metrics",deviceWidth && logicalWidth && deviceWidth->width==logicalWidth->width);
     }
 
     template<> template<>

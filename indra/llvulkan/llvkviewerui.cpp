@@ -52,7 +52,20 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
         if (!files) return nullptr;
         descriptions = std::move(*files);
     }
-    ui->mFonts = LLVKFontRegistry::create(descriptions,configuration.fonts,error);
+    const auto scaleSetting=configuration.settings.find("UIScaleFactor");
+    const auto requestedScale=scaleSetting==configuration.settings.end() ? 1.0 : scaleSetting->second.asReal();
+    if (!std::isfinite(requestedScale)) { error="Invalid native UI scale"; return nullptr; }
+    ui->mDisplayScale=std::clamp(static_cast<float>(requestedScale),0.75f,7.f);
+    auto fontConfiguration=configuration.fonts;
+    const auto dpiSetting=configuration.settings.find("FontScreenDPI");
+    if (dpiSetting!=configuration.settings.end())
+        fontConfiguration.horizontalDpi=fontConfiguration.verticalDpi=static_cast<float>(dpiSetting->second.asReal());
+    ui->mBaseFontDpiX=fontConfiguration.horizontalDpi;
+    ui->mBaseFontDpiY=fontConfiguration.verticalDpi;
+    fontConfiguration.displayScale=ui->mDisplayScale;
+    fontConfiguration.horizontalDpi=std::floor(fontConfiguration.horizontalDpi*ui->mDisplayScale);
+    fontConfiguration.verticalDpi=std::floor(fontConfiguration.verticalDpi*ui->mDisplayScale);
+    ui->mFonts = LLVKFontRegistry::create(descriptions,fontConfiguration,error);
     if (!ui->mFonts) return nullptr;
     ui->mColors = std::make_shared<LLVKColorTable>();
     const auto colors = ui->mSkin->read("","colors.xml",LLVKSkinFiles::Policy::All,error);
@@ -438,6 +451,41 @@ void LLVKViewerUi::updateLoginControls()
     mTree.setEnabled(find("remove_user_btn"),prelogin && savedUsername);
 }
 
+bool LLVKViewerUi::refreshDisplayScale(std::string& error,float systemScale)
+{
+    error.clear();
+    const auto requested=mTree.setting("UIScaleFactor").value_or(LLSD(1.f)).asReal();
+    if (!std::isfinite(requested) || !std::isfinite(systemScale) || systemScale<=0.f)
+    { error="Invalid native UI scale"; return false; }
+    const auto scale=std::clamp(static_cast<float>(requested)*systemScale,0.75f,7.f);
+    const auto dpi=mTree.setting("FontScreenDPI");
+    const auto dpiX=dpi ? static_cast<float>(dpi->asReal()) : mBaseFontDpiX;
+    const auto dpiY=dpi ? static_cast<float>(dpi->asReal()) : mBaseFontDpiY;
+    if (scale==mDisplayScale && dpiX==mBaseFontDpiX && dpiY==mBaseFontDpiY) return true;
+    if (!mFonts->setDisplayScale(scale,dpiX,dpiY,error)) return false;
+    mBaseFontDpiX=dpiX; mBaseFontDpiY=dpiY;
+    mDisplayScale=scale;
+    mMenu->dismiss();
+    if (!mTree.setTopControl(0,error)) return false;
+    if (mActiveNotice)
+    {
+        const auto notice=*mActiveNotice;
+        const auto entered=mNoticeEditor ? std::optional(mTree.value(mNoticeEditor)) : std::nullopt;
+        const auto editorState=mNoticeEditor ? std::optional(mTree.get(mNoticeEditor)->lineEditor->text) : std::nullopt;
+        const auto ignored=mNoticeIgnore ? std::optional(mTree.value(mNoticeIgnore)) : std::nullopt;
+        const auto opened=mNoticeOpened;
+        if (!dismissNotice(error)) return false;
+        mNotices.insert(mNotices.begin(),notice);
+        if (!advanceNotices(mNoticeTime,error)) return false;
+        if (entered && mNoticeEditor) mTree.setValue(mNoticeEditor,*entered);
+        if (editorState && mNoticeEditor && !mTree.restoreLineEditorSelection(mNoticeEditor,editorState->selectionStart(),
+            editorState->selectionEnd(),editorState->cursor(),editorState->selecting(),error)) return false;
+        if (ignored && mNoticeIgnore) mTree.setValue(mNoticeIgnore,*ignored);
+        mNoticeOpened=opened;
+    }
+    return true;
+}
+
 std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint::Input& input,std::string& error)
 {
     updateLoginControls();
@@ -467,8 +515,14 @@ std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint:
     if (const auto color=mColors->find("SearchableControlHighlightFontColor")) paintInput.searchFont=*color;
     auto paint = LLVKWidgetPaint::prepare(mTree,mRoot,paintInput,error);
     if (!paint) return std::nullopt;
+    paint->displayScale=mDisplayScale;
     paint->skinAnisotropy=mTree.setting("RenderAnisotropic").value_or(LLSD(false)).asBoolean();
-    const auto viewport = mTree.screenRect(mRoot,error);
+    auto viewport = mTree.screenRect(mRoot,error);
+    if (viewport && input.physicalWidth && input.physicalHeight)
+    {
+        viewport->right=static_cast<int>(std::ceil(input.physicalWidth/mDisplayScale));
+        viewport->top=static_cast<int>(std::ceil(input.physicalHeight/mDisplayScale));
+    }
     if (!viewport || !mMenu->paint(*paint,*viewport,error)) return std::nullopt;
     if (mNoticePanel)
     {

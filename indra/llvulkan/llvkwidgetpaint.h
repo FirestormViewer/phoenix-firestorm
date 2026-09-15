@@ -16,6 +16,7 @@ public:
         LLVKColor searchBackground{1,0,0,1},searchFont{1,0,0,1};
         std::map<Id,std::uint64_t> browserEpochs;
         double animationSeconds=0;
+        std::uint32_t physicalWidth=0,physicalHeight=0;
     };
     struct Command
     {
@@ -32,6 +33,7 @@ public:
     };
     std::vector<Command> commands;
     bool skinAnisotropy = false;
+    float displayScale = 1.f;
     std::vector<Id> pendingBrowsers;
     static std::optional<LLVKWidgetPaint> prepare(LLVKWidgetTree& tree, Id root, const Input& input, std::string& error);
 };

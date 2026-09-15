@@ -578,6 +578,19 @@ namespace tut
         ensure("marker frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
         ensure("gradient triangle recorded",renderer.recordUiPacket(shadowPacket.vertices(),shadowPacket.draws()));
         ensure("marker triangle presented",renderer.end2DFrame());
+        shadowPaint.commands[0].clip={0,0,60,60};
+        for (const auto scale : {1.25f,1.f,0.75f})
+        {
+            shadowPaint.displayScale=scale;
+            ensure("scaled GPU packet ready",widgetGpu.prepare(shadowPaint,renderer.swapchainExtent(),shadowPacket,error)==LLVKWidgetGpu::Status::Ready);
+            ensure_equals("scaled triangle device X",shadowPacket.vertices()[0].positionX,30.f*scale);
+            ensure_equals("scaled triangle device Y",shadowPacket.vertices()[0].positionY,float(renderer.swapchainExtent().height)-30.f*scale);
+            ensure("scaled frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+            ensure("scaled packet recorded",renderer.recordUiPacket(shadowPacket.vertices(),shadowPacket.draws()));
+            ensure("scaled packet presented",renderer.end2DFrame());
+        }
+        shadowPaint.displayScale=std::numeric_limits<float>::quiet_NaN();
+        ensure("nonfinite scale rejected",widgetGpu.prepare(shadowPaint,renderer.swapchainExtent(),shadowPacket,error)==LLVKWidgetGpu::Status::Failed);
         renderer.waitIdle();
     }
 #endif

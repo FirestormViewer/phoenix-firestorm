@@ -349,10 +349,38 @@ namespace
         std::string error;
         bool close = false, quitRequested = false, resize = true;
         std::uint32_t width = 1024, height = 768;
+        float systemUiScale=1.f;
         char32_t surrogate = 0;
         std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now(), keystroke = start;
         ~WindowState() { if (window) DestroyWindow(window); }
         double elapsed() const { return std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count(); }
+        int logical(int pixels) const { return static_cast<int>(std::floor(pixels/(ui ? ui->displayScale() : 1.f)+0.5f)); }
+        int physical(int units) const { return static_cast<int>(std::floor(units*(ui ? ui->displayScale() : 1.f)+0.5f)); }
+        void updateSystemUiScale()
+        {
+            systemUiScale=1.f;
+            const auto library=LoadLibraryExW(L"shcore.dll",nullptr,LOAD_LIBRARY_SEARCH_SYSTEM32);
+            if (library)
+            {
+                using Awareness=HRESULT(WINAPI*)(HANDLE,int*);
+                using MonitorDpi=HRESULT(WINAPI*)(HMONITOR,int,UINT*,UINT*);
+                const auto awareness=reinterpret_cast<Awareness>(GetProcAddress(library,"GetProcessDpiAwareness"));
+                const auto monitorDpi=reinterpret_cast<MonitorDpi>(GetProcAddress(library,"GetDpiForMonitor"));
+                int kind=0; RECT rect{}; UINT horizontal=0,vertical=0;
+                if (awareness && monitorDpi && SUCCEEDED(awareness(GetCurrentProcess(),&kind)) && kind==2 && GetWindowRect(window,&rect))
+                {
+                    const POINT center{(rect.left+rect.right)/2,(rect.top+rect.bottom)/2};
+                    if (SUCCEEDED(monitorDpi(MonitorFromPoint(center,MONITOR_DEFAULTTONEAREST),0,&horizontal,&vertical)) && horizontal)
+                        systemUiScale=horizontal/96.f;
+                }
+                FreeLibrary(library);
+            }
+            else
+            {
+                const auto context=GetDC(window);
+                if (context) { systemUiScale=GetDeviceCaps(context,LOGPIXELSX)/96.f; ReleaseDC(window,context); }
+            }
+        }
         LLVKWidgetTree::Id browserAt(int x,int y)
         {
             if (!ui || ui->modalNotice() || ui->tree().topControl()) return 0;
@@ -378,6 +406,16 @@ namespace
         {
             if (message == WM_CLOSE) { quitRequested = true; return 0; }
             if (message == WM_SIZE) { width = LOWORD(data); height = HIWORD(data); resize = true; return 0; }
+            if (message == WM_MOVE) updateSystemUiScale();
+            if (message == 0x02e0)
+            {
+                const auto* suggested=reinterpret_cast<const RECT*>(data);
+                if (suggested) SetWindowPos(window,nullptr,suggested->left,suggested->top,suggested->right-suggested->left,
+                    suggested->bottom-suggested->top,SWP_NOZORDER|SWP_NOACTIVATE);
+                updateSystemUiScale();
+                resize=true;
+                return 0;
+            }
             if (!ui) return DefWindowProcW(window,message,parameter,data);
             auto& tree = ui->tree();
             tree.setInputModifiers({bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_CONTROL)&0x8000),bool(GetKeyState(VK_MENU)&0x8000)});
@@ -404,7 +442,7 @@ namespace
                         message==WM_MBUTTONDOWN || message==WM_MBUTTONUP ? CLICK_MIDDLE : message==WM_XBUTTONDOWN || message==WM_XBUTTONUP ?
                         (GET_XBUTTON_WPARAM(parameter)==XBUTTON1 ? CLICK_BUTTON4 : CLICK_BUTTON5) : CLICK_LEFT;
                     LLVKWidgetTree::PointerEvent event;
-                    event.x=GET_X_LPARAM(data); event.y=static_cast<int>(height)-1-GET_Y_LPARAM(data); event.time=elapsed();
+                    event.x=logical(GET_X_LPARAM(data)); event.y=logical(static_cast<int>(height)-1-GET_Y_LPARAM(data)); event.time=elapsed();
                     event.kind=down ? LLVKWidgetTree::PointerKind::LeftDown : LLVKWidgetTree::PointerKind::LeftUp;
                     ui->recordPreferenceMouse(event,click,down,mask,error);
                     if (tree.mouseCapture()) SetCapture(window); else if (GetCapture()==window) ReleaseCapture();
@@ -447,11 +485,11 @@ namespace
             if (message == WM_CAPTURECHANGED)
             { if (reinterpret_cast<HWND>(data) != window) tree.setMouseCapture(0,error); return 0; }
             if (message==WM_RBUTTONDOWN && !ui->modalNotice() && !tree.topControl() && !tree.mouseCapture() &&
-                ui->previewPointer(GET_X_LPARAM(data),static_cast<int>(height)-1-GET_Y_LPARAM(data),error)) return 0;
+                ui->previewPointer(logical(GET_X_LPARAM(data)),logical(static_cast<int>(height)-1-GET_Y_LPARAM(data)),error)) return 0;
             if (message == WM_MOUSEMOVE || message == WM_LBUTTONDOWN || message == WM_LBUTTONUP || message == WM_LBUTTONDBLCLK)
             {
                 LLVKWidgetTree::PointerEvent event;
-                event.x = GET_X_LPARAM(data); event.y = static_cast<std::int32_t>(height)-1-GET_Y_LPARAM(data);
+                event.x = logical(GET_X_LPARAM(data)); event.y = logical(static_cast<std::int32_t>(height)-1-GET_Y_LPARAM(data));
                 event.time = elapsed();
                 event.kind = message == WM_MOUSEMOVE ? LLVKWidgetTree::PointerKind::Hover : message == WM_LBUTTONDOWN ?
                     LLVKWidgetTree::PointerKind::LeftDown : message == WM_LBUTTONDBLCLK ? LLVKWidgetTree::PointerKind::DoubleClick : LLVKWidgetTree::PointerKind::LeftUp;
@@ -485,7 +523,7 @@ namespace
                     {
                         auto& browser=*browserViews.at(id);
                         const auto display=LLVKBrowserSurface::displayRect(rectangle->right-rectangle->left,rectangle->top-rectangle->bottom,browser.surface().width(),browser.surface().height());
-                        browser.hover(event.x-rectangle->left-display.left,rectangle->bottom+display.top-1-event.y,error);
+                        browser.hover(physical(event.x-rectangle->left-display.left),physical(rectangle->bottom+display.top-event.y)-1,error);
                     }
                 }
                 return 0;
@@ -495,7 +533,8 @@ namespace
                 if (ui->menu().open()) return 0;
                 POINT point{GET_X_LPARAM(data),GET_Y_LPARAM(data)};
                 ScreenToClient(window,&point);
-                const auto bottom=static_cast<std::int32_t>(height)-1-point.y;
+                const auto bottom=logical(static_cast<std::int32_t>(height)-1-point.y);
+                point.x=logical(point.x);
                 const auto clicks=-GET_WHEEL_DELTA_WPARAM(parameter)/WHEEL_DELTA;
                 if (const auto id=browserAt(point.x,bottom))
                 {
@@ -504,7 +543,7 @@ namespace
                     {
                         auto& browser=*browserViews.at(id);
                         const auto display=LLVKBrowserSurface::displayRect(rect->right-rect->left,rect->top-rect->bottom,browser.surface().width(),browser.surface().height());
-                        browser.wheel(point.x-rect->left-display.left,rect->bottom+display.top-1-bottom,0,GET_WHEEL_DELTA_WPARAM(parameter),error);
+                        browser.wheel(physical(point.x-rect->left-display.left),physical(rect->bottom+display.top-bottom)-1,0,GET_WHEEL_DELTA_WPARAM(parameter),error);
                     }
                     return 0;
                 }
@@ -975,6 +1014,8 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     if (!CreateWindowExW(0,windowClass.lpszClassName,L"Vulkanstorm",WS_OVERLAPPEDWINDOW,windowX,windowY,
         rectangle.right-rectangle.left,rectangle.bottom-rectangle.top,nullptr,nullptr,windowClass.hInstance,&state))
     { error = "Native login window creation failed"; return false; }
+    state.updateSystemUiScale();
+    if (!ui->refreshDisplayScale(error,state.systemUiScale)) return fail(Code::StartupResources);
     services.audio=std::make_unique<LLVKAudio>();
     auto& audio=*services.audio;
     std::string audioError;
@@ -1118,8 +1159,8 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     const auto browserId = ui->find("login_html");
     auto browserRect = ui->tree().screenRect(browserId,error);
     if (!browserRect) return false;
-    browserConfiguration.width = browserRect->right-browserRect->left;
-    browserConfiguration.height = browserRect->top-browserRect->bottom;
+    browserConfiguration.width = state.physical(browserRect->right-browserRect->left);
+    browserConfiguration.height = state.physical(browserRect->top-browserRect->bottom);
     services.browser=std::make_unique<LLVKBrowser>();
     auto& browser=*services.browser;
     const auto browserLaunchFailed=[&](LLVKWidgetTree::Id widget,std::string& problem)
@@ -1154,9 +1195,9 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             const auto display=LLVKBrowserSurface::displayRect(node->params.rect.right-node->params.rect.left,height,
                 target->second->surface().width(),target->second->surface().height());
             if (event.kind == LLVKWidgetTree::PointerKind::LeftDown || event.kind == LLVKWidgetTree::PointerKind::DoubleClick)
-            { ui->tree().setKeyboardFocus(id,false,false,state.error); ui->tree().setMouseCapture(id,state.error); target->second->pointer(event.x-display.left,display.top-1-event.y,0,true,state.error); }
+            { ui->tree().setKeyboardFocus(id,false,false,state.error); ui->tree().setMouseCapture(id,state.error); target->second->pointer(state.physical(event.x-display.left),state.physical(display.top-event.y)-1,0,true,state.error); }
             else if (event.kind == LLVKWidgetTree::PointerKind::LeftUp)
-            { target->second->pointer(event.x-display.left,display.top-1-event.y,0,false,state.error); ui->tree().setMouseCapture(0,state.error); }
+            { target->second->pointer(state.physical(event.x-display.left),state.physical(display.top-event.y)-1,0,false,state.error); ui->tree().setMouseCapture(0,state.error); }
         };
         ui->tree().setEvents(widget,std::move(events));
     };
@@ -1167,7 +1208,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         const auto rect=ui->tree().screenRect(id,problem);
         if (!rect) return false;
         auto settings=browserConfiguration;
-        settings.width=rect->right-rect->left; settings.height=rect->top-rect->bottom;
+        settings.width=state.physical(rect->right-rect->left); settings.height=state.physical(rect->top-rect->bottom);
         const auto [entry,inserted]=services.browsers.try_emplace(id,std::make_unique<LLVKBrowser>());
         if (!inserted) { problem="Native embedded browser already has an owner"; return false; }
         auto& view=*entry->second;
@@ -1307,6 +1348,9 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         while (PeekMessageW(&message,nullptr,0,0,PM_REMOVE))
         { if (message.message == WM_QUIT) state.quitRequested = true; TranslateMessage(&message); DispatchMessageW(&message); }
         if (!state.error.empty()) { error = state.error; return false; }
+        const auto previousScale=ui->displayScale();
+        if (!ui->refreshDisplayScale(error,state.systemUiScale)) return fail(Code::StartupResources);
+        const bool scaleChanged=previousScale!=ui->displayScale();
         if (state.quitRequested)
         {
             std::map<std::string,LLSD> placement;
@@ -1379,9 +1423,10 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             }
             if (view.state()==LLVKBrowser::State::Running && ui->tree().get(id))
             {
+                if (!view.setPageScale(ui->displayScale(),error)) return false;
                 const auto rectangle=ui->tree().screenRect(id,error);
                 if (!rectangle) return false;
-                const auto width=rectangle->right-rectangle->left,height=rectangle->top-rectangle->bottom;
+                const auto width=state.physical(rectangle->right-rectangle->left),height=state.physical(rectangle->top-rectangle->bottom);
                 if (width>0 && height>0 && (view.surface().width()!=static_cast<std::uint32_t>(width) ||
                     view.surface().height()!=static_cast<std::uint32_t>(height)) && !view.resize(width,height,error)) return false;
                 state.input.browsers[id]=view.surface().frame();
@@ -1400,16 +1445,18 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             }
         }
         }
-        if ((state.resize || renderer.synchronizedPresentationRequested() != synchronizedPresentation()) && state.width && state.height)
+        if ((state.resize || scaleChanged || renderer.synchronizedPresentationRequested() != synchronizedPresentation()) && state.width && state.height)
         {
             ui->menu().dismiss();
-            if (!renderer.createSwapchain(surface,state.width,state.height,error,synchronizedPresentation())) return fail(Code::RendererUnavailable);
-            if (!ui->tree().reshape(ui->root(),renderer.swapchainExtent().width,renderer.swapchainExtent().height,error)) return false;
+            if ((state.resize || renderer.synchronizedPresentationRequested()!=synchronizedPresentation()) &&
+                !renderer.createSwapchain(surface,state.width,state.height,error,synchronizedPresentation())) return fail(Code::RendererUnavailable);
+            if (!ui->tree().reshape(ui->root(),static_cast<int>(std::floor(renderer.swapchainExtent().width/ui->displayScale()+0.5f)),
+                static_cast<int>(std::floor(renderer.swapchainExtent().height/ui->displayScale()+0.5f)),error)) return false;
             if (!ui->tree().prepareLayoutStacks(ui->root(),0,error)) return false;
             browserRect = ui->tree().screenRect(browserId,error);
             if (!browserRect) return false;
             if (loginBrowserStarted && application.access->service && application.access->service->active() &&
-                !browser.resize(browserRect->right-browserRect->left,browserRect->top-browserRect->bottom,error)) return false;
+                !browser.resize(state.physical(browserRect->right-browserRect->left),state.physical(browserRect->top-browserRect->bottom),error)) return false;
             state.resize = false;
             aboutInfo["WINDOW_WIDTH"]=static_cast<int>(renderer.swapchainExtent().width);
             aboutInfo["WINDOW_HEIGHT"]=static_cast<int>(renderer.swapchainExtent().height);
@@ -1424,6 +1471,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         state.input.editor.secondsSinceKeystroke = std::chrono::duration<double>(now-state.keystroke).count();
         if (loginBrowserStarted && application.access->service && application.access->service->active())
         {
+            if (!browser.setPageScale(ui->displayScale(),error)) return false;
             state.input.browsers[browserId] = browser.surface().frame();
             state.input.browserEpochs[browserId] = browser.surface().epoch();
         }
@@ -1431,6 +1479,8 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         ui->tree().advanceTime(state.elapsed(),error);
         if (state.width && state.height)
         {
+            state.input.physicalWidth=renderer.swapchainExtent().width;
+            state.input.physicalHeight=renderer.swapchainExtent().height;
             const auto paint = ui->preparePaint(state.input,error);
             if (!paint) return fail(Code::StartupResources);
             const auto ready = gpu.prepare(*paint,renderer.swapchainExtent(),packet,error);

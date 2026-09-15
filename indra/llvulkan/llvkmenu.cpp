@@ -388,7 +388,10 @@ bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::
         mHits.push_back({item,0,rect});
         const bool selected = (!mOpen.empty() && mOpen[0] == item) || mHovered == item;
         if (selected) solid(item,rect,highlight);
-        if (!text(item,mItems[item].label,left+width/2.f,rect.bottom+1.f,selected ? foreground : normal,LLVKFont::HorizontalAlign::Center)) return false;
+        const auto scale=mFont->displayScale();
+        const auto itemOriginX=std::floor(left*scale)/scale;
+        const auto itemOriginY=std::floor(rect.bottom*scale)/scale;
+        if (!text(item,mItems[item].label,itemOriginX+width/2.f,itemOriginY+1.f,selected ? foreground : normal,LLVKFont::HorizontalAlign::Center)) return false;
         left += width;
     }
     const int rowHeight = static_cast<int>(mFont->metrics().lineHeight)+4;

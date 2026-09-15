@@ -635,7 +635,7 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
         const std::u32string label(wideLabel.begin(),wideLabel.end());
         const auto measured=font->measureRun(label,0,label.size(),1.f,true,false,error);
         if (!measured) return false;
-        buttonWidth=std::max(buttonWidth,static_cast<int>(measured->width+0.99f)+static_cast<int>(padding->width)+8);
+        buttonWidth=std::max(buttonWidth,static_cast<int>(std::floor(measured->width+0.5f))+static_cast<int>(std::floor(padding->width+0.5f))+8);
     }
     const auto totalButtons=buttonWidth*static_cast<int>(notice.buttons.size())+8*static_cast<int>(notice.buttons.size()-1);
     const auto textWidth=std::min(static_cast<int>(options.width),document->bounds.right-document->bounds.left+25);

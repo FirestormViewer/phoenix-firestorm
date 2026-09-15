@@ -22,6 +22,7 @@ public:
         std::vector<std::string> ultimateFallbacks;
         float horizontalDpi = 96.f;
         float verticalDpi = 96.f;
+        float displayScale = 1.f;
         float sizeAdjustment = 0.f;
         bool monochromeEmoji = false;
     };
@@ -29,6 +30,7 @@ public:
     static std::unique_ptr<LLVKFontRegistry> create(std::span<const std::string> documents,
                                                    Configuration configuration, std::string& error);
     std::shared_ptr<LLVKFont> resolve(const Request& request, std::string& error);
+    bool setDisplayScale(float scale, float horizontalBaseDpi, float verticalBaseDpi, std::string& error);
     std::string diagnostics() const;
     ~LLVKFontRegistry();
 private:

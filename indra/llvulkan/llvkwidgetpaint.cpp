@@ -87,8 +87,13 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             for (const auto value : {left,right,bottom,top})
                 if (value < INT32_MIN || value > INT32_MAX) { error = "Native paint coordinates overflow"; return false; }
             if (text)
+            {
+                const auto scale=text->displayScale;
+                const auto originX=std::floor(screen->left*scale)/scale;
+                const auto originY=std::floor(screen->bottom*scale)/scale;
                 for (auto& glyph : text->glyphs)
-                { glyph.left += screen->left; glyph.right += screen->left; glyph.bottom += screen->bottom; glyph.top += screen->bottom; }
+                { glyph.left += originX; glyph.right += originX; glyph.bottom += originY; glyph.top += originY; }
+            }
             output.commands.push_back({id,{static_cast<std::int32_t>(left),static_cast<std::int32_t>(bottom),static_cast<std::int32_t>(right),static_cast<std::int32_t>(top)},
                 clip,color,std::move(image),std::move(text),mask,additive,shadow});
             return true;
@@ -690,11 +695,15 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                 options.y = float(sourceLine.bottom+document->params.rect.bottom);
                 options.vertical = LLVKFont::VerticalAlign::Bottom;
                 options.maxPixels=std::max(0,static_cast<int>(document->params.rect.right-runLeft));
-                if (!text.icons.empty())
+                if (text.params.vertical==LLVKFont::VerticalAlign::Top)
                 {
-                    const auto& metrics=node->control->params.font->metrics();
-                    const auto fontHeight=static_cast<int>(std::ceil(metrics.ascender)+std::ceil(metrics.descender));
-                    options.y=float(sourceLine.top-fontHeight+document->params.rect.bottom);
+                    options.y=float(sourceLine.top+document->params.rect.bottom);
+                    options.vertical=LLVKFont::VerticalAlign::Top;
+                }
+                else if (text.params.vertical==LLVKFont::VerticalAlign::Center)
+                {
+                    options.y=(sourceLine.top+sourceLine.bottom)*0.5f+document->params.rect.bottom;
+                    options.vertical=LLVKFont::VerticalAlign::Center;
                 }
                 if (text.params.useEllipses)
                 {

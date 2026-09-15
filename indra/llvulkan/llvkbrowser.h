@@ -40,6 +40,7 @@ public:
     bool command(Command command,std::string& error);
     std::optional<Navigation> navigation(std::string& error) const;
     bool resize(std::uint32_t width, std::uint32_t height, std::string& error);
+    bool setPageScale(float scale,std::string& error);
     bool requestClose(std::string& error);
     bool pointer(int x, int y, int button, bool down, std::string& error);
     bool hover(int x, int y, std::string& error);
@@ -59,6 +60,7 @@ private:
     std::vector<Event> mEvents;
     State mState = State::Fresh;
     bool mInitialized = false, mExitReady = false, mCallbackFailed = false;
+    float mPageScale=1.f;
 };
 
 #endif
