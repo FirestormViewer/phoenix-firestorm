@@ -64,7 +64,7 @@
 	<combo_box name="compile_target">
 		<combo_box.item label="LSL auf Mono" name="compile_target_mono"/>
 		<combo_box.item label="LSL Altsystem" name="compile_target_lsl2"/>
-		<combo_box.item label="LSL auf Lua" name="compile_target_lsl_luau"/>
+		<combo_box.item label="LSL auf Luau" name="compile_target_lsl_luau"/>
 		<combo_box.item label="Lua" name="compile_target_luau"/>
 	</combo_box>
 </panel>
