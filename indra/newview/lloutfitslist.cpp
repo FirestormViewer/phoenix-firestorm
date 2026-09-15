@@ -66,6 +66,46 @@ static bool is_tab_header_clicked(LLOutfitAccordionCtrlTab* tab, S32 y);
 
 static const LLOutfitTabNameComparator OUTFIT_TAB_NAME_COMPARATOR;
 static const LLOutfitTabFavComparator OUTFIT_TAB_FAV_COMPARATOR;
+static const LLOutfitTabDateComparator OUTFIT_TAB_DATE_COMPARATOR;
+static const LLOutfitTabFavDateComparator OUTFIT_TAB_FAV_DATE_COMPARATOR;
+
+// Bits of the "OutfitListSortOrder" saved setting.
+static const S32 OUTFIT_SORT_FAVORITES_TO_TOP = 0x1;
+static const S32 OUTFIT_SORT_NEWEST_FIRST     = 0x2;
+
+// Returns the creation date of the outfit folder backing this tab, or 0
+// if the folder can't be found for some reason.
+// LLViewerInventoryCategory has no reliable creation date of its own - the
+// inventory protocol only ever tracks CreationDate for items, not folders
+// (see LLInventoryObject::setCreationDate()'s own comment: "only stored
+// for items" - LLViewerInventoryCategory doesn't even override
+// getCreationDate(), so it always reads back the default-constructed 0).
+// Approximate "when was this outfit made" instead using the newest
+// creation date among the outfit's direct contents: saving/updating an
+// outfit creates fresh link items inside its folder, and those links get
+// a real, server-tracked creation date.
+static time_t get_outfit_tab_creation_date(const LLAccordionCtrlTab* tab)
+{
+    LLOutfitAccordionCtrlTab* outfit_tab = (LLOutfitAccordionCtrlTab*)tab;
+
+    LLInventoryModel::cat_array_t* cats = NULL;
+    LLInventoryModel::item_array_t* items = NULL;
+    gInventory.getDirectDescendentsOf(outfit_tab->getFolderID(), cats, items);
+
+    time_t newest = 0;
+    if (items)
+    {
+        for (LLInventoryModel::item_array_t::const_iterator it = items->begin(); it != items->end(); ++it)
+        {
+            const LLViewerInventoryItem* item = *it;
+            if (item && item->getCreationDate() > newest)
+            {
+                newest = item->getCreationDate();
+            }
+        }
+    }
+    return newest;
+}
 
 /*virtual*/
 bool LLOutfitTabNameComparator::compare(const LLAccordionCtrlTab* tab1, const LLAccordionCtrlTab* tab2) const
@@ -80,6 +120,38 @@ bool LLOutfitTabFavComparator::compare(const LLAccordionCtrlTab* tab1, const LLA
     if (taba->getFavorite() != tabb->getFavorite())
     {
         return taba->getFavorite();
+    }
+
+    return (LLStringUtil::compareDict(tab1->getTitle(), tab2->getTitle()) < 0);
+}
+
+bool LLOutfitTabDateComparator::compare(const LLAccordionCtrlTab* tab1, const LLAccordionCtrlTab* tab2) const
+{
+    time_t date1 = get_outfit_tab_creation_date(tab1);
+    time_t date2 = get_outfit_tab_creation_date(tab2);
+    if (date1 != date2)
+    {
+        return date1 > date2; // newest first
+    }
+
+    // Stable fallback when dates are equal (or unknown for both).
+    return (LLStringUtil::compareDict(tab1->getTitle(), tab2->getTitle()) < 0);
+}
+
+bool LLOutfitTabFavDateComparator::compare(const LLAccordionCtrlTab* tab1, const LLAccordionCtrlTab* tab2) const
+{
+    LLOutfitAccordionCtrlTab* taba = (LLOutfitAccordionCtrlTab*)tab1;
+    LLOutfitAccordionCtrlTab* tabb = (LLOutfitAccordionCtrlTab*)tab2;
+    if (taba->getFavorite() != tabb->getFavorite())
+    {
+        return taba->getFavorite();
+    }
+
+    time_t date1 = get_outfit_tab_creation_date(tab1);
+    time_t date2 = get_outfit_tab_creation_date(tab2);
+    if (date1 != date2)
+    {
+        return date1 > date2; // newest first
     }
 
     return (LLStringUtil::compareDict(tab1->getTitle(), tab2->getTitle()) < 0);
@@ -157,13 +229,24 @@ bool LLOutfitsList::postBuild()
 void LLOutfitsList::initComparator()
 {
     S32 mode = gSavedSettings.getS32("OutfitListSortOrder");
-    if (mode == 0)
+    bool favorites_to_top = (mode & OUTFIT_SORT_FAVORITES_TO_TOP) != 0;
+    bool newest_first = (mode & OUTFIT_SORT_NEWEST_FIRST) != 0;
+
+    if (newest_first && favorites_to_top)
     {
-        mAccordion->setComparator(&OUTFIT_TAB_NAME_COMPARATOR);
+        mAccordion->setComparator(&OUTFIT_TAB_FAV_DATE_COMPARATOR);
+    }
+    else if (newest_first)
+    {
+        mAccordion->setComparator(&OUTFIT_TAB_DATE_COMPARATOR);
+    }
+    else if (favorites_to_top)
+    {
+        mAccordion->setComparator(&OUTFIT_TAB_FAV_COMPARATOR);
     }
     else
     {
-        mAccordion->setComparator(&OUTFIT_TAB_FAV_COMPARATOR);
+        mAccordion->setComparator(&OUTFIT_TAB_NAME_COMPARATOR);
     }
     sortOutfits();
 }
@@ -904,9 +987,25 @@ void LLOutfitsList::onChangeSortOrder(const LLSD& userdata)
     std::string sort_data = userdata.asString();
     if (sort_data == "favorites_to_top")
     {
-        // at the moment this is a toggle
+        // this one's a toggle, independent of the alphabetical/newest-first choice
         S32 val = gSavedSettings.getS32("OutfitListSortOrder");
-        gSavedSettings.setS32("OutfitListSortOrder", (val ? 0 : 1));
+        gSavedSettings.setS32("OutfitListSortOrder", val ^ OUTFIT_SORT_FAVORITES_TO_TOP);
+
+        initComparator();
+    }
+    else if (sort_data == "alphabetical" || sort_data == "newest_first")
+    {
+        // these two are mutually exclusive, so set/clear the bit rather than toggling it
+        S32 val = gSavedSettings.getS32("OutfitListSortOrder");
+        if (sort_data == "newest_first")
+        {
+            val |= OUTFIT_SORT_NEWEST_FIRST;
+        }
+        else
+        {
+            val &= ~OUTFIT_SORT_NEWEST_FIRST;
+        }
+        gSavedSettings.setS32("OutfitListSortOrder", val);
 
         initComparator();
     }
@@ -1773,16 +1872,29 @@ void LLOutfitListSortMenu::onUpdateItemsVisibility()
     if (!mMenu) return;
     mMenu->setItemVisible("expand", true);
     mMenu->setItemVisible("collapse", true);
+    mMenu->setItemVisible("sort_alphabetical", true);
+    mMenu->setItemVisible("sort_newest_first", true);
     mMenu->setItemVisible("sort_favorites_to_top", true);
     mMenu->setItemVisible("show_entire_outfit_in_search", true);
 }
 
 bool LLOutfitListSortMenu::onEnable(LLSD::String param)
 {
+    static LLCachedControl<S32> sort_order(gSavedSettings, "OutfitListSortOrder", 0);
+
     if ("favorites_to_top" == param)
     {
-        static LLCachedControl<S32> sort_order(gSavedSettings, "OutfitListSortOrder", 0);
-        return sort_order == 1;
+        return (sort_order & OUTFIT_SORT_FAVORITES_TO_TOP) != 0;
+    }
+    else if ("newest_first" == param)
+    {
+        return (sort_order & OUTFIT_SORT_NEWEST_FIRST) != 0;
+    }
+    else if ("alphabetical" == param)
+    {
+        // the alphabetical/newest-first choice is mutually exclusive,
+        // so "alphabetical" is simply "newest-first is off"
+        return (sort_order & OUTFIT_SORT_NEWEST_FIRST) == 0;
     }
     else if ("show_entire_outfit" == param)
     {
