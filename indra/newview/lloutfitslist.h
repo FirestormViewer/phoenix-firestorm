@@ -73,6 +73,41 @@ public:
     /*virtual*/ bool compare(const LLAccordionCtrlTab* tab1, const LLAccordionCtrlTab* tab2) const;
 };
 
+// <FS:TP> [FIRE-36105] Add date-based outfit sort comparators
+/**
+ * @class LLOutfitTabDateComparator
+ *
+ * Comparator of outfit tabs sorting newest-created outfit first.
+ */
+class LLOutfitTabDateComparator : public LLAccordionCtrl::LLTabComparator
+{
+    LOG_CLASS(LLOutfitTabDateComparator);
+
+public:
+    LLOutfitTabDateComparator() {};
+    virtual ~LLOutfitTabDateComparator() {};
+
+    /*virtual*/ bool compare(const LLAccordionCtrlTab* tab1, const LLAccordionCtrlTab* tab2) const;
+};
+
+/**
+ * @class LLOutfitTabFavDateComparator
+ *
+ * Comparator of outfit tabs: favorites first, newest-created first within
+ * each group.
+ */
+class LLOutfitTabFavDateComparator : public LLAccordionCtrl::LLTabComparator
+{
+    LOG_CLASS(LLOutfitTabFavDateComparator);
+
+public:
+    LLOutfitTabFavDateComparator() {};
+    virtual ~LLOutfitTabFavDateComparator() {};
+
+    /*virtual*/ bool compare(const LLAccordionCtrlTab* tab1, const LLAccordionCtrlTab* tab2) const;
+};
+// </FS:TP>
+
 class LLOutfitListBase : public LLPanelAppearanceTab
 {
 public:
