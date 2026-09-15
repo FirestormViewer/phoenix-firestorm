@@ -19,6 +19,19 @@ bool LLVKUiPacket::image(const LLVKWidgetImage& source, std::shared_ptr<const LL
     return true;
 }
 
+bool LLVKUiPacket::browserImage(const LLVKWidgetImage& source,std::shared_ptr<const LLVKGlyphImage> resource,
+    LLVKWidgetImage::Region deviceRectangle,VkRect2D clip,const LLVKColor::Value& color,std::string& error)
+{
+    error.clear();
+    if (!resource || resource->extent().width!=source.pixelWidth() || resource->extent().height!=source.pixelHeight() ||
+        deviceRectangle.left>deviceRectangle.right || deviceRectangle.bottom>deviceRectangle.top)
+    { error="Native browser quad requires matching published pixels and valid bounds"; return false; }
+    LLVKWidgetImage::Geometry geometry;
+    geometry.count=1;
+    geometry.quads[0]={deviceRectangle,source.clipRegion()};
+    return append(geometry,std::move(resource),clip,color,error);
+}
+
 bool LLVKUiPacket::solid(LLVKWidgetImage::Region deviceRectangle, VkRect2D clip,
     const LLVKColor::Value& color, std::string& error)
 {

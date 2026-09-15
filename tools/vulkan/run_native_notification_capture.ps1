@@ -8,6 +8,14 @@ param(
 $ErrorActionPreference='Stop'
 $fixturePath=(Resolve-Path -LiteralPath $Fixture).Path
 $requestPath=(Resolve-Path -LiteralPath $Request).Path
+$requestXml=[xml](Get-Content -LiteralPath $requestPath -Raw)
+$pageNode=$requestXml.SelectSingleNode('/llsd/map/key[text()="pagePath"]/following-sibling::string[1]')
+$pagePath=if ($pageNode) { (Resolve-Path -LiteralPath $pageNode.InnerText).Path } else { Join-Path $PSScriptRoot 'notification_background.html' }
+$pageHash=(Get-FileHash -LiteralPath $pagePath).Hash
+if ($pageNode) {
+    $expectedHash=$requestXml.SelectSingleNode('/llsd/map/key[text()="pageSha256"]/following-sibling::string[1]')
+    if (!$expectedHash -or $expectedHash.InnerText -ne $pageHash) { throw 'Native fixture page differs from reference request.' }
+}
 if (Test-Path -LiteralPath $OutputDirectory) { throw 'Refusing to overwrite capture evidence.' }
 $root=[IO.Directory]::CreateDirectory($OutputDirectory).FullName
 $serverStart=[Diagnostics.ProcessStartInfo]::new((Get-Command node -ErrorAction Stop).Source)
@@ -15,6 +23,7 @@ $serverStart.UseShellExecute=$false
 $serverStart.RedirectStandardInput=$true
 $serverStart.RedirectStandardOutput=$true
 $serverStart.ArgumentList.Add((Join-Path $PSScriptRoot 'notification_background.cjs'))
+$serverStart.ArgumentList.Add($pagePath)
 $server=[Diagnostics.Process]::Start($serverStart)
 try {
     $ready=$server.StandardOutput.ReadLineAsync()
@@ -42,7 +51,8 @@ try {
         request=$requestPath
         requestSha256=(Get-FileHash -LiteralPath $requestPath).Hash
         backgroundUrl=$pageUrl
-        backgroundSha256=(Get-FileHash (Join-Path $PSScriptRoot 'notification_background.html')).Hash
+        backgroundSha256=$pageHash
+        backgroundPath=$pagePath
         requestedMaximized=$Maximized.IsPresent
         buttonStates=$ButtonStates
         exitCode=$process.ExitCode

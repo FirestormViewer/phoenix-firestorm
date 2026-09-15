@@ -34,7 +34,7 @@ bool LLVKImagePublication::advance(std::shared_ptr<const LLVKWidgetImage> latest
     }
     if (!latest || latest == mCurrent.source) return true;
     mUpload = LLVKGlyphUpload::submit(mDevice,{latest->pixelWidth(),latest->pixelHeight()},latest->bottomUpRgba(),error,
-        LLVKGlyphUpload::Sampling::SkinLinearClamp);
+        LLVKGlyphUpload::Sampling::BrowserLinearRepeat);
     if (!mUpload) { mFailure = error; return false; }
     mUploading = std::move(latest);
     return true;

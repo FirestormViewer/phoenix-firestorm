@@ -1,5 +1,249 @@
 # Native error messaging
 
+## Rich browser visual differences traced and corrected (2026-09-15)
+
+The controlled rich local page now matches the unchanged pinned GL captures
+exactly at both 100 and 125 percent UI scale. This supersedes the browser-blocker
+status below for these two initial presentation states, not the whole no-login
+TODO or arbitrary browser workflows.
+
+### Source contract and discriminating checks
+
+NV-00/01/02/03/11/12/13/14/15/17 apply. Pinned GL source remains
+59108e15a1f8f94d2da7c674d937d19f5cf9450d. The traced roots are MediaPluginCEF
+construction/initialization, Dullahan's OnBeforeCommandLineProcessing,
+LLViewerMediaImpl::updateMediaImage/preMediaTexUpdate/doMediaTexUpdate,
+LLViewerMediaTexture construction, LLImageGL initialization and LLMediaCtrl::draw.
+
+1. Reference MediaPluginCEF initializes mDisableGPU=false, passes it into Dullahan,
+   and registers browser callbacks. The gpu_disabled receive branch has no sender
+   in the inspected reference tree. Native had instead forced disable_gpu=true,
+   adding disable-gpu and disable-gpu-compositing switches. No font-raster override
+   was found in these paths. The coherent CEF 152 native build still differed in
+   exactly 4101 pixels at 100 percent (native-browser-content-76), with the same
+   image hash as before dependency alignment. A separately identified current GL
+   CEF 152 diagnostic (gl-current-cef152-browser-58) was byte-identical to pinned
+   GL capture 53. Thus CEF version was not the cause in this case. Enabling native
+   CEF GPU rasterization with an explicit D3D11 ANGLE backend removed all 4101
+   differences (native-browser-content-78), without changing page bytes or colors.
+2. Reference media pixels occupy the lower-left region of a power-of-two texture,
+   initialized opaque white; RGB upload ignores browser alpha. LLMediaCtrl samples
+   through media-size/texture-size UVs and applies fractional UI transforms directly.
+   Native now owns equivalent padded bottom-up RGBA pixels, preserves logical
+   dimensions, and supplies the occupied UV region. Padding alone left the
+   unscaled image unchanged (native-browser-content-77); it is not claimed as the
+   cause of the text mismatch. The earlier direct fractional browser quad remains.
+3. LLImageGL defaults to TAM_WRAP, and the media constructor does not override it.
+   Native streaming publication incorrectly used the skin linear-clamp sampler.
+   After the raster correction, 125 percent differed in only 1156 pixels, at the
+   right browser edge (native-browser-content-79). An explicit BrowserLinearRepeat
+   sampler removed all 1156 differences (native-browser-content-80). Skin clamp
+   and glyph nearest-repeat policies remain unchanged.
+
+### Native design and safety
+
+CEF is independently built third-party functionality, not a viewer GL visual
+wrapper. Native's Dullahan command-line setup explicitly selects use-gl=angle and
+use-angle=d3d11. Its CEF child uses D3D11 for browser rasterization; native still
+receives CPU BGRA callbacks, copies immutable frames, uploads through Vulkan and
+presents only the Vulkan-composed UI. No desktop OpenGL context or viewer GL draw
+path is requested. Native WebGL remains disabled and is not qualified here.
+CEF's existing error, callback, multiple-view lifetime and final shutdown owners
+are unchanged. EGL/GLES runtime files required by ANGLE are staged from the same
+CEF 152 package; their presence is not desktop OpenGL rendering.
+
+The image producer retains logical dimensions separately from padded allocation
+dimensions. Padded allocations are bounded to 16 million pixels, alpha stays
+opaque, and publication pairs each immutable source with its matching uploaded
+resource. Existing upload fences, image barriers, noncoherent handling, descriptor
+ownership and completion-based retirement are unchanged. Sampler selection uses
+the existing device linear-filter capability check and no new shader ABI.
+
+Capture 82 observed five live Dullahan children, one loading d3d11.dll, and none
+loading opengl32.dll; the existing parent no-OpenGL-module assertion also passes.
+The module snapshots are runtime evidence at capture time, not exhaustive API
+tracing on every platform. An initial probe accidentally inspected the transient
+WGC helper and failed; capture 81 is retained as a failed fixture run. The corrected
+probe restricts inspection to Dullahan children and flushes diagnostics before
+assertions. Unsupported D3D11 environments and CEF failure/fallback behavior on
+other devices remain unverified; no OpenGL fallback was added.
+
+### Exact measured results
+
+All comparisons below use unchanged browser_parity.html bytes, default skin/en,
+anisotropy off, maximized 2560x1369 WGC RGBA8 client captures and tolerance zero.
+Paths are under glref-build/captures. Existing reference captures were reused.
+
+| UI scale | Retained GL | Final native | Report | Differing pixels |
+|---|---|---|---|---|
+| 100 percent | gl-browser-content-53 | native-browser-content-82 | browser-content-parity-53-82 | 0 |
+| 125 percent | gl-browser-content-52 | native-browser-content-80 | browser-content-parity-52-80 | 0 |
+
+100-percent SHA256:
+B5D2EC4FFB3BB12ED5BE998A10314E0D6DF78D92F29A59C0943F662E8B8054B7.
+125-percent SHA256:
+0674BC37F666859EA705D7D3E95B0D4B995A9F1347093FCA933633DD74E8BCEB.
+The final 100-percent run includes the repeat sampler and CEF module checks;
+125 percent uses the same production changes before adding that diagnostic check.
+Widget210/210 verifies padded browser stride/UVs and immutable copies. GPU10/10
+passes on AMD Radeon RX 9070 XT with the new sampler and existing publication,
+retirement and fractional-quad checks. Window7/7 passes, including native browser
+mouse, keyboard, wheel, close and reopen; these functional tests do not establish
+visual parity for the interaction sequence. Existing LNK4020 PDB warnings persist.
+The Windows GPU test now asserts that VkLayer_khronos_validation.dll is loaded;
+GPU10/10 passes with that assertion, rather than merely requesting validation.
+The viewer was relinked successfully with the final production browser changes.
+
+The current-GL diagnostic has source base ab4ed0923c61f594329b3bb8341ca4b6129fece8
+plus working-tree changes, not the historical reference revision. Its mislabeled
+sidecar was corrected without changing captured pixels. The GL runner now rejects
+non-oracle binaries unless an explicit diagnostic ReferenceRevision is supplied.
+No oracle baseline, tolerance, GL implementation or page styling was changed.
+No authentication or commit/push. Broader browser interaction/scroll/navigation,
+animation, nested dialogs, WebGL, alternate drivers and display policies remain
+open rather than being inferred from these two exact initial-state comparisons.
+
+## Upstream CEF 152 alignment (2026-09-15)
+
+At the user's direction, the current build now consistently targets upstream
+Dullahan 1.44.0 / CEF 152.0.6+g708dc14+chromium-152.0.7977.83. The earlier
+headers/runtime mismatch below is historical and is resolved for the active
+build, not by downgrading the package or changing the pinned GL oracle.
+
+NV-00/01/02/03/17: the current GL media plugin already consumes the upstream
+autobuild package's Dullahan facade, wrapper, helper and runtime. Native retains
+its independently built Dullahan owner and CPU-rendered browser policy, with
+unchanged explicit initialization/reference-counting/shutdown patches. Its CEF
+header archive now matches that package (SHA1
+e5e3020627f4528bd43e22f4c4970000b0458e99), and Dullahan source is pinned to release
+v1.44.0-CEF_152.0.6.83, commit f75972f4cba3a01a23007ed79b6c204ececf352c.
+The new upstream dullahan_embed_scheme.cpp is included to satisfy the updated
+implementation's resource-handler factory. This is third-party CPU URL/resource
+handling, not a viewer GL helper; native does not configure an embed root.
+Embed application workflows are not newly qualified. No GPU upload, shader,
+descriptor or retirement behavior changes in this dependency update.
+
+Fetched source contents are copied with configure_file(COPYONLY) before compilation
+so older archive timestamps cannot leave stale Visual Studio objects after a pin
+update. The first build exposed the missing embed source and stale callback-manager
+object; the corrected build passes Window7/7, including native login/Guidebook
+mouse, keyboard, wheel, close and reopen. Existing LNK4020 PDB warnings remain.
+The current media_plugin_cef and copy_w_viewer_manifest targets also build, and
+the native viewer link passes. Viewer llplugin and native fixture runtime/helper,
+common resources and deployed locales were hash-checked against the CEF 152 package.
+The fixture copies all package locales; the viewer keeps its existing manifest
+selection. No GL implementation or packaging policy was modified.
+
+The historical GL oracle and all prior captures remain unchanged. Its CEF 139
+pixels are not a matched-CEF browser oracle, and the earlier rich-content failures
+remain failures. This update is build/runtime validation, not a new exact-parity
+claim or completion of the no-login sweep. No authentication, commit or push.
+
+## No-login locale sweep and browser blocker (2026-09-15)
+
+The second TODO remains open. This slice extends initial local-notification
+presentation coverage; it does not qualify all no-login dialogs or browser
+interactions. Authentication-dependent tests remain deferred. The pinned GL
+revision, binary, assets and zero-tolerance comparison are unchanged.
+
+### Locale contract, correction and evidence
+
+NV-00/01/02/12/17: at reference revision
+59108e15a1f8f94d2da7c674d937d19f5cf9450d, LLAppViewer initialization supplies
+LLUI::getLanguage() to the skin owner. LLUI::getUILanguage(false) resolves
+Language, InstallLanguage and SystemLanguage in that order, skipping empty and
+default entries. It chooses English if none applies. FSEnabledLanguages then
+filters that result: a disabled language yields English and writes Language=default.
+The bypass for agent-language reporting is not the visual startup contract.
+These are CPU settings/resource-selection responsibilities; no GL visual helper
+is shared with native. Existing native LLControlGroup/settings bindings remain
+the persistence and callback owners.
+
+LLVKViewerUi::uiLanguage independently resolves the settings snapshot and records
+the reset in that snapshot. Startup and the isolated capture fixture apply the
+result before loading visual resources and propagate the reset through native
+settings. Startup status, main UI, browser language and login-page language use
+the same resolved value. Explicit low-level skin selection for translation
+previews is unchanged. There are no GPU synchronization or lifetime changes.
+Widget210/210 covers precedence, enabled-language preservation, disabled-language
+fallback/reset and an empty allowlist; Window7/7 and viewer link validation pass.
+Actual OS-language discovery and all settings-change callback combinations are
+not newly qualified by these tests.
+
+All following settled-0 comparisons are full-frame 2560x1369 RGBA8, maximized,
+default skin, UI scale 1.0, anisotropy off, MediaPluginFailed with
+PLUGIN=media_plugin_cef, and the unchanged local gray page. Every row has zero
+differing pixels and zero channel error. Directories are under glref-build/captures.
+
+| Requested locale | GL capture | Native capture | Comparison directory |
+|---|---|---|---|
+| az | gl-locale-54-az | native-locale-72-az | locale-parity-54-72-az |
+| da (English fallback) | gl-locale-54-da | native-locale-73-da | locale-parity-54-73-da |
+| pl | gl-locale-55-pl | native-locale-74-pl | locale-parity-55-74-pl |
+| pt | gl-locale-56-pt | native-locale-74-pt | locale-parity-56-74-pt |
+| ru | gl-locale-57-ru | native-locale-75-ru | locale-parity-57-75-ru |
+| tr (English fallback) | gl-locale-57-tr | native-locale-75-tr | locale-parity-57-75-tr |
+| zh | gl-locale-57-zh | native-locale-75-zh | locale-parity-57-75-zh |
+
+The Danish failure (native-locale-72-da, 7344 differing pixels) remains retained;
+only the native side was rerun after correction. The original Portuguese GL
+capture gl-locale-55-pt had a black, not-yet-painted browser surface and was not
+a matched-input comparison. The GL harness now gates settled acquisition on a
+bounded WGC sample of the fixture's gray background. This readiness sample is not
+parity acceptance: every pixel still participates in the final comparison.
+Only that invalid GL run was repeated; the passing native Portuguese capture
+was reused. Both fixture pages must retain the expected gray readiness sample.
+All successful GL runs exited zero with Goodbye! and a recorded response; native
+runs passed 7/7 and exited zero. Existing LNK4020 debug-symbol warnings remain.
+
+### Rich browser content: partial correction, not parity
+
+The runners accept a local page path, record its SHA256 in the shared request
+and manifest, and reject mismatched native fixture bytes. The deterministic
+browser_parity.html uses local text, form controls and canvas colors without
+remote assets. Its SHA256 is
+D8638DBB532386F0AA3BE3B2B4B163990A85120807045ECC566369AED528D68C.
+
+NV-00/01/02/11/12/13/14/17: reference LLMediaCtrl::draw emits a direct media quad;
+LLRender::vertex3f applies UI offset/scale without rounding the resulting extent.
+Native streaming images previously used the skin-image preparation path, which
+rounds stretched image extents. LLVKUiPacket's browserImage path now preserves
+the fractional device rectangle and source clip region. It uses the existing
+immutable image publication, append, descriptors and completion-based retention;
+skin-image preparation and the shader ABI are unchanged. GPU10/10 includes an
+exact 13.75 by 16.25 device-extent assertion at scale 1.25.
+
+The correction reduced the 125-percent rich-page mismatch from 18889 pixels
+(gl-browser-content-52 versus native-browser-content-69) to 10914 pixels
+(native-browser-content-70). The 100-percent control still differs in 4101 pixels
+(gl-browser-content-53 versus native-browser-content-71). Reports are
+browser-content-parity-52-69, browser-content-parity-52-70 and
+browser-content-parity-53-71. These are failures, not approximate passes.
+Browser raster-source, padded-edge filtering and effective CEF rendering policy
+remain unqualified; the fractional-quad test alone does not close them.
+
+Dependency inspection found a material input mismatch:
+
+- Pinned GL libcef.dll: 139.0.40+g465474a+chromium-139.0.7258.139,
+   SHA256 CB01DBD9620DE4FBB469BCF85E418A0774E2C5F888FC3C5EDD2C30F17E52D83D.
+- Native fixture libcef.dll: 152.0.6+g708dc14+chromium-152.0.7977.83,
+   SHA256 C08E16D5F1BC62102529B891ADC2B8B8997655EC6A78E9ADC031CE63A317C0F9.
+- native_dullahan.cmake still explicitly pins CEF 139 headers. The current
+   autobuild package declares CEF 152 and stages that runtime into sharedlibs.
+   The separate viewer llplugin deployment inspected before link still had 139.
+- Native explicitly disables CEF GPU rendering. The reference plugin defaults
+   to GPU enabled, but its effective incoming disable setting remains unverified;
+   absence of a saved override is not proof of the effective policy.
+
+Version drift can affect browser pixels but is not yet proven to explain every
+remaining difference. No package downgrade, runtime DLL substitution, GL oracle
+update, GPU-policy change or tolerance adjustment was performed. A coherent
+headers/wrapper/helper/runtime configuration and a controlled comparison are
+required before attributing residual browser pixels to Vulkan or claiming parity.
+Browser interaction/scroll/navigation, nested-dialog workflows, time-aligned
+transitions and broader display/theme combinations remain open. No commit or
+push was made for this slice.
+
 ## UI scaling implemented and 125-percent parity verified (2026-09-15)
 
 Today's scope is the UI-scale failure, not the remainder of the no-login parity

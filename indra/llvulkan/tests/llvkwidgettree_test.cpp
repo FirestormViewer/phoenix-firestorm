@@ -140,6 +140,31 @@ namespace tut
     typedef widgettree_group::object object;
     widgettree_group widgettree_tests("llvkwidgettree");
 
+    template<> template<> void object::test<210>()
+    {
+        set_test_name("native UI language honors enabled locales and installation precedence");
+        std::map<std::string,LLSD> settings;
+        settings["FSEnabledLanguages"]=LLSD::emptyArray();
+        for (const auto* language : {"en","de","fr"}) settings["FSEnabledLanguages"].append(language);
+        settings["Language"]="fr";
+        settings["InstallLanguage"]="de";
+        settings["SystemLanguage"]="en";
+        ensure_equals("explicit language wins",LLVKViewerUi::uiLanguage(settings),std::string("fr"));
+        ensure_equals("enabled language preserved",settings.at("Language").asString(),std::string("fr"));
+        settings["Language"]="default";
+        ensure_equals("installation language next",LLVKViewerUi::uiLanguage(settings),std::string("de"));
+        settings["InstallLanguage"]="";
+        ensure_equals("system language next",LLVKViewerUi::uiLanguage(settings),std::string("en"));
+        settings["SystemLanguage"]="default";
+        ensure_equals("empty chain uses English",LLVKViewerUi::uiLanguage(settings),std::string("en"));
+        settings["Language"]="da";
+        settings["InstallLanguage"]="de";
+        ensure_equals("disabled explicit language uses English",LLVKViewerUi::uiLanguage(settings),std::string("en"));
+        ensure_equals("disabled language resets preference",settings.at("Language").asString(),std::string("default"));
+        settings["FSEnabledLanguages"]=LLSD::emptyArray();
+        ensure_equals("empty allowlist uses English",LLVKViewerUi::uiLanguage(settings),std::string("en"));
+    }
+
     template<> template<> void object::test<209>()
     {
         set_test_name("native session UI uses owner snapshots and rejects delayed recovery actions");
@@ -5376,6 +5401,14 @@ namespace tut
         ensure("stale callback ignored",!surface.publish(2,2,pixels,error) && error.empty());
         ensure_equals("stale callback does not advance generation",surface.generation(),generation);
         ensure("malformed current frame rejected",!surface.publish(3,2,pixels,error) && !error.empty());
+        pixels.assign(3*2*4,99);
+        ensure("non-power-of-two frame published",surface.publish(3,2,pixels,error));
+        const auto paddedFrame=surface.frame();
+        ensure("browser logical dimensions preserved",paddedFrame->width()==3 && paddedFrame->height()==2);
+        ensure("browser storage padded",paddedFrame->pixelWidth()==4 && paddedFrame->pixelHeight()==2);
+        ensure_equals("browser UV excludes padding",paddedFrame->clipRegion().right,0.75f);
+        ensure_equals("browser padding opaque white",paddedFrame->bottomUpRgba()[12],std::uint8_t{255});
+        ensure_equals("browser next row uses padded stride",paddedFrame->bottomUpRgba()[16],std::uint8_t{99});
         ensure("oversized surface rejected",!surface.resize(8192,8192,error));
         ensure_equals("failed resize retains width",surface.width(),3u);
     }

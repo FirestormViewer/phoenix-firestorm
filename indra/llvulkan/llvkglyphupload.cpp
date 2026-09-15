@@ -134,7 +134,8 @@ std::unique_ptr<LLVKGlyphUpload> LLVKGlyphUpload::submit(const Device& device, V
                                                       std::string& error, Sampling sampling)
 {
     error.clear();
-    if (sampling != Sampling::GlyphNearestRepeat && sampling != Sampling::SkinLinearClamp && sampling != Sampling::SkinAnisotropicClamp)
+    if (sampling != Sampling::GlyphNearestRepeat && sampling != Sampling::SkinLinearClamp &&
+        sampling != Sampling::SkinAnisotropicClamp && sampling != Sampling::BrowserLinearRepeat)
     { error = "Invalid native image sampling policy"; return nullptr; }
     if (sampling==Sampling::SkinAnisotropicClamp && !device.samplerAnisotropyEnabled)
     { error="Native anisotropic skin sampling was not enabled on the device"; return nullptr; }
@@ -195,8 +196,9 @@ std::unique_ptr<LLVKGlyphUpload> LLVKGlyphUpload::submit(const Device& device, V
     if (!checked(vkCreateImageView(device.logical, &view, nullptr, &resource->view), "glyph image view", error)) return nullptr;
     VkSamplerCreateInfo sampler{VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO};
     sampler.magFilter = sampler.minFilter = sampling != Sampling::GlyphNearestRepeat ? VK_FILTER_LINEAR : VK_FILTER_NEAREST;
-    sampler.addressModeU = sampler.addressModeV = sampler.addressModeW = sampling != Sampling::GlyphNearestRepeat ?
-        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE : VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    sampler.addressModeU = sampler.addressModeV = sampler.addressModeW =
+        sampling == Sampling::GlyphNearestRepeat || sampling == Sampling::BrowserLinearRepeat ?
+        VK_SAMPLER_ADDRESS_MODE_REPEAT : VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
     if (sampling==Sampling::SkinAnisotropicClamp)
     {
         VkPhysicalDeviceProperties properties{};

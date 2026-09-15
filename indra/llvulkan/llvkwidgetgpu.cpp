@@ -187,6 +187,12 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
         {
             const auto source = command.streamingImage ? mStreams.at(command.owner).publication->current().source : command.image;
             const auto image = command.streamingImage ? mStreams.at(command.owner).publication->current().image : mImages.at({command.image.get(),paint.skinAnisotropy}).ready;
+            if (command.streamingImage)
+            {
+                if (!prepared.browserImage(*source,image,{rect.left*scale,rect.bottom*scale,rect.right*scale,rect.top*scale},clip,command.color,error))
+                    return Status::Failed;
+                continue;
+            }
             if (!prepared.image(*source,image,{rect.left,rect.bottom,rect.right,rect.top},{scale,scale,0,0},clip,
                 command.color,error,command.alphaMask,command.additive ? LLVKContext::Blend2D::AddWithAlpha : LLVKContext::Blend2D::Alpha)) return Status::Failed;
         }

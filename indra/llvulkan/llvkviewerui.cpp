@@ -4,6 +4,26 @@
 #include "llvkxmllayers.h"
 #include <fstream>
 
+std::string LLVKViewerUi::uiLanguage(std::map<std::string,LLSD>& settings)
+{
+    std::string language="en";
+    for (const auto* name : {"Language","InstallLanguage","SystemLanguage"})
+    {
+        const auto found=settings.find(name);
+        if (found==settings.end()) continue;
+        const auto value=found->second.asString();
+        if (value.empty() || value=="default") continue;
+        language=value;
+        break;
+    }
+    const auto enabled=settings.find("FSEnabledLanguages");
+    if (enabled!=settings.end())
+        for (auto value=enabled->second.beginArray(); value!=enabled->second.endArray(); ++value)
+            if (value->asString()==language) return language;
+    settings.insert_or_assign("Language",LLSD("default"));
+    return "en";
+}
+
 std::string LLVKViewerUi::pageUrl(const Page& page)
 {
     const LLURI uri(page.url);

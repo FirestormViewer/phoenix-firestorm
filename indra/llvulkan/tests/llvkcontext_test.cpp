@@ -265,6 +265,7 @@ namespace tut
         std::string error;
         const bool instance = renderer.createInstance(true,error);
         ensure(error,instance);
+        ensure("GPU validation layer loaded",GetModuleHandleW(L"VkLayer_khronos_validation.dll")!=nullptr);
         const auto surface = renderer.createSurface(window.handle,GetModuleHandleW(nullptr));
         ensure("native surface",surface != VK_NULL_HANDLE);
         if (!renderer.pickPhysicalDevice(surface,error) || !renderer.createDevice(surface,error))
@@ -456,6 +457,17 @@ namespace tut
         ensure("new surface upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
         ensure("new surface becomes ready",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Ready);
         ensure("new surface cannot reuse retired epoch",widgetPacket.draws()[0].image != priorStreamImage);
+        const auto originalRectangle=paint.commands[0].rectangle;
+        const auto originalClip=paint.commands[0].clip;
+        paint.displayScale=1.25f;
+        paint.commands[0].rectangle={1,2,12,15};
+        paint.commands[0].clip={0,0,30,30};
+        ensure("fractional browser quad ready",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+        ensure_equals("browser width is not rounded like skin images",widgetPacket.vertices()[1].positionX-widgetPacket.vertices()[0].positionX,13.75f);
+        ensure_equals("browser height is not rounded like skin images",widgetPacket.vertices()[0].positionY-widgetPacket.vertices()[2].positionY,16.25f);
+        paint.displayScale=1.f;
+        paint.commands[0].rectangle=originalRectangle;
+        paint.commands[0].clip=originalClip;
         LLVKWidgetTree scrollTree;
         LLVKWidgetTree::Params scrollView;
         scrollView.rect={0,0,120,100};

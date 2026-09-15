@@ -12,6 +12,7 @@
 #include "lltut.h"
 #include <fstream>
 #include <windows.h>
+#include <tlhelp32.h>
 #include <boost/asio.hpp>
 
 namespace tut
@@ -730,7 +731,8 @@ namespace tut
             for (const auto& name : {"Language","WindowWidth","WindowHeight","UIScaleFactor","RenderAnisotropic"})
                 if (display.has(name)) ensure("isolated display override",settings.set(name,display[name],false,error));
             rejected.ui.settings=settings.values();
-            rejected.ui.skin.language=display["Language"].asString();
+            rejected.ui.skin.language=LLVKViewerUi::uiLanguage(rejected.ui.settings);
+            ensure("isolated language fallback reset",settings.set("Language",rejected.ui.settings.at("Language"),false,error));
         }
         if (liveScale)
         {
@@ -900,6 +902,52 @@ namespace tut
                         <<"physicalClient="<<captureClient.right-captureClient.left<<","<<captureClient.bottom-captureClient.top<<"\n"
                         <<"uiRoot="<<rootRect.left<<","<<rootRect.bottom<<","<<rootRect.right<<","<<rootRect.top<<"\n"
                         <<"fontRegistryDpi="<<rejected.ui.fonts.horizontalDpi<<","<<rejected.ui.fonts.verticalDpi<<"\n";
+                    if (capturePage)
+                    {
+                        struct Snapshot
+                        {
+                            HANDLE handle;
+                            ~Snapshot() { if (handle!=INVALID_HANDLE_VALUE) CloseHandle(handle); }
+                        } processes{CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,0)};
+                        ensure("CEF process snapshot available",processes.handle!=INVALID_HANDLE_VALUE);
+                        std::map<DWORD,DWORD> parents;
+                        PROCESSENTRY32W processEntry{}; processEntry.dwSize=sizeof(processEntry);
+                        ensure("CEF process snapshot readable",Process32FirstW(processes.handle,&processEntry)!=FALSE);
+                        do
+                        {
+                            if (_wcsicmp(processEntry.szExeFile,L"dullahan_host.exe")==0)
+                                parents.emplace(processEntry.th32ProcessID,processEntry.th32ParentProcessID);
+                        }
+                        while (Process32NextW(processes.handle,&processEntry));
+                        unsigned browserChildren=0,d3dChildren=0;
+                        for (const auto& [processId,parentId] : parents)
+                        {
+                            if (parentId!=GetCurrentProcessId()) continue;
+                            Snapshot modules{CreateToolhelp32Snapshot(TH32CS_SNAPMODULE,processId)};
+                            metadata<<"cefInspectProcess="<<processId<<" snapshotError="
+                                <<(modules.handle==INVALID_HANDLE_VALUE ? GetLastError() : 0)<<"\n"<<std::flush;
+                            ensure("browser child modules available",modules.handle!=INVALID_HANDLE_VALUE);
+                            MODULEENTRY32W moduleEntry{}; moduleEntry.dwSize=sizeof(moduleEntry);
+                            ensure("browser child modules readable",Module32FirstW(modules.handle,&moduleEntry)!=FALSE);
+                            bool cef=false,d3d=false,openGl=false;
+                            do
+                            {
+                                cef|=_wcsicmp(moduleEntry.szModule,L"libcef.dll")==0;
+                                d3d|=_wcsicmp(moduleEntry.szModule,L"d3d11.dll")==0;
+                                openGl|=_wcsicmp(moduleEntry.szModule,L"opengl32.dll")==0;
+                            } while (Module32NextW(modules.handle,&moduleEntry));
+                            metadata<<"cefProcess="<<processId<<" cef="<<cef<<" d3d11="<<d3d
+                                <<" opengl32="<<openGl<<"\n"<<std::flush;
+                            if (!cef) continue;
+                            ensure("CEF child does not load OpenGL",!openGl);
+                            ++browserChildren;
+                            if (d3d) ++d3dChildren;
+                        }
+                        ensure("CEF children observed",browserChildren>0);
+                        ensure("CEF D3D11 child observed",d3dChildren>0);
+                        metadata<<"cefChildren="<<browserChildren<<"\ncefD3D11Children="<<d3dChildren
+                            <<"\ncefOpenGLModules=0\n";
+                    }
                     const auto modeLabel=ui.find("mode_selection_text");
                     const auto modeRect=ui.tree().screenRect(modeLabel,error);
                     if (modeRect && ui.tree().get(modeLabel)->plainText->layout)

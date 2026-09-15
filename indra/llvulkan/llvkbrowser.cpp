@@ -138,7 +138,7 @@ bool LLVKBrowser::start(const Configuration& configuration, std::string& error)
             ":"+std::to_string(configuration.proxy.port);
     }
     settings.user_agent_substring = mEngine->makeCompatibleUserAgentString(configuration.userAgent);
-    settings.disable_gpu = true;
+    settings.disable_gpu = false;
     settings.webgl_enabled = false;
     settings.flip_pixels_y = false;
     settings.flip_mouse_y = false;

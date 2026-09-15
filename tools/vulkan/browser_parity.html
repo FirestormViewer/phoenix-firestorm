@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Local browser parity fixture</title>
+<style>
+html,body { margin:0; background:rgb(41,41,41); color:#ededed; font:16px Georgia,serif; }
+main { margin:24px; width:720px; height:220px; }
+h1 { margin:0 0 12px; font-size:24px; }
+p { margin:8px 0; }
+input,button,select { font:16px Georgia,serif; }
+canvas { display:block; margin-top:12px; width:320px; height:48px; }
+#scroll-target { margin-top:1200px; height:400px; background:#247b61; }
+</style>
+</head>
+<body>
+<main>
+<h1>Browser fixture</h1>
+<p>Text: ABC abc 0123456789 &amp; punctuation. <b>Bold</b> <i>Italic</i></p>
+<p><label>Value <input id="value" value="Local text"></label>
+<select aria-label="Choice"><option>First</option><option>Second</option></select>
+<button id="apply" type="button">Apply</button></p>
+<p id="result">Ready</p>
+<canvas width="320" height="48" aria-label="Color and alpha samples"></canvas>
+</main>
+<div id="scroll-target">Scroll target</div>
+<script>
+const context = document.querySelector('canvas').getContext('2d');
+for (const [index,color] of ['#cf304a','#36a578','#3484d0','#f1d453'].entries()) {
+    context.fillStyle=color;
+    context.fillRect(index*80,0,80,48);
+}
+context.fillStyle='rgba(255,255,255,0.5)';
+context.fillRect(40,12,240,24);
+document.querySelector('#apply').onclick=()=>{
+    document.querySelector('#result').textContent=document.querySelector('#value').value;
+};
+</script>
+</body>
+</html>

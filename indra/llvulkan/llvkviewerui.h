@@ -70,6 +70,7 @@ public:
         std::map<std::string,LLSD> settings;
     };
     static std::string pageUrl(const Page& page);
+    static std::string uiLanguage(std::map<std::string,LLSD>& settings);
     LLVKWidgetTree& tree() noexcept { return mTree; }
     float displayScale() const noexcept { return mDisplayScale; }
     bool refreshDisplayScale(std::string& error, float systemScale = 1.f);

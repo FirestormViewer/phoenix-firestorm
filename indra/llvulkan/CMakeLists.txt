@@ -214,7 +214,7 @@ if (LL_TESTS)
             endforeach()
         endif()
         foreach(browser_target IN LISTS native_browser_test_targets)
-          foreach(runtime libcef.dll chrome_elf.dll dullahan_host.exe d3dcompiler_47.dll dxcompiler.dll dxil.dll v8_context_snapshot.bin)
+          foreach(runtime libcef.dll chrome_elf.dll dullahan_host.exe libEGL.dll libGLESv2.dll d3dcompiler_47.dll dxcompiler.dll dxil.dll v8_context_snapshot.bin)
             add_custom_command(TARGET ${browser_target} PRE_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
                     "${LIBS_PREBUILT_DIR}/bin/release/${runtime}" "$<TARGET_FILE_DIR:${browser_target}>/${runtime}"

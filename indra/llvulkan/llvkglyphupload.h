@@ -44,7 +44,7 @@ public:
         bool samplerAnisotropyEnabled = false;
     };
     enum class Status { Pending, Ready, Failed };
-    enum class Sampling { GlyphNearestRepeat, SkinLinearClamp, SkinAnisotropicClamp };
+    enum class Sampling { GlyphNearestRepeat, SkinLinearClamp, SkinAnisotropicClamp, BrowserLinearRepeat };
     static std::unique_ptr<LLVKGlyphUpload> submit(const Device& device,
                                                   VkExtent2D extent,
                                                   std::span<const std::uint8_t> rgba,

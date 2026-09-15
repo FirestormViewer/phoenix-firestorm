@@ -250,7 +250,9 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     }
     for (const auto& [name,value] : overrides)
         if (!settings.set(name,LLSD(value),false,error)) return fail(Code::SettingsRead,Operation::Settings);
-    const auto values = settings.values();
+    auto values = settings.values();
+    const auto language=LLVKViewerUi::uiLanguage(values);
+    if (!settings.set("Language",values.at("Language"),false,error)) return fail(Code::SettingsRead,Operation::Settings);
     const auto stringValue = [&](const char* name,const std::string& fallback = {})
     { const auto found = values.find(name); return found == values.end() || found->second.asString().empty() ? fallback : found->second.asString(); };
     auto startupStatus=std::make_shared<LLVKStartupStatus>();
@@ -261,8 +263,7 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     startupSkin.userAppDirectory=profile;
     startupSkin.skin=stringValue("SkinCurrent","default");
     startupSkin.theme=stringValue("SkinCurrentTheme");
-    startupSkin.language=stringValue("Language","en");
-    if (startupSkin.language=="default") startupSkin.language="en";
+    startupSkin.language=language;
     if (!startupStatus->load(startupSkin,"Vulkanstorm",error)) return fail(Code::StartupResources);
     errorResolver=startupStatus->errorResolver();
     fatalReporting.setErrorResolver(errorResolver);
@@ -402,8 +403,7 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     configuration.ui.skin.skinBaseDirectory = directory/"skins";
     configuration.ui.skin.userAppDirectory = profile;
     configuration.ui.skin.skin = stringValue("SkinCurrent","default");
-    configuration.ui.skin.language = stringValue("Language","en");
-    if (configuration.ui.skin.language == "default") configuration.ui.skin.language = "en";
+    configuration.ui.skin.language = language;
     configuration.ui.fonts.platform = "Windows";
     wchar_t windowsDirectory[32768]{};
     GetWindowsDirectoryW(windowsDirectory,32768);

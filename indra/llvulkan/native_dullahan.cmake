@@ -1,11 +1,11 @@
 include(FetchContent)
 FetchContent_Declare(llvk_cef_headers
-    URL "https://cef-builds.spotifycdn.com/cef_binary_139.0.40%2Bg465474a%2Bchromium-139.0.7258.139_windows64_minimal.tar.bz2"
-    URL_HASH SHA1=403afa6001a7cea20f64bff5132bad4530541755
+    URL "https://cef-builds.spotifycdn.com/cef_binary_152.0.6%2Bg708dc14%2Bchromium-152.0.7977.83_windows64_minimal.tar.bz2"
+    URL_HASH SHA1=e5e3020627f4528bd43e22f4c4970000b0458e99
     SOURCE_SUBDIR native_headers_only
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
 FetchContent_Declare(llvk_dullahan_source
-    URL "https://codeload.github.com/secondlife/dullahan/zip/49a551c0216ac7db03e36c9cc7ec44650c0be1c4"
+    URL "https://codeload.github.com/secondlife/dullahan/zip/f75972f4cba3a01a23007ed79b6c204ececf352c"
     SOURCE_SUBDIR native_sources_only
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
 FetchContent_MakeAvailable(llvk_cef_headers llvk_dullahan_source)
@@ -33,6 +33,10 @@ function(native_browser_replace original replacement)
     string(REPLACE "${original}" "${replacement}" implementation "${implementation}")
     set(implementation "${implementation}" PARENT_SCOPE)
 endfunction()
+native_browser_replace("        platformAddCommandLines(command_line);" [=[
+    command_line->AppendSwitchWithValue("use-gl", "angle");
+    command_line->AppendSwitchWithValue("use-angle", "d3d11");
+    platformAddCommandLines(command_line);]=])
 native_browser_replace("dullahan_impl::dullahan_impl() :" [=[
 namespace
 {
@@ -73,8 +77,10 @@ file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/native_dullahan_impl.cpp" CONT
 set(native_dullahan_sources "${CMAKE_CURRENT_BINARY_DIR}/native_dullahan.cpp"
     "${CMAKE_CURRENT_BINARY_DIR}/native_dullahan_impl.cpp")
 foreach(source dullahan_browser_client.cpp dullahan_callback_manager.cpp
-    dullahan_impl_keyboard_win.cpp dullahan_impl_mouse.cpp dullahan_render_handler.cpp)
-    list(APPEND native_dullahan_sources "${llvk_dullahan_source_SOURCE_DIR}/src/${source}")
+    dullahan_embed_scheme.cpp dullahan_impl_keyboard_win.cpp dullahan_impl_mouse.cpp dullahan_render_handler.cpp)
+    configure_file("${llvk_dullahan_source_SOURCE_DIR}/src/${source}"
+        "${CMAKE_CURRENT_BINARY_DIR}/native_${source}" COPYONLY)
+    list(APPEND native_dullahan_sources "${CMAKE_CURRENT_BINARY_DIR}/native_${source}")
 endforeach()
 add_library(llvk_dullahan STATIC ${native_dullahan_sources})
 target_include_directories(llvk_dullahan SYSTEM PRIVATE

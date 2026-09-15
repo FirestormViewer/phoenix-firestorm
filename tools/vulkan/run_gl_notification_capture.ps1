@@ -3,6 +3,7 @@ param(
     [Parameter(Mandatory=$true)][string]$Driver,
     [Parameter(Mandatory=$true)][string]$CaptureHelper,
     [Parameter(Mandatory=$true)][string]$OutputDirectory,
+    [ValidatePattern('^[0-9a-f]{40}(\+working-tree)?$')][string]$ReferenceRevision='59108e15a1f8f94d2da7c674d937d19f5cf9450d',
     [switch]$PrepareOnly,
     [switch]$Maximized,
     [switch]$LoginButtonStates,
@@ -12,6 +13,7 @@ param(
     [switch]$SelectInput,
     [switch]$CheckIgnore,
     [switch]$InactiveFocus,
+    [string]$Page=(Join-Path $PSScriptRoot 'notification_background.html'),
     [ValidatePattern('^[a-z]{2}(-[A-Z]{2})?$')][string]$Language='en',
     [ValidateRange(640,7680)][int]$Width=1024,
     [ValidateRange(480,4320)][int]$Height=738,
@@ -20,8 +22,15 @@ param(
     [ValidateSet('Unchanged','Off','On')][string]$Anisotropy='Unchanged'
 )
 $ErrorActionPreference='Stop'
+$pagePath=(Resolve-Path -LiteralPath $Page).Path
+$pageHash=(Get-FileHash -LiteralPath $pagePath).Hash
 foreach ($executable in $Viewer,$Driver,$CaptureHelper) {
     if (!(Test-Path -LiteralPath $executable -PathType Leaf)) { throw "Missing executable: $executable" }
+}
+$viewerHash=(Get-FileHash -LiteralPath $Viewer).Hash
+if ($ReferenceRevision -eq '59108e15a1f8f94d2da7c674d937d19f5cf9450d' -and
+    $viewerHash -ne 'CB44347B3AC03B36F94794FEF09182C4884F3A332F98692DB2C14016802C6FDF') {
+    throw 'Non-oracle executable requires an explicit diagnostic ReferenceRevision.'
 }
 if (Test-Path -LiteralPath $OutputDirectory) { throw 'Refusing to overwrite capture evidence.' }
 $root=[IO.Directory]::CreateDirectory($OutputDirectory).FullName
@@ -29,6 +38,8 @@ $requestWriter=[Xml.XmlWriter]::Create((Join-Path $root 'capture-request.xml'))
 try {
     $requestWriter.WriteStartElement('llsd'); $requestWriter.WriteStartElement('map')
     $requestWriter.WriteElementString('key','name'); $requestWriter.WriteElementString('string',$Notification)
+    $requestWriter.WriteElementString('key','pagePath'); $requestWriter.WriteElementString('string',$pagePath)
+    $requestWriter.WriteElementString('key','pageSha256'); $requestWriter.WriteElementString('string',$pageHash)
     $requestWriter.WriteElementString('key','substitutions'); $requestWriter.WriteStartElement('map')
     foreach ($key in ($Substitutions.Keys | Sort-Object)) {
         $requestWriter.WriteElementString('key',[string]$key); $requestWriter.WriteElementString('string',[string]$Substitutions[$key])
@@ -56,6 +67,7 @@ $pageStart.UseShellExecute=$false
 $pageStart.RedirectStandardInput=$true
 $pageStart.RedirectStandardOutput=$true
 $pageStart.ArgumentList.Add((Join-Path $PSScriptRoot 'notification_background.cjs'))
+$pageStart.ArgumentList.Add($pagePath)
 $pageServer=[Diagnostics.Process]::Start($pageStart)
 $pageReady=$pageServer.StandardOutput.ReadLineAsync()
 if (!$pageReady.Wait(10000)) { throw 'Loopback page server did not become ready.' }
@@ -63,7 +75,7 @@ $pageUrl=$pageReady.Result
 $pageUri=[Uri]$pageUrl
 if (!$pageUri.IsLoopback -or $pageUri.Scheme -ne 'http') { throw 'Invalid fixture page URL.' }
 $pageResponse=Invoke-WebRequest -Uri $pageUri -TimeoutSec 10
-if ($pageResponse.StatusCode -ne 200 -or $pageResponse.Content -ne [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'notification_background.html'))) {
+if ($pageResponse.StatusCode -ne 200 -or $pageResponse.Content -ne [IO.File]::ReadAllText($pagePath)) {
     throw 'Loopback fixture page did not match its source.'
 }
 $roaming=[IO.Directory]::CreateDirectory((Join-Path $root 'roaming')).FullName
@@ -204,6 +216,24 @@ public static class NotificationFocusState {
         if ([NotificationFocusState]::GetForegroundWindow() -eq $window) { throw 'Inactive fixture requires a nonforeground reference window.' }
         [NotificationFocusState]::SendMessage($window,0x8,[IntPtr]::Zero,[IntPtr]::Zero) | Out-Null
     }
+    $pageDeadline=[DateTime]::UtcNow.AddSeconds(30)
+    $pageFrame=0
+    do {
+        $file=Join-Path $root ("gl-page-ready-$pageFrame.rgba")
+        & $CaptureHelper $window.ToInt64().ToString() $file
+        if ($LASTEXITCODE -ne 0) { throw 'Browser readiness capture failed.' }
+        $pixels=[IO.File]::ReadAllBytes($file)
+        if ($pixels.Length -lt 8) { throw 'Browser readiness capture has no dimensions.' }
+        $frameWidth=[BitConverter]::ToUInt32($pixels,0)
+        $frameHeight=[BitConverter]::ToUInt32($pixels,4)
+        if (!$frameWidth -or !$frameHeight -or $pixels.LongLength -ne 8+4L*$frameWidth*$frameHeight) {
+            throw 'Browser readiness capture has invalid dimensions.'
+        }
+        $offset=8+4L*([Math]::Floor($frameHeight/4)*$frameWidth+[Math]::Floor($frameWidth/2))
+        $painted=$pixels[$offset] -eq 41 -and $pixels[$offset+1] -eq 41 -and $pixels[$offset+2] -eq 41
+        ++$pageFrame
+    } while (!$painted -and [DateTime]::UtcNow -lt $pageDeadline)
+    if (!$painted) { throw 'Fixture page did not paint its expected gray background within thirty seconds.' }
     $settledAfter=[DateTime]::UtcNow.AddSeconds(2)
     $index=0
     do {
@@ -302,10 +332,10 @@ public static class NotificationCursorInput {
     $goodbye=(Test-Path $log) -and (Select-String -LiteralPath $log -SimpleMatch 'Goodbye!' -Quiet)
     $manifest=[ordered]@{
         fixture='pre-login local notification; not STATE_STARTED acceptance'
-        referenceRevision='59108e15a1f8f94d2da7c674d937d19f5cf9450d'
-        viewer=$start.FileName; viewerSha256=(Get-FileHash $Viewer).Hash
+        referenceRevision=$ReferenceRevision
+        viewer=$start.FileName; viewerSha256=$viewerHash
         driverSha256=(Get-FileHash $Driver).Hash; captureSha256=(Get-FileHash $CaptureHelper).Hash
-        backgroundUrl=$pageUrl; backgroundSha256=(Get-FileHash (Join-Path $PSScriptRoot 'notification_background.html')).Hash
+        backgroundUrl=$pageUrl; backgroundSha256=$pageHash; backgroundPath=$pagePath
         notification=$Notification; substitutions=$Substitutions; locale=$Language
         requestedWidth=$Width; requestedHeight=$Height; requestedUiScale=$UiScale
         inactiveFocus=$InactiveFocus.IsPresent

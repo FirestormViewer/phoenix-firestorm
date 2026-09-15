@@ -21,6 +21,8 @@ public:
         LLVKContext::Blend2D blend = LLVKContext::Blend2D::Alpha);
     bool solid(LLVKWidgetImage::Region deviceRectangle, VkRect2D clip,
         const LLVKColor::Value& color, std::string& error);
+    bool browserImage(const LLVKWidgetImage& source,std::shared_ptr<const LLVKGlyphImage> resource,
+        LLVKWidgetImage::Region deviceRectangle,VkRect2D clip,const LLVKColor::Value& color,std::string& error);
     bool triangle(const std::array<float,6>& points, VkRect2D clip,
         const LLVKColor::Value& color, std::string& error);
     bool gradientTriangle(const std::array<float,6>& points, VkRect2D clip,
