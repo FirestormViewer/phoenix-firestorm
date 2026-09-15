@@ -416,6 +416,12 @@ namespace tut
         const auto maximizedNotice=ui->tree().get(ui->modalNotice())->params.rect;
         ensure_equals("notice centers outer toast width",maximizedNotice.left,2560/2-(originalNotice.right-originalNotice.left+5)/2);
         ensure_equals("notice follows pre-login channel",maximizedNotice.bottom,(1369-19-60-3-35)/2+7-(originalNotice.top-originalNotice.bottom+7)%2);
+        LLVKWidgetPaint::Input outerViewport;
+        outerViewport.physicalWidth=2562;
+        outerViewport.physicalHeight=1369;
+        ensure("prepare distinct outer viewport",ui->preparePaint(outerViewport,error).has_value());
+        ensure_equals("modal centers on outer viewport rather than login panel",
+            ui->tree().get(ui->modalNotice())->params.rect.left,maximizedNotice.left+1);
         ensure("restore notification viewport",ui->tree().reshape(ui->root(),originalRoot.right-originalRoot.left,originalRoot.top-originalRoot.bottom,error));
         ensure("prepare restored notification",ui->preparePaint({},error).has_value());
         ensure("restore keeps same notice and geometry",ui->tree().get(ui->modalNotice())->params.rect==originalNotice);
@@ -5157,6 +5163,15 @@ namespace tut
         ensure_equals("shortcut dispatches",quits,2);
         ensure("unbound Preferences shortcut unavailable",!menu->shortcut("P",true,false,false));
         ensure("unmodified letter is not a shortcut",!menu->shortcut("Q",false,false,false));
+        paint={}; paint.displayScale=0.75f;
+        ensure("fractional header backing",menu->paint(paint,{0,0,3414,1826},error,{},true,1357.f/0.75f));
+        ensure("header backing uses explicit triangles",paint.commands[0].triangle && paint.commands[1].triangle);
+        ensure_equals("header respects inclusive world clip",(*paint.commands[0].triangle)[1]*paint.displayScale,1357.f);
+        ensure_equals("menu hit geometry retains declared height",paint.commands[2].rectangle.bottom,1808);
+        paint={}; paint.displayScale=1.5f;
+        ensure("enlarged header backing",menu->paint(paint,{0,0,1707,913},error,{},true,1342.f/1.5f));
+        ensure_equals("backing follows world clip",(*paint.commands[0].triangle)[1]*paint.displayScale,1342.f);
+        ensure_equals("menu fill does not extend past its original bounds",(*paint.commands[2].triangle)[1],895.f);
         ensure("DTD rejected",!LLVKMenu::create("<!DOCTYPE menu_bar><menu_bar/>",loadFont(),{}, {},false,error));
     }
 

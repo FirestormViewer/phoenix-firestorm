@@ -335,10 +335,11 @@ bool LLVKMenu::key(Key key)
 }
 
 bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::string& error,
-    std::optional<LLVKWidgetTree::Rect> bar,bool dropdowns)
+    std::optional<LLVKWidgetTree::Rect> bar,bool dropdowns,std::optional<float> backingBottom)
 {
     error.clear(); mViewport = viewport; mHits.clear();
     mBar=bar.value_or(LLVKWidgetTree::Rect{viewport.left,viewport.top-18,viewport.right,viewport.top});
+    if (backingBottom && !std::isfinite(*backingBottom)) { error="Invalid native header background boundary"; return false; }
     if (std::any_of(mOpen.begin(),mOpen.end(),[this](auto item) { return !itemVisible(item); })) dismiss();
     using Rect = LLVKWidgetTree::Rect;
     if (viewport.right-viewport.left < 100 || viewport.top-viewport.bottom < 18) { error = "Native menu viewport too small"; return false; }
@@ -349,10 +350,21 @@ bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::
     const auto disabled = color("MenuItemDisabledColor",{0.5f,0.5f,0.5f,1});
     const auto highlight = color("MenuItemHighlightBgColor",{0.3f,0.3f,0.3f,1});
     const auto foreground = color("MenuItemHighlightFgColor",{1,1,1,1});
-    const auto solid = [&](std::size_t item,Rect rect,LLVKColor::Value tint)
+    const auto solid = [&](std::size_t item,Rect rect,LLVKColor::Value tint,bool headerBacking=false)
     {
         for (auto& channel : tint) channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
-        output.commands.push_back({UINT64_MAX-item,rect,viewport,tint});
+        if (backingBottom && !bar && rect.bottom==mBar.bottom && rect.top==mBar.top)
+        {
+            LLVKWidgetPaint::Command fill;
+            fill.owner=UINT64_MAX-item; fill.rectangle=rect; fill.clip=viewport; fill.color=tint;
+            const float left=float(rect.left),right=float(rect.right),top=float(rect.top);
+            const auto bottom=std::clamp(*backingBottom,float(headerBacking ? viewport.bottom : rect.bottom),top);
+            fill.triangle=std::array<float,6>{left,bottom,right,bottom,right,top};
+            output.commands.push_back(fill);
+            fill.triangle=std::array<float,6>{left,bottom,right,top,left,top};
+            output.commands.push_back(std::move(fill));
+        }
+        else output.commands.push_back({UINT64_MAX-item,rect,viewport,tint});
     };
     const auto text = [&](std::size_t item,const std::string& label,float x,float y,LLVKColor::Value tint,LLVKFont::HorizontalAlign align) -> bool
     {
@@ -374,7 +386,7 @@ bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::
         for (auto item : mRoots)
             if (itemVisible(item) && mItems[item].branch) width+=measure(mItems[item].label)+25;
         if (!error.empty()) return false;
-        solid(mItems.size(),mBar,{0,0,0,1});
+        solid(mItems.size(),mBar,{0,0,0,1},true);
         mBar.right=mBar.left+width;
     }
     solid(mItems.size(),mBar,color("MenuBarBgColor",background));

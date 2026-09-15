@@ -32,7 +32,7 @@ public:
         std::function<void()> dismissed, std::string& error);
     bool shortcut(std::string key, bool control, bool shift, bool alt);
     bool paint(LLVKWidgetPaint& output, LLVKWidgetTree::Rect viewport, std::string& error,
-        std::optional<LLVKWidgetTree::Rect> bar = {},bool dropdowns = true);
+        std::optional<LLVKWidgetTree::Rect> bar = {},bool dropdowns = true,std::optional<float> backingBottom = {});
     bool pointer(const LLVKWidgetTree::PointerEvent& event);
     enum class Key { Activate, Escape, Left, Right, Up, Down, Return };
     bool key(Key key);

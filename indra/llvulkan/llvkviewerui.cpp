@@ -509,11 +509,17 @@ bool LLVKViewerUi::refreshDisplayScale(std::string& error,float systemScale)
 std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint::Input& input,std::string& error)
 {
     updateLoginControls();
+    auto viewport = mTree.screenRect(mRoot,error);
+    if (viewport && input.physicalWidth && input.physicalHeight)
+    {
+        viewport->right=static_cast<int>(std::ceil(input.physicalWidth/mDisplayScale));
+        viewport->top=static_cast<int>(std::ceil(input.physicalHeight/mDisplayScale));
+    }
     if (const auto notice=mTree.get(mNoticePanel))
     {
         const auto rectangle=notice->params.rect;
         const auto width=rectangle.right-rectangle.left,height=rectangle.top-rectangle.bottom;
-        if (!mTree.setShape(mNoticePanel,noticeRectangle(width,height),error)) return std::nullopt;
+        if (!mTree.setShape(mNoticePanel,noticeRectangle(width,height,viewport),error)) return std::nullopt;
     }
     if (!refreshVoiceDevices(error)) return std::nullopt;
     if (mDebugSettings && mDebugSettings->visible() && !refreshDebugSettings(false,error)) return std::nullopt;
@@ -537,13 +543,10 @@ std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint:
     if (!paint) return std::nullopt;
     paint->displayScale=mDisplayScale;
     paint->skinAnisotropy=mTree.setting("RenderAnisotropic").value_or(LLSD(false)).asBoolean();
-    auto viewport = mTree.screenRect(mRoot,error);
-    if (viewport && input.physicalWidth && input.physicalHeight)
-    {
-        viewport->right=static_cast<int>(std::ceil(input.physicalWidth/mDisplayScale));
-        viewport->top=static_cast<int>(std::ceil(input.physicalHeight/mDisplayScale));
-    }
-    if (!viewport || !mMenu->paint(*paint,*viewport,error)) return std::nullopt;
+    if (!viewport) return std::nullopt;
+    const auto backingBottom=(std::floor(viewport->bottom*mDisplayScale)+
+        std::ceil((viewport->top-viewport->bottom-mNoticeMenuHeight)*mDisplayScale)+1.f)/mDisplayScale;
+    if (!mMenu->paint(*paint,*viewport,error,{},true,backingBottom)) return std::nullopt;
     if (mNoticePanel)
     {
         std::vector<LLVKWidgetPaint::Command> modalPass;

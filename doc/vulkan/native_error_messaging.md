@@ -1,5 +1,75 @@
 # Native error messaging
 
+## Continued no-login scale checks (2026-09-15)
+
+The prior verified browser/locale slice was committed and pushed as 1f95de3506
+on native-error-messaging before this continuation. The following new work is a
+separate slice. The broader no-login TODO remains open; no authentication was run.
+
+NV-00/01/02/11/12/17, unchanged reference revision
+59108e15a1f8f94d2da7c674d937d19f5cf9450d: the 75-percent rich-page comparison first
+differed in 3911 pixels. The browser content matched; 1351 pixels belonged to the
+modal and 2560 to one full-width header row. LLNotificationAlertHandler initializes
+its centered channel using getWorldViewRectScaled(), whose layout derives from
+the ceil-rounded outer root. Native had centered on the separately rounded login
+panel. At 2560 pixels / 0.75, those widths are 3414 and 3413 respectively. Supplying
+the explicit outer viewport to native notice positioning removed all modal
+differences without changing the login root or calling GL visual helpers.
+
+LLLayoutStack::draw clips each child panel, and LLScreenClipRect::updateScissorRegion
+uses floor(origin * scale) + ceil(extent * scale) + 1 for the upper boundary.
+The world panel's inclusive clip overwrites the lower edge of the status/menu
+region. Native's synthetic full-width 18-unit backing did not preserve that
+boundary at fractional scale. The native viewer now supplies the world-clip
+boundary to menu painting. Independent triangle geometry represents its fractional
+logical position; menu fills intersect that boundary with their original bounds,
+while the backing follows the boundary itself. Layout/hit rectangles remain
+unchanged. At 75 percent the boundary is device y=1357; at 150 percent it is 1342,
+while the menu's own lower edge is 1342.5. No generic rectangle rounding, shader,
+sampler, upload, descriptor or retirement policy changed.
+
+Read-only LEAP layout diagnostics now include the status container, menu holder,
+login menu, login holder/root and browser. GL runs 60/61 supplied missing geometry;
+run 60 reproduced run 59's exact image. Intermediate layout snapshots can precede
+settled placement and are not themselves pixel acceptance. Removing native header
+backing was a rejected probe (native85); the backing was restored. Native84 isolated
+the remaining header row, native86 left 88 menu-edge pixels, and native87 closed
+the 75-percent comparison. A 150-percent menu-fill extension was corrected to an
+intersection; native88/89 remain retained failures.
+
+The first 150-percent GL capture (62) contained an extra WarnForceLoginURL modal
+and was invalid for comparison. A direct LoginPage probe (64) was overridden by
+startup and failed readiness; it was reverted and closed gracefully. The actual
+cause was LLWindowListener::mouseEvent using a path's logical center as physical
+input. The driver now supplies scaled physical coordinates for warning dismissal
+and verifies that its control is no longer visible before submitting the fixture
+notification. ForceLoginURL still supplies the same loopback HTML. No warning
+template, GL implementation, reference image or tolerance was modified.
+
+All passing comparisons are maximized 2560x1369, default skin/en, anisotropy off,
+the unchanged browser_parity.html, MediaPluginFailed, and full-frame tolerance zero.
+Capture/report directories below are under glref-build/captures.
+
+| Scale | GL | Native | Report | Differing pixels |
+|---|---|---|---|---|
+| 75 percent | gl-browser-scale-59-075 | native-browser-scale-87-075 | browser-scale-parity-87-075 | 0 |
+| 100 percent regression | gl-browser-content-53 | native-browser-scale-87-100 | browser-scale-parity-87-100 | 0 |
+| 125 percent regression | gl-browser-content-52 | native-browser-scale-87-125 | browser-scale-parity-87-125 | 0 |
+| 150 percent | gl-browser-scale-65-150 | native-browser-scale-90-150 | browser-scale-parity-65-90-150 | 0 |
+
+75-percent SHA256: 91EEFB88840F40B4F62D0021575C48E609EA958D7549450B905672D35ADA79F8.
+150-percent SHA256: C6E6356821942343DF35F1388B4DAF9A886A692728B0A6C317FA89AD752983B6.
+The final 150-percent intersection leaves the previously verified 75/100/125
+geometry unchanged. Widget210/210 covers outer modal centering, fractional backing
+geometry and non-expanding menu fills; Window7/7 and LEAP framing self-test pass.
+Final GPU10/10 passes with the existing explicit Khronos validation-layer check,
+and the native viewer link succeeds. Both settled samples on both backends were
+hash-verified for every passing row above. This continuation remains uncommitted.
+The capture runs retain D3D11/no-opengl32 child-module checks. Existing PDB warnings
+remain. These results qualify initial presentation at these scales, not browser
+interaction sequences, nested dialogs, transition timing, other themes, physical
+DPI changes or login-dependent cases.
+
 ## Rich browser visual differences traced and corrected (2026-09-15)
 
 The controlled rich local page now matches the unchanged pinned GL captures

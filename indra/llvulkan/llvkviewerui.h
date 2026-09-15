@@ -399,7 +399,7 @@ private:
     void updateProxyControls();
     void updateLoginControls();
     bool initializeNoticeLayout(std::string& error);
-    LLVKWidgetTree::Rect noticeRectangle(int width,int height) const;
+    LLVKWidgetTree::Rect noticeRectangle(int width,int height,std::optional<LLVKWidgetTree::Rect> viewport={}) const;
     float mDisplayScale=1.f;
     float mBaseFontDpiX=96.f,mBaseFontDpiY=96.f;
     int mNoticeMenuHeight=19,mNoticeBottomHeight=60,mNoticeStackSpacing=3,mNoticeChicletInset=70;

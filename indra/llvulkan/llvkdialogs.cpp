@@ -560,9 +560,9 @@ bool LLVKViewerUi::initializeNoticeLayout(std::string& error)
     return true;
 }
 
-LLVKWidgetTree::Rect LLVKViewerUi::noticeRectangle(int width,int height) const
+LLVKWidgetTree::Rect LLVKViewerUi::noticeRectangle(int width,int height,std::optional<LLVKWidgetTree::Rect> viewport) const
 {
-    const auto root=mTree.get(mRoot)->params.rect;
+    const auto root=viewport.value_or(mTree.get(mRoot)->params.rect);
     const auto margin=std::clamp(mTree.setting("ChannelBottomPanelMargin").value_or(LLSD(35)).asInteger(),0,16384);
     const auto gap=std::clamp(mTree.setting("ToastGap").value_or(LLSD(7)).asInteger(),0,16384);
     const auto topInset=mNoticeTopRight ? mNoticeChicletInset : 0;

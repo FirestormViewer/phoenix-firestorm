@@ -329,6 +329,19 @@ int main(int count,char** arguments)
             }
             if (data["reqid"].asString()=="capture-layout-paths")
             {
+                for (const auto* path : {"/main_view/menu_stack/status_bar_container",
+                    "/main_view/menu_stack/status_bar_container/menu_bar_holder",
+                    "/main_view/menu_stack/status_bar_container/menu_bar_holder/Login Menu",
+                    "/main_view/menu_stack/world_panel/login_panel_holder",
+                    "/main_view/menu_stack/world_panel/login_panel_holder/panel_login",
+                    "/main_view/menu_stack/world_panel/login_panel_holder/panel_login/login_html"})
+                {
+                    ++geometryRequests;
+                    LLSD request;
+                    request["op"]="getInfo"; request["path"]=path; request["reply"]=reply;
+                    request["reqid"]=std::string("capture-layout:")+path;
+                    send("LLWindow",request);
+                }
                 for (auto path=data["paths"].beginArray(); path!=data["paths"].endArray(); ++path)
                 {
                     const auto text=path->asString();
@@ -441,6 +454,10 @@ int main(int count,char** arguments)
                 {
                     LLSD click;
                     click["op"]="mouseDown"; click["button"]="LEFT"; click["path"]=data["path"];
+                    const auto scale=captureRequest.has("display") ? captureRequest["display"]["UIScaleFactor"].asReal() : 1.0;
+                    const auto& rectangle=data["rect"];
+                    click["x"]=static_cast<int>(std::floor((rectangle["left"].asInteger()+rectangle["right"].asInteger())*0.5*scale+0.5));
+                    click["y"]=static_cast<int>(std::floor((rectangle["bottom"].asInteger()+rectangle["top"].asInteger())*0.5*scale+0.5));
                     send("LLWindow",click);
                     click["op"]="mouseUp"; click["reply"]=reply; click["reqid"]="capture-url-warning-closed";
                     send("LLWindow",click);
@@ -450,6 +467,15 @@ int main(int count,char** arguments)
             if (data["reqid"].asString()=="capture-url-warning-closed")
             {
                 if (data.has("error")) throw std::runtime_error("URL-warning dismissal failed");
+                LLSD check;
+                check["op"]="getInfo"; check["path"]=data["path"]; check["reply"]=reply;
+                check["reqid"]="capture-url-warning-verified";
+                send("LLWindow",check);
+            }
+            if (data["reqid"].asString()=="capture-url-warning-verified")
+            {
+                if (!data.has("error") && data["visible_chain"].asBoolean())
+                    throw std::runtime_error("URL-warning control remained visible after dismissal");
                 if (!--warningChecks) warningCheckComplete();
             }
             if (data["reqid"].asString()=="capture-login-ready")
