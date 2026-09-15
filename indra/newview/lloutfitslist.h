@@ -73,6 +73,7 @@ public:
     /*virtual*/ bool compare(const LLAccordionCtrlTab* tab1, const LLAccordionCtrlTab* tab2) const;
 };
 
+// <FS:TP> [FIRE-36105] Add date-based outfit sort comparators
 /**
  * @class LLOutfitTabDateComparator
  *
@@ -105,6 +106,7 @@ public:
 
     /*virtual*/ bool compare(const LLAccordionCtrlTab* tab1, const LLAccordionCtrlTab* tab2) const;
 };
+// </FS:TP>
 
 class LLOutfitListBase : public LLPanelAppearanceTab
 {

@@ -66,6 +66,7 @@ static bool is_tab_header_clicked(LLOutfitAccordionCtrlTab* tab, S32 y);
 
 static const LLOutfitTabNameComparator OUTFIT_TAB_NAME_COMPARATOR;
 static const LLOutfitTabFavComparator OUTFIT_TAB_FAV_COMPARATOR;
+// <FS:TP> [FIRE-36105] Add date-based outfit sort comparators
 static const LLOutfitTabDateComparator OUTFIT_TAB_DATE_COMPARATOR;
 static const LLOutfitTabFavDateComparator OUTFIT_TAB_FAV_DATE_COMPARATOR;
 
@@ -106,6 +107,7 @@ static time_t get_outfit_tab_creation_date(const LLAccordionCtrlTab* tab)
     }
     return newest;
 }
+// </FS:TP>
 
 /*virtual*/
 bool LLOutfitTabNameComparator::compare(const LLAccordionCtrlTab* tab1, const LLAccordionCtrlTab* tab2) const
@@ -125,6 +127,7 @@ bool LLOutfitTabFavComparator::compare(const LLAccordionCtrlTab* tab1, const LLA
     return (LLStringUtil::compareDict(tab1->getTitle(), tab2->getTitle()) < 0);
 }
 
+// <FS:TP> [FIRE-36105] Add date-based outfit sort comparators
 bool LLOutfitTabDateComparator::compare(const LLAccordionCtrlTab* tab1, const LLAccordionCtrlTab* tab2) const
 {
     time_t date1 = get_outfit_tab_creation_date(tab1);
@@ -156,6 +159,7 @@ bool LLOutfitTabFavDateComparator::compare(const LLAccordionCtrlTab* tab1, const
 
     return (LLStringUtil::compareDict(tab1->getTitle(), tab2->getTitle()) < 0);
 }
+// </FS:TP>
 
 struct outfit_accordion_tab_params : public LLInitParam::Block<outfit_accordion_tab_params, LLOutfitAccordionCtrlTab::Params>
 {
@@ -229,6 +233,16 @@ bool LLOutfitsList::postBuild()
 void LLOutfitsList::initComparator()
 {
     S32 mode = gSavedSettings.getS32("OutfitListSortOrder");
+    // <FS:TP> [FIRE-36105] OutfitListSortOrder is now a bitmask so
+    // favorites-to-top and newest-first can be combined independently
+    // if (mode == 0)
+    // {
+    //     mAccordion->setComparator(&OUTFIT_TAB_NAME_COMPARATOR);
+    // }
+    // else
+    // {
+    //     mAccordion->setComparator(&OUTFIT_TAB_FAV_COMPARATOR);
+    // }
     bool favorites_to_top = (mode & OUTFIT_SORT_FAVORITES_TO_TOP) != 0;
     bool newest_first = (mode & OUTFIT_SORT_NEWEST_FIRST) != 0;
 
@@ -248,6 +262,7 @@ void LLOutfitsList::initComparator()
     {
         mAccordion->setComparator(&OUTFIT_TAB_NAME_COMPARATOR);
     }
+    // </FS:TP>
     sortOutfits();
 }
 
@@ -987,6 +1002,11 @@ void LLOutfitsList::onChangeSortOrder(const LLSD& userdata)
     std::string sort_data = userdata.asString();
     if (sort_data == "favorites_to_top")
     {
+        // <FS:TP> [FIRE-36105] OutfitListSortOrder is now a bitmask so
+        // favorites-to-top and newest-first can be combined independently
+        // at the moment this is a toggle
+        // S32 val = gSavedSettings.getS32("OutfitListSortOrder");
+        // gSavedSettings.setS32("OutfitListSortOrder", (val ? 0 : 1));
         // this one's a toggle, independent of the alphabetical/newest-first choice
         S32 val = gSavedSettings.getS32("OutfitListSortOrder");
         gSavedSettings.setS32("OutfitListSortOrder", val ^ OUTFIT_SORT_FAVORITES_TO_TOP);
@@ -1009,6 +1029,7 @@ void LLOutfitsList::onChangeSortOrder(const LLSD& userdata)
 
         initComparator();
     }
+    // </FS:TP>
     else if (sort_data == "show_entire_outfit")
     {
         bool new_val = !gSavedSettings.getBOOL("OutfitListFilterFullList");
@@ -1872,18 +1893,22 @@ void LLOutfitListSortMenu::onUpdateItemsVisibility()
     if (!mMenu) return;
     mMenu->setItemVisible("expand", true);
     mMenu->setItemVisible("collapse", true);
-    mMenu->setItemVisible("sort_alphabetical", true);
-    mMenu->setItemVisible("sort_newest_first", true);
+    mMenu->setItemVisible("sort_alphabetical", true); // </FS:TP> [FIRE-36105] new sort option
+    mMenu->setItemVisible("sort_newest_first", true); // </FS:TP> [FIRE-36105] new sort option
     mMenu->setItemVisible("sort_favorites_to_top", true);
     mMenu->setItemVisible("show_entire_outfit_in_search", true);
 }
 
 bool LLOutfitListSortMenu::onEnable(LLSD::String param)
 {
+    // <FS:TP> [FIRE-36105] sort_order moved up so it's shared by the new
+    // "newest_first"/"alphabetical" cases below too
     static LLCachedControl<S32> sort_order(gSavedSettings, "OutfitListSortOrder", 0);
 
     if ("favorites_to_top" == param)
     {
+        // static LLCachedControl<S32> sort_order(gSavedSettings, "OutfitListSortOrder", 0);
+        // return sort_order == 1;
         return (sort_order & OUTFIT_SORT_FAVORITES_TO_TOP) != 0;
     }
     else if ("newest_first" == param)
@@ -1896,6 +1921,7 @@ bool LLOutfitListSortMenu::onEnable(LLSD::String param)
         // so "alphabetical" is simply "newest-first is off"
         return (sort_order & OUTFIT_SORT_NEWEST_FIRST) == 0;
     }
+    // </FS:TP>
     else if ("show_entire_outfit" == param)
     {
         static LLCachedControl<bool> filter_mode(gSavedSettings, "OutfitListFilterFullList", 0);
