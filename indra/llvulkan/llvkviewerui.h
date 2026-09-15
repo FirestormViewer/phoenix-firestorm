@@ -103,6 +103,13 @@ public:
     using BrowserCommand = std::function<bool(LLVKWidgetTree::Id,const std::string&,const std::string&,std::string&)>;
     void setBrowserCommand(BrowserCommand command) { mBrowserCommand=std::move(command); }
     bool showMediaBrowser(const std::string& url,std::string& error,const std::string& target = {});
+    static std::string helpUrl(const std::string& format,const std::string& topic,const LLSD& substitutions);
+    static bool helpUsesExternalBrowser(const std::string& url,unsigned behavior);
+    using HelpContext = std::function<std::optional<LLSD>(std::string&)>;
+    using HelpExternal = std::function<bool(const std::string&,std::string&)>;
+    void setHelpServices(HelpContext context,HelpExternal external);
+    bool showHelp(const std::string& topic,std::string& error);
+    LLVKWidgetTree::Id helpBrowser() const noexcept { return mHelpBrowser; }
     void webBrowserEvent(LLVKWidgetTree::Id browser,const std::string& kind,const std::string& text,bool back,bool forward);
     bool reportProblem(std::string& error);
     bool showAutoReplace(std::string& error);
@@ -350,6 +357,14 @@ private:
     bool mPreviewOverlaps=false;
     std::function<bool(std::string&)> mFontTextureDump;
     std::unique_ptr<LLVKFloater> mGuidebook;
+    std::unique_ptr<LLVKFloater> mHelp;
+    LLVKWidgetTree::Id mHelpBrowser=0;
+    bool mHelpRetiring=false,mHelpErrorPageUsed=false;
+    std::map<std::string,LLVKWidgetTree::Id> mHelpFields;
+    std::vector<std::string> mHelpHistory;
+    std::string mHelpCurrentUrl;
+    HelpContext mHelpContext;
+    HelpExternal mHelpExternal;
     GuidebookOpen mGuidebookOpen;
     std::function<void(LLVKWidgetTree::Id)> mGuidebookClose;
     void recordGuidebookState(bool visible);

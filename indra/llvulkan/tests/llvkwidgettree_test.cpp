@@ -738,8 +738,12 @@ namespace tut
         configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
         completePreferenceSettings(configuration);
         std::string error,command,url; LLVKWidgetTree::Id browser=0; int closed=0;
+        std::map<std::string,LLSD> savedHelp;
+        configuration.savePreferences=[&](const auto& values,std::string&) { savedHelp.insert(values.begin(),values.end()); return true; };
         auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
-        ui->setGuidebookService([&](auto id,const auto& page,std::string&) { browser=id; url=page; return true; },[&](auto) { ++closed; });
+        bool failBrowserOpen=false;
+        ui->setGuidebookService([&](auto id,const auto& page,std::string& problem)
+        { browser=id; url=page; if (failBrowserOpen) { problem="Synthetic browser startup failure"; return false; } return true; },[&](auto) { ++closed; });
         ui->setBrowserCommand([&](auto id,const auto& action,const auto& page,std::string&)
         { ensure_equals("command browser owner",id,browser); command=action; url=page; return true; });
         const bool opened=ui->showMediaBrowser("https://example.test/first",error); ensure(error,opened);
@@ -768,6 +772,65 @@ namespace tut
         ui->webBrowserEvent(namedBrowser,"Closed","",false,false);
         ensure("browser close request hides matching floater",!ui->tree().get(named)->params.visible);
         ensure("closed target gets fresh owner",ui->showMediaBrowser("https://example.test/new",error,"help") && browser!=namedBrowser);
+        ensure("close media before Help checks",ui->closeMenuWindow(error));
+        ensure("Help requires native context",!ui->showHelp("topic",error));
+        ui->setHelpServices([](std::string&) -> std::optional<LLSD>
+        { LLSD values; values["LANGUAGE"]="en"; values["DEBUG_MODE"]=""; return values; },
+            [&](const std::string& target,std::string&) { url=target; command="External"; return true; });
+        ensure("configure Help fixture",ui->tree().updateSetting("HelpURLFormat",LLSD("https://example.test/help/[TOPIC]")) &&
+            ui->tree().updateSetting("PreferredBrowserBehavior",LLSD(0)));
+        command.clear();
+        ensure("external Help awaits confirmation",ui->showHelp("preferences/general",error) && command.empty() && !ui->helpBrowser());
+        ensure("Help confirmation appears",ui->advanceNotices(10.,error));
+        ensure("Help confirmation delay expires",ui->advanceNotices(10.5,error));
+        ensure("confirm external Help",ui->noticeKey(true,false,error));
+        ensure("external Help dispatch",command=="External" && url=="https://example.test/help/preferences%2Fgeneral");
+        command.clear();
+        ensure("queue cancelled Help",ui->showHelp("cancel",error));
+        ensure("cancel Help confirmation",ui->advanceNotices(11.,error) && ui->advanceNotices(11.5,error) &&
+            ui->tree().commit(ui->find("Cancel_okcancelignore",ui->modalNotice())) && !ui->modalNotice());
+        ensure("cancel never launches browser",command.empty());
+        ensure("disable external browsing",ui->tree().updateSetting("DisableExternalBrowser",LLSD(true)));
+        ensure("disabled Help launch suppressed",ui->showHelp("disabled",error) && command.empty());
+        ensure("restore external browsing",ui->tree().updateSetting("DisableExternalBrowser",LLSD(false)));
+        ensure("configure missing metadata",ui->tree().updateSetting("HelpURLFormat",LLSD("https://example.test/[SESSION_ID]/[TOPIC]")));
+        ensure("missing metadata cannot launch",!ui->showHelp("missing",error) && command.empty());
+        ensure("restore Help format",ui->tree().updateSetting("HelpURLFormat",LLSD("https://example.test/help/[TOPIC]")));
+        ensure("select internal Help",ui->tree().updateSetting("PreferredBrowserBehavior",LLSD(2)));
+        failBrowserOpen=true;
+        const auto closesBeforeFailure=closed;
+        ensure("failed Help startup retires partial browser",!ui->showHelp("failed",error) && closed==closesBeforeFailure+1 && !ui->helpBrowser());
+        ensure("failed Help startup removes browser widget",!ui->tree().get(browser));
+        failBrowserOpen=false;
+        const bool helpOpened=ui->showHelp("first",error); ensure(error,helpOpened);
+        const auto helpFloater=ui->activeFloater(),helpBrowser=ui->helpBrowser();
+        ensure("dedicated original Help browser",helpBrowser==browser && ui->find("status_text",helpFloater) && !ui->find("nav_controls",helpFloater));
+        ensure("Help open state recorded",ui->tree().setting("HelpFloaterOpen")->asBoolean());
+        ui->webBrowserEvent(helpBrowser,"LoadStart","",false,false);
+        ensure("Help loading status",ui->tree().value(ui->find("status_text",helpFloater)).asString()=="Loading...");
+        ui->webBrowserEvent(helpBrowser,"LoadEnd","",false,false);
+        ensure("Help completion clears status",ui->tree().value(ui->find("status_text",helpFloater)).asString().empty());
+        ensure("Help singleton navigates",ui->showHelp("second",error) && ui->helpBrowser()==helpBrowser &&
+            command=="Navigate" && url=="https://example.test/help/second");
+        const auto helpButton=ui->find("floater_help",helpFloater);
+        ensure("Help has functional title control",helpButton && ui->tree().commit(helpButton));
+        ensure("Help title control resolves its current topic",url=="https://example.test/help/floater_help_browser");
+        ensure("configure Help error page",ui->tree().updateSetting("GenericErrorPageURL",LLSD("https://example.test/error")));
+        ui->webBrowserEvent(helpBrowser,"LoadError","failed",false,false);
+        ensure("Help error navigates fallback",url=="https://example.test/error");
+        const auto beforeClose=closed;
+        ensure("Help close retires browser",ui->closeMenuWindow(error) && closed==beforeClose+1);
+        ensure("normal Help close clears setting",!ui->tree().setting("HelpFloaterOpen")->asBoolean());
+        ensure("Help deferred retirement completes",ui->preparePaint({},error).has_value() && !ui->tree().get(helpFloater) && !ui->helpBrowser());
+        const bool helpReopened=ui->showHelp("third",error); ensure(error,helpReopened);
+        ensure("Help reopen has fresh browser identity",ui->helpBrowser()!=helpBrowser);
+        ui->webBrowserEvent(ui->helpBrowser(),"LoadStart","",false,false);
+        ui->webBrowserEvent(helpBrowser,"Closed","",false,false);
+        ensure("retired Help events cannot close replacement",ui->tree().visibleInChain(ui->helpBrowser()));
+        const auto helpShutdown=ui->prepareShutdown(error);
+        ensure("quit closes Help: "+error,helpShutdown==LLVKViewerUi::ShutdownStatus::Ready);
+        ensure("application quit preserves Help open preference",ui->tree().setting("HelpFloaterOpen")->asBoolean());
+        ensure("quit persists the Help reopen preference",savedHelp.at("HelpFloaterOpen").asBoolean());
     }
 
     template<> template<> void object::test<202>()
@@ -3952,8 +4015,8 @@ namespace tut
         LLVKWidgetPaint::Input paintInput; paintInput.button.frameDelta=0.08f;
         const auto paint=LLVKWidgetPaint::prepare(tree,*owner,paintInput,error);
         ensure(error,paint.has_value());
-        ensure("overflow paint remains inside source clip",std::all_of(paint->commands.begin(),paint->commands.end(),
-            [&](const auto& command) { return command.owner==*owner || (command.clip.left>=3 && command.clip.right<=297); }));
+        ensure("overflow paint preserves inclusive source clip endpoint",std::all_of(paint->commands.begin(),paint->commands.end(),
+            [&](const auto& command) { return command.owner==*owner || (command.clip.left>=3 && command.clip.right<=298); }));
     }
 
     template<> template<> void object::test<142>()
@@ -4491,6 +4554,21 @@ namespace tut
         ensure("panels hidden before selection",!tree.get(*first)->params.visible && !tree.get(*second)->params.visible);
         ensure("hidden topics fall back to owner",tree.findHelpTopic(*container)==std::optional<std::string>("tab-owner"));
         ensure("invalid Help target has no topic",!tree.findHelpTopic(0));
+        LLSD helpValues;
+        helpValues["LANGUAGE"]="fr";
+        helpValues["CHANNEL"]="Native Test";
+        helpValues["DEBUG_MODE"]="";
+        ensure_equals("Help URL encodes the topic independently",LLVKViewerUi::helpUrl(
+            "https://example.test/[LANGUAGE]/[TOPIC]?channel=[CHANNEL][DEBUG_MODE]","a/b ~",helpValues),
+            std::string("https://example.test/fr/a%2Fb%20%7E?channel=Native%20Test"));
+        ensure_equals("empty Help topic uses reference fallback",LLVKViewerUi::helpUrl("https://example.test/[TOPIC]","",helpValues),
+            std::string("https://example.test/this_is_fallbacktopic"));
+        ensure("external-only Help opens outside",LLVKViewerUi::helpUsesExternalBrowser("https://secondlife.com/help",0));
+        ensure("mixed Help keeps Linden domains internal",!LLVKViewerUi::helpUsesExternalBrowser("https://SUPPORT.SECONDLIFE.COM/help",1));
+        ensure("mixed Help keeps grid status internal",!LLVKViewerUi::helpUsesExternalBrowser("https://secondlife-status.statuspage.io",1));
+        ensure("mixed Help opens other hosts externally",LLVKViewerUi::helpUsesExternalBrowser("https://example.test/help",1));
+        ensure("internal Help remains inside",!LLVKViewerUi::helpUsesExternalBrowser("https://example.test/help",2));
+        ensure("internal Help still delegates mailto",LLVKViewerUi::helpUsesExternalBrowser("MAILTO:test@example.test",2));
         int commits=0;
         LLVKControl::Callback callback;
         callback.function=[&](auto,const LLSD& name)

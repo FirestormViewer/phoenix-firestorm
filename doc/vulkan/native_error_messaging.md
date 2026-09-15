@@ -1,5 +1,99 @@
 # Native error messaging
 
+## Help service continuation (2026-09-16)
+
+The requested Copy/topic checkpoint was committed and pushed as c9df46aa11.
+The following Help implementation and tab-clip correction are uncommitted work;
+neither checkpoint claims complete native parity.
+
+NV-00/01/02/03/11/12/14/17: the source roots are LLFloater::onClickHelp and
+title-button creation, LLUICtrl::findHelpTopic, LLViewerHelp::getURL/showTopic,
+LLViewerHelpUtil::buildHelpURL, LLWeb::useExternalBrowser/loadURLExternal,
+LLFloaterHelpBrowser's open/close/media-event handlers, and LLURLHistory.
+Native title buttons resolve topics at click time over native panels. They honor
+FSHideHelpButtons, use Help foreground/pressed skin images and source hover glow,
+and resolve the tooltip through the native localized BUTTON_HELP catalog entry.
+Minimization uses existing native child visibility retention. Alternate floater
+Help image declarations and all dock/tear-off combinations remain unqualified.
+
+Native Help URL construction accepts an explicit metadata map, percent-encodes
+topics using the source unreserved set (excluding tilde), substitutes the format,
+and escapes URL spaces/backslashes. Empty topics use the reference fallback;
+f1_help performs focus-topic lookup and pre-login fallback. The window provides
+build/version, OS, language, pre-login null session/region IDs, first-login false,
+parcel0 and the source GRID substitution policy. GRID_LOWERCASE is provided only
+when present in the login URL. An authenticated window requires Configuration's
+Help-context provider instead of inventing session/grid state. Unresolved uppercase
+substitution tokens fail explicitly. A complete authenticated provider remains open.
+
+External policy follows PreferredBrowserBehavior and the pinned domain rule.
+DisableExternalBrowser suppresses launch. LLWeb's confirmation is an original
+WebLaunchExternalTarget notice with okcancelignore, not the unrelated generic
+native Windows URL prompt. Approval invokes a dedicated native ShellExecute
+callback; Cancel never launches. The unit fixture captures callbacks and never
+opens the system browser. Actual external-browser launch and ignored-confirmation
+parity have not been operator-qualified.
+
+The internal path constructs floater_help_browser.xml with its own LLVKFloater
+and independently owned CEF view, not the general web-content floater. It reuses
+the live singleton for navigation, updates localized loading/done status, and
+records simplified URL history (query/fragment removed, newest first, limit10).
+History remains in the native UI instance; account-file persistence and sharing
+with other browser histories are still open. The reference init_history message
+has no CEF handler and is not treated as an implemented feature mandate.
+Load errors are forwarded from the native browser owner and may navigate the
+configured GenericErrorPageURL once per requested Help navigation; the bounded
+fallback avoids a failed-error-page loop, not a claim of identical repeated-failure
+policy. The generic failure warning remains diagnostic.
+
+Close detaches input/frame publication and requests browser shutdown; the floater
+is destroyed on the next paint-preparation boundary or before reopen, outside its
+own callback. Reopen has a new widget/browser identity and ignores old close events.
+Partial startup failure retires the attempted browser and discards its widget.
+Normal close clears HelpFloaterOpen; application quit preserves it for persistence.
+Startup restoration from that setting and authenticated history persistence remain
+open. Existing frame-slot/upload owners retain GPU versions through completion.
+
+The Help XML's intentionally empty done_text exposed a parser restriction:
+native panel-string declarations now accept empty contents while still rejecting
+unnamed/nested declarations. No skin/reference XML was changed.
+
+Validation: Widget210/210 includes URL escaping, fallback and all three browser
+preferences; confirmation approval/Cancel/disable; missing metadata; partial-open
+failure cleanup; dedicated browser widgets; title-button invocation; load/status/
+fallback; singleton reuse; normal close/reopen; late-event isolation; and quit
+preference persistence. Window7/7 includes two added real-CEF stages using the
+existing loopback page, checks the presented browser pixels, closes/reopens Help
+with a new identity, and completes the existing graceful shutdown/recovery path.
+The final expected stage count is11, not the previous9. These are runtime/lifetime
+checks, not a full-frame visual comparison of the Help browser itself.
+
+An attempted generic ShowHelp menu binding was removed after tracing the actual
+LLShowHelp callback: OpenSim grid_help/grid_about use grid-provided URLs and
+LLWeb::loadURLInternal, not ordinary Help topics. Native grid-menu dispatch is
+still open; title-bar Help and direct native Help service calls are connected.
+
+### Tab clip evidence
+
+LLTabContainer::draw clips panel children three units inside its sides.
+LLLocalClipRect adds one device pixel to both width and height; native exclusive
+clip representation lacked that allowance. Its tab-content producer now adds the
+same endpoint allowance, and the existing overflow test checks the encoded bound.
+This corrected the missing panel-border endpoints at screen1613,460 and1613,938;
+no border-coordinate patch or tolerance adjustment was used.
+
+Retained GLgl-dialog-separated-78/native-help-parity-136,2560x1369,100%,en,
+AnisotropyOff: Colors click and departed states are byte-identical in both samples.
+Preferences departed sample0 is also byte-identical; its other sample and the
+click samples differ by30 caret pixels. Picker click/departed states differ by
+two title-shadow pixels at1701,419 and1701,421, four channel levels each, in both
+samples. They remain failures under the exact criterion. Native136 fixture SHA256:
+6DEF1A8C874A63470385F4E2631D7743D9AD1B3DDEB8146B4B7929C2DF7B7224.
+Native135 retains the preceding Help-icon pass with the two panel-border failures.
+No reference or capture transformations were changed. Menu tear-off, full Help
+browser visual/effects parity, remaining shadow/caret timing and broader nested
+lifecycle/temporal checks remain open. Login-dependent verification stays deferred.
+
 ## Post-checkpoint continuation (2026-09-15)
 
 The browser/dialog checkpoint was committed and pushed as 4154e1e879 on

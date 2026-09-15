@@ -873,7 +873,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             if (!current || current->parent != id) continue;
             auto childClip = clip;
             if (node->tabContainer)
-                childClip=intersect(childClip,{screen->left+3,screen->bottom,screen->right-3,screen->top});
+                childClip=intersect(childClip,{screen->left+3,screen->bottom,screen->right-2,screen->top+1});
             if (clipPanels && current->layoutPanel)
             {
                 auto visible = tree.screenRect(*child,error);

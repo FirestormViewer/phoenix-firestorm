@@ -1,5 +1,7 @@
 #include "llerrorcontrol.h"
 #include "llvkviewerui.h"
+#include "lluriparser.h"
+#include <boost/regex.hpp>
 #include "llstring.h"
 #include "llsdutil.h"
 #include "llsdserialize.h"
@@ -165,7 +167,8 @@ bool LLVKViewerUi::initializeDialogs(const Configuration& configuration,std::str
                         name=="SoundCacheWillBeMoved" || name=="DisableJavascriptBreaksSearch" || name=="ChangeSkin" || name=="SkinDefaultsChangeSettings" || name=="ChangeRenderBackend" ||
                         name=="SettingsConfirmBackup" || name=="SettingsRestoreNeedsLogout" || name=="BackupPathEmpty" ||
                         name=="BackupFinished" || name=="RestoreFinished" || name=="okbutton" ||
-                        name=="DebugSettingsWarning" || name=="ControlNameCopiedToClipboard" || name=="SanityCheck" || name=="MediaPluginFailed" || name=="ChangeLanguage")
+                        name=="DebugSettingsWarning" || name=="ControlNameCopiedToClipboard" || name=="SanityCheck" || name=="MediaPluginFailed" || name=="ChangeLanguage" ||
+                        name=="WebLaunchExternalTarget" || name=="okcancelignore")
                     { state.notice=Notice{name,{}}; state.noticeDepth=static_cast<int>(state.stack.size()); }
                     state.formTemplate=std::string_view(tag)=="template";
                 }
@@ -4714,6 +4717,113 @@ bool LLVKViewerUi::showWhitelist(std::string& error)
     return mWhitelist->open(error);
 }
 
+std::string LLVKViewerUi::helpUrl(const std::string& format,const std::string& topic,const LLSD& substitutions)
+{
+    LLSD values=substitutions;
+    values["TOPIC"]=LLURI::escape(topic.empty() ? "this_is_fallbacktopic" : topic,
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._");
+    auto url=format;
+    LLStringUtil::format(url,values);
+    std::string escaped;
+    for (const char character : url)
+    {
+        if (character==' ') escaped+="%20";
+        else if (character=='\\') escaped+="%5C";
+        else escaped+=character;
+    }
+    return escaped;
+}
+
+bool LLVKViewerUi::helpUsesExternalBrowser(const std::string& url,unsigned behavior)
+{
+    if (behavior==0) return true;
+    if (behavior==1)
+    {
+        LLUriParser parsed(url);
+        parsed.normalize();
+        parsed.extractParts();
+        const auto host=parsed.host();
+        const boost::regex domains("\\b(lindenlab.com|secondlife.com|secondlife.io|secondlifegrid.net|secondlife-status.statuspage.io)$",
+            boost::regex::perl|boost::regex::icase);
+        return !boost::regex_search(host,domains);
+    }
+    const boost::regex mail("^mailto:",boost::regex::perl|boost::regex::icase);
+    return boost::regex_search(url,mail);
+}
+
+void LLVKViewerUi::setHelpServices(HelpContext context,HelpExternal external)
+{
+    mHelpContext=std::move(context); mHelpExternal=std::move(external);
+}
+
+bool LLVKViewerUi::showHelp(const std::string& requested,std::string& error)
+{
+    error.clear();
+    auto topic=requested.empty() ? "this_is_fallbacktopic" : requested;
+    if (topic=="f1_help")
+    {
+        topic=mTree.findHelpTopic(mTree.keyboardFocus()).value_or("this_is_fallbacktopic");
+        if (topic=="this_is_fallbacktopic" && !sessionSnapshot().identity) topic="start";
+    }
+    if (!mHelpContext) { error="Native Help URL context is unavailable"; return false; }
+    const auto values=mHelpContext(error);
+    if (!values || !values->isMap())
+    { if (error.empty()) error="Native Help URL context is not a map"; return false; }
+    const auto format=mTree.setting("HelpURLFormat").value_or(LLSD()).asString();
+    const auto url=helpUrl(format,topic,*values);
+    if (url.empty() || url.find('\0')!=url.npos) { error="Native Help URL is invalid"; return false; }
+    if (boost::regex_search(url,boost::regex("\\[[A-Z][A-Z0-9_]*\\]")))
+    { error="Native Help URL requires unavailable context substitutions"; return false; }
+    if (helpUsesExternalBrowser(url,mTree.setting("PreferredBrowserBehavior").value_or(LLSD(0)).asInteger()))
+    {
+        if (mTree.setting("DisableExternalBrowser").value_or(LLSD(false)).asBoolean()) return true;
+        if (!mHelpExternal) { error="Native external Help browser is unavailable"; return false; }
+        LLSD arguments; arguments["UNTRUSTED_URL"]=url;
+        return queueNotice("WebLaunchExternalTarget",arguments,[this,url](int option,const LLSD&)
+        { if (option==0 && mHelpExternal) mHelpExternal(url,mDialogError); },error);
+    }
+    if (!mGuidebookOpen || !mGuidebookClose || !mBrowserCommand)
+    { error="Native internal Help browser is unavailable"; return false; }
+    mHelpErrorPageUsed=false;
+    if (mHelp && mHelp->visible())
+    {
+        if (!mBrowserCommand(mHelpBrowser,"Navigate",url,error)) return false;
+        mActiveFloater=mHelp.get();
+        return mHelp->open(error);
+    }
+    if (mActiveFloater==mHelp.get()) mActiveFloater=nullptr;
+    mHelp.reset(); mHelpFields.clear(); mHelpBrowser=0; mHelpRetiring=false;
+    auto floater=LLVKFloater::createFile(mTree,*mDialogFactory,mRoot,"floater_help_browser.xml",error);
+    if (!floater) return false;
+    const auto fields=preferenceFields(mTree,floater->id());
+    if (!fields.contains("browser") || !fields.contains("status_text"))
+    { error="Native Help declaration is missing browser or status text"; return false; }
+    const auto browser=fields.at("browser");
+    mTree.setVisible(browser,false);
+    if (!mTree.prepareLayoutStacks(floater->id(),0,error) || !floater->open(error)) return false;
+    if (!mGuidebookOpen(browser,url,error))
+    {
+        mGuidebookClose(browser);
+        return false;
+    }
+    floater->onClose([this,browser]
+    {
+        mTree.setVisible(browser,false);
+        if (mGuidebookClose) mGuidebookClose(browser);
+        if (!mApplicationQuitting)
+        {
+            mTree.updateSetting("HelpFloaterOpen",LLSD(false));
+            mGuidebookChanges["HelpFloaterOpen"]=false;
+        }
+        mHelpRetiring=true;
+    });
+    mHelpFields=fields; mHelpBrowser=browser; mHelpCurrentUrl.clear();
+    mActiveFloater=floater.get(); mHelp=std::move(floater);
+    mTree.updateSetting("HelpFloaterOpen",LLSD(true));
+    mGuidebookChanges["HelpFloaterOpen"]=true;
+    return true;
+}
+
 bool LLVKViewerUi::showMediaBrowser(const std::string& requested,std::string& error,const std::string& target)
 {
     error.clear();
@@ -4797,6 +4907,40 @@ void LLVKViewerUi::webBrowserAction(LLVKWidgetTree::Id browser,const std::string
 
 void LLVKViewerUi::webBrowserEvent(LLVKWidgetTree::Id browser,const std::string& kind,const std::string& text,bool back,bool forward)
 {
+    if (browser==mHelpBrowser && mHelp && mHelp->visible())
+    {
+        if (kind=="Address")
+        {
+            mHelpCurrentUrl=text;
+            if (!text.empty() && text!="about:blank")
+            {
+                const LLURI address(text);
+                const auto simplified=address.scheme()+"://"+address.authority()+address.path();
+                std::erase(mHelpHistory,simplified);
+                mHelpHistory.insert(mHelpHistory.begin(),simplified);
+                if (mHelpHistory.size()>10) mHelpHistory.resize(10);
+            }
+        }
+        else if (kind=="LoadStart" || kind=="LoadEnd")
+        {
+            const auto* panel=mTree.get(mHelp->id());
+            const auto& strings=panel->panel->params.strings;
+            const auto found=strings.find(kind=="LoadStart" ? "loading_text" : "done_text");
+            mTree.setValue(mHelpFields.at("status_text"),LLSD(found==strings.end() ? "" : found->second));
+            mTree.setVisible(browser,true);
+        }
+        else if (kind=="LoadError")
+        {
+            const auto fallback=mTree.setting("GenericErrorPageURL").value_or(LLSD()).asString();
+            if (!fallback.empty() && !mHelpErrorPageUsed)
+            {
+                mHelpErrorPageUsed=true;
+                mBrowserCommand(browser,"Navigate",fallback,mDialogError);
+            }
+        }
+        else if (kind=="Closed") mHelp->close(mDialogError);
+        return;
+    }
     const auto found=mWebDialogs.find(browser);
     if (found==mWebDialogs.end() || !found->second.floater->visible()) return;
     auto& dialog=found->second; const auto& fields=dialog.fields;
@@ -5149,6 +5293,7 @@ std::vector<LLVKFloater*> LLVKViewerUi::floaters() const
     result.push_back(mColorSettings.get());
     for (const auto& [name,dialog] : mUiTests) result.push_back(dialog.get());
     result.push_back(mGuidebook.get());
+    result.push_back(mHelp.get());
     for (const auto& [browser,dialog] : mWebDialogs) result.push_back(dialog.floater.get());
     result.push_back(mBeamColor.get());
     result.push_back(mBeamShape.get());

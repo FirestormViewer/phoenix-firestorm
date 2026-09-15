@@ -233,6 +233,8 @@ public:
         Defaults radioView;
         std::function<void(LLVKWidgetTree::Id,const std::string&)> webLinkHandler;
         std::function<void(LLVKWidgetTree::Id,bool)> colorPickerHandler;
+        std::function<void(LLVKWidgetTree::Id)> helpHandler;
+        std::function<std::string()> helpTooltip;
         std::function<void(LLVKWidgetTree::Id,const std::string&,const std::string&,const Callbacks&)> menuHandler;
             std::shared_ptr<const TextEditorDefaults> textEditor = std::make_shared<TextEditorDefaults>();
         std::map<std::string,std::shared_ptr<LLVKFont>> fonts;
@@ -251,6 +253,8 @@ public:
                        Resources resources = {}, PanelDefaults panelDefaults = {}, LineEditorDefaults lineDefaults = {}, CheckBoxDefaults checkDefaults = {});
     bool loadDefaults(const LLVKWidgetTree& tree, std::string_view xml, std::string& error);
     void setSkinFiles(std::shared_ptr<LLVKSkinFiles> skin) { mResources.skinFiles=std::move(skin); }
+    const std::function<void(LLVKWidgetTree::Id)>& helpHandler() const { return mResources.helpHandler; }
+    std::string helpTooltip() const { return mResources.helpTooltip ? mResources.helpTooltip() : "Help"; }
     void bindAction(std::string name,std::function<void(LLVKWidgetTree::Id,const LLSD&)> action)
     { mCallbacks.actions.insert_or_assign(std::move(name),std::move(action)); }
     bool loadDefaultsFile(const LLVKWidgetTree& tree, const std::string& filename, std::string& error);

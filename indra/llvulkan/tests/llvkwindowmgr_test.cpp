@@ -556,6 +556,7 @@ namespace tut
             }
         };
         LLVKWidgetTree::Id originalGuidebook=0;
+        LLVKWidgetTree::Id originalHelp=0;
         const auto guidebookDeadline=std::chrono::steady_clock::now()+std::chrono::seconds(60);
         configuration.presentedFrame=[&](LLVKViewerUi& ui,const LLVKWidgetPaint::Input& input)
         {
@@ -584,8 +585,30 @@ namespace tut
                 const auto inspector=ui.find("overlap_panel");
                 ensure("overlap diagnostic reaches presented frame",inspector && ui.tree().get(inspector)->params.visible &&
                     !ui.tree().get(inspector)->overlapPanel->elements.empty());
+                std::string problem;
+                ensure("configure local Help",ui.tree().updateSetting("HelpURLFormat",LLSD(guidebookServer.url())) &&
+                    ui.tree().updateSetting("PreferredBrowserBehavior",LLSD(2)));
+                const bool opened=ui.showHelp("fixture",problem); ensure(problem,opened);
+                originalHelp=ui.helpBrowser();
                 ++guidebookStage;
-                PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
+                return;
+            }
+            if (guidebookStage==9 || guidebookStage==10)
+            {
+                const auto frame=input.browsers.find(ui.helpBrowser());
+                if (frame==input.browsers.end() || !frame->second) return;
+                const auto pixels=frame->second->bottomUpRgba();
+                if (pixels[0]!=255 || pixels[1]!=255 || pixels[2]!=0) return;
+                ensure("Help remains prelogin",snapshot.state==LLVKSessionOwner::State::PreLogin);
+                std::string problem;
+                if (guidebookStage==9)
+                {
+                    ensure("live Help closes",ui.closeMenuWindow(problem));
+                    const bool reopened=ui.showHelp("reopened",problem); ensure(problem,reopened);
+                    ensure("live Help has fresh browser identity",ui.helpBrowser()!=originalHelp);
+                }
+                else PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
+                ++guidebookStage;
                 return;
             }
             const auto id=ui.find("webbrowser",guidebookStage>=5 ? ui.activeFloater() : ui.guidebook());
@@ -1333,7 +1356,7 @@ namespace tut
         };
         const bool ran = LLVKWindowMgr::run(configuration,error);
         ensure(error,ran);
-        ensure_equals("browser and XUI preview sequence verified",guidebookStage,9);
+        ensure_equals("browser, XUI preview and Help sequence verified",guidebookStage,11);
         ensure("application and cache retirement completed",session.snapshot().state==LLVKSessionOwner::State::Stopped &&
             session.snapshot().owned[0]==0 && cleanupState->destroyed);
         ensure_equals("one pending poll and one explicit retry",cleanupState->attempts,3);

@@ -16,6 +16,7 @@
 #include <shellapi.h>
 #include <shlobj.h>
 #include "llstring.h"
+#include "llsys.h"
 #include "lluri.h"
 #include <intrin.h>
 #include <psapi.h>
@@ -739,6 +740,7 @@ namespace
                 ui->setJoystickServices({});
                 ui->setGuidebookService({},{});
                 ui->setBrowserCommand({});
+                ui->setHelpServices({},{});
                 for (const auto& [id,view] : window.browserViews)
                 {
                     ui->tree().setEvents(id,{});
@@ -1256,6 +1258,40 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         problem="Unknown native browser action"; return false;
     });
     if (ui->tree().setting("floater_vis_guidebook").value_or(LLSD(false)).asBoolean() && !ui->toggleGuidebook(error)) return false;
+    ui->setHelpServices([&](std::string& problem) -> std::optional<LLSD>
+    {
+        if (configuration.helpContext) return configuration.helpContext(problem);
+        if (application.owner->snapshot().identity)
+        { problem="Native authenticated Help metadata requires a session provider"; return std::nullopt; }
+        LLSD values;
+        values["VERSION"]=std::string(LLVK_VIEWER_MAJOR)+"."+LLVK_VIEWER_MINOR+"."+LLVK_VIEWER_PATCH+"."+LLVK_VIEWER_BUILD;
+        values["VERSION_MAJOR"]=LLVK_VIEWER_MAJOR; values["VERSION_MINOR"]=LLVK_VIEWER_MINOR;
+        values["VERSION_PATCH"]=LLVK_VIEWER_PATCH; values["VERSION_BUILD"]=LLVK_VIEWER_BUILD;
+        values["CHANNEL"]=LLVK_VIEWER_CHANNEL;
+        values["OS"]=LLOSInfo::instance().getOSStringSimple();
+        values["LANGUAGE"]=browserConfiguration.language=="en-us" ? "en" : browserConfiguration.language;
+        values["DEBUG_MODE"]="";
+        values["SESSION_ID"]=LLUUID::null; values["REGION_ID"]=LLUUID::null;
+        values["FIRST_LOGIN"]=false; values["PARCEL_ID"]="0";
+        const auto query=LLURI(configuration.loginPage).queryMap();
+        auto grid=query["grid"].asString(); LLStringUtil::toLower(grid);
+        values["GRID"]=grid=="damballah" ? "secondlife-staging.com" : "secondlife.com";
+        if (!grid.empty()) values["GRID_LOWERCASE"]=grid;
+#ifdef OPENSIM
+        values["SLURL_TYPE"]="hop";
+#endif
+        return values;
+    },[&state](const std::string& url,std::string& problem)
+    {
+        const LLURI address(url);
+        auto scheme=address.scheme(); LLStringUtil::toLower(scheme);
+        if ((scheme!="https" && scheme!="http" && scheme!="ftp" && scheme!="mailto") || url.find('\0')!=url.npos)
+        { problem="Native Help external URL scheme is not supported"; return false; }
+        const auto wide=ll_convert<std::wstring>(url);
+        if (reinterpret_cast<INT_PTR>(ShellExecuteW(state.window,L"open",wide.c_str(),nullptr,nullptr,SW_SHOWNORMAL))<=32)
+        { problem="Native Help external browser launch failed"; return false; }
+        return true;
+    });
     services.joystick=std::make_unique<LLVKJoystick>();
     auto& joystick=*services.joystick;
     bool joystickStarted=false;
@@ -1419,7 +1455,10 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             for (const auto& event : view.takeEvents())
             {
                 if (event.kind==LLVKBrowser::EventKind::LoadError && event.code!=-3)
+                {
                     LL_WARNS("NativeGuidebook") << (LLVKError{Code::OperationFailed,Operation::Browser,1,0}).diagnostic() << LL_ENDL;
+                    ui->webBrowserEvent(id,"LoadError",event.text,false,false);
+                }
                 if (!navigation) continue;
                 std::string kind;
                 using Event=LLVKBrowser::EventKind;

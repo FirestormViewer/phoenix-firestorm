@@ -2041,7 +2041,7 @@ namespace
                     auto entry = std::move(*state.panelString);
                     auto body = panelText(std::move(entry.body));
                     if (!body.empty()) entry.value = std::move(body);
-                    if (!entry.value) { state.reject("Native panel string requires a value"); return; }
+                    if (!entry.value) entry.value=std::string();
                     state.stack.back()->panelStrings.insert_or_assign(entry.name,*entry.value);
                     state.stack.back()->panel->strings.insert_or_assign(std::move(entry.name),std::move(*entry.value));
                     state.panelString.reset();

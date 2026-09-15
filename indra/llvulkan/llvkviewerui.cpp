@@ -142,6 +142,12 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
     { if (owner->mOpenUrl) owner->mOpenUrl(url); else owner->mDialogError="Native web link service is not bound"; };
     resources.colorPickerHandler=[owner=ui.get()](auto swatch,bool takeFocus)
     { owner->showColorPicker(swatch,takeFocus,owner->mDialogError); };
+    resources.helpHandler=[owner=ui.get()](auto floater)
+    {
+        const auto topic=owner->mTree.findHelpTopic(floater);
+        if (topic) owner->showHelp(*topic,owner->mDialogError);
+    };
+    resources.helpTooltip=[owner=ui.get()] { return owner->errorString("BUTTON_HELP","Help"); };
     resources.menuHandler=[owner=ui.get()](auto button,const std::string& filename,const std::string& position,const auto& callbacks)
     { owner->showButtonMenu(button,filename,position,callbacks); };
     LLVKWidgetFactory::PanelDefaults panel;
@@ -508,6 +514,11 @@ bool LLVKViewerUi::refreshDisplayScale(std::string& error,float systemScale)
 
 std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint::Input& input,std::string& error)
 {
+    if (mHelpRetiring)
+    {
+        if (mActiveFloater==mHelp.get()) mActiveFloater=nullptr;
+        mHelp.reset(); mHelpFields.clear(); mHelpBrowser=0; mHelpRetiring=false;
+    }
     updateLoginControls();
     auto viewport = mTree.screenRect(mRoot,error);
     if (viewport && input.physicalWidth && input.physicalHeight)

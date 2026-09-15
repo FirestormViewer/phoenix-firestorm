@@ -126,6 +126,27 @@ bool LLVKFloater::createChrome(LLVKWidgetFactory& factory,const std::string& tit
         tree.setControlCommit(*dock,std::move(action));
         if (!tree.setShape(mTitle,{14,titleTop-titleHeight,right-7,titleTop},error)) return false;
     }
+    if (node->panel && !node->panel->params.helpTopic.empty() && factory.helpHandler() &&
+        !tree.setting("FSHideHelpButtons").value_or(LLSD(false)).asBoolean())
+    {
+        const auto left=width-1-(buttonSize+1)*(1+static_cast<int>(mCanClose)+static_cast<int>(mCanMinimize)+static_cast<int>(mDockButton!=0));
+        auto tooltip=factory.helpTooltip();
+        for (const auto& [from,to] : {std::pair{"&","&amp;"},std::pair{"'","&apos;"},std::pair{"<","&lt;"},std::pair{">","&gt;"}})
+        {
+            std::size_t position=0;
+            while ((position=tooltip.find(from,position))!=std::string::npos)
+            { tooltip.replace(position,std::char_traits<char>::length(from),to); position+=std::char_traits<char>::length(to); }
+        }
+        const auto help=factory.construct(tree,"<button name='floater_help' layout='bottomleft' left='"+std::to_string(left)+
+            "' bottom='"+std::to_string(buttonBottom)+"' width='"+std::to_string(buttonSize)+"' height='"+std::to_string(buttonSize)+
+            "' follows='right|top' tab_stop='false' image_unselected='Icon_Help_Foreground' image_selected='Icon_Help_Press' "
+            "image_pressed='Icon_Help_Press' hover_glow_amount='0.33' tool_tip='"+tooltip+"' label=''/>",id,error);
+        if (!help) return false;
+        LLVKControl::Callback action;
+        action.function=[handler=factory.helpHandler(),id](auto,const LLSD&) { handler(id); };
+        tree.setControlCommit(*help,std::move(action));
+        if (!tree.setShape(mTitle,{14,titleTop-titleHeight,left-7,titleTop},error)) return false;
+    }
     return true;
 }
 
