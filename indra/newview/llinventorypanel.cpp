@@ -1151,6 +1151,11 @@ void LLInventoryPanel::setLibraryFolderVisible(bool visible)
         if (!library_view)
         {
             buildNewViews(library_id);
+            // New folder views are added invisible with no rearrange request
+            // (LLFolderViewFolder::addFolder() has that call commented out,
+            // see addItem()/addFolder() in llfolderviewitem.cpp) - without
+            // this, the folder exists in the model but never actually draws.
+            mFolderRoot.get()->arrangeAll();
         }
     }
     else
@@ -1159,6 +1164,8 @@ void LLInventoryPanel::setLibraryFolderVisible(bool visible)
         {
             // Same pattern used elsewhere in this file to tear down a folder's
             // view: drop it from the item map, then destroy the UI element.
+            // destroyView() -> extractItem() already calls requestArrange()
+            // internally, so no extra rearrange call is needed on this side.
             removeItemID(library_id);
             library_view->destroyView();
         }
