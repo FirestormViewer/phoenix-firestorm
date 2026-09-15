@@ -15,6 +15,7 @@
 #include <winrt/Windows.Graphics.DirectX.h>
 #include <winrt/Windows.Graphics.DirectX.Direct3D11.h>
 #include <chrono>
+#include <condition_variable>
 #include <filesystem>
 #include <fstream>
 #include <future>
@@ -33,7 +34,9 @@ struct Capture
     std::vector<std::uint8_t> rgba;
 };
 
-Capture capture(HWND window)
+void save(const Capture& capture,const std::filesystem::path& path);
+
+Capture capture(HWND window,const std::filesystem::path& streamDirectory={},unsigned durationMs=0)
 {
     init_apartment(apartment_type::multi_threaded);
     if (!GraphicsCaptureSession::IsSupported() || !IsWindow(window) || !IsWindowVisible(window) || IsIconic(window))
@@ -66,7 +69,22 @@ Capture capture(HWND window)
     std::promise<Capture> promise;
     auto result=promise.get_future();
     std::mutex mutex;
+    std::condition_variable stopped;
+    bool received=false;
     bool completed=false;
+    std::exception_ptr streamFailure;
+    std::ofstream timeline;
+    unsigned frames=0;
+    unsigned storedFrame=0;
+    std::vector<std::uint8_t> previousPixels;
+    if (durationMs)
+    {
+        if (durationMs>10000 || streamDirectory.empty() || !std::filesystem::create_directory(streamDirectory))
+            throw std::runtime_error("Continuous capture requires a new directory and duration <=10000ms");
+        timeline.open(streamDirectory/"frames.csv");
+        timeline<<"frame,wgc100ns,callbackQpc,foreground\n";
+        if (!timeline) throw std::runtime_error("Cannot create continuous capture timeline");
+    }
     const auto token=pool.FrameArrived([&](const auto& sender,const auto&)
     {
         const std::lock_guard lock(mutex);
@@ -112,18 +130,50 @@ Capture capture(HWND window)
             check_bool(GetClientRect(window,&current)); check_bool(ClientToScreen(window,&currentOrigin));
             if (current.right!=client.right || current.bottom!=client.bottom || currentOrigin.x!=origin.x || currentOrigin.y!=origin.y)
                 throw std::runtime_error("Window moved or resized during capture");
-            completed=true;
-            promise.set_value(std::move(output));
+            if (durationMs)
+            {
+                if (frames>=1200) throw std::runtime_error("Continuous capture exceeded frame budget");
+                LARGE_INTEGER timestamp{}; QueryPerformanceCounter(&timestamp);
+                if (previousPixels!=output.rgba)
+                {
+                    storedFrame=frames;
+                    save(output,streamDirectory/(std::to_string(storedFrame)+".rgba"));
+                    previousPixels=output.rgba;
+                }
+                timeline<<storedFrame<<","<<frame.SystemRelativeTime().count()<<","<<timestamp.QuadPart<<","<<(GetForegroundWindow()==window)<<"\n";
+                if (!timeline) throw std::runtime_error("Continuous capture timeline failed");
+                ++frames;
+            }
+            if (!received)
+            {
+                received=true;
+                promise.set_value(std::move(output));
+                if (durationMs) std::cout<<"READY\n"<<std::flush;
+            }
+            if (!durationMs) completed=true;
         }
-        catch (...) { completed=true; promise.set_exception(std::current_exception()); }
+        catch (...)
+        {
+            completed=true;
+            if (!received) { received=true; promise.set_exception(std::current_exception()); }
+            else streamFailure=std::current_exception();
+            stopped.notify_all();
+        }
     });
     session.StartCapture();
     const auto status=result.wait_for(std::chrono::seconds(15));
+    if (durationMs && status==std::future_status::ready)
+    {
+        std::unique_lock lock(mutex);
+        stopped.wait_for(lock,std::chrono::milliseconds(durationMs),[&] { return completed; });
+        completed=true;
+    }
     pool.FrameArrived(token);
     session.Close();
     pool.Close();
     const std::lock_guard lock(mutex);
     if (status!=std::future_status::ready) throw std::runtime_error("No capture frame within 15 seconds");
+    if (streamFailure) std::rethrow_exception(streamFailure);
     return result.get();
 }
 
@@ -164,7 +214,15 @@ int wmain(int count,wchar_t** arguments)
             std::cout<<"Windows Graphics Capture client crop and RGBA conversion passed: "<<image.width<<"x"<<image.height<<"\n";
             return 0;
         }
-        if (count!=3) throw std::runtime_error("Usage: notification_capture HWND output.rgba | --self-test");
+        if (count==5 && std::wstring_view(arguments[1])==L"--stream")
+        {
+            const auto window=reinterpret_cast<HWND>(std::stoull(arguments[2],nullptr,0));
+            const auto duration=std::stoul(arguments[4]);
+            if (!duration || duration>10000) throw std::runtime_error("Invalid continuous capture duration");
+            capture(window,arguments[3],static_cast<unsigned>(duration));
+            return 0;
+        }
+        if (count!=3) throw std::runtime_error("Usage: notification_capture HWND output.rgba | --stream HWND directory durationMs | --self-test");
         const auto window=reinterpret_cast<HWND>(std::stoull(arguments[1],nullptr,0));
         const bool foregroundBefore=GetForegroundWindow()==window;
         const auto image=capture(window);

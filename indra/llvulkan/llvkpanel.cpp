@@ -522,6 +522,8 @@ bool LLVKWidgetTree::initializeFloater(Id panel,const Node::Floater& params,std:
     auto& background=mNodes.at(panel).panel->params;
     background.backgroundVisible=background.backgroundOpaque=true;
     background.opaqueImage=findImage("Window_Foreground",error);
+    if (!error.empty()) return false;
+    background.transparentImage=findImage("Window_Background",error);
     return error.empty();
 }
 

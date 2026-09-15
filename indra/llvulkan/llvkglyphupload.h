@@ -56,6 +56,7 @@ public:
     Status poll(std::string& error);
     Status wait(std::uint64_t timeout, std::string& error);
     std::shared_ptr<const LLVKGlyphImage> published() const noexcept;
+    std::shared_ptr<const LLVKGlyphImage> submittedFor(const Device& consumer) const noexcept;
 private:
     struct Impl;
     explicit LLVKGlyphUpload(std::unique_ptr<Impl> impl);

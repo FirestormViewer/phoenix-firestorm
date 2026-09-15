@@ -375,6 +375,24 @@ namespace tut
         ensure(error,published);
         ensure("matching source and image published",publication.current().source == logo && publication.current().image);
         const std::uint8_t browserPixel[]{1,2,3,4};
+        auto orderedUpload=LLVKGlyphUpload::submit(uploadDevice,{1,1},browserPixel,error);
+        ensure(error,orderedUpload!=nullptr);
+        ensure("completion-only publication is unchanged",!orderedUpload->published());
+        ensure("submitted image has matching queue contract",orderedUpload->submittedFor(uploadDevice)!=nullptr);
+        auto foreignQueue=uploadDevice;
+        foreignQueue.queue=VK_NULL_HANDLE;
+        ensure("ordered image rejects different queue",!orderedUpload->submittedFor(foreignQueue));
+        auto foreignDevice=uploadDevice;
+        foreignDevice.logical=VK_NULL_HANDLE;
+        ensure("ordered image rejects different device",!orderedUpload->submittedFor(foreignDevice));
+        auto foreignAllocator=uploadDevice;
+        foreignAllocator.allocator=VK_NULL_HANDLE;
+        ensure("ordered image rejects different allocator",!orderedUpload->submittedFor(foreignAllocator));
+        auto foreignFamily=uploadDevice;
+        foreignFamily.queueFamily=VK_QUEUE_FAMILY_IGNORED;
+        ensure("ordered image rejects different family",!orderedUpload->submittedFor(foreignFamily));
+        ensure("ordered upload retires through completion",orderedUpload->wait(5000000000ull,error)==LLVKGlyphUpload::Status::Ready);
+        orderedUpload.reset();
         std::shared_ptr<const LLVKWidgetImage> browserFrame;
         for (std::uint32_t replacement=0; replacement<64; ++replacement)
         {
@@ -402,6 +420,22 @@ namespace tut
         ensure("replacement completes",publication.waitPendingUpload(5000000000ull,error));
         ensure("replacement publishes after cancellation",publication.advance(replacementFrame,error));
         ensure("replacement source is authoritative",publication.current().source == replacementFrame && publication.current().image);
+        LLVKImagePublication orderedPublication(uploadDevice,true);
+        ensure("ordered publication submits initial frame",orderedPublication.advance(browserFrame,error));
+        ensure("ordered publication pairs submitted image and source",orderedPublication.current().source==browserFrame &&
+            orderedPublication.current().image && orderedPublication.pending());
+        auto retainedOrderedImage=orderedPublication.current().image;
+        const std::weak_ptr<const LLVKGlyphImage> orderedLifetime=retainedOrderedImage;
+        orderedPublication.invalidate();
+        ensure("ordered invalidation hides image but retains upload",!orderedPublication.current().image && orderedPublication.pending());
+        ensure("ordered cancelled upload completes",orderedPublication.waitPendingUpload(5000000000ull,error));
+        ensure("ordered new epoch submits",orderedPublication.advance(replacementFrame,error));
+        ensure("ordered cancelled source never reappears",orderedPublication.current().source==replacementFrame &&
+            orderedPublication.current().image!=retainedOrderedImage);
+        ensure("consumer retains cancelled image after upload retirement",!orderedLifetime.expired());
+        retainedOrderedImage.reset();
+        ensure("cancelled image retires after final consumer release",orderedLifetime.expired());
+        ensure("ordered replacement upload completes",orderedPublication.waitPendingUpload(5000000000ull,error));
         LLVKWidgetPaint paint;
         const LLVKWidgetTree::Rect paintClip{0,0,static_cast<std::int32_t>(renderer.swapchainExtent().width),static_cast<std::int32_t>(renderer.swapchainExtent().height)};
         paint.commands.push_back({1,{8,8,133,133},paintClip,{1,1,1,1},logo});
@@ -444,16 +478,20 @@ namespace tut
         paint.commands.resize(1);
         paint.commands[0].streamingImage = true;
         paint.commands[0].image = browserFrame;
-        ensure("browser stream initially pending",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Pending);
+        ensure("browser stream available to ordered queue",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Ready);
+        ensure("browser frame acquired before CPU upload wait",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+        ensure("browser consumed after ordered upload",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
+        ensure("browser submitted without CPU upload wait",renderer.end2DFrame());
         ensure("test completes browser upload fence",widgetGpu.waitPendingUploads(5000000000ull,error));
         paint.commands[0].image = LLVKWidgetImage::browserFrame(1,1,browserPixel,error);
         const auto streamed=widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error);
         ensure("new frame publication status="+std::to_string(static_cast<int>(streamed))+": "+error,streamed == LLVKWidgetGpu::Status::Ready);
-        ensure("browser packet owns a completed image",widgetPacket.draws()[0].image != nullptr);
+        ensure("browser packet owns an ordered image",widgetPacket.draws()[0].image != nullptr);
         const auto priorStreamImage = widgetPacket.draws()[0].image;
         ensure("old stream upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
         ++paint.commands[0].imageEpoch;
-        ensure("same-size new surface waits for its own image",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Pending);
+        ensure("same-size new surface queues its own image",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Ready);
+        ensure("new surface never exposes old epoch",widgetPacket.draws()[0].image!=priorStreamImage);
         ensure("new surface upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
         ensure("new surface becomes ready",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Ready);
         ensure("new surface cannot reuse retired epoch",widgetPacket.draws()[0].image != priorStreamImage);

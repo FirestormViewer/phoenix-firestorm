@@ -317,7 +317,7 @@ bool LLVKWidgetTree::planReshape(Id id, std::int64_t width, std::int64_t height,
     }
     if (node.checkBox && node.checkBox->label && node.checkBox->button)
         return planCheckBoxReshape(id,width,changes,error);
-    for (Id child : node.children)
+    if (deltaWidth || deltaHeight) for (Id child : node.children)
     {
         const auto& params = mNodes.at(child).params;
         const bool left = (params.follows & Left) != 0;
@@ -410,6 +410,22 @@ bool LLVKWidgetTree::setShape(Id id, const Rect& rectangle, std::string& error)
     if (!planReshape(id,std::int64_t(rectangle.right)-rectangle.left,std::int64_t(rectangle.top)-rectangle.bottom,
                      rectangle,changes,error)) return false;
     return completeShapes(changes,error);
+}
+
+bool LLVKWidgetTree::expandFloaterHeader(Id panel,std::string& error)
+{
+    error.clear();
+    auto found=mNodes.find(panel);
+    if (found==mNodes.end() || !found->second.floater) { error="Native header expansion requires a floater"; return false; }
+    auto& node=found->second;
+    auto& state=*node.floater;
+    if (state.headerExpanded) return true;
+    const auto stretch=std::max<std::int64_t>(0,std::int64_t(state.headerHeight)-state.legacyHeaderHeight);
+    if (std::int64_t(node.params.rect.top)+stretch>INT32_MAX || stretch>16384)
+    { error="Native floater header expansion exceeds bounds"; return false; }
+    node.params.rect.top+=static_cast<std::int32_t>(stretch);
+    state.headerExpanded=true;
+    return true;
 }
 
 bool LLVKWidgetTree::setVisible(Id id, bool visible)

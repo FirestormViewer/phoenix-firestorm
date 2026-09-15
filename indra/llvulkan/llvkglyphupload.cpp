@@ -105,6 +105,13 @@ std::shared_ptr<const LLVKGlyphImage> LLVKGlyphUpload::published() const noexcep
     return mImpl->status == Status::Ready ? mImpl->image : nullptr;
 }
 
+std::shared_ptr<const LLVKGlyphImage> LLVKGlyphUpload::submittedFor(const Device& consumer) const noexcept
+{
+    if (mImpl->status==Status::Failed || (!mImpl->submitted && mImpl->status!=Status::Ready) ||
+        !mImpl->image || !mImpl->image->compatibleWith(consumer.logical,consumer.allocator,consumer.queue,consumer.queueFamily)) return nullptr;
+    return mImpl->image;
+}
+
 LLVKGlyphUpload::Status LLVKGlyphUpload::poll(std::string& error)
 {
     error.clear();

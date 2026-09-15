@@ -209,6 +209,13 @@ int main(int count,char** arguments)
         listen["op"]="listen"; listen["source"]="StartupState";
         listen["listener"]="notification-capture"; listen["reply"]=reply;
         send(command,listen);
+        const bool inspectDialogs=captureRequest["sequence"].asString()=="Dialogs";
+        if (inspectDialogs)
+        {
+            listen["source"]="mainloop";
+            listen["listener"]="notification-dialog-geometry";
+            send(command,listen);
+        }
         LLSD refresh;
         refresh["op"]="postStartupState";
         send("LLStartUp",refresh);
@@ -222,6 +229,9 @@ int main(int count,char** arguments)
         unsigned geometryRequests=0;
         unsigned geometryReplies=0;
         LLSD geometry;
+        bool dialogGeometryRequested=false;
+        unsigned dialogGeometryRequests=0,dialogGeometryReplies=0;
+        LLSD dialogGeometry;
         const bool buttonStates=std::getenv("LLVK_CAPTURE_LOGIN_BUTTON_STATES")!=nullptr;
         std::string loginButtonPath;
         std::string usernamePath,passwordPath,browserPath;
@@ -267,6 +277,38 @@ int main(int count,char** arguments)
         {
             const auto packet=receive(std::cin);
             const auto& data=packet["data"];
+            if (inspectDialogs && !dialogGeometryRequested &&
+                std::filesystem::exists(directory/"gl-browser-preferences-settled-0.rgba"))
+            {
+                dialogGeometryRequested=true;
+                LLSD paths;
+                paths["op"]="getPaths"; paths["reply"]=reply; paths["reqid"]="capture-dialog-paths";
+                paths["under"]="/main_view/menu_stack/world_panel/Floater View";
+                send("LLWindow",paths);
+            }
+            if (data["reqid"].asString()=="capture-dialog-paths")
+            {
+                for (auto path=data["paths"].beginArray(); path!=data["paths"].endArray(); ++path)
+                {
+                    const auto text=path->asString();
+                    if (text.find("Name_Tag_Preference")==text.npos && text.find("RenderNameShowTime")==text.npos &&
+                        text.find("copy_search_slurl_btn")==text.npos) continue;
+                    if (++dialogGeometryRequests>64) throw std::runtime_error("Dialog geometry exceeds view budget");
+                    LLSD request;
+                    request["op"]="getInfo"; request["path"]=text; request["reply"]=reply;
+                    request["reqid"]="capture-dialog:"+text;
+                    send("LLWindow",request);
+                }
+            }
+            if (data["reqid"].asString().starts_with("capture-dialog:"))
+            {
+                dialogGeometry.append(data);
+                if (++dialogGeometryReplies==dialogGeometryRequests)
+                {
+                    save(directory,"gl-dialog-geometry.xml",dialogGeometry);
+                    return 0;
+                }
+            }
             if (packet["pump"].asString()=="StartupState" && data["str"].asString()=="STATE_LOGIN_WAIT")
             {
                 if (!loginReady && anisotropy)
@@ -423,6 +465,7 @@ int main(int count,char** arguments)
             if (submitted && data["reqid"].asString()=="capture-media-launch" && data.has("response"))
             {
                 save(directory,"gl-notification-response.xml",data);
+                if (inspectDialogs) continue;
                 if (!buttonStates) return 0;
                 LLSD paths;
                 paths["op"]="getPaths"; paths["reply"]=reply; paths["reqid"]="capture-login-paths";

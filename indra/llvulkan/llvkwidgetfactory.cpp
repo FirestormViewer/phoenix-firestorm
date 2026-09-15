@@ -133,6 +133,7 @@ namespace
         std::shared_ptr<LLVKWidgetFactory::SliderControlDefaults> sliderControl;
         std::map<std::string,std::unique_ptr<Declaration>> sliderParts;
         bool radioGroup = false, radioItem = false, allowDeselect = false;
+        bool explicitFont = false;
         std::optional<LLSD> radioPayload;
         std::map<std::string,std::unique_ptr<Declaration>> spinnerButtons;
         std::optional<LLVKBorder::Params> border;
@@ -531,6 +532,8 @@ namespace
                 }
                 if (name=="reuse_instance") { bool enabled; return boolean(text,enabled) && enabled; }
                 if (name=="legacy_header_height") return integer(text,floater.legacyHeaderHeight);
+                if (name=="header_height") return integer(text,floater.headerHeight) && floater.headerHeight>=0;
+                if (name=="drop_shadow") return boolean(text,floater.dropShadow);
                 if (name=="save_rect") return boolean(text,floater.saveRect);
                 if (name=="single_instance") return boolean(text,floater.singleInstance);
                 if (name=="can_close") return boolean(text,floater.canClose);
@@ -653,6 +656,7 @@ namespace
                 if (name == "use_tab_offset") return boolean(text,tabs.layout.panelOffset);
                 if (name == "label_pad_left") return integer(text,tabs.labelPadLeft);
                 if (name == "label_pad_bottom") return integer(text,tabs.labelPadBottom);
+                if (name == "label_shadow") return boolean(text,tabs.labelShadow);
                 if (name == "tabs_flashing_color") return color(text,tabs.flashColor);
                 if (name == "use_custom_icon_ctrl") { bool enabled; return boolean(text,enabled) && !enabled; }
                 if (name == "halign")
@@ -903,7 +907,12 @@ namespace
                 if (name == "read_only")
                 { bool value; if (!boolean(text,value)) return false; label.readOnly = value; return true; }
                 if (name == "track_end" || name == "track_bottom") return boolean(text,label.trackEnd);
-                if (name == "font_shadow") return text == "none";
+                if (name == "font_shadow")
+                {
+                    if (text!="none" && text!="soft") return false;
+                    label.softShadow=text=="soft";
+                    return true;
+                }
                 if (name == "allow_scroll" || name == "use_ellipses" || name == "bg_visible" || name == "border_visible" ||
                     name == "parse_markdown" || name == "parse_highlights" || name == "spellcheck")
                 { bool enabled; return boolean(text,enabled) && !enabled; }
@@ -1000,6 +1009,7 @@ namespace
             }
             if ((name == "font" || name == "font.name" || name == "font.size" || name == "font.style" || name == "font.style.") && declaration.control)
             {
+                declaration.explicitFont=true;
                 auto& request = declaration.control->fontRequest;
                 if (!request) request = resources.defaultFontRequest;
                 if (name == "font" || name == "font.name") request->name = text;
@@ -1901,6 +1911,7 @@ namespace
                 if (radioGroup)
                 {
                     declaration->radioGroup=true;
+                    declaration->params=state.resources.radioView;
                     declaration->control=state.resources.radioControl;
                     if (!declaration->control->font && !declaration->control->fontRequest)
                         declaration->control->fontRequest=state.resources.defaultFontRequest;
@@ -2450,7 +2461,6 @@ namespace
                 button.control = *part->control;
                 button.button = *part->button;
                 for (const auto& [attribute,imageName] : part->buttonImages) *buttonImage(button.button.images,attribute) = tree.findImage(imageName);
-                button.button.defaultImages = button.button.images;
             }
         }
         return (!defaults.combo.flyout || resolveFont(defaults.action.control,resources,error)) &&
@@ -2488,6 +2498,11 @@ namespace
     bool resolveSpinner(const Declaration& declaration,LLVKWidgetFactory::SpinnerDefaults& defaults,
         const LLVKWidgetTree& tree,const LLVKWidgetFactory::Resources& resources,std::string& error)
     {
+        if (declaration.control->fontRequest || declaration.control->font)
+        {
+            defaults.editor.control.fontRequest=declaration.control->fontRequest;
+            defaults.editor.control.font=declaration.control->font;
+        }
         for (const auto& [name,part] : declaration.spinnerButtons)
         {
             if (!resolveImages(tree,*part,error)) return false;
@@ -2595,8 +2610,21 @@ namespace
                 item->view=child->params.view;
                 item->layout=std::make_shared<LLVKWidgetLayout>(child->params.geometry);
                 item->control=*child->control;
+                if (!child->explicitFont)
+                {
+                    item->control.font=control->font;
+                    item->control.fontRequest=control->fontRequest;
+                }
                 if (!resolveControl(item->control,callbacks,environment.resources,error)) return std::nullopt;
                 item->check=defaults->construction;
+                item->check.fontProvided=true;
+                const auto labelRect=defaults->labelView.geometry.apply(tree,0,"",error);
+                const auto buttonRect=defaults->buttonView.geometry.apply(tree,0,"",error);
+                if (!labelRect || !buttonRect) return std::nullopt;
+                item->check.labelView=defaults->labelView.view;
+                item->check.labelView.rect=*labelRect;
+                item->check.buttonView=defaults->buttonView.view;
+                item->check.buttonView.rect=*buttonRect;
                 item->payload=child->radioPayload;
                 radioItems.push_back(std::move(*item));
             }
@@ -2868,6 +2896,8 @@ namespace
                        (declaration.tag=="locate" || !declaration.menuXml.empty()) ? tree.createControl(params,*control,owningParent,error) :
                        tree.create(params,owningParent,error);
         if (!id) return std::nullopt;
+        if (check && !tree.reshape(*id,params.rect.right-params.rect.left,params.rect.top-params.rect.bottom,error))
+        { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }
         if (!declaration.menuXml.empty())
         {
             auto menu=LLVKMenu::create(declaration.menuXml,control->font,environment.resources.colors,{},false,error);
@@ -3051,10 +3081,12 @@ namespace
                         button.labelAlign = declaration.tabs->alignment;
                         button.leftPad = declaration.tabs->labelPadLeft;
                         button.bottomPad = declaration.tabs->labelPadBottom;
+                        button.labelShadow = declaration.tabs->labelShadow;
                         button.toggle = false;
                         button.click.reset();
                         const auto& images = declaration.tabs->images[index == 0 ? 0 : index+1 == panels.size() ? 2 : 1];
                         using Position = LLVKWidgetTree::Node::TabContainer::Layout::Position;
+                        if (declaration.tabs->layout.position!=Position::Left) button.rightPad=2;
                         const std::string prefix = declaration.tabs->layout.position == Position::Top ? "tab_top_image_" :
                             declaration.tabs->layout.position == Position::Bottom ? "tab_bottom_image_" : "tab_left_image_";
                         for (const auto& [name,target] : {std::pair{"unselected",&button.images.unselected},
@@ -3253,6 +3285,7 @@ bool LLVKWidgetFactory::loadDefaults(const LLVKWidgetTree& tree, std::string_vie
     }
     else if (declaration.radioGroup)
     {
+        mResources.radioView=declaration.params;
         mResources.radioControl=*declaration.control;
     }
     else if (declaration.radioItem)

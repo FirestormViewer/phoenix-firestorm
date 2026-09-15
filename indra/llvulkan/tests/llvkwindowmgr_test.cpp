@@ -721,6 +721,9 @@ namespace tut
                 !captureRequest["name"].asString().empty() && captureRequest["substitutions"].isMap());
         }
         const auto captureName=captureRequest["name"].asString();
+        const bool browserSequence=captureRequest.has("sequence") &&
+            (captureRequest["sequence"].asString()=="Browser" || captureRequest["sequence"].asString()=="Dialogs");
+        bool sequenceActive=false;
         const bool liveScale=std::getenv("LLVK_CAPTURE_LIVE_SCALE")!=nullptr;
         const auto initialLiveScale=liveScale && captureRequest.has("display") &&
             captureRequest["display"]["UIScaleFactor"].asReal()==1.0 ? 1.25f : 1.f;
@@ -777,6 +780,33 @@ namespace tut
         rejected.presentedFrame=[&](LLVKViewerUi& ui,const LLVKWidgetPaint::Input& input)
         {
             ++failureFrames;
+            if (sequenceActive)
+            {
+                ensure("browser sequence stays prelogin",ui.sessionSnapshot().state==LLVKSessionOwner::State::PreLogin);
+                ensure("browser sequence does not enable login",!ui.tree().get(ui.find("connect_btn"))->params.enabled);
+                if (std::filesystem::exists(std::filesystem::path(captureDirectory)/"sequence-complete.json"))
+                {
+                    std::ofstream geometry(std::filesystem::path(captureDirectory)/"native-widget-geometry.txt");
+                    std::vector<LLVKWidgetTree::Id> nodes{ui.root()};
+                    for (std::size_t index=0; index<nodes.size(); ++index)
+                    {
+                        const auto* node=ui.tree().get(nodes[index]);
+                        if (!node) continue;
+                        nodes.insert(nodes.end(),node->children.begin(),node->children.end());
+                        geometry<<nodes[index]<<" parent="<<node->parent<<" name="<<node->params.name
+                            <<" rect="<<node->params.rect.left<<","<<node->params.rect.bottom<<","<<node->params.rect.right<<","<<node->params.rect.top;
+                        if (node->control && node->control->params.font)
+                        {
+                            const auto& metrics=node->control->params.font->metrics();
+                            geometry<<" ascent="<<metrics.ascender<<" descent="<<metrics.descender;
+                        }
+                        geometry<<"\n";
+                    }
+                    failurePhase=1;
+                    PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
+                }
+                return;
+            }
             if (buttonStates && buttonPhase)
             {
                 if (std::chrono::steady_clock::now()-buttonSince<std::chrono::seconds(2)) return;
@@ -1017,6 +1047,13 @@ namespace tut
             }
             if (capturePage)
             {
+                if (browserSequence)
+                {
+                    ensure("browser sequence capture configuration",captureDirectory && captureMaximized && ui.displayScale()==1.f);
+                    sequenceActive=true;
+                    std::ofstream(std::filesystem::path(captureDirectory)/"sequence-ready.txt")<<"modal dismissed\n";
+                    return;
+                }
                 if (ui.displayScale()!=1.f)
                 {
                     const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);

@@ -13,6 +13,9 @@ param(
     [switch]$SelectInput,
     [switch]$CheckIgnore,
     [switch]$InactiveFocus,
+    [ValidateSet('None','Browser','Dialogs')][string]$Sequence='None',
+    [switch]$Continuous,
+    [switch]$QueuedInput,
     [string]$Page=(Join-Path $PSScriptRoot 'notification_background.html'),
     [ValidatePattern('^[a-z]{2}(-[A-Z]{2})?$')][string]$Language='en',
     [ValidateRange(640,7680)][int]$Width=1024,
@@ -24,6 +27,9 @@ param(
 $ErrorActionPreference='Stop'
 $pagePath=(Resolve-Path -LiteralPath $Page).Path
 $pageHash=(Get-FileHash -LiteralPath $pagePath).Hash
+if ($Sequence -ne 'None' -and (!$Maximized -or $UiScale -ne 1 -or $LoginButtonStates -or $InactiveFocus)) {
+    throw 'Browser sequence requires maximized 100-percent active capture without login-button states.'
+}
 foreach ($executable in $Viewer,$Driver,$CaptureHelper) {
     if (!(Test-Path -LiteralPath $executable -PathType Leaf)) { throw "Missing executable: $executable" }
 }
@@ -40,6 +46,8 @@ try {
     $requestWriter.WriteElementString('key','name'); $requestWriter.WriteElementString('string',$Notification)
     $requestWriter.WriteElementString('key','pagePath'); $requestWriter.WriteElementString('string',$pagePath)
     $requestWriter.WriteElementString('key','pageSha256'); $requestWriter.WriteElementString('string',$pageHash)
+    if ($Sequence -ne 'None') { $requestWriter.WriteElementString('key','sequence'); $requestWriter.WriteElementString('string',$Sequence) }
+    if ($QueuedInput) { $requestWriter.WriteElementString('key','queuedInput'); $requestWriter.WriteElementString('boolean','true') }
     $requestWriter.WriteElementString('key','substitutions'); $requestWriter.WriteStartElement('map')
     foreach ($key in ($Substitutions.Keys | Sort-Object)) {
         $requestWriter.WriteElementString('key',[string]$key); $requestWriter.WriteElementString('string',[string]$Substitutions[$key])
@@ -327,10 +335,22 @@ public static class NotificationCursorInput {
             [NotificationCursorInput]::SetCursorPos($savedCursor.x,$savedCursor.y) | Out-Null
         }
     }
+    if ($Sequence -ne 'None') {
+        $responseWatcher=[IO.FileSystemWatcher]::new($root,'gl-notification-response.xml')
+        try {
+            $responseWatcher.EnableRaisingEvents=$true
+            if (!(Test-Path (Join-Path $root 'gl-notification-response.xml'))) {
+                $responseWatcher.WaitForChanged([IO.WatcherChangeTypes]::Created,10000) | Out-Null
+            }
+            if (!(Test-Path (Join-Path $root 'gl-notification-response.xml'))) { throw 'Sequence requires modal response.' }
+        } finally { $responseWatcher.Dispose() }
+        & (Join-Path $PSScriptRoot 'run_browser_sequence.ps1') -ViewerProcessId $process.Id -CaptureHelper $CaptureHelper -OutputDirectory $root -Backend gl -Dialogs:($Sequence -eq 'Dialogs') -Continuous:$Continuous -QueuedInput:$QueuedInput
+    }
     $process.CloseMainWindow() | Out-Null
     if (!$process.WaitForExit(60000)) { throw 'Reference did not close within 60 seconds; no forced termination performed.' }
     $goodbye=(Test-Path $log) -and (Select-String -LiteralPath $log -SimpleMatch 'Goodbye!' -Quiet)
     $manifest=[ordered]@{
+        queuedInput=$QueuedInput.IsPresent
         fixture='pre-login local notification; not STATE_STARTED acceptance'
         referenceRevision=$ReferenceRevision
         viewer=$start.FileName; viewerSha256=$viewerHash
@@ -343,6 +363,7 @@ public static class NotificationCursorInput {
         requestedMaximized=$Maximized.IsPresent; actualMaximized=$actualMaximized
         requestedAnisotropy=$Anisotropy
         loginButtonStates=$LoginButtonStates.IsPresent
+        sequence=$Sequence
         buttonStates=@($ButtonStates)
         focusInput='injected WM_KILLFOCUS/WM_SETFOCUS; not external-window activation acceptance'
         pid=$process.Id; exitCode=$process.ExitCode; goodbye=$goodbye

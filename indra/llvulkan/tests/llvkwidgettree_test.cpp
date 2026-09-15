@@ -1175,7 +1175,7 @@ namespace tut
         const auto& frame=ui->tree().get(floater)->params;
         ensure_equals("Guidebook overrides inherited root",frame.name,std::string("floater_how_to"));
         ensure_equals("original floater width",frame.rect.right-frame.rect.left,310);
-        ensure_equals("original floater height",frame.rect.top-frame.rect.bottom,525);
+        ensure_equals("original floater height plus skin header",frame.rect.top-frame.rect.bottom,532);
         ensure("original browser widget",browser && ui->tree().get(browser)->browser);
         ensure("separate from login widget",browser!=ui->find("login_html"));
         const auto stack=ui->tree().get(ui->find("stack1",floater))->params.rect;
@@ -1184,13 +1184,13 @@ namespace tut
         for (const auto name : {"nav_controls","debug_controls","status_bar","plugin_fail_text"})
             ensure("source chrome hidden",!ui->tree().get(ui->find(name,floater))->params.visible);
         ensure("Guidebook paint",ui->preparePaint({},error).has_value());
-        ensure("move original Guidebook",ui->tree().setShape(floater,{100,75,410,600},error));
+        ensure("move original Guidebook",ui->tree().setShape(floater,{100,75,410,607},error));
         ensure("toggle closes foreground Guidebook",ui->toggleGuidebook(error) && !ui->guidebook());
         ensure_equals("close releases browser view",closes,1);
         ensure("reopen",ui->toggleGuidebook(error));
         ensure_equals("reopen creates new page",opens,2);
         ensure("new native hierarchy on reopen",ui->guidebook()!=floater);
-        ensure("position survives reopen",ui->tree().get(ui->guidebook())->params.rect==LLVKWidgetTree::Rect{100,75,410,600});
+        ensure("position survives reopen",ui->tree().get(ui->guidebook())->params.rect==LLVKWidgetTree::Rect{100,75,410,607});
         ensure("ordinary close",ui->closeFloater(error));
         ensure_equals("second view close",closes,2);
         ensure("ordinary close records hidden",!ui->tree().setting("floater_vis_guidebook")->asBoolean());
@@ -3857,7 +3857,16 @@ namespace tut
         const auto paint=LLVKWidgetPaint::prepare(tree,*swatch,{},error);
         ensure(error,paint.has_value());
         ensure("native color fill retains alpha",std::any_of(paint->commands.begin(),paint->commands.end(),
-            [&](const auto& command) { return command.owner==*swatch && command.rectangle==LLVKWidgetTree::Rect{1,17,79,59} && command.color==LLVKColor::Value{1,0,0,0.5f}; }));
+            [&](const auto& command) { return command.owner==*swatch && command.rectangle==LLVKWidgetTree::Rect{1,17,79,59} && command.color==LLVKColor::Value{1,0,0,127.f/255.f}; }));
+        LLVKWidgetPaint::Input focusedInput;
+        focusedInput.button.focusColor={0.56f,0.36f,0.25f,1.f};
+        ensure("focus animation settles",tree.advanceTime(10.,error));
+        const auto focusedPaint=LLVKWidgetPaint::prepare(tree,*swatch,focusedInput,error);
+        ensure(error,focusedPaint.has_value());
+        const auto borderId=tree.get(*swatch)->colorSwatch->border;
+        ensure("settled focus border retains integer coverage and encoded color",std::any_of(focusedPaint->commands.begin(),focusedPaint->commands.end(),
+            [&](const auto& command) { return command.owner==borderId && command.rectangle.left==-1 &&
+                command.color==LLVKColor::Value{142.f/255.f,91.f/255.f,63.f/255.f,1.f}; }));
     }
 
     template<> template<> void object::test<144>()
@@ -4415,8 +4424,10 @@ namespace tut
         const auto one=LLVKWidgetPaint::prepare(tree,*inset,{},error);
         ensure(error,one.has_value());
         ensure_equals("one-pixel four edges",one->commands.size(),std::size_t(4));
-        ensure("one-pixel inset shadow preserves alpha",one->commands[0].color==border.shadowDark.get());
+        ensure("one-pixel inset shadow preserves quantized alpha",one->commands[0].color==LLVKColor::Value{51.f/255,76.f/255,102.f/255,127.f/255});
         ensure("one-pixel inset highlight preserves alpha",one->commands[2].color==border.highlightLight.get());
+        ensure_equals("integer line left coverage",one->commands[0].rectangle.left,-1);
+        ensure_equals("integer line bottom coverage",one->commands[3].rectangle.bottom,-1);
         border.thickness=0;
         const auto invisible=tree.createBorder(view,border,0,error);
         ensure(error,invisible.has_value());
@@ -4950,10 +4961,20 @@ namespace tut
         const auto preferences=login->activeFloater();
         ensure("Preferences visible",preferences != 0);
         ensure("Preferences painter",login->preparePaint({},error).has_value());
+        const auto clock=login->find("time_format_combobox",preferences);
+        const auto originalClock=tree.setting("Use24HourClock")->asBoolean();
+        ensure_equals("clock selection follows preference",tree.value(clock).asString(),std::string(originalClock ? "1" : "0"));
+        ensure("clock changes native preference",tree.setValue(clock,LLSD(originalClock ? "0" : "1")) && tree.commit(clock));
+        ensure_equals("clock underlying value changed",tree.setting("Use24HourClock")->asBoolean(),!originalClock);
+        const auto restartNotices=login->takeNotices();
+        ensure("clock queues original restart notice",restartNotices.size()==1 && restartNotices.front().name=="ChangeLanguage");
+        ensure("clock repeated commit",tree.commit(clock));
+        ensure("restart notice only once",login->takeNotices().empty());
         const bool originalNameVisibility=tree.setting("RenderNameShowSelf")->asBoolean();
         ensure("change original General preference",tree.updateSetting("RenderNameShowSelf",LLSD(!originalNameVisibility)));
         ensure("Cancel",login->closeFloater(error));
         ensure("Cancel restores snapshot",tree.setting("RenderNameShowSelf")->asBoolean()==originalNameVisibility);
+        ensure_equals("Cancel restores clock preference",tree.setting("Use24HourClock")->asBoolean(),originalClock);
         ensure_equals("close restores focus",tree.keyboardFocus(),password);
         ensure("Cancel never saves",saved.empty());
         ensure("reopen",login->showPreferences(error));
@@ -4988,7 +5009,12 @@ namespace tut
         ensure("About opens",login->showAbout(error));
         ensure_equals("localized About title",tree.value(login->find("floater_title")).asString(),std::string("About Vulkanstorm"));
         const auto closeRect=tree.get(login->find("floater_close"))->params.rect;
-        ensure_equals("close button at original header",closeRect.top,596);
+        ensure_equals("close button follows skin top inset",closeRect.top,602);
+        ensure_equals("close button follows skin size",closeRect.right-closeRect.left,16);
+        const auto expandedAbout=tree.get(login->activeFloater())->params.rect;
+        ensure("header expansion is idempotent",tree.expandFloaterHeader(login->activeFloater(),error));
+        ensure("repeated header expansion preserves bounds",tree.get(login->activeFloater())->params.rect==expandedAbout);
+        ensure("repeated header expansion preserves chrome",tree.get(login->find("floater_close"))->params.rect==closeRect);
         LLSD aboutInfo;
         aboutInfo["VIEWER_VERSION"]=LLSD::emptyArray();
         for (const auto value : {"7","2","5","test"}) aboutInfo["VIEWER_VERSION"].append(value);
@@ -5357,6 +5383,27 @@ namespace tut
         const auto disabled = tree.prepareButton(*button,input,error);
         ensure(error,disabled.has_value());
         ensure_equals("disabled checked image overrides",disabled->primitives.back().image->name(),std::string("disabled-selected"));
+        tree.setEnabled(*button,true);
+        LLVKWidgetTree::PointerEvent hover;
+        hover.kind=LLVKWidgetTree::PointerKind::Hover; hover.x=10; hover.y=10;
+        tree.routePointer(*button,hover,error);
+        ensure("hover marks button",tree.get(*button)->button->highlighted);
+        hover.x=150;
+        ensure("departed button hover reconciles",tree.updatePointerHover(*button,hover,error));
+        ensure("departure clears button highlight",!tree.get(*button)->button->highlighted);
+        view.rect={0,0,200,100};
+        const auto hoverRoot=tree.create(view,0,error);
+        ensure(error,hoverRoot.has_value());
+        ensure("attach hover button",tree.reparent(*button,*hoverRoot,false,0,error));
+        hover.x=10;
+        tree.routePointer(*hoverRoot,hover,error);
+        ensure("button highlighted before covering view",tree.get(*button)->button->highlighted);
+        view.rect={0,0,100,32}; view.mouseOpaque=true;
+        const auto cover=tree.create(view,*hoverRoot,error);
+        ensure(error,cover.has_value());
+        ensure("opaque hover reconciliation",tree.updatePointerHover(*hoverRoot,hover,error));
+        ensure("covering view clears underlying highlight",!tree.get(*button)->button->highlighted);
+        ensure("invalid hover root rejected",!tree.updatePointerHover(0,hover,error));
     }
 
     template<> template<> void object::test<124>()
@@ -5395,6 +5442,15 @@ namespace tut
     template<> template<> void object::test<123>()
     {
         set_test_name("native browser frames copy borrowed BGRA with opaque alpha and resize invalidation");
+        std::vector<std::uint8_t> popupView(4*4*4,0),popup(2*2*4,99);
+        ensure("native popup composition",LLVKBrowserSurface::compositePopup(popupView,4,4,popup,2,2,1,2,false));
+        ensure_equals("popup matches flipped reference row",popupView[(1*4+1)*4],std::uint8_t{99});
+        ensure_equals("popup leaves next row untouched",popupView[(3*4+1)*4],std::uint8_t{0});
+        popupView.assign(popupView.size(),0);
+        ensure("native popup clips top and left",LLVKBrowserSurface::compositePopup(popupView,4,4,popup,2,2,-1,0,false));
+        ensure_equals("clipped popup retains visible pixels",popupView[0],std::uint8_t{99});
+        ensure_equals("clipped popup leaves adjacent pixel",popupView[4],std::uint8_t{0});
+        ensure("invalid popup byte count rejected",!LLVKBrowserSurface::compositePopup(popupView,4,4,{},2,2,0,0,false));
         LLVKBrowserSurface surface;
         std::string error;
         const auto wideBrowser=LLVKBrowserSurface::displayRect(2560,1199,2048,1199);
@@ -7831,6 +7887,7 @@ namespace tut
             "<spinner name='RenderNameShowTime' width='40' height='20' min_val='1' max_val='60' increment='1' decimal_digits='0' initial_value='5'/>",0,error);
         ensure(error,spinner.has_value());
         const auto spinState=*tree.get(*spinner)->spinner;
+        ensure("spinner editor inherits declared owner font",tree.get(spinState.editor)->control->params.font==tree.get(*spinner)->control->params.font);
         ensure_equals("spinner skin arrow",tree.get(spinState.up)->button->images.unselected->name(),std::string("Stepper_Up_Off"));
         ensure_equals("spinner precision from original declaration",tree.value(spinState.editor).asString(),std::string("5"));
         ensure("spinner from XUI commits",tree.stepSpinner(*spinner,true,{},error));
@@ -7860,9 +7917,20 @@ namespace tut
             "<radio_item name='second' value='second' label='Second' left='0' top_pad='4' width='150' height='20'/></radio_group>",0,error);
         ensure(error,radio.has_value());
         ensure_equals("radio payload initial selection",tree.value(*radio).asString(),std::string("second"));
+        ensure_equals("radio group inherits template follow flags",int(tree.get(*radio)->params.follows),int(LLVKWidgetTree::Left|LLVKWidgetTree::Top));
         const auto radioFirst=tree.get(*radio)->radioGroup->items.front().control;
         ensure_equals("source radio image",tree.get(tree.get(radioFirst)->checkBox->button)->button->images.unselected->name(),std::string("RadioButton_Off"));
         ensure_equals("source radio XUI top",tree.get(radioFirst)->params.rect.top,80);
+        ensure_equals("radio inherits checkbox label offset",tree.get(tree.get(radioFirst)->checkBox->label)->params.rect.left,20);
+        ensure_equals("radio inherits checkbox button offset",tree.get(tree.get(radioFirst)->checkBox->button)->params.rect.left,2);
+        const auto radioButton=tree.get(radioFirst)->checkBox->button;
+        const auto radioLabel=tree.get(radioFirst)->checkBox->label;
+        ensure_equals("radio post-build button covers fitted label top",tree.get(radioButton)->params.rect.top,tree.get(radioLabel)->params.rect.top);
+        const auto buttonBeforeMove=tree.get(radioButton)->params.rect;
+        const auto labelBeforeMove=tree.get(radioLabel)->params.rect;
+        ensure("move radio group without resizing",tree.setShape(*radio,{20,30,220,110},error));
+        ensure("parent move preserves radio button bounds",tree.get(radioButton)->params.rect==buttonBeforeMove);
+        ensure("parent move preserves radio label bounds",tree.get(radioLabel)->params.rect==labelBeforeMove);
         auto preferenceCallbacks=callbacks;
         preferenceCallbacks.actions["Pref.MaturitySettings"]=[](auto,const LLSD&) {};
         preferenceCallbacks.actions["Pref.getUIColor"]=[&](auto id,const LLSD& parameter)
@@ -7946,12 +8014,20 @@ namespace tut
             ensure(error,pickerPaint.has_value());
             const auto paletteOrigin=tree.screenRect(*picker,error);
             ensure(error,paletteOrigin.has_value());
+            const auto pickerHsl=tree.get(*picker)->colorPicker->hsl;
+            const auto crossX=paletteOrigin->left+140+static_cast<int>(256.f*pickerHsl[0]);
+            const auto crossY=paletteOrigin->bottom+100+static_cast<int>(256.f*pickerHsl[1]);
+            ensure("picker crosshair uses integer-line coverage",std::any_of(pickerPaint->commands.begin(),pickerPaint->commands.end(),
+                [&](const auto& command) { return command.owner==*picker && command.rectangle==LLVKWidgetTree::Rect{crossX-8,crossY-1,crossX+8,crossY}; }));
             ensure("first palette cell retains source bounds",std::any_of(pickerPaint->commands.begin(),pickerPaint->commands.end(),
                 [&](const auto& command) { return command.owner==*picker && command.rectangle==LLVKWidgetTree::Rect{
                     paletteOrigin->left+13,paletteOrigin->bottom+74,paletteOrigin->left+35,paletteOrigin->bottom+90}; }));
             ensure("color plane occupies original region",std::any_of(pickerPaint->commands.begin(),pickerPaint->commands.end(),
                 [&](const auto& command) { return command.owner==*picker && command.image==hueImage && command.rectangle.right-command.rectangle.left==256; }));
             const auto pickerFields=tree.get(*picker)->colorPicker->fields;
+            const auto applyCheck=*tree.get(pickerFields.at("apply_immediate"))->checkBox;
+            ensure_equals("factory checkbox initialization fits its button to the label",tree.get(applyCheck.button)->params.rect.top,
+                tree.get(applyCheck.label)->params.rect.top);
             ensure_equals("original picker RGB",tree.value(pickerFields.at("rspin")).asReal(),255.);
             ensure_equals("original picker hex",tree.value(pickerFields.at("hex_value")).asString(),std::string("ff0000"));
             ensure("hex entry",tree.setValue(pickerFields.at("hex_value"),LLSD("336699")));

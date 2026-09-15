@@ -74,16 +74,51 @@ native_browser_replace("    CefShutdown();" [=[
     }]=])
 file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/native_dullahan_impl.cpp" CONTENT "${implementation}")
 
+file(READ "${llvk_dullahan_source_SOURCE_DIR}/src/dullahan_render_handler.cpp" implementation)
+native_browser_replace("        memcpy(mPopupBuffer, buffer, width * height * mBufferDepth);" [=[        if (!mPopupBuffer || !buffer || width != mPopupBufferRect.width || height != mPopupBufferRect.height) return;
+        memcpy(mPopupBuffer, buffer, size_t(width) * height * mBufferDepth);]=])
+native_browser_replace([=[    mPopupBufferRect = rect;
+    if (mPopupBuffer == nullptr)
+    {
+        mPopupBuffer = new unsigned char[rect.width * rect.height * mBufferDepth];
+        memset(mPopupBuffer, 0xff, rect.width * rect.height * mBufferDepth);
+    }]=] [=[    delete[] mPopupBuffer;
+    mPopupBuffer = nullptr;
+    mPopupBufferRect.Set(0, 0, 0, 0);
+    if (rect.width <= 0 || rect.height <= 0 || rect.width > 8192 || rect.height > 8192 ||
+        uint64_t(rect.width) * rect.height > 16 * 1024 * 1024 || mBufferDepth != 4) return;
+    mPopupBufferRect = rect;
+    const auto bytes = size_t(rect.width) * rect.height * mBufferDepth;
+    mPopupBuffer = new unsigned char[bytes];
+    memset(mPopupBuffer, 0xff, bytes);]=])
+native_browser_replace([=[    int popup_y = (mFlipYPixels ? (mPixelBufferHeight - mPopupBufferRect.y) : mPopupBufferRect.y);
+    unsigned char* src = (unsigned char*)mPopupBuffer;
+    unsigned char* dst = mPixelBuffer + popup_y * mPixelBufferWidth * mBufferDepth + mPopupBufferRect.x * mBufferDepth;
+    while (src < (unsigned char*)mPopupBuffer + mPopupBufferRect.width * mPopupBufferRect.height * mBufferDepth)
+    {
+        memcpy(dst, src, mPopupBufferRect.width * mBufferDepth);
+        src += mPopupBufferRect.width * mBufferDepth;
+        dst += mPixelBufferWidth * mBufferDepth * (mFlipYPixels ? -1 : 1);
+    }]=] [=[    if (!mPixelBuffer || !mPopupBuffer || mBufferDepth != 4) return;
+    LLVKBrowserSurface::compositePopup(
+        {mPixelBuffer, size_t(mPixelBufferWidth) * mPixelBufferHeight * 4}, mPixelBufferWidth, mPixelBufferHeight,
+        {mPopupBuffer, size_t(mPopupBufferRect.width) * mPopupBufferRect.height * 4},
+        mPopupBufferRect.width, mPopupBufferRect.height, mPopupBufferRect.x, mPopupBufferRect.y, mFlipYPixels);]=])
+file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/native_dullahan_render_handler.cpp"
+    CONTENT "#include \"llvkbrowsersurface.h\"\n${implementation}")
+
 set(native_dullahan_sources "${CMAKE_CURRENT_BINARY_DIR}/native_dullahan.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/native_dullahan_impl.cpp")
+    "${CMAKE_CURRENT_BINARY_DIR}/native_dullahan_impl.cpp"
+    "${CMAKE_CURRENT_BINARY_DIR}/native_dullahan_render_handler.cpp")
 foreach(source dullahan_browser_client.cpp dullahan_callback_manager.cpp
-    dullahan_embed_scheme.cpp dullahan_impl_keyboard_win.cpp dullahan_impl_mouse.cpp dullahan_render_handler.cpp)
+    dullahan_embed_scheme.cpp dullahan_impl_keyboard_win.cpp dullahan_impl_mouse.cpp)
     configure_file("${llvk_dullahan_source_SOURCE_DIR}/src/${source}"
         "${CMAKE_CURRENT_BINARY_DIR}/native_${source}" COPYONLY)
     list(APPEND native_dullahan_sources "${CMAKE_CURRENT_BINARY_DIR}/native_${source}")
 endforeach()
 add_library(llvk_dullahan STATIC ${native_dullahan_sources})
 target_include_directories(llvk_dullahan SYSTEM PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}"
     "${llvk_cef_headers_SOURCE_DIR}" "${llvk_cef_headers_SOURCE_DIR}/include"
     "${CMAKE_CURRENT_BINARY_DIR}" "${llvk_dullahan_source_SOURCE_DIR}/src")
 target_link_libraries(llvk_dullahan PRIVATE libcef.lib libcef_dll_wrapper.lib)

@@ -11,6 +11,7 @@
 #include <fstream>
 #include <windows.h>
 #include <windowsx.h>
+#include <mmsystem.h>
 #include <chrono>
 #include <shellapi.h>
 #include <shlobj.h>
@@ -543,7 +544,7 @@ namespace
                     {
                         auto& browser=*browserViews.at(id);
                         const auto display=LLVKBrowserSurface::displayRect(rect->right-rect->left,rect->top-rect->bottom,browser.surface().width(),browser.surface().height());
-                        browser.wheel(physical(point.x-rect->left-display.left),physical(rect->bottom+display.top-bottom)-1,0,GET_WHEEL_DELTA_WPARAM(parameter),error);
+                        browser.wheel(physical(point.x-rect->left-display.left),physical(rect->bottom+display.top-bottom)-1,0,-clicks*40,error);
                     }
                     return 0;
                 }
@@ -908,6 +909,18 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         if (configuration.failureCode) *configuration.failureCode = code;
         return false;
     };
+    struct TimerResolution
+    {
+        UINT period=0;
+        ~TimerResolution() { if (period) timeEndPeriod(period); }
+    } timerResolution;
+    TIMECAPS timerCapabilities{};
+    if (timeGetDevCaps(&timerCapabilities,sizeof(timerCapabilities))!=TIMERR_NOERROR)
+    { error="Native window timer capabilities are unavailable"; return false; }
+    const auto timerPeriod=std::clamp(UINT(1),timerCapabilities.wPeriodMin,timerCapabilities.wPeriodMax);
+    if (timeBeginPeriod(timerPeriod)!=TIMERR_NOERROR)
+    { error="Native window timer resolution could not be acquired"; return false; }
+    timerResolution.period=timerPeriod;
     WindowState state;
     std::uint64_t noticeGeneration = 0;
     const auto notice = [&](Code code)
@@ -1324,6 +1337,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     auto previous = std::chrono::steady_clock::now();
     while (!state.close)
     {
+        const auto iterationStart=std::chrono::steady_clock::now();
         if (configuration.fatalError)
             if (const auto failure=configuration.fatalError()) return fail(*failure);
         {
@@ -1501,7 +1515,9 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
                 else if (renderer.frameResult() == LLVKContext::FrameResult::Fatal) { error = renderer.frameError(); return fail(Code::RendererUnavailable); }
             }
         }
-        MsgWaitForMultipleObjectsEx(0,nullptr,16,QS_ALLINPUT,MWMO_INPUTAVAILABLE);
+        const auto remaining=std::chrono::microseconds(16667)-(std::chrono::steady_clock::now()-iterationStart);
+        const auto waitMilliseconds=std::max(std::int64_t(0),std::chrono::duration_cast<std::chrono::milliseconds>(remaining).count());
+        MsgWaitForMultipleObjectsEx(0,nullptr,static_cast<DWORD>(waitMilliseconds),QS_ALLINPUT,MWMO_INPUTAVAILABLE);
     }
     if (application.owner->snapshot().state!=LLVKSessionOwner::State::Stopped)
     { error="Native window exited before application retirement completed"; return fail(Code::ShutdownFailed); }

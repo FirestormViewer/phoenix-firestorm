@@ -165,7 +165,7 @@ bool LLVKViewerUi::initializeDialogs(const Configuration& configuration,std::str
                         name=="SoundCacheWillBeMoved" || name=="DisableJavascriptBreaksSearch" || name=="ChangeSkin" || name=="SkinDefaultsChangeSettings" || name=="ChangeRenderBackend" ||
                         name=="SettingsConfirmBackup" || name=="SettingsRestoreNeedsLogout" || name=="BackupPathEmpty" ||
                         name=="BackupFinished" || name=="RestoreFinished" || name=="okbutton" ||
-                        name=="DebugSettingsWarning" || name=="ControlNameCopiedToClipboard" || name=="SanityCheck" || name=="MediaPluginFailed")
+                        name=="DebugSettingsWarning" || name=="ControlNameCopiedToClipboard" || name=="SanityCheck" || name=="MediaPluginFailed" || name=="ChangeLanguage")
                     { state.notice=Notice{name,{}}; state.noticeDepth=static_cast<int>(state.stack.size()); }
                     state.formTemplate=std::string_view(tag)=="template";
                 }
@@ -1989,6 +1989,27 @@ bool LLVKViewerUi::initializeStartupPreferencePanel(LLVKWidgetTree::Id panel,std
         if (!enabled) mTree.setValue(display->second,LLSD(false));
     }
     if (!mTree.bindPreferenceColorAlpha(panel,mColors,error)) return false;
+    if (fields.contains("time_format_combobox"))
+    {
+        const auto clock=fields.at("time_format_combobox");
+        if (!mTree.setValue(clock,LLSD(mTree.setting("Use24HourClock").value_or(LLSD(false)).asBoolean() ? "1" : "0"))) return false;
+        const auto changed=[this]
+        {
+            if (!mLanguageChanged && queueNotice("ChangeLanguage",{},{},mDialogError)) mLanguageChanged=true;
+        };
+        LLVKControl::Callback callback;
+        callback.function=[this,changed](auto id,const LLSD&)
+        {
+            if (mTree.updateSetting("Use24HourClock",LLSD(mTree.value(id).asString()=="1"))) changed();
+        };
+        mTree.setControlCommit(clock,std::move(callback));
+        if (fields.contains("language_combobox"))
+        {
+            LLVKControl::Callback language;
+            language.function=[changed](auto,const LLSD&) { changed(); };
+            mTree.setControlCommit(fields.at("language_combobox"),std::move(language));
+        }
+    }
     const auto maturity=fields.find("maturity_desired_combobox");
     if (maturity!=fields.end())
     {
@@ -3897,6 +3918,12 @@ bool LLVKViewerUi::showPreferences(std::string& error)
         const auto snapshot=mTree.snapshotPreferences(mPreferences->id(),error);
         if (!snapshot) return false;
         mPreferenceSnapshot=*snapshot;
+        if (const auto clock=mTree.setting("Use24HourClock"))
+        {
+            mPreferenceSnapshot.settings["Use24HourClock"]=*clock;
+            if (const auto combo=find("time_format_combobox",mPreferences->id()))
+                mTree.setValue(combo,LLSD(clock->asBoolean() ? "1" : "0"));
+        }
         if (const auto preset=mTree.setting("PresetGraphicActive")) mPreferenceSnapshot.settings["PresetGraphicActive"]=*preset;
         mBindingSnapshot=mBindings;
         const auto colors=mColors->serializeUser(error);
@@ -3918,7 +3945,9 @@ bool LLVKViewerUi::showPreferences(std::string& error)
         }
     }
     mActiveFloater=mPreferences.get();
-    return mPreferences->open(error);
+    auto placement=mTree.get(mRoot)->params.rect;
+    placement.top=std::max(placement.bottom,placement.top-mNoticeMenuHeight);
+    return mPreferences->open(error,placement);
 }
 
 bool LLVKViewerUi::previewUiSound(const std::string& name,std::string& error)
@@ -5061,10 +5090,50 @@ bool LLVKViewerUi::showColorPicker(LLVKWidgetTree::Id swatch,bool takeFocus,std:
         if (!mTree.beginColorSelection(swatch,error) ||
             !mTree.setColorPickerRgb(found->second->id(),mTree.get(swatch)->colorSwatch->color,false,error)) return false;
     }
+    const bool opening=!found->second->visible();
     if (!found->second->open(error)) return false;
+    if (opening)
+    {
+        auto parent=source->parent;
+        while (mTree.get(parent) && !mTree.get(parent)->floater) parent=mTree.get(parent)->parent;
+        if (const auto* owner=mTree.get(parent); owner && owner->floater)
+        {
+            auto base=owner->params.rect;
+            const auto expanded=LLVKWidgetTree::Rect{base.left-10,base.bottom-10,base.right+10,base.top+10};
+            for (const auto& [otherSwatch,picker] : mColorPickers)
+            {
+                if (otherSwatch==swatch || !picker->visible()) continue;
+                auto ancestor=mTree.get(otherSwatch) ? mTree.get(otherSwatch)->parent : 0;
+                while (mTree.get(ancestor) && !mTree.get(ancestor)->floater) ancestor=mTree.get(ancestor)->parent;
+                const auto rectangle=mTree.get(picker->id())->params.rect;
+                if (ancestor==parent && rectangle.left<expanded.right && rectangle.right>expanded.left &&
+                    rectangle.bottom<expanded.top && rectangle.top>expanded.bottom)
+                {
+                    base.left=std::min(base.left,rectangle.left); base.right=std::max(base.right,rectangle.right);
+                    base.bottom=std::min(base.bottom,rectangle.bottom); base.top=std::max(base.top,rectangle.top);
+                }
+            }
+            auto rectangle=mTree.get(found->second->id())->params.rect;
+            const auto width=rectangle.right-rectangle.left,height=rectangle.top-rectangle.bottom;
+            const auto root=mTree.get(mRoot)->params.rect;
+            auto leftMargin=std::max(0,base.left),rightMargin=std::max(0,root.right-root.left-base.right);
+            auto bottomMargin=std::max(0,base.bottom),topMargin=std::max(0,root.top-root.bottom-mNoticeMenuHeight-base.top);
+            for (unsigned attempt=0; attempt<5; ++attempt)
+            {
+                int left=0,bottom=0;
+                if (rightMargin>width) { left=base.right; bottom=base.top-height; }
+                else if (leftMargin>width) { left=base.left-width; bottom=base.top-height; }
+                else if (bottomMargin>height) { left=base.left; bottom=base.bottom-height; }
+                else if (topMargin>height) { left=base.left; bottom=base.top; }
+                else { leftMargin+=20; rightMargin+=20; bottomMargin+=20; topMargin+=20; continue; }
+                if (!mTree.setShape(found->second->id(),{left,bottom,left+width,bottom+height},error)) return false;
+                break;
+            }
+        }
+    }
     mActiveFloater=found->second.get();
     const auto& fields=mTree.get(found->second->id())->colorPicker->fields;
-    if (takeFocus) return mTree.requestControlFocus(fields.at("select_btn"),true,error);
+    if (takeFocus || opening) return mTree.requestControlFocus(fields.at("select_btn"),true,error);
     return true;
 }
 

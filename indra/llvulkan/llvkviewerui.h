@@ -284,6 +284,7 @@ private:
     std::map<std::string,LLSD> mCrashSettings;
     std::vector<LLVKWidgetTree::Id> mCrashPanels;
     bool mCrashSettingsRequireRestart = false;
+    bool mLanguageChanged = false;
     std::function<bool(const std::map<std::string,LLSD>&,std::string&)> mSaveCrashPreferences;
     std::function<bool(std::string&)> mScheduleSettingsReset;
     LLVKKeyBindings mBindings, mDefaultBindings;

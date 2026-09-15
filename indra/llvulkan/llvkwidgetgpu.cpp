@@ -86,7 +86,7 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
         {
             auto& stream = mStreams[command.owner];
             stream.used = mFrame;
-            if (!stream.publication) stream.publication = std::make_unique<LLVKImagePublication>(mDevice);
+            if (!stream.publication) stream.publication = std::make_unique<LLVKImagePublication>(mDevice,true);
             if (stream.epoch != command.imageEpoch)
             {
                 stream.publication->invalidate();

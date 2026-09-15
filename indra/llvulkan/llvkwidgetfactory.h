@@ -159,6 +159,7 @@ public:
         std::array<std::map<std::string,std::string>,3> images;
         LLVKButton::Align alignment = LLVKButton::Align::Center;
         std::int32_t labelPadLeft = 4, labelPadBottom = 1;
+        bool labelShadow = false;
         LLVKColor flashColor{1,1,1,1};
     };
     struct SpinnerDefaults
@@ -229,6 +230,7 @@ public:
         std::shared_ptr<const SliderControlDefaults> sliderControl = std::make_shared<SliderControlDefaults>();
         std::shared_ptr<const CheckBoxDefaults> radioItem;
         LLVKControl::Params radioControl;
+        Defaults radioView;
         std::function<void(LLVKWidgetTree::Id,const std::string&)> webLinkHandler;
         std::function<void(LLVKWidgetTree::Id,bool)> colorPickerHandler;
         std::function<void(LLVKWidgetTree::Id,const std::string&,const std::string&,const Callbacks&)> menuHandler;

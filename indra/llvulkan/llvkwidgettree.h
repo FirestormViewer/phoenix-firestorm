@@ -434,6 +434,9 @@ public:
         {
             std::string title, positioning;
             std::int32_t legacyHeaderHeight = 18;
+            std::int32_t headerHeight = 25;
+            bool headerExpanded = false;
+            bool dropShadow = true;
             bool saveRect = false, singleInstance = false, saveVisibility = false;
             std::optional<float> relativeX, relativeY;
             bool canClose = true, canMinimize = true;
@@ -566,6 +569,7 @@ public:
         std::uint64_t frame = 0;
     };
     bool routePointer(Id root, const PointerEvent& screenEvent, std::string& error);
+    bool updatePointerHover(Id root,const PointerEvent& screenEvent,std::string& error);
     bool setMenu(Id id,std::shared_ptr<LLVKMenu> menu);
     bool layoutStackPointer(Id id,const PointerEvent& event,std::string& error);
     std::optional<Id> createBrowser(const Params& view, const LLVKControl::Params& control,
@@ -642,6 +646,7 @@ public:
     bool createTabArrows(Id container, const LLVKControl::Params& control,
         const LLVKButton::Params& button, std::string& error);
     bool initializeFloater(Id panel, const Node::Floater& params, std::string& error);
+    bool expandFloaterHeader(Id panel, std::string& error);
     bool attachTabPanel(Id container, Id panel, Id button, std::string& error);
     bool selectTabPanel(Id container, Id panel, std::string& error);
     bool setTabVisibility(Id container, Id panel, bool visible, std::string& error);
@@ -1079,6 +1084,7 @@ private:
     std::vector<Id> mFocusChain;
     Id mKeyboardFocus = 0;
     Id mMouseCapture = 0;
+    std::set<Id> mPointerHover;
     Id mTopControl = 0;
     Id mLockedFocus = 0;
     std::uint64_t mFocusEpoch = 0;

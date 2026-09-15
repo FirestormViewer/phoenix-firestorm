@@ -276,7 +276,13 @@ std::optional<LLVKWidgetTree::ButtonDraw> LLVKWidgetTree::prepareButton(Id id, c
             auto glowRect = imageRect;
             if (!button.params.scaleImage)
             { glowRect.right = static_cast<std::int32_t>(glowImage->width()); glowRect.top = glowRect.bottom+static_cast<std::int32_t>(glowImage->height()); }
-            output.primitives.push_back({glowRect,tint(glowColor,button.glow*alpha),glowImage,true,additive,false});
+            auto encodedGlow=tint(glowColor,button.glow*alpha);
+            for (auto& channel : encodedGlow)
+            {
+                if (!std::isfinite(channel)) { error="Native button glow color is nonfinite"; return std::nullopt; }
+                channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+            }
+            output.primitives.push_back({glowRect,encodedGlow,glowImage,true,additive,false});
         }
     }
     else output.primitives.push_back({{0,0,width,height},{1,0,1,alpha},{},false,false,true});
@@ -296,8 +302,14 @@ std::optional<LLVKWidgetTree::ButtonDraw> LLVKWidgetTree::prepareButton(Id id, c
         { left = button.leftPad; textLeft += overlayWidth+button.params.overlayLabelSpace; textWidth -= overlayWidth+button.params.overlayLabelSpace; }
         else if (button.params.overlayAlign == LLVKButton::Align::Right)
         { left = width-button.rightPad-overlayWidth; textRight -= overlayWidth+button.params.overlayLabelSpace; textWidth -= overlayWidth+button.params.overlayLabelSpace; }
+        auto overlayColor=tint(!enabled ? button.params.disabledOverlayColor.get() : currentSelected ? button.params.selectedOverlayColor.get() : button.params.overlayColor.get(),alpha);
+        for (auto& channel : overlayColor)
+        {
+            if (!std::isfinite(channel)) { error="Native button overlay color is nonfinite"; return std::nullopt; }
+            channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+        }
         output.primitives.push_back({{left,centerY-overlayHeight/2,left+overlayWidth,centerY-overlayHeight/2+overlayHeight},
-            tint(!enabled ? button.params.disabledOverlayColor.get() : currentSelected ? button.params.selectedOverlayColor.get() : button.params.overlayColor.get(),alpha),images.overlay});
+            overlayColor,images.overlay});
     }
     output.label = currentSelected ? button.selectedLabel : button.params.label;
     LLWString label(output.label.begin(),output.label.end());

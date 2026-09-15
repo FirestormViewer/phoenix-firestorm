@@ -528,6 +528,24 @@ std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint:
     if (mBeamColor && mBeamColor->visible() && !updateBeamColorPreview(error)) return std::nullopt;
     updateSpellRemoval();
     auto paintInput=input;
+    paintInput.foregroundFloaters.emplace();
+    for (auto focused=mTree.keyboardFocus(); mTree.get(focused); focused=mTree.get(focused)->parent)
+        if (mTree.get(focused)->floater) { paintInput.foregroundFloaters->insert(focused); break; }
+    for (const auto& [swatch,picker] : mColorPickers)
+    {
+        if (!picker->visible()) continue;
+        auto owner=mTree.get(swatch) ? mTree.get(swatch)->parent : 0;
+        while (mTree.get(owner) && !mTree.get(owner)->floater) owner=mTree.get(owner)->parent;
+        if (paintInput.foregroundFloaters->contains(picker->id())) paintInput.foregroundFloaters->insert(owner);
+    }
+    for (const auto& [swatch,picker] : mColorPickers)
+    {
+        if (!picker->visible()) continue;
+        auto owner=mTree.get(swatch) ? mTree.get(swatch)->parent : 0;
+        while (mTree.get(owner) && !mTree.get(owner)->floater) owner=mTree.get(owner)->parent;
+        if (paintInput.foregroundFloaters->contains(owner)) paintInput.foregroundFloaters->insert(picker->id());
+    }
+    paintInput.floaterShadow=mColors->find("ColorDropShadow");
     if (const auto color=mColors->find("FocusColor"))
     {
         auto focus=color->get();

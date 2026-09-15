@@ -16,7 +16,7 @@ public:
     ~LLVKFloater();
     Id id() const noexcept { return mId; }
     bool visible() const;
-    bool open(std::string& error);
+    bool open(std::string& error,std::optional<LLVKWidgetTree::Rect> placement={});
     bool close(std::string& error);
     bool setMinimized(bool minimized, std::string& error);
     bool setDocked(bool docked,std::string& error);

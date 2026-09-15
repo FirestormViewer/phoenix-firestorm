@@ -99,10 +99,15 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             return true;
         };
         const auto width = screen->right-screen->left, height = screen->top-screen->bottom;
-        const auto alertShadow=[&](int inset,float alpha) -> bool
+        const auto alertShadow=[&](int inset,float alpha,bool floater=false) -> bool
         {
-            if (!node->panel || !node->panel->params.alertShadowColor) return true;
-            auto inner=node->panel->params.alertShadowColor->get();
+            if (!node->panel) return true;
+            const auto color=floater ? input.floaterShadow : node->panel->params.alertShadowColor;
+            if (!color) return true;
+            auto inner=color->get();
+            const bool foreground=!input.foregroundFloaters || input.foregroundFloaters->contains(id);
+            const float edge=floater && !foreground ? 2.f : 6.f;
+            if (floater && !foreground) alpha*=0.5f;
             inner[3]*=alpha;
             for (const auto channel : inner)
                 if (!std::isfinite(channel)) { error="Nonfinite native alert shadow color"; return false; }
@@ -113,9 +118,9 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             const float left=float(screen->left)+inset, right=float(screen->right)-inset-1;
             const float bottom=float(screen->bottom)+inset+1, top=float(screen->top)-inset;
             const std::array<std::array<float,2>,12> positions{{
-                {right,top-6},{right,bottom},{right+6,bottom},{right+6,top-6},
-                {left+6,bottom},{left+6,bottom-6},{right,bottom-6},{left,bottom},
-                {left+1,bottom-5},{right+5,bottom-5},{right+5,top-1},{right,top}}};
+                {right,top-edge},{right,bottom},{right+edge,bottom},{right+edge,top-edge},
+                {left+edge,bottom},{left+edge,bottom-edge},{right,bottom-edge},{left,bottom},
+                {left+1,bottom-edge+1},{right+edge-1,bottom-edge+1},{right+edge-1,top-1},{right,top}}};
             constexpr std::array<std::array<unsigned,3>,10> triangles{{
                 {0,1,2},{0,2,3},{1,4,5},{1,5,6},{4,7,8},
                 {4,8,5},{1,6,9},{1,9,2},{0,3,10},{0,10,11}}};
@@ -416,12 +421,22 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                     }
             }
             auto color=swatch.color; color[3]*=alpha;
+            for (auto& channel : color)
+            {
+                if (!std::isfinite(channel)) { error="Native swatch color is nonfinite"; return false; }
+                channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+            }
             if (!append(interior,color)) return false;
             if (swatch.color[3]<1.f && swatch.params->alphaBackground && !append(interior,color,swatch.params->alphaBackground)) return false;
-            auto border=swatch.params->borderColor.get(); border[3]*=alpha;
+            auto border=swatch.params->borderColor.get();
+            for (auto& channel : border)
+            {
+                if (!std::isfinite(channel)) { error="Native swatch border color is nonfinite"; return false; }
+                channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+            }
             const auto bottom=swatch.params->labelHeight;
-            for (const Rect edge : {Rect{0,bottom,width,bottom+1},Rect{0,height-1,width,height},
-                Rect{0,bottom+1,1,height-1},Rect{width-1,bottom+1,width,height-1}})
+            for (const Rect edge : {Rect{0,bottom-1,width-1,bottom},Rect{0,height-2,width-1,height-1},
+                Rect{-1,bottom,0,height-1},Rect{width-2,bottom,width-1,height-1}})
                 if (!append(edge,border)) return false;
         }
         if (node->slider)
@@ -488,10 +503,12 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
         }
         if (node->panel && node->panel->params.backgroundVisible)
         {
+            if (node->floater && node->floater->dropShadow && !alertShadow(1,input.button.transparency,true)) return false;
             const auto& panel = node->panel->params;
-            const auto image = panel.backgroundOpaque ? panel.opaqueImage : panel.transparentImage;
-            auto color = image ? (panel.backgroundOpaque ? panel.opaqueImageOverlay.get() : panel.transparentImageOverlay.get()) :
-                (panel.backgroundOpaque ? panel.opaqueColor.get() : panel.transparentColor.get());
+            const bool opaque=node->floater && input.foregroundFloaters ? input.foregroundFloaters->contains(id) : panel.backgroundOpaque;
+            const auto image = opaque ? panel.opaqueImage : panel.transparentImage;
+            auto color = image ? (opaque ? panel.opaqueImageOverlay.get() : panel.transparentImageOverlay.get()) :
+                (opaque ? panel.opaqueColor.get() : panel.transparentColor.get());
             color[3] *= input.button.transparency;
             for (auto& channel : color)
             {
@@ -731,7 +748,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                 if (!measured) return false;
                 runLeft+=measured->width;
                 if (text.links.empty() && !selection)
-                { if (!append({},color,{},std::move(line))) return false; }
+                { if (!append({},color,{},std::move(line),false,false,text.params.softShadow)) return false; }
                 else
                 {
                     for (std::size_t first = 0; first < line->glyphs.size(); )
@@ -754,7 +771,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                         if (link)
                         { foreground = link->query ? text.params.queryColor.get() : text.params.linkColor.get(); foreground[3] *= input.button.drawAlpha; }
                         if (highlighted) { foreground = text.params.selectionColor.get(); foreground[3] *= input.button.drawAlpha; }
-                        if (!append({},foreground,{},std::move(part))) return false;
+                        if (!append({},foreground,{},std::move(part),false,false,text.params.softShadow)) return false;
                         const auto hoveredLink=text.params.skipLinkUnderline ? tree.plainTextLinkAt(id,
                             input.button.mouseX-screen->left,input.button.mouseY-screen->bottom,error) : std::optional<std::size_t>();
                         if (!error.empty()) return false;
@@ -817,7 +834,14 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                         top = bottom = input.button.focusColor;
                         thickness = static_cast<int>(std::floor(1.f+tree.focusFlashAmount()+0.5f));
                     }
-                    if (!upper(0,thickness,top) || !lower(0,thickness,bottom)) return false;
+                    if (thickness==1)
+                    {
+                        for (auto* color : {&top,&bottom})
+                            for (auto& channel : *color) channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+                        if (!append({-1,0,0,height},top) || !append({0,height-1,width,height},top) ||
+                            !append({width-1,0,width,height},bottom) || !append({0,-1,width,0},bottom)) return false;
+                    }
+                    else if (!upper(0,thickness,top) || !lower(0,thickness,bottom)) return false;
                 }
                 else
                 {
@@ -870,31 +894,41 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
         {
             const auto& picker=*node->colorPicker;
             const auto alpha=input.button.drawAlpha;
-            if (!append({140,100,396,356},{1,1,1,alpha},picker.hueImage)) return false;
-            const auto outline=[&](Rect rect,LLVKColor::Value color)
+            const auto pickerFill=[&](Rect rectangle,LLVKColor::Value color)
             {
-                return append({rect.left,rect.bottom,rect.right,rect.bottom+1},color) &&
-                    append({rect.left,rect.top-1,rect.right,rect.top},color) &&
-                    append({rect.left,rect.bottom+1,rect.left+1,rect.top-1},color) &&
-                    append({rect.right-1,rect.bottom+1,rect.right,rect.top-1},color);
+                for (auto& channel : color)
+                {
+                    if (!std::isfinite(channel)) { error="Native picker color is nonfinite"; return false; }
+                    channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+                }
+                return append(rectangle,color);
+            };
+            if (!append({140,100,396,356},{1,1,1,alpha},picker.hueImage)) return false;
+            const auto outline=[&](Rect rect,LLVKColor::Value color,bool inverted=false)
+            {
+                const auto low=rect.bottom-(inverted ? 1 : 0),high=rect.top-(inverted ? 0 : 1);
+                return pickerFill({rect.left,low-1,rect.right-1,low},color) &&
+                    pickerFill({rect.left,high-1,rect.right-1,high},color) &&
+                    pickerFill({rect.left-1,low,rect.left,high},color) &&
+                    pickerFill({rect.right-2,low,rect.right-1,high},color);
             };
             const auto hueX=140+static_cast<int>(256.f*picker.hsl[0]);
             const auto saturationY=100+static_cast<int>(256.f*picker.hsl[1]);
-            if (!append({hueX-8,saturationY,hueX+8,saturationY+1},{0,0,0,1}) ||
-                !append({hueX,saturationY-8,hueX+1,saturationY+8},{0,0,0,1}) ||
-                !outline({140,100,397,356},{0,0,0,alpha})) return false;
+            if (!append({hueX-8,saturationY-1,hueX+8,saturationY},{0,0,0,1}) ||
+                !append({hueX-1,saturationY-8,hueX,saturationY+8},{0,0,0,1}) ||
+                !outline({140,100,397,356},{0,0,0,alpha},true)) return false;
             for (int row=0; row<256; ++row)
             {
                 LLColor3 color; color.setHSL(picker.hsl[0],picker.hsl[1],float(row)/256.f);
-                if (!append({412,99+row,428,100+row},{color.mV[0],color.mV[1],color.mV[2],alpha})) return false;
+                if (!pickerFill({412,99+row,428,100+row},{color.mV[0],color.mV[1],color.mV[2],alpha})) return false;
             }
             const auto markerY=100+static_cast<int>(256.f*picker.hsl[2]);
-            if (!append({428,markerY-6,434,markerY+6},{0.75f,0.75f,0.75f,1})) return false;
+            if (!pickerFill({428,markerY-6,434,markerY+6},{0.75f,0.75f,0.75f,1})) return false;
             output.commands.back().triangle=std::array<float,6>{float(screen->left+428),float(screen->bottom+markerY),
                 float(screen->left+434),float(screen->bottom+markerY-6),float(screen->left+434),float(screen->bottom+markerY+6)};
-            if (!outline({412,100,429,356},{0,0,0,1}) ||
-                !append({12,130,128,190},{picker.rgb[0],picker.rgb[1],picker.rgb[2],alpha}) ||
-                !outline({12,130,129,190},{0,0,0,1})) return false;
+            if (!outline({412,100,429,356},{0,0,0,1},true) ||
+                !pickerFill({12,130,128,190},{picker.rgb[0],picker.rgb[1],picker.rgb[2],alpha}) ||
+                !outline({12,130,129,190},{0,0,0,1},true)) return false;
             if (picker.paletteReady)
                 for (int index=0; index<32; ++index)
                 {
@@ -902,7 +936,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                     const auto left=11+418*column/16, right=11+418*(column+1)/16;
                     const auto top=92-40*row/2, bottom=92-40*(row+1)/2;
                     auto color=picker.palette[index]; color[3]*=alpha;
-                    if (!append({left+2,bottom+2,right-2,top-2},color) || !outline({left+1,bottom+1,right-1,top-1},{0,0,0,1})) return false;
+                    if (!pickerFill({left+2,bottom+2,right-2,top-2},color) || !outline({left+1,bottom+1,right-1,top-1},{0,0,0,1})) return false;
                 }
         }
         return true;

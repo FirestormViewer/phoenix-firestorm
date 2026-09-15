@@ -17,6 +17,8 @@ public:
         std::map<Id,std::uint64_t> browserEpochs;
         double animationSeconds=0;
         std::uint32_t physicalWidth=0,physicalHeight=0;
+        std::optional<std::set<Id>> foregroundFloaters;
+        std::optional<LLVKColor> floaterShadow;
     };
     struct Command
     {

@@ -18,6 +18,7 @@ struct LLVKPlainControl
         std::optional<bool> readOnly;
         bool trackEnd = false;
         bool useEllipses = false;
+        bool softShadow = false;
         bool clipPartial = false;
         std::function<bool(std::u32string_view)> prevalidator;
         LLVKColor textColor{1,1,1,1};

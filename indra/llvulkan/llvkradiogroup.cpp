@@ -39,6 +39,8 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createRadioGroup(const Params&
             };
             const auto child=createCheckBox(childView,childControl,item.check,*id,error);
             if (!child || !get(*id)) { discard(); return std::nullopt; }
+            if (!reshape(*child,childView.rect.right-childView.rect.left,childView.rect.top-childView.rect.bottom,error))
+            { discard(); return std::nullopt; }
             mNodes.at(*id).radioGroup->items.push_back({*child,item.payload.value_or(LLSD(item.view.name))});
             setValue(*child,LLSD(false));
             const auto button=get(*child)->checkBox->button;
