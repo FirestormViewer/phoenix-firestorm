@@ -1,5 +1,51 @@
 # Native error messaging
 
+## Post-checkpoint continuation (2026-09-15)
+
+The browser/dialog checkpoint was committed and pushed as 4154e1e879 on
+native-error-messaging. That checkpoint records partial parity, not completion.
+The following continuation is separate, uncommitted work.
+
+NV-00/01/02/11/12/17: Copy's remaining mismatch was caused by the native button
+overlay default, not texture sampling. Pinned LLButton::Params defaults
+image_overlay_alignment to center; LLVKButton::Params incorrectly used Left.
+Native now defaults to Center; explicit left/right overrides are unchanged.
+Tests in the existing button group verify centered and explicit-left rectangles.
+
+Bounded native132/133 diagnostics confirmed identical occupied source pixels,
+18x18 logical size,32x32 padded storage, UV0..0.5625, and anisotropy disabled.
+The actual native quad was x1588..1606, while the source-centered GL overlay was
+x1589..1607. No source pixels, UVs, sampler, shader, capture transform or tolerance
+were changed. Temporary pixel/quad instrumentation was removed after diagnosis;
+its outputs remain in native-copy-diagnostic-132/133 for provenance.
+
+gl-dialog-separated-78 versus native-overlay-parity-134: Copy has zero differing
+pixels in both settled samples of Preferences, Colors and the nested picker.
+Complete frames still differ52 pixels for Preferences/Colors and104 for the
+picker, in both samples, chiefly missing Help icons plus isolated edge pixels.
+Native fixture SHA256:
+C1BC6564195B9A8FFA92B2207F3134464A471614C0C2B3E74ED8603868DC3923.
+The fixture exited zero with Window7/7. The overlay regression passes Widget210/210.
+
+Help implementation has begun at its native data owner:
+LLVKWidgetTree::findHelpTopic follows the pinned LLUICtrl::findHelpTopic search
+precedence over visible descendant panels, selected descendant tabs, then
+panel/ancestor topics. As in the reference, descendant searches stay rooted at
+the originally queried control while ancestor panels are considered. Tests cover
+hidden topics, tab changes, button-to-parent fallback and invalid controls.
+This is CPU-only lookup over native nodes, not reuse of GL UI functions.
+It does not yet connect a visible Help control or complete the Help service.
+
+The next Help boundary remains URL metadata and dispatch, including configured
+external/internal browser policy, dedicated Help-browser lifecycle, URL history
+and error-page behavior. Source tracing found no CEF handler for the reference
+init_history plugin message; do not turn that no-op into a feature mandate.
+LLURLHistory's actual add/remove/limit behavior and LLMediaCtrl's configured
+error-page redirect remain relevant. Live session/grid substitution ownership
+is unresolved; guessed values and an inert Help icon are not acceptable closure.
+Menu tear-off, remaining edge pixels and temporal/nested lifecycle checks remain
+open. Login-dependent verification remains deferred.
+
 ## Interaction and nested-dialog work in progress (2026-09-15)
 
 The preceding scale slice was committed and pushed as c869492616 before this

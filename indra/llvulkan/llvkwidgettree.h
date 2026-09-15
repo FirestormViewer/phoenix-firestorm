@@ -929,6 +929,7 @@ public:
     bool addPanelBorder(Id id, const LLVKBorder::Params& border, std::string& error);
     bool removePanelBorder(Id id, std::string& error);
     bool setPanelFilename(Id id, const std::string& filename);
+    std::optional<std::string> findHelpTopic(Id id) const;
     std::optional<std::string> panelString(Id id, const std::string& name,
         const LLVKLabel::Arguments& arguments, std::string& error) const;
     bool setButtonToggle(Id id, bool selected, std::string& error);

@@ -31,7 +31,7 @@ struct LLVKButton
         std::int32_t overlayTopPad = 0;
         std::int32_t overlayBottomPad = 0;
         std::int32_t overlayLabelSpace = 1;
-        Align overlayAlign = Align::Left;
+        Align overlayAlign = Align::Center;
         Align labelAlign = Align::Center;
         float scaleX = 1.f;
         bool autoResize = false;

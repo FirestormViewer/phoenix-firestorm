@@ -2,6 +2,32 @@
 
 #include <cmath>
 
+std::optional<std::string> LLVKWidgetTree::findHelpTopic(Id id) const
+{
+    const auto* origin=get(id);
+    if (!origin || !origin->control) return std::nullopt;
+    std::vector<Id> descendants=origin->children;
+    for (std::size_t index=0;index<descendants.size();++index)
+        if (const auto* child=get(descendants[index]))
+            descendants.insert(descendants.end(),child->children.begin(),child->children.end());
+    for (const auto* owner=origin;owner;owner=get(owner->parent))
+    {
+        if (!owner->panel) continue;
+        for (const auto childId : descendants)
+            if (const auto* child=get(childId); child && child->panel && visibleInChain(childId) && !child->panel->params.helpTopic.empty())
+                return child->panel->params.helpTopic;
+        for (const auto childId : descendants)
+        {
+            const auto* child=get(childId);
+            if (!child || !child->tabContainer || !child->params.visible) continue;
+            const auto* selected=get(child->tabContainer->selected);
+            if (selected && selected->panel && !selected->panel->params.helpTopic.empty()) return selected->panel->params.helpTopic;
+        }
+        if (!owner->panel->params.helpTopic.empty()) return owner->panel->params.helpTopic;
+    }
+    return std::nullopt;
+}
+
 bool LLVKWidgetTree::moveTab(Id id, bool forward, std::string& error)
 {
     error.clear();

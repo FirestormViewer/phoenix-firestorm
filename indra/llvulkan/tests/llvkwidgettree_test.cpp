@@ -4446,14 +4446,18 @@ namespace tut
         std::string error;
         bool reject=false;
         control.validate.function=[&](auto,const LLSD& name) { ensure("validation receives panel name",name.asString()=="first" || name.asString()=="second"); return !reject; };
-        const auto container=tree.createPanel(view,control,{},0,error);
+        LLVKPanel::Params helpPanel;
+        helpPanel.helpTopic="tab-owner";
+        const auto container=tree.createPanel(view,control,helpPanel,0,error);
         ensure(error,container.has_value());
         ensure("native tab state",tree.initializeTabContainer(*container,error));
         control.validate={};
         view.name="first";
-        const auto first=tree.createPanel(view,control,{},*container,error);
+        helpPanel.helpTopic="first-topic";
+        const auto first=tree.createPanel(view,control,helpPanel,*container,error);
         view.name="second";
-        const auto second=tree.createPanel(view,control,{},*container,error);
+        helpPanel.helpTopic="second-topic";
+        const auto second=tree.createPanel(view,control,helpPanel,*container,error);
         const auto firstButton=tree.createButton(view,control,{},*container,error);
         const auto secondButton=tree.createButton(view,control,{},*container,error);
         ensure(error,first && second && firstButton && secondButton);
@@ -4485,6 +4489,8 @@ namespace tut
         ensure("source bottom panel bounds",tree.get(*first)->params.rect==LLVKWidgetTree::Rect{1,18,299,139});
         ensure_equals("bottom tab offset",tree.get(*firstButton)->params.rect.bottom,1);
         ensure("panels hidden before selection",!tree.get(*first)->params.visible && !tree.get(*second)->params.visible);
+        ensure("hidden topics fall back to owner",tree.findHelpTopic(*container)==std::optional<std::string>("tab-owner"));
+        ensure("invalid Help target has no topic",!tree.findHelpTopic(0));
         int commits=0;
         LLVKControl::Callback callback;
         callback.function=[&](auto,const LLSD& name)
@@ -4495,12 +4501,15 @@ namespace tut
         };
         tree.setControlCommit(*container,callback);
         ensure("select first",tree.selectTabPanel(*container,*first,error));
+        ensure("Help follows visible tab",tree.findHelpTopic(*container)==std::optional<std::string>("first-topic"));
+        ensure("Help from a tab button falls back through its owner",tree.findHelpTopic(*firstButton)==std::optional<std::string>("tab-owner"));
         reject=true;
         ensure("selection veto",!tree.selectTabPanel(*container,*second,error));
         ensure("veto preserves selected panel",tree.get(*first)->params.visible);
         ensure_equals("veto does not commit",commits,1);
         reject=false;
         ensure("button selects second",tree.commit(*secondButton));
+        ensure("Help ignores the now-hidden prior tab",tree.findHelpTopic(*container)==std::optional<std::string>("second-topic"));
         ensure("only selected tab in keyboard traversal",!tree.get(*firstButton)->control->params.tabStop && tree.get(*secondButton)->control->params.tabStop);
         ensure("tab strip focus",tree.requestControlFocus(*secondButton,true,error));
         ensure("right wraps to first tab",tree.tabContainerKey(*container,LLVKWidgetTree::ScrollKey::Right,{},error));
@@ -5404,6 +5413,20 @@ namespace tut
         ensure("opaque hover reconciliation",tree.updatePointerHover(*hoverRoot,hover,error));
         ensure("covering view clears underlying highlight",!tree.get(*button)->button->highlighted);
         ensure("invalid hover root rejected",!tree.updatePointerHover(0,hover,error));
+        params.images.overlay=LLVKWidgetImage::fromRgba("overlay",2,2,std::array<std::uint8_t,16>{},error);
+        ensure(error,params.images.overlay!=nullptr);
+        params.isToggled={};
+        const auto centered=tree.createButton(view,control,params,0,error);
+        ensure(error,centered.has_value());
+        const auto centeredDraw=tree.prepareButton(*centered,{},error);
+        ensure(error,centeredDraw.has_value());
+        ensure("default overlay is centered",centeredDraw->primitives.back().rectangle==LLVKWidgetTree::Rect{49,15,51,17});
+        params.overlayAlign=LLVKButton::Align::Left;
+        const auto aligned=tree.createButton(view,control,params,0,error);
+        ensure(error,aligned.has_value());
+        const auto alignedDraw=tree.prepareButton(*aligned,{},error);
+        ensure(error,alignedDraw.has_value());
+        ensure_equals("explicit left overlay remains left aligned",alignedDraw->primitives.back().rectangle.left,params.leftPad);
     }
 
     template<> template<> void object::test<124>()
