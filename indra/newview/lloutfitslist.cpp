@@ -57,6 +57,10 @@
 #include "llviewercontrol.h" // <FS:ND/> for gSavedSettings
 #include "llresmgr.h"
 #include "lltextbox.h"
+
+// <FS:TP> [FIRE-36105] For the per-sort outfit-date memoization cache
+#include <unordered_map>
+// </FS:TP>
 #include "lleconomy.h"
 
 #include "rlvactions.h"
@@ -69,6 +73,17 @@ static const LLOutfitTabFavComparator OUTFIT_TAB_FAV_COMPARATOR;
 // <FS:TP> [FIRE-36105] Add date-based outfit sort comparators
 static const LLOutfitTabDateComparator OUTFIT_TAB_DATE_COMPARATOR;
 static const LLOutfitTabFavDateComparator OUTFIT_TAB_FAV_DATE_COMPARATOR;
+
+// <FS:TP> [FIRE-36105] Memoization cache for get_outfit_tab_creation_date(),
+// live only for the duration of a single LLOutfitsList::sortOutfits() call.
+// LLAccordionCtrl::sort() calls each comparator's compare() O(n log n)
+// times; without this, every single comparison would re-walk every item
+// in both outfits from scratch instead of once per outfit. Scoping the
+// cache to one sort pass (primed/cleared in sortOutfits(), below) means it
+// can never go stale - it simply doesn't exist outside of an in-progress
+// sort, so there's no invalidation logic to get wrong.
+static std::unordered_map<LLUUID, time_t>* sOutfitDateCache = NULL;
+// </FS:TP>
 
 // Bits of the "OutfitListSortOrder" saved setting.
 static const S32 OUTFIT_SORT_FAVORITES_TO_TOP = 0x1;
@@ -88,10 +103,22 @@ static const S32 OUTFIT_SORT_NEWEST_FIRST     = 0x2;
 static time_t get_outfit_tab_creation_date(const LLAccordionCtrlTab* tab)
 {
     LLOutfitAccordionCtrlTab* outfit_tab = (LLOutfitAccordionCtrlTab*)tab;
+    const LLUUID folder_id = outfit_tab->getFolderID();
+
+    // <FS:TP> [FIRE-36105] Serve from the active sort's cache, if any
+    if (sOutfitDateCache)
+    {
+        std::unordered_map<LLUUID, time_t>::const_iterator cached = sOutfitDateCache->find(folder_id);
+        if (cached != sOutfitDateCache->end())
+        {
+            return cached->second;
+        }
+    }
+    // </FS:TP>
 
     LLInventoryModel::cat_array_t* cats = NULL;
     LLInventoryModel::item_array_t* items = NULL;
-    gInventory.getDirectDescendentsOf(outfit_tab->getFolderID(), cats, items);
+    gInventory.getDirectDescendentsOf(folder_id, cats, items);
 
     time_t newest = 0;
     if (items)
@@ -105,6 +132,14 @@ static time_t get_outfit_tab_creation_date(const LLAccordionCtrlTab* tab)
             }
         }
     }
+
+    // <FS:TP> [FIRE-36105] Populate the active sort's cache, if any
+    if (sOutfitDateCache)
+    {
+        (*sOutfitDateCache)[folder_id] = newest;
+    }
+    // </FS:TP>
+
     return newest;
 }
 // </FS:TP>
@@ -962,7 +997,16 @@ void LLOutfitsList::getCurrentCategories(uuid_vec_t& vcur)
 
 void LLOutfitsList::sortOutfits()
 {
+    // <FS:TP> [FIRE-36105] Prime the per-sort outfit-date cache so a
+    // date-based comparator only walks each outfit's items once (the
+    // first time that outfit is touched during this sort) instead of
+    // on every single pairwise comparison. See sOutfitDateCache and
+    // get_outfit_tab_creation_date() above for details.
+    std::unordered_map<LLUUID, time_t> date_cache;
+    sOutfitDateCache = &date_cache;
     mAccordion->sort();
+    sOutfitDateCache = NULL;
+    // </FS:TP>
 }
 
 void LLOutfitsList::onOutfitRightClick(LLUICtrl* ctrl, S32 x, S32 y, const LLUUID& cat_id)
