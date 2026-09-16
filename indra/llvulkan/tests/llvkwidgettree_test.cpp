@@ -198,6 +198,8 @@ namespace tut
         configuration.settingsGroup=&samplingPreferences;
         configuration.settings["RenderAnisotropic"]=true;
         auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        const auto usernameEditor=ui->tree().get(ui->find("username_combo"))->combo->editor;
+        ensure_equals("empty login starts in username editor",ui->tree().keyboardFocus(),usernameEditor);
         const auto offPaint=ui->preparePaint({},error);
         ensure("authoritative off preference overrides stale startup copy",offPaint && !offPaint->skinAnisotropy);
         samplingPreferences.setBOOL("RenderAnisotropic",true);
@@ -218,6 +220,7 @@ namespace tut
         ensure("refresh login visibility",ui->preparePaint({},error).has_value());
         ensure("grid selector follows live setting",ui->tree().get(ui->find("grid_panel"))->params.visible);
         ensure("set synthetic username",ui->tree().setValue(ui->tree().get(ui->find("username_combo"))->combo->editor,LLSD("fixture-user")));
+        ensure("username-only login focuses password",ui->focusLoginFields(error) && ui->tree().keyboardFocus()==ui->find("password_edit"));
         ensure("refresh username-only state",ui->preparePaint({},error).has_value());
         ensure("password still required",!ui->tree().get(ui->find("connect_btn"))->params.enabled);
         ensure("typed username is not removable saved data",!ui->tree().get(ui->find("remove_user_btn"))->params.enabled);
@@ -229,6 +232,7 @@ namespace tut
         ensure("refresh edited saved username",ui->preparePaint({},error).has_value());
         ensure("edited username is not a saved selection",!ui->tree().get(ui->find("remove_user_btn"))->params.enabled);
         ensure("set synthetic password",ui->tree().setValue(ui->find("password_edit"),LLSD("fixture-only")));
+        ensure("complete credentials focus username",ui->focusLoginFields(error) && ui->tree().keyboardFocus()==usernameEditor);
         ensure("refresh complete credentials",ui->preparePaint({},error).has_value());
         ensure("complete credentials enable login",ui->tree().get(ui->find("connect_btn"))->params.enabled);
         ensure("clear synthetic password",ui->tree().setValue(ui->find("password_edit"),LLSD("")));
@@ -742,6 +746,25 @@ namespace tut
         configuration.savePreferences=[&](const auto& values,std::string&) { savedHelp.insert(values.begin(),values.end()); return true; };
         auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
         bool failBrowserOpen=false;
+        LLVKWidgetTree::Params tooltipView;
+        tooltipView.rect={10,250,210,350}; tooltipView.tooltip="Native tooltip lifecycle";
+        const auto tooltipOwner=ui->tree().create(tooltipView,ui->root(),error);
+        ensure(error,tooltipOwner.has_value());
+        LLVKWidgetPaint::Input tooltipInput;
+        tooltipInput.button.mouseX=30; tooltipInput.button.mouseY=300;
+        ensure("tooltip delay starts at pointer entry",ui->preparePaint(tooltipInput,error).has_value());
+        ensure("tooltip clock advances",ui->tree().advanceTime(1.,error));
+        const auto tooltipPaint=ui->preparePaint(tooltipInput,error);
+        ensure(error,tooltipPaint.has_value());
+        const auto hasTooltip=[](const auto& paint)
+        { return std::any_of(paint.commands.begin(),paint.commands.end(),[](const auto& draw) { return draw.image && draw.image->name()=="Tooltip"; }); };
+        ensure("tooltip uses the native skin image",hasTooltip(*tooltipPaint));
+        ui->menuPointer({LLVKWidgetTree::PointerKind::LeftDown,30,300});
+        ensure("tooltip fade clock advances",ui->tree().advanceTime(1.3,error));
+        const auto fadedTooltip=ui->preparePaint(tooltipInput,error);
+        ensure(error,fadedTooltip.has_value());
+        ensure("tooltip retires after fade",!hasTooltip(*fadedTooltip));
+        ensure("tooltip owner cleanup",ui->tree().erase(*tooltipOwner,error));
         ui->setGuidebookService([&](auto id,const auto& page,std::string& problem)
         { browser=id; url=page; if (failBrowserOpen) { problem="Synthetic browser startup failure"; return false; } return true; },[&](auto) { ++closed; });
         ui->setBrowserCommand([&](auto id,const auto& action,const auto& page,std::string&)
@@ -804,6 +827,22 @@ namespace tut
         failBrowserOpen=false;
         const bool helpOpened=ui->showHelp("first",error); ensure(error,helpOpened);
         const auto helpFloater=ui->activeFloater(),helpBrowser=ui->helpBrowser();
+        const auto helpBounds=ui->tree().get(helpFloater)->params.rect;
+        const auto loginBounds=ui->tree().get(ui->root())->params.rect;
+        ensure_equals("Help centers below menu strip",helpBounds.bottom,
+            (loginBounds.top-loginBounds.bottom-19-(helpBounds.top-helpBounds.bottom))/2);
+        const auto resizeCorner=ui->tree().get(ui->find("floater_resize_corner",helpFloater));
+        ensure("Help resize handle exists",resizeCorner!=nullptr);
+        ensure_equals("source resize handle width",resizeCorner->params.rect.right-resizeCorner->params.rect.left,11);
+        ensure_equals("source resize handle height",resizeCorner->params.rect.top-resizeCorner->params.rect.bottom,11);
+        LLVKWidgetTree::EditorView inactiveEditor;
+        inactiveEditor.transparency=.95f;
+        const auto loginEditor=ui->tree().get(ui->find("username_combo"))->combo->editor;
+        const auto inactiveDraw=ui->tree().prepareLineEditor(loginEditor,inactiveEditor,error);
+        ensure("inactive editor prepares",inactiveDraw.has_value());
+        const auto backgroundPart=std::find_if(inactiveDraw->parts.begin(),inactiveDraw->parts.end(),
+            [](const auto& part) { return bool(part.image); });
+        ensure("inactive background image uses encoded alpha",backgroundPart!=inactiveDraw->parts.end() && backgroundPart->color[3]==242.f/255.f);
         ensure("dedicated original Help browser",helpBrowser==browser && ui->find("status_text",helpFloater) && !ui->find("nav_controls",helpFloater));
         ensure("Help open state recorded",ui->tree().setting("HelpFloaterOpen")->asBoolean());
         ui->webBrowserEvent(helpBrowser,"LoadStart","",false,false);
@@ -820,6 +859,7 @@ namespace tut
         ensure("Help error navigates fallback",url=="https://example.test/error");
         const auto beforeClose=closed;
         ensure("Help close retires browser",ui->closeMenuWindow(error) && closed==beforeClose+1);
+        ensure_equals("independent Help returns to login default focus",ui->tree().keyboardFocus(),loginEditor);
         ensure("normal Help close clears setting",!ui->tree().setting("HelpFloaterOpen")->asBoolean());
         ensure("Help deferred retirement completes",ui->preparePaint({},error).has_value() && !ui->tree().get(helpFloater) && !ui->helpBrowser());
         const bool helpReopened=ui->showHelp("third",error); ensure(error,helpReopened);
@@ -1101,7 +1141,7 @@ namespace tut
     {
         set_test_name("native nested menus use live checked and enabled predicates");
         std::string error;
-        auto menu=LLVKMenu::create("<menu_bar><menu name='root' label='Root'><menu name='nested' label='Nested'>"
+        auto menu=LLVKMenu::create("<menu_bar><menu name='root' label='Root'><menu name='nested' label='Nested' tear_off='true' shortcut_pad='23'>"
             "<menu_item_check name='action' label='Action' shortcut='control|J'><on_click function='Do'/>"
             "<on_check function='Checked' parameter='state'/><on_enable function='Enabled' parameter='state'/>"
             "</menu_item_check></menu></menu></menu_bar>",loadFont(),nullptr,{},false,error);
@@ -1114,8 +1154,19 @@ namespace tut
         enabled=true;
         menu->key(LLVKMenu::Key::Activate); menu->key(LLVKMenu::Key::Down);
         ensure("right enters selected submenu",menu->key(LLVKMenu::Key::Right));
-        menu->key(LLVKMenu::Key::Down); menu->key(LLVKMenu::Key::Return);
+        menu->key(LLVKMenu::Key::Down);
+        LLVKWidgetPaint activationLayout;
+        menu->setTime(5.0);
+        ensure("activation row has published geometry",menu->paint(activationLayout,{0,0,500,500},error));
+        menu->key(LLVKMenu::Key::Return);
         ensure_equals("submenu invokes leaf action",calls,1);
+        menu->setTime(5.15);
+        LLVKWidgetPaint activationPaint;
+        ensure("activated item persists after menu closes",menu->paint(activationPaint,{0,0,500,500},error));
+        menu->setTime(5.301);
+        LLVKWidgetPaint expiredPaint;
+        ensure("activated item expires",menu->paint(expiredPaint,{0,0,500,500},error));
+        ensure_equals("activation overlay has background, checked state, label and shortcut",activationPaint.commands.size(),expiredPaint.commands.size()+4);
         const auto found=std::find_if(menu->items().begin(),menu->items().end(),[](const auto& item) { return item.name=="action"; });
         const auto index=static_cast<std::size_t>(found-menu->items().begin());
         ensure("check predicate sees current state",menu->itemChecked(index));
@@ -1124,6 +1175,40 @@ namespace tut
         menu->key(LLVKMenu::Key::Left); menu->key(LLVKMenu::Key::Right);
         menu->key(LLVKMenu::Key::Down); menu->key(LLVKMenu::Key::Return);
         ensure_equals("left returns to parent submenu selection",calls,2);
+        ensure("tear-off declaration retained",menu->items()[1].canTearOff);
+        ensure_equals("shortcut padding retained",menu->items()[1].shortcutPad,23);
+        ensure("undeclared root cannot detach",!menu->detachedView(0,error));
+        auto detached=menu->detachedView(1,error);
+        ensure(error,detached!=nullptr);
+        ensure("detached view owns presentation",detached->detached() && detached->open());
+        menu->bind("Do",[&](const auto&,const auto&) { calls+=10; });
+        detached->key(LLVKMenu::Key::Down); detached->key(LLVKMenu::Key::Return);
+        ensure_equals("detached action uses live binding",calls,12);
+        ensure("detached command preserves presentation",detached->open());
+        enabled=false;
+        detached->key(LLVKMenu::Key::Down); detached->key(LLVKMenu::Key::Return);
+        ensure_equals("detached predicate suppresses action",calls,12);
+        checked=true;
+        ensure("detached check state stays live",detached->itemChecked(index));
+        LLVKWidgetPaint basePaint,popupPaint;
+        ensure("detached base paints with floater",detached->paint(basePaint,{0,0,500,500},error,LLVKWidgetTree::Rect{10,10,250,200},false));
+        ensure("detached popup pass prepares hits",detached->paint(popupPaint,{0,0,500,500},error,LLVKWidgetTree::Rect{10,10,250,200},true));
+        ensure("detached content not duplicated over other floaters",!basePaint.commands.empty() && popupPaint.commands.empty());
+        LLVKWidgetPaint translucent;
+        ensure("menu background alpha paints",detached->paint(translucent,{0,0,500,500},error,LLVKWidgetTree::Rect{10,10,250,200},false,{},.5f));
+        ensure_equals("background opacity is quantized",translucent.commands.front().color[3],127.f/255.f);
+        const auto label=std::find_if(translucent.commands.begin(),translucent.commands.end(),[](const auto& command) { return command.text.has_value(); });
+        ensure("menu alpha leaves text opaque",label!=translucent.commands.end() && label->color[3]==1.f);
+        menu->setVisible("action",false);
+        ensure("detached visibility stays live",!detached->itemVisible(index));
+        const auto hiddenSize=detached->menuSize(1,error);
+        ensure("hidden item removes its menu height",hiddenSize && hiddenSize->second==4);
+        enabled=true; menu->setVisible("action",true);
+        const auto shownSize=detached->menuSize(1,error);
+        ensure("live item updates menu extent",shownSize && shownSize->first>hiddenSize->first && shownSize->second>hiddenSize->second);
+        menu.reset();
+        detached->key(LLVKMenu::Key::Down); detached->key(LLVKMenu::Key::Return);
+        ensure_equals("shared model outlives original presentation",calls,22);
     }
 
     template<> template<> void object::test<193>()
@@ -1201,6 +1286,84 @@ namespace tut
         menu.key(LLVKMenu::Key::Right); menu.key(LLVKMenu::Key::Down); menu.key(LLVKMenu::Key::Down);
         ensure("original logging submenu invokes shared logger",menu.key(LLVKMenu::Key::Return));
         ensure("logging level really changed",LLError::getDefaultLevel()==LLError::LEVEL_INFO);
+        menu.key(LLVKMenu::Key::Activate);
+        ensure("tear-off popup layout",ui->preparePaint({},error).has_value());
+        const auto viewport=ui->tree().screenRect(ui->root(),error);
+        ensure("tear-off viewport",viewport.has_value());
+        const int tearY=viewport->top-18-7;
+        ensure("press declared tear-off",ui->menuPointer({LLVKWidgetTree::PointerKind::LeftDown,20,tearY}));
+        ensure("detach declared menu",ui->menuPointer({LLVKWidgetTree::PointerKind::LeftUp,20,tearY}));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        const auto torn=ui->find("native_torn_menu_0");
+        const auto content=ui->find("torn_menu_content",torn);
+        ensure("detached floater owns menu",torn && content && ui->tree().get(content)->menu->detached());
+        ensure("detached receives keyboard focus",ui->tree().keyboardFocus()==content);
+        const auto detachedMenu=ui->tree().get(content)->menu;
+        ensure("sample initial detached hover",ui->updateMenuHover({LLVKWidgetTree::PointerKind::Hover,20,tearY},error));
+        const auto firstHoverSelection=detachedMenu->selectedItem();
+        ensure("sample stationary detached hover",ui->updateMenuHover({LLVKWidgetTree::PointerKind::Hover,20,tearY},error));
+        ensure("stationary hover preserves selection",detachedMenu->selectedItem()==firstHoverSelection);
+        const auto initialTornRect=ui->tree().get(torn)->params.rect;
+        ensure_equals("detached starts within screen",initialTornRect.left,0);
+        ensure_equals("detached initial fit stays below menu strip",initialTornRect.top,viewport->top-19);
+        LLVKWidgetPaint::Input animation;
+        animation.button.frameDelta=.05f;
+        ensure("detached header animates",ui->preparePaint(animation,error).has_value());
+        const auto animatedTornRect=ui->tree().get(torn)->params.rect;
+        ensure_equals("tear-off half-life rounds height up",animatedTornRect.top-animatedTornRect.bottom,
+            initialTornRect.top-initialTornRect.bottom+13);
+        ensure_equals("tear-off grows after the screen constraint",animatedTornRect.top,viewport->top-19+13);
+        ensure_equals("animation retains menu origin",ui->tree().get(content)->params.rect.bottom,1);
+        ensure("detached paints",ui->preparePaint({},error).has_value());
+        const auto initialHeight=initialTornRect.top-initialTornRect.bottom;
+        auto currentBounds=ui->tree().get(torn)->params.rect;
+        ensure_equals("zero-delta redraw retains animation height",currentBounds.top-currentBounds.bottom,initialHeight+13);
+        int previousGrowth=13;
+        for (const auto expectedGrowth : {19,22,24,25,25})
+        {
+            ensure("controlled tear-off update",ui->preparePaint(animation,error).has_value());
+            currentBounds=ui->tree().get(torn)->params.rect;
+            ensure_equals("source-rounded height at matching update",currentBounds.top-currentBounds.bottom,initialHeight+expectedGrowth);
+            ensure_equals("controlled update retains menu child origin",ui->tree().get(content)->params.rect.bottom,1);
+            ensure_equals("controlled growth follows constraint",currentBounds.top,viewport->top-19+expectedGrowth-previousGrowth);
+            previousGrowth=expectedGrowth;
+        }
+        ensure("reset tear-off geometry for alternate schedule",ui->tree().setShape(torn,initialTornRect,error));
+        animation.button.frameDelta=.01f;
+        for (const auto expectedGrowth : {4,7,10,12,14})
+        {
+            ensure("controlled ten-millisecond update",ui->preparePaint(animation,error).has_value());
+            currentBounds=ui->tree().get(torn)->params.rect;
+            ensure_equals("per-update rounding follows source schedule",currentBounds.top-currentBounds.bottom,initialHeight+expectedGrowth);
+        }
+        ensure("equal elapsed time can have different rounded state",
+            currentBounds.top-currentBounds.bottom!=animatedTornRect.top-animatedTornRect.bottom);
+        const auto fullMenu=ui->tree().get(content)->params.rect;
+        menu.setVisible("Preferences...",false);
+        ensure("detached visibility resizes owner",ui->preparePaint({},error).has_value());
+        ensure("detached hidden row reduces height",ui->tree().get(content)->params.rect.top<fullMenu.top);
+        menu.setVisible("Preferences...",true);
+        ensure("detached visible row restores owner",ui->preparePaint({},error).has_value());
+        ensure_equals("detached menu height restored",ui->tree().get(content)->params.rect.top,fullMenu.top);
+        ensure("title focus",ui->tree().setKeyboardFocus(torn,false,false,error));
+        ensure("title focus routes keys to detached menu",&ui->menu()==ui->tree().get(content)->menu.get());
+        unsigned shortcutCalls=0;
+        menu.bindItem("Floater.Toggle","preferences",[&](const auto&,const auto&) { ++shortcutCalls; });
+        ensure("global shortcut survives detached focus",ui->menuShortcut("P",true,false,false) && shortcutCalls==1);
+        ensure("global shortcut preserves detached owner",ui->tree().get(torn)->params.visible);
+        const auto tornWidth=animatedTornRect.right-animatedTornRect.left;
+        ensure("move torn menu outside viewport",ui->tree().setShape(torn,{-tornWidth,100,0,185},error));
+        ensure("constrain torn menu",ui->preparePaint({},error).has_value());
+        ensure_equals("source sixteen-pixel overlap remains visible",ui->tree().get(torn)->params.rect.right,16);
+        ensure("outside detached menu is not swallowed",!ui->menuPointer({LLVKWidgetTree::PointerKind::LeftDown,500,100}));
+        ensure("close detached floater",ui->closeFloater(error) && !ui->tree().get(torn)->params.visible);
+        menu.key(LLVKMenu::Key::Activate);
+        ensure("reattached popup paints",ui->preparePaint({},error).has_value());
+        ui->menuPointer({LLVKWidgetTree::PointerKind::LeftDown,20,tearY});
+        ui->menuPointer({LLVKWidgetTree::PointerKind::LeftUp,20,tearY});
+        const auto reopened=ui->find("native_torn_menu_0");
+        ensure("detach renews closed presentation",reopened && reopened!=torn && !ui->tree().get(torn) && ui->tree().get(reopened)->params.visible);
+        ensure("close renewed detached floater",ui->closeFloater(error));
         for (std::size_t index=0; index<menu.items().size(); ++index)
             if (menu.items()[index].checkAction=="Develop.CheckLoggingLevel")
                 ensure("original logging radio checks follow service",menu.itemChecked(index)==(menu.items()[index].checkParameter=="1"));
@@ -1460,17 +1623,19 @@ namespace tut
         LLVKWidgetPaint::Input input;
         input.searchBackground=LLVKColor{0.25f,0.5f,0.75f,1.f};
         input.searchFont=LLVKColor{0.75f,0.25f,0.5f,1.f};
+        const LLVKColor::Value encodedBackground{63.f/255.f,127.f/255.f,191.f/255.f,1.f};
         ensure("set transient highlights",tree.setSearchHighlighted(*action,true) && tree.setSearchHighlighted(*label,true));
         const auto paint=LLVKWidgetPaint::prepare(tree,*root,input,error); ensure(error,paint.has_value());
         ensure("button uses search font color",std::any_of(paint->commands.begin(),paint->commands.end(),[&](const auto& command)
         { return command.owner==*action && command.text && command.color==input.searchFont.get(); }));
         ensure("text uses search background color",std::any_of(paint->commands.begin(),paint->commands.end(),[&](const auto& command)
-        { return command.owner==*label && !command.text && command.color==input.searchBackground.get(); }));
+        { return command.owner==*label && !command.text && command.color==encodedBackground &&
+            command.rectangle.right-command.rectangle.left<rectangle.right-rectangle.left; }));
         ensure("highlight does not change value or geometry",llsd_equals(tree.value(*label),original) && tree.get(*label)->params.rect==rectangle);
         ensure("clear highlights",tree.setSearchHighlighted(*action,false) && tree.setSearchHighlighted(*label,false));
         const auto cleared=LLVKWidgetPaint::prepare(tree,*root,input,error); ensure(error,cleared.has_value());
         ensure("highlight background removed",std::none_of(cleared->commands.begin(),cleared->commands.end(),[&](const auto& command)
-        { return command.owner==*label && !command.text && command.color==input.searchBackground.get(); }));
+        { return command.owner==*label && !command.text && command.color==encodedBackground; }));
     }
 
     template<> template<> void object::test<187>()
@@ -2359,6 +2524,9 @@ namespace tut
         ensure("clear search restores tabs",tree.clearSearchEditor(search,error));
         ensure("all root tabs restored",tree.get(core)->tabContainer->hiddenPanels.empty());
         ensure("clear removes all search highlights",std::all_of(searchNodes.begin(),searchNodes.end(),[&](auto id) { return !tree.get(id) || !tree.get(id)->searchHighlighted; }));
+        ensure("typed Preferences query",tree.lineEditorUnicode(tree.get(search)->searchEditor->editor,U'a',error));
+        ensure("typing filters without explicit commit",std::any_of(searchNodes.begin(),searchNodes.end(),[&](auto id) { return tree.get(id) && tree.get(id)->searchHighlighted; }));
+        ensure("clear typed query",tree.clearSearchEditor(search,error));
         struct Clipboard final : LLVKClipboard
         {
             std::u32string value;
@@ -2401,6 +2569,35 @@ namespace tut
         ensure("search does not persist tab choice",!savedPreferences.contains("LastPrefTab") && tree.setting("LastPrefTab")->asInteger()==savedTab);
         ensure("clear retained search",tree.clearSearchEditor(search,error));
         ensure("reopen original saved tab",ui->showPreferences(error) && tree.get(core)->tabContainer->selected==backup);
+        LLVKWidgetTree::Params swatchView; swatchView.rect={10,10,90,70};
+        LLVKControl::Params swatchControl; swatchControl.font=tree.get(preferences)->control->params.font;
+        LLVKWidgetTree::ColorSwatchParams swatchParams; swatchParams.color=LLVKColor{.4f,.5f,.6f,1.f};
+        const auto swatch=tree.createColorSwatch(swatchView,swatchControl,swatchParams,preferences,error);
+        ensure(error,swatch.has_value());
+        ensure("Preferences-owned picker opens",ui->showColorPicker(*swatch,true,error));
+        const auto picker=ui->activeFloater();
+        ensure("focus swatch before opening child",tree.requestControlFocus(*swatch,true,error));
+        ensure("child takes focus",tree.requestControlFocus(picker,true,error));
+        ensure_equals("parent remembers focused swatch",tree.lastFocusForGroup(preferences),*swatch);
+        ensure("reactivate parent",ui->showPreferences(error));
+        ensure_equals("parent restores swatch instead of first editor",tree.keyboardFocus(),*swatch);
+        const auto parentBefore=tree.get(preferences)->params.rect;
+        const auto pickerBefore=tree.get(picker)->params.rect;
+        LLVKWidgetTree::PointerEvent drag;
+        drag.kind=LLVKWidgetTree::PointerKind::LeftDown;
+        drag.x=parentBefore.left+50; drag.y=parentBefore.top-12;
+        ensure("parent title captures drag",ui->floaterPointer(drag,error));
+        drag.kind=LLVKWidgetTree::PointerKind::Hover; drag.x+=20; drag.y-=20;
+        ensure("parent drag moves dependents",ui->floaterPointer(drag,error));
+        const auto parentAfter=tree.get(preferences)->params.rect;
+        ensure_equals("picker follows parent horizontal delta",tree.get(picker)->params.rect.left-pickerBefore.left,parentAfter.left-parentBefore.left);
+        ensure_equals("picker follows parent vertical delta",tree.get(picker)->params.rect.bottom-pickerBefore.bottom,parentAfter.bottom-parentBefore.bottom);
+        drag.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("parent drag releases capture",ui->floaterPointer(drag,error));
+        ensure("close parent through title button",tree.commit(ui->find("floater_close",preferences)));
+        ensure(ui->dialogError(),ui->dialogError().empty());
+        ensure("parent closure hides dependent picker",!tree.get(preferences)->params.visible && !tree.get(picker)->params.visible);
+        ensure("parent closure ends picker transaction",!tree.get(*swatch)->colorSwatch->picking);
     }
 
     template<> template<> void object::test<170>()
@@ -5372,6 +5569,21 @@ namespace tut
         ensure("mask restored",tree.get(password)->lineEditor->params.text.password);
         ensure_equals("toggle preserves password value",tree.value(password).asString(),std::string("mask-test"));
         ensure_equals("toggle preserves cursor",tree.get(password)->lineEditor->text.cursor(),cursor);
+        const auto recovery=tree.get(link)->plainText->params.clicked;
+        const auto signup=tree.get(login->find("create_new_account_text"))->plainText->params.clicked;
+        ensure("login links have native actions",bool(recovery) && bool(signup));
+        recovery(link);
+        ensure("missing external service is explicit",!login->takeDialogError().empty());
+        std::string externalUrl,internalUrl;
+        login->setOpenUrl([&](const auto& url) { externalUrl=url; });
+        recovery(link);
+        ensure_equals("recovery uses original panel URL",externalUrl,tree.get(login->root())->panel->params.strings.at("forgot_password_url"));
+        login->setGuidebookService([&](auto,const auto& url,std::string&) { internalUrl=url; return true; },[](auto) {});
+        login->setBrowserCommand([](auto,const auto&,const auto&,std::string&) { return true; });
+        signup(login->find("create_new_account_text"));
+        ensure(login->dialogError(),login->dialogError().empty());
+        ensure("signup opens internal web browser",!internalUrl.empty() && login->find("webbrowser",login->activeFloater()));
+        ensure("signup does not use external launcher",externalUrl==tree.get(login->root())->panel->params.strings.at("forgot_password_url"));
     }
 
     template<> template<> void object::test<126>()
@@ -5425,6 +5637,34 @@ namespace tut
         ensure(error,selected.has_value());
         ensure("selection background uses byte color",std::any_of(selected->parts.begin(),selected->parts.end(),[](const auto& part)
         { return !part.image && !part.text && part.color==LLVKColor::Value{142.f/255.f,91.f/255.f,63.f/255.f,191.f/255.f}; }));
+        input.useEditorClock=true;
+        input.applicationFocused=true;
+        ensure("advance editor clock",tree.advanceTime(10.,error));
+        ensure("focus moves away",tree.setKeyboardFocus(0,false,false,error));
+        ensure("focus starts editor clock",tree.requestControlFocus(*editor,true,error));
+        const auto caretAt=[&](double time)
+        {
+            ensure("advance owned caret time",tree.advanceTime(time,error));
+            const auto draw=tree.prepareLineEditor(*editor,input,error);
+            ensure(error,draw.has_value());
+            return draw->caretVisible;
+        };
+        ensure("focus delay stays visible",caretAt(10.999));
+        ensure("one second starts dark half-cycle",!caretAt(11.0));
+        input.secondsSinceKeystroke=0;
+        ensure("unrelated window timer cannot reset editor",!caretAt(11.25));
+        ensure("half-second resumes visible phase",caretAt(11.5));
+        ensure("accepted character resets owned clock",tree.lineEditorUnicode(*editor,U'x',error));
+        ensure("character restarts full delay",caretAt(12.499));
+        ensure("character delay expires",!caretAt(12.5));
+        ensure("cursor navigation resets owned clock",tree.lineEditorKey(*editor,LLVKLineEditor::Key::Left,{},error));
+        ensure("navigation restarts caret",caretAt(12.5));
+        const auto other=tree.createLineEditor(view,control,params,0,error);
+        ensure(error,other.has_value());
+        ensure("other editor receives focus",tree.requestControlFocus(*other,true,error));
+        ensure("first editor retains its own reset timestamp",tree.get(*editor)->lineEditor->caretResetTime==12.5);
+        ensure("later refocus uses current time",tree.advanceTime(15.,error) && tree.requestControlFocus(*editor,true,error));
+        ensure("refocus restarts delay",caretAt(15.999));
     }
 
     template<> template<> void object::test<125>()
@@ -5475,9 +5715,35 @@ namespace tut
         hover.kind=LLVKWidgetTree::PointerKind::Hover; hover.x=10; hover.y=10;
         tree.routePointer(*button,hover,error);
         ensure("hover marks button",tree.get(*button)->button->highlighted);
+        input.frameDelta=.05f;
+        for (const auto expectedGlow : {.25f,.375f,.4375f})
+        {
+            const auto glow=tree.prepareButton(*button,input,error);
+            ensure(error,glow.has_value());
+            ensure_equals("controlled glow rise at each half-life",tree.get(*button)->button->glow,expectedGlow);
+            ensure_equals("controlled glow draw alpha",glow->primitives.back().color[3],
+                static_cast<std::uint8_t>(expectedGlow*input.drawAlpha*255.f)/255.f);
+        }
+        input.frameDelta=0.f;
+        ensure("zero-time glow redraw",tree.prepareButton(*button,input,error).has_value());
+        ensure_equals("zero-time redraw does not advance glow",tree.get(*button)->button->glow,.4375f);
         hover.x=150;
         ensure("departed button hover reconciles",tree.updatePointerHover(*button,hover,error));
         ensure("departure clears button highlight",!tree.get(*button)->button->highlighted);
+        LLVKWidgetTree::PointerEvent captured=hover;
+        captured.x=10; captured.kind=LLVKWidgetTree::PointerKind::LeftDown;
+        ensure("capture hover fixture",tree.routePointer(*button,captured,error));
+        captured.x=150; captured.kind=LLVKWidgetTree::PointerKind::Hover;
+        ensure("captured pointer may leave button bounds",tree.routePointer(*button,captured,error));
+        captured.kind=LLVKWidgetTree::PointerKind::LeftUp;
+        ensure("release outside button",tree.routePointer(*button,captured,error));
+        ensure("outside release clears captured hover",!tree.get(*button)->button->highlighted);
+        input.frameDelta=.05f;
+        for (const auto expectedGlow : {.21875f,.109375f,.0546875f})
+        {
+            ensure("controlled glow decay",tree.prepareButton(*button,input,error).has_value());
+            ensure_equals("controlled glow decay at each half-life",tree.get(*button)->button->glow,expectedGlow);
+        }
         view.rect={0,0,200,100};
         const auto hoverRoot=tree.create(view,0,error);
         ensure(error,hoverRoot.has_value());
@@ -5491,6 +5757,13 @@ namespace tut
         ensure("opaque hover reconciliation",tree.updatePointerHover(*hoverRoot,hover,error));
         ensure("covering view clears underlying highlight",!tree.get(*button)->button->highlighted);
         ensure("invalid hover root rejected",!tree.updatePointerHover(0,hover,error));
+        tree.setTooltip(*button,"underlying");
+        ensure_equals("opaque widget blocks underlying tooltip",tree.tooltipAt(*hoverRoot,10,10,error).value_or(*button),LLVKWidgetTree::Id(0));
+        tree.setTooltip(*hoverRoot,"parent");
+        ensure_equals("parent tooltip survives opaque child without tooltip",tree.tooltipAt(*hoverRoot,10,10,error).value_or(0),*hoverRoot);
+        tree.setTooltip(*cover,"cover"); tree.setEnabled(*cover,false);
+        ensure_equals("disabled child overrides parent tooltip",tree.tooltipAt(*hoverRoot,10,10,error).value_or(0),*cover);
+        ensure("invalid tooltip root rejected",!tree.tooltipAt(0,10,10,error));
         params.images.overlay=LLVKWidgetImage::fromRgba("overlay",2,2,std::array<std::uint8_t,16>{},error);
         ensure(error,params.images.overlay!=nullptr);
         params.isToggled={};
@@ -9917,6 +10190,19 @@ namespace tut
         LLVKPlainTextLayout::Options options;
         options.width = 100;
         options.horizontalPadding = 2;
+        bool checkedOverhang=false;
+        for (char32_t character=U'!';character<=U'~';++character)
+        {
+            const std::u32string sample(1,character);
+            const auto advance=font->measureRun(sample,0,1,1.f,false,false,error);
+            const auto padded=font->measureRun(sample,0,1,1.f,true,false,error);
+            const auto lines=LLVKPlainTextLayout::plain(sample,*font,options,error);
+            ensure(error,advance && padded && lines);
+            ensure_equals("plain segment width excludes raster overhang",lines->front().right-lines->front().left,
+                static_cast<int>(std::ceil(advance->width)));
+            checkedOverhang|=std::ceil(padded->width)>std::ceil(advance->width);
+        }
+        ensure("plain-width regression exercises an overhanging glyph",checkedOverhang);
         const auto height = static_cast<std::int32_t>(std::ceil(font->metrics().ascender)+std::ceil(font->metrics().descender));
         auto document = LLVKPlainTextLayout::document(U"X",*font,options,100,3,LLVKFont::VerticalAlign::Top,error);
         ensure(error,document.has_value());

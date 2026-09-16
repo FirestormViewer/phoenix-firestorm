@@ -20,6 +20,8 @@ struct LLVKWindowMgr
         std::function<void(LLVKViewerUi&)> bindServices;
         LLVKViewerUi::HelpContext helpContext;
         std::function<void(LLVKViewerUi&,const LLVKWidgetPaint::Input&)> presentedFrame;
+        std::function<std::optional<double>(double)> diagnosticFrameTime;
+        std::function<void(const char*,double)> diagnosticTiming;
         LLVKTextureCache* textureCache=nullptr;
         LLVKSessionOwner* sessionOwner=nullptr;
         LLVKError::Code* failureCode=nullptr;

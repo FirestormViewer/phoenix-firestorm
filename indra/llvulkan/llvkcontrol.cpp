@@ -699,6 +699,7 @@ bool LLVKWidgetTree::requestControlFocus(Id id, bool focus, std::string& error)
         node = get(id);
     }
     if (!node->params.enabled) return true;
+    if (focus && node->lineEditor) mNodes.at(id).lineEditor->caretResetTime=mTime;
     if (focus && node->panel && !hasAncestor(mKeyboardFocus,id))
     {
         if (!setKeyboardFocus(id,false,false,error)) return false;

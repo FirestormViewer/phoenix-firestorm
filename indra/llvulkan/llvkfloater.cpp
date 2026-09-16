@@ -89,8 +89,8 @@ bool LLVKFloater::createChrome(LLVKWidgetFactory& factory,const std::string& tit
     mCloseButton=*close;
     tree.setVisible(*close,mCanClose);
     if (mCanResize && !factory.construct(tree,
-        "<icon name='floater_resize_corner' layout='bottomleft' left='"+std::to_string(width-16)+
-        "' bottom='0' width='16' height='16' follows='right|bottom' mouse_opaque='false' image_name='Resize_Corner'/>",id,error)) return false;
+        "<icon name='floater_resize_corner' layout='bottomleft' left='"+std::to_string(width-11)+
+            "' bottom='0' width='11' height='11' follows='right|bottom' mouse_opaque='false' image_name='Resize_Corner'/>",id,error)) return false;
     LLVKControl::Callback callback;
     callback.function = [this](auto,const LLSD&) { std::string problem; this->close(problem); };
     tree.setControlCommit(*close,std::move(callback));
@@ -203,6 +203,9 @@ bool LLVKFloater::open(std::string& error,std::optional<LLVKWidgetTree::Rect> pl
     if (!mTree.reparent(mId,mRoot,false,0,error)) return false;
     if (mTree.topControl() && !mTree.setTopControl(0,error)) return false;
     mTree.setVisible(mId,true);
+    mControlActive=true;
+    if (const auto previous=mTree.lastFocusForGroup(mId))
+        return mTree.requestControlFocus(previous,true,error);
     return mTree.requestControlFocus(mId,true,error);
 }
 bool LLVKFloater::close(std::string& error)
@@ -211,6 +214,7 @@ bool LLVKFloater::close(std::string& error)
     if (!visible()) return true;
     if (mMinimized && !setMinimized(false,error)) return false;
     const auto callback = mClose;
+    if (mCloseDependents && !mCloseDependents(error)) return false;
     for (Id capture = mTree.mouseCapture(); capture && mTree.get(capture); capture = mTree.get(capture)->parent)
         if (capture == mId) { mTree.setMouseCapture(0,error); break; }
     mDragging = false;
@@ -218,7 +222,8 @@ bool LLVKFloater::close(std::string& error)
     for (Id popup = mTree.topControl(); popup && mTree.get(popup); popup = mTree.get(popup)->parent)
         if (popup == mId) { mTree.setTopControl(0,error); break; }
     mTree.setVisible(mId,false);
-    const bool focused = mTree.get(mPreviousFocus) ? mTree.requestControlFocus(mPreviousFocus,true,error) :
+    mControlActive=false;
+    const bool focused = mCloseFocus ? mCloseFocus(error) : mTree.get(mPreviousFocus) ? mTree.requestControlFocus(mPreviousFocus,true,error) :
         mTree.setKeyboardFocus(0,false,false,error);
     if (callback) callback();
     return focused;

@@ -122,6 +122,7 @@ void LLVKWidgetTree::eraseSubtree(Id id)
     auto& node = mNodes.at(id);
     for (Id child : node.children) eraseSubtree(child);
     mEvents.erase(id);
+    mLastGroupFocus.erase(id);
     std::erase(mFocusChain,id);
     if (mKeyboardFocus == id) mKeyboardFocus = 0;
     if (mMouseCapture == id) mMouseCapture = 0;
@@ -206,6 +207,8 @@ bool LLVKWidgetTree::canReceiveFocus(Id id) const noexcept
 
 void LLVKWidgetTree::notify(Id id, std::function<void(Id)> Events::* event)
 {
+    if (event==&Events::focusReceived && get(id) && get(id)->lineEditor)
+        mNodes.at(id).lineEditor->caretResetTime=mTime;
     if (event==&Events::focusLost && get(id) && get(id)->textEditor &&
         get(id)->textEditor->commitOnFocusLost && canReceiveFocus(id))
     { std::string error; commitTextEditor(id,error); }
@@ -264,8 +267,18 @@ bool LLVKWidgetTree::setKeyboardFocus(Id id, bool lock, bool keystrokesOnly, std
         }
     }
     if (mFocusEpoch != epoch) return true;
+    for (auto ancestor=mKeyboardFocus; get(ancestor); ancestor=get(ancestor)->parent)
+        if (get(ancestor)->params.focusRoot) mLastGroupFocus[ancestor]=mKeyboardFocus;
     if (lock) mLockedFocus = mKeyboardFocus;
     return true;
+}
+
+LLVKWidgetTree::Id LLVKWidgetTree::lastFocusForGroup(Id group) const noexcept
+{
+    const auto found=mLastGroupFocus.find(group);
+    if (found==mLastGroupFocus.end() || !get(found->second) || !hasAncestor(found->second,group) ||
+        !visibleInChain(found->second) || !enabledInChain(found->second)) return 0;
+    return found->second;
 }
 
 bool LLVKWidgetTree::setMouseCapture(Id id, std::string& error)

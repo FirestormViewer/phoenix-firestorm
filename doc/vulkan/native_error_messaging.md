@@ -1,5 +1,448 @@
 # Native error messaging
 
+## Gates 1-3 continuation (2026-09-16)
+
+The user requested closure of controlled effects, fractional interactions and
+external/Help workflows. This request is NOT complete. The following supersedes
+older pending statements only for the explicitly measured states.
+
+### Controlled effects evidence
+
+GLgl-controlled-effects-90 versus native-controlled-shadow-188 matches all54
+full-frame samples, two at each of27 controlled checkpoints. These cover tear-off,
+menu activation feedback, first Preferences paint, Help-button hover rise/decay,
+search-editor focus and blink, tooltip appearance, typed search and deletion,
+button press and release outside. Inputs, update timestamps and frame deltas are
+shared, with no image transformation, masking or tolerance. The sequence records
+29 states including its two ordinary preparation states. This is a bounded matrix,
+not proof of every animation family or of fractional interactions.
+
+- GL diagnostic SHA256:1DFD3ACCFAB4472D957FA240E0CD139B7D7473A72252FC8D545AB7275787CE8B.
+- Native188 SHA256:02E9D013FA8965FEB50F763BE44084DD1F913502E1DF1AD99F36F899011F926B.
+- Request SHA256:0FBD03AA884CEAFFE3FD7C5963B835F08F33D7F2B6A0605E835CE742E25DF411.
+- Matrix:glref-build/captures/native-controlled-shadow-188/controlled-comparison.json.
+- Both fixtures exited zero; GL recorded Goodbye, native passed Window7.
+
+NV-00/01/02/09/11/12/17 source/design record: LLMenuHolderGL::draw and
+setActivatedItem retain the live selected row for0.3seconds. Native LLVKMenu
+retains its item identity, geometry and activation time in the shared native model,
+then emits native paint commands with live checked/visible state. LLTabContainer
+draw positions buttons AFTER child rendering; selection/visibility update state
+without publishing next-frame positions early. Initial vertical positions retain
+the last configuration-excluded declaration slot, matching ordered source removal.
+LLFloaterPreference::postBuild installs a search keystroke callback in addition to
+commit; native now does likewise and searches outer controls/tab buttons as well
+as content. Text highlights use document bounds and encoded solid colors.
+LLFontGL::render derives soft-shadow strength from HSL lightness; native widget GPU
+text now does so, leaving atlas publication/retirement unchanged. Outside button
+release clears stale captured hover. Focused Widget210 and GPU10 tests passed.
+
+LLView::handleToolTip/childrenHandleToolTip, LLToolTipMgr::show/createToolTip/
+updateToolTipVisibility, LLToolTip::draw and LLUI::positionViewNearMouse define
+ordinary tooltip selection, delay, geometry and fade. Native tooltip selection
+permits disabled controls and respects child precedence/opaque overlap. A separate
+native widget subtree uses the Tooltip skin image and native text layout. Its
+captured visible and keyboard-fade states match the GL matrix. Callback/media
+tooltips, all edge-exclusion cases, skin-default overrides, timeout variants,
+mouse-leave and full activation/modal policy are not exhaustively qualified by
+this plain-text implementation. These remain explicit obligations, not closure.
+
+### Fractional interaction blocker
+
+Shared dialog input now accepts the request's UI scale and converts input positions
+around the menu/centered-dialog anchors. RGBA captures are never rescaled.
+GLgl-fractional-dialog-91-125 is the retained125-percent pinned reference; request
+SHA256:8856F385AD69C2A661B8098A6BA5BDE0FA57C2612BB5BC6CEA6C34879C8244EF.
+Native189 failed an obsolete100-percent fixture assertion. Dialog-only fractional
+requests are now allowed; the browser-only restriction remains.
+
+Native190 Colors differed7285pixels. Nearest-integer tab widths, matching
+LLFontGL::getWidth, plus native physical-pixel border meshes reduced this to2349
+in191 and17 in192. Directed endpoint coverage in193 leaves12pixels different;
+an alternative endpoint tie probe194 leaves20 and was reverted. Native193 SHA256:
+7AB9471C1276EA1DBE3D1E10FB55FDE24C8DFE988ACFA8053BDA85B6B555FB47.
+All failed captures/reports are retained. The restored directed mesh is still
+an unaccepted implementation probe: the endpoint contract is not closed.
+The required three-attempt limit was reached for this corner-coverage slice.
+
+The125-percent picker192 still differs4062pixels, concentrated in its outlines,
+palette and crosshair. Other fractional menu/Preferences/movement states remain
+unqualified. Initial modal and final parent-closed frames matched, but do not
+close the interaction gate. Other scales and Help/external workflow captures have
+not been completed in this continuation. No external browser was launched.
+
+### Integration and prior feedback
+
+The real CEF login-popup and same-window hyperlink sequence passes Window7 after
+extending its overall bounded deadline from60 to90seconds; its preceding stages
+already consumed most of the earlier deadline. Native login signup/recovery
+callbacks and login-popup event dispatch are implemented; custom schemes and
+OpenSim-specific URLs remain outside that evidence.
+
+Earlier opt-in timing captures178-180 measured the session-refresh guard change
+from2.37939ms to about0.0013ms per update, with checked dialog frames unchanged.
+Prelogin shutdown measured about689ms: browser567ms and audio122ms. No shutdown
+optimization or full-session performance acceptance is claimed.
+
+Latest Widget210 passes after removing the failed tie probe. Window7 passed with
+the preceding probe binary; the restored source still needs its final integration
+build. GPU10 passed the color-dependent shadow regression. Production viewer has
+NOT been relinked with this continuation; the user-accepted CTD-fixed binary is
+not replaced or requalified by these fixtures. No new commit or push was made.
+
+## RelWithDebInfo startup CTD (2026-09-16)
+
+The user reprioritized investigation of the full-viewer Vulkan crash ahead of
+the remaining parity gates. CDB reproduced an unhandled access violation
+(0xC0000005) during LLVKContext::createSwapchain, in vkGetSwapchainImagesKHR.
+The stack passes through VkLayer_api_dump, Khronos validation and amdvlk64.
+Evidence is retained locally in logs/native-rwdi-ctd-01.log. The older normal
+profile logs ended with Goodbye and were not evidence of this native startup crash.
+An initial LLDB attempt crashed inside the debugger's LLVM/PDB handling; that
+debugger failure is separate from the reproduced viewer fault.
+
+NV-00/03/15/17: the relevant owner is LLVKContext::createInstance. This is native
+Vulkan instance configuration, with no OpenGL visual counterpart to reuse or alter.
+The validation flag previously requested both VK_LAYER_KHRONOS_validation and,
+whenever installed, VK_LAYER_LUNARG_api_dump. API dump is optional call tracing,
+not validation. Automatically enabling it made ordinary startup depend on an
+installed tracing layer. Existing GPU/window test tasks suppressed this layer,
+so their passes did not exercise the failing full-viewer configuration.
+
+The fix removes automatic API-dump selection while retaining Khronos validation
+and debug-utils reporting. Explicit loader-based tracing remains possible; no
+global environment or installed layer was disabled. The GPU regression asserts
+that Khronos validation is loaded and API dump is not. A local Default Layer
+Validation task clears layer enable/disable overrides and passes all10 GPU tests.
+The production llvulkan library was rebuilt and the RelWithDebInfo viewer relinked.
+No shader, swapchain format, resource ownership or OpenGL implementation changed.
+
+Full-viewer verification under CDB used the same explicit RenderBackend=Vulkan
+launch without API-dump suppression. It passed swapchain creation and reached
+LLVKContext::end2DFrame. The loaded-layer list contains Khronos validation and
+does not contain API dump. The debugger detached without terminating the viewer;
+the Vulkan window remained responsive for manual interaction. Evidence is in
+logs/native-rwdi-ctd-fixed-02.log. Corrected executable SHA256:
+F7A9472DE79CBF5F7A50BC200127F3FEB9DAAA1D58F62DF67F637C10C386101E.
+
+This verifies removal of the reproduced startup CTD. It does not identify the
+internal defect within the API-dump/driver dispatch chain, nor qualify explicitly
+forced API tracing. Post-login settling and graceful full-session shutdown remain
+operator verification; no STATE_STARTED or successful full-session exit is claimed.
+
+## Approved animation acceptance (2026-09-16)
+
+### Controlled tear-off parity achieved
+
+GLgl-controlled-tearoff-89 versus native-controlled-monotonic-176 matches all14
+full-frame samples at0,50,100,150,200,250,300ms, two samples per checkpoint.
+Frames are2560x1369 RGBA8,100-percent UI scale, default skin, English, anisotropy
+off, with the recorded local rich browser page. Input is queued before the next
+controlled update. No frame alignment, crop, rescaling or tolerance was applied.
+Shared request SHA256:
+0FBD03AA884CEAFFE3FD7C5963B835F08F33D7F2B6A0605E835CE742E25DF411.
+Diagnostic GL executable SHA256:
+1DFD3ACCFAB4472D957FA240E0CD139B7D7473A72252FC8D545AB7275787CE8B.
+Native executable SHA256:
+64F501BA517F80444F87BAB3DABA4CF552312A38B4DB965D1B59BBCDF54AEA6B.
+Both runs released replay and exited zero; GL recorded Goodbye and native passed
+Window7. The pinned GL executable remains unchanged at its recorded hash.
+
+Ordinary-rendering qualification: diagnostic GLgl-timing-passthrough-87 matches
+the pinned modal and detached frames exactly; its menu image matches the pinned
+alternate caret phase. The CEF DLL matches the pinned139 runtime exactly.
+After the native corrections, native-tearoff-framehover-177 matches all four
+ordinary detached/departed samples of pinned GLgl-menu-tearoff-79.
+
+Controlled capture exposed source ordering omitted by settled-only checks.
+LLFloaterView constrains geometry before LLTearOffMenu::draw grows its height.
+Native now follows that order. The source initial two-axis fit clears hover;
+pre-clamping x had skipped this transition. Menu hover is sampled during frame
+update, with popup-local movement history retained across detachment, rather than
+selecting a row on every raw WM_MOUSEMOVE. Intermediate and ordinary captures
+both discriminate these corrections. Tests check transient bounds and stationary
+selection; Widget210 and Window7 pass.
+
+Replay protocol corrections are confined to test scheduling: immutable numbered
+acknowledgements avoid Windows file-replacement contention; completion is
+idempotent; native entry uses the last accepted widget time to remain monotonic.
+A requested native paint packet is retained through GPU readiness retries so one
+requested update cannot accidentally apply layout repeatedly before presentation.
+Standalone protocol tests and five interprocess exchanges passed. Earlier native
+165-175 diagnostic failures remain retained. Native172 had controlled equality
+but an ordinary hover regression;176/177 supersede that incomplete result.
+
+This closes the controlled tear-off intermediate-pixel comparison, not every UI
+animation or scale. Other animation families still have their recorded state tests
+and settled/runtime coverage, not a blanket controlled-pixel parity claim. Broader
+fractional interaction and external-browser acceptance obligations remain separately
+tracked; real-world stalls and latency remain performance measurements.
+
+The user approved stateful elapsed-time animation with controlled update steps.
+For NV-00/02/12/17, compare identical initial state, ordered input events and
+per-update clock values/frame deltas, then require exact state and pixels at the
+corresponding checkpoints. Matching only total elapsed time is insufficient.
+Do not match captures by unrelated frame indices, transform images, or relax the
+zero-tolerance visual criterion. The pinned GL implementation remains unchanged.
+
+The source contracts are LLSmoothInterpolation::calcInterpolant/updateInterpolants,
+LLButton::draw, LLTearOffMenu::draw and LLLineEditor::draw/focus/input resets at
+the pinned reference revision. Smoothing uses 1-pow(2,-delta/halfLife); tear-off
+height rounds upward on every update. Caret phase is relative to its own editor's
+reset event. Native already accepts frameDelta and explicit editor time, so this
+change adds controlled tests without changing production clocks or animation laws.
+
+The existing widget tests now check:
+
+- Tear-off growth at successive50ms steps:13,19,22,24,25,25 pixels toward a25-pixel
+   header expansion, retaining child origin and screen constraints.
+- Zero-delta redraw does not advance the tested animation state.
+- Five10ms updates produce4,7,10,12,14 pixels of growth, demonstrating why update
+   partitioning is part of the contract rather than just total elapsed time.
+- Button glow rises0.25,0.375,0.4375 toward0.5, then decays0.21875,0.109375,
+   0.0546875 after pointer departure, at matching50ms steps. Encoded draw alpha is
+   checked exactly as well as the retained float state.
+- Existing caret checks cover the initial one-second delay, half-second phase
+   boundaries, accepted input resets and independence from other editor clocks.
+
+Validation: Widget210/210 passes with these assertions. Expected values are
+derived from the inspected pinned source; this is not a newly executed GL GPU
+animation replay. Existing exact settled-frame evidence remains valid for its
+recorded states. Controlled paired GL/Vulkan intermediate pixel capture remains
+unverified and must not be inferred from arithmetic or paint-state tests alone.
+
+Wall-clock input latency, frame pacing and stalls are a separate performance
+track. The retained independent-run caret/animation differences remain evidence
+of their original schedules, not failures of a controlled replay they did not
+perform. No performance pass threshold or new performance pass is asserted here.
+This approval resolves the comparison-model question; it does not automatically
+close other outstanding verification gates or advance the queued crash task.
+
+### Controlled replay prerequisite
+
+The user approved an isolated timing-instrumented diagnostic fixture on2026-09-16.
+This is a narrow exception for test clock/input scheduling in a separately generated
+copy of the pinned source, not permission to edit the pinned worktree or production
+GL implementation. It must use its own build directory and executable identity.
+Uninstrumented execution must first match retained ordinary captures; only then may
+controlled checkpoints be evaluated. Rendering logic, assets and tolerances remain
+unchanged. Fixture construction and qualification are in progress, not completed.
+
+Inspection of the pinned reference's LLFrameTimer::updateFrameTime shows that it
+samples totalTime internally; its public API does not accept an injected frame
+timestamp. LLSmoothInterpolation owns a protected LLFrameTimer and cached delta.
+LLLineEditor owns and resets a separate caret timer. The existing notification
+capture driver sends input and observes mainloop events but does not control those
+clocks. Suspending a process or spacing external input cannot establish identical
+per-update timestamps across both renderers.
+
+The approved diagnostic copy is worktrees/notification-gl-timing, built separately
+in gltiming-build. Its only tracked source differences are the clock substitution
+in LLFrameTimer::updateFrameTime and a frame-entry/exit gate in LLAppViewer::doFrame.
+Both use tools/vulkan/diagnostic_replay_clock.h. The pinned reference's tracked
+sources and executable remain unchanged. The diagnostic viewer's ordinary-rendering
+comparison is still pending; its controlled frames are not qualified evidence yet.
+
+The test protocol uses atomic numbered timestamp requests, a named wake event and
+matching acknowledgements. No request means ordinary timing. A release request
+restores ordinary execution; timeout records failure and releases the gate without
+terminating the viewer. The standalone protocol test and the interprocess
+step_diagnostic_replay.ps1 exchange pass, including two frames and release with
+exit zero. Testing exposed a Windows file-sharing defect: the reader must close
+request.txt before waiting so that the next request can replace it atomically.
+That defect is fixed. The C++20 UTF-8 path constructor and parenthesized numeric
+limits call keep the header compatible with the viewer's warning policy and
+Windows macros without suppressing those diagnostics.
+
+Native LLVKWindowMgr now has an optional diagnosticFrameTime callback. It preserves
+the previous frame time during input dispatch, applies the requested time during
+paint preparation, and rejects nonfinite/backward timestamps. Without the callback,
+ordinary timing is unchanged; service shutdown deadlines retain their real clock.
+Only the isolated capture test reads LL_DIAGNOSTIC_REPLAY_DIR. Its callback retains
+the same timestamp through resource-readiness retries and acknowledges presentation
+before allowing a new step. Window7 passes with ordinary execution after this hook.
+
+The shared capture runner has an explicit controlledReplay request flag, requires
+queued tear-off input and a diagnostic GL binary identity, and records acknowledged
+steps at0,50,100,150,200,250,300ms. It releases replay before ordinary graceful
+shutdown. Full-frame captures are not aligned, transformed or tolerance-adjusted.
+Scripts pass syntax validation. Paired execution and pixel equality remain pending.
+
+## Text, caret and menu continuation (2026-09-16)
+
+### Latest measured states
+
+Help lifecycle: GLgl-help-lifecycle-queued-84/native-help-lifecycle-queued-157
+has10 exact full-frame samples across opening, departure, closure and reopening.
+Request SHA256:4B239049D98118EAB2CEA51A7B2A4319A4A385FB8F1468A767A79F92A9E89EFC.
+Native fixture SHA256:9756A552C62C0CF79DAE054FB4B989F0C13ACC3D47E9C5FDE5E63E82E0493D31.
+Independent Help close now uses an explicit native close-focus policy, returning
+to pre-login default focus rather than the previously focused Preferences control.
+LLFloater::closeFloater restores a dependee only for dependent floaters. Source
+LLFloater::setForeground releases focus only on a foreground transition; native
+control-opacity state is therefore distinct from foreground image selection.
+The synchronous GL83/native156 reopen comparison remains1371 pixels different:
+native can draw between SendMessage press/release while GL queues the burst.
+Queued input on both backends exercises the corresponding batching contract and
+matches; it does not erase or close the separate synchronous temporal discrepancy.
+
+Nested picker lifecycle: GLgl-picker-lifecycle-85/native-picker-parent-close-159
+matches picker opening, closure, reopening, departure and parent closure in both
+samples. Native previously left the picker visible when Preferences closed.
+Preferences now closes its owned pickers before restoring its settings snapshot,
+through an explicit dependent-close hook. The regression test checks cancellation
+and hidden parent/child state. Request SHA256:
+773D52677F5187E0F96BA47412169291F00AD3005E5A792C55445062D3EF4376.
+Native159 fixture SHA256:F41ABD08717BC81388FE128AAC17559EC741AAFEC6B3E0699A65CFB2845A3F93.
+
+Parent movement: GLgl-picker-movement-86/native-picker-snap-162 has8 exact samples
+for parent title press, drag, release and parent closure. Native focus-root history
+now retains the valid last focused descendant, matching LLFloater::setFocus instead
+of selecting the first editor on reactivation. The epoch guard protects reentrant
+focus callbacks; erased groups discard their history and stale targets are rejected.
+Positioned native pickers retain their parent snap target and follow parent drag
+deltas, matching LLFloater::addDependentFloater/translate. Independent picker movement
+clears that attachment. Tests cover parent focus restoration, translation and closure.
+Request SHA256:43129521D9F31B3F6EAB5E02EB3ABFA013944B752CC57DBE40AFDDA0AE18C04D.
+Native162 fixture SHA256:920E1F988B6CB12E8009B7ADA26E9BBEE0E29D6B14239C02FDEE5CB9B0750161.
+Earlier160/161 failures remain retained. All these runs were isolated pre-login
+fixtures, exited zero, and required no credentials; GL recorded Goodbye.
+
+Latest implementation gates: Widget210/210, Window7/7, GPU10/10 and the
+RelWithDebInfo viewer link pass. Diff whitespace validation passes. Editor diagnostics
+show no new native-code errors; the untouched notification_background.html has
+existing missing viewport/lang metadata warnings. LNK4020 debugger-metadata warnings
+remain. These results do not establish full temporal or fractional-scale interaction
+parity, external-browser operator acceptance, or authenticated Help behavior. The
+reported full-viewer Vulkan crash remains queued after the current verification TODO;
+successful fixture runs and linking do not diagnose that crash.
+
+Initial fractional-scale regressions on the latest native162 binary remain exact:
+GLgl-browser-scale-59-075/native-scale-regression-163-075 and
+GLgl-browser-scale-65-150/native-scale-regression-164-150, both samples at each
+scale. Each native fixture exited zero with Window7. These are initial-modal
+regressions, not fractional-scale nested-dialog interaction qualification.
+The remaining temporal gate must distinguish equal elapsed-time animation states
+from independent wall-clock presentation schedules. Current captures demonstrate
+differences in the latter and do not provide a controlled shared elapsed-time oracle;
+neither automatic alignment nor relaxed tolerances are authorized by this record.
+
+GLgl-menu-lifecycle-separated-81 versus native-menu-lifecycle-fixed-149 has
+16 byte-identical settled samples across detached, pointer-departed, title-press,
+drag, release, close, popup reattachment and fresh-detachment states. The initial
+menu samples differ only in the username caret phase. The source keeps tear-off
+selection on title press, clears it on two-axis translation, and creates a fresh
+presentation after close; native now follows those rules. The shared lifecycle
+request is revision2, SHA256
+26BEA5CD32CFBAAE7613E6EBE9CDCEB429A8908A40AB344B1189694EA13E14C3.
+GL80/native147's combined drag burst is retained but invalid for movement acceptance:
+GL coalesced the move before the press. The revised sequence separates press,
+movement and release. Native149 fixture SHA256 is
+B60C97E7A9529AA7A66CB2C5173D68E9B158557704DD6E149790A9BED10E356F.
+Later tests cover live visibility-driven size changes, menu background opacity,
+title-focus keyboard routing and global accelerators. Those later changes have
+widget/window coverage but do not expand the captured menu state matrix.
+
+Continuous tear-off streams are not temporally equivalent: GL81 retained two
+intermediate images; native149 had a roughly180ms presentation gap and one
+different intermediate. Foreground-window state also differs in these streams.
+Neither settled equality nor the deterministic half-life test closes this gate.
+
+GLgl-help-browser-82 versus native-help-encoded-153 has four byte-identical full
+frames for Help opening and pointer departure, including Preferences behind it.
+The request uses the same local rich page and internal-browser policy, SHA256
+F0CE6482A946B174334D0B0DF73BE492EE6275DA4CEA17888C18CF0556798F83.
+Native153 fixture SHA256 is
+0DA9EE5E9C1B0A6FB0F26B90FB571413CB883E59326F414EDD36E49D5A7464E8.
+Both processes exited zero; GL recorded Goodbye and native passed Window7.
+
+The Help corrections follow LLFloater's centering region below the19-pixel menu
+strip, LLResizeHandle's11x11 natural image geometry, and LLFloater::updateTransparency
+through LLUICtrl::getCurrentTransparency. Native caches paint inputs per floater
+with ActiveFloaterTransparency/InactiveFloaterTransparency while preserving the
+separate draw-context alpha input. The final five search-field pixels were caused
+by unencoded0.95 line-editor background alpha; LLLineEditor::drawBackground uses
+the UNORM8 UI vertex-color path. Native now encodes that image tint, with direct
+regression assertions. Native150/151/152 retain77844/1521/5-pixel failures.
+No pixel-specific compensation or tolerance change was used.
+
+Startup Help restoration is in LLStartUp's post-login path, not the pre-login UI;
+it remains deferred with authenticated context/history verification. Browser
+interactions, resize/move/close/reopen effects and external-confirmation acceptance
+still need their own captures. The user also requested investigation of the
+RelWithDebInfo executable's Vulkan crash after the current TODO list is complete;
+that investigation is queued, not performed or diagnosed here.
+
+The requested Help/tab checkpoint was committed and pushed as 1374ad9906.
+This continuation is uncommitted; overall interaction/effects parity remains open.
+The independent GL revision and zero-tolerance acceptance rule are unchanged.
+
+NV-00/01/02/11/12/17: LLNormalTextSegment::getDimensionsF32 passes
+no_padding=true through LLFontWidthBuffer to LLFontGL. The native measureRun
+argument is includePadding, the opposite meaning. Plain-text layout now passes
+false. Its advance-only clip removes the final two picker-title shadow fragments;
+no shadow alpha, sampler or triangle-order compensation was retained. Widget210
+tests printable glyph widths, and GLgl-dialog-separated-78 versus
+native-text-bounds-139 has byte-identical picker click/departure samples.
+
+LLLineEditor resets its own caret clock on focus and accepted editing/selection
+operations, not on unrelated window input. Native line editors now own that reset
+time. Native UI paint opts into the editor clock while low-level tests retain an
+explicit elapsed-time input. Tests cover the one-second delay, half-second phase
+boundaries, accepted key/Unicode input and independent editor focus. Widget210 and
+Window7 pass. Native-caret-owned-140 retains eight exact Colors/picker samples.
+Independent real-time capture phases and the multiline editor clock remain open;
+deterministic timer tests do not claim identical end-to-end presentation latency.
+
+Menu source roots are LLMenuItemGL nominal dimensions/draw/onCommit,
+LLMenuItemSeparatorGL, LLMenuItemTearOffGL, LLMenuGL::arrange/draw/setTornOff,
+LLMenuItemBranchGL activation/highlight, and LLTearOffMenu construction, draw,
+focus, updateSize and closeTearOff. Supporting contracts include native equivalents
+of LLFloaterView::refresh/adjustToFitScreen, LLView's getNeededTranslation and
+LLSmoothInterpolation::calcInterpolant. These are CPU layout/input responsibilities;
+the existing native paint packet and completion-owned GPU path remain the consumer.
+
+The native menu uses a shared command/predicate/item model with independent popup
+and detached view state. It retains live bindings, check/enabled/visible predicates
+and leaf callbacks; it does not copy a stale command list or call GL visual owners.
+Declared tear-off rows route to native owned floaters, preserve keyboard handling,
+and support close/reopen. Explicit activation of an already detached branch focuses
+its owner; hover does not create another popup. Detached base content is painted in
+floater order, with only transient submenus in the late popup pass. Tests193/194
+cover these model/lifecycle boundaries, outside-click routing and composition.
+
+Popup layout now uses rounded ascender/descender row height, 40 units of plain item
+padding and declared shortcut padding only for accelerators. All four vertical
+padding units are at the bottom. Accelerator text reserves 22 units on the right;
+branch markers use U+25B8. Tear-off lines use the declared disabled color, and
+separators use six-unit endpoints. Popup shadows reuse the existing native
+alert/floater mesh builder; no GL utility is shared. Detached header growth uses
+the source 0.05-second half-life and ceil rounding, with a 16-pixel partial-overlap
+constraint and the pre-login floater region below the 19-pixel menu strip.
+
+GLgl-dialog-separated-78/native-menu-shadow-143: the menu region is byte-identical,
+but the full frame fails with 1538 username-control pixels. FSPanelLogin::giveFocus
+explains this: native had no initial focus to restore after modal dismissal. Native
+startup now focuses password only for a nonempty username and empty password,
+otherwise the username editor. It does not repeatedly refocus during paint.
+
+The shared capture harness has an opt-in serialized tearOff boolean, preserving
+older sequences. GLgl-menu-tearoff-79 records menu-open, menu-detached and
+menu-detached-away; its request SHA256 is
+1595AABE76B679755D721737B0BD0A572821A514E8119313AA0760A1642D9362.
+It exited zero with Goodbye. Native-menu-tearoff-144 exited zero with Window7;
+fixture SHA256 is 3A0D3754528DB90DC6A29BA735411702A7B62B15552F7A04543F68F9D7608721.
+Menu-open sample0 differs58 pixels; detached samples differ15390 pixels.
+These captures predate the screen-constraint correction, which passes Widget210
+but has not yet been recaptured. Native141 is retained as an invalid nonmaximized
+sequence attempt;142/143 used the required maximized client. No evidence was erased.
+
+Open menu obligations include exact detached visual/temporal qualification,
+dynamic size updates, focus/hover details, submenu ownership and opacity settings,
+and extended move/close/reattach sequences. Full Help-browser visuals, nested
+lifecycle transitions and the previously recorded temporal/fractional-scale gates
+also remain open. Login-dependent verification remains deferred.
+
 ## Help service continuation (2026-09-16)
 
 The requested Copy/topic checkpoint was committed and pushed as c9df46aa11.

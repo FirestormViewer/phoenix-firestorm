@@ -266,6 +266,7 @@ namespace tut
         const bool instance = renderer.createInstance(true,error);
         ensure(error,instance);
         ensure("GPU validation layer loaded",GetModuleHandleW(L"VkLayer_khronos_validation.dll")!=nullptr);
+        ensure("validation does not implicitly enable API tracing",GetModuleHandleW(L"VkLayer_api_dump.dll")==nullptr);
         const auto surface = renderer.createSurface(window.handle,GetModuleHandleW(nullptr));
         ensure("native surface",surface != VK_NULL_HANDLE);
         if (!renderer.pickPhysicalDevice(surface,error) || !renderer.createDevice(surface,error))
@@ -449,6 +450,16 @@ namespace tut
         const auto imageIdentity = widgetPacket.draws()[0].image;
         ensure("unchanged paint ready without reupload",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Ready);
         ensure("image cache identity retained",widgetPacket.draws()[0].image == imageIdentity);
+        const auto unshadowedVertices=widgetPacket.vertices().size();
+        paint.commands[1].shadow=true;
+        paint.commands[1].color={0.2f,0.1f,0.1f,1.f};
+        ensure("dark widget text is ready without reupload",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+        ensure_equals("dark text suppresses soft shadow",widgetPacket.vertices().size(),unshadowedVertices);
+        paint.commands[1].color={1.f,1.f,1.f,1.f};
+        ensure("bright widget shadow prepares",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+        ensure("bright text retains shadow geometry",widgetPacket.vertices().size()>unshadowedVertices);
+        paint.commands[1].shadow=false;
+        ensure("restore ordinary text packet",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
         ensure("widget frame acquired",renderer.begin2DFrame(0,0,0,1) != VK_NULL_HANDLE);
         ensure("widget packet recorded",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
         ensure("widget packet presented",renderer.end2DFrame());

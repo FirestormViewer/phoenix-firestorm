@@ -84,6 +84,35 @@ bool LLVKWidgetTree::handleWheel(Id id, std::int32_t x, std::int32_t y, std::int
     return false;
 }
 
+std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::tooltipAt(Id root,std::int32_t x,std::int32_t y,std::string& error) const
+{
+    error.clear();
+    if (!get(root)) { error="Invalid native tooltip root"; return std::nullopt; }
+    Id target=0;
+    const auto visit=[&](auto&& self,Id id) -> bool
+    {
+        const auto* node=get(id);
+        if (!node || !node->params.visible) return false;
+        const auto rect=screenRect(id,error);
+        if (!rect) return false;
+        const auto localX=std::int64_t(x)-rect->left,localY=std::int64_t(y)-rect->bottom;
+        if (localX<INT32_MIN || localX>INT32_MAX || localY<INT32_MIN || localY>INT32_MAX)
+        { error="Native tooltip coordinate conversion overflows"; return false; }
+        const auto inside=containsLocal(id,static_cast<std::int32_t>(localX),static_cast<std::int32_t>(localY),true,0,error);
+        if (!inside || !*inside) return false;
+        const bool own=!node->params.tooltip.empty();
+        if (own) target=id;
+        for (const auto child : node->children)
+        {
+            if (self(self,child)) return true;
+            if (!error.empty()) return false;
+        }
+        return own || node->params.mouseOpaque;
+    };
+    visit(visit,root);
+    return error.empty() ? std::optional<Id>(target) : std::nullopt;
+}
+
 bool LLVKWidgetTree::updatePointerHover(Id root,const PointerEvent& screenEvent,std::string& error)
 {
     error.clear();
@@ -323,6 +352,7 @@ bool LLVKWidgetTree::buttonPointer(Id id, PointerEvent event, std::string& error
             if (!buttonCallback(id,&LLVKButton::Params::mouseUp,LLSD())) return true;
             auto contains = containsLocal(id,event.x,event.y,true,mTopControl,error);
             if (!contains) return false;
+            if (!*contains) mouseLeave(id);
             if (*contains)
             {
                 buttonSound(id,true);

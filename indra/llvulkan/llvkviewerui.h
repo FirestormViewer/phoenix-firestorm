@@ -77,6 +77,11 @@ public:
     LLVKWidgetTree::Id root() const noexcept { return mRoot; }
     LLVKWidgetTree::Id find(std::string_view name,LLVKWidgetTree::Id within = 0) const;
     LLVKMenu& menu() noexcept;
+    bool focusLoginFields(std::string& error);
+    bool menuPointer(const LLVKWidgetTree::PointerEvent& event);
+    bool updateMenuHover(const LLVKWidgetTree::PointerEvent& event,std::string& error);
+    void blockTooltips();
+    bool menuShortcut(const std::string& key,bool control,bool shift,bool alt);
     std::optional<LLVKWidgetPaint> preparePaint(const LLVKWidgetPaint::Input& input, std::string& error);
     bool showPreferences(std::string& error);
     std::optional<LLVKWidgetTree::Id> constructPreferencePanel(const std::string& filename,
@@ -212,6 +217,13 @@ public:
     bool refreshSession(std::string& error, bool repeat = false);
     const LLVKSessionOwner::Snapshot& sessionSnapshot() const noexcept { return mSessionSnapshot; }
 private:
+    bool appendTooltip(LLVKWidgetPaint& paint,const LLVKWidgetPaint::Input& input,std::string& error);
+    LLVKWidgetTree::Id mTooltipPanel=0,mTooltipOwner=0;
+    std::optional<std::pair<int,int>> mTooltipPointer;
+    LLVKWidgetTree::Rect mTooltipNear;
+    double mTooltipMoved=0.0,mTooltipShown=0.0;
+    std::optional<double> mTooltipFade;
+    bool mTooltipBlocked=false;
     std::string errorString(std::string_view key, std::string_view fallback) const;
     bool enqueueNotice(Notice notice, std::string& error);
     bool queueError(const LLVKError& failure, std::vector<Notice::Button> actions,
@@ -327,6 +339,15 @@ private:
     std::map<std::string,LLSD> mShutdownWarnings;
     std::function<void()> mClearSpamQueues;
     std::unique_ptr<LLVKMenu> mMenu;
+    struct TornMenu
+    {
+        std::unique_ptr<LLVKFloater> floater;
+        std::shared_ptr<LLVKMenu> view;
+        LLVKWidgetTree::Id content=0;
+        int targetHeight=0;
+    };
+    std::map<std::size_t,TornMenu> mTornMenus;
+    bool tearOffMenu(std::size_t item,LLVKWidgetTree::Rect rectangle,std::string& error);
     std::unique_ptr<LLVKFloater> mPreferences, mAbout;
     std::unique_ptr<LLVKFloater> mWhitelist;
     std::unique_ptr<LLVKFloater> mWindowSize;

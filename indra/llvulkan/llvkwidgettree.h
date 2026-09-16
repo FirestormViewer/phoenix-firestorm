@@ -123,6 +123,7 @@ public:
         std::size_t lastSelectionStart = 0, lastSelectionEnd = 0;
         std::optional<double> tripleClickUntil;
         double scrollTime = 0.0;
+        double caretResetTime = 0.0;
     };
     struct SearchEditorParams
     {
@@ -570,6 +571,7 @@ public:
     };
     bool routePointer(Id root, const PointerEvent& screenEvent, std::string& error);
     bool updatePointerHover(Id root,const PointerEvent& screenEvent,std::string& error);
+    std::optional<Id> tooltipAt(Id root,std::int32_t x,std::int32_t y,std::string& error) const;
     bool setMenu(Id id,std::shared_ptr<LLVKMenu> menu);
     bool layoutStackPointer(Id id,const PointerEvent& event,std::string& error);
     std::optional<Id> createBrowser(const Params& view, const LLVKControl::Params& control,
@@ -597,6 +599,7 @@ public:
     bool setTopControl(Id id, std::string& error);
     void unlockFocus() noexcept { mLockedFocus = 0; }
     Id keyboardFocus() const noexcept { return mKeyboardFocus; }
+    Id lastFocusForGroup(Id group) const noexcept;
     Id mouseCapture() const noexcept { return mMouseCapture; }
     Id topControl() const noexcept { return mTopControl; }
     bool keystrokesOnly() const noexcept { return mKeystrokesOnly; }
@@ -651,7 +654,7 @@ public:
     bool selectTabPanel(Id container, Id panel, std::string& error);
     bool setTabVisibility(Id container, Id panel, bool visible, std::string& error);
     bool layoutTopTabs(Id container, const Node::TabContainer::Layout& layout, std::string& error);
-    bool layoutTabPanels(Id container, const Node::TabContainer::Layout& layout, std::string& error, float frameDelta = 0.f);
+    bool layoutTabPanels(Id container, const Node::TabContainer::Layout& layout, std::string& error, float frameDelta = 0.f, bool positionButtons = true);
     std::optional<Id> createLayoutStack(const Params& view, bool vertical, std::int32_t spacing, bool clip, Id parent, std::string& error);
     bool attachLayoutPanel(Id stack, Id panel, const Node::LayoutPanel& params, std::string& error);
     bool updateLayoutStack(Id id, std::string& error, float frameDelta = 0.f);
@@ -744,6 +747,7 @@ public:
     {
         bool applicationFocused = true;
         double secondsSinceKeystroke = 0;
+        bool useEditorClock = false;
         float drawAlpha = 1.f, transparency = 1.f;
         LLVKColor::Value focusColor{1,1,1,1};
         std::int32_t focusWidth = 1;
@@ -830,6 +834,7 @@ public:
     std::optional<Id> createPlainText(const Params& view, const LLVKControl::Params& control,
                                      const LLVKPlainControl::Params& text, Id parent, std::string& error);
     bool setPlainText(Id id, std::string text, std::string& error);
+    bool setSearchEditorKeystroke(Id id,LLVKControl::Callback callback);
     bool setPlainTextArgument(Id id, std::string key, std::string replacement, std::string& error);
     bool reflowPlainText(Id id, std::string& error);
     bool fitPlainText(Id id, std::string& error);
@@ -967,6 +972,7 @@ public:
     bool setButtonImages(Id id, LLVKButton::Image unselected, LLVKButton::Image selected);
     bool setButtonFlashing(Id id, bool flashing, bool force = false, bool alternateColor = false);
     bool advanceTime(double time, std::string& error);
+    double time() const noexcept { return mTime; }
     bool buttonUnicode(Id id, char32_t character, bool repeated, std::string& error);
     bool buttonReturn(Id id, std::uint32_t modifiers, bool repeated, std::string& error);
     bool registerImage(std::shared_ptr<const LLVKWidgetImage> image);
@@ -1084,6 +1090,7 @@ private:
     std::set<Id> mErasing;
     std::vector<Id> mFocusChain;
     Id mKeyboardFocus = 0;
+    std::map<Id,Id> mLastGroupFocus;
     Id mMouseCapture = 0;
     std::set<Id> mPointerHover;
     Id mTopControl = 0;

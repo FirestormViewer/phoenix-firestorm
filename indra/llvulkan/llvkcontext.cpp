@@ -92,14 +92,10 @@ bool LLVKContext::createInstance(bool enableValidation, std::string& error)
         std::vector<VkLayerProperties> available(layer_count);
         vkEnumerateInstanceLayerProperties(&layer_count, available.data());
         bool have_validation = false;
-        bool have_apidump = false;
         for (const auto& lp : available)
         {
             if (std::strcmp(lp.layerName, "VK_LAYER_KHRONOS_validation") == 0) have_validation = true;
-            if (std::strcmp(lp.layerName, "VK_LAYER_LUNARG_api_dump") == 0) have_apidump = true;
         }
-        // API dump first (outermost) so it records the raw calls, then validation.
-        if (have_apidump) layers.push_back("VK_LAYER_LUNARG_api_dump");
         if (have_validation)
         {
             layers.push_back("VK_LAYER_KHRONOS_validation");

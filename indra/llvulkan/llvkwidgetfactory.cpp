@@ -3117,6 +3117,28 @@ namespace
                     if (!tree.layoutTabPanels(*id,layout,error)) return false;
                     auto arrows=environment.buttonDefaults.button;
                     if (!resolveButton(arrows,callbacks,error) || !tree.createTabArrows(*id,*control,arrows,error)) return false;
+                    if (layout.position==LLVKWidgetTree::Node::TabContainer::Layout::Position::Left)
+                    {
+                        std::size_t declaredIndex=0;
+                        const Declaration* lastExcluded=nullptr;
+                        for (const auto& child : declaration.children)
+                            if (child->panel && environment.resources.excludedPanelClasses.contains(child->panelClass)) lastExcluded=child.get();
+                        const auto height=tree.get(*id)->params.rect.top-tree.get(*id)->params.rect.bottom;
+                        for (const auto& child : declaration.children)
+                        {
+                            if (!child->panel) continue;
+                            if (child.get()!=lastExcluded && environment.resources.excludedPanelClasses.contains(child->panelClass)) continue;
+                            const auto found=std::find_if(tree.get(*id)->tabContainer->tabs.begin(),tree.get(*id)->tabContainer->tabs.end(),[&](const auto& tab)
+                            { return tree.get(tab.panel)->params.name==child->params.view.name; });
+                            if (found!=tree.get(*id)->tabContainer->tabs.end())
+                            {
+                                const auto old=tree.get(found->button)->params.rect;
+                                const auto top=height-2-static_cast<int>(declaredIndex)*(layout.verticalHeight+layout.verticalPadding);
+                                if (!tree.setShape(found->button,{old.left,top-layout.verticalHeight,old.right,top},error)) return false;
+                            }
+                            ++declaredIndex;
+                        }
+                    }
                     return panels.empty() || tree.selectTabPanel(*id,panels.front(),error);
                 };
                 if (!constructTabs()) { std::string cleanup; tree.erase(*id,cleanup); return std::nullopt; }

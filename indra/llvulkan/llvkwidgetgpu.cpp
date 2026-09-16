@@ -203,7 +203,13 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
             LLVKTextDraw::Style style;
             for (std::size_t channel = 0; channel < 4; ++channel)
                 style.color[channel] = static_cast<std::uint8_t>(std::floor(std::clamp(command.color[channel],0.f,1.f)*255.f+0.5f));
-            if (command.shadow) { style.shadow = LLVKTextDraw::Shadow::Soft; style.shadowStrength = 1.f; }
+            if (command.shadow)
+            {
+                const auto lightness=0.5f*(std::min({command.color[0],command.color[1],command.color[2]})+
+                    std::max({command.color[0],command.color[1],command.color[2]}));
+                style.shadow=lightness<0.35f ? LLVKTextDraw::Shadow::None : LLVKTextDraw::Shadow::Soft;
+                style.shadowStrength=std::clamp((lightness-0.35f)/0.25f,0.f,1.f);
+            }
             if (!prepared.text(*text.atlas,text.pages,0,0,clip,style,error)) return Status::Failed;
         }
         else if (rect.right > rect.left && rect.top > rect.bottom &&

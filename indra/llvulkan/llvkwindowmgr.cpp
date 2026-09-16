@@ -354,8 +354,9 @@ namespace
         float systemUiScale=1.f;
         char32_t surrogate = 0;
         std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now(), keystroke = start;
+        std::optional<double> controlledTime;
         ~WindowState() { if (window) DestroyWindow(window); }
-        double elapsed() const { return std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count(); }
+        double elapsed() const { return controlledTime ? *controlledTime : std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count(); }
         int logical(int pixels) const { return static_cast<int>(std::floor(pixels/(ui ? ui->displayScale() : 1.f)+0.5f)); }
         int physical(int units) const { return static_cast<int>(std::floor(units*(ui ? ui->displayScale() : 1.f)+0.5f)); }
         void updateSystemUiScale()
@@ -420,6 +421,9 @@ namespace
             }
             if (!ui) return DefWindowProcW(window,message,parameter,data);
             auto& tree = ui->tree();
+            if (message==WM_KEYDOWN || message==WM_SYSKEYDOWN ||
+                message==WM_MOUSEWHEEL || message==WM_KILLFOCUS || message==WM_RBUTTONDOWN || message==WM_MBUTTONDOWN)
+                ui->blockTooltips();
             tree.setInputModifiers({bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_CONTROL)&0x8000),bool(GetKeyState(VK_MENU)&0x8000)});
             const auto focused = tree.keyboardFocus();
             const auto* focus = tree.get(focused);
@@ -505,7 +509,7 @@ namespace
                     if (tree.mouseCapture()) SetCapture(window); else if (GetCapture()==window) ReleaseCapture();
                     return 0;
                 }
-                if (!tree.mouseCapture() && ui->menu().pointer(event))
+                if (!tree.mouseCapture() && (event.kind==LLVKWidgetTree::PointerKind::Hover ? ui->menu().open() : ui->menuPointer(event)))
                 {
                     if (ui->menu().open() && tree.topControl()) tree.setTopControl(0,error);
                     return 0;
@@ -560,7 +564,7 @@ namespace
                 std::string shortcut;
                 if (parameter >= 'A' && parameter <= 'Z') shortcut.assign(1,static_cast<char>(parameter));
                 else if (parameter >= VK_F1 && parameter <= VK_F12) shortcut = "F"+std::to_string(parameter-VK_F1+1);
-                if (!shortcut.empty() && ui->menu().shortcut(shortcut,bool(GetKeyState(VK_CONTROL)&0x8000),
+                if (!shortcut.empty() && ui->menuShortcut(shortcut,bool(GetKeyState(VK_CONTROL)&0x8000),
                     bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_MENU)&0x8000))) return 0;
                 if (parameter == VK_F10) { ui->menu().key(LLVKMenu::Key::Activate); return 0; }
                 if (ui->menu().open())
@@ -760,7 +764,16 @@ namespace
         }
         Code retire() override
         {
+            auto started=std::chrono::steady_clock::now();
+            const auto measure=[&](const char* stage)
+            {
+                if (!diagnosticTiming) return;
+                const auto now=std::chrono::steady_clock::now();
+                diagnosticTiming(stage,std::chrono::duration<double,std::milli>(now-started).count());
+                started=now;
+            };
             detach();
+            measure("retire-detach");
             std::string error;
             if (!mCloseDeadline) mCloseDeadline=std::chrono::steady_clock::now()+std::chrono::seconds(15);
             bool pending=false,failed=false;
@@ -777,19 +790,23 @@ namespace
             for (auto& [id,view] : browsers) close(view);
             std::erase_if(browsers,[](const auto& entry) { return !entry.second; });
             close(browser);
+            measure("retire-browser");
             if (failed || (pending && std::chrono::steady_clock::now()>=*mCloseDeadline))
             { mCloseDeadline.reset(); return Code::CleanupFailed; }
             if (pending) return Code::Pending;
             if (voice && !voice->stop(error)) return Code::CleanupFailed;
             voice.reset();
+            measure("retire-voice");
             if (audio && !audio->stop(error)) return Code::CleanupFailed;
             audio.reset();
+            measure("retire-audio");
             if (joystick) joystick->stop();
             joystick.reset();
             return Code::Ok;
         }
         bool active() const { return mWindow!=nullptr; }
         std::shared_ptr<Access> access;
+        std::function<void(const char*,double)> diagnosticTiming;
         std::unique_ptr<LLVKAudio> audio;
         std::unique_ptr<LLVKVoice> voice;
         std::unique_ptr<LLVKJoystick> joystick;
@@ -969,6 +986,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         application.owner=application.local.get();
     }
     auto ownedServices=std::make_unique<ApplicationServices>(state);
+    ownedServices->diagnosticTiming=configuration.diagnosticTiming;
     application.access=ownedServices->access;
     auto& services=*ownedServices;
     std::unique_ptr<LLVKSessionOwner::Service> adoptedServices=std::move(ownedServices);
@@ -1371,9 +1389,23 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
     LLVKUiPacket packet(renderer.swapchainExtent());
     std::uint32_t frames = 0;
     auto previous = std::chrono::steady_clock::now();
+    std::optional<LLVKWidgetPaint> diagnosticPaint;
     while (!state.close)
     {
+        const auto previousAnimationTime=std::max(state.input.animationSeconds,ui->tree().time());
+        const auto requestedTime=configuration.diagnosticFrameTime ? configuration.diagnosticFrameTime(previousAnimationTime) : std::nullopt;
+        if (requestedTime && (!std::isfinite(*requestedTime) || *requestedTime<previousAnimationTime))
+        { error="Invalid diagnostic frame timestamp"; return false; }
+        state.controlledTime=requestedTime ? std::optional<double>(previousAnimationTime) : std::nullopt;
         const auto iterationStart=std::chrono::steady_clock::now();
+        auto timingStart=iterationStart;
+        const auto timing=[&](const char* stage)
+        {
+            if (!configuration.diagnosticTiming) return;
+            const auto now=std::chrono::steady_clock::now();
+            configuration.diagnosticTiming(stage,std::chrono::duration<double,std::milli>(now-timingStart).count());
+            timingStart=now;
+        };
         if (configuration.fatalError)
             if (const auto failure=configuration.fatalError()) return fail(*failure);
         {
@@ -1383,8 +1415,10 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
                 application.owner->retryCleanup(snapshot.tag);
             else application.owner->pumpOne();
             if (!ui->refreshSession(error)) return fail(Code::StartupResources);
-            if (application.owner->snapshot().state==LLVKSessionOwner::State::Stopped) break;
+            if (application.owner->snapshot().state==LLVKSessionOwner::State::Stopped)
+            { timing("session-final"); break; }
         }
+        timing("session");
         if (application.access->service && application.access->service->active())
         {
             if (services.previews && !services.previews->update(error)) return fail(Code::PreviewFailed);
@@ -1397,6 +1431,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         MSG message;
         while (PeekMessageW(&message,nullptr,0,0,PM_REMOVE))
         { if (message.message == WM_QUIT) state.quitRequested = true; TranslateMessage(&message); DispatchMessageW(&message); }
+        timing("services-input");
         if (!state.error.empty()) { error = state.error; return false; }
         const auto previousScale=ui->displayScale();
         if (!ui->refreshDisplayScale(error,state.systemUiScale)) return fail(Code::StartupResources);
@@ -1420,11 +1455,13 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
                 }
             }
             const auto shutdown=ui->prepareShutdown(error,placement);
+            timing("shutdown-preferences");
             if (shutdown==LLVKViewerUi::ShutdownStatus::Failed) return fail(Code::SettingsWrite);
             if (shutdown==LLVKViewerUi::ShutdownStatus::Ready)
             {
                 if (application.owner->snapshot().state!=LLVKSessionOwner::State::Disconnecting)
                     application.owner->shutdown();
+                timing("shutdown-services");
                 if (application.owner->snapshot().state==LLVKSessionOwner::State::Stopped) break;
                 state.quitRequested=false;
                 if (!ui->refreshSession(error,true)) return fail(Code::StartupResources);
@@ -1436,10 +1473,13 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         if (application.access->service && application.access->service->active())
         {
         if (loginBrowserStarted && !browser.update(error)) return fail(Code::BrowserUnavailable);
+        std::vector<std::pair<std::string,std::string>> popups;
         for (const auto& event : browser.takeEvents())
+        {
             if (event.kind == LLVKBrowser::EventKind::LoadError)
             { error = "Native login page failed"; return fail(Code::BrowserUnavailable); }
-        std::vector<std::pair<std::string,std::string>> popups;
+            if (event.kind == LLVKBrowser::EventKind::Popup) popups.emplace_back(event.text,event.detail);
+        }
         for (auto iterator=services.browsers.begin(); iterator!=services.browsers.end(); )
         {
             const auto id=iterator->first;
@@ -1516,7 +1556,9 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             if (!ui->setAboutInfo(aboutInfo,error)) return false;
         }
         const auto now = std::chrono::steady_clock::now();
-        state.input.button.frameDelta = std::chrono::duration<float>(now-previous).count();
+        state.controlledTime=requestedTime;
+        state.input.button.frameDelta = requestedTime ? static_cast<float>(*requestedTime-previousAnimationTime) :
+            std::chrono::duration<float>(now-previous).count();
         state.input.animationSeconds=state.elapsed();
         previous = now;
         state.input.button.spaceDown = bool(GetKeyState(VK_SPACE)&0x8000);
@@ -1530,13 +1572,19 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         }
         ui->tree().setInputModifiers({bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_CONTROL)&0x8000),bool(GetKeyState(VK_MENU)&0x8000)});
         ui->tree().advanceTime(state.elapsed(),error);
+        if (!diagnosticPaint && !ui->updateMenuHover({LLVKWidgetTree::PointerKind::Hover,
+            state.input.button.mouseX,state.input.button.mouseY},error)) return false;
+        timing("browser-layout");
         if (state.width && state.height)
         {
             state.input.physicalWidth=renderer.swapchainExtent().width;
             state.input.physicalHeight=renderer.swapchainExtent().height;
-            const auto paint = ui->preparePaint(state.input,error);
+            auto paint = diagnosticPaint ? diagnosticPaint : ui->preparePaint(state.input,error);
             if (!paint) return fail(Code::StartupResources);
+            if (requestedTime && !diagnosticPaint) diagnosticPaint=paint;
+            timing("paint");
             const auto ready = gpu.prepare(*paint,renderer.swapchainExtent(),packet,error);
+            timing("gpu-prepare");
             if (ready == LLVKWidgetGpu::Status::Failed) return fail(Code::RendererUnavailable);
             if (ready == LLVKWidgetGpu::Status::Ready)
             {
@@ -1545,7 +1593,10 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
                     if (!renderer.recordUiPacket(packet.vertices(),packet.draws())) { error = renderer.frameError(); return fail(Code::RendererUnavailable); }
                     if (!renderer.end2DFrame() && renderer.frameResult() != LLVKContext::FrameResult::OutOfDate)
                     { error = renderer.frameError(); return fail(Code::RendererUnavailable); }
+                    timing("present");
                     if (configuration.presentedFrame) configuration.presentedFrame(*ui,state.input);
+                    timing("fixture");
+                    diagnosticPaint.reset();
                     if (configuration.stopAfterFrames && ++frames >= configuration.stopAfterFrames &&
                         !PostMessageW(state.window,WM_CLOSE,0,0))
                     { error="Native test close request failed"; return false; }
@@ -1557,10 +1608,14 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         const auto remaining=std::chrono::microseconds(16667)-(std::chrono::steady_clock::now()-iterationStart);
         const auto waitMilliseconds=std::max(std::int64_t(0),std::chrono::duration_cast<std::chrono::milliseconds>(remaining).count());
         MsgWaitForMultipleObjectsEx(0,nullptr,static_cast<DWORD>(waitMilliseconds),QS_ALLINPUT,MWMO_INPUTAVAILABLE);
+        timing("idle");
     }
     if (application.owner->snapshot().state!=LLVKSessionOwner::State::Stopped)
     { error="Native window exited before application retirement completed"; return fail(Code::ShutdownFailed); }
     ui->setSessionOwner(nullptr);
+    const auto visualShutdownStart=std::chrono::steady_clock::now();
     if (!visuals.prepareShutdown(error)) return fail(Code::ShutdownFailed);
+    if (configuration.diagnosticTiming)
+        configuration.diagnosticTiming("shutdown-gpu",std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-visualShutdownStart).count());
     return true;
 }

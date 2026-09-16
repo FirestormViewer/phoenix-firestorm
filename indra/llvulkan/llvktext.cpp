@@ -50,7 +50,7 @@ std::optional<std::vector<LLVKPlainTextLayout::Line>> LLVKPlainTextLayout::plain
             if (!fitted) return std::nullopt;
             count = std::max<std::size_t>(1,*fitted);
         }
-        auto measured = font.measureRun(text,begin,count,options.scaleX,true,options.tabularNumbers,error);
+        auto measured = font.measureRun(text,begin,count,options.scaleX,false,options.tabularNumbers,error);
         if (!measured) return std::nullopt;
         const float remainingPixels = static_cast<float>(available)-measured->width;
         const double widthValue = std::ceil(static_cast<float>(available)-remainingPixels);

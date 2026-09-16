@@ -428,15 +428,15 @@ bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
     using Owner=LLVKSessionOwner;
     mSessionSnapshot=mSessionOwner->snapshot();
     const auto snapshot=mSessionSnapshot;
-    const bool prelogin=snapshot.state==Owner::State::PreLogin;
-    for (const auto name : {"connect_btn","username_combo","password_edit","server_combo","start_location_combo"})
-        mTree.setEnabled(find(name),prelogin);
-    updateLoginControls();
     const auto same=[](const Owner::Status& left,const Owner::Status& right)
     { return left.code==right.code && left.action==right.action && left.operation==right.operation &&
         left.generation==right.generation && left.service==right.service; };
     if (mReportedSession && mReportedSession->tag==snapshot.tag && mReportedSession->state==snapshot.state &&
         same(mReportedSession->status,snapshot.status) && same(mReportedSession->cleanup,snapshot.cleanup)) return true;
+    const bool prelogin=snapshot.state==Owner::State::PreLogin;
+    for (const auto name : {"connect_btn","username_combo","password_edit","server_combo","start_location_combo"})
+        mTree.setEnabled(find(name),prelogin);
+    updateLoginControls();
     if (mActiveNotice && (mActiveNotice->name=="NativeSessionError" || mActiveNotice->name=="NativeSessionProgress" ||
         mActiveNotice->name=="NativeSessionAgreement"))
         if (!dismissNotice(error)) return false;
@@ -3836,6 +3836,7 @@ bool LLVKViewerUi::filterPreferences(std::string& error)
             {
                 const bool visible=self(self,tab.panel);
                 if (!mTree.setTabVisibility(id,tab.panel,visible,error)) return false;
+                self(self,tab.button);
                 if (visible && !first) first=tab.panel;
                 match|=visible;
             }
@@ -3861,7 +3862,7 @@ bool LLVKViewerUi::filterPreferences(std::string& error)
         for (const auto child : children) match|=self(self,child);
         return match;
     };
-    visit(visit,fields.at("pref core"));
+    visit(visit,mPreferences->id());
     return error.empty();
 }
 
@@ -3876,6 +3877,24 @@ bool LLVKViewerUi::showPreferences(std::string& error)
         if (!fields.contains("OK") || !fields.contains("Cancel") || !fields.contains("pref core"))
         { error="Original Preferences hierarchy is missing required controls"; mPreferences.reset(); return false; }
         if (!mTree.setPanelDefaultButton(mPreferences->id(),fields.at("OK"),error)) { mPreferences.reset(); return false; }
+        LLVKControl::Callback filter;
+        filter.function=[this](auto,const LLSD&) { filterPreferences(mDialogError); };
+        if (!mTree.setSearchEditorKeystroke(fields.at("search_prefs_edit"),std::move(filter)))
+        { error="Native Preferences search editor is unavailable"; mPreferences.reset(); return false; }
+        mPreferences->onCloseDependents([this](std::string& problem)
+        {
+            for (auto& [swatch,picker] : mColorPickers)
+            {
+                if (!picker->visible()) continue;
+                for (auto ancestor=swatch; mTree.get(ancestor); ancestor=mTree.get(ancestor)->parent)
+                    if (ancestor==mPreferences->id())
+                    {
+                        if (!picker->close(problem)) return false;
+                        break;
+                    }
+            }
+            return true;
+        });
         mPreferences->onClose([this]
         {
             ++mPreferenceGeneration;
@@ -4800,12 +4819,18 @@ bool LLVKViewerUi::showHelp(const std::string& requested,std::string& error)
     { error="Native Help declaration is missing browser or status text"; return false; }
     const auto browser=fields.at("browser");
     mTree.setVisible(browser,false);
-    if (!mTree.prepareLayoutStacks(floater->id(),0,error) || !floater->open(error)) return false;
+    auto placement=mTree.get(mRoot)->params.rect;
+    placement.top-=19;
+    if (!mTree.prepareLayoutStacks(floater->id(),0,error) || !floater->open(error,placement)) return false;
     if (!mGuidebookOpen(browser,url,error))
     {
         mGuidebookClose(browser);
         return false;
     }
+    floater->onCloseFocus([this](std::string& problem)
+    {
+        return !sessionSnapshot().identity ? focusLoginFields(problem) : mTree.setKeyboardFocus(0,false,false,problem);
+    });
     floater->onClose([this,browser]
     {
         mTree.setVisible(browser,false);
@@ -5242,6 +5267,7 @@ bool LLVKViewerUi::showColorPicker(LLVKWidgetTree::Id swatch,bool takeFocus,std:
         while (mTree.get(parent) && !mTree.get(parent)->floater) parent=mTree.get(parent)->parent;
         if (const auto* owner=mTree.get(parent); owner && owner->floater)
         {
+            found->second->setSnapTarget(parent);
             auto base=owner->params.rect;
             const auto expanded=LLVKWidgetTree::Rect{base.left-10,base.bottom-10,base.right+10,base.top+10};
             for (const auto& [otherSwatch,picker] : mColorPickers)
@@ -5292,6 +5318,7 @@ std::vector<LLVKFloater*> LLVKViewerUi::floaters() const
     result.push_back(mDebugSettings.get());
     result.push_back(mColorSettings.get());
     for (const auto& [name,dialog] : mUiTests) result.push_back(dialog.get());
+    for (const auto& [item,dialog] : mTornMenus) result.push_back(dialog.floater.get());
     result.push_back(mGuidebook.get());
     result.push_back(mHelp.get());
     for (const auto& [browser,dialog] : mWebDialogs) result.push_back(dialog.floater.get());
@@ -5411,7 +5438,29 @@ bool LLVKViewerUi::floaterPointer(const LLVKWidgetTree::PointerEvent& event,std:
     if (mTree.mouseCapture())
     {
         for (auto* floater : floaters())
-            if (floater && floater->id()==mTree.mouseCapture()) return floater->pointer(event,error);
+            if (floater && floater->id()==mTree.mouseCapture())
+            {
+                const auto before=mTree.get(floater->id())->params.rect;
+                const auto handled=floater->pointer(event,error);
+                const auto after=mTree.get(floater->id())->params.rect;
+                const auto deltaX=after.left-before.left,deltaY=after.bottom-before.bottom;
+                if (deltaX || deltaY)
+                {
+                    floater->setSnapTarget(0);
+                    for (auto& [swatch,picker] : mColorPickers)
+                    {
+                        if (!picker->visible() || picker->snapTarget()!=floater->id()) continue;
+                        auto rectangle=mTree.get(picker->id())->params.rect;
+                        rectangle.left+=deltaX; rectangle.right+=deltaX;
+                        rectangle.bottom+=deltaY; rectangle.top+=deltaY;
+                        if (!mTree.setShape(picker->id(),rectangle,error)) return false;
+                    }
+                }
+                if (before.left!=after.left && before.bottom!=after.bottom)
+                    for (auto& [item,dialog] : mTornMenus)
+                        if (dialog.floater.get()==floater) dialog.view->dismiss();
+                return handled;
+            }
         return false;
     }
     if (event.kind == LLVKWidgetTree::PointerKind::LeftDown)

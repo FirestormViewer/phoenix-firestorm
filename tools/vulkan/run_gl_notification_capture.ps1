@@ -15,6 +15,12 @@ param(
     [switch]$InactiveFocus,
     [ValidateSet('None','Browser','Dialogs')][string]$Sequence='None',
     [switch]$Continuous,
+    [switch]$TearOff,
+    [switch]$TearOffLifecycle,
+    [switch]$HelpBrowser,
+    [switch]$DialogLifecycle,
+    [switch]$DialogMovement,
+    [switch]$ControlledReplay,
     [switch]$QueuedInput,
     [string]$Page=(Join-Path $PSScriptRoot 'notification_background.html'),
     [ValidatePattern('^[a-z]{2}(-[A-Z]{2})?$')][string]$Language='en',
@@ -25,9 +31,15 @@ param(
     [ValidateSet('Unchanged','Off','On')][string]$Anisotropy='Unchanged'
 )
 $ErrorActionPreference='Stop'
+if ($ControlledReplay -and (!$TearOff -or !$QueuedInput -or $ReferenceRevision -notlike '*+working-tree')) { throw 'Controlled replay requires an explicitly identified diagnostic binary and queued tear-off input.' }
+if ($TearOff -and $Sequence -ne 'Dialogs') { throw 'Tear-off capture requires the dialog sequence.' }
+if ($TearOffLifecycle -and !$TearOff) { throw 'Tear-off lifecycle requires tear-off capture.' }
+if ($HelpBrowser -and ($Sequence -ne 'Dialogs' -or $TearOff)) { throw 'Help browser capture requires a separate dialog sequence.' }
+if ($DialogLifecycle -and ($Sequence -ne 'Dialogs' -or $TearOff)) { throw 'Dialog lifecycle requires a non-tear-off dialog sequence.' }
+if ($DialogMovement -and (!$DialogLifecycle -or $HelpBrowser)) { throw 'Dialog movement requires the picker lifecycle.' }
 $pagePath=(Resolve-Path -LiteralPath $Page).Path
 $pageHash=(Get-FileHash -LiteralPath $pagePath).Hash
-if ($Sequence -ne 'None' -and (!$Maximized -or $UiScale -ne 1 -or $LoginButtonStates -or $InactiveFocus)) {
+if ($Sequence -ne 'None' -and (!$Maximized -or ($UiScale -ne 1 -and $Sequence -ne 'Dialogs') -or $LoginButtonStates -or $InactiveFocus)) {
     throw 'Browser sequence requires maximized 100-percent active capture without login-button states.'
 }
 foreach ($executable in $Viewer,$Driver,$CaptureHelper) {
@@ -48,6 +60,13 @@ try {
     $requestWriter.WriteElementString('key','pageSha256'); $requestWriter.WriteElementString('string',$pageHash)
     if ($Sequence -ne 'None') { $requestWriter.WriteElementString('key','sequence'); $requestWriter.WriteElementString('string',$Sequence) }
     if ($QueuedInput) { $requestWriter.WriteElementString('key','queuedInput'); $requestWriter.WriteElementString('boolean','true') }
+    if ($TearOff) { $requestWriter.WriteElementString('key','tearOff'); $requestWriter.WriteElementString('boolean','true') }
+    if ($TearOffLifecycle) { $requestWriter.WriteElementString('key','tearOffLifecycle'); $requestWriter.WriteElementString('boolean','true') }
+    if ($TearOffLifecycle) { $requestWriter.WriteElementString('key','lifecycleRevision'); $requestWriter.WriteElementString('integer','2') }
+    if ($HelpBrowser) { $requestWriter.WriteElementString('key','helpBrowser'); $requestWriter.WriteElementString('boolean','true') }
+    if ($DialogLifecycle) { $requestWriter.WriteElementString('key','dialogLifecycle'); $requestWriter.WriteElementString('boolean','true') }
+    if ($DialogMovement) { $requestWriter.WriteElementString('key','dialogMovement'); $requestWriter.WriteElementString('boolean','true') }
+    if ($ControlledReplay) { $requestWriter.WriteElementString('key','controlledReplay'); $requestWriter.WriteElementString('boolean','true') }
     $requestWriter.WriteElementString('key','substitutions'); $requestWriter.WriteStartElement('map')
     foreach ($key in ($Substitutions.Keys | Sort-Object)) {
         $requestWriter.WriteElementString('key',[string]$key); $requestWriter.WriteElementString('string',[string]$Substitutions[$key])
@@ -96,6 +115,8 @@ $start.UseShellExecute=$false
 $start.WorkingDirectory=Split-Path $start.FileName
 $start.Environment['APPDATA']=$roaming
 $start.Environment['LOCALAPPDATA']=$local
+$start.Environment.Remove('LL_DIAGNOSTIC_REPLAY_DIR') | Out-Null
+if ($ControlledReplay) { $start.Environment['LL_DIAGNOSTIC_REPLAY_DIR']=[IO.Directory]::CreateDirectory((Join-Path $root 'replay')).FullName }
 $start.Environment.Remove('VULKANSTORM_CAPTURE') | Out-Null
 $start.Environment.Remove('VULKANSTORM_UITEST') | Out-Null
 $start.Environment.Remove('LLVK_CAPTURE_ANISOTROPY') | Out-Null
@@ -115,6 +136,10 @@ $settings=[ordered]@{
     LeapCommand=@('LLSD','array',('"'+(Resolve-Path $Driver).Path.Replace('\','/')+'" "'+$root.Replace('\','/')+'"'))
 }
 $userSettings=[IO.Directory]::CreateDirectory((Join-Path $roaming 'Vulkanstorm_x64/user_settings')).FullName
+if ($HelpBrowser) {
+    $settings['HelpURLFormat']=@('String','string',$pageUrl)
+    $settings['PreferredBrowserBehavior']=@('U32','integer','2')
+}
 $settingsName='fsdata_defaults.7.2.5.xml'
 $settingsPath=Join-Path $userSettings $settingsName
 $defaultsPath=Join-Path $start.WorkingDirectory 'app_settings/settings.xml'
@@ -344,7 +369,7 @@ public static class NotificationCursorInput {
             }
             if (!(Test-Path (Join-Path $root 'gl-notification-response.xml'))) { throw 'Sequence requires modal response.' }
         } finally { $responseWatcher.Dispose() }
-        & (Join-Path $PSScriptRoot 'run_browser_sequence.ps1') -ViewerProcessId $process.Id -CaptureHelper $CaptureHelper -OutputDirectory $root -Backend gl -Dialogs:($Sequence -eq 'Dialogs') -Continuous:$Continuous -QueuedInput:$QueuedInput
+        & (Join-Path $PSScriptRoot 'run_browser_sequence.ps1') -ViewerProcessId $process.Id -CaptureHelper $CaptureHelper -OutputDirectory $root -Backend gl -UiScale $UiScale -Dialogs:($Sequence -eq 'Dialogs') -TearOff:$TearOff -TearOffLifecycle:$TearOffLifecycle -HelpBrowser:$HelpBrowser -DialogLifecycle:$DialogLifecycle -DialogMovement:$DialogMovement -ControlledReplay:$ControlledReplay -Continuous:$Continuous -QueuedInput:$QueuedInput
     }
     $process.CloseMainWindow() | Out-Null
     if (!$process.WaitForExit(60000)) { throw 'Reference did not close within 60 seconds; no forced termination performed.' }
@@ -364,6 +389,12 @@ public static class NotificationCursorInput {
         requestedAnisotropy=$Anisotropy
         loginButtonStates=$LoginButtonStates.IsPresent
         sequence=$Sequence
+        tearOff=$TearOff.IsPresent
+        tearOffLifecycle=$TearOffLifecycle.IsPresent
+        helpBrowser=$HelpBrowser.IsPresent
+        dialogLifecycle=$DialogLifecycle.IsPresent
+        dialogMovement=$DialogMovement.IsPresent
+        controlledReplay=$ControlledReplay.IsPresent
         buttonStates=@($ButtonStates)
         focusInput='injected WM_KILLFOCUS/WM_SETFOCUS; not external-window activation acceptance'
         pid=$process.Id; exitCode=$process.ExitCode; goodbye=$goodbye

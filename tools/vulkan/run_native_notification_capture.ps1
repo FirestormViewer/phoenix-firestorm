@@ -12,10 +12,28 @@ $ErrorActionPreference='Stop'
 $fixturePath=(Resolve-Path -LiteralPath $Fixture).Path
 $requestPath=(Resolve-Path -LiteralPath $Request).Path
 $requestXml=[xml](Get-Content -LiteralPath $requestPath -Raw)
+$scaleNode=$requestXml.SelectSingleNode('/llsd/map/key[text()="display"]/following-sibling::map[1]/key[text()="UIScaleFactor"]/following-sibling::real[1]')
+$uiScale=if ($scaleNode) { [double]::Parse($scaleNode.InnerText,[Globalization.CultureInfo]::InvariantCulture) } else { 1.0 }
 $sequenceNode=$requestXml.SelectSingleNode('/llsd/map/key[text()="sequence"]/following-sibling::string[1]')
 $sequence=if ($sequenceNode) { $sequenceNode.InnerText } else { 'None' }
 $queuedNode=$requestXml.SelectSingleNode('/llsd/map/key[text()="queuedInput"]/following-sibling::boolean[1]')
 $queuedInput=$queuedNode -and $queuedNode.InnerText -eq 'true'
+$tearOffNode=$requestXml.SelectSingleNode('/llsd/map/key[text()="tearOff"]/following-sibling::boolean[1]')
+$tearOff=$tearOffNode -and $tearOffNode.InnerText -eq 'true'
+$lifecycleNode=$requestXml.SelectSingleNode('/llsd/map/key[text()="tearOffLifecycle"]/following-sibling::boolean[1]')
+$tearOffLifecycle=$lifecycleNode -and $lifecycleNode.InnerText -eq 'true'
+$helpNode=$requestXml.SelectSingleNode('/llsd/map/key[text()="helpBrowser"]/following-sibling::boolean[1]')
+$helpBrowser=$helpNode -and $helpNode.InnerText -eq 'true'
+$dialogNode=$requestXml.SelectSingleNode('/llsd/map/key[text()="dialogLifecycle"]/following-sibling::boolean[1]')
+$dialogLifecycle=$dialogNode -and $dialogNode.InnerText -eq 'true'
+$movementNode=$requestXml.SelectSingleNode('/llsd/map/key[text()="dialogMovement"]/following-sibling::boolean[1]')
+$dialogMovement=$movementNode -and $movementNode.InnerText -eq 'true'
+$controlledNode=$requestXml.SelectSingleNode('/llsd/map/key[text()="controlledReplay"]/following-sibling::boolean[1]')
+$controlledReplay=$controlledNode -and $controlledNode.InnerText -eq 'true'
+if ($tearOffLifecycle) {
+    $revision=$requestXml.SelectSingleNode('/llsd/map/key[text()="lifecycleRevision"]/following-sibling::integer[1]')
+    if (!$revision -or $revision.InnerText -ne '2') { throw 'Tear-off lifecycle request predates separated drag input.' }
+}
 if ($sequence -notin @('None','Browser','Dialogs')) { throw 'Unsupported native capture sequence.' }
 $pageNode=$requestXml.SelectSingleNode('/llsd/map/key[text()="pagePath"]/following-sibling::string[1]')
 $pagePath=if ($pageNode) { (Resolve-Path -LiteralPath $pageNode.InnerText).Path } else { Join-Path $PSScriptRoot 'notification_background.html' }
@@ -46,6 +64,8 @@ try {
     $start.Environment['LLVK_NOTIFICATION_CAPTURE_DIR']=$root
     $start.Environment['LLVK_NOTIFICATION_CAPTURE_PAGE']=$pageUrl
     $start.Environment['LLVK_NOTIFICATION_CAPTURE_REQUEST']=$requestPath
+    $start.Environment.Remove('LL_DIAGNOSTIC_REPLAY_DIR') | Out-Null
+    if ($controlledReplay) { $start.Environment['LL_DIAGNOSTIC_REPLAY_DIR']=[IO.Directory]::CreateDirectory((Join-Path $root 'replay')).FullName }
     $start.Environment.Remove('LLVK_NOTIFICATION_CAPTURE_MAXIMIZED') | Out-Null
     $start.Environment.Remove('LLVK_CAPTURE_LOGIN_BUTTON_STATES') | Out-Null
     if ($Maximized) { $start.Environment['LLVK_NOTIFICATION_CAPTURE_MAXIMIZED']='1' }
@@ -63,7 +83,7 @@ try {
                 $watcher.WaitForChanged([IO.WatcherChangeTypes]::Created,1000) | Out-Null
             }
         } finally { $watcher.Dispose() }
-        & (Join-Path $PSScriptRoot 'run_browser_sequence.ps1') -ViewerProcessId $process.Id -CaptureHelper $CaptureHelper -OutputDirectory $root -Backend native -HoverOnly:$HoverOnly -Dialogs:($sequence -eq 'Dialogs') -Continuous:$Continuous -QueuedInput:$queuedInput
+        & (Join-Path $PSScriptRoot 'run_browser_sequence.ps1') -ViewerProcessId $process.Id -CaptureHelper $CaptureHelper -OutputDirectory $root -Backend native -UiScale $uiScale -HoverOnly:$HoverOnly -Dialogs:($sequence -eq 'Dialogs') -TearOff:$tearOff -TearOffLifecycle:$tearOffLifecycle -HelpBrowser:$helpBrowser -DialogLifecycle:$dialogLifecycle -DialogMovement:$dialogMovement -ControlledReplay:$controlledReplay -Continuous:$Continuous -QueuedInput:$queuedInput
     }
     if ($sequence -ne 'None') {
         if (!$process.WaitForExit(60000)) { throw 'Native fixture did not exit after sequence completion.' }
@@ -80,6 +100,12 @@ try {
         requestedMaximized=$Maximized.IsPresent
         buttonStates=$ButtonStates
         sequence=$sequence
+        tearOff=$tearOff
+        tearOffLifecycle=$tearOffLifecycle
+        helpBrowser=$helpBrowser
+        dialogLifecycle=$dialogLifecycle
+        dialogMovement=$dialogMovement
+        controlledReplay=$controlledReplay
         queuedInput=$queuedInput
         exitCode=$process.ExitCode
     }

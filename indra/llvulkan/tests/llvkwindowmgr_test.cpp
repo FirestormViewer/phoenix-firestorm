@@ -14,6 +14,7 @@
 #include <windows.h>
 #include <tlhelp32.h>
 #include <boost/asio.hpp>
+#include "../../../tools/vulkan/diagnostic_replay_clock.h"
 
 namespace tut
 {
@@ -536,9 +537,14 @@ namespace tut
             }
             std::string url() const { return "http://127.0.0.1:"+std::to_string(acceptor.local_endpoint().port())+"/guidebook"; }
         } guidebookServer;
+        configuration.loginPage="data:text/html,<html><body style='margin:0;background:rgb(45,90,120)'>"
+            "<a target='_blank' style='display:block;width:200px;height:48px' href='"+guidebookServer.url()+
+            "'>Open login page link</a><a style='display:block;width:200px;height:48px' href='"+
+            guidebookServer.url()+"'>Navigate login page</a></body></html>";
         ensure("loopback Guidebook URL",settings.set("GuidebookURL",LLSD(guidebookServer.url()),false,error));
         configuration.ui.settings["GuidebookURL"]=guidebookServer.url();
         int guidebookStage=0;
+        int reportedGuidebookStage=-1;
         LLVKSessionOwner session;
         struct CleanupState { int attempts=0,frames=0; bool destroyed=false; };
         auto cleanupState=std::make_shared<CleanupState>();
@@ -557,10 +563,17 @@ namespace tut
         };
         LLVKWidgetTree::Id originalGuidebook=0;
         LLVKWidgetTree::Id originalHelp=0;
-        const auto guidebookDeadline=std::chrono::steady_clock::now()+std::chrono::seconds(60);
+        std::set<LLVKWidgetTree::Id> browsersBeforeLoginLink;
+        const auto guidebookDeadline=std::chrono::steady_clock::now()+std::chrono::seconds(90);
         configuration.presentedFrame=[&](LLVKViewerUi& ui,const LLVKWidgetPaint::Input& input)
         {
-            ensure("bounded integrated Guidebook completion",std::chrono::steady_clock::now()<guidebookDeadline);
+            if (reportedGuidebookStage!=guidebookStage)
+            {
+                LL_INFOS("Vulkan") << "Browser integration stage " << guidebookStage << LL_ENDL;
+                reportedGuidebookStage=guidebookStage;
+            }
+            ensure("bounded integrated Guidebook completion at stage "+std::to_string(guidebookStage),
+                std::chrono::steady_clock::now()<guidebookDeadline);
             const auto snapshot=session.snapshot();
             if (snapshot.state==LLVKSessionOwner::State::Disconnecting)
             {
@@ -607,8 +620,52 @@ namespace tut
                     const bool reopened=ui.showHelp("reopened",problem); ensure(problem,reopened);
                     ensure("live Help has fresh browser identity",ui.helpBrowser()!=originalHelp);
                 }
-                else PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
+                else
+                {
+                    ensure("close Help before login hyperlink",ui.closeMenuWindow(problem));
+                    for (const auto& [id,frame] : input.browsers) browsersBeforeLoginLink.insert(id);
+                    const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+                    const auto rectangle=ui.tree().screenRect(ui.find("login_html"),problem);
+                    ensure("login hyperlink browser bounds",rectangle.has_value());
+                    RECT client{}; GetClientRect(window,&client);
+                    const auto point=MAKELPARAM(rectangle->left+20,client.bottom-rectangle->top+20);
+                    SendMessageW(window,WM_LBUTTONDOWN,MK_LBUTTON,point);
+                    SendMessageW(window,WM_LBUTTONUP,0,point);
+                }
                 ++guidebookStage;
+                return;
+            }
+            if (guidebookStage==11)
+            {
+                const auto popup=ui.find("webbrowser",ui.activeFloater());
+                if (browsersBeforeLoginLink.contains(popup)) return;
+                const auto frame=input.browsers.find(popup);
+                if (!popup || frame==input.browsers.end() || !frame->second) return;
+                const auto pixels=frame->second->bottomUpRgba();
+                if (pixels[0]!=255 || pixels[1]!=255 || pixels[2]!=0) return;
+                ensure("login popup creates a distinct browser",popup!=ui.find("login_html") && popup!=originalGuidebook);
+                ensure("login hyperlink stays prelogin",snapshot.state==LLVKSessionOwner::State::PreLogin);
+                std::string problem;
+                ensure("close login hyperlink popup",ui.closeMenuWindow(problem));
+                const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+                const auto rectangle=ui.tree().screenRect(ui.find("login_html"),problem);
+                ensure("same-window login link bounds",rectangle.has_value());
+                RECT client{}; GetClientRect(window,&client);
+                const auto point=MAKELPARAM(rectangle->left+20,client.bottom-rectangle->top+70);
+                SendMessageW(window,WM_LBUTTONDOWN,MK_LBUTTON,point);
+                SendMessageW(window,WM_LBUTTONUP,0,point);
+                ++guidebookStage;
+                return;
+            }
+            if (guidebookStage==12)
+            {
+                const auto frame=input.browsers.find(ui.find("login_html"));
+                if (frame==input.browsers.end() || !frame->second) return;
+                const auto pixels=frame->second->bottomUpRgba();
+                if (pixels[0]!=255 || pixels[1]!=255 || pixels[2]!=0) return;
+                ensure("same-window login navigation stays prelogin",snapshot.state==LLVKSessionOwner::State::PreLogin);
+                ++guidebookStage;
+                PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
                 return;
             }
             const auto id=ui.find("webbrowser",guidebookStage>=5 ? ui.activeFloater() : ui.guidebook());
@@ -744,6 +801,13 @@ namespace tut
                 !captureRequest["name"].asString().empty() && captureRequest["substitutions"].isMap());
         }
         const auto captureName=captureRequest["name"].asString();
+        if (captureRequest["helpBrowser"].asBoolean())
+        {
+            ensure("Help capture requires the local page",capturePage!=nullptr);
+            ensure("Help capture URL",settings.set("HelpURLFormat",LLSD(capturePage),false,error));
+            ensure("Help capture internal policy",settings.set("PreferredBrowserBehavior",LLSD(2),false,error));
+            rejected.ui.settings=settings.values();
+        }
         const bool browserSequence=captureRequest.has("sequence") &&
             (captureRequest["sequence"].asString()=="Browser" || captureRequest["sequence"].asString()=="Dialogs");
         bool sequenceActive=false;
@@ -794,14 +858,39 @@ namespace tut
                 }
             };
         std::future<DWORD> captureResult;
+        std::optional<double> diagnosticRequestedTime;
+        std::optional<double> diagnosticBaseTime;
+        if (captureDirectory && std::getenv("LL_DIAGNOSTIC_REPLAY_DIR"))
+            rejected.diagnosticFrameTime=[&](double previous) -> std::optional<double>
+            {
+                if (diagnosticRequestedTime) return diagnosticRequestedTime;
+                auto& clock=diagnostic_replay::Clock::instance();
+                if (!clock.begin()) return std::nullopt;
+                if (!diagnosticBaseTime) diagnosticBaseTime=previous;
+                diagnosticRequestedTime=*diagnosticBaseTime+clock.microseconds(0,0)/1000000.;
+                return diagnosticRequestedTime;
+            };
         struct InactiveFocusOwner
         {
             HWND window=nullptr;
             ~InactiveFocusOwner() { if (window) DestroyWindow(window); }
         } inactiveFocusOwner;
         unsigned captures=0;
+        std::map<std::string,std::vector<double>> timingSamples;
+        if (captureDirectory)
+            rejected.diagnosticTiming=[&](const char* stage,double milliseconds)
+            {
+                const std::string phase=failurePhase ? "shutdown/" : sequenceActive ? "interactive/" : "startup/";
+                auto& samples=timingSamples[phase+stage];
+                if (samples.size()<10000) samples.push_back(milliseconds);
+            };
         rejected.presentedFrame=[&](LLVKViewerUi& ui,const LLVKWidgetPaint::Input& input)
         {
+            if (rejected.diagnosticFrameTime)
+            {
+                diagnostic_replay::Clock::instance().finish();
+                diagnosticRequestedTime.reset();
+            }
             ++failureFrames;
             if (sequenceActive)
             {
@@ -1072,7 +1161,8 @@ namespace tut
             {
                 if (browserSequence)
                 {
-                    ensure("browser sequence capture configuration",captureDirectory && captureMaximized && ui.displayScale()==1.f);
+                    ensure("browser sequence capture configuration",captureDirectory && captureMaximized &&
+                        (ui.displayScale()==1.f || captureRequest["sequence"].asString()=="Dialogs"));
                     sequenceActive=true;
                     std::ofstream(std::filesystem::path(captureDirectory)/"sequence-ready.txt")<<"modal dismissed\n";
                     return;
@@ -1110,7 +1200,23 @@ namespace tut
             }
             PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
         };
-        ensure("browser launch failure leaves viewer usable",LLVKWindowMgr::run(rejected,error));
+        const auto captureRun=LLVKWindowMgr::run(rejected,error);
+        if (captureDirectory)
+        {
+            std::ofstream report(std::filesystem::path(captureDirectory)/"stage-timing.csv");
+            report<<"stage,count,meanMs,p95Ms,maxMs,totalMs\n";
+            for (auto& [stage,samples] : timingSamples)
+            {
+                if (samples.empty()) continue;
+                std::sort(samples.begin(),samples.end());
+                double total=0.; for (const auto sample : samples) total+=sample;
+                report<<stage<<','<<samples.size()<<','<<total/samples.size()<<','
+                    <<samples[(samples.size()-1)*95/100]<<','<<samples.back()<<','<<total<<'\n';
+            }
+        }
+        if (!captureRun && captureDirectory)
+            std::ofstream(std::filesystem::path(captureDirectory)/"window-failure.txt")<<error;
+        ensure("browser launch failure leaves viewer usable: "+error,captureRun);
         ensure("browser notification was presented",launchNoticePresented);
         ensure_equals("both login and auxiliary launch failures exercised",failurePhase,1u);
         ensure("browser failure fixture closes native window",FindWindowW(L"VulkanstormNativeLogin",nullptr)==nullptr);
@@ -1356,7 +1462,7 @@ namespace tut
         };
         const bool ran = LLVKWindowMgr::run(configuration,error);
         ensure(error,ran);
-        ensure_equals("browser, XUI preview and Help sequence verified",guidebookStage,11);
+        ensure_equals("browser, XUI preview, Help and login hyperlink sequence verified",guidebookStage,13);
         ensure("application and cache retirement completed",session.snapshot().state==LLVKSessionOwner::State::Stopped &&
             session.snapshot().owned[0]==0 && cleanupState->destroyed);
         ensure_equals("one pending poll and one explicit retry",cleanupState->attempts,3);

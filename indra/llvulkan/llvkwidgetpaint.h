@@ -18,6 +18,7 @@ public:
         double animationSeconds=0;
         std::uint32_t physicalWidth=0,physicalHeight=0;
         std::optional<std::set<Id>> foregroundFloaters;
+        std::optional<std::set<Id>> activeControlFloaters;
         std::optional<LLVKColor> floaterShadow;
     };
     struct Command
@@ -37,6 +38,7 @@ public:
     bool skinAnisotropy = false;
     float displayScale = 1.f;
     std::vector<Id> pendingBrowsers;
+    bool appendDropShadow(Id owner,Rect rectangle,Rect clip,LLVKColor::Value color,float edge,std::string& error);
     static std::optional<LLVKWidgetPaint> prepare(LLVKWidgetTree& tree, Id root, const Input& input, std::string& error);
 };
 
