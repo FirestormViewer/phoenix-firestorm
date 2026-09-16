@@ -195,7 +195,7 @@ public:
     bool setAboutInfo(const LLSD& info, std::string& error);
     void setDialogClipboard(std::shared_ptr<LLVKClipboard> clipboard) { mTree.setClipboard(clipboard); mDialogClipboard = std::move(clipboard); }
     void setOpenUrl(std::function<void(const std::string&)> callback) { mOpenUrl = std::move(callback); }
-    void setPointerCursor(std::function<void(bool)> callback) { mPointerCursor = std::move(callback); }
+    void setPointerCursor(std::function<void(bool)> callback) { mPointerCursor = std::move(callback); mTree.setCursorHandler(mPointerCursor); }
     const std::string& dialogError() const noexcept { return mDialogError; }
     std::string takeDialogError() { auto error = std::move(mDialogError); mDialogError.clear(); return error; }
     struct Notice

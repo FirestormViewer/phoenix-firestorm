@@ -110,7 +110,11 @@ bool LLVKBrowser::start(const Configuration& configuration, std::string& error)
     mEngine->setOnOpenPopupCallback([this](const std::string url,const std::string target) { enqueue({EventKind::Popup,url,target}); });
     mEngine->setOnCustomSchemeURLCallback([this](const std::string url,bool gesture,bool redirect)
         { enqueue({EventKind::CustomScheme,url,{},0,gesture,redirect}); });
-    mEngine->setOnCursorChangedCallback([this](dullahan::ECursorType cursor) { enqueue({EventKind::Cursor,{},{},int(cursor)}); });
+    mEngine->setOnCursorChangedCallback([this](dullahan::ECursorType cursor)
+    {
+        const auto name=cursor==dullahan::CT_HAND ? "hand" : cursor==dullahan::CT_IBEAM ? "ibeam" : "arrow";
+        enqueue({EventKind::Cursor,name,{},int(cursor)});
+    });
     mEngine->setOnStatusMessageCallback([this](const std::string text) { enqueue({EventKind::Status,text}); });
     mEngine->setOnTitleChangeCallback([this](const std::string text) { enqueue({EventKind::Title,text}); });
     mEngine->setOnTooltipCallback([this](const std::string text) { enqueue({EventKind::Tooltip,text}); });

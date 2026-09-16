@@ -1,5 +1,153 @@
 # Native error messaging
 
+## Native hyperlink hover cursor (2026-09-16)
+
+The user reported that Vulkan hyperlinks did not select a hand cursor. Two native
+routing gaps were found: ordinary widget cursor requests had no default sink
+(only specific About controls installed one), and both login and auxiliary CEF
+event drains discarded cursor-change events. Windows client cursor messages also
+had no retained native cursor policy.
+
+NV-00/01/03/12/17 source contract: native plain-text link hit testing already
+requests a hand over a link; the GL MediaPluginCEF::onCursorChangedCallback maps
+Dullahan CT_HAND to UI_CURSOR_HAND. The equivalent native implementation is CPU-only
+cursor selection, independent of GL rendering: the native tree now has a fallback
+cursor handler, preserving per-control overrides. LLVKBrowser publishes semantic
+hand/ibeam/arrow cursor names; WindowState caches them by browser identity and
+applies asynchronous changes only for the eligible browser under the pointer.
+Client cursor selection survives WM_SETCURSOR, resets on pointer movement, and
+auxiliary browser retirement erases its cached cursor. Other CEF cursor shapes
+remain arrow fallbacks; this is not complete CEF cursor-shape parity.
+
+The existing real-window test now checks native signup-link hand selection,
+WM_SETCURSOR persistence, departure back to arrow, asynchronous CEF login-link
+hand selection, movement within the link, departure, and reentry before actual
+navigation. Window7, Widget210, GPU10, native core build and RelWithDebInfo viewer
+link pass. The rebuilt in-place binary contains the cursor fix. No new full-viewer
+operator run or pixel-parity closure is inferred from these cursor tests.
+
+## Operator verification outside the harness (2026-09-16)
+
+The user reports that the RelWithDebInfo binary, run in place outside the test
+harness, opens Help links in the system browser and opens Guidebook without issue.
+The user clarifies that most Help links are external URLs. Accept this as operator
+verification of the tested external-link launches and Guidebook opening; do not
+require those successful checks to be repeated. This report does not supply a
+separately recorded executable hash or exhaustive URL/confirmation-state matrix.
+
+The earlier harness forced an internal Help browser with a local test page and
+exercised resizing. Its black GL browser frames remain evidence about that specific
+embedded-browser test, not evidence that ordinary external Help links or Guidebook
+opening fail. Investigating that discrepancy must not block acceptance of the
+operator-verified workflows or justify changing native behavior to display black
+content. Exact embedded-resize parity, untested confirmation policies and other
+previously declared coverage gaps remain distinct from these successful checks.
+
+## Post-checkpoint fractional coverage (2026-09-16)
+
+Requested commit/push completed:4349b481f849e14ba0fcd4496352447f3a1848c9 on
+origin/native-error-messaging. The following work is subsequent and uncommitted.
+The request to close every open gate remains incomplete.
+
+### Measured fractional interactions
+
+All30 corresponding full-frame samples in each listed nested-dialog matrix match
+exactly, including the initial notification, menu, Preferences, Colors, picker
+open/close/reopen, parent press/drag/release and parent close. No masks, transforms,
+rescaling or tolerance changes were used.
+
+| UI scale | Pinned GL capture | Native capture | Request SHA256 |
+|---|---|---|---|
+|75%|gl-fractional-dialog-92-075|native-fractional-run-203-075|DC58BD5BFC70FB5AF6D98B3D0B62EA9E15C3CDDB2D88B80AD57387F850506A78|
+|125%|gl-fractional-dialog-91-125|native-fractional-regression-209-125|8856F385AD69C2A661B8098A6BA5BDE0FA57C2612BB5BC6CEA6C34879C8244EF|
+|150%|gl-fractional-dialog-93-150|native-fractional-origin-206-150|62A947ED257977DCCF3CD9E0CAB381ADFFA5136DECE185CB1D688443D4DB9B23|
+
+Native203 SHA256:B593BAB216693A52ECB0941C8A46C33008165DB2CA2E643561249C218E410DED.
+Native206/209 SHA256:AEF9AD7705B17DA2A10D4EA7262018A733709C8BAA6EB85C6500C76838A24BF0.
+The later width/origin changes have retained75-percent evidence, not a new75-percent
+run of the206 binary. The final100-percent controlled regression208 still matches
+all54 checkpoints against GL90. Every native run completed Window7 with exit zero;
+the pinned GL runs exited zero and recorded Goodbye. This closes the listed
+fractional nested-dialog matrix, not all fractional Help/tear-off/resize workflows.
+
+NV-00/01/02/11/12/17: LLViewBorder::drawOnePixelLines, LLColorSwatchCtrl::draw,
+LLFloaterColorPicker::draw/drawPalette and LLMenuItemSeparatorGL/LLMenuItemTearOffGL
+use directed line coverage, including distinct endpoint order and inherited physical
+line width. The standalone tools/vulkan/line_coverage_probe.cpp creates its own
+hidden diagnostic context, measures quarter-pixel endpoints in both directions,
+and destroys it normally. It does not link into native rendering or modify the
+pinned GL source/executable. All64 one-pixel cases match its explicit prediction;
+the1.5-pixel-width measurements show two-pixel cross-axis coverage. Measurements
+are local AMD Radeon RX9070XT driver26.9.1 evidence, not a universal driver claim.
+Native paint emits explicit triangles for the recovered coverage. The speculative
+epsilon rules were replaced; the12-pixel corner gap is closed in actual captures.
+
+LLVKFont::metrics already returns logical metrics. Native menu row height no longer
+divides them by scale twice. Menu text now snaps its row origin separately, matching
+LLFontGL's origin/local-offset order. LLDragHandleTop::reshapeTitleBox uses separately
+ceiled ascender/descender for title height; native does likewise. Hyperlink underline
+positions now use physical raster bearings/advances and the returned pen endpoint.
+Linked text preserves style boundaries in document layout and rendering, following
+LLNormalTextSegment::drawClippedSegment. A bounded diagnostic showed78 of80
+characters emitted in the old whole-line font run; splitting at link boundaries
+restored the final period at75%. The temporary text diagnostic was removed.
+
+### Help resize reference blocker
+
+Follow-up no-input observation: the user suggested delayed GL repaint rather than
+an inherent defect. GLgl-help-resize-dwell-96 used the unchanged pinned executable
+and inserted three consecutive10-second capture streams after resize release,
+before any restore gesture. The measured interval was30.42seconds; its1811 WGC
+callbacks all reported foreground=1. Each stream retained one unique image, and
+all three images are byte-identical to the released frame and the earlier black
+GL95 reference. No recovery was observed during this interval. This does not prove
+a permanent failure or identify the cause; delayed recovery beyond30seconds and
+stalled repaint/publication remain possible.
+
+The observation data and timeline were saved, but the runner then failed while
+counting states: Select-Object property expansion does not handle its live ordered
+dictionaries as intended. Explicit dictionary access fixes that metadata operation;
+the saved23-state dictionary timeline and script syntax pass the focused check.
+The run logged Goodbye during graceful cleanup, but the usual final exit-code
+manifest was not produced, so this run is diagnostic evidence, not a full runner
+acceptance pass. Captures were not repeated or overwritten. The opt-in
+LL_DIAGNOSTIC_HELP_RESIZE_DWELL=1 path injects no input during the three streams.
+
+The shared Help workflow now adds browser field input and separated title/resize
+gestures before restoring geometry and closing/reopening. GLgl-help-workflow-94 and
+GLgl-help-workflow-recheck-95 use the unchanged pinned executable. Both produce the
+same black embedded browser after resize, including byte-identical resized,
+restored and later reopen checkpoint frames. Native-help-workflow-207 retains
+browser content at the same resized floater geometry. The resized sample differs
+442800pixels. The viewer log does not identify a media-process crash; the root
+cause and whether this is a defined failure or a reference defect remain unknown.
+
+Request SHA256:D5651ACF167E861E73E297277B916B74995C7DA9B1B2345B63441FC74782D23E.
+Both GL runs exited zero with Goodbye; native exited zero with Window7. Initial
+Help, field-input and movement samples have matching evidence before resize;
+ordinary caret-phase differences remain in unrelated preparation frames. Matching
+samples alone do not prove every input produced the intended DOM state.
+The sequence completion count is now derived from the timeline (20Help states);
+older94/95/207 fixed-count metadata is superseded by their recorded timelines.
+
+The pinned reference has not been patched, replaced or given different tolerances.
+Native has not been changed to discard valid browser content to manufacture equality.
+Further reference-specific diagnosis or an explicitly approved diagnostic reference
+is required before closing this embedded-resize workflow. Subsequent operator
+verification above confirms tested external launches and Guidebook opening outside
+the harness. Untested confirmation policies, additional Help navigation/error cases,
+and remaining declared tooltip obligations are still open. The agent did not launch
+an external system browser during this capture continuation.
+
+### Build state
+
+Latest Widget210, Window7, GPU10, native core build and RelWithDebInfo viewer link
+pass. The production executable now includes these changes, but no new full-viewer
+login/settle/shutdown acceptance run was performed. Prior CTD acceptance remains
+valid for the reproduced startup defect, not blanket acceptance of new UI work.
+UI/shutdown performance follow-ups remain open as previously measured. Unrelated
+mcp-Vulkan files were not staged or modified.
+
 ## Gates 1-3 continuation (2026-09-16)
 
 The user requested closure of controlled effects, fractional interactions and

@@ -259,10 +259,11 @@ bool LLVKWidgetTree::basePointer(Id id, const PointerEvent& event, std::string& 
 
 void LLVKWidgetTree::cursorEffect(Id id, bool hand)
 {
+    if (!get(id)) return;
     const auto events = mEvents.find(id);
-    if (events == mEvents.end() || !get(id)) return;
-    const auto callback = events->second.cursor;
+    const auto callback = events==mEvents.end() ? std::function<void(Id,bool)>{} : events->second.cursor;
     if (callback) callback(id,hand);
+    else if (const auto handler=mCursorHandler) handler(hand);
 }
 
 bool LLVKWidgetTree::handlePointer(Id id, PointerEvent event, std::string& error)

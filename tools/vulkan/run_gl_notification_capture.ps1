@@ -36,7 +36,7 @@ if ($TearOff -and $Sequence -ne 'Dialogs') { throw 'Tear-off capture requires th
 if ($TearOffLifecycle -and !$TearOff) { throw 'Tear-off lifecycle requires tear-off capture.' }
 if ($HelpBrowser -and ($Sequence -ne 'Dialogs' -or $TearOff)) { throw 'Help browser capture requires a separate dialog sequence.' }
 if ($DialogLifecycle -and ($Sequence -ne 'Dialogs' -or $TearOff)) { throw 'Dialog lifecycle requires a non-tear-off dialog sequence.' }
-if ($DialogMovement -and (!$DialogLifecycle -or $HelpBrowser)) { throw 'Dialog movement requires the picker lifecycle.' }
+if ($DialogMovement -and !$DialogLifecycle) { throw 'Dialog movement requires the dialog lifecycle.' }
 $pagePath=(Resolve-Path -LiteralPath $Page).Path
 $pageHash=(Get-FileHash -LiteralPath $pagePath).Hash
 if ($Sequence -ne 'None' -and (!$Maximized -or ($UiScale -ne 1 -and $Sequence -ne 'Dialogs') -or $LoginButtonStates -or $InactiveFocus)) {

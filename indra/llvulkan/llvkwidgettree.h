@@ -594,6 +594,7 @@ public:
         std::function<void(Id)> tabInto;
     };
     bool setEvents(Id id, Events events);
+    void setCursorHandler(std::function<void(bool)> handler) { mCursorHandler=std::move(handler); }
     bool setKeyboardFocus(Id id, bool lock, bool keystrokesOnly, std::string& error);
     bool setMouseCapture(Id id, std::string& error);
     bool setTopControl(Id id, std::string& error);
@@ -1093,6 +1094,7 @@ private:
     std::map<Id,Id> mLastGroupFocus;
     Id mMouseCapture = 0;
     std::set<Id> mPointerHover;
+    std::function<void(bool)> mCursorHandler;
     Id mTopControl = 0;
     Id mLockedFocus = 0;
     std::uint64_t mFocusEpoch = 0;

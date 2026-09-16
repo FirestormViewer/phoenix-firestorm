@@ -159,17 +159,21 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
         };
         const auto pixelLine=[&](double startX,double startY,double endX,double endY,LLVKColor::Value color)
         {
-            startX-=0.0001; endX-=0.0001;
-            startY-=0.000001; endY-=0.000001;
             const bool vertical=startX==endX;
             const auto cross=vertical ? startX : startY;
-            const auto column=std::floor(cross);
-            const auto radius=0.5-std::abs(cross-column-0.5);
+            const auto thickness=std::max(1.0,std::floor(double(scale)+0.5));
+            const auto column=std::ceil(cross-(static_cast<int>(thickness)%2 ? 0.0 : 0.5))-std::ceil(thickness/2.0);
+            const auto fraction=cross-std::floor(cross);
+            const auto radius=std::min(fraction,1.0-fraction);
             const auto start=vertical ? startY : startX,end=vertical ? endY : endX;
-            const auto low=start<end ? std::floor(start-0.5-radius)+1.0 : std::floor(end-0.5+radius)+1.0;
-            const auto high=start<end ? std::ceil(end-0.5-radius) : std::ceil(start-0.5+radius);
-            if (vertical) pixelRect(static_cast<float>(column),static_cast<float>(low),static_cast<float>(column+1),static_cast<float>(high),color);
-            else pixelRect(static_cast<float>(low),static_cast<float>(column),static_cast<float>(high),static_cast<float>(column+1),color);
+            const auto endpoint=[&](double coordinate)
+            {
+                if (fraction==0.0) return vertical ? std::floor(coordinate+0.5) : std::ceil(coordinate-0.5);
+                return start<end ? std::floor(coordinate-0.5-radius)+1.0 : std::ceil(coordinate-0.5+radius);
+            };
+            const auto low=endpoint(std::min(start,end)),high=endpoint(std::max(start,end));
+            if (vertical) pixelRect(static_cast<float>(column),static_cast<float>(low),static_cast<float>(column+thickness),static_cast<float>(high),color);
+            else pixelRect(static_cast<float>(low),static_cast<float>(column),static_cast<float>(high),static_cast<float>(column+thickness),color);
         };
         const auto alertShadow=[&](int inset,float alpha,bool floater=false) -> bool
         {
@@ -764,7 +768,10 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                     ++begin;
                     continue;
                 }
-                const auto end=icon==text.icons.end() ? lineEnd : std::min(lineEnd,icon->first);
+                auto end=icon==text.icons.end() ? lineEnd : std::min(lineEnd,icon->first);
+                for (const auto& link : text.links)
+                    for (const auto boundary : {link.begin,link.end})
+                        if (boundary>begin) end=std::min(end,boundary);
                 auto count = end-begin;
                 if (count && text.text[begin+count-1] == U'\n') --count;
                 LLVKFont::LineOptions options;
@@ -806,7 +813,8 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                 if (!line) return false;
                 const auto measured=node->control->params.font->measureRun(text.text,begin,count,1.f,true,text.params.layout.tabularNumbers,error);
                 if (!measured) return false;
-                runLeft+=measured->width;
+                if (text.links.empty()) runLeft+=measured->width;
+                else runLeft=line->endPixelX;
                 if (text.links.empty() && !selection)
                 { if (!append({},color,{},std::move(line),false,false,text.params.softShadow)) return false; }
                 else
@@ -839,10 +847,22 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                         {
                             const auto& initial = line->glyphs[first];
                             const auto& final = line->glyphs[last-1];
-                            const auto left = static_cast<std::int32_t>(std::floor(initial.left-initial.glyph->raster.bearingX+0.5f));
-                            const auto right = static_cast<std::int32_t>(std::floor(final.left-final.glyph->raster.bearingX+final.glyph->raster.advanceX+0.5f));
-                            const auto bottom = static_cast<std::int32_t>(std::floor(line->baselinePixelY-std::floor(node->control->params.font->metrics().descender)));
-                            if (right > left && !append({left,bottom-1,right,bottom},foreground)) return false;
+                            if (scale==1.f)
+                            {
+                                const auto left = static_cast<std::int32_t>(std::floor(initial.left-initial.glyph->raster.bearingX+0.5f));
+                                const auto right = static_cast<std::int32_t>(std::floor(final.left-final.glyph->raster.bearingX+final.glyph->raster.advanceX+0.5f));
+                                const auto bottom = static_cast<std::int32_t>(std::floor(line->baselinePixelY-std::floor(node->control->params.font->metrics().descender)));
+                                if (right > left && !append({left,bottom-1,right,bottom},foreground)) return false;
+                            }
+                            else
+                            {
+                                const auto originX=std::floor(screen->left*scale),originY=std::floor(screen->bottom*scale);
+                                const auto left=originX+initial.left*scale-initial.glyph->raster.bearingX;
+                                const auto right=originX+(last==line->glyphs.size() ? line->endPixelX*scale :
+                                    final.left*scale-final.glyph->raster.bearingX+final.glyph->raster.advanceX);
+                                const auto bottom=originY+line->baselinePixelY*scale-std::floor(node->control->params.font->metrics().descender*scale);
+                                pixelLine(left,bottom,right,bottom,foreground);
+                            }
                         }
                         first = last;
                     }
@@ -985,6 +1005,18 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             const auto outline=[&](Rect rect,LLVKColor::Value color,bool inverted=false)
             {
                 const auto low=rect.bottom-(inverted ? 1 : 0),high=rect.top-(inverted ? 0 : 1);
+                if (scale!=1.f)
+                {
+                    for (auto& channel : color) channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+                    const auto left=(screen->left+rect.left)*scale,right=(screen->left+rect.right-1)*scale;
+                    const auto start=(screen->bottom+(inverted ? low : high))*scale;
+                    const auto end=(screen->bottom+(inverted ? high : low))*scale;
+                    pixelLine(left,start,left,end,color);
+                    pixelLine(left,end,right,end,color);
+                    pixelLine(right,end,right,start,color);
+                    pixelLine(right,start,left,start,color);
+                    return true;
+                }
                 return pickerFill({rect.left,low-1,rect.right-1,low},color) &&
                     pickerFill({rect.left,high-1,rect.right-1,high},color) &&
                     pickerFill({rect.left-1,low,rect.left,high},color) &&
@@ -992,9 +1024,19 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             };
             const auto hueX=140+static_cast<int>(256.f*picker.hsl[0]);
             const auto saturationY=100+static_cast<int>(256.f*picker.hsl[1]);
-            if (!append({hueX-8,saturationY-1,hueX+8,saturationY},{0,0,0,1}) ||
-                !append({hueX-1,saturationY-8,hueX,saturationY+8},{0,0,0,1}) ||
-                !outline({140,100,397,356},{0,0,0,alpha},true)) return false;
+            if (scale==1.f)
+            {
+                if (!append({hueX-8,saturationY-1,hueX+8,saturationY},{0,0,0,1}) ||
+                    !append({hueX-1,saturationY-8,hueX,saturationY+8},{0,0,0,1})) return false;
+            }
+            else
+            {
+                pixelLine((screen->left+hueX-8)*scale,(screen->bottom+saturationY)*scale,
+                    (screen->left+hueX+8)*scale,(screen->bottom+saturationY)*scale,{0,0,0,1});
+                pixelLine((screen->left+hueX)*scale,(screen->bottom+saturationY-8)*scale,
+                    (screen->left+hueX)*scale,(screen->bottom+saturationY+8)*scale,{0,0,0,1});
+            }
+            if (!outline({140,100,397,356},{0,0,0,alpha},true)) return false;
             for (int row=0; row<256; ++row)
             {
                 LLColor3 color; color.setHSL(picker.hsl[0],picker.hsl[1],float(row)/256.f);

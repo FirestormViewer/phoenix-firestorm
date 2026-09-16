@@ -229,6 +229,35 @@ try {
         if ($HelpBrowser) {
             Capture-SequenceState 'help-browser' { Click-SequencePointer 1572 422 }
             Capture-SequenceState 'help-browser-away' { Move-SequencePointer 2200 900 }
+            if ($DialogMovement) {
+                Capture-SequenceState 'help-field-focus' { Click-SequencePointer 1320 550 }
+                Capture-SequenceState 'help-field-edited' {
+                    Send-SequenceKey 0x24
+                    foreach ($index in 1..10) { Send-SequenceKey 0x2E }
+                    foreach ($character in 'Help input'.ToCharArray()) { Send-SequenceMessage 0x102 ([int]$character) 1 }
+                    Click-SequencePointer 1578 550
+                    Move-SequencePointer 2200 900
+                }
+                Capture-SequenceState 'help-title-pressed' { Move-SequencePointer 1100 403; Send-SequenceMessage 0x201 1 ((403 -shl 16) -bor 1100) }
+                Capture-SequenceState 'help-title-moved' { Move-SequencePointer 1000 303 }
+                Capture-SequenceState 'help-title-released' { Send-SequenceMessage 0x202 0 ((303 -shl 16) -bor 1000) }
+                Capture-SequenceState 'help-size-pressed' { Move-SequencePointer 1502 887; Send-SequenceMessage 0x201 1 ((887 -shl 16) -bor 1502) }
+                Capture-SequenceState 'help-size-moved' { Move-SequencePointer 1582 947 }
+                Capture-SequenceState 'help-size-released' { Send-SequenceMessage 0x202 0 ((947 -shl 16) -bor 1582); Move-SequencePointer 2200 900 }
+                if ($env:LL_DIAGNOSTIC_HELP_RESIZE_DWELL -eq '1') {
+                    foreach ($segment in 0..2) {
+                        $directory=Join-Path $OutputDirectory "$Backend-help-resize-dwell-$segment"
+                        $started=[Diagnostics.Stopwatch]::GetTimestamp()
+                        & $CaptureHelper --stream $window.ToInt64().ToString() $directory 10000
+                        if ($LASTEXITCODE -ne 0) { throw 'Help resize dwell capture failed.' }
+                        $timeline.Add([ordered]@{state="help-resize-dwell-$segment";kind='no-input';startQpc=$started;endQpc=[Diagnostics.Stopwatch]::GetTimestamp();qpcFrequency=[Diagnostics.Stopwatch]::Frequency;directory=$directory})
+                    }
+                }
+                Capture-SequenceState 'help-size-restore-pressed' { Move-SequencePointer 1582 947; Send-SequenceMessage 0x201 1 ((947 -shl 16) -bor 1582) }
+                Capture-SequenceState 'help-size-restored' { Move-SequencePointer 1502 887; Send-SequenceMessage 0x202 0 ((887 -shl 16) -bor 1502) }
+                Capture-SequenceState 'help-position-restore-pressed' { Move-SequencePointer 1000 303; Send-SequenceMessage 0x201 1 ((303 -shl 16) -bor 1000) }
+                Capture-SequenceState 'help-position-restored' { Move-SequencePointer 1100 403; Send-SequenceMessage 0x202 0 ((403 -shl 16) -bor 1100); Move-SequencePointer 2200 900 }
+            }
             if ($DialogLifecycle) {
                 Capture-SequenceState 'help-closed' { Click-SequencePointer 1595 403 }
                 Capture-SequenceState 'help-reopened' { Click-SequencePointer 1572 422 }
@@ -288,7 +317,7 @@ try {
     }
     }
     $timeline | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutputDirectory "$Backend-browser-timeline.json") -Encoding utf8
-    [ordered]@{sequence=$(if ($Dialogs) { 'dialogs' } else { 'browser' });uiScale=$uiScale;controlledReplay=$ControlledReplay.IsPresent;dialogMovement=$DialogMovement.IsPresent;dialogLifecycle=$DialogLifecycle.IsPresent;helpBrowser=$HelpBrowser.IsPresent;tearOff=$TearOff.IsPresent;tearOffLifecycle=$TearOffLifecycle.IsPresent;lifecycleRevision=2;queuedInput=$QueuedInput.IsPresent;completed=$true;states=$(if ($ControlledReplay) { 29 } elseif ($DialogMovement) { 14 } elseif ($HelpBrowser -and $DialogLifecycle) { 8 } elseif ($HelpBrowser) { 5 } elseif ($Dialogs -and $TearOff -and $TearOffLifecycle) { 9 } elseif ($Dialogs -and $TearOff) { 3 } elseif ($Dialogs -and $DialogLifecycle) { 11 } elseif ($Dialogs) { 7 } elseif ($HoverOnly) { 2 } else { 10 });process=$ViewerProcessId} | ConvertTo-Json |
+    [ordered]@{sequence=$(if ($Dialogs) { 'dialogs' } else { 'browser' });uiScale=$uiScale;controlledReplay=$ControlledReplay.IsPresent;dialogMovement=$DialogMovement.IsPresent;dialogLifecycle=$DialogLifecycle.IsPresent;helpBrowser=$HelpBrowser.IsPresent;tearOff=$TearOff.IsPresent;tearOffLifecycle=$TearOffLifecycle.IsPresent;lifecycleRevision=2;queuedInput=$QueuedInput.IsPresent;completed=$true;states=@($timeline | ForEach-Object { $_['state'] } | Select-Object -Unique).Count;process=$ViewerProcessId} | ConvertTo-Json |
         Set-Content (Join-Path $OutputDirectory 'sequence-complete.json') -Encoding utf8
 } finally {
     if ($ControlledReplay -and $replaySequence) {

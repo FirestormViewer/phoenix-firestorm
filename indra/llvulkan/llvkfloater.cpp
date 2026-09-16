@@ -78,7 +78,8 @@ bool LLVKFloater::createChrome(LLVKWidgetFactory& factory,const std::string& tit
         "follows='left|right|top' mouse_opaque='false'/>",id,error);
     if (!titleId) return false;
     mTitle=*titleId;
-    const auto titleHeight=static_cast<int>(tree.get(mTitle)->control->params.font->metrics().lineHeight);
+    const auto& titleMetrics=tree.get(mTitle)->control->params.font->metrics();
+    const auto titleHeight=static_cast<int>(std::ceil(titleMetrics.ascender)+std::ceil(titleMetrics.descender));
     const auto titleTop=height-5;
     if (!tree.setShape(mTitle,{14,titleTop-titleHeight,width-30,titleTop},error) || !tree.setValue(mTitle,LLSD(title))) return false;
     const auto close = factory.construct(tree,

@@ -222,8 +222,8 @@ std::optional<std::pair<int,int>> LLVKMenu::menuSize(std::size_t item,std::strin
         { error="Native menu width overflows"; return 0; }
         return static_cast<int>(std::floor(result->width+0.5f));
     };
-    const auto rowHeight=static_cast<int>(std::ceil(mFont->metrics().ascender/mFont->displayScale())+
-        std::ceil(mFont->metrics().descender/mFont->displayScale()))+4;
+    const auto rowHeight=static_cast<int>(std::ceil(mFont->metrics().ascender)+
+        std::ceil(mFont->metrics().descender))+4;
     int width=0,height=4+(mItems[item].canTearOff && mTearOff ? 10 : 0);
     for (const auto child : mItems[item].children)
     {
@@ -522,10 +522,33 @@ bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::
         }
         else output.commands.push_back({UINT64_MAX-item,rect,viewport,tint});
     };
+    const auto horizontalLine=[&](std::size_t item,int left,int right,int height,LLVKColor::Value tint)
+    {
+        const auto scale=mFont->displayScale();
+        if (scale==1.f) { solid(item,{left,height-1,right,height},tint); return; }
+        for (auto& channel : tint) channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+        const auto cross=height*scale,fraction=cross-std::floor(cross);
+        const auto radius=std::min(fraction,1.f-fraction);
+        const auto endpoint=[&](float position) { return fraction==0.f ? std::ceil(position-.5f) : std::floor(position-.5f-radius)+1.f; };
+        const auto low=endpoint(left*scale)/scale,high=endpoint(right*scale)/scale;
+        const auto thickness=std::max(1.f,std::floor(scale+.5f));
+        const auto base=std::ceil(cross-(static_cast<int>(thickness)%2 ? 0.f : .5f))-std::ceil(thickness/2.f);
+        const auto bottom=base/scale,top=(base+thickness)/scale;
+        LLVKWidgetPaint::Command command;
+        command.owner=UINT64_MAX-item; command.clip=viewport; command.color=tint;
+        command.triangle=std::array<float,6>{low,bottom,high,bottom,high,top}; output.commands.push_back(command);
+        command.triangle=std::array<float,6>{low,bottom,high,top,low,top}; output.commands.push_back(std::move(command));
+    };
     const auto text = [&](std::size_t item,const std::string& label,float x,float y,LLVKColor::Value tint,LLVKFont::HorizontalAlign align) -> bool
     {
         const auto wide = utf8str_to_wstring(label); const std::u32string value(wide.begin(),wide.end());
         LLVKFont::LineOptions options; options.x = x; options.y = y; options.vertical = LLVKFont::VerticalAlign::Bottom; options.horizontal = align;
+        const auto row=std::find_if(mHits.begin(),mHits.end(),[item](const Hit& hit) { return hit.item==item && hit.level>0 && !hit.tearOff; });
+        if (row!=mHits.end())
+        {
+            options.originX=static_cast<float>(row->rect.left); options.originY=static_cast<float>(row->rect.bottom);
+            options.x-=options.originX; options.y-=options.originY;
+        }
         auto line = mFont->layoutLine(value,0,value.size(),options,error);
         if (!line) return false;
         output.commands.push_back({UINT64_MAX-item,{},viewport,tint,{},std::move(line)}); return true;
@@ -563,8 +586,8 @@ bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::
         if (!text(item,mItems[item].label,itemOriginX+width/2.f,itemOriginY+1.f,selected ? foreground : normal,LLVKFont::HorizontalAlign::Center)) return false;
         left += width;
     }
-    const int rowHeight = static_cast<int>(std::ceil(mFont->metrics().ascender/mFont->displayScale())+
-        std::ceil(mFont->metrics().descender/mFont->displayScale()))+4;
+    const int rowHeight = static_cast<int>(std::ceil(mFont->metrics().ascender)+
+        std::ceil(mFont->metrics().descender))+4;
     if (!dropdowns && !mFixedRoot) return true;
     if (mFixedRoot) mHits.push_back({*mFixedRoot,0,{mBar.left,mBar.top,mBar.right,mBar.top}});
     if (mContextRoot) mHits.push_back({*mContextRoot,0,mContextAnchor});
@@ -603,14 +626,14 @@ bool LLVKMenu::paint(LLVKWidgetPaint& output,LLVKWidgetTree::Rect viewport,std::
             mHits.push_back({mOpen[level],level+1,rect,true});
             if (mTearHovered==mOpen[level]) solid(mOpen[level],rect,highlight);
             const auto tint=disabled;
-            solid(mOpen[level],{left+6,rect.bottom+2,left+width-6,rect.bottom+3},tint);
-            solid(mOpen[level],{left+6,rect.bottom+5,left+width-6,rect.bottom+6},tint);
+            horizontalLine(mOpen[level],left+6,left+width-6,rect.bottom+3,tint);
+            horizontalLine(mOpen[level],left+6,left+width-6,rect.bottom+6,tint);
             top-=10;
         }
         for (auto item : mItems[mOpen[level]].children)
         {
             const auto& entry = mItems[item]; if (!itemVisible(item)) continue;
-            if (entry.separator) { solid(item,{left+6,top-5,left+width-6,top-4},disabled); top -= 8; continue; }
+            if (entry.separator) { horizontalLine(item,left+6,left+width-6,top-4,disabled); top -= 8; continue; }
             const Rect rect{left,top-rowHeight,left+width,top}; mHits.push_back({item,level+1,rect});
             const bool selected = mHovered == item && enabled(item);
             if (selected) solid(item,rect,highlight);

@@ -329,12 +329,17 @@ std::optional<LLVKPlainControl> LLVKWidgetTree::resolvePlainText(const LLVKPlain
 std::optional<LLVKPlainTextLayout::Document> LLVKPlainControl::prepareDocument(std::shared_ptr<LLVKFont> font,
     const LLVKPlainTextLayout::Options& options, std::int32_t height, std::string& error) const
 {
-    if (icons.empty()) return LLVKPlainTextLayout::document(text,*font,options,height,params.verticalPadding,params.vertical,error);
+    if (icons.empty() && links.empty()) return LLVKPlainTextLayout::document(text,*font,options,height,params.verticalPadding,params.vertical,error);
     LLVKStyledTextSegment::Params defaults;
     defaults.font=font; defaults.scaleX=options.scaleX; defaults.scaleY=options.scaleY;
     defaults.tabularNumbers=options.tabularNumbers;
     auto styled=LLVKStyledTextDocument::create(text,defaults,error);
     if (!styled) return std::nullopt;
+    for (const auto& link : links)
+    {
+        auto segment=defaults; segment.begin=link.begin; segment.end=link.end;
+        if (!styled->overlay(segment,error)) return std::nullopt;
+    }
     for (const auto& [position,image] : icons)
     {
         auto segment=defaults;

@@ -544,6 +544,7 @@ namespace tut
         ensure("loopback Guidebook URL",settings.set("GuidebookURL",LLSD(guidebookServer.url()),false,error));
         configuration.ui.settings["GuidebookURL"]=guidebookServer.url();
         int guidebookStage=0;
+        int hyperlinkCursorStage=0;
         int reportedGuidebookStage=-1;
         LLVKSessionOwner session;
         struct CleanupState { int attempts=0,frames=0; bool destroyed=false; };
@@ -593,6 +594,38 @@ namespace tut
                 return;
             }
             ensure("cache gate and real window services adopted",snapshot.owned[0]==3);
+            if (hyperlinkCursorStage)
+            {
+                const auto expected=LoadCursorW(nullptr,hyperlinkCursorStage==2 ? IDC_ARROW : IDC_HAND);
+                if (GetCursor()!=expected) return;
+                const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+                SendMessageW(window,WM_SETCURSOR,reinterpret_cast<WPARAM>(window),MAKELPARAM(HTCLIENT,WM_MOUSEMOVE));
+                ensure("browser cursor persists through Windows cursor messages",GetCursor()==expected);
+                std::string problem;
+                const auto rectangle=ui.tree().screenRect(ui.find("login_html"),problem);
+                ensure("cursor test login bounds",rectangle.has_value());
+                RECT client{}; GetClientRect(window,&client);
+                const auto linkPoint=MAKELPARAM(rectangle->left+20,client.bottom-rectangle->top+20);
+                if (hyperlinkCursorStage==1)
+                {
+                    SendMessageW(window,WM_MOUSEMOVE,0,MAKELPARAM(rectangle->left+21,client.bottom-rectangle->top+20));
+                    ensure("moving within CEF link retains cached hand",GetCursor()==expected);
+                    SendMessageW(window,WM_MOUSEMOVE,0,MAKELPARAM(rectangle->left+300,client.bottom-rectangle->top+20));
+                    hyperlinkCursorStage=2;
+                }
+                else if (hyperlinkCursorStage==2)
+                {
+                    SendMessageW(window,WM_MOUSEMOVE,0,linkPoint);
+                    hyperlinkCursorStage=3;
+                }
+                else
+                {
+                    SendMessageW(window,WM_LBUTTONDOWN,MK_LBUTTON,linkPoint);
+                    SendMessageW(window,WM_LBUTTONUP,0,linkPoint);
+                    hyperlinkCursorStage=0;
+                }
+                return;
+            }
             if (guidebookStage==8)
             {
                 const auto inspector=ui.find("overlap_panel");
@@ -628,9 +661,17 @@ namespace tut
                     const auto rectangle=ui.tree().screenRect(ui.find("login_html"),problem);
                     ensure("login hyperlink browser bounds",rectangle.has_value());
                     RECT client{}; GetClientRect(window,&client);
+                    const auto signup=ui.tree().screenRect(ui.find("create_new_account_text"),problem);
+                    ensure("native signup cursor bounds",signup.has_value());
+                    SendMessageW(window,WM_MOUSEMOVE,0,MAKELPARAM(signup->left+5,client.bottom-1-(signup->bottom+5)));
+                    ensure("native login link selects hand",GetCursor()==LoadCursorW(nullptr,IDC_HAND));
+                    SendMessageW(window,WM_SETCURSOR,reinterpret_cast<WPARAM>(window),MAKELPARAM(HTCLIENT,WM_MOUSEMOVE));
+                    ensure("native hand survives Windows cursor update",GetCursor()==LoadCursorW(nullptr,IDC_HAND));
+                    SendMessageW(window,WM_MOUSEMOVE,0,MAKELPARAM(5,client.bottom-5));
+                    ensure("leaving native link restores arrow",GetCursor()==LoadCursorW(nullptr,IDC_ARROW));
                     const auto point=MAKELPARAM(rectangle->left+20,client.bottom-rectangle->top+20);
-                    SendMessageW(window,WM_LBUTTONDOWN,MK_LBUTTON,point);
-                    SendMessageW(window,WM_LBUTTONUP,0,point);
+                    SendMessageW(window,WM_MOUSEMOVE,0,point);
+                    hyperlinkCursorStage=1;
                 }
                 ++guidebookStage;
                 return;
