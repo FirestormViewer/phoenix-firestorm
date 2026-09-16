@@ -1,5 +1,149 @@
 # Native error messaging
 
+## Text movement cache optimization (2026-09-16)
+
+The user deferred further investigation of the Guidebook fixture timeout and
+directed work to continue with UI latency. Live Guidebook display is explicitly
+operator-accepted. The real CEF internal-link regression remains unverified:
+the fixture times out at stage0 before the link click, then aborts during session
+cleanup. That failure is not evidence that Guidebook fails in live use.
+
+NV-00/01/12/13/14/17, optimization: the GL reference contract is
+LLFontGL::render -> LLFontFreetype::getGlyphInfo at the pinned reference revision
+59108e15a1f8f94d2da7c674d937d19f5cf9450d. Cached glyph bitmap coordinates are
+independent of the screen rectangles generated for each draw; cache misses use
+addGlyph. Native LLVKWidgetGpu previously included screen positions in atlas
+identity, rebuilding and uploading unchanged pixels whenever text moved.
+
+The native implementation now asks LLVKGlyphAtlas::updateLayout to replace only
+CPU placements when the complete ordered glyph-identity sequence matches. Count
+or identity mismatch rejects reuse before mutation and retains the existing
+rebuild/publication path. No GL function is reused or changed. Pixel pages, UVs,
+sampling, shader ABI, color conversion, shadow order and clips are unchanged.
+This avoids offset arithmetic that could change fractional rounding: the exact
+new device-space rectangles are copied into placements.
+
+GPU safety: placement changes do not touch Vulkan images or descriptors. Existing
+uploads retain their completion gate. Packets and recorded draws own copied
+vertices and shared immutable image references, so later CPU placement changes
+cannot modify in-flight geometry. Glyph-identity replacement still uses new
+resources, with existing completion-based consumer retention. No new barriers,
+device-idle waits or descriptor recycling are introduced.
+
+Measured on AMD Radeon RX9070XT, Windows, RelWithDebInfo: the same32-update
+fractional movement probe took56.5941ms with31 upload/publication cycles before
+the change. Afterward it took0.0506ms with zero cycles; subsequent runs measured
+0.0532,0.1055,0.0521 and0.0503ms, all with zero cycles. These are fixture CPU
+preparation timings including explicit completion waits in the old path, not
+end-to-end input latency or a full-viewer speedup. First-open Preferences stalls
+and browser scheduling are not claimed fixed. The earlier shutdown task remains
+backlog, outside this continuation's three-feature request.
+
+Validation: GPU10/10, Widget210/210 and offscreen glyph6/6 pass. The GPU fixture
+checks exact fresh-versus-reused vertices, UVs, colors, draw order and clipping at
+75/100/125/150 percent, unchanged image identities, new-glyph publication and
+retained old packets. The offscreen fixture checks every target pixel against
+unchanged blending, clipping, hard/soft-shadow, bold and depth expectations after
+repositioning; it also mutates placements after recording and checks failed reuse
+is nonmutating. Khronos and synchronization validation execute in the offscreen
+fixture with zero validation errors. Editor diagnostics, native core build and
+RelWithDebInfo viewer link pass. No full-viewer run or new commit was performed.
+
+Prior bounded effects evidence is retained: GLgl-controlled-tooltip-bottom-99
+versus native-controlled-partial-216 matched all138 full-frame samples exactly
+before this cache optimization. Native216 SHA256:
+DE92C916C9D3883FB30043C96E314A323B10633050758CEA2CD575C5A9B0C7FF.
+That expanded matrix includes bottom-edge tooltip placement and partial floater
+dragging; modal tooltip suppression also passed widget tests. It is historical
+full-window evidence, not a rerun of that matrix on the optimized binary.
+
+Native Preferences URL tab/subtab/search routing and external forwarding passed
+direct widget tests before the deferral. Explicit CEF custom-scheme clicks are
+queued for dispatch after browser iteration; non-gesture or redirect events are
+not treated as clicks. Other internal destinations remain unsupported rather
+than silently forwarded to the system browser. None of this closes the deferred
+real-CEF click verification or establishes complete SLURL support.
+
+## Tooltip skin layering resolved (2026-09-16)
+
+The timeout-override blocker below was an incorrect test expectation, not a failed
+numeric parse. NV-00/01/02/12/17 source tracing:
+LLUICtrlFactory::loadWidgetTemplate calls LLXMLNode::getLayeredXMLNode, whose
+LLXMLNode::updateNode only updates attributes already present in the base node.
+LLVKXmlLayers implements the same rule. The base widgets/tool_tip.xml declares
+max_width and padding but not visible_time_near. Therefore a partial skin overlay
+can change width/padding but cannot introduce that timeout attribute. Keeping the
+configured10-second timeout in that case matches GL; forcing0.25seconds would not.
+Neither the GL implementation nor the native shared XML merger was changed.
+
+The regression now verifies inherited Tooltip background styling, width80,
+padding9, and unchanged tooltip identity when the unsupported new timeout
+attribute is ignored. It separately changes ToolTipVisibleTimeNear to0.25 and
+verifies timeout-driven tooltip renewal. Widget210/210 passes. This corrects the
+assertion against the inspected source contract, not a visual tolerance.
+
+The skin-backed native template also passes the retained default-skin controlled
+pixel regression: GLgl-controlled-tooltip-edge-98 versus native-tooltip-skin-214,
+all122 full-frame samples exact. Native214 SHA256:
+CB8CC8EE1F85B0A04A0155EFB8DB86A3193D30CFD8AEA62225C48ED574BAE6AE.
+The request and GL binary identities are unchanged from the continuation below;
+native exits zero with Window7. This is default-skin pixel evidence plus focused
+custom-overlay state/geometry tests, not a claim of paired screenshots for every
+custom skin. Broader controlled-effects obligations remain separately tracked.
+
+Window7, GPU10, native core build, RelWithDebInfo viewer link and editor diagnostics
+pass. The in-place viewer contains the validated tooltip changes. No full-session
+operator run, new commit or push was performed for this correction.
+
+## Controlled tooltip continuation (2026-09-16)
+
+After checkpoint ff29de9e70, the user requested sequential completion of controlled
+effects, hyperlink activation and UI latency. This continuation remains on the
+first feature; the latter two have not been changed in this pass.
+
+The expanded controlled replay now records tooltip initial/fast delays, replacement,
+near/far timeout, keyboard fade, focus loss/regain, a dormant Win32 leave message,
+and right-edge positioning. GLgl-controlled-tooltip-edge-98 and
+native-controlled-tooltip-edge-213 match all122 full-frame samples exactly.
+Native213 SHA256:3AB4CC6D6AE74607DA421A6037D3627663BE8D38D361C40D25F2FE2D91CB329F.
+The GL diagnostic binary remains1DFD3ACCFAB4472D957FA240E0CD139B7D7473A72252FC8D545AB7275787CE8B.
+Request SHA256:0FBD03AA884CEAFFE3FD7C5963B835F08F33D7F2B6A0605E835CE742E25DF411;
+the recorded timeline identifies the expanded sequence. Both runs exit zero;
+GL records Goodbye and native passes Window7. No image tolerance or transform is
+used. The original54 checkpoints are included unchanged.
+
+NV-00/01/09/12/17: source LLView::getTooltipTimeout uses the fast delay while a
+tooltip remains visible. LLToolTipMgr selects over/near/far timeouts; LLToolTip::draw
+uses F32 timer values for fade thresholds. Native now matches those policies and
+the cursor-exclusion placement in LLUI::positionViewNearMouse and
+LLView::translateIntoRectWithExclusion. LLViewerWindow::handleFocusLost does not
+fade existing tooltips: it suppresses new requests via application focus. An
+initial native WM_MOUSELEAVE addition was removed after tracing showed the GL
+Win32 handler is commented out; dormant behavior is not a parity mandate.
+
+Native210 failed after replay with Invalid native notice clock: controlled time
+advanced beyond wall time, and releasing replay moved notice time backwards.
+The diagnostic-to-ordinary clock handoff now rebases to the last accepted time;
+211-213 pass graceful fixture completion. Native211 had one delay checkpoint
+mismatch from double versus F32 fade-boundary evaluation;212 closes all106 earlier
+samples and213 adds16 exact edge/drag/fade samples. Failed evidence is retained.
+
+A subsequent tooltip skin-default implementation is NOT yet validated. It merges
+widgets/tool_tip.xml layers into an independently owned native panel/text template,
+with width, padding, font, wrapping, background and timeout attributes. Its new
+test203 passes inherited image, width and padding checks, but fails
+"XML near timeout renews eligible tooltip". A temporary probe showed timeout=10
+instead of the declared0.25 at times1.3 and1.4. Switching to all skin layers fixed
+the missing background; explicit locale-independent parsing did not fix the
+remaining timeout failure. The temporary logging has been removed.
+
+Latest widget result is209/210, with that one regression unresolved. The required
+retry limit has been reached; further correction awaits user direction. Do not
+mark the controlled-effects gate complete or infer current-template parity from
+the earlier122-frame pass. Current source includes the unverified skin-template
+changes; the window fixture binary and production viewer have not been rebuilt
+with that later slice. No new commit or push was made.
+
 ## Native hyperlink hover cursor (2026-09-16)
 
 The user reported that Vulkan hyperlinks did not select a hand cursor. Two native

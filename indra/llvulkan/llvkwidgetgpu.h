@@ -24,7 +24,6 @@ private:
     };
     struct Text
     {
-        LLVKFont::LineLayout layout;
         std::optional<LLVKGlyphAtlas> atlas;
         std::vector<std::unique_ptr<LLVKGlyphUpload>> uploads;
         std::vector<std::shared_ptr<const LLVKGlyphImage>> pages;

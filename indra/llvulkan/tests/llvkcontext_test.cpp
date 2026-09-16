@@ -450,6 +450,96 @@ namespace tut
         const auto imageIdentity = widgetPacket.draws()[0].image;
         ensure("unchanged paint ready without reupload",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Ready);
         ensure("image cache identity retained",widgetPacket.draws()[0].image == imageIdentity);
+        {
+            const auto original=*paint.commands[1].text;
+            std::size_t uploads=0;
+            const auto started=std::chrono::steady_clock::now();
+            for (std::size_t step=0; step<32; ++step)
+            {
+                auto moved=original;
+                for (auto& glyph : moved.glyphs)
+                {
+                    glyph.left+=float(step%8)*0.25f; glyph.right+=float(step%8)*0.25f;
+                    glyph.bottom+=float(step%4)*0.5f; glyph.top+=float(step%4)*0.5f;
+                }
+                paint.commands[1].text=std::move(moved);
+                const auto status=widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error);
+                ensure(error,status!=LLVKWidgetGpu::Status::Failed);
+                if (status==LLVKWidgetGpu::Status::Pending)
+                {
+                    ++uploads;
+                    ensure("movement probe upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
+                    ensure("movement probe publishes",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+                }
+            }
+            const auto elapsed=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-started).count();
+            std::cout << "Native text movement probe: steps=32 uploads=" << uploads << " elapsed_ms=" << elapsed << '\n';
+            ensure_equals("placement-only changes never upload glyph rasters",uploads,std::size_t(0));
+            paint.commands[1].text=original;
+            const auto restored=widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error);
+            ensure(error,restored!=LLVKWidgetGpu::Status::Failed);
+            ensure("movement probe restore uploads complete",widgetGpu.waitPendingUploads(5000000000ull,error));
+            ensure("movement probe restored",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+        }
+        {
+            auto textPaint=paint;
+            textPaint.commands.erase(textPaint.commands.begin());
+            textPaint.commands[0].clip={0,0,100,100};
+            const auto initialPacket=widgetPacket;
+            const auto equalVertices=[](const auto& first,const auto& second)
+            {
+                return first.positionX==second.positionX && first.positionY==second.positionY &&
+                    first.textureU==second.textureU && first.textureV==second.textureV &&
+                    first.red==second.red && first.green==second.green && first.blue==second.blue && first.alpha==second.alpha;
+            };
+            for (const float scale : {0.75f,1.f,1.25f,1.5f})
+            {
+                textPaint.displayScale=scale;
+                textPaint.commands[0].text=*line;
+                for (std::size_t index=0; index<textPaint.commands[0].text->glyphs.size(); ++index)
+                {
+                    auto& glyph=textPaint.commands[0].text->glyphs[index];
+                    glyph.left+=40.f+float(index)*0.25f; glyph.right+=40.f+float(index)*0.25f;
+                    glyph.bottom+=40.5f; glyph.top+=40.5f;
+                }
+                ensure("scaled reposition remains immediately ready",widgetGpu.prepare(textPaint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+                LLVKWidgetGpu freshGpu(uploadDevice);
+                LLVKUiPacket freshPacket(renderer.swapchainExtent());
+                ensure("fresh comparison requires publication",freshGpu.prepare(textPaint,renderer.swapchainExtent(),freshPacket,error)==LLVKWidgetGpu::Status::Pending);
+                ensure("fresh comparison upload completes",freshGpu.waitPendingUploads(5000000000ull,error));
+                ensure("fresh comparison publishes",freshGpu.prepare(textPaint,renderer.swapchainExtent(),freshPacket,error)==LLVKWidgetGpu::Status::Ready);
+                ensure("reposition matches fresh geometry exactly",std::equal(widgetPacket.vertices().begin(),widgetPacket.vertices().end(),
+                    freshPacket.vertices().begin(),freshPacket.vertices().end(),equalVertices));
+                ensure_equals("reposition preserves draw count",widgetPacket.draws().size(),freshPacket.draws().size());
+                for (std::size_t index=0; index<widgetPacket.draws().size(); ++index)
+                {
+                    const auto& reused=widgetPacket.draws()[index];
+                    const auto& fresh=freshPacket.draws()[index];
+                    ensure("reposition retains original glyph image",reused.image==initialPacket.draws()[index+1].image);
+                    ensure("reposition preserves draw contract",reused.firstVertex==fresh.firstVertex && reused.vertexCount==fresh.vertexCount &&
+                        reused.clip.offset.x==fresh.clip.offset.x && reused.clip.offset.y==fresh.clip.offset.y &&
+                        reused.clip.extent.width==fresh.clip.extent.width && reused.clip.extent.height==fresh.clip.extent.height &&
+                        reused.blend==fresh.blend && reused.alphaMask==fresh.alphaMask);
+                }
+                ensure("moved frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+                ensure("moved packet recorded",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
+                ensure("moved packet presented",renderer.end2DFrame());
+            }
+            const auto changed=font->layoutLine(U"Updated",0,7,{},error);
+            ensure(error,changed.has_value());
+            textPaint.commands[0].text=*changed;
+            ensure("new glyph identities require publication",widgetGpu.prepare(textPaint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Pending);
+            ensure("new glyph publication completes",widgetGpu.waitPendingUploads(5000000000ull,error));
+            ensure("new glyph identities publish",widgetGpu.prepare(textPaint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+            ensure("old packet acquired after atlas replacement",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+            ensure("old packet retains its image and geometry",renderer.recordUiPacket(initialPacket.vertices(),initialPacket.draws()));
+            ensure("old packet presented",renderer.end2DFrame());
+            ensure("restore original paint requests publication",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Pending);
+            ensure("original paint upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
+            ensure("original paint publishes",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+            ensure("retained original packet is unchanged",std::equal(widgetPacket.vertices().begin(),widgetPacket.vertices().end(),
+                initialPacket.vertices().begin(),initialPacket.vertices().end(),equalVertices));
+        }
         const auto unshadowedVertices=widgetPacket.vertices().size();
         paint.commands[1].shadow=true;
         paint.commands[1].color={0.2f,0.1f,0.1f,1.f};

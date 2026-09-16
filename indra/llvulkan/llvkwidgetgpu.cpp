@@ -67,17 +67,6 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
     for (auto& [key,text] : mTexts)
         for (std::size_t page = 0; page < text.uploads.size(); ++page)
             if (!poll(text.uploads[page],text.pages[page])) return Status::Failed;
-    const auto same = [](const LLVKFont::LineLayout& first,const LLVKFont::LineLayout& second)
-    {
-        if (first.glyphs.size() != second.glyphs.size()) return false;
-        for (std::size_t index = 0; index < first.glyphs.size(); ++index)
-        {
-            const auto& before = first.glyphs[index]; const auto& after = second.glyphs[index];
-            if (before.glyph != after.glyph || before.left != after.left || before.right != after.right ||
-                before.top != after.top || before.bottom != after.bottom) return false;
-        }
-        return true;
-    };
     std::map<LLVKWidgetTree::Id,std::size_t> parts;
     for (const auto& command : paint.commands)
     {
@@ -121,13 +110,12 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
                 }
             auto& text = mTexts[key];
             text.used = mFrame;
-            if (!text.atlas || !same(text.layout,deviceText))
+            if (!text.atlas || !text.atlas->updateLayout(deviceText))
             {
                 const bool uploading = std::any_of(text.uploads.begin(),text.uploads.end(),[](const auto& upload) { return bool(upload); });
                 if (uploading) { pending = true; continue; }
                 Text replacement;
                 replacement.used = mFrame;
-                replacement.layout = deviceText;
                 replacement.atlas = LLVKGlyphAtlas::prepare(deviceText,256,16*1024*1024,error);
                 if (!replacement.atlas) return Status::Failed;
                 for (const auto& page : replacement.atlas->pages())

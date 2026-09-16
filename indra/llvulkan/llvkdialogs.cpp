@@ -3803,6 +3803,54 @@ bool LLVKViewerUi::showJoystick(std::string& error)
     return mJoystick->open(error);
 }
 
+bool LLVKViewerUi::activateUrl(const std::string& url,std::string& error)
+{
+    error.clear();
+    if (url.empty() || url.size()>65536 || url.find('\0')!=url.npos)
+    { error="Invalid native hyperlink"; return false; }
+    const LLURI uri(url);
+    auto scheme=uri.scheme(); LLStringUtil::toLower(scheme);
+    if (scheme!="secondlife")
+    {
+        if ((scheme!="http" && scheme!="https" && scheme!="ftp") || uri.hostName().empty())
+        { error="Unsupported native hyperlink scheme"; return false; }
+        if (!mOpenUrl) { error="Native web link service is not bound"; return false; }
+        mOpenUrl(url);
+        return true;
+    }
+    if (!uri.authority().empty() || uri.path()!="/app/openfloater/preferences")
+    { error="Native internal hyperlink destination is unavailable"; return false; }
+    if (!showPreferences(error)) return false;
+    const auto query=uri.queryMap();
+    const auto core=find("pref core",mPreferences->id());
+    if (query.has("tab"))
+    {
+        const auto tabs=mTree.get(core)->tabContainer->tabs;
+        for (const auto& tab : tabs)
+            if (mTree.get(tab.panel)->params.name==query["tab"].asString())
+            {
+                if (!mTree.selectTabPanel(core,tab.panel,error)) return false;
+                if (query.has("subtab"))
+                {
+                    const auto nested=find("tabs",tab.panel);
+                    const auto* container=mTree.get(nested);
+                    if (container && container->tabContainer)
+                        for (const auto& child : container->tabContainer->tabs)
+                            if (mTree.get(child.panel)->params.name==query["subtab"].asString())
+                                return mTree.selectTabPanel(nested,child.panel,error);
+                }
+                break;
+            }
+    }
+    else if (query.has("search"))
+    {
+        if (!mTree.setValue(find("search_prefs_edit",mPreferences->id()),query["search"]))
+        { error="Native Preferences search field is unavailable"; return false; }
+        return filterPreferences(error);
+    }
+    return true;
+}
+
 bool LLVKViewerUi::copyPreferenceSearch(std::string& error)
 {
     error.clear();

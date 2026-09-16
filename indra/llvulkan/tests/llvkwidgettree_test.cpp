@@ -759,12 +759,103 @@ namespace tut
         const auto hasTooltip=[](const auto& paint)
         { return std::any_of(paint.commands.begin(),paint.commands.end(),[](const auto& draw) { return draw.image && draw.image->name()=="Tooltip"; }); };
         ensure("tooltip uses the native skin image",hasTooltip(*tooltipPaint));
+        tooltipInput.editor.applicationFocused=false;
+        const auto unfocusedTooltip=ui->preparePaint(tooltipInput,error);
+        ensure(error,unfocusedTooltip.has_value());
+        ensure("focus loss preserves existing tooltip until timeout",hasTooltip(*unfocusedTooltip));
+        tooltipInput.editor.applicationFocused=true;
+        ui->blockTooltips();
+        ensure("blocked input begins tooltip fade",ui->preparePaint(tooltipInput,error).has_value());
+        ensure("leave fade advances",ui->tree().advanceTime(1.25,error));
+        const auto leftTooltip=ui->preparePaint(tooltipInput,error);
+        ensure(error,leftTooltip.has_value());
+        ensure("blocked input retires tooltip",!hasTooltip(*leftTooltip));
+        ensure("outside clock advances",ui->tree().advanceTime(2.,error));
+        const auto outsideTooltip=ui->preparePaint(tooltipInput,error);
+        ensure(error,outsideTooltip.has_value());
+        ensure("stale coordinates cannot recreate tooltip",!hasTooltip(*outsideTooltip));
+        tooltipInput.button.mouseX=250; tooltipInput.button.mouseY=400;
+        ensure("reentry clears blocked region",ui->preparePaint(tooltipInput,error).has_value());
+        tooltipInput.button.mouseX=30; tooltipInput.button.mouseY=300;
+        ensure("reentry starts fresh delay",ui->preparePaint(tooltipInput,error).has_value());
+        ensure("reentry delay advances",ui->tree().advanceTime(3.,error));
+        const auto reenteredTooltip=ui->preparePaint(tooltipInput,error);
+        ensure(error,reenteredTooltip.has_value());
+        ensure("tooltip returns after reentry delay",hasTooltip(*reenteredTooltip));
         ui->menuPointer({LLVKWidgetTree::PointerKind::LeftDown,30,300});
-        ensure("tooltip fade clock advances",ui->tree().advanceTime(1.3,error));
+        ensure("tooltip fade clock advances",ui->tree().advanceTime(3.3,error));
         const auto fadedTooltip=ui->preparePaint(tooltipInput,error);
         ensure(error,fadedTooltip.has_value());
         ensure("tooltip retires after fade",!hasTooltip(*fadedTooltip));
         ensure("tooltip owner cleanup",ui->tree().erase(*tooltipOwner,error));
+        const auto tooltipViewport=ui->tree().get(ui->root())->params.rect;
+        tooltipView.rect={tooltipViewport.right-100,0,tooltipViewport.right,100};
+        const auto edgeOwner=ui->tree().create(tooltipView,ui->root(),error);
+        ensure(error,edgeOwner.has_value());
+        tooltipInput.button.mouseX=tooltipViewport.right-2; tooltipInput.button.mouseY=2;
+        ensure("edge tooltip starts delay",ui->preparePaint(tooltipInput,error).has_value());
+        ensure("edge tooltip clock",ui->tree().advanceTime(4.3,error));
+        const auto edgePaint=ui->preparePaint(tooltipInput,error);
+        ensure(error,edgePaint.has_value());
+        const auto edgeImage=std::find_if(edgePaint->commands.begin(),edgePaint->commands.end(),[](const auto& draw)
+        { return draw.image && draw.image->name()=="Tooltip"; });
+        ensure("edge tooltip shown",edgeImage!=edgePaint->commands.end());
+        ensure("corner tooltip excludes cursor on both axes",edgeImage->rectangle.right<=tooltipInput.button.mouseX-1 &&
+            edgeImage->rectangle.bottom>=tooltipInput.button.mouseY+1);
+        ui->blockTooltips();
+        ensure("edge tooltip expires",ui->tree().advanceTime(4.6,error) && ui->preparePaint(tooltipInput,error).has_value());
+        ensure("edge owner cleanup",ui->tree().erase(*edgeOwner,error));
+        tooltipView.rect={10,250,210,350};
+        const auto coveredTooltip=ui->tree().create(tooltipView,ui->root(),error); ensure(error,coveredTooltip.has_value());
+        const bool tooltipModalQueued=ui->queueNotice("MediaPluginFailed",LLSD().with("PLUGIN","tooltip fixture"),{},error);
+        ensure(error,tooltipModalQueued);
+        ensure("tooltip modal shown",ui->advanceNotices(5.,error));
+        tooltipInput.button.mouseX=30; tooltipInput.button.mouseY=300;
+        ensure("modal tooltip clock advances",ui->tree().advanceTime(6.,error));
+        ensure("modal hover sampled",ui->preparePaint(tooltipInput,error).has_value());
+        ensure("modal tooltip delay advances",ui->tree().advanceTime(7.,error));
+        const auto modalPaint=ui->preparePaint(tooltipInput,error); ensure(error,modalPaint.has_value());
+        ensure("modal prevents underlying tooltip creation",!hasTooltip(*modalPaint));
+        ensure("modal dismissal delay expires",ui->advanceNotices(7.,error));
+        ensure("tooltip modal dismissed",ui->noticeKey(true,false,error) && !ui->modalNotice());
+        ensure("underlying tooltip cleanup",ui->tree().erase(*coveredTooltip,error));
+        {
+            struct TooltipProfile
+            {
+                std::filesystem::path path=std::filesystem::temp_directory_path()/("native-tooltip-"+LLUUID::generateNewID().asString());
+                ~TooltipProfile() { std::error_code ignored; std::filesystem::remove_all(path,ignored); }
+            } profile;
+            const auto widgets=profile.path/"skins"/"default"/"xui"/"en"/"widgets";
+            std::filesystem::create_directories(widgets);
+            std::ofstream(widgets/"tool_tip.xml")<<"<tool_tip name='tooltip' max_width='80' padding='9' visible_time_near='0.25'/>";
+            auto themedConfiguration=configuration;
+            themedConfiguration.skin.userAppDirectory=profile.path;
+            auto themed=LLVKViewerUi::create(themedConfiguration,error); ensure(error,themed!=nullptr);
+            tooltipView.rect={10,250,210,350};
+            const auto themedOwner=themed->tree().create(tooltipView,themed->root(),error); ensure(error,themedOwner.has_value());
+            tooltipInput.button.mouseX=30; tooltipInput.button.mouseY=300;
+            ensure("themed tooltip delay",themed->preparePaint(tooltipInput,error).has_value());
+            ensure("themed tooltip clock",themed->tree().advanceTime(1.,error));
+            const auto themedPaint=themed->preparePaint(tooltipInput,error); ensure(error,themedPaint.has_value());
+            const auto image=std::find_if(themedPaint->commands.begin(),themedPaint->commands.end(),[](const auto& draw)
+            { return draw.image && draw.image->name()=="Tooltip"; });
+            ensure("themed tooltip exists",image!=themedPaint->commands.end());
+            ensure("tooltip respects XML width",image->rectangle.right-image->rectangle.left<=98);
+            const auto label=themed->find("tooltip_text",image->owner);
+            ensure("tooltip respects XML padding",label && themed->tree().get(label)->params.rect.left==9 &&
+                themed->tree().get(label)->params.rect.bottom==9);
+            ensure("themed tooltip advances",themed->tree().advanceTime(1.3,error) && themed->preparePaint(tooltipInput,error).has_value());
+            ensure("themed timeout advances",themed->tree().advanceTime(1.4,error));
+            const auto renewed=themed->preparePaint(tooltipInput,error); ensure(error,renewed.has_value());
+            ensure("overlay cannot introduce timeout absent from base XML",std::any_of(renewed->commands.begin(),renewed->commands.end(),[&](const auto& draw)
+            { return draw.image && draw.image->name()=="Tooltip" && draw.owner==image->owner; }));
+            ensure("configure actual tooltip timeout",themed->tree().updateSetting("ToolTipVisibleTimeNear",LLSD(.25)));
+            ensure("configured near timeout begins fade",themed->tree().advanceTime(1.5,error) && themed->preparePaint(tooltipInput,error).has_value());
+            ensure("configured timeout advances",themed->tree().advanceTime(1.6,error));
+            const auto configured=themed->preparePaint(tooltipInput,error); ensure(error,configured.has_value());
+            ensure("configured near timeout renews eligible tooltip",std::any_of(configured->commands.begin(),configured->commands.end(),[&](const auto& draw)
+            { return draw.image && draw.image->name()=="Tooltip" && draw.owner!=image->owner; }));
+        }
         ui->setGuidebookService([&](auto id,const auto& page,std::string& problem)
         { browser=id; url=page; if (failBrowserOpen) { problem="Synthetic browser startup failure"; return false; } return true; },[&](auto) { ++closed; });
         ui->setBrowserCommand([&](auto id,const auto& action,const auto& page,std::string&)
@@ -2503,6 +2594,21 @@ namespace tut
         visit(visit,core);
         ensure("nested tabs visited",visited>40);
         const auto search=ui->find("search_prefs_edit",preferences);
+        std::string externalUrl;
+        ui->setOpenUrl([&](const std::string& target) { externalUrl=target; });
+        ensure("external hyperlink dispatch",ui->activateUrl("https://example.test/help",error) && externalUrl=="https://example.test/help");
+        externalUrl.clear();
+        ensure("internal Preferences hyperlink",ui->activateUrl("secondlife:///app/openfloater/preferences?tab=im&subtab=tab-autoresponse-1",error));
+        const auto privacy=ui->find("im",core);
+        ensure_equals("internal link selects Privacy",tree.get(core)->tabContainer->selected,privacy);
+        const auto privacyTabs=ui->find("tabs",privacy);
+        ensure_equals("internal link selects nested tab",tree.get(privacyTabs)->tabContainer->selected,ui->find("tab-autoresponse-1",privacyTabs));
+        ensure("internal link is never sent to system browser",externalUrl.empty());
+        ensure("reject unsupported internal destination",!ui->activateUrl("secondlife:///app/openfloater/upload_image",error));
+        ensure("reject executable scheme",!ui->activateUrl("file:///C:/Windows/notepad.exe",error));
+        ensure("escaped search hyperlink",ui->activateUrl("secondlife:///app/openfloater/preferences?search=RenderAlphaOITNodesPerPixel",error));
+        ensure_equals("search hyperlink updates field",tree.value(search).asString(),std::string("RenderAlphaOITNodesPerPixel"));
+        ensure("clear hyperlink search",tree.clearSearchEditor(search,error));
         ensure("search real setting",tree.setValue(search,LLSD("RenderAlphaOITNodesPerPixel")) && tree.commit(search));
         ensure(ui->dialogError(),ui->dialogError().empty());
         const auto graphics=ui->find("display",core);

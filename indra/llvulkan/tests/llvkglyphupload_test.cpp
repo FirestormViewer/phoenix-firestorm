@@ -167,13 +167,28 @@ namespace tut
         glyph->raster.width = glyph->raster.height = 4;
         glyph->raster.bottomUpPixels.assign(16, 255);
         line.glyphs.push_back({0,false,2,6,6,2,glyph});
-        auto atlas = LLVKGlyphAtlas::prepare(line, 16, 1024, error);
+        auto displaced=line;
+        for (auto& draw : displaced.glyphs)
+        {
+            draw.left+=17.25f; draw.right+=17.25f;
+            draw.bottom+=9.5f; draw.top+=9.5f;
+        }
+        auto atlas = LLVKGlyphAtlas::prepare(displaced, 16, 1024, error);
         ensure(error, atlas.has_value());
+        const auto atlasPixels=atlas->pages()[0].rgba;
         auto upload = LLVKGlyphUpload::submit(device, {16,16}, atlas->pages()[0].rgba, error);
         ensure(error, upload != nullptr);
         ensure("published after own fence", upload->wait(UINT64_MAX,error) == LLVKGlyphUpload::Status::Ready);
         auto image = upload->published();
         upload.reset();
+        ensure("existing glyph placements can move without repacking",atlas->updateLayout(line));
+        ensure("placement update preserves every atlas byte",atlas->pages()[0].rgba==atlasPixels);
+        auto incompatible=displaced;
+        incompatible.glyphs[0].glyph=std::make_shared<LLVKFont::Glyph>(*glyph);
+        ensure("different raster owner rejects placement reuse",!atlas->updateLayout(incompatible));
+        ensure_equals("failed reuse preserves prior placement",atlas->placements()[0].draw.left,2.f);
+        incompatible.glyphs.clear();
+        ensure("different glyph count rejects placement reuse",!atlas->updateLayout(incompatible));
         auto textPipeline = LLVKTextPipeline::create(device, VK_FORMAT_R8G8B8A8_UNORM, error,
                                  withDepth ? VK_FORMAT_D32_SFLOAT : VK_FORMAT_UNDEFINED);
         ensure(error, textPipeline != nullptr);
@@ -283,6 +298,7 @@ namespace tut
         }
         std::weak_ptr<LLVKTextPipeline> pipelineLifetime = textPipeline;
         std::weak_ptr<const LLVKGlyphImage> imageLifetime = image;
+        ensure("later placement updates cannot alter recorded geometry",atlas->updateLayout(displaced));
         textPipeline.reset();
         image.reset();
         atlas.reset();

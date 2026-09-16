@@ -26,6 +26,7 @@ public:
     std::uint32_t pageSize() const noexcept { return mPageSize; }
     std::span<const Page> pages() const noexcept { return mPages; }
     std::span<const Placement> placements() const noexcept { return mPlacements; }
+    bool updateLayout(const LLVKFont::LineLayout& layout);
 private:
     std::uint32_t mPageSize = 0;
     std::vector<Page> mPages;

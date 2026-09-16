@@ -434,7 +434,7 @@ namespace
             if (!ui) return DefWindowProcW(window,message,parameter,data);
             auto& tree = ui->tree();
             if (message==WM_KEYDOWN || message==WM_SYSKEYDOWN ||
-                message==WM_MOUSEWHEEL || message==WM_KILLFOCUS || message==WM_RBUTTONDOWN || message==WM_MBUTTONDOWN)
+                message==WM_MOUSEWHEEL || message==WM_RBUTTONDOWN || message==WM_MBUTTONDOWN)
                 ui->blockTooltips();
             tree.setInputModifiers({bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_CONTROL)&0x8000),bool(GetKeyState(VK_MENU)&0x8000)});
             const auto focused = tree.keyboardFocus();
@@ -1410,6 +1410,9 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         const auto requestedTime=configuration.diagnosticFrameTime ? configuration.diagnosticFrameTime(previousAnimationTime) : std::nullopt;
         if (requestedTime && (!std::isfinite(*requestedTime) || *requestedTime<previousAnimationTime))
         { error="Invalid diagnostic frame timestamp"; return false; }
+        if (state.controlledTime && !requestedTime)
+            state.start=std::chrono::steady_clock::now()-std::chrono::duration_cast<std::chrono::steady_clock::duration>(
+                std::chrono::duration<double>(previousAnimationTime));
         state.controlledTime=requestedTime ? std::optional<double>(previousAnimationTime) : std::nullopt;
         const auto iterationStart=std::chrono::steady_clock::now();
         auto timingStart=iterationStart;
@@ -1488,9 +1491,12 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         {
         if (loginBrowserStarted && !browser.update(error)) return fail(Code::BrowserUnavailable);
         std::vector<std::pair<std::string,std::string>> popups;
+        std::vector<std::string> internalLinks;
         for (const auto& event : browser.takeEvents())
         {
             if (event.kind==LLVKBrowser::EventKind::Cursor) state.browserCursor(browserId,event.text);
+            if (event.kind==LLVKBrowser::EventKind::CustomScheme && event.userGesture && !event.redirect)
+                internalLinks.push_back(event.text);
             if (event.kind == LLVKBrowser::EventKind::LoadError)
             { error = "Native login page failed"; return fail(Code::BrowserUnavailable); }
             if (event.kind == LLVKBrowser::EventKind::Popup) popups.emplace_back(event.text,event.detail);
@@ -1511,6 +1517,8 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             for (const auto& event : view.takeEvents())
             {
                 if (event.kind==LLVKBrowser::EventKind::Cursor) state.browserCursor(id,event.text);
+                if (event.kind==LLVKBrowser::EventKind::CustomScheme && event.userGesture && !event.redirect)
+                    internalLinks.push_back(event.text);
                 if (event.kind==LLVKBrowser::EventKind::LoadError && event.code!=-3)
                 {
                     LL_WARNS("NativeGuidebook") << (LLVKError{Code::OperationFailed,Operation::Browser,1,0}).diagnostic() << LL_ENDL;
@@ -1543,6 +1551,11 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
                 state.input.browserEpochs[id]=view.surface().epoch();
             }
             ++iterator;
+        }
+        for (const auto& url : internalLinks)
+        {
+            std::string problem;
+            if (!ui->activateUrl(url,problem)) notice(Code::OperationFailed);
         }
         for (const auto& [url,target] : popups)
         {

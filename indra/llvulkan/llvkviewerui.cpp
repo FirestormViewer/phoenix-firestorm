@@ -3,6 +3,9 @@
 #include "lluri.h"
 #include "llvkxmllayers.h"
 #include <fstream>
+#include <charconv>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
 
 std::string LLVKViewerUi::uiLanguage(std::map<std::string,LLSD>& settings)
 {
@@ -139,7 +142,7 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
     resources.fallbackFont=ui->mFonts->resolve({"SansSerif","Medium"},error);
     if (!resources.fallbackFont) return nullptr;
     resources.webLinkHandler = [owner=ui.get()](auto,const std::string& url)
-    { if (owner->mOpenUrl) owner->mOpenUrl(url); else owner->mDialogError="Native web link service is not bound"; };
+    { owner->activateUrl(url,owner->mDialogError); };
     resources.colorPickerHandler=[owner=ui.get()](auto swatch,bool takeFocus)
     { owner->showColorPicker(swatch,takeFocus,owner->mDialogError); };
     resources.helpHandler=[owner=ui.get()](auto floater)
@@ -668,6 +671,58 @@ std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint:
     return paint;
 }
 
+bool LLVKViewerUi::initializeTooltip(std::string& error)
+{
+    if (!mTooltipTemplate.empty()) return true;
+    const auto files=mSkin->read("xui","widgets/tool_tip.xml",LLVKSkinFiles::Policy::All,error);
+    if (!files) return false;
+    std::vector<std::string_view> layers;
+    for (const auto& text : *files) layers.push_back(text);
+    const auto merged=LLVKXmlLayers::merge(layers,error);
+    if (!merged) return false;
+    try
+    {
+        boost::property_tree::ptree document;
+        std::istringstream stream(*merged);
+        boost::property_tree::read_xml(stream,document);
+        const auto& declaration=document.get_child("tool_tip");
+        mTooltipMaximumWidth=declaration.get<int>("<xmlattr>.max_width",200);
+        mTooltipPadding=declaration.get<int>("<xmlattr>.padding",4);
+        if (mTooltipMaximumWidth<1 || mTooltipMaximumWidth>4096 || mTooltipPadding<0 || mTooltipPadding>128)
+        { error="Native tooltip dimensions exceed their bounds"; return false; }
+        boost::property_tree::ptree panel,label,output;
+        for (const auto* name : {"background_visible","background_opaque","bg_opaque_image","bg_alpha_image","bg_opaque_color","bg_alpha_color"})
+            if (const auto value=declaration.get_optional<std::string>(std::string("<xmlattr>.")+name))
+                panel.put(std::string("<xmlattr>.")+name,*value);
+        for (const auto* name : {"visible_time_over","visible_time_near","visible_time_far"})
+            if (const auto value=declaration.get_optional<std::string>(std::string("<xmlattr>.")+name))
+            {
+                float seconds=0.f;
+                const auto parsed=std::from_chars(value->data(),value->data()+value->size(),seconds);
+                if (parsed.ec!=std::errc{} || parsed.ptr!=value->data()+value->size() || !std::isfinite(seconds) || seconds<0.f)
+                { error="Invalid native tooltip timeout"; return false; }
+                mTooltipTimeouts[name]=seconds;
+            }
+        panel.put("<xmlattr>.name","native_tooltip"); panel.put("<xmlattr>.mouse_opaque","false");
+        panel.put("<xmlattr>.width",mTooltipMaximumWidth+2*mTooltipPadding);
+        panel.put("<xmlattr>.height",10000+2*mTooltipPadding);
+        label.put("<xmlattr>.name","tooltip_text");
+        label.put("<xmlattr>.left",mTooltipPadding); label.put("<xmlattr>.bottom",mTooltipPadding);
+        label.put("<xmlattr>.width",mTooltipMaximumWidth); label.put("<xmlattr>.height",10000);
+        label.put("<xmlattr>.font",declaration.get<std::string>("<xmlattr>.font","SansSerif"));
+        label.put("<xmlattr>.text_color",declaration.get<std::string>("<xmlattr>.text_color","ToolTipTextColor"));
+        label.put("<xmlattr>.wrap",declaration.get<std::string>("<xmlattr>.wrap","true"));
+        label.put("<xmlattr>.h_pad",0); label.put("<xmlattr>.v_pad",0);
+        label.put("<xmlattr>.valign","center"); label.put("<xmlattr>.parse_urls","false");
+        label.put("<xmlattr>.use_ellipses","true");
+        panel.add_child("text",label); output.add_child("panel",panel);
+        std::ostringstream xml; boost::property_tree::write_xml(xml,output);
+        mTooltipTemplate=xml.str();
+        return true;
+    }
+    catch (const boost::property_tree::ptree_error& failure) { error=failure.what(); return false; }
+}
+
 bool LLVKViewerUi::appendTooltip(LLVKWidgetPaint& paint,const LLVKWidgetPaint::Input& input,std::string& error)
 {
     const auto now=mTree.time();
@@ -683,7 +738,7 @@ bool LLVKViewerUi::appendTooltip(LLVKWidgetPaint& paint,const LLVKWidgetPaint::I
         mTooltipMoved=now;
         mTooltipPointer=position;
     }
-    if (!input.editor.applicationFocused || mTree.mouseCapture())
+    if (mTree.mouseCapture())
     {
         mTooltipBlocked=true;
         if (mTooltipPanel && !mTooltipFade) mTooltipFade=now;
@@ -693,39 +748,55 @@ bool LLVKViewerUi::appendTooltip(LLVKWidgetPaint& paint,const LLVKWidgetPaint::I
     const auto root=mNoticePanel ? mNoticePanel : mTree.topControl() ? mTree.topControl() : mRoot;
     const auto owner=mTree.tooltipAt(root,position.first,position.second,error);
     if (!owner) return false;
-    if (!mTooltipBlocked && *owner && mTree.setting("BasicUITooltips").value_or(LLSD(true)).asBoolean() &&
-        now-mTooltipMoved>setting("ToolTipDelay",0.7) && (!mTooltipPanel || mTooltipFade || mTooltipOwner!=*owner))
+    if (input.editor.applicationFocused && !mTooltipBlocked && *owner && mTree.setting("BasicUITooltips").value_or(LLSD(true)).asBoolean() &&
+        static_cast<float>(now-mTooltipMoved)>static_cast<float>(mTooltipPanel ? setting("ToolTipFastDelay",0.1) : setting("ToolTipDelay",0.7)) &&
+        (!mTooltipPanel || mTooltipFade || mTooltipOwner!=*owner))
     {
         const auto message=mTree.get(*owner)->params.tooltip;
         const auto near=mTree.screenRect(*owner,error);
         if (!near) return false;
         if (mTooltipPanel) { if (!mTree.erase(mTooltipPanel,error)) return false; mTooltipPanel=0; }
-        const auto panel=mDialogFactory->construct(mTree,
-            "<panel name='native_tooltip' width='208' height='10008' mouse_opaque='false' background_visible='true' background_opaque='true' bg_opaque_image='Tooltip'>"
-            "<text name='tooltip_text' left='4' bottom='4' width='200' height='10000' font='SansSerif' h_pad='0' v_pad='0' wrap='true' valign='center' text_color='ToolTipTextColor' parse_urls='false' use_ellipses='true'/></panel>",0,error);
+        if (!initializeTooltip(error)) return false;
+        const auto panel=mDialogFactory->construct(mTree,mTooltipTemplate,0,error);
         if (!panel) return false;
         mTooltipPanel=*panel;
         const auto label=find("tooltip_text",mTooltipPanel);
         if (!label || !mTree.setPlainText(label,message,error) || !mTree.fitPlainText(label,error)) return false;
         const auto textRect=mTree.get(label)->params.rect;
-        const int width=std::min(200,textRect.right-textRect.left)+8,height=textRect.top-textRect.bottom+8;
+        const auto padding=mTooltipPadding;
+        const int width=std::min(mTooltipMaximumWidth,textRect.right-textRect.left)+2*padding,height=textRect.top-textRect.bottom+2*padding;
         int left=position.first+8,top=position.second-16;
+        const auto initialLeft=left,initialTop=top;
         left=std::clamp(left,viewport->left,std::max(viewport->left,viewport->right-width));
-        if (top-height<viewport->bottom) top=position.second+1+height;
         top=std::clamp(top,std::min(viewport->top,viewport->bottom+height),viewport->top);
+        const LLVKWidgetTree::Rect exclusion{position.first-1,position.second-17,position.first+9,position.second+1};
+        if ((left!=initialLeft || top!=initialTop) && left<exclusion.right && left+width>exclusion.left &&
+            top>exclusion.bottom && top-height<exclusion.top)
+        {
+            if (left>initialLeft) left=exclusion.right;
+            else if (left<initialLeft) left=exclusion.left-width;
+            if (top>initialTop) top=exclusion.top+height;
+            else if (top<initialTop) top=exclusion.bottom;
+        }
         if (!mTree.setShape(mTooltipPanel,{left,top-height,left+width,top},error)) return false;
-        if (!mTree.setShape(label,{4,4,width-4,height-4},error)) return false;
+        if (!mTree.setShape(label,{padding,padding,width-padding,height-padding},error)) return false;
         mTooltipOwner=*owner; mTooltipNear=*near; mTooltipShown=now;
         mTooltipFade.reset(); mTooltipBlocked=true;
     }
     else if (mTooltipPanel && !mTooltipFade)
     {
-        const auto timeout=contains(mTooltipNear,position) ? setting("ToolTipVisibleTimeNear",6.0) : setting("ToolTipVisibleTimeFar",0.2);
-        if (now-mTooltipShown>timeout) { mTooltipFade=now; mTooltipBlocked=false; }
+        const auto tooltipRect=mTree.screenRect(mTooltipPanel,error);
+        if (!tooltipRect) return false;
+        const auto configured=[&](const char* name,const char* control,double fallback)
+        { const auto found=mTooltipTimeouts.find(name); return found==mTooltipTimeouts.end() ? setting(control,fallback) : found->second; };
+        const auto timeout=contains(mTooltipNear,position) ? contains(*tooltipRect,position) ?
+            configured("visible_time_over","ToolTipVisibleTimeOver",1000.0) : configured("visible_time_near","ToolTipVisibleTimeNear",10.0) :
+            configured("visible_time_far","ToolTipVisibleTimeFar",1.0);
+        if (static_cast<float>(now-mTooltipShown)>static_cast<float>(timeout)) { mTooltipFade=now; mTooltipBlocked=false; }
     }
     if (!mTooltipPanel) return true;
-    const auto fadeTime=setting("ToolTipFadeTime",0.2);
-    const auto alpha=mTooltipFade ? fadeTime>0.0 ? std::clamp(1.0-(now-*mTooltipFade)/fadeTime,0.0,1.0) : 0.0 : 1.0;
+    const auto fadeTime=static_cast<float>(setting("ToolTipFadeTime",0.2));
+    const auto alpha=mTooltipFade ? fadeTime>0.f ? std::clamp(1.f-static_cast<float>(now-*mTooltipFade)/fadeTime,0.f,1.f) : 0.f : 1.f;
     if (alpha==0.0)
     {
         if (!mTree.erase(mTooltipPanel,error)) return false;

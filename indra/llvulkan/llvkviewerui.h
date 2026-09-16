@@ -195,6 +195,7 @@ public:
     bool setAboutInfo(const LLSD& info, std::string& error);
     void setDialogClipboard(std::shared_ptr<LLVKClipboard> clipboard) { mTree.setClipboard(clipboard); mDialogClipboard = std::move(clipboard); }
     void setOpenUrl(std::function<void(const std::string&)> callback) { mOpenUrl = std::move(callback); }
+    bool activateUrl(const std::string& url,std::string& error);
     void setPointerCursor(std::function<void(bool)> callback) { mPointerCursor = std::move(callback); mTree.setCursorHandler(mPointerCursor); }
     const std::string& dialogError() const noexcept { return mDialogError; }
     std::string takeDialogError() { auto error = std::move(mDialogError); mDialogError.clear(); return error; }
@@ -218,6 +219,10 @@ public:
     const LLVKSessionOwner::Snapshot& sessionSnapshot() const noexcept { return mSessionSnapshot; }
 private:
     bool appendTooltip(LLVKWidgetPaint& paint,const LLVKWidgetPaint::Input& input,std::string& error);
+    bool initializeTooltip(std::string& error);
+    std::string mTooltipTemplate;
+    int mTooltipMaximumWidth=200,mTooltipPadding=4;
+    std::map<std::string,float> mTooltipTimeouts;
     LLVKWidgetTree::Id mTooltipPanel=0,mTooltipOwner=0;
     std::optional<std::pair<int,int>> mTooltipPointer;
     LLVKWidgetTree::Rect mTooltipNear;

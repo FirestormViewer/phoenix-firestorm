@@ -519,6 +519,8 @@ namespace tut
                     boost::asio::read_until(client,request,"\r\n\r\n",problem);
                     if (problem) continue;
                     const std::string body="<html><body style='margin:0;background:rgb(255,255,0);height:2000px'>"
+                        "<a style='position:absolute;left:100px;top:0;width:190px;height:48px' "
+                        "href='secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1'>Preferences</a>"
                         "<script>document.onclick=()=>document.body.style.background='rgb(0,255,255)';"
                         "document.onkeydown=()=>document.body.style.background='rgb(255,0,255)';"
                         "document.onwheel=()=>document.body.style.background='rgb(0,0,255)';</script></body></html>";
@@ -705,6 +707,26 @@ namespace tut
                 const auto pixels=frame->second->bottomUpRgba();
                 if (pixels[0]!=255 || pixels[1]!=255 || pixels[2]!=0) return;
                 ensure("same-window login navigation stays prelogin",snapshot.state==LLVKSessionOwner::State::PreLogin);
+                const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+                std::string problem;
+                const auto rectangle=ui.tree().screenRect(ui.find("login_html"),problem);
+                ensure("internal login link bounds",rectangle.has_value());
+                RECT client{}; GetClientRect(window,&client);
+                const auto point=MAKELPARAM(rectangle->left+120,client.bottom-rectangle->top+20);
+                SendMessageW(window,WM_LBUTTONDOWN,MK_LBUTTON,point);
+                SendMessageW(window,WM_LBUTTONUP,0,point);
+                ++guidebookStage;
+                return;
+            }
+            if (guidebookStage==13)
+            {
+                const auto core=ui.find("pref core",ui.activeFloater());
+                if (!core) return;
+                const auto privacy=ui.find("im",core);
+                ensure_equals("CEF internal link selects Privacy",ui.tree().get(core)->tabContainer->selected,privacy);
+                const auto tabs=ui.find("tabs",privacy);
+                ensure_equals("CEF internal link selects nested tab",ui.tree().get(tabs)->tabContainer->selected,
+                    ui.find("tab-autoresponse-1",tabs));
                 ++guidebookStage;
                 PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
                 return;
@@ -1503,7 +1525,7 @@ namespace tut
         };
         const bool ran = LLVKWindowMgr::run(configuration,error);
         ensure(error,ran);
-        ensure_equals("browser, XUI preview, Help and login hyperlink sequence verified",guidebookStage,13);
+        ensure_equals("browser, XUI preview, Help and login hyperlink sequence verified",guidebookStage,14);
         ensure("application and cache retirement completed",session.snapshot().state==LLVKSessionOwner::State::Stopped &&
             session.snapshot().owned[0]==0 && cleanupState->destroyed);
         ensure_equals("one pending poll and one explicit retry",cleanupState->attempts,3);

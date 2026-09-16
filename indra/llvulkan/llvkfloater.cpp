@@ -320,8 +320,8 @@ bool LLVKFloater::pointer(const LLVKWidgetTree::PointerEvent& event,std::string&
             const auto parent = mTree.screenRect(mRoot,error);
             if (!parent) return false;
             const auto width = rect->right-rect->left, height = rect->top-rect->bottom;
-            const auto left = std::clamp(event.x-mDragX,parent->left,std::max(parent->left,parent->right-width));
-            const auto bottom = std::clamp(event.y-mDragY,parent->bottom,std::max(parent->bottom,parent->top-height-18));
+            const auto left = std::clamp(event.x-mDragX,parent->left-width+16,parent->right-16);
+            const auto bottom = std::clamp(event.y-mDragY,parent->bottom-height+16,std::max(parent->bottom-height+16,parent->top-19-16));
             return mTree.setShape(mId,{left-parent->left,bottom-parent->bottom,left-parent->left+width,bottom-parent->bottom+height},error);
         }
         return true;
