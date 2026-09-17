@@ -11,9 +11,10 @@ namespace
     {
         Owner::Request request;
         std::shared_ptr<Owner::Inbox> inbox;
-        unsigned requests=0,drains=0;
+        unsigned requests=0,drains=0,pumps=0;
         Owner::Code begin(const Owner::Request& value,const std::shared_ptr<Owner::Inbox>& replies) override
         { request=value; inbox=replies; ++requests; return Owner::Code::Ok; }
+        Owner::Code pump() override { ++pumps; return Owner::Code::Ok; }
         Owner::Code quiesce(std::uint64_t) override { ++drains; return Owner::Code::Ok; }
     };
     struct Service final : Owner::Service
@@ -74,6 +75,17 @@ int main()
                 "explicit rejection ends attempt");
             check(agreementOwner.snapshot().state==Owner::State::PreLogin && !agreementOwner.snapshot().agreement,
                 "agreement discarded after rejection");
+            check(agreementOwner.beginLogin().ok(),"challenge attempt started");
+            Owner::Response challenge;
+            challenge.kind=Owner::Response::Kind::ChallengeRequired;
+            challenge.tag=agreementOwner.snapshot().tag;
+            challenge.challenge={1,1,"LoginFailedAuthenticationMFARequired"};
+            check(agreementTransport->inbox->post(challenge)==Owner::Code::Ok && agreementOwner.pumpOne().ok(),"challenge delivered");
+            check(agreementOwner.snapshot().state==Owner::State::AwaitingChallenge,"challenge not authorization");
+            check(agreementOwner.submitChallenge(challenge.tag,challenge.challenge,"").code==Owner::Code::InvalidReply,"empty token rejected");
+            check(agreementOwner.submitChallenge(challenge.tag,challenge.challenge,"123456").ok(),"explicit token accepted");
+            check(agreementTransport->request.challengeToken=="123456","token forwarded only to transport");
+            check(agreementOwner.submitChallenge(challenge.tag,challenge.challenge,"123456").code==Owner::Code::StaleReply,"stale token rejected");
         }
 
         auto transport=std::make_shared<Transport>();
@@ -84,9 +96,13 @@ int main()
         std::unique_ptr<Owner::Service> service=std::move(concrete);
         check(owner.install(Owner::Lifetime::Application,1,service).ok() && !service,"application ownership transferred");
         check(owner.beginLogin().ok(),"begin controlled login");
+        owner.pumpOne();
+        check(transport->pumps==1,"active transport progresses on owner thread");
         const auto cancelled=owner.snapshot().tag;
         auto oldInbox=transport->inbox;
         check(owner.cancel(cancelled).code==Owner::Code::Cancelled,"tagged cancel");
+        owner.pumpOne();
+        check(transport->pumps==1,"cancelled transport is not pumped");
         check(owner.snapshot().owned[0]==1 && events==std::vector<unsigned>{1},"application survives cancellation");
         check(owner.beginLogin().ok(),"new attempt");
         const auto current=owner.snapshot().tag;

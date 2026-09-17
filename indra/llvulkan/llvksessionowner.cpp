@@ -10,6 +10,7 @@ LLVKSessionOwner::Code LLVKSessionOwner::Inbox::post(const Response& response)
     if (mStopped) return Code::Stopped;
     if (!mAccepting || response.tag.generation != mGeneration) return Code::StaleReply;
     if (response.agreement.text.size() > Agreement::maximumTextBytes) return Code::InvalidReply;
+    if (response.challenge.messageKey.size()>128) return Code::InvalidReply;
     if (mResponses.size() == capacity) return Code::QueueFull;
     mResponses.push_back(response);
     return Code::Ok;
@@ -71,6 +72,7 @@ LLVKSessionOwner::Snapshot LLVKSessionOwner::snapshot() const
     snapshot.state = mState;
     snapshot.tag = mTag;
     snapshot.agreement = mAgreement;
+    snapshot.challenge = mChallenge;
     snapshot.identity = mIdentity;
     snapshot.status = mStatus;
     snapshot.cleanup = mCleanup;
@@ -99,13 +101,13 @@ LLVKSessionOwner::Status LLVKSessionOwner::beginLogin()
     return dispatch(Operation::Authenticate);
 }
 
-LLVKSessionOwner::Status LLVKSessionOwner::dispatch(Operation operation, std::optional<Agreement> accepted)
+LLVKSessionOwner::Status LLVKSessionOwner::dispatch(Operation operation, std::optional<Agreement> accepted,std::string token)
 {
     if (mTag.request == std::numeric_limits<std::uint64_t>::max())
         return disconnect(result(Code::CounterExhausted, operation, Action::Close), true);
     ++mTag.request;
     mTransportActive = true;
-    const Request request{operation, mTag, accepted};
+    const Request request{operation, mTag, accepted,std::move(token)};
     const auto code = invoke([&] { return mTransport->begin(request, mInbox); });
     if (code != Code::Ok)
     {
@@ -133,8 +135,26 @@ LLVKSessionOwner::Status LLVKSessionOwner::decideAgreement(Tag tag, Agreement ag
 LLVKSessionOwner::Status LLVKSessionOwner::pumpOne()
 {
     if (auto status = check(); !status.ok()) return status;
+    if (mTransportActive && mState!=State::Disconnecting)
+    {
+        const auto code=invoke([&] { return mTransport->pump(); });
+        if (code!=Code::Ok && code!=Code::Pending)
+            return disconnect(result(code, mState==State::Authenticating ? Operation::Authenticate : Operation::Connect,
+                Action::RetryLogin),false);
+    }
     const auto response = mInbox->pop();
     return response ? receive(*response) : result(Code::Pending, Operation::None, Action::Wait);
+}
+
+LLVKSessionOwner::Status LLVKSessionOwner::submitChallenge(Tag tag,Challenge challenge,std::string token)
+{
+    if (auto status=check(); !status.ok()) return status;
+    if (tag!=mTag || !mChallenge || challenge!=*mChallenge) return result(Code::StaleReply);
+    if (mState!=State::AwaitingChallenge) return result(Code::WrongState);
+    if (token.empty() || token.size()>256 || token.find('\0')!=token.npos) return result(Code::InvalidReply);
+    mChallenge.reset();
+    mState=State::Authenticating;
+    return dispatch(Operation::Authenticate,{},std::move(token));
 }
 
 LLVKSessionOwner::Status LLVKSessionOwner::receive(const Response& response)
@@ -142,6 +162,13 @@ LLVKSessionOwner::Status LLVKSessionOwner::receive(const Response& response)
     if (response.tag != mTag) return result(Code::StaleReply);
     switch (response.kind)
     {
+    case Response::Kind::ChallengeRequired:
+        if (mState!=State::Authenticating) return result(Code::WrongState);
+        if (!response.challenge.id || !response.challenge.revision || response.challenge.messageKey.empty()) return result(Code::InvalidReply);
+        mChallenge=response.challenge;
+        mState=State::AwaitingChallenge;
+        mStatus=result(Code::Ok,Operation::Authenticate,Action::Wait);
+        return mStatus;
     case Response::Kind::AgreementRequired:
         if (mState != State::Authenticating) return result(Code::WrongState);
         if (!response.agreement.id || !response.agreement.revision || response.agreement.text.empty() ||
@@ -182,6 +209,7 @@ LLVKSessionOwner::Status LLVKSessionOwner::disconnect(Status reason, bool stoppi
     mState = State::Disconnecting;
     mStatus = reason;
     mAgreement.reset();
+    mChallenge.reset();
     mIdentity.reset();
     mInbox->reset(mTag.generation, false, stopping);
     const auto cleanup = drain();

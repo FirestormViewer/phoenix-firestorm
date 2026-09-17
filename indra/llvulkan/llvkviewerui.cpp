@@ -56,6 +56,7 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
 {
     error.clear();
     auto ui = std::make_unique<LLVKViewerUi>();
+    ui->mPrepareLogin=configuration.prepareLogin;
     ui->mSkin = std::make_shared<LLVKSkinFiles>(configuration.skin);
     std::vector<std::string> descriptions;
     if (!configuration.fontDescription.empty())

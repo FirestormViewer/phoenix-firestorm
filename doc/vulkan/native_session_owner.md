@@ -1,5 +1,149 @@
 # Native session integration
 
+## Live network milestone verified (2026-09-17)
+
+On branch native-sl-login, the corrected viewer's operator-driven run2496 logged
+authorized, connection-started, seed-ready and region-connected. A subsequent
+75-second uninterrupted observation recorded no connection failure. WM_CLOSE
+was accepted, the retained process handle reported exit0, and the per-process
+native-session-2496.log recorded Goodbye! with status0. Credentials were entered
+directly in the viewer; no debugger or forced termination was used.
+
+This verifies the bounded live Second Life authentication, initial region
+connection, dwell and graceful shutdown workflow. It does not establish all
+login variants, reconnect behavior, authenticated service completeness or world
+rendering. The login screen still remains visible after connection: refreshSession
+does not yet transition to a connected UI. This missing feedback is a known UI
+gap, not evidence that this run failed authentication. Preserve this passed
+operator evidence rather than repeating it solely to reconfirm the milestone.
+
+## Live seed-validation correction (2026-09-17)
+
+The operator's diagnostic attempt in viewer26812 recorded authorized,
+connection-started, then seed-capability-url-invalid. This establishes live
+authorization and receipt of a decoded seed response with an HTTPS EventQueueGet
+endpoint; it does not establish a completed region connection. The failing code
+required every other capability entry to be an HTTPS string, even though no
+native consumer used those entries. The fixed-label log deliberately contains
+no capability values, so the specific rejected optional value is unknown.
+
+NV-00/01/15/17: reference LLViewerRegion's seed-response loop calls setCapability
+per entry rather than globally requiring HTTPS for every advertised capability.
+The native connection now validates its actual EventQueueGet consumer strictly
+as an HTTPS string and retains other entries as unused data. Future consumers
+must validate their endpoint before use; this change does not enable HTTP login,
+HTTP event polling, automatic redirects or unvalidated optional requests.
+
+The existing TLS/UDP fixture now returns an optional HTTP GetTexture endpoint
+and empty GetMesh value alongside its HTTPS EventQueueGet. Protocol4/4 passes,
+including connection, keepalive and logout; editor diagnostics and diff hygiene
+pass. Production relinking subsequently passed, and run2496 completed the live
+connection and75-second dwell recorded above.
+
+## Second Life transport implementation in progress (2026-09-17)
+
+The user prioritized native Second Life authentication and region connection
+ahead of the remaining prelogin UI parity tasks. Work starts from merged PR44,
+master035b1fdb8d. OpenSim and world rendering are not included in this slice.
+This is an initial implementation checkpoint with the bounded live network
+acceptance above, not complete login/UI parity.
+
+### Source contract and native design
+
+NV-00/01/03/09/12/14/15/17 apply. The reference roots are
+LLLoginInstance::constructAuthParams/handleLoginFailure/handleMFAChallenge,
+LLCredential::getLoginParams, FSPanelLogin credential transformation,
+LLLogin::Impl::loginCoro, LLXMLRPCTransaction, LLStartUp's UseCircuitCode and
+AgentMovementComplete stages, LLViewerRegion capability setup, LLEventPoll and
+scripts/messages/message_template.msg. Authentication success is not simulator
+readiness. Credentials, circuit/session identities and capability URLs must not
+enter user diagnostics or synthetic success states.
+
+The native implementation has four independently owned components:
+
+- LLVKLoginProtocol serializes login_to_simulator XML-RPC and validates the
+   authorization bootstrap: agent/session/secure-session UUIDs, unsigned circuit
+   code, simulator IPv4/port, region handle and HTTPS seed capability. Signed
+   XML-RPC circuit integers preserve their32-bit bit pattern. Expat preflight
+   rejects DTDs, excessive depth/node count and oversized replies before tree
+   decoding. Existing LLSD/XML serialization and parsing are nonvisual data
+   utilities; no GL login/UI callback is reused.
+- LLVKLoginHttp owns libcurl multi/easy handles, request buffers and response
+   bounds. Production requests require HTTPS with peer/hostname verification,
+   explicit CA bundle and no automatic HTTP redirects. Cancellation removes the
+   easy handle and erases its retained request buffer. Body and endpoint values
+   are not logged. Tests alone may explicitly allow literal loopback HTTP.
+- LLVKRegionCircuit owns a nonblocking Boost.Asio UDP socket to the authenticated
+   simulator endpoint. It implements reliable retries/acknowledgements, bounded
+   zero decoding, duplicate suppression, UseCircuitCode, RegionHandshakeReply,
+   matching AgentMovementComplete, pings and LogoutRequest/LogoutReply. Native
+   code does not invoke the reference message reader, which dispatches through
+   global message-system callbacks. Tests independently encode replies with the
+   reference template builder and shipped message definitions.
+- LLVKLoginTransport composes authorization, seed capability discovery, event
+   polling and circuit readiness. The session owner now pumps active transports
+   on its owner thread. Connected requires seed discovery plus acknowledged
+   circuit, handshake and matching movement completion. Login response data and
+   capabilities remain private; UI snapshots carry opaque handles. Event replies
+   are retained under count/byte bounds, not dispatched into GL world services.
+
+Startup binds the main-grid transport to native login controls. Request preparation
+uses reference-style first/last names and the password digest wire format, without
+persisting credentials. Home/Last Location are supported. Unsupported grid/proxy
+or custom-location selections fail explicitly. MFA challenge state is generation
+tagged; the original PromptMFAToken declaration provides input/Continue/Cancel,
+whitespace is stripped before submission, and stale responses are rejected.
+Tokens and returned MFA hashes are not persisted or logged. Existing plain-text
+critical-notice handling is functional but is not qualified as visual parity with
+the reference critical-message floater.
+
+Shutdown cancels pending authentication or sends event-queue done and simulator
+logout for an established connection. Pending work is polled under the owner;
+failures remain explicit cleanup failures. GPU upload/publication/retirement and
+OpenGL implementation are unchanged. NATIVE_LOGIN_AUTHORIZED and
+NATIVE_REGION_CONNECTED markers contain only generation/epoch counters. Neither
+is STATE_STARTED or a claim of visible simulation.
+
+### Verified evidence
+
+- Session-owner tests pass, including transport pumping/cancellation and tagged
+   MFA empty/stale token rejection.
+- Native login protocol suite4/4 passes. It covers request escaping, bootstrap
+   fields, signed circuit codes, numeric failures, XML bounds, HTTP redirect
+   refusal, cancellation, real server rejection and MFA/critical replies.
+- The full synthetic flow uses a temporary trusted TLS certificate with the key
+   held in memory, actual HTTPS requests for login/seed/event queue, independently
+   built UDP replies, a keepalive interval and graceful logout. A separate request
+   rejects the untrusted certificate. No real account credentials are used.
+- Widget210/210 passes, including the reference MFA form and token normalization.
+   Window7/7 and native core build pass. Existing LNK4020 debug-symbol warnings
+   remain. RelWithDebInfo production viewer link also passes. The Windows-scoped
+   protocol fixture passes again after final build integration.
+- The network fixture asserts no desktop OpenGL module is loaded. This is not
+   exhaustive API tracing, packet-loss qualification or a live Second Life run.
+
+### Open requirements
+
+Browser-based TOS is deliberately not accepted through the generic text-agreement
+route. LLFloaterTOS uses a loading page, site-availability request, real terms page
+and checkbox gating; that native consumer and its exact parity remain required.
+The transport currently fails TOS requests rather than bypassing consent.
+
+Also open: protected credential/remember-device persistence; full login metadata
+(machine identifiers are currently omitted as empty values, not fabricated);
+proxy routing; custom start locations and additional Second Life grid selection;
+complete redirect/update/error policy; account settings and authenticated Help
+integration; MFA refresh after an intervening agreement; world/event consumers,
+region crossing and full loss/reconnect qualification. The retained event queue
+is bounded and eventually fails explicitly if consumers are not installed; it is
+not a complete simulation service. Inbound world packets do not create a scene.
+
+The operator approved NATIVE_REGION_CONNECTED as the network-only readiness gate
+instead of STATE_STARTED; the resulting live verification is recorded above.
+STATE_STARTED must not be fabricated before world readiness. Credentials must
+continue to be entered directly in the viewer, never in chat or command-line
+arguments. Broader login and simulation qualification remains open.
+
 ## Current production integration (2026-09-13)
 
 This section supersedes the cache-only scope and isolated-build limitations below;

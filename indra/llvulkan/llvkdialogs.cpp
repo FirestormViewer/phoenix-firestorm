@@ -168,7 +168,7 @@ bool LLVKViewerUi::initializeDialogs(const Configuration& configuration,std::str
                         name=="SettingsConfirmBackup" || name=="SettingsRestoreNeedsLogout" || name=="BackupPathEmpty" ||
                         name=="BackupFinished" || name=="RestoreFinished" || name=="okbutton" ||
                         name=="DebugSettingsWarning" || name=="ControlNameCopiedToClipboard" || name=="SanityCheck" || name=="MediaPluginFailed" || name=="ChangeLanguage" ||
-                        name=="WebLaunchExternalTarget" || name=="okcancelignore")
+                        name=="WebLaunchExternalTarget" || name=="okcancelignore" || name=="PromptMFAToken")
                     { state.notice=Notice{name,{}}; state.noticeDepth=static_cast<int>(state.stack.size()); }
                     state.formTemplate=std::string_view(tag)=="template";
                 }
@@ -403,6 +403,17 @@ bool LLVKViewerUi::showError(const LLVKError& failure,std::string& error)
     return true;
 }
 
+bool LLVKViewerUi::prepareLogin()
+{
+    if (!mPrepareLogin) return true;
+    LLSD input;
+    input["account"]=mTree.value(find("username_combo"));
+    input["password"]=mTree.value(find("password_edit"));
+    input["start"]=mTree.value(find("start_location_combo"));
+    input["grid"]=mTree.value(find("server_combo"));
+    return mPrepareLogin(input,mDialogError);
+}
+
 void LLVKViewerUi::setSessionOwner(LLVKSessionOwner* owner)
 {
     mSessionOwner=owner;
@@ -412,6 +423,7 @@ void LLVKViewerUi::setSessionOwner(LLVKSessionOwner* owner)
     {
         updateLoginControls();
         if (mSessionOwner!=owner || !mTree.get(find("connect_btn"))->params.enabled) return;
+        if (!prepareLogin()) return;
         owner->beginLogin();
         mReportedSession.reset();
         refreshSession(mDialogError);
@@ -438,10 +450,30 @@ bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
         mTree.setEnabled(find(name),prelogin);
     updateLoginControls();
     if (mActiveNotice && (mActiveNotice->name=="NativeSessionError" || mActiveNotice->name=="NativeSessionProgress" ||
-        mActiveNotice->name=="NativeSessionAgreement"))
+        mActiveNotice->name=="NativeSessionAgreement" || mActiveNotice->name=="PromptMFAToken"))
         if (!dismissNotice(error)) return false;
     std::erase_if(mNotices,[](const auto& notice)
-    { return notice.name=="NativeSessionError" || notice.name=="NativeSessionProgress" || notice.name=="NativeSessionAgreement"; });
+    { return notice.name=="NativeSessionError" || notice.name=="NativeSessionProgress" || notice.name=="NativeSessionAgreement" || notice.name=="PromptMFAToken"; });
+    if (snapshot.state==Owner::State::AwaitingChallenge && snapshot.challenge)
+    {
+        LLSD arguments;
+        arguments["MESSAGE"]=errorString(snapshot.challenge->messageKey,"Enter your Second Life authentication code.");
+        if (!queueNotice("PromptMFAToken",arguments,[this,owner=mSessionOwner,tag=snapshot.tag,challenge=*snapshot.challenge](int option,const LLSD& values)
+        {
+            if (mSessionOwner!=owner || owner->snapshot().tag!=tag) return;
+            if (option!=0) owner->cancel(tag);
+            else
+            {
+                auto token=values["token"].asString();
+                std::erase_if(token,[](unsigned char character) { return std::isspace(character)!=0; });
+                owner->submitChallenge(tag,challenge,std::move(token));
+            }
+            mReportedSession.reset();
+            refreshSession(mDialogError);
+        },error)) return false;
+        mReportedSession=snapshot;
+        return true;
+    }
     if (snapshot.state==Owner::State::AwaitingAgreement && snapshot.agreement)
     {
         if (mNotices.size()>=64) { error="Native session notice queue is full"; return false; }
@@ -506,7 +538,11 @@ bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
     {
         if (!option || mSessionOwner!=owner || owner->snapshot().tag!=snapshot.tag) return;
         if (option==1 && snapshot.cleanup.action==Owner::Action::RetryCleanup) owner->retryCleanup(snapshot.tag);
-        else if (option==2 && snapshot.status.action==Owner::Action::RetryLogin) owner->beginLogin();
+        else if (option==2 && snapshot.status.action==Owner::Action::RetryLogin)
+        {
+            if (!prepareLogin()) return;
+            owner->beginLogin();
+        }
         else return;
         mReportedSession.reset();
         refreshSession(mDialogError);

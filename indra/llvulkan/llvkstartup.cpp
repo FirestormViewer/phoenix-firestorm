@@ -4,11 +4,13 @@
 #include "llvkpreferencesbackup.h"
 #include "llvkstartupstatus.h"
 #include "llvkerror.h"
+#include "llvklogintransport.h"
 #include "llstring.h"
 #include "llerror.h"
 #include "llerrorcontrol.h"
 #include <atomic>
 #include <cstring>
+#include <fstream>
 #include <windows.h>
 #include <shellapi.h>
 #include <shlobj.h>
@@ -328,6 +330,48 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     if (!cachePlan) return fail(Code::CacheUnavailable,Operation::Cache);
     const auto& cacheConfiguration=cachePlan->configuration;
     ApplicationSession session;
+    LLVKLoginTransport::Configuration loginConfiguration;
+    const auto sessionLog=std::make_shared<std::ofstream>(profile/"logs"/
+        ("native-session-"+std::to_string(GetCurrentProcessId())+".log"),std::ios::out|std::ios::trunc);
+    if (!*sessionLog) return fail(Code::StartupResources);
+    const auto sessionDiagnostic=[sessionLog](const char* stage,long status)
+    { *sessionLog<<"native-session stage="<<stage<<" status="<<status<<std::endl; };
+    loginConfiguration.diagnostic=sessionDiagnostic;
+    sessionDiagnostic("startup",0);
+    loginConfiguration.http.certificateBundle=(directory/"ca-bundle.crt").string();
+    loginConfiguration.http.userAgent="Vulkanstorm/"+shortVersion;
+    auto loginTransport=std::make_shared<LLVKLoginTransport>(std::move(loginConfiguration));
+    session.owner=std::make_unique<LLVKSessionOwner>(loginTransport);
+    configuration.ui.prepareLogin=[loginTransport,&settings,shortVersion](const LLSD& input,std::string& problem)
+    {
+        const auto grid=input["grid"].asString();
+        if (!grid.empty() && grid!="agni" && grid!="Second Life" && grid!="util.agni.lindenlab.com")
+        { problem="Native authentication currently supports the Second Life main grid only"; return false; }
+        const auto proxyType=settings.find("HttpProxyType");
+        const auto socks=settings.find("Socks5ProxyEnabled");
+        if ((proxyType && proxyType->getValue().asString()!="None") || (socks && socks->getValue().asBoolean()))
+        { problem="Native login proxy integration is not yet available"; return false; }
+        auto parameters=LLVKLoginProtocol::credentials(input["account"].asString(),input["password"].asString(),
+            input["start"].asString(),problem);
+        if (!parameters) return false;
+        (*parameters)["version"]=shortVersion;
+        (*parameters)["channel"]="Vulkanstorm";
+        (*parameters)["platform"]="win";
+        (*parameters)["address_size"]=64;
+        (*parameters)["platform_version"]="Windows";
+        (*parameters)["platform_string"]="Windows";
+        (*parameters)["mac"]="";
+        (*parameters)["id0"]="";
+        (*parameters)["extended_errors"]=true;
+        (*parameters)["token"]="";
+        (*parameters)["options"]=LLSD::emptyArray();
+        for (const auto option : {"inventory-root","inventory-skeleton","inventory-lib-root","inventory-lib-owner",
+            "inventory-skel-lib","initial-outfit","gestures","display_names","event_categories","event_notifications",
+            "classified_categories","adult_compliant","buddy-list","newuser-config","ui-config","advanced-mode",
+            "max-agent-groups","map-server-url","voice-config","tutorial_setting","login-flags","global-textures"})
+            (*parameters)["options"].append(option);
+        return loginTransport->prepare(std::move(*parameters),problem);
+    };
     session.errorResolver=errorResolver;
     auto cacheService=std::make_unique<LLVKApplicationCache>(cacheConfiguration,startupStatus);
     auto& textureCache=cacheService->cache();
@@ -435,6 +479,7 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     if (session.owner->snapshot().state!=LLVKSessionOwner::State::Stopped)
         return fail(Code::ShutdownFailed,Operation::Shutdown);
     LL_INFOS("NativeStartup") << "Goodbye!" << LL_ENDL;
+    sessionDiagnostic("Goodbye!",0);
     return 0;
     }
     catch (const std::bad_alloc&) { return fail(Code::OutOfMemory); }

@@ -61,6 +61,7 @@ public:
         std::filesystem::path userColorsFile;
         std::function<bool(const BackupRequest&,std::string&)> backupHandler;
         std::function<void()> clearSpamQueues;
+        std::function<bool(const LLSD&,std::string&)> prepareLogin;
     };
     static std::unique_ptr<LLVKViewerUi> create(const Configuration& configuration, std::string& error);
     struct Page
@@ -235,6 +236,8 @@ private:
         std::function<void(int)> response, std::string& error, std::string name = "NativeError");
     LLVKErrorGate mErrorGate;
     LLVKSessionOwner* mSessionOwner = nullptr;
+    std::function<bool(const LLSD&,std::string&)> mPrepareLogin;
+    bool prepareLogin();
     LLVKSessionOwner::Snapshot mSessionSnapshot;
     std::optional<LLVKSessionOwner::Snapshot> mReportedSession;
     bool initializeDialogs(const Configuration& configuration,std::string& error);

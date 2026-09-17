@@ -174,8 +174,9 @@ namespace tut
             std::shared_ptr<Owner::Inbox> inbox;
             unsigned requests=0,drains=0;
             bool failCleanup=false;
-            Owner::Code begin(const Owner::Request&,const std::shared_ptr<Owner::Inbox>& replies) override
-            { inbox=replies; ++requests; return Owner::Code::Ok; }
+            std::string token;
+            Owner::Code begin(const Owner::Request& request,const std::shared_ptr<Owner::Inbox>& replies) override
+            { inbox=replies; token=request.challengeToken; ++requests; return Owner::Code::Ok; }
             Owner::Code quiesce(std::uint64_t) override
             {
                 ++drains;
@@ -318,6 +319,19 @@ namespace tut
         ensure("Enter explicitly declines rather than accepting",ui->noticeKey(true,false,error) &&
             owner.snapshot().state==Owner::State::PreLogin && owner.snapshot().status.code==Owner::Code::AgreementRejected);
         ensure("login after agreement rejection",ui->tree().commit(ui->find("connect_btn")));
+        Owner::Response challenge;
+        challenge.kind=Owner::Response::Kind::ChallengeRequired;
+        challenge.tag=owner.snapshot().tag;
+        challenge.challenge={1,1,"LoginFailedAuthenticationMFARequired"};
+        ensure("native MFA challenge delivered",transport->inbox->post(challenge)==Owner::Code::Ok && owner.pumpOne().ok());
+        ensure("native MFA prompt prepared",ui->refreshSession(error));
+        notices=ui->takeNotices();
+        ensure("reference MFA form retained",notices.size()==1 && notices[0].name=="PromptMFAToken" &&
+            notices[0].inputName=="token" && notices[0].buttons[0].name=="continue");
+        LLSD tokenInput; tokenInput["token"]=" 123 456 ";
+        notices[0].response(0,tokenInput);
+        ensure("MFA whitespace stripped before transport",transport->token=="123456" && owner.snapshot().state==Owner::State::Authenticating);
+        ui->takeNotices();
         failure.tag=owner.snapshot().tag; failure.failure=Owner::Code::TransportUnavailable;
         ensure("installed transport failure accepted",transport->inbox->post(failure)==Owner::Code::Ok);
         owner.pumpOne();
