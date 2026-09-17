@@ -519,7 +519,7 @@ namespace tut
                     boost::asio::read_until(client,request,"\r\n\r\n",problem);
                     if (problem) continue;
                     const std::string body="<html><body style='margin:0;background:rgb(255,255,0);height:2000px'>"
-                        "<a style='position:absolute;left:100px;top:0;width:190px;height:48px' "
+                        "<a style='position:absolute;left:100px;top:0;width:120px;height:48px' "
                         "href='secondlife:///app/openfloater/preferences?tab=im&amp;subtab=tab-autoresponse-1'>Preferences</a>"
                         "<script>document.onclick=()=>document.body.style.background='rgb(0,255,255)';"
                         "document.onkeydown=()=>document.body.style.background='rgb(255,0,255)';"
@@ -568,6 +568,7 @@ namespace tut
         LLVKWidgetTree::Id originalHelp=0;
         std::set<LLVKWidgetTree::Id> browsersBeforeLoginLink;
         const auto guidebookDeadline=std::chrono::steady_clock::now()+std::chrono::seconds(90);
+        std::string guidebookTimeout;
         configuration.presentedFrame=[&](LLVKViewerUi& ui,const LLVKWidgetPaint::Input& input)
         {
             if (reportedGuidebookStage!=guidebookStage)
@@ -575,8 +576,6 @@ namespace tut
                 LL_INFOS("Vulkan") << "Browser integration stage " << guidebookStage << LL_ENDL;
                 reportedGuidebookStage=guidebookStage;
             }
-            ensure("bounded integrated Guidebook completion at stage "+std::to_string(guidebookStage),
-                std::chrono::steady_clock::now()<guidebookDeadline);
             const auto snapshot=session.snapshot();
             if (snapshot.state==LLVKSessionOwner::State::Disconnecting)
             {
@@ -593,6 +592,13 @@ namespace tut
                 ensure("cleanup action presented in surviving visual host",retry!=0);
                 ensure("retry through actual modal button",ui.tree().commit(retry));
                 ensure("UI action completes owner shutdown",session.snapshot().state==LLVKSessionOwner::State::Stopped);
+                return;
+            }
+            if (!guidebookTimeout.empty()) return;
+            if (std::chrono::steady_clock::now()>=guidebookDeadline || std::getenv("LL_VK_TEST_GUIDEBOOK_TIMEOUT"))
+            {
+                guidebookTimeout="bounded integrated Guidebook completion at stage "+std::to_string(guidebookStage);
+                PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
                 return;
             }
             ensure("cache gate and real window services adopted",snapshot.owned[0]==3);
@@ -1525,12 +1531,13 @@ namespace tut
         };
         const bool ran = LLVKWindowMgr::run(configuration,error);
         ensure(error,ran);
-        ensure_equals("browser, XUI preview, Help and login hyperlink sequence verified",guidebookStage,14);
         ensure("application and cache retirement completed",session.snapshot().state==LLVKSessionOwner::State::Stopped &&
             session.snapshot().owned[0]==0 && cleanupState->destroyed);
         ensure_equals("one pending poll and one explicit retry",cleanupState->attempts,3);
         ensure_equals("recovery remained presentable across frames",cleanupState->frames,3);
         ensure("orderly quit destroys HWND",FindWindowW(L"VulkanstormNativeLogin",nullptr)==nullptr);
+        ensure(guidebookTimeout,guidebookTimeout.empty());
+        ensure_equals("browser, XUI preview, Help and login hyperlink sequence verified",guidebookStage,14);
         ensure_equals("native shutdown persists client width",settings.find("WindowWidth")->getSaveValue().asInteger(),expectedWidth);
         ensure_equals("native shutdown persists client height",settings.find("WindowHeight")->getSaveValue().asInteger(),expectedHeight);
         LLVKSettingsMgr reloaded;

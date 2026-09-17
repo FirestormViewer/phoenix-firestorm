@@ -1,5 +1,35 @@
 # Native error messaging
 
+## CEF hyperlink fixture resolved (2026-09-17)
+
+The previously deferred stage0 timeout was fixture horizontal overflow, not a
+production Guidebook rendering failure. Read-only CDB observations showed a
+300x500 browser with a15-pixel vertical scrollbar: x284 remained yellow while
+x285 was scrollbar gray. The added link at left100 with width190 ended at290,
+five pixels beyond the285-pixel content width, creating a horizontal scrollbar.
+At y484 the left edge remained yellow; y485 was gray. The bottom-left readiness
+pixel was RGB252,252,252 rather than expected255,255,0, so the click was never
+reached. Native browserFrame correctly flips that bottom row into pixel zero.
+
+NV-00/01/12/17: the test link now has width120, retaining its x120 click target,
+vertical scrolling, original readiness colors and all production rendering.
+No GL reference, tolerance, browser sizing or production URL policy changed.
+Window7/7 now passes, including the actual CEF internal Preferences hyperlink,
+Privacy tab and nested autoresponse selection, and normal lifecycle cleanup.
+The first successful run logged a CEF browser-info response timeout despite
+completing all assertions; it is not silently treated as a clean CEF log.
+
+The secondary abort was LLVKSessionOwner's deliberate destructor guard against
+still-owned services during assertion unwinding. The fixture now records a
+deadline failure, posts WM_CLOSE, allows its existing cleanup/retry path to run,
+and asserts only after session retirement and HWND destruction checks. The
+test-only LL_VK_TEST_GUIDEBOOK_TIMEOUT environment switch forces that path.
+Fault injection verifies the preserved stage0 message and ordinary assertion
+exit1 (6passed/1expected failure), rather than fail-fast0xc0000409. Normal window
+validation remains7/7. Editor diagnostics pass. Changes are test/documentation
+only; no full-viewer run or production relink is needed. This closes this CEF
+click verification, not complete SLURL support or unrelated destinations.
+
 ## Text movement cache optimization (2026-09-16)
 
 The user deferred further investigation of the Guidebook fixture timeout and
