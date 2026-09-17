@@ -155,6 +155,18 @@ namespace tut
                                 group["GroupPowers"]=powers;
                                 event["body"]["GroupData"]=LLSD::emptyArray(); event["body"]["GroupData"].append(group);
                                 reply["events"].append(event);
+                                LLSD instant,identity,block;
+                                instant["message"]="ImprovedInstantMessage";
+                                identity["AgentID"]=LLUUID("44444444-4444-4444-4444-444444444444");
+                                block["ToAgentID"]=login["agent_id"].asUUID(); block["ID"]=identity["AgentID"].asUUID()^block["ToAgentID"].asUUID();
+                                block["RegionID"]=LLUUID::null; block["FromGroup"]=false;
+                                block["Offline"]=0; block["Dialog"]=0; block["Timestamp"]=LLSD::Binary(4,0);
+                                block["FromAgentName"]="Event Resident"; block["Message"]="Event IM fixture";
+                                block["BinaryBucket"]=LLSD::Binary{0}; block["Position"]=LLSD::emptyArray();
+                                for (unsigned coordinate=0; coordinate<3; ++coordinate) block["Position"].append(0.);
+                                instant["body"]["AgentData"]=LLSD::emptyArray(); instant["body"]["AgentData"].append(identity);
+                                instant["body"]["MessageBlock"]=LLSD::emptyArray(); instant["body"]["MessageBlock"].append(block);
+                                reply["events"].append(instant);
                             }
                             if (groupStart.exchange(false))
                             {
@@ -214,6 +226,51 @@ namespace tut
     typedef test_group<loginprotocol_data> loginprotocol_group;
     typedef loginprotocol_group::object loginprotocol_object;
     loginprotocol_group loginprotocol_tests("llvkloginprotocol");
+
+    template<> template<> void loginprotocol_object::test<8>()
+    {
+        const LLUUID id("44444444-4444-4444-4444-444444444444");
+        LLSD list=LLSD::emptyArray(),row;
+        row["buddy_id"]=id; row["buddy_rights_given"]=1; row["buddy_rights_has"]=5; list.append(row);
+        std::string error;
+        const auto friends=LLVKChatProtocol::decodeFriends(list,error);
+        ensure("friend initialization preserves permissions without inventing presence",friends && friends->size()==1 &&
+            friends->front().id==id && friends->front().rightsGiven==1 && friends->front().rightsHeld==5 &&
+            !friends->front().online && !friends->front().presenceReceived);
+        list.append(row);
+        ensure("duplicate friend identity rejected",!LLVKChatProtocol::decodeFriends(list,error));
+        LLVKChatProtocol::Bytes payload{1}; payload.insert(payload.end(),id.mData,id.mData+16);
+        const auto online=LLVKChatProtocol::decodePresence(payload,true,error),offline=LLVKChatProtocol::decodePresence(payload,false,error);
+        ensure("presence transitions retain identity",online && offline && online->front().id==id && online->front().online && !offline->front().online);
+        payload.pop_back();
+        ensure("truncated presence rejected",!LLVKChatProtocol::decodePresence(payload,true,error));
+    }
+
+    template<> template<> void loginprotocol_object::test<7>()
+    {
+        LLSD body,agent,block;
+        agent["AgentID"]=LLUUID("11111111-1111-1111-1111-111111111111");
+        block["ToAgentID"]=LLUUID("22222222-2222-2222-2222-222222222222");
+        block["ID"]=LLVKChatProtocol::directSession(agent["AgentID"].asUUID(),block["ToAgentID"].asUUID());
+        block["RegionID"]=LLUUID::null; block["FromGroup"]=false; block["Offline"]=0; block["Dialog"]=0;
+        block["FromAgentName"]="Fixture Resident"; block["Message"]="Structured IM fixture";
+        block["BinaryBucket"]=LLSD::Binary{0};
+        block["Timestamp"]=LLSD::Binary{0x12,0x34,0x56,0x78};
+        block["Position"]=LLSD::emptyArray(); block["Position"].append(128.); block["Position"].append(129.); block["Position"].append(30.);
+        body["AgentData"]=LLSD::emptyArray(); body["AgentData"].append(agent);
+        body["MessageBlock"]=LLSD::emptyArray(); body["MessageBlock"].append(block);
+        std::string error;
+        const auto message=LLVKChatProtocol::decodeInstantEvent(body,error);
+        ensure("structured IM retains identities and payload",message && message->sender==agent["AgentID"].asUUID() &&
+            message->recipient==block["ToAgentID"].asUUID() && message->text=="Structured IM fixture" && message->timestamp==0x12345678 && message->position[1]==129.f);
+        for (const auto field : {"ToAgentID","Dialog","Message","BinaryBucket","Timestamp","Position"})
+        {
+            auto malformed=body; malformed["MessageBlock"][0].erase(field);
+            ensure("missing structured field rejected",!LLVKChatProtocol::decodeInstantEvent(malformed,error));
+        }
+        body["MessageBlock"][0]["Dialog"]=256;
+        ensure("structured IM dialog cannot wrap",!LLVKChatProtocol::decodeInstantEvent(body,error));
+    }
 
     template<> template<> void loginprotocol_object::test<6>()
     {
@@ -436,7 +493,7 @@ namespace tut
         ensure("wire session identity",std::equal(bootstrap.sessionId.mData,bootstrap.sessionId.mData+16,first.begin()+14));
         const auto acknowledged=boost::endian::load_big_u32(first.data()+1);
         std::uint32_t sequence=40;
-        const auto send=[&](const char* message,std::uint32_t acknowledgement=0)
+        const auto send=[&](const char* message,std::uint32_t acknowledgement=0,bool longBucket=false)
         {
             const auto canonical=LLMessageStringTable::getInstance()->getString(message);
             auto* definition=names.at(canonical);
@@ -456,9 +513,19 @@ namespace tut
                     case MVT_S32: builder.addS32(name,0); break;
                     case MVT_U64: builder.addU64(name,std::string_view(name)=="RegionHandle" ? bootstrap.regionHandle : 0); break;
                     case MVT_F32: builder.addF32(name,0); break;
-                    case MVT_LLUUID: builder.addUUID(name,std::string_view(name)=="SessionID" ? bootstrap.sessionId : bootstrap.agentId); break;
+                    case MVT_LLUUID:
+                        builder.addUUID(name,(std::string_view(message)=="OnlineNotification" || std::string_view(message)=="OfflineNotification") ?
+                            LLUUID("44444444-4444-4444-4444-444444444444") : std::string_view(name)=="SessionID" ? bootstrap.sessionId : bootstrap.agentId);
+                        break;
                     case MVT_LLVector3: builder.addVector3(name,LLVector3(128,128,30)); break;
-                    case MVT_VARIABLE: builder.addString(name,""); break;
+                    case MVT_VARIABLE:
+                        if (longBucket && std::string_view(name)=="BinaryBucket")
+                        {
+                            const std::array<std::uint8_t,600> bucket{};
+                            builder.addBinaryData(name,bucket.data(),static_cast<S32>(bucket.size()));
+                        }
+                        else builder.addString(name,"");
+                        break;
                     default: ensure("supported connection fixture field",false);
                     }
                 }
@@ -469,7 +536,18 @@ namespace tut
             auto length=builder.buildMessage(buffer.data(),static_cast<U32>(buffer.size()),0);
             auto* bytes=buffer.data();
             builder.compressMessage(bytes,length);
-            server.send_to(boost::asio::buffer(bytes,length),client);
+            if (longBucket)
+            {
+                std::vector<std::uint8_t> continued(bytes,bytes+length);
+                const std::array<std::uint8_t,4> shortRuns{0,255,0,255};
+                const auto run=std::search(continued.begin()+6,continued.end(),shortRuns.begin(),shortRuns.end());
+                ensure("fixture contains two full zero runs",run!=continued.end());
+                const auto offset=std::distance(continued.begin(),run);
+                continued.erase(run,run+4);
+                continued.insert(continued.begin()+offset,{0,0,254});
+                server.send_to(boost::asio::buffer(continued),client);
+            }
+            else server.send_to(boost::asio::buffer(bytes,length),client);
         };
         send("RegionHandshake");
         ensure("handshake alone is not connected",circuit.pump(error)==LLVKRegionCircuit::Status::Connecting);
@@ -484,10 +562,20 @@ namespace tut
         ensure("connected IM can send",circuit.sendInstant(direct,error));
         send("ChatFromSimulator");
         send("ImprovedInstantMessage");
+        send("OnlineNotification"); send("OfflineNotification");
         ensure("incoming chat pump",circuit.pump(error)==LLVKRegionCircuit::Status::Connected);
         const auto incoming=circuit.takeMessages();
         ensure("incoming local and IM reach native queue",incoming.size()==2 && incoming[0].kind==LLVKChatProtocol::Message::Kind::Local &&
             incoming[1].kind==LLVKChatProtocol::Message::Kind::Instant);
+        ensure("IM receive diagnostics reflect actual decoded packets",circuit.messageDiagnostics().instantReceived &&
+            circuit.messageDiagnostics().instantDecoded && !circuit.messageDiagnostics().instantRejected);
+        const auto presence=circuit.takePresence();
+        ensure("reference presence notifications reach native queue in order",presence.size()==2 &&
+            presence[0].id==LLUUID("44444444-4444-4444-4444-444444444444") && presence[0].online && !presence[1].online && circuit.takePresence().empty());
+        send("ImprovedInstantMessage",0,true);
+        ensure("long zero-run IM remains connected",circuit.pump(error)==LLVKRegionCircuit::Status::Connected);
+        const auto longIncoming=circuit.takeMessages();
+        ensure("reference-compressed long IM bucket reaches consumer",longIncoming.size()==1 && longIncoming[0].bucket==LLVKChatProtocol::Bytes(600,0));
         ensure("message queue drains once",circuit.takeMessages().empty());
         ensure("logout waits for simulator",circuit.close(error)==LLVKRegionCircuit::Status::Closing);
         send("LogoutReply");
@@ -505,6 +593,9 @@ namespace tut
         login["secure_session_id"]="33333333-3333-3333-3333-333333333333";
         login["circuit_code"]="4294967295"; login["sim_ip"]="127.0.0.1"; login["sim_port"]=bootstrap.simulatorPort;
         login["region_x"]=256000; login["region_y"]=256256;
+        LLSD buddy;
+        buddy["buddy_id"]=LLUUID("44444444-4444-4444-4444-444444444444"); buddy["buddy_rights_given"]=1; buddy["buddy_rights_has"]=5;
+        login["buddy-list"]=LLSD::emptyArray(); login["buddy-list"].append(buddy);
         LoginTlsServer tls(login);
         {
             LLVKLoginHttp untrusted({});
@@ -528,6 +619,8 @@ namespace tut
         bool connected=false,closing=false,keepalive=false,searchStarted=false,searchComplete=false;
         bool groupStarted=false,groupSent=false,groupLeft=false,moderationSeen=false,invitationSeen=false;
         bool denialRequested=false;
+        unsigned eventInstantMessages=0;
+        bool directSubmitted=false,directObserved=false;
         const LLUUID groupId("55555555-5555-5555-5555-555555555555");
         const auto deadline=std::chrono::steady_clock::now()+std::chrono::seconds(15);
         while (std::chrono::steady_clock::now()<deadline)
@@ -559,6 +652,14 @@ namespace tut
                     searchComplete=true;
                 }
                 const auto memberships=transport->groups(owner.snapshot().tag);
+                const auto friends=transport->friends(owner.snapshot().tag);
+                if (!directSubmitted && friends.size()==1 && friends.front().presenceReceived)
+                {
+                    ensure("live friend state combines permissions and notifications",friends.front().rightsGiven==1 && friends.front().rightsHeld==5 && !friends.front().online);
+                    ensure("stale tag cannot expose friends",transport->friends(stale).empty());
+                    ensure("direct message uses authenticated friend data",transport->sendDirect(owner.snapshot().tag,friends.front().id,"Offline delivery fixture",false,false,error));
+                    directSubmitted=true;
+                }
                 if (!memberships.empty() && !groupStarted)
                 {
                     ensure("stale group join rejected",!transport->joinGroup(stale,groupId,error));
@@ -597,15 +698,22 @@ namespace tut
                         }
                     }
                 }
-                if (groupLeft)
-                    for (const auto& message : transport->takeMessages(owner.snapshot().tag))
+                for (const auto& message : transport->takeMessages(owner.snapshot().tag))
+                {
+                        if (message.dialog==0)
+                        {
+                            ensure("event-queue IM reaches real transport consumer",message.text=="Event IM fixture" &&
+                                message.recipient==bootstrap.agentId && message.sender==LLUUID("44444444-4444-4444-4444-444444444444"));
+                            ++eventInstantMessages;
+                        }
                         if (message.dialog==13)
                         {
                             ensure("invitation preserves text and session",message.conversation==groupId && message.text=="Invitation fixture");
                             ensure("native consumer accepts invitation",transport->joinGroup(owner.snapshot().tag,groupId,error));
                             invitationSeen=true;
                         }
-                if (keepalive && searchComplete && groupLeft && invitationSeen && !memberships.empty() && memberships.front().state==LLVKChatProtocol::Group::State::Joined)
+                }
+                if (keepalive && searchComplete && groupLeft && invitationSeen && directObserved && !memberships.empty() && memberships.front().state==LLVKChatProtocol::Group::State::Joined)
                 {
                     ensure("nonmoderator cannot issue mute request",!transport->moderateGroup(owner.snapshot().tag,groupId,bootstrap.agentId,true,error));
                     ensure("old moderation cannot publish into rejoined session",memberships.front().error.empty() && !memberships.front().moderationPending);
@@ -627,11 +735,19 @@ namespace tut
                 const auto message=boost::endian::load_big_u16(bytes.data()+8);
                 if (bytes[0]&0x40) send("PacketAck",boost::endian::load_big_u32(bytes.data()+1));
                 if (message==3) send("RegionHandshake");
-                if (message==249) send("AgentMovementComplete");
+                if (message==249)
+                { send("AgentMovementComplete"); send("OnlineNotification"); send("OfflineNotification"); }
                 if (message==252) send("LogoutReply");
                 if (message==254)
                 {
                     const auto instant=LLVKChatProtocol::decodeInstant(std::span(bytes).subspan(10,count-10),error);
+                    if (instant && instant->dialog==0)
+                    {
+                        ensure("offline friend flag matches reference delivery",instant->recipient==buddy["buddy_id"].asUUID() &&
+                            instant->offline==1 && instant->text=="Offline delivery fixture");
+                        directObserved=true;
+                        continue;
+                    }
                     ensure("group operation has native IM framing",instant && instant->conversation==groupId && instant->recipient==groupId);
                     if (instant->dialog==15) tls.groupStart=true;
                     if (instant->dialog==17) ensure("group wire text preserved",instant->text=="Group fixture");
@@ -646,8 +762,13 @@ namespace tut
         ensure("group moderation uses exact HTTPS request",tls.groupModerated.load());
         ensure("server denial exercised",denialRequested && tls.moderationDenied.load());
         ensure("group invitation accepted through HTTPS",invitationSeen && tls.groupAccepted);
+        ensure_equals("event-queue IM published exactly once",eventInstantMessages,1u);
+        for (const auto stage : {"im-event-received","im-published-to-ui"})
+            ensure_equals("message diagnostics are one-time",std::count(diagnosticStages.begin(),diagnosticStages.end(),stage),std::ptrdiff_t(1));
         ensure("event queue closes before successful shutdown",closing && tls.finished && owner.snapshot().state==LLVKSessionOwner::State::Stopped);
         ensure("disconnected chat context revoked",!transport->chatContext(owner.snapshot().tag));
+        ensure("friend data revoked on shutdown",transport->friends(owner.snapshot().tag).empty());
+        ensure("friend-aware direct delivery exercised",directSubmitted && directObserved);
         for (const auto stage : {"authorized","connection-started","seed-ready","region-connected"})
             ensure("sanitized transport stage emitted",std::find(diagnosticStages.begin(),diagnosticStages.end(),stage)!=diagnosticStages.end());
         ensure("native authentication and circuit never load desktop OpenGL",GetModuleHandleW(L"opengl32.dll")==nullptr);

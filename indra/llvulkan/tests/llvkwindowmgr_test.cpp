@@ -772,8 +772,15 @@ namespace tut
                 ensure_equals("CEF internal link selects nested tab",ui.tree().get(tabs)->tabContainer->selected,
                     ui.find("tab-autoresponse-1",tabs));
                 std::string problem;
+                if (ui.modalNotice()) { ui.noticeKey(true,false,problem); return; }
                 ensure("close preferences before connected transition",ui.closeMenuWindow(problem));
-                ensure("synthetic window session starts",session.beginLogin().ok());
+                ensure("synthetic login username",ui.tree().setValue(ui.tree().get(ui.find("username_combo"))->combo->editor,LLSD("fixture-user")));
+                ensure("synthetic login password",ui.tree().setValue(ui.find("password_edit"),LLSD("fixture-only")));
+                ensure("focus login password",ui.tree().setKeyboardFocus(ui.find("password_edit"),false,false,problem));
+                const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+                SendMessageW(window,WM_KEYDOWN,VK_RETURN,1);
+                SendMessageW(window,WM_KEYUP,VK_RETURN,1);
+                ensure("Windows Enter starts synthetic login",session.snapshot().state==LLVKSessionOwner::State::Authenticating);
                 connectedDeadline=std::chrono::steady_clock::now()+std::chrono::seconds(15);
                 ++guidebookStage;
                 return;
@@ -924,6 +931,7 @@ namespace tut
             catch (const std::exception& failure)
             {
                 if (guidebookTimeout.empty()) guidebookTimeout=failure.what();
+                std::cerr << "Native window assertion: " << failure.what() << std::endl;
                 PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
             }
         };

@@ -138,6 +138,7 @@ bool LLVKViewerUi::clearCommunications(std::string& error)
 {
     stopCommunicationTyping();
     mCommunicationContext.reset(); mConversations.clear(); mSelectedConversation.setNull(); mLocalTranscript.clear();
+    mInstantReceivedReported=false; mInstantDisplayedReported=false;
     ++mResidentQuery; mResidentResults.clear();
     mGroupConversations.clear(); mSelectedGroup.setNull();
     if (!mCommunicationPanel) return true;
@@ -163,6 +164,8 @@ bool LLVKViewerUi::selectConversation(const LLUUID& recipient,std::string& error
     mSelectedConversation=recipient; conversation.unread=0;
     mTree.setValue(find("im_composer",mCommunicationPanel),LLSD(conversation.draft));
     if (!mTree.setTextEditorText(find("im_transcript",mCommunicationPanel),conversation.transcript,error)) return false;
+    if (!conversation.transcript.empty() && !mInstantDisplayedReported && mCommunications.diagnostic)
+    { mCommunications.diagnostic("im-transcript-displayed"); mInstantDisplayedReported=true; }
     return refreshCommunications(error);
 }
 
@@ -310,6 +313,8 @@ bool LLVKViewerUi::refreshCommunications(std::string& error)
                 if (message.dialog==0)
                 {
                     append(conversation.transcript,conversation.name+": "+message.text);
+                    if (!mInstantReceivedReported && mCommunications.diagnostic)
+                    { mCommunications.diagnostic("im-conversation-received"); mInstantReceivedReported=true; }
                     conversation.typing=false;
                     if (mSelectedConversation!=message.sender) ++conversation.unread;
                 }
@@ -333,6 +338,8 @@ bool LLVKViewerUi::refreshCommunications(std::string& error)
         if (!mTree.replaceComboItems(groupList,std::move(groupItems),error)) return false;
     if (groupSelected && !mTree.setComboValue(groupList,LLSD(mSelectedGroup.asString()),error)) return false;
     if (directChanged && !mTree.setTextEditorText(find("im_transcript",mCommunicationPanel),mConversations[mSelectedConversation].transcript,error)) return false;
+    if (directChanged && !mConversations[mSelectedConversation].transcript.empty() && !mInstantDisplayedReported && mCommunications.diagnostic)
+    { mCommunications.diagnostic("im-transcript-displayed"); mInstantDisplayedReported=true; }
     std::vector<LLVKWidgetTree::ComboItem> items;
     for (const auto& [id,conversation] : mConversations)
         items.push_back({conversation.name+(conversation.unread ? " ("+std::to_string(conversation.unread)+")" : ""),LLSD(id.asString()),true});

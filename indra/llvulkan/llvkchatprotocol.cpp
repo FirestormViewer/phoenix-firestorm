@@ -75,6 +75,44 @@ namespace
 LLUUID LLVKChatProtocol::directSession(const LLUUID& agent,const LLUUID& recipient)
 { return agent==recipient ? agent : agent^recipient; }
 
+std::optional<std::vector<LLVKChatProtocol::Friend>> LLVKChatProtocol::decodeFriends(const LLSD& list,std::string& error)
+{
+    error.clear();
+    std::vector<Friend> friends;
+    if (list.isUndefined()) return friends;
+    if (!list.isArray() || list.size()>4096) { error="Invalid native friend list"; return {}; }
+    std::set<LLUUID> identities;
+    for (auto iterator=list.beginArray(); iterator!=list.endArray(); ++iterator)
+    {
+        const auto& row=*iterator;
+        const auto id=row["buddy_id"].asUUID();
+        if (!row.isMap() || id.isNull() || !identities.insert(id).second ||
+            (row.has("buddy_rights_given") && !row["buddy_rights_given"].isInteger()) ||
+            (row.has("buddy_rights_has") && !row["buddy_rights_has"].isInteger()))
+        { error="Invalid native friend identity or permissions"; return {}; }
+        friends.push_back({id,static_cast<std::uint32_t>(row["buddy_rights_given"].asInteger()),
+            static_cast<std::uint32_t>(row["buddy_rights_has"].asInteger())});
+    }
+    return friends;
+}
+
+std::optional<std::vector<LLVKChatProtocol::Presence>> LLVKChatProtocol::decodePresence(
+    std::span<const std::uint8_t> payload,bool online,std::string& error)
+{
+    error.clear();
+    if (payload.empty() || payload.size()!=1+std::size_t(payload[0])*16)
+    { error="Invalid native presence notification"; return {}; }
+    Reader reader{payload}; const auto count=reader.byte();
+    std::vector<Presence> result;
+    for (unsigned index=0; index<count; ++index)
+    {
+        const auto id=reader.uuid();
+        if (id.isNull()) { error="Invalid native presence identity"; return {}; }
+        result.push_back({id,online});
+    }
+    return result;
+}
+
 std::optional<std::vector<LLVKChatProtocol::Group>> LLVKChatProtocol::decodeGroups(const LLSD& input,const LLUUID& agent,std::string& error)
 {
     error.clear();
@@ -227,6 +265,48 @@ std::optional<LLVKChatProtocol::Message> LLVKChatProtocol::decodeLocal(std::span
     result.sourceType=reader.byte(); result.chatType=reader.byte(); result.audible=reader.byte();
     result.position=reader.position(); result.text=reader.text(false,65534);
     if (!reader.done()) { error="Malformed native local chat payload"; return {}; }
+    return result;
+}
+
+std::optional<LLVKChatProtocol::Message> LLVKChatProtocol::decodeInstantEvent(const LLSD& body,std::string& error)
+{
+    error.clear();
+    if (!body.isMap() || !body["AgentData"].isArray() || body["AgentData"].size()!=1 ||
+        !body["MessageBlock"].isArray() || body["MessageBlock"].size()!=1)
+    { error="Malformed native instant message event blocks"; return {}; }
+    const auto& agent=body["AgentData"][0];
+    const auto& block=body["MessageBlock"][0];
+    const auto uuidField=[](const LLSD& value)
+    {
+        LLUUID parsed;
+        return value.isUUID() || (value.isString() && parsed.set(value.asString(),false));
+    };
+    if (!agent.isMap() || !block.isMap() || !uuidField(agent["AgentID"]) || !uuidField(block["ToAgentID"]) ||
+        !uuidField(block["ID"]) || !uuidField(block["RegionID"]) || !block["FromGroup"].isBoolean() ||
+        !block["Offline"].isInteger() || block["Offline"].asInteger()<0 || block["Offline"].asInteger()>1 ||
+        !block["Dialog"].isInteger() || block["Dialog"].asInteger()<0 || block["Dialog"].asInteger()>255 ||
+        !block["FromAgentName"].isString() || !validText(block["FromAgentName"].asString(),254) ||
+        !block["Message"].isString() || !validText(block["Message"].asString(),65534) ||
+        !block["BinaryBucket"].isBinary() || block["BinaryBucket"].asBinary().size()>65535 ||
+        !block["Timestamp"].isBinary() || block["Timestamp"].asBinary().size()!=4 ||
+        !block["Position"].isArray() || block["Position"].size()!=3)
+    { error="Malformed native instant message event fields"; return {}; }
+    Message result; result.kind=Message::Kind::Instant;
+    result.sender=agent["AgentID"].asUUID(); result.recipient=block["ToAgentID"].asUUID();
+    result.conversation=block["ID"].asUUID(); result.region=block["RegionID"].asUUID();
+    result.fromGroup=block["FromGroup"].asBoolean();
+    result.offline=static_cast<std::uint8_t>(block["Offline"].asInteger());
+    result.dialog=static_cast<std::uint8_t>(block["Dialog"].asInteger());
+    result.name=block["FromAgentName"].asString(); result.text=block["Message"].asString();
+    result.bucket=block["BinaryBucket"].asBinary();
+    result.timestamp=boost::endian::load_big_u32(block["Timestamp"].asBinary().data());
+    for (int index=0; index<3; ++index)
+    {
+        const auto& value=block["Position"][index];
+        result.position[index]=static_cast<float>(value.asReal());
+        if ((!value.isReal() && !value.isInteger()) || !std::isfinite(result.position[index]))
+        { error="Malformed native instant message event position"; return {}; }
+    }
     return result;
 }
 

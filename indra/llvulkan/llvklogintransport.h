@@ -27,6 +27,7 @@ public:
     bool searchResidents(LLVKSessionOwner::Tag tag,std::uint64_t query,std::string name,std::string& error);
     std::optional<LLVKChatProtocol::SearchResult> takeResidentSearch(LLVKSessionOwner::Tag tag);
     std::vector<LLVKChatProtocol::Group> groups(LLVKSessionOwner::Tag tag) const;
+    std::vector<LLVKChatProtocol::Friend> friends(LLVKSessionOwner::Tag tag) const;
     bool joinGroup(LLVKSessionOwner::Tag tag,const LLUUID& group,std::string& error);
     bool leaveGroup(LLVKSessionOwner::Tag tag,const LLUUID& group,std::string& error);
     bool sendGroup(LLVKSessionOwner::Tag tag,const LLUUID& group,const std::string& text,std::string& error);
@@ -63,6 +64,10 @@ private:
     std::vector<LLVKChatProtocol::Message> mEventMessages;
     std::size_t mEventMessageBytes=0;
     LLVKRegionCircuit mCircuit;
+    std::map<LLUUID,LLVKChatProtocol::Friend> mFriends;
+    LLVKRegionCircuit::MessageDiagnostics mMessageDiagnostics;
+    bool mInstantPublished=false;
+    bool mInstantEventReceived=false,mInstantEventRejected=false;
     LLSD mParameters,mLoginData,mCapabilities,mEventAck;
     std::deque<LLSD> mPendingEvents;
     std::optional<LLVKLoginProtocol::Bootstrap> mBootstrap;

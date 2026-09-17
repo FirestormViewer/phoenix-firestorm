@@ -1,5 +1,89 @@
 # Native session integration
 
+## Enter and default-button routing (2026-09-17)
+
+NV-00/01/12/17: reference FSPanelLogin assigns Connect as the default for
+the login and start-location panels and separately commits password_edit to
+onClickConnect. LLLineEditor::handleSpecialKey records Return history but leaves
+the key unhandled; LLView propagates it to parents, and LLPanel::handleKeyHere
+honors an enabled visible default before its text-input commit fallback.
+The native window handler previously discarded that unhandled Return and selected
+a possibly unrelated active floater as its dispatch root.
+
+Native login now assigns those defaults and the password commit callback. The
+window preserves an editor's handled result and routes unhandled Return along
+actual keyboard-focus ancestry, selecting the nearest declared panel default
+before editor fallback. Modifiers do not activate defaults. Existing modal notice
+delay/default handling, browser input ownership and multiline newline handling
+remain separate. Disabled or hidden defaults are not activated. Callbacks may
+destroy their own dialog without a subsequent node dereference. No GL code or
+GPU resource ownership is changed.
+
+Widget210/210 covers password Enter starting the owner, modified Return,
+nested defaults, disabled-default fallback and self-closing callbacks. Window7/7
+passes with WM_KEYDOWN/WM_KEYUP Return initiating synthetic login after focus
+leaves Preferences, followed by connected input, resize and orderly teardown.
+Earlier failed fixture runs exposed the stale active-floater dispatch root and
+required normal cancellation of a file picker and acknowledgement of an unrelated
+alert before cleanup; they are not passing evidence. This verification does not
+qualify every dialog's default assignment or connected visual parity.
+
+## Incoming IM receive investigation (2026-09-17)
+
+After checkpoint8e2b68f879, the operator reports that the native connected viewer
+does not receive IMs. Region connection is verified separately; incoming live
+messaging is a failed acceptance gate. The interim connected UI is not accepted
+as OpenGL parity. Friends/account presence and the original Contacts,
+Conversations, menu, address and favourites surfaces remain required work.
+
+NV-00/01/15/17: source roots inspected are LLMessageSystem::zeroCodeExpand,
+LLTemplateMessageBuilder::buildMessage/compressMessage,
+LLEventPollImpl::handleMessage, LLSDMessageReader's field readers and
+process_improved_im. The reference supports zero-run continuation bytes and
+dispatches named event-queue messages as well as UDP messages. Native code must
+decode these representations into its own bounded message records without
+calling the GL-owned handlers. This is CPU protocol and publication work;
+Vulkan resources, visual assets and GPU synchronization are unchanged.
+
+The native packet decoder now accepts bounded zero-run continuations: a zero
+count contributes256 zeros followed by another count byte. The fixture starts
+with a reference-compressed IM and replaces two255-zero runs with an equivalent
+256+254 continuation, checking the complete600-byte bucket at the queue consumer.
+Structured ImprovedInstantMessage event bodies now validate single AgentData and
+MessageBlock arrays, UUIDs, text, flags, position, binary bucket and the reference
+network-order four-byte timestamp before joining the native incoming queue.
+The TLS fixture delivers an unsolicited structured IM and checks exactly-once
+transport consumption. Binary-template event framing is not yet implemented;
+that route remains retained under the existing event budget, not claimed covered.
+
+Content-free, one-time-per-connection diagnostic stages distinguish UDP IM
+arrival/decode/rejection, structured-event arrival/rejection, transport publication,
+conversation receipt and transcript display. No message body, name, UUID,
+credential or capability URL is written by these markers. Transcript display
+means native text-control publication, not measured visual parity or a delivery
+receipt sent to another resident.
+
+The native friend-data foundation now reads buddy IDs and granted/held permission
+masks from login, matching LLStartUp's buddy-list construction. Initial online=false
+is retained, with a separate presenceReceived flag so it is not evidence of a
+server-reported offline notification. OnlineNotification322 and
+OfflineNotification323 are decoded into bounded ordered circuit queues, applied
+only to existing friends, exposed only for the current connected tag and cleared
+on shutdown. LLIMModel's reference delivery policy now determines the direct IM
+offline flag from that friend data; nonfriends and typing retain their previous
+flags. Source roots include LLAvatarTracker::processNotify and deliverMessage.
+The integrated TLS/UDP fixture checks permissions, notification order and the
+offline message flag. Unknown-buddy reconciliation, friendship/rights updates,
+structured presence events, account-status controls and the actual Friends view
+remain open. This data foundation is not a completed presence workflow.
+
+Protocol8/8 and widget210/210 pass after these changes. The observed live failure
+is not yet attributed to a specific transport representation or UI branch; these
+source-backed corrections must not be presented as a proven live fix. Next live
+acceptance uses ladyanamarques in the isolated native profile and cooperating
+Anne Skydancer, with no automatic sends or credential capture. No previous passed
+authentication evidence needs to be repeated for reassurance.
+
 ## Fresh-profile login proxy gate (2026-09-17)
 
 Isolated viewer27704 reached native startup and created its own cache while the

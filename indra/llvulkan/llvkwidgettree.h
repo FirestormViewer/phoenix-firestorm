@@ -642,6 +642,7 @@ public:
     Id rootMostFocusRoot(Id control) const;
     enum class PanelKey { Escape, Tab, Return };
     bool panelKey(Id id, PanelKey key, LLVKLineEditor::Modifiers modifiers, std::string& error);
+    bool routePanelKey(Id root, PanelKey key, LLVKLineEditor::Modifiers modifiers, std::string& error);
     bool setPanelDefaultButton(Id id, Id button, std::string& error);
     bool initializeTabContainer(Id panel, std::string& error);
     bool scrollTabStrip(Id container, std::int32_t rows, std::string& error);

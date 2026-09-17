@@ -713,9 +713,9 @@ namespace
                         case VK_UP: key = LLVKLineEditor::Key::Up; break;
                         case VK_DOWN: key = LLVKLineEditor::Key::Down; break;
                     }
-                    if (key) { tree.lineEditorKey(focused,*key,modifiers,error); return 0; }
+                    if (key && (tree.lineEditorKey(focused,*key,modifiers,error) || !error.empty())) return 0;
                 }
-                if (parameter == VK_RETURN) tree.panelKey(focusRoot,LLVKWidgetTree::PanelKey::Return,modifiers,error);
+                if (parameter == VK_RETURN) tree.routePanelKey(ui->root(),LLVKWidgetTree::PanelKey::Return,modifiers,error);
                 else if (parameter == VK_ESCAPE) tree.panelKey(focusRoot,LLVKWidgetTree::PanelKey::Escape,modifiers,error);
                 return 0;
             }

@@ -35,6 +35,7 @@ public:
         std::function<bool(LLVKSessionOwner::Tag,const LLUUID&,std::string&)> joinGroup,leaveGroup;
         std::function<bool(LLVKSessionOwner::Tag,const LLUUID&,const std::string&,std::string&)> group;
         std::function<bool(LLVKSessionOwner::Tag,const LLUUID&,const LLUUID&,bool,std::string&)> moderateGroup;
+        std::function<void(const char*)> diagnostic;
         std::function<bool(LLVKSessionOwner::Tag,const std::string&,std::uint8_t,std::string&)> local;
         std::function<bool(LLVKSessionOwner::Tag,const LLUUID&,const std::string&,bool,bool,std::string&)> direct;
     };
@@ -266,6 +267,7 @@ private:
     std::map<LLUUID,Conversation> mConversations;
     LLUUID mSelectedConversation;
     std::string mLocalTranscript;
+    bool mInstantReceivedReported=false,mInstantDisplayedReported=false;
     std::uint64_t mResidentQuery=0;
     std::vector<LLVKChatProtocol::Resident> mResidentResults;
     std::map<LLUUID,Conversation> mGroupConversations;

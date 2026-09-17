@@ -23,6 +23,13 @@ public:
         LLUUID id;
         std::string displayName,username;
     };
+    struct Friend
+    {
+        LLUUID id;
+        std::uint32_t rightsGiven=0,rightsHeld=0;
+        bool online=false,presenceReceived=false;
+    };
+    struct Presence { LLUUID id; bool online=false; };
     struct Group
     {
         enum class State { Closed, Joining, Joined, Failed };
@@ -55,6 +62,8 @@ public:
         bool fromGroup=false;
     };
     static LLUUID directSession(const LLUUID& agent,const LLUUID& recipient);
+    static std::optional<std::vector<Friend>> decodeFriends(const LLSD& list,std::string& error);
+    static std::optional<std::vector<Presence>> decodePresence(std::span<const std::uint8_t> payload,bool online,std::string& error);
     static std::optional<std::vector<Group>> decodeGroups(const LLSD& body,const LLUUID& agent,std::string& error);
     static bool updateParticipants(Group& group,const LLSD& body,bool initial,std::string& error);
     static std::optional<Message> decodeInvitation(const LLSD& body,std::string& error);
@@ -64,4 +73,5 @@ public:
         const Message& message,std::string& error);
     static std::optional<Message> decodeLocal(std::span<const std::uint8_t> payload,std::string& error);
     static std::optional<Message> decodeInstant(std::span<const std::uint8_t> payload,std::string& error);
+    static std::optional<Message> decodeInstantEvent(const LLSD& body,std::string& error);
 };

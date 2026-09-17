@@ -213,6 +213,8 @@ namespace tut
         const LLUUID chatAgent("11111111-1111-1111-1111-111111111111"),chatPeer("22222222-2222-2222-2222-222222222222");
         std::vector<LLVKChatProtocol::Message> incomingChat;
         unsigned localSends=0,directSends=0;
+        std::vector<std::string> communicationStages;
+        configuration.communications.diagnostic=[&](const char* stage) { communicationStages.emplace_back(stage); };
         unsigned typingStarts=0,typingStops=0;
         LLVKChatProtocol::Group chatGroup;
         chatGroup.id=LLUUID("55555555-5555-5555-5555-555555555555"); chatGroup.name="Fixture Group"; chatGroup.powers=std::uint64_t(1)<<16;
@@ -311,7 +313,11 @@ namespace tut
         ensure("hide grid selector setting",ui->tree().updateSetting("ForceShowGrid",LLSD(false)));
         ensure("refresh restored credentials",ui->preparePaint({},error).has_value());
         ensure("grid selector hides after toggle",!ui->tree().get(ui->find("grid_panel"))->params.visible);
-        ensure("login command reaches owner",ui->tree().commit(ui->find("connect_btn")));
+        ensure("password field receives login focus",ui->tree().setKeyboardFocus(ui->find("password_edit"),false,false,error));
+        ensure("line editor leaves Enter for panel default",!ui->tree().lineEditorKey(ui->find("password_edit"),LLVKLineEditor::Key::Return,{},error));
+        ensure("modified Enter does not log in",!ui->tree().routePanelKey(ui->root(),LLVKWidgetTree::PanelKey::Return,{false,true,false},error) &&
+            owner.snapshot().state==Owner::State::PreLogin);
+        ensure("Enter login command reaches owner",ui->tree().routePanelKey(ui->root(),LLVKWidgetTree::PanelKey::Return,{},error));
         ensure("actual owner is authenticating",owner.snapshot().state==Owner::State::Authenticating);
         ensure("snapshot observed by UI",ui->sessionSnapshot().tag==owner.snapshot().tag);
         ensure("login inputs disabled during attempt",!ui->tree().get(ui->find("connect_btn"))->params.enabled);
@@ -451,6 +457,7 @@ namespace tut
         ensure("choose unsolicited sender",ui->tree().setComboValue(ui->find("conversation_list"),LLSD(chatPeer.asString()),error) &&
             ui->tree().commit(ui->find("conversation_list")));
         ensure("IM transcript belongs to selected sender",ui->tree().value(ui->find("im_transcript")).asString()=="Peer Resident: Incoming fixture\n");
+        ensure("IM UI diagnostics distinguish receipt from display",communicationStages==std::vector<std::string>{"im-conversation-received","im-transcript-displayed"});
         ensure("conversation dropdown opens",ui->tree().showComboList(ui->find("conversation_list"),error));
         ensure("idle paint retains conversation dropdown",ui->preparePaint({},error).has_value() &&
             ui->tree().get(ui->tree().get(ui->find("conversation_list"))->combo->list)->params.visible);
@@ -6644,6 +6651,26 @@ namespace tut
         ensure("Escape handled",tree.panelKey(*panel,Key::Escape,{},error));
         ensure_equals("Escape clears subtree focus",tree.keyboardFocus(),LLVKWidgetTree::Id(0));
         ensure("Return without focus unhandled",!tree.panelKey(*panel,Key::Return,{},error));
+        control.commit={};
+        const auto nested=tree.createPanel(view,control,{},*panel,error);
+        ensure("nested dialog panel",nested.has_value());
+        control.commit.function=[&](auto,const LLSD&) { ++textCommits; };
+        const auto nestedEditor=tree.createLineEditor(view,control,{},*nested,error);
+        ensure("nested dialog editor",nestedEditor.has_value());
+        ensure("focus nested dialog editor",tree.setKeyboardFocus(*nestedEditor,false,false,error));
+        ensure("nested editor Enter reaches dialog default",tree.routePanelKey(*panel,Key::Return,{},error));
+        ensure_equals("dialog default committed once",buttonCommits,2);
+        ensure_equals("nested panel cannot consume default as editor commit",textCommits,1);
+        tree.setEnabled(*button,false);
+        ensure("disabled default falls back without activation",tree.routePanelKey(*panel,Key::Return,{},error));
+        ensure_equals("disabled default never commits",buttonCommits,2);
+        ensure_equals("fallback editor commits once",textCommits,2);
+        tree.setEnabled(*button,true);
+        LLVKControl::Callback close;
+        close.function=[&](auto,const LLSD&) { ++buttonCommits; tree.erase(*panel,error); };
+        tree.setControlCommit(*button,std::move(close));
+        ensure("default may destroy its dialog",tree.routePanelKey(*panel,Key::Return,{},error) && !tree.get(*panel));
+        ensure_equals("closing default callback invoked once",buttonCommits,3);
     }
 
     template<> template<> void object::test<111>()

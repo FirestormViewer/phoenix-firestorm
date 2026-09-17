@@ -477,6 +477,8 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
             !ui->mTree.setValue(ui->mTree.get(locationId)->combo->editor,LLSD(location))) return nullptr;
     }
     ui->updateLoginControls();
+    for (const auto name : {"login","start_location_panel"})
+        if (!ui->mTree.setPanelDefaultButton(ui->find(name),ui->find("connect_btn"),error)) return nullptr;
     if (!ui->focusLoginFields(error)) return nullptr;
     return ui;
 }

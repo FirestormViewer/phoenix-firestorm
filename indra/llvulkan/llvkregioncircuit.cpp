@@ -48,8 +48,15 @@ namespace
             const auto byte=input[index];
             if ((packet.flags&0x80) && !byte)
             {
-                if (++index>=end || !input[index] || data.size()+input[index]>65535) return {};
-                data.insert(data.end(),input[index],0);
+                std::size_t zeros=0;
+                do
+                {
+                    if (++index>=end) return {};
+                    const auto count=input[index] ? std::size_t(input[index]) : 256;
+                    if (count>65535-data.size()-zeros) return {};
+                    zeros+=count;
+                } while (!input[index]);
+                data.insert(data.end(),zeros,0);
             }
             else data.push_back(byte);
             if (data.size()>65535) return {};
@@ -103,7 +110,9 @@ struct LLVKRegionCircuit::Impl
     std::set<std::uint32_t> received;
     std::deque<std::uint32_t> receivedOrder;
     std::vector<LLVKChatProtocol::Message> messages;
+    std::vector<LLVKChatProtocol::Presence> presence;
     std::size_t messageBytes=0;
+    MessageDiagnostics messageDiagnostics;
     std::uint32_t sequence=0;
     std::uint8_t ping=0;
     bool circuitAcknowledged=false,handshake=false,movement=false,movementSent=false;
@@ -160,10 +169,24 @@ struct LLVKRegionCircuit::Impl
             if (receivedOrder.size()>4096) { received.erase(receivedOrder.front()); receivedOrder.pop_front(); }
         }
         const auto& payload=packet.payload;
+        if ((packet.id==low(322) || packet.id==low(323)) && status!=Status::Closing)
+        {
+            const auto updates=LLVKChatProtocol::decodePresence(payload,packet.id==low(322),error);
+            if (!updates) { error.clear(); return true; }
+            if (presence.size()+updates->size()>4096) { error="Native presence queue exceeds its budget"; return false; }
+            presence.insert(presence.end(),updates->begin(),updates->end());
+            return true;
+        }
         if ((packet.id==low(139) || packet.id==low(254)) && status!=Status::Closing)
         {
+            if (packet.id==low(254)) messageDiagnostics.instantReceived=true;
             auto message=packet.id==low(139) ? LLVKChatProtocol::decodeLocal(payload,error) : LLVKChatProtocol::decodeInstant(payload,error);
-            if (!message) { error.clear(); return true; }
+            if (!message)
+            {
+                if (packet.id==low(254)) messageDiagnostics.instantRejected=true;
+                error.clear(); return true;
+            }
+            if (packet.id==low(254)) messageDiagnostics.instantDecoded=true;
             if (messages.size()>=1024 || messageBytes+payload.size()>4*1024*1024)
             { error="Native incoming message queue exceeds its budget"; return false; }
             messageBytes+=payload.size(); messages.push_back(std::move(*message));
@@ -299,10 +322,19 @@ void LLVKRegionCircuit::cancel()
     mImpl->outstanding.clear(); mImpl->received.clear(); mImpl->receivedOrder.clear();
     mImpl->bootstrap={}; mImpl->status=Status::Closed;
     mImpl->messages.clear(); mImpl->messageBytes=0;
+    mImpl->presence.clear();
     mImpl->regionName.clear();
 }
 
 const std::string& LLVKRegionCircuit::regionName() const { return mImpl->regionName; }
+
+std::vector<LLVKChatProtocol::Presence> LLVKRegionCircuit::takePresence()
+{
+    auto updates=std::move(mImpl->presence); mImpl->presence.clear(); return updates;
+}
+
+LLVKRegionCircuit::MessageDiagnostics LLVKRegionCircuit::messageDiagnostics() const
+{ return mImpl->messageDiagnostics; }
 
 bool LLVKRegionCircuit::sendLocal(const std::string& text,std::uint8_t type,std::int32_t channel,std::string& error)
 {

@@ -91,6 +91,8 @@ LLVKSessionOwner::Code LLVKLoginTransport::begin(const Owner::Request& request,c
     if (request.operation!=Owner::Operation::Connect || !mBootstrap) return Owner::Code::WrongState;
     mTag=request.tag; mInbox=replies;
     if (!mCircuit.start(*mBootstrap,error)) return connectionFailure("circuit-start-failed");
+    mMessageDiagnostics={}; mInstantPublished=false;
+    mInstantEventReceived=false; mInstantEventRejected=false;
     LLSD names=LLSD::emptyArray();
     for (const auto name : {"EventQueueGet","SimulatorFeatures","GetDisplayNames","AvatarPickerSearch","ChatSessionRequest","FetchInventoryDescendents2",
         "FetchLibDescendents2","FetchInventory2","FetchLib2","ViewerAsset","GetTexture","GetMesh","GetMesh2","EnvironmentSettings"})
@@ -176,6 +178,10 @@ LLVKSessionOwner::Code LLVKLoginTransport::pump()
         mBootstrap=LLVKLoginProtocol::bootstrap(*data,error);
         if (!mBootstrap) return Owner::Code::AuthenticationFailed;
         mLoginData=*data;
+        const auto friends=LLVKChatProtocol::decodeFriends((*data)["buddy-list"],error);
+        if (!friends) return Owner::Code::AuthenticationFailed;
+        mFriends.clear();
+        for (const auto& buddy : *friends) mFriends.emplace(buddy.id,buddy);
         mParameters=LLSD();
         Owner::Response response; response.kind=Owner::Response::Kind::Authorized;
         response.identity={mTag.generation,mTag.generation};
@@ -183,6 +189,17 @@ LLVKSessionOwner::Code LLVKLoginTransport::pump()
     }
     if (mPhase!=Phase::Seed && mPhase!=Phase::Online) return Owner::Code::Pending;
     const auto circuit=mCircuit.pump(error);
+    const auto messages=mCircuit.messageDiagnostics();
+    if (messages.instantReceived && !mMessageDiagnostics.instantReceived) report("im-packet-received");
+    if (messages.instantDecoded && !mMessageDiagnostics.instantDecoded) report("im-packet-decoded");
+    if (messages.instantRejected && !mMessageDiagnostics.instantRejected) report("im-packet-rejected");
+    mMessageDiagnostics=messages;
+    for (const auto& update : mCircuit.takePresence())
+    {
+        const auto found=mFriends.find(update.id);
+        if (found!=mFriends.end())
+        { found->second.online=update.online; found->second.presenceReceived=true; }
+    }
     if (circuit==LLVKRegionCircuit::Status::Failed) return connectionFailure("circuit-progress-failed");
     pumpResidentSearch();
     pumpGroupAcceptance();
@@ -254,6 +271,21 @@ LLVKSessionOwner::Code LLVKLoginTransport::pump()
                 }
                 const auto event=(*iterator)["message"].asString();
                 const auto& body=(*iterator)["body"];
+                if (event=="ImprovedInstantMessage" && !body.has("binary-template-data"))
+                {
+                    if (!mInstantEventReceived) { report("im-event-received"); mInstantEventReceived=true; }
+                    const auto message=LLVKChatProtocol::decodeInstantEvent(body,error);
+                    if (!message)
+                    {
+                        if (!mInstantEventRejected) { report("im-event-rejected"); mInstantEventRejected=true; }
+                        continue;
+                    }
+                    const auto bytes=message->name.size()+message->text.size()+message->bucket.size();
+                    if (mEventMessages.size()>=1024 || mEventMessageBytes+bytes>4*1024*1024)
+                        return connectionFailure("im-event-queue-full");
+                    mEventMessages.push_back(*message); mEventMessageBytes+=bytes;
+                    continue;
+                }
                 if (event=="ChatterBoxInvitation" && body.has("instantmessage"))
                 {
                     const auto message=LLVKChatProtocol::decodeInvitation(body,error);
@@ -355,6 +387,7 @@ LLVKSessionOwner::Code LLVKLoginTransport::quiesce(std::uint64_t generation)
         mHttp.cancel(); mEvents.cancel(); mInbox.reset(); mParameters=LLSD(); mPendingEvents.clear(); mPendingEventBytes=0;
         mResidentSearch.cancel(); mSearchResult.reset(); mSearchQuery=0;
         mGroups.clear(); mGroupDeadlines.clear();
+        mFriends.clear();
         mGroupUpdates.clear(); mGroupUpdateBytes=0;
         mGroupHttp.cancel(); mGroupInvitations.clear(); mGroupVersions.clear(); mGroupAccepts.clear(); mAcceptingGroup.reset();
         mModerationHttp.cancel(); mModeratingGroup.reset();
@@ -530,6 +563,13 @@ bool LLVKLoginTransport::sendGroup(Owner::Tag tag,const LLUUID& id,const std::st
     return groupMessage(tag,id,17,text,error);
 }
 
+std::vector<LLVKChatProtocol::Friend> LLVKLoginTransport::friends(Owner::Tag tag) const
+{
+    std::vector<LLVKChatProtocol::Friend> result;
+    if (chatContext(tag)) for (const auto& [id,buddy] : mFriends) result.push_back(buddy);
+    return result;
+}
+
 std::vector<LLVKChatProtocol::Group> LLVKLoginTransport::groups(Owner::Tag tag) const
 {
     std::vector<LLVKChatProtocol::Group> result;
@@ -608,6 +648,9 @@ std::vector<LLVKChatProtocol::Message> LLVKLoginTransport::takeMessages(Owner::T
     auto messages=mCircuit.takeMessages();
     messages.insert(messages.end(),std::make_move_iterator(mEventMessages.begin()),std::make_move_iterator(mEventMessages.end()));
     mEventMessages.clear(); mEventMessageBytes=0;
+    if (!mInstantPublished && std::any_of(messages.begin(),messages.end(),[](const auto& message)
+        { return message.kind==LLVKChatProtocol::Message::Kind::Instant; }))
+    { report("im-published-to-ui"); mInstantPublished=true; }
     return messages;
 }
 
@@ -628,6 +671,8 @@ bool LLVKLoginTransport::sendDirect(Owner::Tag tag,const LLUUID& recipient,const
     message.kind=LLVKChatProtocol::Message::Kind::Instant;
     message.recipient=recipient; message.name=context->name; message.text=typing || typingStopped ? "typing" : text;
     message.dialog=typing ? 41 : typingStopped ? 42 : 0;
+    const auto buddy=mFriends.find(recipient);
+    if (!typing && !typingStopped && buddy!=mFriends.end() && !buddy->second.online) message.offline=1;
     message.conversation=LLVKChatProtocol::directSession(context->agent,recipient);
     return mCircuit.sendInstant(message,error);
 }

@@ -373,6 +373,7 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     loginConfiguration.http.userAgent="Vulkanstorm/"+shortVersion;
     auto loginTransport=std::make_shared<LLVKLoginTransport>(std::move(loginConfiguration));
     session.owner=std::make_unique<LLVKSessionOwner>(loginTransport);
+    configuration.ui.communications.diagnostic=[sessionDiagnostic](const char* stage) { sessionDiagnostic(stage,0); };
     configuration.ui.communications.context=[loginTransport](LLVKSessionOwner::Tag tag)
     { return loginTransport->chatContext(tag); };
     configuration.ui.communications.receive=[loginTransport](LLVKSessionOwner::Tag tag)

@@ -438,6 +438,7 @@ void LLVKViewerUi::setSessionOwner(LLVKSessionOwner* owner)
         mReportedSession.reset();
         refreshSession(mDialogError);
     };
+    mTree.setControlCommit(find("password_edit"),login);
     mTree.setControlCommit(find("connect_btn"),std::move(login));
     updateLoginControls();
 }
