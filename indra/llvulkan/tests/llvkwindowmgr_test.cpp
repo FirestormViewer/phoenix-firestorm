@@ -946,6 +946,18 @@ namespace tut
         } inactiveFocusOwner;
         unsigned captures=0;
         std::map<std::string,std::vector<double>> timingSamples;
+        std::optional<std::chrono::steady_clock::time_point> shutdownRequested;
+        const auto requestCaptureClose=[&](HWND window)
+        {
+            if (captureDirectory && std::getenv("LLVK_CAPTURE_EXTERNAL_CLOSE"))
+            {
+                const auto ready=std::filesystem::path(captureDirectory)/"shutdown-ready.txt";
+                if (!std::filesystem::exists(ready)) std::ofstream(ready)<<"ready\n";
+                return;
+            }
+            if (!shutdownRequested) shutdownRequested=std::chrono::steady_clock::now();
+            PostMessageW(window,WM_CLOSE,0,0);
+        };
         if (captureDirectory)
             rejected.diagnosticTiming=[&](const char* stage,double milliseconds)
             {
@@ -984,7 +996,7 @@ namespace tut
                         geometry<<"\n";
                     }
                     failurePhase=1;
-                    PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
+                    requestCaptureClose(FindWindowW(L"VulkanstormNativeLogin",nullptr));
                 }
                 return;
             }
@@ -1218,7 +1230,7 @@ namespace tut
                     SendMessageW(window,WM_LBUTTONUP,0,outside);
                     ensure("release outside does not authenticate",ui.sessionSnapshot().state==LLVKSessionOwner::State::PreLogin && !ui.modalNotice());
                     failurePhase=1;
-                    PostMessageW(window,WM_CLOSE,0,0);
+                    requestCaptureClose(window);
                     return;
                 }
                 ++buttonPhase;
@@ -1253,7 +1265,7 @@ namespace tut
                     ensure("scaled input remains prelogin",ui.sessionSnapshot().state==LLVKSessionOwner::State::PreLogin);
                 }
                 failurePhase=1;
-                PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
+                requestCaptureClose(FindWindowW(L"VulkanstormNativeLogin",nullptr));
                 return;
             }
             if (!failurePhase)
@@ -1267,9 +1279,12 @@ namespace tut
                 ++failurePhase;
                 return;
             }
-            PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
+            requestCaptureClose(FindWindowW(L"VulkanstormNativeLogin",nullptr));
         };
         const auto captureRun=LLVKWindowMgr::run(rejected,error);
+        if (shutdownRequested)
+            timingSamples["shutdown/wall-close-to-return"].push_back(
+                std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-*shutdownRequested).count());
         if (captureDirectory)
         {
             std::ofstream report(std::filesystem::path(captureDirectory)/"stage-timing.csv");

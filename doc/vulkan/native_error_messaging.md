@@ -1,5 +1,138 @@
 # Native error messaging
 
+## Shutdown difference accepted (2026-09-17)
+
+The user accepts the measured prelogin shutdown difference as inherent to the
+different pipelines and closes this shutdown investigation. No further matching
+or optimization is required for this comparison: native averages986.7209ms to
+process exit (987.5724ms including confirmation of CEF helper exits), versus
+OpenGL1149.7421ms to process exit.
+
+This is an acceptance decision, not experimental proof of which pipeline or
+service differences cause the gap. The measurement scope and caveats below
+remain intact. It does not qualify logged-in shutdown, change visual/effects
+parity requirements, or waive orderly service retirement and process exit.
+
+## Corrected Vulkan process-exit timing (2026-09-17)
+
+The user required Vulkan shutdown timing to include process exit, CEF and all
+initialized services. The earlier829.534ms window-runner result is a partial
+interval and is superseded for comparison by the measurements below.
+
+Native capture now offers MeasureShutdown: the fixture signals shutdown readiness
+without closing itself, and the external runner starts its stopwatch immediately
+before CloseMainWindow. It waits for parent process exit, then confirms exit of
+the five captured CEF descendant process handles. The latter measurement includes
+observer/check overhead and does not imply helpers remained alive after the
+parent exited. Handles are captured before the stopwatch starts. No process is
+force-terminated. The local HTTP evidence server is outside the viewer process
+tree and outside this interval, as in the GL runner.
+
+The test runner's opt-in --group/--test selector restricts timed native captures
+to test1. This avoids unrelated later tests without skipping anything initialized
+by the capture workflow: CEF, browser/audio/voice service retirement, settings,
+GPU/UI/window destruction, cache-owner retirement, profile cleanup and test
+runtime/process teardown all precede the measured exit. Default Window validation
+still runs all7tests. This changes only test/measurement code (NV-00/01/14/17),
+not production shutdown behavior or the pinned OpenGL binary.
+
+| Native run | Parent process exit ms | Parent and CEF exits confirmed ms |
+|---|---:|---:|
+| 220 | 982.4593 | 984.8230 |
+| 221 | 982.4164 | 982.5035 |
+| 222 | 995.2870 | 995.3906 |
+| Mean | 986.7209 | 987.5724 |
+
+All runs exit0 and retain five CEF helper identities in their manifests under
+glref-build/captures/native-shutdown-process-220 through222. Fixture SHA256:
+18A6ACC3D53533A7AC2E32D4AFCAAB69C8119994DD5500CC510D36C69BFE261D.
+The request hash remains773D52677F5187E0F96BA47412169291F00AD3005E5A792C55445062D3EF4376,
+matching GL100-102. Against GL's1149.7421ms mean close-to-process-exit interval,
+native's same-endpoint mean is163.0212ms lower in these three-sample sets.
+The prior320ms gap mixed endpoints and must not be used. GL's retained measurement
+does not independently confirm descendant exits; native now does. Different
+initialized service sets and CEF139 versus152 still prevent attributing the gap
+to the renderer alone. Neither result represents a logged-in full session.
+
+Window7/7, three selected capture runs, invalid selector checks, PowerShell syntax
+and editor diagnostics pass. No full viewer was launched. Existing per-stage CSV
+phase labels begin at shutdown readiness and can include the external handshake
+wait; they are not substitutes for this external close-to-exit stopwatch.
+
+## OpenGL shutdown comparison (2026-09-17)
+
+The GL capture runner now measures wall time immediately before CloseMainWindow
+through WaitForExit completion, recording shutdownCloseToProcessExitMs in the
+manifest. This is external diagnostic instrumentation only (NV-00/01/02/17);
+the pinned GL source and executable remain unchanged. Parser validation passes.
+
+Three new isolated prelogin captures gl-shutdown-measure-100 through102 use the
+same maximized queued Preferences/picker workflow as native-shutdown-measure-217
+through219. All six request hashes match:
+773D52677F5187E0F96BA47412169291F00AD3005E5A792C55445062D3EF4376.
+GL uses revision59108e15a1f8f94d2da7c674d937d19f5cf9450d and executable SHA256
+CB44347B3AC03B36F94794FEF09182C4884F3A332F98692DB2C14016802C6FDF.
+All GL runs record exit0, Goodbye and notification response; native runs exit0.
+
+| Metric | OpenGL | Native Vulkan |
+|---|---:|---:|
+| Sample1 ms | 1196.4409 | 829.748 |
+| Sample2 ms | 1358.7629 | 829.537 |
+| Sample3 ms | 894.0224 | 829.317 |
+| Mean ms | 1149.7421 | 829.534 |
+| Endpoint | Process exit observed by runner | Native window runner returns |
+
+The observed mean gap is320.2081ms, but these endpoints are NOT equivalent and
+do not establish a backend speedup. Native excludes subsequent test/profile and
+process cleanup; its executable otherwise runs additional tests, so timing its
+whole exit would introduce unrelated work. GL includes full viewer process
+teardown and has greater observed variance in this three-sample set. GL uses
+CEF139 versus native CEF152, and their initialized service sets differ. Neither
+measurement includes a logged-in session or establishes renderer-only overhead.
+Use these as bounded prelogin workflow measurements, not a claim that Vulkan
+shutdown is28percent faster. A strict comparison still requires matching both
+the endpoint and initialized lifecycle scope. No new Vulkan run was necessary;
+the valid217-219 evidence was reused.
+
+## Shutdown latency measurement (2026-09-17)
+
+After committing and pushing the CEF fixture fix as53abc88b77, the user requested
+shutdown measurement. A fixture-only steady-clock timer now starts immediately
+before posting WM_CLOSE and stops after LLVKWindowMgr::run returns, including
+its local destruction. Existing nested stage counters remain unchanged. This
+is CPU diagnostic instrumentation (NV-00/01/14/17), not a cleanup optimization;
+no work is skipped and production rendering/shutdown code is untouched.
+
+Three isolated prelogin runs reused gl-picker-lifecycle-85/capture-request.xml,
+the local browser page, maximized display and queued Preferences/picker sequence.
+Evidence directories are native-shutdown-measure-217 through219 under
+glref-build/captures, each containing stage-timing.csv and an exit-zero manifest.
+All use fixture SHA256
+A8D8FC82327738CA1E1D595B498C64AEB8A93B1D14C7B4D4E0EDC063A71B468B.
+
+| Run | Close-to-return ms | Browser retirement ms | Audio retirement ms | Preferences ms |
+|---|---:|---:|---:|---:|
+| 217 | 829.748 | 570.959 | 3.7630 | 2.5976 |
+| 218 | 829.537 | 576.051 | 9.9940 | 2.5803 |
+| 219 | 829.317 | 584.904 | 4.3278 | 3.0034 |
+
+Mean close-to-return latency is829.534ms (range829.317..829.748ms, three samples).
+Browser retirement is the largest named component. shutdown-services includes
+retire-browser/audio, so those rows MUST NOT be summed together. The
+shutdown-gpu counter measures only VisualServices::prepareShutdown
+(0.0466..0.0547ms), not subsequent destruction of GPU/UI/window owners. Subtracting
+shutdown-services, shutdown-preferences and shutdown-gpu from wall time leaves
+236.9804..252.3398ms outside those counters, including return-path destruction
+and scheduling. That residual has not been attributed to a particular owner.
+
+Window7/7 passes after instrumentation and all three measurement runs exit zero
+through normal cleanup. This is not a logged-in full-viewer or process-exit
+latency measurement: it excludes later test/profile cleanup and contains no
+authentication, STATE_STARTED or75-second settle dwell. The older approximately
+689ms result lacked this independent wall timer and must not be compared as an
+equivalent end-to-end metric. No shutdown improvement is claimed. Measurement
+instrumentation and this record are separate, uncommitted follow-up changes.
+
 ## CEF hyperlink fixture resolved (2026-09-17)
 
 The previously deferred stage0 timeout was fixture horizontal overflow, not a

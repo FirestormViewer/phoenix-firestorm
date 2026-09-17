@@ -371,8 +371,10 @@ public static class NotificationCursorInput {
         } finally { $responseWatcher.Dispose() }
         & (Join-Path $PSScriptRoot 'run_browser_sequence.ps1') -ViewerProcessId $process.Id -CaptureHelper $CaptureHelper -OutputDirectory $root -Backend gl -UiScale $UiScale -Dialogs:($Sequence -eq 'Dialogs') -TearOff:$TearOff -TearOffLifecycle:$TearOffLifecycle -HelpBrowser:$HelpBrowser -DialogLifecycle:$DialogLifecycle -DialogMovement:$DialogMovement -ControlledReplay:$ControlledReplay -Continuous:$Continuous -QueuedInput:$QueuedInput
     }
+    $shutdownTimer=[Diagnostics.Stopwatch]::StartNew()
     $process.CloseMainWindow() | Out-Null
     if (!$process.WaitForExit(60000)) { throw 'Reference did not close within 60 seconds; no forced termination performed.' }
+    $shutdownTimer.Stop()
     $goodbye=(Test-Path $log) -and (Select-String -LiteralPath $log -SimpleMatch 'Goodbye!' -Quiet)
     $manifest=[ordered]@{
         queuedInput=$QueuedInput.IsPresent
@@ -398,6 +400,7 @@ public static class NotificationCursorInput {
         buttonStates=@($ButtonStates)
         focusInput='injected WM_KILLFOCUS/WM_SETFOCUS; not external-window activation acceptance'
         pid=$process.Id; exitCode=$process.ExitCode; goodbye=$goodbye
+        shutdownCloseToProcessExitMs=$shutdownTimer.Elapsed.TotalMilliseconds
         responseRecorded=(Test-Path (Join-Path $root 'gl-notification-response.xml'))
     }
     $manifest | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'manifest.json') -Encoding utf8

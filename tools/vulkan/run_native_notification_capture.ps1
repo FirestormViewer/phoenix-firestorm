@@ -6,7 +6,8 @@ param(
     [ValidateSet('None','focus','pressed','1')][string]$ButtonStates='None',
     [string]$CaptureHelper=(Join-Path $PSScriptRoot '../../build-vc170-64/llvulkan/RelWithDebInfo/notification_capture.exe'),
     [switch]$HoverOnly,
-    [switch]$Continuous
+    [switch]$Continuous,
+    [switch]$MeasureShutdown
 )
 $ErrorActionPreference='Stop'
 $fixturePath=(Resolve-Path -LiteralPath $Fixture).Path
@@ -61,6 +62,12 @@ try {
     $start=[Diagnostics.ProcessStartInfo]::new($fixturePath)
     $start.UseShellExecute=$false
     $start.WorkingDirectory=Split-Path $fixturePath
+    $start.Environment.Remove('LLVK_CAPTURE_EXTERNAL_CLOSE') | Out-Null
+    if ($MeasureShutdown) {
+        $start.ArgumentList.Add('--group=llvkwindowmgr')
+        $start.ArgumentList.Add('--test=1')
+        $start.Environment['LLVK_CAPTURE_EXTERNAL_CLOSE']='1'
+    }
     $start.Environment['LLVK_NOTIFICATION_CAPTURE_DIR']=$root
     $start.Environment['LLVK_NOTIFICATION_CAPTURE_PAGE']=$pageUrl
     $start.Environment['LLVK_NOTIFICATION_CAPTURE_REQUEST']=$requestPath
@@ -85,6 +92,48 @@ try {
         } finally { $watcher.Dispose() }
         & (Join-Path $PSScriptRoot 'run_browser_sequence.ps1') -ViewerProcessId $process.Id -CaptureHelper $CaptureHelper -OutputDirectory $root -Backend native -UiScale $uiScale -HoverOnly:$HoverOnly -Dialogs:($sequence -eq 'Dialogs') -TearOff:$tearOff -TearOffLifecycle:$tearOffLifecycle -HelpBrowser:$helpBrowser -DialogLifecycle:$dialogLifecycle -DialogMovement:$dialogMovement -ControlledReplay:$controlledReplay -Continuous:$Continuous -QueuedInput:$queuedInput
     }
+    $shutdownParentMs=$null
+    $shutdownCompleteMs=$null
+    $shutdownHelpers=@()
+    if ($MeasureShutdown) {
+        $watcher=[IO.FileSystemWatcher]::new($root,'shutdown-ready.txt')
+        try {
+            $watcher.EnableRaisingEvents=$true
+            $deadline=[DateTime]::UtcNow.AddSeconds(90)
+            while (!(Test-Path (Join-Path $root 'shutdown-ready.txt'))) {
+                if ($process.HasExited) { throw 'Native fixture exited before shutdown readiness.' }
+                if ([DateTime]::UtcNow -ge $deadline) { throw 'Native shutdown readiness deadline exceeded.' }
+                $watcher.WaitForChanged([IO.WatcherChangeTypes]::Created,1000) | Out-Null
+            }
+        } finally { $watcher.Dispose() }
+        $processTree=@(Get-CimInstance Win32_Process | Select-Object ProcessId,ParentProcessId,Name)
+        $parents=@([uint32]$process.Id)
+        $helperHandles=@()
+        try {
+            while ($parents.Count) {
+                $children=@($processTree | Where-Object { $_.ParentProcessId -in $parents })
+                $parents=@($children | ForEach-Object { [uint32]$_.ProcessId })
+                foreach ($child in $children) {
+                    try {
+                        $helper=[Diagnostics.Process]::GetProcessById($child.ProcessId)
+                        $null=$helper.Handle
+                        $helperHandles+=$helper
+                        $shutdownHelpers+=@{pid=$child.ProcessId;name=$child.Name}
+                    } catch [ArgumentException] { }
+                }
+            }
+            $timer=[Diagnostics.Stopwatch]::StartNew()
+            if (!$process.CloseMainWindow()) { throw 'Native timed close request failed.' }
+            if (!$process.WaitForExit(60000)) { throw 'Native timed shutdown did not exit; no forced termination performed.' }
+            $shutdownParentMs=$timer.Elapsed.TotalMilliseconds
+            foreach ($helper in $helperHandles) {
+                $remaining=[Math]::Max(0,60000-[int]$timer.ElapsedMilliseconds)
+                if (!$helper.WaitForExit($remaining)) { throw 'Native helper did not exit; no forced termination performed.' }
+            }
+            $timer.Stop()
+            $shutdownCompleteMs=$timer.Elapsed.TotalMilliseconds
+        } finally { foreach ($helper in $helperHandles) { $helper.Dispose() } }
+    }
     if ($sequence -ne 'None') {
         if (!$process.WaitForExit(60000)) { throw 'Native fixture did not exit after sequence completion.' }
     } else { $process.WaitForExit() }
@@ -108,6 +157,10 @@ try {
         controlledReplay=$controlledReplay
         queuedInput=$queuedInput
         exitCode=$process.ExitCode
+        shutdownCloseToProcessExitMs=$shutdownParentMs
+        shutdownCloseToProcessAndHelpersExitMs=$shutdownCompleteMs
+        shutdownHelpers=$shutdownHelpers
+        shutdownMeasurement=$MeasureShutdown.IsPresent
     }
     $manifest | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'manifest.json') -Encoding utf8
     if ($process.ExitCode -ne 0) { throw "Native fixture failed: $($process.ExitCode)" }
