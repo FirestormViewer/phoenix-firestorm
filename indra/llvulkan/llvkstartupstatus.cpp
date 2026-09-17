@@ -12,6 +12,7 @@ struct LLVKStartupStatus::Impl
     HWND window=nullptr;
     std::string title;
     std::map<std::string,std::string> strings;
+    std::shared_ptr<const std::map<std::string,std::string>> errors;
     static INT_PTR CALLBACK procedure(HWND,UINT,WPARAM,LPARAM) { return FALSE; }
 };
 
@@ -34,15 +35,24 @@ bool LLVKStartupStatus::load(const LLVKSkinFiles::Configuration& configuration,c
         std::istringstream input(*xml);
         boost::property_tree::read_xml(input,document);
         std::map<std::string,std::string> strings;
+        auto errors=std::make_shared<std::map<std::string,std::string>>();
         for (const auto& [tag,entry] : document.get_child("strings"))
             if (tag=="string")
             {
                 const auto name=entry.get<std::string>("<xmlattr>.name","");
                 if (name=="StartupInitializingTextureCache" || name=="StartupClearingTextureCache" || name=="ShuttingDown")
                     strings[name]=entry.data();
+                if (name.starts_with("NativeError"))
+                {
+                    auto value=entry.data();
+                    LLStringUtil::trim(value);
+                    for (auto& character : value) if (character=='\n' || character=='\r' || character=='\t') character=' ';
+                    errors->emplace(name,std::move(value));
+                }
             }
             if (strings.size()!=3) { error="Native startup/shutdown status strings are missing"; return false; }
         mImpl->strings=std::move(strings);
+        mImpl->errors=std::move(errors);
         mImpl->title=title;
         return true;
     }
@@ -72,4 +82,14 @@ bool LLVKStartupStatus::show(const std::string& key,std::string& error)
 void LLVKStartupStatus::hide()
 {
     if (mImpl->window) { DestroyWindow(mImpl->window); mImpl->window=nullptr; }
+}
+
+LLVKError::Resolver LLVKStartupStatus::errorResolver() const
+{
+    return [strings=mImpl->errors](std::string_view key)
+    {
+        if (!strings) return std::string();
+        const auto found=strings->find(std::string(key));
+        return found==strings->end() ? std::string() : found->second;
+    };
 }

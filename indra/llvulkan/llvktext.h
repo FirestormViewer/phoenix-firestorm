@@ -58,10 +58,17 @@ public:
 	static std::optional<Document> document(std::u32string_view text, LLVKFont& font,
 		const Options& options, std::int32_t height, std::int32_t verticalPadding,
 		LLVKFont::VerticalAlign alignment, std::string& error);
+	static std::optional<Document> document(std::vector<Line> lines, const Options& options,
+		std::int32_t height, std::int32_t verticalPadding, LLVKFont::VerticalAlign alignment, std::string& error);
 };
 
 struct LLVKWebText
 {
+	struct Icon
+	{
+		std::size_t position = 0;
+		std::string name;
+	};
 	struct Link
 	{
 		std::size_t begin = 0, end = 0;
@@ -70,6 +77,7 @@ struct LLVKWebText
 	};
 	std::u32string text;
 	std::vector<Link> links;
+    std::vector<Icon> icons;
 	static std::optional<LLVKWebText> parse(std::string_view markup, std::string& error);
 };
 

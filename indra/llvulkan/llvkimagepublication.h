@@ -12,7 +12,7 @@ public:
         std::shared_ptr<const LLVKWidgetImage> source;
         std::shared_ptr<const LLVKGlyphImage> image;
     };
-    explicit LLVKImagePublication(LLVKGlyphUpload::Device device) : mDevice(device) {}
+    explicit LLVKImagePublication(LLVKGlyphUpload::Device device,bool queueOrdered=false) : mDevice(device),mQueueOrdered(queueOrdered) {}
     void invalidate() noexcept;
     bool advance(std::shared_ptr<const LLVKWidgetImage> latest, std::string& error);
     bool waitPendingUpload(std::uint64_t timeout, std::string& error);
@@ -26,6 +26,7 @@ private:
     std::shared_ptr<const LLVKWidgetImage> mUploading;
     std::unique_ptr<LLVKGlyphUpload> mUpload;
     bool mDiscardUpload = false;
+    bool mQueueOrdered = false;
     std::string mFailure;
 };
 

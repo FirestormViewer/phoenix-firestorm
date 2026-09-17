@@ -699,6 +699,7 @@ bool LLVKWidgetTree::requestControlFocus(Id id, bool focus, std::string& error)
         node = get(id);
     }
     if (!node->params.enabled) return true;
+    if (focus && node->lineEditor) mNodes.at(id).lineEditor->caretResetTime=mTime;
     if (focus && node->panel && !hasAncestor(mKeyboardFocus,id))
     {
         if (!setKeyboardFocus(id,false,false,error)) return false;
@@ -791,4 +792,9 @@ bool LLVKWidgetTree::moveFocus(Id root, bool forward, bool textOnly, std::string
 float LLVKWidgetTree::focusFlashAmount() const noexcept
 {
     return std::clamp(1.f-static_cast<float>(mTime-mFocusFlashTime)/0.3f,0.f,1.f);
+}
+
+void LLVKWidgetTree::triggerFocusFlash() noexcept
+{
+    mFocusFlashTime=mTime;
 }

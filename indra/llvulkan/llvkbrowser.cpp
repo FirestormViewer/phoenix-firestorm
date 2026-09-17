@@ -3,6 +3,7 @@
 #include <mutex>
 #include <optional>
 #include <chrono>
+#include <cmath>
 #include <windows.h>
 
 namespace
@@ -84,7 +85,7 @@ bool LLVKBrowser::start(const Configuration& configuration, std::string& error)
         !std::filesystem::is_regular_file(configuration.helperDirectory/"dullahan_host.exe") ||
         !std::filesystem::is_directory(configuration.localesDirectory))
     { error = "Native browser requires absolute helper, locale and private cache paths"; return false; }
-    if (!mSurface.resize(configuration.width,configuration.height,error)) return false;
+    if (!mSurface.resize(std::min(configuration.width,2048u),std::min(configuration.height,2048u),error)) return false;
     std::error_code directoryError;
     std::filesystem::create_directories(configuration.cacheDirectory,directoryError);
     if (directoryError) { error = "Cannot create native browser cache directory: " + directoryError.message(); return false; }
@@ -109,7 +110,11 @@ bool LLVKBrowser::start(const Configuration& configuration, std::string& error)
     mEngine->setOnOpenPopupCallback([this](const std::string url,const std::string target) { enqueue({EventKind::Popup,url,target}); });
     mEngine->setOnCustomSchemeURLCallback([this](const std::string url,bool gesture,bool redirect)
         { enqueue({EventKind::CustomScheme,url,{},0,gesture,redirect}); });
-    mEngine->setOnCursorChangedCallback([this](dullahan::ECursorType cursor) { enqueue({EventKind::Cursor,{},{},int(cursor)}); });
+    mEngine->setOnCursorChangedCallback([this](dullahan::ECursorType cursor)
+    {
+        const auto name=cursor==dullahan::CT_HAND ? "hand" : cursor==dullahan::CT_IBEAM ? "ibeam" : "arrow";
+        enqueue({EventKind::Cursor,name,{},int(cursor)});
+    });
     mEngine->setOnStatusMessageCallback([this](const std::string text) { enqueue({EventKind::Status,text}); });
     mEngine->setOnTitleChangeCallback([this](const std::string text) { enqueue({EventKind::Title,text}); });
     mEngine->setOnTooltipCallback([this](const std::string text) { enqueue({EventKind::Tooltip,text}); });
@@ -124,8 +129,8 @@ bool LLVKBrowser::start(const Configuration& configuration, std::string& error)
     settings.locales_dir_path = utf8Path(configuration.localesDirectory);
     settings.root_cache_path = utf8Path(configuration.cacheDirectory);
     settings.log_file = utf8Path(configuration.cacheDirectory/"browser.log");
-    settings.initial_width = configuration.width;
-    settings.initial_height = configuration.height;
+    settings.initial_width = mSurface.width();
+    settings.initial_height = mSurface.height();
     settings.accept_language_list = configuration.language;
     if (configuration.proxy.type!=LLVKProxy::Type::None)
     {
@@ -137,7 +142,7 @@ bool LLVKBrowser::start(const Configuration& configuration, std::string& error)
             ":"+std::to_string(configuration.proxy.port);
     }
     settings.user_agent_substring = mEngine->makeCompatibleUserAgentString(configuration.userAgent);
-    settings.disable_gpu = true;
+    settings.disable_gpu = false;
     settings.webgl_enabled = false;
     settings.flip_pixels_y = false;
     settings.flip_mouse_y = false;
@@ -208,8 +213,18 @@ std::optional<LLVKBrowser::Navigation> LLVKBrowser::navigation(std::string& erro
     return Navigation{mEngine->canGoBack(),mEngine->canGoForward(),mEngine->isLoading()};
 }
 
+bool LLVKBrowser::setPageScale(float scale,std::string& error)
+{
+    if (!running(error)) return false;
+    if (!std::isfinite(scale) || scale<=0.f || scale>7.f) { error="Invalid native browser page scale"; return false; }
+    if (scale!=mPageScale) { mEngine->setPageZoom(scale); mPageScale=scale; }
+    return true;
+}
+
 bool LLVKBrowser::resize(std::uint32_t width,std::uint32_t height,std::string& error)
 {
+    width=std::min(width,2048u); height=std::min(height,2048u);
+    if (mSurface.width()==width && mSurface.height()==height) return running(error);
     if (!running(error) || !mSurface.resize(width,height,error)) return false;
     mEngine->setSize(int(width),int(height));
     return true;

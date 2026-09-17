@@ -91,16 +91,28 @@ std::shared_ptr<const LLVKWidgetImage> LLVKWidgetImage::browserFrame(std::uint32
     const std::uint64_t pixels = std::uint64_t(width)*height;
     if (!width || !height || width > 8192 || height > 8192 || pixels > 16*1024*1024 || topDownBgra.size() != pixels*4)
     { error = "Native browser frame has invalid dimensions or byte count"; return nullptr; }
+    const auto padded=[](std::uint32_t value)
+    {
+        std::uint32_t extent=1;
+        while (extent<value) extent*=2;
+        return extent;
+    };
+    const auto textureWidth=padded(width), textureHeight=padded(height);
+    if (std::uint64_t(textureWidth)*textureHeight>16*1024*1024)
+    { error="Native padded browser frame exceeds pixel budget"; return nullptr; }
     auto result = std::shared_ptr<LLVKWidgetImage>(new LLVKWidgetImage);
     result->mName = "native-browser";
-    result->mWidth = result->mLogicalWidth = width;
-    result->mHeight = result->mLogicalHeight = height;
-    result->mPixels.resize(topDownBgra.size());
+    result->mLogicalWidth = width;
+    result->mLogicalHeight = height;
+    result->mWidth = textureWidth;
+    result->mHeight = textureHeight;
+    result->mClip={0,0,float(width)/textureWidth,float(height)/textureHeight};
+    result->mPixels.assign(std::size_t(textureWidth)*textureHeight*4,255);
     for (std::uint32_t row = 0; row < height; ++row)
         for (std::uint32_t column = 0; column < width; ++column)
         {
             const auto source = (std::size_t(row)*width+column)*4;
-            const auto destination = (std::size_t(height-1-row)*width+column)*4;
+            const auto destination = (std::size_t(height-1-row)*textureWidth+column)*4;
             result->mPixels[destination] = topDownBgra[source+2];
             result->mPixels[destination+1] = topDownBgra[source+1];
             result->mPixels[destination+2] = topDownBgra[source];

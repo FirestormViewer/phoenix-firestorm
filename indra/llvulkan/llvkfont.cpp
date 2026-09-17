@@ -22,13 +22,20 @@ namespace
 
 std::unique_ptr<LLVKFont> LLVKFont::create(const FaceSource& primary,
                                          const std::vector<FallbackSource>& fallbacks,
-                                         bool monochromeEmoji, std::string& error)
+                                         bool monochromeEmoji, std::string& error, float displayScale)
 {
     error.clear();
+    if (!std::isfinite(displayScale) || displayScale<=0.f)
+    { error="Invalid native font display scale"; return nullptr; }
     auto font = std::unique_ptr<LLVKFont>(new LLVKFont);
     auto primaryFace = LLVKFontFace::create(primary.bytes, primary.options, error);
     if (!primaryFace) return nullptr;
     font->mFaces.push_back(std::move(primaryFace));
+    font->mDisplayScale=displayScale;
+    font->mLogicalMetrics=font->mFaces.front()->metrics();
+    font->mLogicalMetrics.ascender/=displayScale;
+    font->mLogicalMetrics.descender/=displayScale;
+    font->mLogicalMetrics.lineHeight/=displayScale;
     font->mMonochromeEmoji = monochromeEmoji;
     font->mWeight = primary.options.weight;
     for (const auto& fallback : fallbacks)
@@ -61,7 +68,19 @@ std::unique_ptr<LLVKFont> LLVKFont::create(const FaceSource& primary,
 
 const LLVKFontFace::Metrics& LLVKFont::metrics() const noexcept
 {
-    return mFaces.front()->metrics();
+    return mLogicalMetrics;
+}
+
+void LLVKFont::replaceRasterState(LLVKFont& replacement)
+{
+    std::scoped_lock lock(mMutex,replacement.mMutex);
+    mFaces.swap(replacement.mFaces);
+    mPolicies.swap(replacement.mPolicies);
+    mGlyphs.swap(replacement.mGlyphs);
+    std::swap(mDisplayScale,replacement.mDisplayScale);
+    std::swap(mLogicalMetrics,replacement.mLogicalMetrics);
+    std::swap(mMonochromeEmoji,replacement.mMonochromeEmoji);
+    std::swap(mWeight,replacement.mWeight);
 }
 
 std::size_t LLVKFont::cachedGlyphCount() const
@@ -130,6 +149,19 @@ std::optional<LLVKFont::MeasuredRun> LLVKFont::measureRun(std::u32string_view te
                                                         float scaleX, bool includePadding,
                                                         bool tabularNumbers, std::string& error)
 {
+    auto run=measureDeviceRun(text,begin,count,scaleX*mDisplayScale,includePadding,tabularNumbers,error);
+    if (run && mDisplayScale!=1.f)
+    {
+        run->advancePixels/=mDisplayScale;
+        run->trailingPaddingPixels/=mDisplayScale;
+        for (auto& glyph : run->glyphs) { glyph.penX/=mDisplayScale; glyph.digitOffsetX/=mDisplayScale; }
+    }
+    return run;
+}
+
+std::optional<LLVKFont::MeasuredRun> LLVKFont::measureDeviceRun(std::u32string_view text,
+    std::size_t begin, std::size_t count, float scaleX, bool includePadding, bool tabularNumbers, std::string& error)
+{
     error.clear();
     if (begin > text.size() || !std::isfinite(scaleX) || scaleX <= 0.f)
     {
@@ -189,6 +221,27 @@ std::optional<LLVKFont::LineLayout> LLVKFont::layoutLine(std::u32string_view tex
                                                        const LineOptions& options,
                                                        std::string& error)
 {
+    auto deviceOptions=options;
+    deviceOptions.scaleX*=mDisplayScale;
+    deviceOptions.scaleY*=mDisplayScale;
+    auto line=layoutDeviceLine(text,begin,count,deviceOptions,error);
+    if (line) line->displayScale=mDisplayScale;
+    if (line && mDisplayScale!=1.f)
+    {
+        for (auto& glyph : line->glyphs)
+        {
+            glyph.left/=mDisplayScale; glyph.right/=mDisplayScale;
+            glyph.bottom/=mDisplayScale; glyph.top/=mDisplayScale;
+        }
+        line->startPixelX/=mDisplayScale; line->baselinePixelY/=mDisplayScale;
+        line->endPixelX/=mDisplayScale; line->endPixelY/=mDisplayScale;
+    }
+    return line;
+}
+
+std::optional<LLVKFont::LineLayout> LLVKFont::layoutDeviceLine(std::u32string_view text,
+    std::size_t begin, std::size_t count, const LineOptions& options, std::string& error)
+{
     error.clear();
     const auto validCoordinate = [](float value)
     {
@@ -228,10 +281,10 @@ std::optional<LLVKFont::LineLayout> LLVKFont::layoutLine(std::u32string_view tex
     switch (options.vertical)
     {
         case VerticalAlign::Baseline: break;
-        case VerticalAlign::Top: penY -= std::ceil(metrics().ascender); break;
-        case VerticalAlign::Bottom: penY += std::ceil(metrics().descender); break;
+        case VerticalAlign::Top: penY -= std::ceil(mFaces.front()->metrics().ascender); break;
+        case VerticalAlign::Bottom: penY += std::ceil(mFaces.front()->metrics().descender); break;
         case VerticalAlign::Center:
-            penY -= std::ceil((std::ceil(metrics().ascender) - std::ceil(metrics().descender)) / 2.f);
+            penY -= std::ceil((std::ceil(mFaces.front()->metrics().ascender) - std::ceil(mFaces.front()->metrics().descender)) / 2.f);
             break;
         default:
             error = "Invalid vertical alignment";
@@ -239,7 +292,7 @@ std::optional<LLVKFont::LineLayout> LLVKFont::layoutLine(std::u32string_view tex
     }
     if (options.horizontal != HorizontalAlign::Left || options.ellipses)
     {
-        auto measured = measureRun(text, begin, length, options.scaleX, true, options.tabularNumbers, error);
+        auto measured = measureDeviceRun(text, begin, length, options.scaleX, true, options.tabularNumbers, error);
         if (!measured) return std::nullopt;
         const float measuredPixels = roundPixel(measured->width * options.scaleX);
         if (!validCoordinate(measuredPixels))
@@ -259,7 +312,7 @@ std::optional<LLVKFont::LineLayout> LLVKFont::layoutLine(std::u32string_view tex
         }
         if (options.ellipses && measuredPixels > available)
         {
-            auto dots = measureRun(U"....", 0, 4, options.scaleX, true, options.tabularNumbers, error);
+            auto dots = measureDeviceRun(U"....", 0, 4, options.scaleX, true, options.tabularNumbers, error);
             if (!dots) return std::nullopt;
             const float reservation = roundPixel(dots->width);
             if (!validCoordinate(reservation))
@@ -329,7 +382,7 @@ std::optional<LLVKFont::LineLayout> LLVKFont::layoutLine(std::u32string_view tex
         suffixOptions.x = layout.rightX;
         suffixOptions.horizontal = HorizontalAlign::Left;
         suffixOptions.ellipses = false;
-        auto suffix = layoutLine(U"...", 0, 3, suffixOptions, error);
+        auto suffix = layoutDeviceLine(U"...", 0, 3, suffixOptions, error);
         if (!suffix) return std::nullopt;
         for (auto& placement : suffix->glyphs)
         {
@@ -375,6 +428,7 @@ std::optional<float> LLVKFont::pairKerning(const Glyph& left, const Glyph& right
 std::optional<std::size_t> LLVKFont::fitCharacters(std::u32string_view text, float maxPixels,
     std::size_t count, float scaleX, Wrap wrap, bool tabularNumbers, std::string& error)
 {
+    scaleX*=mDisplayScale;
     error.clear();
     if (!validTextExtent(maxPixels, scaleX) ||
         (wrap != Wrap::Anywhere && wrap != Wrap::WordsOnly && wrap != Wrap::WordsWhenPossible))
@@ -438,6 +492,7 @@ std::optional<std::size_t> LLVKFont::hitTest(std::u32string_view text, std::size
     float targetX, float maxPixels, std::size_t count, float scaleX, bool nearest,
     bool tabularNumbers, std::string& error)
 {
+    scaleX*=mDisplayScale;
     error.clear();
     if (!validTextExtent(maxPixels, scaleX) || begin > text.size() ||
         !std::isfinite(targetX) || !std::isfinite(targetX * scaleX))
@@ -476,6 +531,7 @@ std::optional<std::size_t> LLVKFont::hitTest(std::u32string_view text, std::size
 std::optional<std::size_t> LLVKFont::firstVisible(std::u32string_view text, std::size_t start,
     float maxPixels, std::size_t count, float scaleX, bool tabularNumbers, std::string& error)
 {
+    scaleX*=mDisplayScale;
     error.clear();
     if (!validTextExtent(maxPixels, scaleX) || (!text.empty() && start >= text.size()))
     {

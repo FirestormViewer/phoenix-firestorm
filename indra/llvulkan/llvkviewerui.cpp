@@ -3,6 +3,29 @@
 #include "lluri.h"
 #include "llvkxmllayers.h"
 #include <fstream>
+#include <charconv>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+
+std::string LLVKViewerUi::uiLanguage(std::map<std::string,LLSD>& settings)
+{
+    std::string language="en";
+    for (const auto* name : {"Language","InstallLanguage","SystemLanguage"})
+    {
+        const auto found=settings.find(name);
+        if (found==settings.end()) continue;
+        const auto value=found->second.asString();
+        if (value.empty() || value=="default") continue;
+        language=value;
+        break;
+    }
+    const auto enabled=settings.find("FSEnabledLanguages");
+    if (enabled!=settings.end())
+        for (auto value=enabled->second.beginArray(); value!=enabled->second.endArray(); ++value)
+            if (value->asString()==language) return language;
+    settings.insert_or_assign("Language",LLSD("default"));
+    return "en";
+}
 
 std::string LLVKViewerUi::pageUrl(const Page& page)
 {
@@ -52,7 +75,20 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
         if (!files) return nullptr;
         descriptions = std::move(*files);
     }
-    ui->mFonts = LLVKFontRegistry::create(descriptions,configuration.fonts,error);
+    const auto scaleSetting=configuration.settings.find("UIScaleFactor");
+    const auto requestedScale=scaleSetting==configuration.settings.end() ? 1.0 : scaleSetting->second.asReal();
+    if (!std::isfinite(requestedScale)) { error="Invalid native UI scale"; return nullptr; }
+    ui->mDisplayScale=std::clamp(static_cast<float>(requestedScale),0.75f,7.f);
+    auto fontConfiguration=configuration.fonts;
+    const auto dpiSetting=configuration.settings.find("FontScreenDPI");
+    if (dpiSetting!=configuration.settings.end())
+        fontConfiguration.horizontalDpi=fontConfiguration.verticalDpi=static_cast<float>(dpiSetting->second.asReal());
+    ui->mBaseFontDpiX=fontConfiguration.horizontalDpi;
+    ui->mBaseFontDpiY=fontConfiguration.verticalDpi;
+    fontConfiguration.displayScale=ui->mDisplayScale;
+    fontConfiguration.horizontalDpi=std::floor(fontConfiguration.horizontalDpi*ui->mDisplayScale);
+    fontConfiguration.verticalDpi=std::floor(fontConfiguration.verticalDpi*ui->mDisplayScale);
+    ui->mFonts = LLVKFontRegistry::create(descriptions,fontConfiguration,error);
     if (!ui->mFonts) return nullptr;
     ui->mColors = std::make_shared<LLVKColorTable>();
     const auto colors = ui->mSkin->read("","colors.xml",LLVKSkinFiles::Policy::All,error);
@@ -106,9 +142,15 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
     resources.fallbackFont=ui->mFonts->resolve({"SansSerif","Medium"},error);
     if (!resources.fallbackFont) return nullptr;
     resources.webLinkHandler = [owner=ui.get()](auto,const std::string& url)
-    { if (owner->mOpenUrl) owner->mOpenUrl(url); else owner->mDialogError="Native web link service is not bound"; };
+    { owner->activateUrl(url,owner->mDialogError); };
     resources.colorPickerHandler=[owner=ui.get()](auto swatch,bool takeFocus)
     { owner->showColorPicker(swatch,takeFocus,owner->mDialogError); };
+    resources.helpHandler=[owner=ui.get()](auto floater)
+    {
+        const auto topic=owner->mTree.findHelpTopic(floater);
+        if (topic) owner->showHelp(*topic,owner->mDialogError);
+    };
+    resources.helpTooltip=[owner=ui.get()] { return owner->errorString("BUTTON_HELP","Help"); };
     resources.menuHandler=[owner=ui.get()](auto button,const std::string& filename,const std::string& position,const auto& callbacks)
     { owner->showButtonMenu(button,filename,position,callbacks); };
     LLVKWidgetFactory::PanelDefaults panel;
@@ -382,6 +424,20 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
     };
     ui->mTree.setControlCommit(ui->find("password_show_btn"),togglePassword);
     ui->mTree.setControlCommit(ui->find("password_hide_btn"),std::move(togglePassword));
+    ui->mTree.setPlainTextClicked(ui->find("create_new_account_text"),[owner=ui.get()](auto)
+    {
+        const auto url=owner->errorString("create_account_url","https://www.firestormviewer.org/join-secondlife/");
+        owner->showMediaBrowser(url,owner->mDialogError);
+    });
+    ui->mTree.setPlainTextClicked(ui->find("forgot_password_text"),[owner=ui.get()](auto)
+    {
+        const auto* root=owner->mTree.get(owner->mRoot);
+        const auto found=root->panel->params.strings.find("forgot_password_url");
+        if (found==root->panel->params.strings.end() || found->second.empty())
+        { owner->mDialogError="Native password recovery URL is unavailable"; return; }
+        if (!owner->mOpenUrl) { owner->mDialogError="Native web link service is not bound"; return; }
+        owner->mOpenUrl(found->second);
+    });
     const auto mode = configuration.settings.find("SessionSettingsFile");
     if (mode != configuration.settings.end()) ui->mTree.setValue(ui->find("mode_combo"),mode->second);
     const auto menuFiles = ui->mSkin->read("xui","menu_login.xml",LLVKSkinFiles::Policy::Current,error);
@@ -401,12 +457,148 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
         ui->mMenu->setVisible(name,false);
 #endif
     ui->mDialogFactory = std::make_unique<LLVKWidgetFactory>(factory);
+    ui->mMenu->setTearOffHandler([owner=ui.get()](auto item,auto rectangle)
+    { owner->tearOffMenu(item,rectangle,owner->mDialogError); });
     if (!ui->initializeDialogs(configuration,error)) return nullptr;
+    if (!ui->initializeNoticeLayout(error)) return nullptr;
+    auto location=ui->mTree.setting("CmdLineLoginLocation").value_or(LLSD("")).asString();
+    if (location.empty()) location=ui->mTree.setting("NextLoginLocation").value_or(LLSD("")).asString();
+    if (location.empty()) location=ui->mTree.setting("LoginLocation").value_or(LLSD("last")).asString();
+    const auto locationId=ui->find("start_location_combo");
+    if (location=="last" || location=="home" || location.empty())
+    {
+        if (!ui->mTree.setComboValue(locationId,LLSD(location.empty() ? "home" : location),error)) return nullptr;
+    }
+    else
+    {
+        if (!ui->mTree.selectComboItem(locationId,std::nullopt,error) ||
+            !ui->mTree.setValue(ui->mTree.get(locationId)->combo->editor,LLSD(location))) return nullptr;
+    }
+    ui->updateLoginControls();
+    if (!ui->focusLoginFields(error)) return nullptr;
     return ui;
+}
+
+bool LLVKViewerUi::focusLoginFields(std::string& error)
+{
+    const auto username=find("username_combo"),password=find("password_edit");
+    const auto* combo=mTree.get(username);
+    if (!combo || !combo->combo || !mTree.get(password))
+    { error="Native login focus controls are unavailable"; return false; }
+    const auto target=!mTree.value(username).asString().empty() && mTree.value(password).asString().empty() ?
+        password : combo->combo->editor;
+    return mTree.requestControlFocus(target,true,error);
+}
+
+void LLVKViewerUi::updateLoginControls()
+{
+    mTree.setVisible(find("grid_panel"),mTree.setting("ForceShowGrid").value_or(LLSD(false)).asBoolean());
+    const bool prelogin=!mSessionOwner || mSessionOwner->snapshot().state==LLVKSessionOwner::State::PreLogin;
+    const bool credentials=!mTree.value(find("username_combo")).asString().empty() &&
+        !mTree.value(find("password_edit")).asString().empty();
+    mTree.setEnabled(find("connect_btn"),prelogin && credentials);
+    const auto* username=mTree.get(find("username_combo"));
+    bool savedUsername=false;
+    if (username && username->combo && username->combo->selected)
+    {
+        const auto& item=username->combo->items[*username->combo->selected];
+        savedUsername=!item.value.asString().empty() &&
+            mTree.value(username->combo->editor).asString()==item.label;
+    }
+    mTree.setEnabled(find("remove_user_btn"),prelogin && savedUsername);
+}
+
+bool LLVKViewerUi::refreshDisplayScale(std::string& error,float systemScale)
+{
+    error.clear();
+    const auto requested=mTree.setting("UIScaleFactor").value_or(LLSD(1.f)).asReal();
+    if (!std::isfinite(requested) || !std::isfinite(systemScale) || systemScale<=0.f)
+    { error="Invalid native UI scale"; return false; }
+    const auto scale=std::clamp(static_cast<float>(requested)*systemScale,0.75f,7.f);
+    const auto dpi=mTree.setting("FontScreenDPI");
+    const auto dpiX=dpi ? static_cast<float>(dpi->asReal()) : mBaseFontDpiX;
+    const auto dpiY=dpi ? static_cast<float>(dpi->asReal()) : mBaseFontDpiY;
+    if (scale==mDisplayScale && dpiX==mBaseFontDpiX && dpiY==mBaseFontDpiY) return true;
+    if (!mFonts->setDisplayScale(scale,dpiX,dpiY,error)) return false;
+    mBaseFontDpiX=dpiX; mBaseFontDpiY=dpiY;
+    mDisplayScale=scale;
+    mMenu->dismiss();
+    if (!mTree.setTopControl(0,error)) return false;
+    if (mActiveNotice)
+    {
+        const auto notice=*mActiveNotice;
+        const auto entered=mNoticeEditor ? std::optional(mTree.value(mNoticeEditor)) : std::nullopt;
+        const auto editorState=mNoticeEditor ? std::optional(mTree.get(mNoticeEditor)->lineEditor->text) : std::nullopt;
+        const auto ignored=mNoticeIgnore ? std::optional(mTree.value(mNoticeIgnore)) : std::nullopt;
+        const auto opened=mNoticeOpened;
+        if (!dismissNotice(error)) return false;
+        mNotices.insert(mNotices.begin(),notice);
+        if (!advanceNotices(mNoticeTime,error)) return false;
+        if (entered && mNoticeEditor) mTree.setValue(mNoticeEditor,*entered);
+        if (editorState && mNoticeEditor && !mTree.restoreLineEditorSelection(mNoticeEditor,editorState->selectionStart(),
+            editorState->selectionEnd(),editorState->cursor(),editorState->selecting(),error)) return false;
+        if (ignored && mNoticeIgnore) mTree.setValue(mNoticeIgnore,*ignored);
+        mNoticeOpened=opened;
+    }
+    return true;
 }
 
 std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint::Input& input,std::string& error)
 {
+    if (mHelpRetiring)
+    {
+        if (mActiveFloater==mHelp.get()) mActiveFloater=nullptr;
+        mHelp.reset(); mHelpFields.clear(); mHelpBrowser=0; mHelpRetiring=false;
+    }
+    updateLoginControls();
+    for (auto& [item,dialog] : mTornMenus)
+    {
+        if (!dialog.floater->visible()) continue;
+        bool focused=false;
+        for (auto current=mTree.keyboardFocus(); mTree.get(current); current=mTree.get(current)->parent)
+            if (current==dialog.floater->id()) { focused=true; break; }
+        dialog.view->setDetachedFocus(focused);
+        auto rectangle=mTree.get(dialog.floater->id())->params.rect;
+        const auto dimensions=dialog.view->menuSize(item,error);
+        if (!dimensions) return std::nullopt;
+        const auto content=mTree.get(dialog.content)->params.rect;
+        if (content.right-content.left!=dimensions->first || content.top-content.bottom!=dimensions->second)
+        {
+            const auto header=dialog.targetHeight-(content.top-content.bottom);
+            dialog.targetHeight=dimensions->second+header;
+            rectangle.right=rectangle.left+dimensions->first+4;
+            rectangle.top=rectangle.bottom+dialog.targetHeight;
+            if (!mTree.setShape(dialog.floater->id(),rectangle,error) ||
+                !mTree.setShape(dialog.content,{1,1,dimensions->first+1,dimensions->second+1},error)) return std::nullopt;
+        }
+        const auto height=rectangle.top-rectangle.bottom;
+        if (!std::isfinite(input.button.frameDelta) || input.button.frameDelta<0.f)
+        { error="Invalid native tear-off animation delta"; return std::nullopt; }
+        const auto amount=std::clamp(1.f-std::pow(2.f,-input.button.frameDelta/0.05f),0.f,1.f);
+        const auto root=mTree.get(mRoot)->params.rect;
+        const auto visibleHeight=std::min(16,rectangle.top-rectangle.bottom);
+        const auto visibleWidth=std::min(16,rectangle.right-rectangle.left);
+        const auto horizontal=rectangle.right-visibleWidth<0 ? visibleWidth-rectangle.right :
+            rectangle.left+visibleWidth>root.right-root.left ? root.right-root.left-rectangle.left-visibleWidth : 0;
+        const auto vertical=rectangle.top>root.top-root.bottom-19 ? root.top-root.bottom-19-rectangle.top :
+            rectangle.top-visibleHeight<0 ? visibleHeight-rectangle.top : 0;
+        rectangle.left+=horizontal; rectangle.right+=horizontal;
+        rectangle.bottom+=vertical; rectangle.top+=vertical;
+        rectangle.top=rectangle.bottom+static_cast<int>(std::ceil(height+(dialog.targetHeight-height)*amount));
+        if (!mTree.setShape(dialog.floater->id(),rectangle,error)) return std::nullopt;
+    }
+    auto viewport = mTree.screenRect(mRoot,error);
+    if (viewport && input.physicalWidth && input.physicalHeight)
+    {
+        viewport->right=static_cast<int>(std::ceil(input.physicalWidth/mDisplayScale));
+        viewport->top=static_cast<int>(std::ceil(input.physicalHeight/mDisplayScale));
+    }
+    if (const auto notice=mTree.get(mNoticePanel))
+    {
+        const auto rectangle=notice->params.rect;
+        const auto width=rectangle.right-rectangle.left,height=rectangle.top-rectangle.bottom;
+        if (!mTree.setShape(mNoticePanel,noticeRectangle(width,height,viewport),error)) return std::nullopt;
+    }
     if (!refreshVoiceDevices(error)) return std::nullopt;
     if (mDebugSettings && mDebugSettings->visible() && !refreshDebugSettings(false,error)) return std::nullopt;
     if (mColorSettings && mColorSettings->visible() && !refreshColorSettings(false,error)) return std::nullopt;
@@ -414,20 +606,319 @@ std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint:
     if (mBeamColor && mBeamColor->visible() && !updateBeamColorPreview(error)) return std::nullopt;
     updateSpellRemoval();
     auto paintInput=input;
+    paintInput.editor.useEditorClock=true;
+    paintInput.foregroundFloaters.emplace();
+    for (auto focused=mTree.keyboardFocus(); mTree.get(focused); focused=mTree.get(focused)->parent)
+        if (mTree.get(focused)->floater) { paintInput.foregroundFloaters->insert(focused); break; }
+    for (const auto& [swatch,picker] : mColorPickers)
+    {
+        if (!picker->visible()) continue;
+        auto owner=mTree.get(swatch) ? mTree.get(swatch)->parent : 0;
+        while (mTree.get(owner) && !mTree.get(owner)->floater) owner=mTree.get(owner)->parent;
+        if (paintInput.foregroundFloaters->contains(picker->id())) paintInput.foregroundFloaters->insert(owner);
+    }
+    for (const auto& [swatch,picker] : mColorPickers)
+    {
+        if (!picker->visible()) continue;
+        auto owner=mTree.get(swatch) ? mTree.get(swatch)->parent : 0;
+        while (mTree.get(owner) && !mTree.get(owner)->floater) owner=mTree.get(owner)->parent;
+        if (paintInput.foregroundFloaters->contains(owner)) paintInput.foregroundFloaters->insert(picker->id());
+    }
+    paintInput.activeControlFloaters.emplace();
+    for (auto* floater : floaters())
+    {
+        if (!floater || !floater->visible()) continue;
+        floater->updateForeground(paintInput.foregroundFloaters->contains(floater->id()));
+        if (floater->controlActive()) paintInput.activeControlFloaters->insert(floater->id());
+    }
+    paintInput.floaterShadow=mColors->find("ColorDropShadow");
+    if (const auto color=mColors->find("FocusColor"))
+    {
+        auto focus=color->get();
+        const auto flash=mTree.focusFlashAmount();
+        for (std::size_t channel=0; channel<focus.size(); ++channel) focus[channel]+=(1.f-focus[channel])*flash;
+        if (!input.editor.applicationFocused) focus[3]*=0.4f;
+        paintInput.button.focusColor=paintInput.editor.focusColor=focus;
+        paintInput.button.focusWidth=paintInput.editor.focusWidth=static_cast<int>(std::floor(1.f+flash+0.5f));
+    }
     if (const auto color=mColors->find("SearchableControlHighlightBgColor")) paintInput.searchBackground=*color;
     if (const auto color=mColors->find("SearchableControlHighlightFontColor")) paintInput.searchFont=*color;
     auto paint = LLVKWidgetPaint::prepare(mTree,mRoot,paintInput,error);
     if (!paint) return std::nullopt;
-    const auto viewport = mTree.screenRect(mRoot,error);
-    if (!viewport || !mMenu->paint(*paint,*viewport,error)) return std::nullopt;
+    paint->displayScale=mDisplayScale;
+    paint->skinAnisotropy=mTree.setting("RenderAnisotropic").value_or(LLSD(false)).asBoolean();
+    if (!viewport) return std::nullopt;
+    const auto backingBottom=(std::floor(viewport->bottom*mDisplayScale)+
+        std::ceil((viewport->top-viewport->bottom-mNoticeMenuHeight)*mDisplayScale)+1.f)/mDisplayScale;
+    const auto menuAlpha=static_cast<float>(mTree.setting("FSMenuBackgroundAlpha").value_or(LLSD(1.f)).asReal());
+    mMenu->setTime(mTree.time());
+    if (!mMenu->paint(*paint,*viewport,error,{},true,backingBottom,menuAlpha)) return std::nullopt;
+    if (mNoticePanel)
+    {
+        std::vector<LLVKWidgetPaint::Command> modalPass;
+        for (const auto& command : paint->commands)
+            for (auto owner=command.owner; mTree.get(owner); owner=mTree.get(owner)->parent)
+                if (owner==mNoticePanel)
+                {
+                    modalPass.push_back(command);
+                    break;
+                }
+        if (modalPass.size()>65536-paint->commands.size())
+        { error="Native modal composition exceeds paint command budget"; return std::nullopt; }
+        paint->commands.insert(paint->commands.end(),modalPass.begin(),modalPass.end());
+    }
+    if (!appendTooltip(*paint,input,error)) return std::nullopt;
     return paint;
+}
+
+bool LLVKViewerUi::initializeTooltip(std::string& error)
+{
+    if (!mTooltipTemplate.empty()) return true;
+    const auto files=mSkin->read("xui","widgets/tool_tip.xml",LLVKSkinFiles::Policy::All,error);
+    if (!files) return false;
+    std::vector<std::string_view> layers;
+    for (const auto& text : *files) layers.push_back(text);
+    const auto merged=LLVKXmlLayers::merge(layers,error);
+    if (!merged) return false;
+    try
+    {
+        boost::property_tree::ptree document;
+        std::istringstream stream(*merged);
+        boost::property_tree::read_xml(stream,document);
+        const auto& declaration=document.get_child("tool_tip");
+        mTooltipMaximumWidth=declaration.get<int>("<xmlattr>.max_width",200);
+        mTooltipPadding=declaration.get<int>("<xmlattr>.padding",4);
+        if (mTooltipMaximumWidth<1 || mTooltipMaximumWidth>4096 || mTooltipPadding<0 || mTooltipPadding>128)
+        { error="Native tooltip dimensions exceed their bounds"; return false; }
+        boost::property_tree::ptree panel,label,output;
+        for (const auto* name : {"background_visible","background_opaque","bg_opaque_image","bg_alpha_image","bg_opaque_color","bg_alpha_color"})
+            if (const auto value=declaration.get_optional<std::string>(std::string("<xmlattr>.")+name))
+                panel.put(std::string("<xmlattr>.")+name,*value);
+        for (const auto* name : {"visible_time_over","visible_time_near","visible_time_far"})
+            if (const auto value=declaration.get_optional<std::string>(std::string("<xmlattr>.")+name))
+            {
+                float seconds=0.f;
+                const auto parsed=std::from_chars(value->data(),value->data()+value->size(),seconds);
+                if (parsed.ec!=std::errc{} || parsed.ptr!=value->data()+value->size() || !std::isfinite(seconds) || seconds<0.f)
+                { error="Invalid native tooltip timeout"; return false; }
+                mTooltipTimeouts[name]=seconds;
+            }
+        panel.put("<xmlattr>.name","native_tooltip"); panel.put("<xmlattr>.mouse_opaque","false");
+        panel.put("<xmlattr>.width",mTooltipMaximumWidth+2*mTooltipPadding);
+        panel.put("<xmlattr>.height",10000+2*mTooltipPadding);
+        label.put("<xmlattr>.name","tooltip_text");
+        label.put("<xmlattr>.left",mTooltipPadding); label.put("<xmlattr>.bottom",mTooltipPadding);
+        label.put("<xmlattr>.width",mTooltipMaximumWidth); label.put("<xmlattr>.height",10000);
+        label.put("<xmlattr>.font",declaration.get<std::string>("<xmlattr>.font","SansSerif"));
+        label.put("<xmlattr>.text_color",declaration.get<std::string>("<xmlattr>.text_color","ToolTipTextColor"));
+        label.put("<xmlattr>.wrap",declaration.get<std::string>("<xmlattr>.wrap","true"));
+        label.put("<xmlattr>.h_pad",0); label.put("<xmlattr>.v_pad",0);
+        label.put("<xmlattr>.valign","center"); label.put("<xmlattr>.parse_urls","false");
+        label.put("<xmlattr>.use_ellipses","true");
+        panel.add_child("text",label); output.add_child("panel",panel);
+        std::ostringstream xml; boost::property_tree::write_xml(xml,output);
+        mTooltipTemplate=xml.str();
+        return true;
+    }
+    catch (const boost::property_tree::ptree_error& failure) { error=failure.what(); return false; }
+}
+
+bool LLVKViewerUi::appendTooltip(LLVKWidgetPaint& paint,const LLVKWidgetPaint::Input& input,std::string& error)
+{
+    const auto now=mTree.time();
+    const auto position=std::pair{input.button.mouseX,input.button.mouseY};
+    const auto contains=[](const auto& rect,const auto& point)
+    { return point.first>=rect.left && point.first<rect.right && point.second>=rect.bottom && point.second<rect.top; };
+    const auto setting=[&](const char* name,double fallback)
+    { return mTree.setting(name).value_or(LLSD(fallback)).asReal(); };
+    if (!mTooltipPointer || *mTooltipPointer!=position)
+    {
+        if (!mTooltipPointer || (mTooltipPointer->first!=position.first && mTooltipPointer->second!=position.second && !contains(mTooltipNear,position)))
+            mTooltipBlocked=false;
+        mTooltipMoved=now;
+        mTooltipPointer=position;
+    }
+    if (mTree.mouseCapture())
+    {
+        mTooltipBlocked=true;
+        if (mTooltipPanel && !mTooltipFade) mTooltipFade=now;
+    }
+    const auto viewport=mTree.screenRect(mRoot,error);
+    if (!viewport) return false;
+    const auto root=mNoticePanel ? mNoticePanel : mTree.topControl() ? mTree.topControl() : mRoot;
+    const auto owner=mTree.tooltipAt(root,position.first,position.second,error);
+    if (!owner) return false;
+    if (input.editor.applicationFocused && !mTooltipBlocked && *owner && mTree.setting("BasicUITooltips").value_or(LLSD(true)).asBoolean() &&
+        static_cast<float>(now-mTooltipMoved)>static_cast<float>(mTooltipPanel ? setting("ToolTipFastDelay",0.1) : setting("ToolTipDelay",0.7)) &&
+        (!mTooltipPanel || mTooltipFade || mTooltipOwner!=*owner))
+    {
+        const auto message=mTree.get(*owner)->params.tooltip;
+        const auto near=mTree.screenRect(*owner,error);
+        if (!near) return false;
+        if (mTooltipPanel) { if (!mTree.erase(mTooltipPanel,error)) return false; mTooltipPanel=0; }
+        if (!initializeTooltip(error)) return false;
+        const auto panel=mDialogFactory->construct(mTree,mTooltipTemplate,0,error);
+        if (!panel) return false;
+        mTooltipPanel=*panel;
+        const auto label=find("tooltip_text",mTooltipPanel);
+        if (!label || !mTree.setPlainText(label,message,error) || !mTree.fitPlainText(label,error)) return false;
+        const auto textRect=mTree.get(label)->params.rect;
+        const auto padding=mTooltipPadding;
+        const int width=std::min(mTooltipMaximumWidth,textRect.right-textRect.left)+2*padding,height=textRect.top-textRect.bottom+2*padding;
+        int left=position.first+8,top=position.second-16;
+        const auto initialLeft=left,initialTop=top;
+        left=std::clamp(left,viewport->left,std::max(viewport->left,viewport->right-width));
+        top=std::clamp(top,std::min(viewport->top,viewport->bottom+height),viewport->top);
+        const LLVKWidgetTree::Rect exclusion{position.first-1,position.second-17,position.first+9,position.second+1};
+        if ((left!=initialLeft || top!=initialTop) && left<exclusion.right && left+width>exclusion.left &&
+            top>exclusion.bottom && top-height<exclusion.top)
+        {
+            if (left>initialLeft) left=exclusion.right;
+            else if (left<initialLeft) left=exclusion.left-width;
+            if (top>initialTop) top=exclusion.top+height;
+            else if (top<initialTop) top=exclusion.bottom;
+        }
+        if (!mTree.setShape(mTooltipPanel,{left,top-height,left+width,top},error)) return false;
+        if (!mTree.setShape(label,{padding,padding,width-padding,height-padding},error)) return false;
+        mTooltipOwner=*owner; mTooltipNear=*near; mTooltipShown=now;
+        mTooltipFade.reset(); mTooltipBlocked=true;
+    }
+    else if (mTooltipPanel && !mTooltipFade)
+    {
+        const auto tooltipRect=mTree.screenRect(mTooltipPanel,error);
+        if (!tooltipRect) return false;
+        const auto configured=[&](const char* name,const char* control,double fallback)
+        { const auto found=mTooltipTimeouts.find(name); return found==mTooltipTimeouts.end() ? setting(control,fallback) : found->second; };
+        const auto timeout=contains(mTooltipNear,position) ? contains(*tooltipRect,position) ?
+            configured("visible_time_over","ToolTipVisibleTimeOver",1000.0) : configured("visible_time_near","ToolTipVisibleTimeNear",10.0) :
+            configured("visible_time_far","ToolTipVisibleTimeFar",1.0);
+        if (static_cast<float>(now-mTooltipShown)>static_cast<float>(timeout)) { mTooltipFade=now; mTooltipBlocked=false; }
+    }
+    if (!mTooltipPanel) return true;
+    const auto fadeTime=static_cast<float>(setting("ToolTipFadeTime",0.2));
+    const auto alpha=mTooltipFade ? fadeTime>0.f ? std::clamp(1.f-static_cast<float>(now-*mTooltipFade)/fadeTime,0.f,1.f) : 0.f : 1.f;
+    if (alpha==0.0)
+    {
+        if (!mTree.erase(mTooltipPanel,error)) return false;
+        mTooltipPanel=0; mTooltipOwner=0; mTooltipFade.reset();
+        return true;
+    }
+    auto tooltipInput=input;
+    tooltipInput.button.drawAlpha=tooltipInput.button.transparency=static_cast<float>(alpha);
+    auto tooltip=LLVKWidgetPaint::prepare(mTree,mTooltipPanel,tooltipInput,error);
+    if (!tooltip) return false;
+    for (auto& command : tooltip->commands) command.clip=*viewport;
+    paint.commands.insert(paint.commands.end(),tooltip->commands.begin(),tooltip->commands.end());
+    return true;
 }
 
 LLVKMenu& LLVKViewerUi::menu() noexcept
 {
     for (auto id=mTree.keyboardFocus(); mTree.get(id); id=mTree.get(id)->parent)
+    {
         if (const auto& menu=mTree.get(id)->menu; menu && menu->open()) return *menu;
+        for (const auto& [item,dialog] : mTornMenus)
+            if (dialog.floater->id()==id && dialog.floater->visible()) return *dialog.view;
+    }
     return *mMenu;
+}
+
+void LLVKViewerUi::blockTooltips()
+{
+    mTooltipBlocked=true;
+    if (mTooltipPanel && !mTooltipFade) mTooltipFade=mTree.time();
+}
+
+bool LLVKViewerUi::menuPointer(const LLVKWidgetTree::PointerEvent& event)
+{
+    if (event.kind!=LLVKWidgetTree::PointerKind::Hover) blockTooltips();
+    mMenu->setTime(mTree.time());
+    auto& focused=menu();
+    if (&focused!=mMenu.get() && focused.pointer(event)) return true;
+    return mMenu->pointer(event);
+}
+
+bool LLVKViewerUi::menuShortcut(const std::string& key,bool control,bool shift,bool alt)
+{
+    return mMenu->shortcut(key,control,shift,alt);
+}
+
+bool LLVKViewerUi::updateMenuHover(const LLVKWidgetTree::PointerEvent& event,std::string& error)
+{
+    if (mTree.mouseCapture() || mNoticePanel) return true;
+    for (auto& [item,dialog] : mTornMenus)
+    {
+        if (!dialog.floater->visible()) continue;
+        const auto rectangle=mTree.screenRect(dialog.content,error);
+        const auto viewport=mTree.screenRect(mRoot,error);
+        if (!rectangle || !viewport) return false;
+        LLVKWidgetPaint layout;
+        if (!dialog.view->paint(layout,*viewport,error,*rectangle,true)) return false;
+    }
+    menuPointer(event);
+    return error.empty();
+}
+
+bool LLVKViewerUi::tearOffMenu(std::size_t item,LLVKWidgetTree::Rect rectangle,std::string& error)
+{
+    error.clear();
+    if (const auto found=mTornMenus.find(item); found!=mTornMenus.end())
+    {
+        if (found->second.floater->visible())
+        {
+            if (!found->second.floater->open(error)) return false;
+            return mTree.setKeyboardFocus(found->second.content,false,false,error);
+        }
+        if (mActiveFloater==found->second.floater.get()) mActiveFloater=nullptr;
+        mTornMenus.erase(found);
+    }
+    auto view=mMenu->detachedView(item,error);
+    if (!view) return false;
+    const auto width=rectangle.right-rectangle.left,height=rectangle.top-rectangle.bottom;
+    auto floater=LLVKFloater::createXml(mTree,*mDialogFactory,mRoot,
+        "<floater name='native_torn_menu_"+std::to_string(item)+"' title='' width='"+std::to_string(width+4)+
+        "' height='"+std::to_string(height+18)+"' can_minimize='false' can_resize='false'/>",error);
+    if (!floater) return false;
+    mTree.setValue(find("floater_title",floater->id()),LLSD(mMenu->items()[item].label));
+    LLVKWidgetTree::Params params;
+    params.name="torn_menu_content"; params.rect={1,1,width+1,height+1};
+    params.mouseOpaque=true;
+    LLVKControl::Params control;
+    control.font=mFonts->resolve({"SansSerif","Small"},error);
+    if (!control.font) return false;
+    const auto content=mTree.createControl(params,control,floater->id(),error);
+    if (!content || !mTree.setMenu(*content,view)) return false;
+    const auto id=floater->id();
+    floater->onClose([this,item]
+    {
+        const auto found=mTornMenus.find(item);
+        if (found==mTornMenus.end()) return;
+        found->second.view->dismiss();
+        found->second.view->setDetachedActive(false);
+        mMenu->dismiss();
+    });
+    view->setTearOffHandler([this,item](auto selected,auto rectangle)
+    {
+        if (selected!=item) { tearOffMenu(selected,rectangle,mDialogError); return; }
+        const auto found=mTornMenus.find(item);
+        if (found!=mTornMenus.end()) found->second.floater->close(mDialogError);
+    });
+    const auto constructed=mTree.get(id)->params.rect;
+    const auto totalHeight=constructed.top-constructed.bottom;
+    const auto left=rectangle.left-1;
+    auto placement=LLVKWidgetTree::Rect{left,rectangle.bottom,left+width+4,rectangle.top};
+    const auto root=mTree.get(mRoot)->params.rect;
+    const auto fitX=placement.left<0 ? -placement.left : 0;
+    const auto fitY=placement.top>root.top-root.bottom-19 ? root.top-root.bottom-19-placement.top : 0;
+    placement.left+=fitX; placement.right+=fitX;
+    placement.bottom+=fitY; placement.top+=fitY;
+    if (!floater->open(error) || !mTree.setShape(id,placement,error) ||
+        !mTree.setKeyboardFocus(*content,false,false,error)) return false;
+    view->setDetachedFocus(true);
+    if (fitX && fitY) view->dismiss();
+    view->setDetachedActive(true);
+    mTornMenus.emplace(item,TornMenu{std::move(floater),std::move(view),*content,totalHeight});
+    return true;
 }
 
 LLVKWidgetTree::Id LLVKViewerUi::find(std::string_view name,LLVKWidgetTree::Id within) const

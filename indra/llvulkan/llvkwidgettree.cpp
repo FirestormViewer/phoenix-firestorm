@@ -122,6 +122,7 @@ void LLVKWidgetTree::eraseSubtree(Id id)
     auto& node = mNodes.at(id);
     for (Id child : node.children) eraseSubtree(child);
     mEvents.erase(id);
+    mLastGroupFocus.erase(id);
     std::erase(mFocusChain,id);
     if (mKeyboardFocus == id) mKeyboardFocus = 0;
     if (mMouseCapture == id) mMouseCapture = 0;
@@ -206,6 +207,8 @@ bool LLVKWidgetTree::canReceiveFocus(Id id) const noexcept
 
 void LLVKWidgetTree::notify(Id id, std::function<void(Id)> Events::* event)
 {
+    if (event==&Events::focusReceived && get(id) && get(id)->lineEditor)
+        mNodes.at(id).lineEditor->caretResetTime=mTime;
     if (event==&Events::focusLost && get(id) && get(id)->textEditor &&
         get(id)->textEditor->commitOnFocusLost && canReceiveFocus(id))
     { std::string error; commitTextEditor(id,error); }
@@ -264,8 +267,18 @@ bool LLVKWidgetTree::setKeyboardFocus(Id id, bool lock, bool keystrokesOnly, std
         }
     }
     if (mFocusEpoch != epoch) return true;
+    for (auto ancestor=mKeyboardFocus; get(ancestor); ancestor=get(ancestor)->parent)
+        if (get(ancestor)->params.focusRoot) mLastGroupFocus[ancestor]=mKeyboardFocus;
     if (lock) mLockedFocus = mKeyboardFocus;
     return true;
+}
+
+LLVKWidgetTree::Id LLVKWidgetTree::lastFocusForGroup(Id group) const noexcept
+{
+    const auto found=mLastGroupFocus.find(group);
+    if (found==mLastGroupFocus.end() || !get(found->second) || !hasAncestor(found->second,group) ||
+        !visibleInChain(found->second) || !enabledInChain(found->second)) return 0;
+    return found->second;
 }
 
 bool LLVKWidgetTree::setMouseCapture(Id id, std::string& error)
@@ -317,7 +330,7 @@ bool LLVKWidgetTree::planReshape(Id id, std::int64_t width, std::int64_t height,
     }
     if (node.checkBox && node.checkBox->label && node.checkBox->button)
         return planCheckBoxReshape(id,width,changes,error);
-    for (Id child : node.children)
+    if (deltaWidth || deltaHeight) for (Id child : node.children)
     {
         const auto& params = mNodes.at(child).params;
         const bool left = (params.follows & Left) != 0;
@@ -410,6 +423,22 @@ bool LLVKWidgetTree::setShape(Id id, const Rect& rectangle, std::string& error)
     if (!planReshape(id,std::int64_t(rectangle.right)-rectangle.left,std::int64_t(rectangle.top)-rectangle.bottom,
                      rectangle,changes,error)) return false;
     return completeShapes(changes,error);
+}
+
+bool LLVKWidgetTree::expandFloaterHeader(Id panel,std::string& error)
+{
+    error.clear();
+    auto found=mNodes.find(panel);
+    if (found==mNodes.end() || !found->second.floater) { error="Native header expansion requires a floater"; return false; }
+    auto& node=found->second;
+    auto& state=*node.floater;
+    if (state.headerExpanded) return true;
+    const auto stretch=std::max<std::int64_t>(0,std::int64_t(state.headerHeight)-state.legacyHeaderHeight);
+    if (std::int64_t(node.params.rect.top)+stretch>INT32_MAX || stretch>16384)
+    { error="Native floater header expansion exceeds bounds"; return false; }
+    node.params.rect.top+=static_cast<std::int32_t>(stretch);
+    state.headerExpanded=true;
+    return true;
 }
 
 bool LLVKWidgetTree::setVisible(Id id, bool visible)

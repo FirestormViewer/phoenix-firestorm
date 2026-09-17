@@ -1,5 +1,7 @@
 #include "llerrorcontrol.h"
 #include "llvkviewerui.h"
+#include "lluriparser.h"
+#include <boost/regex.hpp>
 #include "llstring.h"
 #include "llsdutil.h"
 #include "llsdserialize.h"
@@ -165,7 +167,8 @@ bool LLVKViewerUi::initializeDialogs(const Configuration& configuration,std::str
                         name=="SoundCacheWillBeMoved" || name=="DisableJavascriptBreaksSearch" || name=="ChangeSkin" || name=="SkinDefaultsChangeSettings" || name=="ChangeRenderBackend" ||
                         name=="SettingsConfirmBackup" || name=="SettingsRestoreNeedsLogout" || name=="BackupPathEmpty" ||
                         name=="BackupFinished" || name=="RestoreFinished" || name=="okbutton" ||
-                        name=="DebugSettingsWarning" || name=="ControlNameCopiedToClipboard" || name=="SanityCheck")
+                        name=="DebugSettingsWarning" || name=="ControlNameCopiedToClipboard" || name=="SanityCheck" || name=="MediaPluginFailed" || name=="ChangeLanguage" ||
+                        name=="WebLaunchExternalTarget" || name=="okcancelignore")
                     { state.notice=Notice{name,{}}; state.noticeDepth=static_cast<int>(state.stack.size()); }
                     state.formTemplate=std::string_view(tag)=="template";
                 }
@@ -284,7 +287,7 @@ bool LLVKViewerUi::initializeDialogs(const Configuration& configuration,std::str
             LLStringUtil::format_map_t arguments;
             arguments["[STATE]"]=mAboutStrings.at(value.asBoolean() ? "RLVaToggleEnabled" : "RLVaToggleDisabled");
             LLStringUtil::format(message,arguments);
-            mNotices.push_back({"GenericAlert",std::move(message)});
+            enqueueNotice({"GenericAlert",std::move(message)},mDialogError);
         });
         if (!subscription) { error="Cannot subscribe native RLVa startup setting"; return false; }
     }
@@ -330,8 +333,247 @@ bool LLVKViewerUi::queueNotice(const std::string& name,const LLSD& arguments,
     LLStringUtil::format(notice.message,substitutions);
     for (auto& button : notice.buttons) LLStringUtil::format(button.label,substitutions);
     notice.response=std::move(response);
+    return enqueueNotice(std::move(notice),error);
+}
+
+bool LLVKViewerUi::enqueueNotice(Notice notice,std::string& error)
+{
+    error.clear();
+    if (mNotices.size()>=64) { error="Native notice queue is full"; return false; }
+    if (notice.response)
+    {
+        auto delivered=std::make_shared<bool>(false);
+        notice.response=[delivered,response=std::move(notice.response)](int option,const LLSD& values)
+        {
+            if (*delivered) return;
+            *delivered=true;
+            response(option,values);
+        };
+    }
     mNotices.push_back(std::move(notice));
     return true;
+}
+
+std::string LLVKViewerUi::errorString(std::string_view key,std::string_view fallback) const
+{
+    const auto found=mAboutStrings.find(std::string(key));
+    auto value=found==mAboutStrings.end() || found->second.empty() ? std::string(fallback) : found->second;
+    for (auto& character : value) if (character=='\n' || character=='\r' || character=='\t') character=' ';
+    return value;
+}
+
+bool LLVKViewerUi::queueError(const LLVKError& failure,std::vector<Notice::Button> actions,
+    std::function<void(int)> response,std::string& error,std::string name)
+{
+    error.clear();
+    if (mNotices.size()>=64) { error="Native error notice queue is full"; return false; }
+    const auto message=failure.format([this](std::string_view key) { return errorString(key,{}); });
+    Notice notice;
+    notice.name=name;
+    notice.message=message.title+"\n\n"+message.body;
+    notice.buttons=std::move(actions);
+    notice.buttons.push_back({"close",errorString("implicitclosebutton","Close"),0,true});
+    if (mDialogClipboard)
+        notice.buttons.push_back({"copy",errorString("NativeErrorCopy","Copy details"),-1,false});
+    notice.response=[this,failure,name,diagnostic=message.diagnostic,actions=notice.buttons,response=std::move(response)](int option,const LLSD&)
+    {
+        if (option==-1)
+        {
+            const auto wide=utf8str_to_wstring(diagnostic);
+            std::string copyError;
+            if (mDialogClipboard) mDialogClipboard->write(std::u32string(wide.begin(),wide.end()),false,copyError);
+            auto repeated=actions;
+            std::erase_if(repeated,[](const auto& button) { return button.option==0 || button.option==-1; });
+            if (!queueError(failure,std::move(repeated),response,mDialogError,name)) mReportedSession.reset();
+            else if (!copyError.empty()) mDialogError=std::move(copyError);
+        }
+        else if (response) response(option);
+    };
+    return enqueueNotice(std::move(notice),error);
+}
+
+bool LLVKViewerUi::showError(const LLVKError& failure,std::string& error)
+{
+    error.clear();
+    auto gate=mErrorGate;
+    if (!gate.begin(failure.operation,failure.generation) || !gate.accept(failure)) return true;
+    if (!queueError(failure,{},[this,failure](int option)
+    { if (!option && failure.policy().recovery==LLVKError::Recovery::Stop && mQuitRequest) mQuitRequest(); },error)) return false;
+    mErrorGate=gate;
+    return true;
+}
+
+void LLVKViewerUi::setSessionOwner(LLVKSessionOwner* owner)
+{
+    mSessionOwner=owner;
+    mReportedSession.reset();
+    LLVKControl::Callback login;
+    if (owner) login.function=[this,owner](auto,const LLSD&)
+    {
+        updateLoginControls();
+        if (mSessionOwner!=owner || !mTree.get(find("connect_btn"))->params.enabled) return;
+        owner->beginLogin();
+        mReportedSession.reset();
+        refreshSession(mDialogError);
+    };
+    mTree.setControlCommit(find("connect_btn"),std::move(login));
+    updateLoginControls();
+}
+
+bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
+{
+    error.clear();
+    if (!mSessionOwner) return true;
+    if (repeat) mReportedSession.reset();
+    using Owner=LLVKSessionOwner;
+    mSessionSnapshot=mSessionOwner->snapshot();
+    const auto snapshot=mSessionSnapshot;
+    const auto same=[](const Owner::Status& left,const Owner::Status& right)
+    { return left.code==right.code && left.action==right.action && left.operation==right.operation &&
+        left.generation==right.generation && left.service==right.service; };
+    if (mReportedSession && mReportedSession->tag==snapshot.tag && mReportedSession->state==snapshot.state &&
+        same(mReportedSession->status,snapshot.status) && same(mReportedSession->cleanup,snapshot.cleanup)) return true;
+    const bool prelogin=snapshot.state==Owner::State::PreLogin;
+    for (const auto name : {"connect_btn","username_combo","password_edit","server_combo","start_location_combo"})
+        mTree.setEnabled(find(name),prelogin);
+    updateLoginControls();
+    if (mActiveNotice && (mActiveNotice->name=="NativeSessionError" || mActiveNotice->name=="NativeSessionProgress" ||
+        mActiveNotice->name=="NativeSessionAgreement"))
+        if (!dismissNotice(error)) return false;
+    std::erase_if(mNotices,[](const auto& notice)
+    { return notice.name=="NativeSessionError" || notice.name=="NativeSessionProgress" || notice.name=="NativeSessionAgreement"; });
+    if (snapshot.state==Owner::State::AwaitingAgreement && snapshot.agreement)
+    {
+        if (mNotices.size()>=64) { error="Native session notice queue is full"; return false; }
+        Notice notice;
+        notice.name="NativeSessionAgreement";
+        notice.message=snapshot.agreement->text;
+        notice.buttons.push_back({"reject",errorString("NativeAgreementReject","Decline"),0,true});
+        notice.buttons.push_back({"accept",errorString("NativeAgreementAccept","Accept"),1,false});
+        notice.response=[this,owner=mSessionOwner,tag=snapshot.tag,agreement=*snapshot.agreement](int option,const LLSD&)
+        {
+            if (mSessionOwner!=owner || (option!=0 && option!=1)) return;
+            owner->decideAgreement(tag,agreement,option==1);
+            refreshSession(mDialogError);
+        };
+        if (!enqueueNotice(std::move(notice),error)) return false;
+        mReportedSession=snapshot;
+        return true;
+    }
+    const bool cleaning=snapshot.state==Owner::State::Disconnecting;
+    const auto status=cleaning ? snapshot.cleanup : snapshot.status;
+    if (status.code==Owner::Code::Ok || status.code==Owner::Code::Cancelled || status.code==Owner::Code::Pending)
+    {
+        const bool active=snapshot.state==Owner::State::Authenticating || snapshot.state==Owner::State::Connecting;
+        if (active)
+        {
+            if (mNotices.size()>=64) { error="Native session notice queue is full"; return false; }
+            Notice notice;
+            notice.name="NativeSessionProgress";
+            notice.message=errorString(snapshot.state==Owner::State::Connecting ? "LoginConnectingToRegion" :
+                "LoginInProgress","Login in progress...");
+            notice.buttons.push_back({"cancel",errorString("Cancel","Cancel"),1,true});
+            notice.response=[this,owner=mSessionOwner,tag=snapshot.tag](int option,const LLSD&)
+            {
+                if (option!=1 || mSessionOwner!=owner) return;
+                owner->cancel(tag);
+                refreshSession(mDialogError);
+            };
+            if (!enqueueNotice(std::move(notice),error)) return false;
+        }
+        mReportedSession=snapshot;
+        return true;
+    }
+    auto code=LLVKError::Code::SessionFailed;
+    if (cleaning) code=LLVKError::Code::SessionCleanupFailed;
+    else switch (status.code)
+    {
+        case Owner::Code::TransportUnavailable:
+            code=status.action==Owner::Action::Close ? LLVKError::Code::TransportUnavailable : LLVKError::Code::NetworkUnavailable;
+            break;
+        case Owner::Code::AuthenticationFailed: code=LLVKError::Code::AuthenticationFailed; break;
+        case Owner::Code::ConnectionFailed: code=LLVKError::Code::ConnectionFailed; break;
+        case Owner::Code::Timeout: code=LLVKError::Code::SessionTimeout; break;
+        default: break;
+    }
+    const LLVKError failure{code,LLVKError::Operation::Session,snapshot.tag.generation,snapshot.tag.request};
+    std::vector<Notice::Button> actions;
+    if (cleaning && status.action==Owner::Action::RetryCleanup)
+        actions.push_back({"retry_cleanup",errorString("NativeErrorRetryCleanup","Retry cleanup"),1,false});
+    if (prelogin && status.action==Owner::Action::RetryLogin)
+        actions.push_back({"retry_login",errorString("NativeErrorRetryLogin","Retry login"),2,false});
+    if (!queueError(failure,std::move(actions),[this,owner=mSessionOwner,snapshot](int option)
+    {
+        if (!option || mSessionOwner!=owner || owner->snapshot().tag!=snapshot.tag) return;
+        if (option==1 && snapshot.cleanup.action==Owner::Action::RetryCleanup) owner->retryCleanup(snapshot.tag);
+        else if (option==2 && snapshot.status.action==Owner::Action::RetryLogin) owner->beginLogin();
+        else return;
+        mReportedSession.reset();
+        refreshSession(mDialogError);
+    },error,"NativeSessionError")) return false;
+    try { LL_WARNS("NativeSession") << failure.diagnostic() << LL_ENDL; } catch (...) {}
+    mReportedSession=snapshot;
+    return true;
+}
+
+bool LLVKViewerUi::initializeNoticeLayout(std::string& error)
+{
+    mNoticeTopRight=mTree.setting("ShowGroupNoticesTopRight").value_or(LLSD(false)).asBoolean();
+    const auto declaration=[&](const char* file) -> std::optional<boost::property_tree::ptree>
+    {
+        const auto files=mSkin->read("xui",file,LLVKSkinFiles::Policy::Current,error);
+        if (!files) return {};
+        std::vector<std::string_view> layers;
+        for (const auto& text : *files) layers.push_back(text);
+        const auto xml=LLVKXmlLayers::merge(layers,error);
+        if (!xml) return {};
+        boost::property_tree::ptree parsed;
+        std::istringstream stream(*xml);
+        boost::property_tree::read_xml(stream,parsed);
+        return parsed;
+    };
+    const auto named=[](const auto& self,const boost::property_tree::ptree& node,std::string_view name) -> const boost::property_tree::ptree*
+    {
+        if (node.get<std::string>("<xmlattr>.name","")==name) return &node;
+        for (const auto& child : node)
+            if (child.first!="<xmlattr>") if (const auto found=self(self,child.second,name)) return found;
+        return nullptr;
+    };
+    try
+    {
+        const auto main=declaration("main_view.xml"),toolbar=declaration("panel_toolbar_view.xml"),toast=declaration("panel_toast.xml");
+        if (!main || !toolbar || !toast) return false;
+        const auto menu=named(named,*main,"status_bar_container");
+        const auto bottom=named(named,*toolbar,"bottom_toolbar_panel");
+        const auto stack=named(named,*toolbar,"bottom_toolbar_stack");
+        const auto chiclet=named(named,*toolbar,"chiclet_container");
+        const auto outer=named(named,*toast,"toast"),wrapper=named(named,*toast,"wrapper_panel");
+        if (!menu || !bottom || !stack || !chiclet || !outer || !wrapper)
+        { error="Native notification layout declaration is incomplete"; return false; }
+        mNoticeMenuHeight=menu->get<int>("<xmlattr>.height");
+        mNoticeBottomHeight=bottom->get<int>("<xmlattr>.height");
+        mNoticeStackSpacing=stack->get<int>("<xmlattr>.border_size",3);
+        mNoticeChicletInset=chiclet->get<int>("<xmlattr>.top")+chiclet->get<int>("<xmlattr>.height");
+        mNoticeRightPad=outer->get<int>("<xmlattr>.width")-wrapper->get<int>("<xmlattr>.width");
+        mNoticeTopPad=outer->get<int>("<xmlattr>.height")-wrapper->get<int>("<xmlattr>.height");
+        for (const auto value : {mNoticeMenuHeight,mNoticeBottomHeight,mNoticeStackSpacing,mNoticeChicletInset,mNoticeRightPad,mNoticeTopPad})
+            if (value<0 || value>16384) { error="Native notification layout dimension is invalid"; return false; }
+    }
+    catch (const boost::property_tree::ptree_error& failure) { error=failure.what(); return false; }
+    return true;
+}
+
+LLVKWidgetTree::Rect LLVKViewerUi::noticeRectangle(int width,int height,std::optional<LLVKWidgetTree::Rect> viewport) const
+{
+    const auto root=viewport.value_or(mTree.get(mRoot)->params.rect);
+    const auto margin=std::clamp(mTree.setting("ChannelBottomPanelMargin").value_or(LLSD(35)).asInteger(),0,16384);
+    const auto gap=std::clamp(mTree.setting("ToastGap").value_or(LLSD(7)).asInteger(),0,16384);
+    const auto topInset=mNoticeTopRight ? mNoticeChicletInset : 0;
+    const auto channelHeight=std::max(0,root.top-root.bottom-mNoticeMenuHeight-mNoticeBottomHeight-mNoticeStackSpacing-margin-topInset);
+    const auto outerHeight=height+mNoticeTopPad;
+    const auto left=std::max(0,(root.right-root.left)/2-(width+mNoticeRightPad)/2);
+    const auto bottom=std::clamp(channelHeight/2+gap+2*(outerHeight/2)-outerHeight,0,std::max(0,root.top-root.bottom-height-mNoticeTopPad));
+    return {left,bottom,left+width,bottom+height};
 }
 
 bool LLVKViewerUi::advanceNotices(double time,std::string& error)
@@ -357,14 +599,35 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
             mTree.value(mKeyCaptureFields.at("apply_all")).asBoolean(),error)) return false;
         mKeyCapture->close(error);
     }
-    if (mNoticePanel || mNotices.empty()) return true;
+    if (mNoticePanel)
+    {
+        if (time-mNoticeOpened>=0.5 && !mTree.setPanelDefaultButton(mNoticePanel,mNoticeButton,error)) return false;
+        return true;
+    }
+    if (mNotices.empty()) return true;
     auto notice=mNotices.front();
+    const auto preference=mNotificationPreferences.find(notice.name);
+    const bool hasIgnore=preference!=mNotificationPreferences.end();
+    std::string ignoreLabel;
+    if (hasIgnore)
+        ignoreLabel=mAboutStrings.at(preference->second.sessionOnly ? "skipnexttimesessiononly" :
+            preference->second.saveResponse ? "alwayschoose" : "skipnexttime");
     if (notice.buttons.empty()) notice.buttons.push_back({"close",mAboutStrings.at("implicitclosebutton"),0,true});
-    const auto font=mFonts->resolve({"SansSerif","Medium"},error);
+    const auto font=mFonts->resolve({"SansSerif","Default"},error);
     if (!font) return false;
-    const auto wide=utf8str_to_wstring(mNotices.front().message);
-    LLVKPlainTextLayout::Options options; options.width=400; options.wrap=true;
-    const auto document=LLVKPlainTextLayout::document(std::u32string(wide.begin(),wide.end()),*font,options,0,0,LLVKFont::VerticalAlign::Top,error);
+    const auto root=mTree.get(mRoot)->params.rect;
+    LLVKPlainTextLayout::Options options; options.width=std::max(1,std::min(400,root.right-root.left-70)); options.wrap=true;
+    const auto parsed=LLVKWebText::parse(mNotices.front().message,error);
+    if (!parsed) return false;
+    LLVKPlainControl message;
+    message.text=parsed->text;
+    for (const auto& icon : parsed->icons)
+    {
+        const auto image=mTree.findImage(icon.name,error);
+        if (!image) return false;
+        message.icons.emplace(icon.position,image);
+    }
+    const auto document=message.prepareDocument(font,options,0,error);
     if (!document) return false;
     const auto padding=font->measureRun(U"OO",0,2,1.f,true,false,error);
     if (!padding) return false;
@@ -375,19 +638,30 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
         const std::u32string label(wideLabel.begin(),wideLabel.end());
         const auto measured=font->measureRun(label,0,label.size(),1.f,true,false,error);
         if (!measured) return false;
-        buttonWidth=std::max(buttonWidth,static_cast<int>(measured->width+0.99f)+static_cast<int>(padding->width)+20);
+        buttonWidth=std::max(buttonWidth,static_cast<int>(std::floor(measured->width+0.5f))+static_cast<int>(std::floor(padding->width+0.5f))+8);
     }
-    const auto totalButtons=buttonWidth*static_cast<int>(notice.buttons.size())+10*static_cast<int>(notice.buttons.size()-1);
-    const auto textWidth=std::min(400,document->fitWidth+25);
-    const auto textHeight=document->fitHeight;
-    const auto width=std::max(totalButtons,textWidth)+50, height=textHeight+48+23+(notice.inputName.empty() ? 0 : 36);
-    const auto root=mTree.get(mRoot)->params.rect;
-    const auto left=std::max(0,(root.right-root.left-width)/2),bottom=std::max(0,(root.top-root.bottom-height)/2);
-    LLVKWidgetTree::Params view; view.name=notice.name; view.rect={left,bottom,left+width,bottom+height};
+    const auto totalButtons=buttonWidth*static_cast<int>(notice.buttons.size())+8*static_cast<int>(notice.buttons.size()-1);
+    const auto textWidth=std::min(static_cast<int>(options.width),document->bounds.right-document->bounds.left+25);
+    const auto textHeight=std::min(document->fitHeight,std::max(40,root.top-root.bottom-120));
+    const auto lineHeight=static_cast<int>(std::ceil(font->metrics().ascender)+std::ceil(font->metrics().descender));
+    const auto ignoreLines=1+static_cast<int>(std::count(ignoreLabel.begin(),ignoreLabel.end(),'\n'));
+    const int ignoreHeight=hasIgnore ? lineHeight*ignoreLines+lineHeight/2 : 0;
+    auto width=std::max(totalButtons,textWidth)+50;
+    if (hasIgnore)
+    {
+        const auto firstLine=utf8str_to_wstring(ignoreLabel.substr(0,ignoreLabel.find('\n')));
+        const std::u32string label(firstLine.begin(),firstLine.end());
+        const auto measured=font->measureRun(label,0,label.size(),1.f,true,false,error);
+        if (!measured) return false;
+        width=std::max(width,static_cast<int>(measured->width+0.99f)+16+50);
+    }
+    const auto height=textHeight+48+23+(notice.inputName.empty() ? 0 : 36)+ignoreHeight;
+    LLVKWidgetTree::Params view; view.name=notice.name; view.rect=noticeRectangle(width,height);
     view.focusRoot=true;
     LLVKControl::Params control; control.font=font;
     LLVKPanel::Params background; background.backgroundVisible=background.backgroundOpaque=true;
-    background.opaqueImage=mTree.findImage("Window_Foreground",error);
+    background.opaqueImage=mTree.findImage("Toast_Over",error);
+    background.alertShadowColor=mColors->find("ColorDropShadow");
     if (!error.empty()) return false;
     const auto panel=mTree.createPanel(view,control,background,mRoot,error);
     if (!panel) return false;
@@ -400,13 +674,27 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
     text.linkClicked=[this](auto,const std::string& url) { if (mOpenUrl) mOpenUrl(url); };
     if (const auto color=mColors->find("HTMLLinkColor")) text.linkColor=*color;
     if (const auto color=mColors->find("LabelTextColor")) text.textColor=text.readOnlyColor=*color;
-    if (!mTree.createPlainText(view,control,text,*panel,error)) { discard(); return false; }
+    if (notice.name=="NativeSessionAgreement" || textHeight<document->fitHeight)
+    {
+        const auto body=mDialogFactory->construct(mTree,
+            "<text_editor name='Alert message' read_only='true' word_wrap='true' max_length='65536' parse_urls='false'/>",*panel,error);
+        if (!body || !mTree.setShape(*body,view.rect,error) || !mTree.setValue(*body,LLSD(notice.message)))
+        { discard(); return false; }
+    }
+    else if (!mTree.createPlainText(view,control,text,*panel,error)) { discard(); return false; }
     std::map<LLVKWidgetTree::Id,int> optionsById;
-    LLVKWidgetTree::Id defaultButton=0,editor=0;
+    LLVKWidgetTree::Id defaultButton=0,editor=0,ignore=0;
     int buttonLeft=(width-totalButtons)/2;
+    const auto buttonFactory=std::make_unique<LLVKWidgetFactory>(*mDialogFactory);
+    if (!buttonFactory->loadDefaultsFile(mTree,"alert_button.xml",error)) { discard(); return false; }
     for (const auto& option : notice.buttons)
     {
-        const auto button=mDialogFactory->constructFile(mTree,"alert_button.xml",*panel,error);
+        auto name=option.name;
+        LLStringUtil::replaceString(name,"&","&amp;");
+        LLStringUtil::replaceString(name,"'","&apos;");
+        LLStringUtil::replaceString(name,"<","&lt;");
+        LLStringUtil::replaceString(name,">","&gt;");
+        const auto button=buttonFactory->construct(mTree,"<button name='"+name+"' font='SansSerif'/>",*panel,error);
         if (!button) { discard(); return false; }
         if (!mTree.setShape(*button,{buttonLeft,16,buttonLeft+buttonWidth,39},error)) { discard(); return false; }
         const auto wideLabel=utf8str_to_wstring(option.label);
@@ -416,15 +704,29 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
         mTree.setControlCommit(*button,std::move(close));
         optionsById.emplace(*button,option.option);
         if (!defaultButton || option.isDefault) defaultButton=*button;
-        buttonLeft+=buttonWidth+10;
+        buttonLeft+=buttonWidth+8;
     }
     if (!notice.inputName.empty())
     {
         const auto inputFactory=std::make_unique<LLVKWidgetFactory>(*mDialogFactory);
         if (!inputFactory->loadDefaultsFile(mTree,"alert_line_editor.xml",error)) { discard(); return false; }
         const auto input=inputFactory->construct(mTree,"<line_editor name='notification_input' width='200' height='20' max_length_bytes='1023'/>",*panel,error);
-        if (!input || !mTree.setShape(*input,{25,47,width-25,67},error)) { discard(); return false; }
+        const auto inputBottom=47+(hasIgnore ? 20 : 0);
+        if (!input || !mTree.setShape(*input,{25,inputBottom,width-25,inputBottom+20},error)) { discard(); return false; }
         editor=*input;
+    }
+    if (hasIgnore)
+    {
+        LLStringUtil::replaceString(ignoreLabel,"&","&amp;");
+        LLStringUtil::replaceString(ignoreLabel,"'","&apos;");
+        LLStringUtil::replaceString(ignoreLabel,"<","&lt;");
+        LLStringUtil::replaceString(ignoreLabel,">","&gt;");
+        const auto checkFactory=std::make_unique<LLVKWidgetFactory>(*mDialogFactory);
+        if (!checkFactory->loadDefaultsFile(mTree,"alert_check_box.xml",error)) { discard(); return false; }
+        const auto check=checkFactory->construct(mTree,"<check_box name='notification_ignore' label='"+ignoreLabel+"' word_wrap='down'/>",*panel,error);
+        const auto checkBottom=39+lineHeight/2;
+        if (!check || !mTree.setShape(*check,{25,checkBottom,width-25,checkBottom+lineHeight*ignoreLines},error)) { discard(); return false; }
+        ignore=*check;
     }
     mNoticePreviousFocus=mTree.keyboardFocus();
     if (mTree.mouseCapture() && !mTree.setMouseCapture(0,error)) { discard(); return false; }
@@ -433,6 +735,7 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
     if (!mTree.setKeyboardFocus(*panel,true,false,error) || !mTree.requestControlFocus(editor ? editor : defaultButton,true,error))
     { mTree.unlockFocus(); discard(); return false; }
     mNoticePanel=*panel; mNoticeButton=defaultButton; mNoticeEditor=editor; mNoticeOpened=time;
+    mNoticeIgnore=ignore;
     mNoticeOptions=std::move(optionsById); mActiveNotice=std::move(notice);
     mNotices.erase(mNotices.begin());
     return true;
@@ -447,6 +750,24 @@ bool LLVKViewerUi::respondNotice(int option,std::string& error)
     if (found->first==mNoticeButton && mNoticeTime-mNoticeOpened<0.5) return true;
     LLSD values=LLSD::emptyMap();
     if (mNoticeEditor) values[mActiveNotice->inputName]=mTree.value(mNoticeEditor);
+    if (mNoticeIgnore)
+    {
+        const auto& preference=mNotificationPreferences.at(mActiveNotice->name);
+        const bool ignored=mTree.value(mNoticeIgnore).asBoolean();
+        values["ignore"]=ignored;
+        std::map<std::string,LLSD> changes;
+        if (preference.control.empty()) changes[mActiveNotice->name]=!ignored;
+        if (ignored && preference.saveResponse)
+        {
+            auto saved=preference.defaultResponse;
+            for (const auto& [name,index] : preference.responseOptions) saved[name]=index==option;
+            changes["Default"+mActiveNotice->name]=saved;
+        }
+        if (!preference.sessionOnly && mSaveWarningPreferences && !changes.empty() && !mSaveWarningPreferences(changes,error)) return false;
+        for (const auto& [name,value] : changes)
+            if (auto control=mWarningSettings->getControl(name)) control->setValue(value,!preference.sessionOnly);
+        if (!preference.control.empty()) mTree.updateSetting(preference.control,LLSD(preference.inverted ? ignored : !ignored));
+    }
     const auto response=mActiveNotice->response;
     if (!dismissNotice(error)) return false;
     if (response) response(option,values);
@@ -460,7 +781,7 @@ bool LLVKViewerUi::dismissNotice(std::string& error)
     const auto panel=mNoticePanel,focus=mNoticePreviousFocus;
     mTree.unlockFocus();
     mNoticePanel=mNoticeButton=mNoticePreviousFocus=0;
-    mNoticeEditor=0; mNoticeOptions.clear(); mActiveNotice.reset();
+    mNoticeEditor=mNoticeIgnore=0; mNoticeOptions.clear(); mActiveNotice.reset();
     if (!mTree.erase(panel,error)) return false;
     return !mTree.get(focus) || mTree.requestControlFocus(focus,true,error);
 }
@@ -1671,6 +1992,27 @@ bool LLVKViewerUi::initializeStartupPreferencePanel(LLVKWidgetTree::Id panel,std
         if (!enabled) mTree.setValue(display->second,LLSD(false));
     }
     if (!mTree.bindPreferenceColorAlpha(panel,mColors,error)) return false;
+    if (fields.contains("time_format_combobox"))
+    {
+        const auto clock=fields.at("time_format_combobox");
+        if (!mTree.setValue(clock,LLSD(mTree.setting("Use24HourClock").value_or(LLSD(false)).asBoolean() ? "1" : "0"))) return false;
+        const auto changed=[this]
+        {
+            if (!mLanguageChanged && queueNotice("ChangeLanguage",{},{},mDialogError)) mLanguageChanged=true;
+        };
+        LLVKControl::Callback callback;
+        callback.function=[this,changed](auto id,const LLSD&)
+        {
+            if (mTree.updateSetting("Use24HourClock",LLSD(mTree.value(id).asString()=="1"))) changed();
+        };
+        mTree.setControlCommit(clock,std::move(callback));
+        if (fields.contains("language_combobox"))
+        {
+            LLVKControl::Callback language;
+            language.function=[changed](auto,const LLSD&) { changed(); };
+            mTree.setControlCommit(fields.at("language_combobox"),std::move(language));
+        }
+    }
     const auto maturity=fields.find("maturity_desired_combobox");
     if (maturity!=fields.end())
     {
@@ -3155,7 +3497,7 @@ void LLVKViewerUi::verifyTranslation(const std::string& service,bool alert)
         {
             const auto message=mTree.panelString(mTranslation->id(),service+(verified ? "_api_key_verified" : "_api_key_not_verified"),
                 {{"STATUS",std::to_string(status)}},mDialogError);
-            if (message) mNotices.push_back({"GenericAlert",*message});
+            if (message) enqueueNotice({"GenericAlert",*message},mDialogError);
         }
     },mDialogError);
 }
@@ -3461,6 +3803,54 @@ bool LLVKViewerUi::showJoystick(std::string& error)
     return mJoystick->open(error);
 }
 
+bool LLVKViewerUi::activateUrl(const std::string& url,std::string& error)
+{
+    error.clear();
+    if (url.empty() || url.size()>65536 || url.find('\0')!=url.npos)
+    { error="Invalid native hyperlink"; return false; }
+    const LLURI uri(url);
+    auto scheme=uri.scheme(); LLStringUtil::toLower(scheme);
+    if (scheme!="secondlife")
+    {
+        if ((scheme!="http" && scheme!="https" && scheme!="ftp") || uri.hostName().empty())
+        { error="Unsupported native hyperlink scheme"; return false; }
+        if (!mOpenUrl) { error="Native web link service is not bound"; return false; }
+        mOpenUrl(url);
+        return true;
+    }
+    if (!uri.authority().empty() || uri.path()!="/app/openfloater/preferences")
+    { error="Native internal hyperlink destination is unavailable"; return false; }
+    if (!showPreferences(error)) return false;
+    const auto query=uri.queryMap();
+    const auto core=find("pref core",mPreferences->id());
+    if (query.has("tab"))
+    {
+        const auto tabs=mTree.get(core)->tabContainer->tabs;
+        for (const auto& tab : tabs)
+            if (mTree.get(tab.panel)->params.name==query["tab"].asString())
+            {
+                if (!mTree.selectTabPanel(core,tab.panel,error)) return false;
+                if (query.has("subtab"))
+                {
+                    const auto nested=find("tabs",tab.panel);
+                    const auto* container=mTree.get(nested);
+                    if (container && container->tabContainer)
+                        for (const auto& child : container->tabContainer->tabs)
+                            if (mTree.get(child.panel)->params.name==query["subtab"].asString())
+                                return mTree.selectTabPanel(nested,child.panel,error);
+                }
+                break;
+            }
+    }
+    else if (query.has("search"))
+    {
+        if (!mTree.setValue(find("search_prefs_edit",mPreferences->id()),query["search"]))
+        { error="Native Preferences search field is unavailable"; return false; }
+        return filterPreferences(error);
+    }
+    return true;
+}
+
 bool LLVKViewerUi::copyPreferenceSearch(std::string& error)
 {
     error.clear();
@@ -3494,6 +3884,7 @@ bool LLVKViewerUi::filterPreferences(std::string& error)
             {
                 const bool visible=self(self,tab.panel);
                 if (!mTree.setTabVisibility(id,tab.panel,visible,error)) return false;
+                self(self,tab.button);
                 if (visible && !first) first=tab.panel;
                 match|=visible;
             }
@@ -3519,7 +3910,7 @@ bool LLVKViewerUi::filterPreferences(std::string& error)
         for (const auto child : children) match|=self(self,child);
         return match;
     };
-    visit(visit,fields.at("pref core"));
+    visit(visit,mPreferences->id());
     return error.empty();
 }
 
@@ -3534,6 +3925,24 @@ bool LLVKViewerUi::showPreferences(std::string& error)
         if (!fields.contains("OK") || !fields.contains("Cancel") || !fields.contains("pref core"))
         { error="Original Preferences hierarchy is missing required controls"; mPreferences.reset(); return false; }
         if (!mTree.setPanelDefaultButton(mPreferences->id(),fields.at("OK"),error)) { mPreferences.reset(); return false; }
+        LLVKControl::Callback filter;
+        filter.function=[this](auto,const LLSD&) { filterPreferences(mDialogError); };
+        if (!mTree.setSearchEditorKeystroke(fields.at("search_prefs_edit"),std::move(filter)))
+        { error="Native Preferences search editor is unavailable"; mPreferences.reset(); return false; }
+        mPreferences->onCloseDependents([this](std::string& problem)
+        {
+            for (auto& [swatch,picker] : mColorPickers)
+            {
+                if (!picker->visible()) continue;
+                for (auto ancestor=swatch; mTree.get(ancestor); ancestor=mTree.get(ancestor)->parent)
+                    if (ancestor==mPreferences->id())
+                    {
+                        if (!picker->close(problem)) return false;
+                        break;
+                    }
+            }
+            return true;
+        });
         mPreferences->onClose([this]
         {
             ++mPreferenceGeneration;
@@ -3579,6 +3988,12 @@ bool LLVKViewerUi::showPreferences(std::string& error)
         const auto snapshot=mTree.snapshotPreferences(mPreferences->id(),error);
         if (!snapshot) return false;
         mPreferenceSnapshot=*snapshot;
+        if (const auto clock=mTree.setting("Use24HourClock"))
+        {
+            mPreferenceSnapshot.settings["Use24HourClock"]=*clock;
+            if (const auto combo=find("time_format_combobox",mPreferences->id()))
+                mTree.setValue(combo,LLSD(clock->asBoolean() ? "1" : "0"));
+        }
         if (const auto preset=mTree.setting("PresetGraphicActive")) mPreferenceSnapshot.settings["PresetGraphicActive"]=*preset;
         mBindingSnapshot=mBindings;
         const auto colors=mColors->serializeUser(error);
@@ -3600,7 +4015,9 @@ bool LLVKViewerUi::showPreferences(std::string& error)
         }
     }
     mActiveFloater=mPreferences.get();
-    return mPreferences->open(error);
+    auto placement=mTree.get(mRoot)->params.rect;
+    placement.top=std::max(placement.bottom,placement.top-mNoticeMenuHeight);
+    return mPreferences->open(error,placement);
 }
 
 bool LLVKViewerUi::previewUiSound(const std::string& name,std::string& error)
@@ -4367,6 +4784,119 @@ bool LLVKViewerUi::showWhitelist(std::string& error)
     return mWhitelist->open(error);
 }
 
+std::string LLVKViewerUi::helpUrl(const std::string& format,const std::string& topic,const LLSD& substitutions)
+{
+    LLSD values=substitutions;
+    values["TOPIC"]=LLURI::escape(topic.empty() ? "this_is_fallbacktopic" : topic,
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._");
+    auto url=format;
+    LLStringUtil::format(url,values);
+    std::string escaped;
+    for (const char character : url)
+    {
+        if (character==' ') escaped+="%20";
+        else if (character=='\\') escaped+="%5C";
+        else escaped+=character;
+    }
+    return escaped;
+}
+
+bool LLVKViewerUi::helpUsesExternalBrowser(const std::string& url,unsigned behavior)
+{
+    if (behavior==0) return true;
+    if (behavior==1)
+    {
+        LLUriParser parsed(url);
+        parsed.normalize();
+        parsed.extractParts();
+        const auto host=parsed.host();
+        const boost::regex domains("\\b(lindenlab.com|secondlife.com|secondlife.io|secondlifegrid.net|secondlife-status.statuspage.io)$",
+            boost::regex::perl|boost::regex::icase);
+        return !boost::regex_search(host,domains);
+    }
+    const boost::regex mail("^mailto:",boost::regex::perl|boost::regex::icase);
+    return boost::regex_search(url,mail);
+}
+
+void LLVKViewerUi::setHelpServices(HelpContext context,HelpExternal external)
+{
+    mHelpContext=std::move(context); mHelpExternal=std::move(external);
+}
+
+bool LLVKViewerUi::showHelp(const std::string& requested,std::string& error)
+{
+    error.clear();
+    auto topic=requested.empty() ? "this_is_fallbacktopic" : requested;
+    if (topic=="f1_help")
+    {
+        topic=mTree.findHelpTopic(mTree.keyboardFocus()).value_or("this_is_fallbacktopic");
+        if (topic=="this_is_fallbacktopic" && !sessionSnapshot().identity) topic="start";
+    }
+    if (!mHelpContext) { error="Native Help URL context is unavailable"; return false; }
+    const auto values=mHelpContext(error);
+    if (!values || !values->isMap())
+    { if (error.empty()) error="Native Help URL context is not a map"; return false; }
+    const auto format=mTree.setting("HelpURLFormat").value_or(LLSD()).asString();
+    const auto url=helpUrl(format,topic,*values);
+    if (url.empty() || url.find('\0')!=url.npos) { error="Native Help URL is invalid"; return false; }
+    if (boost::regex_search(url,boost::regex("\\[[A-Z][A-Z0-9_]*\\]")))
+    { error="Native Help URL requires unavailable context substitutions"; return false; }
+    if (helpUsesExternalBrowser(url,mTree.setting("PreferredBrowserBehavior").value_or(LLSD(0)).asInteger()))
+    {
+        if (mTree.setting("DisableExternalBrowser").value_or(LLSD(false)).asBoolean()) return true;
+        if (!mHelpExternal) { error="Native external Help browser is unavailable"; return false; }
+        LLSD arguments; arguments["UNTRUSTED_URL"]=url;
+        return queueNotice("WebLaunchExternalTarget",arguments,[this,url](int option,const LLSD&)
+        { if (option==0 && mHelpExternal) mHelpExternal(url,mDialogError); },error);
+    }
+    if (!mGuidebookOpen || !mGuidebookClose || !mBrowserCommand)
+    { error="Native internal Help browser is unavailable"; return false; }
+    mHelpErrorPageUsed=false;
+    if (mHelp && mHelp->visible())
+    {
+        if (!mBrowserCommand(mHelpBrowser,"Navigate",url,error)) return false;
+        mActiveFloater=mHelp.get();
+        return mHelp->open(error);
+    }
+    if (mActiveFloater==mHelp.get()) mActiveFloater=nullptr;
+    mHelp.reset(); mHelpFields.clear(); mHelpBrowser=0; mHelpRetiring=false;
+    auto floater=LLVKFloater::createFile(mTree,*mDialogFactory,mRoot,"floater_help_browser.xml",error);
+    if (!floater) return false;
+    const auto fields=preferenceFields(mTree,floater->id());
+    if (!fields.contains("browser") || !fields.contains("status_text"))
+    { error="Native Help declaration is missing browser or status text"; return false; }
+    const auto browser=fields.at("browser");
+    mTree.setVisible(browser,false);
+    auto placement=mTree.get(mRoot)->params.rect;
+    placement.top-=19;
+    if (!mTree.prepareLayoutStacks(floater->id(),0,error) || !floater->open(error,placement)) return false;
+    if (!mGuidebookOpen(browser,url,error))
+    {
+        mGuidebookClose(browser);
+        return false;
+    }
+    floater->onCloseFocus([this](std::string& problem)
+    {
+        return !sessionSnapshot().identity ? focusLoginFields(problem) : mTree.setKeyboardFocus(0,false,false,problem);
+    });
+    floater->onClose([this,browser]
+    {
+        mTree.setVisible(browser,false);
+        if (mGuidebookClose) mGuidebookClose(browser);
+        if (!mApplicationQuitting)
+        {
+            mTree.updateSetting("HelpFloaterOpen",LLSD(false));
+            mGuidebookChanges["HelpFloaterOpen"]=false;
+        }
+        mHelpRetiring=true;
+    });
+    mHelpFields=fields; mHelpBrowser=browser; mHelpCurrentUrl.clear();
+    mActiveFloater=floater.get(); mHelp=std::move(floater);
+    mTree.updateSetting("HelpFloaterOpen",LLSD(true));
+    mGuidebookChanges["HelpFloaterOpen"]=true;
+    return true;
+}
+
 bool LLVKViewerUi::showMediaBrowser(const std::string& requested,std::string& error,const std::string& target)
 {
     error.clear();
@@ -4450,6 +4980,40 @@ void LLVKViewerUi::webBrowserAction(LLVKWidgetTree::Id browser,const std::string
 
 void LLVKViewerUi::webBrowserEvent(LLVKWidgetTree::Id browser,const std::string& kind,const std::string& text,bool back,bool forward)
 {
+    if (browser==mHelpBrowser && mHelp && mHelp->visible())
+    {
+        if (kind=="Address")
+        {
+            mHelpCurrentUrl=text;
+            if (!text.empty() && text!="about:blank")
+            {
+                const LLURI address(text);
+                const auto simplified=address.scheme()+"://"+address.authority()+address.path();
+                std::erase(mHelpHistory,simplified);
+                mHelpHistory.insert(mHelpHistory.begin(),simplified);
+                if (mHelpHistory.size()>10) mHelpHistory.resize(10);
+            }
+        }
+        else if (kind=="LoadStart" || kind=="LoadEnd")
+        {
+            const auto* panel=mTree.get(mHelp->id());
+            const auto& strings=panel->panel->params.strings;
+            const auto found=strings.find(kind=="LoadStart" ? "loading_text" : "done_text");
+            mTree.setValue(mHelpFields.at("status_text"),LLSD(found==strings.end() ? "" : found->second));
+            mTree.setVisible(browser,true);
+        }
+        else if (kind=="LoadError")
+        {
+            const auto fallback=mTree.setting("GenericErrorPageURL").value_or(LLSD()).asString();
+            if (!fallback.empty() && !mHelpErrorPageUsed)
+            {
+                mHelpErrorPageUsed=true;
+                mBrowserCommand(browser,"Navigate",fallback,mDialogError);
+            }
+        }
+        else if (kind=="Closed") mHelp->close(mDialogError);
+        return;
+    }
     const auto found=mWebDialogs.find(browser);
     if (found==mWebDialogs.end() || !found->second.floater->visible()) return;
     auto& dialog=found->second; const auto& fields=dialog.fields;
@@ -4743,10 +5307,51 @@ bool LLVKViewerUi::showColorPicker(LLVKWidgetTree::Id swatch,bool takeFocus,std:
         if (!mTree.beginColorSelection(swatch,error) ||
             !mTree.setColorPickerRgb(found->second->id(),mTree.get(swatch)->colorSwatch->color,false,error)) return false;
     }
+    const bool opening=!found->second->visible();
     if (!found->second->open(error)) return false;
+    if (opening)
+    {
+        auto parent=source->parent;
+        while (mTree.get(parent) && !mTree.get(parent)->floater) parent=mTree.get(parent)->parent;
+        if (const auto* owner=mTree.get(parent); owner && owner->floater)
+        {
+            found->second->setSnapTarget(parent);
+            auto base=owner->params.rect;
+            const auto expanded=LLVKWidgetTree::Rect{base.left-10,base.bottom-10,base.right+10,base.top+10};
+            for (const auto& [otherSwatch,picker] : mColorPickers)
+            {
+                if (otherSwatch==swatch || !picker->visible()) continue;
+                auto ancestor=mTree.get(otherSwatch) ? mTree.get(otherSwatch)->parent : 0;
+                while (mTree.get(ancestor) && !mTree.get(ancestor)->floater) ancestor=mTree.get(ancestor)->parent;
+                const auto rectangle=mTree.get(picker->id())->params.rect;
+                if (ancestor==parent && rectangle.left<expanded.right && rectangle.right>expanded.left &&
+                    rectangle.bottom<expanded.top && rectangle.top>expanded.bottom)
+                {
+                    base.left=std::min(base.left,rectangle.left); base.right=std::max(base.right,rectangle.right);
+                    base.bottom=std::min(base.bottom,rectangle.bottom); base.top=std::max(base.top,rectangle.top);
+                }
+            }
+            auto rectangle=mTree.get(found->second->id())->params.rect;
+            const auto width=rectangle.right-rectangle.left,height=rectangle.top-rectangle.bottom;
+            const auto root=mTree.get(mRoot)->params.rect;
+            auto leftMargin=std::max(0,base.left),rightMargin=std::max(0,root.right-root.left-base.right);
+            auto bottomMargin=std::max(0,base.bottom),topMargin=std::max(0,root.top-root.bottom-mNoticeMenuHeight-base.top);
+            for (unsigned attempt=0; attempt<5; ++attempt)
+            {
+                int left=0,bottom=0;
+                if (rightMargin>width) { left=base.right; bottom=base.top-height; }
+                else if (leftMargin>width) { left=base.left-width; bottom=base.top-height; }
+                else if (bottomMargin>height) { left=base.left; bottom=base.bottom-height; }
+                else if (topMargin>height) { left=base.left; bottom=base.top; }
+                else { leftMargin+=20; rightMargin+=20; bottomMargin+=20; topMargin+=20; continue; }
+                if (!mTree.setShape(found->second->id(),{left,bottom,left+width,bottom+height},error)) return false;
+                break;
+            }
+        }
+    }
     mActiveFloater=found->second.get();
     const auto& fields=mTree.get(found->second->id())->colorPicker->fields;
-    if (takeFocus) return mTree.requestControlFocus(fields.at("select_btn"),true,error);
+    if (takeFocus || opening) return mTree.requestControlFocus(fields.at("select_btn"),true,error);
     return true;
 }
 
@@ -4761,7 +5366,9 @@ std::vector<LLVKFloater*> LLVKViewerUi::floaters() const
     result.push_back(mDebugSettings.get());
     result.push_back(mColorSettings.get());
     for (const auto& [name,dialog] : mUiTests) result.push_back(dialog.get());
+    for (const auto& [item,dialog] : mTornMenus) result.push_back(dialog.floater.get());
     result.push_back(mGuidebook.get());
+    result.push_back(mHelp.get());
     for (const auto& [browser,dialog] : mWebDialogs) result.push_back(dialog.floater.get());
     result.push_back(mBeamColor.get());
     result.push_back(mBeamShape.get());
@@ -4879,7 +5486,29 @@ bool LLVKViewerUi::floaterPointer(const LLVKWidgetTree::PointerEvent& event,std:
     if (mTree.mouseCapture())
     {
         for (auto* floater : floaters())
-            if (floater && floater->id()==mTree.mouseCapture()) return floater->pointer(event,error);
+            if (floater && floater->id()==mTree.mouseCapture())
+            {
+                const auto before=mTree.get(floater->id())->params.rect;
+                const auto handled=floater->pointer(event,error);
+                const auto after=mTree.get(floater->id())->params.rect;
+                const auto deltaX=after.left-before.left,deltaY=after.bottom-before.bottom;
+                if (deltaX || deltaY)
+                {
+                    floater->setSnapTarget(0);
+                    for (auto& [swatch,picker] : mColorPickers)
+                    {
+                        if (!picker->visible() || picker->snapTarget()!=floater->id()) continue;
+                        auto rectangle=mTree.get(picker->id())->params.rect;
+                        rectangle.left+=deltaX; rectangle.right+=deltaX;
+                        rectangle.bottom+=deltaY; rectangle.top+=deltaY;
+                        if (!mTree.setShape(picker->id(),rectangle,error)) return false;
+                    }
+                }
+                if (before.left!=after.left && before.bottom!=after.bottom)
+                    for (auto& [item,dialog] : mTornMenus)
+                        if (dialog.floater.get()==floater) dialog.view->dismiss();
+                return handled;
+            }
         return false;
     }
     if (event.kind == LLVKWidgetTree::PointerKind::LeftDown)

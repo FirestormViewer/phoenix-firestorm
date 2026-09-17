@@ -4,6 +4,41 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
+	<string name="NativeErrorTitle">Vulkanstorm 原生模式錯誤</string>
+	<string name="NativeErrorCloseViewer">確認此訊息以關閉檢視器。</string>
+	<string name="NativeErrorCopy">複製詳細資料</string>
+	<string name="NativeErrorRetryCleanup">重試清理</string>
+	<string name="NativeErrorRetryLogin">重試登入</string>
+	<string name="NativeAgreementAccept">接受</string>
+	<string name="NativeErrorOutOfMemory">檢視器記憶體不足。重新啟動前請關閉其他應用程式。</string>
+	<string name="NativeErrorMissingFiles">必要的檔案遺失或無法存取。請修復安裝並檢查檔案權限。</string>
+	<string name="NativeErrorAudioFailed">音效服務發生錯誤。重新啟動前請檢查音效裝置與設定。</string>
+	<string name="NativeErrorVoiceFailed">語音裝置服務發生錯誤。重新啟動前請檢查語音設定與所選裝置。</string>
+	<string name="NativeErrorTranslationFailed">翻譯驗證失敗。重新啟動前請檢查網路與代理伺服器設定。</string>
+	<string name="NativeErrorPreviewFailed">材質預覽服務發生錯誤。重新啟動前請檢查快取存取權限與所選圖片。</string>
+	<string name="NativeAgreementReject">拒絕</string>
+	<string name="NativeErrorUnexpected">原生檢視器發生非預期的錯誤。請關閉檢視器，若再次發生，請聯絡支援服務。</string>
+	<string name="NativeErrorDefaultSettings">無法載入必要的預設設定。請先修復安裝，再重新啟動。</string>
+	<string name="NativeErrorSettingsMode">無法載入所選的設定模式。請先檢查已安裝的設定檔，再重新啟動。</string>
+	<string name="NativeErrorUnsupportedArguments">原生啟動不支援一或多個命令列選項。請先移除不支援的選項，再重新啟動。</string>
+	<string name="NativeErrorSettingsRead">無法讀取或套用必要的設定。請先檢查設定檔和存取權限，再重新啟動。</string>
+	<string name="NativeErrorSettingsWrite">無法儲存設定。請先檢查可用磁碟空間和寫入權限，再重新啟動。</string>
+	<string name="NativeErrorCacheUnavailable">無法初始化快取。請先檢查快取位置、存取權限和可用磁碟空間，再重新啟動。</string>
+	<string name="NativeErrorStartupResources">必要的啟動資源無法使用。請先修復安裝，再重新啟動。</string>
+	<string name="NativeErrorWindowUnavailable">原生視窗無法使用或無法完成操作。請先檢查顯示器是否可用及視窗設定，再重新啟動。</string>
+	<string name="NativeErrorRendererUnavailable">原生 Vulkan 繪製引擎無法使用或已停止。請先檢查驅動程式是否支援 Vulkan，再重新啟動。未切換繪製引擎，也未重試。</string>
+	<string name="NativeErrorBrowserUnavailable">內嵌瀏覽器無法啟動或載入頁面。請先檢查安裝和網路設定，再重新啟動。</string>
+	<string name="NativeErrorShutdownFailed">原生模式的關閉程序無法正常完成。請先檢查設定和快取的存取權限，再重新啟動。</string>
+	<string name="NativeErrorOperationFailed">無法完成要求的操作。請關閉此訊息以返回檢視器。未進行重試。</string>
+	<string name="NativeErrorOptionalSettings">無法載入選用設定。檢視器將使用可用的預設值繼續執行。</string>
+	<string name="NativeErrorNetworkUnavailable">無法完成網路要求。請檢查連線。復原需要由管理此操作的元件處理；未進行重試。</string>
+	<string name="NativeErrorTlsRejected">無法驗證安全連線。請檢查系統時鐘和網路設定。未略過憑證驗證。</string>
+	<string name="NativeErrorTransportUnavailable">此組建不提供原生驗證功能。未傳送任何登入要求。</string>
+	<string name="NativeErrorSessionCleanupFailed">無法完成工作階段清理。資源仍由負責的元件持有。請重試清理以完成操作。</string>
+	<string name="NativeErrorAuthenticationFailed">驗證失敗。尚未建立已連線的工作階段。</string>
+	<string name="NativeErrorConnectionFailed">區域連線失敗。復原需要由管理工作階段的元件處理。</string>
+	<string name="NativeErrorSessionTimeout">工作階段要求逾時。復原需要由管理工作階段的元件處理。</string>
+	<string name="NativeErrorSessionFailed">無法完成工作階段操作。復原需要由管理工作階段的元件處理。</string>
 	<string name="SECOND_LIFE">
 		[當前伺服器]
 	</string>

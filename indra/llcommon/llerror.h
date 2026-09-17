@@ -331,7 +331,9 @@ namespace LLError
         // tittle, message and error code to include in error marker file
         typedef std::function<void(const std::string&, const std::string&, S32 error_code)> Handler;
         static void setHandler(const Handler&);
+        static Handler getHandler();
         static void setOutOfMemoryStrings(const std::string& title, const std::string& message);
+        static void getOutOfMemoryStrings(std::string& title, std::string& message);
 
         // When viewer encounters bad alloc or can't access files try warning user about reasons
         static void showOutOfMemory();

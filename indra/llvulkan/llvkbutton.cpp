@@ -247,8 +247,16 @@ std::optional<LLVKWidgetTree::ButtonDraw> LLVKWidgetTree::prepareButton(Id id, c
     Rect imageRect{0,0,width,height};
     if (image && !button.params.scaleImage) imageRect = {0,height-static_cast<std::int32_t>(image->height()),static_cast<std::int32_t>(image->width()),height};
     if (focused && button.params.drawFocusBorder && image)
+    {
+        auto focus=tint(view.focusColor,alpha);
+        for (auto& channel : focus)
+        {
+            if (!std::isfinite(channel)) { error="Native button focus color is nonfinite"; return std::nullopt; }
+            channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+        }
         output.primitives.push_back({{imageRect.left-view.focusWidth,imageRect.bottom-view.focusWidth,imageRect.right+view.focusWidth,imageRect.top+view.focusWidth},
-            tint(view.focusColor,alpha),image,true,false,false});
+            focus,image,true,false,false});
+    }
     float targetGlow = 0.f;
     if (useGlow) targetGlow = button.flashing && button.flashTimer ?
         (button.flashTimer->highlighted || !button.flashTimer->running || button.highlighted ? 1.f : 0.f) : button.params.hoverGlow;
@@ -256,13 +264,25 @@ std::optional<LLVKWidgetTree::ButtonDraw> LLVKWidgetTree::prepareButton(Id id, c
     if (image)
     {
         const float disabledFade = !enabled && button.fadeWhenDisabled ? 0.5f : 1.f;
-        output.primitives.push_back({imageRect,tint(enabled ? button.params.imageColor.get() : button.params.disabledImageColor.get(),alpha*disabledFade),image});
+        auto imageColor=tint(enabled ? button.params.imageColor.get() : button.params.disabledImageColor.get(),alpha*disabledFade);
+        for (auto& channel : imageColor)
+        {
+            if (!std::isfinite(channel)) { error="Native button image color is nonfinite"; return std::nullopt; }
+            channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+        }
+        output.primitives.push_back({imageRect,imageColor,image});
         if (button.glow > 0.01f && glowImage)
         {
             auto glowRect = imageRect;
             if (!button.params.scaleImage)
             { glowRect.right = static_cast<std::int32_t>(glowImage->width()); glowRect.top = glowRect.bottom+static_cast<std::int32_t>(glowImage->height()); }
-            output.primitives.push_back({glowRect,tint(glowColor,button.glow*alpha),glowImage,true,additive,false});
+            auto encodedGlow=tint(glowColor,button.glow*alpha);
+            for (auto& channel : encodedGlow)
+            {
+                if (!std::isfinite(channel)) { error="Native button glow color is nonfinite"; return std::nullopt; }
+                channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+            }
+            output.primitives.push_back({glowRect,encodedGlow,glowImage,true,additive,false});
         }
     }
     else output.primitives.push_back({{0,0,width,height},{1,0,1,alpha},{},false,false,true});
@@ -282,8 +302,14 @@ std::optional<LLVKWidgetTree::ButtonDraw> LLVKWidgetTree::prepareButton(Id id, c
         { left = button.leftPad; textLeft += overlayWidth+button.params.overlayLabelSpace; textWidth -= overlayWidth+button.params.overlayLabelSpace; }
         else if (button.params.overlayAlign == LLVKButton::Align::Right)
         { left = width-button.rightPad-overlayWidth; textRight -= overlayWidth+button.params.overlayLabelSpace; textWidth -= overlayWidth+button.params.overlayLabelSpace; }
+        auto overlayColor=tint(!enabled ? button.params.disabledOverlayColor.get() : currentSelected ? button.params.selectedOverlayColor.get() : button.params.overlayColor.get(),alpha);
+        for (auto& channel : overlayColor)
+        {
+            if (!std::isfinite(channel)) { error="Native button overlay color is nonfinite"; return std::nullopt; }
+            channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+        }
         output.primitives.push_back({{left,centerY-overlayHeight/2,left+overlayWidth,centerY-overlayHeight/2+overlayHeight},
-            tint(!enabled ? button.params.disabledOverlayColor.get() : currentSelected ? button.params.selectedOverlayColor.get() : button.params.overlayColor.get(),alpha),images.overlay});
+            overlayColor,images.overlay});
     }
     output.label = currentSelected ? button.selectedLabel : button.params.label;
     LLWString label(output.label.begin(),output.label.end());

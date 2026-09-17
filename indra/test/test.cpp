@@ -438,6 +438,7 @@ static const apr_getopt_option_t TEST_CL_OPTIONS[] =
     {"list", 'l', 0, "List available test groups."},
     {"verbose", 'v', 0, "Verbose output."},
     {"group", 'g', 1, "Run test group specified by option argument."},
+    {"test", 'n', 1, "Run one positive test number; requires --group."},
     {"output", 'o', 1, "Write output to the named file."},
     {"sourcedir", 's', 1, "Project source file directory from CMake."},
     {"touch", 't', 1, "Touch the given file if all tests succeed"},
@@ -521,6 +522,7 @@ int main(int argc, char **argv)
     bool verbose_mode = false;
     bool wait_at_exit = false;
     std::string test_group;
+    int test_number = 0;
     std::string suite_name;
 
     // LOGTEST overrides default, but can be overridden by --debug.
@@ -549,6 +551,17 @@ int main(int argc, char **argv)
             case 'g':
                 test_group.assign(opt_arg);
                 break;
+            case 'n':
+            {
+                const std::string number(opt_arg);
+                if (number.empty() || number.size()>6 || number.find_first_not_of("0123456789")!=std::string::npos ||
+                    (test_number=std::stoi(number))<=0)
+                {
+                    std::cerr << "--test requires a positive test number" << std::endl;
+                    return 1;
+                }
+                break;
+            }
             case 'h':
                 stream_usage(std::cout, argv[0]);
                 return 0;
@@ -639,7 +652,16 @@ int main(int argc, char **argv)
     // a chained_callback subclass must be linked with previous
     mycallback->link();
 
-    if(test_group.empty())
+    if (test_number && test_group.empty())
+    {
+        std::cerr << "--test requires --group" << std::endl;
+        return 1;
+    }
+    if (test_number)
+    {
+        tut::runner.get().run_test(test_group,test_number);
+    }
+    else if(test_group.empty())
     {
         tut::runner.get().run_tests();
     }

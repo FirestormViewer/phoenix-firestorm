@@ -1,11 +1,46 @@
 #include "llvkwidgetpaint.h"
 #include "llvkmenu.h"
+#include "llvkbrowsersurface.h"
 #include "v3color.h"
 #include "llstring.h"
 #include <algorithm>
 #include <cmath>
 #include <iomanip>
 #include <sstream>
+
+bool LLVKWidgetPaint::appendDropShadow(Id owner,Rect rectangle,Rect clip,LLVKColor::Value inner,float edge,std::string& error)
+{
+    for (const auto channel : inner)
+        if (!std::isfinite(channel)) { error="Nonfinite native shadow color"; return false; }
+    for (auto& channel : inner)
+        channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+    if (commands.size()>65536-10) { error="Native shadow exceeds paint budget"; return false; }
+    auto outer=inner; outer[3]=0;
+    const float left=float(rectangle.left),right=float(rectangle.right)-1;
+    const float bottom=float(rectangle.bottom)+1,top=float(rectangle.top);
+    const std::array<std::array<float,2>,12> positions{{
+        {right,top-edge},{right,bottom},{right+edge,bottom},{right+edge,top-edge},
+        {left+edge,bottom},{left+edge,bottom-edge},{right,bottom-edge},{left,bottom},
+        {left+1,bottom-edge+1},{right+edge-1,bottom-edge+1},{right+edge-1,top-1},{right,top}}};
+    constexpr std::array<std::array<unsigned,3>,10> triangles{{
+        {0,1,2},{0,2,3},{1,4,5},{1,5,6},{4,7,8},
+        {4,8,5},{1,6,9},{1,9,2},{0,3,10},{0,10,11}}};
+    for (const auto& indices : triangles)
+    {
+        Command command;
+        command.owner=owner; command.clip=clip;
+        command.triangle.emplace(); command.triangleColors.emplace();
+        for (std::size_t vertex=0; vertex<indices.size(); ++vertex)
+        {
+            const auto index=indices[vertex];
+            (*command.triangle)[vertex*2]=positions[index][0];
+            (*command.triangle)[vertex*2+1]=positions[index][1];
+            (*command.triangleColors)[vertex]=(index==0 || index==1 || index==4) ? inner : outer;
+        }
+        commands.push_back(std::move(command));
+    }
+    return true;
+}
 
 std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id root, const Input& input, std::string& error)
 {
@@ -22,7 +57,8 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
         const auto screen=tree.screenRect(id,error);
         if (!node || !node->menu || !screen) return false;
         LLVKWidgetPaint menuPaint;
-        if (!node->menu->paint(menuPaint,*rootRect,error,*screen,dropdowns)) return false;
+        const auto menuAlpha=static_cast<float>(tree.setting("FSMenuBackgroundAlpha").value_or(LLSD(1.f)).asReal());
+        if (!node->menu->paint(menuPaint,*rootRect,error,*screen,dropdowns,{},menuAlpha)) return false;
         for (auto& command : menuPaint.commands)
         { command.owner=id; output.commands.push_back(std::move(command)); }
         return true;
@@ -30,10 +66,28 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
     bool paintingPopups = false;
     const auto intersect = [](Rect first,Rect second)
     { return Rect{std::max(first.left,second.left),std::max(first.bottom,second.bottom),std::min(first.right,second.right),std::min(first.top,second.top)}; };
+    const auto& rootInput=input;
+    std::map<Id,Input> floaterInputs;
     const auto visit = [&](const auto& self,Id id,Rect clip) -> bool
     {
         const auto* node = tree.get(id);
         if (!node || !node->params.visible) return true;
+        Id floater=0;
+        if (rootInput.foregroundFloaters)
+            for (auto ancestor=id; tree.get(ancestor); ancestor=tree.get(ancestor)->parent)
+                if (tree.get(ancestor)->floater) { floater=ancestor; break; }
+        if (floater && !floaterInputs.contains(floater))
+        {
+            auto local=rootInput;
+            const bool active=rootInput.activeControlFloaters ? rootInput.activeControlFloaters->contains(floater) :
+                rootInput.foregroundFloaters->contains(floater);
+            const auto opacity=static_cast<float>(tree.setting(active ? "ActiveFloaterTransparency" : "InactiveFloaterTransparency")
+                .value_or(LLSD(active ? 1.f : .95f)).asReal());
+            if (!std::isfinite(opacity)) { error="Nonfinite native floater transparency"; return false; }
+            local.button.transparency=local.editor.transparency=opacity;
+            floaterInputs.emplace(floater,std::move(local));
+        }
+        const auto& input=floater ? floaterInputs.at(floater) : rootInput;
         if (node->containerView && (!node->parent || !tree.get(node->parent)->containerView))
         {
             const auto rectangle=node->params.rect;
@@ -59,13 +113,6 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             node=tree.get(id);
             if (!node) return true;
         }
-        if (node->tabContainer && node->tabContainer->layout)
-        {
-            const auto layout = *node->tabContainer->layout;
-            if (!tree.layoutTabPanels(id,layout,error,input.button.frameDelta)) return false;
-            node = tree.get(id);
-            if (!node) return true;
-        }
         if (node->comboListOwner && !paintingPopups) { popups.push_back(id); return true; }
         if (node->menu)
         {
@@ -86,14 +133,65 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             for (const auto value : {left,right,bottom,top})
                 if (value < INT32_MIN || value > INT32_MAX) { error = "Native paint coordinates overflow"; return false; }
             if (text)
+            {
+                const auto scale=text->displayScale;
+                const auto originX=std::floor(screen->left*scale)/scale;
+                const auto originY=std::floor(screen->bottom*scale)/scale;
                 for (auto& glyph : text->glyphs)
-                { glyph.left += screen->left; glyph.right += screen->left; glyph.bottom += screen->bottom; glyph.top += screen->bottom; }
+                { glyph.left += originX; glyph.right += originX; glyph.bottom += originY; glyph.top += originY; }
+            }
             output.commands.push_back({id,{static_cast<std::int32_t>(left),static_cast<std::int32_t>(bottom),static_cast<std::int32_t>(right),static_cast<std::int32_t>(top)},
                 clip,color,std::move(image),std::move(text),mask,additive,shadow});
             return true;
         };
         const auto width = screen->right-screen->left, height = screen->top-screen->bottom;
+        const auto rootNode=tree.get(root);
+        const auto scale=rootNode && rootNode->control && rootNode->control->params.font ? rootNode->control->params.font->displayScale() : 1.f;
+        const auto pixelRect=[&](float left,float bottom,float right,float top,LLVKColor::Value color)
+        {
+            Command command;
+            command.owner=id; command.clip=clip; command.color=color;
+            left/=scale; bottom/=scale; right/=scale; top/=scale;
+            command.triangle=std::array<float,6>{left,bottom,right,bottom,right,top};
+            output.commands.push_back(command);
+            command.triangle=std::array<float,6>{left,bottom,right,top,left,top};
+            output.commands.push_back(std::move(command));
+        };
+        const auto pixelLine=[&](double startX,double startY,double endX,double endY,LLVKColor::Value color)
+        {
+            const bool vertical=startX==endX;
+            const auto cross=vertical ? startX : startY;
+            const auto thickness=std::max(1.0,std::floor(double(scale)+0.5));
+            const auto column=std::ceil(cross-(static_cast<int>(thickness)%2 ? 0.0 : 0.5))-std::ceil(thickness/2.0);
+            const auto fraction=cross-std::floor(cross);
+            const auto radius=std::min(fraction,1.0-fraction);
+            const auto start=vertical ? startY : startX,end=vertical ? endY : endX;
+            const auto endpoint=[&](double coordinate)
+            {
+                if (fraction==0.0) return vertical ? std::floor(coordinate+0.5) : std::ceil(coordinate-0.5);
+                return start<end ? std::floor(coordinate-0.5-radius)+1.0 : std::ceil(coordinate-0.5+radius);
+            };
+            const auto low=endpoint(std::min(start,end)),high=endpoint(std::max(start,end));
+            if (vertical) pixelRect(static_cast<float>(column),static_cast<float>(low),static_cast<float>(column+thickness),static_cast<float>(high),color);
+            else pixelRect(static_cast<float>(low),static_cast<float>(column),static_cast<float>(high),static_cast<float>(column+thickness),color);
+        };
+        const auto alertShadow=[&](int inset,float alpha,bool floater=false) -> bool
+        {
+            if (!node->panel) return true;
+            const auto color=floater ? input.floaterShadow : node->panel->params.alertShadowColor;
+            if (!color) return true;
+            auto inner=color->get();
+            const bool foreground=!input.foregroundFloaters || input.foregroundFloaters->contains(id);
+            const float edge=floater && !foreground ? 2.f : 6.f;
+            if (floater && !foreground) alpha*=0.5f;
+            inner[3]*=alpha;
+            return output.appendDropShadow(id,{screen->left+inset,screen->bottom+inset,
+                screen->right-inset,screen->top-inset},clip,inner,edge,error);
+        };
         bool searchHighlighted=false;
+        auto searchBackground=input.searchBackground.get();
+        const auto searchFont=input.searchFont.get();
+        for (auto& channel : searchBackground) channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
         for (auto ancestor=id; ancestor && tree.get(ancestor); ancestor=tree.get(ancestor)->parent)
         {
             if (tree.get(ancestor)->searchHighlighted) { searchHighlighted=true; break; }
@@ -374,13 +472,35 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                     }
             }
             auto color=swatch.color; color[3]*=alpha;
+            for (auto& channel : color)
+            {
+                if (!std::isfinite(channel)) { error="Native swatch color is nonfinite"; return false; }
+                channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+            }
             if (!append(interior,color)) return false;
             if (swatch.color[3]<1.f && swatch.params->alphaBackground && !append(interior,color,swatch.params->alphaBackground)) return false;
-            auto border=swatch.params->borderColor.get(); border[3]*=alpha;
+            auto border=swatch.params->borderColor.get();
+            for (auto& channel : border)
+            {
+                if (!std::isfinite(channel)) { error="Native swatch border color is nonfinite"; return false; }
+                channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+            }
             const auto bottom=swatch.params->labelHeight;
-            for (const Rect edge : {Rect{0,bottom,width,bottom+1},Rect{0,height-1,width,height},
-                Rect{0,bottom+1,1,height-1},Rect{width-1,bottom+1,width,height-1}})
-                if (!append(edge,border)) return false;
+            if (scale==1.f)
+            {
+                for (const Rect edge : {Rect{0,bottom-1,width-1,bottom},Rect{0,height-2,width-1,height-1},
+                    Rect{-1,bottom,0,height-1},Rect{width-2,bottom,width-1,height-1}})
+                    if (!append(edge,border)) return false;
+            }
+            else
+            {
+                const auto left=screen->left*scale,right=(screen->right-1)*scale;
+                const auto low=(screen->bottom+bottom)*scale,high=(screen->top-1)*scale;
+                pixelLine(left,high,left,low,border);
+                pixelLine(left,low,right,low,border);
+                pixelLine(right,low,right,high,border);
+                pixelLine(right,high,left,high,border);
+            }
         }
         if (node->slider)
         {
@@ -446,13 +566,21 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
         }
         if (node->panel && node->panel->params.backgroundVisible)
         {
+            if (node->floater && node->floater->dropShadow && !alertShadow(1,input.button.transparency,true)) return false;
             const auto& panel = node->panel->params;
-            const auto image = panel.backgroundOpaque ? panel.opaqueImage : panel.transparentImage;
-            auto color = image ? (panel.backgroundOpaque ? panel.opaqueImageOverlay.get() : panel.transparentImageOverlay.get()) :
-                (panel.backgroundOpaque ? panel.opaqueColor.get() : panel.transparentColor.get());
+            const bool opaque=node->floater && input.foregroundFloaters ? input.foregroundFloaters->contains(id) : panel.backgroundOpaque;
+            const auto image = opaque ? panel.opaqueImage : panel.transparentImage;
+            auto color = image ? (opaque ? panel.opaqueImageOverlay.get() : panel.transparentImageOverlay.get()) :
+                (opaque ? panel.opaqueColor.get() : panel.transparentColor.get());
             color[3] *= input.button.transparency;
+            for (auto& channel : color)
+            {
+                if (!std::isfinite(channel)) { error="Native panel color is nonfinite"; return false; }
+                channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+            }
             if (!append({0,0,width,height},color,image)) return false;
         }
+        if (!alertShadow(0,1.f)) return false;
         if (node->overlapPanel)
         {
             const auto state=*node->overlapPanel;
@@ -539,7 +667,8 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             if (browser == input.browsers.end() || !browser->second) output.pendingBrowsers.push_back(id);
             else
             {
-                if (!append({0,0,width,height},{1,1,1,input.button.drawAlpha},browser->second)) return false;
+                const auto display=LLVKBrowserSurface::displayRect(width,height,browser->second->width(),browser->second->height());
+                if (!append({display.left,display.bottom,display.right,display.top},{1,1,1,input.button.drawAlpha},browser->second)) return false;
                 output.commands.back().streamingImage = true;
                 const auto epoch = input.browserEpochs.find(id);
                 if (epoch != input.browserEpochs.end()) output.commands.back().imageEpoch = epoch->second;
@@ -566,7 +695,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             if (!draw->label.empty())
             {
                 auto line = draw->font->layoutLine(draw->label,0,draw->label.size(),draw->text,error);
-                if (!line || !append({},searchHighlighted ? input.searchFont.get() : draw->labelColor,{},std::move(line),false,false,draw->shadow)) return false;
+                if (!line || !append({},searchHighlighted ? searchFont : draw->labelColor,{},std::move(line),false,false,draw->shadow)) return false;
             }
         }
         else if (node->lineEditor)
@@ -588,33 +717,78 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                 background[3]*=input.button.drawAlpha;
                 if (!append({0,0,width,height},background)) return false;
             }
-            if (searchHighlighted && !append({0,0,width,height},input.searchBackground.get())) return false;
             const auto* document = tree.get(text.document);
             if (!document || !text.layout) { error = "Native text paint document is missing"; return false; }
-            clip = intersect(clip,*screen);
+            const auto visibleClip = intersect(clip,*screen);
             auto color = text.readOnly ? text.params.readOnlyColor.get() : text.params.textColor.get();
             color[3] *= input.button.drawAlpha;
             std::optional<std::size_t> lastVisible;
+            std::optional<Rect> visibleLines;
             for (std::size_t index=0; index<text.layout->lines.size(); ++index)
             {
                 const auto& line=text.layout->lines[index];
                 const auto bottom=line.bottom+document->params.rect.bottom+screen->bottom;
                 const auto top=line.top+document->params.rect.bottom+screen->bottom;
-                if (text.params.clipPartial ? bottom>=clip.bottom && top<=clip.top : bottom<clip.top && top>clip.bottom) lastVisible=index;
+                if (text.params.clipPartial ? bottom>=visibleClip.bottom && top<=visibleClip.top : bottom<visibleClip.top && top>visibleClip.bottom)
+                {
+                    lastVisible=index;
+                    const Rect lineRect{screen->left+document->params.rect.left+line.left,bottom,
+                        screen->left+document->params.rect.left+line.right,top};
+                    if (!visibleLines) visibleLines=lineRect;
+                    else visibleLines=Rect{std::min(visibleLines->left,lineRect.left),std::min(visibleLines->bottom,bottom),
+                        std::max(visibleLines->right,lineRect.right),std::max(visibleLines->top,top)};
+                }
+            }
+            if (visibleLines)
+            {
+                if (searchHighlighted && !append({visibleLines->left-screen->left,visibleLines->bottom-screen->bottom,
+                    visibleLines->right-screen->left,visibleLines->top-screen->bottom},searchBackground)) return false;
+                if (visibleLines->top-screen->bottom>2) visibleLines->top-=2;
+                ++visibleLines->right; ++visibleLines->top;
+                clip=intersect(clip,*visibleLines);
             }
             for (std::size_t index=0; index<text.layout->lines.size(); ++index)
             {
                 const auto& sourceLine=text.layout->lines[index];
                 const auto bottom=sourceLine.bottom+document->params.rect.bottom+screen->bottom;
                 const auto top=sourceLine.top+document->params.rect.bottom+screen->bottom;
-                if (text.params.clipPartial ? bottom<clip.bottom || top>clip.top : bottom>=clip.top || top<=clip.bottom) continue;
-                const auto begin = std::min(sourceLine.begin,text.text.size()), end = std::min(sourceLine.end,text.text.size());
+                if (text.params.clipPartial ? bottom<visibleClip.bottom || top>visibleClip.top : bottom>=visibleClip.top || top<=visibleClip.bottom) continue;
+                const auto lineEnd=std::min(sourceLine.end,text.text.size());
+                float runLeft=float(sourceLine.left+document->params.rect.left);
+                for (auto begin=std::min(sourceLine.begin,text.text.size()); begin<lineEnd; )
+                {
+                const auto icon=text.icons.lower_bound(begin);
+                if (icon!=text.icons.end() && icon->first==begin)
+                {
+                    const auto imageWidth=static_cast<int>(icon->second->width()),imageHeight=static_cast<int>(icon->second->height());
+                    const auto imageBottom=static_cast<int>((sourceLine.top+sourceLine.bottom)*0.5f)+document->params.rect.bottom-imageHeight/2;
+                    if (!append({static_cast<int>(runLeft),imageBottom,static_cast<int>(runLeft)+imageWidth,imageBottom+imageHeight},
+                        {1,1,1,input.button.drawAlpha},icon->second)) return false;
+                    runLeft+=imageWidth+3;
+                    ++begin;
+                    continue;
+                }
+                auto end=icon==text.icons.end() ? lineEnd : std::min(lineEnd,icon->first);
+                for (const auto& link : text.links)
+                    for (const auto boundary : {link.begin,link.end})
+                        if (boundary>begin) end=std::min(end,boundary);
                 auto count = end-begin;
                 if (count && text.text[begin+count-1] == U'\n') --count;
                 LLVKFont::LineOptions options;
-                options.x = float(sourceLine.left+document->params.rect.left);
+                options.x = runLeft;
                 options.y = float(sourceLine.bottom+document->params.rect.bottom);
                 options.vertical = LLVKFont::VerticalAlign::Bottom;
+                options.maxPixels=std::max(0,static_cast<int>(document->params.rect.right-runLeft));
+                if (text.params.vertical==LLVKFont::VerticalAlign::Top)
+                {
+                    options.y=float(sourceLine.top+document->params.rect.bottom);
+                    options.vertical=LLVKFont::VerticalAlign::Top;
+                }
+                else if (text.params.vertical==LLVKFont::VerticalAlign::Center)
+                {
+                    options.y=(sourceLine.top+sourceLine.bottom)*0.5f+document->params.rect.bottom;
+                    options.vertical=LLVKFont::VerticalAlign::Center;
+                }
                 if (text.params.useEllipses)
                 {
                     options.ellipses=true;
@@ -637,8 +811,12 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                 }
                 auto line = node->control->params.font->layoutLine(text.text,begin,count,options,error);
                 if (!line) return false;
+                const auto measured=node->control->params.font->measureRun(text.text,begin,count,1.f,true,text.params.layout.tabularNumbers,error);
+                if (!measured) return false;
+                if (text.links.empty()) runLeft+=measured->width;
+                else runLeft=line->endPixelX;
                 if (text.links.empty() && !selection)
-                { if (!append({},color,{},std::move(line))) return false; }
+                { if (!append({},color,{},std::move(line),false,false,text.params.softShadow)) return false; }
                 else
                 {
                     for (std::size_t first = 0; first < line->glyphs.size(); )
@@ -661,7 +839,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                         if (link)
                         { foreground = link->query ? text.params.queryColor.get() : text.params.linkColor.get(); foreground[3] *= input.button.drawAlpha; }
                         if (highlighted) { foreground = text.params.selectionColor.get(); foreground[3] *= input.button.drawAlpha; }
-                        if (!append({},foreground,{},std::move(part))) return false;
+                        if (!append({},foreground,{},std::move(part),false,false,text.params.softShadow)) return false;
                         const auto hoveredLink=text.params.skipLinkUnderline ? tree.plainTextLinkAt(id,
                             input.button.mouseX-screen->left,input.button.mouseY-screen->bottom,error) : std::optional<std::size_t>();
                         if (!error.empty()) return false;
@@ -669,13 +847,27 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                         {
                             const auto& initial = line->glyphs[first];
                             const auto& final = line->glyphs[last-1];
-                            const auto left = static_cast<std::int32_t>(std::floor(initial.left-initial.glyph->raster.bearingX+0.5f));
-                            const auto right = static_cast<std::int32_t>(std::floor(final.left-final.glyph->raster.bearingX+final.glyph->raster.advanceX+0.5f));
-                            const auto bottom = static_cast<std::int32_t>(std::floor(line->baselinePixelY-std::floor(node->control->params.font->metrics().descender)));
-                            if (right > left && !append({left,bottom,right,bottom+1},foreground)) return false;
+                            if (scale==1.f)
+                            {
+                                const auto left = static_cast<std::int32_t>(std::floor(initial.left-initial.glyph->raster.bearingX+0.5f));
+                                const auto right = static_cast<std::int32_t>(std::floor(final.left-final.glyph->raster.bearingX+final.glyph->raster.advanceX+0.5f));
+                                const auto bottom = static_cast<std::int32_t>(std::floor(line->baselinePixelY-std::floor(node->control->params.font->metrics().descender)));
+                                if (right > left && !append({left,bottom-1,right,bottom},foreground)) return false;
+                            }
+                            else
+                            {
+                                const auto originX=std::floor(screen->left*scale),originY=std::floor(screen->bottom*scale);
+                                const auto left=originX+initial.left*scale-initial.glyph->raster.bearingX;
+                                const auto right=originX+(last==line->glyphs.size() ? line->endPixelX*scale :
+                                    final.left*scale-final.glyph->raster.bearingX+final.glyph->raster.advanceX);
+                                const auto bottom=originY+line->baselinePixelY*scale-std::floor(node->control->params.font->metrics().descender*scale);
+                                pixelLine(left,bottom,right,bottom,foreground);
+                            }
                         }
                         first = last;
                     }
+                }
+                begin=end;
                 }
             }
             if (text.params.selectable && !text.readOnly && tree.keyboardFocus()==id && input.editor.applicationFocused &&
@@ -722,7 +914,26 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                         top = bottom = input.button.focusColor;
                         thickness = static_cast<int>(std::floor(1.f+tree.focusFlashAmount()+0.5f));
                     }
-                    if (!upper(0,thickness,top) || !lower(0,thickness,bottom)) return false;
+                    if (thickness==1)
+                    {
+                        for (auto* color : {&top,&bottom})
+                            for (auto& channel : *color) channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+                        if (scale==1.f)
+                        {
+                            if (!append({-1,0,0,height},top) || !append({0,height-1,width,height},top) ||
+                                !append({width-1,0,width,height},bottom) || !append({0,-1,width,0},bottom)) return false;
+                        }
+                        else
+                        {
+                            const auto left=screen->left*scale,right=screen->right*scale;
+                            const auto low=screen->bottom*scale,high=screen->top*scale;
+                            pixelLine(left,low,left,high,top);
+                            pixelLine(left,high,right,high,top);
+                            pixelLine(right,high,right,low,bottom);
+                            pixelLine(left,low,right,low,bottom);
+                        }
+                    }
+                    else if (!upper(0,thickness,top) || !lower(0,thickness,bottom)) return false;
                 }
                 else
                 {
@@ -754,7 +965,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
             if (!current || current->parent != id) continue;
             auto childClip = clip;
             if (node->tabContainer)
-                childClip=intersect(childClip,{screen->left+3,screen->bottom,screen->right-3,screen->top});
+                childClip=intersect(childClip,{screen->left+3,screen->bottom,screen->right-2,screen->top+1});
             if (clipPanels && current->layoutPanel)
             {
                 auto visible = tree.screenRect(*child,error);
@@ -762,40 +973,82 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                 const auto amount = current->layoutPanel->visibleAmount;
                 if (vertical) visible->bottom = visible->top-static_cast<std::int32_t>(std::floor((visible->top-visible->bottom)*amount+0.5f));
                 else visible->right = visible->left+static_cast<std::int32_t>(std::floor((visible->right-visible->left)*amount+0.5f));
+                if (visible->left>=visible->right || visible->bottom>=visible->top) continue;
+                if (visible->right<clip.right) ++visible->right;
+                if (visible->top<clip.top) ++visible->top;
                 childClip = intersect(childClip,*visible);
             }
             if (childClip.left < childClip.right && childClip.bottom < childClip.top && !self(self,*child,childClip)) return false;
         }
         node=tree.get(id);
+        if (node && node->tabContainer && node->tabContainer->layout)
+        {
+            const auto layout=*node->tabContainer->layout;
+            if (!tree.layoutTabPanels(id,layout,error,input.button.frameDelta)) return false;
+            node=tree.get(id);
+        }
+        if (node && !alertShadow(1,input.button.transparency)) return false;
         if (node && node->colorPicker)
         {
             const auto& picker=*node->colorPicker;
             const auto alpha=input.button.drawAlpha;
-            if (!append({140,100,396,356},{1,1,1,alpha},picker.hueImage)) return false;
-            const auto outline=[&](Rect rect,LLVKColor::Value color)
+            const auto pickerFill=[&](Rect rectangle,LLVKColor::Value color)
             {
-                return append({rect.left,rect.bottom,rect.right,rect.bottom+1},color) &&
-                    append({rect.left,rect.top-1,rect.right,rect.top},color) &&
-                    append({rect.left,rect.bottom+1,rect.left+1,rect.top-1},color) &&
-                    append({rect.right-1,rect.bottom+1,rect.right,rect.top-1},color);
+                for (auto& channel : color)
+                {
+                    if (!std::isfinite(channel)) { error="Native picker color is nonfinite"; return false; }
+                    channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+                }
+                return append(rectangle,color);
+            };
+            if (!append({140,100,396,356},{1,1,1,alpha},picker.hueImage)) return false;
+            const auto outline=[&](Rect rect,LLVKColor::Value color,bool inverted=false)
+            {
+                const auto low=rect.bottom-(inverted ? 1 : 0),high=rect.top-(inverted ? 0 : 1);
+                if (scale!=1.f)
+                {
+                    for (auto& channel : color) channel=static_cast<std::uint8_t>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
+                    const auto left=(screen->left+rect.left)*scale,right=(screen->left+rect.right-1)*scale;
+                    const auto start=(screen->bottom+(inverted ? low : high))*scale;
+                    const auto end=(screen->bottom+(inverted ? high : low))*scale;
+                    pixelLine(left,start,left,end,color);
+                    pixelLine(left,end,right,end,color);
+                    pixelLine(right,end,right,start,color);
+                    pixelLine(right,start,left,start,color);
+                    return true;
+                }
+                return pickerFill({rect.left,low-1,rect.right-1,low},color) &&
+                    pickerFill({rect.left,high-1,rect.right-1,high},color) &&
+                    pickerFill({rect.left-1,low,rect.left,high},color) &&
+                    pickerFill({rect.right-2,low,rect.right-1,high},color);
             };
             const auto hueX=140+static_cast<int>(256.f*picker.hsl[0]);
             const auto saturationY=100+static_cast<int>(256.f*picker.hsl[1]);
-            if (!append({hueX-8,saturationY,hueX+8,saturationY+1},{0,0,0,1}) ||
-                !append({hueX,saturationY-8,hueX+1,saturationY+8},{0,0,0,1}) ||
-                !outline({140,100,397,356},{0,0,0,alpha})) return false;
+            if (scale==1.f)
+            {
+                if (!append({hueX-8,saturationY-1,hueX+8,saturationY},{0,0,0,1}) ||
+                    !append({hueX-1,saturationY-8,hueX,saturationY+8},{0,0,0,1})) return false;
+            }
+            else
+            {
+                pixelLine((screen->left+hueX-8)*scale,(screen->bottom+saturationY)*scale,
+                    (screen->left+hueX+8)*scale,(screen->bottom+saturationY)*scale,{0,0,0,1});
+                pixelLine((screen->left+hueX)*scale,(screen->bottom+saturationY-8)*scale,
+                    (screen->left+hueX)*scale,(screen->bottom+saturationY+8)*scale,{0,0,0,1});
+            }
+            if (!outline({140,100,397,356},{0,0,0,alpha},true)) return false;
             for (int row=0; row<256; ++row)
             {
                 LLColor3 color; color.setHSL(picker.hsl[0],picker.hsl[1],float(row)/256.f);
-                if (!append({412,99+row,428,100+row},{color.mV[0],color.mV[1],color.mV[2],alpha})) return false;
+                if (!pickerFill({412,99+row,428,100+row},{color.mV[0],color.mV[1],color.mV[2],alpha})) return false;
             }
             const auto markerY=100+static_cast<int>(256.f*picker.hsl[2]);
-            if (!append({428,markerY-6,434,markerY+6},{0.75f,0.75f,0.75f,1})) return false;
+            if (!pickerFill({428,markerY-6,434,markerY+6},{0.75f,0.75f,0.75f,1})) return false;
             output.commands.back().triangle=std::array<float,6>{float(screen->left+428),float(screen->bottom+markerY),
                 float(screen->left+434),float(screen->bottom+markerY-6),float(screen->left+434),float(screen->bottom+markerY+6)};
-            if (!outline({412,100,429,356},{0,0,0,1}) ||
-                !append({12,130,128,190},{picker.rgb[0],picker.rgb[1],picker.rgb[2],alpha}) ||
-                !outline({12,130,129,190},{0,0,0,1})) return false;
+            if (!outline({412,100,429,356},{0,0,0,1},true) ||
+                !pickerFill({12,130,128,190},{picker.rgb[0],picker.rgb[1],picker.rgb[2],alpha}) ||
+                !outline({12,130,129,190},{0,0,0,1},true)) return false;
             if (picker.paletteReady)
                 for (int index=0; index<32; ++index)
                 {
@@ -803,7 +1056,7 @@ std::optional<LLVKWidgetPaint> LLVKWidgetPaint::prepare(LLVKWidgetTree& tree, Id
                     const auto left=11+418*column/16, right=11+418*(column+1)/16;
                     const auto top=92-40*row/2, bottom=92-40*(row+1)/2;
                     auto color=picker.palette[index]; color[3]*=alpha;
-                    if (!append({left+2,bottom+2,right-2,top-2},color) || !outline({left+1,bottom+1,right-1,top-1},{0,0,0,1})) return false;
+                    if (!pickerFill({left+2,bottom+2,right-2,top-2},color) || !outline({left+1,bottom+1,right-1,top-1},{0,0,0,1})) return false;
                 }
         }
         return true;

@@ -5,6 +5,155 @@ This is a continuation checkpoint, not a completion or parity claim.
 
 ## Current checkpoint and evidence
 
+### Existing-service reporting (2026-09-13)
+
+The user accepted finishing native reporting for existing services, then requiring
+reporting as each transport/authenticated service is integrated. See
+[the accepted reporting scope](native_error_messaging.md) for NV-00 contracts and
+the distinction from complete GL notification/crash-service parity.
+
+- Independent OS fallback now uses retained selected-skin translations with strict
+  Unicode handling; unavailable/invalid catalogs retain English fallback.
+- Scoped native fatal logging and missing-file/OOM warning hooks produce safe
+  records and a fatal-state signal. Normal window work stops after a fatal warning.
+  Warning callbacks are synchronized with retirement; previous shared handler and
+  OOM strings are restored. No GL visual implementation or callback is reused.
+- Existing runtime audio/voice/translation/preview failures have distinct stable
+  causes. Six new messages are present in all 13 catalogs. Local notices are bounded
+  and queued responses run once. Existing ignore preferences remain persistent;
+  the 29 admitted local alert templates do not request persistence or expiry.
+- Configured Widget209/209, Window7/7 plus error/cold-cache checks, standalone
+  OS-dialog checks, shared llerror18/18 and Native Viewer Link Validation passed.
+  No full viewer, credentials,
+  microphone or operator-profile tests were run.
+
+Live transport/authentication reporting remains with Phase 2; authenticated
+notifications remain with their Phase 3 services. Exact UI parity, crash submission
+and exhaustive legacy producer-detail classification are not established here.
+
+### Production lifecycle follow-up (2026-09-13)
+
+Supersedes the cache-only and no-agreement-consumer limitations in the historical
+integration checkpoint below. See [session integration](native_session_owner.md)
+for source contracts, ownership order and the reproduced recovery stall.
+
+- Existing window services are now inside the adopted native application owner:
+  browser views, audio, voice, joystick, translation verification, pickers and preview
+  producers. Their callbacks detach before retirement; preview producers retire
+  before startup's cache. Failed cleanup retains its dependencies and requires the
+  exact-tag Retry Cleanup action. The presentation host remains alive until then.
+- Resolved the observed nonresponsive component test. Retired browser consumers
+  were still visible without frames, preventing any recovery frame from publishing.
+  Hiding them during detach fixes that dependency. Modal buttons now preserve their
+  action names, allowing the real cleanup retry control to execute.
+- Agreements now publish bounded exact text with ID/revision and request identity.
+  A read-only scrolling native modal provides explicit Accept/Decline, with Decline
+  as default. Superseded callbacks cannot accept or reject a later request. Both
+  actions are present in all 13 shipped catalogs; their XML checks passed.
+- Configured owner checks, Widget209/209, Window7/7 with error/cold-cache regression,
+  and native viewer link passed. The live window fixture observes three recovery
+  frames without automatic retry, activates Retry Cleanup and verifies zero retained
+  services and destroyed HWND. No component test or debugger is left running.
+
+Live transport/authentication, server agreement retrieval and measured exact UI
+parity remain separate unverified gates. No full viewer, real profile, credentials
+or microphone run, commit, push or merge was performed. The earlier 382-check
+source-worktree owner result predates the agreement payload extension; current
+claims use the configured main owner and UI regressions, not that old count.
+
+### Main integration follow-up (2026-09-13)
+
+The user authorized integration in main `native-error-messaging` without commits
+or branch merging. This supersedes the integration-open statements in the earlier
+parallel-track checkpoint below; its historical test evidence is retained.
+
+- Imported the tested `LLVKSessionOwner` implementation unchanged from
+  `worktrees/native-session-owner`. The main copy passed the source worktree's
+  382 deterministic checks with MSVC C++20 `/W4 /WX`. A main-tree standalone
+  `INTEGRATION_TEST_llvksessionowner` target also passes its adoption, cancellation,
+  stale-action, reverse-retirement and explicit-cleanup tests.
+- Startup now adopts its actual texture cache via `LLVKApplicationCache` before
+  acquisition and lends that owner to the window/UI. Preview producers detach
+  before owner shutdown. Pending cleanup polls only when the owner returns Wait;
+  failed cleanup requires a tagged UI retry. The cache service retains the native
+  shutdown-status presenter through retirement. Fatal teardown failure retains the
+  cache owner until process exit; that containment is not successful cleanup.
+- Native error notices use the existing modal/widgets and selected-skin catalogs,
+  with close, safe diagnostic copy, bounded error admission and deduplication.
+  English and German contain 27 native-error keys; other locales currently fall
+  back to English for these new keys. Login observes the real owner and reports
+  unavailable authentication, never a fabricated connection. Retry Login,
+  Retry Cleanup and Cancel capture exact owner tags. Generic legacy errors remain
+  close-only because their producers do not carry recovery identities.
+- Final isolated MSVC compilation passed for the touched startup, window, dialog,
+  UI-construction, error, owner and test sources using configured project include
+  paths/definitions, `/O2 /WX`. Isolated widget and window fixture links passed.
+  Widget tests **208/209** passed for localization, modal delay/focus, deduplication,
+  safe copy/copy failure, unavailable/installed transport distinction and stale
+  recovery callbacks. Window test **7** passed for real cache adoption, queued-write
+  drain, failed partial acquisition and shared status-presenter retirement.
+  The expanded standalone error/Win32 fallback suite also passed; its recursive
+  presenter negative test deliberately prints the fixed unavailable-presentation
+  diagnostic. No test above authenticates, starts the full viewer or captures audio.
+
+Validation limitation: these are isolated compiles/links and exact-test runs, not
+a refreshed configured viewer build. A full isolated widget run initially hit
+`0xC00000FD` (stack overflow); after matching fixture optimization it passed 1-49
+and hit the same status at existing test 50. The final focused runs used matched
+optimization for all replacement objects. The full-suite failure was not diagnosed
+or hidden by modifying that test. Main must run the configured Widget/Window and
+viewer-link gates for the combined changes. Earlier 7/7 window and viewer-link
+evidence below predates this integration. GPU context test8 remains separately
+owned by main and was not run or edited here.
+
+Still open: authentication/region transport, full service adoption beyond the
+cache, real producer-specific failures, network retry/backoff policy, localized
+OS fallback, remaining locales, full startup fault injection, runtime shutdown and
+measured exact UI/effects parity. Existing native modal scrolling, shadows and
+keyboard/nesting behavior are not closed by these component tests. See
+[session integration](native_session_owner.md) and the dated integration section in
+[error messaging](native_error_messaging.md) for contracts, exact files and limits.
+
+No real profile/credentials/microphone, full viewer, GPU-owned source, commits,
+pushes or merges were used. Source worktree files and existing dirty main changes
+were preserved. Isolated helper scripts, runner and compiler outputs are only in
+the ignored `worktrees/native-session-owner/build-vc-session-owner` directory.
+
+### Parallel tracks started (2026-09-13)
+
+Following the user's parallel-work directive, both tracks start from `485967401a`
+(the subsequent upstream merge on master). Work is uncommitted and unpushed:
+
+- Main checkout, `native-error-messaging`: structured errors, safe catalog/diagnostic
+  formatting, bounded generation-scoped duplicate handling, independent Win32 fallback
+  and production startup/window failure boundaries. See
+  [native error messaging](native_error_messaging.md) for contracts and limitations.
+  Standalone MSVC/real OS-dialog tests, configured error target, Window7/7 plus cold
+  startup and viewer link passed. GPU context test8 was intermittent in a broader
+  build; it remains unresolved and is not hidden by the passing window evidence.
+- Isolated local worktree `worktrees/native-session-owner`, branch
+  `native-session-owner`: independent LLVKSessionOwner, not legacy LLVKSession.
+  Seven states, request/generation/region tags, exact agreement identity, bounded
+  thread-safe reply ingress, reverse resource retirement with retained failed cleanup,
+  and tagged Cancel/RetryCleanup commands are implemented. Standalone MSVC C++20
+  /W4 /WX validation passed 382 deterministic checks. Its local contract report is
+  `doc/vulkan/native_session_owner.md` in that worktree, not yet in this branch.
+  Production startup/window adoption, error adapter and session UI remain open.
+
+The tracks deliberately do not share a partially defined header yet. The session
+owner exposes typed status/action plus generation; a later integration adapter must
+map those statuses to stable error codes and execute recovery only through tagged
+owner commands. Error presentation currently acknowledges only; it does not invent
+Retry/Cancel or authentication. Services-ready, region-connected and STATE_STARTED
+remain different conditions. Neither complete error-roadmap acceptance nor the
+Phase 1 production integration gate is claimed by this checkpoint.
+
+No full viewer/profile launch, authentication, microphone capture, branch merge,
+commit or push was performed for these tracks. Keep builds/worktree paths explicit;
+parallel agents can change the persistent terminal cwd even with isolated source trees.
+
+### Merged foundation
+
 Merged baseline: `master` at `1b68d3afa1`, containing implementation checkpoint
 `a9e9ead2bd` and documentation checkpoint `7e2aac6c6c` from
 [PR #43](https://github.com/anne-skydancer/vulkanstorm/pull/43). The local

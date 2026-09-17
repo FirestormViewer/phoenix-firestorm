@@ -2,6 +2,32 @@
 
 #include <cmath>
 
+std::optional<std::string> LLVKWidgetTree::findHelpTopic(Id id) const
+{
+    const auto* origin=get(id);
+    if (!origin || !origin->control) return std::nullopt;
+    std::vector<Id> descendants=origin->children;
+    for (std::size_t index=0;index<descendants.size();++index)
+        if (const auto* child=get(descendants[index]))
+            descendants.insert(descendants.end(),child->children.begin(),child->children.end());
+    for (const auto* owner=origin;owner;owner=get(owner->parent))
+    {
+        if (!owner->panel) continue;
+        for (const auto childId : descendants)
+            if (const auto* child=get(childId); child && child->panel && visibleInChain(childId) && !child->panel->params.helpTopic.empty())
+                return child->panel->params.helpTopic;
+        for (const auto childId : descendants)
+        {
+            const auto* child=get(childId);
+            if (!child || !child->tabContainer || !child->params.visible) continue;
+            const auto* selected=get(child->tabContainer->selected);
+            if (selected && selected->panel && !selected->panel->params.helpTopic.empty()) return selected->panel->params.helpTopic;
+        }
+        if (!owner->panel->params.helpTopic.empty()) return owner->panel->params.helpTopic;
+    }
+    return std::nullopt;
+}
+
 bool LLVKWidgetTree::moveTab(Id id, bool forward, std::string& error)
 {
     error.clear();
@@ -73,7 +99,7 @@ bool LLVKWidgetTree::layoutTopTabs(Id container, const Node::TabContainer::Layou
     return layoutTabPanels(container,top,error);
 }
 
-bool LLVKWidgetTree::layoutTabPanels(Id container, const Node::TabContainer::Layout& layout, std::string& error,float frameDelta)
+bool LLVKWidgetTree::layoutTabPanels(Id container, const Node::TabContainer::Layout& layout, std::string& error,float frameDelta,bool positionButtons)
 {
     error.clear();
     const auto* owner = get(container);
@@ -121,7 +147,7 @@ bool LLVKWidgetTree::layoutTabPanels(Id container, const Node::TabContainer::Lay
         const auto& label = button->button->params.label;
         const auto measured = button->control->params.font->measureRun(label,0,label.size(),1.f,true,false,error);
         if (!measured) return false;
-        const double padded = std::ceil(measured->width)+layout.labelPadding;
+        const double padded = std::floor(measured->width+0.5f)+layout.labelPadding;
         if (!std::isfinite(padded) || padded > INT32_MAX) { error = "Native tab label width overflows"; return false; }
         const auto tabWidth = vertical ? layout.minimumWidth : std::clamp(static_cast<std::int32_t>(padded),layout.minimumWidth,layout.maximumWidth);
         if (next+tabWidth > INT32_MAX) { error = "Native tab strip width overflows"; return false; }
@@ -189,7 +215,8 @@ bool LLVKWidgetTree::layoutTabPanels(Id container, const Node::TabContainer::Lay
     ShapeChanges changes;
     for (const auto& placement : placements)
         for (const auto& [id,rect] : {std::pair{placement.panel,placement.content},std::pair{placement.button,placement.tab}})
-            if (get(id)->params.rect != rect && !planReshape(id,std::int64_t(rect.right)-rect.left,std::int64_t(rect.top)-rect.bottom,rect,changes,error)) return false;
+            if ((positionButtons || id!=placement.button) && get(id)->params.rect != rect &&
+                !planReshape(id,std::int64_t(rect.right)-rect.left,std::int64_t(rect.top)-rect.bottom,rect,changes,error)) return false;
     if (!completeShapes(changes,error)) return false;
     std::size_t index=0;
     for (const auto& placement : placements)
@@ -522,6 +549,8 @@ bool LLVKWidgetTree::initializeFloater(Id panel,const Node::Floater& params,std:
     auto& background=mNodes.at(panel).panel->params;
     background.backgroundVisible=background.backgroundOpaque=true;
     background.opaqueImage=findImage("Window_Foreground",error);
+    if (!error.empty()) return false;
+    background.transparentImage=findImage("Window_Background",error);
     return error.empty();
 }
 
@@ -572,7 +601,7 @@ bool LLVKWidgetTree::setTabVisibility(Id container,Id panel,bool visible,std::st
         for (const auto& tab : tabs)
             if (!state.hiddenPanels.contains(tab.panel) && selectTabPanel(container,tab.panel,error)) break;
     const auto layout=get(container)->tabContainer->layout;
-    return !layout || layoutTabPanels(container,*layout,error);
+    return !layout || layoutTabPanels(container,*layout,error,0.f,false);
 }
 
 bool LLVKWidgetTree::selectTabPanel(Id container, Id panel, std::string& error)
@@ -644,7 +673,7 @@ bool LLVKWidgetTree::selectTabPanel(Id container, Id panel, std::string& error)
         owner = get(container);
         if (!owner || !owner->tabContainer || owner->tabContainer->selectionGeneration != generation) return false;
     }
-    if (owner->tabContainer->layout && !layoutTabPanels(container,*owner->tabContainer->layout,error)) return false;
+    if (owner->tabContainer->layout && !layoutTabPanels(container,*owner->tabContainer->layout,error,0.f,false)) return false;
     owner=get(container);
     if (!owner || !owner->tabContainer) return false;
     const auto callback = owner->control->params.commit;

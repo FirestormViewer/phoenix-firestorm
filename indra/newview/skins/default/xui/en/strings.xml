@@ -4,6 +4,41 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
+  <string name="NativeErrorTitle">Vulkanstorm native error</string>
+  <string name="NativeErrorCloseViewer">Acknowledge this message to close the viewer.</string>
+  <string name="NativeErrorCopy">Copy details</string>
+  <string name="NativeErrorRetryCleanup">Retry cleanup</string>
+  <string name="NativeErrorRetryLogin">Retry login</string>
+  <string name="NativeAgreementAccept">Accept</string>
+  <string name="NativeErrorOutOfMemory">The viewer has run out of memory. Close other applications before restarting.</string>
+  <string name="NativeErrorMissingFiles">Required files are missing or inaccessible. Repair the installation and check file permissions.</string>
+  <string name="NativeErrorAudioFailed">The audio service failed. Check the audio device and settings before restarting.</string>
+  <string name="NativeErrorVoiceFailed">The voice device service failed. Check voice processing settings and selected devices before restarting.</string>
+  <string name="NativeErrorTranslationFailed">Translation verification failed. Check network and proxy settings before restarting.</string>
+  <string name="NativeErrorPreviewFailed">The texture preview service failed. Check cache access and the selected image before restarting.</string>
+  <string name="NativeAgreementReject">Decline</string>
+  <string name="NativeErrorUnexpected">An unexpected native viewer error occurred. Close the viewer and contact support if this happens again.</string>
+  <string name="NativeErrorDefaultSettings">Required default settings could not be loaded. Repair the installation before starting again.</string>
+  <string name="NativeErrorSettingsMode">The selected settings mode could not be loaded. Check the installed settings files before starting again.</string>
+  <string name="NativeErrorUnsupportedArguments">One or more command-line options are not supported by native startup. Remove unsupported options before starting again.</string>
+  <string name="NativeErrorSettingsRead">Required settings could not be read or applied. Check the settings files and access permissions before starting again.</string>
+  <string name="NativeErrorSettingsWrite">Settings could not be saved. Check available disk space and write permissions before starting again.</string>
+  <string name="NativeErrorCacheUnavailable">The cache could not be initialized. Check the cache location, access permissions and available disk space before starting again.</string>
+  <string name="NativeErrorStartupResources">Required startup resources are unavailable. Repair the installation before starting again.</string>
+  <string name="NativeErrorWindowUnavailable">The native window is unavailable or could not complete an operation. Check display availability and window settings before starting again.</string>
+  <string name="NativeErrorRendererUnavailable">The native Vulkan renderer is unavailable or has stopped. Check Vulkan driver support before starting again. No renderer switch or retry has been performed.</string>
+  <string name="NativeErrorBrowserUnavailable">The embedded browser could not start or load its page. Check the installation and network configuration before starting again.</string>
+  <string name="NativeErrorShutdownFailed">Native shutdown could not complete normally. Check settings and cache access before starting again.</string>
+  <string name="NativeErrorOperationFailed">The requested operation could not be completed. Dismiss this message to return to the viewer. No retry has been performed.</string>
+  <string name="NativeErrorOptionalSettings">Optional settings could not be loaded. The viewer will continue with the available defaults.</string>
+  <string name="NativeErrorNetworkUnavailable">The network request could not be completed. Check the connection. Recovery requires the operation owner; no retry has been performed.</string>
+  <string name="NativeErrorTlsRejected">The secure connection could not be verified. Check the system clock and network configuration. Certificate verification has not been bypassed.</string>
+  <string name="NativeErrorTransportUnavailable">Native authentication is not available in this build. No login request has been sent.</string>
+  <string name="NativeErrorSessionCleanupFailed">Session cleanup could not complete. Resources remain owned. Retry cleanup to finish the operation.</string>
+  <string name="NativeErrorAuthenticationFailed">Authentication failed. No connected session has been established.</string>
+  <string name="NativeErrorConnectionFailed">The region connection failed. Recovery requires the session owner.</string>
+  <string name="NativeErrorSessionTimeout">The session request timed out. Recovery requires the session owner.</string>
+  <string name="NativeErrorSessionFailed">The session operation could not be completed. Recovery requires the session owner.</string>
 
 	<!-- Default Args - these arguments will be replaced in all strings -->
 	<string name="SECOND_LIFE">[CURRENT_GRID]</string>

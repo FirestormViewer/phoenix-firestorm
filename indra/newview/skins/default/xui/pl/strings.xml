@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
+	<string name="NativeErrorTitle">Błąd natywny Vulkanstorm</string>
+	<string name="NativeErrorCloseViewer">Potwierdź ten komunikat, aby zamknąć przeglądarkę.</string>
+	<string name="NativeErrorCopy">Kopiuj szczegóły</string>
+	<string name="NativeErrorRetryCleanup">Ponów sprzątanie</string>
+	<string name="NativeErrorRetryLogin">Ponów logowanie</string>
+	<string name="NativeAgreementAccept">Akceptuj</string>
+	<string name="NativeErrorOutOfMemory">Przeglądarce zabrakło pamięci. Zamknij inne aplikacje przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorMissingFiles">Wymagane pliki nie istnieją lub są niedostępne. Napraw instalację i sprawdź uprawnienia do plików.</string>
+	<string name="NativeErrorAudioFailed">Usługa dźwięku uległa awarii. Sprawdź urządzenie i ustawienia dźwięku przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorVoiceFailed">Usługa urządzeń głosowych uległa awarii. Sprawdź ustawienia głosu i wybrane urządzenia przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorTranslationFailed">Weryfikacja tłumaczenia nie powiodła się. Sprawdź ustawienia sieci i proxy przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorPreviewFailed">Usługa podglądu tekstur uległa awarii. Sprawdź dostęp do pamięci podręcznej i wybrany obraz przed ponownym uruchomieniem.</string>
+	<string name="NativeAgreementReject">Odrzuć</string>
+	<string name="NativeErrorUnexpected">W natywnej przeglądarce wystąpił nieoczekiwany błąd. Zamknij przeglądarkę, a jeśli problem się powtórzy, skontaktuj się z pomocą techniczną.</string>
+	<string name="NativeErrorDefaultSettings">Nie udało się wczytać wymaganych ustawień domyślnych. Napraw instalację przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorSettingsMode">Nie udało się wczytać wybranego trybu ustawień. Sprawdź zainstalowane pliki ustawień przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorUnsupportedArguments">Co najmniej jedna opcja wiersza poleceń nie jest obsługiwana podczas natywnego uruchamiania. Usuń nieobsługiwane opcje przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorSettingsRead">Nie udało się odczytać lub zastosować wymaganych ustawień. Sprawdź pliki ustawień i uprawnienia dostępu przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorSettingsWrite">Nie udało się zapisać ustawień. Sprawdź wolne miejsce na dysku i uprawnienia do zapisu przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorCacheUnavailable">Nie udało się zainicjować pamięci podręcznej. Sprawdź jej lokalizację, uprawnienia dostępu i wolne miejsce na dysku przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorStartupResources">Wymagane zasoby startowe są niedostępne. Napraw instalację przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorWindowUnavailable">Natywne okno jest niedostępne lub nie udało się w nim ukończyć operacji. Sprawdź dostępność ekranu i ustawienia okna przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorRendererUnavailable">Natywny moduł renderujący Vulkan jest niedostępny lub został zatrzymany. Sprawdź obsługę Vulkan przez sterownik przed ponownym uruchomieniem. Nie przełączono modułu renderującego ani nie ponowiono próby.</string>
+	<string name="NativeErrorBrowserUnavailable">Wbudowana przeglądarka internetowa nie mogła się uruchomić lub wczytać strony. Sprawdź instalację i konfigurację sieci przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorShutdownFailed">Natywne zamykanie nie zakończyło się prawidłowo. Sprawdź dostęp do ustawień i pamięci podręcznej przed ponownym uruchomieniem.</string>
+	<string name="NativeErrorOperationFailed">Nie udało się ukończyć żądanej operacji. Zamknij ten komunikat, aby wrócić do przeglądarki. Nie ponowiono próby.</string>
+	<string name="NativeErrorOptionalSettings">Nie udało się wczytać ustawień opcjonalnych. Przeglądarka będzie kontynuować działanie z dostępnymi wartościami domyślnymi.</string>
+	<string name="NativeErrorNetworkUnavailable">Nie udało się ukończyć żądania sieciowego. Sprawdź połączenie. Przywrócenie działania wymaga interwencji komponentu zarządzającego operacją; nie ponowiono próby.</string>
+	<string name="NativeErrorTlsRejected">Nie udało się zweryfikować bezpiecznego połączenia. Sprawdź zegar systemowy i konfigurację sieci. Weryfikacja certyfikatu nie została pominięta.</string>
+	<string name="NativeErrorTransportUnavailable">Natywne uwierzytelnianie jest niedostępne w tej kompilacji. Nie wysłano żadnego żądania logowania.</string>
+	<string name="NativeErrorSessionCleanupFailed">Nie udało się ukończyć sprzątania sesji. Zasoby pozostają pod kontrolą odpowiedzialnego komponentu. Ponów sprzątanie, aby zakończyć operację.</string>
+	<string name="NativeErrorAuthenticationFailed">Uwierzytelnianie nie powiodło się. Nie nawiązano połączonej sesji.</string>
+	<string name="NativeErrorConnectionFailed">Połączenie z regionem nie powiodło się. Przywrócenie działania wymaga interwencji komponentu zarządzającego sesją.</string>
+	<string name="NativeErrorSessionTimeout">Upłynął limit czasu żądania sesji. Przywrócenie działania wymaga interwencji komponentu zarządzającego sesją.</string>
+	<string name="NativeErrorSessionFailed">Nie udało się ukończyć operacji sesji. Przywrócenie działania wymaga interwencji komponentu zarządzającego sesją.</string>
 	<string name="SUPPORT_SITE">
 		Portal Pomocy Firestorma
 	</string>

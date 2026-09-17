@@ -31,6 +31,18 @@ FetchContent_Declare(llvk_stb
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
 FetchContent_MakeAvailable(llvk_stb)
 
+add_library(llvksessionowner llvksessionowner.cpp llvksessionowner.h)
+target_include_directories(llvksessionowner PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+set_property(TARGET llvksessionowner PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+add_library(llvkerror llvkerror.cpp llvkerror.h)
+target_include_directories(llvkerror PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+set_property(TARGET llvkerror PROPERTY POSITION_INDEPENDENT_CODE ON)
+if (WINDOWS)
+    target_sources(llvkerror PRIVATE llvkerrorwin32.cpp)
+    target_link_libraries(llvkerror PRIVATE user32)
+endif ()
+
 add_library(llvkwidgets llvkwidgettree.cpp llvkwidgettree.h llvkwidgetlayout.cpp llvkwidgetlayout.h
     llvkwidgetfactory.cpp llvkwidgetfactory.h llvkcontrol.cpp llvkcontrol.h
     llvkwidgetimage.cpp llvkwidgetimage.h llvkicon.cpp llvkicon.h llvkbutton.cpp llvkbutton.h
@@ -41,7 +53,7 @@ add_library(llvkwidgets llvkwidgettree.cpp llvkwidgettree.h llvkwidgetlayout.cpp
     llvklineeditor.cpp llvklineeditor.h llvkclipboard.cpp llvkclipboard.h llvkstyledtext.h
     llvkscroll.cpp llvkscroll.h llvkcombo.cpp llvkbrowsersurface.cpp llvkbrowsersurface.h llvkwidgetpaint.cpp llvkwidgetpaint.h
     llvkviewerui.cpp llvkviewerui.h llvksettingsmgr.cpp llvksettingsmgr.h llvkmenu.cpp llvkmenu.h llvkfloater.cpp llvkfloater.h llvkdialogs.cpp llvkspinner.cpp llvkradiogroup.cpp)
-target_link_libraries(llvkwidgets PRIVATE llmath PUBLIC llxml)
+target_link_libraries(llvkwidgets PRIVATE llmath PUBLIC llxml llvkerror llvksessionowner)
 target_sources(llvkwidgets PRIVATE llvktext.h)
 target_sources(llvkwidgets PRIVATE llvkslider.cpp llvkspellcheck.cpp llvkspellcheck.h llvktranslation.cpp llvktranslation.h)
 target_sources(llvkwidgets PRIVATE llvkkeybindings.cpp llvkkeybindings.h)
@@ -122,6 +134,7 @@ if (WINDOWS)
     target_include_directories(llvkbrowser SYSTEM PRIVATE "${LIBS_PREBUILT_DIR}/include/cef")
     target_link_libraries(llvkbrowser PUBLIC llvkwidgets PRIVATE llvk_dullahan user32)
     add_library(llvkwindowmgr llvkwindowmgr.cpp llvkwindowmgr.h llvkstartup.cpp llvkstartup.h)
+    target_link_libraries(llvkwindowmgr PUBLIC llvkerror)
     target_sources(llvkwindowmgr PRIVATE llvkaudio.cpp llvkaudio.h)
     target_sources(llvkwindowmgr PRIVATE llvkstartupstatus.cpp llvkstartupstatus.h)
     target_sources(llvkwindowmgr PRIVATE llvkvoice.cpp llvkvoice.h)
@@ -130,7 +143,7 @@ if (WINDOWS)
     target_include_directories(llvkwindowmgr PRIVATE ${CMAKE_SOURCE_DIR}/newview)
     target_link_libraries(llvkwindowmgr PRIVATE llimage)
     target_sources(llvkwindowmgr PRIVATE llvkjoystick.cpp llvkjoystick.h)
-    target_link_libraries(llvkwindowmgr PRIVATE dinput8 dxguid)
+    target_link_libraries(llvkwindowmgr PRIVATE dinput8 dxguid winmm)
     target_link_libraries(llvkwindowmgr PRIVATE llwebrtc)
     include(OPENAL)
     if (TARGET ll::openal)
@@ -149,6 +162,27 @@ option(LL_VULKAN_GPU_TESTS "Run native glyph GPU tests requiring Vulkan validati
 option(LL_VULKAN_BROWSER_TESTS "Run native browser lifecycle tests requiring packaged CEF helpers" OFF)
 if (LL_TESTS)
     include(LLAddBuildTest)
+    if (WINDOWS)
+        add_executable(notification_capture ../../tools/vulkan/notification_capture.cpp)
+        target_link_libraries(notification_capture PRIVATE d3d11 dxgi dwmapi windowsapp)
+        add_executable(notification_leap ../../tools/vulkan/notification_leap.cpp)
+        target_link_libraries(notification_leap PRIVATE llxml llcommon)
+        add_custom_command(TARGET notification_leap POST_BUILD
+            COMMAND "$<TARGET_FILE:notification_leap>" --self-test VERBATIM)
+    endif ()
+    add_executable(INTEGRATION_TEST_llvksessionowner tests/llvksessionowner_test.cpp)
+    target_link_libraries(INTEGRATION_TEST_llvksessionowner PRIVATE llvksessionowner)
+    add_custom_command(TARGET INTEGRATION_TEST_llvksessionowner POST_BUILD
+        COMMAND "$<TARGET_FILE:INTEGRATION_TEST_llvksessionowner>" VERBATIM)
+    add_test(NAME llvksessionowner COMMAND INTEGRATION_TEST_llvksessionowner)
+    add_dependencies(llvkwidgets INTEGRATION_TEST_llvksessionowner)
+    add_executable(INTEGRATION_TEST_llvkerror tests/llvkerror_test.cpp)
+    target_link_libraries(INTEGRATION_TEST_llvkerror PRIVATE llvkerror)
+    add_custom_command(TARGET INTEGRATION_TEST_llvkerror POST_BUILD
+        COMMAND "$<TARGET_FILE:INTEGRATION_TEST_llvkerror>" VERBATIM)
+    if (WINDOWS)
+        add_dependencies(llvkwindowmgr INTEGRATION_TEST_llvkerror)
+    endif ()
     if (WINDOWS AND LL_VULKAN_BROWSER_TESTS)
         LL_ADD_INTEGRATION_TEST(llvkbrowser "" "llvkbrowser;llcommon")
         set(native_browser_test_targets INTEGRATION_TEST_llvkbrowser)
@@ -166,7 +200,9 @@ if (LL_TESTS)
             target_sources(INTEGRATION_TEST_llvkwindowmgr PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/native_status_test.rc)
             target_include_directories(INTEGRATION_TEST_llvkwindowmgr PRIVATE ${CMAKE_SOURCE_DIR}/newview/res)
             target_compile_definitions(INTEGRATION_TEST_llvkwindowmgr PRIVATE VK_USE_PLATFORM_WIN32_KHR
-                LLVK_LOGIN_SOURCE="${CMAKE_SOURCE_DIR}/newview" LLVK_LOGIN_PACKAGED_FONTS="${LIBS_PREBUILT_DIR}/fonts")
+                LLVK_LOGIN_SOURCE="${CMAKE_SOURCE_DIR}/newview" LLVK_LOGIN_PACKAGED_FONTS="${LIBS_PREBUILT_DIR}/fonts"
+                LLVK_NOTIFICATION_CAPTURE_EXE="$<TARGET_FILE:notification_capture>")
+            add_dependencies(INTEGRATION_TEST_llvkwindowmgr notification_capture)
             list(APPEND native_browser_test_targets INTEGRATION_TEST_llvkwindowmgr)
             foreach(stage vert frag)
                 add_custom_command(TARGET INTEGRATION_TEST_llvkwindowmgr PRE_BUILD
@@ -178,7 +214,7 @@ if (LL_TESTS)
             endforeach()
         endif()
         foreach(browser_target IN LISTS native_browser_test_targets)
-          foreach(runtime libcef.dll chrome_elf.dll dullahan_host.exe d3dcompiler_47.dll dxcompiler.dll dxil.dll v8_context_snapshot.bin)
+          foreach(runtime libcef.dll chrome_elf.dll dullahan_host.exe libEGL.dll libGLESv2.dll d3dcompiler_47.dll dxcompiler.dll dxil.dll v8_context_snapshot.bin)
             add_custom_command(TARGET ${browser_target} PRE_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
                     "${LIBS_PREBUILT_DIR}/bin/release/${runtime}" "$<TARGET_FILE_DIR:${browser_target}>/${runtime}"

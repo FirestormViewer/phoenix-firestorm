@@ -4,6 +4,41 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
+	<string name="NativeErrorTitle">Vulkanstorm yerel mod hatası</string>
+	<string name="NativeErrorCloseViewer">Görüntüleyiciyi kapatmak için bu iletiyi onaylayın.</string>
+	<string name="NativeErrorCopy">Ayrıntıları kopyala</string>
+	<string name="NativeErrorRetryCleanup">Temizlemeyi yeniden dene</string>
+	<string name="NativeErrorRetryLogin">Girişi yeniden dene</string>
+	<string name="NativeAgreementAccept">Kabul et</string>
+	<string name="NativeErrorOutOfMemory">Görüntüleyicinin belleği tükendi. Yeniden başlatmadan önce diğer uygulamaları kapatın.</string>
+	<string name="NativeErrorMissingFiles">Gerekli dosyalar eksik veya erişilemiyor. Kurulumu onarın ve dosya izinlerini kontrol edin.</string>
+	<string name="NativeErrorAudioFailed">Ses hizmeti başarısız oldu. Yeniden başlatmadan önce ses aygıtını ve ayarları kontrol edin.</string>
+	<string name="NativeErrorVoiceFailed">Sesli iletişim aygıt hizmeti başarısız oldu. Yeniden başlatmadan önce sesli iletişim ayarlarını ve seçili aygıtları kontrol edin.</string>
+	<string name="NativeErrorTranslationFailed">Çeviri doğrulaması başarısız oldu. Yeniden başlatmadan önce ağ ve vekil sunucu ayarlarını kontrol edin.</string>
+	<string name="NativeErrorPreviewFailed">Doku önizleme hizmeti başarısız oldu. Yeniden başlatmadan önce önbellek erişimini ve seçili resmi kontrol edin.</string>
+	<string name="NativeAgreementReject">Reddet</string>
+	<string name="NativeErrorUnexpected">Yerel görüntüleyicide beklenmeyen bir hata oluştu. Görüntüleyiciyi kapatın ve bu durum tekrarlanırsa destek ekibiyle iletişime geçin.</string>
+	<string name="NativeErrorDefaultSettings">Gerekli varsayılan ayarlar yüklenemedi. Yeniden başlatmadan önce kurulumu onarın.</string>
+	<string name="NativeErrorSettingsMode">Seçilen ayar modu yüklenemedi. Yeniden başlatmadan önce kurulu ayar dosyalarını kontrol edin.</string>
+	<string name="NativeErrorUnsupportedArguments">Bir veya daha fazla komut satırı seçeneği yerel başlatma tarafından desteklenmiyor. Yeniden başlatmadan önce desteklenmeyen seçenekleri kaldırın.</string>
+	<string name="NativeErrorSettingsRead">Gerekli ayarlar okunamadı veya uygulanamadı. Yeniden başlatmadan önce ayar dosyalarını ve erişim izinlerini kontrol edin.</string>
+	<string name="NativeErrorSettingsWrite">Ayarlar kaydedilemedi. Yeniden başlatmadan önce kullanılabilir disk alanını ve yazma izinlerini kontrol edin.</string>
+	<string name="NativeErrorCacheUnavailable">Önbellek başlatılamadı. Yeniden başlatmadan önce önbellek konumunu, erişim izinlerini ve kullanılabilir disk alanını kontrol edin.</string>
+	<string name="NativeErrorStartupResources">Gerekli başlatma kaynakları kullanılamıyor. Yeniden başlatmadan önce kurulumu onarın.</string>
+	<string name="NativeErrorWindowUnavailable">Yerel pencere kullanılamıyor veya bir işlemi tamamlayamadı. Yeniden başlatmadan önce ekranın kullanılabilirliğini ve pencere ayarlarını kontrol edin.</string>
+	<string name="NativeErrorRendererUnavailable">Yerel Vulkan işleyicisi kullanılamıyor veya durdu. Yeniden başlatmadan önce sürücünün Vulkan desteğini kontrol edin. İşleyici değiştirilmedi ve yeniden deneme yapılmadı.</string>
+	<string name="NativeErrorBrowserUnavailable">Dahili tarayıcı başlatılamadı veya sayfasını yükleyemedi. Yeniden başlatmadan önce kurulumu ve ağ yapılandırmasını kontrol edin.</string>
+	<string name="NativeErrorShutdownFailed">Yerel kapanış normal şekilde tamamlanamadı. Yeniden başlatmadan önce ayarlara ve önbelleğe erişimi kontrol edin.</string>
+	<string name="NativeErrorOperationFailed">İstenen işlem tamamlanamadı. Görüntüleyiciye dönmek için bu iletiyi kapatın. Yeniden deneme yapılmadı.</string>
+	<string name="NativeErrorOptionalSettings">İsteğe bağlı ayarlar yüklenemedi. Görüntüleyici kullanılabilir varsayılan değerlerle devam edecek.</string>
+	<string name="NativeErrorNetworkUnavailable">Ağ isteği tamamlanamadı. Bağlantıyı kontrol edin. Kurtarma için işlemi yöneten bileşenin müdahalesi gerekir; yeniden deneme yapılmadı.</string>
+	<string name="NativeErrorTlsRejected">Güvenli bağlantı doğrulanamadı. Sistem saatini ve ağ yapılandırmasını kontrol edin. Sertifika doğrulaması atlanmadı.</string>
+	<string name="NativeErrorTransportUnavailable">Bu derlemede yerel kimlik doğrulama kullanılamıyor. Hiçbir giriş isteği gönderilmedi.</string>
+	<string name="NativeErrorSessionCleanupFailed">Oturum temizliği tamamlanamadı. Kaynaklar hâlâ sorumlu bileşenin denetiminde tutuluyor. İşlemi bitirmek için temizlemeyi yeniden deneyin.</string>
+	<string name="NativeErrorAuthenticationFailed">Kimlik doğrulama başarısız oldu. Bağlı bir oturum oluşturulmadı.</string>
+	<string name="NativeErrorConnectionFailed">Bölge bağlantısı başarısız oldu. Kurtarma için oturumu yöneten bileşenin müdahalesi gerekir.</string>
+	<string name="NativeErrorSessionTimeout">Oturum isteği zaman aşımına uğradı. Kurtarma için oturumu yöneten bileşenin müdahalesi gerekir.</string>
+	<string name="NativeErrorSessionFailed">Oturum işlemi tamamlanamadı. Kurtarma için oturumu yöneten bileşenin müdahalesi gerekir.</string>
 	<string name="SECOND_LIFE">
 		Second Life
 	</string>

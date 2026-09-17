@@ -123,6 +123,7 @@ public:
         std::size_t lastSelectionStart = 0, lastSelectionEnd = 0;
         std::optional<double> tripleClickUntil;
         double scrollTime = 0.0;
+        double caretResetTime = 0.0;
     };
     struct SearchEditorParams
     {
@@ -434,6 +435,9 @@ public:
         {
             std::string title, positioning;
             std::int32_t legacyHeaderHeight = 18;
+            std::int32_t headerHeight = 25;
+            bool headerExpanded = false;
+            bool dropShadow = true;
             bool saveRect = false, singleInstance = false, saveVisibility = false;
             std::optional<float> relativeX, relativeY;
             bool canClose = true, canMinimize = true;
@@ -566,6 +570,8 @@ public:
         std::uint64_t frame = 0;
     };
     bool routePointer(Id root, const PointerEvent& screenEvent, std::string& error);
+    bool updatePointerHover(Id root,const PointerEvent& screenEvent,std::string& error);
+    std::optional<Id> tooltipAt(Id root,std::int32_t x,std::int32_t y,std::string& error) const;
     bool setMenu(Id id,std::shared_ptr<LLVKMenu> menu);
     bool layoutStackPointer(Id id,const PointerEvent& event,std::string& error);
     std::optional<Id> createBrowser(const Params& view, const LLVKControl::Params& control,
@@ -588,11 +594,13 @@ public:
         std::function<void(Id)> tabInto;
     };
     bool setEvents(Id id, Events events);
+    void setCursorHandler(std::function<void(bool)> handler) { mCursorHandler=std::move(handler); }
     bool setKeyboardFocus(Id id, bool lock, bool keystrokesOnly, std::string& error);
     bool setMouseCapture(Id id, std::string& error);
     bool setTopControl(Id id, std::string& error);
     void unlockFocus() noexcept { mLockedFocus = 0; }
     Id keyboardFocus() const noexcept { return mKeyboardFocus; }
+    Id lastFocusForGroup(Id group) const noexcept;
     Id mouseCapture() const noexcept { return mMouseCapture; }
     Id topControl() const noexcept { return mTopControl; }
     bool keystrokesOnly() const noexcept { return mKeystrokesOnly; }
@@ -642,11 +650,12 @@ public:
     bool createTabArrows(Id container, const LLVKControl::Params& control,
         const LLVKButton::Params& button, std::string& error);
     bool initializeFloater(Id panel, const Node::Floater& params, std::string& error);
+    bool expandFloaterHeader(Id panel, std::string& error);
     bool attachTabPanel(Id container, Id panel, Id button, std::string& error);
     bool selectTabPanel(Id container, Id panel, std::string& error);
     bool setTabVisibility(Id container, Id panel, bool visible, std::string& error);
     bool layoutTopTabs(Id container, const Node::TabContainer::Layout& layout, std::string& error);
-    bool layoutTabPanels(Id container, const Node::TabContainer::Layout& layout, std::string& error, float frameDelta = 0.f);
+    bool layoutTabPanels(Id container, const Node::TabContainer::Layout& layout, std::string& error, float frameDelta = 0.f, bool positionButtons = true);
     std::optional<Id> createLayoutStack(const Params& view, bool vertical, std::int32_t spacing, bool clip, Id parent, std::string& error);
     bool attachLayoutPanel(Id stack, Id panel, const Node::LayoutPanel& params, std::string& error);
     bool updateLayoutStack(Id id, std::string& error, float frameDelta = 0.f);
@@ -662,6 +671,7 @@ public:
     bool hideComboList(Id id);
     bool refreshComboText(Id id, std::optional<LLVKLineEditor::Key> key, std::string& error);
     float focusFlashAmount() const noexcept;
+    void triggerFocusFlash() noexcept;
     std::optional<Id> createIcon(const Params& view, const LLVKControl::Params& control,
                                  const LLVKIcon::Params& icon, Id parent, std::string& error);
     std::optional<Id> createButton(const Params& view, const LLVKControl::Params& control,
@@ -681,6 +691,7 @@ public:
                                       const LineEditorParams& editor, Id parent, std::string& error);
     bool clearLineEditor(Id id, std::string& error);
     bool setLineEditorPassword(Id id, bool password);
+    bool restoreLineEditorSelection(Id id,std::size_t anchor,std::size_t end,std::size_t cursor,bool selecting,std::string& error);
     bool setLineEditorKeystroke(Id id, LLVKControl::Callback callback);
     bool selectLineEditorAll(Id id, std::string& error);
     bool setControlCommit(Id id, LLVKControl::Callback callback);
@@ -737,6 +748,7 @@ public:
     {
         bool applicationFocused = true;
         double secondsSinceKeystroke = 0;
+        bool useEditorClock = false;
         float drawAlpha = 1.f, transparency = 1.f;
         LLVKColor::Value focusColor{1,1,1,1};
         std::int32_t focusWidth = 1;
@@ -823,6 +835,7 @@ public:
     std::optional<Id> createPlainText(const Params& view, const LLVKControl::Params& control,
                                      const LLVKPlainControl::Params& text, Id parent, std::string& error);
     bool setPlainText(Id id, std::string text, std::string& error);
+    bool setSearchEditorKeystroke(Id id,LLVKControl::Callback callback);
     bool setPlainTextArgument(Id id, std::string key, std::string replacement, std::string& error);
     bool reflowPlainText(Id id, std::string& error);
     bool fitPlainText(Id id, std::string& error);
@@ -922,6 +935,7 @@ public:
     bool addPanelBorder(Id id, const LLVKBorder::Params& border, std::string& error);
     bool removePanelBorder(Id id, std::string& error);
     bool setPanelFilename(Id id, const std::string& filename);
+    std::optional<std::string> findHelpTopic(Id id) const;
     std::optional<std::string> panelString(Id id, const std::string& name,
         const LLVKLabel::Arguments& arguments, std::string& error) const;
     bool setButtonToggle(Id id, bool selected, std::string& error);
@@ -959,6 +973,7 @@ public:
     bool setButtonImages(Id id, LLVKButton::Image unselected, LLVKButton::Image selected);
     bool setButtonFlashing(Id id, bool flashing, bool force = false, bool alternateColor = false);
     bool advanceTime(double time, std::string& error);
+    double time() const noexcept { return mTime; }
     bool buttonUnicode(Id id, char32_t character, bool repeated, std::string& error);
     bool buttonReturn(Id id, std::uint32_t modifiers, bool repeated, std::string& error);
     bool registerImage(std::shared_ptr<const LLVKWidgetImage> image);
@@ -1076,7 +1091,10 @@ private:
     std::set<Id> mErasing;
     std::vector<Id> mFocusChain;
     Id mKeyboardFocus = 0;
+    std::map<Id,Id> mLastGroupFocus;
     Id mMouseCapture = 0;
+    std::set<Id> mPointerHover;
+    std::function<void(bool)> mCursorHandler;
     Id mTopControl = 0;
     Id mLockedFocus = 0;
     std::uint64_t mFocusEpoch = 0;

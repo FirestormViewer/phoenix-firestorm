@@ -144,6 +144,7 @@ public:
     VkInstance instance() const { return mInstance; }
     VkDevice device() const { return mDevice; }
     VkPhysicalDevice physicalDevice() const { return mPhysicalDevice; }
+    bool samplerAnisotropyEnabled() const { return isValid() && mSamplerAnisotropy; }
     VmaAllocator allocator() const { return mAllocator; }
     VkQueue graphicsQueue() const { return mGraphicsQueue; }
     uint32_t graphicsQueueFamily() const { return mGraphicsQueueFamily; }
@@ -169,6 +170,7 @@ private:
     VkInstance       mInstance = VK_NULL_HANDLE;
     VkPhysicalDevice mPhysicalDevice = VK_NULL_HANDLE;
     VkDevice         mDevice = VK_NULL_HANDLE;
+    bool mSamplerAnisotropy = false;
     VmaAllocator     mAllocator = VK_NULL_HANDLE;
     VkDebugUtilsMessengerEXT mDebugMessenger = VK_NULL_HANDLE;
 

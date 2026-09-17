@@ -5,6 +5,7 @@
 #include "llvkcolor.h"
 #include "llvkplaintextlayout.h"
 #include "llvkstyledtext.h"
+#include <map>
 
 struct LLVKPlainControl
 {
@@ -17,6 +18,7 @@ struct LLVKPlainControl
         std::optional<bool> readOnly;
         bool trackEnd = false;
         bool useEllipses = false;
+        bool softShadow = false;
         bool clipPartial = false;
         std::function<bool(std::u32string_view)> prevalidator;
         LLVKColor textColor{1,1,1,1};
@@ -42,6 +44,11 @@ struct LLVKPlainControl
     LLVKLabel source;
     std::u32string text;
     std::vector<LLVKWebText::Link> links;
+    std::map<std::size_t,std::shared_ptr<const LLVKWidgetImage>> icons;
+    std::optional<LLVKPlainTextLayout::Document> prepareDocument(std::shared_ptr<LLVKFont> font,
+        const LLVKPlainTextLayout::Options& options, std::int32_t height, std::string& error) const;
+    std::optional<std::size_t> hitIndex(LLVKFont& font, const LLVKPlainTextLayout::Line& line,
+        float pixels, bool nearest, std::string& error) const;
     std::optional<std::string> pressedLink;
     std::string value;
     std::uint64_t document = 0;

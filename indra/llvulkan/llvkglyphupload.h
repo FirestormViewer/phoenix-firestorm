@@ -41,9 +41,10 @@ public:
         VmaAllocator allocator = VK_NULL_HANDLE;
         VkQueue queue = VK_NULL_HANDLE;
         std::uint32_t queueFamily = 0;
+        bool samplerAnisotropyEnabled = false;
     };
     enum class Status { Pending, Ready, Failed };
-    enum class Sampling { GlyphNearestRepeat, SkinLinearClamp };
+    enum class Sampling { GlyphNearestRepeat, SkinLinearClamp, SkinAnisotropicClamp, BrowserLinearRepeat };
     static std::unique_ptr<LLVKGlyphUpload> submit(const Device& device,
                                                   VkExtent2D extent,
                                                   std::span<const std::uint8_t> rgba,
@@ -55,6 +56,7 @@ public:
     Status poll(std::string& error);
     Status wait(std::uint64_t timeout, std::string& error);
     std::shared_ptr<const LLVKGlyphImage> published() const noexcept;
+    std::shared_ptr<const LLVKGlyphImage> submittedFor(const Device& consumer) const noexcept;
 private:
     struct Impl;
     explicit LLVKGlyphUpload(std::unique_ptr<Impl> impl);

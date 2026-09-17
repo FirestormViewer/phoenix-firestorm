@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
+	<string name="NativeErrorTitle">Vulkanstorm-fejl i native tilstand</string>
+	<string name="NativeErrorCloseViewer">Bekræft denne meddelelse for at lukke vieweren.</string>
+	<string name="NativeErrorCopy">Kopiér detaljer</string>
+	<string name="NativeErrorRetryCleanup">Prøv oprydning igen</string>
+	<string name="NativeErrorRetryLogin">Prøv login igen</string>
+	<string name="NativeAgreementAccept">Accepter</string>
+	<string name="NativeErrorOutOfMemory">Fremviseren er løbet tør for hukommelse. Luk andre programmer før genstart.</string>
+	<string name="NativeErrorMissingFiles">Nødvendige filer mangler eller er utilgængelige. Reparer installationen og kontroller filrettighederne.</string>
+	<string name="NativeErrorAudioFailed">Lydtjenesten fejlede. Kontroller lydenheden og indstillingerne før genstart.</string>
+	<string name="NativeErrorVoiceFailed">Taleenhedstjenesten fejlede. Kontroller taleindstillingerne og de valgte enheder før genstart.</string>
+	<string name="NativeErrorTranslationFailed">Kontrol af oversættelse mislykkedes. Kontroller netværks- og proxyindstillingerne før genstart.</string>
+	<string name="NativeErrorPreviewFailed">Forhåndsvisning af teksturer fejlede. Kontroller adgangen til cachen og det valgte billede før genstart.</string>
+	<string name="NativeAgreementReject">Afvis</string>
+	<string name="NativeErrorUnexpected">Der opstod en uventet fejl i den native viewer. Luk vieweren, og kontakt support, hvis det sker igen.</string>
+	<string name="NativeErrorDefaultSettings">De nødvendige standardindstillinger kunne ikke indlæses. Reparér installationen, før du starter igen.</string>
+	<string name="NativeErrorSettingsMode">Den valgte indstillingstilstand kunne ikke indlæses. Kontrollér de installerede indstillingsfiler, før du starter igen.</string>
+	<string name="NativeErrorUnsupportedArguments">En eller flere kommandolinjeindstillinger understøttes ikke ved native opstart. Fjern de ikke-understøttede indstillinger, før du starter igen.</string>
+	<string name="NativeErrorSettingsRead">De nødvendige indstillinger kunne ikke læses eller anvendes. Kontrollér indstillingsfilerne og adgangstilladelserne, før du starter igen.</string>
+	<string name="NativeErrorSettingsWrite">Indstillingerne kunne ikke gemmes. Kontrollér ledig diskplads og skrivetilladelser, før du starter igen.</string>
+	<string name="NativeErrorCacheUnavailable">Cachen kunne ikke initialiseres. Kontrollér cachens placering, adgangstilladelserne og ledig diskplads, før du starter igen.</string>
+	<string name="NativeErrorStartupResources">Nødvendige opstartsressourcer er ikke tilgængelige. Reparér installationen, før du starter igen.</string>
+	<string name="NativeErrorWindowUnavailable">Det native vindue er ikke tilgængeligt eller kunne ikke fuldføre en handling. Kontrollér skærmens tilgængelighed og vinduesindstillingerne, før du starter igen.</string>
+	<string name="NativeErrorRendererUnavailable">Den native Vulkan-renderer er ikke tilgængelig eller er stoppet. Kontrollér driverens Vulkan-understøttelse, før du starter igen. Der er hverken skiftet renderer eller forsøgt igen.</string>
+	<string name="NativeErrorBrowserUnavailable">Den indbyggede browser kunne ikke starte eller indlæse sin side. Kontrollér installationen og netværkskonfigurationen, før du starter igen.</string>
+	<string name="NativeErrorShutdownFailed">Den native nedlukning kunne ikke fuldføres normalt. Kontrollér adgangen til indstillinger og cache, før du starter igen.</string>
+	<string name="NativeErrorOperationFailed">Den ønskede handling kunne ikke fuldføres. Luk denne meddelelse for at vende tilbage til vieweren. Der er ikke forsøgt igen.</string>
+	<string name="NativeErrorOptionalSettings">Valgfrie indstillinger kunne ikke indlæses. Vieweren fortsætter med de tilgængelige standardværdier.</string>
+	<string name="NativeErrorNetworkUnavailable">Netværksanmodningen kunne ikke fuldføres. Kontrollér forbindelsen. Genoprettelse kræver den komponent, der styrer handlingen; der er ikke forsøgt igen.</string>
+	<string name="NativeErrorTlsRejected">Den sikre forbindelse kunne ikke bekræftes. Kontrollér systemuret og netværkskonfigurationen. Certifikatkontrollen er ikke blevet omgået.</string>
+	<string name="NativeErrorTransportUnavailable">Native godkendelse er ikke tilgængelig i denne programversion. Der er ikke sendt nogen loginanmodning.</string>
+	<string name="NativeErrorSessionCleanupFailed">Oprydning af sessionen kunne ikke fuldføres. Ressourcerne holdes fortsat af den ansvarlige komponent. Prøv oprydning igen for at afslutte handlingen.</string>
+	<string name="NativeErrorAuthenticationFailed">Godkendelse mislykkedes. Der er ikke etableret en tilsluttet session.</string>
+	<string name="NativeErrorConnectionFailed">Forbindelsen til regionen mislykkedes. Genoprettelse kræver den komponent, der styrer sessionen.</string>
+	<string name="NativeErrorSessionTimeout">Sessionens anmodning fik timeout. Genoprettelse kræver den komponent, der styrer sessionen.</string>
+	<string name="NativeErrorSessionFailed">Sessionens handling kunne ikke fuldføres. Genoprettelse kræver den komponent, der styrer sessionen.</string>
 	<string name="SUPPORT_SITE">
 		Firestorm Support Portal
 	</string>

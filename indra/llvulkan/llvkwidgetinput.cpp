@@ -84,6 +84,79 @@ bool LLVKWidgetTree::handleWheel(Id id, std::int32_t x, std::int32_t y, std::int
     return false;
 }
 
+std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::tooltipAt(Id root,std::int32_t x,std::int32_t y,std::string& error) const
+{
+    error.clear();
+    if (!get(root)) { error="Invalid native tooltip root"; return std::nullopt; }
+    Id target=0;
+    const auto visit=[&](auto&& self,Id id) -> bool
+    {
+        const auto* node=get(id);
+        if (!node || !node->params.visible) return false;
+        const auto rect=screenRect(id,error);
+        if (!rect) return false;
+        const auto localX=std::int64_t(x)-rect->left,localY=std::int64_t(y)-rect->bottom;
+        if (localX<INT32_MIN || localX>INT32_MAX || localY<INT32_MIN || localY>INT32_MAX)
+        { error="Native tooltip coordinate conversion overflows"; return false; }
+        const auto inside=containsLocal(id,static_cast<std::int32_t>(localX),static_cast<std::int32_t>(localY),true,0,error);
+        if (!inside || !*inside) return false;
+        const bool own=!node->params.tooltip.empty();
+        if (own) target=id;
+        for (const auto child : node->children)
+        {
+            if (self(self,child)) return true;
+            if (!error.empty()) return false;
+        }
+        return own || node->params.mouseOpaque;
+    };
+    visit(visit,root);
+    return error.empty() ? std::optional<Id>(target) : std::nullopt;
+}
+
+bool LLVKWidgetTree::updatePointerHover(Id root,const PointerEvent& screenEvent,std::string& error)
+{
+    error.clear();
+    if (!get(root) || !std::isfinite(screenEvent.time) || screenEvent.time<0)
+    { error="Invalid native hover root or event time"; return false; }
+    std::set<Id> hovered;
+    const auto visit=[&](auto&& self,Id id,bool occlude) -> bool
+    {
+        const auto* node=get(id);
+        if (!node || !node->params.visible) return false;
+        const auto rect=screenRect(id,error);
+        if (!rect) return false;
+        const auto localX=std::int64_t(screenEvent.x)-rect->left,localY=std::int64_t(screenEvent.y)-rect->bottom;
+        if (localX<INT32_MIN || localX>INT32_MAX || localY<INT32_MIN || localY>INT32_MAX)
+        { error="Native hover coordinate conversion overflows"; return false; }
+        const auto inside=containsLocal(id,static_cast<std::int32_t>(localX),static_cast<std::int32_t>(localY),true,0,error);
+        if (!inside || !*inside) return false;
+        hovered.insert(id);
+        const bool opaque=node->params.mouseOpaque;
+        const auto children=node->children;
+        for (const auto child : children)
+        {
+            const bool blocked=self(self,child,occlude);
+            if (!error.empty()) return false;
+            if (blocked && occlude) return true;
+        }
+        return opaque;
+    };
+    const auto target=mMouseCapture ? mMouseCapture : mTopControl;
+    bool exclusive=false;
+    if (target && get(target))
+    {
+        visit(visit,target,false);
+        exclusive=hovered.contains(target);
+    }
+    if (!exclusive) visit(visit,root,true);
+    if (!error.empty()) return false;
+    const auto previous=mPointerHover;
+    mPointerHover=hovered;
+    for (const auto id : hovered) if (!previous.contains(id) && get(id)) mouseEnter(id);
+    for (const auto id : previous) if (!hovered.contains(id) && get(id)) mouseLeave(id);
+    return true;
+}
+
 bool LLVKWidgetTree::routePointer(Id root, const PointerEvent& screenEvent, std::string& error)
 {
     error.clear();
@@ -96,6 +169,7 @@ bool LLVKWidgetTree::routePointer(Id root, const PointerEvent& screenEvent, std:
         case PointerKind::DoubleClick: case PointerKind::Hover: case PointerKind::MiddleDown: break;
         default: error = "Invalid native pointer kind"; return false;
     }
+    if (screenEvent.kind==PointerKind::Hover && !updatePointerHover(root,screenEvent,error)) return false;
     if (!mMouseCapture && mTopControl && get(mTopControl))
     {
         const Id top = mTopControl;
@@ -185,10 +259,11 @@ bool LLVKWidgetTree::basePointer(Id id, const PointerEvent& event, std::string& 
 
 void LLVKWidgetTree::cursorEffect(Id id, bool hand)
 {
+    if (!get(id)) return;
     const auto events = mEvents.find(id);
-    if (events == mEvents.end() || !get(id)) return;
-    const auto callback = events->second.cursor;
+    const auto callback = events==mEvents.end() ? std::function<void(Id,bool)>{} : events->second.cursor;
     if (callback) callback(id,hand);
+    else if (const auto handler=mCursorHandler) handler(hand);
 }
 
 bool LLVKWidgetTree::handlePointer(Id id, PointerEvent event, std::string& error)
@@ -278,6 +353,7 @@ bool LLVKWidgetTree::buttonPointer(Id id, PointerEvent event, std::string& error
             if (!buttonCallback(id,&LLVKButton::Params::mouseUp,LLSD())) return true;
             auto contains = containsLocal(id,event.x,event.y,true,mTopControl,error);
             if (!contains) return false;
+            if (!*contains) mouseLeave(id);
             if (*contains)
             {
                 buttonSound(id,true);

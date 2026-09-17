@@ -3,6 +3,16 @@
 #include <algorithm>
 #include <map>
 
+bool LLVKGlyphAtlas::updateLayout(const LLVKFont::LineLayout& layout)
+{
+    if (layout.glyphs.size()!=mPlacements.size()) return false;
+    for (std::size_t index=0; index<mPlacements.size(); ++index)
+        if (layout.glyphs[index].glyph!=mPlacements[index].draw.glyph) return false;
+    for (std::size_t index=0; index<mPlacements.size(); ++index)
+        mPlacements[index].draw=layout.glyphs[index];
+    return true;
+}
+
 std::optional<LLVKGlyphAtlas> LLVKGlyphAtlas::prepare(const LLVKFont::LineLayout& layout,
                                                    std::uint32_t pageSize, std::size_t byteBudget,
                                                    std::string& error)

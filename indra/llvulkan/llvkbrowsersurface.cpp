@@ -1,6 +1,19 @@
 #include "llvkbrowsersurface.h"
 #include "llvkwidgettree.h"
 #include <atomic>
+#include <algorithm>
+#include <cmath>
+
+LLVKWidgetImage::Rect LLVKBrowserSurface::displayRect(int width,int height,int mediaWidth,int mediaHeight)
+{
+    if (width<=0 || height<=0 || mediaWidth<=0 || mediaHeight<=0) return {};
+    const float aspect=float(mediaWidth)/mediaHeight;
+    int drawnWidth=width,drawnHeight=height;
+    if (aspect>float(width)/height) drawnHeight=std::clamp(static_cast<int>(std::floor(width/aspect+0.5f)),0,height);
+    else drawnWidth=std::clamp(static_cast<int>(std::floor(height*aspect+0.5f)),0,width);
+    const auto left=(width-drawnWidth)/2,bottom=(height-drawnHeight)/2;
+    return {left,bottom,left+drawnWidth,bottom+drawnHeight};
+}
 
 std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createBrowser(const Params& view, const LLVKControl::Params& control,
     const LLVKPanel::Params& panel, const Node::Browser& browser, Id parent, std::string& error)

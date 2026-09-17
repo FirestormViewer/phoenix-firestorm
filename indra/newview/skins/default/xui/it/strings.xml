@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
+	<string name="NativeErrorTitle">Errore nativo di Vulkanstorm</string>
+	<string name="NativeErrorCloseViewer">Conferma questo messaggio per chiudere il visualizzatore.</string>
+	<string name="NativeErrorCopy">Copia dettagli</string>
+	<string name="NativeErrorRetryCleanup">Riprova la pulizia</string>
+	<string name="NativeErrorRetryLogin">Riprova l'accesso</string>
+	<string name="NativeAgreementAccept">Accetta</string>
+	<string name="NativeErrorOutOfMemory">La memoria disponibile per il visualizzatore è esaurita. Chiudi altre applicazioni prima di riavviare.</string>
+	<string name="NativeErrorMissingFiles">Alcuni file necessari sono mancanti o inaccessibili. Ripara l'installazione e controlla le autorizzazioni.</string>
+	<string name="NativeErrorAudioFailed">Il servizio audio ha smesso di funzionare. Controlla il dispositivo e le impostazioni audio prima di riavviare.</string>
+	<string name="NativeErrorVoiceFailed">Il servizio dei dispositivi vocali ha smesso di funzionare. Controlla le impostazioni vocali e i dispositivi selezionati prima di riavviare.</string>
+	<string name="NativeErrorTranslationFailed">La verifica della traduzione non è riuscita. Controlla le impostazioni di rete e proxy prima di riavviare.</string>
+	<string name="NativeErrorPreviewFailed">Il servizio di anteprima delle texture ha smesso di funzionare. Controlla l'accesso alla cache e l'immagine selezionata prima di riavviare.</string>
+	<string name="NativeAgreementReject">Rifiuta</string>
+	<string name="NativeErrorUnexpected">Si è verificato un errore imprevisto nel visualizzatore nativo. Chiudi il visualizzatore e contatta l'assistenza se il problema si ripresenta.</string>
+	<string name="NativeErrorDefaultSettings">Impossibile caricare le impostazioni predefinite necessarie. Ripara l'installazione prima di riavviare il visualizzatore.</string>
+	<string name="NativeErrorSettingsMode">Impossibile caricare la modalità di impostazione selezionata. Controlla i file di impostazione installati prima di riavviare il visualizzatore.</string>
+	<string name="NativeErrorUnsupportedArguments">Una o più opzioni della riga di comando non sono supportate dall'avvio nativo. Rimuovi le opzioni non supportate prima di riavviare il visualizzatore.</string>
+	<string name="NativeErrorSettingsRead">Impossibile leggere o applicare le impostazioni necessarie. Controlla i file di impostazione e i permessi di accesso prima di riavviare il visualizzatore.</string>
+	<string name="NativeErrorSettingsWrite">Impossibile salvare le impostazioni. Controlla lo spazio disponibile su disco e i permessi di scrittura prima di riavviare il visualizzatore.</string>
+	<string name="NativeErrorCacheUnavailable">Impossibile inizializzare la cache. Controlla la posizione della cache, i permessi di accesso e lo spazio disponibile su disco prima di riavviare il visualizzatore.</string>
+	<string name="NativeErrorStartupResources">Le risorse necessarie all'avvio non sono disponibili. Ripara l'installazione prima di riavviare il visualizzatore.</string>
+	<string name="NativeErrorWindowUnavailable">La finestra nativa non è disponibile o non ha potuto completare un'operazione. Controlla la disponibilità dello schermo e le impostazioni della finestra prima di riavviare il visualizzatore.</string>
+	<string name="NativeErrorRendererUnavailable">Il renderer Vulkan nativo non è disponibile o si è arrestato. Controlla il supporto Vulkan del driver prima di riavviare il visualizzatore. Non è stato cambiato renderer e non è stato eseguito alcun nuovo tentativo.</string>
+	<string name="NativeErrorBrowserUnavailable">Il browser integrato non ha potuto avviarsi o caricare la pagina. Controlla l'installazione e la configurazione di rete prima di riavviare il visualizzatore.</string>
+	<string name="NativeErrorShutdownFailed">L'arresto nativo non è stato completato normalmente. Controlla l'accesso alle impostazioni e alla cache prima di riavviare il visualizzatore.</string>
+	<string name="NativeErrorOperationFailed">Impossibile completare l'operazione richiesta. Chiudi questo messaggio per tornare al visualizzatore. Non è stato eseguito alcun nuovo tentativo.</string>
+	<string name="NativeErrorOptionalSettings">Impossibile caricare le impostazioni facoltative. Il visualizzatore continuerà con i valori predefiniti disponibili.</string>
+	<string name="NativeErrorNetworkUnavailable">Impossibile completare la richiesta di rete. Controlla la connessione. Il recupero richiede l'intervento del componente responsabile dell'operazione; non è stato eseguito alcun nuovo tentativo.</string>
+	<string name="NativeErrorTlsRejected">Impossibile verificare la connessione sicura. Controlla l'orologio di sistema e la configurazione di rete. La verifica del certificato non è stata aggirata.</string>
+	<string name="NativeErrorTransportUnavailable">L'autenticazione nativa non è disponibile in questa build. Non è stata inviata alcuna richiesta di accesso.</string>
+	<string name="NativeErrorSessionCleanupFailed">Impossibile completare la pulizia della sessione. Le risorse restano sotto il controllo del componente responsabile. Riprova la pulizia per terminare l'operazione.</string>
+	<string name="NativeErrorAuthenticationFailed">Autenticazione non riuscita. Non è stata stabilita alcuna sessione connessa.</string>
+	<string name="NativeErrorConnectionFailed">Connessione alla regione non riuscita. Il recupero richiede l'intervento del componente responsabile della sessione.</string>
+	<string name="NativeErrorSessionTimeout">La richiesta di sessione è scaduta. Il recupero richiede l'intervento del componente responsabile della sessione.</string>
+	<string name="NativeErrorSessionFailed">Impossibile completare l'operazione di sessione. Il recupero richiede l'intervento del componente responsabile della sessione.</string>
 	<string name="SUPPORT_SITE">
 		Portale di supporto di Firestorm
 	</string>

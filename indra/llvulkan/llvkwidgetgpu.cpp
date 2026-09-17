@@ -50,6 +50,9 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
     LLVKUiPacket& packet, std::string& error)
 {
     error.clear();
+    const auto scale=paint.displayScale;
+    if (!std::isfinite(scale) || scale<=0.f || scale>8.f)
+    { error="Invalid native paint display scale"; return Status::Failed; }
     ++mFrame;
     bool pending = !paint.pendingBrowsers.empty();
     const auto poll = [&](std::unique_ptr<LLVKGlyphUpload>& upload,std::shared_ptr<const LLVKGlyphImage>& ready) -> bool
@@ -64,17 +67,6 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
     for (auto& [key,text] : mTexts)
         for (std::size_t page = 0; page < text.uploads.size(); ++page)
             if (!poll(text.uploads[page],text.pages[page])) return Status::Failed;
-    const auto same = [](const LLVKFont::LineLayout& first,const LLVKFont::LineLayout& second)
-    {
-        if (first.glyphs.size() != second.glyphs.size()) return false;
-        for (std::size_t index = 0; index < first.glyphs.size(); ++index)
-        {
-            const auto& before = first.glyphs[index]; const auto& after = second.glyphs[index];
-            if (before.glyph != after.glyph || before.left != after.left || before.right != after.right ||
-                before.top != after.top || before.bottom != after.bottom) return false;
-        }
-        return true;
-    };
     std::map<LLVKWidgetTree::Id,std::size_t> parts;
     for (const auto& command : paint.commands)
     {
@@ -83,7 +75,7 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
         {
             auto& stream = mStreams[command.owner];
             stream.used = mFrame;
-            if (!stream.publication) stream.publication = std::make_unique<LLVKImagePublication>(mDevice);
+            if (!stream.publication) stream.publication = std::make_unique<LLVKImagePublication>(mDevice,true);
             if (stream.epoch != command.imageEpoch)
             {
                 stream.publication->invalidate();
@@ -95,29 +87,36 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
         }
         else if (command.image)
         {
-            auto& image = mImages[command.image.get()];
+            const auto imageKey=std::pair{command.image.get(),paint.skinAnisotropy};
+            auto& image = mImages[imageKey];
             image.used = mFrame;
             if (!image.source)
             {
                 image.source = command.image;
                 image.upload = LLVKGlyphUpload::submit(mDevice,{command.image->pixelWidth(),command.image->pixelHeight()},
-                    command.image->bottomUpRgba(),error,LLVKGlyphUpload::Sampling::SkinLinearClamp);
-                if (!image.upload) { mImages.erase(command.image.get()); return Status::Failed; }
+                    command.image->bottomUpRgba(),error,paint.skinAnisotropy ? LLVKGlyphUpload::Sampling::SkinAnisotropicClamp : LLVKGlyphUpload::Sampling::SkinLinearClamp);
+                if (!image.upload) { mImages.erase(imageKey); return Status::Failed; }
             }
             pending |= !image.ready;
         }
         if (command.text && !command.text->glyphs.empty())
         {
+            auto deviceText=*command.text;
+            if (scale!=1.f)
+                for (auto& glyph : deviceText.glyphs)
+                {
+                    glyph.left*=scale; glyph.right*=scale;
+                    glyph.bottom*=scale; glyph.top*=scale;
+                }
             auto& text = mTexts[key];
             text.used = mFrame;
-            if (!text.atlas || !same(text.layout,*command.text))
+            if (!text.atlas || !text.atlas->updateLayout(deviceText))
             {
                 const bool uploading = std::any_of(text.uploads.begin(),text.uploads.end(),[](const auto& upload) { return bool(upload); });
                 if (uploading) { pending = true; continue; }
                 Text replacement;
                 replacement.used = mFrame;
-                replacement.layout = *command.text;
-                replacement.atlas = LLVKGlyphAtlas::prepare(*command.text,256,16*1024*1024,error);
+                replacement.atlas = LLVKGlyphAtlas::prepare(deviceText,256,16*1024*1024,error);
                 if (!replacement.atlas) return Status::Failed;
                 for (const auto& page : replacement.atlas->pages())
                 {
@@ -149,22 +148,40 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
     for (const auto& command : paint.commands)
     {
         const auto key = std::pair{command.owner,parts[command.owner]++};
-        if (command.clip.left < 0 || command.clip.bottom < 0 || command.clip.right > std::int64_t(extent.width) ||
-            command.clip.top > std::int64_t(extent.height))
+        if (command.clip.left < 0 || command.clip.bottom < 0 || command.clip.right > std::ceil(extent.width/scale) ||
+            command.clip.top > std::ceil(extent.height/scale))
         { error = "Native widget paint clip is outside framebuffer"; return Status::Failed; }
         if (command.clip.right <= command.clip.left || command.clip.top <= command.clip.bottom) continue;
-        const VkRect2D clip{{command.clip.left,static_cast<std::int32_t>(extent.height)-command.clip.top},
-            {static_cast<std::uint32_t>(command.clip.right-command.clip.left),static_cast<std::uint32_t>(command.clip.top-command.clip.bottom)}};
+        const auto clipLeft=std::clamp(static_cast<int>(std::floor(command.clip.left*scale)),0,static_cast<int>(extent.width));
+        const auto clipRight=std::clamp(static_cast<int>(std::floor(command.clip.left*scale)+std::ceil((command.clip.right-command.clip.left-1)*scale)+1),0,static_cast<int>(extent.width));
+        const auto clipBottom=std::clamp(static_cast<int>(std::floor(command.clip.bottom*scale)),0,static_cast<int>(extent.height));
+        const auto clipTop=std::clamp(static_cast<int>(std::floor(command.clip.bottom*scale)+std::ceil((command.clip.top-command.clip.bottom-1)*scale)+1),0,static_cast<int>(extent.height));
+        if (clipRight<=clipLeft || clipTop<=clipBottom) continue;
+        const VkRect2D clip{{clipLeft,static_cast<int>(extent.height)-clipTop},
+            {static_cast<std::uint32_t>(clipRight-clipLeft),static_cast<std::uint32_t>(clipTop-clipBottom)}};
         const auto& rect = command.rectangle;
         if (command.triangle)
         {
-            if (command.image || command.text || !prepared.triangle(*command.triangle,clip,command.color,error)) return Status::Failed;
+            auto points=*command.triangle;
+            for (auto& coordinate : points) coordinate*=scale;
+            if (command.image || command.text) { error="Native triangle cannot contain image or text data"; return Status::Failed; }
+            if (command.triangleColors)
+            {
+                if (!prepared.gradientTriangle(points,clip,*command.triangleColors,error)) return Status::Failed;
+            }
+            else if (!prepared.triangle(points,clip,command.color,error)) return Status::Failed;
         }
         else if (command.image)
         {
             const auto source = command.streamingImage ? mStreams.at(command.owner).publication->current().source : command.image;
-            const auto image = command.streamingImage ? mStreams.at(command.owner).publication->current().image : mImages.at(command.image.get()).ready;
-            if (!prepared.image(*source,image,{rect.left,rect.bottom,rect.right,rect.top},{},clip,
+            const auto image = command.streamingImage ? mStreams.at(command.owner).publication->current().image : mImages.at({command.image.get(),paint.skinAnisotropy}).ready;
+            if (command.streamingImage)
+            {
+                if (!prepared.browserImage(*source,image,{rect.left*scale,rect.bottom*scale,rect.right*scale,rect.top*scale},clip,command.color,error))
+                    return Status::Failed;
+                continue;
+            }
+            if (!prepared.image(*source,image,{rect.left,rect.bottom,rect.right,rect.top},{scale,scale,0,0},clip,
                 command.color,error,command.alphaMask,command.additive ? LLVKContext::Blend2D::AddWithAlpha : LLVKContext::Blend2D::Alpha)) return Status::Failed;
         }
         else if (command.text)
@@ -174,11 +191,17 @@ LLVKWidgetGpu::Status LLVKWidgetGpu::prepare(const LLVKWidgetPaint& paint, VkExt
             LLVKTextDraw::Style style;
             for (std::size_t channel = 0; channel < 4; ++channel)
                 style.color[channel] = static_cast<std::uint8_t>(std::floor(std::clamp(command.color[channel],0.f,1.f)*255.f+0.5f));
-            if (command.shadow) { style.shadow = LLVKTextDraw::Shadow::Soft; style.shadowStrength = 1.f; }
+            if (command.shadow)
+            {
+                const auto lightness=0.5f*(std::min({command.color[0],command.color[1],command.color[2]})+
+                    std::max({command.color[0],command.color[1],command.color[2]}));
+                style.shadow=lightness<0.35f ? LLVKTextDraw::Shadow::None : LLVKTextDraw::Shadow::Soft;
+                style.shadowStrength=std::clamp((lightness-0.35f)/0.25f,0.f,1.f);
+            }
             if (!prepared.text(*text.atlas,text.pages,0,0,clip,style,error)) return Status::Failed;
         }
         else if (rect.right > rect.left && rect.top > rect.bottom &&
-            !prepared.solid({float(rect.left),float(rect.bottom),float(rect.right),float(rect.top)},clip,command.color,error)) return Status::Failed;
+            !prepared.solid({rect.left*scale,rect.bottom*scale,rect.right*scale,rect.top*scale},clip,command.color,error)) return Status::Failed;
     }
     packet = std::move(prepared);
     return Status::Ready;

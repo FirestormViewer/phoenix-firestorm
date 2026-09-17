@@ -44,6 +44,16 @@ bool LLVKWidgetTree::clearLineEditor(Id id, std::string& error)
     return true;
 }
 
+bool LLVKWidgetTree::setSearchEditorKeystroke(Id id,LLVKControl::Callback callback)
+{
+    const auto* node=get(id);
+    if (!node || !node->searchEditor) return false;
+    auto params=std::make_shared<SearchEditorParams>(*node->searchEditor->params);
+    params->keystroke=std::move(callback);
+    mNodes.at(id).searchEditor->params=std::move(params);
+    return true;
+}
+
 bool LLVKWidgetTree::setLineEditorKeystroke(Id id,LLVKControl::Callback callback)
 {
     if (!get(id) || !get(id)->lineEditor) return false;
@@ -59,6 +69,17 @@ bool LLVKWidgetTree::setLineEditorPassword(Id id, bool password)
     found->second.lineEditor->text.setPassword(password);
     lineLanguageInput(id,false);
     return get(id) != nullptr;
+}
+
+bool LLVKWidgetTree::restoreLineEditorSelection(Id id,std::size_t anchor,std::size_t end,std::size_t cursor,bool selecting,std::string& error)
+{
+    const auto found=mNodes.find(id);
+    if (found==mNodes.end() || !found->second.lineEditor) { error="Native selection owner is not an editor"; return false; }
+    auto text=found->second.lineEditor->text;
+    if (!text.setSelection(end,anchor,error) || !text.setCursor(cursor,error)) return false;
+    if (!selecting) text.finishSelection();
+    found->second.lineEditor->text=std::move(text);
+    return true;
 }
 
 bool LLVKWidgetTree::selectLineEditorAll(Id id, std::string& error)
@@ -113,15 +134,17 @@ std::optional<LLVKWidgetTree::EditorDraw> LLVKWidgetTree::prepareLineEditor(Id i
             {
                 auto color = view.focusColor;
                 color[3] = view.transparency;
+                for (auto& channel : color) channel=static_cast<unsigned>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
                 output.parts.push_back({{-view.focusWidth,-view.focusWidth,width+view.focusWidth,height+view.focusWidth},color,image,true});
             }
-            output.parts.push_back({{0,0,width,height},{1,1,1,view.transparency},image});
+            const auto imageAlpha=static_cast<std::uint8_t>(std::clamp(view.transparency,0.f,1.f)*255.f)/255.f;
+            output.parts.push_back({{0,0,width,height},{1,1,1,imageAlpha},image});
         }
     }
     auto color = editor.readOnly ? params.readOnlyColor.get() : node->control->tentative ? params.tentativeColor.get() : params.textColor.get();
     color[3] = view.drawAlpha;
-    const auto border = params.border.thickness;
-    const auto lineHeight = static_cast<std::int32_t>(std::floor(font->metrics().lineHeight+0.5f));
+    constexpr int border = 0;
+    const auto lineHeight = static_cast<std::int32_t>(std::ceil(font->metrics().ascender)+std::ceil(font->metrics().descender));
     const auto verticalPad = (height-2*border-lineHeight)/2;
     const auto cursorBottom = border+2, cursorTop = height-border-1;
     const float textBottom = float(border+verticalPad);
@@ -181,6 +204,7 @@ std::optional<LLVKWidgetTree::EditorDraw> LLVKWidgetTree::prepareLineEditor(Id i
             const auto selectedWidth = std::min(rounded(measured->width),text.rightEdge()-rounded(rightPixel));
             auto highlight = params.highlightColor.get();
             highlight[3] = view.drawAlpha;
+            for (auto& channel : highlight) channel=static_cast<unsigned>(std::clamp(channel,0.f,1.f)*255.f)/255.f;
             output.parts.push_back({{rounded(rightPixel),cursorBottom,rounded(rightPixel)+selectedWidth,cursorTop},highlight});
             if (!run(display,text.scroll()+rendered,count,{1-color[0],1-color[1],1-color[2],view.drawAlpha})) return std::nullopt;
         }
@@ -189,8 +213,9 @@ std::optional<LLVKWidgetTree::EditorDraw> LLVKWidgetTree::prepareLineEditor(Id i
     }
     else if (!run(display,text.scroll(),display.size()-text.scroll(),color)) return std::nullopt;
     if (get(editor.border)) setVisible(editor.border,false);
+    const float caretAge=static_cast<float>(view.useEditorClock ? std::max(0.0,mTime-editor.caretResetTime) : view.secondsSinceKeystroke);
     if (focused && !editor.readOnly && view.applicationFocused &&
-        (view.secondsSinceKeystroke < 1.0 || std::fmod(std::floor(view.secondsSinceKeystroke*2),2.0) == 1.0))
+        (caretAge<1.f || std::fmod(std::floor(caretAge*2.f),2.f)==1.f))
     {
         const auto pixel = pixelPosition(text.cursor());
         if (!pixel) return std::nullopt;
@@ -565,6 +590,7 @@ bool LLVKWidgetTree::updateLinePreedit(Id id, std::u32string_view composition, c
     if (node->lineEditor->readOnly) return false;
     auto text = node->lineEditor->text;
     if (!text.updatePreedit(composition,segments,standouts,caret,mOverwrite,error)) return false;
+    mNodes.at(id).lineEditor->caretResetTime=mTime;
     mNodes.at(id).lineEditor->text = std::move(text);
     mNodes.at(id).control->value = LLSD(mNodes.at(id).lineEditor->text.text());
     mNodes.at(id).control->dirty = dirty(id);
@@ -617,7 +643,7 @@ std::optional<LLVKWidgetTree::PreeditLocation> LLVKWidgetTree::linePreeditLocati
     if (!rightPixel) return std::nullopt;
     const auto width = std::int64_t(node->params.rect.right)-node->params.rect.left;
     const auto height = std::int64_t(node->params.rect.top)-node->params.rect.bottom;
-    const auto right = std::max(std::int64_t(*leftPixel),std::min(std::int64_t(*rightPixel),width-node->lineEditor->params.border.thickness));
+    const auto right = std::max(std::int64_t(*leftPixel),std::min(std::int64_t(*rightPixel),width));
     const auto scaled = [&](std::int64_t coordinate, float scale, std::int32_t& output)
     {
         const double rounded = std::floor(double(float(coordinate)*scale)+0.5);
@@ -901,6 +927,7 @@ bool LLVKWidgetTree::lineEditorKey(Id id, LLVKLineEditor::Key key, LLVKLineEdito
         }
     }
     if (!selecting) text.deselect();
+    mNodes.at(id).lineEditor->caretResetTime=mTime;
     mNodes.at(id).lineEditor->text = std::move(text);
     mNodes.at(id).control->value = LLSD(mNodes.at(id).lineEditor->text.text());
     if (bad) notify(id,&Events::badKeystroke);
@@ -1243,6 +1270,7 @@ bool LLVKWidgetTree::lineEditorUnicode(Id id, char32_t character, bool overwrite
     auto text = node->lineEditor->text;
     bool limited = false;
     if (!text.insert(character,overwrite,allowRemoval,limited,error)) return false;
+    mNodes.at(id).lineEditor->caretResetTime=mTime;
     LLSD stored(text.text());
     mNodes.at(id).lineEditor->text = std::move(text);
     mNodes.at(id).control->value = std::move(stored);
@@ -1347,7 +1375,11 @@ bool LLVKWidgetTree::lineEditorPointer(Id id, PointerEvent event, std::string& e
             if (!get(id)) return true;
             mNodes.at(id).lineEditor->text = std::move(text);
         }
-        if (get(id)) mNodes.at(id).lineEditor->text.finishSelection();
+        if (get(id))
+        {
+            mNodes.at(id).lineEditor->text.finishSelection();
+            mNodes.at(id).lineEditor->caretResetTime=mTime;
+        }
         return true;
     }
     if (event.kind == PointerKind::LeftDown)
@@ -1388,7 +1420,7 @@ bool LLVKWidgetTree::lineEditorPointer(Id id, PointerEvent event, std::string& e
             if (!get(id)) return true;
         }
         if (!requestControlFocus(id,true,error)) return false;
-        if (get(id)) emit();
+        if (get(id)) { mNodes.at(id).lineEditor->caretResetTime=mTime; emit(); }
         return true;
     }
     if (event.kind == PointerKind::Hover)
@@ -1408,6 +1440,7 @@ bool LLVKWidgetTree::lineEditorPointer(Id id, PointerEvent event, std::string& e
             }
             if (!text.point(event.x,false,snapshot.params.inputPrevalidator,error)) return false;
             if (!get(id)) return true;
+            mNodes.at(id).lineEditor->caretResetTime=mTime;
             mNodes.at(id).lineEditor->text = std::move(text);
         }
         notify(id,&Events::textCursor);
@@ -1435,6 +1468,7 @@ bool LLVKWidgetTree::lineEditorPointer(Id id, PointerEvent event, std::string& e
             std::string failure;
             copyLineEditor(id,true,failure);
         }
+        if (handled && get(id)) mNodes.at(id).lineEditor->caretResetTime=mTime;
         if (get(id)) emit();
         return handled;
     }

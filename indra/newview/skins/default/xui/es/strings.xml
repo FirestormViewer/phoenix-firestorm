@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <strings>
+	<string name="NativeErrorTitle">Error nativo de Vulkanstorm</string>
+	<string name="NativeErrorCloseViewer">Confirma este mensaje para cerrar el visor.</string>
+	<string name="NativeErrorCopy">Copiar detalles</string>
+	<string name="NativeErrorRetryCleanup">Reintentar limpieza</string>
+	<string name="NativeErrorRetryLogin">Reintentar inicio de sesión</string>
+	<string name="NativeAgreementAccept">Aceptar</string>
+	<string name="NativeErrorOutOfMemory">El visor se ha quedado sin memoria. Cierra otras aplicaciones antes de reiniciarlo.</string>
+	<string name="NativeErrorMissingFiles">Faltan archivos necesarios o no son accesibles. Repara la instalación y comprueba los permisos.</string>
+	<string name="NativeErrorAudioFailed">El servicio de audio ha fallado. Comprueba el dispositivo y la configuración de audio antes de reiniciar.</string>
+	<string name="NativeErrorVoiceFailed">El servicio de dispositivos de voz ha fallado. Comprueba la configuración de voz y los dispositivos seleccionados antes de reiniciar.</string>
+	<string name="NativeErrorTranslationFailed">La verificación de traducción ha fallado. Comprueba la configuración de red y proxy antes de reiniciar.</string>
+	<string name="NativeErrorPreviewFailed">La vista previa de texturas ha fallado. Comprueba el acceso a la caché y la imagen seleccionada antes de reiniciar.</string>
+	<string name="NativeAgreementReject">Rechazar</string>
+	<string name="NativeErrorUnexpected">Se ha producido un error inesperado en el visor nativo. Cierra el visor y contacta con el servicio de asistencia si vuelve a ocurrir.</string>
+	<string name="NativeErrorDefaultSettings">No se pudieron cargar los ajustes predeterminados necesarios. Repara la instalación antes de volver a iniciar el visor.</string>
+	<string name="NativeErrorSettingsMode">No se pudo cargar el modo de configuración seleccionado. Comprueba los archivos de configuración instalados antes de volver a iniciar el visor.</string>
+	<string name="NativeErrorUnsupportedArguments">El inicio nativo no admite una o más opciones de la línea de comandos. Elimina las opciones no admitidas antes de volver a iniciar el visor.</string>
+	<string name="NativeErrorSettingsRead">No se pudieron leer o aplicar los ajustes necesarios. Comprueba los archivos de configuración y los permisos de acceso antes de volver a iniciar el visor.</string>
+	<string name="NativeErrorSettingsWrite">No se pudieron guardar los ajustes. Comprueba el espacio disponible en disco y los permisos de escritura antes de volver a iniciar el visor.</string>
+	<string name="NativeErrorCacheUnavailable">No se pudo inicializar la caché. Comprueba la ubicación de la caché, los permisos de acceso y el espacio disponible en disco antes de volver a iniciar el visor.</string>
+	<string name="NativeErrorStartupResources">Los recursos necesarios para el inicio no están disponibles. Repara la instalación antes de volver a iniciar el visor.</string>
+	<string name="NativeErrorWindowUnavailable">La ventana nativa no está disponible o no pudo completar una operación. Comprueba la disponibilidad de la pantalla y los ajustes de la ventana antes de volver a iniciar el visor.</string>
+	<string name="NativeErrorRendererUnavailable">El renderizador Vulkan nativo no está disponible o se ha detenido. Comprueba la compatibilidad del controlador con Vulkan antes de volver a iniciar el visor. No se ha cambiado de renderizador ni se ha realizado ningún reintento.</string>
+	<string name="NativeErrorBrowserUnavailable">El navegador integrado no pudo iniciarse o cargar su página. Comprueba la instalación y la configuración de red antes de volver a iniciar el visor.</string>
+	<string name="NativeErrorShutdownFailed">El cierre nativo no pudo completarse con normalidad. Comprueba el acceso a los ajustes y a la caché antes de volver a iniciar el visor.</string>
+	<string name="NativeErrorOperationFailed">No se pudo completar la operación solicitada. Cierra este mensaje para volver al visor. No se ha realizado ningún reintento.</string>
+	<string name="NativeErrorOptionalSettings">No se pudieron cargar los ajustes opcionales. El visor continuará con los valores predeterminados disponibles.</string>
+	<string name="NativeErrorNetworkUnavailable">No se pudo completar la solicitud de red. Comprueba la conexión. La recuperación requiere la intervención del componente responsable de la operación; no se ha realizado ningún reintento.</string>
+	<string name="NativeErrorTlsRejected">No se pudo verificar la conexión segura. Comprueba el reloj del sistema y la configuración de red. No se ha omitido la verificación del certificado.</string>
+	<string name="NativeErrorTransportUnavailable">La autenticación nativa no está disponible en esta compilación. No se ha enviado ninguna solicitud de inicio de sesión.</string>
+	<string name="NativeErrorSessionCleanupFailed">No se pudo completar la limpieza de la sesión. Los recursos siguen bajo el control del componente responsable. Reintenta la limpieza para finalizar la operación.</string>
+	<string name="NativeErrorAuthenticationFailed">La autenticación ha fallado. No se ha establecido ninguna sesión conectada.</string>
+	<string name="NativeErrorConnectionFailed">La conexión con la región ha fallado. La recuperación requiere la intervención del componente responsable de la sesión.</string>
+	<string name="NativeErrorSessionTimeout">Se ha agotado el tiempo de espera de la solicitud de sesión. La recuperación requiere la intervención del componente responsable de la sesión.</string>
+	<string name="NativeErrorSessionFailed">No se pudo completar la operación de sesión. La recuperación requiere la intervención del componente responsable de la sesión.</string>
 	<string name="SECOND_LIFE">
 		[CURRENT_GRID]
 	</string>

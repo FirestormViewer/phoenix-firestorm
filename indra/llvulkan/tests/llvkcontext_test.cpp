@@ -265,6 +265,8 @@ namespace tut
         std::string error;
         const bool instance = renderer.createInstance(true,error);
         ensure(error,instance);
+        ensure("GPU validation layer loaded",GetModuleHandleW(L"VkLayer_khronos_validation.dll")!=nullptr);
+        ensure("validation does not implicitly enable API tracing",GetModuleHandleW(L"VkLayer_api_dump.dll")==nullptr);
         const auto surface = renderer.createSurface(window.handle,GetModuleHandleW(nullptr));
         ensure("native surface",surface != VK_NULL_HANDLE);
         if (!renderer.pickPhysicalDevice(surface,error) || !renderer.createDevice(surface,error))
@@ -290,7 +292,7 @@ namespace tut
         }
         renderer.waitIdle();
         const LLVKGlyphUpload::Device uploadDevice{renderer.physicalDevice(),renderer.device(),renderer.allocator(),
-            renderer.graphicsQueue(),renderer.graphicsQueueFamily()};
+            renderer.graphicsQueue(),renderer.graphicsQueueFamily(),renderer.samplerAnisotropyEnabled()};
         ensure("native unsynchronized recreation",renderer.createSwapchain(surface,256,256,error,false));
         ensure("requested policy is retained",!renderer.synchronizedPresentationRequested());
         ensure("negotiated present mode reported",renderer.presentMode() == VK_PRESENT_MODE_IMMEDIATE_KHR || renderer.presentMode() == VK_PRESENT_MODE_FIFO_KHR);
@@ -369,19 +371,45 @@ namespace tut
         LLVKImagePublication publication(uploadDevice);
         ensure("asynchronous image begins",publication.advance(logo,error));
         ensure("not published before completion observation",!publication.current().image && publication.pending());
-        ensure_equals("test waits only to observe completion",vkQueueWaitIdle(renderer.graphicsQueue()),VK_SUCCESS);
+        ensure("test observes initial upload fence",publication.waitPendingUpload(5000000000ull,error));
         const bool published = publication.advance(logo,error);
         ensure(error,published);
         ensure("matching source and image published",publication.current().source == logo && publication.current().image);
-        const auto oldImage = publication.current().image;
         const std::uint8_t browserPixel[]{1,2,3,4};
-        auto browserFrame = LLVKWidgetImage::browserFrame(1,1,browserPixel,error);
-        ensure(error,browserFrame != nullptr);
-        ensure("replacement upload begins",publication.advance(browserFrame,error));
-        ensure("prior image valid during upload",publication.current().image == oldImage);
-        ensure_equals("replacement upload completes",vkQueueWaitIdle(renderer.graphicsQueue()),VK_SUCCESS);
-        ensure("replacement publishes",publication.advance(browserFrame,error));
-        ensure("new image paired to browser frame",publication.current().source == browserFrame && publication.current().image != oldImage);
+        auto orderedUpload=LLVKGlyphUpload::submit(uploadDevice,{1,1},browserPixel,error);
+        ensure(error,orderedUpload!=nullptr);
+        ensure("completion-only publication is unchanged",!orderedUpload->published());
+        ensure("submitted image has matching queue contract",orderedUpload->submittedFor(uploadDevice)!=nullptr);
+        auto foreignQueue=uploadDevice;
+        foreignQueue.queue=VK_NULL_HANDLE;
+        ensure("ordered image rejects different queue",!orderedUpload->submittedFor(foreignQueue));
+        auto foreignDevice=uploadDevice;
+        foreignDevice.logical=VK_NULL_HANDLE;
+        ensure("ordered image rejects different device",!orderedUpload->submittedFor(foreignDevice));
+        auto foreignAllocator=uploadDevice;
+        foreignAllocator.allocator=VK_NULL_HANDLE;
+        ensure("ordered image rejects different allocator",!orderedUpload->submittedFor(foreignAllocator));
+        auto foreignFamily=uploadDevice;
+        foreignFamily.queueFamily=VK_QUEUE_FAMILY_IGNORED;
+        ensure("ordered image rejects different family",!orderedUpload->submittedFor(foreignFamily));
+        ensure("ordered upload retires through completion",orderedUpload->wait(5000000000ull,error)==LLVKGlyphUpload::Status::Ready);
+        orderedUpload.reset();
+        std::shared_ptr<const LLVKWidgetImage> browserFrame;
+        for (std::uint32_t replacement=0; replacement<64; ++replacement)
+        {
+            const auto oldImage = publication.current().image;
+            browserFrame = LLVKWidgetImage::browserFrame(1,1,browserPixel,error);
+            ensure(error,browserFrame != nullptr);
+            ensure("replacement upload begins",publication.advance(browserFrame,error));
+            ensure("prior image valid during upload",publication.current().image == oldImage);
+            ensure("replacement upload fence completes",publication.waitPendingUpload(5000000000ull,error));
+            ensure("replacement publishes",publication.advance(browserFrame,error));
+            ensure("new image paired to browser frame: replacement="+std::to_string(replacement)+
+                " pending="+std::to_string(publication.pending())+
+                " source="+std::to_string(publication.current().source == browserFrame)+
+                " image="+std::to_string(publication.current().image != oldImage),
+                publication.current().source == browserFrame && publication.current().image != oldImage);
+        }
         ensure("invalidation clears publication",publication.advance({},error) && !publication.current().image);
         ensure("cancelled upload begins",publication.advance(browserFrame,error));
         publication.invalidate();
@@ -393,6 +421,22 @@ namespace tut
         ensure("replacement completes",publication.waitPendingUpload(5000000000ull,error));
         ensure("replacement publishes after cancellation",publication.advance(replacementFrame,error));
         ensure("replacement source is authoritative",publication.current().source == replacementFrame && publication.current().image);
+        LLVKImagePublication orderedPublication(uploadDevice,true);
+        ensure("ordered publication submits initial frame",orderedPublication.advance(browserFrame,error));
+        ensure("ordered publication pairs submitted image and source",orderedPublication.current().source==browserFrame &&
+            orderedPublication.current().image && orderedPublication.pending());
+        auto retainedOrderedImage=orderedPublication.current().image;
+        const std::weak_ptr<const LLVKGlyphImage> orderedLifetime=retainedOrderedImage;
+        orderedPublication.invalidate();
+        ensure("ordered invalidation hides image but retains upload",!orderedPublication.current().image && orderedPublication.pending());
+        ensure("ordered cancelled upload completes",orderedPublication.waitPendingUpload(5000000000ull,error));
+        ensure("ordered new epoch submits",orderedPublication.advance(replacementFrame,error));
+        ensure("ordered cancelled source never reappears",orderedPublication.current().source==replacementFrame &&
+            orderedPublication.current().image!=retainedOrderedImage);
+        ensure("consumer retains cancelled image after upload retirement",!orderedLifetime.expired());
+        retainedOrderedImage.reset();
+        ensure("cancelled image retires after final consumer release",orderedLifetime.expired());
+        ensure("ordered replacement upload completes",orderedPublication.waitPendingUpload(5000000000ull,error));
         LLVKWidgetPaint paint;
         const LLVKWidgetTree::Rect paintClip{0,0,static_cast<std::int32_t>(renderer.swapchainExtent().width),static_cast<std::int32_t>(renderer.swapchainExtent().height)};
         paint.commands.push_back({1,{8,8,133,133},paintClip,{1,1,1,1},logo});
@@ -406,26 +450,163 @@ namespace tut
         const auto imageIdentity = widgetPacket.draws()[0].image;
         ensure("unchanged paint ready without reupload",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Ready);
         ensure("image cache identity retained",widgetPacket.draws()[0].image == imageIdentity);
+        {
+            const auto original=*paint.commands[1].text;
+            std::size_t uploads=0;
+            const auto started=std::chrono::steady_clock::now();
+            for (std::size_t step=0; step<32; ++step)
+            {
+                auto moved=original;
+                for (auto& glyph : moved.glyphs)
+                {
+                    glyph.left+=float(step%8)*0.25f; glyph.right+=float(step%8)*0.25f;
+                    glyph.bottom+=float(step%4)*0.5f; glyph.top+=float(step%4)*0.5f;
+                }
+                paint.commands[1].text=std::move(moved);
+                const auto status=widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error);
+                ensure(error,status!=LLVKWidgetGpu::Status::Failed);
+                if (status==LLVKWidgetGpu::Status::Pending)
+                {
+                    ++uploads;
+                    ensure("movement probe upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
+                    ensure("movement probe publishes",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+                }
+            }
+            const auto elapsed=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-started).count();
+            std::cout << "Native text movement probe: steps=32 uploads=" << uploads << " elapsed_ms=" << elapsed << '\n';
+            ensure_equals("placement-only changes never upload glyph rasters",uploads,std::size_t(0));
+            paint.commands[1].text=original;
+            const auto restored=widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error);
+            ensure(error,restored!=LLVKWidgetGpu::Status::Failed);
+            ensure("movement probe restore uploads complete",widgetGpu.waitPendingUploads(5000000000ull,error));
+            ensure("movement probe restored",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+        }
+        {
+            auto textPaint=paint;
+            textPaint.commands.erase(textPaint.commands.begin());
+            textPaint.commands[0].clip={0,0,100,100};
+            const auto initialPacket=widgetPacket;
+            const auto equalVertices=[](const auto& first,const auto& second)
+            {
+                return first.positionX==second.positionX && first.positionY==second.positionY &&
+                    first.textureU==second.textureU && first.textureV==second.textureV &&
+                    first.red==second.red && first.green==second.green && first.blue==second.blue && first.alpha==second.alpha;
+            };
+            for (const float scale : {0.75f,1.f,1.25f,1.5f})
+            {
+                textPaint.displayScale=scale;
+                textPaint.commands[0].text=*line;
+                for (std::size_t index=0; index<textPaint.commands[0].text->glyphs.size(); ++index)
+                {
+                    auto& glyph=textPaint.commands[0].text->glyphs[index];
+                    glyph.left+=40.f+float(index)*0.25f; glyph.right+=40.f+float(index)*0.25f;
+                    glyph.bottom+=40.5f; glyph.top+=40.5f;
+                }
+                ensure("scaled reposition remains immediately ready",widgetGpu.prepare(textPaint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+                LLVKWidgetGpu freshGpu(uploadDevice);
+                LLVKUiPacket freshPacket(renderer.swapchainExtent());
+                ensure("fresh comparison requires publication",freshGpu.prepare(textPaint,renderer.swapchainExtent(),freshPacket,error)==LLVKWidgetGpu::Status::Pending);
+                ensure("fresh comparison upload completes",freshGpu.waitPendingUploads(5000000000ull,error));
+                ensure("fresh comparison publishes",freshGpu.prepare(textPaint,renderer.swapchainExtent(),freshPacket,error)==LLVKWidgetGpu::Status::Ready);
+                ensure("reposition matches fresh geometry exactly",std::equal(widgetPacket.vertices().begin(),widgetPacket.vertices().end(),
+                    freshPacket.vertices().begin(),freshPacket.vertices().end(),equalVertices));
+                ensure_equals("reposition preserves draw count",widgetPacket.draws().size(),freshPacket.draws().size());
+                for (std::size_t index=0; index<widgetPacket.draws().size(); ++index)
+                {
+                    const auto& reused=widgetPacket.draws()[index];
+                    const auto& fresh=freshPacket.draws()[index];
+                    ensure("reposition retains original glyph image",reused.image==initialPacket.draws()[index+1].image);
+                    ensure("reposition preserves draw contract",reused.firstVertex==fresh.firstVertex && reused.vertexCount==fresh.vertexCount &&
+                        reused.clip.offset.x==fresh.clip.offset.x && reused.clip.offset.y==fresh.clip.offset.y &&
+                        reused.clip.extent.width==fresh.clip.extent.width && reused.clip.extent.height==fresh.clip.extent.height &&
+                        reused.blend==fresh.blend && reused.alphaMask==fresh.alphaMask);
+                }
+                ensure("moved frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+                ensure("moved packet recorded",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
+                ensure("moved packet presented",renderer.end2DFrame());
+            }
+            const auto changed=font->layoutLine(U"Updated",0,7,{},error);
+            ensure(error,changed.has_value());
+            textPaint.commands[0].text=*changed;
+            ensure("new glyph identities require publication",widgetGpu.prepare(textPaint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Pending);
+            ensure("new glyph publication completes",widgetGpu.waitPendingUploads(5000000000ull,error));
+            ensure("new glyph identities publish",widgetGpu.prepare(textPaint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+            ensure("old packet acquired after atlas replacement",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+            ensure("old packet retains its image and geometry",renderer.recordUiPacket(initialPacket.vertices(),initialPacket.draws()));
+            ensure("old packet presented",renderer.end2DFrame());
+            ensure("restore original paint requests publication",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Pending);
+            ensure("original paint upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
+            ensure("original paint publishes",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+            ensure("retained original packet is unchanged",std::equal(widgetPacket.vertices().begin(),widgetPacket.vertices().end(),
+                initialPacket.vertices().begin(),initialPacket.vertices().end(),equalVertices));
+        }
+        const auto unshadowedVertices=widgetPacket.vertices().size();
+        paint.commands[1].shadow=true;
+        paint.commands[1].color={0.2f,0.1f,0.1f,1.f};
+        ensure("dark widget text is ready without reupload",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+        ensure_equals("dark text suppresses soft shadow",widgetPacket.vertices().size(),unshadowedVertices);
+        paint.commands[1].color={1.f,1.f,1.f,1.f};
+        ensure("bright widget shadow prepares",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+        ensure("bright text retains shadow geometry",widgetPacket.vertices().size()>unshadowedVertices);
+        paint.commands[1].shadow=false;
+        ensure("restore ordinary text packet",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
         ensure("widget frame acquired",renderer.begin2DFrame(0,0,0,1) != VK_NULL_HANDLE);
         ensure("widget packet recorded",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
         ensure("widget packet presented",renderer.end2DFrame());
         renderer.waitIdle();
+        auto disabledAnisotropy=uploadDevice;
+        disabledAnisotropy.samplerAnisotropyEnabled=false;
+        ensure("anisotropic sampler requires enabled device feature",!LLVKGlyphUpload::submit(disabledAnisotropy,
+            {logo->pixelWidth(),logo->pixelHeight()},logo->bottomUpRgba(),error,LLVKGlyphUpload::Sampling::SkinAnisotropicClamp));
+        if (renderer.samplerAnisotropyEnabled())
+        {
+            paint.skinAnisotropy=true;
+            ensure("sampling policy change requires new publication",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Pending);
+            ensure("anisotropic image upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
+            ensure("anisotropic image publishes",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+            ensure("sampler policy has distinct resource identity",widgetPacket.draws()[0].image!=imageIdentity);
+            ensure("anisotropic frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+            ensure("anisotropic packet recorded",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
+            ensure("anisotropic packet presented",renderer.end2DFrame());
+            renderer.waitIdle();
+            const auto anisotropicIdentity=widgetPacket.draws()[0].image;
+            paint.skinAnisotropy=false;
+            ensure("disabling anisotropy prepares a bilinear resource",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Pending);
+            ensure("bilinear replacement upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
+            ensure("bilinear replacement publishes",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+            ensure("off policy no longer uses anisotropic resource",widgetPacket.draws()[0].image!=anisotropicIdentity);
+        }
         paint.commands.resize(1);
         paint.commands[0].streamingImage = true;
         paint.commands[0].image = browserFrame;
-        ensure("browser stream initially pending",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Pending);
+        ensure("browser stream available to ordered queue",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Ready);
+        ensure("browser frame acquired before CPU upload wait",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+        ensure("browser consumed after ordered upload",renderer.recordUiPacket(widgetPacket.vertices(),widgetPacket.draws()));
+        ensure("browser submitted without CPU upload wait",renderer.end2DFrame());
         ensure("test completes browser upload fence",widgetGpu.waitPendingUploads(5000000000ull,error));
         paint.commands[0].image = LLVKWidgetImage::browserFrame(1,1,browserPixel,error);
         const auto streamed=widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error);
         ensure("new frame publication status="+std::to_string(static_cast<int>(streamed))+": "+error,streamed == LLVKWidgetGpu::Status::Ready);
-        ensure("browser packet owns a completed image",widgetPacket.draws()[0].image != nullptr);
+        ensure("browser packet owns an ordered image",widgetPacket.draws()[0].image != nullptr);
         const auto priorStreamImage = widgetPacket.draws()[0].image;
         ensure("old stream upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
         ++paint.commands[0].imageEpoch;
-        ensure("same-size new surface waits for its own image",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Pending);
+        ensure("same-size new surface queues its own image",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Ready);
+        ensure("new surface never exposes old epoch",widgetPacket.draws()[0].image!=priorStreamImage);
         ensure("new surface upload completes",widgetGpu.waitPendingUploads(5000000000ull,error));
         ensure("new surface becomes ready",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error) == LLVKWidgetGpu::Status::Ready);
         ensure("new surface cannot reuse retired epoch",widgetPacket.draws()[0].image != priorStreamImage);
+        const auto originalRectangle=paint.commands[0].rectangle;
+        const auto originalClip=paint.commands[0].clip;
+        paint.displayScale=1.25f;
+        paint.commands[0].rectangle={1,2,12,15};
+        paint.commands[0].clip={0,0,30,30};
+        ensure("fractional browser quad ready",widgetGpu.prepare(paint,renderer.swapchainExtent(),widgetPacket,error)==LLVKWidgetGpu::Status::Ready);
+        ensure_equals("browser width is not rounded like skin images",widgetPacket.vertices()[1].positionX-widgetPacket.vertices()[0].positionX,13.75f);
+        ensure_equals("browser height is not rounded like skin images",widgetPacket.vertices()[0].positionY-widgetPacket.vertices()[2].positionY,16.25f);
+        paint.displayScale=1.f;
+        paint.commands[0].rectangle=originalRectangle;
+        paint.commands[0].clip=originalClip;
         LLVKWidgetTree scrollTree;
         LLVKWidgetTree::Params scrollView;
         scrollView.rect={0,0,120,100};
@@ -531,9 +712,36 @@ namespace tut
         const auto verticesBefore=trianglePacket.vertices().size();
         ensure("invalid triangle clip rejected",!trianglePacket.triangle({0,0,1,0,0,1},{{-1,0},{1,1}},{1,1,1,1},error));
         ensure_equals("rejected triangle preserves packet",trianglePacket.vertices().size(),verticesBefore);
+        std::array<LLVKColor::Value,3> shadowColors{{{0,0,0,0.5f},{0,0,0,0},{0,0,0,0}}};
+        LLVKWidgetPaint shadowPaint;
+        LLVKWidgetPaint::Command shadow;
+        shadow.clip={0,0,static_cast<int>(renderer.swapchainExtent().width),static_cast<int>(renderer.swapchainExtent().height)};
+        shadow.triangle=std::array<float,6>{30,30,36,24,36,36};
+        shadow.triangleColors=shadowColors;
+        shadowPaint.commands.push_back(shadow);
+        LLVKUiPacket shadowPacket(renderer.swapchainExtent());
+        ensure("gradient traverses widget GPU preparation",widgetGpu.prepare(shadowPaint,renderer.swapchainExtent(),shadowPacket,error)==LLVKWidgetGpu::Status::Ready);
+        ensure_equals("shadow inner alpha preserved",shadowPacket.vertices()[0].alpha,0.5f);
+        ensure_equals("shadow outer alpha preserved",shadowPacket.vertices()[1].alpha,0.f);
+        shadowColors[2][3]=std::numeric_limits<float>::quiet_NaN();
+        ensure("nonfinite gradient rejected",!shadowPacket.gradientTriangle(*shadow.triangle,triangleClip,shadowColors,error));
+        ensure_equals("invalid gradient leaves packet intact",shadowPacket.vertices().size(),std::size_t(3));
         ensure("marker frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
-        ensure("marker triangle recorded",renderer.recordUiPacket(trianglePacket.vertices(),trianglePacket.draws()));
+        ensure("gradient triangle recorded",renderer.recordUiPacket(shadowPacket.vertices(),shadowPacket.draws()));
         ensure("marker triangle presented",renderer.end2DFrame());
+        shadowPaint.commands[0].clip={0,0,60,60};
+        for (const auto scale : {1.25f,1.f,0.75f})
+        {
+            shadowPaint.displayScale=scale;
+            ensure("scaled GPU packet ready",widgetGpu.prepare(shadowPaint,renderer.swapchainExtent(),shadowPacket,error)==LLVKWidgetGpu::Status::Ready);
+            ensure_equals("scaled triangle device X",shadowPacket.vertices()[0].positionX,30.f*scale);
+            ensure_equals("scaled triangle device Y",shadowPacket.vertices()[0].positionY,float(renderer.swapchainExtent().height)-30.f*scale);
+            ensure("scaled frame acquired",renderer.begin2DFrame(0,0,0,1)!=VK_NULL_HANDLE);
+            ensure("scaled packet recorded",renderer.recordUiPacket(shadowPacket.vertices(),shadowPacket.draws()));
+            ensure("scaled packet presented",renderer.end2DFrame());
+        }
+        shadowPaint.displayScale=std::numeric_limits<float>::quiet_NaN();
+        ensure("nonfinite scale rejected",widgetGpu.prepare(shadowPaint,renderer.swapchainExtent(),shadowPacket,error)==LLVKWidgetGpu::Status::Failed);
         renderer.waitIdle();
     }
 #endif

@@ -190,6 +190,50 @@ teardown without stale callbacks. Require source-defined visual/effects/interact
 parity within the implemented scope. A component is not workflow-complete until its
 relevant UI and menu actions work end to end.
 
+### Cross-cutting requirement: service error reporting
+
+Established 2026-09-13 following the existing-service reporting work. Every native
+service increment MUST deliver its error reporting together with the service and
+its UI/menu consumers. Reporting is part of the service's exit gate, not a later
+cleanup phase. The existing reporting infrastructure is a foundation, not evidence
+that a new producer's failure paths are covered.
+
+User clarification (2026-09-13): log-only native reporting counts as reporting
+parity where the corresponding OpenGL path is log-only. User-visible messages,
+localization and presentation gates below apply where that source contract requires
+them; do not introduce a popup merely to satisfy this requirement. Browser error
+pages, texture fallback states and explicit notifications remain distinct observable
+contracts. This does not waive safe diagnostics or required recovery behavior.
+
+- Recover the source-defined failure contract under NV-00, including asynchronous
+  callbacks, partial initialization, cancellation, timeouts and teardown. Identify
+  which failures are recoverable, fatal or expected user cancellation.
+- Map actual producer failures to stable, cause-specific codes, operation and
+  request/session identities. Supply actionable localized messages and safe
+  diagnostic details; never expose credentials, tokens or sensitive response bodies.
+- Wire reporting into the production service and native consumer. Preserve usable
+  reporting before UI initialization, during operation and after renderer failure,
+  using an independent fallback when the normal presentation path is unavailable.
+- Let the operation/session owner decide Retry, Cancel and Close behavior. Implement
+  applicable deadlines and retry/backoff policy in that owner, not in the dialog.
+  Reject stale responses and actions; do not offer recovery that has no executable
+  production binding or bypass security checks to make a retry succeed.
+- Bound admission and duplicate handling, deliver responses once, and retain the
+  resources needed to explain and recover from failed cleanup. Implement expiry,
+  ignore and persistence rules when required by that service's source contract;
+  never persist callbacks or replay recovery against an expired owner.
+- Include discriminating failure-injection tests at the production boundary for
+  relevant missing resources, permissions, network/TLS failures, cancellation,
+  late results, retry and partial cleanup. Verify localized presentation and fallback
+  behavior separately from successful-operation tests and measured UI parity.
+
+Phase 2 transport must bring login/TLS/MFA, agreement and connection diagnostics
+with its real protocol producers. Each selected Phase 3 service must bring its own
+authenticated failures and notification policies. Phase 4 must cover its resource,
+rendering and snapshot failures. A fixture-only error, generic placeholder message,
+disabled route or successful build cannot close the corresponding reporting gate.
+Record remaining failure paths and verification limits in each service's handoff.
+
 ### Delivery and validation
 
 - Deliver focused branches/PRs per behavior package. The sequence is source contract,

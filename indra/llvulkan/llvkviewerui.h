@@ -18,6 +18,8 @@
 #include "llvkbeamshape.h"
 #include "llvkgraphicpresets.h"
 #include "llvkgraphicspolicy.h"
+#include "llvkerror.h"
+#include "llvksessionowner.h"
 
 class LLVKViewerUi final
 {
@@ -68,10 +70,18 @@ public:
         std::map<std::string,LLSD> settings;
     };
     static std::string pageUrl(const Page& page);
+    static std::string uiLanguage(std::map<std::string,LLSD>& settings);
     LLVKWidgetTree& tree() noexcept { return mTree; }
+    float displayScale() const noexcept { return mDisplayScale; }
+    bool refreshDisplayScale(std::string& error, float systemScale = 1.f);
     LLVKWidgetTree::Id root() const noexcept { return mRoot; }
     LLVKWidgetTree::Id find(std::string_view name,LLVKWidgetTree::Id within = 0) const;
     LLVKMenu& menu() noexcept;
+    bool focusLoginFields(std::string& error);
+    bool menuPointer(const LLVKWidgetTree::PointerEvent& event);
+    bool updateMenuHover(const LLVKWidgetTree::PointerEvent& event,std::string& error);
+    void blockTooltips();
+    bool menuShortcut(const std::string& key,bool control,bool shift,bool alt);
     std::optional<LLVKWidgetPaint> preparePaint(const LLVKWidgetPaint::Input& input, std::string& error);
     bool showPreferences(std::string& error);
     std::optional<LLVKWidgetTree::Id> constructPreferencePanel(const std::string& filename,
@@ -98,6 +108,13 @@ public:
     using BrowserCommand = std::function<bool(LLVKWidgetTree::Id,const std::string&,const std::string&,std::string&)>;
     void setBrowserCommand(BrowserCommand command) { mBrowserCommand=std::move(command); }
     bool showMediaBrowser(const std::string& url,std::string& error,const std::string& target = {});
+    static std::string helpUrl(const std::string& format,const std::string& topic,const LLSD& substitutions);
+    static bool helpUsesExternalBrowser(const std::string& url,unsigned behavior);
+    using HelpContext = std::function<std::optional<LLSD>(std::string&)>;
+    using HelpExternal = std::function<bool(const std::string&,std::string&)>;
+    void setHelpServices(HelpContext context,HelpExternal external);
+    bool showHelp(const std::string& topic,std::string& error);
+    LLVKWidgetTree::Id helpBrowser() const noexcept { return mHelpBrowser; }
     void webBrowserEvent(LLVKWidgetTree::Id browser,const std::string& kind,const std::string& text,bool back,bool forward);
     bool reportProblem(std::string& error);
     bool showAutoReplace(std::string& error);
@@ -178,7 +195,8 @@ public:
     bool setAboutInfo(const LLSD& info, std::string& error);
     void setDialogClipboard(std::shared_ptr<LLVKClipboard> clipboard) { mTree.setClipboard(clipboard); mDialogClipboard = std::move(clipboard); }
     void setOpenUrl(std::function<void(const std::string&)> callback) { mOpenUrl = std::move(callback); }
-    void setPointerCursor(std::function<void(bool)> callback) { mPointerCursor = std::move(callback); }
+    bool activateUrl(const std::string& url,std::string& error);
+    void setPointerCursor(std::function<void(bool)> callback) { mPointerCursor = std::move(callback); mTree.setCursorHandler(mPointerCursor); }
     const std::string& dialogError() const noexcept { return mDialogError; }
     std::string takeDialogError() { auto error = std::move(mDialogError); mDialogError.clear(); return error; }
     struct Notice
@@ -195,7 +213,30 @@ public:
     bool advanceNotices(double time, std::string& error);
     bool noticeKey(bool returnKey, bool modified, std::string& error);
     LLVKWidgetTree::Id modalNotice() const noexcept { return mNoticePanel; }
+    bool showError(const LLVKError& failure, std::string& error);
+    void setSessionOwner(LLVKSessionOwner* owner);
+    bool refreshSession(std::string& error, bool repeat = false);
+    const LLVKSessionOwner::Snapshot& sessionSnapshot() const noexcept { return mSessionSnapshot; }
 private:
+    bool appendTooltip(LLVKWidgetPaint& paint,const LLVKWidgetPaint::Input& input,std::string& error);
+    bool initializeTooltip(std::string& error);
+    std::string mTooltipTemplate;
+    int mTooltipMaximumWidth=200,mTooltipPadding=4;
+    std::map<std::string,float> mTooltipTimeouts;
+    LLVKWidgetTree::Id mTooltipPanel=0,mTooltipOwner=0;
+    std::optional<std::pair<int,int>> mTooltipPointer;
+    LLVKWidgetTree::Rect mTooltipNear;
+    double mTooltipMoved=0.0,mTooltipShown=0.0;
+    std::optional<double> mTooltipFade;
+    bool mTooltipBlocked=false;
+    std::string errorString(std::string_view key, std::string_view fallback) const;
+    bool enqueueNotice(Notice notice, std::string& error);
+    bool queueError(const LLVKError& failure, std::vector<Notice::Button> actions,
+        std::function<void(int)> response, std::string& error, std::string name = "NativeError");
+    LLVKErrorGate mErrorGate;
+    LLVKSessionOwner* mSessionOwner = nullptr;
+    LLVKSessionOwner::Snapshot mSessionSnapshot;
+    std::optional<LLVKSessionOwner::Snapshot> mReportedSession;
     bool initializeDialogs(const Configuration& configuration,std::string& error);
     bool updateAboutText(std::string& error);
     bool initializeStartupPreferencePanel(LLVKWidgetTree::Id panel, std::string& error);
@@ -267,6 +308,7 @@ private:
     std::map<std::string,LLSD> mCrashSettings;
     std::vector<LLVKWidgetTree::Id> mCrashPanels;
     bool mCrashSettingsRequireRestart = false;
+    bool mLanguageChanged = false;
     std::function<bool(const std::map<std::string,LLSD>&,std::string&)> mSaveCrashPreferences;
     std::function<bool(std::string&)> mScheduleSettingsReset;
     LLVKKeyBindings mBindings, mDefaultBindings;
@@ -302,6 +344,15 @@ private:
     std::map<std::string,LLSD> mShutdownWarnings;
     std::function<void()> mClearSpamQueues;
     std::unique_ptr<LLVKMenu> mMenu;
+    struct TornMenu
+    {
+        std::unique_ptr<LLVKFloater> floater;
+        std::shared_ptr<LLVKMenu> view;
+        LLVKWidgetTree::Id content=0;
+        int targetHeight=0;
+    };
+    std::map<std::size_t,TornMenu> mTornMenus;
+    bool tearOffMenu(std::size_t item,LLVKWidgetTree::Rect rectangle,std::string& error);
     std::unique_ptr<LLVKFloater> mPreferences, mAbout;
     std::unique_ptr<LLVKFloater> mWhitelist;
     std::unique_ptr<LLVKFloater> mWindowSize;
@@ -332,6 +383,14 @@ private:
     bool mPreviewOverlaps=false;
     std::function<bool(std::string&)> mFontTextureDump;
     std::unique_ptr<LLVKFloater> mGuidebook;
+    std::unique_ptr<LLVKFloater> mHelp;
+    LLVKWidgetTree::Id mHelpBrowser=0;
+    bool mHelpRetiring=false,mHelpErrorPageUsed=false;
+    std::map<std::string,LLVKWidgetTree::Id> mHelpFields;
+    std::vector<std::string> mHelpHistory;
+    std::string mHelpCurrentUrl;
+    HelpContext mHelpContext;
+    HelpExternal mHelpExternal;
     GuidebookOpen mGuidebookOpen;
     std::function<void(LLVKWidgetTree::Id)> mGuidebookClose;
     void recordGuidebookState(bool visible);
@@ -380,6 +439,14 @@ private:
     LLVKWidgetTree::PreferenceSnapshot mProxySnapshot;
     bool mProxyAccepted = false;
     void updateProxyControls();
+    void updateLoginControls();
+    bool initializeNoticeLayout(std::string& error);
+    LLVKWidgetTree::Rect noticeRectangle(int width,int height,std::optional<LLVKWidgetTree::Rect> viewport={}) const;
+    float mDisplayScale=1.f;
+    float mBaseFontDpiX=96.f,mBaseFontDpiY=96.f;
+    int mNoticeMenuHeight=19,mNoticeBottomHeight=60,mNoticeStackSpacing=3,mNoticeChicletInset=70;
+    int mNoticeRightPad=5,mNoticeTopPad=7;
+    bool mNoticeTopRight=false;
     bool acceptProxy(std::string& error);
     void networkPreferenceAction(LLVKWidgetTree::Id panel,const std::string& action);
     DirectoryPicker mDirectoryPicker;
@@ -478,6 +545,7 @@ private:
     std::optional<Notice> mActiveNotice;
     std::map<LLVKWidgetTree::Id,int> mNoticeOptions;
     LLVKWidgetTree::Id mNoticeEditor = 0;
+    LLVKWidgetTree::Id mNoticeIgnore = 0;
     LLVKWidgetTree::Id mNoticePanel = 0, mNoticeButton = 0, mNoticePreviousFocus = 0;
     double mNoticeOpened = 0.0, mNoticeTime = 0.0;
     bool dismissNotice(std::string& error);

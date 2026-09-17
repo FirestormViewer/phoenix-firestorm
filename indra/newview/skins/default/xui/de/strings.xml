@@ -4,6 +4,41 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
+	<string name="NativeErrorTitle">Vulkanstorm-Fehler</string>
+	<string name="NativeErrorCloseViewer">Bestätigen Sie diese Meldung, um den Viewer zu schließen.</string>
+	<string name="NativeErrorCopy">Details kopieren</string>
+	<string name="NativeErrorRetryCleanup">Bereinigung wiederholen</string>
+	<string name="NativeErrorRetryLogin">Anmeldung wiederholen</string>
+	<string name="NativeAgreementAccept">Akzeptieren</string>
+	<string name="NativeErrorOutOfMemory">Der Viewer hat nicht genügend Arbeitsspeicher. Schließen Sie vor dem Neustart andere Anwendungen.</string>
+	<string name="NativeErrorMissingFiles">Erforderliche Dateien fehlen oder sind nicht zugänglich. Reparieren Sie die Installation und prüfen Sie die Dateiberechtigungen.</string>
+	<string name="NativeErrorAudioFailed">Der Audiodienst ist ausgefallen. Prüfen Sie vor dem Neustart das Audiogerät und die Einstellungen.</string>
+	<string name="NativeErrorVoiceFailed">Der Sprachgerätedienst ist ausgefallen. Prüfen Sie vor dem Neustart die Sprachverarbeitung und die ausgewählten Geräte.</string>
+	<string name="NativeErrorTranslationFailed">Die Übersetzungsprüfung ist fehlgeschlagen. Prüfen Sie vor dem Neustart die Netzwerk- und Proxy-Einstellungen.</string>
+	<string name="NativeErrorPreviewFailed">Die Texturvorschau ist ausgefallen. Prüfen Sie vor dem Neustart den Cache-Zugriff und das ausgewählte Bild.</string>
+	<string name="NativeAgreementReject">Ablehnen</string>
+	<string name="NativeErrorUnexpected">Ein unerwarteter Fehler ist aufgetreten. Schließen Sie den Viewer. Wenden Sie sich bei erneutem Auftreten an den Support.</string>
+	<string name="NativeErrorDefaultSettings">Erforderliche Standardeinstellungen konnten nicht geladen werden. Reparieren Sie die Installation vor dem nächsten Start.</string>
+	<string name="NativeErrorSettingsMode">Der gewählte Einstellungsmodus konnte nicht geladen werden. Prüfen Sie die installierten Einstellungsdateien.</string>
+	<string name="NativeErrorUnsupportedArguments">Mindestens eine Befehlszeilenoption wird vom nativen Start nicht unterstützt. Entfernen Sie nicht unterstützte Optionen.</string>
+	<string name="NativeErrorSettingsRead">Erforderliche Einstellungen konnten nicht gelesen oder angewendet werden. Prüfen Sie die Dateien und Zugriffsrechte.</string>
+	<string name="NativeErrorSettingsWrite">Einstellungen konnten nicht gespeichert werden. Prüfen Sie freien Speicherplatz und Schreibrechte.</string>
+	<string name="NativeErrorCacheUnavailable">Der Cache konnte nicht initialisiert werden. Prüfen Sie Speicherort, Zugriffsrechte und freien Speicherplatz.</string>
+	<string name="NativeErrorStartupResources">Erforderliche Startressourcen sind nicht verfügbar. Reparieren Sie die Installation vor dem nächsten Start.</string>
+	<string name="NativeErrorWindowUnavailable">Das native Fenster ist nicht verfügbar oder konnte eine Aktion nicht abschließen. Prüfen Sie Anzeige und Fenstereinstellungen.</string>
+	<string name="NativeErrorRendererUnavailable">Der native Vulkan-Renderer ist nicht verfügbar oder wurde angehalten. Prüfen Sie die Vulkan-Treiberunterstützung. Der Renderer wurde weder gewechselt noch neu gestartet.</string>
+	<string name="NativeErrorBrowserUnavailable">Der eingebettete Browser konnte nicht starten oder die Seite laden. Prüfen Sie Installation und Netzwerkkonfiguration.</string>
+	<string name="NativeErrorShutdownFailed">Das native Herunterfahren konnte nicht ordnungsgemäß abgeschlossen werden. Prüfen Sie den Zugriff auf Einstellungen und Cache.</string>
+	<string name="NativeErrorOperationFailed">Die gewünschte Aktion konnte nicht abgeschlossen werden. Schließen Sie diese Meldung, um zum Viewer zurückzukehren. Die Aktion wurde nicht wiederholt.</string>
+	<string name="NativeErrorOptionalSettings">Optionale Einstellungen konnten nicht geladen werden. Der Viewer verwendet die verfügbaren Standardwerte.</string>
+	<string name="NativeErrorNetworkUnavailable">Die Netzwerkanfrage konnte nicht abgeschlossen werden. Prüfen Sie die Verbindung. Eine Wiederholung muss vom zuständigen Dienst freigegeben werden.</string>
+	<string name="NativeErrorTlsRejected">Die sichere Verbindung konnte nicht überprüft werden. Prüfen Sie Systemzeit und Netzwerkkonfiguration. Die Zertifikatsprüfung wurde nicht umgangen.</string>
+	<string name="NativeErrorTransportUnavailable">Die native Anmeldung ist in dieser Version nicht verfügbar. Es wurde keine Anmeldeanfrage gesendet.</string>
+	<string name="NativeErrorSessionCleanupFailed">Die Sitzungsbereinigung konnte nicht abgeschlossen werden. Ressourcen bleiben erhalten. Wiederholen Sie die Bereinigung, um den Vorgang abzuschließen.</string>
+	<string name="NativeErrorAuthenticationFailed">Die Authentifizierung ist fehlgeschlagen. Es wurde keine verbundene Sitzung hergestellt.</string>
+	<string name="NativeErrorConnectionFailed">Die Verbindung zur Region ist fehlgeschlagen. Die Wiederherstellung muss von der Sitzungsverwaltung ausgeführt werden.</string>
+	<string name="NativeErrorSessionTimeout">Die Zeit für die Sitzungsanfrage ist abgelaufen. Die Wiederherstellung muss von der Sitzungsverwaltung ausgeführt werden.</string>
+	<string name="NativeErrorSessionFailed">Der Sitzungsvorgang konnte nicht abgeschlossen werden. Die Wiederherstellung muss von der Sitzungsverwaltung ausgeführt werden.</string>
 	<string name="SECOND_LIFE_GRID">
 		Second Life-Grid:
 	</string>

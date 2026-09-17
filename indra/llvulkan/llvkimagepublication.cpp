@@ -34,8 +34,14 @@ bool LLVKImagePublication::advance(std::shared_ptr<const LLVKWidgetImage> latest
     }
     if (!latest || latest == mCurrent.source) return true;
     mUpload = LLVKGlyphUpload::submit(mDevice,{latest->pixelWidth(),latest->pixelHeight()},latest->bottomUpRgba(),error,
-        LLVKGlyphUpload::Sampling::SkinLinearClamp);
+        LLVKGlyphUpload::Sampling::BrowserLinearRepeat);
     if (!mUpload) { mFailure = error; return false; }
     mUploading = std::move(latest);
+    if (mQueueOrdered)
+    {
+        const auto submitted=mUpload->submittedFor(mDevice);
+        if (!submitted) { mFailure=error="Native browser upload is not ordered before its consumer"; return false; }
+        mCurrent={mUploading,submitted};
+    }
     return true;
 }
