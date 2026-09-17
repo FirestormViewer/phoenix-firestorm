@@ -42,6 +42,8 @@ public:
     bool set(const std::string& name, const LLSD& value, bool saved, std::string& error);
     bool saveChanges(const std::filesystem::path& path, const std::map<std::string,LLSD>& changes, std::string& error);
     static bool scheduleReset(const std::filesystem::path& profile, std::string& error);
+    static std::optional<std::filesystem::path> isolatedProfile(const std::filesystem::path& base,
+        std::string_view name,std::string& error);
     static bool clearBrowserCache(const std::filesystem::path& profile,std::string& error);
     bool consumeBrowserCacheClear(const std::filesystem::path& profile,const std::filesystem::path& settingsFile,std::string& error);
     static std::optional<bool> consumeReset(const std::filesystem::path& profile,

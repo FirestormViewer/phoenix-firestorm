@@ -2,6 +2,7 @@
 #include "llvkloginprotocol.h"
 #include "llvkloginhttp.h"
 #include "llvkregioncircuit.h"
+#include "llvkchatprotocol.h"
 #include "llvklogintransport.h"
 #include "llmessagetemplateparser.h"
 #include "lltemplatemessagebuilder.h"
@@ -27,7 +28,10 @@ namespace tut
         boost::asio::ssl::context tls{boost::asio::ssl::context::tls_server};
         boost::asio::ip::tcp::acceptor acceptor{context,{boost::asio::ip::address_v4::loopback(),0}};
         std::filesystem::path certificate=std::filesystem::temp_directory_path()/("native-login-ca-"+LLUUID::generateNewID().asString()+".pem");
-        std::atomic<bool> stopping=false,polled=false,finished=false;
+        std::atomic<bool> stopping=false,polled=false,finished=false,searched=false;
+        std::atomic<bool> groupStart=false,groupUnmute=false,groupInvite=false,groupAccepted=false;
+        std::atomic<bool> groupModerated=false;
+        std::atomic<bool> moderationDenied=false;
         std::thread worker;
         std::string url() const { return "https://127.0.0.1:"+std::to_string(acceptor.local_endpoint().port()); }
         explicit LoginTlsServer(LLSD login)
@@ -86,6 +90,8 @@ namespace tut
                     if (problem) continue;
                     const auto& request=parser.get();
                     std::string body;
+                    bool noContent=false;
+                    bool forbidden=false;
                     if (request.target()=="/login")
                         body="<methodResponse><params><param>"+login.asXMLRPCValue()+"</param></params></methodResponse>";
                     else
@@ -94,20 +100,103 @@ namespace tut
                         if (request.target()=="/seed")
                         {
                             reply["EventQueueGet"]=address+"/events";
+                            reply["AvatarPickerSearch"]=address+"/avatars";
+                            reply["ChatSessionRequest"]=address+"/chat";
                             reply["GetTexture"]="http://127.0.0.1:1/unused-texture";
                             reply["GetMesh"]="";
+                        }
+                        else if (request.target()=="/chat")
+                        {
+                            LLSD input;
+                            std::istringstream incoming(request.body()); LLSDSerialize::fromXML(input,incoming);
+                            if (input["method"].asString()=="mute update")
+                            {
+                                const bool validModeration=request.method()==boost::beast::http::verb::post &&
+                                    input["session-id"].asUUID()==LLUUID("55555555-5555-5555-5555-555555555555") &&
+                                    input["params"]["agent_id"].asUUID()==login["agent_id"].asUUID() &&
+                                    input["params"]["mute_info"]["text"].isBoolean();
+                                forbidden=validModeration && input["params"]["mute_info"]["text"].asBoolean();
+                                if (forbidden) moderationDenied=true;
+                                else
+                                {
+                                    groupModerated=validModeration; groupUnmute=validModeration;
+                                    noContent=true;
+                                }
+                            }
+                            else groupAccepted=request.method()==boost::beast::http::verb::post && input["method"].asString()=="accept invitation" &&
+                                input["session-id"].asUUID()==LLUUID("55555555-5555-5555-5555-555555555555");
+                            reply["agent_info"][login["agent_id"].asString()]["mutes"]["text"]=false;
+                        }
+                        else if (request.target().starts_with("/avatars/"))
+                        {
+                            searched=request.method()==boost::beast::http::verb::get &&
+                                request.target().find("page_size=100")!=boost::beast::string_view::npos &&
+                                request.target().find("names=Fixture")!=boost::beast::string_view::npos;
+                            LLSD resident;
+                            resident["id"]=LLUUID("44444444-4444-4444-4444-444444444444");
+                            resident["display_name"]="Fixture Display"; resident["username"]="fixture.resident";
+                            reply["agents"]=LLSD::emptyArray(); reply["agents"].append(resident);
                         }
                         else
                         {
                             LLSD input;
                             std::istringstream incoming(request.body()); LLSDSerialize::fromXML(input,incoming);
                             if (input["done"].asBoolean()) finished=true;
-                            else polled=true;
                             reply["id"]=1; reply["events"]=LLSD::emptyArray();
+                            if (!input["done"].asBoolean() && !polled.exchange(true))
+                            {
+                                LLSD event,agent,group;
+                                agent["AgentID"]=login["agent_id"];
+                                event["message"]="AgentGroupDataUpdate";
+                                event["body"]["AgentData"]=LLSD::emptyArray(); event["body"]["AgentData"].append(agent);
+                                group["GroupID"]=LLUUID("55555555-5555-5555-5555-555555555555");
+                                group["GroupName"]="Fixture Group";
+                                LLSD::Binary powers(8); boost::endian::store_big_u64(powers.data(),(std::uint64_t(1)<<16)|(std::uint64_t(1)<<37));
+                                group["GroupPowers"]=powers;
+                                event["body"]["GroupData"]=LLSD::emptyArray(); event["body"]["GroupData"].append(group);
+                                reply["events"].append(event);
+                            }
+                            if (groupStart.exchange(false))
+                            {
+                                LLSD update;
+                                update["message"]="ChatterBoxSessionAgentListUpdates";
+                                update["body"]["session_id"]=LLUUID("55555555-5555-5555-5555-555555555555");
+                                update["body"]["agent_updates"][login["agent_id"].asString()]["info"]["mutes"]["text"]=true;
+                                reply["events"].append(update);
+                                LLSD event;
+                                event["message"]="ChatterBoxSessionStartReply";
+                                event["body"]["temp_session_id"]=LLUUID("55555555-5555-5555-5555-555555555555");
+                                event["body"]["session_id"]=event["body"]["temp_session_id"];
+                                event["body"]["success"]=true;
+                                event["body"]["agent_info"][login["agent_id"].asString()]["mutes"]["text"]=false;
+                                event["body"]["agent_info"][login["agent_id"].asString()]["is_moderator"]=true;
+                                reply["events"].append(event);
+                            }
+                            if (groupUnmute.exchange(false))
+                            {
+                                LLSD update;
+                                update["message"]="ChatterBoxSessionAgentListUpdates";
+                                update["body"]["session_id"]=LLUUID("55555555-5555-5555-5555-555555555555");
+                                update["body"]["agent_updates"][login["agent_id"].asString()]["info"]["mutes"]["text"]=false;
+                                reply["events"].append(update);
+                            }
+                            if (groupInvite.exchange(false))
+                            {
+                                LLSD event;
+                                event["message"]="ChatterBoxInvitation";
+                                auto& message=event["body"]["instantmessage"]["message_params"];
+                                message["from_id"]=LLUUID("44444444-4444-4444-4444-444444444444");
+                                message["id"]=LLUUID("55555555-5555-5555-5555-555555555555");
+                                message["from_name"]="Fixture Resident"; message["message"]="Invitation fixture";
+                                message["offline"]=0;
+                                reply["events"].append(event);
+                            }
                         }
                         std::ostringstream outgoing; LLSDSerialize::toXML(reply,outgoing); body=outgoing.str();
                     }
-                    boost::beast::http::response<boost::beast::http::string_body> response{boost::beast::http::status::ok,11};
+                    boost::beast::http::response<boost::beast::http::string_body> response{
+                        forbidden ? boost::beast::http::status::forbidden : noContent ? boost::beast::http::status::no_content : boost::beast::http::status::ok,11};
+                    if (noContent) body.clear();
                     response.body()=std::move(body); response.keep_alive(false); response.prepare_payload();
                     boost::beast::http::write(stream,response,problem);
                     stream.shutdown(problem);
@@ -125,6 +214,97 @@ namespace tut
     typedef test_group<loginprotocol_data> loginprotocol_group;
     typedef loginprotocol_group::object loginprotocol_object;
     loginprotocol_group loginprotocol_tests("llvkloginprotocol");
+
+    template<> template<> void loginprotocol_object::test<6>()
+    {
+        const LLUUID agent("11111111-1111-1111-1111-111111111111"),groupId("55555555-5555-5555-5555-555555555555");
+        LLSD body,identity,group;
+        identity["AgentID"]=agent;
+        body["AgentData"]=LLSD::emptyArray(); body["AgentData"].append(identity);
+        group["GroupID"]=groupId; group["GroupName"]="Fixture Group";
+        LLSD::Binary powers(8); boost::endian::store_big_u64(powers.data(),(std::uint64_t(1)<<16)|(std::uint64_t(1)<<37));
+        group["GroupPowers"]=powers;
+        body["GroupData"]=LLSD::emptyArray(); body["GroupData"].append(group);
+        std::string error;
+        const auto decoded=LLVKChatProtocol::decodeGroups(body,agent,error);
+        ensure("group permission bits retain network order",decoded && decoded->size()==1 && decoded->front().id==groupId &&
+            decoded->front().powers==((std::uint64_t(1)<<16)|(std::uint64_t(1)<<37)));
+        ensure("wrong account membership rejected",!LLVKChatProtocol::decodeGroups(body,groupId,error));
+        body["GroupData"][0]["GroupPowers"]=LLSD::Binary(7);
+        ensure("truncated group powers rejected",!LLVKChatProtocol::decodeGroups(body,agent,error));
+        body["GroupData"][0]=group; body["GroupData"].append(group);
+        ensure("duplicate membership rejected",!LLVKChatProtocol::decodeGroups(body,agent,error));
+    }
+
+    template<> template<> void loginprotocol_object::test<5>()
+    {
+        std::ifstream file(LLVK_LOGIN_MESSAGE_TEMPLATE);
+        ensure("chat reference template available",file.good());
+        const std::string source{std::istreambuf_iterator<char>(file),std::istreambuf_iterator<char>()};
+        LLTemplateTokenizer tokenizer(source); LLTemplateParser parser(tokenizer);
+        std::vector<std::unique_ptr<LLMessageTemplate>> owned;
+        LLTemplateMessageBuilder::message_template_name_map_t names;
+        for (auto iterator=parser.getMessagesBegin(); iterator!=parser.getMessagesEnd(); ++iterator)
+        { owned.emplace_back(*iterator); names[(*iterator)->mName]=*iterator; }
+        const auto symbol=[](const char* value) { return LLMessageStringTable::getInstance()->getString(value); };
+        const LLUUID agent("11111111-1111-1111-1111-111111111111"),session("22222222-2222-2222-2222-222222222222");
+        const LLUUID recipient("33333333-3333-3333-3333-333333333333");
+        const std::string text="Hello \xE2\x98\x83";
+        std::string error;
+        LLTemplateMessageBuilder builder(names);
+        const auto payload=[&]()
+        {
+            std::array<std::uint8_t,4096> bytes{};
+            const auto length=builder.buildMessage(bytes.data(),static_cast<U32>(bytes.size()),0);
+            return LLVKChatProtocol::Bytes(bytes.begin()+10,bytes.begin()+length);
+        };
+        for (const std::uint8_t type : {0,1,2})
+        {
+            builder.newMessage(symbol("ChatFromViewer")); builder.nextBlock(symbol("AgentData"));
+            builder.addUUID(symbol("AgentID"),agent); builder.addUUID(symbol("SessionID"),session);
+            builder.nextBlock(symbol("ChatData")); builder.addString(symbol("Message"),text);
+            builder.addU8(symbol("Type"),type); builder.addS32(symbol("Channel"),0);
+            const auto encoded=LLVKChatProtocol::local(agent,session,text,type,0,error);
+            ensure("local chat matches reference bytes",encoded && *encoded==payload());
+        }
+        builder.newMessage(symbol("ChatFromSimulator")); builder.nextBlock(symbol("ChatData"));
+        builder.addString(symbol("FromName"),"Fixture Resident"); builder.addUUID(symbol("SourceID"),agent);
+        builder.addUUID(symbol("OwnerID"),recipient); builder.addU8(symbol("SourceType"),1);
+        builder.addU8(symbol("ChatType"),1); builder.addU8(symbol("Audible"),2);
+        builder.addVector3(symbol("Position"),LLVector3(128,129,30)); builder.addString(symbol("Message"),text);
+        const auto localPayload=payload();
+        const auto local=LLVKChatProtocol::decodeLocal(localPayload,error);
+        ensure("incoming local chat preserves reference fields",local && local->sender==agent && local->owner==recipient &&
+            local->name=="Fixture Resident" && local->text==text && local->audible==2 && local->position[1]==129.f);
+        for (std::size_t length=0; length<localPayload.size(); ++length)
+            ensure("truncated local chat rejected",!LLVKChatProtocol::decodeLocal(std::span(localPayload).first(length),error));
+        for (const std::uint8_t dialog : {0,15,17,18,41,42})
+        {
+            LLVKChatProtocol::Message message;
+            message.recipient=recipient; message.name="Fixture Resident"; message.text=text; message.dialog=dialog;
+            message.conversation=LLVKChatProtocol::directSession(agent,recipient);
+            builder.newMessage(symbol("ImprovedInstantMessage")); builder.nextBlock(symbol("AgentData"));
+            builder.addUUID(symbol("AgentID"),agent); builder.addUUID(symbol("SessionID"),session);
+            builder.nextBlock(symbol("MessageBlock")); builder.addBOOL(symbol("FromGroup"),false);
+            builder.addUUID(symbol("ToAgentID"),recipient); builder.addU32(symbol("ParentEstateID"),0);
+            builder.addUUID(symbol("RegionID"),LLUUID::null); builder.addVector3(symbol("Position"),LLVector3::zero);
+            builder.addU8(symbol("Offline"),0); builder.addU8(symbol("Dialog"),dialog);
+            builder.addUUID(symbol("ID"),message.conversation); builder.addU32(symbol("Timestamp"),0);
+            builder.addString(symbol("FromAgentName"),message.name); builder.addString(symbol("Message"),text);
+            const std::uint8_t empty=0; builder.addBinaryData(symbol("BinaryBucket"),&empty,1);
+            builder.nextBlock(symbol("EstateBlock")); builder.addU32(symbol("EstateID"),0);
+            const auto reference=payload();
+            const auto encoded=LLVKChatProtocol::instant(agent,session,message,error);
+            ensure("IM matches reference bytes",encoded && *encoded==reference);
+            const auto decoded=LLVKChatProtocol::decodeInstant(reference,error);
+            ensure("incoming IM preserves reference fields",decoded && decoded->sender==agent && decoded->recipient==recipient &&
+                decoded->conversation==message.conversation && decoded->text==text && decoded->dialog==dialog);
+            ensure("truncated IM rejected",!LLVKChatProtocol::decodeInstant(std::span(reference).first(60),error));
+        }
+        ensure("self conversation identity matches reference",LLVKChatProtocol::directSession(agent,agent)==agent);
+        ensure("invalid UTF-8 rejected",!LLVKChatProtocol::local(agent,session,std::string(1,char(0xff)),1,0,error));
+        ensure("oversized chat rejected without truncation",!LLVKChatProtocol::local(agent,session,std::string(1024,'x'),1,0,error));
+    }
 
     template<> template<> void loginprotocol_object::test<4>()
     {
@@ -297,10 +477,24 @@ namespace tut
         ensure("circuit ack alone is not connected",circuit.pump(error)==LLVKRegionCircuit::Status::Connecting);
         send("AgentMovementComplete");
         ensure("matching simulator movement completes circuit",circuit.pump(error)==LLVKRegionCircuit::Status::Connected);
+        ensure("connected local chat can send",circuit.sendLocal("Local fixture",1,0,error));
+        LLVKChatProtocol::Message direct;
+        direct.recipient=LLUUID("44444444-4444-4444-4444-444444444444"); direct.name="Fixture Resident";
+        direct.text="IM fixture"; direct.conversation=LLVKChatProtocol::directSession(bootstrap.agentId,direct.recipient);
+        ensure("connected IM can send",circuit.sendInstant(direct,error));
+        send("ChatFromSimulator");
+        send("ImprovedInstantMessage");
+        ensure("incoming chat pump",circuit.pump(error)==LLVKRegionCircuit::Status::Connected);
+        const auto incoming=circuit.takeMessages();
+        ensure("incoming local and IM reach native queue",incoming.size()==2 && incoming[0].kind==LLVKChatProtocol::Message::Kind::Local &&
+            incoming[1].kind==LLVKChatProtocol::Message::Kind::Instant);
+        ensure("message queue drains once",circuit.takeMessages().empty());
         ensure("logout waits for simulator",circuit.close(error)==LLVKRegionCircuit::Status::Closing);
         send("LogoutReply");
         ensure("matching logout completes",circuit.close(error)==LLVKRegionCircuit::Status::Closed);
         circuit.cancel();
+        ensure("closed circuit cannot send local chat",!circuit.sendLocal("not sent",1,0,error));
+        ensure("closed circuit cannot send IM",!circuit.sendInstant(direct,error));
         {
             std::array<std::uint8_t,2048> discarded{};
             boost::system::error_code problem;
@@ -331,7 +525,10 @@ namespace tut
         const auto credentials=LLVKLoginProtocol::credentials("Fixture.Resident","synthetic","last",error);
         ensure("TLS fixture credentials prepared",credentials && transport->prepare(*credentials,error));
         ensure("TLS authentication starts",owner.beginLogin().ok());
-        bool connected=false,closing=false,keepalive=false;
+        bool connected=false,closing=false,keepalive=false,searchStarted=false,searchComplete=false;
+        bool groupStarted=false,groupSent=false,groupLeft=false,moderationSeen=false,invitationSeen=false;
+        bool denialRequested=false;
+        const LLUUID groupId("55555555-5555-5555-5555-555555555555");
         const auto deadline=std::chrono::steady_clock::now()+std::chrono::seconds(15);
         while (std::chrono::steady_clock::now()<deadline)
         {
@@ -342,7 +539,82 @@ namespace tut
             if (owner.snapshot().state==LLVKSessionOwner::State::Connected && tls.polled)
             {
                 connected=true;
-                if (keepalive) { owner.shutdown(); closing=true; }
+                const auto chat=transport->chatContext(owner.snapshot().tag);
+                ensure("connected identity available without secrets",chat && chat->agent==bootstrap.agentId);
+                auto stale=owner.snapshot().tag; ++stale.generation;
+                ensure("stale communication context rejected",!transport->chatContext(stale));
+                ensure("stale message send rejected",!transport->sendLocal(stale,"not sent",1,error));
+                if (!searchStarted)
+                {
+                    ensure("stale resident search rejected",!transport->searchResidents(stale,1,"Fixture",error));
+                    ensure("resident search starts",transport->searchResidents(owner.snapshot().tag,1,"Fixture",error));
+                    ensure("new search replaces pending request",transport->searchResidents(owner.snapshot().tag,2,"Fixture",error));
+                    searchStarted=true;
+                }
+                if (auto result=transport->takeResidentSearch(owner.snapshot().tag))
+                {
+                    ensure("latest search publishes validated identity",result->query==2 && result->error.empty() && result->residents.size()==1 &&
+                        result->residents[0].id==LLUUID("44444444-4444-4444-4444-444444444444") && result->residents[0].username=="fixture.resident");
+                    ensure("search result consumed once",!transport->takeResidentSearch(owner.snapshot().tag));
+                    searchComplete=true;
+                }
+                const auto memberships=transport->groups(owner.snapshot().tag);
+                if (!memberships.empty() && !groupStarted)
+                {
+                    ensure("stale group join rejected",!transport->joinGroup(stale,groupId,error));
+                    ensure("group member joins",transport->joinGroup(owner.snapshot().tag,groupId,error));
+                    ensure("joining cannot send early",!transport->sendGroup(owner.snapshot().tag,groupId,"not sent",error));
+                    groupStarted=true;
+                }
+                if (!memberships.empty() && memberships.front().state==LLVKChatProtocol::Group::State::Joined && !groupSent)
+                {
+                    const bool muted=memberships.front().participants.at(bootstrap.agentId).textMuted;
+                    if (muted && !moderationSeen)
+                    {
+                        ensure("pre-reply moderator update blocks sends",!transport->sendGroup(owner.snapshot().tag,groupId,"not sent",error));
+                        ensure("stale moderator command rejected",!transport->moderateGroup(stale,groupId,bootstrap.agentId,false,error));
+                        ensure("moderator requests explicit unmute",transport->moderateGroup(owner.snapshot().tag,groupId,bootstrap.agentId,false,error));
+                        ensure("moderation is not applied optimistically",transport->groups(owner.snapshot().tag).front().participants.at(bootstrap.agentId).textMuted);
+                        ensure("concurrent moderation bounded",!transport->moderateGroup(owner.snapshot().tag,groupId,bootstrap.agentId,true,error));
+                        moderationSeen=true;
+                    }
+                    if (!muted && moderationSeen && !memberships.front().moderationPending)
+                    {
+                        if (!denialRequested)
+                        {
+                            ensure("empty successful moderation response is accepted",memberships.front().error.empty());
+                            ensure("submit server-denied moderation",transport->moderateGroup(owner.snapshot().tag,groupId,bootstrap.agentId,true,error));
+                            denialRequested=true;
+                        }
+                        else
+                        {
+                            ensure("denied moderation reports permission without closing session",memberships.front().error=="Group moderation permission was denied");
+                            ensure("joined group sends after denial",transport->sendGroup(owner.snapshot().tag,groupId,"Group fixture",error));
+                            ensure("submit moderation before leave",transport->moderateGroup(owner.snapshot().tag,groupId,bootstrap.agentId,true,error));
+                            ensure("group chat leave submits",transport->leaveGroup(owner.snapshot().tag,groupId,error));
+                            ensure("left group cannot send",!transport->sendGroup(owner.snapshot().tag,groupId,"not sent",error));
+                            groupSent=true;
+                        }
+                    }
+                }
+                if (groupLeft)
+                    for (const auto& message : transport->takeMessages(owner.snapshot().tag))
+                        if (message.dialog==13)
+                        {
+                            ensure("invitation preserves text and session",message.conversation==groupId && message.text=="Invitation fixture");
+                            ensure("native consumer accepts invitation",transport->joinGroup(owner.snapshot().tag,groupId,error));
+                            invitationSeen=true;
+                        }
+                if (keepalive && searchComplete && groupLeft && invitationSeen && !memberships.empty() && memberships.front().state==LLVKChatProtocol::Group::State::Joined)
+                {
+                    ensure("nonmoderator cannot issue mute request",!transport->moderateGroup(owner.snapshot().tag,groupId,bootstrap.agentId,true,error));
+                    ensure("old moderation cannot publish into rejoined session",memberships.front().error.empty() && !memberships.front().moderationPending);
+                    const auto groups=transport->groups(owner.snapshot().tag);
+                    ensure("event queue publishes native memberships",groups.size()==1 && groups.front().name=="Fixture Group" &&
+                        groups.front().powers==((std::uint64_t(1)<<16)|(std::uint64_t(1)<<37)));
+                    ensure("stale owner cannot read memberships",transport->groups(stale).empty());
+                    owner.shutdown(); closing=true;
+                }
             }
             std::array<std::uint8_t,2048> bytes{};
             boost::system::error_code problem;
@@ -357,10 +629,25 @@ namespace tut
                 if (message==3) send("RegionHandshake");
                 if (message==249) send("AgentMovementComplete");
                 if (message==252) send("LogoutReply");
+                if (message==254)
+                {
+                    const auto instant=LLVKChatProtocol::decodeInstant(std::span(bytes).subspan(10,count-10),error);
+                    ensure("group operation has native IM framing",instant && instant->conversation==groupId && instant->recipient==groupId);
+                    if (instant->dialog==15) tls.groupStart=true;
+                    if (instant->dialog==17) ensure("group wire text preserved",instant->text=="Group fixture");
+                    if (instant->dialog==18 && !groupLeft) { groupLeft=true; tls.groupInvite=true; }
+                }
             }
         }
         ensure("TLS authorization and capabilities maintain real UDP connection",connected && keepalive);
+        ensure("resident lookup uses actual TLS GET",searchComplete && tls.searched);
+        ensure("group join send leave completes through UDP and event queue",groupStarted && groupSent && groupLeft);
+        ensure("group text moderation enforced",moderationSeen);
+        ensure("group moderation uses exact HTTPS request",tls.groupModerated.load());
+        ensure("server denial exercised",denialRequested && tls.moderationDenied.load());
+        ensure("group invitation accepted through HTTPS",invitationSeen && tls.groupAccepted);
         ensure("event queue closes before successful shutdown",closing && tls.finished && owner.snapshot().state==LLVKSessionOwner::State::Stopped);
+        ensure("disconnected chat context revoked",!transport->chatContext(owner.snapshot().tag));
         for (const auto stage : {"authorized","connection-started","seed-ready","region-connected"})
             ensure("sanitized transport stage emitted",std::find(diagnosticStages.begin(),diagnosticStages.end(),stage)!=diagnosticStages.end());
         ensure("native authentication and circuit never load desktop OpenGL",GetModuleHandleW(L"opengl32.dll")==nullptr);
@@ -375,11 +662,13 @@ namespace tut
         configuration.allowLoopbackHttpForTests=true;
         LLVKLoginHttp http(configuration);
         const auto endpoint="http://127.0.0.1:"+std::to_string(acceptor.local_endpoint().port())+"/login";
+        for (const auto method : {LLVKLoginHttp::Method::Post,LLVKLoginHttp::Method::Get})
         for (const bool redirect : {false,true})
         {
             std::string error;
-            const std::string body="<fixture>synthetic-secret</fixture>";
-            ensure("queue loopback request",http.start(endpoint,body,"text/xml",error));
+            const bool get=method==LLVKLoginHttp::Method::Get;
+            const std::string body=get ? "" : "<fixture>synthetic-secret</fixture>";
+            ensure("queue loopback request",http.start(endpoint,body,"text/xml",error,method));
             boost::asio::ip::tcp::socket socket(context);
             bool accepted=false,replied=false;
             std::string request;
@@ -401,8 +690,9 @@ namespace tut
                     const auto count=socket.read_some(boost::asio::buffer(buffer),problem);
                     if (!problem) request.append(buffer.data(),count);
                     else ensure("nonblocking request read",problem==boost::asio::error::would_block);
-                    if (request.ends_with(body))
+                    if (get ? request.ends_with("\r\n\r\n") : request.ends_with(body))
                     {
+                        ensure("HTTP method matches request",request.starts_with(get ? "GET /login " : "POST /login "));
                         ensure("HTTP content type",request.find("Content-Type: text/xml")!=request.npos);
                         const std::string response=redirect ?
                             "HTTP/1.1 302 Found\r\nLocation: http://127.0.0.1:1/leak\r\nContent-Length: 0\r\nConnection: close\r\n\r\n" :

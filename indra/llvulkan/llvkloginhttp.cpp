@@ -61,14 +61,14 @@ LLVKLoginHttp::LLVKLoginHttp(Configuration configuration) : mImpl(std::make_uniq
 
 LLVKLoginHttp::~LLVKLoginHttp()=default;
 
-bool LLVKLoginHttp::start(const std::string& url,std::string body,const std::string& contentType,std::string& error)
+bool LLVKLoginHttp::start(const std::string& url,std::string body,const std::string& contentType,std::string& error,Method method)
 {
     error.clear();
     const auto parsed=boost::urls::parse_uri(url);
     const bool testHttp=parsed && mImpl->configuration.allowLoopbackHttpForTests && parsed->scheme()=="http" &&
         (parsed->host()=="127.0.0.1" || parsed->host()=="[::1]");
     if (!parsed || url.size()>16384 || parsed->has_userinfo() || parsed->has_fragment() || parsed->host().empty() ||
-        (parsed->scheme()!="https" && !testHttp) || body.size()>65536 ||
+        (parsed->scheme()!="https" && !testHttp) || body.size()>65536 || (method==Method::Get && !body.empty()) ||
         (contentType!="text/xml" && contentType!="application/llsd+xml"))
     { Impl::erase(body); error="Invalid native login HTTP request"; return false; }
     if (mImpl->status==Status::Pending) { Impl::erase(body); error="Native login HTTP request is already pending"; return false; }
@@ -83,9 +83,13 @@ bool LLVKLoginHttp::start(const std::string& url,std::string body,const std::str
     const auto option=[&](CURLoption name,auto value)
     { if (curl_easy_setopt(mImpl->easy,name,value)!=CURLE_OK) configured=false; };
     option(CURLOPT_URL,url.c_str());
-    option(CURLOPT_POST,1L);
-    option(CURLOPT_POSTFIELDS,mImpl->request.data());
-    option(CURLOPT_POSTFIELDSIZE_LARGE,static_cast<curl_off_t>(mImpl->request.size()));
+    if (method==Method::Get) option(CURLOPT_HTTPGET,1L);
+    else
+    {
+        option(CURLOPT_POST,1L);
+        option(CURLOPT_POSTFIELDS,mImpl->request.data());
+        option(CURLOPT_POSTFIELDSIZE_LARGE,static_cast<curl_off_t>(mImpl->request.size()));
+    }
     option(CURLOPT_HTTPHEADER,mImpl->headers);
     option(CURLOPT_WRITEFUNCTION,&Impl::receive);
     option(CURLOPT_WRITEDATA,mImpl.get());
@@ -120,7 +124,7 @@ LLVKLoginHttp::Status LLVKLoginHttp::pump(std::string& error)
         const auto code=message->data.result;
         mImpl->timedOut=code==CURLE_OPERATION_TIMEDOUT;
         curl_easy_getinfo(mImpl->easy,CURLINFO_RESPONSE_CODE,&mImpl->responseCode);
-        mImpl->status=code==CURLE_OK && mImpl->responseCode==200 ? Status::Complete : Status::Failed;
+        mImpl->status=code==CURLE_OK && mImpl->responseCode>=200 && mImpl->responseCode<300 ? Status::Complete : Status::Failed;
         if (mImpl->status==Status::Failed)
             error=mImpl->overflow ? "Native login HTTP response exceeds its limit" : "Native login HTTPS request failed";
         mImpl->release();

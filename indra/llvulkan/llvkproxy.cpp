@@ -51,6 +51,22 @@ bool LLVKProxy::saveCredentialFile(const std::filesystem::path& file,
     return true;
 }
 
+bool LLVKProxy::validateDirectLogin(const std::map<std::string,LLSD>& settings,std::string& error)
+{
+    error.clear();
+    const auto value=[&](const char* name) -> LLSD
+    {
+        const auto found=settings.find(name);
+        return found==settings.end() ? LLSD() : found->second;
+    };
+    const auto mode=value("HttpProxyType").asString();
+    if (value("Socks5ProxyEnabled").asBoolean() || (mode=="Web" && value("BrowserProxyEnabled").asBoolean()))
+    { error="Native login proxy integration is not yet available"; return false; }
+    if (!mode.empty() && mode!="None" && mode!="Socks" && mode!="Web")
+    { error="Invalid native login proxy selection"; return false; }
+    return true;
+}
+
 std::optional<LLVKProxy::Endpoint> LLVKProxy::select(const std::map<std::string,LLSD>& settings,
     bool browser, std::string& error)
 {

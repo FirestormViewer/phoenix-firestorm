@@ -7,6 +7,7 @@ class LLVKLoginHttp final
 {
 public:
     enum class Status { Idle, Pending, Complete, Failed };
+    enum class Method { Post, Get };
     struct Configuration
     {
         std::string certificateBundle;
@@ -18,7 +19,7 @@ public:
     ~LLVKLoginHttp();
     LLVKLoginHttp(const LLVKLoginHttp&)=delete;
     LLVKLoginHttp& operator=(const LLVKLoginHttp&)=delete;
-    bool start(const std::string& url,std::string body,const std::string& contentType,std::string& error);
+    bool start(const std::string& url,std::string body,const std::string& contentType,std::string& error,Method method=Method::Post);
     Status pump(std::string& error);
     void cancel();
     long responseCode() const;

@@ -1487,6 +1487,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         if (const auto problem=ui->takeDialogError(); !problem.empty())
             notice(Code::OperationFailed);
         if (application.owner->snapshot().state==LLVKSessionOwner::State::Stopped) break;
+        const bool loginPageVisible=ui->tree().get(browserId) && ui->tree().get(browserId)->params.visible;
         if (application.access->service && application.access->service->active())
         {
         if (loginBrowserStarted && !browser.update(error)) return fail(Code::BrowserUnavailable);
@@ -1494,6 +1495,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         std::vector<std::string> internalLinks;
         for (const auto& event : browser.takeEvents())
         {
+            if (!loginPageVisible) continue;
             if (event.kind==LLVKBrowser::EventKind::Cursor) state.browserCursor(browserId,event.text);
             if (event.kind==LLVKBrowser::EventKind::CustomScheme && event.userGesture && !event.redirect)
                 internalLinks.push_back(event.text);
@@ -1594,11 +1596,16 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         state.input.button.spaceDown = bool(GetKeyState(VK_SPACE)&0x8000);
         state.input.button.returnDown = bool(GetKeyState(VK_RETURN)&0x8000);
         state.input.editor.secondsSinceKeystroke = std::chrono::duration<double>(now-state.keystroke).count();
-        if (loginBrowserStarted && application.access->service && application.access->service->active())
+        if (loginBrowserStarted && loginPageVisible && application.access->service && application.access->service->active())
         {
             if (!browser.setPageScale(ui->displayScale(),error)) return false;
             state.input.browsers[browserId] = browser.surface().frame();
             state.input.browserEpochs[browserId] = browser.surface().epoch();
+        }
+        else
+        {
+            state.input.browsers.erase(browserId); state.input.browserEpochs.erase(browserId);
+            state.browserCursors.erase(browserId);
         }
         ui->tree().setInputModifiers({bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_CONTROL)&0x8000),bool(GetKeyState(VK_MENU)&0x8000)});
         ui->tree().advanceTime(state.elapsed(),error);

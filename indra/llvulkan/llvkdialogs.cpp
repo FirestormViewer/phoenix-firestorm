@@ -416,6 +416,16 @@ bool LLVKViewerUi::prepareLogin()
 
 void LLVKViewerUi::setSessionOwner(LLVKSessionOwner* owner)
 {
+    if (mSessionOwner!=owner)
+    {
+        clearCommunications(mDialogError);
+        if (mConnectedView)
+        {
+            mTree.setVisible(mCommunicationPanel,false);
+            for (const auto& [id,visible] : mLoginVisibility) mTree.setVisible(id,visible);
+            mLoginVisibility.clear(); mConnectedView=false;
+        }
+    }
     mSessionOwner=owner;
     mReportedSession.reset();
     LLVKControl::Callback login;
@@ -446,12 +456,40 @@ bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
     if (mReportedSession && mReportedSession->tag==snapshot.tag && mReportedSession->state==snapshot.state &&
         same(mReportedSession->status,snapshot.status) && same(mReportedSession->cleanup,snapshot.cleanup)) return true;
     const bool prelogin=snapshot.state==Owner::State::PreLogin;
-    for (const auto name : {"connect_btn","username_combo","password_edit","server_combo","start_location_combo"})
-        mTree.setEnabled(find(name),prelogin);
-    updateLoginControls();
     if (mActiveNotice && (mActiveNotice->name=="NativeSessionError" || mActiveNotice->name=="NativeSessionProgress" ||
         mActiveNotice->name=="NativeSessionAgreement" || mActiveNotice->name=="PromptMFAToken"))
         if (!dismissNotice(error)) return false;
+    if (snapshot.state==Owner::State::Connected && !mConnectedView)
+    {
+        if (!initializeCommunications(error)) return false;
+        mMenu->dismiss();
+        blockTooltips();
+        if (mNoticePanel) mNoticePreviousFocus=find("local_composer",mCommunicationPanel);
+        else if (!mTree.setKeyboardFocus(0,false,false,error)) return false;
+        for (const auto name : {"login_html","ui_stack"})
+        {
+            const auto id=find(name);
+            const auto* node=mTree.get(id);
+            if (!node) { error="Native login transition is missing a login subtree"; return false; }
+            mLoginVisibility[id]=node->params.visible;
+            mTree.setVisible(id,false);
+        }
+        mTree.setValue(find("password_edit"),LLSD(""));
+        mConnectedView=true;
+        mTree.setVisible(mCommunicationPanel,true);
+    }
+    else if (prelogin && mConnectedView)
+    {
+        mTree.setVisible(mCommunicationPanel,false);
+        if (!clearCommunications(error)) return false;
+        for (const auto& [id,visible] : mLoginVisibility) mTree.setVisible(id,visible);
+        mLoginVisibility.clear();
+        mConnectedView=false;
+        if (!focusLoginFields(error)) return false;
+    }
+    for (const auto name : {"connect_btn","username_combo","password_edit","server_combo","start_location_combo"})
+        mTree.setEnabled(find(name),prelogin);
+    updateLoginControls();
     std::erase_if(mNotices,[](const auto& notice)
     { return notice.name=="NativeSessionError" || notice.name=="NativeSessionProgress" || notice.name=="NativeSessionAgreement" || notice.name=="PromptMFAToken"; });
     if (snapshot.state==Owner::State::AwaitingChallenge && snapshot.challenge)

@@ -1,5 +1,153 @@
 # Native session integration
 
+## Fresh-profile login proxy gate (2026-09-17)
+
+Isolated viewer27704 reached native startup and created its own cache while the
+installed viewer remained running. The operator subsequently reported code1012
+(OperationFailed/window). Its log had no authorization marker; normal exit0 and
+Goodbye! were verified. The generic notice alone does not identify the operation.
+
+Source inspection found a deterministic fresh-profile login blocker: shipped
+HttpProxyType is Socks while Socks5ProxyEnabled is false. Native prepareLogin
+rejected every non-None type. Reference LLStartUp::startLLProxy instead disables
+HTTP proxying and normalizes a disabled selection to None without failing login.
+NV-00/01/15/17: the native CPU-only login gate now checks effective enablement.
+Disabled known selections permit direct login; enabled SOCKS (including UDP) or
+selected/enabled HTTP proxies remain explicitly unsupported, and unknown types
+are rejected. General LLVKProxy::select behavior and OpenGL are unchanged.
+
+Widget210/210 covers disabled defaults, active HTTP/SOCKS containment and invalid
+types. Startup compilation passes. Fixed login-prepare stage labels now identify
+grid/proxy/input/transport rejection without writing credentials or user text.
+Live login after this correction remains unverified; the prior generic notice
+is consistent with this defect but lacks branch-specific evidence.
+
+## Explicit isolated test profile (2026-09-17)
+
+The operator approved a separate native test profile after simultaneous installed
+and native viewers encountered cache ownership failure. Reference
+LLAppViewer::initCache uses mSecondInstance for read-only access. Native startup
+instead retains its exclusive execution-marker and cache locks; this change is
+an explicit test-isolation extension, not second-instance parity or a lock bypass.
+NV-00/01/03/15/17 apply; OpenGL startup is untouched.
+
+Launch with `--set RenderBackend Vulkan --native-profile ladyanamarques`.
+The name is 1-48 lowercase ASCII letters, digits, hyphens or underscores.
+Settings, logs, marker, native browser storage and profile assets are rooted at
+`%APPDATA%/Vulkanstorm_x64/native_profiles/profile-ladyanamarques`.
+The default texture and sound cache root is the corresponding path under
+`%LOCALAPPDATA%`. Explicit Vulkan selection is required. Linked profile paths,
+duplicate/missing profile arguments and nonlocal settings-file arguments fail.
+Without this option, existing profile selection is unchanged.
+
+Native CPU-only path planning uses std::filesystem and Windows reparse-point
+inspection before profile IO. No settings or credentials are copied from the
+ordinary profile. Cache-location overrides are cleared for this test mode before
+cache planning so installed-viewer cache preferences cannot redirect startup
+back to shared storage. Profile-local preferences persist normally. The native
+cache still rejects two writers selecting the same isolated profile. No GPU
+ownership or visual behavior is changed.
+
+Widget 210/210 includes deterministic distinct-root, invalid-name, relative-root
+and side-effect-free planning checks; startup library compilation passes. Existing
+cache tests cover exclusive writer conflict. Actual simultaneous installed/native
+startup is pending the isolated operator run. Full window tests are deliberately
+not run while the cooperating live viewer is open. This does not complete live
+messaging or connected UI parity acceptance.
+
+## Connected text services in progress (2026-09-17)
+
+The native-sl-login working tree now transitions to a native-owned connected
+text workspace. This supersedes the missing-transition observation in the
+historical run2496 record below; it does not extend that run's live evidence.
+Local chat, direct IM, avatar-name search and group text sessions have synthetic
+consumer tests. No live bidirectional messaging or connected visual parity has
+been qualified. The current three-column plain-text workspace is an interim
+consumer, not the reference conversation/history UI or a completed transposition.
+
+### Source contract and ownership
+
+NV-00/01/03/09/12/15/17 apply. The pinned reference remains
+59108e15a1f8f94d2da7c674d937d19f5cf9450d; current source roots inspected are
+LLIMModel::sendTypingState/deliverMessage/sendStartSession,
+LLIMMgr::computeSessionID, pack_instant_message, process_chat_from_simulator,
+LLFloaterAvatarPicker::find/findByNameCoro/processResponse,
+LLAgentGroupDataUpdateViewerNode::post, the ChatterBox HTTP handlers,
+LLIMSpeakerMgr::setSpeakers/updateSpeakers/allowTextChat/moderationActionCoro,
+and FSFloaterIM's typing callbacks/timedUpdate. The message template independently
+defines local/IM wire field order and encoding. Full policy/helper closure remains
+open; the inspected roots do not establish exhaustive source parity.
+
+The source routes local chat by simulator audibility and source/owner identity,
+direct IM by avatar-derived session identity, and group chat by membership and
+server-established session state. Group invitations use HTTPS acceptance;
+participant updates can precede the initialization reply. Moderator text requests
+carry an explicit mute boolean and report HTTP failure without treating it as
+session closure. The server's participant updates remain authoritative.
+
+Native CPU-only protocol and session owners now produce bounded, tagged data for
+native widget controls. They do not invoke GL viewer UI, message dispatch or
+speaker callbacks. Boost endian/URL/Asio, libcurl and existing nonvisual LLSD/UUID
+utilities handle encoding and transport. Rendering still uses native widget
+preparation, immutable paint packets and the existing Vulkan resource owners;
+these service edits add no GPU resource or synchronization mechanism.
+
+- LLVKChatProtocol validates local/IM payloads, membership powers, participant
+   updates and invitation data. Local/IM encoding is compared with the independent
+   reference template builder. Direct session IDs retain XOR and self semantics.
+- LLVKLoginTransport keeps credentials, session secrets and capabilities private.
+   Public communication operations require the current owner tag and connection.
+   Search replaces its prior HTTP request and publishes the caller's query ID.
+   Group membership, join/leave, pending participant updates and invitation
+   acceptance have bounded native storage and explicit state.
+- Moderation uses one concurrent HTTPS request, requires current server-reported
+   moderator authority, and publishes completion only for the matching group
+   version. Leave/reconnect invalidate old completion. HTTP 2xx includes empty 204
+   success; payload-requiring consumers still validate their decoded bodies.
+   A 403 reports permission denial without locally changing mute state or closing
+   the group session. No moderation request targets voice.
+- Native UI separates local, direct and group transcripts, drafts and send
+   controls. Local text waits for simulator echo. IM/group local echoes do not
+   claim delivery or read receipts. Search results and moderator actions retain
+   UUID identity. Disconnect clears retained text and recipient controls.
+
+### Focus and validation
+
+The real-window connected probe exposed null-focus transfer while an unrelated
+modal owned the focus lock. Session progress is dismissed before transition;
+unrelated alerts retain their modal ownership and return focus to the connected
+composer on acknowledgement. The widget regression checks retained focus,
+exactly-once response and return focus using an existing native-catalog alert.
+GenericAlert is enqueued internally, not available through queueNotice's catalog.
+
+Focused results: protocol 6/6 includes TLS search, UDP group join/send/leave,
+invitation acceptance, pre-reply participant ordering, moderator commands,
+204 success, 403 denial and stale completion after leave/rejoin. Widget 210/210
+includes transcript/composer routing, query isolation, typing timers, moderator
+controls, disconnect clearing and unrelated-modal handoff. GPU 10/10 and startup
+library compilation pass. Existing LNK4020 PDB warnings remain a debugger limit.
+Window 7/7 now passes with the moderator controls present, covering synthetic
+connection, physical local-send input, resize/restore and graceful cleanup.
+The browser sequence's existing 90-second budget now starts at its first
+presented frame, excluding preceding independent fixtures and service setup;
+the connected phase retains its separate 15-second budget. Earlier failures
+and intermittent CEF navigation timeouts remain retained evidence, not all
+reclassified as the fixed modal-focus defect. This window test does not exercise
+live moderation or establish visual parity of the connected controls.
+
+### Remaining gates
+
+Live local/IM/group bidirectional messaging, moderator workflows and reconnect
+acceptance remain required. Preserve run2496's network evidence; it is not a
+messaging test. Exact original chat/history/editor UI, localized text, complete
+name resolution, rich attribution/styles, transcript scroll behavior, account
+preferences/history, complete mute/friend/autoresponse policy, and all session
+error/permission transitions remain open. Unknown event-queue entries are still
+retained under a finite budget rather than dispatched to GL services; a full
+retention queue fails explicitly and is not a completed consumer implementation.
+Repeated same-ID group join replies need further ordering qualification.
+OpenSim, voice and WebGL remain separately deferred; no world rendering is claimed.
+
 ## Live network milestone verified (2026-09-17)
 
 On branch native-sl-login, the corrected viewer's operator-driven run2496 logged

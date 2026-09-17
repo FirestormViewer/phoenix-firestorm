@@ -72,7 +72,19 @@ namespace tut
         ensure("SOCKS no authentication",endpoint && !endpoint->passwordAuthentication);
         settings["Socks5ProxyEnabled"]=false;
         ensure("disabled proxy cannot silently bypass",!LLVKProxy::select(settings,false,error));
+        ensure("fresh-profile disabled SOCKS allows direct login",LLVKProxy::validateDirectLogin(settings,error));
+        settings["Socks5ProxyEnabled"]=true;
+        ensure("active SOCKS cannot bypass native login containment",!LLVKProxy::validateDirectLogin(settings,error));
+        settings["HttpProxyType"]="None";
+        ensure("UDP SOCKS still requires supported transport",!LLVKProxy::validateDirectLogin(settings,error));
+        settings["Socks5ProxyEnabled"]=false;
         settings["HttpProxyType"]="Web";
+        ensure("active HTTP proxy cannot bypass native login containment",!LLVKProxy::validateDirectLogin(settings,error));
+        settings["BrowserProxyEnabled"]=false;
+        ensure("disabled HTTP proxy permits direct login",LLVKProxy::validateDirectLogin(settings,error));
+        settings["HttpProxyType"]="invalid";
+        ensure("unknown login proxy mode rejected",!LLVKProxy::validateDirectLogin(settings,error));
+        settings["HttpProxyType"]="Web"; settings["BrowserProxyEnabled"]=true;
         settings["BrowserProxyAddress"]="user:secret@proxy.example.test";
         ensure("URL credentials rejected",!LLVKProxy::select(settings,false,error));
         ensure("credentials absent from error",error.find("secret")==std::string::npos);
@@ -198,6 +210,62 @@ namespace tut
         samplingPreferences.declareBOOL("RenderAnisotropic",false,"Native sampling test preference",LLControlVariable::PERSIST_NO);
         configuration.settingsGroup=&samplingPreferences;
         configuration.settings["RenderAnisotropic"]=true;
+        const LLUUID chatAgent("11111111-1111-1111-1111-111111111111"),chatPeer("22222222-2222-2222-2222-222222222222");
+        std::vector<LLVKChatProtocol::Message> incomingChat;
+        unsigned localSends=0,directSends=0;
+        unsigned typingStarts=0,typingStops=0;
+        LLVKChatProtocol::Group chatGroup;
+        chatGroup.id=LLUUID("55555555-5555-5555-5555-555555555555"); chatGroup.name="Fixture Group"; chatGroup.powers=std::uint64_t(1)<<16;
+        unsigned groupSends=0;
+        unsigned moderationRequests=0;
+        configuration.communications.moderateGroup=[&](Owner::Tag tag,const LLUUID& group,const LLUUID& participant,bool muted,std::string&)
+        {
+            ensure("moderation UI retains explicit command and identity",tag==owner.snapshot().tag && group==chatGroup.id && participant==chatPeer && muted);
+            ++moderationRequests; chatGroup.moderationPending=true; return true;
+        };
+        configuration.communications.groups=[&](Owner::Tag) { return std::vector{chatGroup}; };
+        configuration.communications.joinGroup=[&](Owner::Tag tag,const LLUUID& id,std::string&)
+        { ensure("group join identity",tag==owner.snapshot().tag && id==chatGroup.id); chatGroup.state=LLVKChatProtocol::Group::State::Joining; return true; };
+        configuration.communications.leaveGroup=[&](Owner::Tag,const LLUUID&,std::string&)
+        { chatGroup.state=LLVKChatProtocol::Group::State::Closed; return true; };
+        configuration.communications.group=[&](Owner::Tag tag,const LLUUID& id,const std::string& text,std::string&)
+        { ensure("group send identity and text",tag==owner.snapshot().tag && id==chatGroup.id && text=="Group fixture"); ++groupSends; return true; };
+        std::uint64_t searchQuery=0;
+        std::optional<LLVKChatProtocol::SearchResult> residentResult;
+        configuration.communications.search=[&](Owner::Tag tag,std::uint64_t query,std::string text,std::string&)
+        {
+            ensure("search uses owner and typed name",tag==owner.snapshot().tag && text=="Peer Resident");
+            searchQuery=query; return true;
+        };
+        configuration.communications.searchResult=[&](Owner::Tag)
+        { return std::exchange(residentResult,std::nullopt); };
+        configuration.communications.context=[&](Owner::Tag tag)->std::optional<LLVKChatProtocol::Context>
+        {
+            if (tag!=owner.snapshot().tag || owner.snapshot().state!=Owner::State::Connected) return {};
+            return LLVKChatProtocol::Context{tag,chatAgent,"Fixture Resident","Fixture Region"};
+        };
+        configuration.communications.receive=[&](Owner::Tag tag)
+        {
+            ensure("receive uses current owner tag",tag==owner.snapshot().tag);
+            auto messages=std::move(incomingChat); incomingChat.clear(); return messages;
+        };
+        configuration.communications.local=[&](Owner::Tag tag,const std::string& text,std::uint8_t type,std::string&)
+        {
+            ensure("local send retains text and volume",tag==owner.snapshot().tag && text=="Local fixture" && type==2);
+            ++localSends; return true;
+        };
+        configuration.communications.direct=[&](Owner::Tag tag,const LLUUID& recipient,const std::string& text,bool typing,bool stopped,std::string&)
+        {
+            if (typing || stopped)
+            {
+                ensure("typing keeps recipient identity",tag==owner.snapshot().tag && recipient==chatPeer);
+                if (typing) ++typingStarts; else ++typingStops;
+                return true;
+            }
+            ensure("reply retains recipient and session",tag==owner.snapshot().tag && recipient==chatPeer &&
+                text=="Reply fixture" && !typing && !stopped);
+            ++directSends; return true;
+        };
         auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
         const auto usernameEditor=ui->tree().get(ui->find("username_combo"))->combo->editor;
         ensure_equals("empty login starts in username editor",ui->tree().keyboardFocus(),usernameEditor);
@@ -340,7 +408,134 @@ namespace tut
         ensure("installed transport failure is not absent authentication",notices.size()==1 &&
             notices.front().message.find("network request")!=std::string::npos &&
             notices.front().message.find("No login request")==std::string::npos);
+        ensure("transition login started",ui->tree().commit(ui->find("connect_btn")));
+        Owner::Response authorized;
+        authorized.kind=Owner::Response::Kind::Authorized;
+        authorized.tag=owner.snapshot().tag; authorized.identity={1,2};
+        ensure("transition authorized",transport->inbox->post(authorized)==Owner::Code::Ok && owner.pumpOne().ok());
+        ensure("connecting snapshot",ui->refreshSession(error));
+        ensure("connection pending retains login view",ui->tree().get(ui->find("login_html"))->params.visible);
+        ensure("connection progress owns a real modal",ui->advanceNotices(4.,error) && ui->modalNotice()!=0);
+        Owner::Response connected;
+        connected.kind=Owner::Response::Kind::RegionConnected; connected.tag=owner.snapshot().tag;
+        ensure("transition connected",transport->inbox->post(connected)==Owner::Code::Ok && owner.pumpOne().ok());
+        const bool connectedSnapshot=ui->refreshSession(error);
+        ensure("connected snapshot: "+error,connectedSnapshot);
+        ensure("connected hides login browser and controls",!ui->tree().get(ui->find("login_html"))->params.visible &&
+            !ui->tree().get(ui->find("ui_stack"))->params.visible);
+        ensure("connected discards password text",ui->tree().value(ui->find("password_edit")).asString().empty());
+        ensure("hidden login browser no longer blocks paint",ui->preparePaint({},error).has_value());
+        ensure("connected status uses account and region",ui->tree().value(ui->find("connection_status")).asString().find("Fixture Region")!=std::string::npos);
+        ensure("resident name search commits",ui->tree().setValue(ui->find("recipient_id"),LLSD("Peer Resident")) &&
+            ui->tree().commit(ui->find("open_conversation")) && searchQuery!=0);
+        residentResult=LLVKChatProtocol::SearchResult{searchQuery-1,{{chatPeer,"Peer Display","peer.resident"}},""};
+        ensure("stale search cannot populate picker",ui->preparePaint({},error).has_value() && ui->tree().get(ui->find("resident_results"))->combo->items.empty());
+        residentResult=LLVKChatProtocol::SearchResult{searchQuery,{{chatPeer,"Peer Display","peer.resident"}},""};
+        ensure("current search populates picker",ui->preparePaint({},error).has_value() && ui->tree().get(ui->find("resident_results"))->combo->items.size()==1);
+        ensure("local composer accepts text",ui->tree().setValue(ui->find("local_composer"),LLSD("Local fixture")));
+        ensure("local volume selects shout",ui->tree().setComboValue(ui->find("local_volume"),LLSD("2"),error));
+        ensure("local send commits",ui->tree().commit(ui->find("local_send")));
+        ensure("local send waits for simulator echo",localSends==1 && ui->tree().value(ui->find("local_transcript")).asString().empty() &&
+            ui->tree().value(ui->find("local_composer")).asString().empty());
+        LLVKChatProtocol::Message localMessage;
+        localMessage.sender=chatPeer; localMessage.name="Peer Resident"; localMessage.text="Local fixture"; localMessage.chatType=2;
+        incomingChat.push_back(localMessage);
+        auto barelyAudible=localMessage; barelyAudible.audible=0; barelyAudible.text="Not fully audible";
+        incomingChat.push_back(barelyAudible);
+        auto directMessage=localMessage; directMessage.kind=LLVKChatProtocol::Message::Kind::Instant;
+        directMessage.recipient=chatAgent; directMessage.text="Incoming fixture";
+        incomingChat.push_back(directMessage);
+        ensure("received messages prepare",ui->preparePaint({},error).has_value());
+        ensure("simulator local message displayed",ui->tree().value(ui->find("local_transcript")).asString()=="Peer Resident shouts: Local fixture\n");
+        ensure("unsolicited IM creates unread conversation",ui->tree().get(ui->find("conversation_list"))->combo->items.size()==1);
+        ensure("choose unsolicited sender",ui->tree().setComboValue(ui->find("conversation_list"),LLSD(chatPeer.asString()),error) &&
+            ui->tree().commit(ui->find("conversation_list")));
+        ensure("IM transcript belongs to selected sender",ui->tree().value(ui->find("im_transcript")).asString()=="Peer Resident: Incoming fixture\n");
+        ensure("conversation dropdown opens",ui->tree().showComboList(ui->find("conversation_list"),error));
+        ensure("idle paint retains conversation dropdown",ui->preparePaint({},error).has_value() &&
+            ui->tree().get(ui->tree().get(ui->find("conversation_list"))->combo->list)->params.visible);
+        ui->tree().hideComboList(ui->find("conversation_list"));
+        ensure("resolved resident opens matching IM",ui->tree().commit(ui->find("resident_im")) &&
+            ui->tree().value(ui->find("conversation_list")).asString()==chatPeer.asString());
+        ensure("reply composer",ui->tree().setValue(ui->find("im_composer"),LLSD("Reply fixture")) && ui->tree().commit(ui->find("im_send")));
+        ensure("reply sent once and locally echoed",directSends==1 && ui->tree().value(ui->find("im_transcript")).asString().find("Fixture Resident: Reply fixture")!=std::string::npos);
+        const auto typingTime=ui->tree().time();
+        auto typingMessage=directMessage; typingMessage.dialog=41;
+        incomingChat.push_back(typingMessage);
+        ensure("incoming typing displayed",ui->preparePaint({},error).has_value() && !ui->tree().value(ui->find("typing_status")).asString().empty());
+        ensure("advance remote typing expiry",ui->tree().advanceTime(typingTime+10.,error));
+        ensure("remote typing expires",ui->preparePaint({},error).has_value() && ui->tree().value(ui->find("typing_status")).asString().empty());
+        ensure("focus direct composer",ui->tree().setKeyboardFocus(ui->find("im_composer"),false,false,error));
+        ensure("first typed character",ui->tree().lineEditorUnicode(ui->find("im_composer"),U'A',error) && typingStarts==0);
+        ensure("advance typing delay",ui->tree().advanceTime(typingTime+11.2,error));
+        ensure("continued typing announces once",ui->tree().lineEditorUnicode(ui->find("im_composer"),U'B',error) && typingStarts==1);
+        ensure("advance typing inactivity",ui->tree().advanceTime(typingTime+17.,error));
+        ensure("inactivity sends typing stop",ui->preparePaint({},error).has_value() && typingStops==1);
+        ensure("select membership",ui->tree().setComboValue(ui->find("group_list"),LLSD(chatGroup.id.asString()),error) && ui->tree().commit(ui->find("group_list")));
+        ensure("group starts closed",!ui->tree().get(ui->find("group_send"))->params.enabled);
+        ensure("join group",ui->tree().commit(ui->find("group_join")) && !ui->tree().get(ui->find("group_send"))->params.enabled);
+        chatGroup.state=LLVKChatProtocol::Group::State::Joined;
+        chatGroup.participants[chatAgent].textMuted=true;
+        const auto moderatedPaint=ui->preparePaint({},error);
+        ensure("moderated group paint: "+error,moderatedPaint.has_value());
+        ensure("moderated group composer disabled",ui->tree().get(ui->find("group_composer"))->lineEditor->readOnly);
+        chatGroup.participants[chatAgent].textMuted=false;
+        ensure("unmuted group composer enabled",ui->preparePaint({},error).has_value() && ui->tree().get(ui->find("group_send"))->params.enabled);
+        chatGroup.participants[chatPeer]={};
+        ensure("participant roster prepares",ui->preparePaint({},error).has_value());
+        ensure("choose moderation target",ui->tree().setComboValue(ui->find("group_participants"),LLSD(chatPeer.asString()),error) &&
+            ui->tree().commit(ui->find("group_participants")));
+        ensure("nonmoderator actions disabled",!ui->tree().get(ui->find("group_mute"))->params.enabled);
+        chatGroup.participants[chatAgent].moderator=true;
+        ensure("moderator action becomes available",ui->preparePaint({},error).has_value() && ui->tree().get(ui->find("group_mute"))->params.enabled);
+        ensure("explicit text mute submits once",ui->tree().commit(ui->find("group_mute")) && moderationRequests==1);
+        ensure("pending moderation disables further actions without changing roster",!ui->tree().get(ui->find("group_unmute"))->params.enabled &&
+            !chatGroup.participants.at(chatPeer).textMuted);
+        chatGroup.moderationPending=false; chatGroup.participants[chatPeer].textMuted=true;
+        ensure("server mute update reaches roster",ui->preparePaint({},error).has_value() &&
+            ui->tree().get(ui->find("group_participants"))->combo->items.back().label.find("Text muted")!=std::string::npos);
+        auto groupMessage=directMessage; groupMessage.dialog=17; groupMessage.conversation=chatGroup.id; groupMessage.text="Group received";
+        incomingChat.push_back(groupMessage);
+        ensure("group receive reaches separate transcript",ui->preparePaint({},error).has_value() &&
+            ui->tree().value(ui->find("group_transcript")).asString()=="Peer Resident: Group received\n");
+        ensure("group composer submits",ui->tree().setValue(ui->find("group_composer"),LLSD("Group fixture")) &&
+            ui->tree().commit(ui->find("group_send")) && groupSends==1);
+        ensure("leave immediately disables group sending",ui->tree().commit(ui->find("group_leave")) && !ui->tree().get(ui->find("group_send"))->params.enabled);
+        groupMessage.dialog=13; groupMessage.text="Invited message"; incomingChat.push_back(groupMessage);
+        ensure("invitation starts native acceptance",ui->preparePaint({},error).has_value() && chatGroup.state==LLVKChatProtocol::Group::State::Joining);
+        ensure("invitation text displayed once",ui->tree().value(ui->find("group_transcript")).asString().ends_with("Peer Resident: Invited message\n"));
+        ensure("pending invitation still cannot send",!ui->tree().get(ui->find("group_send"))->params.enabled);
+        ensure("disconnect returns to login",owner.cancel().code==Owner::Code::Cancelled && ui->refreshSession(error));
+        ui->tree().setValue(ui->find("local_composer"),LLSD("Local fixture"));
+        ui->tree().commit(ui->find("local_send"));
+        ensure("disconnected callback cannot send",localSends==1 && !ui->tree().get(ui->find("native_communications"))->params.visible);
+        ensure("login subtrees restored",ui->tree().get(ui->find("login_html"))->params.visible &&
+            ui->tree().get(ui->find("ui_stack"))->params.visible);
+        ensure("logout clears retained transcripts and recipients",ui->tree().value(ui->find("local_transcript")).asString().empty() &&
+            ui->tree().value(ui->find("im_transcript")).asString().empty() && ui->tree().get(ui->find("conversation_list"))->combo->items.empty());
+        ensure("reconnect begins",owner.beginLogin().ok());
+        authorized.tag=owner.snapshot().tag;
+        ensure("reconnect authorizes",transport->inbox->post(authorized)==Owner::Code::Ok && owner.pumpOne().ok());
+        ui->takeNotices();
+        LLSD alertArguments; alertArguments["URL"]="https://example.invalid/fixture";
+        unsigned alertResponses=0;
+        const bool alertQueued=ui->queueNotice("WebLaunchExternalTarget",alertArguments,
+            [&](int,const LLSD&) { ++alertResponses; },error);
+        ensure("queue unrelated alert before connection: "+error,alertQueued);
+        const auto alertTime=ui->tree().time()+1.;
+        ensure("unrelated alert takes focus",ui->advanceNotices(alertTime,error) && ui->modalNotice()!=0);
+        const auto unrelatedAlert=ui->modalNotice(),alertFocus=ui->tree().keyboardFocus();
+        connected.tag=owner.snapshot().tag;
+        ensure("reconnect completes",transport->inbox->post(connected)==Owner::Code::Ok && owner.pumpOne().ok() && ui->refreshSession(error));
+        ensure("connection preserves unrelated modal and focus",ui->modalNotice()==unrelatedAlert &&
+            ui->tree().keyboardFocus()==alertFocus && alertResponses==0);
+        ensure("reconnected workspace is empty",ui->preparePaint({},error).has_value() &&
+            ui->tree().value(ui->find("im_transcript")).asString().empty() && !ui->tree().get(ui->find("im_send"))->params.enabled);
+        ensure("alert response delay elapses",ui->advanceNotices(alertTime+1.,error));
+        ensure("unrelated alert acknowledges once",ui->noticeKey(true,false,error) && !ui->modalNotice() && alertResponses==1);
+        ensure_equals("alert dismissal focuses connected composer",ui->tree().keyboardFocus(),ui->find("local_composer"));
         ui->setSessionOwner(nullptr);
+        ensure("detaching owner hides connected workspace",!ui->tree().get(ui->find("native_communications"))->params.visible);
         ensure("shutdown",owner.shutdown().ok());
     }
 
@@ -3553,6 +3748,13 @@ namespace tut
         write(user/"beams"/"keep.xml"); write(account/"settings_per_account.xml"); write(account/"chat.txt"); write(account/"screen_last.png");
         std::string error;
         const auto absent=LLVKSettingsMgr::consumeReset(directory,"settings.xml",error);
+        const auto isolated=LLVKSettingsMgr::isolatedProfile(directory,"ladyanamarques",error);
+        ensure("isolated profile stays beneath a dedicated directory",isolated && *isolated==directory/"native_profiles"/"profile-ladyanamarques");
+        ensure("profile planning does not create files",!std::filesystem::exists(*isolated));
+        for (const auto name : {"","..","../shared","a/b","a\\b","C:\\shared","a:b","trailing.","UPPER"})
+            ensure("unsafe profile name rejected",!LLVKSettingsMgr::isolatedProfile(directory,name,error));
+        ensure("oversized profile name rejected",!LLVKSettingsMgr::isolatedProfile(directory,std::string(49,'a'),error));
+        ensure("relative profile root rejected",!LLVKSettingsMgr::isolatedProfile("relative","fixture",error));
         ensure("absent marker changes nothing",absent && !*absent && std::filesystem::exists(user/"settings.xml"));
         ensure("schedule deferred reset",LLVKSettingsMgr::scheduleReset(directory,error));
         ensure("marker does not remove settings",std::filesystem::exists(directory/"logs"/"CLEAR") && std::filesystem::exists(user/"settings.xml"));

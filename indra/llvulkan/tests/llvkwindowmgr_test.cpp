@@ -548,7 +548,31 @@ namespace tut
         int guidebookStage=0;
         int hyperlinkCursorStage=0;
         int reportedGuidebookStage=-1;
-        LLVKSessionOwner session;
+        struct ConnectedTransport final : LLVKSessionOwner::Transport
+        {
+            LLVKSessionOwner::Code begin(const LLVKSessionOwner::Request& request,
+                const std::shared_ptr<LLVKSessionOwner::Inbox>& inbox) override
+            {
+                LLVKSessionOwner::Response response;
+                response.tag=request.tag; response.identity={1,1};
+                response.kind=request.operation==LLVKSessionOwner::Operation::Authenticate ?
+                    LLVKSessionOwner::Response::Kind::Authorized : LLVKSessionOwner::Response::Kind::RegionConnected;
+                return inbox->post(response);
+            }
+            LLVKSessionOwner::Code quiesce(std::uint64_t) override { return LLVKSessionOwner::Code::Ok; }
+        };
+        LLVKSessionOwner session(std::make_shared<ConnectedTransport>());
+        unsigned connectedSends=0;
+        configuration.ui.communications.context=[&](LLVKSessionOwner::Tag tag)->std::optional<LLVKChatProtocol::Context>
+        {
+            if (session.snapshot().state!=LLVKSessionOwner::State::Connected || tag!=session.snapshot().tag) return {};
+            return LLVKChatProtocol::Context{tag,LLUUID("11111111-1111-1111-1111-111111111111"),"Window Fixture","Fixture Region"};
+        };
+        configuration.ui.communications.local=[&](LLVKSessionOwner::Tag tag,const std::string& text,std::uint8_t type,std::string&)
+        {
+            ensure("window composer sends tagged text",tag==session.snapshot().tag && text=="Window fixture" && type==1);
+            ++connectedSends; return true;
+        };
         struct CleanupState { int attempts=0,frames=0; bool destroyed=false; };
         auto cleanupState=std::make_shared<CleanupState>();
         struct CleanupGate final : LLVKSessionOwner::Service
@@ -567,10 +591,13 @@ namespace tut
         LLVKWidgetTree::Id originalGuidebook=0;
         LLVKWidgetTree::Id originalHelp=0;
         std::set<LLVKWidgetTree::Id> browsersBeforeLoginLink;
-        const auto guidebookDeadline=std::chrono::steady_clock::now()+std::chrono::seconds(90);
+        auto guidebookDeadline=std::chrono::steady_clock::time_point{};
+        auto connectedDeadline=guidebookDeadline;
         std::string guidebookTimeout;
         configuration.presentedFrame=[&](LLVKViewerUi& ui,const LLVKWidgetPaint::Input& input)
         {
+            if (guidebookDeadline==std::chrono::steady_clock::time_point{})
+                guidebookDeadline=std::chrono::steady_clock::now()+std::chrono::seconds(90);
             if (reportedGuidebookStage!=guidebookStage)
             {
                 LL_INFOS("Vulkan") << "Browser integration stage " << guidebookStage << LL_ENDL;
@@ -595,9 +622,19 @@ namespace tut
                 return;
             }
             if (!guidebookTimeout.empty()) return;
-            if (std::chrono::steady_clock::now()>=guidebookDeadline || std::getenv("LL_VK_TEST_GUIDEBOOK_TIMEOUT"))
+            if (std::chrono::steady_clock::now()>=(guidebookStage<14 ? guidebookDeadline : connectedDeadline) || std::getenv("LL_VK_TEST_GUIDEBOOK_TIMEOUT"))
             {
                 guidebookTimeout="bounded integrated Guidebook completion at stage "+std::to_string(guidebookStage);
+                const auto describe=[&](LLVKWidgetTree::Id id)
+                { const auto* node=ui.tree().get(id); return node ? node->params.name : std::string("none"); };
+                guidebookTimeout+=" focus="+describe(ui.tree().keyboardFocus())+" capture="+describe(ui.tree().mouseCapture())+
+                    " top="+describe(ui.tree().topControl());
+                const auto frame=input.browsers.find(ui.find("login_html"));
+                if (frame!=input.browsers.end() && frame->second)
+                {
+                    const auto pixels=frame->second->bottomUpRgba();
+                    guidebookTimeout+=" loginRGB="+std::to_string(pixels[0])+","+std::to_string(pixels[1])+","+std::to_string(pixels[2]);
+                }
                 PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
                 return;
             }
@@ -713,6 +750,7 @@ namespace tut
                 const auto pixels=frame->second->bottomUpRgba();
                 if (pixels[0]!=255 || pixels[1]!=255 || pixels[2]!=0) return;
                 ensure("same-window login navigation stays prelogin",snapshot.state==LLVKSessionOwner::State::PreLogin);
+                ensure("prelogin internal link page remains visible",ui.tree().get(ui.find("login_html"))->params.visible);
                 const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
                 std::string problem;
                 const auto rectangle=ui.tree().screenRect(ui.find("login_html"),problem);
@@ -733,6 +771,56 @@ namespace tut
                 const auto tabs=ui.find("tabs",privacy);
                 ensure_equals("CEF internal link selects nested tab",ui.tree().get(tabs)->tabContainer->selected,
                     ui.find("tab-autoresponse-1",tabs));
+                std::string problem;
+                ensure("close preferences before connected transition",ui.closeMenuWindow(problem));
+                ensure("synthetic window session starts",session.beginLogin().ok());
+                connectedDeadline=std::chrono::steady_clock::now()+std::chrono::seconds(15);
+                ++guidebookStage;
+                return;
+            }
+            if (guidebookStage==14)
+            {
+                if (snapshot.state!=LLVKSessionOwner::State::Connected) return;
+                ensure("connected window removes login browser frame",!input.browsers.contains(ui.find("login_html")));
+                ensure("connected workspace is visible",ui.tree().get(ui.find("native_communications"))->params.visible);
+                std::string problem;
+                if (ui.modalNotice())
+                {
+                    ensure("connected transition preserves actionable alert",ui.noticeKey(true,false,problem));
+                    return;
+                }
+                const auto editor=ui.find("local_composer");
+                ensure("connected native editor focuses",ui.tree().setKeyboardFocus(editor,false,false,problem));
+                ensure("connected native editor accepts text",ui.tree().setValue(editor,LLSD("Window fixture")));
+                const auto window=FindWindowW(L"VulkanstormNativeLogin",nullptr);
+                const auto button=ui.tree().screenRect(ui.find("local_send"),problem);
+                ensure("connected send bounds",button.has_value());
+                RECT client{}; GetClientRect(window,&client);
+                const auto point=MAKELPARAM((button->left+button->right)/2,client.bottom-1-(button->bottom+button->top)/2);
+                SendMessageW(window,WM_LBUTTONDOWN,MK_LBUTTON,point);
+                SendMessageW(window,WM_LBUTTONUP,0,point);
+                ensure("physical click submits local chat once",connectedSends==1);
+                ShowWindow(window,SW_MAXIMIZE);
+                ++guidebookStage;
+                return;
+            }
+            if (guidebookStage==15)
+            {
+                ensure("connected resize remains browser-free",!input.browsers.contains(ui.find("login_html")));
+                const auto root=ui.tree().get(ui.root())->params.rect;
+                std::string problem;
+                for (const auto name : {"local_send","im_send","group_send","disconnect"})
+                {
+                    const auto bounds=ui.tree().screenRect(ui.find(name),problem);
+                    ensure("connected resized controls stay inside viewport",bounds && bounds->left>=0 && bounds->bottom>=0 &&
+                        bounds->right<=root.right && bounds->top<=root.top);
+                }
+                ShowWindow(FindWindowW(L"VulkanstormNativeLogin",nullptr),SW_RESTORE);
+                ++guidebookStage;
+                return;
+            }
+            if (guidebookStage==16)
+            {
                 ++guidebookStage;
                 PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
                 return;
@@ -828,6 +916,16 @@ namespace tut
                     MAKELPARAM(labelRect->left+2,client.bottom-1-(labelRect->bottom+2)));
             }
             ++guidebookStage;
+        };
+        const auto presentedCheck=configuration.presentedFrame;
+        configuration.presentedFrame=[&,presentedCheck](LLVKViewerUi& ui,const LLVKWidgetPaint::Input& input)
+        {
+            try { presentedCheck(ui,input); }
+            catch (const std::exception& failure)
+            {
+                if (guidebookTimeout.empty()) guidebookTimeout=failure.what();
+                PostMessageW(FindWindowW(L"VulkanstormNativeLogin",nullptr),WM_CLOSE,0,0);
+            }
         };
         LLVKTextureCache::Configuration cacheConfiguration;
         cacheConfiguration.directory=profile.path/"textures";
@@ -1545,6 +1643,13 @@ namespace tut
             ensure(ui.dialogError(),ui.guidebook()!=0 && ui.dialogError().empty());
         };
         const bool ran = LLVKWindowMgr::run(configuration,error);
+        if (!ran)
+        {
+            std::cerr << "Native window fixture failure: " << error << std::endl;
+            session.shutdown();
+            for (unsigned attempt=0; attempt<8 && session.snapshot().state!=LLVKSessionOwner::State::Stopped; ++attempt)
+                session.retryCleanup();
+        }
         ensure(error,ran);
         ensure("application and cache retirement completed",session.snapshot().state==LLVKSessionOwner::State::Stopped &&
             session.snapshot().owned[0]==0 && cleanupState->destroyed);
@@ -1552,7 +1657,7 @@ namespace tut
         ensure_equals("recovery remained presentable across frames",cleanupState->frames,3);
         ensure("orderly quit destroys HWND",FindWindowW(L"VulkanstormNativeLogin",nullptr)==nullptr);
         ensure(guidebookTimeout,guidebookTimeout.empty());
-        ensure_equals("browser, XUI preview, Help and login hyperlink sequence verified",guidebookStage,14);
+        ensure_equals("browser, XUI preview, Help, login links and connected workspace verified",guidebookStage,17);
         ensure_equals("native shutdown persists client width",settings.find("WindowWidth")->getSaveValue().asInteger(),expectedWidth);
         ensure_equals("native shutdown persists client height",settings.find("WindowHeight")->getSaveValue().asInteger(),expectedHeight);
         LLVKSettingsMgr reloaded;

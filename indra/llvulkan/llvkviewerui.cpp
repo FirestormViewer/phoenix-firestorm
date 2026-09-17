@@ -57,6 +57,7 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
     error.clear();
     auto ui = std::make_unique<LLVKViewerUi>();
     ui->mPrepareLogin=configuration.prepareLogin;
+    ui->mCommunications=configuration.communications;
     ui->mSkin = std::make_shared<LLVKSkinFiles>(configuration.skin);
     std::vector<std::string> descriptions;
     if (!configuration.fontDescription.empty())
@@ -546,6 +547,7 @@ bool LLVKViewerUi::refreshDisplayScale(std::string& error,float systemScale)
 
 std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint::Input& input,std::string& error)
 {
+    if (!refreshCommunications(error)) return std::nullopt;
     if (mHelpRetiring)
     {
         if (mActiveFloater==mHelp.get()) mActiveFloater=nullptr;

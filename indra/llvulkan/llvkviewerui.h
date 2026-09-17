@@ -20,10 +20,24 @@
 #include "llvkgraphicspolicy.h"
 #include "llvkerror.h"
 #include "llvksessionowner.h"
+#include "llvkchatprotocol.h"
 
 class LLVKViewerUi final
 {
 public:
+    struct CommunicationServices
+    {
+        std::function<std::optional<LLVKChatProtocol::Context>(LLVKSessionOwner::Tag)> context;
+        std::function<std::vector<LLVKChatProtocol::Message>(LLVKSessionOwner::Tag)> receive;
+        std::function<bool(LLVKSessionOwner::Tag,std::uint64_t,std::string,std::string&)> search;
+        std::function<std::optional<LLVKChatProtocol::SearchResult>(LLVKSessionOwner::Tag)> searchResult;
+        std::function<std::vector<LLVKChatProtocol::Group>(LLVKSessionOwner::Tag)> groups;
+        std::function<bool(LLVKSessionOwner::Tag,const LLUUID&,std::string&)> joinGroup,leaveGroup;
+        std::function<bool(LLVKSessionOwner::Tag,const LLUUID&,const std::string&,std::string&)> group;
+        std::function<bool(LLVKSessionOwner::Tag,const LLUUID&,const LLUUID&,bool,std::string&)> moderateGroup;
+        std::function<bool(LLVKSessionOwner::Tag,const std::string&,std::uint8_t,std::string&)> local;
+        std::function<bool(LLVKSessionOwner::Tag,const LLUUID&,const std::string&,bool,bool,std::string&)> direct;
+    };
     struct BackupRequest;
     struct Configuration
     {
@@ -62,6 +76,7 @@ public:
         std::function<bool(const BackupRequest&,std::string&)> backupHandler;
         std::function<void()> clearSpamQueues;
         std::function<bool(const LLSD&,std::string&)> prepareLogin;
+        CommunicationServices communications;
     };
     static std::unique_ptr<LLVKViewerUi> create(const Configuration& configuration, std::string& error);
     struct Page
@@ -236,6 +251,36 @@ private:
         std::function<void(int)> response, std::string& error, std::string name = "NativeError");
     LLVKErrorGate mErrorGate;
     LLVKSessionOwner* mSessionOwner = nullptr;
+    bool mConnectedView=false;
+    std::map<LLVKWidgetTree::Id,bool> mLoginVisibility;
+    CommunicationServices mCommunications;
+    LLVKWidgetTree::Id mCommunicationPanel=0;
+    std::optional<LLVKChatProtocol::Context> mCommunicationContext;
+    struct Conversation
+    {
+        std::string name,draft,transcript;
+        unsigned unread=0;
+        bool typing=false;
+        double typingUntil=0;
+    };
+    std::map<LLUUID,Conversation> mConversations;
+    LLUUID mSelectedConversation;
+    std::string mLocalTranscript;
+    std::uint64_t mResidentQuery=0;
+    std::vector<LLVKChatProtocol::Resident> mResidentResults;
+    std::map<LLUUID,Conversation> mGroupConversations;
+    LLUUID mSelectedGroup;
+    void sendGroupCommunication();
+    LLUUID mTypingRecipient;
+    double mTypingStarted=0,mTypingLastKey=0,mTypingLastSent=0;
+    bool mTypingAnnounced=false;
+    void communicationKeystroke();
+    void stopCommunicationTyping();
+    bool initializeCommunications(std::string& error);
+    bool clearCommunications(std::string& error);
+    bool refreshCommunications(std::string& error);
+    bool selectConversation(const LLUUID& recipient,std::string& error);
+    void sendCommunication(bool local);
     std::function<bool(const LLSD&,std::string&)> mPrepareLogin;
     bool prepareLogin();
     LLVKSessionOwner::Snapshot mSessionSnapshot;

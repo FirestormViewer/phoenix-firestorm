@@ -97,10 +97,13 @@ struct LLVKRegionCircuit::Impl
     boost::asio::io_context context;
     boost::asio::ip::udp::socket socket{context};
     LLVKLoginProtocol::Bootstrap bootstrap;
+    std::string regionName;
     struct Reliable { Bytes bytes; Clock::time_point sent; unsigned retries=0; std::uint32_t id=0; };
     std::map<std::uint32_t,Reliable> outstanding;
     std::set<std::uint32_t> received;
     std::deque<std::uint32_t> receivedOrder;
+    std::vector<LLVKChatProtocol::Message> messages;
+    std::size_t messageBytes=0;
     std::uint32_t sequence=0;
     std::uint8_t ping=0;
     bool circuitAcknowledged=false,handshake=false,movement=false,movementSent=false;
@@ -157,6 +160,15 @@ struct LLVKRegionCircuit::Impl
             if (receivedOrder.size()>4096) { received.erase(receivedOrder.front()); receivedOrder.pop_front(); }
         }
         const auto& payload=packet.payload;
+        if ((packet.id==low(139) || packet.id==low(254)) && status!=Status::Closing)
+        {
+            auto message=packet.id==low(139) ? LLVKChatProtocol::decodeLocal(payload,error) : LLVKChatProtocol::decodeInstant(payload,error);
+            if (!message) { error.clear(); return true; }
+            if (messages.size()>=1024 || messageBytes+payload.size()>4*1024*1024)
+            { error="Native incoming message queue exceeds its budget"; return false; }
+            messageBytes+=payload.size(); messages.push_back(std::move(*message));
+            return true;
+        }
         if (packet.id==packetAck)
         {
             if (payload.empty() || payload.size()!=1+std::size_t(payload[0])*4) return true;
@@ -170,6 +182,8 @@ struct LLVKRegionCircuit::Impl
         else if (packet.id==regionHandshake && status==Status::Connecting)
         {
             if (!handshakeValid(payload)) { error="Native simulator handshake is malformed"; return false; }
+            regionName.assign(payload.begin()+6,payload.begin()+6+payload[5]);
+            if (!regionName.empty() && regionName.back()==0) regionName.pop_back();
             auto reply=identity(); add32(reply,0);
             if (!send(handshakeReply,reply,true,error)) return false;
             handshake=true;
@@ -284,4 +298,31 @@ void LLVKRegionCircuit::cancel()
     mImpl->socket.close(ignored);
     mImpl->outstanding.clear(); mImpl->received.clear(); mImpl->receivedOrder.clear();
     mImpl->bootstrap={}; mImpl->status=Status::Closed;
+    mImpl->messages.clear(); mImpl->messageBytes=0;
+    mImpl->regionName.clear();
+}
+
+const std::string& LLVKRegionCircuit::regionName() const { return mImpl->regionName; }
+
+bool LLVKRegionCircuit::sendLocal(const std::string& text,std::uint8_t type,std::int32_t channel,std::string& error)
+{
+    error.clear();
+    if (mImpl->status!=Status::Connected) { error="Native chat requires a connected circuit"; return false; }
+    const auto payload=LLVKChatProtocol::local(mImpl->bootstrap.agentId,mImpl->bootstrap.sessionId,text,type,channel,error);
+    return payload && mImpl->send(low(80),*payload,true,error);
+}
+
+bool LLVKRegionCircuit::sendInstant(const LLVKChatProtocol::Message& message,std::string& error)
+{
+    error.clear();
+    if (mImpl->status!=Status::Connected) { error="Native IM requires a connected circuit"; return false; }
+    const auto payload=LLVKChatProtocol::instant(mImpl->bootstrap.agentId,mImpl->bootstrap.sessionId,message,error);
+    return payload && mImpl->send(low(254),*payload,true,error);
+}
+
+std::vector<LLVKChatProtocol::Message> LLVKRegionCircuit::takeMessages()
+{
+    auto messages=std::move(mImpl->messages);
+    mImpl->messages.clear(); mImpl->messageBytes=0;
+    return messages;
 }

@@ -158,6 +158,7 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     struct Arguments { LPWSTR* value; ~Arguments() { LocalFree(value); } } ownedArguments{arguments};
     std::map<std::string,std::string> overrides;
     std::string settingsFile = "settings.xml", sessionFile;
+    std::optional<std::string> isolatedName;
     bool unsupported = false;
     for (int index = 1; index < count; ++index)
     {
@@ -169,6 +170,12 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
                 const auto name = ll_convert_wide_to_string(arguments[++index]);
                 overrides[name] = ll_convert_wide_to_string(arguments[++index]);
             }
+        }
+        else if (option == L"--native-profile")
+        {
+            if (isolatedName || index+1>=count) unsupported=true;
+            if (index+1<count) isolatedName=ll_convert_wide_to_string(arguments[++index]);
+            else isolatedName="";
         }
         else if ((option == L"--settings" || option == L"--sessionsettings") && index+1 < count)
         {
@@ -182,8 +189,22 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     const auto directory = std::filesystem::path(executable).parent_path();
     PWSTR roaming = nullptr;
     if (FAILED(SHGetKnownFolderPath(FOLDERID_RoamingAppData,0,nullptr,&roaming))) return std::nullopt;
-    const auto profile = std::filesystem::path(roaming)/std::filesystem::path(std::u8string(profileName.begin(),profileName.end()));
+    auto profile = std::filesystem::path(roaming)/std::filesystem::path(std::u8string(profileName.begin(),profileName.end()));
     CoTaskMemFree(roaming);
+    if (isolatedName)
+    {
+        std::string problem;
+        const auto isolated=LLVKSettingsMgr::isolatedProfile(profile,*isolatedName,problem);
+        const auto localFile=[](const std::string& name)
+        { return !name.empty() && name!="." && name!=".." && name.find_first_of("/\\:")==name.npos; };
+        if (!isolated || unsupported || overrides["RenderBackend"]!="Vulkan" || !localFile(settingsFile) ||
+            (!sessionFile.empty() && !localFile(sessionFile)))
+        {
+            llvkPresentErrorFallback({LLVKError::Code::UnsupportedArguments,LLVKError::Operation::Bootstrap,1,1});
+            return -1;
+        }
+        profile=*isolated;
+    }
     const auto userSettings = profile/"user_settings";
     LLVKSettingsMgr settings;
     std::string error;
@@ -315,6 +336,16 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     if (FAILED(SHGetKnownFolderPath(FOLDERID_LocalAppData,0,nullptr,&local))) return fail(Code::CacheUnavailable,Operation::Cache);
     configuration.ui.defaultCacheDirectory=std::filesystem::path(local)/std::filesystem::path(std::u8string(profileName.begin(),profileName.end()));
     CoTaskMemFree(local);
+    if (isolatedName)
+    {
+        const auto isolated=LLVKSettingsMgr::isolatedProfile(configuration.ui.defaultCacheDirectory,*isolatedName,error);
+        if (!isolated) return fail(Code::CacheUnavailable,Operation::Cache);
+        configuration.ui.defaultCacheDirectory=*isolated;
+        for (const auto name : {"CacheLocation","NewCacheLocation","FSSoundCacheLocation"})
+            if (!settings.set(name,LLSD(""),false,error)) return fail(Code::SettingsRead,Operation::Settings);
+        values=settings.values();
+        configuration.ui.settings=values;
+    }
     const auto cache=stringValue("CacheLocation");
     configuration.ui.cacheDirectory=cache.empty() ? configuration.ui.defaultCacheDirectory :
         std::filesystem::path(std::u8string(cache.begin(),cache.end()));
@@ -342,18 +373,43 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
     loginConfiguration.http.userAgent="Vulkanstorm/"+shortVersion;
     auto loginTransport=std::make_shared<LLVKLoginTransport>(std::move(loginConfiguration));
     session.owner=std::make_unique<LLVKSessionOwner>(loginTransport);
-    configuration.ui.prepareLogin=[loginTransport,&settings,shortVersion](const LLSD& input,std::string& problem)
+    configuration.ui.communications.context=[loginTransport](LLVKSessionOwner::Tag tag)
+    { return loginTransport->chatContext(tag); };
+    configuration.ui.communications.receive=[loginTransport](LLVKSessionOwner::Tag tag)
+    { return loginTransport->takeMessages(tag); };
+    configuration.ui.communications.search=[loginTransport](LLVKSessionOwner::Tag tag,std::uint64_t query,
+        std::string name,std::string& problem)
+    { return loginTransport->searchResidents(tag,query,std::move(name),problem); };
+    configuration.ui.communications.searchResult=[loginTransport](LLVKSessionOwner::Tag tag)
+    { return loginTransport->takeResidentSearch(tag); };
+    configuration.ui.communications.groups=[loginTransport](LLVKSessionOwner::Tag tag)
+    { return loginTransport->groups(tag); };
+    configuration.ui.communications.joinGroup=[loginTransport](LLVKSessionOwner::Tag tag,const LLUUID& id,std::string& problem)
+    { return loginTransport->joinGroup(tag,id,problem); };
+    configuration.ui.communications.leaveGroup=[loginTransport](LLVKSessionOwner::Tag tag,const LLUUID& id,std::string& problem)
+    { return loginTransport->leaveGroup(tag,id,problem); };
+    configuration.ui.communications.group=[loginTransport](LLVKSessionOwner::Tag tag,const LLUUID& id,const std::string& text,std::string& problem)
+    { return loginTransport->sendGroup(tag,id,text,problem); };
+    configuration.ui.communications.moderateGroup=[loginTransport](LLVKSessionOwner::Tag tag,const LLUUID& group,
+        const LLUUID& participant,bool muted,std::string& problem)
+    { return loginTransport->moderateGroup(tag,group,participant,muted,problem); };
+    configuration.ui.communications.local=[loginTransport](LLVKSessionOwner::Tag tag,const std::string& text,
+        std::uint8_t type,std::string& problem)
+    { return loginTransport->sendLocal(tag,text,type,problem); };
+    configuration.ui.communications.direct=[loginTransport](LLVKSessionOwner::Tag tag,const LLUUID& recipient,
+        const std::string& text,bool typing,bool stopped,std::string& problem)
+    { return loginTransport->sendDirect(tag,recipient,text,typing,stopped,problem); };
+    configuration.ui.prepareLogin=[loginTransport,&settings,shortVersion,sessionDiagnostic](const LLSD& input,std::string& problem)
     {
+        sessionDiagnostic("login-prepare",0);
         const auto grid=input["grid"].asString();
         if (!grid.empty() && grid!="agni" && grid!="Second Life" && grid!="util.agni.lindenlab.com")
-        { problem="Native authentication currently supports the Second Life main grid only"; return false; }
-        const auto proxyType=settings.find("HttpProxyType");
-        const auto socks=settings.find("Socks5ProxyEnabled");
-        if ((proxyType && proxyType->getValue().asString()!="None") || (socks && socks->getValue().asBoolean()))
-        { problem="Native login proxy integration is not yet available"; return false; }
+        { sessionDiagnostic("login-prepare-grid-rejected",0); problem="Native authentication currently supports the Second Life main grid only"; return false; }
+        if (!LLVKProxy::validateDirectLogin(settings.values(),problem))
+        { sessionDiagnostic("login-prepare-proxy-rejected",0); return false; }
         auto parameters=LLVKLoginProtocol::credentials(input["account"].asString(),input["password"].asString(),
             input["start"].asString(),problem);
-        if (!parameters) return false;
+        if (!parameters) { sessionDiagnostic("login-prepare-input-rejected",0); return false; }
         (*parameters)["version"]=shortVersion;
         (*parameters)["channel"]="Vulkanstorm";
         (*parameters)["platform"]="win";
@@ -370,7 +426,9 @@ std::optional<int> llvkStartup(const std::wstring& commandLine,const std::string
             "classified_categories","adult_compliant","buddy-list","newuser-config","ui-config","advanced-mode",
             "max-agent-groups","map-server-url","voice-config","tutorial_setting","login-flags","global-textures"})
             (*parameters)["options"].append(option);
-        return loginTransport->prepare(std::move(*parameters),problem);
+        const bool prepared=loginTransport->prepare(std::move(*parameters),problem);
+        sessionDiagnostic(prepared ? "login-prepared" : "login-prepare-transport-rejected",0);
+        return prepared;
     };
     session.errorResolver=errorResolver;
     auto cacheService=std::make_unique<LLVKApplicationCache>(cacheConfiguration,startupStatus);

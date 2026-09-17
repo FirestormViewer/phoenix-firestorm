@@ -10,6 +10,33 @@
 #include <windows.h>
 #endif
 
+std::optional<std::filesystem::path> LLVKSettingsMgr::isolatedProfile(const std::filesystem::path& base,
+    std::string_view name,std::string& error)
+{
+    error.clear();
+    if (!base.is_absolute() || name.empty() || name.size()>48 ||
+        !std::all_of(name.begin(),name.end(),[](char character)
+        { return (character>='a' && character<='z') || (character>='0' && character<='9') || character=='-' || character=='_'; }))
+    { error="Invalid isolated native profile name"; return {}; }
+    const auto path=base/"native_profiles"/("profile-"+std::string(name));
+    for (auto component=path; !component.empty();)
+    {
+        std::error_code status;
+        const auto type=std::filesystem::symlink_status(component,status);
+        if ((status && status!=std::errc::no_such_file_or_directory) || std::filesystem::is_symlink(type))
+        { error="Cannot use linked or inaccessible native profile path"; return {}; }
+#ifdef _WIN32
+        const auto attributes=GetFileAttributesW(component.c_str());
+        if (attributes!=INVALID_FILE_ATTRIBUTES && (attributes&FILE_ATTRIBUTE_REPARSE_POINT))
+        { error="Cannot use linked native profile path"; return {}; }
+#endif
+        const auto parent=component.parent_path();
+        if (parent==component) break;
+        component=parent;
+    }
+    return path;
+}
+
 namespace
 {
     bool browserCachePathUnlinked(const std::filesystem::path& path,std::string& error)
