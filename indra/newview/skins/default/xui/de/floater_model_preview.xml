@@ -303,7 +303,7 @@
 					<text name="resolution_label">
 						Aufösung:
 					</text>
-					<text name="hulls_per_mesh_label">
+					<text name="hulls_label">
 						Hüllen pro Mesh:
 					</text>
 					<text name="vertices_per_hull_label">

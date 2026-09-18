@@ -303,7 +303,7 @@
 					<text name="resolution_label">
 						Resolução:
 					</text>
-					<text name="hulls_per_mesh_label">
+					<text name="hulls_label">
 						Cascos por mesh:
 					</text>
 					<text name="vertices_per_hull_label">

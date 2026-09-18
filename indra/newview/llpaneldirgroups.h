@@ -29,6 +29,8 @@
 
 #include "llpaneldirbrowser.h"
 
+#include "lltoggleablemenu.h"
+
 class LLPanelDirGroups : public LLPanelDirBrowser
 {
 public:
@@ -42,6 +44,14 @@ public:
     static void onClickSearch(void *userdata);
 
     void openProfile(); // <FS:Ansariel> Add "open profile" button
+
+private:
+    void onResultsRightClick(LLUICtrl* ctrl, S32 x, S32 y);
+    bool onContextMenuItemClick(const LLSD& userdata);
+    bool onContextMenuItemEnable(const LLSD& userdata);
+
+    LLHandle<LLToggleableMenu> mPopupMenuHandle;
+    LLUUID mSelectedGroupID;
 };
 
 #endif

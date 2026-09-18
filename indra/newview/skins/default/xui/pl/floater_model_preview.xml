@@ -183,7 +183,7 @@
                     <text name="resolution_label">
                       Rozdzielczość:
                     </text>
-                    <text name="hulls_per_mesh_label">
+                    <text name="hulls_label">
                       Powłok / mesz:
                     </text>
                     <text name="vertices_per_hull_label">

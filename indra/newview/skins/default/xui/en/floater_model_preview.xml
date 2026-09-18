@@ -1046,7 +1046,7 @@
                     <text
                       follows="top|left"
                       height="15"
-                      name="hulls_per_mesh_label"
+                      name="hulls_label"
                       layout="topleft"
                       left_pad="25"
                       width="95">

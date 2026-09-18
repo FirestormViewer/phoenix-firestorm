@@ -356,7 +356,7 @@
 					<text name="resolution_label">
 						解像度：
 					</text>
-					<text name="hulls_per_mesh_label">
+					<text name="hulls_label">
 						メッシュあたりの殻：
 					</text>
 					<text name="vertices_per_hull_label">

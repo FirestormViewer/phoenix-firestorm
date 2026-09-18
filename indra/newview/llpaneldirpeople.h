@@ -48,13 +48,18 @@ public:
 
     void openProfile(); // <FS:Ansariel> Add "open profile" button
 
-// <FS:PP> Search by UUID
 private:
+    void onResultsRightClick(LLUICtrl* ctrl, S32 x, S32 y);
+    void onViewProfile();
+
+    LLHandle<LLContextMenu> mPopupMenuHandle;
+    LLUUID mSelectedAvatarID;
+
+// <FS:PP> Search by UUID
     void onAvatarNameCallback(const LLUUID& id, const LLAvatarName& av_name);
     void addUUIDAvatarResult(const LLUUID& id, const LLAvatarName& av_name);
     boost::signals2::connection mAvatarNameCallbackConnection;
 // </FS:PP>
-
 };
 
 #endif

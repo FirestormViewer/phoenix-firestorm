@@ -225,7 +225,7 @@
 				<text name="resolution_label">
 					Résolution :
 				</text>
-				<text name="hulls_per_mesh_label">
+				<text name="hulls_label">
 					Hulls par Mesh :
 				</text>
 				<text name="vertices_per_hull_label">
