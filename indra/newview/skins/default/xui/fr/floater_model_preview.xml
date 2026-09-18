@@ -98,7 +98,6 @@
 				<item name="MeshOpt Auto" label="Générer Auto" />
 				<item name="MeshOptCombine" label="Générer précis" />
 				<item name="MeshOptSloppy" label="Générer imprécis" />
-				<item name="Generate" label="Générer crédible"/>
 			</combo_box>
 			<button label="Parcourir..." name="lod_browse_high"/>
 			<combo_box name="lod_mode_high">
@@ -113,7 +112,6 @@
 				<item name="MeshOpt Auto" label="Générer Auto" />
 				<item name="MeshOptCombine" label="Générer précis" />
 				<item name="MeshOptSloppy" label="Générer imprécis" />
-				<item name="Generate" label="Générer crédible"/>
 				<item label="Niveau de détail du dessus" name="Use LoD above" value="Niveau de détail du dessus"/>
 			</combo_box>
 			<button label="Parcourir..." name="lod_browse_medium"/>
@@ -129,7 +127,6 @@
 				<item name="MeshOpt Auto" label="Générer Auto" />
 				<item name="MeshOptCombine" label="Générer précis" />
 				<item name="MeshOptSloppy" label="Générer imprécis" />
-				<item name="Generate" label="Générer crédible"/>
 				<item label="Niveau de détail du dessus" name="Use LoD above" value="Niveau de détail du dessus"/>
 			</combo_box>
 			<button label="Parcourir..." name="lod_browse_low"/>
@@ -145,7 +142,6 @@
 				<item name="MeshOpt Auto" label="Générer Auto" />
 				<item name="MeshOptCombine" label="Générer précis" />
 				<item name="MeshOptSloppy" label="Générer imprécis" />
-				<item name="Generate" label="Générer crédible"/>
 				<item label="Niveau de détail du dessus" name="Use LoD above" value="Niveau de détail du dessus"/>
 			</combo_box>
 			<button label="Parcourir..." name="lod_browse_lowest"/>
@@ -322,7 +318,6 @@
 			</text>
 			<check_box label="Activation automatique des poids" tool_tip="Régler automatiquement le poids des mesh avec les informations de rigging" name="mesh_preview_auto_weights"/>
 			<check_box label="Visualisation automatique des poids" tool_tip="Visualiser automatiquement les poids dans l'aperçu des meshes avec les info de rigging" name="mesh_preview_auto_show_weights"/>
-			<check_box label="LOD crédible par défaut" tool_tip="Utiliser la méthode «crédible» (GLOD) par défaut" name="mesh_upload_default_to_reliable"/>
 			<text name="lod_suffix_label">
 				Suffixes LOD :
 			</text>

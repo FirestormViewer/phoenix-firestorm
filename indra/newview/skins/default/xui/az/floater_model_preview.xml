@@ -65,7 +65,6 @@
           <item name="MeshOpt Auto" label="Avtomatik yarat"/>
           <item name="MeshOptCombine" label="Dəqiq yarat"/>
           <item name="MeshOptSloppy" label="Diqqətsiz yarat"/>
-          <item name="Generate" label="Etibarlı yarat"/>
         </combo_box>
         <button label="İcmal..." name="lod_browse_high"/>
         <combo_box name="lod_mode_high">
@@ -78,7 +77,6 @@
           <item name="MeshOpt Auto" label="Avtomatik yarat"/>
           <item name="MeshOptCombine" label="Dəqiq yarat"/>
           <item name="MeshOptSloppy" label="Diqqətsiz yarat"/>
-          <item name="Generate" label="Etibarlı yarat"/>
           <item name="Use LoD above" label="Yuxarıdan istifadə et"/>
         </combo_box>
         <button label="İcmal..." name="lod_browse_medium"/>
@@ -91,7 +89,6 @@
           <item name="MeshOpt Auto" label="Avtomatik yarat"/>
           <item name="MeshOptCombine" label="Dəqiq yarat"/>
           <item name="MeshOptSloppy" label="Diqqətsiz yarat"/>
-          <item name="Generate" label="Etibarlı yarat"/>
           <item name="Use LoD above" label="Yuxarıdan istifadə et"/>
         </combo_box>
         <button label="İcmal..." name="lod_browse_low"/>
@@ -104,7 +101,6 @@
           <item name="MeshOpt Auto" label="Avtomatik yarat"/>
           <item name="MeshOptCombine" label="Dəqiq yarat"/>
           <item name="MeshOptSloppy" label="Diqqətsiz yarat"/>
-          <item name="Generate" label="Etibarlı yarat"/>
           <item name="Use LoD above" label="Yuxarıdan istifadə et"/>
         </combo_box>
         <button label="İcmal..." name="lod_browse_lowest"/>

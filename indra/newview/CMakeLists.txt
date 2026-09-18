@@ -20,7 +20,6 @@ if (USE_DISCORD)
 endif ()
 include(EXPAT)
 include(FMODSTUDIO)
-include(GLOD) # <FS:Beq/> restore GLOD
 include(Hunspell)
 include(JPEGEncoderBasic)
 include(LLAppearance)
@@ -2351,7 +2350,6 @@ if (WINDOWS)
       ${viewer_SHADER_FILES}
       ${viewer_XUI_FILES}
       ${ARCH_PREBUILT_DIRS_RELEASE}/growl.dll
-      ${SHARED_LIB_STAGING_DIR}/glod.dll # <FS:Beq> Restore GLOD build dependencies
       SLPlugin
       media_plugin_cef
       media_plugin_libvlc
@@ -2667,7 +2665,6 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         ll::ndof
         ll::tracy
         ll::openxr
-        fs::glod # <FS:Beq/> restore GLOD dependencies
         fs::discord # <FS:Ansariel> Discord  support
         )
 

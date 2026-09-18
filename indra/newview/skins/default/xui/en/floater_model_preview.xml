@@ -226,10 +226,6 @@
                  name="MeshOptSloppy"
                  label="Generate Sloppy"
                  value="MeshOptSloppy" />
-                 <item
-                 name="Generate"
-                 label="Generate Reliable"
-                 value="Generate" />
             </combo_box>
             <line_editor
              follows="left|top"
@@ -367,10 +363,6 @@
                  name="MeshOptSloppy"
                  label="Generate Sloppy"
                  value="MeshOptSloppy" />
-                 <item
-                 name="Generate"
-                 label="Generate Reliable"
-                 value="Generate" />
                 <item
                  name="Use LoD above"
                  label="Use LoD above"
@@ -512,10 +504,6 @@
                  name="MeshOptSloppy"
                  label="Generate Sloppy"
                  value="MeshOptSloppy" />
-                 <item
-                 name="Generate"
-                 label="Generate Reliable"
-                 value="Generate" />
                 <item
                  name="Use LoD above"
                  label="Use LoD above"
@@ -657,10 +645,6 @@
                  name="MeshOptSloppy"
                  label="Generate Sloppy"
                  value="MeshOptSloppy" />
-                 <item
-                 name="Generate"
-                 label="Generate Reliable"
-                 value="Generate" />
                 <item
                  name="Use LoD above"
                  label="Use LoD above"
@@ -1633,15 +1617,6 @@
          label="Auto-preview weights"
          tool_tip="Automatically show weights in preview for meshes with rigging info"
          name="mesh_preview_auto_show_weights"/>
-         <check_box
-         control_name="FSMeshUploadUseGLODAsDefault"
-         follows="top|left"
-         left="24"
-         top_pad="5"
-         width="300"
-         label="Default to 'Reliable' LODs"
-         tool_tip="Use the 'Reliable' method (GLOD) by default"
-         name="mesh_upload_default_to_reliable"/>
          <text
            follows="left|top"
            layout="topleft"

@@ -159,7 +159,6 @@
 					<item name="MeshOpt Auto" label="Genera automaticamente"/>
 					<item name="MeshOptCombine" label="Genera con precisione"/>
 					<item name="MeshOptSloppy" label="Genera approssimativamente"/>
-					<item name="Generate" label="Genera in modo affidabile"/>
 				</combo_box>
 				<button label="Scegli..." name="lod_browse_high"/>
 				<combo_box name="lod_mode_high">
@@ -172,7 +171,6 @@
 					<item name="MeshOpt Auto" label="Genera automaticamente"/>
 					<item name="MeshOptCombine" label="Genera con precisione"/>
 					<item name="MeshOptSloppy" label="Genera approssimativamente"/>
-					<item name="Generate" label="Genera in modo affidabile"/>
 					<item name="Use LoD above" label="Usa il LoD precedente"/>
 				</combo_box>
 				<button label="Scegli..." name="lod_browse_medium"/>
@@ -186,7 +184,6 @@
 					<item name="MeshOpt Auto" label="Genera automaticamente"/>
 					<item name="MeshOptCombine" label="Genera con precisione"/>
 					<item name="MeshOptSloppy" label="Genera approssimativamente"/>
-					<item name="Generate" label="Genera in modo affidabile"/>
 					<item name="Use LoD above" label="Usa il LoD precedente"/>
 				</combo_box>
 				<button label="Scegli..." name="lod_browse_low"/>
@@ -200,7 +197,6 @@
 					<item name="MeshOpt Auto" label="Genera automaticamente"/>
 					<item name="MeshOptCombine" label="Genera con precisione"/>
 					<item name="MeshOptSloppy" label="Genera approssimativamente"/>
-					<item name="Generate" label="Genera in modo affidabile"/>
 					<item name="Use LoD above" label="Usa il LoD precedente"/>
 				</combo_box>
 				<button label="Scegli..." name="lod_browse_lowest"/>
@@ -348,7 +344,6 @@
 				</text>
 				<check_box label="Abilitazione automatica dei pesi" tool_tip="Imposta automaticamente i pesi abilitati per le mesh con informazioni sul rigging" name="mesh_preview_auto_weights" />
 				<check_box label="Anteprima automatica dei pesi" tool_tip="Mostra automaticamente i pesi in anteprima per le mesh con informazioni sul rigging" name="mesh_preview_auto_show_weights" />
-				<check_box label="Usa LOD 'affidabile' come impostazione predefinita" tool_tip="Per impostazione predefinita, utilizzare il metodo 'affidabile' (GLOD)" name="mesh_upload_default_to_reliable"/>
 				<text name="lod_suffix_label">
 					Suffissi LOD:
 				</text>

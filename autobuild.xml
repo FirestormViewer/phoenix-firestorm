@@ -185,58 +185,6 @@
         <key>version</key>
         <string>5.1.0</string>
       </map>
-      <key>glod</key>
-      <map>
-        <key>copyright</key>
-        <string>Copyright 2003 Jonathan Cohen, Nat Duca, David Luebke, Brenden Schubert - Johns Hopkins University and University of Virginia</string>
-        <key>license</key>
-        <string>GLOD Open-Source License   Version 1.0</string>
-        <key>license_file</key>
-        <string>LICENSES/GLOD.txt</string>
-        <key>name</key>
-        <string>glod</string>
-        <key>platforms</key>
-        <map>
-          <key>darwin64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>439af4161d99a3d12e0d6d90cb948687</string>
-              <key>url</key>
-              <string>https://3p.firestormviewer.org/glod-1.0pre3.252621603-darwin64-252621603.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin64</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>acc1181cd31ef32c3724eda84ae4b580</string>
-              <key>url</key>
-              <string>https://3p.firestormviewer.org/glod-1.0pre3.180990827-linux64-180990827.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
-          <key>windows64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>e906cf08bfbfbd9d4fc78557e021e7d0</string>
-              <key>url</key>
-              <string>https://3p.firestormviewer.org/glod-1.0pre3.vs2017-1906061512-windows64-vs2017-1906061512.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows64</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>1.0pre3.532346</string>
-      </map>
       <key>gntp-growl</key>
       <map>
         <key>copyright</key>

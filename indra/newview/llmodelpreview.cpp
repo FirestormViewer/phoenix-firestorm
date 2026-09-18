@@ -97,7 +97,6 @@ bool LLModelPreview::sIgnoreLoadedCallback = false;
 static const std::string DEFAULT_PHYSICS_MESH_NAME = "default_physics_shape";
 const F32 SKIN_WEIGHT_CAMERA_DISTANCE = 16.f;
 
-#include "glod/glod.h" // <FS:Beq/> More flexible LOD generation
 // <FS:Beq> mesh loader suffix configuration
 //static
 const std::array<std::string,5> LLModelPreview::sSuffixVarNames
@@ -108,24 +107,6 @@ const std::array<std::string,5> LLModelPreview::sSuffixVarNames
     "FSMeshHighLodSuffix",
     "FSMeshPhysicsSuffix"
 };
-// </FS:Beq>
-
-// <FS:Beq> More flexible LOD generation
-bool stop_gloderror()
-{
-    GLuint error = glodGetError();
-
-    if (error != GLOD_NO_ERROR)
-    {
-        std::ostringstream out;
-        out << "GLOD error detected, cannot generate LOD (try another method?): " << std::hex << error;
-        LL_WARNS("MeshUpload") << out.str() << LL_ENDL;
-        LLFloaterModelPreview::addStringToLog(out, true);
-        return true;
-    }
-
-    return false;
-}
 // </FS:Beq>
 
 LLViewerFetchedTexture* bindMaterialDiffuseTexture(const LLImportMaterial& material)
@@ -240,14 +221,7 @@ LLModelPreview::LLModelPreview(S32 width, S32 height, LLFloater* fmp)
     mGenLOD = false;
     mLookUpLodFiles = false;
     mLoadState = LLModelLoader::STARTING;
-    mGroup = 0;
     mLODFrozen = false;
-    // <FS:Beq> Improved LOD generation
-    mBuildShareTolerance = 0.f;
-    mBuildQueueMode = GLOD_QUEUE_GREEDY;
-    mBuildBorderMode = GLOD_BORDER_UNLOCK;
-    mBuildOperator = GLOD_OPERATOR_EDGE_COLLAPSE;
-    // </FS:Beq>
     mUVGuideTexture = LLViewerTextureManager::getFetchedTextureFromFile(gSavedSettings.getString("FSMeshPreviewUVGuideFile"), FTT_LOCAL_FILE, true, LLGLTexture::BOOST_PREVIEW); // <FS:Beq> - Add UV guide overlay to pmesh preview
 
     for (U32 i = 0; i < LLModel::NUM_LODS; ++i)
@@ -261,7 +235,6 @@ LLModelPreview::LLModelPreview(S32 width, S32 height, LLFloater* fmp)
     mViewOption["show_textures"] = false;
 
     mFMP = fmp;
-    glodInit(); // <FS:Beq/> Improved LOD generation
     mHasPivot = false;
     mModelPivot = LLVector3(0.0f, 0.0f, 0.0f);
 
@@ -1018,12 +991,6 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
     }
 
     mLODFile[lod] = filename;
-    // <FS:Beq> Improved LOD generation
-    if (lod == LLModel::LOD_HIGH)
-    {
-        clearGLODGroup();
-    }
-    // </FS:Beq>
     std::map<std::string, std::string, std::less<>> joint_alias_map;
     getJointAliases(joint_alias_map);
 
@@ -1204,8 +1171,6 @@ void LLModelPreview::clearIncompatible(S32 lod)
                     mBaseScene = mScene[lod];
                     mVertexBuffer[LLModel::NUM_LODS].clear();
                     replaced_base_model = true;
-
-                    clearGLODGroup(); // <FS:Beq/> Improved LOD generation
                 }
             }
         }
@@ -1250,24 +1215,6 @@ void LLModelPreview::clearIncompatible(S32 lod)
     }
 }
 
-// <FS:Beq> Improved LOD generation
-void LLModelPreview::clearGLODGroup()
-{
-    if (mGroup)
-    {
-        for (std::map<LLPointer<LLModel>, U32>::iterator iter = mObject.begin(); iter != mObject.end(); ++iter)
-        {
-            glodDeleteObject(iter->second);
-            stop_gloderror();
-        }
-        mObject.clear();
-
-        glodDeleteGroup(mGroup);
-        stop_gloderror();
-        mGroup = 0;
-    }
-}
-// </FS:Beq>
 void LLModelPreview::loadModelCallback(S32 loaded_lod)
 {
     assert_main_thread();
@@ -1446,7 +1393,6 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
             }
 
             mBaseModel = mModel[loaded_lod];
-            clearGLODGroup(); // <FS:Beq/> Improved LOD generation
 
             mBaseScene = mScene[loaded_lod];
             mVertexBuffer[LLModel::NUM_LODS].clear();
@@ -1695,442 +1641,6 @@ void LLModelPreview::restoreNormals()
     refresh();
     updateStatusMessages();
 }
-
-// <FS:Beq> Improved LOD generation
-// Restore the GLOD entry point.
-// There would appear to be quite a lot of commonality which would be well suited to refactoring but
-// LL are still playing with Mesh Optimiser code.
-void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri_limit)
-{
-    // Allow LoD from -1 to LLModel::LOD_PHYSICS
-    if (which_lod < -1 || which_lod > LLModel::NUM_LODS - 1)
-    {
-        std::ostringstream out;
-        out << "Invalid level of detail: " << which_lod;
-        LL_WARNS() << out.str() << LL_ENDL;
-        LLFloaterModelPreview::addStringToLog(out, false);
-        assert(which_lod >= -1 && which_lod < LLModel::NUM_LODS);
-        return;
-    }
-
-    if (mBaseModel.empty())
-    {
-        return;
-    }
-
-    LLVertexBuffer::unbind();
-
-    LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
-
-    if (shader)
-    {
-        shader->unbind();
-    }
-
-    stop_gloderror();
-    static U32 cur_name = 1;
-
-    S32 limit = -1;
-
-    U32 triangle_count = 0;
-
-    U32 instanced_triangle_count = 0;
-
-    //get the triangle count for the whole scene
-    for (auto& [pos, instance_list] : mBaseScene)
-    {
-        for (auto& instance : instance_list)
-        {
-            LLModel* mdl = instance.mModel;
-            if (mdl)
-            {
-                instanced_triangle_count += mdl->getNumTriangles();
-            }
-        }
-    }
-
-    //get the triangle count for the non-instanced set of models
-    for (auto& model : mBaseModel)
-    {
-        triangle_count += model->getNumTriangles();
-    }
-
-    //get ratio of uninstanced triangles to instanced triangles
-    F32 triangle_ratio = (F32)triangle_count / (F32)instanced_triangle_count;
-
-    U32 base_triangle_count = triangle_count;
-
-    U32 type_mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0;
-
-    U32 lod_mode = 0;
-
-    F32 lod_error_threshold = 0;
-
-    // The LoD should be in range from Lowest to High
-    if (which_lod > -1 && which_lod < NUM_LOD)
-    {
-        LLCtrlSelectionInterface* iface = mFMP->childGetSelectionInterface("lod_mode_" + lod_name[which_lod]);
-        if (iface)
-        {
-            lod_mode = iface->getFirstSelectedIndex();
-        }
-
-        lod_error_threshold = (F32)mFMP->childGetValue("lod_error_threshold_" + lod_name[which_lod]).asReal();
-    }
-
-    if (which_lod != -1)
-    {
-        mRequestedLoDMode[which_lod] = lod_mode;
-    }
-
-    if (lod_mode == 0)
-    {
-        lod_mode = GLOD_TRIANGLE_BUDGET;
-
-        // The LoD should be in range from Lowest to High
-        if (which_lod > -1 && which_lod < NUM_LOD)
-        {
-            limit = mFMP->childGetValue("lod_triangle_limit_" + lod_name[which_lod]).asInteger();
-            //convert from "scene wide" to "non-instanced" triangle limit
-            limit = (S32)((F32)limit*triangle_ratio);
-        }
-    }
-    else
-    {
-        lod_mode = GLOD_ERROR_THRESHOLD;
-    }
-
-    bool object_dirty = false;
-
-    if (mGroup == 0)
-    {
-        object_dirty = true;
-        mGroup = cur_name++;
-        glodNewGroup(mGroup);
-    }
-
-    if (object_dirty)
-    {
-        bool first_model = true;
-        for (auto mdl : mBaseModel)
-        { //build GLOD objects for each model in base model list
-
-            if (mObject[mdl] != 0)
-            {
-                glodDeleteObject(mObject[mdl]);
-            }
-
-            mObject[mdl] = cur_name++;
-
-            glodNewObject(mObject[mdl], mGroup, GLOD_DISCRETE);
-            stop_gloderror();
-
-            if (first_model && !mdl->mSkinWeights.empty())
-            { //regenerate vertex buffer for skinned models to prevent animation feedback during LOD generation
-                mVertexBuffer[5].clear();
-            }
-            first_model = false;
-
-            if (mVertexBuffer[5].empty())
-            {
-                genBuffers(5, false);
-            }
-
-            for (U32 i = 0; i < mVertexBuffer[5][mdl].size(); ++i)
-            {
-                LLVertexBuffer* buff = mVertexBuffer[5][mdl][i];
-
-                U32 num_indices = mVertexBuffer[5][mdl][i]->getNumIndices();
-                if (num_indices > 2)
-                {
-                    // <FS:ND> Fix glod so it works when just using the opengl core profile
-                    //glodInsertElements(mObject[mdl], i, GL_TRIANGLES, num_indices, GL_UNSIGNED_SHORT, (U8*)mVertexBuffer[5][mdl][i]->getIndicesPointer(), 0, 0.f);
-                    LLStrider<LLVector3> vertex_strider;
-                    LLStrider<LLVector3> normal_strider;
-                    LLStrider<LLVector2> tc_strider;
-
-                    LLStrider< U16 > index_strider;
-                    buff->getIndexStrider( index_strider );
-
-                    glodVBO vbo = {};
-
-                    if( buff->hasDataType( LLVertexBuffer::TYPE_VERTEX ) )
-                    {
-                        buff->getVertexStrider( vertex_strider );
-                        vbo.mV.p = vertex_strider.get();
-                        vbo.mV.size = 3;
-                        vbo.mV.stride = LLVertexBuffer::sTypeSize[ LLVertexBuffer::TYPE_VERTEX ];
-                        vbo.mV.type = GL_FLOAT;
-                    }
-                    if( buff->hasDataType( LLVertexBuffer::TYPE_NORMAL ) )
-                    {
-                        buff->getNormalStrider( normal_strider );
-                        vbo.mN.p = normal_strider.get();
-                        vbo.mN.stride = LLVertexBuffer::sTypeSize[ LLVertexBuffer::TYPE_NORMAL ];
-                        vbo.mN.type = GL_FLOAT;
-                    }
-                    if( buff->hasDataType( LLVertexBuffer::TYPE_TEXCOORD0 ) )
-                    {
-                        buff->getTexCoord0Strider( tc_strider );
-                        vbo.mT.p = tc_strider.get();
-                        vbo.mT.size = 2;
-                        vbo.mT.stride = LLVertexBuffer::sTypeSize[ LLVertexBuffer::TYPE_TEXCOORD0 ];
-                        vbo.mT.type = GL_FLOAT;
-                    }
-
-                    glodInsertElements( mObject[ mdl ], i, GL_TRIANGLES, num_indices, GL_UNSIGNED_SHORT, (U8*)index_strider.get(), 0, 0.f, &vbo );
-                    // </FS:ND>
-                }
-                stop_gloderror();
-            }
-
-            glodBuildObject(mObject[mdl]);
-            stop_gloderror();
-        }
-    }
-
-
-    S32 start = LLModel::LOD_HIGH;
-    S32 end = 0;
-
-    if (which_lod != -1)
-    {
-        start = end = which_lod;
-    }
-
-    mMaxTriangleLimit = base_triangle_count;
-
-    for (S32 lod = start; lod >= end; --lod)
-    {
-        if (which_lod == -1)
-        {
-            if (lod < start)
-            {
-                triangle_count /= decimation;
-            }
-        }
-        else
-        {
-            if (enforce_tri_limit)
-            {
-                triangle_count = limit;
-            }
-            else
-            {
-                for (S32 j = LLModel::LOD_HIGH; j>which_lod; --j)
-                {
-                    triangle_count /= decimation;
-                }
-            }
-        }
-
-        mModel[lod].clear();
-        mModel[lod].resize(mBaseModel.size());
-        mVertexBuffer[lod].clear();
-
-        mRequestedTriangleCount[lod] = (S32)((F32)triangle_count / triangle_ratio);
-        mRequestedErrorThreshold[lod] = lod_error_threshold;
-
-        glodGroupParameteri(mGroup, GLOD_ADAPT_MODE, lod_mode);
-        stop_gloderror();
-
-        glodGroupParameteri(mGroup, GLOD_ERROR_MODE, GLOD_OBJECT_SPACE_ERROR);
-        stop_gloderror();
-
-        glodGroupParameterf(mGroup, GLOD_OBJECT_SPACE_ERROR_THRESHOLD, lod_error_threshold);
-        stop_gloderror();
-
-        if (lod_mode != GLOD_TRIANGLE_BUDGET)
-        {
-            glodGroupParameteri(mGroup, GLOD_MAX_TRIANGLES, 0);
-        }
-        else
-        {
-            //SH-632: always add 1 to desired amount to avoid decimating below desired amount
-            glodGroupParameteri(mGroup, GLOD_MAX_TRIANGLES, triangle_count + 1);
-        }
-
-        stop_gloderror();
-        glodAdaptGroup(mGroup);
-        stop_gloderror();
-
-        for (U32 mdl_idx = 0; mdl_idx < mBaseModel.size(); ++mdl_idx)
-        {
-            LLModel* base = mBaseModel[mdl_idx];
-
-            GLint patch_count = 0;
-            glodGetObjectParameteriv(mObject[base], GLOD_NUM_PATCHES, &patch_count);
-            stop_gloderror();
-
-            LLVolumeParams volume_params;
-            volume_params.setType(LL_PCODE_PROFILE_SQUARE, LL_PCODE_PATH_LINE);
-            mModel[lod][mdl_idx] = new LLModel(volume_params, 0.f);
-            std::string name = stripSuffix(base->mLabel) + getLodSuffix(lod);
-
-            mModel[lod][mdl_idx]->mLabel = name;
-            mModel[lod][mdl_idx]->mSubmodelID = base->mSubmodelID;
-
-            GLint* sizes = new GLint[patch_count * 2];
-            glodGetObjectParameteriv(mObject[base], GLOD_PATCH_SIZES, sizes);
-            stop_gloderror();
-
-            GLint* names = new GLint[patch_count];
-            glodGetObjectParameteriv(mObject[base], GLOD_PATCH_NAMES, names);
-            stop_gloderror();
-
-            mModel[lod][mdl_idx]->setNumVolumeFaces(patch_count);
-
-            LLModel* target_model = mModel[lod][mdl_idx];
-
-            for (GLint i = 0; i < patch_count; ++i)
-            {
-                type_mask = mVertexBuffer[5][base][i]->getTypeMask();
-
-                LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask);
-
-                if (sizes[i * 2 + 1] > 0 && sizes[i * 2] > 0)
-                {
-                    if (!buff->allocateBuffer(sizes[i * 2 + 1], sizes[i * 2]))
-                    {
-                        // Todo: find a way to stop preview in this case instead of crashing
-                        LL_ERRS() << "Failed buffer allocation during preview LOD generation."
-                            << " Vertices: " << sizes[i * 2 + 1]
-                            << " Indices: " << sizes[i * 2] << LL_ENDL;
-                    }
-                    // <FS:ND> Fix glod so it works when just using the opengl core profile
-                    //glodFillElements(mObject[base], names[i], GL_UNSIGNED_SHORT, (U8*)buff->getIndicesPointer());
-                    LLStrider<LLVector3> vertex_strider;
-                    LLStrider<LLVector3> normal_strider;
-                    LLStrider<LLVector2> tc_strider;
-
-                    LLStrider< U16 > index_strider;
-                    buff->getIndexStrider( index_strider );
-
-                    glodVBO vbo = {};
-
-                    if( buff->hasDataType( LLVertexBuffer::TYPE_VERTEX ) )
-                    {
-                        buff->getVertexStrider( vertex_strider );
-                        vbo.mV.p = vertex_strider.get();
-                        vbo.mV.size = 3;
-                        vbo.mV.stride = LLVertexBuffer::sTypeSize[ LLVertexBuffer::TYPE_VERTEX ];
-                        vbo.mV.type = GL_FLOAT;
-                    }
-                    if( buff->hasDataType( LLVertexBuffer::TYPE_NORMAL ) )
-                    {
-                        buff->getNormalStrider( normal_strider );
-                        vbo.mN.p = normal_strider.get();
-                        vbo.mN.stride = LLVertexBuffer::sTypeSize[ LLVertexBuffer::TYPE_NORMAL ];
-                        vbo.mN.type = GL_FLOAT;
-                    }
-                    if( buff->hasDataType( LLVertexBuffer::TYPE_TEXCOORD0 ) )
-                    {
-                        buff->getTexCoord0Strider( tc_strider );
-                        vbo.mT.p = tc_strider.get();
-                        vbo.mT.size = 2;
-                        vbo.mT.stride = LLVertexBuffer::sTypeSize[ LLVertexBuffer::TYPE_TEXCOORD0 ];
-                        vbo.mT.type = GL_FLOAT;
-                    }
-
-                    glodFillElements( mObject[ base ], names[ i ], GL_UNSIGNED_SHORT, (U8*)index_strider.get(), &vbo );
-                    // </FS:ND>
-                    stop_gloderror();
-                }
-                else
-                {
-                    // This face was eliminated or we failed to allocate buffer,
-                    // attempt to create a dummy triangle (one vertex, 3 indices, all 0)
-                    buff->allocateBuffer(1, 3);
-                    memset((U8*)buff->getMappedData(), 0, buff->getSize());
-                    // <FS:ND> Fix when running with opengl core profile
-                    //memset((U8*)buff->getIndicesPointer(), 0, buff->getIndicesSize());
-                    LLStrider< U16 > index_strider;
-                    buff->getIndexStrider( index_strider );
-
-                    memset( (U8*)index_strider.get(), 0, buff->getIndicesSize() );
-                    // </FS:ND>
-                }
-
-                buff->validateRange(0, buff->getNumVerts() - 1, buff->getNumIndices(), 0);
-
-                LLStrider<LLVector3> pos;
-                LLStrider<LLVector3> norm;
-                LLStrider<LLVector2> tc;
-                LLStrider<U16> index;
-
-                buff->getVertexStrider(pos);
-                if (type_mask & LLVertexBuffer::MAP_NORMAL)
-                {
-                    buff->getNormalStrider(norm);
-                }
-                if (type_mask & LLVertexBuffer::MAP_TEXCOORD0)
-                {
-                    buff->getTexCoord0Strider(tc);
-                }
-
-                buff->getIndexStrider(index);
-
-                target_model->setVolumeFaceData(names[i], pos, norm, tc, index, buff->getNumVerts(), buff->getNumIndices());
-
-                if (!validate_face(target_model->getVolumeFace(names[i])))
-                {
-                    std::ostringstream out;
-                    out << "Invalid face generated during LOD generation.";
-                    LLFloaterModelPreview::addStringToLog(out,true);
-                    LL_ERRS() << out.str() << LL_ENDL;
-                }
-            }
-
-            //blind copy skin weights and just take closest skin weight to point on
-            //decimated mesh for now (auto-generating LODs with skin weights is still a bit
-            //of an open problem).
-            target_model->mPosition = base->mPosition;
-            target_model->mSkinWeights = base->mSkinWeights;
-            target_model->mSkinInfo = base->mSkinInfo;
-            //copy material list
-            target_model->mMaterialList = base->mMaterialList;
-
-            if (!validate_model(target_model))
-            {
-                LL_ERRS() << "Invalid model generated when creating LODs" << LL_ENDL;
-            }
-
-            delete[] sizes;
-            delete[] names;
-        }
-
-        //rebuild scene based on mBaseScene
-        mScene[lod].clear();
-        mScene[lod] = mBaseScene;
-
-        for (U32 i = 0; i < mBaseModel.size(); ++i)
-        {
-            LLModel* mdl = mBaseModel[i];
-            LLModel* target = mModel[lod][i];
-            if (target)
-            {
-                for (LLModelLoader::scene::iterator iter = mScene[lod].begin(); iter != mScene[lod].end(); ++iter)
-                {
-                    for (U32 j = 0; j < iter->second.size(); ++j)
-                    {
-                        if (iter->second[j].mModel == mdl)
-                        {
-                            iter->second[j].mModel = target;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    LLVertexBuffer::unbind();
-    if (shader)
-    {
-        shader->bind();
-    }
-    refresh(); // <FS:ND/> refresh once to make sure render gets called with the updated vbos
-}
-// </FS:Beq>
 
 // Runs per object, but likely it is a better way to run per model+submodels
 // returns a ratio of base model indices to resulting indices
@@ -3783,17 +3293,7 @@ void LLModelPreview::updateLodControls(S32 lod)
     }
     else // auto generate, the default case for all LoDs except High
     {
-        // <FS:Beq> FIRE-32267 - Allow GLOD to be default
-        // fmp->mLODMode[lod] = MESH_OPTIMIZER_AUTO;
-        if( lod_mode == GENERATE )
-        {
-            fmp->mLODMode[lod] = GENERATE;
-        }
-        else
-        {
-            fmp->mLODMode[lod] = MESH_OPTIMIZER_AUTO;
-        }
-        // </FS:Beq>
+        fmp->mLODMode[lod] = lod_mode;
         //don't actually regenerate lod when refreshing UI
         mLODFrozen = true;
 
@@ -3818,7 +3318,7 @@ void LLModelPreview::updateLodControls(S32 lod)
 
         mFMP->getChild<LLComboBox>("lod_mode_" + lod_name[lod])->selectNthItem(mRequestedLoDMode[lod]);
 
-        if (mRequestedLoDMode[lod] == 0 || mRequestedLoDMode[lod] == GENERATE) // <FS:Beq/> FIRE-32267 - Allow GLOD to be default
+        if (mRequestedLoDMode[lod] == LIMIT_TRIANGLES)
         {
             limit->setVisible(true);
             threshold->setVisible(false);
@@ -5255,17 +4755,7 @@ bool LLModelPreview::lodQueryCallback()
         {
             S32 lod = preview->mLodsQuery.back();
             preview->mLodsQuery.pop_back();
-// <FS:Beq> Improved LOD generation
-            static LLCachedControl<bool> default_to_glod(gSavedSettings, "FSMeshUploadUseGLODAsDefault");
-            if (default_to_glod())
-            {
-                preview->genGlodLODs(lod, 3, false);
-            }
-            else
-            {
-                preview->genMeshOptimizerLODs(lod, MESH_OPTIMIZER_AUTO, 3, false);
-            }
-// </FS:Beq>
+            preview->genMeshOptimizerLODs(lod, MESH_OPTIMIZER_AUTO, 3, false);
             if (preview->mLookUpLodFiles && (lod == LLModel::LOD_HIGH))
             {
                 preview->lookupLODModelFiles(LLModel::LOD_HIGH);
@@ -5280,17 +4770,6 @@ bool LLModelPreview::lodQueryCallback()
 }
 
 // <FS:Beq> Improved LOD generation
-void LLModelPreview::onLODGLODParamCommit(S32 lod, bool enforce_tri_limit)
-{
-    if (mFMP && !mLODFrozen)
-    {
-        genGlodLODs(lod, 3, enforce_tri_limit);
-        mFMP->refresh();
-        refresh();
-        mDirty = true;
-    }
-
-}
 void LLModelPreview::onLODMeshOptimizerParamCommit(S32 requested_lod, bool enforce_tri_limit, S32 mode)
 {
     if (mFMP && !mLODFrozen) // <FS:Beq> minor sidestep of potential crash

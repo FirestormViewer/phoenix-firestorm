@@ -128,7 +128,6 @@ public:
         MESH_OPTIMIZER_AUTO, // automatically selects method based on model or face
         MESH_OPTIMIZER_PRECISE, // combines faces into a single model, simplifies, then splits back into faces
         MESH_OPTIMIZER_SLOPPY, // uses sloppy method, works per face
-        GENERATE, // Use GLOD <FS:Beq/> Improved LOD generation
         USE_LOD_ABOVE,
     } eLoDMode;
 
@@ -166,7 +165,6 @@ public:
     void loadModelCallback(S32 lod);
     bool lodsReady() { return !mGenLOD && mLodsQuery.empty(); }
     void queryLODs() { mGenLOD = true; };
-    void genGlodLODs(S32 which_lod = -1, U32 decimation = 3, bool enforce_tri_limit = false);
     void genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 decimation = 3, bool enforce_tri_limit = false);
     void generateNormals();
     void restoreNormals();
@@ -177,8 +175,6 @@ public:
     void clearIncompatible(S32 lod);
     void updateStatusMessages();
     void updateLodControls(S32 lod);
-    void clearGLODGroup();
-    void onLODGLODParamCommit(S32 lod, bool enforce_tri_limit);
     void onLODMeshOptimizerParamCommit(S32 lod, bool enforce_tri_limit, S32 mode);
     void addEmptyFace(LLModel* pTarget);
 
@@ -306,16 +302,6 @@ protected:
     S32 mRequestedTriangleCount[LLModel::NUM_LODS];
     F32 mRequestedErrorThreshold[LLModel::NUM_LODS];
     F32 mRequestedCreaseAngle[LLModel::NUM_LODS];
-    // <FS:Beq> Improved LOD generation
-    F32 mBuildShareTolerance;
-    U32 mBuildQueueMode;
-    U32 mBuildOperator;
-    U32 mBuildBorderMode;
-    U32 mRequestedBuildOperator[LLModel::NUM_LODS];
-    U32 mRequestedQueueMode[LLModel::NUM_LODS];
-    U32 mRequestedBorderMode[LLModel::NUM_LODS];
-    F32 mRequestedShareTolerance[LLModel::NUM_LODS];
-    // </FS:Beq>
 
     LLModelLoader* mModelLoader;
 
@@ -330,9 +316,6 @@ protected:
 
     vv_LLVolumeFace_t mModelFacesCopy[LLModel::NUM_LODS];
     vv_LLVolumeFace_t mBaseModelFacesCopy;
-
-    U32 mGroup;
-    std::map<LLPointer<LLModel>, U32> mObject; // <FS:Beq> Improved LOD generation
 
     // Amount of triangles in original(base) model
     U32 mMaxTriangleLimit;
