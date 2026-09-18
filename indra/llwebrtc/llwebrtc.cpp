@@ -496,7 +496,7 @@ bool LLWebRTCImpl::terminate()
             {
                 for (auto& connection : connections)
                 {
-                    connection->closeOnSignalingThread();
+                    connection->closeOnSignalingThread(true);
                 }
                 // Destroy the connections here, on the signaling thread, while
                 // it's still running.
@@ -824,8 +824,14 @@ void LLWebRTCImpl::workerDeployDevices()
 
     // Stop first so the start helpers (which no-op when already running) will
     // re-select the now-current device.
-    mDeviceModule->StopPlayout();
-    mDeviceModule->ForceStopRecording();
+    if (mDeviceModule->Playing())
+    {
+        mDeviceModule->StopPlayout();
+    }
+    if (mDeviceModule->Recording())
+    {
+        mDeviceModule->ForceStopRecording();
+    }
 
     workerStartRecording();
     workerStartPlayout();
@@ -1205,7 +1211,10 @@ void LLWebRTCImpl::freePeerConnection(LLWebRTCPeerConnectionInterface* peer_conn
                 {
                     if (mDeviceModule)
                     {
-                        mDeviceModule->StopPlayout();
+                        if (mDeviceModule->Playing())
+                        {
+                            mDeviceModule->StopPlayout();
+                        }
                         if (!mVoiceEnabled)
                         {
                             mDeviceModule->ForceStopRecording();
@@ -1281,13 +1290,13 @@ void LLWebRTCPeerConnectionImpl::terminate()
     mWebRTCImpl->PostSignalingTask(
         [self]()
         {
-            self->closeOnSignalingThread();
+            self->closeOnSignalingThread(false);
             self->mPendingJobs--;
         });
 }
 
 // Signaling thread only.
-void LLWebRTCPeerConnectionImpl::closeOnSignalingThread()
+void LLWebRTCPeerConnectionImpl::closeOnSignalingThread(bool webrtc_terminate)
 {
     // Stop issuing stats requests; one may already be in flight, and
     // Close() below will flush it.
@@ -1338,13 +1347,16 @@ void LLWebRTCPeerConnectionImpl::closeOnSignalingThread()
         observer->OnPeerConnectionClosed();
     }
 
-    // Nothing may call back into the viewer past this point.  Connections
-    // closed while the viewer is still running unset themselves as observers
-    // when they're destroyed, but any that are left for llwebrtc::terminate()
-    // to close deliberately don't -- they're torn down as soon as it returns,
-    // so a late callback would be reaching into freed memory.
-    mSignalingObserverList.clear();
-    mDataObserverList.clear();
+    if (webrtc_terminate)
+    {
+        // Nothing may call back into the viewer past this point.  Connections
+        // closed while the viewer is still running unset themselves as observers
+        // when they're destroyed, but any that are left for llwebrtc::terminate()
+        // to close deliberately don't -- they're torn down as soon as it returns,
+        // so a late callback would be reaching into freed memory.
+        mSignalingObserverList.clear();
+        mDataObserverList.clear();
+    }
 }
 
 void LLWebRTCPeerConnectionImpl::setSignalingObserver(LLWebRTCSignalingObserver *observer) { mSignalingObserverList.emplace_back(observer); }
