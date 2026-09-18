@@ -54,6 +54,11 @@ void LLTemplateMessageDispatcher::dispatch(const std::string& msg_name,
     LLHost host;
     host = gMessageSystem->getSender();
 
+    if (LLMessageSystem::callDispatchInterceptor(msg_name, message, responsep))
+    {
+        return;
+    }
+
     bool validate_message = mTemplateMessageReader.validateMessage(data.data(), static_cast<S32>(size), host, true);
 
     if (validate_message)

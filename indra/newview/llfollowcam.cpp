@@ -851,6 +851,11 @@ void LLFollowCamMgr::removeFollowCamParams(const LLUUID& source)
     PermissionsTracker::instance().removePermissionsEntry(source, PermissionsTracker::PERM_FOLLOWCAM);
 }
 
+void LLFollowCamMgr::clearActiveFollowCamParams()
+{
+    mParamStack.clear();
+}
+
 bool LLFollowCamMgr::isScriptedCameraSource(const LLUUID& source)
 {
     param_map_t::iterator found_it = mParamMap.find(source);
