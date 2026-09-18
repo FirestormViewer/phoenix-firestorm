@@ -72,7 +72,7 @@ namespace
     }
 }
 
-LLMarkdown::span_vec_t LLMarkdown::parseEmphasis(const std::string& text, bool emote)
+LLMarkdown::span_vec_t LLMarkdown::parseEmphasis(const std::string& text, bool emote, const literal_ranges_t& literal_ranges)
 {
     span_vec_t spans;
     if (text.empty())
@@ -94,14 +94,45 @@ LLMarkdown::span_vec_t LLMarkdown::parseEmphasis(const std::string& text, bool e
         ESpanType mType;
     };
     std::vector<Match> strong_matches, em_matches;
+    literal_ranges_t protected_ranges = literal_ranges;
+    std::vector<size_t> escaped_underscores;
+    auto is_literal = [&protected_ranges](size_t offset)
+    {
+        return std::any_of(protected_ranges.begin(), protected_ranges.end(), [offset](const auto& range)
+        {
+            return offset >= range.first && offset < range.second;
+        });
+    };
+    if (!emote)
+    {
+        for (size_t offset = 0; offset + 1 < text.size(); ++offset)
+        {
+            if (text[offset] == '_' && text[offset + 1] == '_' &&
+                !is_literal(offset) && !is_literal(offset + 1))
+            {
+                escaped_underscores.push_back(offset);
+                protected_ranges.emplace_back(offset, offset + 2);
+                ++offset;
+            }
+        }
+    }
 
     // Pass 1: strong emphasis (**...**).
     size_t pos = 0;
     while (pos < text.size())
     {
-        if (text[pos] == '*' && byteAt(text, pos + 1) == '*')
+        if (text[pos] == '*' && byteAt(text, pos + 1) == '*' && !is_literal(pos) && !is_literal(pos + 1))
         {
             size_t close = text.find("**", pos + 2);
+            while (close != std::string::npos && (is_literal(close) || is_literal(close + 1)))
+            {
+                close = text.find("**", close + 2);
+            }
+            if (close == std::string::npos && pos + 2 < text.size() &&
+                !LLStringOps::isSpace(text[pos + 2]))
+            {
+                close = text.size();
+            }
             // Content must be non-empty and not all whitespace ("** **").
             if (close != std::string::npos && close > pos + 2 &&
                 text.find_first_not_of(" \t\r\n", pos + 2) < close)
@@ -155,16 +186,19 @@ LLMarkdown::span_vec_t LLMarkdown::parseEmphasis(const std::string& text, bool e
                 flush(i);
                 spans.push_back({ ESpanType::STRONG_DELIM, text.substr(sm.mDelimPos, sm.mDelimLen) });
                 spans.push_back({ ESpanType::STRONG, text.substr(sm.mContentPos, sm.mContentLen) });
-                spans.push_back({ ESpanType::STRONG_DELIM, text.substr(sm.mContentPos + sm.mContentLen, sm.mDelimLen) });
+                if (sm.mContentPos + sm.mContentLen < text.size())
+                {
+                    spans.push_back({ ESpanType::STRONG_DELIM, text.substr(sm.mContentPos + sm.mContentLen, sm.mDelimLen) });
+                }
                 i = sm.mContentPos + sm.mContentLen + sm.mDelimLen;
                 seg_start = i;
                 ++strong_idx;
                 continue;
             }
-            if (text[i] == '_')
+            if (text[i] == '_' && !is_literal(i))
             {
                 flush(i);
-                if (byteAt(text, i + 1) == '_')
+                if (byteAt(text, i + 1) == '_' && !is_literal(i + 1))
                 {
                     // escaped literal: "__" renders as one '_', no toggle
                     spans.push_back({ ESpanType::EMOTE_LITERAL, "_" });
@@ -192,7 +226,7 @@ LLMarkdown::span_vec_t LLMarkdown::parseEmphasis(const std::string& text, bool e
     pos = 0;
     while (pos < text.size())
     {
-        if (text[pos] == '_' && !inside_strong(pos))
+        if (text[pos] == '_' && !inside_strong(pos) && !is_literal(pos))
         {
             if (canOpenEmphasis(text, pos))
             {
@@ -204,7 +238,7 @@ LLMarkdown::span_vec_t LLMarkdown::parseEmphasis(const std::string& text, bool e
                     {
                         break;
                     }
-                    if (!inside_strong(close) && canCloseEmphasis(text, close))
+                    if (!inside_strong(close) && !is_literal(close) && canCloseEmphasis(text, close))
                     {
                         break;
                     }
@@ -216,6 +250,8 @@ LLMarkdown::span_vec_t LLMarkdown::parseEmphasis(const std::string& text, bool e
                     pos = close + 1;
                     continue;
                 }
+                em_matches.push_back({ pos, 1, pos + 1, text.size() - (pos + 1), ESpanType::EMPHASIS });
+                break;
             }
         }
         ++pos;
@@ -282,7 +318,10 @@ LLMarkdown::span_vec_t LLMarkdown::parseEmphasis(const std::string& text, bool e
         // opening '**' — strip any emphasis delimiters (can't overlap by construction)
         spans.push_back({ ESpanType::STRONG_DELIM, text.substr(strong.mDelimPos, strong.mDelimLen) });
         emit(strong.mContentPos, strong.mContentPos + strong.mContentLen, ESpanType::STRONG);
-        spans.push_back({ ESpanType::STRONG_DELIM, text.substr(strong.mContentPos + strong.mContentLen, strong.mDelimLen) });
+        if (strong.mContentPos + strong.mContentLen < text.size())
+        {
+            spans.push_back({ ESpanType::STRONG_DELIM, text.substr(strong.mContentPos + strong.mContentLen, strong.mDelimLen) });
+        }
         cursor = strong_end;
     }
     if (cursor < text.size())
@@ -290,6 +329,22 @@ LLMarkdown::span_vec_t LLMarkdown::parseEmphasis(const std::string& text, bool e
         emit(cursor, text.size(), ESpanType::PLAIN);
     }
 
+    size_t source_offset = 0;
+    size_t escape_index = 0;
+    for (auto& span : spans)
+    {
+        const size_t original_size = span.mText.size();
+        size_t removed = 0;
+        while (escape_index < escaped_underscores.size() &&
+               escaped_underscores[escape_index] < source_offset + original_size)
+        {
+            const size_t position = escaped_underscores[escape_index] - source_offset;
+            span.mText.erase(position + 1 - removed, 1);
+            ++removed;
+            ++escape_index;
+        }
+        source_offset += original_size;
+    }
     return spans;
 }
 

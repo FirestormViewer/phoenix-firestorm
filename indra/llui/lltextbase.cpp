@@ -2994,6 +2994,59 @@ void LLTextBase::appendText(const std::string &new_text, bool prepend_newline, c
 
     if(prepend_newline)
         appendLineBreakSegment(input_params);
+    if (mParseMarkdown && !input_params.is_link &&
+        (new_text.find('_') != std::string::npos || new_text.find("**") != std::string::npos))
+    {
+        LLStyle::Params message_params(getStyleParams());
+        message_params.overwriteFrom(input_params);
+        const U8 base_flags = LLFontGL::getStyleFromString(message_params.font.style());
+        U8 emote_flags = base_flags;
+        LLMarkdown::literal_ranges_t literal_ranges;
+        std::string remaining = new_text;
+        size_t offset = 0;
+        LLUrlMatch match;
+        while (mParseHTML && LLUrlRegistry::instance().findUrl(remaining, match))
+        {
+            const size_t end = match.getEnd() + 1;
+            if (end == 0 || end > remaining.size()) break;
+            literal_ranges.emplace_back(offset + match.getStart(), offset + end);
+            offset += end;
+            remaining.erase(0, end);
+        }
+        for (const auto& span : LLMarkdown::parseEmphasis(new_text, message_params.markdown_emote, literal_ranges))
+        {
+            U8 flags = message_params.markdown_emote ? emote_flags : base_flags;
+            switch (span.mType)
+            {
+                case LLMarkdown::ESpanType::EMPHASIS_DELIM:
+                case LLMarkdown::ESpanType::STRONG_DELIM:
+                    continue;
+                case LLMarkdown::ESpanType::EMOTE_DELIM:
+                    emote_flags ^= LLFontGL::ITALIC;
+                    continue;
+                case LLMarkdown::ESpanType::EMPHASIS:
+                    flags |= LLFontGL::ITALIC;
+                    break;
+                case LLMarkdown::ESpanType::STRONG:
+                    flags |= LLFontGL::BOLD;
+                    break;
+                case LLMarkdown::ESpanType::EMOTE_TOGGLE_ON:
+                    flags |= LLFontGL::ITALIC;
+                    emote_flags = flags;
+                    break;
+                case LLMarkdown::ESpanType::EMOTE_TOGGLE_OFF:
+                    flags &= ~LLFontGL::ITALIC;
+                    emote_flags = flags;
+                    break;
+                default:
+                    break;
+            }
+            LLStyle::Params span_params(message_params);
+            span_params.font.style(LLFontGL::getStringFromStyle(flags));
+            appendTextImpl(span.mText, span_params);
+        }
+        return;
+    }
     appendTextImpl(new_text,input_params);
 }
 
@@ -3147,68 +3200,6 @@ void LLTextBase::appendAndHighlightTextImpl(const std::string &new_text, S32 hig
     deselect();
 
     setCursorPos(old_length);
-
-    // <FS> Markdown-style _italic_ / **bold** emphasis for read-only text.
-    // Runs before keyword highlights and URL/icon handling; operates on the
-    // plain-text chunk passed here (URLs and <nolink> content have already
-    // been split into separate segments by appendTextImpl).
-    // Markdown is applied in BOTH plain-text and rich chat modes: plain text
-    // controls layout/columns, not emphasis, so `_`/`**` should still parse.
-    if (mParseMarkdown)
-    {
-        // Ensure the common case (no delimiters at all) stays on the fast path.
-        if (new_text.find('_') != std::string::npos || new_text.find("**") != std::string::npos)
-        {
-            auto spans = LLMarkdown::parseEmphasis(new_text, (bool)style_params.markdown_emote);
-            bool any_emphasis = false;
-            for (const auto& span : spans)
-            {
-                if (span.mType != LLMarkdown::ESpanType::PLAIN)
-                {
-                    any_emphasis = true;
-                    break;
-                }
-            }
-            if (any_emphasis)
-            {
-                // Determine the incoming base style once so nested spans
-                // merge on top of it rather than resetting it.
-                U8 base_flags = LLFontGL::getStyleFromString(style_params.font.style());
-                for (const auto& span : spans)
-                {
-                    if (span.mType == LLMarkdown::ESpanType::EMPHASIS_DELIM ||
-                        span.mType == LLMarkdown::ESpanType::STRONG_DELIM ||
-                        span.mType == LLMarkdown::ESpanType::EMOTE_DELIM)
-                    {
-                        continue; // drop the delimiter characters
-                    }
-                    LLStyle::Params span_params(style_params);
-                    U8 merged = base_flags;
-                    switch (span.mType)
-                    {
-                        case LLMarkdown::ESpanType::EMPHASIS:
-                            merged |= LLFontGL::ITALIC;
-                            break;
-                        case LLMarkdown::ESpanType::STRONG:
-                            merged |= LLFontGL::BOLD;
-                            break;
-                        case LLMarkdown::ESpanType::EMOTE_TOGGLE_ON:
-                            merged |= LLFontGL::ITALIC;  // action (italic) part of an emote
-                            break;
-                        case LLMarkdown::ESpanType::EMOTE_TOGGLE_OFF:
-                            merged &= ~LLFontGL::ITALIC; // spoken (normal) part of an emote
-                            break;
-                        default:
-                            break; // PLAIN / EMOTE_LITERAL keep the base style
-                    }
-                    span_params.font.style(LLFontGL::getStringFromStyle(merged));
-                    appendAndHighlightTextImpl(span.mText, highlight_part, span_params, underline_link);
-                }
-                return;
-            }
-        }
-    }
-    // </FS>
 
     if (mParseHighlights)
     {

@@ -30,6 +30,7 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 
 // Parses a UTF-8 string for markdown-style emphasis spans:
 //   **bold**   -> strong emphasis
@@ -41,6 +42,8 @@
 // A single '*' is not treated as emphasis to avoid false positives in
 // chat ("2*3*4", emoticons, censoring). Emphasis spans may contain strong
 // spans ("_some **bold** text_" -> italic-bold-italic nesting).
+// An unmatched valid opening delimiter formats through the end of this input.
+// Two consecutive underscores display one literal underscore in either mode.
 //
 // The result is a list of spans that exactly reconstructs the original
 // string when concatenated, with the delimiter runs either marked as
@@ -68,9 +71,10 @@ public:
     };
 
     using span_vec_t = std::vector<Span>;
+    using literal_ranges_t = std::vector<std::pair<size_t, size_t>>;
 
-    // Split text into emphasis spans. Never loses or reorders characters:
-    // concatenating all spans' mText yields text.
+    // Split text into emphasis spans. Concatenating spans reconstructs the
+    // input except that escaped double underscores collapse to one underscore.
     //
     // When emote is true, '_' *toggles* the base italic off and on rather
     // than delimiting emphasis. Emotes ("/me ...", and their synonyms a
@@ -86,7 +90,8 @@ public:
     // EMOTE_TOGGLE_OFF (caller strips ITALIC); EMOTE_DELIM is the hidden
     // toggle character and EMOTE_LITERAL a collapsed '__'. The toggle
     // never survives the line (input is split per line upstream).
-    static span_vec_t parseEmphasis(const std::string& text, bool emote = false);
+    static span_vec_t parseEmphasis(const std::string& text, bool emote = false,
+        const literal_ranges_t& literal_ranges = {});
 
     // <FS> Strip the markdown emphasis delimiters, returning the visible text
     // with all EMPHASIS_DELIM / STRONG_DELIM / EMOTE_DELIM runs removed and

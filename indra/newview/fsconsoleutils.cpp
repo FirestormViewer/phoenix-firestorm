@@ -91,18 +91,15 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
         }
 
         std::string message = irc_me ? chat_msg.mText.substr(3) : chat_msg.mText;
-        // <FS> The console renders plain text (one font style per line); strip
-        // the emote markdown toggle delimiters so a trailing '_' isn't shown.
-        if (irc_me)
-        {
-            message = LLMarkdown::stripEmphasisDelimiters(message, /*emote=*/true);
-        }
-        // </FS>
         console_chat = sender_name + delimiter + message;
         F32 alpha = 1.f;
         LLUIColor chatcolor;
         LLViewerChat::getChatColor(chat_msg, chatcolor, alpha);
-        gConsole->addConsoleLine(console_chat, chatcolor % alpha);
+        const bool emote = irc_me || chat_msg.mChatStyle == CHAT_STYLE_IRC;
+        const auto style = chat_msg.mChatType == CHAT_TYPE_SHOUT ? LLFontGL::BOLD :
+            (emote || chat_msg.mChatType == CHAT_TYPE_WHISPER ? LLFontGL::ITALIC : LLFontGL::NORMAL);
+        gConsole->addConsoleLine(console_chat, chatcolor % alpha, LLUUID::null, style,
+            static_cast<S32>(utf8str_to_wstring(sender_name + delimiter).size()), emote);
     }
     else
     {
@@ -125,7 +122,8 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
         F32 alpha = 1.f;
         LLUIColor chatcolor;
         LLViewerChat::getChatColor(chat_msg, chatcolor, alpha);
-        gConsole->addConsoleLine(console_chat, chatcolor % alpha);
+        gConsole->addConsoleLine(console_chat, chatcolor % alpha, LLUUID::null, LLFontGL::NORMAL,
+            chat_msg.mFromName.empty() ? 0 : static_cast<S32>(utf8str_to_wstring(chat_msg.mFromName + " ").size()));
     }
 
     return true;
@@ -159,13 +157,6 @@ void FSConsoleUtils::onProcessChatAvatarNameLookup(const LLUUID& agent_id, const
     }
 
     std::string message = irc_me ? chat_msg.mText.substr(3) : chat_msg.mText;
-    // <FS> The console renders plain text (one font style per line); strip the
-    // emote markdown toggle delimiters so a trailing '_' isn't shown.
-    if (irc_me)
-    {
-        message = LLMarkdown::stripEmphasisDelimiters(message, /*emote=*/true);
-    }
-    // </FS>
 
     // Get the display name of the sender if required
     if (!chat_msg.mRlvNamesFiltered)
@@ -177,7 +168,11 @@ void FSConsoleUtils::onProcessChatAvatarNameLookup(const LLUUID& agent_id, const
     F32 alpha = 1.f;
     LLUIColor chatcolor;
     LLViewerChat::getChatColor(chat_msg, chatcolor, alpha);
-    gConsole->addConsoleLine(console_chat, chatcolor % alpha);
+    const bool emote = irc_me || chat_msg.mChatStyle == CHAT_STYLE_IRC;
+    const auto style = chat_msg.mChatType == CHAT_TYPE_SHOUT ? LLFontGL::BOLD :
+        (emote || chat_msg.mChatType == CHAT_TYPE_WHISPER ? LLFontGL::ITALIC : LLFontGL::NORMAL);
+    gConsole->addConsoleLine(console_chat, chatcolor % alpha, LLUUID::null, style,
+        static_cast<S32>(utf8str_to_wstring(sender_name + delimiter).size()), emote);
 }
 
 //static
@@ -236,14 +231,11 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
     std::string delimiter = ": ";
 
     // irc styled messages
-    if (FSCommon::is_irc_me_prefix(message))
+    const bool emote = FSCommon::is_irc_me_prefix(message);
+    if (emote)
     {
         delimiter = LLStringUtil::null;
         message = message.substr(3);
-        // <FS> The console renders plain text (one font style per line); strip
-        // the emote markdown toggle delimiters so a trailing '_' isn't shown.
-        message = LLMarkdown::stripEmphasisDelimiters(message, /*emote=*/true);
-        // </FS>
     }
 
     sender_name = FSCommon::getAvatarNameByDisplaySettings(av_name);
@@ -264,5 +256,8 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
     LLUIColor textcolor;
     LLViewerChat::getChatColor(chat, textcolor, alpha, LLSD().with("is_local", false).with("for_console", true));
 
-    gConsole->addConsoleLine("IM: " + sender_name + delimiter + message, textcolor % alpha, session_id);
+    const std::string prefix = "IM: " + sender_name + delimiter;
+    gConsole->addConsoleLine(prefix + message, textcolor % alpha, session_id,
+        emote ? LLFontGL::ITALIC : LLFontGL::NORMAL,
+        static_cast<S32>(utf8str_to_wstring(prefix).size()), emote);
 }
