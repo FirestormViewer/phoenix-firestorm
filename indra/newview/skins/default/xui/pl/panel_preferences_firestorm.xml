@@ -203,6 +203,15 @@
         <check_box label="Włącz rozszerzanie funkcjonalności informacji o skryptach" tool_tip="Gdy zaznaczysz tą opcję, to podstawowa funkcjonalność informacji o skryptach zostanie rozszerzona za pomocą różnych szczegółów przydatnych dla budowniczych" name="FSScriptInfoExtended" />
         <check_box label="Sortuj miejsca dodatków w sekcjach menu &quot;Dołącz do&quot; alfabetycznie (wymaga restartu)" tool_tip="Jeśli ta opcja jest włączona, to lista miejsc dla doczepienia dodatków pojawiająca się w menusach &quot;Dołącz do&quot; będzie posortowana alfabetycznie" name="FSSortAttachmentSpotsAlphabetically" />
         <check_box label="Nowy panel tekstur [APP_NAME] w panelu budowania (wymaga restartu)" tool_tip="Gdy zaznaczysz tą opcję, to narzędzia do edycji tekstur będą korzystać z udoskonalonego panelu [APP_NAME] i pozwolą na edycję tekstur BlinnPhong oraz PBR." name="FSUseNewTexturePanel" />
+		<text name="buildaxiscolors_label">
+			Wygląd osi X/Y/Z:
+		</text>
+		<color_swatch label="Oś X" name="colorswatchXaxis" tool_tip="Kliknij, wybrać kolor" />
+		<color_swatch label="Oś Y" name="colorswatchYaxis" tool_tip="Kliknij, wybrać kolor" />
+		<color_swatch label="Oś Z" name="colorswatchZaxis" tool_tip="Kliknij, wybrać kolor" />
+		<color_swatch label="Tło tekstu" name="colorswatchEditTextBackgroundColor" tool_tip="Kliknij, wybrać kolor" />
+		<spinner label="Skala" name="editWidgetScaling" tool_tip="Określa skalę elementów sterujących używanych do edycji obrotu, skali i położenia." />
+		<check_box label="Cień tekstu" tool_tip="Jeśli opcja jest włączona, tekst pomocniczy podczas edycji będzie miał cień." name="editTextDropShadow" />
     </panel>
     <panel label="Edytor skryptów" name="BuildTabScriptEditor">
         <text name="text_box_scripting_font" width="150">

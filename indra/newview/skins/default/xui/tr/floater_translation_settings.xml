@@ -47,11 +47,11 @@
 	</text>
 	<button label="Doğrula" name="verify_bing_api_key_btn"/>
 	<text name="google_api_key_label">
-		Google [http://code.google.com/apis/language/translate/v2/getting_started.html#auth API anahtarı]:
+		Google [https://docs.cloud.google.com/translate/docs/authentication#api-keys API anahtarı]:
 	</text>
 	<button label="Doğrula" name="verify_google_api_key_btn"/>
 	<text name="google_links_text">
-		[http://code.google.com/apis/language/translate/v2/pricing.html Fiyatlandırma] | [https://code.google.com/apis/console İstatistikler]
+		[https://cloud.google.com/products/translate/pricing Fiyatlandırma] | [https://console.cloud.google.com/apis/dashboard İstatistikler]
 	</text>
 	<button label="Tamam" name="ok_btn"/>
 	<button label="İptal" name="cancel_btn"/>

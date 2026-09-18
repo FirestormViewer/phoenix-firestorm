@@ -14,7 +14,11 @@
 			<pie_slice label="Sauvegarde" name="Backup"/>
 			<pie_slice label="Collada" name="Collada"/>
 		</pie_menu>
-		<pie_slice label="Voir dans l'inv." name="Show original"/>
+		<pie_menu name="Inventory" label="Inventaire &gt;">
+			<pie_slice label="Ajouter aux favoris" name="Add to favorites"/>
+			<pie_slice label="Supprimer des favoris" name="Remove from favorites"/>
+			<pie_slice label="Afficher l'original" name="Show original"/>
+		</pie_menu>
 		<pie_slice label="Inspecter" name="Avatar Inspect"/>
 		<pie_slice label="Textures" name="Debug..."/>
 	</pie_menu>

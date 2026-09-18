@@ -116,8 +116,8 @@ Pick: Texture
      label_selected="Default"
      layout="topleft"
      name="Default"
-     width="73"
-	 left="94"
+     width="83"
+	 left="86"
      top="215"/>
     <button
      follows="left|top"
@@ -128,7 +128,7 @@ Pick: Texture
      left_delta="0"
      name="Blank"
      top_pad="0"
-     width="73" />
+     width="83" />
     <button
      follows="left|top"
      height="18"
@@ -139,7 +139,7 @@ Pick: Texture
      name="Transparent"
      tool_tip="Note: If transparent texture is selected, or another texture with partial transperancy, light will not project."
      top_pad="0"
-     width="73" />
+     width="83" />
      <button
      enabled="false"
      follows="left|top"
@@ -150,15 +150,15 @@ Pick: Texture
      left_delta="0"
      name="None"
      top_pad="0"
-     width="73" />
+     width="83" />
     <button
      follows="left|top"
      height="28"
      image_selected="eye_button_active.tga"
      image_unselected="eye_button_inactive.tga"
      layout="topleft"
-     left_delta="-80"
-     top_delta="-15"
+     left_delta="-78"
+     top_delta="-23"
      name="Pipette"
      width="28" />
    <text

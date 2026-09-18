@@ -65,12 +65,12 @@
 	<line_editor default_text="Можно оставить пустым для глобальных служб" name="azure_api_region"/>
 	<button label="Проверить" name="verify_azure_api_key_btn"/>
 	<text name="google_api_key_label">
-		Google [http://code.google.com/apis/language/translate/v2/getting_started.html#auth Ключ API]:
+		Google [https://docs.cloud.google.com/translate/docs/authentication#api-keys Ключ API]:
 	</text>
 	<line_editor default_text="Введите ключ API Google и нажмите &quot;Проверить&quot;" name="google_api_key"/>
 	<button label="Проверить" name="verify_google_api_key_btn"/>
 	<text name="google_links_text">
-		[http://code.google.com/apis/language/translate/v2/pricing.html Цены] | [https://code.google.com/apis/console Статистика]
+		[https://cloud.google.com/products/translate/pricing Цены] | [https://console.cloud.google.com/apis/dashboard Статистика]
 	</text>
 	<text name="deepl_api_domain_label">
 		Конечная точка:

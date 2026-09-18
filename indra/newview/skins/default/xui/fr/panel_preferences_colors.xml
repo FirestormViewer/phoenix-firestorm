@@ -8,7 +8,7 @@
 			<text name="text_box3">Objets</text>
 			<text name="friends_label">Amis</text>
 			<text name="linden_label">Linden Lab</text>
-			<text name="muted_label">Ignorés</text>
+			<text name="muted_label">Bloqué(e)s</text>
 			<text name="system_label">Système</text>
 			<text name="script_error_label">Erreurs</text>
 			<text name="object_im_label">IMs des objets</text>
@@ -42,7 +42,7 @@
 			<text name="nametag_colors">Couleur des étiquettes :</text>
 			<text name="self_tag_label">Mon nom</text>
 			<text name="friend_tag_label">Amis</text>
-			<text name="muted_tag_label">Ignorés</text>
+			<text name="muted_tag_label">Bloqué(e)s</text>
 			<text name="linden_tag_label">Linden Lab</text>
 			<text name="match_tag_label">Correspondances</text>
 			<text name="mismatch_tag_label" width="120">Non-correspondances</text>
@@ -96,7 +96,7 @@
 			<text name="MapAvatarColor_label">Autres</text>
 			<text name="MapAvatarFriendColor_label">Amis</text>
 			<text name="MapAvatarLindenColor_label">Linden Lab</text>
-			<text name="MapAvatarMutedColor_label">Ignorés</text>
+			<text name="MapAvatarMutedColor_label">Bloqué(e)s</text>
 			<check_box name="MiniMapChatRing" label="Afficher des périmètres de murmure, voix normale et cri sur la minicarte :"/>
 			<text name="netmap_whisperring_color_label">Murmure</text>
 			<text name="netmap_chatring_color_label">Voix normale</text>

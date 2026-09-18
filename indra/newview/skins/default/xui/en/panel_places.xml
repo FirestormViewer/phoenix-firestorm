@@ -160,7 +160,7 @@
      follows="all"
      layout="topleft"
      halign="center"
-     height="520"
+     height="502"
      left="2"
      name="Places Tabs"
      tab_group="2"
