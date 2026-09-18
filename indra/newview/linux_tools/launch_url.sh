@@ -51,12 +51,6 @@ if [ ! -z "$GNOME_DESKTOP_SESSION_ID" ] && which gnome-open >/dev/null; then
     exit
 fi
 
-# Launch the default KDE browser.
-if [ ! -z "$KDE_FULL_SESSION" ] && which kfmclient >/dev/null; then
-    kfmclient openURL "$URL" &
-    exit
-fi
-
 # List of browser commands that will be tried in the order listed. x-www-browser
 # will be tried first, which is a debian alternative.
 BROWSER_COMMANDS="      \
