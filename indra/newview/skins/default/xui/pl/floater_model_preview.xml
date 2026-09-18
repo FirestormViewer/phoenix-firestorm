@@ -85,7 +85,6 @@
                 <item name="MeshOpt Auto" label="Generuj: Auto" />
                 <item name="MeshOptCombine" label="Generuj: Dokładny" />
                 <item name="MeshOptSloppy" label="Generuj: Niestaranny" />
-                <item name="Generate" label="Generuj: Wiarygodny" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_high" />
             <combo_box name="lod_mode_high">
@@ -98,7 +97,6 @@
                 <item name="MeshOpt Auto" label="Generuj: Auto" />
                 <item name="MeshOptCombine" label="Generuj: Dokładny" />
                 <item name="MeshOptSloppy" label="Generuj: Niestaranny" />
-                <item name="Generate" label="Generuj: Wiarygodny" />
                 <item name="Use LoD above" label="Użyj poziomu detali (LoD) powyżej" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_medium" />
@@ -112,7 +110,6 @@
                 <item name="MeshOpt Auto" label="Generuj: Auto" />
                 <item name="MeshOptCombine" label="Generuj: Dokładny" />
                 <item name="MeshOptSloppy" label="Generuj: Niestaranny" />
-                <item name="Generate" label="Generuj: Wiarygodny" />
                 <item name="Use LoD above" label="Użyj poziomu detali (LoD) powyżej" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_low" />
@@ -126,7 +123,6 @@
                 <item name="MeshOpt Auto" label="Generuj: Auto" />
                 <item name="MeshOptCombine" label="Generuj: Dokładny" />
                 <item name="MeshOptSloppy" label="Generuj: Niestaranny" />
-                <item name="Generate" label="Generuj: Wiarygodny" />
                 <item name="Use LoD above" label="Użyj poziomu detali (LoD) powyżej" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_lowest" />
@@ -270,7 +266,6 @@
         </text>
         <check_box label="Auto-włączanie wag" tool_tip="Automatycznie włącz wagi dla meszy z informacjami o riggowaniu" name="mesh_preview_auto_weights" />
         <check_box label="Auto-podgląd wag" tool_tip="Automatycznie wyświetlaj wagi w podglądzie dla meszy z informacjami o riggowaniu" name="mesh_preview_auto_show_weights" />
-		<check_box label="Domyślny LOD: 'Wiarygodny'" tool_tip="Domyślnie używaj metody 'Wiarygodny' (GLOD)" name="mesh_upload_default_to_reliable" />
         <text name="lod_suffix_label">
             Sufiksy LOD:
         </text>

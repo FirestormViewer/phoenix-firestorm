@@ -224,7 +224,6 @@
 					<item name="MeshOpt Auto" label="自動產生" />
 					<item name="MeshOptCombine" label="精確產生" />
 					<item name="MeshOptSloppy" label="粗略產生" />
-					<item label="產生" name="Generate" />
 				</combo_box>
 				<button label="瀏覽…" name="lod_browse_high" />
 				<combo_box name="lod_mode_high">
@@ -237,7 +236,6 @@
 					<item name="MeshOpt Auto" label="自動產生" />
 					<item name="MeshOptCombine" label="精確產生" />
 					<item name="MeshOptSloppy" label="粗略產生" />
-					<item label="產生" name="Generate" />
 					<item label="以上使用低階細節" name="Use LoD above" />
 				</combo_box>
 				<button label="瀏覽…" name="lod_browse_medium" />
@@ -251,7 +249,6 @@
 					<item name="MeshOpt Auto" label="自動產生" />
 					<item name="MeshOptCombine" label="精確產生" />
 					<item name="MeshOptSloppy" label="粗略產生" />
-					<item label="產生" name="Generate" />
 					<item label="以上使用低階細節" name="Use LoD above" />
 				</combo_box>
 				<button label="瀏覽…" name="lod_browse_low" />
@@ -265,7 +262,6 @@
 					<item name="MeshOpt Auto" label="自動產生" />
 					<item name="MeshOptCombine" label="精確產生" />
 					<item name="MeshOptSloppy" label="粗略產生" />
-					<item label="產生" name="Generate" />
 					<item label="以上使用低階細節" name="Use LoD above" />
 				</combo_box>
 				<button label="瀏覽…" name="lod_browse_lowest" />
@@ -432,7 +428,6 @@
 					模型上傳行為設定：
 				</text>
 				<check_box label="自動啟用權重" tool_tip="自動為包含綁定資訊的網格啟用權重" name="mesh_preview_auto_weights" />
-				<check_box label="預設使用'可靠'的細節層次" tool_tip="預設使用'可靠'的方法（GLOD）" name="mesh_upload_default_to_reliable" />
 				<check_box label="自動預覽權重" tool_tip="自動在預覽中顯示包含綁定資訊的網格的權重" name="mesh_preview_auto_show_weights" />
 				<text name="lod_suffix_label">
 					細節層次後綴：

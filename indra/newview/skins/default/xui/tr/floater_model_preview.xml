@@ -100,7 +100,6 @@
 				<text initial_value="Yüksek" name="high_label" value="Yüksek"/>
 				<combo_box name="lod_source_high">
 					<item label="Dosyadan yükle" name="Load from file"/>
-					<item label="Oluştur" name="Generate"/>
 				</combo_box>
 				<button label="Gözat..." name="lod_browse_high"/>
 				<combo_box name="lod_mode_high">
@@ -112,7 +111,6 @@
 				<text initial_value="Orta" name="medium_label" value="Orta"/>
 				<combo_box name="lod_source_medium">
 					<item label="Dosyadan yükle" name="Load from file"/>
-					<item label="Oluştur" name="Generate"/>
 					<item label="Yukarıdaki ayrıntı seviyesini kullan" name="Use LoD above"/>
 				</combo_box>
 				<button label="Gözat..." name="lod_browse_medium"/>
@@ -125,7 +123,6 @@
 				<text initial_value="Düşük" name="low_label" value="Düşük"/>
 				<combo_box name="lod_source_low">
 					<item label="Dosyadan yükle" name="Load from file"/>
-					<item label="Oluştur" name="Generate"/>
 					<item label="Yukarıdaki ayrıntı seviyesini kullan" name="Use LoD above"/>
 				</combo_box>
 				<button label="Gözat..." name="lod_browse_low"/>
@@ -138,7 +135,6 @@
 				<text initial_value="En Düşük" name="lowest_label" value="En Düşük"/>
 				<combo_box name="lod_source_lowest">
 					<item label="Dosyadan yükle" name="Load from file"/>
-					<item label="Oluştur" name="Generate"/>
 					<item label="Yukarıdaki ayrıntı seviyesini kullan" name="Use LoD above"/>
 				</combo_box>
 				<button label="Gözat..." name="lod_browse_lowest"/>

@@ -96,7 +96,6 @@
 				<text initial_value="Alto" name="high_label" value="Alto"/>
 				<combo_box name="lod_source_high">
 					<item name="Load from file" label="Cargar de archivo"/>
-					<item name="Generate" label="Generar"/>
 				</combo_box>
 				<button label="Buscar..." name="lod_browse_high"/>
 				<combo_box name="lod_mode_high">
@@ -108,7 +107,6 @@
 				<text initial_value="Medio" name="medium_label" value="Medio"/>
 				<combo_box name="lod_source_medium">
 					<item name="Load from file" label="Cargar de archivo"/>
-					<item name="Generate" label="Generar"/>
 					<item name="Use LoD above" label="Usar LoD de arriba"/>
 				</combo_box>
 				<button label="Buscar..." name="lod_browse_medium"/>
@@ -121,7 +119,6 @@
 				<text initial_value="Bajo" name="low_label" value="Bajo"/>
 				<combo_box name="lod_source_low">
 					<item name="Load from file" label="Cargar de archivo"/>
-					<item name="Generate" label="Generar"/>
 					<item name="Use LoD above" label="Usar LoD de arriba"/>
 				</combo_box>
 				<button label="Buscar..." name="lod_browse_low"/>
@@ -134,7 +131,6 @@
 				<text initial_value="Mínimo" name="lowest_label" value="Mínimo"/>
 				<combo_box name="lod_source_lowest">
 					<item name="Load from file" label="Cargar de archivo"/>
-					<item name="Generate" label="Generar"/>
 					<item name="Use LoD above" label="Usar LoD de arriba"/>
 				</combo_box>
 				<button label="Buscar..." name="lod_browse_lowest"/>

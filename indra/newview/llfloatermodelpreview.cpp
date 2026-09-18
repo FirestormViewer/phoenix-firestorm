@@ -149,18 +149,7 @@ mAvatarTabIndex(0)
     mLODMode[LLModel::LOD_HIGH] = LLModelPreview::LOD_FROM_FILE;
     for (U32 i = 0; i < LLModel::LOD_HIGH; i++)
     {
-        // <FS:Beq> FIRE-32267 - Set default LOD mode to GLOD
-        // mLODMode[i] = LLModelPreview::MESH_OPTIMIZER_AUTO;
-        static LLCachedControl<bool> default_to_glod(gSavedSettings, "FSMeshUploadUseGLODAsDefault");
-        if( default_to_glod )
-        {
-            mLODMode[i] = LLModelPreview::GENERATE;
-        }
-        else
-        {
-            mLODMode[i] = LLModelPreview::MESH_OPTIMIZER_AUTO;
-        }
-        // </FS:Beq>
+        mLODMode[i] = LLModelPreview::MESH_OPTIMIZER_AUTO;
     }
 }
 
@@ -843,9 +832,6 @@ void LLFloaterModelPreview::onLODParamCommit(S32 lod, bool enforce_tri_limit)
     case LLModelPreview::MESH_OPTIMIZER_SLOPPY:
     case LLModelPreview::MESH_OPTIMIZER_PRECISE:
         mModelPreview->onLODMeshOptimizerParamCommit(lod, enforce_tri_limit, mode);
-        break;
-    case LLModelPreview::GENERATE:
-        mModelPreview->onLODGLODParamCommit(lod, enforce_tri_limit);
         break;
     default:
         LL_ERRS() << "Only supposed to be called to generate models" << LL_ENDL;
@@ -2052,7 +2038,6 @@ void LLFloaterModelPreview::onLoDSourceCommit(S32 lod)
 
     S32 index = lod_source_combo->getCurrentIndex();
     if (index == LLModelPreview::MESH_OPTIMIZER_AUTO
-        || index == LLModelPreview::GENERATE // <FS:Beq/> Improved LOD generation
         || index == LLModelPreview::MESH_OPTIMIZER_SLOPPY
         || index == LLModelPreview::MESH_OPTIMIZER_PRECISE)
     {

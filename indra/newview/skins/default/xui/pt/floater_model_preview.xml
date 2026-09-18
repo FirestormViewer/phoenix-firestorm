@@ -176,7 +176,6 @@
 					<item name="MeshOpt Auto" label="Gerar automático"/>
 					<item name="MeshOptCombine" label="Gerar preciso"/>
 					<item name="MeshOptSloppy" label="Gerar simples"/>
-					<item name="Generate" label="Gerar confiável"/>
 				</combo_box>
 				<button label="Procurar..." name="lod_browse_high"/>
 				<combo_box name="lod_mode_high">
@@ -191,7 +190,6 @@
 					<item name="MeshOpt Auto" label="Gerar automático"/>
 					<item name="MeshOptCombine" label="Gerar preciso"/>
 					<item name="MeshOptSloppy" label="Gerar simples"/>
-					<item name="Generate" label="Gerar confiável"/>
 					<item name="Use LoD above" label="Usar LOD acima"/>
 				</combo_box>
 				<button label="Procurar..." name="lod_browse_medium"/>
@@ -207,7 +205,6 @@
 					<item name="MeshOpt Auto" label="Gerar automático"/>
 					<item name="MeshOptCombine" label="Gerar preciso"/>
 					<item name="MeshOptSloppy" label="Gerar simples"/>
-					<item name="Generate" label="Gerar confiável"/>
 					<item name="Use LoD above" label="Usar LOD acima"/>
 				</combo_box>
  				<button label="Procurar..." name="lod_browse_low"/>
@@ -223,7 +220,6 @@
 					<item name="MeshOpt Auto" label="Gerar automático"/>
 					<item name="MeshOptCombine" label="Gerar preciso"/>
 					<item name="MeshOptSloppy" label="Gerar simples"/>
-					<item name="Generate" label="Gerar confiável"/>
 					<item name="Use LoD above" label="Usar LOD acima"/>
 				</combo_box>
  				<button label="Procurar..." name="lod_browse_lowest"/>
@@ -422,7 +418,6 @@
 				</text>
 				<check_box label="Ativar pesos automaticamente" tool_tip="Ativa automaticamente os pesos para meshes com informações de rigging" name="mesh_preview_auto_weights"/>
 				<check_box label="Pré-visualizar pesos automaticamente" tool_tip="Mostra automaticamente os pesos na pré-visualização para meshes com informações de rigging" name="mesh_preview_auto_show_weights"/>
-				<check_box label="Usar LODs 'confiáveis' por padrão" tool_tip="Usa por padrão o método 'Confiável' (GLOD)" name="mesh_upload_default_to_reliable"/>
 				<text name="lod_suffix_label">
 					Sufixos de LOD:
 				</text>
