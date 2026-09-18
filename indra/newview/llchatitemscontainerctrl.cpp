@@ -190,9 +190,8 @@ void LLFloaterIMNearbyChatToastPanel::addMessage(LLSD& notification)
 
         if(notification["chat_style"].asInteger()== CHAT_STYLE_IRC)
         {
-            // italics for emotes -Zi
-            if(gSavedSettings.getBOOL("EmotesUseItalic"))
-                style_params.font.style = "ITALIC";
+            style_params.font.style = "ITALIC";
+            style_params.markdown_emote = true;
         }
         else if( chat_type == CHAT_TYPE_SHOUT)
         {
@@ -202,7 +201,9 @@ void LLFloaterIMNearbyChatToastPanel::addMessage(LLSD& notification)
         {
             style_params.font.style = "ITALIC";
         }
+        mMsgText->setParseMarkdown(true);
         mMsgText->appendText(messageText, true, style_params);
+        mMsgText->setParseMarkdown(false);
     }
 
     snapToMessageHeight();
@@ -244,6 +245,7 @@ void LLFloaterIMNearbyChatToastPanel::init(LLSD& notification)
     mMsgText->setContentTrusted(false);
     mMsgText->setNearbyChatContent(true); // <FS:PP> Nearby chat toast follows the nearby-chat labeled-link setting
     mMsgText->setIsFriendCallback(LLAvatarActions::isFriend);
+    mMsgText->setParseMarkdown(false);
 
     mMsgText->setText(std::string(""));
 
@@ -324,6 +326,7 @@ void LLFloaterIMNearbyChatToastPanel::init(LLSD& notification)
         if(notification["chat_style"].asInteger()== CHAT_STYLE_IRC)
         {
             style_params.font.style = "ITALIC";
+            style_params.markdown_emote = true;
         }
         else if( chat_type == CHAT_TYPE_SHOUT)
         {
@@ -333,7 +336,9 @@ void LLFloaterIMNearbyChatToastPanel::init(LLSD& notification)
         {
             style_params.font.style = "ITALIC";
         }
+        mMsgText->setParseMarkdown(true);
         mMsgText->appendText(messageText, false, style_params);
+        mMsgText->setParseMarkdown(false);
     }
 
 

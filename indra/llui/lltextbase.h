@@ -456,6 +456,7 @@ public:
     virtual void    onFocusLost() override;
 
     void        setParseHTML(bool parse_html) { mParseHTML = parse_html; }
+    void        setParseMarkdown(bool parse_markdown) { mParseMarkdown = parse_markdown; }
 
     // LLSpellCheckMenuHandler overrides
     /*virtual*/ bool        getSpellCheck() const override;

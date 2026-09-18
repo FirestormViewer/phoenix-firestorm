@@ -28,6 +28,8 @@
 #include "linden_common.h"
 
 #include "llconsole.h"
+#include "llmarkdown.h"
+#include "llfontregistry.h"
 
 // linden library includes
 #include "llmath.h"
@@ -610,7 +612,8 @@ void LLConsole::draw()
                             seg_it != line_color_segement_end_it;
                             ++seg_it)
                     {
-                        mFont->render((*seg_it).mText, 0, (*seg_it).mXPosition - 8, y_pos -  y_off,
+                        const LLFontGL* segment_font = seg_it->mFont ? seg_it->mFont : mFont;
+                        segment_font->render((*seg_it).mText, 0, (*seg_it).mXPosition - 8, y_pos -  y_off,
                             LLColor4(
                                 (*seg_it).mColor.mV[VRED],
                                 (*seg_it).mColor.mV[VGREEN],
@@ -618,7 +621,7 @@ void LLConsole::draw()
                                 (*seg_it).mColor.mV[VALPHA]*alpha),
                             LLFontGL::LEFT,
                             LLFontGL::BASELINE,
-                            (*line_it).mStyleFlags,
+                            seg_it->mFont ? seg_it->mStyle : (*line_it).mStyleFlags,
                             LLFontGL::DROP_SHADOW,
                             S32_MAX,
                             target_width
@@ -683,7 +686,8 @@ void LLConsole::draw()
                             seg_it != line_color_segement_end_it;
                             ++seg_it)
                     {
-                        mFont->render((*seg_it).mText, 0, (*seg_it).mXPosition - 8, y_pos -  y_off,
+                        const LLFontGL* segment_font = seg_it->mFont ? seg_it->mFont : mFont;
+                        segment_font->render((*seg_it).mText, 0, (*seg_it).mXPosition - 8, y_pos -  y_off,
                             LLColor4(
                                 (*seg_it).mColor.mV[VRED],
                                 (*seg_it).mColor.mV[VGREEN],
@@ -691,7 +695,7 @@ void LLConsole::draw()
                                 (*seg_it).mColor.mV[VALPHA]*alpha),
                             LLFontGL::LEFT,
                             LLFontGL::BASELINE,
-                            (*line_it).mStyleFlags,
+                            seg_it->mFont ? seg_it->mStyle : (*line_it).mStyleFlags,
                             LLFontGL::DROP_SHADOW,
                             S32_MAX,
                             target_width
@@ -707,13 +711,13 @@ void LLConsole::draw()
 }
 
 // <FS:Ansariel> Chat console
-void LLConsole::addConsoleLine(const std::string& utf8line, const LLColor4 &color, const LLUUID& session_id, LLFontGL::StyleFlags styleflags)
+void LLConsole::addConsoleLine(const std::string& utf8line, const LLColor4 &color, const LLUUID& session_id, LLFontGL::StyleFlags styleflags, S32 markdown_offset, bool markdown_emote)
 {
     LLWString wline = utf8str_to_wstring(utf8line);
-    addConsoleLine(wline, color, session_id, styleflags);
+    addConsoleLine(wline, color, session_id, styleflags, markdown_offset, markdown_emote);
 }
 
-void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color, const LLUUID& session_id, LLFontGL::StyleFlags styleflags)
+void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color, const LLUUID& session_id, LLFontGL::StyleFlags styleflags, S32 markdown_offset, bool markdown_emote)
 {
     if (wline.empty())
     {
@@ -732,6 +736,7 @@ void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color, co
     mLineColors.push_back(color);
     mLineStyle.push_back(styleflags);
     mSessionIDs.push_back(session_id);
+    mMarkdownMessages.emplace_back(markdown_offset, markdown_emote);
     mMutex.unlock();
 }
 
@@ -745,6 +750,7 @@ void LLConsole::clear()
     mLineColors.clear();
     mLineStyle.clear();
     mSessionIDs.clear();
+    mMarkdownMessages.clear();
     mMutex.unlock();
 
     mTimer.reset();
@@ -766,6 +772,14 @@ void LLConsole::removeExtraLines()
         {
             mLineStyle.pop_front();
         }
+        if (!mSessionIDs.empty())
+        {
+            mSessionIDs.pop_front();
+        }
+        if (!mMarkdownMessages.empty())
+        {
+            mMarkdownMessages.pop_front();
+        }
     }
     mMutex.unlock();
 }
@@ -774,6 +788,69 @@ void LLConsole::removeExtraLines()
 //Generate highlight color segments for this paragraph.  Pass in default color of paragraph.
 void LLConsole::Paragraph::makeParagraphColorSegments (const LLColor4 &color)
 {
+    mParagraphColorSegments.clear();
+    mCharacterStyles.clear();
+    if (mMarkdownOffset >= 0 && static_cast<size_t>(mMarkdownOffset) <= mParagraphText.size())
+    {
+        const std::string body = wstring_to_utf8str(mParagraphText.substr(mMarkdownOffset));
+        mParagraphText.resize(mMarkdownOffset);
+        mCharacterStyles.assign(mMarkdownOffset, LLFontGL::NORMAL);
+        U8 emote_style = mBaseStyle;
+        LLMarkdown::literal_ranges_t literal_ranges;
+        std::string remaining = body;
+        size_t offset = 0;
+        LLUrlMatch match;
+        while (LLUrlRegistry::instance().findUrl(remaining, match))
+        {
+            const size_t end = match.getEnd() + 1;
+            if (end == 0 || end > remaining.size()) break;
+            literal_ranges.emplace_back(offset + match.getStart(), offset + end);
+            offset += end;
+            remaining.erase(0, end);
+        }
+        for (const auto& entry : mUrlLabels)
+        {
+            if (entry.second.empty()) continue;
+            size_t start = body.find(entry.second);
+            while (start != std::string::npos)
+            {
+                literal_ranges.emplace_back(start, start + entry.second.size());
+                start = body.find(entry.second, start + entry.second.size());
+            }
+        }
+        for (const auto& span : LLMarkdown::parseEmphasis(body, mMarkdownEmote, literal_ranges))
+        {
+            U8 style = mMarkdownEmote ? emote_style : mBaseStyle;
+            switch (span.mType)
+            {
+                case LLMarkdown::ESpanType::EMPHASIS_DELIM:
+                case LLMarkdown::ESpanType::STRONG_DELIM:
+                    continue;
+                case LLMarkdown::ESpanType::EMOTE_DELIM:
+                    emote_style ^= LLFontGL::ITALIC;
+                    continue;
+                case LLMarkdown::ESpanType::EMPHASIS:
+                    style |= LLFontGL::ITALIC;
+                    break;
+                case LLMarkdown::ESpanType::STRONG:
+                    style |= LLFontGL::BOLD;
+                    break;
+                case LLMarkdown::ESpanType::EMOTE_TOGGLE_ON:
+                    style |= LLFontGL::ITALIC;
+                    emote_style = style;
+                    break;
+                case LLMarkdown::ESpanType::EMOTE_TOGGLE_OFF:
+                    style &= ~LLFontGL::ITALIC;
+                    emote_style = style;
+                    break;
+                default:
+                    break;
+            }
+            const LLWString text = utf8str_to_wstring(span.mText);
+            mParagraphText += text;
+            mCharacterStyles.insert(mCharacterStyles.end(), text.size(), style);
+        }
+    }
     LLSD paragraph_color_segments;
     paragraph_color_segments[0]["text"] =wstring_to_utf8str(mParagraphText);
     LLSD color_sd = color.getValue();
@@ -812,8 +889,16 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, L
 
     screen_width = screen_width - 30;   //Margin for small windows.
 
-    if (    mParagraphText.empty()
-        || mParagraphColorSegments.empty()
+    if (mParagraphText.empty())
+    {
+        mLines.clear();
+        Line line;
+        line.mStyleFlags = mBaseStyle;
+        mLines.push_back(line);
+        mMaxWidth = 0.f;
+        return;
+    }
+    if (mParagraphColorSegments.empty()
         || font == NULL)
     {
         return;                 //Not enough info to complete.
@@ -821,6 +906,70 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, L
 
     mLines.clear();             //Chuck everything.
     mMaxWidth = 0.0f;
+
+    if (!mCharacterStyles.empty())
+    {
+        std::map<U8, const LLFontGL*> fonts;
+        auto styled_font = [&](U8 style)
+        {
+            auto found = fonts.find(style);
+            if (found != fonts.end()) return found->second;
+            LLFontDescriptor descriptor = font->getFontDesc();
+            descriptor.setStyle(style);
+            const LLFontGL* selected = LLFontGL::getFont(descriptor);
+            if (!selected) selected = font;
+            fonts.emplace(style, selected);
+            return selected;
+        };
+        const S32 length = static_cast<S32>(mParagraphText.size());
+        S32 start = 0;
+        while (start < length)
+        {
+            S32 end = start;
+            F32 width = 0.f;
+            while (end < length && mParagraphText[end] != '\n')
+            {
+                const U8 style = mCharacterStyles[end];
+                S32 run_end = end + 1;
+                while (run_end < length && mParagraphText[run_end] != '\n' && mCharacterStyles[run_end] == style)
+                    ++run_end;
+                const LLFontGL* selected = styled_font(style);
+                const S32 fit = selected->maxDrawableChars(mParagraphText.c_str() + end,
+                    llmax(0.f, screen_width - width), run_end - end, LLFontGL::ANYWHERE);
+                width += selected->getWidthF32(mParagraphText.c_str(), end, fit);
+                end += fit;
+                if (end != run_end) break;
+            }
+            if (end < length && mParagraphText[end] != '\n')
+            {
+                S32 boundary = end;
+                while (boundary > start && !LLStringOps::isSpace(mParagraphText[boundary - 1])) --boundary;
+                if (boundary > start) end = boundary;
+                else if (end == start) ++end;
+            }
+            Line line;
+            line.mStyleFlags = mBaseStyle;
+            F32 position = 0.f;
+            for (S32 offset = start; offset < end;)
+            {
+                const U8 style = mCharacterStyles[offset];
+                S32 run_end = offset + 1;
+                while (run_end < end && mCharacterStyles[run_end] == style) ++run_end;
+                const LLFontGL* selected = styled_font(style);
+                LineColorSegment segment(mParagraphText.substr(offset, run_end - offset),
+                    mParagraphColorSegments.front().mColor, position);
+                segment.mStyle = static_cast<LLFontGL::StyleFlags>(style);
+                segment.mFont = selected;
+                position += selected->getWidthF32(segment.mText.c_str());
+                line.mLineColorSegments.push_back(segment);
+                offset = run_end;
+            }
+            mMaxWidth = llmax(mMaxWidth, position);
+            mLines.push_back(line);
+            start = end + (end < length && mParagraphText[end] == '\n' ? 1 : 0);
+        }
+        return;
+    }
 
     paragraph_color_segments_t::iterator current_color = mParagraphColorSegments.begin();
     U32 current_color_length = (*current_color).mNumChars;
@@ -922,12 +1071,15 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, L
 // <FS:Ansariel> Added styleflags parameter for style customization and session support
 //LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width)
 //: mParagraphText(str), mAddTime(add_time), mMaxWidth(-1)
-LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags, const LLUUID& session_id, bool parse_urls, LLConsole* console)
+LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags, const LLUUID& session_id, bool parse_urls, LLConsole* console, S32 markdown_offset, bool markdown_emote)
 :   mParagraphText(str), mAddTime(add_time), mMaxWidth(-1), mSessionID(session_id)
 // </FS:Ansariel>
 {
     // <FS:Ansariel> Parse SLURLs
     mSourceText = str;
+    mMarkdownOffset = markdown_offset;
+    mMarkdownEmote = markdown_emote;
+    mBaseStyle = styleflags;
     mID.generate();
 
     if (parse_urls)
@@ -985,7 +1137,8 @@ void LLConsole::onUrlLabelCallback(const LLUUID& paragraph_id, const std::string
             }
             paragraph.mParagraphText = newText;
 
-            paragraph.makeParagraphColorSegments(paragraph.mLines.front().mLineColorSegments.front().mColor);
+            const LLColor4 color = paragraph.mParagraphColorSegments.front().mColor;
+            paragraph.makeParagraphColorSegments(color);
             paragraph.updateLines((F32)getRect().getWidth(), mFont, paragraph.mLines.front().mStyleFlags, true);
 
             break;
@@ -1030,7 +1183,9 @@ void LLConsole::update()
                             (!mLineStyle.empty() ? mLineStyle.front() : LLFontGL::NORMAL),
                             (!mSessionIDs.empty() ? mSessionIDs.front(): LLUUID::null),
                             mParseUrls,
-                            this));
+                            this,
+                            mMarkdownMessages.empty() ? -1 : mMarkdownMessages.front().first,
+                            !mMarkdownMessages.empty() && mMarkdownMessages.front().second));
             mLines.pop_front();
             if (!mLineColors.empty())
                 mLineColors.pop_front();
@@ -1038,6 +1193,8 @@ void LLConsole::update()
                 mLineStyle.pop_front();
             if (!mSessionIDs.empty())
                 mSessionIDs.pop_front();
+            if (!mMarkdownMessages.empty())
+                mMarkdownMessages.pop_front();
             // </FS:Ansariel>
         }
     }

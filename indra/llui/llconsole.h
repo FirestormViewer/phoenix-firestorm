@@ -96,6 +96,8 @@ public:
             LLWString mText;
             LLColor4  mColor;
             F32       mXPosition;
+            LLFontGL::StyleFlags mStyle = LLFontGL::NORMAL;
+            const LLFontGL* mFont = nullptr;
     };
 
     typedef std::list<LineColorSegment> line_color_segments_t;
@@ -122,7 +124,7 @@ public:
         public:
             // <FS:Ansariel> Added styleflags parameter for style customization
             //Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width);
-            Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags, const LLUUID& session_id, bool parse_urls, LLConsole* console);
+            Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags, const LLUUID& session_id, bool parse_urls, LLConsole* console, S32 markdown_offset = -1, bool markdown_emote = false);
             // </FS:Ansariel>
             void makeParagraphColorSegments ( const LLColor4 &color);
             // <FS:Ansariel> Added styleflags parameter for style customization
@@ -131,6 +133,10 @@ public:
             // </FS:Ansariel>
         public:
             LLWString mParagraphText;   //The entire text of the paragraph
+            S32 mMarkdownOffset = -1;
+            bool mMarkdownEmote = false;
+            LLFontGL::StyleFlags mBaseStyle = LLFontGL::NORMAL;
+            std::vector<U8> mCharacterStyles;
             paragraph_color_segments_t  mParagraphColorSegments;
             F32 mAddTime;               //Time this paragraph was added to the display.
             F32 mMaxWidth;              //Width of the widest line of text in this paragraph.
@@ -190,8 +196,8 @@ public:
     // </VulkanStorm>
 
 // <FS:Ansariel> Chat console
-    void addConsoleLine(const std::string& utf8line, const LLColor4 &color, const LLUUID& session_id = LLUUID::null, LLFontGL::StyleFlags styleflags = LLFontGL::NORMAL);
-    void addConsoleLine(const LLWString& wline, const LLColor4 &color, const LLUUID& session_id = LLUUID::null, LLFontGL::StyleFlags styleflags = LLFontGL::NORMAL);
+    void addConsoleLine(const std::string& utf8line, const LLColor4 &color, const LLUUID& session_id = LLUUID::null, LLFontGL::StyleFlags styleflags = LLFontGL::NORMAL, S32 markdown_offset = -1, bool markdown_emote = false);
+    void addConsoleLine(const LLWString& wline, const LLColor4 &color, const LLUUID& session_id = LLUUID::null, LLFontGL::StyleFlags styleflags = LLFontGL::NORMAL, S32 markdown_offset = -1, bool markdown_emote = false);
     void clear();
     void addSession(const LLUUID& session_id);
     void removeSession(const LLUUID& session_id);
@@ -199,6 +205,7 @@ public:
     std::deque<LLColor4> mLineColors;
     std::deque<LLFontGL::StyleFlags> mLineStyle;
     std::deque<LLUUID> mSessionIDs;
+    std::deque<std::pair<S32, bool>> mMarkdownMessages;
 
 protected:
     /*virtual*/ void removeExtraLines();

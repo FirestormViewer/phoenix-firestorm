@@ -1295,6 +1295,7 @@ static LLTrace::BlockTimerStatHandle FTM_APPEND_MESSAGE("Append Chat Message");
 
 void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
 {
+    mEditor->setParseMarkdown(false);
     LL_RECORD_BLOCK_TIME(FTM_APPEND_MESSAGE);
     bool use_plain_text_chat_history = args["use_plain_text_chat_history"].asBoolean();
     bool square_brackets = false; // square brackets necessary for a system messages
@@ -1630,7 +1631,9 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
             message += "]";
         }
 
+        mEditor->setParseMarkdown(true);
         mEditor->appendText(message, prependNewLineState, body_message_params);
+        mEditor->setParseMarkdown(false);
         prependNewLineState = false;
     }
 
