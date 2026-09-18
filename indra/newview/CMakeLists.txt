@@ -36,6 +36,7 @@ include(LLWindow)
 include(NDOF)
 include(NVAPI)
 include(OPENAL)
+include(SOLOUD)
 include(OpenGL)
 include(OpenSSL)
 include(OpenXR)
@@ -2397,6 +2398,13 @@ if (WINDOWS)
           )
     endif ()
 
+    if (TARGET ll::soloud)
+      list(APPEND COPY_INPUT_DEPENDENCIES
+           ${AUTOBUILD_INSTALL_DIR}/LICENSES/soloud.txt
+           ${AUTOBUILD_INSTALL_DIR}/LICENSES/soloud-miniaudio.txt
+          )
+    endif ()
+
     # <VulkanStorm> Mesa Zink runtime staged by Copy3rdPartyLibs.cmake
     if (USE_MESAZINK)
       list(APPEND COPY_INPUT_DEPENDENCIES
@@ -2418,6 +2426,7 @@ if (WINDOWS)
         "--discord=${USE_DISCORD}"
         "--fmodstudio=${USE_FMODSTUDIO}"
         "--openal=${USE_OPENAL}"
+        "--soloud=${USE_SOLOUD}"
         "--mesazink=${USE_MESAZINK}"
         "--tracy=${USE_TRACY}"
         "--avx2=${USE_AVX2_OPTIMIZATION}"
@@ -2463,6 +2472,7 @@ if (WINDOWS)
             "--discord=${USE_DISCORD}"
             "--fmodstudio=${USE_FMODSTUDIO}"
             "--openal=${USE_OPENAL}"
+            "--soloud=${USE_SOLOUD}"
             "--tracy=${USE_TRACY}"
             "--avx2=${USE_AVX2_OPTIMIZATION}"
             --build=${CMAKE_CURRENT_BINARY_DIR}
@@ -2531,6 +2541,7 @@ if (WINDOWS)
               "--discord=${USE_DISCORD}"
               "--fmodstudio=${USE_FMODSTUDIO}"
               "--openal=${USE_OPENAL}"
+              "--soloud=${USE_SOLOUD}"
               "--mesazink=${USE_MESAZINK}"
               "--tracy=${USE_TRACY}"
               "--velopack=${USE_VELOPACK}"
@@ -2773,6 +2784,7 @@ if (LINUX)
         "--discord=${USE_DISCORD}"
         "--fmodstudio=${USE_FMODSTUDIO}"
         "--openal=${USE_OPENAL}"
+        "--soloud=${USE_SOLOUD}"
         "--tracy=${USE_TRACY}"
         "--avx2=${USE_AVX2_OPTIMIZATION}"        
         --build=${CMAKE_CURRENT_BINARY_DIR}
@@ -2802,6 +2814,7 @@ if (LINUX)
       "--discord=${USE_DISCORD}"
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
+      "--soloud=${USE_SOLOUD}"
       "--tracy=${USE_TRACY}"
       "--avx2=${USE_AVX2_OPTIMIZATION}"      
       --build=${CMAKE_CURRENT_BINARY_DIR}
@@ -2897,6 +2910,7 @@ if (DARWIN)
       "--discord=${USE_DISCORD}"
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
+      "--soloud=${USE_SOLOUD}"
       "--tracy=${USE_TRACY}"
       "--avx2=${USE_AVX2_OPTIMIZATION}"      
       --build=${CMAKE_CURRENT_BINARY_DIR}
@@ -2934,6 +2948,7 @@ if (DARWIN)
           "--discord=${USE_DISCORD}"
           "--fmodstudio=${USE_FMODSTUDIO}"
           "--openal=${USE_OPENAL}"
+          "--soloud=${USE_SOLOUD}"
           "--tracy=${USE_TRACY}"
           "--avx2=${USE_AVX2_OPTIMIZATION}"          
           --build=${CMAKE_CURRENT_BINARY_DIR}

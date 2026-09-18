@@ -1,4 +1,13 @@
 ===========
+SoLoud Audio
+===========
+
+SoLoud Copyright (c) 2013-2020 Jari Komppa, Zlib license.
+When built with SoLoud, the complete package notices are included in
+licenses/soloud.txt and licenses/soloud-miniaudio.txt.
+The miniaudio backend is by David Reid, public domain or MIT-0.
+
+===========
 Logitech License
 ===========
 
@@ -801,7 +810,7 @@ tinygltf
 ============
 MIT License
 
-Copyright (c) 2017 Syoyo Fujita, Aurélien Chatelain and many contributors
+Copyright (c) 2017 Syoyo Fujita, Aurï¿½lien Chatelain and many contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

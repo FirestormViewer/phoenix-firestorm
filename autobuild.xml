@@ -1786,6 +1786,40 @@
         <key>description</key>
         <string>Mesa Zink Gallium driver for OpenGL-over-Vulkan (patched: AMD RX9000-series support, viewer crash-region fixes)</string>
       </map>
+      <key>soloud</key>
+      <map>
+        <key>platforms</key>
+        <map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>605017ece00f03e7f45f6cb13888559e053c58d515a1f8990284dc3617b532e7</string>
+              <key>hash_algorithm</key>
+              <string>sha256</string>
+              <key>url</key>
+              <string>https://github.com/anne-skydancer/3p-soloud/releases/download/v202002-e82fd32c1f-2/soloud-202002.e82fd32c1f.vulkanstorm2-windows64-2.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
+        </map>
+        <key>license</key>
+        <string>Zlib</string>
+        <key>license_file</key>
+        <string>LICENSES/soloud.txt</string>
+        <key>copyright</key>
+        <string>Copyright (c) 2013-2020 Jari Komppa</string>
+        <key>version</key>
+        <string>202002.e82fd32c1f.vulkanstorm2</string>
+        <key>name</key>
+        <string>soloud</string>
+        <key>canonical_repo</key>
+        <string>https://github.com/anne-skydancer/3p-soloud</string>
+        <key>description</key>
+        <string>SoLoud with bounded multichannel mixing and output device selection</string>
+      </map>
       <key>meshoptimizer</key>
       <map>
         <key>platforms</key>
@@ -3346,7 +3380,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
                   <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
                   <string>-DINSTALL_PROPRIETARY=TRUE</string>
-                  <string>-DUSE_OPENAL:BOOL=ON</string>
+                  <string>-DUSE_SOLOUD:BOOL=ON</string>
+                  <string>-DUSE_OPENAL:BOOL=OFF</string>
+                  <string>-DUSE_FMODSTUDIO:BOOL=OFF</string>
+                  <string>-DOPENAL:BOOL=OFF</string>
+                  <string>-DFMODSTUDIO:BOOL=OFF</string>
                 </array>
               </map>
               <key>build</key>
@@ -3388,7 +3426,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
                   <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
                   <string>-DINSTALL_PROPRIETARY=TRUE</string>
-                  <string>-DUSE_OPENAL:BOOL=ON</string>
+                  <string>-DUSE_SOLOUD:BOOL=ON</string>
+                  <string>-DUSE_OPENAL:BOOL=OFF</string>
+                  <string>-DUSE_FMODSTUDIO:BOOL=OFF</string>
+                  <string>-DOPENAL:BOOL=OFF</string>
+                  <string>-DFMODSTUDIO:BOOL=OFF</string>
                 </array>
               </map>
               <key>build</key>
@@ -3738,7 +3780,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>--package</string>
                   <string>--platform darwin</string>
-                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                 </array>
               </map>
@@ -3748,7 +3789,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>--platform darwin</string>
                   <string>--package</string>
-                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                 </array>
               </map>
@@ -3787,7 +3827,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <key>options</key>
                 <array>
                   <string>--platform darwin</string>
-                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                 </array>
               </map>
@@ -3797,7 +3836,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>--platform darwin</string>
                   <string>--kdu</string>
-                  <string>--fmodstudio</string>
                 </array>
               </map>
               <key>default</key>
@@ -3903,7 +3941,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmodstudio</string>
                   <string>--platform linux</string>
                   <string>--package</string>
                 </array>
@@ -3951,7 +3988,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmodstudio</string>
                   <string>--platform linux</string>
                 </array>
               </map>
@@ -4041,7 +4077,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
-                  <string>-DUSE_OPENAL:BOOL=ON</string>
+                  <string>-DUSE_SOLOUD:BOOL=ON</string>
+                  <string>-DUSE_OPENAL:BOOL=OFF</string>
+                  <string>-DUSE_FMODSTUDIO:BOOL=OFF</string>
+                  <string>-DOPENAL:BOOL=OFF</string>
+                  <string>-DFMODSTUDIO:BOOL=OFF</string>
                 </array>
                 <key>arguments</key>
                 <array>
@@ -4115,7 +4155,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DUNATTENDED:BOOL=ON</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
-                  <string>-DUSE_OPENAL:BOOL=ON</string>
+                  <string>-DUSE_SOLOUD:BOOL=ON</string>
+                  <string>-DUSE_OPENAL:BOOL=OFF</string>
+                  <string>-DUSE_FMODSTUDIO:BOOL=OFF</string>
+                  <string>-DOPENAL:BOOL=OFF</string>
+                  <string>-DFMODSTUDIO:BOOL=OFF</string>
                 </array>
                 <key>arguments</key>
                 <array>
@@ -4149,7 +4193,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--platform windows</string>
@@ -4159,7 +4202,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--platform windows</string>
@@ -4201,7 +4243,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--platform windows</string>
@@ -4211,7 +4252,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--platform windows</string>
@@ -4228,7 +4268,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--platform windows</string>
@@ -4238,7 +4277,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--platform windows</string>
@@ -4253,7 +4291,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--platform windows</string>
@@ -4263,7 +4300,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmodstudio</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--platform windows</string>

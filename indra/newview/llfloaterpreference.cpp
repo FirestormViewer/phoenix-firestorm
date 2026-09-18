@@ -6507,7 +6507,7 @@ bool FSPanelPreferenceSounds::postBuild()
     mMoapInteractionFriendObjects    = getChild<LLCheckBoxCtrl>("media_first_click_friend");
     mMoapInteractionLandownerObjects = getChild<LLCheckBoxCtrl>("media_first_click_land");
 
-#if LL_FMODSTUDIO
+#if LL_FMODSTUDIO || LL_SOLOUD
     if (gAudiop && mOutputDevicePanel && mOutputDeviceComboBox)
     {
         gSavedSettings.getControl("FSOutputDeviceUUID")->getSignal()->connect(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceChanged, this, _2));
