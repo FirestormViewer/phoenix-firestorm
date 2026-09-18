@@ -102,7 +102,7 @@
 		<combo_box.item label="Lokal" name="Local"/>
 		<combo_box.item label="Referenz" name="Reference"/>
 	</combo_box>
-	<button label="Optionen..." label_selected="Optionen..." name="Options..." tool_tip="Mehr Raster-Optionen anzeigen" top="63"/>
+	<button label="Optionen..." label_selected="Optionen..." name="Options..." tool_tip="Mehr Raster-Optionen anzeigen"/>
 	<button label="" label_selected="" name="ToolCube" tool_tip="Würfel"/>
 	<button label="" label_selected="" name="ToolPrism" tool_tip="Prisma"/>
 	<button label="" label_selected="" name="ToolPyramid" tool_tip="Pyramide"/>
