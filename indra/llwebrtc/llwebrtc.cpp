@@ -815,7 +815,7 @@ void LLWebRTCImpl::workerStartPlayout()
 // state.  To merely bring playout up when a connection is established (without
 // disturbing the connection's own mute/track management) call
 // workerOpenPlayout() directly -- see startPlayout().
-void LLWebRTCImpl::workerDeployDevices()
+void LLWebRTCImpl::workerDeployDevices(bool reset_module)
 {
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
     try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
@@ -848,7 +848,7 @@ void LLWebRTCImpl::workerDeployDevices()
     {
         mDeviceModule->ForceStopRecording();
     }
-    if (mDeviceModule->RecordingIsInitialized() || mDeviceModule->PlayoutIsInitialized())
+    if (reset_module && (mDeviceModule->RecordingIsInitialized() || mDeviceModule->PlayoutIsInitialized()))
     {
         int32_t result = mDeviceModule->ForceTerminate();
         if (result != 0)
@@ -886,7 +886,11 @@ void LLWebRTCImpl::workerDeployDevices()
             }
             if (1 < mDevicesDeploying.fetch_sub(1, std::memory_order_relaxed))
             {
-                mWorkerThread->PostTask([this] { workerDeployDevices(); });
+                mWorkerThread->PostTask([this]
+                {
+                    bool reset = mDevicesDeployingNeedsReset.exchange(false, std::memory_order_relaxed);
+                    workerDeployDevices(reset);
+                });
             }
         });
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
@@ -929,7 +933,7 @@ void LLWebRTCImpl::setCaptureDevice(const std::string &id)
     if (mRecordingDevice != id)
     {
         mRecordingDevice = id;
-        deployDevices();
+        deployDevices(false);
     }
 }
 
@@ -938,7 +942,7 @@ void LLWebRTCImpl::setRenderDevice(const std::string &id)
     if (mPlayoutDevice != id)
     {
         mPlayoutDevice = id;
-        deployDevices();
+        deployDevices(false);
     }
 }
 
@@ -958,7 +962,7 @@ void LLWebRTCImpl::setVoiceEnabled(bool enable)
                 // across calls and mute/unmute), and start playout if there's
                 // already a connection to render.
                 mDeviceModule->Init();
-                workerDeployDevices();
+                workerDeployDevices(false);
             }
             else
             {
@@ -975,6 +979,7 @@ void LLWebRTCImpl::setVoiceEnabled(bool enable)
 void LLWebRTCImpl::updateDevices()
 {
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    bool reset_module = false;
     try // Try catch needed for uniquie lock as will throw an exception if a second lock is attempted or the mutex is invalid
     {
     // Attempt to lock the access to the audio device, wait up to 1 second for other threads to unlock.
@@ -991,6 +996,43 @@ void LLWebRTCImpl::updateDevices()
         return;
     }
 
+    // Snapshot the previous lists so we can diff them against the freshly
+    // enumerated ones below -- both to detect whether the currently-selected
+    // playout/recording device disappeared (which forces a module reset)
+    // and to report any devices that are newly present (for diagnostics).
+    LLWebRTCVoiceDeviceList previousPlayoutDeviceList = mPlayoutDeviceList;
+    LLWebRTCVoiceDeviceList previousRecordingDeviceList = mRecordingDeviceList;
+
+    auto deviceStillPresent = [](const LLWebRTCVoiceDeviceList& list, const std::string& id) -> bool
+    {
+        if (id.empty() || id == "Default")
+        {
+            return true;
+        }
+        return std::any_of(list.begin(), list.end(),
+            [&id](const LLWebRTCVoiceDevice& device) { return device.mID == id; });
+    };
+
+    // Logs any device present in newList that wasn't present in oldList.
+    auto logNewlyAddedDevices = [](const LLWebRTCVoiceDeviceList& oldList,
+        const LLWebRTCVoiceDeviceList& newList,
+        const char* label)
+    {
+        for (const auto& device : newList)
+        {
+            bool wasPresent = std::any_of(oldList.begin(), oldList.end(),
+                [&device](const LLWebRTCVoiceDevice& old_device) { return old_device.mID == device.mID; });
+            if (!wasPresent)
+            {
+                RTC_LOG(LS_INFO) << "updateDevices: " << label << " device added: name='" << device.mDisplayName
+                    << "' id='" << device.mID << "'";
+            }
+        }
+    };
+
+    bool hadPlayoutDevice = deviceStillPresent(mPlayoutDeviceList, mPlayoutDevice);
+    bool hadRecordingDevice = deviceStillPresent(mRecordingDeviceList, mRecordingDevice);
+
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
     // Flag the device is being interacted with for the Co-routine in case something goes wrong.
     gWebRTCUpdateDevices = true;
@@ -998,12 +1040,21 @@ void LLWebRTCImpl::updateDevices()
     int16_t renderDeviceCount  = mDeviceModule->PlayoutDevices();
 
     mPlayoutDeviceList.clear();
+    std::string newDefaultPlayoutDeviceGuid;
 #if WEBRTC_WIN
     int16_t index = 0;
 #else
     // index zero is always "Default" for darwin/linux,
     // which is a special case, so skip it.
     int16_t index = 1;
+    {
+        char name[webrtc::kAdmMaxDeviceNameSize];
+        char guid[webrtc::kAdmMaxGuidSize];
+        if (renderDeviceCount > 0 && mDeviceModule->PlayoutDeviceName(0, name, guid) == 0)
+        {
+            newDefaultPlayoutDeviceGuid = guid;
+        }
+    }
 #endif
     for (; index < renderDeviceCount; index++)
     {
@@ -1017,12 +1068,21 @@ void LLWebRTCImpl::updateDevices()
     int16_t captureDeviceCount        = mDeviceModule->RecordingDevices();
 
     mRecordingDeviceList.clear();
+    std::string newDefaultRecordingDeviceGuid;
 #if WEBRTC_WIN
     index = 0;
 #else
     // index zero is always "Default" for darwin/linux,
     // which is a special case, so skip it.
     index = 1;
+    {
+        char name[webrtc::kAdmMaxDeviceNameSize];
+        char guid[webrtc::kAdmMaxGuidSize];
+        if (captureDeviceCount > 0 && mDeviceModule->RecordingDeviceName(0, name, guid) == 0)
+        {
+            newDefaultRecordingDeviceGuid = guid;
+        }
+    }
 #endif
     for (; index < captureDeviceCount; index++)
     {
@@ -1035,6 +1095,9 @@ void LLWebRTCImpl::updateDevices()
 
     RTC_LOG(LS_INFO) << "updateDevices, playout count: " << renderDeviceCount << "; capture count: " << captureDeviceCount;
 
+    logNewlyAddedDevices(previousPlayoutDeviceList, mPlayoutDeviceList, "playout");
+    logNewlyAddedDevices(previousRecordingDeviceList, mRecordingDeviceList, "recording");
+
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
     // Flag the device is no longer being interacted with for the Co-routine in case something goes wrong.
     gWebRTCUpdateDevices = false;
@@ -1043,7 +1106,37 @@ void LLWebRTCImpl::updateDevices()
     {
         observer->OnDevicesChanged(mPlayoutDeviceList, mRecordingDeviceList);
     }
+
+    // Force a reinit if a device in use disappeared from the list.
+    bool lostPlayoutDevice = hadPlayoutDevice && !deviceStillPresent(mPlayoutDeviceList, mPlayoutDevice);
+    bool lostRecordingDevice = hadRecordingDevice && !deviceStillPresent(mRecordingDeviceList, mRecordingDevice);
+
+    // Force a reinit if the OS-resolved default device changed
+    // On windows this is going to be unused.
+    bool defaultPlayoutChanged = mPlayoutDevice == "Default"
+        && !mDefaultPlayoutDeviceGuid.empty()
+        && !newDefaultPlayoutDeviceGuid.empty()
+        && mDefaultPlayoutDeviceGuid != newDefaultPlayoutDeviceGuid;
+    bool defaultRecordingChanged = mRecordingDevice == "Default"
+        && !mDefaultRecordingDeviceGuid.empty()
+        && !newDefaultRecordingDeviceGuid.empty()
+        && mDefaultRecordingDeviceGuid != newDefaultRecordingDeviceGuid;
+
+    if (defaultPlayoutChanged)
+    {
+        RTC_LOG(LS_INFO) << "updateDevices: default playout device changed";
+    }
+    if (defaultRecordingChanged)
+    {
+        RTC_LOG(LS_INFO) << "updateDevices: default recording device changed";
+    }
+
+    mDefaultPlayoutDeviceGuid = newDefaultPlayoutDeviceGuid;
+    mDefaultRecordingDeviceGuid = newDefaultRecordingDeviceGuid;
+
     // <FS:minerjr> [FIRE-36022] - Removing my USB headset crashes entire viewer
+    //bool reset_module = lostPlayoutDevice || lostRecordingDevice || defaultPlayoutChanged || defaultRecordingChanged;
+    reset_module = lostPlayoutDevice || lostRecordingDevice || defaultPlayoutChanged || defaultRecordingChanged;
     }
     // There are two exceptions that unique_lock can trigger, operation_not_permitted or resource_deadlock_would_occur
     catch (const std::system_error& e)
@@ -1076,7 +1169,7 @@ void LLWebRTCImpl::updateDevices()
     }
     // </FS:minerjr> [FIRE-36022]
 
-    deployDevices();
+    deployDevices(reset_module);
 }
 
 void LLWebRTCImpl::OnDevicesUpdated()
@@ -1127,15 +1220,22 @@ void LLWebRTCImpl::setTuningMode(bool enable)
         });
 }
 
-void LLWebRTCImpl::deployDevices()
+void LLWebRTCImpl::deployDevices(bool reset_module)
 {
     if (0 < mDevicesDeploying.fetch_add(1, std::memory_order_relaxed))
     {
+        if (reset_module)
+        {
+            mDevicesDeployingNeedsReset.store(true, std::memory_order_relaxed);
+        }
         return;
     }
     mWorkerThread->PostTask(
-        [this] {
-            workerDeployDevices();
+        [this, reset_module] {
+
+            bool reset = mDevicesDeployingNeedsReset.exchange(false, std::memory_order_relaxed);
+            reset |= reset_module;
+            workerDeployDevices(reset);
         });
 }
 
