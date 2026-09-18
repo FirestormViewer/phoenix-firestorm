@@ -87,7 +87,7 @@
 				Do nieznajomych, gdy włączony jest tryb autoodpowiedzi dla nieznajomych:
 			</text>
 			<check_box label="Wysyłaj autoodpowiedź, gdy mój awatar śpi (jest w trybie 'away'):" name="send_away_av_response" tool_tip="Wysyłaj tekst poniżej, gdy ktoś wysyła Ci wiadomość IM, a Twój awatar w tym momencie akurat śpi (jest w trybie 'away')."/>
-			<check_box label="Wysyłaj autoodpowiedzi do WYCISZONYCH awatarów:" name="send_muted_av_response" tool_tip="Wysyła poniższy tekst do osoby, która wysyła Ci IM, a jest przez Ciebie wyciszona."/>
+			<check_box label="Wysyłaj autoodpowiedzi do BLOKOWANYCH awatarów:" name="send_muted_av_response" tool_tip="Wysyła poniższy tekst do osoby, która wysyła Ci IM, a jest przez Ciebie zablokowana."/>
 		</panel>
 		<panel label="Autoodpowiedzi 2" name="tab-autoresponse-2">
 			<text name="autorespond_rto_response_label">

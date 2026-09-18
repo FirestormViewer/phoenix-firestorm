@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Attachment Pie">
 	<menu_item_call label="Toucher" name="Attachment Object Touch"/>
-	<menu_item_call label="Voir dans l'inventaire'" name="Show original"/>
+	<menu_item_call label="Voir dans l'inventaire" name="Show original"/>
+	<menu_item_call label="Ajouter aux favoris" name="Add to favorites"/>
+	<menu_item_call label="Supprimer des favoris" name="Remove from favorites"/>
 	<menu_item_call label="Modifier" name="Edit..."/>
+	<menu_item_call label="Mpdifier le matériau PBR" name="EditGLTFMaterial"/>
 	<menu_item_call label="Détacher" name="Detach"/>
 	<context_menu label="Enregistrer sous" name="Export Menu">
 		<menu_item_call label="Sauvegarde" name="Backup"/>

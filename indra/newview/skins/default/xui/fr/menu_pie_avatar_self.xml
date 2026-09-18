@@ -50,6 +50,11 @@
 	<pie_slice label="Gestes" name="Gestures"/>
 	<pie_menu label="Apparence &gt;" name="Appearance &gt;">
 		<pie_slice label="Modifier la silhouette" name="Edit My Shape"/>
+		<pie_menu name="ResetMenu" label="Réinit. &gt;">
+			<pie_slice label="Squel. &amp; Anim." name="Reset Skeleton And Animations"/>
+			<pie_slice label="Squelette" name="Reset Skeleton"/>
+			<pie_slice label="LOD mesh" name="Reset Mesh LOD"/>
+		</pie_menu>
 		<pie_slice label="MàJ Textures" name="Texture Refresh"/>
 		<pie_slice label="Modifier la tenue" name="Edit My Outfit"/>
 		<pie_slice label="Dump XML" name="Dump XML"/>

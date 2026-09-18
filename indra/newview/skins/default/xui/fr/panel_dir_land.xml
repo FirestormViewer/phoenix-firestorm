@@ -21,7 +21,10 @@
 	<icon tool_tip="Modéré" name="rating_icon_moderate"/>
 	<icon tool_tip="Adulte" name="rating_icon_adult"/>
 	<check_box label="Prix &#8804; " name="pricecheck"/>
-	<check_box label="Surface &#8805; " name="areacheck"/>
+	<check_box label="Surface &#8805; " name="areacheck" width="80"/>
+	<text name="areacheck_symbol" width="25">
+		m²
+	</text>
 	<button label="Recherche" name="Search"/>
 	<scroll_list name="results">
 		<column label="Nom" name="name" />

@@ -39,12 +39,12 @@
 	<line_editor default_text="Escribe la AppID de Bing and pulsa &quot;Verificar&quot;" name="bing_api_key" width="225"/>
 	<button label="Verificar" name="verify_bing_api_key_btn" width="65"/>
 	<text name="google_api_key_label" width="130" left="35">
-		[http://code.google.com/apis/language/translate/v2/getting_started.html#auth Clave de API] de Google:
+		[https://docs.cloud.google.com/translate/docs/authentication#api-keys Clave de API] de Google:
 	</text>
 	<line_editor default_text="Escribe la clave API de Google y pulsa &quot;Verificar&quot;" name="google_api_key" width="225"/>
 	<button label="Verificar" name="verify_google_api_key_btn" width="65"/>
 	<text name="google_links_text" width="115" left="176" top_delta="-24">
-		[http://code.google.com/apis/language/translate/v2/pricing.html Precios] | [https://code.google.com/apis/console Estadísticas]
+		[https://cloud.google.com/products/translate/pricing Precios] | [https://console.cloud.google.com/apis/dashboard Estadísticas]
 	</text>
 	<button label="Aceptar" name="ok_btn"/>
 	<button label="Cancelar" name="cancel_btn"/>

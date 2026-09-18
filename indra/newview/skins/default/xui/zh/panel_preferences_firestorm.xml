@@ -145,6 +145,15 @@
 			<check_box label="為指令碼啟用詳細資訊" tool_tip="啟用後，將向指令碼基本資訊中新增對創造者有用的詳細資訊。" name="FSScriptInfoExtended" />
 			<check_box label="按字母順序排序「附著到」選單中的附著點（需要重新啟動）" tool_tip="如果啟用此選項，「附著到」選單中的附件點列表將按字母順序排序。" name="FSSortAttachmentSpotsAlphabetically" />
 			<check_box label="在工具視窗中使用新的[APP_NAME]紋理面板(需要重新啟動)" tool_tip="如果啟用,紋理編輯工具將使用改進的[APP_NAME]工作流,並允許編輯BlinnPhong和PBR材質" name="FSUseNewTexturePanel" />
+			<text name="buildaxiscolors_label">
+				設定建造工具 X/Y/Z 軸的外觀：
+			</text>
+			<color_swatch label="X 軸" name="colorswatchXaxis" tool_tip="點擊以開啟顏色選擇器"/>
+			<color_swatch label="Y 軸" name="colorswatchYaxis" tool_tip="點擊以開啟顏色選擇器"/>
+			<color_swatch label="Z 軸" name="colorswatchZaxis" tool_tip="點擊以開啟顏色選擇器"/>
+			<color_swatch label="文字背景" name="colorswatchEditTextBackgroundColor" tool_tip="點擊以開啟顏色選擇器"/>
+			<spinner label="縮放" name="editWidgetScaling" tool_tip="調整用於編輯旋轉/縮放/位置的控制項大小。"/>
+			<check_box label="文字陰影" tool_tip="啟用後，編輯時的提示文字將顯示陰影。" name="editTextDropShadow"/>
 		</panel>
 		<panel label="指令碼編輯器" name="BuildTabScriptEditor">
 			<text name="text_box_scripting_font" width="155">指令碼編輯器字型：</text>

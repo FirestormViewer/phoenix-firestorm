@@ -21,7 +21,7 @@
 				Linden Lab
 			</text>
 			<text name="muted_label">
-				Wyciszeni
+				Blokowani
 			</text>
 			<text name="script_error_label">
 				Błędy skryptów
@@ -84,7 +84,7 @@
 				Znajomi
 			</text>
 			<text name="muted_tag_label">
-				Wyciszeni
+				Blokowani
 			</text>
 			<text name="linden_tag_label">
 				Linden Lab
@@ -180,7 +180,7 @@
 				Linden Lab
 			</text>
 			<text name="MapAvatarMutedColor_label">
-				Wyciszeni
+				Blokowani
 			</text>
 			<check_box name="MiniMapChatRing" label="Pierścienie na minimapie symbolizujące zasięg szeptu, czatu i krzyku"/>
 			<text name="netmap_whisperring_color_label">

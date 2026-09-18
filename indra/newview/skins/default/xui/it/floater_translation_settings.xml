@@ -47,7 +47,7 @@
 	<line_editor default_text="Inserisci la tua chiave API di Google" name="google_api_key" />
 	<button label="Verifica" name="verify_google_api_key_btn" />
 	<text name="google_links_text">
-		[http://code.google.com/apis/language/translate/v2/pricing.html Prezzi] | [https://code.google.com/apis/console Statistiche]
+		[https://cloud.google.com/products/translate/pricing Prezzi] | [https://console.cloud.google.com/apis/dashboard Statistiche]
 	</text>
 	<!-- <text name="deepl_api_key_label">
 		Chiave DeepL:

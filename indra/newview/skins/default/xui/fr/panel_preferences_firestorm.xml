@@ -147,6 +147,15 @@
 			<check_box label="Active les informations détaillées pour les script" tool_tip="Activée, ajoute aux informations de base sur les scripts des détails utiles aux créateurs" name="FSScriptInfoExtended"/>
 			<check_box label="Points d'attachement alphabétiques dans les menus &quot;Attacher à&quot; (redémarrage requis)" tool_tip="Si cette option est activée, la liste des points d'attachement dans les menus 'Attacher à' sera triée par ordre alphabétique." name="FSSortAttachmentSpotsAlphabetically"/>
 			<check_box label="Nouveau module de texture Firestorm dans la fenêtre d'outils (nécessite un redémarrage)" tool_tip="Si cette option est activée, les outils d'édition de textures utiliseront le flux de travail amélioré de FS et permettront l'édition de textures Blinn-Phong et PBR." name="FSUseNewTexturePanel"/>
+			<text name="buildaxiscolors_label">
+				Apparence des axes de construction X/Y/Z :
+			</text>
+			<color_swatch label="Axe X" name="colorswatchXaxis" tool_tip="Cliquez ici pour ouvrir la palette de couleurs"/>
+			<color_swatch label="Axe Y" name="colorswatchYaxis" tool_tip="Cliquez ici pour ouvrir la palette de couleurs"/>
+			<color_swatch label="Axe Z" name="colorswatchZaxis" tool_tip="Cliquez ici pour ouvrir la palette de couleurs"/>
+			<color_swatch label="Fond texte" name="colorswatchEditTextBackgroundColor" tool_tip="Cliquez ici pour ouvrir la palette de couleurs"/>
+			<spinner label="Échelle" name="editWidgetScaling" tool_tip="Adapte la taille des commandes utilisées pour modifier la rotation, l'échelle et la position."/>
+			<check_box label="Ombre du texte" tool_tip="Si cette option est activée, le texte d'aide affiché pendant la modification est doté d'une ombre portée.." name="editTextDropShadow"/>
 		</panel>
 		<panel label="Éditeur de script" name="BuildTabScriptEditor">
 			<text name="text_box_scripting_font" width="155">Police de l'éditeur de script :</text>

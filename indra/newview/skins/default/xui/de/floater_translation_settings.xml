@@ -65,12 +65,12 @@
 	<line_editor default_text="Optional für globale Dienste" name="azure_api_region"/>
 	<button label="Verifizieren" name="verify_azure_api_key_btn"/>
 	<text name="google_api_key_label">
-		Google-[http://code.google.com/apis/language/translate/v2/getting_started.html#auth API-Key]:
+		Google-[https://docs.cloud.google.com/translate/docs/authentication#api-keys API-Key]:
 	</text>
 	<line_editor default_text="API-Key eingeben &amp; &quot;Verifizieren&quot;" name="google_api_key"/>
 	<button label="Verifizieren" name="verify_google_api_key_btn"/>
 	<text name="google_links_text">
-		[http://code.google.com/apis/language/translate/v2/pricing.html Preise] | [https://code.google.com/apis/console Statistik]
+		[https://cloud.google.com/products/translate/pricing Preise] | [https://console.cloud.google.com/apis/dashboard Statistik]
 	</text>
 	<text name="deepl_api_domain_label">
 		Endpunkt:
