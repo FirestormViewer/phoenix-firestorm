@@ -151,6 +151,7 @@ public:
     void setCookie(std::string uri, std::string name, std::string value, std::string domain, std::string path, bool httponly, bool secure);
 
     void loadURI(const std::string &uri);
+    void loadURI(const std::string& uri, F32 audio_target, F32 audio_duration);
 
     void executeJavaScript(const std::string &code);
 
@@ -339,6 +340,19 @@ public:
     void setVolume(float volume);
     float getVolume();
 
+    bool pluginSupportsMediaAudio() const;
+    bool audioControlsAvailable() const;
+    bool isAudioPlaying() const;
+    bool isAudioPaused() const;
+    void setAudioRole(const std::string& role);
+    void setAudioGain(F32 target, bool hard_mute);
+    void setAudioSpatial(F32 right, F32 forward);
+    bool transitionAudio(F32 target, F32 duration);
+    enum class AudioTransitionResult { Pending, Complete, Failed, Cancelled };
+    AudioTransitionResult audioTransitionResult() const;
+    bool audioTransitionComplete() const { return audioTransitionResult() == AudioTransitionResult::Complete; }
+    const std::string& getAudioState() const { return mAudioState; }
+
     F64 getCurrentTime(void) const { return mCurrentTime; };
     F64 getDuration(void) const { return mDuration; };
     F64 getCurrentPlayRate(void) { return mCurrentRate; };
@@ -361,6 +375,21 @@ protected:
 
     void sendMessage(const LLPluginMessage &message);  // Send message internally, either queueing or sending directly.
     std::queue<LLPluginMessage> mSendQueue;     // Used to queue messages while the plugin initializes.
+
+    void sendAudioGain();
+    void receiveAudioState(const LLPluginMessage& message);
+    std::string mAudioRole;
+    std::string mAudioURI;
+    bool mAudioStopped = true;
+    U64 mAudioGeneration = 0;
+    U64 mAudioSerial = 0;
+    bool mAudioTransitionComplete = false;
+    F32 mAudioTransitionTarget = 1.f;
+    F32 mAudioGain = 0.f;
+    bool mAudioHardMute = false;
+    F32 mAudioRight = 0.f;
+    F32 mAudioForward = 1.f;
+    std::string mAudioState;
 
     void setSizeInternal(void);
 

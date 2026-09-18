@@ -3219,4 +3219,9 @@ if (LL_TESTS)
 
 endif (LL_TESTS)
 
+option(LL_VLC_AUDIO_PROTOCOL_TESTS "Build device-free media_audio protocol tests" OFF)
+if (LL_VLC_AUDIO_PROTOCOL_TESTS)
+  LL_ADD_INTEGRATION_TEST(llviewermedia_audio "" "llplugin;llxml;llcommon;llfilesystem")
+endif ()
+
 check_message_template(${VIEWER_BINARY_NAME})

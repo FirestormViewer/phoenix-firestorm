@@ -49,6 +49,16 @@ class LLStreamingAudioInterface
     virtual bool supportsAdjustableBufferSizes(){return false;}
     virtual void setBufferSizes(U32 streambuffertime, U32 decodebuffertime){};
 
+    virtual bool hasAudioFade() const { return false; }
+    virtual bool beginAudioFade(F32 target, F32 duration) { return false; }
+    virtual bool isAudioFadeComplete() const { return false; }
+    enum class AudioFadeResult { Pending, Complete, Failed, Cancelled };
+    virtual AudioFadeResult getAudioFadeResult() const
+    {
+        return isAudioFadeComplete() ? AudioFadeResult::Complete : AudioFadeResult::Pending;
+    }
+    virtual void setAudioHardMute(bool muted) {}
+
     // These three are Firestorm additions and thus optional.
     using metadata_update_callback_t = boost::signals2::signal<void(const LLSD& metadata)>;
     virtual boost::signals2::connection setMetadataUpdateCallback(const metadata_update_callback_t::slot_type& cb) noexcept

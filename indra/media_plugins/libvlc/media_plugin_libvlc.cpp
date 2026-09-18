@@ -42,6 +42,16 @@ typedef SSIZE_T ssize_t;
 #include "vlc/vlc.h"
 #include "vlc/libvlc_version.h"
 
+#include <atomic>
+#include <array>
+#include <cmath>
+#include <limits>
+#include <memory>
+#if LL_VLC_PCM_AUDIO
+#include "llvlcaudiobridge.h"
+#include <chrono>
+#endif
+
 #if LL_WINDOWS
 // needed for waveOut call - see below for description
 #include <mmsystem.h>
@@ -64,6 +74,8 @@ private:
     void initVLC();
     void playMedia();
     void resetVLC();
+    void stopPlayer();
+    void idle();
     void setVolume(const F64 volume);
     void setVolumeVLC();
     void updateTitle(const char* title);
@@ -79,6 +91,61 @@ private:
     void setDurationDirty();
 
     static void eventCallbacks(const libvlc_event_t* event, void* ptr);
+
+    enum EventBits : unsigned
+    {
+        EventPlaying = 1, EventTime = 2, EventDuration = 4, EventTitle = 8,
+        EventNowPlaying = 16, EventArtist = 32, EventMetaTitle = 64, EventEnd = 128
+    };
+    std::atomic<unsigned> mEvents{0};
+    std::atomic<EStatus> mEventStatus{STATUS_NONE};
+    std::atomic<std::int64_t> mEventTime{0};
+    std::atomic<std::int64_t> mEventDuration{0};
+    std::atomic<float> mBuffering{100.f};
+    std::atomic<bool> mFrameReady{false};
+    unsigned mAttachedPlayerEvents = 0;
+    bool mAttachedMediaEvent = false;
+
+#if LL_VLC_PCM_AUDIO
+    void receiveAudio(const LLPluginMessage& message);
+    void idleAudio();
+    void audioState(const std::string& state, const std::string& detail,
+                    const std::string& generation, const std::string& serial);
+    bool submitGain(float target, double duration, bool hardMute, bool transition = false);
+    std::unique_ptr<llvlc::PluginAudio> mAudio;
+    bool mAudioNegotiated = false;
+    std::uint64_t mAudioGeneration = 0;
+    std::string mAudioGenerationText;
+    std::string mAudioRole;
+    std::string mAudioSerial;
+    std::string mAudioFailure;
+    std::string mAudioLastState;
+    std::string mAudioLastDetail;
+    std::string mAudioLastSerial;
+    std::string mRejectedGeneration;
+    std::string mRejectedDetail;
+    double mGainDuration = 0.;
+    struct PendingAudioGain
+    {
+        float target = 0.f;
+        double duration = 0.;
+        bool hardMute = false;
+        bool transition = false;
+    };
+    std::array<PendingAudioGain, 58> mPendingAudioGains{};
+    std::size_t mPendingAudioGainCount = 0;
+    float mInitialAudioGain = 0.f;
+    bool mHardMute = false;
+    float mSpatialRight = 0.f;
+    float mSpatialForward = 1.f;
+    bool mTransitionPending = false;
+    bool mTransitionComplete = false;
+    float mTransitionTarget = 0.f;
+    std::uint64_t mTransitionCommand = 0;
+    std::uint64_t mLastTransitionSerial = 0;
+    std::uint64_t mReportedDiscontinuities = 0;
+    std::chrono::steady_clock::time_point mTransitionStarted{};
+#endif
 
     libvlc_instance_t* mLibVLC;
     libvlc_media_t* mLibVLCMedia;
@@ -135,6 +202,7 @@ MediaPluginBase(host_send_func, host_user_data)
 //
 MediaPluginLibVLC::~MediaPluginLibVLC()
 {
+    resetVLC();
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -163,7 +231,7 @@ void MediaPluginLibVLC::display(void* data, void* id)
 {
     struct mLibVLCContext* context = (mLibVLCContext*)data;
 
-    context->parent->setDirty(0, 0, context->parent->mWidth, context->parent->mHeight);
+    context->parent->mFrameReady.store(true, std::memory_order_release);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -191,18 +259,76 @@ void MediaPluginLibVLC::initVLC()
 
     if (!mLibVLC)
     {
-        // for the moment, if this fails, the plugin will fail and
-        // the media sub-system will tell the viewer something went wrong.
+        mEventStatus.store(STATUS_ERROR);
+        setStatus(STATUS_ERROR);
     }
+}
+
+namespace
+{
+const libvlc_event_e playerEvents[] =
+{
+    libvlc_MediaPlayerOpening, libvlc_MediaPlayerPlaying, libvlc_MediaPlayerPaused,
+    libvlc_MediaPlayerStopped, libvlc_MediaPlayerEndReached,
+    libvlc_MediaPlayerEncounteredError, libvlc_MediaPlayerTimeChanged,
+    libvlc_MediaPlayerPositionChanged, libvlc_MediaPlayerLengthChanged,
+    libvlc_MediaPlayerTitleChanged, libvlc_MediaPlayerBuffering
+};
+}
+
+void MediaPluginLibVLC::stopPlayer()
+{
+#if LL_VLC_PCM_AUDIO
+    if (mLibVLCMediaPlayer && mTransitionPending)
+    {
+        mTransitionPending = false;
+        mAudioFailure = "transition_interrupted";
+    }
+    if (mAudio) mAudio->cancelAndStop();
+#endif
+    if (mLibVLCMediaPlayer)
+    {
+        auto* events = libvlc_media_player_event_manager(mLibVLCMediaPlayer);
+        if (events)
+        {
+            unsigned index = 0;
+            for (const auto type : playerEvents)
+            {
+                if (mAttachedPlayerEvents & (1u << index)) libvlc_event_detach(events, type, eventCallbacks, this);
+                ++index;
+            }
+        }
+        if (mLibVLCMedia && mAttachedMediaEvent)
+        {
+            auto* metadata = libvlc_media_event_manager(mLibVLCMedia);
+            if (metadata) libvlc_event_detach(metadata, libvlc_MediaMetaChanged, eventCallbacks, this);
+        }
+        libvlc_media_player_stop(mLibVLCMediaPlayer);
+        libvlc_media_player_release(mLibVLCMediaPlayer);
+        mLibVLCMediaPlayer = nullptr;
+    }
+    if (mLibVLCMedia)
+    {
+        libvlc_media_release(mLibVLCMedia);
+        mLibVLCMedia = nullptr;
+    }
+    mLibVLCCallbackContext = {};
+    mAttachedPlayerEvents = 0;
+    mAttachedMediaEvent = false;
+    mFrameReady.store(false);
+    mEvents.store(0);
+    mEventStatus.store(STATUS_DONE);
+    mVlcStatus = STATUS_DONE;
+    mLastMetadataSent.clear();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 void MediaPluginLibVLC::resetVLC()
 {
-    libvlc_media_player_stop(mLibVLCMediaPlayer);
-    libvlc_media_player_release(mLibVLCMediaPlayer);
-    libvlc_release(mLibVLC);
+    stopPlayer();
+    if (mLibVLC) libvlc_release(mLibVLC);
+    mLibVLC = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -246,85 +372,109 @@ void MediaPluginLibVLC::eventCallbacks(const libvlc_event_t* event, void* ptr)
         return;
     }
 
+    unsigned flags = 0;
     switch (event->type)
     {
     case libvlc_MediaPlayerOpening:
-        parent->mVlcStatus = STATUS_LOADING;
+        parent->mEventStatus.store(STATUS_LOADING);
         break;
 
     case libvlc_MediaPlayerPlaying:
-        parent->mDuration = (float)(libvlc_media_get_duration(parent->mLibVLCMedia)) / 1000.0f;
-        parent->mVlcStatus = STATUS_PLAYING;
-        parent->setVolumeVLC();
-        parent->setDurationDirty();
+        parent->mEventStatus.store(STATUS_PLAYING);
+        flags = EventPlaying;
         break;
 
     case libvlc_MediaPlayerPaused:
-        parent->mVlcStatus = STATUS_PAUSED;
+        parent->mEventStatus.store(STATUS_PAUSED);
         break;
 
     case libvlc_MediaPlayerStopped:
-        parent->mVlcStatus = STATUS_DONE;
+        parent->mEventStatus.store(STATUS_DONE);
         break;
 
     case libvlc_MediaPlayerEndReached:
-        parent->mVlcStatus = STATUS_DONE;
-        parent->mCurTime = parent->mDuration;
-        parent->setDurationDirty();
+        parent->mEventStatus.store(STATUS_DONE);
+        flags = EventEnd;
         break;
 
     case libvlc_MediaPlayerEncounteredError:
-        parent->mVlcStatus = STATUS_ERROR;
+        parent->mEventStatus.store(STATUS_ERROR);
         break;
 
     case libvlc_MediaPlayerTimeChanged:
-        parent->mCurTime = (float)libvlc_media_player_get_time(parent->mLibVLCMediaPlayer) / 1000.0f;
-        if (parent->mVlcStatus == STATUS_DONE && libvlc_media_player_is_playing(parent->mLibVLCMediaPlayer))
-        {
-            parent->mVlcStatus = STATUS_PLAYING;
-        }
-        parent->setDurationDirty();
+        parent->mEventTime.store(event->u.media_player_time_changed.new_time);
+        flags = EventTime;
         break;
 
-    case libvlc_MediaPlayerPositionChanged:
+    case libvlc_MediaPlayerBuffering:
+        parent->mBuffering.store(event->u.media_player_buffering.new_cache);
         break;
 
     case libvlc_MediaPlayerLengthChanged:
-        parent->mDuration = (float)libvlc_media_get_duration(parent->mLibVLCMedia) / 1000.0f;
-        parent->setDurationDirty();
+        parent->mEventDuration.store(event->u.media_player_length_changed.new_length);
+        flags = EventDuration;
         break;
 
     case libvlc_MediaPlayerTitleChanged:
-    {
-        char* title = libvlc_media_get_meta(parent->mLibVLCMedia, libvlc_meta_Title);
-        if (title)
-        {
-            parent->updateTitle(title);
-        }
-    }
-    break;
-
-    // <FS:ND> Report ICY/stream metadata (song title/artist) to the viewer
+        flags = EventTitle;
+        break;
     case libvlc_MediaMetaChanged:
     {
-        libvlc_meta_t meta_type = event->u.media_meta_changed.meta_type;
-        if (meta_type == libvlc_meta_NowPlaying ||
-            meta_type == libvlc_meta_Title ||
-            meta_type == libvlc_meta_Artist)
+        const auto meta = event->u.media_meta_changed.meta_type;
+        if (meta == libvlc_meta_NowPlaying) flags = EventNowPlaying;
+        else if (meta == libvlc_meta_Title) flags = EventMetaTitle;
+        else if (meta == libvlc_meta_Artist) flags = EventArtist;
+        break;
+    }
+    default: break;
+    }
+    parent->mEvents.fetch_or(flags, std::memory_order_release);
+}
+
+void MediaPluginLibVLC::idle()
+{
+    const auto flags = mEvents.exchange(0, std::memory_order_acq_rel);
+    mVlcStatus = mEventStatus.load();
+    if (flags & EventPlaying)
+    {
+        if (mLibVLCMedia) mDuration = libvlc_media_get_duration(mLibVLCMedia) / 1000.;
+        setVolumeVLC();
+#if LL_VLC_PCM_AUDIO
+        if (mAudioNegotiated && mLibVLCMedia)
         {
-            parent->updateStreamMetadata(meta_type);
+            libvlc_media_track_t** tracks = nullptr;
+            const unsigned count = libvlc_media_tracks_get(mLibVLCMedia, &tracks);
+            for (unsigned index = 0; index < count; ++index)
+                if (tracks[index]->i_type == libvlc_track_video) mAudioFailure = "pcm_video_not_qualified";
+            libvlc_media_tracks_release(tracks, count);
+            if (!mAudioFailure.empty()) stopPlayer();
         }
+#endif
     }
-    break;
-    // </FS:ND>
+    if (flags & EventTime) mCurTime = mEventTime.load() / 1000.;
+    if (flags & EventDuration) mDuration = mEventDuration.load() / 1000.;
+    if (flags & EventEnd) mCurTime = mDuration;
+    if (flags & (EventPlaying | EventTime | EventDuration | EventEnd)) setDurationDirty();
+    if ((flags & EventTitle) && mLibVLCMedia)
+    {
+        char* title = libvlc_media_get_meta(mLibVLCMedia, libvlc_meta_Title);
+        if (title) { updateTitle(title); libvlc_free(title); }
     }
+    if (flags & EventNowPlaying) updateStreamMetadata(libvlc_meta_NowPlaying);
+    if (flags & EventMetaTitle) updateStreamMetadata(libvlc_meta_Title);
+    if (flags & EventArtist) updateStreamMetadata(libvlc_meta_Artist);
+    if (mFrameReady.exchange(false, std::memory_order_acq_rel)) setDirty(0, 0, mWidth, mHeight);
+#if LL_VLC_PCM_AUDIO
+    idleAudio();
+#endif
+    setStatus(mVlcStatus);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 void MediaPluginLibVLC::playMedia()
 {
-    if (mURL.length() == 0)
+    if (mURL.empty() || !mLibVLC)
     {
         return;
     }
@@ -336,15 +486,18 @@ void MediaPluginLibVLC::playMedia()
     // buffer size is out of sync with the declared size (width/height) for a frame
     // or two and the plugin crashes as VLC tries to decode a frame into unallocated
     // memory.
-    if (mLibVLCMediaPlayer)
-    {
-        libvlc_media_player_stop(mLibVLCMediaPlayer);
-    }
+    stopPlayer();
+#if LL_VLC_PCM_AUDIO
+    if (mAudioNegotiated && !mAudioFailure.empty()) return;
+#endif
+    mBuffering.store(100.f);
+    mEventStatus.store(STATUS_LOADING);
+    mVlcStatus = STATUS_LOADING;
 
     mLibVLCMedia = libvlc_media_new_location(mLibVLC, mURL.c_str());
     if (!mLibVLCMedia)
     {
-        mLibVLCMediaPlayer = 0;
+        mEventStatus.store(STATUS_ERROR);
         setStatus(STATUS_ERROR);
         return;
     }
@@ -352,24 +505,25 @@ void MediaPluginLibVLC::playMedia()
     mLibVLCMediaPlayer = libvlc_media_player_new_from_media(mLibVLCMedia);
     if (!mLibVLCMediaPlayer)
     {
+        libvlc_media_release(mLibVLCMedia);
+        mLibVLCMedia = nullptr;
+        mEventStatus.store(STATUS_ERROR);
         setStatus(STATUS_ERROR);
         return;
     }
 
     // listen to events
     libvlc_event_manager_t* em = libvlc_media_player_event_manager(mLibVLCMediaPlayer);
+    bool eventsAttached = em != nullptr;
     if (em)
     {
-        libvlc_event_attach(em, libvlc_MediaPlayerOpening, eventCallbacks, this);
-        libvlc_event_attach(em, libvlc_MediaPlayerPlaying, eventCallbacks, this);
-        libvlc_event_attach(em, libvlc_MediaPlayerPaused, eventCallbacks, this);
-        libvlc_event_attach(em, libvlc_MediaPlayerStopped, eventCallbacks, this);
-        libvlc_event_attach(em, libvlc_MediaPlayerEndReached, eventCallbacks, this);
-        libvlc_event_attach(em, libvlc_MediaPlayerEncounteredError, eventCallbacks, this);
-        libvlc_event_attach(em, libvlc_MediaPlayerTimeChanged, eventCallbacks, this);
-        libvlc_event_attach(em, libvlc_MediaPlayerPositionChanged, eventCallbacks, this);
-        libvlc_event_attach(em, libvlc_MediaPlayerLengthChanged, eventCallbacks, this);
-        libvlc_event_attach(em, libvlc_MediaPlayerTitleChanged, eventCallbacks, this);
+        unsigned index = 0;
+        for (const auto type : playerEvents)
+        {
+            if (libvlc_event_attach(em, type, eventCallbacks, this) != 0) eventsAttached = false;
+            else mAttachedPlayerEvents |= 1u << index;
+            ++index;
+        }
     }
 
     // <FS:ND> Stream metadata (ICY StreamTitle etc.) arrives on the media's
@@ -377,9 +531,47 @@ void MediaPluginLibVLC::playMedia()
     libvlc_event_manager_t* mem = libvlc_media_event_manager(mLibVLCMedia);
     if (mem)
     {
-        libvlc_event_attach(mem, libvlc_MediaMetaChanged, eventCallbacks, this);
+        if (libvlc_event_attach(mem, libvlc_MediaMetaChanged, eventCallbacks, this) != 0) eventsAttached = false;
+        else mAttachedMediaEvent = true;
     }
+    else eventsAttached = false;
     // </FS:ND>
+
+    if (!eventsAttached)
+    {
+        stopPlayer();
+        mEventStatus.store(STATUS_ERROR);
+        setStatus(STATUS_ERROR);
+        return;
+    }
+
+#if LL_VLC_PCM_AUDIO
+    if (mAudioNegotiated)
+    {
+        mAudio->attach(mLibVLCMediaPlayer, mAudioRole == "object" ? llvlc::Role::Object : llvlc::Role::Music);
+        libvlc_media_add_option(mLibVLCMedia, ":no-video");
+        auto lastGain = mAudio->gain(mPendingAudioGainCount ? mInitialAudioGain :
+                                    static_cast<float>(mCurVolume), 0., false);
+        if (lastGain) lastGain = mAudio->transition(1.f, 0.);
+        for (std::size_t index = 0; lastGain && index < mPendingAudioGainCount; ++index)
+        {
+            const auto& pending = mPendingAudioGains[index];
+            lastGain = pending.transition ? mAudio->transition(pending.target, pending.duration) :
+                mAudio->gain(pending.target, pending.duration, pending.hardMute);
+            if (pending.transition) mTransitionCommand = lastGain;
+        }
+        if (!mPendingAudioGainCount && lastGain)
+            lastGain = mAudio->gain(static_cast<float>(mCurVolume), 0., mHardMute);
+        mPendingAudioGainCount = 0;
+        if (!lastGain ||
+            (mAudioRole == "object" && !mAudio->spatial(mSpatialRight, mSpatialForward)))
+        {
+            mAudioFailure = "initial_audio_control_failed";
+            stopPlayer();
+            return;
+        }
+    }
+#endif
 
     libvlc_video_set_callbacks(mLibVLCMediaPlayer, lock, unlock, display, &mLibVLCCallbackContext);
     libvlc_video_set_format(mLibVLCMediaPlayer, "RV32", mWidth, mHeight, mWidth * mDepth);
@@ -401,7 +593,7 @@ void MediaPluginLibVLC::playMedia()
 
     // volume level gets set before VLC is initialized (thanks media system) so we have to record
     // it in mCurVolume and set it again here so that volume levels are correctly initialized
-    setVolume(mCurVolume);
+    setVolumeVLC();
 
     setStatus(STATUS_LOADED);
 
@@ -424,7 +616,13 @@ void MediaPluginLibVLC::playMedia()
     }
     // </FS>
 
-    libvlc_media_player_play(mLibVLCMediaPlayer);
+    if (libvlc_media_player_play(mLibVLCMediaPlayer) != 0)
+    {
+        stopPlayer();
+        mEventStatus.store(STATUS_ERROR);
+        setStatus(STATUS_ERROR);
+        return;
+    }
 
     // send a "location_changed" message - this informs the media system
     // that a new URL is the 'current' one and is used extensively.
@@ -537,6 +735,9 @@ void MediaPluginLibVLC::updateStreamMetadata(int meta_type)
 
 void MediaPluginLibVLC::setVolumeVLC()
 {
+#if LL_VLC_PCM_AUDIO
+    if (mAudioNegotiated) return;
+#endif
     if (mLibVLCMediaPlayer)
     {
         int vlc_vol = (int)(mCurVolume * 100);
@@ -548,7 +749,7 @@ void MediaPluginLibVLC::setVolumeVLC()
         }
         else
         {
-            // volume change was NOT accepted by LibVLC and not actioned
+            mEventStatus.store(STATUS_ERROR);
         }
 
 #if LL_WINDOWS
@@ -567,7 +768,7 @@ void MediaPluginLibVLC::setVolumeVLC()
         DWORD left_channel = (DWORD)(mCurVolume * 65535.0f);
         DWORD right_channel = (DWORD)(mCurVolume * 65535.0f);
         DWORD hw_volume = left_channel << 16 | right_channel;
-        waveOutSetVolume(NULL, hw_volume);
+        if (waveOutSetVolume(NULL, hw_volume) != MMSYSERR_NOERROR) mEventStatus.store(STATUS_ERROR);
 #endif
     }
     else
@@ -582,10 +783,272 @@ void MediaPluginLibVLC::setVolumeVLC()
 //
 void MediaPluginLibVLC::setVolume(const F64 volume)
 {
+    if (!std::isfinite(volume) || volume < 0. || volume > 1.)
+    {
+#if LL_VLC_PCM_AUDIO
+        if (mAudioNegotiated) mAudioFailure = "invalid_compat_gain";
+#endif
+        return;
+    }
     mCurVolume = volume;
 
+#if LL_VLC_PCM_AUDIO
+    if (mAudioNegotiated)
+    {
+        submitGain(static_cast<float>(volume), 0., mHardMute);
+        return;
+    }
+#endif
     setVolumeVLC();
 }
+
+#if LL_VLC_PCM_AUDIO
+namespace
+{
+bool audioGeneration(const LLSD& value, std::uint64_t& generation)
+{
+    if (!value.isString()) return false;
+    const auto text = value.asString();
+    if (text.empty() || text.size() > 20 || (text.size() > 1 && text[0] == '0')) return false;
+    generation = 0;
+    for (const char digit : text)
+    {
+        if (digit < '0' || digit > '9' ||
+            generation > (std::numeric_limits<std::uint64_t>::max() - (digit - '0')) / 10)
+            return false;
+        generation = generation * 10 + (digit - '0');
+    }
+    return true;
+}
+
+bool audioReal(const LLPluginMessage& message, const char* name, double& value)
+{
+    const auto field = message.getValueLLSD(name);
+    if (!field.isReal()) return false;
+    value = field.asReal();
+    return std::isfinite(value);
+}
+}
+
+bool MediaPluginLibVLC::submitGain(float target, double duration, bool hardMute, bool transition)
+{
+    if (!transition)
+    {
+        mCurVolume = target;
+        mHardMute = hardMute;
+    }
+    if (!mLibVLCMediaPlayer)
+    {
+        if (mPendingAudioGainCount == mPendingAudioGains.size())
+        {
+            mAudioFailure = "preplay_gain_queue_full";
+            return false;
+        }
+        mPendingAudioGains[mPendingAudioGainCount++] = {target, duration, hardMute, transition};
+        return true;
+    }
+    const auto ticket = transition ? mAudio->transition(target, duration) : mAudio->gain(target, duration, hardMute);
+    if (!ticket)
+    {
+        mAudioFailure = "audio_gain_not_accepted";
+        return false;
+    }
+    if (transition)
+    {
+        mTransitionCommand = ticket;
+    }
+    return true;
+}
+
+void MediaPluginLibVLC::receiveAudio(const LLPluginMessage& message)
+{
+    const auto name = message.getName();
+    if (name == "configure")
+    {
+        std::uint64_t generation = 0;
+        const bool validGeneration = audioGeneration(message.getValueLLSD("generation"), generation);
+        const auto role = message.getValue("role");
+        if (!validGeneration || !generation || !message.getValueLLSD("role").isString() ||
+            (role != "music" && role != "object" && role != "nonpositional"))
+        {
+            mRejectedGeneration = validGeneration ? message.getValue("generation") : "0";
+            mRejectedDetail = "invalid_configuration";
+            return;
+        }
+        if (generation <= mAudioGeneration)
+        {
+            mRejectedGeneration = message.getValue("generation");
+            mRejectedDetail = "stale_configuration";
+            return;
+        }
+        stopPlayer();
+        mAudioNegotiated = true;
+        mAudioGeneration = generation;
+        mAudioGenerationText = message.getValue("generation");
+        mAudioRole = role;
+        mAudioSerial = "0";
+        mLastTransitionSerial = 0;
+        mTransitionComplete = false;
+        mAudioFailure.clear();
+        mAudioLastState.clear();
+        mAudioLastDetail.clear();
+        mAudioLastSerial.clear();
+        mTransitionPending = false;
+        mGainDuration = 0.;
+        mPendingAudioGainCount = 0;
+        mInitialAudioGain = static_cast<float>(mCurVolume);
+        mHardMute = false;
+        mSpatialRight = 0.f;
+        mSpatialForward = 1.f;
+        mReportedDiscontinuities = 0;
+        const std::string version = libvlc_get_version();
+        if (version.compare(0, 6, "3.0.21") != 0 || (version.size() > 6 && version[6] != ' '))
+        {
+            mAudioFailure = "runtime_vlc_version_unqualified";
+            return;
+        }
+        if (!mAudio)
+        {
+            try { mAudio = std::make_unique<llvlc::PluginAudio>(); }
+            catch (const std::exception&) { mAudioFailure = "audio_owner_creation_failed"; return; }
+        }
+        mURL.clear();
+        return;
+    }
+    if (!mAudioNegotiated || !mAudio)
+    {
+        mRejectedGeneration = "0";
+        mRejectedDetail = "configure_required";
+        return;
+    }
+    std::uint64_t generation = 0;
+    if (!audioGeneration(message.getValueLLSD("generation"), generation) || generation != mAudioGeneration)
+        return;
+    if (name == "spatial")
+    {
+        double right = 0., forward = 0.;
+        if (mAudioRole != "object" || !audioReal(message, "right", right) ||
+            !audioReal(message, "forward", forward) || std::abs(std::hypot(right, forward) - 1.) > .001)
+        {
+            mAudioFailure = "invalid_spatial_direction";
+            return;
+        }
+        mSpatialRight = static_cast<float>(right);
+        mSpatialForward = static_cast<float>(forward);
+        if (mLibVLCMediaPlayer && !mAudio->spatial(mSpatialRight, mSpatialForward))
+            mAudioFailure = "spatial_not_accepted";
+        return;
+    }
+    if (name == "set_gain" || name == "transition")
+    {
+        double target = 0., duration = 0.;
+        if (!audioReal(message, "target", target) || !audioReal(message, "duration", duration) ||
+            target < 0. || target > 1. || duration < 0. || duration > 60. ||
+            (name == "set_gain" && !message.getValueLLSD("hard_mute").isBoolean()) ||
+            (name == "transition" && !message.getValueLLSD("serial").isString()))
+        {
+            if (name == "transition" && message.getValueLLSD("serial").isString())
+                mAudioSerial = message.getValue("serial");
+            mAudioFailure = "invalid_gain_command";
+            return;
+        }
+        if (name == "transition")
+        {
+            std::uint64_t serial = 0;
+            if (!audioGeneration(message.getValueLLSD("serial"), serial) || serial <= mLastTransitionSerial)
+                return;
+            mLastTransitionSerial = serial;
+            mAudioSerial = message.getValue("serial");
+            mTransitionPending = true;
+            mTransitionComplete = false;
+            mTransitionCommand = 0;
+            mTransitionTarget = static_cast<float>(target);
+            mTransitionStarted = std::chrono::steady_clock::now();
+            mGainDuration = duration;
+        }
+        submitGain(static_cast<float>(target), duration,
+                   name == "set_gain" && message.getValueBoolean("hard_mute"), name == "transition");
+        return;
+    }
+    mAudioFailure = "unknown_audio_command";
+}
+
+void MediaPluginLibVLC::audioState(const std::string& state, const std::string& detail,
+                                  const std::string& generation, const std::string& serial)
+{
+    LLPluginMessage message("media_audio", "state");
+    message.setValue("generation", generation);
+    message.setValue("serial", serial);
+    message.setValue("state", state);
+    message.setValue("detail", detail);
+    sendMessage(message);
+}
+
+void MediaPluginLibVLC::idleAudio()
+{
+    if (!mRejectedDetail.empty())
+    {
+        audioState("failed", mRejectedDetail, mRejectedGeneration, "0");
+        mRejectedDetail.clear();
+    }
+    if (!mAudioNegotiated) return;
+    const auto snapshot = mAudio ? mAudio->snapshot() : llvlc::PluginAudio::Snapshot{};
+    const auto& status = snapshot.engine;
+    const auto report = llvlc::PluginAudio::playbackReport(status, mBuffering.load(), mVlcStatus == STATUS_PAUSED);
+    std::string state = report.state;
+    std::string detail = report.detail;
+    if (snapshot.failure && mAudioFailure.empty()) mAudioFailure = snapshot.failure;
+    if (mVlcStatus == STATUS_ERROR && mAudioFailure.empty()) mAudioFailure = "vlc_playback_failed";
+    if (mTransitionPending && mAudioFailure.empty())
+    {
+        if (llvlc::PluginAudio::transitionComplete(status, mTransitionCommand))
+        {
+            mTransitionPending = false;
+            mTransitionComplete = true;
+            audioState(mTransitionTarget == 0.f ? "silent" : "running",
+                       "endpoint_complete",
+                       mAudioGenerationText, mAudioSerial);
+            mAudioLastSerial = mAudioSerial;
+        }
+        else if (mTransitionCommand && mTransitionTarget == 0.f &&
+                 status.transitionCompleted == mTransitionCommand && !status.endpointQualified)
+        {
+            mTransitionPending = false;
+            mAudioFailure = "endpoint_tail_unqualified";
+        }
+        else if (std::chrono::duration<double>(std::chrono::steady_clock::now() - mTransitionStarted).count() >
+                 mGainDuration + 10.)
+        {
+            mTransitionPending = false;
+            mAudioFailure = "transition_clock_timeout_retry_or_stop";
+        }
+    }
+    if (!mAudioFailure.empty())
+    {
+        state = "failed";
+        detail = mAudioFailure;
+    }
+    else if (snapshot.discontinuities != mReportedDiscontinuities)
+    {
+        mReportedDiscontinuities = snapshot.discontinuities;
+        state = "buffering";
+        detail = "pts_discontinuity_flushed";
+    }
+    else if (!mLibVLCMediaPlayer && !mURL.empty())
+    {
+        state = "failed";
+        detail = "player_stopped_without_endpoint_ack";
+    }
+    const std::string serial = state == "failed" ? mAudioSerial : "0";
+    if (state != mAudioLastState || detail != mAudioLastDetail || serial != mAudioLastSerial)
+    {
+        audioState(state, detail, mAudioGenerationText, serial);
+        mAudioLastState = state;
+        mAudioLastDetail = detail;
+        mAudioLastSerial = serial;
+    }
+}
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -608,6 +1071,9 @@ void MediaPluginLibVLC::receiveMessage(const char* message_string)
                 versions[LLPLUGIN_MESSAGE_CLASS_BASE] = LLPLUGIN_MESSAGE_CLASS_BASE_VERSION;
                 versions[LLPLUGIN_MESSAGE_CLASS_MEDIA] = LLPLUGIN_MESSAGE_CLASS_MEDIA_VERSION;
                 versions[LLPLUGIN_MESSAGE_CLASS_MEDIA_TIME] = LLPLUGIN_MESSAGE_CLASS_MEDIA_TIME_VERSION;
+#if LL_VLC_PCM_AUDIO
+                versions["media_audio"] = "1.0";
+#endif
                 message.setValueLLSD("versions", versions);
 
                 std::ostringstream s;
@@ -623,7 +1089,7 @@ void MediaPluginLibVLC::receiveMessage(const char* message_string)
             }
             else if (message_name == "idle")
             {
-                setStatus(mVlcStatus);
+                idle();
             }
             else if (message_name == "cleanup")
             {
@@ -631,6 +1097,7 @@ void MediaPluginLibVLC::receiveMessage(const char* message_string)
             }
             else if (message_name == "force_exit")
             {
+                resetVLC();
                 mDeleteMe = true;
             }
             else if (message_name == "shm_added")
@@ -652,9 +1119,7 @@ void MediaPluginLibVLC::receiveMessage(const char* message_string)
                 {
                     if (mPixels == iter->second.mAddress)
                     {
-                        libvlc_media_player_stop(mLibVLCMediaPlayer);
-                        libvlc_media_player_release(mLibVLCMediaPlayer);
-                        mLibVLCMediaPlayer = 0;
+                        stopPlayer();
 
                         mPixels = NULL;
                         mTextureSegmentName.clear();
@@ -676,6 +1141,12 @@ void MediaPluginLibVLC::receiveMessage(const char* message_string)
                 //std::cerr << "MediaPluginWebKit::receiveMessage: unknown base message: " << message_name << std::endl;
             }
         }
+    #if LL_VLC_PCM_AUDIO
+        else if (message_class == "media_audio")
+        {
+            receiveAudio(message_in);
+        }
+    #endif
         else if (message_class == LLPLUGIN_MESSAGE_CLASS_MEDIA)
         {
             if (message_name == "init")
@@ -704,6 +1175,7 @@ void MediaPluginLibVLC::receiveMessage(const char* message_string)
                     SharedSegmentMap::iterator iter = mSharedSegments.find(name);
                     if (iter != mSharedSegments.end())
                     {
+                        stopPlayer();
                         mPixels = (unsigned char*)iter->second.mAddress;
                         mWidth = width;
                         mHeight = height;
@@ -741,6 +1213,14 @@ void MediaPluginLibVLC::receiveMessage(const char* message_string)
             }
             else if (message_name == "load_uri")
             {
+#if LL_VLC_PCM_AUDIO
+                if (message_in.getValue("audio_generation") != mAudioGenerationText)
+                {
+                    stopPlayer();
+                    mAudioNegotiated = false;
+                    mTransitionPending = mTransitionComplete = false;
+                }
+#endif
                 mURL = message_in.getValue("uri");
                 playMedia();
             }
@@ -750,23 +1230,17 @@ void MediaPluginLibVLC::receiveMessage(const char* message_string)
             {
                 if (message_name == "stop")
                 {
-                    if (mLibVLCMediaPlayer)
-                    {
-                        libvlc_media_player_stop(mLibVLCMediaPlayer);
-                    }
+                    stopPlayer();
                 }
                 else if (message_name == "start")
                 {
-                    if (mLibVLCMediaPlayer)
+                    if (!mLibVLCMediaPlayer || mVlcStatus == STATUS_DONE)
                     {
-                        if (mVlcStatus == STATUS_DONE && !libvlc_media_player_is_playing(mLibVLCMediaPlayer))
-                        {
-                            // stop or vlc will ignore 'play', it will just
-                            // make an MediaPlayerEndReached event even if
-                            // seek was used
-                            libvlc_media_player_stop(mLibVLCMediaPlayer);
-                        }
-                        libvlc_media_player_play(mLibVLCMediaPlayer);
+                        playMedia();
+                    }
+                    else
+                    {
+                        if (libvlc_media_player_play(mLibVLCMediaPlayer) != 0) mEventStatus.store(STATUS_ERROR);
                     }
                 }
                 else if (message_name == "pause")
