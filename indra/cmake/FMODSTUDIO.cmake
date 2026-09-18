@@ -2,14 +2,7 @@
 
 include_guard()
 
-# FMODSTUDIO can be set when launching the make using the argument -DUSE_FMODSTUDIO:BOOL=ON
-# When building using proprietary binaries though (i.e. having access to LL private servers),
-# we always build with FMODSTUDIO.
-# Open source devs should use the -DFMODSTUDIO:BOOL=ON then if they want to build with FMOD, whether
-# they are using USESYSTEMLIBS or not.
-if (INSTALL_PROPRIETARY)
-  set(USE_FMODSTUDIO ON CACHE BOOL "Using FMODSTUDIO sound library.")
-endif (INSTALL_PROPRIETARY)
+option(USE_FMODSTUDIO "Enable the optional FMOD Studio audio engine" OFF)
 
 # ND: To streamline arguments passed, switch from FMODSTUDIO to USE_FMODSTUDIO
 # To not break all old build scripts convert old arguments but warn about it

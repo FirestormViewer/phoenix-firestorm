@@ -1,0 +1,26 @@
+include_guard()
+include(Linking)
+include(Prebuilt)
+
+set(soloud_default ON)
+if(USE_FMODSTUDIO OR FMODSTUDIO OR USE_OPENAL OR OPENAL)
+    set(soloud_default OFF)
+endif()
+option(USE_SOLOUD "Enable the SoLoud audio engine" ${soloud_default})
+
+if(USE_SOLOUD AND (USE_FMODSTUDIO OR USE_OPENAL))
+    message(FATAL_ERROR "Select one audio backend: disable USE_SOLOUD when enabling USE_OPENAL or USE_FMODSTUDIO. Use --soloud, --openal or --fmodstudio to reset cached selections.")
+endif()
+
+if(USE_SOLOUD)
+    if(NOT WINDOWS OR NOT ADDRESS_SIZE EQUAL 64)
+        message(FATAL_ERROR "The SoLoud package currently supports Windows x64 only. Select USE_SOLOUD=OFF and USE_OPENAL=ON or USE_FMODSTUDIO=ON on this platform.")
+    endif()
+    use_prebuilt_binary(soloud)
+    find_library(SOLOUD_LIBRARY NAMES soloud
+        PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
+    add_library(ll::soloud INTERFACE IMPORTED)
+    target_include_directories(ll::soloud SYSTEM INTERFACE "${LIBS_PREBUILT_DIR}/include/soloud")
+    target_compile_definitions(ll::soloud INTERFACE LL_SOLOUD=1)
+    target_link_libraries(ll::soloud INTERFACE "${SOLOUD_LIBRARY}")
+endif()

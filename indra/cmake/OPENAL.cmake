@@ -8,7 +8,7 @@ include_guard()
 # to have memory leaks, has no option to play music streams
 # It probably makes sense to to completely remove it
 
-set(USE_OPENAL ON CACHE BOOL "Enable OpenAL")
+set(USE_OPENAL OFF CACHE BOOL "Enable OpenAL")
 
 # <FS:Zi> Always download the libopenal.so library on Linux for SLVoice
 if (LINUX)
