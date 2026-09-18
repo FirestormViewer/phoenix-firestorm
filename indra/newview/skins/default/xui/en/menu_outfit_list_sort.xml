@@ -22,6 +22,32 @@
   <menu_item_separator/>
 
   <menu_item_check
+   label="Sort alphabetically"
+   layout="topleft"
+   name="sort_alphabetical">
+    <on_click
+     function="Sort.OnSort"
+    parameter="alphabetical" />
+    <on_check
+     function="Sort.OnEnable"
+     parameter="alphabetical" />
+  </menu_item_check>
+
+  <menu_item_check
+   label="Sort newest first"
+   layout="topleft"
+   name="sort_newest_first">
+    <on_click
+     function="Sort.OnSort"
+    parameter="newest_first" />
+    <on_check
+     function="Sort.OnEnable"
+     parameter="newest_first" />
+  </menu_item_check>
+
+  <menu_item_separator/>
+
+  <menu_item_check
    label="Sort favorites to top"
    layout="topleft"
    name="sort_favorites_to_top">
