@@ -8104,6 +8104,8 @@ void LLPipeline::allocateAlphaOITBuffers(U32 w, U32 h)
     while (glGetError() != GL_NO_ERROR) {}
 
     // Per-pixel linked-list head image.
+    GLint previous_texture = 0;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &previous_texture);
     glGenTextures(1, &mAlphaOITHead);
     glBindTexture(GL_TEXTURE_2D, mAlphaOITHead);
     glTexStorage2D(GL_TEXTURE_2D, 1, GL_R32UI, (GLsizei)w, (GLsizei)h);
@@ -8112,7 +8114,7 @@ void LLPipeline::allocateAlphaOITBuffers(U32 w, U32 h)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, previous_texture);
 
     // HDR node pool: packed half-float RG/BA, depth, next.
     glGenBuffers(1, &mAlphaOITNodes);

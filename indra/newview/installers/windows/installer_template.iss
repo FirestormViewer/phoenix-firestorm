@@ -105,6 +105,8 @@ Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#ViewerExe}"; Tasks: desktop
 Filename: "{app}\{#ViewerExe}"; Description: "Launch {#AppName} now"; Flags: nowait postinstall skipifsilent unchecked
 
 [Registry]
+Root: HKLM; Subkey: "Software\Classes\Applications\{#ViewerExe}"; ValueType: none; ValueName: "IsHostApp"; Flags: deletevalue
+Root: HKLM; Subkey: "Software\Classes\Applications\{#ViewerExe}"; ValueType: none; ValueName: "NoStartPage"; Flags: deletevalue
 ; Product registration (always).
 Root: HKLM; Subkey: "SOFTWARE\The Vulkanstorm Project\{#AppNameOneWord}"; ValueType: string; ValueName: ""; ValueData: "{app}"; Flags: uninsdeletekey
 Root: HKLM; Subkey: "SOFTWARE\The Vulkanstorm Project\{#AppNameOneWord}"; ValueType: string; ValueName: "Version"; ValueData: "{#AppVersion}"
