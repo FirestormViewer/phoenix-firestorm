@@ -238,6 +238,62 @@
          left="10"
          width="500"
          tool_tip="Causes repeated keybinds (e.g. ctrl+shift+y) to alternate between the requested preset &amp; shared environment"/>
+        <!-- <FS:TP> [FIRE-36987] Selectable avatar loading/bakefail cloud color -->
+        <text
+         top_pad="12"
+         layout="topleft"
+         follows="left|top"
+         left="10"
+         height="16"
+         width="300"
+         name="FSCloudColorLabel">
+            Avatar loading/bakefail cloud color:
+        </text>
+        <text
+         layout="topleft"
+         follows="left|top"
+         left="10"
+         top_pad="4"
+         height="16"
+         width="60"
+         name="FSCloudColorStartLabel">
+            Start:
+        </text>
+        <text
+         layout="topleft"
+         follows="left|top"
+         left="90"
+         top_delta="0"
+         height="16"
+         width="60"
+         name="FSCloudColorEndLabel">
+            End:
+        </text>
+        <color_swatch
+         control_name="FSCloudColorStart"
+         can_apply_immediately="true"
+         layout="topleft"
+         left="10"
+         top_pad="2"
+         follows="left|top"
+         height="24"
+         label_height="0"
+         name="FSCloudColorStart"
+         tool_tip="Start color of the particle &quot;cloud&quot; shown while an avatar is loading or its bake has failed. Applies immediately, no restart needed."
+         width="44" />
+        <color_swatch
+         control_name="FSCloudColorEnd"
+         can_apply_immediately="true"
+         layout="topleft"
+         left="90"
+         top_delta="0"
+         follows="left|top"
+         height="24"
+         label_height="0"
+         name="FSCloudColorEnd"
+         tool_tip="End color of the particle &quot;cloud&quot; shown while an avatar is loading or its bake has failed. Applies immediately, no restart needed."
+         width="44" />
+        <!-- </FS:TP> -->
     </panel>
 
 
