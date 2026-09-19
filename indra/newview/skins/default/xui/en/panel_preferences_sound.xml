@@ -779,6 +779,32 @@
              name="sound_output_device"
              top_delta="-5"
              right="-5" />
+            <text
+             follows="left|top"
+             height="16"
+             layout="topleft"
+             left="25"
+             top="42"
+             name="spatial_sound_label"
+             width="110">
+               Spatial sound:
+            </text>
+            <combo_box
+             control_name="FSMusicSpatialSound"
+             name="FSMusicSpatialSound"
+             follows="left|top"
+             height="23"
+             layout="topleft"
+             left_pad="0"
+             top_delta="-4"
+             width="180"
+             tool_tip="Stereo music speaker layout; applies on the next stream start. Unsupported devices and headphones bypass speaker fill. LFE remains silent; bass management is provided by your sound card. Choose Stereo when using sound-card surround.">
+               <combo_box.item label="Stereo" name="stereo" value="0" />
+               <combo_box.item label="2.1" name="surround_21" value="21" />
+               <combo_box.item label="4.1" name="surround_41" value="41" />
+               <combo_box.item label="5.1" name="surround_51" value="51" />
+               <combo_box.item label="7.1" name="surround_71" value="71" />
+            </combo_box>
         </panel>
     </panel>
 
@@ -1126,15 +1152,15 @@
             seconds
         </text>
 
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         left="26"
-         name="show_stream_metadata_text"
-         top_pad="20"
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="20"
+       layout="topleft"
+       left="26"
+       name="show_stream_metadata_text"
+       top_pad="8"
          width="250">
             Show stream title notifications:
         </text>

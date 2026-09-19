@@ -17,7 +17,8 @@ namespace llvlc
 {
 struct WasapiEndpoint
 {
-    static void invalidate(ma_device* device) noexcept;
+    static void invalidate(ma_device* device, DeviceFailure reason = DeviceFailure::Notification,
+                           std::uint32_t code = 0) noexcept;
     static bool healthy(ma_device* device) noexcept;
     static bool stopping(ma_device* device) noexcept;
     static bool submitted(ma_device* device, std::uint32_t frames) noexcept;
@@ -263,6 +264,7 @@ struct AudioEngine::Impl
         Matrix matrix{};
         Format source{};
         std::uint64_t format = 0;
+        bool preserveTransition = false;
     };
 
     std::array<PCMFrame, MaxQueueFrames> pcm{};
@@ -281,6 +283,7 @@ struct AudioEngine::Impl
     std::atomic<bool> stopping{false};
     std::atomic<State> publishedState{State::Closed};
     std::atomic<Result> error{Result::Ok};
+    std::atomic<std::uint64_t> deviceFailure{0};
     std::atomic<std::uint32_t> publishedReserve{0};
     std::atomic<std::uint64_t> rendered{0};
     std::atomic<std::uint64_t> starvations{0};
@@ -337,8 +340,11 @@ struct AudioEngine::Impl
     ma_linear_resampler handoverResampler{};
     ma_device device{};
 
-    Result endpointFailure() noexcept
+    Result endpointFailure(DeviceFailure reason, std::uint32_t code = 0) noexcept
     {
+        std::uint64_t expected = 0;
+        deviceFailure.compare_exchange_strong(expected,
+            (static_cast<std::uint64_t>(reason) << 32) | code, std::memory_order_relaxed);
         endpointQualified.store(false, std::memory_order_release);
         accepting.store(false, std::memory_order_release);
         error.store(Result::DeviceError, std::memory_order_release);
@@ -351,7 +357,7 @@ struct AudioEngine::Impl
         if (error.load(std::memory_order_acquire) != Result::Ok) return error.load();
         const auto previous = submittedFrames.load(std::memory_order_relaxed);
         if (!success || frames > std::numeric_limits<std::uint64_t>::max() - previous ||
-            previous + frames != clockFrames.load(std::memory_order_acquire)) return endpointFailure();
+            previous + frames != clockFrames.load(std::memory_order_acquire)) return endpointFailure(DeviceFailure::Submission);
         submittedFrames.store(previous + frames, std::memory_order_release);
         return Result::Ok;
     }
@@ -364,7 +370,7 @@ struct AudioEngine::Impl
         const auto result = endpoint.observe(observation, submittedFrames.load(std::memory_order_acquire));
         if (result != Result::Ok)
         {
-            return endpointFailure();
+            return endpointFailure(DeviceFailure::Timeline);
         }
         endpointFrames.store(endpoint.consumed, std::memory_order_release);
         endpointQualified.store(true, std::memory_order_release);
@@ -385,11 +391,11 @@ struct AudioEngine::Impl
         return Result::Ok;
     }
 
-    void resetConsumer(std::uint64_t nextStream) noexcept
+    void resetConsumer(std::uint64_t nextStream, bool preserveTransition = false) noexcept
     {
         renderStream = nextStream;
-        transitionId = 0;
-        transitionConsumed.store(0, std::memory_order_relaxed);
+        if (!preserveTransition) transitionId = 0;
+        transitionConsumed.store(transitionId, std::memory_order_relaxed);
         transitionCompleted.store(0, std::memory_order_relaxed);
         transitionFenceFrame.store(0, std::memory_order_relaxed);
         drainFenceFrame.store(0, std::memory_order_relaxed);
@@ -438,7 +444,7 @@ struct AudioEngine::Impl
                 appliedFormat.store(next.format, std::memory_order_release);
                 break;
             case CommandType::Resume: paused = false; break;
-            case CommandType::Flush: resetConsumer(next.token); break;
+            case CommandType::Flush: resetConsumer(next.token, next.preserveTransition); break;
             case CommandType::Drain: eos = true; break;
             case CommandType::Spatial: matrix = next.matrix; break;
             }
@@ -536,7 +542,7 @@ struct AudioEngine::Impl
         if (frames > std::numeric_limits<std::uint64_t>::max() - clockFrames.load(std::memory_order_relaxed))
         {
             std::fill_n(destination, static_cast<std::size_t>(frames) * output.channels, 0.f);
-            endpointFailure();
+            endpointFailure(DeviceFailure::FrameOverflow);
             return;
         }
         fenceSequence.fetch_add(1, std::memory_order_acq_rel);
@@ -655,6 +661,9 @@ struct AudioEngine::Impl
         engine.started.store(false, std::memory_order_release);
         if (!engine.stopping.load(std::memory_order_acquire))
         {
+            std::uint64_t expected = 0;
+            engine.deviceFailure.compare_exchange_strong(expected,
+                static_cast<std::uint64_t>(DeviceFailure::UnexpectedStop) << 32, std::memory_order_relaxed);
             engine.accepting.store(false, std::memory_order_release);
             engine.error.store(Result::DeviceError, std::memory_order_release);
             engine.publishedState.store(State::Error, std::memory_order_release);
@@ -669,10 +678,10 @@ AudioEngine::AudioEngine() : mImpl(std::make_unique<Impl>()) {}
 AudioEngine::~AudioEngine() { close(); }
 
 #if defined(_WIN64)
-void WasapiEndpoint::invalidate(ma_device* device) noexcept
+void WasapiEndpoint::invalidate(ma_device* device, DeviceFailure reason, std::uint32_t code) noexcept
 {
     auto& engine = *static_cast<AudioEngine::Impl*>(device->pUserData);
-    engine.endpointFailure();
+    engine.endpointFailure(reason, code);
     SetEvent(device->wasapi.hEventPlayback);
 }
 
@@ -730,6 +739,7 @@ Result AudioEngine::configure(Role role, const Format& source, Generation genera
     engine.role = role;
     engine.stopping.store(false);
     engine.error.store(Result::Ok);
+    engine.deviceFailure.store(0);
     if (options.output == OutputMode::Headless)
     {
         engine.output = options.headlessOutput;
@@ -1013,7 +1023,7 @@ Result AudioEngine::resume() noexcept
     return mImpl->command(command);
 }
 
-Result AudioEngine::flush(Generation nextGeneration) noexcept
+Result AudioEngine::flush(Generation nextGeneration, bool preserveTransition) noexcept
 {
     auto& engine = *mImpl;
     if (nextGeneration.stream <= engine.stream.load(std::memory_order_acquire) ||
@@ -1021,6 +1031,7 @@ Result AudioEngine::flush(Generation nextGeneration) noexcept
     Impl::Command command;
     command.type = Impl::CommandType::Flush;
     command.token = nextGeneration.stream;
+    command.preserveTransition = preserveTransition;
     const auto result = engine.command(command);
     if (result == Result::Ok)
     {
@@ -1103,6 +1114,9 @@ Status AudioEngine::status() const noexcept
     Status result;
     result.state = engine.publishedState.load(std::memory_order_acquire);
     result.error = engine.error.load(std::memory_order_acquire);
+    const auto deviceFailure = engine.deviceFailure.load(std::memory_order_relaxed);
+    result.deviceFailure = static_cast<DeviceFailure>(deviceFailure >> 32);
+    result.deviceFailureCode = static_cast<std::uint32_t>(deviceFailure);
     result.generation = {engine.stream.load(std::memory_order_acquire), engine.formatGeneration};
     result.renderedGeneration = {engine.appliedStream.load(std::memory_order_acquire), engine.appliedFormat.load(std::memory_order_acquire)};
     result.outputMode = engine.options.output;

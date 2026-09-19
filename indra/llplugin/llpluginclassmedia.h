@@ -345,6 +345,10 @@ public:
     bool isAudioPlaying() const;
     bool isAudioPaused() const;
     void setAudioRole(const std::string& role);
+    void setMusicSpeakerFill(S32 layout)
+    {
+        mMusicSpeakerFill = (layout == 21 || layout == 41 || layout == 51 || layout == 71) ? layout : 0;
+    }
     void setAudioGain(F32 target, bool hard_mute);
     void setAudioSpatial(F32 right, F32 forward);
     bool transitionAudio(F32 target, F32 duration);
@@ -381,6 +385,7 @@ protected:
     std::string mAudioRole;
     std::string mAudioURI;
     bool mAudioStopped = true;
+    S32 mMusicSpeakerFill = 0;
     U64 mAudioGeneration = 0;
     U64 mAudioSerial = 0;
     bool mAudioTransitionComplete = false;

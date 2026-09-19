@@ -321,6 +321,31 @@ class PluginAudioTest
         audio->closeAfterVLC();
     }
 
+    static void discontinuityDuringTransition()
+    {
+        auto audio = make();
+        require(setup(*audio) == 0, "discontinuity setup");
+        const auto ticket = audio->transition(1.f, .02);
+        require(ticket != 0, "discontinuity transition ticket");
+        until(*audio, [&] { return audio->snapshot().engine.transitionConsumed == ticket; }, true);
+        const std::vector<std::int16_t> input(2048 * 2, 1000);
+        PluginAudio::play(&audio->mContext, input.data(), 2048, 1000000);
+        until(*audio, [&] { return audio->snapshot().engine.lastSourcePts >= 1000000; }, true);
+        PluginAudio::play(&audio->mContext, input.data(), 2048, 2000000);
+        until(*audio, [&] { return audio->snapshot().discontinuities == 1; }, true);
+        until(*audio, [&] { return audio->snapshot().engine.lastSourcePts >= 2000000; }, true);
+        require(audio->snapshot().engine.transitionConsumed == ticket, "timestamp recovery lost transition identity");
+        until(*audio, [&] { return audio->snapshot().engine.transitionCompleted == ticket; }, true);
+        const auto status = audio->snapshot().engine;
+        require(!PluginAudio::transitionComplete(status, ticket), "recovery acknowledged before endpoint");
+        require(audio->mEngine.advanceHeadlessEndpoint(status.generation, status.transitionFenceFrame) == Result::Ok,
+            "recovered endpoint progress");
+        until(*audio, [&] { return PluginAudio::transitionComplete(audio->snapshot().engine, ticket); }, false);
+        require(!audio->snapshot().failure, "timestamp recovery failed the stream");
+        audio->cancelAndStop();
+        audio->closeAfterVLC();
+    }
+
 public:
     static void run()
     {
@@ -332,6 +357,7 @@ public:
         playbackAfterCompletion();
         stoppedEngineRecovery();
         endpointLagAndFailure();
+        discontinuityDuringTransition();
         rejectUnqualifiedLayout();
     }
 };

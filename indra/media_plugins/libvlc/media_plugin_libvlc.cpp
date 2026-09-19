@@ -53,6 +53,7 @@ typedef SSIZE_T ssize_t;
 #endif
 
 #if LL_WINDOWS
+#include "llvlcspeakerfillconfig.h"
 // needed for waveOut call - see below for description
 #include <mmsystem.h>
 #endif
@@ -160,6 +161,7 @@ private:
     struct mLibVLCContext mLibVLCCallbackContext;
 
     std::string mURL;
+    S32 mMusicSpeakerFill = 0;
     F64 mCurVolume;
 
     bool mIsLooping;
@@ -502,6 +504,12 @@ void MediaPluginLibVLC::playMedia()
         return;
     }
 
+#if LL_WINDOWS
+    if (mMusicSpeakerFill)
+    {
+        libvlc_media_add_option(mLibVLCMedia, ":no-video");
+    }
+#endif
     mLibVLCMediaPlayer = libvlc_media_player_new_from_media(mLibVLCMedia);
     if (!mLibVLCMediaPlayer)
     {
@@ -511,6 +519,18 @@ void MediaPluginLibVLC::playMedia()
         setStatus(STATUS_ERROR);
         return;
     }
+
+#if LL_WINDOWS
+    if (mMusicSpeakerFill &&
+        (!configureSpeakerFill(mLibVLCMediaPlayer, mMusicSpeakerFill) ||
+         libvlc_audio_output_set(mLibVLCMediaPlayer, "mmdevice") != 0))
+    {
+        stopPlayer();
+        mEventStatus.store(STATUS_ERROR);
+        setStatus(STATUS_ERROR);
+        return;
+    }
+#endif
 
     // listen to events
     libvlc_event_manager_t* em = libvlc_media_player_event_manager(mLibVLCMediaPlayer);
@@ -981,6 +1001,44 @@ void MediaPluginLibVLC::audioState(const std::string& state, const std::string& 
     message.setValue("serial", serial);
     message.setValue("state", state);
     message.setValue("detail", detail);
+    if (state == "failed" && mAudio)
+    {
+        const auto snapshot = mAudio->snapshot();
+        const auto& status = snapshot.engine;
+        LLSD diagnostic = LLSD::emptyMap();
+        diagnostic["expected_transition"] = std::to_string(mTransitionCommand);
+        diagnostic["consumed_transition"] = std::to_string(status.transitionConsumed);
+        diagnostic["completed_transition"] = std::to_string(status.transitionCompleted);
+        diagnostic["endpoint_transition"] = std::to_string(status.endpointTransitionCompleted);
+        diagnostic["stream"] = std::to_string(status.generation.stream);
+        diagnostic["rendered_stream"] = std::to_string(status.renderedGeneration.stream);
+        diagnostic["format"] = std::to_string(status.generation.format);
+        diagnostic["rendered_format"] = std::to_string(status.renderedGeneration.format);
+        diagnostic["discontinuities"] = std::to_string(snapshot.discontinuities);
+        diagnostic["starvations"] = std::to_string(status.starvationCount);
+        diagnostic["rendered"] = std::to_string(status.renderedFrames);
+        diagnostic["submitted"] = std::to_string(status.submittedFrames);
+        diagnostic["endpoint"] = std::to_string(status.endpointFrames);
+        diagnostic["fence"] = std::to_string(status.transitionFenceFrame);
+        diagnostic["queued"] = static_cast<S32>(status.queuedFrames);
+        diagnostic["reserved"] = static_cast<S32>(status.reservedFrames);
+        diagnostic["engine_state"] = static_cast<S32>(status.state);
+        diagnostic["engine_error"] = static_cast<S32>(status.error);
+        diagnostic["device_failure"] = static_cast<S32>(status.deviceFailure);
+        diagnostic["device_failure_code"] = std::to_string(status.deviceFailureCode);
+        diagnostic["vlc_status"] = static_cast<S32>(mVlcStatus);
+        diagnostic["buffering"] = mBuffering.load();
+        diagnostic["gain"] = status.currentGain;
+        diagnostic["transition"] = status.currentTransition;
+        diagnostic["target"] = mTransitionTarget;
+        diagnostic["duration"] = mGainDuration;
+        diagnostic["elapsed"] = mTransitionCommand ?
+            std::chrono::duration<double>(std::chrono::steady_clock::now() - mTransitionStarted).count() : 0.;
+        diagnostic["muted"] = status.hardMuted;
+        diagnostic["device_started"] = status.deviceStarted;
+        diagnostic["endpoint_qualified"] = status.endpointQualified;
+        message.setValueLLSD("diagnostic", diagnostic);
+    }
     sendMessage(message);
 }
 
@@ -1222,6 +1280,10 @@ void MediaPluginLibVLC::receiveMessage(const char* message_string)
                 }
 #endif
                 mURL = message_in.getValue("uri");
+                const S32 layout = message_in.getValueLLSD("speaker_fill").isInteger() ?
+                    message_in.getValueS32("speaker_fill") : 0;
+                mMusicSpeakerFill = message_in.getValue("audio_role") == "music" &&
+                    (layout == 21 || layout == 41 || layout == 51 || layout == 71) ? layout : 0;
                 playMedia();
             }
         }

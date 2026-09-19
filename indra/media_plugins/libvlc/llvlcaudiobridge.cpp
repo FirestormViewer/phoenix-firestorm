@@ -365,7 +365,7 @@ Result PluginAudio::apply(const Request& request)
     case Kind::Flush:
     {
         if (mGeneration.stream == std::numeric_limits<std::uint64_t>::max()) return Result::StaleGeneration;
-        const auto result = mEngine.flush({mGeneration.stream + 1, mGeneration.format});
+        const auto result = mEngine.flush({mGeneration.stream + 1, mGeneration.format}, request.preserveTransition);
         if (result == Result::Ok) { ++mGeneration.stream; mPendingDrain = 0; }
         return result;
     }
@@ -505,6 +505,7 @@ void PluginAudio::run()
             {
                 Request discontinuity;
                 discontinuity.kind = Kind::Flush;
+                discontinuity.preserveTransition = true;
                 result = apply(discontinuity);
                 if (result == Result::Ok)
                 {

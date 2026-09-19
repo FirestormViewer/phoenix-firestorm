@@ -27,6 +27,12 @@ enum class Result
     EndOfStream, Stopped, DeviceError, ResamplerError, PtsDiscontinuity
 };
 enum class State { Closed, Priming, Playing, Starving, Paused, Drained, Stopped, Error };
+enum class DeviceFailure : std::uint32_t
+{
+    None, Notification, Timeline, Submission, FrameOverflow, UnexpectedStop,
+    ClockService, ClockFrequency, StreamLatency, Padding, ClockPosition,
+    GetBuffer, ReleaseBuffer, Start, Wait
+};
 
 struct Generation
 {
@@ -55,6 +61,8 @@ struct Status
 {
     State state = State::Closed;
     Result error = Result::Ok;
+    DeviceFailure deviceFailure = DeviceFailure::None;
+    std::uint32_t deviceFailureCode = 0;
     Generation generation{};
     Generation renderedGeneration{};
     OutputMode outputMode = OutputMode::Wasapi;
@@ -110,7 +118,7 @@ public:
     Result transition(float target, double durationSeconds, std::uint64_t commandId) noexcept;
     Result pause() noexcept;
     Result resume() noexcept;
-    Result flush(Generation nextGeneration) noexcept;
+    Result flush(Generation nextGeneration, bool preserveTransition = false) noexcept;
     Result drain() noexcept;
     Result spatialDirection(float right, float forward) noexcept;
     Result stop() noexcept;

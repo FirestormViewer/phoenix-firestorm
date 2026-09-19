@@ -227,6 +227,18 @@ void AudioProtocolObject::test<11>()
         probe.pending(0.f);
         auto failed = probe.state("1", "0", "failed");
         failed.setValue("detail", detail);
+        LLSD diagnostic = LLSD::emptyMap();
+        diagnostic["expected_transition"] = "18446744073709551615";
+        diagnostic["completed_transition"] = "0";
+        diagnostic["queued"] = 1024;
+        diagnostic["gain"] = .5;
+        diagnostic["endpoint_qualified"] = true;
+        diagnostic["device_failure"] = 10;
+        diagnostic["device_failure_code"] = "2148880388";
+        diagnostic["stream"] = "invalid\ntext";
+        diagnostic["reserved"] = "not_numeric";
+        diagnostic["unknown"] = "must_not_be_logged";
+        failed.setValueLLSD("diagnostic", diagnostic);
         probe.receiveAudioState(probe.state("0", "0", "failed"));
         ensure("stale failure ignored", probe.audioTransitionResult() == Result::Pending);
         probe.receiveAudioState(failed);
@@ -241,6 +253,38 @@ void AudioProtocolObject::test<11>()
         probe.receiveAudioState(failed);
         ensure("old failure cannot poison replacement", probe.audioTransitionResult() == Result::Pending);
     }
+}
+
+template<> template<>
+void AudioProtocolObject::test<13>()
+{
+    media.setAudioRole("music");
+    const auto load = [&]()
+    {
+        media.loadURI("https://example.invalid/music");
+        LLPluginMessage message;
+        do { message = media.take(); } while (message.getName() != "load_uri");
+        return message;
+    };
+    ensure("speaker fill absent by default", load().getValueLLSD("speaker_fill").isUndefined());
+    for (const S32 layout : {21, 41, 51, 71})
+    {
+        media.setMusicSpeakerFill(layout);
+        const auto enabled = load();
+        ensure("integer layout", enabled.getValueLLSD("speaker_fill").isInteger());
+        ensure_equals("explicit layout", enabled.getValueS32("speaker_fill"), layout);
+        ensure_equals("music-only role", enabled.getValue("audio_role"), "music");
+    }
+    media.setMusicSpeakerFill(0);
+    ensure("disable restores baseline message", load().getValueLLSD("speaker_fill").isUndefined());
+    media.setMusicSpeakerFill(99);
+    ensure("invalid layout bypasses fill", load().getValueLLSD("speaker_fill").isUndefined());
+    media.setMusicSpeakerFill(51);
+    media.setAudioRole("object");
+    ensure("object media never upmixed", load().getValueLLSD("speaker_fill").isUndefined());
+    media.reset();
+    media.setAudioRole("music");
+    ensure("reset clears opt-in", load().getValueLLSD("speaker_fill").isUndefined());
 }
 
 template<> template<>

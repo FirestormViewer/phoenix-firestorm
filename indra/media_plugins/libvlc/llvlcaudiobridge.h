@@ -62,6 +62,7 @@ private:
         float forward = 1.f;
         double seconds = 0.;
         bool mute = false;
+        bool preserveTransition = false;
         std::array<std::int16_t, 1024 * MaxChannels> pcm{};
     };
     struct Context

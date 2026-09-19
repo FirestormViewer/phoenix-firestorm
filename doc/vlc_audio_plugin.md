@@ -1,5 +1,124 @@
 # VLC plugin PCM integration
 
+## Active VLC-native speaker-fill implementation (2026-09-19)
+
+This section supersedes the PCM implementation history below. The operator
+accepted VLC-native music and effects: stereo with sound-card surround off,
+all speakers with it on. Production `media_plugin_libvlc` has
+`LL_VLC_PCM_AUDIO=0`; the custom PCM device/bridge is not linked into it.
+
+`FSMusicSpatialSound` is a persisted Windows-only integer option exposed as
+**Spatial sound** in the **Sounds** tab of Sound & Media preferences, beneath
+Output device. Choices are Stereo (0, default), 2.1 (21), 4.1 (41), 5.1 (51)
+and 7.1 (71). It applies at the next parcel-music stream start, not to effects
+or voice. Stereo sends no speaker-fill options
+and uses the original packaged VLC modules. Object media and video are not
+opted in. Avoid enabling both software fill and sound-card surround processing.
+
+Enabled music selects VLC's `mmdevice` output with the explicit
+`speakerfill_output,none` backend and the `speakerfill` audio filter. These are
+separate module DLLs; no packaged VLC binary is overwritten. The output module
+is built from hash-checked VLC 3.0.21 `wasapi.c`, `mmdevice.h`, and `vlc_codecs.h`
+using `prepare_speakerfill.cmake`. Its playback, timing, pause, flush and stop
+functions are unchanged upstream code, not the rejected custom WASAPI loop.
+The existing VLC MMDevice owner continues managing device changes and recovery.
+
+### Player option ownership correction
+
+The initial listening acceptance was withdrawn: with sound-card surround off,
+music remained front-only. The initial implementation attached output/filter
+options to the media item, but VLC 3.0.21 creates its audio output under the
+media player, which also owns an initially empty `audio-filter` variable.
+Those media options did not configure that owner.
+
+`llvlcspeakerfillconfig` now sets the filter, output variant and layout on the
+player before `libvlc_audio_output_set` recreates the MMDevice output. This
+uses the bundled VLC core variable API and the audited 3.0.21 player prefix
+(`VLC_COMMON_MEMBERS`), guarded by compile-time and runtime version checks.
+Stereo mode does not touch these variables. Missing modules or configuration
+failure do not silently masquerade as enabled speaker-fill.
+
+The device-free harness creates actual libVLC media/player objects, demonstrates
+that per-media options leave the player filter empty, and verifies the production
+helper's inherited output/filter/layout values. After this correction, the
+operator confirmed: "Sound output nominal across speakers with soundcard
+surround off." Software speaker-fill therefore passes the listening test on
+that setup; this does not qualify every selectable layout or device recovery.
+
+The added negotiation applies only to ordinary stereo on non-headphone
+endpoints. It uses the selected endpoint's mix format rate and sample type,
+requesting the chosen layout only when its speaker mask fits the endpoint.
+4.1 and 5.1 accept rear or side speaker pairs. Unsupported selections and
+rejected multichannel formats fall back to source-layout negotiation.
+A successful output initialization
+publishes a fill mask only if the final negotiated layout matches the request. The filter
+inherits that mask; stereo/headphone/unknown layouts and native multichannel
+sources bypass filling. Failed property/mix-format queries leave source-layout
+negotiation unchanged. A failed initialization does not publish a fill mask.
+
+The filter uses float PCM and VLC's channel order. Left/right feed corresponding
+main speakers at 0.70710678 gain; the center receives their average. Synthesized
+LFE is zero. Source multichannel audio is untouched, including authored LFE.
+PCM frame counts, rate, timestamps, duration and block flags are preserved;
+there is no extra device, queue, timer or presentation clock in the filter.
+
+### Build and verification
+
+Windows builds additionally require an x64 Windows GNU C compiler for the
+unchanged GNU C VLC module (validated with LLVM-MinGW 22.1.8). Set
+`VLC_MODULE_CC` if it is not on PATH. Sources are fetched once over HTTPS,
+SHA-256 checked, and cached in the build tree. The packaged VLC 3.0.21 plugin
+SDK and core import library supply the matching ABI. Dependency source and
+the transformation are included under `llplugin/speakerfill-source`.
+
+`vlc_speakerfill_test` loads both actual DLL entry points and confirms real
+libVLC module discovery without opening a device. It tests negotiated speaker
+masks against fake IMMDevice/IAudioClient interfaces, headphone/query-failure
+bypass, initialization-failure cleanup, actual filter samples, LFE silence,
+native multichannel passthrough and timing metadata. The protocol test verifies
+default Stereo, all four music-only multichannel selections, invalid-selection
+bypass, disable and reset behavior. The operator's listening acceptance is
+recorded above. Exhaustive physical layout, long-playback and device-recovery
+testing remain open.
+
+## Timestamp recovery retry (2026-09-18)
+
+The diagnostic physical run captured 28 timestamp-recovery flushes followed by
+`transition_clock_timeout_retry_or_stop` at 13.0067 seconds. The plugin awaited
+transition 5, but recovery had cleared its consumed/completed IDs to zero.
+
+At the operator's request, the first fix is restored: only internally generated
+timestamp-recovery flushes preserve transition identity and fade progress.
+Completion and endpoint fences are cleared and established again for the new
+PCM generation. Ordinary flushes and handovers still invalidate transitions.
+The second, sample-count timeline alternative is not included; timestamp checks
+and the watchdog remain unchanged. Plugin failure snapshots remain enabled.
+
+The bridge regression fails without the fix and passes with it. Engine tests
+cover recovery completion and ordinary-flush invalidation. Physical playback
+acceptance after reapplying the fix remains pending; the operator suspects the
+reboot resolved the earlier no-sound issue, but that attribution is unverified.
+
+### Retry outcome and backend diagnostics
+
+The subsequent rebooted test failed: music was choppy, then cut out, and the
+operator reported no effects or music afterward. The first snapshot reported
+`audio_device_error`, 67 timestamp flushes, transition 5 consumed/completed,
+and an unqualified endpoint. This is not the earlier lost-ID timeout. Later
+retries reported the same failed engine state. The effects failure is not yet
+attributed; its successful startup log is not proof of continued playback.
+
+Backend diagnostics now retain the first failure location and native result
+atomically, without logging from the audio callback or changing error policy.
+The failure snapshot includes `device_failure` and unsigned decimal
+`device_failure_code` (HRESULT for API calls, wait result or GetLastError for
+wait failures). Locations follow `DeviceFailure`: 1 notification, 2 timeline
+validation, 3 submission validation, 4 frame overflow, 5 unexpected stop,
+6 clock service, 7 frequency, 8 latency, 9 padding, 10 clock position,
+11 GetBuffer, 12 ReleaseBuffer, 13 Start, 14 wait. Zero means no instrumented
+location was captured. Reopening resets the record; later failures cannot
+overwrite the first one. This is instrumentation, not an accepted playback fix.
+
 ## Current integrated contract (2026-09-18)
 
 This section supersedes the archived agent handoff below. Sole-owner integration

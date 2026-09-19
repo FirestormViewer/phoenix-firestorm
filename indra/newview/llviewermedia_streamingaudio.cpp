@@ -29,6 +29,7 @@
 #include "llpluginclassmedia.h"
 #include "llpluginclassmediaowner.h"
 #include "llviewermedia.h"
+#include "llviewercontrol.h"
 
 #include "llviewermedia_streamingaudio.h"
 
@@ -85,6 +86,9 @@ void LLStreamingAudio_MediaPlugins::start(const std::string& url)
             // People label their streams this way, ignore the 'label'.
             snt_url = snt_url.substr(0, pos);
         }
+    #if LL_WINDOWS
+        mMediaPlugin->setMusicSpeakerFill(gSavedSettings.getS32("FSMusicSpatialSound"));
+    #endif
         if (mPendingFade)
         {
             mMediaPlugin->loadURI(snt_url, mFadeTarget, mFadeDuration);

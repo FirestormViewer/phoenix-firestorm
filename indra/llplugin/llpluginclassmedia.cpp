@@ -170,6 +170,7 @@ void LLPluginClassMedia::reset()
     mAudioURI.clear();
     mAudioStopped = true;
     mAudioState.clear();
+    mMusicSpeakerFill = 0;
     mAudioTransitionComplete = false;
     mAudioGain = 0.f;
     mAudioHardMute = false;
@@ -836,6 +837,11 @@ void LLPluginClassMedia::loadURI(const std::string& uri, F32 audio_target, F32 a
 
     message.setValue("uri", uri);
     if (!mAudioRole.empty()) message.setValue("audio_generation", std::to_string(mAudioGeneration));
+    if (mAudioRole == "music" && mMusicSpeakerFill)
+    {
+        message.setValue("audio_role", "music");
+        message.setValueS32("speaker_fill", mMusicSpeakerFill);
+    }
 
     sendMessage(message);
 }
@@ -1758,6 +1764,36 @@ void LLPluginClassMedia::receiveAudioState(const LLPluginMessage& message)
         return;
     }
     if (mAudioState == "failed" || mAudioState == "cancelled") return;
+    if (state == "failed")
+    {
+        std::string detail = message.getValue("detail");
+        if (detail.empty() || detail.size() > 96 ||
+            detail.find_first_not_of("abcdefghijklmnopqrstuvwxyz0123456789_") != std::string::npos)
+            detail = "invalid_audio_failure_detail";
+        LL_WARNS("MediaAudio") << "VLC PCM failure: " << detail
+            << " generation=" << mAudioGeneration << " serial=" << mAudioSerial << LL_ENDL;
+        const LLSD diagnostic = message.getValueLLSD("diagnostic");
+        if (diagnostic.isMap())
+        {
+            std::ostringstream values;
+            for (const char* field : {"expected_transition", "consumed_transition", "completed_transition",
+                "endpoint_transition", "stream", "rendered_stream", "format", "rendered_format",
+                "discontinuities", "starvations", "rendered", "submitted", "endpoint", "fence", "device_failure_code"})
+            {
+                const auto value = diagnostic[field].asString();
+                if (!value.empty() && value.size() <= 20 && value.find_first_not_of("0123456789") == std::string::npos)
+                    values << ' ' << field << '=' << value;
+            }
+            for (const char* field : {"queued", "reserved", "engine_state", "engine_error", "device_failure", "vlc_status",
+                "buffering", "gain", "transition", "target", "duration", "elapsed"})
+                if (diagnostic[field].isInteger() || diagnostic[field].isReal())
+                    values << ' ' << field << '=' << diagnostic[field].asReal();
+            for (const char* field : {"muted", "device_started", "endpoint_qualified"})
+                if (diagnostic[field].isBoolean())
+                    values << ' ' << field << '=' << diagnostic[field].asBoolean();
+            LL_WARNS("MediaAudio") << "VLC PCM failure snapshot:" << values.str() << LL_ENDL;
+        }
+    }
     mAudioState = state;
     if (mAudioSerial != 0 && message.getValue("serial") == std::to_string(mAudioSerial) &&
         ((mAudioTransitionTarget == 0.f && state == "silent") ||

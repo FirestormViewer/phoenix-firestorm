@@ -605,6 +605,25 @@ void testConcurrent()
 
 void testIndependentTransition()
 {
+    {
+        AudioEngine recovery;
+        check(recovery.configure(Role::Music, {}, {1, 1}, headless()) == Result::Ok, "recovery configure");
+        check(recovery.transition(0.f, .01, 1) == Result::Ok, "recovery transition");
+        float output[960]{};
+        render(recovery, output, 240);
+        check(recovery.flush({2, 1}, true) == Result::Ok, "timestamp recovery flush");
+        render(recovery, output, 241);
+        check(recovery.status().transitionCompleted == 1, "timestamp recovery must retain transition identity");
+        const auto status = recovery.status();
+        check(status.endpointTransitionCompleted == 0, "recovery must await a new endpoint fence");
+        check(recovery.advanceHeadlessEndpoint(status.generation, status.transitionFenceFrame) == Result::Ok,
+            "recovery endpoint consumes target");
+        check(recovery.status().endpointTransitionCompleted == 1, "recovery transition acknowledged");
+        check(recovery.flush({3, 1}) == Result::Ok, "ordinary flush");
+        render(recovery, output, 1);
+        check(recovery.status().transitionConsumed == 0 && recovery.status().transitionCompleted == 0,
+            "ordinary flush still invalidates transitions");
+    }
     AudioEngine engine;
     check(engine.configure(Role::Music, {}, {1, 1}, headless()) == Result::Ok, "transition configure");
     enqueue(engine, std::vector<std::int16_t>(4096 * 2, 16384), 2);
@@ -739,10 +758,12 @@ void testEndpointTimeline()
       if (failure == 2) ++observation.frequency;
       if (failure == 3) observation.paddingFrames = 10000;
       check(engine.observeHeadlessEndpoint({2, 1}, observation) == Result::DeviceError, "bad clock/padding fails explicitly");
+    check(engine.status().deviceFailure == DeviceFailure::Timeline, "clock failure location retained");
       check(engine.status().state == State::Error && !engine.status().endpointQualified &&
           !engine.status().endpointTransitionCompleted, "endpoint failure is not success");
       const auto oldEpoch = observation.deviceEpoch;
       check(engine.configure(Role::Music, {}, {3, 2}, headless()) == Result::Ok, "explicit device reopen");
+    check(engine.status().deviceFailure == DeviceFailure::None, "reopen resets failure diagnostic");
       check(engine.status().deviceEpoch > oldEpoch, "reopen renews device epoch");
       check(engine.observeHeadlessEndpoint({3, 2}, observation) == Result::StaleGeneration, "old device cannot complete reopened stream");
       check(engine.stop() == Result::Ok && !engine.status().endpointQualified, "teardown invalidates physical qualification");
@@ -752,6 +773,11 @@ void testEndpointTimeline()
     check(failedSubmission.transition(0.f, 0., 1) == Result::Ok, "failed submission transition");
     float output[64]{};
     check(failedSubmission.render(output, 32, false) == Result::DeviceError, "failed ReleaseBuffer model");
+    check(failedSubmission.status().deviceFailure == DeviceFailure::Submission, "submission failure location retained");
+    const EndpointObservation invalidObservation{};
+    check(failedSubmission.observeHeadlessEndpoint({1, 1}, invalidObservation) != Result::Ok,
+        "failed endpoint remains failed");
+    check(failedSubmission.status().deviceFailure == DeviceFailure::Submission, "first failure is not overwritten");
     check(failedSubmission.status().submittedFrames == 0 && failedSubmission.status().transitionCompleted == 1 &&
           !failedSubmission.status().endpointTransitionCompleted, "rendered but failed submission never completes");
         AudioEngine saturated;
