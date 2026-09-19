@@ -957,6 +957,19 @@ class Windows_x86_64_Manifest(ViewerManifest):
                 self.path("libvlccore.dll")
                 self.path("plugins/")
 
+            with self.prefix(dst="plugins/audio_filter"):
+                self.path2basename("../media_plugins/libvlc/" + self.args['configuration'],
+                                   "libspeakerfill_plugin.dll")
+            with self.prefix(dst="plugins/audio_output"):
+                self.path2basename("../media_plugins/libvlc/" + self.args['configuration'],
+                                   "libspeakerfill_output_plugin.dll")
+            with self.prefix(dst="speakerfill-source"):
+                self.path(src="../media_plugins/libvlc/speakerfill-source/", dst="upstream")
+                self.path(src="../media_plugins/libvlc/prepare_speakerfill.cmake", dst="prepare_speakerfill.cmake")
+                self.path(src="../media_plugins/libvlc/vlc_speakerfill.cpp", dst="vlc_speakerfill.cpp")
+                self.path(src="../../doc/vlc_audio_plugin.md", dst="README.md")
+                self.path(src="../../doc/LGPL-license.txt", dst="COPYING.LIB")
+
         if not self.is_packaging_viewer():
             self.package_file = "copied_deps"
 

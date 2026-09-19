@@ -29,11 +29,13 @@
 #include "llpluginclassmedia.h"
 #include "llpluginclassmediaowner.h"
 #include "llviewermedia.h"
+#include "llviewercontrol.h"
 
 #include "llviewermedia_streamingaudio.h"
 
 #include "llmimetypes.h"
 #include "lldir.h"
+#include <cmath>
 
 // <FS> Icecast status sidechannel
 #include "llaudioengine.h"
@@ -84,7 +86,18 @@ void LLStreamingAudio_MediaPlugins::start(const std::string& url)
             // People label their streams this way, ignore the 'label'.
             snt_url = snt_url.substr(0, pos);
         }
-        mMediaPlugin->loadURI(snt_url);
+    #if LL_WINDOWS
+        mMediaPlugin->setMusicSpeakerFill(gSavedSettings.getS32("FSMusicSpatialSound"));
+    #endif
+        if (mPendingFade)
+        {
+            mMediaPlugin->loadURI(snt_url, mFadeTarget, mFadeDuration);
+            mPendingFade = false;
+        }
+        else
+        {
+            mMediaPlugin->loadURI(snt_url);
+        }
         mMediaPlugin->start();
         LL_INFOS() << "Playing stream..." << LL_ENDL;
     }
@@ -92,20 +105,22 @@ void LLStreamingAudio_MediaPlugins::start(const std::string& url)
     {
         LL_INFOS() << "setting stream to NULL"<< LL_ENDL;
         mURL.clear();
-        mMediaPlugin->stop();
-        delete mMediaPlugin;
-        mMediaPlugin = nullptr;
+        stop();
     }
 }
 
 void LLStreamingAudio_MediaPlugins::stop()
 {
+    mPendingFade = false;
     LL_INFOS() << "Stopping internet stream." << LL_ENDL;
     if(mMediaPlugin)
     {
         mMediaPlugin->stop();
-        delete mMediaPlugin;
-        mMediaPlugin = nullptr;
+        if (!mMediaPlugin->audioControlsAvailable() || mMediaPlugin->isPluginExited())
+        {
+            delete mMediaPlugin;
+            mMediaPlugin = nullptr;
+        }
     }
 
     mURL.clear();
@@ -145,6 +160,13 @@ int LLStreamingAudio_MediaPlugins::isPlaying()
     if (!mMediaPlugin)
         return 0; // stopped
 
+    if (mMediaPlugin->audioControlsAvailable())
+    {
+        if (mMediaPlugin->isAudioPaused())
+            return 2;
+        return mMediaPlugin->isAudioPlaying() ? 1 : 0;
+    }
+
     LLPluginClassMediaOwner::EMediaStatus status =
         mMediaPlugin->getStatus();
 
@@ -168,7 +190,56 @@ void LLStreamingAudio_MediaPlugins::setGain(F32 vol)
         return;
 
     vol = llclamp(vol, 0.f, 1.f);
-    mMediaPlugin->setVolume(vol);
+    if (mMediaPlugin->audioControlsAvailable())
+        mMediaPlugin->setAudioGain(vol, mHardMuted);
+    else
+        mMediaPlugin->setVolume(vol);
+}
+
+bool LLStreamingAudio_MediaPlugins::hasAudioFade() const
+{
+    return !mMediaPlugin || mMediaPlugin->audioControlsAvailable();
+}
+
+bool LLStreamingAudio_MediaPlugins::beginAudioFade(F32 target, F32 duration)
+{
+    if (!hasAudioFade() || !std::isfinite(target) || !std::isfinite(duration) ||
+        target < 0.f || target > 1.f || duration < 0.f || duration > 60.f)
+        return false;
+    mFadeTarget = target;
+    mFadeDuration = duration;
+    if (!mMediaPlugin || mURL.empty())
+    {
+        mPendingFade = true;
+        return true;
+    }
+    return mMediaPlugin->transitionAudio(target, duration);
+}
+
+bool LLStreamingAudio_MediaPlugins::isAudioFadeComplete() const
+{
+    return getAudioFadeResult() == AudioFadeResult::Complete;
+}
+
+LLStreamingAudioInterface::AudioFadeResult LLStreamingAudio_MediaPlugins::getAudioFadeResult() const
+{
+    if (!mMediaPlugin) return mPendingFade ? AudioFadeResult::Pending : AudioFadeResult::Cancelled;
+    if (mMediaPlugin->isPluginExited()) return AudioFadeResult::Cancelled;
+    switch (mMediaPlugin->audioTransitionResult())
+    {
+    case LLPluginClassMedia::AudioTransitionResult::Complete: return AudioFadeResult::Complete;
+    case LLPluginClassMedia::AudioTransitionResult::Failed: return AudioFadeResult::Failed;
+    case LLPluginClassMedia::AudioTransitionResult::Cancelled: return mPendingFade ? AudioFadeResult::Pending : AudioFadeResult::Cancelled;
+    case LLPluginClassMedia::AudioTransitionResult::Pending: return AudioFadeResult::Pending;
+    }
+    return AudioFadeResult::Failed;
+}
+
+void LLStreamingAudio_MediaPlugins::setAudioHardMute(bool muted)
+{
+    mHardMuted = muted;
+    if (mMediaPlugin && mMediaPlugin->audioControlsAvailable())
+        mMediaPlugin->setAudioGain(llclamp(mGain, 0.f, 1.f), muted);
 }
 
 F32 LLStreamingAudio_MediaPlugins::getGain()
@@ -190,6 +261,8 @@ LLPluginClassMedia* LLStreamingAudio_MediaPlugins::initializeMedia(const std::st
 
     if (media_source)
     {
+        media_source->setAudioRole("music");
+        media_source->setAudioGain(llclamp(mGain, 0.f, 1.f), mHardMuted);
         media_source->setLoop(false); // audio streams are not expected to loop
     }
 

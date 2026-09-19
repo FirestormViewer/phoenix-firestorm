@@ -70,6 +70,7 @@ public:
 private:
 
     bool mDone;
+    bool mBackendFade = false;
     F32 mFadeTime;
     std::string mNextStreamURI;
     EFadeState mFadeState;

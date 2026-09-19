@@ -32,6 +32,8 @@
 #include "llpluginclassmedia.h"
 #include "llpluginmessageclasses.h"
 #include "llcontrol.h"
+#include <cmath>
+#include <limits>
 
 extern LLControlGroup gSavedSettings;
 #if LL_DARWIN
@@ -164,6 +166,17 @@ void LLPluginClassMedia::reset()
     mDuration = 0.0f;
     mCurrentRate = 0.0f;
     mLoadedDuration = 0.0f;
+    mAudioRole.clear();
+    mAudioURI.clear();
+    mAudioStopped = true;
+    mAudioState.clear();
+    mMusicSpeakerFill = 0;
+    mAudioTransitionComplete = false;
+    mAudioGain = 0.f;
+    mAudioHardMute = false;
+    mAudioRight = 0.f;
+    mAudioForward = 1.f;
+    mSendQueue = std::queue<LLPluginMessage>();
 }
 
 void LLPluginClassMedia::idle(void)
@@ -284,7 +297,7 @@ void LLPluginClassMedia::idle(void)
         {
             LLPluginMessage message = mSendQueue.front();
             mSendQueue.pop();
-            mPlugin->sendMessage(message);
+            sendMessage(message);
         }
     }
 }
@@ -778,9 +791,57 @@ void LLPluginClassMedia::setCookie(std::string uri, std::string name, std::strin
 
 void LLPluginClassMedia::loadURI(const std::string &uri)
 {
+    loadURI(uri, 1.f, -1.f);
+}
+
+void LLPluginClassMedia::loadURI(const std::string& uri, F32 audio_target, F32 audio_duration)
+{
+    if (!mAudioRole.empty())
+    {
+        if (mAudioGeneration == std::numeric_limits<U64>::max())
+        {
+            mAudioStopped = true;
+            mAudioState = "failed";
+            return;
+        }
+        ++mAudioGeneration;
+        mAudioURI = uri;
+        mAudioStopped = false;
+        mAudioSerial = 0;
+        mAudioTransitionTarget = 1.f;
+        mAudioTransitionComplete = false;
+        mAudioState = "priming";
+        LLPluginMessage configure(LLPLUGIN_MESSAGE_CLASS_MEDIA_AUDIO, "configure");
+        configure.setValue("role", mAudioRole);
+        configure.setValue("generation", std::to_string(mAudioGeneration));
+        sendMessage(configure);
+        sendAudioGain();
+        if (mAudioRole == "object")
+        {
+            LLPluginMessage spatial(LLPLUGIN_MESSAGE_CLASS_MEDIA_AUDIO, "spatial");
+            spatial.setValue("generation", std::to_string(mAudioGeneration));
+            spatial.setValueReal("right", mAudioRight);
+            spatial.setValueReal("forward", mAudioForward);
+            sendMessage(spatial);
+        }
+        if (audio_duration >= 0.f)
+        {
+            transitionAudio(0.f, 0.f);
+            transitionAudio(audio_target, audio_duration);
+            LLPluginMessage legacy(LLPLUGIN_MESSAGE_CLASS_MEDIA_TIME, "set_volume");
+            legacy.setValueReal("volume", 0.0);
+            sendMessage(legacy);
+        }
+    }
     LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "load_uri");
 
     message.setValue("uri", uri);
+    if (!mAudioRole.empty()) message.setValue("audio_generation", std::to_string(mAudioGeneration));
+    if (mAudioRole == "music")
+    {
+        message.setValue("audio_role", "music");
+        if (mMusicSpeakerFill) message.setValueS32("speaker_fill", mMusicSpeakerFill);
+    }
 
     sendMessage(message);
 }
@@ -1031,6 +1092,13 @@ void LLPluginClassMedia::setTarget(const std::string &target)
 void LLPluginClassMedia::receivePluginMessage(const LLPluginMessage &message)
 {
     std::string message_class = message.getClass();
+
+    if (message_class == LLPLUGIN_MESSAGE_CLASS_MEDIA_AUDIO)
+    {
+        if (pluginSupportsMediaAudio())
+            receiveAudioState(message);
+        return;
+    }
 
     if(message_class == LLPLUGIN_MESSAGE_CLASS_MEDIA)
     {
@@ -1419,6 +1487,15 @@ void LLPluginClassMedia::sendMessage(const LLPluginMessage &message)
 {
     if(mPlugin && mPlugin->isRunning())
     {
+        if (message.getClass() == LLPLUGIN_MESSAGE_CLASS_MEDIA_AUDIO && !pluginSupportsMediaAudio())
+        {
+            return;
+        }
+        if (!mAudioRole.empty() && pluginSupportsMediaAudio() &&
+            message.getClass() == LLPLUGIN_MESSAGE_CLASS_MEDIA_TIME && message.getName() == "set_volume")
+        {
+            return;
+        }
         mPlugin->sendMessage(message);
     }
     else
@@ -1590,12 +1667,22 @@ bool LLPluginClassMedia::pluginSupportsMediaTime(void)
 
 void LLPluginClassMedia::stop()
 {
+    mAudioStopped = true;
+    mAudioTransitionComplete = false;
     LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_TIME, "stop");
     sendMessage(message);
 }
 
 void LLPluginClassMedia::start(float rate)
 {
+    if (!mAudioRole.empty() && mAudioStopped && !mAudioURI.empty())
+    {
+        loadURI(mAudioURI);
+        if (mAudioStopped)
+            return;
+    }
+    if (audioControlsAvailable() && mAudioState == "paused")
+        mAudioState = "priming";
     LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_TIME, "start");
 
     message.setValueReal("rate", rate);
@@ -1605,6 +1692,8 @@ void LLPluginClassMedia::start(float rate)
 
 void LLPluginClassMedia::pause()
 {
+    if (audioControlsAvailable() && !mAudioStopped)
+        mAudioState = "paused";
     LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_TIME, "pause");
     sendMessage(message);
 }
@@ -1630,6 +1719,11 @@ void LLPluginClassMedia::setLoop(bool loop)
 
 void LLPluginClassMedia::setVolume(float volume)
 {
+    if (audioControlsAvailable())
+    {
+        setAudioGain(volume, false);
+        return;
+    }
     if(volume != mRequestedVolume)
     {
         mRequestedVolume = volume;
@@ -1645,6 +1739,180 @@ void LLPluginClassMedia::setVolume(float volume)
 float LLPluginClassMedia::getVolume()
 {
     return mRequestedVolume;
+}
+
+bool LLPluginClassMedia::pluginSupportsMediaAudio() const
+{
+    return mPlugin && (mPlugin->getMessageClassVersion(LLPLUGIN_MESSAGE_CLASS_MEDIA_AUDIO) ==
+        LLPLUGIN_MESSAGE_CLASS_MEDIA_AUDIO_VERSION ||
+        (mAudioRole == "music" && mPlugin->getMessageClassVersion("media_music") == "1.0"));
+}
+
+void LLPluginClassMedia::receiveAudioState(const LLPluginMessage& message)
+{
+    if (mAudioRole.empty() || mAudioStopped || !mAudioGeneration || message.getName() != "state" ||
+        !message.getValueLLSD("generation").isString() ||
+        !message.getValueLLSD("serial").isString() ||
+        message.getValue("generation") != std::to_string(mAudioGeneration) ||
+        (message.getValue("serial") != "0" && message.getValue("serial") != std::to_string(mAudioSerial)))
+    {
+        return;
+    }
+    const std::string state = message.getValue("state");
+    if (state != "priming" && state != "running" && state != "buffering" &&
+        state != "paused" && state != "drained" && state != "failed" && state != "silent" && state != "cancelled")
+    {
+        return;
+    }
+    if (mAudioState == "failed" || mAudioState == "cancelled") return;
+    if (state == "failed")
+    {
+        std::string detail = message.getValue("detail");
+        if (detail.empty() || detail.size() > 96 ||
+            detail.find_first_not_of("abcdefghijklmnopqrstuvwxyz0123456789_") != std::string::npos)
+            detail = "invalid_audio_failure_detail";
+        LL_WARNS("MediaAudio") << "VLC PCM failure: " << detail
+            << " generation=" << mAudioGeneration << " serial=" << mAudioSerial << LL_ENDL;
+        const LLSD diagnostic = message.getValueLLSD("diagnostic");
+        if (diagnostic.isMap())
+        {
+            std::ostringstream values;
+            for (const char* field : {"expected_transition", "consumed_transition", "completed_transition",
+                "endpoint_transition", "stream", "rendered_stream", "format", "rendered_format",
+                "discontinuities", "starvations", "rendered", "submitted", "endpoint", "fence", "device_failure_code"})
+            {
+                const auto value = diagnostic[field].asString();
+                if (!value.empty() && value.size() <= 20 && value.find_first_not_of("0123456789") == std::string::npos)
+                    values << ' ' << field << '=' << value;
+            }
+            for (const char* field : {"queued", "reserved", "engine_state", "engine_error", "device_failure", "vlc_status",
+                "buffering", "gain", "transition", "target", "duration", "elapsed"})
+                if (diagnostic[field].isInteger() || diagnostic[field].isReal())
+                    values << ' ' << field << '=' << diagnostic[field].asReal();
+            for (const char* field : {"muted", "device_started", "endpoint_qualified"})
+                if (diagnostic[field].isBoolean())
+                    values << ' ' << field << '=' << diagnostic[field].asBoolean();
+            LL_WARNS("MediaAudio") << "VLC PCM failure snapshot:" << values.str() << LL_ENDL;
+        }
+    }
+    mAudioState = state;
+    if (mAudioSerial != 0 && message.getValue("serial") == std::to_string(mAudioSerial) &&
+        ((mAudioTransitionTarget == 0.f && state == "silent") ||
+         (mAudioTransitionTarget != 0.f && state == "running")))
+    {
+        mAudioTransitionComplete = true;
+    }
+}
+
+LLPluginClassMedia::AudioTransitionResult LLPluginClassMedia::audioTransitionResult() const
+{
+    if (mAudioStopped || mAudioState == "cancelled") return AudioTransitionResult::Cancelled;
+    if (mAudioState == "failed") return AudioTransitionResult::Failed;
+    return mAudioTransitionComplete ? AudioTransitionResult::Complete : AudioTransitionResult::Pending;
+}
+
+bool LLPluginClassMedia::audioControlsAvailable() const
+{
+    return !mAudioRole.empty() && mPlugin &&
+        (mPlugin->isLoading() || pluginSupportsMediaAudio());
+}
+
+bool LLPluginClassMedia::isAudioPlaying() const
+{
+    return !mAudioStopped && !(mPlugin && mPlugin->isDone()) &&
+        mAudioState != "paused" && mAudioState != "drained" && mAudioState != "failed" && mAudioState != "cancelled";
+}
+
+bool LLPluginClassMedia::isAudioPaused() const
+{
+    return !mAudioStopped && mAudioState == "paused";
+}
+
+void LLPluginClassMedia::setAudioRole(const std::string& role)
+{
+    if (role.empty() || role == "music" || role == "object" || role == "nonpositional")
+    {
+        mAudioRole = role;
+    }
+}
+
+void LLPluginClassMedia::sendAudioGain()
+{
+    LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_AUDIO, "set_gain");
+    message.setValue("generation", std::to_string(mAudioGeneration));
+    message.setValueReal("target", mAudioGain);
+    message.setValueReal("duration", 0.0);
+    message.setValueBoolean("hard_mute", mAudioHardMute);
+    sendMessage(message);
+
+    LLPluginMessage legacy(LLPLUGIN_MESSAGE_CLASS_MEDIA_TIME, "set_volume");
+    legacy.setValueReal("volume", mAudioHardMute ? 0.f : mAudioGain);
+    sendMessage(legacy);
+}
+
+void LLPluginClassMedia::setAudioGain(F32 target, bool hard_mute)
+{
+    if (!std::isfinite(target))
+    {
+        return;
+    }
+    target = llclamp(target, 0.f, 1.f);
+    if (target == mAudioGain && hard_mute == mAudioHardMute)
+    {
+        return;
+    }
+    mAudioGain = target;
+    mRequestedVolume = target;
+    mAudioHardMute = hard_mute;
+    if (mAudioGeneration != 0)
+    {
+        sendAudioGain();
+    }
+}
+
+void LLPluginClassMedia::setAudioSpatial(F32 right, F32 forward)
+{
+    const F32 length = std::hypot(right, forward);
+    if (!std::isfinite(length) || length <= 0.f || mAudioRole != "object")
+    {
+        return;
+    }
+    right /= length;
+    forward /= length;
+    if (right == mAudioRight && forward == mAudioForward)
+    {
+        return;
+    }
+    mAudioRight = right;
+    mAudioForward = forward;
+    if (mAudioGeneration != 0)
+    {
+        LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_AUDIO, "spatial");
+        message.setValue("generation", std::to_string(mAudioGeneration));
+        message.setValueReal("right", right);
+        message.setValueReal("forward", forward);
+        sendMessage(message);
+    }
+}
+
+bool LLPluginClassMedia::transitionAudio(F32 target, F32 duration)
+{
+    if (!audioControlsAvailable() || !mAudioGeneration || !std::isfinite(target) ||
+        !std::isfinite(duration) || target < 0.f || target > 1.f || duration < 0.f || duration > 60.f ||
+        mAudioSerial == std::numeric_limits<U64>::max())
+    {
+        return false;
+    }
+    ++mAudioSerial;
+    mAudioTransitionTarget = target;
+    mAudioTransitionComplete = false;
+    LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_AUDIO, "transition");
+    message.setValue("generation", std::to_string(mAudioGeneration));
+    message.setValueReal("target", target);
+    message.setValueReal("duration", duration);
+    message.setValue("serial", std::to_string(mAudioSerial));
+    sendMessage(message);
+    return true;
 }
 
 void LLPluginClassMedia::initializeUrlHistory(const LLSD& url_history)

@@ -848,6 +848,10 @@ bool LLFloaterPreference::postBuild()
     // </FS:Ansariel>
 
     // <FS:Ansariel> Disable options only available on Windows and not on other platforms
+#if !LL_WINDOWS
+    childSetVisible("FSMusicSpatialSound", false);
+    childSetVisible("spatial_sound_label", false);
+#endif
 #ifndef LL_WINDOWS
     childSetEnabled("FSDisableWMIProbing", false);
 #endif

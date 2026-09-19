@@ -54,6 +54,7 @@
 #include "llurldispatcher.h"
 #include "lluuid.h"
 #include "llversioninfo.h"
+#include "llviewercamera.h"
 #include "llviewermediafocus.h"
 #include "llviewercontrol.h"
 #include "llviewermenufile.h" // LLFilePickerThread
@@ -1965,6 +1966,11 @@ bool LLViewerMediaImpl::initializePlugin(const std::string& media_type)
 
     if (media_source)
     {
+        if (mMimeType.compare(0, 6, "audio/") == 0)
+        {
+            media_source->setAudioRole(!mObjectList.empty() && !mObjectList.front()->isHUDAttachment()
+                ? "object" : "nonpositional");
+        }
         media_source->injectOpenIDCookie();
         media_source->setDisableTimeout(gSavedSettings.getBOOL("DebugPluginDisableTimeout"));
         media_source->setLoop(mMediaLoop);
@@ -2019,6 +2025,10 @@ void LLViewerMediaImpl::loadURI()
             LL_INFOS() << "Asking media source to load URI: " << sanitized_uri << LL_ENDL;
         }
 
+        mMediaSource->setAudioRole(mMimeType.compare(0, 6, "audio/") == 0
+            ? (!mObjectList.empty() && !mObjectList.front()->isHUDAttachment() ? "object" : "nonpositional")
+            : "");
+        updateVolume();
         mMediaSource->loadURI( uri );
 
         // A non-zero mPreviousMediaTime means that either this media was previously unloaded by the priority code while playing/paused,
@@ -2233,7 +2243,28 @@ void LLViewerMediaImpl::updateVolume()
             }
         }
 
-        if (sOnlyAudibleTextureID == LLUUID::null || sOnlyAudibleTextureID == mTextureId)
+        const bool audible = sOnlyAudibleTextureID == LLUUID::null || sOnlyAudibleTextureID == mTextureId;
+        if (mMediaSource->audioControlsAvailable())
+        {
+            const bool hard_mute = !audible || mIsMuted || mRequestedVolume == 0.f ||
+                gSavedSettings.getBOOL("MuteAudio") || gSavedSettings.getBOOL("MuteMedia") ||
+                (!gViewerWindow->getActive() && gSavedSettings.getBOOL("MuteWhenMinimized"));
+            mMediaSource->setAudioGain(volume, hard_mute);
+            if (!mObjectList.empty() && !mObjectList.front()->isHUDAttachment())
+            {
+                static LLUICachedControl<S32> ear_location("MediaSoundsEarLocation", 0);
+                const LLVector3d ear_position = ear_location == 1
+                    ? gAgent.getPositionGlobal() : gAgentCamera.getCameraPositionGlobal();
+                LLVector3 direction;
+                direction.setVec(mObjectList.front()->getPositionGlobal() - ear_position);
+                F32 right = -(direction * LLViewerCamera::getInstance()->getLeftAxis());
+                F32 forward = direction * LLViewerCamera::getInstance()->getAtAxis();
+                if (right == 0.f && forward == 0.f)
+                    forward = 1.f;
+                mMediaSource->setAudioSpatial(right, forward);
+            }
+        }
+        else if (audible)
         {
             mMediaSource->setVolume(volume);
         }
@@ -3305,6 +3336,10 @@ bool LLViewerMediaImpl::isMediaPlaying()
 
     if(mMediaSource)
     {
+        if (mMediaSource->audioControlsAvailable())
+        {
+            return mMediaSource->isAudioPlaying();
+        }
         EMediaStatus status = mMediaSource->getStatus();
         if(status == MEDIA_PLAYING || status == MEDIA_LOADING)
             result = true;
@@ -3319,6 +3354,8 @@ bool LLViewerMediaImpl::isMediaPaused()
 
     if(mMediaSource)
     {
+        if (mMediaSource->audioControlsAvailable())
+            return mMediaSource->isAudioPaused();
         if(mMediaSource->getStatus() == MEDIA_PAUSED)
             result = true;
     }

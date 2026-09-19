@@ -48,6 +48,7 @@
 #include "llstreamingaudio.h"
 
 #include "llvoavatarself.h"
+#include <cmath>
 
 /////////////////////////////////////////////////////////
 const U32 FMODEX_DECODE_BUFFER_SIZE = 1000; // in milliseconds
@@ -111,6 +112,9 @@ void LLViewerAudio::startInternetStreamWithAutoFade(const std::string &streamURI
     // <FS:Ansariel> Optional audio stream fading
     if (!gSavedSettings.getBOOL("FSFadeAudioStream"))
     {
+        mDone = true;
+        mBackendFade = false;
+        mFadeState = FADE_IDLE;
         gAudiop->startInternetStream(mNextStreamURI);
         return;
     }
@@ -134,6 +138,7 @@ void LLViewerAudio::startInternetStreamWithAutoFade(const std::string &streamURI
             if (stream && stream->supportsAdjustableBufferSizes())
                 stream->setBufferSizes(FMODEX_STREAM_BUFFER_SIZE, FMODEX_DECODE_BUFFER_SIZE);
 
+            startFading();
             gAudiop->startInternetStream(mNextStreamURI);
         }
 
@@ -160,6 +165,24 @@ void LLViewerAudio::startInternetStreamWithAutoFade(const std::string &streamURI
 bool LLViewerAudio::onIdleUpdate()
 {
     bool fadeIsFinished = false;
+    LLStreamingAudioInterface* stream = gAudiop ? gAudiop->getStreamingAudioImpl() : nullptr;
+    if (mBackendFade && stream)
+    {
+        const auto result = stream->getAudioFadeResult();
+        if (result == LLStreamingAudioInterface::AudioFadeResult::Failed ||
+            result == LLStreamingAudioInterface::AudioFadeResult::Cancelled)
+        {
+            LL_WARNS("AudioEngine") << "Audio transition failed or was cancelled; hard stopping without fade acknowledgement" << LL_ENDL;
+            mNextStreamURI.clear();
+            mFadeState = FADE_IDLE;
+            mDone = true;
+            mBackendFade = false;
+            gAudiop->stopInternetStream();
+            deregisterIdleListener();
+            return true;
+        }
+    }
+    getFadeVolume();
 
     // There is a delay in the login sequence between when the parcel information has
     // arrived and the music stream is started and when the audio system is called to set
@@ -201,6 +224,7 @@ bool LLViewerAudio::onIdleUpdate()
                     if(stream && stream->supportsAdjustableBufferSizes())
                         stream->setBufferSizes(FMODEX_STREAM_BUFFER_SIZE, FMODEX_DECODE_BUFFER_SIZE);
 
+                    startFading();
                     gAudiop->startInternetStream(mNextStreamURI);
                 }
 
@@ -238,10 +262,26 @@ void LLViewerAudio::stopInternetStreamWithAutoFade()
     if (!gSavedSettings.getBOOL("FSFadeAudioStream"))
     {
         mNextStreamURI = LLStringUtil::null;
-        gAudiop->stopInternetStream();
+        mFadeState = FADE_IDLE;
+        mDone = true;
+        mBackendFade = false;
+        if (gAudiop)
+            gAudiop->stopInternetStream();
         return;
     }
     // </FS:Ansariel>
+
+    if (gAudiop && gAudiop->getStreamingAudioImpl() &&
+        gAudiop->getStreamingAudioImpl()->hasAudioFade() && !gAudiop->getInternetStreamURL().empty())
+    {
+        if (mFadeState != FADE_OUT)
+            mDone = true;
+        mFadeState = FADE_OUT;
+        mNextStreamURI.clear();
+        startFading();
+        registerIdleListener();
+        return;
+    }
 
     mFadeState = FADE_IDLE;
     mNextStreamURI = LLStringUtil::null;
@@ -274,8 +314,13 @@ void LLViewerAudio::startFading()
             AUDIO_MUSIC_FADE_OUT_TIME : AUDIO_MUSIC_FADE_IN_TIME;
 
         // Prevent invalid fade time
+        if (!std::isfinite(mFadeTime))
+            mFadeTime = AUDIO_MUSIC_MINIMUM_FADE_TIME;
         mFadeTime = llmax(mFadeTime, AUDIO_MUSIC_MINIMUM_FADE_TIME);
 
+        LLStreamingAudioInterface* stream = gAudiop ? gAudiop->getStreamingAudioImpl() : nullptr;
+        mBackendFade = stream && stream->beginAudioFade(mFadeState == FADE_OUT ? 0.f : 1.f,
+            llclamp(mFadeTime, AUDIO_MUSIC_MINIMUM_FADE_TIME, 60.f));
         stream_fade_timer.reset();
         stream_fade_timer.setTimerExpirySec(mFadeTime);
         mDone = false;
@@ -284,6 +329,26 @@ void LLViewerAudio::startFading()
 
 F32 LLViewerAudio::getFadeVolume()
 {
+    if (mFadeState == FADE_IDLE)
+    {
+        mBackendFade = false;
+        return 1.f;
+    }
+    LLStreamingAudioInterface* stream = gAudiop ? gAudiop->getStreamingAudioImpl() : nullptr;
+    if (mBackendFade)
+    {
+        if (stream && (stream->getAudioFadeResult() == LLStreamingAudioInterface::AudioFadeResult::Failed ||
+                   stream->getAudioFadeResult() == LLStreamingAudioInterface::AudioFadeResult::Cancelled))
+            return 1.f;
+        if (stream && stream->hasAudioFade())
+        {
+            mDone = stream->isAudioFadeComplete();
+            return 1.f;
+        }
+        mBackendFade = false;
+        stream_fade_timer.reset();
+        stream_fade_timer.setTimerExpirySec(mFadeTime);
+    }
     F32 fade_volume = 1.0f;
 
     if (stream_fade_timer.hasExpired())
@@ -526,8 +591,17 @@ void audio_update_volume(bool force_update)
 
         F32 fade_volume = LLViewerAudio::getInstance()->getFadeVolume();
 
-        F32 music_volume = mute_volume * master_volume * al_music() * fade_volume;
-        gAudiop->setInternetStreamGain (mute_music() ? 0.f : music_volume);
+        LLStreamingAudioInterface* stream = gAudiop->getStreamingAudioImpl();
+        if (stream && stream->hasAudioFade())
+        {
+            stream->setAudioHardMute(mute_audio || mute_music());
+            gAudiop->setInternetStreamGain(master_volume * al_music());
+        }
+        else
+        {
+            F32 music_volume = mute_volume * master_volume * al_music() * fade_volume;
+            gAudiop->setInternetStreamGain (mute_music() ? 0.f : music_volume);
+        }
     }
 
     // Streaming Media
