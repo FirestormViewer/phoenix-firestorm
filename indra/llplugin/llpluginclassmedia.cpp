@@ -837,10 +837,10 @@ void LLPluginClassMedia::loadURI(const std::string& uri, F32 audio_target, F32 a
 
     message.setValue("uri", uri);
     if (!mAudioRole.empty()) message.setValue("audio_generation", std::to_string(mAudioGeneration));
-    if (mAudioRole == "music" && mMusicSpeakerFill)
+    if (mAudioRole == "music")
     {
         message.setValue("audio_role", "music");
-        message.setValueS32("speaker_fill", mMusicSpeakerFill);
+        if (mMusicSpeakerFill) message.setValueS32("speaker_fill", mMusicSpeakerFill);
     }
 
     sendMessage(message);
@@ -1743,8 +1743,9 @@ float LLPluginClassMedia::getVolume()
 
 bool LLPluginClassMedia::pluginSupportsMediaAudio() const
 {
-    return mPlugin && mPlugin->getMessageClassVersion(LLPLUGIN_MESSAGE_CLASS_MEDIA_AUDIO) ==
-        LLPLUGIN_MESSAGE_CLASS_MEDIA_AUDIO_VERSION;
+    return mPlugin && (mPlugin->getMessageClassVersion(LLPLUGIN_MESSAGE_CLASS_MEDIA_AUDIO) ==
+        LLPLUGIN_MESSAGE_CLASS_MEDIA_AUDIO_VERSION ||
+        (mAudioRole == "music" && mPlugin->getMessageClassVersion("media_music") == "1.0"));
 }
 
 void LLPluginClassMedia::receiveAudioState(const LLPluginMessage& message)

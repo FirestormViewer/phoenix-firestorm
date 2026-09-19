@@ -28,6 +28,67 @@ endfunction()
 
 speakerfill_replace("#include <vlc_common.h>" "#define N_(text) text\n#include <winsock2.h>\nstatic inline int poll(struct pollfd *descriptors, unsigned count, int timeout)\n{ return WSAPoll(descriptors, count, timeout); }\n#include <vlc_common.h>")
 speakerfill_replace("#include <audioclient.h>" "#include <audioclient.h>\n#include <mmdeviceapi.h>\n#include <functiondiscoverykeys_devpkey.h>")
+speakerfill_replace("    UINT64 written; /**< Frames written to the buffer */" [=[
+  UINT64 written; /**< Frames written to the buffer */
+  vlc_object_t *music_owner;
+  vlc_tick_t music_tail;
+]=])
+speakerfill_replace("    sys->client = NULL;" [=[
+  sys->client = NULL;
+  sys->music_tail = 0;
+  sys->music_owner = VLC_OBJECT(s);
+  while (sys->music_owner && var_Type(sys->music_owner, "music-fade-command") != VLC_VAR_INTEGER)
+    sys->music_owner = sys->music_owner->obj.parent;
+  if (sys->music_owner)
+  {
+    var_SetInteger(sys->music_owner, "music-clock-pts", 0);
+    var_SetInteger(sys->music_owner, "music-clock-error", 0);
+    var_SetInteger(sys->music_owner, "music-clock-epoch",
+             var_GetInteger(sys->music_owner, "music-clock-epoch") + 1);
+  }
+]=])
+speakerfill_replace("    return hr;\n}\n\nstatic HRESULT Play" [=[
+  if (sys->music_owner && sys->music_tail > 0 && *delay < sys->music_tail)
+    var_SetInteger(sys->music_owner, "music-clock-pts", sys->music_tail - (*delay > 0 ? *delay : 0));
+  return hr;
+}
+
+static HRESULT Play
+]=])
+speakerfill_replace("    if (sys->chans_to_reorder)" [=[
+  const vlc_tick_t music_tail = block->i_pts + block->i_length;
+  if (sys->chans_to_reorder)
+]=])
+speakerfill_replace("out:\n    block_Release(block);" [=[
+out:
+  if (sys->music_owner)
+  {
+    if (SUCCEEDED(hr) && block->i_nb_samples == 0)
+      sys->music_tail = music_tail;
+    else
+      var_SetInteger(sys->music_owner, "music-clock-error", 1);
+  }
+  block_Release(block);
+]=])
+speakerfill_replace("        sys->written = 0;" [=[
+    sys->written = 0;
+    sys->music_tail = 0;
+    if (sys->music_owner)
+    {
+      var_SetInteger(sys->music_owner, "music-clock-pts", 0);
+      var_SetInteger(sys->music_owner, "music-clock-epoch",
+               var_GetInteger(sys->music_owner, "music-clock-epoch") + 1);
+    }
+]=])
+speakerfill_replace("    IAudioClient_Stop(sys->client); /* should not be needed */" [=[
+  if (sys->music_owner)
+  {
+    var_SetInteger(sys->music_owner, "music-clock-pts", 0);
+    var_SetInteger(sys->music_owner, "music-clock-epoch",
+             var_GetInteger(sys->music_owner, "music-clock-epoch") + 1);
+  }
+  IAudioClient_Stop(sys->client); /* should not be needed */
+]=])
 speakerfill_replace("static HRESULT Start(aout_stream_t *s," [=[
 static bool SpeakerFillEligible(aout_stream_t *stream)
 {

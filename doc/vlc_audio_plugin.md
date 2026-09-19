@@ -11,16 +11,17 @@ all speakers with it on. Production `media_plugin_libvlc` has
 **Spatial sound** in the **Sounds** tab of Sound & Media preferences, beneath
 Output device. Choices are Stereo (0, default), 2.1 (21), 4.1 (41), 5.1 (51)
 and 7.1 (71). It applies at the next parcel-music stream start, not to effects
-or voice. Stereo sends no speaker-fill options
-and uses the original packaged VLC modules. Object media and video are not
+or voice. Stereo sends no speaker-fill layout options and uses the original
+VLC output backend, with the music-gain filter described below. Object media and video are not
 opted in. Avoid enabling both software fill and sound-card surround processing.
 
 Enabled music selects VLC's `mmdevice` output with the explicit
 `speakerfill_output,none` backend and the `speakerfill` audio filter. These are
 separate module DLLs; no packaged VLC binary is overwritten. The output module
 is built from hash-checked VLC 3.0.21 `wasapi.c`, `mmdevice.h`, and `vlc_codecs.h`
-using `prepare_speakerfill.cmake`. Its playback, timing, pause, flush and stop
-functions are unchanged upstream code, not the rejected custom WASAPI loop.
+using `prepare_speakerfill.cmake`. Its playback and timing algorithms remain
+upstream VLC code, with progress reporting added for native fades below; this
+is not the rejected custom WASAPI loop.
 The existing VLC MMDevice owner continues managing device changes and recovery.
 
 ### Player option ownership correction
@@ -35,7 +36,8 @@ Those media options did not configure that owner.
 player before `libvlc_audio_output_set` recreates the MMDevice output. This
 uses the bundled VLC core variable API and the audited 3.0.21 player prefix
 (`VLC_COMMON_MEMBERS`), guarded by compile-time and runtime version checks.
-Stereo mode does not touch these variables. Missing modules or configuration
+Stereo mode does not enable channel expansion. Native music fades now use the
+output variant for playback-progress reporting even in Stereo. Missing modules or configuration
 failure do not silently masquerade as enabled speaker-fill.
 
 The device-free harness creates actual libVLC media/player objects, demonstrates
@@ -80,6 +82,68 @@ default Stereo, all four music-only multichannel selections, invalid-selection
 bypass, disable and reset behavior. The operator's listening acceptance is
 recorded above. Exhaustive physical layout, long-playback and device-recovery
 testing remain open.
+
+### Native duration fades (2026-09-19)
+
+The 50 ms smoothing-only attempt below failed operator listening acceptance.
+It joined frame-timed targets but did not control the complete fade timeline.
+
+Windows VLC now advertises the music-only `media_music: 1.0` capability. The
+viewer sends its existing generation/serial-tagged configure, user gain/mute,
+and full-duration transition messages; object media remains on its existing
+path. The retired custom PCM capability is not enabled. Native transitions
+disable the viewer's frame-based fade multiplier and completion timer through
+the existing backend-fade interface.
+
+The filter applies a separate transition envelope sample by sample from its
+current value to the commanded target over the requested duration. One packed
+control value publishes serial, milliseconds and target together. User volume
+retains the cubic curve and short smoothing; mute gates samples independently.
+Initial zero and pending fade-in commands are installed before decoding.
+
+The final target sample publishes a scheduled PTS fence and output epoch.
+The VLC output variant records successful block submission and reports the
+last submitted PTS end minus VLC's existing `TimeGet` queued delay, clamped
+to the submitted tail. The plugin acknowledges only the matching command
+after that reported playback position reaches the fence. Flush/stop epochs
+invalidate old fences; output errors cannot acknowledge success. This is VLC
+playback-clock completion, not an acoustic guarantee or the former custom
+physical-endpoint contract. There is no new device loop or clock extrapolator.
+No progress beyond duration plus 30 seconds reports failure, not completion.
+
+Tests exercise one three-second command without viewer updates, exact final
+samples across block boundaries, independent volume/mute, stale command/epoch
+rejection, and the actual VLC DLL `Play`, `TimeGet`, `Flush` and `Stop` functions
+against fake render/clock interfaces. The operator confirmed on 2026-09-19:
+"This crossfade fix works. Stream transition is smooth." Transition listening
+acceptance passes on the tested setup; this does not qualify every device or
+establish overlapping, gapless playback of two streams.
+
+### Superseded smoothing-only attempt (2026-09-19)
+
+The operator accepted software surround but reported stepped stream fades.
+Native playback had restored the legacy frame-timed volume updates, truncated
+to integer VLC percentages and also applied through waveOut volume.
+
+Windows parcel music now identifies its role even with Spatial sound set to
+Stereo. The VLC filter receives a floating-point gain target from the player,
+retaining VLC's cubic volume curve without integer-percent quantization. Each
+new target is joined from the current gain by a 50 ms linear per-sample ramp,
+including continuous retargeting and exact zero. Initial gain is set before
+decoding. The filter handles gain in place when no channel expansion is needed;
+the accepted speaker routing is unchanged. VLC output and the legacy Windows
+session-volume workaround are set to unity on setup/playing, not updated with
+each fade step. Object media/video retain their existing volume path.
+
+This attempt removed gain discontinuities, not the viewer's fade scheduler: transition
+duration and stream stop/start still use the viewer timer. There is up to 50 ms
+of smoothing lag plus VLC's queued audio, and no new endpoint-completion claim
+or gapless/crossfade guarantee. Low frame rates and queued fade tails remain
+listening-test risks. This change is not the rejected custom PCM output.
+
+Actual-DLL tests cover sub-percent targets, 2/6/8 channels, 1/37/512-frame
+partitions, interrupted ramps, initial gain and exact zero. Physical fade
+smoothness has not yet been accepted.
 
 ## Timestamp recovery retry (2026-09-18)
 
