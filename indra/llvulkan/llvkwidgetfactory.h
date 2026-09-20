@@ -249,8 +249,9 @@ public:
     };
     explicit LLVKWidgetFactory(Defaults defaults);
     LLVKWidgetFactory(Defaults defaults, IconDefaults iconDefaults);
+    LLVKWidgetFactory(Defaults defaults, IconDefaults iconDefaults, ButtonDefaults buttonDefaults, Callbacks callbacks);
     LLVKWidgetFactory(Defaults defaults, IconDefaults iconDefaults, ButtonDefaults buttonDefaults, Callbacks callbacks,
-                       Resources resources = {}, PanelDefaults panelDefaults = {}, LineEditorDefaults lineDefaults = {}, CheckBoxDefaults checkDefaults = {});
+                       Resources resources, PanelDefaults panelDefaults = {}, LineEditorDefaults lineDefaults = {}, CheckBoxDefaults checkDefaults = {});
     bool loadDefaults(const LLVKWidgetTree& tree, std::string_view xml, std::string& error);
     void setSkinFiles(std::shared_ptr<LLVKSkinFiles> skin) { mResources.skinFiles=std::move(skin); }
     const std::function<void(LLVKWidgetTree::Id)>& helpHandler() const { return mResources.helpHandler; }

@@ -3230,6 +3230,11 @@ LLVKWidgetFactory::LLVKWidgetFactory(Defaults defaults, IconDefaults iconDefault
     : mDefaults(std::move(defaults)), mIconDefaults(std::move(iconDefaults)) {}
 
 LLVKWidgetFactory::LLVKWidgetFactory(Defaults defaults, IconDefaults iconDefaults,
+        ButtonDefaults buttonDefaults, Callbacks callbacks)
+    : LLVKWidgetFactory(std::move(defaults), std::move(iconDefaults),
+        std::move(buttonDefaults), std::move(callbacks), Resources{}) {}
+
+LLVKWidgetFactory::LLVKWidgetFactory(Defaults defaults, IconDefaults iconDefaults,
         ButtonDefaults buttonDefaults, Callbacks callbacks, Resources resources, PanelDefaults panelDefaults, LineEditorDefaults lineDefaults, CheckBoxDefaults checkDefaults)
         : mDefaults(std::move(defaults)), mIconDefaults(std::move(iconDefaults)),
             mButtonDefaults(std::move(buttonDefaults)), mCallbacks(std::move(callbacks)), mResources(std::move(resources)),
