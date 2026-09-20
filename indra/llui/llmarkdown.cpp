@@ -28,6 +28,7 @@
 #include "linden_common.h"
 
 #include "llmarkdown.h"
+#include <string_view>
 
 namespace
 {
@@ -43,6 +44,64 @@ namespace
     char byteAt(const std::string& text, size_t pos)
     {
         return pos < text.size() ? text[pos] : '\0';
+    }
+
+    bool isEmoticonEye(std::string_view eye)
+    {
+        // Conventional eye characters, including asymmetric pairs (^_~, o_O).
+        // See doc/markdown_emoticons.md for the reference corpus.
+        constexpr std::string_view ascii_eyes = "^~oO0123456789><-TtUu=+xX;:@*.?QqPpYyEeNn'`/\\";
+        constexpr std::string_view unicode_eyes =
+            "\xe0\xb2\xa0\xe0\xb2\xa5\xc2\xb0\xe3\x83\xbb\xe2\x80\xa2\xc2\xac"
+            "\xe3\x83\xbc\xe4\xb8\x80\xef\xbf\xa3\xef\xbc\xa0\xef\xbc\xbe\xe2\x8a\x99"
+            "\xe2\x98\x89\xe2\x97\x8e\xe2\x95\xa5\xc3\xb2\xc3\xb3\xc3\xb5"
+            "\xc3\xb9\xc3\x94\xc3\x97\xef\xbf\xa2\xe2\x86\x92\xe2\x86\x90"
+            "\xe2\x86\xbc\xe2\x87\x80\xe2\x96\xa1\xce\xbc\xe4\xb8\xaa\xe3\x83\x8e"
+            "\xef\xbe\x89\xe3\x83\xbd\xef\xbc\xbc\xef\xbc\x9e\xef\xbc\x9c\xef\xbc\x8b"
+            "\xcb\x98\xeb\x88\x88\xe2\x97\xa3\xe2\x97\xa2\xe2\x98\x86";
+        return eye.size() == 1 ? ascii_eyes.find(eye) != std::string_view::npos :
+            !eye.empty() && unicode_eyes.find(eye) != std::string_view::npos;
+    }
+
+    size_t emoticonMouthEnd(const std::string& text, size_t pos)
+    {
+        if (text[pos] != '_' || pos == 0 || text[pos - 1] == '_')
+        {
+            return pos;
+        }
+        const size_t end = text.find_first_not_of('_', pos);
+        if (end == std::string::npos)
+        {
+            return pos;
+        }
+        // Locate adjacent UTF-8 characters without changing source byte offsets.
+        size_t left = pos - 1;
+        while (left > 0 && (static_cast<unsigned char>(text[left]) & 0xc0) == 0x80)
+        {
+            --left;
+        }
+        size_t right = end + 1;
+        while (right < text.size() && (static_cast<unsigned char>(text[right]) & 0xc0) == 0x80)
+        {
+            ++right;
+        }
+        const std::string_view view(text);
+        if (!isEmoticonEye(view.substr(left, pos - left)) ||
+            !isEmoticonEye(view.substr(end, right - end)))
+        {
+            return pos;
+        }
+        auto is_letter_or_digit = [](char c)
+        {
+            return isWordByte(c) && c != '_';
+        };
+        // Do not mistake the middle of "photo_order" for an o_o face.
+        if ((is_letter_or_digit(text[left]) && left > 0 && is_letter_or_digit(text[left - 1])) ||
+            (is_letter_or_digit(text[end]) && is_letter_or_digit(byteAt(text, right))))
+        {
+            return pos;
+        }
+        return end;
     }
 
     // CommonMark-flavored left-flanking check for a single '_' at pos:
@@ -95,6 +154,15 @@ LLMarkdown::span_vec_t LLMarkdown::parseEmphasis(const std::string& text, bool e
     };
     std::vector<Match> strong_matches, em_matches;
     literal_ranges_t protected_ranges = literal_ranges;
+    for (size_t offset = 0; offset < text.size(); ++offset)
+    {
+        const size_t end = emoticonMouthEnd(text, offset);
+        if (end > offset)
+        {
+            protected_ranges.emplace_back(offset, end);
+            offset = end - 1;
+        }
+    }
     std::vector<size_t> escaped_underscores;
     auto is_literal = [&protected_ranges](size_t offset)
     {

@@ -43,7 +43,9 @@
 // chat ("2*3*4", emoticons, censoring). Emphasis spans may contain strong
 // spans ("_some **bold** text_" -> italic-bold-italic nesting).
 // An unmatched valid opening delimiter formats through the end of this input.
-// Two consecutive underscores display one literal underscore in either mode.
+// Outside recognized emoticons, two underscores display one literal underscore.
+// Underscores between emoticon eyes (^_^, o_o, 0_0, ^_~, etc.) stay literal
+// in both modes, including extended mouths (^____^), preserving surrounding style.
 //
 // The result is a list of spans that exactly reconstructs the original
 // string when concatenated, with the delimiter runs either marked as
