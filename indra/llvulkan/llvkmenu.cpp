@@ -475,7 +475,16 @@ bool LLVKMenu::key(Key key)
     if (key == Key::Activate)
     {
         if (mFixedRoot) { mKeyboardMode=true; return this->key(Key::Down); }
-        for (auto item : mRoots) if (enabled(item) && mItems[item].branch) { mKeyboardMode=true; activate(item,0); return true; } return false;
+        for (auto item : mRoots)
+        {
+            if (enabled(item) && mItems[item].branch)
+            {
+                mKeyboardMode = true;
+                activate(item,0);
+                return true;
+            }
+        }
+        return false;
     }
     if (!open()) return false;
     mKeyboardMode=true;
