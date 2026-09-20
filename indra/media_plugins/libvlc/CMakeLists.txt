@@ -44,6 +44,7 @@ if (WINDOWS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
       "${SPEAKERFILL_SOURCE_DIR}/speakerfill_output.c" "${VLCCORE_LIBRARY}"
       -lole32 -luuid -lksuser -lwinmm -lws2_32 -o "${SPEAKERFILL_OUTPUT}"
     DEPENDS "${SPEAKERFILL_SOURCE_DIR}/speakerfill_output.c" "${CMAKE_CURRENT_SOURCE_DIR}/prepare_speakerfill.cmake"
+      "${SPEAKERFILL_SOURCE_DIR}/speakerfill_codecs.h"
     VERBATIM)
   add_custom_target(vlc_speakerfill_output DEPENDS "${SPEAKERFILL_OUTPUT}")
   add_library(vlc_speakerfill MODULE vlc_speakerfill.cpp)

@@ -15,6 +15,16 @@ file(MAKE_DIRECTORY "${SPEAKERFILL_SOURCE_DIR}/audio_output")
 speakerfill_source(wasapi.c modules/audio_output/wasapi.c d485ec637ed2891b794734630942d82598be713f95a2c2beb6c3997efa3a4841)
 speakerfill_source(audio_output/mmdevice.h modules/audio_output/mmdevice.h 0dd3863c3e604ac8ca383b309ed44fb4766999c6a213a8a7772afaf9100d8770)
 speakerfill_source(vlc_codecs.h include/vlc_codecs.h 2434807ee1aea805a972aff706f87c79a5440c3cfe9cff5d9bb7e72524a6a68a)
+# Keep the hash-verified upstream header intact for subsequent configurations.
+# MinGW's Windows headers already define PCM as 1; VLC spells it 0x0001.
+file(READ "${SPEAKERFILL_SOURCE_DIR}/vlc_codecs.h" codecs)
+set(pcm_definition "#define WAVE_FORMAT_PCM                 0x0001 /* Microsoft Corporation */")
+string(FIND "${codecs}" "${pcm_definition}" pcm_position)
+if (pcm_position EQUAL -1)
+  message(FATAL_ERROR "VLC speaker-fill PCM definition anchor missing")
+endif ()
+string(REPLACE "${pcm_definition}" "#ifndef WAVE_FORMAT_PCM\n${pcm_definition}\n#endif" codecs "${codecs}")
+file(CONFIGURE OUTPUT "${SPEAKERFILL_SOURCE_DIR}/speakerfill_codecs.h" CONTENT "${codecs}" @ONLY)
 file(READ "${SPEAKERFILL_SOURCE_DIR}/wasapi.c" source)
 
 function(speakerfill_replace before after)
@@ -26,6 +36,7 @@ function(speakerfill_replace before after)
   set(source "${source}" PARENT_SCOPE)
 endfunction()
 
+speakerfill_replace("#include <vlc_codecs.h>" "#include \"speakerfill_codecs.h\"")
 speakerfill_replace("#include <vlc_common.h>" "#define N_(text) text\n#include <winsock2.h>\nstatic inline int poll(struct pollfd *descriptors, unsigned count, int timeout)\n{ return WSAPoll(descriptors, count, timeout); }\n#include <vlc_common.h>")
 speakerfill_replace("#include <audioclient.h>" "#include <audioclient.h>\n#include <mmdeviceapi.h>\n#include <functiondiscoverykeys_devpkey.h>")
 speakerfill_replace("    UINT64 written; /**< Frames written to the buffer */" [=[

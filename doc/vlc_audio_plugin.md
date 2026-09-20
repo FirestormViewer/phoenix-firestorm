@@ -529,3 +529,17 @@ Only owned files changed: plugin source, plugin CMake, private bridge header and
 implementation, the new bridge test, and this document. Engine/header/existing
 tests, viewer/protocol owners, `LibVLCPlugin.cmake`, SoLoud modules and autobuild
 were not edited by this agent.
+### Windows PCM definition compatibility
+
+The speaker-fill preparation script retains the hash-verified VLC 3.0.21
+`vlc_codecs.h` and generates `speakerfill_codecs.h` with an `#ifndef` guard
+around WAVE_FORMAT_PCM. The generated output source includes that adapted
+header. Windows/MinGW's existing definition (1) takes precedence over VLC's
+numerically identical 0x0001 definition, avoiding macro-redefinition warnings
+without suppressing diagnostics or changing audio behavior. The adapted header
+is an explicit plugin build dependency and is included in the staged source tree.
+
+Validation: repeated preparation preserves upstream hashes and produces an
+identical adapted header. The complete output plugin compiles and links with
+LLVM-MinGW with macro-redefinition warnings promoted to errors. Other existing
+VLC header warnings remain outside this correction.
