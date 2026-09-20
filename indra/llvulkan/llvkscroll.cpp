@@ -513,7 +513,7 @@ bool LLVKWidgetTree::updateScrollContainer(Id id, std::string& error)
         if (!error.empty()) return false;
         if (!alive()) return true;
     }
-    for (const auto [bar,documentSize,pageSize] : {
+    for (const auto& [bar,documentSize,pageSize] : {
         std::tuple{state.horizontal,static_cast<std::int32_t>(docWidth),visible->width},
         std::tuple{state.vertical,static_cast<std::int32_t>(docHeight),visible->height}})
     {
@@ -644,7 +644,7 @@ bool LLVKWidgetTree::finishScrollResize(Id id, std::string& error)
     const auto visible = LLVKScrollLayout::visible(params,error);
     if (!visible) return false;
     if (visible->width < 0 || visible->height < 0) { error = "Native resized scroll page cannot be negative"; return false; }
-    for (const auto [bar,documentSize,pageSize] : {
+    for (const auto& [bar,documentSize,pageSize] : {
         std::tuple{state.vertical,params.documentHeight,visible->height},
         std::tuple{state.horizontal,params.documentWidth,visible->width}})
     {
