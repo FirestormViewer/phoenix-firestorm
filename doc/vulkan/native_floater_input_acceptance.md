@@ -204,5 +204,13 @@ renderer confirmation. The immediate native notification callback is unchanged.
 The operator reports floater dropdowns operational in the branch build. Prior
 widget validation passed 213/213 with the actual Preferences language dropdown.
 After worktree relocation, CMake regeneration completed successfully with
-RelWithDebInfo and PACKAGE=OFF; the viewer rebuild is in progress at checkpoint.
+RelWithDebInfo and PACKAGE=OFF. The viewer rebuild and copy-only runtime staging
+subsequently completed with exit 0; the executable timestamp is 2026-09-20
+21:57:19 local time. Evidence: build-vc170-64/renderer-dialog-build.log.
 The duplicate-confirmation removal has not yet been exercised interactively.
+
+Post-build operator acceptance, 2026-09-20: the operator explicitly reconfirmed
+that floater dropdowns work. Record this as operator-verified dropdown selection,
+not full UI visual parity or verification of the renderer shutdown flow. The
+implementation checkpoint was merged through PR #51; this follow-up only records
+the completed build and acceptance evidence.
