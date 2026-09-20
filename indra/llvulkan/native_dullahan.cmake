@@ -116,10 +116,10 @@ foreach(source dullahan_browser_client.cpp dullahan_callback_manager.cpp
         "${CMAKE_CURRENT_BINARY_DIR}/native_${source}" COPYONLY)
     list(APPEND native_dullahan_sources "${CMAKE_CURRENT_BINARY_DIR}/native_${source}")
 endforeach()
-add_library(llvk_dullahan STATIC ${native_dullahan_sources})
-target_include_directories(llvk_dullahan SYSTEM PRIVATE
+add_library(vkdullahan STATIC ${native_dullahan_sources})
+target_include_directories(vkdullahan SYSTEM PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}"
     "${llvk_cef_headers_SOURCE_DIR}" "${llvk_cef_headers_SOURCE_DIR}/include"
     "${CMAKE_CURRENT_BINARY_DIR}" "${llvk_dullahan_source_SOURCE_DIR}/src")
-target_link_libraries(llvk_dullahan PRIVATE libcef.lib libcef_dll_wrapper.lib)
-target_compile_options(llvk_dullahan PRIVATE /W0)
+target_link_libraries(vkdullahan PRIVATE libcef.lib libcef_dll_wrapper.lib)
+target_compile_options(vkdullahan PRIVATE /W0)
