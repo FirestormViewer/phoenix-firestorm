@@ -6926,30 +6926,39 @@ void LLViewerWindow::initTextures(S32 location_id)
     }
 }
 
+// <FS:Zi> Fade teleport screens
+//void LLViewerWindow::setShowProgress(const bool show)
+//{
+//    if (mProgressView)
+//    {
+//        mProgressView->setVisible(show);
+//    }
+//}
 void LLViewerWindow::setShowProgress(const bool show, bool fullscreen)
 {
-    if(show)
+    if (show)
     {
-        if(fullscreen)
+        if (mProgressViewMini && !fullscreen)
+            mProgressViewMini->setVisible(true);
+
+        if (mProgressView)
         {
-            if(mProgressView)
+            if (LLAppViewer::instance()->quitRequested())
+                mProgressView->setVisible(true); // Fix pink screen when quitting the viewer
+            else if (fullscreen)
                 mProgressView->fade(true);
-        }
-        else
-        {
-            if(mProgressViewMini)
-                mProgressViewMini->setVisible(true);
         }
     }
     else
     {
-        if(mProgressView && mProgressView->getVisible())
+        if (mProgressView && mProgressView->getVisible())
             mProgressView->fade(false);
 
-        if(mProgressViewMini)
+        if (mProgressViewMini)
             mProgressViewMini->setVisible(false);
     }
 }
+// </FS:Zi>
 
 void LLViewerWindow::setStartupComplete()
 {

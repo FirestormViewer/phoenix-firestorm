@@ -325,7 +325,10 @@ public:
     void            moveCursorToCenter();                               // move to center of window
 
     void            initTextures(S32 location_id);
+    // <FS:Zi> Fade teleport screens
+    //void            setShowProgress(const bool show);
     void            setShowProgress(const bool show, bool fullscreen);
+    // </FS:Zi>
     bool            getShowProgress() const;
     void            setProgressString(const std::string& string);
     void            setProgressPercent(const F32 percent);
