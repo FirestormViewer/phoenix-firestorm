@@ -551,4 +551,129 @@ namespace tut
         ensure_roundtrip(url, spans);
         ensure_equals("protected URL", signature(spans), "P");
     }
+
+    template<> template<>
+    void markdown_object::test<44>()
+    {
+        for (const std::string face : {"^_^", "o_o", "0_0", "^_~", "o_O",
+                                      "O_o", "T_T", "u_u", "-_-", ">_<", "@_@", "*_*"})
+        {
+            const std::string input = "hello (" + face + ")!";
+            ensure_equals("normal face " + face, signature(parse(input)), "P");
+            const auto emote = LLMarkdown::parseEmphasis(input, true);
+            ensure_roundtrip(input, emote);
+            ensure_equals("emote face " + face, signature(emote), "O");
+            ensure_equals("visible face " + face, LLMarkdown::stripEmphasisDelimiters(input), input);
+            ensure_equals("visible emote face " + face, LLMarkdown::stripEmphasisDelimiters(input, true), input);
+        }
+    }
+
+    template<> template<>
+    void markdown_object::test<45>()
+    {
+        ensure_equals("italic face", signature(parse("_^_^_")), "dId");
+        ensure_equals("visible italic face", LLMarkdown::stripEmphasisDelimiters("_o_o_"), "o_o");
+        ensure_equals("bold face", LLMarkdown::stripEmphasisDelimiters("**^_~**"), "^_~");
+        ensure_equals("punctuation eyes beside words", signature(parse("hello^_^there")), "P");
+        ensure_equals("word is not a face", signature(LLMarkdown::parseEmphasis("photo_order", true)), "OeF");
+        const std::string input = "smiles ^_^_ hi o_o _waves ^_~";
+        const auto spans = LLMarkdown::parseEmphasis(input, true);
+        ensure_roundtrip(input, spans);
+        ensure_equals("faces preserve emote toggles", signature(spans), "OeFeO");
+        ensure_equals("spoken face", spans[2].mText, " hi o_o ");
+        ensure_equals("visible emote", LLMarkdown::stripEmphasisDelimiters(input, true),
+            "smiles ^_^ hi o_o waves ^_~");
+    }
+    template<> template<>
+    void markdown_object::test<46>()
+    {
+        // Published reference corpus: see doc/markdown_emoticons.md.
+        for (const std::string face : {
+            "Q_Q",
+            ";_;",
+            ":_;",
+            ";_:",
+            "'_'",
+            "/_;",
+            "._.",
+            "<_<",
+            ">_>",
+            "?_?",
+            "+_+",
+            "X_X",
+            "x_X",
+            "=_=",
+            "~_~",
+            "^_-",
+            "p_-",
+            "-_q",
+            "e_e",
+            "n_n",
+            "Y_Y",
+            "^_^;",
+            "(^_^)/",
+            "(-_-)zzz",
+            "((d[-_-]b))",
+            "(??_??)",
+            "(--_--)",
+            "^__^",
+            "^_________^",
+            "o___O",
+            "\xe0\xb2\xa0_\xe0\xb2\xa0",
+            "\xe0\xb2\xa0__\xe0\xb2\xa0",
+            "\xe0\xb2\xa5_\xe0\xb2\xa5",
+            "\xc2\xb0_\xc2\xb0",
+            "\xe3\x83\xbb_\xe3\x83\xbb",
+            "\xc2\xac_\xc2\xac",
+            "\xe3\x83\xbc_\xe3\x83\xbc",
+            "\xef\xbf\xa3_\xef\xbf\xa3",
+            "\xef\xbc\xa0_\xef\xbc\xa0",
+            "\xe2\x8a\x99_\xe2\x8a\x99",
+            "\xe2\x8a\x99_\xe2\x98\x89",
+            "\xe2\x95\xa5_\xe2\x95\xa5",
+            "\xc3\xb2_\xc3\xb3",
+            "\xc3\xb3_\xc3\xb2",
+            "\xc3\xb5_o",
+            "\xc3\xb9_u",
+            "o_\xc3\x94",
+            "\xc3\x97_\xc3\x97",
+            "\xef\xbf\xa2_\xef\xbf\xa2",
+            "\xe2\x86\x92_\xe2\x86\x92",
+            "\xe2\x86\x90_\xe2\x86\x90",
+            "\xe2\x96\xa1_\xe2\x96\xa1",
+            "(\xe3\x83\x8e_<\xe3\x80\x82)",
+            "(\xeb\x88\x88_\xeb\x88\x88)",
+            "(\xe2\x98\x86_@)"})
+        {
+            for (const bool emote : {false, true})
+            {
+                const auto spans = LLMarkdown::parseEmphasis(face, emote);
+                ensure_roundtrip(face, spans);
+                ensure_equals("reference face " + face, signature(spans), emote ? "O" : "P");
+                ensure_equals("reference visible " + face,
+                    LLMarkdown::stripEmphasisDelimiters(face, emote), face);
+            }
+        }
+    }
+
+    template<> template<>
+    void markdown_object::test<47>()
+    {
+        const std::string input = "^_^ o_o 0_0 ^_~ Q_Q ;_; ._. ^____^";
+        ensure_equals("faces do not pair across message", signature(parse(input)), "P");
+        ensure_equals("faces do not toggle across emote",
+            signature(LLMarkdown::parseEmphasis(input, true)), "O");
+        ensure_equals("emphasis around extended mouth",
+            LLMarkdown::stripEmphasisDelimiters("_^____^_"), "^____^");
+        ensure_equals("escape outside faces", LLMarkdown::stripEmphasisDelimiters("word__tail"), "word_tail");
+        ensure_equals("intentional ordinary toggle",
+            signature(LLMarkdown::parseEmphasis("a_b", true)), "OeF");
+        ensure_equals("numeric identifier not a face",
+            signature(LLMarkdown::parseEmphasis("123_456", true)), "OeF");
+        const std::string url = "https://example.com/^__^/_path";
+        const auto spans = LLMarkdown::parseEmphasis(url, false, {{0, url.size()}});
+        ensure_roundtrip(url, spans);
+        ensure_equals("URL stays protected", signature(spans), "P");
+    }
+
 }
