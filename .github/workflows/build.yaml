@@ -2,124 +2,41 @@ name: Build
 
 on:
   workflow_dispatch:
-    inputs:
-      installer_type:
-        description: 'Windows installer type'
-        type: choice
-        options:
-          - velopack
-          - nsis
-        default: 'velopack'
+  workflow_call:
   pull_request:
   push:
     branches: ["master", "main", "release/*", "project/*"]
     tags: ["Second_Life*"]
 
-jobs:
-  # The whole point of the setup job is that we want to set variables once
-  # that will be consumed by multiple subsequent jobs.
-  setup:
-    runs-on: ubuntu-latest
-    outputs:
-      release_run: ${{ steps.setvar.outputs.release_run }}
-      configurations: ${{ steps.setvar.outputs.configurations }}
-      bugsplat_db: ${{ steps.setvar.outputs.bugsplat_db }}
-    env:
-      # Build with a tag like "Second_Life#abcdef0" to generate a release page
-      # (used for builds we are planning to deploy).
-      # When you want to use a string variable as a workflow YAML boolean, it's
-      # important to ensure it's the empty string when false. If you omit || '',
-      # its value when false is "false", which is interpreted as true.
-      RELEASE_RUN: ${{ (github.event.inputs.release_run || github.ref_type == 'tag' && startsWith(github.ref_name, 'Second_Life')) && 'Y' || '' }}
-      FROM_FORK: ${{ github.event.pull_request.head.repo.fork }}
-    steps:
-      - name: Set Variables
-        id: setvar
-        shell: bash
-        run: |
-          echo "release_run=$RELEASE_RUN" >> "$GITHUB_OUTPUT"
+permissions:
+  contents: read
 
-          if [[ "$FROM_FORK" == "true" ]]; then
-            # PR from fork; don't build with Bugsplat, proprietary libs
-            echo 'configurations=["ReleaseOS"]' >> $GITHUB_OUTPUT
-            echo "bugsplat_db=" >> $GITHUB_OUTPUT
-          else
-            echo 'configurations=["Release"]' >> $GITHUB_OUTPUT
-            echo "bugsplat_db=SecondLife_Viewer_2018" >> $GITHUB_OUTPUT
-          fi
+jobs:
   build:
-    needs: setup
     strategy:
       fail-fast: false
       matrix:
-        runner: ${{ fromJson((github.ref_type == 'tag' && startsWith(github.ref, 'refs/tags/Second_Life')) && '["windows-large","ubuntu-24.04"]' || '["windows-2022","ubuntu-24.04"]') }}
-        configuration: ${{ fromJson(needs.setup.outputs.configurations) }}
-    runs-on: ${{ matrix.runner }}
-    outputs:
-      viewer_channel: ${{ steps.build.outputs.viewer_channel }}
-      viewer_version: ${{ steps.build.outputs.viewer_version }}
-      viewer_branch:  ${{ steps.which-branch.outputs.branch }}
-      relnotes:       ${{ steps.which-branch.outputs.relnotes }}
-      imagename:      ${{ steps.build.outputs.imagename }}
-      configuration:  ${{ matrix.configuration }}
-      # Windows Velopack outputs (passed to sign-pkg-windows)
-      velopack_pack_id:       ${{ steps.build.outputs.velopack_pack_id }}
-      velopack_pack_version:  ${{ steps.build.outputs.velopack_pack_version }}
-      velopack_pack_title:    ${{ steps.build.outputs.velopack_pack_title }}
-      velopack_main_exe:      ${{ steps.build.outputs.velopack_main_exe }}
-      velopack_exclude:       ${{ steps.build.outputs.velopack_exclude }}
-      velopack_icon:          ${{ steps.build.outputs.velopack_icon }}
-      velopack_installer_base: ${{ steps.build.outputs.velopack_installer_base }}
-      # macOS Velopack outputs (passed to sign-pkg-mac)
-      velopack_mac_pack_id:      ${{ steps.build.outputs.velopack_mac_pack_id }}
-      velopack_mac_pack_version: ${{ steps.build.outputs.velopack_mac_pack_version }}
-      velopack_mac_pack_title:   ${{ steps.build.outputs.velopack_mac_pack_title }}
-      velopack_mac_main_exe:     ${{ steps.build.outputs.velopack_mac_main_exe }}
-      velopack_mac_bundle_id:    ${{ steps.build.outputs.velopack_mac_bundle_id }}
+        include:
+          - os: windows-2022
+            directory: build-vc170-64
+          - os: ubuntu-24.04
+            directory: build-linux-x86_64
+    runs-on: ${{ matrix.os }}
     env:
       AUTOBUILD_ADDRSIZE: 64
       AUTOBUILD_BUILD_ID: ${{ github.run_id }}
-      AUTOBUILD_CONFIGURATION: ${{ matrix.configuration }}
-      # authorizes fetching private constituent packages
-      AUTOBUILD_GITHUB_TOKEN: ${{ secrets.SHARED_AUTOBUILD_GITHUB_TOKEN }}
-      AUTOBUILD_INSTALLABLE_CACHE: ${{ github.workspace }}/.autobuild-installables
-      AUTOBUILD_VARIABLES_FILE: ${{ github.workspace }}/.build-variables/variables
-      # Direct autobuild to store vcs_url, vcs_branch and vcs_revision in
-      # autobuild-package.xml.
-      AUTOBUILD_VCS_INFO: "true"
+      AUTOBUILD_CONFIGURATION: ReleaseFS_open
       AUTOBUILD_VSVER: "170"
-      DEVELOPER_DIR: "/Applications/Xcode_16.4.app/Contents/Developer"
-      # Ensure that Linden viewer builds engage Bugsplat.
-      BUGSPLAT_DB: ${{ needs.setup.outputs.bugsplat_db }}
-      build_coverity: false
-      build_log_dir: ${{ github.workspace }}/.logs
-      build_viewer: true
-      BUILDSCRIPTS_SHARED: ${{ github.workspace }}/.shared
-      # extracted and committed to viewer repo
-      BUILDSCRIPTS_SUPPORT_FUNCTIONS: ${{ github.workspace }}/buildscripts_support_functions
-      GIT_REF: ${{ github.head_ref || github.ref }}
+      AUTOBUILD_VARIABLES_FILE: ${{ github.workspace }}/.build-variables/variables
+      AUTOBUILD_INSTALLABLE_CACHE: ${{ github.workspace }}/.autobuild-installables
       LL_SKIP_REQUIRE_SYSROOT: 1
-      # Setting this variable directs Linden's TUT test driver code to capture
-      # test-program log output at the specified level, but to display it only if
-      # the individual test fails.
-      LOGFAIL: DEBUG
-      master_message_template_checkout: ${{ github.workspace }}/.master-message-template
-      # Only set variants to the one configuration: don't let build.sh loop
-      # over variants, let GitHub distribute variants over multiple hosts.
-      variants: ${{ matrix.configuration }}
-      # Pass USE_VELOPACK to CMake when using Velopack installer (default) - Windows and macOS
-      autobuild_configure_parameters: ${{ (contains(matrix.runner, 'windows') || contains(matrix.runner, 'macos')) && (github.event.inputs.installer_type || 'velopack') == 'velopack' && '-- -DUSE_VELOPACK:BOOL=ON' || '' }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-
-      - name: Setup python
-        uses: actions/setup-python@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
-
       # The Vulkan prebuilt supplies headers/loader sources, not shader tools.
       - name: Cache shader compiler
         id: shader-compiler
@@ -169,413 +86,97 @@ jobs:
         shell: bash
         run: glslangValidator --version
 
-      - name: Checkout build variables
+      - name: Checkout locally qualified build variables
         uses: actions/checkout@v7
         with:
-          repository: secondlife/build-variables
-          ref: master
+          repository: FirestormViewer/fs-build-variables
+          ref: c17312d38377c003977cf5b6dcc83c6042eba194
           path: .build-variables
+          persist-credentials: false
 
-      - name: Checkout master-message-template
-        uses: actions/checkout@v7
-        with:
-          repository: secondlife/master-message-template
-          path: .master-message-template
+      - name: Install build dependencies
+        run: python -m pip install autobuild==3.9.3 llsd
 
-      - name: Install autobuild and python dependencies
-        run: pip3 install autobuild llsd
+      - name: Install Inno Setup
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: choco install innosetup --yes --no-progress
 
-      - name: Cache autobuild packages
-        id: cache-installables
-        uses: actions/cache@v6
+      - uses: actions/cache@v6
         with:
           path: .autobuild-installables
-          key: ${{ runner.os }}-64-${{ matrix.configuration }}-${{ hashFiles('autobuild.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-64-${{ matrix.configuration }}-
-            ${{ runner.os }}-64-
+          key: ${{ runner.os }}-64-ReleaseFS_open-${{ hashFiles('autobuild.xml') }}
+          restore-keys: ${{ runner.os }}-64-ReleaseFS_open-
 
-      - name: Determine source branch
-        id: which-branch
-        uses: secondlife/viewer-build-util/which-branch@v2
-        with:
-          token: ${{ github.token }}
-
-      - name: Setup .NET for Velopack
-        if: (runner.os == 'Windows' || runner.os == 'macOS') && (github.event.inputs.installer_type || 'velopack') == 'velopack'
-        uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: '9.0.x'
-
-      - name: Install Velopack CLI
-        if: (runner.os == 'Windows' || runner.os == 'macOS') && (github.event.inputs.installer_type || 'velopack') == 'velopack'
-        shell: bash
-        run: dotnet tool install -g vpk
-
-      - name: Build
-        id: build
+      - name: Configure local Release settings
         shell: bash
         env:
-          AUTOBUILD_VCS_BRANCH: ${{ steps.which-branch.outputs.branch }}
-          RUNNER_OS: ${{ runner.os }}
+          BUILD_DIRECTORY: ${{ matrix.directory }}
         run: |
-          # set up things the viewer's build.sh script expects
-          set -x
-          mkdir -p "$build_log_dir"
-          mkdir -p "$BUILDSCRIPTS_SHARED/packages/lib/python"
-          source "$BUILDSCRIPTS_SUPPORT_FUNCTIONS"
-          if [[ "$OSTYPE" =~ cygwin|msys ]]
-          then
-            native_path() { cygpath --windows "$1"; }
-            shell_path()  { cygpath --unix "$1"; }
+          set -euo pipefail
+          eval "$(autobuild source_environment -c ReleaseFS_open)"
+          export LL_BUILD
+          options=()
+          if [[ "$RUNNER_OS" == Windows ]]; then
+            # The flags used by the successful local Release build.
+            export LL_BUILD='/MD /O2 /Ob2 /std:c++20 /permissive- /Zc:wchar_t /Zi /GR /DLL_RELEASE=1 /DNDEBUG /D_SECURE_STL=0 /D_HAS_ITERATOR_DEBUGGING=0 /DWIN32 /D_WINDOWS /DLL_WINDOWS=1 /DUNICODE /D_UNICODE /DWINVER=0x0601 /D_WIN32_WINNT=0x0601 /DLL_OS_DRAGDROP_ENABLED=1 /DLIB_NDOF=1'
+            options+=(-G 'Visual Studio 17 2022' -A x64 -DUSE_MESAZINK:BOOL=ON -DUSE_INNOSETUP:BOOL=ON)
           else
-            native_path() { echo "$1"; }
-            shell_path()  { echo "$1"; }
+            options+=(-DUSE_MESAZINK:BOOL=OFF -DUSE_INNOSETUP:BOOL=OFF)
           fi
-          finalize()
-          {
-            case "$1" in
-              true|0)
-                record_success "Build Succeeded"
-                ;;
-              *)
-                record_failure "Build Failed with $1"
-                ;;
-            esac
-          }
-          initialize_build()
-          {
-            echo "initialize_build"
-          }
-          initialize_version()
-          {
-            export revision="$AUTOBUILD_BUILD_ID"
-          }
-          python_cmd()
-          {
-              if [[ "x${1:0:1}" == "x-" ]]    # -m, -c, etc.
-              then # if $1 is a switch, don't try to twiddle paths
-                   "$(shell_path "$PYTHON_COMMAND")" "$@"
-              elif [[ "$(basename "$1")" == "codeticket.py" ]]
-              then # ignore any attempt to contact codeticket
-                   echo "## $@"
-              else # running a script at an explicit path: fix path for Python
-                   local script="$1"
-                   shift
-                   "$(shell_path "$PYTHON_COMMAND")" "$(native_path "$script")" "$@"
-              fi
-          }
-          repo_branch()
-          {
-            echo "$AUTOBUILD_VCS_BRANCH"
-          }
-          record_dependencies_graph()
-          {
-            echo "TODO: generate and post dependency graph"
-          }
-          # Since we're not uploading to codeticket, DO NOT sleep for minutes.
-          sleep()
-          {
-            echo "Not sleeping for $1 seconds"
-          }
-          export -f native_path shell_path finalize initialize_build initialize_version
-          export -f python_cmd repo_branch record_dependencies_graph sleep
-          ## Useful for diagnosing Windows LLProcess/LLLeap test failures
-          ##export APR_LOG="${RUNNER_TEMP}/apr.log"
-          export arch=$(uname | cut -b-6)
-          # Surprise! GH Windows runner's MINGW6 is a $arch value we've never
-          # seen before, so numerous tests don't know about it.
-          [[ "$arch" == "MINGW6" ]] && arch=CYGWIN
-          export AUTOBUILD="$(which autobuild)"
+          cmake -S indra -B "$BUILD_DIRECTORY" "${options[@]}" \
+            -DCMAKE_BUILD_TYPE:STRING=Release -DADDRESS_SIZE:STRING=64 \
+            -DVIEWER_CHANNEL:STRING=Vulkanstorm-Release -DROOT_PROJECT_NAME:STRING=Firestorm \
+            -DPYTHON_EXECUTABLE:FILEPATH="$(python -c 'import sys; print(sys.executable)')" \
+            -DPACKAGE:BOOL=ON -DOPENSIM:BOOL=OFF -DINSTALL_PROPRIETARY:BOOL=OFF \
+            -DUSE_KDU:BOOL=OFF -DUSE_SOLOUD:BOOL=ON \
+            -DUSE_OPENAL:BOOL=OFF -DOPENAL:BOOL=OFF -DUSE_FMODSTUDIO:BOOL=OFF -DFMODSTUDIO:BOOL=OFF \
+            -DUSE_AVX2_OPTIMIZATION:BOOL=ON -DUSE_AVX_OPTIMIZATION:BOOL=OFF -DUSE_LTO:BOOL=ON \
+            -DUSE_PRECOMPILED_HEADERS:BOOL=ON -DUSE_DISCORD:BOOL=OFF -DUSE_BUGSPLAT:BOOL=OFF \
+            -DUSE_TRACY:BOOL=OFF -DUSE_VELOPACK:BOOL=OFF -DUSE_NSIS:BOOL=OFF \
+            -DLL_TESTS:BOOL=OFF -DRELEASE_CRASH_REPORTING:BOOL=OFF \
+            -DNON_RELEASE_CRASH_REPORTING:BOOL=OFF -DBUGSPLAT_DB:STRING=
+          python scripts/ci_release_config.py "$BUILD_DIRECTORY/CMakeCache.txt" "$RUNNER_OS"
 
-          # determine the viewer channel from the branch or tag name
-          # trigger an EDU build by including "edu" in the tag
-          edu=${{ github.ref_type == 'tag' && contains(github.ref_name, 'edu') }}
-          echo "ref_type=${{ github.ref_type }}, ref_name=${{ github.ref_name }}, edu='$edu'"
-          branch=$AUTOBUILD_VCS_BRANCH
-          if [[ "$edu" == "true" ]]
-          then
-              export viewer_channel="Second Life Release edu"
-          elif  [[ "$branch" == "develop" ]];
-          then
-              export viewer_channel="Second Life Develop"
-          else
-              IFS='/' read -ra ba <<< "$branch"
-              prefix=${ba[0]}
-              if [ "$prefix" == "project" ]; then
-                  IFS='_' read -ra prj <<< "${ba[1]}"
-                  prj_str="${prj[*]}"
-                  # uppercase first letter of each word
-                  capitalized=$(echo "$prj_str" | awk '{for (i=1; i<=NF; i++) $i = toupper(substr($i,1,1)) substr($i,2); print}')
-                  export viewer_channel="Second Life Project $capitalized"
-              elif  [[ "$prefix" == "release" || "$prefix" == "main" ]];
-              then
-                  export viewer_channel="Second Life Release"
-              else
-                  export viewer_channel="Second Life Test"
-              fi
-          fi
-          echo "viewer_channel=$viewer_channel"
-          echo "viewer_channel=$viewer_channel" >> "$GITHUB_OUTPUT"
-          # On windows we need to point the build to the correct python
-          # as neither CMake's FindPython nor our custom Python.cmake module
-          # will resolve the correct interpreter location.
-          if [[ "$RUNNER_OS" == "Windows" ]]; then
-            export PYTHON="$(native_path "$(which python)")"
-            echo "Python location: $PYTHON"
-            export PYTHON_COMMAND="$PYTHON"
-          else
-            export PYTHON_COMMAND="python3"
-          fi
-          export PYTHON_COMMAND_NATIVE="$(native_path "$PYTHON_COMMAND")"
+      - name: Build Release and installer
+        run: cmake --build ${{ matrix.directory }} --config Release --parallel 3
 
-          ./build.sh
-
-          # Each artifact is downloaded as a distinct .zip file. Multiple jobs
-          # (per the matrix above) writing the same filepath to the same
-          # artifact name will *overwrite* that file. Moreover, they can
-          # interfere with each other, causing the upload to fail.
-          # https://github.com/actions/upload-artifact#uploading-to-the-same-artifact
-          # Given the size of our installers, and the fact that we typically
-          # only want to download just one instead of a single zip containing
-          # several, generate a distinct artifact name for each installer.
-          # If the matrix above can run multiple builds on the same
-          # platform, we must disambiguate on more than the platform name.
-          # e.g. if we were still running Windows 32-bit builds, we'd need to
-          # qualify the artifact with bit width.
-          if [[ "$AUTOBUILD_CONFIGURATION" == "ReleaseOS" ]]
-          then cfg_suffix='OS'
-          else cfg_suffix=''
-          fi
-          echo "artifact=$RUNNER_OS$cfg_suffix" >> $GITHUB_OUTPUT
-
-      - name: Upload executable
-        if: steps.build.outputs.viewer_app
+      - name: Upload installer
         uses: actions/upload-artifact@v7
         with:
-          name: "${{ steps.build.outputs.artifact }}-app"
+          name: ${{ runner.os }}-installer
+          if-no-files-found: error
           path: |
-            ${{ steps.build.outputs.viewer_app }}
+            ${{ matrix.directory }}/newview/Release/*_Setup.exe
+            ${{ matrix.directory }}/newview/*.tar.xz
 
-      # The other upload of nontrivial size is the symbol file. Use a distinct
-      # artifact for that too.
-      - name: Upload symbol file
-        if: steps.build.outputs.symbolfile
+      - name: Upload build evidence
+        if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: "${{ steps.build.outputs.artifact }}-symbols"
-          path: ${{ steps.build.outputs.symbolfile }}
-
-      - name: Upload metadata
-        uses: actions/upload-artifact@v7
-        with:
-          name: "${{ steps.build.outputs.artifact }}-metadata"
-          # emitted by build.sh, possibly multiple lines
+          name: ${{ runner.os }}-build-evidence
           path: |
-            ${{ steps.build.outputs.metadata }}
-
-      - name: Upload physics package
-        uses: actions/upload-artifact@v7
-        # should only be set for viewer-private
-        if: matrix.configuration == 'Release' && steps.build.outputs.physicstpv
-        with:
-          name: "${{ steps.build.outputs.artifact }}-physics"
-          # emitted by build.sh, zero or one lines
-          path: |
-            ${{ steps.build.outputs.physicstpv }}
-
-  sign-and-package-windows:
-    env:
-      AZURE_KEY_VAULT_URI: ${{ secrets.AZURE_KEY_VAULT_URI }}
-      AZURE_CERT_NAME:     ${{ secrets.AZURE_CERT_NAME }}
-      AZURE_CLIENT_ID:     ${{ secrets.AZURE_CLIENT_ID }}
-      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      AZURE_TENANT_ID:     ${{ secrets.AZURE_TENANT_ID }}
-    needs: build
-    runs-on: windows-2022
-    steps:
-      - name: Sign and package Windows viewer
-        if: env.AZURE_KEY_VAULT_URI && env.AZURE_CERT_NAME && env.AZURE_CLIENT_ID && env.AZURE_CLIENT_SECRET && env.AZURE_TENANT_ID
-        uses: secondlife/viewer-build-util/sign-pkg-windows@v2.1.0
-        with:
-          vault_uri: "${{ env.AZURE_KEY_VAULT_URI }}"
-          cert_name: "${{ env.AZURE_CERT_NAME }}"
-          client_id: "${{ env.AZURE_CLIENT_ID }}"
-          client_secret: "${{ env.AZURE_CLIENT_SECRET }}"
-          tenant_id: "${{ env.AZURE_TENANT_ID }}"
-          installer_type: "${{ github.event.inputs.installer_type || 'velopack' }}"
-          velopack_pack_id: "${{ needs.build.outputs.velopack_pack_id }}"
-          velopack_pack_version: "${{ needs.build.outputs.velopack_pack_version }}"
-          velopack_pack_title: "${{ needs.build.outputs.velopack_pack_title }}"
-          velopack_main_exe: "${{ needs.build.outputs.velopack_main_exe }}"
-          velopack_exclude: "${{ needs.build.outputs.velopack_exclude }}"
-          velopack_icon: "${{ needs.build.outputs.velopack_icon }}"
-          velopack_installer_base: "${{ needs.build.outputs.velopack_installer_base }}"
-
-  sign-and-package-mac:
-    env:
-      NOTARIZE_CREDS_MACOS:        ${{ secrets.NOTARIZE_CREDS_MACOS }}
-      SIGNING_CERT_MACOS:          ${{ secrets.SIGNING_CERT_MACOS }}
-      SIGNING_CERT_MACOS_IDENTITY: ${{ secrets.SIGNING_CERT_MACOS_IDENTITY }}
-      SIGNING_CERT_MACOS_PASSWORD: ${{ secrets.SIGNING_CERT_MACOS_PASSWORD }}
-    needs: build
-    runs-on: macos-latest
-    steps:
-      - name: Unpack Mac notarization credentials
-        if: env.NOTARIZE_CREDS_MACOS
-        id: note-creds
-        shell: bash
-        run: |
-          # In NOTARIZE_CREDS_MACOS we expect to find:
-          # USERNAME="..."
-          # PASSWORD="..."
-          # TEAM_ID="..."
-          eval "${{ env.NOTARIZE_CREDS_MACOS }}"
-          echo "::add-mask::$USERNAME"
-          echo "::add-mask::$PASSWORD"
-          echo "::add-mask::$TEAM_ID"
-          echo "note_user=$USERNAME" >> "$GITHUB_OUTPUT"
-          echo "note_pass=$PASSWORD" >> "$GITHUB_OUTPUT"
-          echo "note_team=$TEAM_ID" >> "$GITHUB_OUTPUT"
-          # If we didn't manage to retrieve all of these credentials, better
-          # find out sooner than later.
-          [[ -n "$USERNAME" && -n "$PASSWORD" && -n "$TEAM_ID" ]]
-
-      - name: Sign and package Mac viewer
-        if: env.SIGNING_CERT_MACOS && env.SIGNING_CERT_MACOS_IDENTITY && env.SIGNING_CERT_MACOS_PASSWORD && steps.note-creds.outputs.note_user && steps.note-creds.outputs.note_pass && steps.note-creds.outputs.note_team
-        uses: secondlife/viewer-build-util/sign-pkg-mac@v2.1.0
-        with:
-          channel: ${{ needs.build.outputs.viewer_channel }}
-          imagename: ${{ needs.build.outputs.imagename }}
-          cert_base64: ${{ env.SIGNING_CERT_MACOS }}
-          cert_name: ${{ env.SIGNING_CERT_MACOS_IDENTITY }}
-          cert_pass: ${{ env.SIGNING_CERT_MACOS_PASSWORD }}
-          note_user: ${{ steps.note-creds.outputs.note_user }}
-          note_pass: ${{ steps.note-creds.outputs.note_pass }}
-          note_team: ${{ steps.note-creds.outputs.note_team }}
-          velopack_pack_id: "${{ needs.build.outputs.velopack_mac_pack_id }}"
-          velopack_pack_version: "${{ needs.build.outputs.velopack_mac_pack_version }}"
-          velopack_pack_title: "${{ needs.build.outputs.velopack_mac_pack_title }}"
-          velopack_main_exe: "${{ needs.build.outputs.velopack_mac_main_exe }}"
-          velopack_bundle_id: "${{ needs.build.outputs.velopack_mac_bundle_id }}"
-
-  post-windows-symbols:
-    env:
-      BUGSPLAT_DATABASE: "${{ secrets.BUGSPLAT_DATABASE }}"
-      SYMBOL_UPLOAD_CLIENT_ID: "${{ secrets.BUGSPLAT_SYMBOL_UPLOAD_CLIENT_ID }}"
-      SYMBOL_UPLOAD_CLIENT_SECRET: "${{ secrets.BUGSPLAT_SYMBOL_UPLOAD_CLIENT_SECRET }}"
-    needs: build
-    if: needs.build.outputs.configuration == 'Release'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download viewer exe
-        uses: actions/download-artifact@v8
-        with:
-          name: Windows-app
-          path: _artifacts
-      - name: Download Windows Symbols
-        if: env.BUGSPLAT_DATABASE && env.SYMBOL_UPLOAD_CLIENT_ID
-        uses: actions/download-artifact@v8
-        with:
-          name: Windows-symbols
-      - name: Extract viewer pdb
-        if: env.BUGSPLAT_DATABASE && env.SYMBOL_UPLOAD_CLIENT_ID
-        shell: bash
-        run: |
-          tar -xJf "${{ needs.build.outputs.viewer_channel }}.sym.tar.xz" -C _artifacts
-      - name: Post Windows symbols
-        if: env.BUGSPLAT_DATABASE && env.SYMBOL_UPLOAD_CLIENT_ID
-        uses: BugSplat-Git/symbol-upload@e019eb5090a6cd589268b9119e09cf4a18ace9ad
-        with:
-          clientId: "${{ env.SYMBOL_UPLOAD_CLIENT_ID }}"
-          clientSecret: "${{ env.SYMBOL_UPLOAD_CLIENT_SECRET }}"
-          database: "${{ env.BUGSPLAT_DATABASE }}"
-          application: ${{ needs.build.outputs.viewer_channel }}
-          version: ${{ needs.build.outputs.viewer_version }}
-          directory: _artifacts
-          files: "**/{SecondLifeViewer.exe,llwebrtc.dll,*.pdb}"
-          node-version: "22"
-          dumpSyms: false
-
-  post-mac-symbols:
-    env:
-      BUGSPLAT_DATABASE: "${{ secrets.BUGSPLAT_DATABASE }}"
-      SYMBOL_UPLOAD_CLIENT_ID: "${{ secrets.BUGSPLAT_SYMBOL_UPLOAD_CLIENT_ID }}"
-      SYMBOL_UPLOAD_CLIENT_SECRET: "${{ secrets.BUGSPLAT_SYMBOL_UPLOAD_CLIENT_SECRET }}"
-    needs: build
-    if: needs.build.outputs.configuration == 'Release'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Mac Symbols
-        if: env.BUGSPLAT_DATABASE && env.SYMBOL_UPLOAD_CLIENT_ID
-        uses: actions/download-artifact@v8
-        with:
-          name: macOS-symbols
-      - name: Post Mac symbols
-        if: env.BUGSPLAT_DATABASE && env.SYMBOL_UPLOAD_CLIENT_ID
-        uses: BugSplat-Git/symbol-upload@e019eb5090a6cd589268b9119e09cf4a18ace9ad
-        with:
-          clientId: "${{ env.SYMBOL_UPLOAD_CLIENT_ID }}"
-          clientSecret: "${{ env.SYMBOL_UPLOAD_CLIENT_SECRET }}"
-          database: "${{ env.BUGSPLAT_DATABASE }}"
-          application: ${{ needs.build.outputs.viewer_channel }}
-          version: ${{ needs.build.outputs.viewer_version }} (${{ needs.build.outputs.viewer_version }})
-          directory: .
-          files: "**/*.xcarchive.zip"
-          node-version: "22"
-          dumpSyms: false
+            ${{ matrix.directory }}/CMakeCache.txt
+            ${{ matrix.directory }}/CMakeFiles/CMakeConfigureLog.yaml
+            ${{ matrix.directory }}/packages/autobuild-package.xml
+            ${{ matrix.directory }}/newview/viewer_version.txt
 
   release:
-    needs: [setup, build, sign-and-package-windows, sign-and-package-mac]
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/Second_Life')
+    needs: build
     runs-on: ubuntu-latest
-    if: needs.setup.outputs.release_run
+    permissions:
+      contents: write
     steps:
       - uses: actions/download-artifact@v8
         with:
-          pattern: "*-installer"
-
-      - uses: actions/download-artifact@v8
+          pattern: '*-installer'
+          path: installers
+      - uses: secondlife-3p/action-gh-release@v1
         with:
-          pattern: "*-metadata"
-
-      - uses: actions/download-artifact@v8
-        with:
-          pattern: "*-releases"
-
-      - name: Rename metadata
-        run: |
-          cp Windows-metadata/autobuild-package.xml Windows-autobuild-package.xml
-          cp Windows-metadata/newview/viewer_version.txt Windows-viewer_version.txt
-          cp macOS-metadata/autobuild-package.xml macOS-autobuild-package.xml
-          cp macOS-metadata/newview/viewer_version.txt macOS-viewer_version.txt
-
-      # forked from softprops/action-gh-release
-      - name: Create GitHub release
-        id: release
-        uses: secondlife-3p/action-gh-release@v1
-        with:
-          # name the release page for the branch
-          name: "${{ needs.build.outputs.viewer_branch }}"
-          # SL-20546: want the channel and version to be visible on the
-          # release page
-          body: |
-            Build ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            ${{ needs.build.outputs.viewer_channel }}
-            ${{ needs.build.outputs.viewer_version }}
-            ${{ needs.build.outputs.relnotes }}
           prerelease: true
           generate_release_notes: true
-          target_commitish: ${{ github.sha }}
-          append_body: true
-          fail_on_unmatched_files: false
+          fail_on_unmatched_files: true
           files: |
-            macOS-installer/*.dmg
-            Windows-installer/*.exe
-            *-autobuild-package.xml
-            *-viewer_version.txt
-            Windows-releases/*
-            macOS-releases/*
-
-      - name: post release URL
-        run: |
-          echo "::notice::Release ${{ steps.release.outputs.url }}"
+            installers/Windows-installer/*.exe
+            installers/Linux-installer/*.tar.xz

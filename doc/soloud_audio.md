@@ -15,19 +15,19 @@ silently choosing a backend. `INSTALL_PROPRIETARY` does not imply FMOD.
 
 The viewer uses an autobuild package, not vendored SoLoud source or `SOLOUD_ROOT`.
 The standalone repository is https://github.com/anne-skydancer/3p-soloud.
-Its revision 2 is based on SoLoud source
+Its revision 3 is based on SoLoud source
 `e82fd32c1f62183922f08c14c814a02b58db1873`, with bounded 1024-frame miniaudio
 mixing and device-selection/native-format-negotiation patches.
 
-- Repository revision: `ee0970a9c85e870fb62865972e2297bf602a7766`.
-- Package version: `202002.e82fd32c1f.vulkanstorm2`, build ID `2`.
-- Release: `v202002-e82fd32c1f-2`.
-- SHA256: `605017ece00f03e7f45f6cb13888559e053c58d515a1f8990284dc3617b532e7`.
+- Repository revision: `1f82eca53e8f659898c0e6305be356c4c1be2050`.
+- Package version: `202002.e82fd32c1f.vulkanstorm3`, build ID `35538098924`.
+- Release: `v202002-e82fd32c1f-3`; per-platform SHA256 pins are in `autobuild.xml`.
 
-Only a Windows x64 package is currently published. Other platforms and Windows
-32-bit fail explicitly when SoLoud is selected; select an optional backend until
-matching packages exist. Their builds are not validated by the Windows tests.
-SoLoud is linked statically. The Windows manifest stages package-owned notices
+Windows x64 and Linux x64 packages are published. Both passed their hosted
+package builds and bounded callback tests in run `35538098924`. Other platforms
+and 32-bit builds fail explicitly when SoLoud is selected. Linux uses PIC plus
+Threads and dl; Linux hardware playback remains unverified.
+SoLoud is linked statically. Both manifests stage package-owned notices
 as `licenses/soloud.txt` and `licenses/soloud-miniaudio.txt`.
 
 ## Behavior

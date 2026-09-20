@@ -1738,16 +1738,30 @@
       <map>
         <key>platforms</key>
         <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>b72941b0cf61be2757e16b3fe30fe2f5eff154579417216a580dfd4fc01ccf34</string>
+              <key>hash_algorithm</key>
+              <string>sha256</string>
+              <key>url</key>
+              <string>https://github.com/anne-skydancer/3p-soloud/releases/download/v202002-e82fd32c1f-3/soloud-202002.e82fd32c1f.vulkanstorm3-linux64-35538098924.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
           <key>windows64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>605017ece00f03e7f45f6cb13888559e053c58d515a1f8990284dc3617b532e7</string>
+              <string>635d4026712129471bf98df4fc2a1d26e96a7737f653ca0ec54994bab81638d8</string>
               <key>hash_algorithm</key>
               <string>sha256</string>
               <key>url</key>
-              <string>https://github.com/anne-skydancer/3p-soloud/releases/download/v202002-e82fd32c1f-2/soloud-202002.e82fd32c1f.vulkanstorm2-windows64-2.tar.zst</string>
+              <string>https://github.com/anne-skydancer/3p-soloud/releases/download/v202002-e82fd32c1f-3/soloud-202002.e82fd32c1f.vulkanstorm3-windows64-35538098924.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -1760,7 +1774,7 @@
         <key>copyright</key>
         <string>Copyright (c) 2013-2020 Jari Komppa</string>
         <key>version</key>
-        <string>202002.e82fd32c1f.vulkanstorm2</string>
+        <string>202002.e82fd32c1f.vulkanstorm3</string>
         <key>name</key>
         <string>soloud</string>
         <key>canonical_repo</key>
@@ -2268,11 +2282,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>94a72c6ddbfb23796ce913c55bc47c128542a582</string>
+              <string>39671be3780e2ca9725e49e3b9a3133d323755a504cd164cea6e0d262a5ccefc</string>
               <key>hash_algorithm</key>
-              <string>sha1</string>
+              <string>sha256</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-openjpeg/releases/download/v2.5.3-r1/openjpeg-2.5.3.15590356935-darwin64-15590356935.tar.zst</string>
+              <string>https://github.com/secondlife/3p-openjpeg/releases/download/v2.5.4-r1/openjpeg-2.5.4.18754730947-darwin64-18754730947.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2282,11 +2296,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>751172af405f4a47a3aebb37729d62229cab6c07</string>
+              <string>d581267d31d64f0d67bf89a10fdc41f29ad4f14d2cf581b78c479859429bbb22</string>
               <key>hash_algorithm</key>
-              <string>sha1</string>
+              <string>sha256</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-openjpeg/releases/download/v2.5.3-r1/openjpeg-2.5.3.15590356935-linux64-15590356935.tar.zst</string>
+              <string>https://github.com/secondlife/3p-openjpeg/releases/download/v2.5.4-r1/openjpeg-2.5.4.18754730947-linux64-18754730947.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2296,11 +2310,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8aab9cf250dfee252386e1c79b5205e6d3b3e19e</string>
+              <string>445579e4de3e3e96fc270f0cef0339336f297da20c305363c8e8b8f816599c6d</string>
               <key>hash_algorithm</key>
-              <string>sha1</string>
+              <string>sha256</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-openjpeg/releases/download/v2.5.3-r1/openjpeg-2.5.3.15590356935-windows64-15590356935.tar.zst</string>
+              <string>https://github.com/secondlife/3p-openjpeg/releases/download/v2.5.4-r1/openjpeg-2.5.4.18754730947-windows64-18754730947.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -2313,7 +2327,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>copyright</key>
         <string>Copyright (c) 2002-2007, Communications and Remote Sensing Laboratory, Universite catholique de Louvain (UCL), Belgium; Copyright (c) 2002-2007, Professor Benoit Macq; Copyright (c) 2001-2003, David Janssens; Copyright (c) 2002-2003, Yannick Verschueren; Copyright (c) 2003-2007, Francois-Olivier Devaux and Antonin Descampe; Copyright (c) 2005, Herve Drolon, FreeImage Team; Copyright (c) 2006-2007, Parvatha Elangovan; Copyright (c) 2008, Jerome Fimes, Communications &amp; Systemes &lt;jerome.fimes@c-s.fr&gt;; Copyright (c) 2010-2011, Kaori Hagihara; Copyright (c) 2011-2012, Centre National d'Etudes Spatiales (CNES), France; Copyright (c) 2012, CS Systemes d'Information, France;</string>
         <key>version</key>
-        <string>2.5.3.15590356935</string>
+        <string>2.5.4.18754730947</string>
         <key>name</key>
         <string>openjpeg</string>
         <key>description</key>
