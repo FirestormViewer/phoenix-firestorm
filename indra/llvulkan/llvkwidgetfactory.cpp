@@ -1504,6 +1504,7 @@ namespace
                             else if (attribute != "name") { state.reject("Unsupported native combo item attribute"); return; }
                         }
                         if (!labelProvided) item.label = item.value.asString();
+                        else item.labelSource=item.label;
                         if (++state.nodes > LLVKWidgetTree::maximumNodes) { state.reject("Native combo item budget exceeded"); return; }
                         state.stack.back()->combo->combo.items.push_back(std::move(item));
                         state.callbackElement = true;

@@ -24,6 +24,8 @@ std::optional<LLVKWidgetTree::Id> LLVKWidgetTree::createCombo(const Params& view
     Combo combo;
     combo.params = std::make_shared<const ComboParams>(params);
     combo.items = params.items;
+    for (auto& item : combo.items) if (item.labelSource)
+    { LLVKLabel label; label.assign(*item.labelSource); item.label=label.resolve(mLabelContext); }
     return createControlImpl(view,control,std::nullopt,parent,error,std::nullopt,std::nullopt,std::nullopt,
         std::nullopt,std::nullopt,std::nullopt,std::nullopt,std::nullopt,{},std::move(combo));
 }

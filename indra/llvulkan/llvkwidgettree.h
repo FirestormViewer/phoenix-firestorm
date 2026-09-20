@@ -228,6 +228,7 @@ public:
         std::string label;
         LLSD value;
         bool enabled = true;
+        std::optional<std::string> labelSource;
     };
     struct ComboParams
     {

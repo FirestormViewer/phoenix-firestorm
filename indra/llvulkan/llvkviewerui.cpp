@@ -720,6 +720,8 @@ std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint:
 {
     if (!refreshCommunications(error)) return std::nullopt;
     if (!prepareConnectedShell(input.button.frameDelta,error)) return std::nullopt;
+    for (auto* floater : floaters())
+        if (floater && !floater->fitToViewport(mNoticeMenuHeight,error)) return std::nullopt;
     if (mHelpRetiring)
     {
         if (mActiveFloater==mHelp.get()) mActiveFloater=nullptr;

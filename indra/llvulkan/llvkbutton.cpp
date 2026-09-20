@@ -407,6 +407,23 @@ void LLVKWidgetTree::setLabelContext(LLVKLabel::Context context)
             node.control->dirty = true;
         }
     }
+    for (auto& [id,node] : mNodes)
+    {
+        if (!node.combo) continue;
+        auto& combo=*node.combo;
+        for (std::size_t index=0; index<combo.items.size(); ++index)
+        {
+            auto& item=combo.items[index];
+            if (!item.labelSource) continue;
+            LLVKLabel label; label.assign(*item.labelSource);
+            auto resolved=label.resolve(mLabelContext);
+            if (resolved==item.label) continue;
+            item.label=std::move(resolved);
+            if (combo.selected!=index) continue;
+            if (combo.editor) setValue(combo.editor,LLSD(item.label));
+            else if (!combo.params->flyout) setButtonLabel(combo.button,label.resolveWide(mLabelContext));
+        }
+    }
 }
 
 bool LLVKWidgetTree::setButtonFlashing(Id id, bool flashing, bool force, bool alternateColor)

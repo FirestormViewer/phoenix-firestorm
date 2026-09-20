@@ -89,3 +89,120 @@ Overall visual parity remains incomplete:
 Both viewers were subsequently closed. The detailed local evidence is in
 `build-vc170-64/floater-input-interactive-verification.md`. This checkpoint is
 not approval to merge or a claim of complete UI transposition.
+
+## Visual parity follow-up: pre-edit contract, 2026-09-20
+
+Reference inspection at native branch 61b340fc3d: LLFloaterView::refresh and
+adjustToFitScreen, LLFloater::fitWithDependentsOnScreen, LLView's
+getNeededTranslation, and LLAppViewer::initStrings. NV-00/01/02/12/17 apply.
+
+1. GL keeps a floater's top below its container top and preserves a minimum
+   visible overlap; resizable, non-minimized floaters shrink to the available
+   dimensions subject to their minimum sizes. Fixed-size floaters retain size.
+   Global generation substitutions come from localized strings and the actual
+   major version, before UI labels are consumed.
+2. Native code will perform CPU-owned floater constraint preparation before
+   paint, using native root bounds and the menu strip. It will publish the
+   existing independently formatted generation strings into the native label
+   context. No GL visual implementation is reused and no GPU ownership changes.
+3. Add a native floater fitting method used by the existing viewer floater list.
+   Preserve partial-offscreen dragging and minimized client geometry. Existing
+   snapped dependent movement, toolbar exclusions and docking parity remain
+   separate obligations; do not claim their closure. Update label context only
+   when generation values change, avoiding frame-by-frame re-resolution.
+
+Discriminators: shrink the root under a displaced fixed-size Preferences-sized
+floater and require its header to remain reachable without changing size; repeat
+preparation without drift; constrain a resizable floater without violating its
+minimum size. Verify a generation token in both an existing and newly constructed
+native label resolves from version metadata. RelWithDebInfo tests/build and later
+interactive comparison are required; these repairs alone do not close UI parity.
+
+First follow-up run: 213/213 widget tests and the RelWithDebInfo viewer build
+passed; the localized V7 label was verified on screen. The viewport test exposed
+an insufficient contract: minimum overlap alone leaves most of Preferences
+off-screen. Further reference inspection of LLFloaterView::reshape,
+LLFloater::applyPositioning and LL_COORD_FLOATER::convertFromCommon/convertToCommon
+shows viewport changes reapply normalized positioning before the visibility
+constraint. Native will retain the last prepared viewport/rectangle and map each
+axis into the new available travel range, including the partial-outside ranges.
+The discriminator must now require a previously fully visible Preferences
+window to remain fully visible after contraction when it fits. This is a
+refinement before acceptance, not a claim that the first repair was sufficient.
+
+## Login Mode label correction: pre-edit record, 2026-09-20
+
+The operator reports [VIEWER_GENERATION] still visible in Mode. The shipped
+panel_fs_login.xml declares that label with value settings_v3.xml. Reference
+LLComboBox construction sends the localized ItemParams label to its list row;
+the selected display and underlying value are separate. Native createCombo
+currently copies unformatted row labels and setLabelContext updates only
+buttons/badges/plain text. The prior short-generation fix did not cover rows.
+
+Native design: retain the source label only for XML-declared combo rows, resolve
+it using the independently owned label context at construction and on context
+changes, and refresh the selected display without invoking commits or changing
+selection/value. Programmatic resident/user labels stay literal. Regression:
+inspect the actual Mode row before/after metadata publication, select its
+settings_v3.xml value, change the generation, and require updated display with
+unchanged value/selection and no callbacks. No GL implementation changes.
+
+Mode-label validation: the RelWithDebInfo widget suite passed 213/213 tests,
+including the actual login Mode row, selected label refresh, preserved selection
+and settings value, and absence of commit callbacks. Native session integration
+passed. Viewer build and copy-only staging completed with exit 0 and PACKAGE=OFF.
+Evidence: build-vc170-64/mode-label-tests.log and mode-label-viewer-build.log.
+This dropdown correction has not yet been inspected in the running viewer.
+
+## Dropdown follow-up, 2026-09-20
+
+Operator reports popups open but clicking a row does not select it. Read-only
+process inspection found the running executable at
+C:/Dev/vulkanstorm/build-vc170-64/newview/RelWithDebInfo/vulkanstorm-bin.exe
+(12:06:52 build), rather than the native-sl-login executable (18:34:22 build).
+This establishes a build mismatch, not the cause of the reported selection
+failure. No PC control was taken and no implementation change was inferred.
+
+Extended test 221 to exercise actual login Mode and Start Location through
+menu/floater/tree pointer dispatch, separate press/release pairs, and viewer
+paint preparation between each event. Both select the second row and close
+their popup. The RelWithDebInfo suite passed 213/213, with session integration
+also passing; evidence: build-vc170-64/dropdown-regression-tests.log. Runtime
+selection and visual parity remain unverified in the corrected branch binary.
+
+Operator clarified that the failure concerns dropdowns inside floaters; login
+dropdown selection works. Extended the same frame-separated pointer check to
+the actual Preferences language_combobox. The suite passed 213/213 (evidence:
+build-vc170-64/floater-dropdown-tests.log). The parent worktree's floaterPointer
+lacks the active-popup guard present in native-sl-login commit 61b340fc3d; it can
+run floater activation/drag handling before popup dispatch. This source
+difference is relevant but is not proof of the reported runtime cause. No claim
+of floater dropdown runtime acceptance follows from the passing test.
+
+## Renderer confirmation timing: pre-edit record, 2026-09-20
+
+NV-00/NV-01/NV-03, native-sl-login 61b340fc3d plus current UI edits.
+Reference roots: LLPanelPreferenceGraphics::onRenderBackendCommit and
+callbackRenderBackendRestart use ChangeRenderBackend, persist on Shutdown now,
+and restore the active selection on Later. After checking baseline, the operator
+confirmed that the immediate in-viewer notification must remain unchanged;
+the proposed Preferences OK timing was withdrawn before implementation. Existing native
+graphicsPreferenceAction("Backend") prompts immediately; LLVKWindowMgr::run
+also wraps persistence with MessageBoxW, causing duplicate confirmation.
+
+Native design: remove only the extra MessageBoxW confirmation from the window
+manager's save wrapper. Retain immediate ChangeRenderBackend notification,
+validation, persistence, failure propagation and shutdown ordering. Later still
+restores the active selection without saving or quitting. No GPU ownership or GL
+implementation changes. Focused verification: inspect the unchanged notification
+callback and save-before-quit ordering, require no Change Renderer MessageBoxW
+call in the window manager, and compile the affected native window code.
+Runtime appearance remains separately open.
+
+Checkpoint validation: removed the three lines constructing/showing the Windows
+renderer confirmation. The immediate native notification callback is unchanged.
+The operator reports floater dropdowns operational in the branch build. Prior
+widget validation passed 213/213 with the actual Preferences language dropdown.
+After worktree relocation, CMake regeneration completed successfully with
+RelWithDebInfo and PACKAGE=OFF; the viewer rebuild is in progress at checkpoint.
+The duplicate-confirmation removal has not yet been exercised interactively.

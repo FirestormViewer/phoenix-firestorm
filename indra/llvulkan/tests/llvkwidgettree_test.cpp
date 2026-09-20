@@ -148,9 +148,105 @@ namespace tut
             return result;
         }
     };
-    typedef test_group<widgettree_data,220> widgettree_group;
+    typedef test_group<widgettree_data,221> widgettree_group;
     typedef widgettree_group::object object;
     widgettree_group widgettree_tests("llvkwidgettree");
+
+    template<> template<> void object::test<221>()
+    {
+        set_test_name("viewport contraction preserves reachable Preferences and generation labels");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        auto& tree=ui->tree();
+        // Exercise separate clicks with real viewer preparation between events.
+        for (const auto name : {"mode_combo","start_location_combo","language_combobox"})
+        {
+            if (std::string(name)=="language_combobox")
+                ensure("open Preferences for floater dropdown",ui->showPreferences(error));
+            const auto id=ui->find(name);
+            ensure("dropdown exists",tree.get(id) && tree.get(id)->combo);
+            const auto combo=*tree.get(id)->combo;
+            const auto button=tree.screenRect(combo.button,error);
+            ensure("dropdown button has geometry",button.has_value());
+            const auto route=[&](LLVKWidgetTree::PointerKind kind,int x,int y)
+            {
+                LLVKWidgetTree::PointerEvent event; event.kind=kind; event.x=x; event.y=y;
+                if (!tree.mouseCapture() && ui->menuPointer(event)) return;
+                if (!ui->floaterPointer(event,error)) tree.routePointer(ui->root(),event,error);
+                ensure("dropdown pointer: "+error,error.empty());
+                ensure("frame between dropdown clicks",ui->preparePaint({},error).has_value());
+            };
+            const int x=(button->left+button->right)/2,y=(button->bottom+button->top)/2;
+            route(LLVKWidgetTree::PointerKind::LeftDown,x,y);
+            route(LLVKWidgetTree::PointerKind::LeftUp,x,y);
+            ensure("dropdown remains open after arrow release",tree.get(combo.list)->params.visible);
+            const auto popup=tree.screenRect(combo.list,error);
+            ensure("dropdown popup has geometry",popup.has_value());
+            const int rowY=popup->top-2-tree.get(id)->combo->rowHeight*3/2;
+            route(LLVKWidgetTree::PointerKind::Hover,popup->left+5,rowY);
+            route(LLVKWidgetTree::PointerKind::LeftDown,popup->left+5,rowY);
+            route(LLVKWidgetTree::PointerKind::LeftUp,popup->left+5,rowY);
+            ensure("second click selects second row",tree.get(id)->combo->selected==1);
+            ensure("selected dropdown closes",!tree.get(combo.list)->params.visible);
+        }
+        ensure("large viewport",tree.reshape(ui->root(),2560,1392,error));
+        ensure("open Preferences",ui->showPreferences(error));
+        const auto preferences=ui->activeFloater();
+        auto rect=tree.get(preferences)->params.rect;
+        const int width=rect.right-rect.left,height=rect.top-rect.bottom;
+        ensure("displaced Preferences",tree.setShape(preferences,{1700,700,1700+width,700+height},error));
+        LLVKWidgetPaint::Input input;
+        ensure("prepare original viewport",ui->preparePaint(input,error).has_value());
+        ensure("contract viewport",tree.reshape(ui->root(),1026,770,error));
+        ensure("prepare contracted UI",ui->preparePaint(input,error).has_value());
+        rect=tree.get(preferences)->params.rect;
+        ensure("fixed size retained",rect.right-rect.left==width && rect.top-rect.bottom==height);
+        ensure("header remains inside viewport",rect.top<=770 && rect.top>=16 && rect.left+16<=1026 && rect.right>=16);
+        ensure("fitting Preferences stays fully visible",rect.left>=0 && rect.bottom>=0 && rect.right<=1026 && rect.top<=770);
+        ensure("repeat preparation",ui->preparePaint(input,error).has_value());
+        ensure("no positioning drift",tree.get(preferences)->params.rect==rect);
+
+        LLSD info; info["VIEWER_VERSION"]=LLSD::emptyArray();
+        for (const auto value : {7,2,5,0}) info["VIEWER_VERSION"].append(value);
+        ensure("publish version metadata",ui->setAboutInfo(info,error));
+        const auto mode=ui->find("mode_combo");
+        ensure("login mode exists",tree.get(mode) && tree.get(mode)->combo);
+        const auto generationRow=std::find_if(tree.get(mode)->combo->items.begin(),tree.get(mode)->combo->items.end(),
+            [](const auto& item) { return item.value.asString()=="settings_v3.xml"; });
+        ensure("generation mode row exists",generationRow!=tree.get(mode)->combo->items.end());
+        ensure("mode popup generation resolved",generationRow->label.find("7")!=std::string::npos &&
+            generationRow->label.find("[VIEWER_GENERATION]")==std::string::npos);
+        ensure("select generation mode without committing",tree.setComboValue(mode,LLSD("settings_v3.xml"),error));
+        const auto modeSelection=tree.get(mode)->combo->selected;
+        int modeCommits=0;
+        LLVKControl::Callback modeCallback;
+        modeCallback.function=[&](auto,const LLSD&) { ++modeCommits; };
+        tree.setControlCommit(mode,std::move(modeCallback));
+        info["VIEWER_VERSION"][0]=8;
+        ensure("refresh generation metadata",ui->setAboutInfo(info,error));
+        ensure("mode selection preserved",tree.get(mode)->combo->selected==modeSelection);
+        ensure("mode value preserved",tree.value(mode).asString()=="settings_v3.xml");
+        ensure_equals("formatting does not commit mode",modeCommits,0);
+        ensure("selected mode label refreshes",tree.get(tree.get(mode)->combo->button)->button->params.label.find(U"8")!=std::u32string::npos);
+        info["VIEWER_VERSION"][0]=7;
+        ensure("restore generation metadata",ui->setAboutInfo(info,error));
+        const auto checkbox=ui->find("ShowChatMiniIcons");
+        ensure("chat generation checkbox exists",checkbox!=0);
+        bool resolved=false;
+        for (const auto child : tree.get(checkbox)->children)
+            if (const auto* node=tree.get(child); node && node->plainText)
+            {
+                const auto text=node->plainText->text;
+                resolved=text.find(U"V7")!=std::u32string::npos && text.find(U"[SHORT_VIEWER_GENERATION]")==std::u32string::npos;
+            }
+        ensure("existing preference label receives localized generation",resolved);
+    }
 
     template<> template<> void object::test<220>()
     {

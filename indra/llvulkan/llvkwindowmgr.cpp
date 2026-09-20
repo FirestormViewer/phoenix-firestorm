@@ -1026,9 +1026,6 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
         {
             const auto selected=backend->second.asString();
             if (selected!="OpenGL" && selected!="Zink") { problem="Invalid renderer preference"; return false; }
-            const auto prompt=ll_convert<std::wstring>("Save preferences and shut down now?\n\nThe renderer will be switched to "+selected+" when you launch Vulkanstorm again.");
-            if (MessageBoxW(state.window,prompt.c_str(),L"Change Renderer",MB_OKCANCEL|MB_ICONQUESTION)!=IDOK)
-            { problem="Renderer change cancelled. Preferences were not saved."; return false; }
         }
         if (!save || !save(changes,problem)) { if (problem.empty()) problem="Native preference persistence is unavailable"; return false; }
         if (restart) state.quitRequested=true;

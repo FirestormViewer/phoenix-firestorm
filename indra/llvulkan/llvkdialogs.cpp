@@ -5294,12 +5294,16 @@ bool LLVKViewerUi::setAboutInfo(const LLSD& info,std::string& error)
     arguments["ReleaseNotes"]=mAboutStrings["ReleaseNotes"];
     LLStringUtil::format_map_t generationArguments;
     generationArguments["VERSION"]=info["VIEWER_VERSION"][0].asString();
+    bool generationChanged=false;
     for (const auto name : {"VIEWER_GENERATION","SHORT_VIEWER_GENERATION"})
     {
         auto label=mAboutStrings[name];
         LLStringUtil::format(label,generationArguments);
         arguments[name]=label;
+        if (mShellLabels.defaults[name]!=label)
+        { mShellLabels.defaults[name]=label; generationChanged=true; }
     }
+    if (generationChanged) mTree.setLabelContext(mShellLabels);
     for (auto item=info.beginMap(); item!=info.endMap(); ++item)
     {
         if (item->second.isArray())

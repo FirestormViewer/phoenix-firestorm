@@ -165,6 +165,58 @@ bool LLVKFloater::setDocked(bool docked,std::string& error)
 
 LLVKFloater::~LLVKFloater() { if (mId) { std::string error; mTree.erase(mId,error); } }
 bool LLVKFloater::visible() const { const auto* node = mTree.get(mId); return node && node->params.visible; }
+bool LLVKFloater::fitToViewport(int menuHeight,std::string& error)
+{
+    error.clear();
+    const auto* node=mTree.get(mId);
+    const auto* root=mTree.get(mRoot);
+    if (!node || !root) { error="Native floater viewport owner is missing"; return false; }
+    if (!visible() || node->parent!=mRoot) return true;
+    const int availableWidth=root->params.rect.right-root->params.rect.left;
+    const int availableHeight=std::max(0,root->params.rect.top-root->params.rect.bottom-menuHeight);
+    if (availableWidth<=0 || availableHeight<=0) return true;
+    const LLVKWidgetTree::Rect viewport{0,0,availableWidth,availableHeight};
+    auto rect=node->params.rect;
+    if (mTree.mouseCapture()==mId)
+    { mPreparedViewport=viewport; mPreparedRectangle=rect; return true; }
+    if (mCanResize && !mMinimized)
+    {
+        const int width=std::max(mMinWidth,std::min(rect.right-rect.left,availableWidth));
+        const int height=std::max(mMinHeight,std::min(rect.top-rect.bottom,availableHeight));
+        rect.right=rect.left+width;
+        rect.bottom=rect.top-height;
+    }
+    if (mPreparedViewport && *mPreparedViewport!=viewport && !mMinimized)
+    {
+        const auto position=[](int offset,int oldExtent,int oldAvailable,int extent,int available)
+        {
+            double result=0.;
+            if (offset<0 && oldExtent>16)
+                result=static_cast<double>(offset)*(extent-16)/(oldExtent-16);
+            else if (offset+oldExtent>oldAvailable && oldExtent>16)
+                result=available-extent+static_cast<double>(offset-(oldAvailable-oldExtent))*(extent-16)/(oldExtent-16);
+            else if (oldAvailable>oldExtent)
+                result=static_cast<double>(offset)*(available-extent)/(oldAvailable-oldExtent);
+            return static_cast<int>(std::floor(result+.5));
+        };
+        const int width=rect.right-rect.left,height=rect.top-rect.bottom;
+        rect.left=position(mPreparedRectangle.left,mPreparedRectangle.right-mPreparedRectangle.left,
+            mPreparedViewport->right,width,availableWidth);
+        rect.bottom=position(mPreparedRectangle.bottom,mPreparedRectangle.top-mPreparedRectangle.bottom,
+            mPreparedViewport->top,height,availableHeight);
+        rect.right=rect.left+width; rect.top=rect.bottom+height;
+    }
+    const int overlapWidth=std::min(16,rect.right-rect.left);
+    const int overlapHeight=std::min(16,rect.top-rect.bottom);
+    const int dx=rect.right-overlapWidth<0 ? overlapWidth-rect.right :
+        rect.left+overlapWidth>availableWidth ? availableWidth-rect.left-overlapWidth : 0;
+    const int dy=rect.top>availableHeight ? availableHeight-rect.top :
+        rect.top-overlapHeight<0 ? overlapHeight-rect.top : 0;
+    rect.left+=dx; rect.right+=dx; rect.bottom+=dy; rect.top+=dy;
+    mPreparedViewport=viewport; mPreparedRectangle=rect;
+    if (rect==node->params.rect) return true;
+    return mTree.setShape(mId,rect,error);
+}
 bool LLVKFloater::open(std::string& error,std::optional<LLVKWidgetTree::Rect> placement)
 {
     error.clear();

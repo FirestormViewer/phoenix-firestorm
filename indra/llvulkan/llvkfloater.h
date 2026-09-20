@@ -29,6 +29,7 @@ public:
     bool setMinimized(bool minimized, std::string& error);
     bool setDocked(bool docked,std::string& error);
     bool minimized() const noexcept { return mMinimized; }
+    bool fitToViewport(int menuHeight,std::string& error);
     enum class ResizeCursor { None, Horizontal, Vertical, NorthwestSoutheast, NortheastSouthwest };
     ResizeCursor resizeCursor(int x,int y,std::string& error) const;
     bool pointer(const LLVKWidgetTree::PointerEvent& event, std::string& error);
@@ -47,6 +48,8 @@ private:
     Id mDockButton = 0;
     bool mCanClose = true, mCanMinimize = false, mMinimized = false;
     LLVKWidgetTree::Rect mExpandedRect;
+    std::optional<LLVKWidgetTree::Rect> mPreparedViewport;
+    LLVKWidgetTree::Rect mPreparedRectangle;
     std::map<Id,bool> mExpandedVisibility;
     bool mDragging = false;
     bool mForeground=true, mControlActive=true;
