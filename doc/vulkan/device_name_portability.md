@@ -31,3 +31,15 @@ initializer-list storage lives through the loop. Preserve callback order and
 all widget-liveness checks. No GPU state, GL oracle or runtime policy changes.
 Validate by compiling the affected translation units and rerunning Linux CI,
 without disabling -Werror or individual diagnostics.
+
+## Menu activation loop indentation
+
+At ea2eea2adc, LLVKMenu::key(Key::Activate) searches root items, enables keyboard
+mode and activates the first enabled branch, returning true. If none qualifies,
+it returns false after the loop. The compressed loop and trailing return on one
+line trigger GCC -Wmisleading-indentation. Expand the loop and condition into
+explicit blocks and put the final return on its own line. Preserve root order,
+predicate evaluation, activation arguments and return behavior. NV-00/NV-01/
+NV-03: formatting-only CPU control-flow clarification; no GL oracle, rendering,
+GPU lifetime or synchronization change. Validate compilation without suppressing
+the warning and inspect the surrounding menu code for the same pattern.
