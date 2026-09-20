@@ -14,7 +14,7 @@
 class LLVKSessionOwner final
 {
 public:
-    enum class State { PreLogin, Authenticating, AwaitingAgreement, Connecting, Connected, Disconnecting, Stopped };
+    enum class State { PreLogin, Authenticating, AwaitingAgreement, Connecting, Connected, Disconnecting, Stopped, AwaitingChallenge };
     enum class Lifetime { Application, Session, Region };
     enum class Code
     {
@@ -46,6 +46,12 @@ public:
         std::uint64_t sessionHandle = 0;
         bool operator==(const Identity&) const = default;
     };
+    struct Challenge
+    {
+        std::uint64_t id=0,revision=0;
+        std::string messageKey;
+        bool operator==(const Challenge&) const = default;
+    };
     struct Status
     {
         Code code = Code::Ok;
@@ -57,12 +63,13 @@ public:
     };
     struct Response
     {
-        enum class Kind { AgreementRequired, Authorized, RegionConnected, Failed };
+        enum class Kind { AgreementRequired, Authorized, RegionConnected, Failed, ChallengeRequired };
         Kind kind = Kind::Failed;
         Tag tag;
         Agreement agreement;
         Identity identity;
         Code failure = Code::ConnectionFailed;
+        Challenge challenge;
     };
     class Inbox final
     {
@@ -84,12 +91,14 @@ public:
         Operation operation = Operation::None;
         Tag tag;
         std::optional<Agreement> acceptedAgreement;
+        std::string challengeToken;
     };
     class Transport
     {
     public:
         virtual ~Transport() = default;
         virtual Code begin(const Request& request, const std::shared_ptr<Inbox>& replies) = 0;
+        virtual Code pump() { return Code::Ok; }
         virtual Code quiesce(std::uint64_t generation) = 0;
     };
     struct Context
@@ -113,6 +122,7 @@ public:
         Status status;
         Status cleanup;
         std::array<std::size_t, 3> owned{};
+        std::optional<Challenge> challenge;
     };
 
     explicit LLVKSessionOwner(std::shared_ptr<Transport> transport = {});
@@ -124,6 +134,7 @@ public:
 
     Status beginLogin();
     Status decideAgreement(Tag tag, Agreement agreement, bool accepted);
+    Status submitChallenge(Tag tag,Challenge challenge,std::string token);
     Status pumpOne();
     Status cancel(Tag tag);
     Status cancel();
@@ -138,7 +149,7 @@ private:
     Status check() const;
     Status result(Code code, Operation operation = Operation::None, Action action = Action::None,
                   std::uint64_t service = 0) const;
-    Status dispatch(Operation operation, std::optional<Agreement> accepted = {});
+    Status dispatch(Operation operation, std::optional<Agreement> accepted = {},std::string token = {});
     Status receive(const Response& response);
     Status disconnect(Status reason, bool stopping);
     Status drain();
@@ -158,6 +169,7 @@ private:
     State mState = State::PreLogin;
     Tag mTag;
     std::optional<Agreement> mAgreement;
+    std::optional<Challenge> mChallenge;
     std::optional<Identity> mIdentity;
     Status mStatus;
     Status mCleanup;

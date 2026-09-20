@@ -35,6 +35,7 @@ public:
     };
     static std::optional<Endpoint> select(const std::map<std::string,LLSD>& settings,
         bool browser, std::string& error);
+    static bool validateDirectLogin(const std::map<std::string,LLSD>& settings,std::string& error);
 };
 
 #endif

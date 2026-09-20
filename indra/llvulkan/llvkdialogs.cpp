@@ -168,7 +168,7 @@ bool LLVKViewerUi::initializeDialogs(const Configuration& configuration,std::str
                         name=="SettingsConfirmBackup" || name=="SettingsRestoreNeedsLogout" || name=="BackupPathEmpty" ||
                         name=="BackupFinished" || name=="RestoreFinished" || name=="okbutton" ||
                         name=="DebugSettingsWarning" || name=="ControlNameCopiedToClipboard" || name=="SanityCheck" || name=="MediaPluginFailed" || name=="ChangeLanguage" ||
-                        name=="WebLaunchExternalTarget" || name=="okcancelignore")
+                        name=="WebLaunchExternalTarget" || name=="okcancelignore" || name=="PromptMFAToken" || name=="ConfirmQuit")
                     { state.notice=Notice{name,{}}; state.noticeDepth=static_cast<int>(state.stack.size()); }
                     state.formTemplate=std::string_view(tag)=="template";
                 }
@@ -403,8 +403,34 @@ bool LLVKViewerUi::showError(const LLVKError& failure,std::string& error)
     return true;
 }
 
+bool LLVKViewerUi::prepareLogin()
+{
+    if (!mPrepareLogin) return true;
+    LLSD input;
+    input["account"]=mTree.value(find("username_combo"));
+    input["password"]=mTree.value(find("password_edit"));
+    input["start"]=mTree.value(find("start_location_combo"));
+    input["grid"]=mTree.value(find("server_combo"));
+    return mPrepareLogin(input,mDialogError);
+}
+
 void LLVKViewerUi::setSessionOwner(LLVKSessionOwner* owner)
 {
+    if (mSessionOwner!=owner)
+    {
+        if (!selectShellMenu(false,mDialogError)) return;
+        if (mLifecycleScreen) mTree.setVisible(mLifecycleScreen,false);
+        mLifecycleScreen=0;
+        mLifecycleQuitRequested=false;
+        clearCommunications(mDialogError);
+        if (mConnectedShell) mTree.setVisible(mConnectedShell,false);
+        if (mConnectedView || !mLoginVisibility.empty())
+        {
+            mTree.setVisible(mCommunicationPanel,false);
+            for (const auto& [id,visible] : mLoginVisibility) mTree.setVisible(id,visible);
+            mLoginVisibility.clear(); mConnectedView=false;
+        }
+    }
     mSessionOwner=owner;
     mReportedSession.reset();
     LLVKControl::Callback login;
@@ -412,10 +438,12 @@ void LLVKViewerUi::setSessionOwner(LLVKSessionOwner* owner)
     {
         updateLoginControls();
         if (mSessionOwner!=owner || !mTree.get(find("connect_btn"))->params.enabled) return;
+        if (!prepareLogin()) return;
         owner->beginLogin();
         mReportedSession.reset();
         refreshSession(mDialogError);
     };
+    mTree.setControlCommit(find("password_edit"),login);
     mTree.setControlCommit(find("connect_btn"),std::move(login));
     updateLoginControls();
 }
@@ -428,20 +456,90 @@ bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
     using Owner=LLVKSessionOwner;
     mSessionSnapshot=mSessionOwner->snapshot();
     const auto snapshot=mSessionSnapshot;
+    const bool enteringConnected=snapshot.state==Owner::State::Connected && !mConnectedView;
     const auto same=[](const Owner::Status& left,const Owner::Status& right)
     { return left.code==right.code && left.action==right.action && left.operation==right.operation &&
         left.generation==right.generation && left.service==right.service; };
     if (mReportedSession && mReportedSession->tag==snapshot.tag && mReportedSession->state==snapshot.state &&
         same(mReportedSession->status,snapshot.status) && same(mReportedSession->cleanup,snapshot.cleanup)) return true;
     const bool prelogin=snapshot.state==Owner::State::PreLogin;
+    const bool restoreLoginFocus=prelogin && (mConnectedView || !mLoginVisibility.empty());
+    if (mActiveNotice && (mActiveNotice->name=="NativeSessionError" || mActiveNotice->name=="NativeSessionProgress" ||
+        mActiveNotice->name=="NativeSessionAgreement" || mActiveNotice->name=="PromptMFAToken"))
+        if (!dismissNotice(error)) return false;
+    if (snapshot.state==Owner::State::Connected && !mConnectedView)
+    {
+        if (!initializeConnectedShell(error)) return false;
+        if (!initializeCommunications(error)) return false;
+        if (!selectShellMenu(true,error)) return false;
+        mMenu->dismiss();
+        blockTooltips();
+        if (mNoticePanel) mNoticePreviousFocus=find("local_composer",mCommunicationPanel);
+        else if (!mTree.setKeyboardFocus(0,false,false,error)) return false;
+        for (const auto name : {"login_html","ui_stack"})
+        {
+            const auto id=find(name);
+            const auto* node=mTree.get(id);
+            if (!node) { error="Native login transition is missing a login subtree"; return false; }
+            mLoginVisibility.try_emplace(id,node->params.visible);
+            mTree.setVisible(id,false);
+        }
+        mTree.setValue(find("password_edit"),LLSD(""));
+        mConnectedView=true;
+        mTree.setVisible(mConnectedShell,true);
+    }
+    else if (prelogin && (mConnectedView || !mLoginVisibility.empty()))
+    {
+        if (!selectShellMenu(false,error)) return false;
+        if (mConnectedShell) mTree.setVisible(mConnectedShell,false);
+        mTree.setVisible(mCommunicationPanel,false);
+        if (mConnectedView && !clearCommunications(error)) return false;
+        for (const auto& [id,visible] : mLoginVisibility) mTree.setVisible(id,visible);
+        mLoginVisibility.clear();
+        mConnectedView=false;
+    }
     for (const auto name : {"connect_btn","username_combo","password_edit","server_combo","start_location_combo"})
         mTree.setEnabled(find(name),prelogin);
     updateLoginControls();
-    if (mActiveNotice && (mActiveNotice->name=="NativeSessionError" || mActiveNotice->name=="NativeSessionProgress" ||
-        mActiveNotice->name=="NativeSessionAgreement"))
-        if (!dismissNotice(error)) return false;
+    if (!refreshLifecycleScreen(error)) return false;
+    if (enteringConnected)
+    {
+        const auto modalFocus=mTree.keyboardFocus(),modalTop=mTree.topControl();
+        if (mNoticePanel) mTree.unlockFocus();
+        const bool opened=showContacts("friends",error);
+        const auto openingError=error;
+        if (mNoticePanel)
+        {
+            mNoticePreviousFocus=find("friends_panel",mCommunicationPanel);
+            if (!mTree.setKeyboardFocus(mNoticePanel,true,false,error) ||
+                !mTree.setKeyboardFocus(modalFocus,false,false,error) ||
+                !mTree.setTopControl(modalTop,error)) return false;
+        }
+        if (!opened) { error=openingError; return false; }
+    }
+    if (restoreLoginFocus && !mNoticePanel && !focusLoginFields(error)) return false;
     std::erase_if(mNotices,[](const auto& notice)
-    { return notice.name=="NativeSessionError" || notice.name=="NativeSessionProgress" || notice.name=="NativeSessionAgreement"; });
+    { return notice.name=="NativeSessionError" || notice.name=="NativeSessionProgress" || notice.name=="NativeSessionAgreement" || notice.name=="PromptMFAToken"; });
+    if (snapshot.state==Owner::State::AwaitingChallenge && snapshot.challenge)
+    {
+        LLSD arguments;
+        arguments["MESSAGE"]=errorString(snapshot.challenge->messageKey,"Enter your Second Life authentication code.");
+        if (!queueNotice("PromptMFAToken",arguments,[this,owner=mSessionOwner,tag=snapshot.tag,challenge=*snapshot.challenge](int option,const LLSD& values)
+        {
+            if (mSessionOwner!=owner || owner->snapshot().tag!=tag) return;
+            if (option!=0) owner->cancel(tag);
+            else
+            {
+                auto token=values["token"].asString();
+                std::erase_if(token,[](unsigned char character) { return std::isspace(character)!=0; });
+                owner->submitChallenge(tag,challenge,std::move(token));
+            }
+            mReportedSession.reset();
+            refreshSession(mDialogError);
+        },error)) return false;
+        mReportedSession=snapshot;
+        return true;
+    }
     if (snapshot.state==Owner::State::AwaitingAgreement && snapshot.agreement)
     {
         if (mNotices.size()>=64) { error="Native session notice queue is full"; return false; }
@@ -464,23 +562,6 @@ bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
     const auto status=cleaning ? snapshot.cleanup : snapshot.status;
     if (status.code==Owner::Code::Ok || status.code==Owner::Code::Cancelled || status.code==Owner::Code::Pending)
     {
-        const bool active=snapshot.state==Owner::State::Authenticating || snapshot.state==Owner::State::Connecting;
-        if (active)
-        {
-            if (mNotices.size()>=64) { error="Native session notice queue is full"; return false; }
-            Notice notice;
-            notice.name="NativeSessionProgress";
-            notice.message=errorString(snapshot.state==Owner::State::Connecting ? "LoginConnectingToRegion" :
-                "LoginInProgress","Login in progress...");
-            notice.buttons.push_back({"cancel",errorString("Cancel","Cancel"),1,true});
-            notice.response=[this,owner=mSessionOwner,tag=snapshot.tag](int option,const LLSD&)
-            {
-                if (option!=1 || mSessionOwner!=owner) return;
-                owner->cancel(tag);
-                refreshSession(mDialogError);
-            };
-            if (!enqueueNotice(std::move(notice),error)) return false;
-        }
         mReportedSession=snapshot;
         return true;
     }
@@ -506,7 +587,11 @@ bool LLVKViewerUi::refreshSession(std::string& error,bool repeat)
     {
         if (!option || mSessionOwner!=owner || owner->snapshot().tag!=snapshot.tag) return;
         if (option==1 && snapshot.cleanup.action==Owner::Action::RetryCleanup) owner->retryCleanup(snapshot.tag);
-        else if (option==2 && snapshot.status.action==Owner::Action::RetryLogin) owner->beginLogin();
+        else if (option==2 && snapshot.status.action==Owner::Action::RetryLogin)
+        {
+            if (!prepareLogin()) return;
+            owner->beginLogin();
+        }
         else return;
         mReportedSession.reset();
         refreshSession(mDialogError);
@@ -723,7 +808,9 @@ bool LLVKViewerUi::advanceNotices(double time,std::string& error)
         LLStringUtil::replaceString(ignoreLabel,">","&gt;");
         const auto checkFactory=std::make_unique<LLVKWidgetFactory>(*mDialogFactory);
         if (!checkFactory->loadDefaultsFile(mTree,"alert_check_box.xml",error)) { discard(); return false; }
-        const auto check=checkFactory->construct(mTree,"<check_box name='notification_ignore' label='"+ignoreLabel+"' word_wrap='down'/>",*panel,error);
+        const auto check=checkFactory->construct(mTree,"<check_box name='notification_ignore' width='"+
+            std::to_string(width-50)+"' height='"+std::to_string(lineHeight*ignoreLines)+
+            "' label='"+ignoreLabel+"' word_wrap='down'/>",*panel,error);
         const auto checkBottom=39+lineHeight/2;
         if (!check || !mTree.setShape(*check,{25,checkBottom,width-25,checkBottom+lineHeight*ignoreLines},error)) { discard(); return false; }
         ignore=*check;
@@ -5207,12 +5294,16 @@ bool LLVKViewerUi::setAboutInfo(const LLSD& info,std::string& error)
     arguments["ReleaseNotes"]=mAboutStrings["ReleaseNotes"];
     LLStringUtil::format_map_t generationArguments;
     generationArguments["VERSION"]=info["VIEWER_VERSION"][0].asString();
+    bool generationChanged=false;
     for (const auto name : {"VIEWER_GENERATION","SHORT_VIEWER_GENERATION"})
     {
         auto label=mAboutStrings[name];
         LLStringUtil::format(label,generationArguments);
         arguments[name]=label;
+        if (mShellLabels.defaults[name]!=label)
+        { mShellLabels.defaults[name]=label; generationChanged=true; }
     }
+    if (generationChanged) mTree.setLabelContext(mShellLabels);
     for (auto item=info.beginMap(); item!=info.endMap(); ++item)
     {
         if (item->second.isArray())
@@ -5374,6 +5465,7 @@ std::vector<LLVKFloater*> LLVKViewerUi::floaters() const
     result.push_back(mBeamShape.get());
     for (const auto& [action,dialog] : mGraphicPresetDialogs) result.push_back(dialog.get());
     for (const auto& [swatch,picker] : mColorPickers) result.push_back(picker.get());
+    for (auto* floater : communicationFloaters()) result.push_back(floater);
     return result;
 }
 
@@ -5481,8 +5573,30 @@ LLVKViewerUi::ShutdownStatus LLVKViewerUi::prepareShutdown(std::string& error,co
     mShutdownPrepared=true;
     return ShutdownStatus::Ready;
 }
+LLVKFloater::ResizeCursor LLVKViewerUi::floaterResizeCursor(int x,int y,std::string& error) const
+{
+    using Cursor=LLVKFloater::ResizeCursor;
+    if (mNoticePanel || mTree.topControl() || mMenu->open()) return Cursor::None;
+    if (mTree.mouseCapture())
+    {
+        for (auto* floater : floaters())
+            if (floater && floater->id()==mTree.mouseCapture()) return floater->resizeCursor(x,y,error);
+        return Cursor::None;
+    }
+    for (const auto child : mTree.get(mRoot)->children)
+        for (auto* floater : floaters())
+        {
+            if (!floater || floater->id()!=child || !floater->visible()) continue;
+            const auto rect=mTree.screenRect(child,error);
+            if (rect && x>=rect->left && x<rect->right && y>=rect->bottom && y<rect->top)
+                return floater->resizeCursor(x,y,error);
+        }
+    return Cursor::None;
+}
+
 bool LLVKViewerUi::floaterPointer(const LLVKWidgetTree::PointerEvent& event,std::string& error)
 {
+    if (mNoticePanel || (!mTree.mouseCapture() && mTree.topControl())) return false;
     if (mTree.mouseCapture())
     {
         for (auto* floater : floaters())

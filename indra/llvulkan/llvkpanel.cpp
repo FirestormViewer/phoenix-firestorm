@@ -121,7 +121,12 @@ bool LLVKWidgetTree::layoutTabPanels(Id container, const Node::TabContainer::Lay
     const auto bottom = !layout.hidden && layout.position == Position::Bottom ? layout.tabHeight-layout.panelOverlap : 1;
     const auto left = vertical && !layout.hidden ? std::int64_t(layout.minimumWidth)+layout.rightPadding+2+layout.verticalPadding : layout.panelOffset ? 3 : 1;
     const auto right = width-(!vertical && layout.panelOffset ? 2 : 1);
-    if (top < bottom || right < left) { error = "Native tab container is too small for its content"; return false; }
+    if (top < bottom || right < left)
+    {
+        error = "Native tab container is too small for its content: "+owner->params.name+
+            " ("+std::to_string(width)+"x"+std::to_string(height)+")";
+        return false;
+    }
     struct Placement { Id panel, button; Rect content, tab; };
     std::vector<Placement> placements;
     const auto rowHeight=std::int64_t(layout.verticalHeight)+layout.verticalPadding;
@@ -852,6 +857,26 @@ bool LLVKWidgetTree::setPanelDefaultButton(Id id, Id button, std::string& error)
     { error = "Invalid native panel default button"; return false; }
     mNodes.at(id).panel->defaultButton = button;
     return true;
+}
+
+bool LLVKWidgetTree::routePanelKey(Id root, PanelKey key, LLVKLineEditor::Modifiers modifiers, std::string& error)
+{
+    error.clear();
+    std::vector<Id> parents;
+    for (auto current=mKeyboardFocus; get(current); current=get(current)->parent)
+    {
+        parents.push_back(current);
+        if (current==root) break;
+    }
+    if (parents.empty() || parents.back()!=root) return false;
+    if (key==PanelKey::Return)
+        for (const auto current : parents)
+            if (const auto* node=get(current); node && node->panel && node->panel->defaultButton)
+                return panelKey(current,key,modifiers,error);
+    for (const auto current : parents)
+        if (const auto* node=get(current); node && node->panel)
+            if (panelKey(current,key,modifiers,error) || !error.empty()) return error.empty();
+    return false;
 }
 
 bool LLVKWidgetTree::panelKey(Id id, PanelKey key, LLVKLineEditor::Modifiers modifiers, std::string& error)

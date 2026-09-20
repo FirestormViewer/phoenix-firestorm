@@ -29,11 +29,15 @@ public:
     bool setMinimized(bool minimized, std::string& error);
     bool setDocked(bool docked,std::string& error);
     bool minimized() const noexcept { return mMinimized; }
+    bool fitToViewport(int menuHeight,std::string& error);
+    enum class ResizeCursor { None, Horizontal, Vertical, NorthwestSoutheast, NortheastSouthwest };
+    ResizeCursor resizeCursor(int x,int y,std::string& error) const;
     bool pointer(const LLVKWidgetTree::PointerEvent& event, std::string& error);
     void onClose(std::function<void()> callback) { mClose = std::move(callback); }
     void onCloseFocus(std::function<bool(std::string&)> callback) { mCloseFocus=std::move(callback); }
     void onCloseDependents(std::function<bool(std::string&)> callback) { mCloseDependents=std::move(callback); }
 private:
+    std::uint8_t resizeEdgesAt(int x,int y,std::string& error) const;
     static std::unique_ptr<LLVKFloater> adopt(LLVKWidgetTree& tree, LLVKWidgetFactory& factory, Id root, Id id, std::string& error);
     bool createChrome(LLVKWidgetFactory& factory, const std::string& title, std::shared_ptr<LLVKFont> font, std::string& error);
     explicit LLVKFloater(LLVKWidgetTree& tree) : mTree(tree) {}
@@ -44,6 +48,8 @@ private:
     Id mDockButton = 0;
     bool mCanClose = true, mCanMinimize = false, mMinimized = false;
     LLVKWidgetTree::Rect mExpandedRect;
+    std::optional<LLVKWidgetTree::Rect> mPreparedViewport;
+    LLVKWidgetTree::Rect mPreparedRectangle;
     std::map<Id,bool> mExpandedVisibility;
     bool mDragging = false;
     bool mForeground=true, mControlActive=true;

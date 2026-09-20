@@ -7,6 +7,18 @@
 
 namespace
 {
+    std::string shortcutBinding(std::string_view declaration)
+    {
+        if (declaration.empty()) return {};
+        std::string binding;
+        if (declaration.find("control")!=std::string_view::npos) binding+="control|";
+        if (declaration.find("alt")!=std::string_view::npos) binding+="alt|";
+        if (declaration.find("shift")!=std::string_view::npos) binding+="shift|";
+        std::string key(declaration.substr(declaration.rfind('|')+1));
+        LLStringUtil::toUpper(key);
+        return binding+key;
+    }
+
     std::string shortcutLabel(std::string value)
     {
         LLStringUtil::replaceString(value,"control|","Ctrl+");
@@ -69,6 +81,7 @@ std::unique_ptr<LLVKMenu> LLVKMenu::create(std::string_view xml,std::shared_ptr<
         XML_Parser parser;
         std::vector<std::optional<std::size_t>> stack;
         bool failed = false, root = false;
+        bool rootCreateJumpKeys = false;
         static void XMLCALL start(void* data,const char* tag,const char** attributes)
         {
             auto& state = *static_cast<Parser*>(data);
@@ -79,6 +92,12 @@ std::unique_ptr<LLVKMenu> LLVKMenu::create(std::string_view xml,std::shared_ptr<
                 if (state.stack.empty())
                 {
                     if (name != "menu_bar" && name!="toggleable_menu" && name!="context_menu") throw std::runtime_error("menu root");
+                    for (std::size_t index = 0; attributes[index]; index += 2)
+                        if (std::string_view(attributes[index]) == "create_jump_keys")
+                        {
+                            const std::string_view value(attributes[index+1]);
+                            state.rootCreateJumpKeys = value == "true" || value == "1";
+                        }
                     state.root = true; state.stack.push_back({}); return;
                 }
                 const bool item = name == "menu" || name == "menu_item_call" || name == "menu_item_check" || name == "menu_item_separator";
@@ -153,8 +172,8 @@ std::unique_ptr<LLVKMenu> LLVKMenu::create(std::string_view xml,std::shared_ptr<
         if (item.name == "Debug") item.visible = debug;
         LLVKLabel label; label.assign(item.label); label.setArgument("[APP_NAME]","Vulkanstorm");
         item.label = label.resolve(menu->mLabels);
-        if (!item.branch && !item.separator && item.action.empty()) item.invoke=[] {};
     }
+    if (state.rootCreateJumpKeys) menu->assignJumpKeys(menu->mRoots);
     for (const auto& item : menu->mItems)
         if (item.createJumpKeys) menu->assignJumpKeys(item.children);
     return menu;
@@ -272,6 +291,8 @@ bool LLVKMenu::itemChecked(std::size_t item) const
 }
 void LLVKMenu::setVisible(std::string_view name,bool visible)
 { for (auto& item : mItems) if (item.name == name) item.visible = visible; }
+void LLVKMenu::setEnabled(std::string_view name,bool enabled)
+{ for (auto& item : mItems) if (item.name == name) item.enabled = enabled; }
 bool LLVKMenu::itemVisible(std::size_t item) const
 {
     if (item>=mItems.size() || !mItems[item].visible) return false;
@@ -281,6 +302,7 @@ bool LLVKMenu::itemVisible(std::size_t item) const
 }
 bool LLVKMenu::shortcut(std::string key,bool control,bool shift,bool alt)
 {
+    LLStringUtil::toUpper(key);
     std::string shortcut;
     if (control) shortcut += "control|";
     if (alt) shortcut += "alt|";
@@ -288,9 +310,12 @@ bool LLVKMenu::shortcut(std::string key,bool control,bool shift,bool alt)
     shortcut += key;
     const auto visit = [&](const auto& self,std::size_t item) -> bool
     {
-        if (!itemVisible(item) || !enabled(item)) return false;
-        if (mItems[item].shortcut == shortcut && enabled(item) && !mItems[item].branch)
-        { activate(item,0); return true; }
+        if (!mItems[item].branch)
+        {
+            if (mItems[item].shortcut.empty() || shortcutBinding(mItems[item].shortcut) != shortcut || !commandEnabled(item)) return false;
+            invokeItem(item); return true;
+        }
+        if (!commandEnabled(item)) return false;
         for (auto child : mItems[item].children) if (self(self,child)) return true;
         return false;
     };
@@ -299,14 +324,18 @@ bool LLVKMenu::shortcut(std::string key,bool control,bool shift,bool alt)
 }
 bool LLVKMenu::enabled(std::size_t item) const
 {
-    if (!itemVisible(item) || !mItems[item].enabled) return false;
+    return itemVisible(item) && commandEnabled(item);
+}
+bool LLVKMenu::commandEnabled(std::size_t item) const
+{
+    if (item>=mItems.size() || !mItems[item].enabled) return false;
     const auto& entry = mItems[item];
     const auto predicate=mPredicates.find(entry.enableAction);
     if (predicate!=mPredicates.end() && predicate->second && !predicate->second(entry.enableParameter)) return false;
     const auto specific = mItemHandlers.find({entry.action,entry.parameter});
     const auto handler = mHandlers.find(entry.action);
-    return entry.branch || (!entry.separator && (bool(entry.invoke) || (specific != mItemHandlers.end() && bool(specific->second)) ||
-        (handler != mHandlers.end() && bool(handler->second))));
+    return entry.branch || (!entry.separator && (bool(entry.invoke) || (specific != mItemHandlers.end() ? bool(specific->second) :
+        (handler != mHandlers.end() && bool(handler->second)))));
 }
 bool LLVKMenu::showContext(std::vector<Item> items,int x,int y,std::string& error)
 {
@@ -357,6 +386,12 @@ void LLVKMenu::activate(std::size_t item,std::size_t level)
         }
         mOpen.resize(std::min(level,mOpen.size())); mOpen.push_back(item); mHovered = item; return;
     }
+    invokeItem(item);
+}
+
+void LLVKMenu::invokeItem(std::size_t item)
+{
+    if (mContextRoot && item<*mContextRoot) dismiss();
     const auto entry = mItems[item];
     const auto hit=std::find_if(mHits.begin(),mHits.end(),[item](const Hit& value) { return value.item==item && !value.tearOff; });
     if (!mContextRoot && hit!=mHits.end()) mModel->activation=Model::Activation{item,hit->rect,mModel->time};
