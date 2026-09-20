@@ -40,6 +40,18 @@ public:
         std::function<bool(LLVKSessionOwner::Tag,const LLUUID&,const std::string&,bool,bool,std::string&)> direct;
     };
     struct BackupRequest;
+    bool showConversations(std::string& error);
+    bool hideConversations(std::string& error);
+    bool showContacts(const std::string& tab,std::string& error);
+    bool showNearbyChat(std::string& error);
+    bool showPeople(std::string& error,const std::string& tab="nearby_panel");
+    bool hidePeople(std::string& error);
+    bool showResidentSearch(std::string& error);
+    bool showDirectConversation(const LLUUID& recipient,std::string& error);
+    bool showGroupConversation(const LLUUID& group,std::string& error);
+    LLVKWidgetTree::Id conversationPanel(const LLUUID& id,bool group=false) const;
+    std::vector<LLVKFloater*> communicationFloaters() const;
+    void setCommunicationApplicationFocused(bool focused);
     struct Configuration
     {
         LLVKSkinFiles::Configuration skin;
@@ -205,6 +217,7 @@ public:
     enum class ShutdownStatus { Pending, Ready, Failed };
     ShutdownStatus prepareShutdown(std::string& error,const std::map<std::string,LLSD>& applicationSettings = {});
     bool floaterPointer(const LLVKWidgetTree::PointerEvent& event,std::string& error);
+    LLVKFloater::ResizeCursor floaterResizeCursor(int x,int y,std::string& error) const;
     bool floaterWheel(int x,int y,int clicks,std::string& error);
     LLVKWidgetTree::Id activeFloater() const;
     bool pointOverFloater(int x,int y) const;
@@ -234,7 +247,32 @@ public:
     void setSessionOwner(LLVKSessionOwner* owner);
     bool refreshSession(std::string& error, bool repeat = false);
     const LLVKSessionOwner::Snapshot& sessionSnapshot() const noexcept { return mSessionSnapshot; }
+    LLVKWidgetTree::Id lifecycleScreen() const noexcept { return mLifecycleScreen; }
+    void quitLifecycle();
 private:
+    bool initializeConnectedShell(std::string& error);
+    bool initializeShellToolbar(std::string& error);
+    bool prepareConnectedShell(float frameDelta,std::string& error);
+    bool selectShellMenu(bool connected,std::string& error);
+    bool activateShellCommand(const std::string& command,std::string& error);
+    bool shellSessionCurrent() const;
+    bool shellCommandAvailable(const std::string& command) const;
+    bool shellFloaterVisible(const std::string& name) const;
+    void refreshShellMenuBindings();
+    LLVKWidgetTree::Id mConnectedShell=0,mShellNavigation=0,mShellLocation=0,mShellToolbar=0;
+    int mShellToolbarHeight=0,mShellToolbarPad=0,mShellToolbarGap=0;
+    bool mShellToolbarFill=false;
+    std::vector<std::pair<LLVKWidgetTree::Id,std::string>> mShellCommands;
+    std::vector<std::string> mShellBlockers;
+    LLVKLabel::Context mShellLabels;
+    std::unique_ptr<LLVKMenu> mLoginMenu;
+    std::uint64_t mShellMenuIncarnation=0;
+    bool refreshLifecycleScreen(std::string& error);
+    bool appendLifecycleScreen(LLVKWidgetPaint& paint,const LLVKWidgetPaint::Input& input,std::string& error);
+    LLVKWidgetTree::Id mLifecycleFull=0,mLifecycleMini=0,mLifecycleScreen=0;
+    double mLifecycleShown=0;
+    LLVKSessionOwner::Tag mLifecycleTag;
+    bool mLifecycleQuitRequested=false;
     bool appendTooltip(LLVKWidgetPaint& paint,const LLVKWidgetPaint::Input& input,std::string& error);
     bool initializeTooltip(std::string& error);
     std::string mTooltipTemplate;
@@ -256,9 +294,15 @@ private:
     std::map<LLVKWidgetTree::Id,bool> mLoginVisibility;
     CommunicationServices mCommunications;
     LLVKWidgetTree::Id mCommunicationPanel=0;
+    bool mCommunicationApplicationFocused=true;
+    bool communicationFocused(LLVKWidgetTree::Id page) const;
+    bool refreshPeople(std::string& error);
+    bool openCommunicationFloater(LLVKFloater& floater,const std::optional<LLVKWidgetTree::Rect>& rectangle,std::string& error);
+    std::optional<LLVKWidgetTree::Rect> mConversationsRectangle,mPeopleRectangle,mResidentPickerRectangle;
     std::optional<LLVKChatProtocol::Context> mCommunicationContext;
     struct Conversation
     {
+        LLVKWidgetTree::Id page=0,tab=0;
         std::string name,draft,transcript;
         unsigned unread=0;
         bool typing=false;
@@ -272,17 +316,18 @@ private:
     std::vector<LLVKChatProtocol::Resident> mResidentResults;
     std::map<LLUUID,Conversation> mGroupConversations;
     LLUUID mSelectedGroup;
-    void sendGroupCommunication();
+    bool ensureConversation(const LLUUID& id,bool group,std::string& error);
+    void sendGroupCommunication(const LLUUID& id);
     LLUUID mTypingRecipient;
     double mTypingStarted=0,mTypingLastKey=0,mTypingLastSent=0;
     bool mTypingAnnounced=false;
-    void communicationKeystroke();
+    void communicationKeystroke(const LLUUID& recipient);
     void stopCommunicationTyping();
     bool initializeCommunications(std::string& error);
     bool clearCommunications(std::string& error);
     bool refreshCommunications(std::string& error);
     bool selectConversation(const LLUUID& recipient,std::string& error);
-    void sendCommunication(bool local);
+    void sendCommunication(bool local,const LLUUID& recipient=LLUUID::null);
     std::function<bool(const LLSD&,std::string&)> mPrepareLogin;
     bool prepareLogin();
     LLVKSessionOwner::Snapshot mSessionSnapshot;
@@ -382,6 +427,7 @@ private:
     std::unique_ptr<LLVKWidgetFactory> mDialogFactory;
     LLVKWidgetTree mTree;
     LLVKWidgetTree::Id mRoot = 0;
+    std::unique_ptr<LLVKFloater> mConversationsFloater,mPeopleFloater,mResidentPicker;
     std::shared_ptr<LLVKFontRegistry> mFonts;
     std::shared_ptr<LLVKSkinFiles> mSkin;
     std::shared_ptr<LLVKColorTable> mColors;

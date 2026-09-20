@@ -252,7 +252,9 @@ bool LLVKFloater::setMinimized(bool minimized,std::string& error)
         const auto offset=(mTree.setting("ShowNavbarFavoritesPanel").value_or(LLSD(false)).asBoolean() ? 20 : 0)+
             (mTree.setting("ShowNavbarNavigationPanel").value_or(LLSD(false)).asBoolean() ? 30 : 0);
         const int bottom=legacy ? 0 : std::max(0,root.top-root.bottom-18-25-offset);
-        if (!mTree.setShape(mId,{0,bottom,width,bottom+25},error))
+        std::vector<Id> preserved;
+        for (const auto& [child,visible] : mExpandedVisibility) preserved.push_back(child);
+        if (!mTree.setShape(mId,{0,bottom,width,bottom+25},error,preserved))
         {
             for (const auto& [child,visible] : mExpandedVisibility) mTree.setVisible(child,visible);
             mExpandedVisibility.clear(); return false;
@@ -261,13 +263,47 @@ bool LLVKFloater::setMinimized(bool minimized,std::string& error)
     }
     else
     {
-        if (!mTree.setShape(mId,mExpandedRect,error)) return false;
+        std::vector<Id> preserved;
+        for (const auto& [child,visible] : mExpandedVisibility) preserved.push_back(child);
+        if (!mTree.setShape(mId,mExpandedRect,error,preserved)) return false;
         for (const auto& [child,visible] : mExpandedVisibility) mTree.setVisible(child,visible);
         mExpandedVisibility.clear();
     }
     mMinimized=minimized;
     mTree.setVisible(mMinimizeButton,!minimized); mTree.setVisible(mRestoreButton,minimized);
     return error.empty();
+}
+
+std::uint8_t LLVKFloater::resizeEdgesAt(int x,int y,std::string& error) const
+{
+    if (!visible() || !mCanResize || mMinimized) return 0;
+    const auto rect=mTree.screenRect(mId,error);
+    if (!rect || x<rect->left || x>=rect->right || y<rect->bottom || y>=rect->top) return 0;
+    const auto left=x-rect->left, right=rect->right-x;
+    const auto bottom=y-rect->bottom, top=rect->top-y;
+    constexpr int edge=3, corner=11;
+    if (right<=corner && bottom<corner) return 2|4;
+    if (left<corner && bottom<corner && (left<=edge || bottom<=edge)) return 1|4;
+    if (left<corner && top<=corner && (left<=edge || top<=edge)) return 1|8;
+    if (right<=corner && top<=corner && (right<=edge || top<=edge)) return 2|8;
+    if (left<edge) return 1;
+    if (right<=edge) return 2;
+    if (bottom<edge) return 4;
+    if (top<=edge) return 8;
+    return 0;
+}
+
+LLVKFloater::ResizeCursor LLVKFloater::resizeCursor(int x,int y,std::string& error) const
+{
+    const auto edges=mTree.mouseCapture()==mId && mResizeEdges ? mResizeEdges : resizeEdgesAt(x,y,error);
+    switch (edges)
+    {
+        case 1: case 2: return ResizeCursor::Horizontal;
+        case 4: case 8: return ResizeCursor::Vertical;
+        case 1|8: case 2|4: return ResizeCursor::NorthwestSoutheast;
+        case 1|4: case 2|8: return ResizeCursor::NortheastSouthwest;
+        default: return ResizeCursor::None;
+    }
 }
 
 bool LLVKFloater::pointer(const LLVKWidgetTree::PointerEvent& event,std::string& error)
@@ -294,16 +330,7 @@ bool LLVKFloater::pointer(const LLVKWidgetTree::PointerEvent& event,std::string&
     }
     if (mCanResize && !mMinimized && event.kind==Kind::LeftDown && event.x>=rect->left && event.x<rect->right && event.y>=rect->bottom && event.y<rect->top)
     {
-        constexpr int edge=3,corner=16;
-        std::uint8_t edges=0;
-        if (event.x<rect->left+edge) edges|=1;
-        if (event.x>=rect->right-edge) edges|=2;
-        if (event.y<rect->bottom+edge) edges|=4;
-        if (event.y>=rect->top-edge) edges|=8;
-        if (event.x-rect->left+event.y-rect->bottom<corner) edges=1|4;
-        if (rect->right-1-event.x+event.y-rect->bottom<corner) edges=2|4;
-        if (event.x-rect->left+rect->top-1-event.y<corner) edges=1|8;
-        if (rect->right-1-event.x+rect->top-1-event.y<corner) edges=2|8;
+        const auto edges=resizeEdgesAt(event.x,event.y,error);
         if (edges)
         {
             if (!mTree.setMouseCapture(mId,error)) return false;

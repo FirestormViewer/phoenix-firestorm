@@ -312,7 +312,7 @@ bool LLVKWidgetTree::setTopControl(Id id, std::string& error)
 }
 
 bool LLVKWidgetTree::planReshape(Id id, std::int64_t width, std::int64_t height, const Rect& origin,
-                                ShapeChanges& changes, std::string& error) const
+                                ShapeChanges& changes, std::string& error,const std::vector<Id>& preservedChildren) const
 {
     const auto& node = mNodes.at(id);
     const auto deltaWidth = width - (std::int64_t(node.params.rect.right)-node.params.rect.left);
@@ -332,6 +332,7 @@ bool LLVKWidgetTree::planReshape(Id id, std::int64_t width, std::int64_t height,
         return planCheckBoxReshape(id,width,changes,error);
     if (deltaWidth || deltaHeight) for (Id child : node.children)
     {
+        if (std::find(preservedChildren.begin(),preservedChildren.end(),child)!=preservedChildren.end()) continue;
         const auto& params = mNodes.at(child).params;
         const bool left = (params.follows & Left) != 0;
         const bool rightFollow = (params.follows & Right) != 0;
@@ -415,13 +416,13 @@ void LLVKWidgetTree::publishShapes(ShapeChanges& changes)
     for (const auto& [id,thumb] : changes.thumbs) mNodes.at(id).scrollbar->thumb = thumb;
 }
 
-bool LLVKWidgetTree::setShape(Id id, const Rect& rectangle, std::string& error)
+bool LLVKWidgetTree::setShape(Id id, const Rect& rectangle, std::string& error,const std::vector<Id>& preservedChildren)
 {
     error.clear();
     if (!get(id)) { error = "Native shape target does not exist"; return false; }
     ShapeChanges changes;
     if (!planReshape(id,std::int64_t(rectangle.right)-rectangle.left,std::int64_t(rectangle.top)-rectangle.bottom,
-                     rectangle,changes,error)) return false;
+                     rectangle,changes,error,preservedChildren)) return false;
     return completeShapes(changes,error);
 }
 

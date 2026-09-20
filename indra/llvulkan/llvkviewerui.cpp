@@ -1,6 +1,7 @@
 #include "llvkviewerui.h"
 #include "llvkskinimages.h"
 #include "lluri.h"
+#include "llstring.h"
 #include "llvkxmllayers.h"
 #include <fstream>
 #include <charconv>
@@ -105,6 +106,7 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
     ui->mTree.setSkinImages(images);
     auto labels=configuration.labels;
     labels.defaults.try_emplace("APP_NAME","Vulkanstorm");
+    ui->mShellLabels=labels;
     ui->mTree.setLabelContext(std::move(labels));
     for (const auto& [name,value] : configuration.settings)
     {
@@ -483,6 +485,173 @@ std::unique_ptr<LLVKViewerUi> LLVKViewerUi::create(const Configuration& configur
     return ui;
 }
 
+bool LLVKViewerUi::refreshLifecycleScreen(std::string& error)
+{
+    using State=LLVKSessionOwner::State;
+    const auto state=mSessionSnapshot.state;
+    const bool cleaning=state==State::Disconnecting;
+    const bool active=cleaning || state==State::Authenticating || state==State::Connecting ||
+        state==State::AwaitingAgreement || state==State::AwaitingChallenge;
+    if (!active)
+    {
+        if (!mLifecycleScreen) return true;
+        mTree.setVisible(mLifecycleScreen,false);
+        mLifecycleScreen=0;
+        mLifecycleQuitRequested=false;
+        const auto composer=find("local_composer",mCommunicationPanel);
+        if (mNoticePanel)
+        {
+            mNoticePreviousFocus=state==State::Connected ? composer : state==State::PreLogin ? find("password_edit") : 0;
+            return true;
+        }
+        if (state==State::PreLogin) return focusLoginFields(error);
+        if (state==State::Connected && composer)
+            return mTree.requestControlFocus(composer,true,error);
+        return mTree.setKeyboardFocus(0,false,false,error);
+    }
+    const bool compact=mTree.setting(cleaning ? "FSDisableLogoutScreens" : "FSDisableLoginScreens").value_or(LLSD(false)).asBoolean();
+    auto& panel=compact ? mLifecycleMini : mLifecycleFull;
+    if (!panel)
+    {
+        const auto files=mSkin->read("xui","main_view.xml",LLVKSkinFiles::Policy::Current,error);
+        if (!files) return false;
+        std::vector<std::string_view> layers;
+        for (const auto& file : *files) layers.push_back(file);
+        const auto merged=LLVKXmlLayers::merge(layers,error);
+        if (!merged) return false;
+        std::string declaration;
+        try
+        {
+            boost::property_tree::ptree document;
+            std::istringstream source(*merged);
+            boost::property_tree::read_xml(source,document);
+            const auto& main=document.get_child("panel");
+            boost::property_tree::ptree holder,output;
+            holder.put("<xmlattr>.name","native_lifecycle_screen");
+            holder.put("<xmlattr>.width",main.get<int>("<xmlattr>.width"));
+            holder.put("<xmlattr>.height",main.get<int>("<xmlattr>.height"));
+            bool found=false;
+            for (const auto& [kind,child] : main)
+                if (kind=="panel" && child.get<std::string>("<xmlattr>.name","")==
+                    (compact ? "progress_view_mini" : "progress_view"))
+                {
+                    auto progress=child;
+                    progress.get_child("<xmlattr>").erase("class");
+                    progress.put("<xmlattr>.visible",true);
+                    holder.add_child("panel",progress);
+                    found=true;
+                    break;
+                }
+            if (!found) { error="Native main view is missing its lifecycle declaration"; return false; }
+            output.add_child("panel",holder);
+            std::ostringstream encoded;
+            boost::property_tree::write_xml(encoded,output);
+            declaration=encoded.str();
+        }
+        catch (const boost::property_tree::ptree_error& failure) { error=failure.what(); return false; }
+        const auto created=mDialogFactory->construct(mTree,declaration,0,error);
+        if (!created) return false;
+        panel=*created;
+        const auto discard=[&]() { std::string ignored; mTree.erase(panel,ignored); panel=0; };
+        for (const auto name : {"progress_text","cancel_btn"})
+            if (!find(name,panel)) { error="Native lifecycle declaration is missing a required control"; discard(); return false; }
+        mTree.setVisible(find(compact ? "progress_bar_mini" : "login_progress_bar",panel),true);
+        if (!compact)
+        {
+            mTree.setVisible(find("login_media_panel",panel),false);
+            mTree.setVisible(find("panel_icons",panel),false);
+            mTree.setVisible(find("panel_top_spacer",panel),true);
+            if (!mTree.setPlainText(find("title_text",panel),"[APP_NAME]",error)) { discard(); return false; }
+        }
+    }
+    if (mLifecycleScreen!=panel)
+    {
+        if (mLifecycleScreen) mTree.setVisible(mLifecycleScreen,false);
+        mLifecycleScreen=panel;
+        mLifecycleShown=mTree.time();
+        mMenu->dismiss();
+        blockTooltips();
+        if (!mTree.setTopControl(0,error) || !mTree.setMouseCapture(0,error)) return false;
+        if (mNoticePanel) mNoticePreviousFocus=panel;
+        else if (!mTree.setKeyboardFocus(panel,false,false,error)) return false;
+    }
+    if (mLifecycleTag!=mSessionSnapshot.tag) mLifecycleQuitRequested=false;
+    mLifecycleTag=mSessionSnapshot.tag;
+    mTree.setVisible(panel,true);
+    const auto progress=find(compact ? "progress_bar_mini" : "login_progress_bar",panel);
+    if (!progress || !mTree.setValue(progress,LLSD(cleaning ? 100. : state==State::Connecting ? 40. : 10.)))
+    { error="Native lifecycle progress control is unavailable"; return false; }
+    const auto key=cleaning ? "LoggingOut" : state==State::Connecting ? "LoginConnectingToRegion" : "LoginInProgress";
+    if (!mTree.setPlainText(find("progress_text",panel),errorString(key,cleaning ? "Logging out..." : "Logging in..."),error)) return false;
+    const auto button=find("cancel_btn",panel);
+    const auto label=utf8str_to_wstring(errorString("Quit","Quit"));
+    mTree.setButtonLabel(button,std::u32string(label.begin(),label.end()));
+    mTree.setVisible(button,!cleaning);
+    mTree.setEnabled(button,!cleaning && !mLifecycleQuitRequested && bool(mQuitRequest));
+    LLVKControl::Callback quit;
+    quit.function=[this,owner=mSessionOwner,tag=mLifecycleTag](auto,const LLSD&)
+    {
+        if (mSessionOwner==owner && owner && owner->snapshot().tag==tag) quitLifecycle();
+    };
+    mTree.setControlCommit(button,std::move(quit));
+    return true;
+}
+
+void LLVKViewerUi::quitLifecycle()
+{
+    if (!mLifecycleScreen || !mSessionOwner || mNoticePanel || mLifecycleQuitRequested || !mQuitRequest) return;
+    const auto snapshot=mSessionOwner->snapshot();
+    using State=LLVKSessionOwner::State;
+    if (snapshot.tag!=mLifecycleTag || (snapshot.state!=State::Authenticating && snapshot.state!=State::Connecting &&
+        snapshot.state!=State::AwaitingAgreement && snapshot.state!=State::AwaitingChallenge)) return;
+    mLifecycleQuitRequested=true;
+    mTree.setEnabled(find("cancel_btn",mLifecycleScreen),false);
+    mQuitRequest();
+}
+
+bool LLVKViewerUi::appendLifecycleScreen(LLVKWidgetPaint& paint,const LLVKWidgetPaint::Input& input,std::string& error)
+{
+    if (!mLifecycleScreen) return true;
+    const auto viewport=mTree.screenRect(mRoot,error);
+    if (!viewport) return false;
+    const bool compact=mLifecycleScreen==mLifecycleMini;
+    if (!mTree.setShape(mLifecycleScreen,*viewport,error) ||
+        !mTree.prepareLayoutStacks(mLifecycleScreen,input.button.frameDelta,error)) return false;
+    const auto alpha=compact ? 1.f : std::clamp(static_cast<float>(mTree.time()-mLifecycleShown),0.f,1.f);
+    if (!mConnectedView && (compact || alpha==1.f))
+        for (const auto name : {"login_html","ui_stack"})
+        {
+            const auto id=find(name);
+            const auto* node=mTree.get(id);
+            if (!node) { error="Native lifecycle is missing a login subtree"; return false; }
+            mLoginVisibility.try_emplace(id,node->params.visible);
+            mTree.setVisible(id,false);
+            std::erase_if(paint.commands,[&](const auto& command)
+            {
+                for (auto ancestor=command.owner; mTree.get(ancestor); ancestor=mTree.get(ancestor)->parent)
+                    if (ancestor==id) return true;
+                return false;
+            });
+        }
+    if (!compact)
+    {
+        LLVKWidgetPaint::Command background;
+        background.owner=mLifecycleScreen;
+        background.rectangle=background.clip=*viewport;
+        background.color={0.f,0.f,0.f,alpha};
+        paint.commands.push_back(std::move(background));
+    }
+    auto screenInput=input;
+    screenInput.button.drawAlpha*=alpha;
+    screenInput.button.transparency*=alpha;
+    const auto screen=LLVKWidgetPaint::prepare(mTree,mLifecycleScreen,screenInput,error);
+    if (!screen) return false;
+    if (screen->commands.size()>65536-paint.commands.size())
+    { error="Native lifecycle composition exceeds paint command budget"; return false; }
+    paint.commands.insert(paint.commands.end(),screen->commands.begin(),screen->commands.end());
+    return true;
+}
+
 bool LLVKViewerUi::focusLoginFields(std::string& error)
 {
     const auto username=find("username_combo"),password=find("password_edit");
@@ -550,6 +719,7 @@ bool LLVKViewerUi::refreshDisplayScale(std::string& error,float systemScale)
 std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint::Input& input,std::string& error)
 {
     if (!refreshCommunications(error)) return std::nullopt;
+    if (!prepareConnectedShell(input.button.frameDelta,error)) return std::nullopt;
     if (mHelpRetiring)
     {
         if (mActiveFloater==mHelp.get()) mActiveFloater=nullptr;
@@ -653,26 +823,40 @@ std::optional<LLVKWidgetPaint> LLVKViewerUi::preparePaint(const LLVKWidgetPaint:
     paint->displayScale=mDisplayScale;
     paint->skinAnisotropy=mTree.setting("RenderAnisotropic").value_or(LLSD(false)).asBoolean();
     if (!viewport) return std::nullopt;
+    if (mConnectedView)
+    {
+        const auto color=mColors->find("DkGray");
+        if (!color) { error="Connected background palette color is unavailable"; return std::nullopt; }
+        LLVKWidgetPaint::Command background;
+        background.owner=mRoot;
+        background.rectangle=background.clip=*viewport;
+        background.color=color->get();
+        background.color[3]=1.f;
+        paint->commands.insert(paint->commands.begin(),std::move(background));
+    }
     const auto backingBottom=(std::floor(viewport->bottom*mDisplayScale)+
         std::ceil((viewport->top-viewport->bottom-mNoticeMenuHeight)*mDisplayScale)+1.f)/mDisplayScale;
     const auto menuAlpha=static_cast<float>(mTree.setting("FSMenuBackgroundAlpha").value_or(LLSD(1.f)).asReal());
     mMenu->setTime(mTree.time());
     if (!mMenu->paint(*paint,*viewport,error,{},true,backingBottom,menuAlpha)) return std::nullopt;
+    std::vector<LLVKWidgetPaint::Command> modalPass;
     if (mNoticePanel)
     {
-        std::vector<LLVKWidgetPaint::Command> modalPass;
         for (const auto& command : paint->commands)
+        {
             for (auto owner=command.owner; mTree.get(owner); owner=mTree.get(owner)->parent)
                 if (owner==mNoticePanel)
                 {
                     modalPass.push_back(command);
                     break;
                 }
-        if (modalPass.size()>65536-paint->commands.size())
-        { error="Native modal composition exceeds paint command budget"; return std::nullopt; }
-        paint->commands.insert(paint->commands.end(),modalPass.begin(),modalPass.end());
+        }
     }
-    if (!appendTooltip(*paint,input,error)) return std::nullopt;
+    if (!appendLifecycleScreen(*paint,input,error)) return std::nullopt;
+    if (modalPass.size()>65536-paint->commands.size())
+    { error="Native modal composition exceeds paint command budget"; return std::nullopt; }
+    paint->commands.insert(paint->commands.end(),modalPass.begin(),modalPass.end());
+    if (!mLifecycleScreen && !appendTooltip(*paint,input,error)) return std::nullopt;
     return paint;
 }
 
@@ -836,6 +1020,7 @@ void LLVKViewerUi::blockTooltips()
 
 bool LLVKViewerUi::menuPointer(const LLVKWidgetTree::PointerEvent& event)
 {
+    if (mNoticePanel || mLifecycleScreen) return false;
     if (event.kind!=LLVKWidgetTree::PointerKind::Hover) blockTooltips();
     mMenu->setTime(mTree.time());
     auto& focused=menu();
@@ -845,12 +1030,13 @@ bool LLVKViewerUi::menuPointer(const LLVKWidgetTree::PointerEvent& event)
 
 bool LLVKViewerUi::menuShortcut(const std::string& key,bool control,bool shift,bool alt)
 {
+    if (mNoticePanel || mLifecycleScreen) return false;
     return mMenu->shortcut(key,control,shift,alt);
 }
 
 bool LLVKViewerUi::updateMenuHover(const LLVKWidgetTree::PointerEvent& event,std::string& error)
 {
-    if (mTree.mouseCapture() || mNoticePanel) return true;
+    if (mTree.mouseCapture() || mNoticePanel || mLifecycleScreen) return true;
     for (auto& [item,dialog] : mTornMenus)
     {
         if (!dialog.floater->visible()) continue;

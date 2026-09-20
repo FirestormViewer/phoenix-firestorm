@@ -995,7 +995,7 @@ public:
     bool reparent(Id child, Id parent, bool inBack, std::int32_t tabGroup, std::string& error);
     bool erase(Id id, std::string& error);
     bool reshape(Id id, std::int32_t width, std::int32_t height, std::string& error);
-    bool setShape(Id id, const Rect& rectangle, std::string& error);
+    bool setShape(Id id, const Rect& rectangle, std::string& error,const std::vector<Id>& preservedChildren={});
     bool setVisible(Id id, bool visible);
     bool setEnabled(Id id, bool enabled);
     const Node* get(Id id) const noexcept;
@@ -1019,7 +1019,7 @@ private:
         std::vector<Id> scrollContainers;
     };
     bool planReshape(Id id, std::int64_t width, std::int64_t height, const Rect& origin,
-                     ShapeChanges& changes, std::string& error) const;
+                       ShapeChanges& changes, std::string& error,const std::vector<Id>& preservedChildren={}) const;
     void publishShapes(ShapeChanges& changes);
     bool completeShapes(ShapeChanges& changes, std::string& error);
     bool finishScrollResize(Id id, std::string& error);

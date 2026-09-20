@@ -211,7 +211,12 @@ namespace tut
                     if (noContent) body.clear();
                     response.body()=std::move(body); response.keep_alive(false); response.prepare_payload();
                     boost::beast::http::write(stream,response,problem);
-                    stream.shutdown(problem);
+                    // This single-threaded fixture must accept the next HTTP
+                    // request even if a cancelled client never sends TLS
+                    // close_notify. The complete response has already been
+                    // written; close the advertised non-keepalive connection.
+                    stream.next_layer().shutdown(boost::asio::ip::tcp::socket::shutdown_both,problem);
+                    stream.next_layer().close(problem);
                 }
             });
         }
@@ -622,7 +627,7 @@ namespace tut
         unsigned eventInstantMessages=0;
         bool directSubmitted=false,directObserved=false;
         const LLUUID groupId("55555555-5555-5555-5555-555555555555");
-        const auto deadline=std::chrono::steady_clock::now()+std::chrono::seconds(15);
+        auto deadline=std::chrono::steady_clock::now()+std::chrono::seconds(15);
         while (std::chrono::steady_clock::now()<deadline)
         {
             const auto snapshot=owner.snapshot();
@@ -722,6 +727,9 @@ namespace tut
                         groups.front().powers==((std::uint64_t(1)<<16)|(std::uint64_t(1)<<37)));
                     ensure("stale owner cannot read memberships",transport->groups(stale).empty());
                     owner.shutdown(); closing=true;
+                    // Connection, search and moderation must not consume the
+                    // independent bounded window for logout and event closure.
+                    deadline=std::chrono::steady_clock::now()+std::chrono::seconds(15);
                 }
             }
             std::array<std::uint8_t,2048> bytes{};

@@ -396,7 +396,7 @@ namespace
         }
         LLVKWidgetTree::Id browserAt(int x,int y)
         {
-            if (!ui || ui->modalNotice() || ui->tree().topControl()) return 0;
+            if (!ui || ui->modalNotice() || ui->lifecycleScreen() || ui->tree().topControl()) return 0;
             const auto overFloater=ui->pointOverFloater(x,y);
             for (const auto& [id,view] : browserViews)
             {
@@ -433,15 +433,50 @@ namespace
             }
             if (!ui) return DefWindowProcW(window,message,parameter,data);
             auto& tree = ui->tree();
+            if (const auto screen=ui->lifecycleScreen(); screen && !ui->modalNotice())
+            {
+                if (message==WM_KEYDOWN || message==WM_SYSKEYDOWN)
+                {
+                    if (parameter=='Q' && (GetKeyState(VK_CONTROL)&0x8000) &&
+                        !(GetKeyState(VK_SHIFT)&0x8000) && !(GetKeyState(VK_MENU)&0x8000)) ui->quitLifecycle();
+                    return 0;
+                }
+                if (message==WM_KEYUP || message==WM_SYSKEYUP || message==WM_CHAR || message==WM_SYSCHAR ||
+                    message==WM_UNICHAR || (message>=WM_IME_STARTCOMPOSITION && message<=WM_IME_COMPOSITION) ||
+                    message==WM_IME_CHAR || message==WM_MOUSEWHEEL || message==WM_MOUSEHWHEEL) return 0;
+                if (message>=WM_MOUSEFIRST && message<=WM_MOUSELAST)
+                {
+                    if (message==WM_MOUSEMOVE || message==WM_LBUTTONDOWN || message==WM_LBUTTONUP || message==WM_LBUTTONDBLCLK)
+                    {
+                        LLVKWidgetTree::PointerEvent event;
+                        event.x=logical(GET_X_LPARAM(data)); event.y=logical(static_cast<int>(height)-1-GET_Y_LPARAM(data));
+                        event.time=elapsed();
+                        event.kind=message==WM_MOUSEMOVE ? LLVKWidgetTree::PointerKind::Hover :
+                            message==WM_LBUTTONDOWN ? LLVKWidgetTree::PointerKind::LeftDown :
+                            message==WM_LBUTTONDBLCLK ? LLVKWidgetTree::PointerKind::DoubleClick : LLVKWidgetTree::PointerKind::LeftUp;
+                        input.button.mouseX=event.x; input.button.mouseY=event.y;
+                        tree.advanceTime(event.time,error);
+                        const auto button=ui->find("cancel_btn",screen);
+                        const auto* action=tree.get(button);
+                        const auto bounds=action ? tree.screenRect(button,error) : std::nullopt;
+                        const bool overAction=action && action->params.visible && action->params.enabled && bounds &&
+                            event.x>=bounds->left && event.x<bounds->right && event.y>=bounds->bottom && event.y<bounds->top;
+                        setClientCursor(LoadCursorW(nullptr,overAction ? IDC_ARROW : IDC_WAIT));
+                        tree.routePointer(screen,event,error);
+                        if (tree.mouseCapture()) SetCapture(window); else if (GetCapture()==window) ReleaseCapture();
+                    }
+                    return 0;
+                }
+            }
             if (message==WM_KEYDOWN || message==WM_SYSKEYDOWN ||
                 message==WM_MOUSEWHEEL || message==WM_RBUTTONDOWN || message==WM_MBUTTONDOWN)
                 ui->blockTooltips();
             tree.setInputModifiers({bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_CONTROL)&0x8000),bool(GetKeyState(VK_MENU)&0x8000)});
             const auto focused = tree.keyboardFocus();
             const auto* focus = tree.get(focused);
-            if (!ui->keyCaptureDialog() && (message==WM_KEYUP || message==WM_SYSKEYUP) &&
+            if (!ui->lifecycleScreen() && !ui->keyCaptureDialog() && (message==WM_KEYUP || message==WM_SYSKEYUP) &&
                 ui->recordPreferenceKey(preferenceKey(parameter),0,false,error)) return 0;
-            if (ui->keyCaptureDialog())
+            if (!ui->lifecycleScreen() && ui->keyCaptureDialog())
             {
                 const MASK mask=((GetKeyState(VK_CONTROL)&0x8000) ? MASK_CONTROL : 0) |
                     ((GetKeyState(VK_SHIFT)&0x8000) ? MASK_SHIFT : 0) | ((GetKeyState(VK_MENU)&0x8000) ? MASK_ALT : 0);
@@ -490,6 +525,7 @@ namespace
                     tree.triggerFocusFlash();
                 }
                 input.editor.applicationFocused=focused;
+                ui->setCommunicationApplicationFocused(focused);
                 if (!focused)
                 {
                     ui->menu().dismiss();
@@ -545,6 +581,15 @@ namespace
                         const auto display=LLVKBrowserSurface::displayRect(rectangle->right-rectangle->left,rectangle->top-rectangle->bottom,browser.surface().width(),browser.surface().height());
                         browser.hover(physical(event.x-rectangle->left-display.left),physical(rectangle->bottom+display.top-event.y)-1,error);
                     }
+                    using Cursor=LLVKFloater::ResizeCursor;
+                    switch (ui->floaterResizeCursor(event.x,event.y,error))
+                    {
+                        case Cursor::Horizontal: setClientCursor(LoadCursorW(nullptr,IDC_SIZEWE)); break;
+                        case Cursor::Vertical: setClientCursor(LoadCursorW(nullptr,IDC_SIZENS)); break;
+                        case Cursor::NorthwestSoutheast: setClientCursor(LoadCursorW(nullptr,IDC_SIZENWSE)); break;
+                        case Cursor::NortheastSouthwest: setClientCursor(LoadCursorW(nullptr,IDC_SIZENESW)); break;
+                        case Cursor::None: break;
+                    }
                 }
                 return 0;
             }
@@ -580,7 +625,6 @@ namespace
                 else if (parameter >= VK_F1 && parameter <= VK_F12) shortcut = "F"+std::to_string(parameter-VK_F1+1);
                 if (!shortcut.empty() && ui->menuShortcut(shortcut,bool(GetKeyState(VK_CONTROL)&0x8000),
                     bool(GetKeyState(VK_SHIFT)&0x8000),bool(GetKeyState(VK_MENU)&0x8000))) return 0;
-                if (parameter == VK_F10) { ui->menu().key(LLVKMenu::Key::Activate); return 0; }
                 if (ui->menu().open())
                 {
                     using Key = LLVKMenu::Key;
@@ -1625,7 +1669,7 @@ bool LLVKWindowMgr::run(const Configuration& configuration,std::string& error)
             if (ready == LLVKWidgetGpu::Status::Failed) return fail(Code::RendererUnavailable);
             if (ready == LLVKWidgetGpu::Status::Ready)
             {
-                if (renderer.begin2DFrame(0.16f,0.16f,0.16f,1))
+                if (renderer.begin2DFrame(0.f,0.f,0.f,1))
                 {
                     if (!renderer.recordUiPacket(packet.vertices(),packet.draws())) { error = renderer.frameError(); return fail(Code::RendererUnavailable); }
                     if (!renderer.end2DFrame() && renderer.frameResult() != LLVKContext::FrameResult::OutOfDate)

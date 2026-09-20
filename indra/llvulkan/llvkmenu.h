@@ -41,6 +41,7 @@ public:
     bool itemChecked(std::size_t item) const;
     bool itemVisible(std::size_t item) const;
     void setVisible(std::string_view name, bool visible);
+    void setEnabled(std::string_view name, bool enabled);
     bool showContext(std::vector<Item> items, int x, int y, std::string& error);
     bool showPopup(std::vector<Item> items, LLVKWidgetTree::Rect anchor, const std::string& position,
         std::function<void()> dismissed, std::string& error);
@@ -74,7 +75,9 @@ private:
     explicit LLVKMenu(std::shared_ptr<Model> model);
     struct Hit { std::size_t item, level; LLVKWidgetTree::Rect rect; bool tearOff=false; };
     bool enabled(std::size_t item) const;
+    bool commandEnabled(std::size_t item) const;
     void activate(std::size_t item, std::size_t level);
+    void invokeItem(std::size_t item);
     void assignJumpKeys(const std::vector<std::size_t>& siblings);
     std::shared_ptr<Model> mModel;
     std::vector<Item>& mItems;

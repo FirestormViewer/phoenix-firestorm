@@ -152,6 +152,355 @@ namespace tut
     typedef widgettree_group::object object;
     widgettree_group widgettree_tests("llvkwidgettree");
 
+    template<> template<> void object::test<220>()
+    {
+        set_test_name("quit confirmation pointer clicks do not toggle the ignore checkbox");
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        LLControlGroup warnings("quit-pointer-warnings");
+        configuration.warningSettingsGroup=&warnings;
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        for (int option=0; option<2; ++option)
+        {
+            int response=-1; bool ignored=true;
+            ensure("queue quit confirmation",ui->queueNotice("ConfirmQuit",{},[&](int result,const LLSD& values)
+                { response=result; ignored=values["ignore"].asBoolean(); },error));
+            ensure("open quit confirmation",ui->advanceNotices(2.+option*2,error));
+            ensure("paint quit confirmation",ui->preparePaint({},error).has_value());
+            ensure("allow confirmation buttons",ui->advanceNotices(3.+option*2,error));
+            const auto modal=ui->modalNotice();
+            const auto checkbox=ui->find("notification_ignore",modal);
+            ensure("quit has ignore checkbox",checkbox!=0);
+            std::vector<LLVKWidgetTree::Id> buttons;
+            for (const auto child : ui->tree().get(modal)->children)
+                if (ui->tree().get(child)->button) buttons.push_back(child);
+            ensure_equals("two quit choices",buttons.size(),std::size_t(2));
+            const auto rect=ui->tree().screenRect(buttons[option],error);
+            LLVKWidgetTree::PointerEvent pointer;
+            pointer.x=(rect->left+rect->right)/2; pointer.y=(rect->bottom+rect->top)/2;
+            pointer.kind=LLVKWidgetTree::PointerKind::LeftDown;
+            ensure("press visible quit-dialog button",ui->tree().routePointer(modal,pointer,error));
+            ensure("button owns capture, not checkbox",ui->tree().mouseCapture()==buttons[option]);
+            ensure("press leaves ignore unchecked",!ui->tree().value(checkbox).asBoolean());
+            pointer.kind=LLVKWidgetTree::PointerKind::LeftUp;
+            ensure("release visible quit-dialog button",ui->tree().routePointer(modal,pointer,error));
+            ensure("button responds and closes modal",response>=0 && !ignored && !ui->modalNotice());
+            ensure("quit warning remains enabled",warnings.getBOOL("ConfirmQuit"));
+        }
+    }
+
+    template<> template<> void object::test<219>()
+    {
+        set_test_name("native communication windows retain independent sessions and acknowledge only focused pages");
+        using Owner=LLVKSessionOwner;
+        struct Transport final : Owner::Transport
+        {
+            std::shared_ptr<Owner::Inbox> inbox;
+            Owner::Code begin(const Owner::Request&,const std::shared_ptr<Owner::Inbox>& replies) override
+            { inbox=replies; return Owner::Code::Ok; }
+            Owner::Code quiesce(std::uint64_t) override { return Owner::Code::Ok; }
+        };
+        auto transport=std::make_shared<Transport>();
+        Owner owner(transport);
+        struct Cleanup { Owner& owner; ~Cleanup() { owner.shutdown(); } } cleanup{owner};
+        LLVKViewerUi::Configuration configuration;
+        const auto fonts=std::filesystem::path(LLVK_WIDGET_FONT_FIXTURE).parent_path();
+        configuration.skin.skinBaseDirectory=std::filesystem::path(LLVK_WIDGET_SKIN_FIXTURE).parent_path();
+        configuration.fontDescription=fonts/"fonts.xml"; configuration.fonts.platform="Windows";
+        configuration.fonts.searchDirectories={fonts,std::filesystem::path(LLVK_WIDGET_PACKAGED_FONTS)};
+        completePreferenceSettings(configuration);
+        const LLUUID agent("11111111-1111-1111-1111-111111111111");
+        const LLUUID first("22222222-2222-2222-2222-222222222222"),second("33333333-3333-3333-3333-333333333333");
+        const LLUUID firstGroup("44444444-4444-4444-4444-444444444444"),secondGroup("55555555-5555-5555-5555-555555555555");
+        bool contextAvailable=true,staleContext=false;
+        unsigned receivePolls=0;
+        std::uint64_t query=0;
+        std::optional<LLVKChatProtocol::SearchResult> searchResult;
+        std::vector<LLVKChatProtocol::Message> incoming;
+        std::vector<LLUUID> sentDirect,sentGroup;
+        unsigned joins=0,leaves=0,typingStarts=0,typingStops=0;
+        std::vector<LLVKChatProtocol::Group> groups(2);
+        groups[0].id=firstGroup; groups[0].name="First Group"; groups[1].id=secondGroup; groups[1].name="Second Group";
+        for (auto& group : groups)
+        { group.powers=std::uint64_t(1)<<16; group.state=LLVKChatProtocol::Group::State::Joined; }
+        configuration.communications.context=[&](Owner::Tag tag)->std::optional<LLVKChatProtocol::Context>
+        {
+            if (!contextAvailable || tag!=owner.snapshot().tag || owner.snapshot().state!=Owner::State::Connected) return {};
+            return LLVKChatProtocol::Context{staleContext ? Owner::Tag{} : tag,agent,"Fixture Resident","Fixture Region"};
+        };
+        configuration.communications.receive=[&](Owner::Tag) { ++receivePolls; return std::exchange(incoming,{}); };
+        configuration.communications.search=[&](Owner::Tag tag,std::uint64_t id,std::string text,std::string&)
+        {
+            ensure("picker submits actual query and tag",tag==owner.snapshot().tag && text=="Peer Resident");
+            query=id; return true;
+        };
+        configuration.communications.searchResult=[&](Owner::Tag) { return std::exchange(searchResult,std::nullopt); };
+        configuration.communications.direct=[&](Owner::Tag tag,const LLUUID& recipient,const std::string&,bool typing,bool stopped,std::string&)
+        {
+            ensure("direct target retains current tag",tag==owner.snapshot().tag);
+            if (typing) ++typingStarts;
+            else if (stopped) ++typingStops;
+            else sentDirect.push_back(recipient);
+            return true;
+        };
+        configuration.communications.groups=[&](Owner::Tag) { return groups; };
+        configuration.communications.joinGroup=[&](Owner::Tag,const LLUUID&,std::string&) { ++joins; return true; };
+        configuration.communications.leaveGroup=[&](Owner::Tag,const LLUUID&,std::string&) { ++leaves; return true; };
+        configuration.communications.group=[&](Owner::Tag tag,const LLUUID& id,const std::string&,std::string&)
+        { ensure("group tag remains current",tag==owner.snapshot().tag); sentGroup.push_back(id); return true; };
+        std::string error;
+        auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
+        ui->setSessionOwner(&owner);
+        ensure("begin controlled login",owner.beginLogin().ok());
+        Owner::Response authorized; authorized.kind=Owner::Response::Kind::Authorized;
+        authorized.tag=owner.snapshot().tag; authorized.identity={1,2};
+        ensure("authorize fixture",transport->inbox->post(authorized)==Owner::Code::Ok && owner.pumpOne().ok());
+        Owner::Response connected; connected.kind=Owner::Response::Kind::RegionConnected; connected.tag=owner.snapshot().tag;
+        ensure("connect fixture",transport->inbox->post(connected)==Owner::Code::Ok && owner.pumpOne().ok());
+        const bool shown=ui->refreshSession(error);
+        ensure("show connected owner: "+error,shown);
+        const auto initialContainer=ui->find("im_box_tab_container",ui->find("native_communications"));
+        ensure("connection dismisses lifecycle screen",ui->lifecycleScreen()==0);
+        ensure("connection opens Contacts",ui->tree().visibleInChain(ui->find("native_communications")) &&
+            ui->tree().get(initialContainer)->tabContainer->selected==ui->find("imcontacts"));
+        const auto connectedPaint=ui->preparePaint({},error);
+        ensure("connected UI paints: "+error,connectedPaint.has_value() && !connectedPaint->commands.empty());
+        const auto communications=ui->find("native_communications");
+        const auto initialRectangle=ui->tree().get(communications)->params.rect;
+        const auto hostRect=ui->tree().screenRect(communications,error);
+        const auto tabsRect=ui->tree().screenRect(initialContainer,error);
+        ensure("conversation tabs are below the complete title bar",tabsRect->top<=hostRect->top-25);
+        using Cursor=LLVKFloater::ResizeCursor;
+        struct EdgeCase { int x,y,dx,dy; Cursor cursor; };
+        const auto left=hostRect->left,right=hostRect->right,bottom=hostRect->bottom,top=hostRect->top;
+        const EdgeCase edges[]{
+            {left+1,(top+bottom)/2,-20,0,Cursor::Horizontal},
+            {right-2,(top+bottom)/2,20,0,Cursor::Horizontal},
+            {(left+right)/2,bottom+1,0,-20,Cursor::Vertical},
+            {(left+right)/2,top-2,0,20,Cursor::Vertical},
+            {left+1,bottom+1,-20,-20,Cursor::NortheastSouthwest},
+            {right-9,bottom+9,20,-20,Cursor::NorthwestSoutheast},
+            {left+1,top-2,-20,20,Cursor::NorthwestSoutheast},
+            {right-2,top-2,20,20,Cursor::NortheastSouthwest}};
+        for (const auto& edge : edges)
+        {
+            ensure("restore floater before edge drag",ui->tree().setShape(communications,initialRectangle,error));
+            ensure("directional cursor at border",ui->floaterResizeCursor(edge.x,edge.y,error)==edge.cursor);
+            LLVKWidgetTree::PointerEvent pointer;
+            pointer.kind=LLVKWidgetTree::PointerKind::LeftDown; pointer.x=edge.x; pointer.y=edge.y;
+            ensure("each border captures",ui->floaterPointer(pointer,error));
+            pointer.kind=LLVKWidgetTree::PointerKind::Hover; pointer.x+=edge.dx; pointer.y+=edge.dy;
+            ensure("each border resizes",ui->floaterPointer(pointer,error));
+            ensure("resize cursor retained during capture",ui->floaterResizeCursor(pointer.x,pointer.y,error)==edge.cursor);
+            const auto resized=ui->tree().get(communications)->params.rect;
+            ensure_equals("horizontal extent",resized.right-resized.left,initialRectangle.right-initialRectangle.left+std::abs(edge.dx));
+            ensure_equals("vertical extent",resized.top-resized.bottom,initialRectangle.top-initialRectangle.bottom+std::abs(edge.dy));
+            pointer.kind=LLVKWidgetTree::PointerKind::LeftUp;
+            ensure("border capture released",ui->floaterPointer(pointer,error) && !ui->tree().mouseCapture());
+        }
+        auto expandedRectangle=initialRectangle;
+        expandedRectangle.right+=120;
+        ensure("expand conversations to expose all Contacts tabs",ui->tree().setShape(communications,expandedRectangle,error));
+        ensure("prepare tabs after border drags",ui->preparePaint({},error).has_value());
+        const auto contactTabs=ui->find("friends_and_groups",communications);
+        const auto clickTab=[&](LLVKWidgetTree::Id container,LLVKWidgetTree::Id panel)
+        {
+            for (const auto& tab : ui->tree().get(container)->tabContainer->tabs)
+                if (tab.panel==panel)
+                {
+                    const auto rect=ui->tree().screenRect(tab.button,error);
+                    LLVKWidgetTree::PointerEvent pointer;
+                    pointer.x=(rect->left+rect->right)/2; pointer.y=(rect->bottom+rect->top)/2;
+                    for (const auto kind : {LLVKWidgetTree::PointerKind::LeftDown,LLVKWidgetTree::PointerKind::LeftUp})
+                    {
+                        pointer.kind=kind;
+                        if (!ui->floaterPointer(pointer,error)) ui->tree().routePointer(ui->root(),pointer,error);
+                        ensure(error,error.empty());
+                        if (kind==LLVKWidgetTree::PointerKind::LeftDown)
+                            ensure("tab press captures "+ui->tree().get(panel)->params.name+" actual="+
+                                (ui->tree().get(ui->tree().mouseCapture()) ? ui->tree().get(ui->tree().mouseCapture())->params.name : "none"),
+                                ui->tree().mouseCapture()==tab.button);
+                    }
+                    ensure("clicked tab becomes selected: "+ui->tree().get(panel)->params.name+
+                        " actual="+ui->tree().get(ui->tree().get(container)->tabContainer->selected)->params.name+
+                        " at="+std::to_string(pointer.x)+","+std::to_string(pointer.y),
+                        ui->tree().get(container)->tabContainer->selected==panel);
+                    return;
+                }
+            fail("missing tab to click");
+        };
+        clickTab(contactTabs,ui->find("groups_panel"));
+        clickTab(contactTabs,ui->find("contact_sets_panel"));
+        clickTab(contactTabs,ui->find("friends_panel"));
+        clickTab(initialContainer,ui->find("nearby_chat"));
+        clickTab(initialContainer,ui->find("imcontacts"));
+        const auto& background=connectedPaint->commands.front();
+        ensure("opaque themed backdrop precedes all connected UI",background.owner==ui->root() &&
+            background.color==LLVKColor::Value{0.125f,0.125f,0.125f,1.f} && !background.image && !background.text);
+        ensure("world inventory shortcut remains unavailable",!ui->menu().shortcut("I",true,false,false));
+        const bool originalQa=ui->tree().setting("QAMode").value_or(LLSD(false)).asBoolean();
+        ensure("applicable developer-menu shortcut works",ui->menu().shortcut("Q",true,false,true) &&
+            ui->tree().setting("QAMode").value_or(LLSD(false)).asBoolean()!=originalQa);
+        ensure("developer menu state refreshes",ui->preparePaint({},error).has_value());
+        ensure("developer-menu shortcut restores its setting",ui->menu().shortcut("Q",true,false,true) &&
+            ui->tree().setting("QAMode").value_or(LLSD(false)).asBoolean()==originalQa);
+        const auto& initialTabs=ui->tree().get(initialContainer)->tabContainer->tabs;
+        ensure("only Contacts and Nearby precede actual sessions",initialTabs.size()==2 &&
+            ui->tree().get(initialTabs[0].panel)->params.name=="imcontacts" && ui->tree().get(initialTabs[1].panel)->params.name=="nearby_chat");
+        ensure("resident search is an independent window",ui->showResidentSearch(error));
+        const auto picker=ui->find("avatarpicker");
+        ensure("search submission",ui->tree().setValue(ui->find("recipient_id",picker),LLSD("Peer Resident")) &&
+            ui->tree().commit(ui->find("open_conversation",picker)) && query);
+        searchResult=LLVKChatProtocol::SearchResult{query-1,{{first,"Peer Display","peer.resident"}},""};
+        ensure("stale picker result ignored",ui->preparePaint({},error).has_value() &&
+            ui->tree().get(ui->find("resident_results",picker))->combo->items.empty());
+        searchResult=LLVKChatProtocol::SearchResult{query,{{first,"Peer Display","peer.resident"}},""};
+        ensure("current real resident result shown",ui->preparePaint({},error).has_value() &&
+            ui->tree().get(ui->find("resident_results",picker))->combo->items.size()==1 && !ui->conversationPanel(first));
+        ensure("picker selection creates only that session",ui->tree().commit(ui->find("resident_im",picker)) &&
+            ui->conversationPanel(first) && !ui->tree().visibleInChain(picker));
+        ensure("picker can reopen",ui->showResidentSearch(error));
+        ensure("new query before cancel",ui->tree().commit(ui->find("open_conversation",picker)));
+        const auto canceledQuery=query;
+        ensure("cancel picker",ui->tree().commit(ui->find("resident_cancel",picker)));
+        searchResult=LLVKChatProtocol::SearchResult{canceledQuery,{{second,"Other Display","other.resident"}},""};
+        ensure("closed picker rejects its outstanding result",ui->preparePaint({},error).has_value() &&
+            ui->tree().get(ui->find("resident_results",picker))->combo->items.empty() && !ui->conversationPanel(second));
+        ensure("open first direct page",ui->showDirectConversation(first,error));
+        const auto firstPage=ui->conversationPanel(first);
+        const auto firstEditor=ui->find("im_composer",firstPage);
+        ensure("first page is a retained native editor",firstPage && firstEditor);
+        ensure("retain first draft",ui->tree().setValue(firstEditor,LLSD("first draft")));
+        ensure("open second direct page",ui->showDirectConversation(second,error));
+        const auto secondPage=ui->conversationPanel(second);
+        ensure("separate page and composer",secondPage && firstPage!=secondPage && firstEditor!=ui->find("im_composer",secondPage));
+        ensure_equals("switch retains first draft",ui->tree().value(firstEditor).asString(),std::string("first draft"));
+        ensure("second session sends to second peer",ui->tree().setValue(ui->find("im_composer",secondPage),LLSD("second reply")) &&
+            ui->tree().commit(ui->find("im_send",secondPage)) && sentDirect==std::vector<LLUUID>{second});
+        ensure("open first again",ui->showDirectConversation(first,error));
+        const auto host=ui->find("native_communications");
+        const auto container=ui->find("im_box_tab_container",host);
+        const auto tabLabel=[&](LLVKWidgetTree::Id page)
+        {
+            const auto& tabs=ui->tree().get(container)->tabContainer->tabs;
+            const auto found=std::find_if(tabs.begin(),tabs.end(),[&](const auto& tab) { return tab.panel==page; });
+            ensure("session has its own tab",found!=tabs.end());
+            return ui->tree().get(found->button)->button->params.label;
+        };
+        const auto deliver=[&](const LLUUID& sender,const LLUUID& conversation,bool group)
+        {
+            LLVKChatProtocol::Message message;
+            message.kind=LLVKChatProtocol::Message::Kind::Instant; message.sender=sender; message.recipient=agent;
+            message.conversation=conversation; message.dialog=group ? 17 : 0; message.fromGroup=group;
+            message.name="Peer Resident"; message.text="Incoming"; incoming.push_back(message);
+        };
+        ensure("open independent People Groups",ui->showPeople(error,"groups_panel"));
+        const auto people=ui->find("floater_people");
+        ensure("People and Conversations coexist",people && people!=host && ui->tree().visibleInChain(host) && ui->tree().visibleInChain(people));
+        ensure("People groups come from membership service",ui->tree().get(ui->find("group_list",people))->combo->items.size()==2);
+        deliver(first,{},false);
+        ensure("unfocused incoming preparation",ui->preparePaint({},error).has_value());
+        ensure("visible but unfocused session stays unread",tabLabel(firstPage).find(U"(1)")!=std::u32string::npos);
+        ensure("repeated paint cannot acknowledge unfocused session",ui->preparePaint({},error).has_value() &&
+            tabLabel(firstPage).find(U"(1)")!=std::u32string::npos);
+        ensure("focus acknowledges only selected IM",ui->showDirectConversation(first,error) && tabLabel(firstPage).find(U"(1)")==std::u32string::npos);
+        ui->setCommunicationApplicationFocused(false);
+        deliver(first,{},false);
+        ensure("inactive application keeps unread",ui->preparePaint({},error).has_value() && tabLabel(firstPage).find(U"(1)")!=std::u32string::npos);
+        ui->setCommunicationApplicationFocused(true);
+        ensure("reactivated focused session acknowledges",ui->preparePaint({},error).has_value() && tabLabel(firstPage).find(U"(1)")==std::u32string::npos);
+        const auto now=ui->tree().time();
+        ensure("typing starts after delay",ui->tree().lineEditorUnicode(firstEditor,U'A',error) &&
+            ui->tree().advanceTime(now+1.2,error) && ui->tree().lineEditorUnicode(firstEditor,U'B',error) && typingStarts==1);
+        ensure("switch stops typing",ui->showDirectConversation(second,error) && typingStops==1);
+        LLVKChatProtocol::Message typing;
+        typing.kind=LLVKChatProtocol::Message::Kind::Instant; typing.sender=first; typing.recipient=agent;
+        typing.name="Peer Resident"; typing.dialog=41; incoming.push_back(typing);
+        ensure("background typing belongs to sender page",ui->preparePaint({},error).has_value() &&
+            !ui->tree().value(ui->find("typing_status",firstPage)).asString().empty() &&
+            ui->tree().value(ui->find("typing_status",secondPage)).asString().empty());
+        ensure("background typing expires",ui->tree().advanceTime(now+12.,error) && ui->preparePaint({},error).has_value() &&
+            ui->tree().value(ui->find("typing_status",firstPage)).asString().empty());
+        const auto draft=ui->tree().value(firstEditor).asString();
+        const auto originalRect=ui->tree().get(host)->params.rect;
+        const LLVKWidgetTree::Rect movedRect{originalRect.left+15,originalRect.bottom+10,originalRect.right+15,originalRect.top+10};
+        ensure("move host before hiding",ui->tree().setShape(host,movedRect,error));
+        ensure("host close only hides",ui->hideConversations(error) && !ui->tree().visibleInChain(host) && leaves==0);
+        deliver(first,{},false);
+        ensure("hidden host still receives",ui->preparePaint({},error).has_value() && tabLabel(firstPage).find(U"(1)")!=std::u32string::npos);
+        ensure("reopen retains same widgets and draft",ui->showDirectConversation(first,error) && ui->conversationPanel(first)==firstPage &&
+            ui->tree().value(firstEditor).asString()==draft);
+        ensure("reopen retains window position",ui->tree().get(host)->params.rect==movedRect);
+        auto floaters=ui->communicationFloaters();
+        ensure("communications owner enumerated",!floaters.empty() && floaters.front());
+        const bool minimized=floaters.front()->setMinimized(true,error);
+        ensure("minimize host: "+error,minimized);
+        deliver(first,{},false);
+        ensure("minimized host cannot acknowledge",ui->preparePaint({},error).has_value() && tabLabel(firstPage).find(U"(1)")!=std::u32string::npos);
+        ensure("restore direct",ui->showDirectConversation(first,error));
+        ensure("open independent group sessions",ui->showGroupConversation(firstGroup,error) && ui->showGroupConversation(secondGroup,error));
+        const auto groupPage=ui->conversationPanel(firstGroup,true),otherGroupPage=ui->conversationPanel(secondGroup,true);
+        ensure("one page per group and no repeated join",groupPage && otherGroupPage && groupPage!=otherGroupPage && joins==0);
+        ensure("first group draft",ui->tree().setValue(ui->find("group_composer",groupPage),LLSD("first group draft")));
+        ensure("second group sends its own identity",ui->tree().setValue(ui->find("group_composer",otherGroupPage),LLSD("group reply")) &&
+            ui->tree().commit(ui->find("group_send",otherGroupPage)) && sentGroup==std::vector<LLUUID>{secondGroup});
+        deliver(first,firstGroup,true);
+        ensure("background group unread",ui->preparePaint({},error).has_value() && tabLabel(groupPage).find(U"(1)")!=std::u32string::npos);
+        const auto groupLabel=[&](const LLUUID& id)
+        {
+            const auto& rows=ui->tree().get(ui->find("group_list",host))->combo->items;
+            const auto found=std::find_if(rows.begin(),rows.end(),[&](const auto& row) { return row.value.asString()==id.asString(); });
+            ensure("membership row remains present",found!=rows.end());
+            return found->label;
+        };
+        ensure_equals("background group count reaches Contacts",groupLabel(firstGroup),std::string("First Group (1)"));
+        ensure("focus retained group page without refreshing",ui->tree().selectTabPanel(container,groupPage,error) &&
+            ui->tree().requestControlFocus(ui->find("group_composer",groupPage),true,error));
+        deliver(second,secondGroup,true);
+        ensure("one refresh publishes consistent group unread",ui->preparePaint({},error).has_value() &&
+            tabLabel(groupPage).find(U"(1)")==std::u32string::npos && groupLabel(firstGroup)=="First Group" &&
+            tabLabel(otherGroupPage).find(U"(1)")!=std::u32string::npos && groupLabel(secondGroup)=="Second Group (1)");
+        ensure("focus group acknowledges",ui->showGroupConversation(firstGroup,error) && tabLabel(groupPage).find(U"(1)")==std::u32string::npos);
+        ensure_equals("group draft survives",ui->tree().value(ui->find("group_composer",groupPage)).asString(),std::string("first group draft"));
+        groups[0].participants[agent].textMuted=true;
+        ensure("mute makes composer read-only and disables Send",ui->preparePaint({},error).has_value() &&
+            ui->tree().get(ui->find("group_composer",groupPage))->lineEditor->readOnly &&
+            !ui->tree().get(ui->find("group_send",groupPage))->params.enabled);
+        const auto staleSend=ui->tree().get(ui->find("group_send",groupPage))->control->params.commit;
+        staleSend.function(ui->find("group_send",groupPage),{});
+        ensure_equals("programmatic send cannot bypass text mute",sentGroup.size(),std::size_t(1));
+        ensure("People hide leaves Conversations intact",ui->hidePeople(error) && ui->tree().visibleInChain(host) && leaves==0);
+        ensure("Contacts preserves supported hierarchy",ui->showContacts("friends",error) && ui->find("friends_unavailable",host) &&
+            ui->showContacts("contact_sets",error) && ui->find("contact_sets_unavailable",host));
+        contextAvailable=false;
+        ensure("context loss retires windows and data",ui->preparePaint({},error).has_value() && !ui->tree().get(firstPage) && !ui->tree().get(people));
+        staleSend.function(0,{});
+        ensure_equals("retired callbacks cannot send",sentGroup.size(),std::size_t(1));
+        contextAvailable=true;
+        ensure("restored context starts clean",ui->showDirectConversation(first,error) && ui->conversationPanel(first)!=firstPage &&
+            ui->tree().value(ui->find("im_composer",ui->conversationPanel(first))).asString().empty());
+        const auto restoredPage=ui->conversationPanel(first);
+        const auto restoredSend=ui->tree().get(ui->find("im_send",restoredPage))->control->params.commit;
+        const auto pollsBeforeMismatch=receivePolls;
+        staleContext=true;
+        ensure("mismatched context retires account UI without draining messages",ui->preparePaint({},error).has_value() &&
+            !ui->tree().get(restoredPage) && !ui->find("native_communications") && receivePolls==pollsBeforeMismatch);
+        ensure("mismatched context cannot reopen conversations",!ui->showDirectConversation(first,error) &&
+            !ui->conversationPanel(first) && receivePolls==pollsBeforeMismatch);
+        restoredSend.function(0,{});
+        ensure_equals("retired direct callback cannot send",sentDirect.size(),std::size_t(1));
+        staleContext=false;
+        ensure("matching context can reopen a clean host",ui->showDirectConversation(first,error) &&
+            ui->conversationPanel(first)!=restoredPage &&
+            ui->tree().value(ui->find("im_transcript",ui->conversationPanel(first))).asString().empty());
+        ui->setSessionOwner(nullptr);
+    }
+
     template<> template<> void object::test<210>()
     {
         set_test_name("native UI language honors enabled locales and installation precedence");
@@ -270,6 +619,30 @@ namespace tut
         };
         auto ui=LLVKViewerUi::create(configuration,error); ensure(error,ui!=nullptr);
         const auto usernameEditor=ui->tree().get(ui->find("username_combo"))->combo->editor;
+        unsigned quitRequests=0;
+        ui->setQuitRequestHandler([&] { ++quitRequests; });
+        const auto checkModalEmission=[&]()
+        {
+            const auto modal=ui->modalNotice();
+            ensure("modal exists for composition check",modal!=0);
+            const auto isolated=LLVKWidgetPaint::prepare(ui->tree(),modal,{},error);
+            ensure("isolated notice prepares: "+error,isolated.has_value());
+            const auto composed=ui->preparePaint({},error);
+            ensure("composed notice prepares: "+error,composed.has_value());
+            std::size_t count=0;
+            std::size_t trailing=0;
+            for (const auto& command : composed->commands)
+            {
+                bool noticeOwned=false;
+                for (auto ancestor=command.owner; ui->tree().get(ancestor); ancestor=ui->tree().get(ancestor)->parent)
+                    if (ancestor==modal) { noticeOwned=true; break; }
+                if (noticeOwned) { ++count; ++trailing; }
+                else trailing=0;
+            }
+            ensure("notice has paint primitives",!isolated->commands.empty());
+            ensure_equals("modal retains reference tree and top-control passes",count,2*isolated->commands.size());
+            ensure_equals("complete final modal pass follows all lower layers",trailing,isolated->commands.size());
+        };
         ensure_equals("empty login starts in username editor",ui->tree().keyboardFocus(),usernameEditor);
         const auto offPaint=ui->preparePaint({},error);
         ensure("authoritative off preference overrides stale startup copy",offPaint && !offPaint->skinAnisotropy);
@@ -322,8 +695,17 @@ namespace tut
         ensure("snapshot observed by UI",ui->sessionSnapshot().tag==owner.snapshot().tag);
         ensure("login inputs disabled during attempt",!ui->tree().get(ui->find("connect_btn"))->params.enabled);
         auto notices=ui->takeNotices();
-        ensure("progress has owner cancellation",notices.size()==1 && notices.front().buttons.front().name=="cancel");
-        const auto oldCancel=notices.front().response;
+        ensure("progress uses lifecycle screen, not a notice",notices.empty() && ui->lifecycleScreen()!=0 && !ui->modalNotice());
+        const auto loginProgress=ui->find("login_progress_bar",ui->lifecycleScreen());
+        ensure("authentication progress bar is visible",loginProgress && ui->tree().get(loginProgress)->params.visible);
+        ensure_equals("authentication progress reflects its phase",ui->tree().value(loginProgress).asReal(),10.);
+        const auto quitButton=ui->find("cancel_btn",ui->lifecycleScreen());
+        ensure("lifecycle exposes bound Quit",quitButton && ui->tree().get(quitButton)->params.enabled);
+        const auto oldQuit=ui->tree().get(quitButton)->control->params.commit.function;
+        ui->quitLifecycle();
+        ui->quitLifecycle();
+        ensure("lifecycle Quit requests orderly shutdown once without cancelling transport",quitRequests==1 &&
+            owner.snapshot().state==Owner::State::Authenticating && !ui->tree().get(quitButton)->params.enabled);
         const auto first=owner.snapshot().tag;
         Owner::Response failure;
         failure.tag=first; failure.failure=Owner::Code::AuthenticationFailed;
@@ -336,14 +718,19 @@ namespace tut
         oldRetry(2,{});
         const auto second=owner.snapshot().tag;
         ensure("retry advances owner attempt",second.generation>first.generation && transport->requests==2);
-        oldRetry(2,{}); oldCancel(1,{});
+        oldRetry(2,{}); owner.cancel(first); oldQuit(quitButton,{});
         ensure("delayed retry and cancel leave newer attempt intact",owner.snapshot().tag==second &&
             owner.snapshot().state==Owner::State::Authenticating && transport->requests==2);
+        ensure_equals("obsolete lifecycle Quit cannot request shutdown",quitRequests,1u);
         notices=ui->takeNotices();
-        ensure("new attempt progress",notices.size()==1 && notices.front().name=="NativeSessionProgress");
+        ensure("new attempt restores lifecycle Quit",notices.empty() && ui->lifecycleScreen()!=0 &&
+            ui->tree().get(ui->find("cancel_btn",ui->lifecycleScreen()))->params.enabled);
         transport->failCleanup=true;
-        notices.front().response(1,{});
+        owner.cancel(second);
+        ensure("cancel failure observed",ui->refreshSession(error));
         ensure("failed cancellation retains disconnect",owner.snapshot().state==Owner::State::Disconnecting);
+        ensure("cleanup screen cannot request login Quit",ui->lifecycleScreen()!=0 &&
+            !ui->tree().get(ui->find("cancel_btn",ui->lifecycleScreen()))->params.visible);
         notices=ui->takeNotices();
         ensure("cleanup recovery comes from owner",notices.size()==1 && notices.front().buttons.front().name=="retry_cleanup");
         const auto oldCleanup=notices.front().response;
@@ -377,6 +764,9 @@ namespace tut
         const auto rootRect=ui->tree().get(ui->root())->params.rect;
         const auto modalRect=ui->tree().get(modal)->params.rect;
         ensure("long agreement fits viewport",modalRect.bottom>=0 && modalRect.top<=rootRect.top-rootRect.bottom);
+        checkModalEmission();
+        ui->quitLifecycle();
+        ensure("agreement blocks lifecycle Quit",quitRequests==1);
         const auto acceptButton=ui->find("accept",modal);
         ensure("explicit agreement acceptance through actual button",acceptButton && ui->tree().commit(acceptButton));
         const auto acceptedTag=owner.snapshot().tag;
@@ -420,8 +810,11 @@ namespace tut
         authorized.tag=owner.snapshot().tag; authorized.identity={1,2};
         ensure("transition authorized",transport->inbox->post(authorized)==Owner::Code::Ok && owner.pumpOne().ok());
         ensure("connecting snapshot",ui->refreshSession(error));
+        ensure_equals("connection progress reflects its phase",
+            ui->tree().value(ui->find("login_progress_bar",ui->lifecycleScreen())).asReal(),40.);
         ensure("connection pending retains login view",ui->tree().get(ui->find("login_html"))->params.visible);
-        ensure("connection progress owns a real modal",ui->advanceNotices(4.,error) && ui->modalNotice()!=0);
+        ensure("connection progress owns a screen without a modal",ui->advanceNotices(4.,error) &&
+            ui->lifecycleScreen()!=0 && !ui->modalNotice());
         Owner::Response connected;
         connected.kind=Owner::Response::Kind::RegionConnected; connected.tag=owner.snapshot().tag;
         ensure("transition connected",transport->inbox->post(connected)==Owner::Code::Ok && owner.pumpOne().ok());
@@ -431,6 +824,22 @@ namespace tut
             !ui->tree().get(ui->find("ui_stack"))->params.visible);
         ensure("connected discards password text",ui->tree().value(ui->find("password_edit")).asString().empty());
         ensure("hidden login browser no longer blocks paint",ui->preparePaint({},error).has_value());
+        const auto shell=ui->find("native_connected_shell");
+        ensure("connected shell is a visible native subtree",shell && ui->tree().get(shell)->params.visible);
+        ensure("connected menu loads the original Comm declaration",std::any_of(ui->menu().items().begin(),ui->menu().items().end(),
+            [](const auto& item) { return item.name=="Communicate" && item.branch; }));
+        const auto location=ui->find("location_combo",shell);
+        ensure("address field displays only the tagged real region",location && ui->tree().get(location)->combo &&
+            ui->tree().value(ui->tree().get(location)->combo->editor).asString()=="Fixture Region");
+        ensure("unbound location commands are unavailable",!ui->tree().get(location)->params.enabled &&
+            !ui->tree().get(ui->find("home_btn",shell))->params.enabled && !ui->tree().get(ui->find("back_btn",shell))->params.enabled);
+        ensure("favorites retains its source label without invented rows",ui->find("favorites_bar_label",shell)!=0 &&
+            !ui->find("more_btn",shell));
+        ensure("toolbar uses original command icons",ui->find("shell_command_chat",shell) && ui->find("shell_command_people",shell) &&
+            ui->tree().get(ui->find("shell_command_chat",shell))->button->images.overlay->name()=="Command_Chat_Icon");
+        for (const auto name : {"shell_command_inventory","shell_command_appearance"})
+            if (const auto command=ui->find(name,shell))
+                ensure("world-dependent toolbar commands remain unavailable",!ui->tree().get(command)->params.enabled);
         ensure("connected status uses account and region",ui->tree().value(ui->find("connection_status")).asString().find("Fixture Region")!=std::string::npos);
         ensure("resident name search commits",ui->tree().setValue(ui->find("recipient_id"),LLSD("Peer Resident")) &&
             ui->tree().commit(ui->find("open_conversation")) && searchQuery!=0);
@@ -453,17 +862,14 @@ namespace tut
         incomingChat.push_back(directMessage);
         ensure("received messages prepare",ui->preparePaint({},error).has_value());
         ensure("simulator local message displayed",ui->tree().value(ui->find("local_transcript")).asString()=="Peer Resident shouts: Local fixture\n");
-        ensure("unsolicited IM creates unread conversation",ui->tree().get(ui->find("conversation_list"))->combo->items.size()==1);
-        ensure("choose unsolicited sender",ui->tree().setComboValue(ui->find("conversation_list"),LLSD(chatPeer.asString()),error) &&
-            ui->tree().commit(ui->find("conversation_list")));
+        ensure("unsolicited IM creates its own conversation",ui->conversationPanel(chatPeer)!=0);
+        ensure("choose unsolicited sender",ui->showDirectConversation(chatPeer,error));
         ensure("IM transcript belongs to selected sender",ui->tree().value(ui->find("im_transcript")).asString()=="Peer Resident: Incoming fixture\n");
         ensure("IM UI diagnostics distinguish receipt from display",communicationStages==std::vector<std::string>{"im-conversation-received","im-transcript-displayed"});
-        ensure("conversation dropdown opens",ui->tree().showComboList(ui->find("conversation_list"),error));
-        ensure("idle paint retains conversation dropdown",ui->preparePaint({},error).has_value() &&
-            ui->tree().get(ui->tree().get(ui->find("conversation_list"))->combo->list)->params.visible);
-        ui->tree().hideComboList(ui->find("conversation_list"));
+        ensure("idle paint retains selected conversation",ui->preparePaint({},error).has_value() &&
+            ui->tree().get(ui->find("im_box_tab_container"))->tabContainer->selected==ui->conversationPanel(chatPeer));
         ensure("resolved resident opens matching IM",ui->tree().commit(ui->find("resident_im")) &&
-            ui->tree().value(ui->find("conversation_list")).asString()==chatPeer.asString());
+            ui->tree().get(ui->find("im_box_tab_container"))->tabContainer->selected==ui->conversationPanel(chatPeer));
         ensure("reply composer",ui->tree().setValue(ui->find("im_composer"),LLSD("Reply fixture")) && ui->tree().commit(ui->find("im_send")));
         ensure("reply sent once and locally echoed",directSends==1 && ui->tree().value(ui->find("im_transcript")).asString().find("Fixture Resident: Reply fixture")!=std::string::npos);
         const auto typingTime=ui->tree().time();
@@ -479,8 +885,9 @@ namespace tut
         ensure("advance typing inactivity",ui->tree().advanceTime(typingTime+17.,error));
         ensure("inactivity sends typing stop",ui->preparePaint({},error).has_value() && typingStops==1);
         ensure("select membership",ui->tree().setComboValue(ui->find("group_list"),LLSD(chatGroup.id.asString()),error) && ui->tree().commit(ui->find("group_list")));
-        ensure("group starts closed",!ui->tree().get(ui->find("group_send"))->params.enabled);
-        ensure("join group",ui->tree().commit(ui->find("group_join")) && !ui->tree().get(ui->find("group_send"))->params.enabled);
+        ensure("closed group has no conversation page",!ui->conversationPanel(chatGroup.id,true));
+        ensure("join group",ui->tree().commit(ui->find("group_join")) && ui->conversationPanel(chatGroup.id,true) &&
+            !ui->tree().get(ui->find("group_send"))->params.enabled);
         chatGroup.state=LLVKChatProtocol::Group::State::Joined;
         chatGroup.participants[chatAgent].textMuted=true;
         const auto moderatedPaint=ui->preparePaint({},error);
@@ -512,14 +919,18 @@ namespace tut
         ensure("invitation starts native acceptance",ui->preparePaint({},error).has_value() && chatGroup.state==LLVKChatProtocol::Group::State::Joining);
         ensure("invitation text displayed once",ui->tree().value(ui->find("group_transcript")).asString().ends_with("Peer Resident: Invited message\n"));
         ensure("pending invitation still cannot send",!ui->tree().get(ui->find("group_send"))->params.enabled);
+        const auto oldLocalSend=ui->tree().get(ui->find("local_send"))->control->params.commit.function;
+        const auto oldLocalButton=ui->find("local_send");
         ensure("disconnect returns to login",owner.cancel().code==Owner::Code::Cancelled && ui->refreshSession(error));
-        ui->tree().setValue(ui->find("local_composer"),LLSD("Local fixture"));
-        ui->tree().commit(ui->find("local_send"));
-        ensure("disconnected callback cannot send",localSends==1 && !ui->tree().get(ui->find("native_communications"))->params.visible);
+        oldLocalSend(oldLocalButton,{});
+        ensure("disconnected callback cannot send",localSends==1 && !ui->find("native_communications"));
+        ensure("logout hides connected chrome",!ui->tree().get(shell)->params.visible);
+        ensure("logout restores login menu",std::none_of(ui->menu().items().begin(),ui->menu().items().end(),
+            [](const auto& item) { return item.name=="Communicate"; }));
         ensure("login subtrees restored",ui->tree().get(ui->find("login_html"))->params.visible &&
             ui->tree().get(ui->find("ui_stack"))->params.visible);
-        ensure("logout clears retained transcripts and recipients",ui->tree().value(ui->find("local_transcript")).asString().empty() &&
-            ui->tree().value(ui->find("im_transcript")).asString().empty() && ui->tree().get(ui->find("conversation_list"))->combo->items.empty());
+        ensure("logout retires account transcript and recipient widgets",!ui->find("local_transcript") &&
+            !ui->find("im_transcript") && !ui->find("conversation_list"));
         ensure("reconnect begins",owner.beginLogin().ok());
         authorized.tag=owner.snapshot().tag;
         ensure("reconnect authorizes",transport->inbox->post(authorized)==Owner::Code::Ok && owner.pumpOne().ok());
@@ -532,17 +943,21 @@ namespace tut
         const auto alertTime=ui->tree().time()+1.;
         ensure("unrelated alert takes focus",ui->advanceNotices(alertTime,error) && ui->modalNotice()!=0);
         const auto unrelatedAlert=ui->modalNotice(),alertFocus=ui->tree().keyboardFocus();
+        checkModalEmission();
         connected.tag=owner.snapshot().tag;
         ensure("reconnect completes",transport->inbox->post(connected)==Owner::Code::Ok && owner.pumpOne().ok() && ui->refreshSession(error));
         ensure("connection preserves unrelated modal and focus",ui->modalNotice()==unrelatedAlert &&
             ui->tree().keyboardFocus()==alertFocus && alertResponses==0);
-        ensure("reconnected workspace is empty",ui->preparePaint({},error).has_value() &&
-            ui->tree().value(ui->find("im_transcript")).asString().empty() && !ui->tree().get(ui->find("im_send"))->params.enabled);
+        ensure("connected retires lifecycle screen",ui->lifecycleScreen()==0);
+        ensure("modal blocks connected menu shortcuts",!ui->menuShortcut("T",true,false,false));
+        checkModalEmission();
+        ensure("reconnected workspace has no previous IM session",ui->preparePaint({},error).has_value() &&
+            !ui->conversationPanel(chatPeer) && !ui->find("im_transcript") && !ui->find("im_send"));
         ensure("alert response delay elapses",ui->advanceNotices(alertTime+1.,error));
         ensure("unrelated alert acknowledges once",ui->noticeKey(true,false,error) && !ui->modalNotice() && alertResponses==1);
-        ensure_equals("alert dismissal focuses connected composer",ui->tree().keyboardFocus(),ui->find("local_composer"));
+        ensure_equals("alert dismissal focuses initial Contacts",ui->tree().keyboardFocus(),ui->find("friends_panel"));
         ui->setSessionOwner(nullptr);
-        ensure("detaching owner hides connected workspace",!ui->tree().get(ui->find("native_communications"))->params.visible);
+        ensure("detaching owner retires connected workspace",!ui->find("native_communications") && !ui->tree().get(shell)->params.visible);
         ensure("shutdown",owner.shutdown().ok());
     }
 
@@ -652,6 +1067,9 @@ namespace tut
         const auto lineHeight=static_cast<int>(std::ceil(metrics.ascender)+std::ceil(metrics.descender));
         ensure_equals("alert checkbox follows font line height",ignoreNode->params.rect.bottom,39+lineHeight/2);
         ensure_equals("single-line alert checkbox height",ignoreNode->params.rect.top-ignoreNode->params.rect.bottom,lineHeight);
+        const auto checkHit=ui->tree().screenRect(ignoreNode->checkBox->button,error);
+        const auto noticeRect=ui->tree().screenRect(ui->modalNotice(),error);
+        ensure("ignore hit region cannot cover the alert buttons",checkHit && noticeRect && checkHit->bottom>=noticeRect->bottom+39);
         const auto decorated=ui->preparePaint({},error);
         ensure(error,decorated.has_value());
         std::vector<const LLVKWidgetPaint::Command*> shadows;
@@ -1424,24 +1842,89 @@ namespace tut
 
     template<> template<> void object::test<197>()
     {
-        set_test_name("menu visibility predicates gate input and open submenu lifetime");
+        set_test_name("hidden menus retain eligible shortcuts but not visible navigation");
         std::string error;
-        auto menu=LLVKMenu::create("<menu_bar><menu name='Root' label='Root'><on_visible function='Visible'/>"
-            "<menu_item_call name='action' label='Action' shortcut='control|J'><on_click function='Do'/></menu_item_call>"
+        auto menu=LLVKMenu::create("<menu_bar><menu name='Advanced' label='Advanced'><on_visible function='Visible'/>"
+            "<on_enable function='BranchEnabled'/>"
+            "<menu_item_call name='action' label='Action' shortcut='control|J'><on_click function='Do'/>"
+            "<on_enable function='Enabled'/><on_visible function='LeafVisible'/></menu_item_call>"
+            "<menu name='Nested' label='Nested' visible='false'>"
+            "<menu_item_check name='nested_action' label='Nested action' visible='false' shortcut='control|K'>"
+            "<on_click function='Do'/></menu_item_check></menu>"
+            "<menu_item_call name='unbound' shortcut='control|U'><on_click function='Missing'/></menu_item_call>"
+            "<menu_item_call name='callbackless' shortcut='control|N'/>"
+            "<menu_item_call name='empty' shortcut='control|E'><on_click function='Empty'/></menu_item_call>"
+            "<menu_item_call name='empty_specific' shortcut='control|B'><on_click function='Do' parameter='blocked'/></menu_item_call>"
+            "<menu_item_call name='reordered' shortcut='alt|control|shift|h'><on_click function='Do'/></menu_item_call>"
+            "<menu_item_call name='lowercase' shortcut='alt|shift|c'><on_click function='Do'/></menu_item_call>"
+            "<menu_item_call name='named' shortcut='Esc'><on_click function='Do'/></menu_item_call>"
             "</menu></menu_bar>",loadFont(),nullptr,{},false,error);
         ensure(error,menu!=nullptr);
-        bool visible=true; int calls=0;
+        bool visible=true,leafVisible=true,branchEnabled=true,leafEnabled=true;
+        int calls=0,enableChecks=0,visibilityChecks=0;
         menu->bindPredicate("Visible",[&](const auto&) { return visible; });
+        menu->bindPredicate("LeafVisible",[&](const auto&) { ++visibilityChecks; return leafVisible; });
+        menu->bindPredicate("BranchEnabled",[&](const auto&) { return branchEnabled; });
+        menu->bindPredicate("Enabled",[&](const auto&) { ++enableChecks; return leafEnabled; });
         menu->bind("Do",[&](const auto&,const auto&) { ++calls; });
+        menu->bind("Empty",{});
+        menu->bindItem("Do","blocked",{});
         ensure("visible accelerator",menu->shortcut("J",true,false,false) && calls==1);
+        ensure_equals("matching leaf enable predicate evaluated once",enableChecks,1);
+        ensure_equals("accelerator does not query leaf visibility",visibilityChecks,0);
         menu->key(LLVKMenu::Key::Activate);
         visible=false;
-        ensure("hidden ancestor gates accelerator",!menu->shortcut("J",true,false,false) && calls==1);
         menu->key(LLVKMenu::Key::Down);
         ensure("hidden open menu dismissed",!menu->open());
         LLVKWidgetPaint paint;
         ensure("hidden menu paint",menu->paint(paint,{0,0,500,500},error));
         ensure("hidden predicate suppresses item",!menu->itemVisible(0));
+        ensure("hidden root cannot activate visibly",!menu->key(LLVKMenu::Key::Activate) && !menu->open());
+        ensure("hidden Advanced ancestor retains accelerator",menu->shortcut("J",true,false,false) && calls==2);
+        leafVisible=false;
+        ensure("hidden leaf retains accelerator",menu->shortcut("J",true,false,false) && calls==3);
+        menu->setVisible("Advanced",false);
+        ensure("declaration-hidden ancestors and check leaf retain accelerator",menu->shortcut("K",true,false,false) && calls==4);
+        ensure("shortcut does not open hidden menus",!menu->open());
+        menu->setEnabled("Nested",false);
+        ensure("disabled nested branch blocks hidden shortcut",!menu->shortcut("K",true,false,false) && calls==4);
+        menu->setEnabled("Nested",true);
+        menu->setEnabled("Advanced",false);
+        ensure("disabled top-level branch blocks shortcut",!menu->shortcut("K",true,false,false) && calls==4);
+        menu->setEnabled("Advanced",true);
+        branchEnabled=false;
+        ensure("live ancestor predicate blocks shortcut",!menu->shortcut("J",true,false,false) && calls==4);
+        branchEnabled=true; leafEnabled=false;
+        ensure("live leaf predicate blocks shortcut",!menu->shortcut("J",true,false,false) && calls==4);
+        leafEnabled=true;
+        menu->setEnabled("action",false);
+        ensure("disabled leaf blocks shortcut",!menu->shortcut("J",true,false,false) && calls==4);
+        menu->setEnabled("action",true);
+        const auto beforeChecks=enableChecks;
+        ensure("unbound action is not handled",!menu->shortcut("U",true,false,false));
+        ensure("callbackless declaration is not a no-op command",!menu->shortcut("N",true,false,false));
+        ensure("empty action is not handled",!menu->shortcut("E",true,false,false));
+        ensure("empty item binding overrides generic handler eligibility",!menu->shortcut("B",true,false,false));
+        ensure_equals("unmatched leaf predicates are not evaluated",enableChecks,beforeChecks);
+        ensure("reenabled hidden shortcut uses current state",menu->shortcut("J",true,false,false) && calls==5);
+        ensure_equals("reenabled leaf checked exactly once",enableChecks,beforeChecks+1);
+        ensure("actual declaration modifier order and lowercase key",menu->shortcut("H",true,true,true) && calls==6);
+        ensure("shortcut requires exact modifiers",!menu->shortcut("H",true,false,true) && calls==6);
+        ensure("actual lowercase declaration accepts lowercase event key",menu->shortcut("c",false,true,true) && calls==7);
+        ensure("actual named key declaration ignores case",menu->shortcut("ESC",false,false,false) && calls==8);
+        const auto font=loadFont();
+        for (const std::string policy : {"true","1","false","0",""})
+        {
+            const auto attribute=policy.empty() ? std::string{} : " create_jump_keys='"+policy+"'";
+            auto roots=LLVKMenu::create("<menu_bar"+attribute+"><menu name='Action' label='Action' jump_key='A'/>"
+                "<menu name='Tools' label='Tools'><menu_item_call name='Child' label='Child'/></menu>"
+                "</menu_bar>",font,nullptr,{},false,error);
+            ensure(error,roots!=nullptr);
+            ensure_equals("explicit root key preserved",int(roots->items()[0].jumpKey),int('A'));
+            ensure_equals("root declaration controls automatic assignment",int(roots->items()[1].jumpKey),
+                policy=="true" || policy=="1" ? int('T') : 0);
+            ensure_equals("root policy does not propagate to descendants",int(roots->items()[2].jumpKey),0);
+        }
     }
 
     template<> template<> void object::test<194>()
@@ -1580,7 +2063,8 @@ namespace tut
             ~RestoreLogging() { LLError::setDefaultLevel(level); }
         } restoreLogging;
         LLError::setDefaultLevel(LLError::LEVEL_WARN);
-        menu.setVisible("Debug",true);
+        ensure("enable Debug through its setting",ui->tree().updateSetting("UseDebugMenus",LLSD(true)));
+        ensure("refresh Debug availability",ui->preparePaint({},error).has_value());
         menu.key(LLVKMenu::Key::Activate); menu.key(LLVKMenu::Key::Right); menu.key(LLVKMenu::Key::Right);
         bool loggingSelected=false;
         for (std::size_t attempt=0; attempt<menu.items().size(); ++attempt)

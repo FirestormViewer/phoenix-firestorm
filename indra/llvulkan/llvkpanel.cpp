@@ -121,7 +121,12 @@ bool LLVKWidgetTree::layoutTabPanels(Id container, const Node::TabContainer::Lay
     const auto bottom = !layout.hidden && layout.position == Position::Bottom ? layout.tabHeight-layout.panelOverlap : 1;
     const auto left = vertical && !layout.hidden ? std::int64_t(layout.minimumWidth)+layout.rightPadding+2+layout.verticalPadding : layout.panelOffset ? 3 : 1;
     const auto right = width-(!vertical && layout.panelOffset ? 2 : 1);
-    if (top < bottom || right < left) { error = "Native tab container is too small for its content"; return false; }
+    if (top < bottom || right < left)
+    {
+        error = "Native tab container is too small for its content: "+owner->params.name+
+            " ("+std::to_string(width)+"x"+std::to_string(height)+")";
+        return false;
+    }
     struct Placement { Id panel, button; Rect content, tab; };
     std::vector<Placement> placements;
     const auto rowHeight=std::int64_t(layout.verticalHeight)+layout.verticalPadding;

@@ -956,6 +956,7 @@ namespace
                 if (name == "preedit_bg_color") return color(text,editor.preeditColor);
                 if (name == "background_image" || name == "background_image_disabled" || name == "background_image_focused")
                 { declaration.lineImages[std::string(name)] = text; return true; }
+                if (name.starts_with("border.")) name.remove_prefix(7);
                 if (name == "border_thickness" || name == "thickness" || name == "bevel_style" || name == "border_style" ||
                     name == "style" || name == "highlight_light_color" || name == "highlight_dark_color" ||
                     name == "shadow_light_color" || name == "shadow_dark_color") declaration.lineBorderProvided = true;
