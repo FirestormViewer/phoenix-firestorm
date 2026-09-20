@@ -194,7 +194,7 @@ bool LLVKContext::pickPhysicalDevice(VkSurfaceKHR surface, std::string& error)
         vkGetPhysicalDeviceProperties(dev, &dprops);
         const char* dtype = dprops.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU ? "discrete" :
                             dprops.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU ? "integrated" : "other";
-        LL_INFOS("Vulkan") << "  device '" << (dprops.deviceName ? dprops.deviceName : "?")
+        LL_INFOS("Vulkan") << "  device '" << dprops.deviceName
                            << "' type=" << dtype << " gfxQueue=" << (gfx == UINT32_MAX ? -1 : (int)gfx)
                            << " presentQueue=" << (present == UINT32_MAX ? -1 : (int)present) << LL_ENDL;
 
@@ -228,7 +228,7 @@ bool LLVKContext::pickPhysicalDevice(VkSurfaceKHR surface, std::string& error)
 
     VkPhysicalDeviceProperties props{};
     vkGetPhysicalDeviceProperties(best, &props);
-    mDeviceName = props.deviceName ? props.deviceName : "";
+    mDeviceName = props.deviceName;
     LL_INFOS("Vulkan") << "Selected Vulkan device: " << mDeviceName << LL_ENDL;
     return true;
 }

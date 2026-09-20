@@ -89,7 +89,7 @@ namespace
                 }
             }
 
-            g_device_name = props.deviceName ? props.deviceName : "";
+            g_device_name = props.deviceName;
 
             // <VulkanStorm> Stage 1: capture the static GPU facts while the
             // instance/device handle is live (this runs before LLFeatureManager
