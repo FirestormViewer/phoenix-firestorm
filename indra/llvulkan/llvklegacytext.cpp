@@ -35,7 +35,7 @@ namespace
         F32 u0 = 0.f, v0 = 0.f, u1 = 0.f, v1 = 0.f;
     };
 
-    struct Font
+    struct LegacyFontState
     {
         FT_Face face = nullptr;
         // <VulkanStorm> Fallback face for glyphs the primary face cannot
@@ -54,7 +54,7 @@ namespace
 
     LLVKContext* s_context = nullptr;
     FT_Library s_library = nullptr;
-    std::map<const LLFontGL*, std::unique_ptr<Font>> s_fonts;
+    std::map<const LLFontGL*, std::unique_ptr<LegacyFontState>> s_fonts;
 
     void setWeight(FT_Face face, S32 weight)
     {
@@ -75,7 +75,7 @@ namespace
         FT_Done_MM_Var(s_library, mm);
     }
 
-    Font* getFont(const LLFontGL* font)
+    LegacyFontState* getFont(const LLFontGL* font)
     {
         if (!font || !s_library) return nullptr;
         auto found = s_fonts.find(font);
@@ -83,7 +83,7 @@ namespace
 
         LLFontGL::VkFaceInfo info;
         if (!font->getVkFaceInfo(info)) return nullptr;
-        std::unique_ptr<Font> created(new Font());
+        std::unique_ptr<LegacyFontState> created(new LegacyFontState());
         if (FT_New_Face(s_library, info.filename.c_str(), 0, &created->face))
         {
             LL_WARNS("Vulkan") << "LLVKText: cannot load " << info.filename << LL_ENDL;
@@ -93,7 +93,7 @@ namespace
         FT_Set_Char_Size(created->face, 0, (FT_F26Dot6)ll_round(info.point_size * 64.f),
                         (FT_UInt)LLFontGL::sHorizDPI, (FT_UInt)LLFontGL::sVertDPI);
         created->pixels.assign(ATLAS_SIZE * ATLAS_SIZE * 4, 0);
-        Font* result = created.get();
+        LegacyFontState* result = created.get();
         s_fonts[font] = std::move(created);
         // <VulkanStorm> prepare the fallback face (default UI font) so
         // bitmap/emoji-only fonts can render plain text glyphs. The default
@@ -112,7 +112,7 @@ namespace
         return result;
     }
 
-    const Glyph* ensureGlyph(Font& font, llwchar ch)
+    const Glyph* ensureGlyph(LegacyFontState& font, llwchar ch)
     {
         auto old = font.glyphs.find(ch);
         if (old != font.glyphs.end()) return &old->second;
@@ -211,7 +211,7 @@ namespace
         return &font.glyphs.emplace(ch, glyph).first->second;
     }
 
-    bool upload(Font& font)
+    bool upload(LegacyFontState& font)
     {
         if (!font.dirty) return font.texture.descriptor != VK_NULL_HANDLE;
         std::string error;
@@ -237,7 +237,7 @@ namespace
         return true;
     }
 
-    F32 kern(Font& font, const Glyph* left, const Glyph* right)
+    F32 kern(LegacyFontState& font, const Glyph* left, const Glyph* right)
     {
         if (!left || !right) return 0.f;
         FT_Vector delta{0, 0};
@@ -249,7 +249,7 @@ namespace
         return result;
     }
 
-    F32 measure(Font& font, const LLWString& text)
+    F32 measure(LegacyFontState& font, const LLWString& text)
     {
         F32 x = 0.f;
         const Glyph* previous = nullptr;
@@ -302,7 +302,7 @@ namespace LLVKText
         {
             for (auto& pair : s_fonts)
             {
-                Font& font = *pair.second;
+                LegacyFontState& font = *pair.second;
                 s_context->destroyTexture2D(font.texture);
             }
         }
@@ -323,7 +323,7 @@ namespace LLVKText
     {
         if (!ready() || !fontp || text.empty() || !LLFontGL::sDisplayFont)
             return;
-        Font* font = getFont(fontp);
+        LegacyFontState* font = getFont(fontp);
         if (!font) return;
         measure(*font, text);
     }
@@ -333,7 +333,7 @@ namespace LLVKText
         if (!ready()) return;
         for (auto& pair : s_fonts)
         {
-            Font& font = *pair.second;
+            LegacyFontState& font = *pair.second;
             if (font.dirty) upload(font);
         }
     }
@@ -350,7 +350,7 @@ namespace LLVKText
     F32 debugMeasureAdvance(const LLFontGL* fontp, const LLWString& text)
     {
         if (!ready() || !fontp) return -1.f;
-        Font* font = getFont(fontp);
+        LegacyFontState* font = getFont(fontp);
         if (!font) return -1.f;
         return measure(*font, text);
     }
@@ -362,7 +362,7 @@ namespace LLVKText
                S32 max_pixels, bool ellipses, LLFontGL::ShadowType shadow)
     {
         if (!ready() || !fontp || source.empty() || !LLFontGL::sDisplayFont) return 0;
-        Font* font = getFont(fontp);
+        LegacyFontState* font = getFont(fontp);
         if (!font) return 0;
 
         LLWString text = source;
