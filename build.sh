@@ -45,7 +45,7 @@ build_dir_Darwin()
 
 build_dir_Linux()
 {
-  echo build-linux-i686
+  echo build-linux-x86_64
 }
 
 build_dir_CYGWIN()
