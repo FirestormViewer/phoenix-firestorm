@@ -149,7 +149,7 @@ pre_build()
     RELEASE_CRASH_REPORTING=OFF
     HAVOK=OFF
     SIGNING=()
-    if [[ "$variant" != *OS ]]
+    if [[ "$variant" != *OS && "$variant" != *_open ]]
     then
         # Proprietary builds
 

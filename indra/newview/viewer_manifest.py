@@ -2375,6 +2375,10 @@ class LinuxManifest(ViewerManifest):
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
         self.path("licenses-linux.txt","licenses.txt")
+        if self.args.get('soloud', 'OFF').lower() == 'on':
+            with self.prefix(src=os.path.join(pkgdir, 'LICENSES'), dst='licenses'):
+                self.path('soloud.txt')
+                self.path('soloud-miniaudio.txt')
         self.path("VivoxAUP.txt")
         self.path("LGPL-license.txt")
         self.path("res/firestorm_icon.png","firestorm_icon.png")
