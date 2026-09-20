@@ -11,6 +11,11 @@ Linux uses its native archive packager and does not bundle Windows WGL DLLs.
 The channel is Vulkanstorm-Release. Build numbers identify the CI run, so
 installer filenames need not equal the local filename.
 
+Crash reporting is disabled explicitly for Release and non-Release builds,
+USE_BUGSPLAT is OFF, and BUGSPLAT_DB is empty. The cache assertion enforces all
+four settings. The legacy macOS workflow also disables reporting and has no
+BugSplat symbol-upload step. No paid crash-reporting service is required.
+
 NV-00 reference/design: the existing CMake and viewer manifest consume build
 options, select libraries, compile native shaders and stage runtime assets.
 These are CPU build operations shared by both renderers. Configure the same

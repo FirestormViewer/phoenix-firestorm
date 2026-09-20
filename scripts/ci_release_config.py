@@ -14,7 +14,8 @@ enabled = {"PACKAGE", "USE_SOLOUD", "USE_AVX2_OPTIMIZATION", "USE_LTO",
            "USE_PRECOMPILED_HEADERS"}
 disabled = {"OPENSIM", "USE_KDU", "INSTALL_PROPRIETARY", "USE_OPENAL",
             "USE_FMODSTUDIO", "USE_DISCORD", "USE_BUGSPLAT", "USE_TRACY",
-            "USE_AVX_OPTIMIZATION", "USE_VELOPACK", "USE_NSIS", "LL_TESTS"}
+            "USE_AVX_OPTIMIZATION", "USE_VELOPACK", "USE_NSIS", "LL_TESTS",
+            "RELEASE_CRASH_REPORTING", "NON_RELEASE_CRASH_REPORTING"}
 (enabled if windows else disabled).update({"USE_INNOSETUP", "USE_MESAZINK"})
 errors = []
 for key in sorted(enabled | disabled):
@@ -23,7 +24,7 @@ for key in sorted(enabled | disabled):
     if actual not in valid:
         errors.append(f"{key}: expected {'ON' if key in enabled else 'OFF'}, got {actual}")
 for key, expected in {"CMAKE_BUILD_TYPE": "Release", "ADDRESS_SIZE": "64",
-                      "VIEWER_CHANNEL": "Vulkanstorm-Release"}.items():
+                      "VIEWER_CHANNEL": "Vulkanstorm-Release", "BUGSPLAT_DB": ""}.items():
     if values.get(key) != expected:
         errors.append(f"{key}: expected {expected}, got {values.get(key)}")
 if errors:
