@@ -8172,6 +8172,10 @@ bool LLPipeline::beginAlphaOITCapture()
     }
     LL_PROFILE_GPU_ZONE("alpha oit capture begin");
 
+    // The previous capture wrote these resources through shaders. Order those
+    // writes before the API resets, including when reusing unchanged allocations.
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT | GL_TEXTURE_UPDATE_BARRIER_BIT);
+
     // reset the free-node allocator and clear every per-pixel head to "empty"
     U32 zero = 0;
     glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, mAlphaOITCounter);
@@ -8182,8 +8186,7 @@ bool LLPipeline::beginAlphaOITCapture()
     glClearTexImage(mAlphaOITHead, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, &clear_head);
 
     glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT |
-                    GL_ATOMIC_COUNTER_BARRIER_BIT |
-                    GL_BUFFER_UPDATE_BARRIER_BIT);
+                    GL_ATOMIC_COUNTER_BARRIER_BIT);
 
     // bind storage: head image (unit 0, rw), node pool (SSBO 0), counter (atomic 0)
     glBindImageTexture(0, mAlphaOITHead, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R32UI);
@@ -8223,6 +8226,8 @@ void LLPipeline::compositeAlphaOIT()
     static LLCachedControl<bool> oit_stats(gSavedSettings, "RenderAlphaOITStats", false);
     if (oit_stats && mAlphaOITCounter)
     {
+        // API readback consumes the counter written by the just-finished capture.
+        glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
         U32 used = 0;
         glBindBuffer(GL_ARRAY_BUFFER, mAlphaOITCounter);
         glGetBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(U32), &used);
