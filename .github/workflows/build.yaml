@@ -97,6 +97,11 @@ jobs:
       - name: Install build dependencies
         run: python -m pip install autobuild==3.9.3 llsd
 
+      - name: Check Linux installation scripts
+        if: runner.os == 'Linux'
+        shell: bash
+        run: bash scripts/test_linux_install_scripts.sh
+
       - name: Install Inno Setup
         if: runner.os == 'Windows'
         shell: powershell

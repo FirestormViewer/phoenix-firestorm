@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Firestorm Viewer Installation Script
+# Vulkanstorm Viewer Installation Script
 
 # ANSI color codes for styling
 VT102_STYLE_NORMAL='\E[0m'
@@ -85,9 +85,18 @@ prune_old_backups() {
     done
 }
 
-# Function to install Firestorm Viewer to the specified directory
+# Function to install Vulkanstorm Viewer to the specified directory
 install_to_prefix() {
     local install_prefix="$1"
+
+    # Validate canonical paths before moving installations or pruning backups.
+    local source_path destination_path
+    source_path=$(readlink -f -- "$tarball_path") || die "Cannot resolve source package."
+    destination_path=$(readlink -m -- "$install_prefix") || die "Cannot resolve installation directory."
+    if [[ "$destination_path" == / || "$destination_path" == "$source_path" ||
+          "$destination_path" == "$source_path/"* || "$source_path" == "$destination_path/"* ]]; then
+        die "Installation directory and source package must not overlap."
+    fi
 
     # Check if the installation directory already exists
     if [[ -e "$install_prefix" ]]; then
@@ -101,12 +110,7 @@ install_to_prefix() {
     # Create the installation directory
     mkdir -p "$install_prefix" || die "Failed to create installation directory: $install_prefix"
 
-    # Prevent recursive copy if install_prefix is inside tarball_path
-    if [[ "$(readlink -f "$install_prefix")" == "$(readlink -f "$tarball_path")"* ]]; then
-        die "Cannot install into a subdirectory of the source package."
-    fi
-
-    echo " - Installing Firestorm Viewer to $install_prefix"
+    echo " - Installing Vulkanstorm Viewer to $install_prefix"
 
     # Copy all files from the tarball to the installation directory
     cp -a "${tarball_path}/." "$install_prefix/" || die "Failed to complete the installation!"
@@ -116,8 +120,8 @@ install_to_prefix() {
 # Function for user-specific installation (non-root)
 homedir_install() {
     warn "You are not running as a privileged user, so you will only be able"
-    warn "to install the Firestorm Viewer in your home directory. If you"
-    warn "would like to install the Firestorm Viewer system-wide, please run"
+    warn "to install the Vulkanstorm Viewer in your home directory. If you"
+    warn "would like to install the Vulkanstorm Viewer system-wide, please run"
     warn "this script as the root user, or with the 'sudo' command."
     echo
 
@@ -139,7 +143,7 @@ homedir_install() {
     fi
 
     install_to_prefix "${install_prefix}"
-    "${install_prefix}/etc/refresh_desktop_app_entry.sh"
+    "${install_prefix}/etc/refresh_desktop_app_entry.sh" || die "Failed to register the desktop entry."
 }
 
 # Function for system-wide installation (root)
@@ -150,7 +154,7 @@ root_install() {
     if [[ -n "$CUSTOM_INSTALL_DIR" ]]; then
         local install_prefix="$CUSTOM_INSTALL_DIR"
     elif [[ -n "$SUFFIX" ]]; then
-        local install_prefix="$default_prefix_$SUFFIX"
+        local install_prefix="${default_prefix}_${SUFFIX}"
     else
         local install_prefix="$default_prefix"
     fi
@@ -168,7 +172,7 @@ root_install() {
     # Ensure the applications directory exists
     mkdir -p /usr/local/share/applications || die "Failed to create /usr/local/share/applications"
 
-    "${install_prefix}/etc/refresh_desktop_app_entry.sh"
+    "${install_prefix}/etc/refresh_desktop_app_entry.sh" || die "Failed to register the desktop entry."
 }
 
 # Function to parse command-line arguments
@@ -215,7 +219,7 @@ parse_arguments() {
 
 # Main installation workflow
 main() {
-    echo "Starting Firestorm Viewer installation script..."
+    echo "Starting Vulkanstorm Viewer installation script..."
 
     RETAIN_BACKUPS="${DEFAULT_RETAIN_BACKUPS}"
     NON_INTERACTIVE="false"
@@ -237,7 +241,7 @@ main() {
         homedir_install
     fi
 
-    echo "Firestorm Viewer installation process completed successfully."
+    echo "Vulkanstorm Viewer installation process completed successfully."
 }
 
 # Execute the main function with all passed arguments
