@@ -253,6 +253,7 @@ static void gl_render_ui_test_scene()
 }
 // </VulkanStorm>
 
+#if LL_WINDOWS
 // <VulkanStorm> GL reference capture (read-only diagnostic, env-gated): dump
 // the finished GL back buffer to the same .rgba format the Vulkan harness uses
 // (8-byte LE w/h header + RGBA8, bottom-origin like glReadPixels) when
@@ -293,6 +294,8 @@ static void gl_capture_frame_once()
     }
 }
 // </VulkanStorm>
+
+#endif // LL_WINDOWS
 
 #if LL_WINDOWS
 // <VulkanStorm> M0 greenfield: LLMediaCtrl view hook (registered with

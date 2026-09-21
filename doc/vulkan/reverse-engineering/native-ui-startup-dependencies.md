@@ -671,6 +671,15 @@ Outgoing: mkdir/add/getExpandedFilename and base directory fields.
 
 ## UI-CAPTURE-002: gl_capture_frame_once
 
+Portability review, 2026-09-21, source `78d2c624eb` (NV-00/NV-01): the
+only call in `display_startup` is guarded by `LL_WINDOWS`, but the static
+definition was unconditional. Guard the definition with the same condition.
+This preserves the Windows GL reference capture and its ordering, leaves the
+existing Linux execution path unchanged, and removes the unused Linux function.
+No GPU ownership, synchronization or retirement contract changes. Verification:
+inspect both guards and confirm that the function body and call are unchanged;
+full Linux compilation remains a CI check.
+
 Source: [llviewerdisplay.cpp](../../../indra/newview/llviewerdisplay.cpp#L261).
 **1.** Static getenv(VULKANSTORM_CAPTURE); absent/empty returns. Startup state below
 LOGIN_SHOW returns without frame increment. Otherwise increment static frame counter;
