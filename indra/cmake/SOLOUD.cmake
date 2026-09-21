@@ -17,7 +17,8 @@ if(USE_SOLOUD)
         message(FATAL_ERROR "The SoLoud package supports Windows x64 and Linux x64. Select USE_SOLOUD=OFF and USE_OPENAL=ON or USE_FMODSTUDIO=ON on this platform.")
     endif()
     use_prebuilt_binary(soloud)
-    find_library(SOLOUD_LIBRARY NAMES soloud
+    # Exact filenames bypass directory listings cached before package extraction.
+    find_library(SOLOUD_LIBRARY NAMES soloud.lib libsoloud.a
         PATHS "${ARCH_PREBUILT_DIRS_RELEASE}" REQUIRED NO_DEFAULT_PATH)
     add_library(ll::soloud INTERFACE IMPORTED)
     target_include_directories(ll::soloud SYSTEM INTERFACE "${LIBS_PREBUILT_DIR}/include/soloud")

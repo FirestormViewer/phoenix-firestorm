@@ -30,6 +30,23 @@ Threads and dl; Linux hardware playback remains unverified.
 SoLoud is linked statically. Both manifests stage package-owned notices
 as `licenses/soloud.txt` and `licenses/soloud-miniaudio.txt`.
 
+### Library lookup on a fresh configure
+
+Source review: `a66f52621f`, Windows/Linux build integration, 2026-09-21.
+NV-00/NV-01: both viewer backends consume the same neutral audio package;
+this change affects only discovery, with no audio or GPU lifetime changes.
+`Audio.cmake` searches for Ogg before `SOLOUD.cmake` installs SoLoud into the
+same directory. CMake 3.31 can retain that directory listing and miss the newly
+installed archive when searching for the generic name `soloud`. Search the
+exact packaged filenames `soloud.lib` and `libsoloud.a` instead, preserving the
+package-only search path and fatal failure when the library is absent.
+
+Validation: the pinned Linux archive checksum and `lib/release/libsoloud.a`
+were verified. A fresh-directory CMake 3.31.6 probe using Audio.cmake's Ogg
+search names, followed by creation of the SoLoud archive, reproduces failure
+with the generic name and success with the exact filename. This is a focused
+lookup check, not a completed Linux viewer build or hardware playback test.
+
 ## Behavior
 
 SoLoud does not replace the VLC media plugin. Parcel/music streaming and its
