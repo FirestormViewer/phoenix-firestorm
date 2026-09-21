@@ -21,6 +21,7 @@
   
   <menu_item_separator/>
 
+  <!-- <FS:TP> [FIRE-36105] New sort options: alphabetical and newest-first -->
   <menu_item_check
    label="Sort alphabetically"
    layout="topleft"
@@ -46,6 +47,7 @@
   </menu_item_check>
 
   <menu_item_separator/>
+  <!-- </FS:TP> -->
 
   <menu_item_check
    label="Sort favorites to top"

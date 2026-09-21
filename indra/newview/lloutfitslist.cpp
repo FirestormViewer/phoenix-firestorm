@@ -57,11 +57,6 @@
 #include "llviewercontrol.h" // <FS:ND/> for gSavedSettings
 #include "llresmgr.h"
 #include "lltextbox.h"
-
-// <FS:TP> [FIRE-36105] std::unordered_map is used below for the per-sort
-// outfit-date memoization cache; no include needed here, it's already
-// pulled in via llviewerprecompiledheaders.h
-// </FS:TP>
 #include "lleconomy.h"
 
 #include "rlvactions.h"
@@ -83,17 +78,18 @@ static const LLOutfitTabFavDateComparator OUTFIT_TAB_FAV_DATE_COMPARATOR;
 // cache to one sort pass (primed/cleared in sortOutfits(), below) means it
 // can never go stale - it simply doesn't exist outside of an in-progress
 // sort, so there's no invalidation logic to get wrong.
-static std::unordered_map<LLUUID, time_t>* sOutfitDateCache = NULL;
+static std::unordered_map<LLUUID, time_t>* sOutfitDateCache = nullptr;
 // </FS:TP>
 
 // <FS:TP> [FIRE-36105] Bits of the "FSOutfitListSortOrder" saved setting.
 // This is a Firestorm-specific setting, not LL's own "OutfitListSortOrder"
 // (which stays a simple 0/1 toggle so LL's own code keeps reading it as
 // before) - see FSOutfitListSortOrder in settings.xml.
-static const S32 OUTFIT_SORT_FAVORITES_TO_TOP = 0x1;
-static const S32 OUTFIT_SORT_NEWEST_FIRST     = 0x2;
+static constexpr S32 OUTFIT_SORT_FAVORITES_TO_TOP = 0x1;
+static constexpr S32 OUTFIT_SORT_NEWEST_FIRST     = 0x2;
 // </FS:TP>
 
+// <FS:TP> [FIRE-36105] Entirely custom helper. approximates an outfit folders creation date from its contents, with a per-sort cache (sOutfitDateCache) to avoid re-walking items on every comparator call.
 // Returns the creation date of the outfit folder backing this tab, or 0
 // if the folder can't be found for some reason.
 // LLViewerInventoryCategory has no reliable creation date of its own - the
@@ -110,7 +106,7 @@ static time_t get_outfit_tab_creation_date(const LLAccordionCtrlTab* tab)
     LLOutfitAccordionCtrlTab* outfit_tab = (LLOutfitAccordionCtrlTab*)tab;
     const LLUUID folder_id = outfit_tab->getFolderID();
 
-    // <FS:TP> [FIRE-36105] Serve from the active sort's cache, if any
+    // Serve from the active sort's cache, if any
     if (sOutfitDateCache)
     {
         std::unordered_map<LLUUID, time_t>::const_iterator cached = sOutfitDateCache->find(folder_id);
@@ -119,18 +115,16 @@ static time_t get_outfit_tab_creation_date(const LLAccordionCtrlTab* tab)
             return cached->second;
         }
     }
-    // </FS:TP>
 
-    LLInventoryModel::cat_array_t* cats = NULL;
-    LLInventoryModel::item_array_t* items = NULL;
+    LLInventoryModel::cat_array_t* cats = nullptr;
+    LLInventoryModel::item_array_t* items = nullptr;
     gInventory.getDirectDescendentsOf(folder_id, cats, items);
 
     time_t newest = 0;
     if (items)
     {
-        for (LLInventoryModel::item_array_t::const_iterator it = items->begin(); it != items->end(); ++it)
+        for (const LLViewerInventoryItem* item : *items)
         {
-            const LLViewerInventoryItem* item = *it;
             if (item && item->getCreationDate() > newest)
             {
                 newest = item->getCreationDate();
@@ -138,12 +132,11 @@ static time_t get_outfit_tab_creation_date(const LLAccordionCtrlTab* tab)
         }
     }
 
-    // <FS:TP> [FIRE-36105] Populate the active sort's cache, if any
+    // Populate the active sort's cache, if any
     if (sOutfitDateCache)
     {
         (*sOutfitDateCache)[folder_id] = newest;
     }
-    // </FS:TP>
 
     return newest;
 }
@@ -369,6 +362,7 @@ void LLOutfitsList::updateAddedCategory(LLUUID cat_id)
     // its tab is added here; this is what actually gives it a date once its
     // items arrive, so it needs to trigger a fresh sort itself rather than
     // waiting for some unrelated outfit-list change to do it.
+    // if (!mCategoriesObserver->addCategory(cat_id, boost::bind(&LLWearableItemsList::updateList, list, cat_id)))
     if (!mCategoriesObserver->addCategory(cat_id, [this, list, cat_id]()
     {
         list->updateList(cat_id);
@@ -1021,7 +1015,7 @@ void LLOutfitsList::sortOutfits()
     std::unordered_map<LLUUID, time_t> date_cache;
     sOutfitDateCache = &date_cache;
     mAccordion->sort();
-    sOutfitDateCache = NULL;
+    sOutfitDateCache = nullptr;
     // </FS:TP>
 }
 

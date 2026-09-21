@@ -84,8 +84,8 @@ class LLOutfitTabDateComparator : public LLAccordionCtrl::LLTabComparator
     LOG_CLASS(LLOutfitTabDateComparator);
 
 public:
-    LLOutfitTabDateComparator() {};
-    virtual ~LLOutfitTabDateComparator() {};
+    LLOutfitTabDateComparator() = default;
+    virtual ~LLOutfitTabDateComparator() = default;
 
     /*virtual*/ bool compare(const LLAccordionCtrlTab* tab1, const LLAccordionCtrlTab* tab2) const;
 };
@@ -101,8 +101,8 @@ class LLOutfitTabFavDateComparator : public LLAccordionCtrl::LLTabComparator
     LOG_CLASS(LLOutfitTabFavDateComparator);
 
 public:
-    LLOutfitTabFavDateComparator() {};
-    virtual ~LLOutfitTabFavDateComparator() {};
+    LLOutfitTabFavDateComparator() = default;
+    virtual ~LLOutfitTabFavDateComparator() = default;
 
     /*virtual*/ bool compare(const LLAccordionCtrlTab* tab1, const LLAccordionCtrlTab* tab2) const;
 };
