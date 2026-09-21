@@ -2926,11 +2926,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3e218901df98257f93ca9ddb22c05ac0f396cbf7</string>
+              <string>26fe911a2d6adb80ce933db873263339df529386c97f460a8a943140ca218f54</string>
               <key>hash_algorithm</key>
-              <string>sha1</string>
+              <string>sha256</string>
               <key>url</key>
-              <string>https://github.com/anne-skydancer/3p-vulkan-sdk/releases/download/v1.4.350/vulkan_sdk-1.4.350-common-73f1373.tar.zst</string>
+              <string>https://github.com/anne-skydancer/3p-vulkan-sdk/releases/download/v1.4.350-metadata1/vulkan_sdk-1.4.350-common-3.tar.zst</string>
             </map>
             <key>name</key>
             <string>common</string>
