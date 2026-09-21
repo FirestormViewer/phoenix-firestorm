@@ -174,7 +174,7 @@ verified initial pixels, clicked pixels and resized pixels, then crashed in
 dullahan::~dullahan after shutdown returned. LLDB/PDB identified the destructor,
 not startup. Pinned source 49a551c0216ac7db03e36c9cc7ec44650c0be1c4 owns
 CEF-refcounted dullahan_impl with unique_ptr but supplies no owning CEF reference.
-The native-only llvk_dullahan target retains AddRef at construction and pairs it
+The native-only vkdullahan target retains AddRef at construction and pairs it
 with Release after relinquishing unique_ptr ownership at destruction. This keeps
 the object valid through CefShutdown without a leak/double delete. The generated
 facade preserves upstream license; existing GL plugin/prebuilt Dullahan remains
