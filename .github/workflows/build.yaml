@@ -24,7 +24,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       AUTOBUILD_ADDRSIZE: 64
-      AUTOBUILD_BUILD_ID: ${{ github.run_id }}
       AUTOBUILD_CONFIGURATION: ReleaseFS_open
       AUTOBUILD_VSVER: "170"
       AUTOBUILD_VARIABLES_FILE: ${{ github.workspace }}/.build-variables/variables
@@ -34,6 +33,24 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Set source build number
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$(git rev-parse --is-shallow-repository)" != false ]]; then
+            echo "Build numbering requires complete Git history" >&2
+            exit 1
+          fi
+          build_revision=$(git rev-list --count HEAD)
+          [[ "$build_revision" =~ ^[1-9][0-9]*$ ]]
+          # Match BuildVersion.cmake's local Git fallback on both platforms.
+          # Set revision too: it has precedence over AUTOBUILD_BUILD_ID.
+          echo "revision=$build_revision" >> "$GITHUB_ENV"
+          echo "AUTOBUILD_BUILD_ID=$build_revision" >> "$GITHUB_ENV"
+          echo "Source $(git rev-parse HEAD): build $build_revision" >> "$GITHUB_STEP_SUMMARY"
+
       - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
@@ -142,6 +159,7 @@ jobs:
             -DLL_TESTS:BOOL=OFF -DRELEASE_CRASH_REPORTING:BOOL=OFF \
             -DNON_RELEASE_CRASH_REPORTING:BOOL=OFF -DBUGSPLAT_DB:STRING=
           python scripts/ci_release_config.py "$BUILD_DIRECTORY/CMakeCache.txt" "$RUNNER_OS"
+          python scripts/ci_viewer_version.py "$BUILD_DIRECTORY/newview/viewer_version.txt"
 
       - name: Build Release and installer
         run: cmake --build ${{ matrix.directory }} --config Release --parallel 3
