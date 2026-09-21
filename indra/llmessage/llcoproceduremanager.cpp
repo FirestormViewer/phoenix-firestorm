@@ -30,6 +30,7 @@
 #include "linden_common.h"
 
 #include "llcoproceduremanager.h"
+#include "llallocationlimits.h"
 
 #include <chrono>
 
@@ -328,7 +329,8 @@ LLCoprocedurePool::LLCoprocedurePool(const std::string &poolName, size_t size, s
     llassert_always(mQueueSize > mPoolSize); // queue should be able to fit pool
     try
     {
-        mPendingCoprocs = std::make_shared<CoprocQueue_t>(mQueueSize);
+        mPendingCoprocs = std::make_shared<CoprocQueue_t>(
+            LLAllocationLimits::queueCapacity(mQueueSize, LLCoprocedureManager::DEFAULT_QUEUE_SIZE));
         // store in our LLTempBoundListener so that when the LLCoprocedurePool is
         // destroyed, we implicitly disconnect from this LLEventPump
         // Monitores application status

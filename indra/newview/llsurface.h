@@ -64,6 +64,8 @@ public:
 
     static void initClasses(); // Do class initialization for LLSurface and its child classes.
 
+    static void validateGeometry(U32 grids_per_edge, U32 grids_per_patch_edge, F32 width);
+
     void create(const S32 surface_grid_width,
                 const S32 surface_patch_width,
                 const LLVector3d &origin_global,

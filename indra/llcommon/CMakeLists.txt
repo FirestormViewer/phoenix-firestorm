@@ -225,6 +225,7 @@ set(llcommon_HEADER_FILES
     llstrider.h
     llstring.h
     llstringtable.h
+    llallocationlimits.h
     llstaticstringtable.h
     llstatsaccumulator.h
     llsys.h

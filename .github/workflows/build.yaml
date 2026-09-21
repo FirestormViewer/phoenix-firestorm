@@ -102,6 +102,15 @@ jobs:
         shell: bash
         run: bash scripts/test_linux_install_scripts.sh
 
+      - name: Check allocation bounds with LTO
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          g++-14 -std=c++20 -O2 -flto -Wall -Wextra -Werror \
+            -I indra/llcommon indra/llcommon/tests/llallocationlimits_test.cpp \
+            -o "$RUNNER_TEMP/allocation-limits-test"
+          "$RUNNER_TEMP/allocation-limits-test"
+
       - name: Install Inno Setup
         if: runner.os == 'Windows'
         shell: powershell

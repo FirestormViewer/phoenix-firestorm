@@ -79,6 +79,7 @@ public:
     void close();
     void close(const std::string &pool);
 
+    // Queue capacity must be a power of two in [2, DEFAULT_QUEUE_SIZE].
     void initializePool(const std::string &poolName, size_t queue_size = DEFAULT_QUEUE_SIZE);
 
 private:
