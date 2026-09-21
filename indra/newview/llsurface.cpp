@@ -27,6 +27,8 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llsurface.h"
+#include "llallocationlimits.h"
+#include <cmath>
 
 #include "llpatchvertexarray.h"
 #include "patch_dct.h"
@@ -143,6 +145,21 @@ void LLSurface::setRegion(LLViewerRegion *regionp)
     mWaterObjp = nullptr; // depends on regionp, needs recreating
 }
 
+void LLSurface::validateGeometry(U32 grids_per_edge, U32 grids_per_patch_edge, F32 width)
+{
+    if (grids_per_edge == 0 || grids_per_patch_edge == 0 ||
+        grids_per_patch_edge > grids_per_edge || grids_per_edge % grids_per_patch_edge != 0 ||
+        !std::isfinite(width) || width < 1.f || width >= 2147483648.f)
+    {
+        throw std::invalid_argument("Invalid terrain surface dimensions");
+    }
+    const auto grids = LLAllocationLimits::squareCount(static_cast<U64>(grids_per_edge) + 1);
+    const auto patches = LLAllocationLimits::squareCount(grids_per_edge / grids_per_patch_edge);
+    LLAllocationLimits::arrayCount<F32>(grids);
+    LLAllocationLimits::arrayCount<LLVector3>(grids);
+    LLAllocationLimits::arrayCount<LLSurfacePatch>(patches);
+}
+
 // Assumes that arguments are powers of 2, and that
 // grids_per_edge / grids_per_patch_edge = power of 2
 void LLSurface::create(const S32 grids_per_edge,
@@ -150,12 +167,13 @@ void LLSurface::create(const S32 grids_per_edge,
                        const LLVector3d &origin_global,
                        const F32 width)
 {
+    validateGeometry(grids_per_edge, grids_per_patch_edge, width);
     // Initialize various constants for the surface
     mGridsPerEdge = grids_per_edge + 1;  // Add 1 for the east and north buffer
     mOOGridsPerEdge = 1.f / mGridsPerEdge;
     mGridsPerPatchEdge = grids_per_patch_edge;
     mPatchesPerEdge = (mGridsPerEdge - 1) / mGridsPerPatchEdge;
-    mNumberOfPatches = mPatchesPerEdge * mPatchesPerEdge;
+    mNumberOfPatches = LLAllocationLimits::squareCount(mPatchesPerEdge);
     mMetersPerGrid = width / ((F32)(mGridsPerEdge - 1));
     mMetersPerEdge = mMetersPerGrid * (mGridsPerEdge - 1);
 // <FS:CR> Aurora Sim
@@ -165,7 +183,8 @@ void LLSurface::create(const S32 grids_per_edge,
     if ((sTextureSize & (sTextureSize - 1)) != 0)
     {
         // Not a power of 2, find the next power of 2
-        sTextureSize = 1 << static_cast<S32>( ceil(log2(sTextureSize)) ) ;
+        sTextureSize = sTextureSize >= 1024 ? 1024 :
+            1 << static_cast<S32>(ceil(log2(sTextureSize)));
     }
 
     // Clamp to maximum limit
@@ -176,14 +195,14 @@ void LLSurface::create(const S32 grids_per_edge,
 
     mPVArray.create(mGridsPerEdge, mGridsPerPatchEdge, LLWorld::getInstance()->getRegionScale());
 
-    S32 number_of_grids = mGridsPerEdge * mGridsPerEdge;
+    S32 number_of_grids = LLAllocationLimits::squareCount(mGridsPerEdge);
 
     /////////////////////////////////////
     //
     // Initialize data arrays for surface
     ///
-    mSurfaceZ = new F32[number_of_grids];
-    mNorm = new LLVector3[number_of_grids];
+    mSurfaceZ = new F32[LLAllocationLimits::arrayCount<F32>(number_of_grids)];
+    mNorm = new LLVector3[LLAllocationLimits::arrayCount<LLVector3>(number_of_grids)];
 
     // Reset the surface to be a flat square grid
     for(S32 i=0; i < number_of_grids; i++)
@@ -1200,7 +1219,7 @@ void LLSurface::createPatchData()
     LLSurfacePatch *patchp;
 
     // Allocate memory
-    mPatchList = new LLSurfacePatch[mNumberOfPatches];
+    mPatchList = new LLSurfacePatch[LLAllocationLimits::arrayCount<LLSurfacePatch>(mNumberOfPatches)];
 
     // One of each for each camera
     mVisiblePatchCount = mNumberOfPatches;

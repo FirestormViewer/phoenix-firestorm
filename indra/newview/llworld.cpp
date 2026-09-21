@@ -79,8 +79,6 @@ U32         gAgentPauseSerialNum = 0;
 //
 // Constants
 //
-const S32 WORLD_PATCH_SIZE = 16;
-
 extern LLColor4U MAX_WATER_COLOR;
 // <FS:CR> Aurora Sim
 extern std::string SYSTEM_FROM;

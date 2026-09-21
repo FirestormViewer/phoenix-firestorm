@@ -4948,6 +4948,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
     if (!text.empty())
     {
         first_sim_size_x = strtoul(text.c_str(), NULL, 10);
+        LLSurface::validateGeometry(first_sim_size_x, WORLD_PATCH_SIZE, (F32)first_sim_size_x);
         LLViewerParcelMgr::getInstance()->init((F32)first_sim_size_x);
     }
 

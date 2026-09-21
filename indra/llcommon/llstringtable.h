@@ -29,6 +29,7 @@
 #define LL_STRING_TABLE_H
 
 #include "lldefs.h"
+#include "llallocationlimits.h"
 #include "llformat.h"
 #include "llstl.h"
 #include <list>
@@ -110,20 +111,8 @@ public:
         {
             tablesize = 256; // default
         }
-        // Make sure tablesize is power of 2
-        for (S32 i = 31; i>0; i--)
-        {
-            if (tablesize & (1<<i))
-            {
-                if (tablesize >= (3<<(i-1)))
-                    tablesize = (1<<(i+1));
-                else
-                    tablesize = (1<<i);
-                break;
-            }
-        }
-        mTableSize = tablesize;
-        mStringList = new string_set_t[tablesize];
+        mTableSize = LLAllocationLimits::nearestPowerOfTwo(tablesize);
+        mStringList = new string_set_t[LLAllocationLimits::arrayCount<string_set_t>(mTableSize)];
     }
     ~LLStdStringTable()
     {

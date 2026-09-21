@@ -42,6 +42,8 @@
 #include "llviewertexture.h"
 #include "llvowater.h"
 
+inline constexpr S32 WORLD_PATCH_SIZE = 16;
+
 class LLViewerRegion;
 class LLVector3d;
 class LLMessageSystem;
