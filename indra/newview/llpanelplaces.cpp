@@ -55,6 +55,7 @@
 #include "llavatarpropertiesprocessor.h"
 #include "llcommandhandler.h"
 #include "lldndbutton.h"
+#include "llfloaterdirectory.h" // <FS:TJ/> [FIRE-36928] Fix Ctrl-F not hiding LL legacy search
 #include "llfloaterworldmap.h"
 #include "llinventorybridge.h"
 #include "llinventoryobserver.h"
@@ -1449,7 +1450,8 @@ void LLPanelPlaces::resetFilter()
 // <FS:Ansariel> CTRL-F focusses local search editor
 bool LLPanelPlaces::handleKeyHere(KEY key, MASK mask)
 {
-    if (FSCommon::isFilterEditorKeyCombo(key, mask))
+    if (!getParentByType<LLFloaterDirectory>() // <FS:TJ/> [FIRE-36928] Fix Ctrl-F not hiding LL legacy search
+        && FSCommon::isFilterEditorKeyCombo(key, mask))
     {
         mFilterEditor->setFocus(true);
         return true;
