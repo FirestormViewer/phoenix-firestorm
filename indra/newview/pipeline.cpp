@@ -906,6 +906,20 @@ LLPipeline::eFBOStatus LLPipeline::doAllocateScreenBuffer(U32 resX, U32 resY)
     return ret;
 }
 
+static bool supportsAlphaDepthPeeling()
+{
+    if (!(gGLManager.mGLVersion >= 4.1f))
+    {
+        return false;
+    }
+#if LL_WINDOWS && !LL_MESA
+    // Windows loads a function pointer; other platforms link the GL function.
+    return glBlendEquationSeparate != nullptr;
+#else
+    return true;
+#endif
+}
+
 bool LLPipeline::allocateScreenBufferInternal(U32 resX, U32 resY)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DISPLAY;
@@ -998,7 +1012,7 @@ bool LLPipeline::allocateScreenBufferInternal(U32 resX, U32 resY)
             allocateAlphaOITBuffers(resX, resY);
         }
         gSavedSettings.setBOOL("RenderAlphaDepthPeelAvailable",
-                               gGLManager.mGLVersion >= 4.1f && glBlendEquationSeparate != nullptr);
+                               supportsAlphaDepthPeeling());
         if (gSavedSettings.getU32("RenderAlphaSortMethod") == 2)
         {
             allocateAlphaDepthPeelBuffers(resX, resY);
@@ -8284,7 +8298,7 @@ void LLPipeline::compositeAlphaOIT()
 
 bool LLPipeline::allocateAlphaDepthPeelBuffers(U32 w, U32 h)
 {
-    const bool capable = gGLManager.mGLVersion >= 4.1f && glBlendEquationSeparate != nullptr;
+    const bool capable = supportsAlphaDepthPeeling();
     if (!capable)
     {
         releaseAlphaDepthPeelBuffers();
