@@ -2760,6 +2760,7 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
     mPendingUploads = 0;
     // <FS> FIRE-10172: Fix LSL editor error display
     //mScriptEd->mErrorList->deleteAllItems();
+    mScriptEd->enableSave(false);
     mScriptEd->mEditor->makePristine();
 
 
@@ -2827,6 +2828,7 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
 
 void LLPreviewLSL::onCompileTargetChanged()
 {
+    mScriptEd->enableSave(true);
     bool is_lua = (mScriptEd->mCompileTarget->getValue().asString() == "luau");
     mScriptEd->mEditor->setLuauLanguage(is_lua);
     mScriptEd->processKeywords(is_lua);

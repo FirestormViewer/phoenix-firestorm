@@ -1601,8 +1601,7 @@ void LLVOVolume::sculpt()
             }
         }
 
-        static LLCachedControl<bool> validate_area(gSavedSettings, "ValidateSculptyAreaRatio", true);
-        getVolume()->sculpt(sculpt_width, sculpt_height, sculpt_components, sculpt_data, discard_level, mSculptTexture->isMissingAsset(), validate_area());
+        getVolume()->sculpt(sculpt_width, sculpt_height, sculpt_components, sculpt_data, discard_level, mSculptTexture->isMissingAsset());
     }
 }
 
