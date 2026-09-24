@@ -1302,6 +1302,14 @@ void LLVOAvatar::cleanupClass()
 }
 
 LLPartSysData LLVOAvatar::sCloud;
+
+// <FS:TP> [FIRE-36987] track the signal connections so initCloud() can
+// disconnect and reconnect cleanly if it runs more than once (there is
+// a menu option to reload the particle cloud)
+boost::signals2::connection LLVOAvatar::sCloudColorStartConnection;
+boost::signals2::connection LLVOAvatar::sCloudColorEndConnection;
+// </FS:TP>
+
 void LLVOAvatar::initCloud()
 {
     // fancy particle cloud designed by Brent
@@ -1338,7 +1346,50 @@ void LLVOAvatar::initCloud()
     // llifstream in_file_muted(filename);
     llifstream in_file_muted(filename.c_str());
     // </FS:ND>
+
+    // <FS:TP> [FIRE-36987] Selectable avatar loading/bakefail cloud color
+    // Apply whatever start/end colors are currently saved, on top of
+    // whatever cloud.xml just loaded above, then keep re-applying live if
+    // the user changes either preference later (no restart needed - see
+    // applyCloudColor()).
+    applyCloudColor();
+
+    // disconnect any previous connection first, since initCloud() can run
+    // more than once (menu option to reload the particle cloud), then bind
+    // straight to applyCloudColor() - no wrapper needed since the signal's
+    // new_value/old_value aren't used
+    if (sCloudColorStartConnection.connected())
+    {
+        sCloudColorStartConnection.disconnect();
+    }
+    sCloudColorStartConnection = gSavedSettings.getControl("FSCloudColorStart")->getSignal()->connect(
+        boost::bind(&LLVOAvatar::applyCloudColor));
+
+    if (sCloudColorEndConnection.connected())
+    {
+        sCloudColorEndConnection.disconnect();
+    }
+    sCloudColorEndConnection = gSavedSettings.getControl("FSCloudColorEnd")->getSignal()->connect(
+        boost::bind(&LLVOAvatar::applyCloudColor));
+    // </FS:TP>
 }
+
+void LLVOAvatar::applyCloudColor()
+{
+    // Same alpha envelope (0.1 -> 0.9) and burst/scale/pattern as the
+    // stock Firestorm cloud.xml - only the start/end hues are user
+    // configurable, so changing colors doesn't change the shape/behavior
+    // of the effect. Alpha is intentionally not exposed to the color
+    // pickers and is forced back to the stock values here.
+    LLColor4 start_color = gSavedSettings.getColor4("FSCloudColorStart");
+    LLColor4 end_color   = gSavedSettings.getColor4("FSCloudColorEnd");
+    start_color.mV[VALPHA] = 0.1f;
+    end_color.mV[VALPHA]   = 0.9f;
+
+    sCloud.mPartData.mStartColor = start_color;
+    sCloud.mPartData.mEndColor   = end_color;
+}
+// </FS:TP>
 
 // virtual
 void LLVOAvatar::initInstance()
