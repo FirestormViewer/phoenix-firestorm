@@ -10,6 +10,7 @@
 		<menu_item_check name="recent_tab" label="Aktuell anzeigen"/>
 		<menu_item_check name="worn_tab" label="Angezogen anzeigen"/>
 		<menu_item_check name="favorites_tab" label="Favoriten anzeigen"/>
+		<menu_item_check name="library" label="Bibliothek anzeigen"/>
 	</context_menu>
 	<context_menu label="Sortierung" name="sorting_menu">
 		<menu_item_check name="sort_by_name" label="Nach Name sortieren"/>
