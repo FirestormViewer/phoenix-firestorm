@@ -566,10 +566,9 @@ void FSFloaterNearbyChat::updateChatHistoryStyle()
 }
 
 //static
-void FSFloaterNearbyChat::processChatHistoryStyleUpdate(const LLSD& newvalue)
+void FSFloaterNearbyChat::handleChatHistoryStyleChanged(const LLSD& newvalue)
 {
-    FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
-    if (nearby_chat)
+    if (auto nearby_chat = LLFloaterReg::findTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD()))
     {
         nearby_chat->updateChatHistoryStyle();
         nearby_chat->mInputEditor->setFont(LLViewerChat::getChatFont());

@@ -7,6 +7,11 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>LSUIElement</key>
-	<string>1</string>
+	<!-- <FS:TJ> [FIRE-36985] Fix multiple Firestorm dock icons in macOS 27.2+
+	<string>1</string> !-->
+	<true/>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<!-- </FS:TJ> -->
 </dict>
 </plist>

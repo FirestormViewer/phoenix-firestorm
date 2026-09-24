@@ -938,7 +938,7 @@ void LLLogChat::deleteTranscripts()
 
     // <FS:CR> FIRE-11734 - Flush out the current histories from any open chat window
     //LLFloaterIMSessionTab::processChatHistoryStyleUpdate(true);
-    FSFloaterIM::clearAllOpenHistories();
+    FSFloaterIM::processChatHistoryStyleUpdate(true);
     // </FS:CR>
 }
 

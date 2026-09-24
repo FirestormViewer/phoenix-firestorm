@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="Teleport History" bottom="0" height="0" left="0" width="313"
+<panel name="Teleport History" bottom="0" height="400" left="0" width="313"
      help_topic="panel_teleport_history"
      border="false" follows="left|top|right|bottom">
     <accordion
      follows="left|top|right|bottom"
+     height="400"
      layout="topleft"
      left="3"
      top="0"
-     bottom="0"
      name="history_accordion"
      width="307">
         <no_matched_tabs_text
