@@ -3796,6 +3796,14 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 
     LL_DEBUGS("CrossingCaps") << "Calling setSeedCapability(). Seed cap == "
             << seedCap << LL_ENDL;
+
+    // <FS:TJ> Fixes OpenSim race condition on grid change not having updated Grid Info yet
+    if (!LLGridManager::getInstance()->isInSecondLife())
+    {
+        regionp->setCapabilitiesReceivedCallback([](const LLUUID& region_id, LLViewerRegion* regionp)
+            { LLAppViewer::instance()->updateNameLookupUrl(regionp); });
+    }
+    // </FS:TJ>
     regionp->setSeedCapability(seedCap);
 
     // Don't send camera updates to the new region until we're
