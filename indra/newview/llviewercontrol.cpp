@@ -1529,10 +1529,10 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "FSTrimLegacyNames", handleLegacyTrimOptionChanged);
 
     // <FS:Ansariel> [FS communication UI]
-    setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterIM::processChatHistoryStyleUpdate);
-    setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
-    setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterIM::processChatHistoryStyleUpdate);
-    setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
+    setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterIM::handleChatHistoryStyleChanged);
+    setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterNearbyChat::handleChatHistoryStyleChanged);
+    setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterIM::handleChatHistoryStyleChanged);
+    setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterNearbyChat::handleChatHistoryStyleChanged);
     setting_setup_signal_listener(gSavedSettings, "ChatFontSize", LLViewerChat::signalChatFontChanged);
     // </FS:Ansariel> [FS communication UI]
 
