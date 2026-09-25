@@ -7854,6 +7854,16 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
                              << ". Setting state to TELEPORT_NONE" << LL_ENDL;
         gAgent.setTeleportState( LLAgent::TELEPORT_NONE );
     }
+
+    // <FS:TJ> Fixes OpenSim race condition on grid change not having updated Grid Info yet
+    if (!LLGridManager::getInstance()->isInSecondLife())
+    {
+        if (LLViewerRegion* region = gAgent.getRegion())
+        {
+            LLAppViewer::instance()->updateNameLookupUrl(region);
+        }
+    }
+    // </FS:TJ>
 }
 
 void process_teleport_local(LLMessageSystem *msg,void**)
