@@ -47,6 +47,10 @@
 - (void) languageUpdated;
 - (bool) romanScript;
 - (void) setBugsplatValue:(nullable NSString *)value forAttribute:(nullable NSString *)attribute;
+// <FS:TJ> Launch new instance option from macOS dock
+- (NSMenu * _Nullable) applicationDockMenu:(NSApplication * _Nonnull)sender;
+- (void) launchNewInstance:(id _Nonnull)sender;
+// </FS:TJ>
 @end
 
 @interface LLApplication : NSApplication
