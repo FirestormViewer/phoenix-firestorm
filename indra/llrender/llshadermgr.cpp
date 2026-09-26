@@ -26,6 +26,7 @@
 
 #include "linden_common.h"
 #include "llshadermgr.h"
+#include <sstream>
 #include "llrender.h"
 #include "llfile.h"
 #include "lldir.h"
@@ -44,6 +45,7 @@ using std::make_pair;
 using std::string;
 
 LLShaderMgr * LLShaderMgr::sInstance = NULL;
+LLShaderMgr::shader_source_override_fn_t LLShaderMgr::sShaderSourceOverride;
 
 LLShaderMgr::LLShaderMgr()
 {
@@ -63,6 +65,12 @@ LLShaderMgr * LLShaderMgr::instance()
     }
 
     return sInstance;
+}
+
+// static
+void LLShaderMgr::setShaderSourceOverride(shader_source_override_fn_t fn)
+{
+    sShaderSourceOverride = fn;
 }
 
 bool LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
@@ -492,6 +500,9 @@ GLuint LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shader_lev
     S32 gpu_class;
 
     std::string open_file_name;
+    std::string plugin_source;
+    std::istringstream plugin_stream;
+    bool use_plugin_source = false;
 
 #if 0  // WIP -- try to come up with a way to fallback to an error shader without needing debug stubs all over the place in the shader tree
     if (shader_level == -1)
@@ -544,7 +555,25 @@ GLuint LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shader_lev
         }
     }
 
-    if (file == NULL)
+    // Allow Manikineko plugins to provide shader source overrides.
+    if (sShaderSourceOverride)
+    {
+        plugin_source = sShaderSourceOverride(filename, type, try_gpu_class);
+        if (!plugin_source.empty())
+        {
+            if (file)
+            {
+                fclose(file);
+                file = NULL;
+            }
+            use_plugin_source = true;
+            plugin_stream.str(plugin_source);
+            open_file_name = "[plugin] " + filename;
+            LL_INFOS("ShaderLoading") << "Using plugin source for " << filename << LL_ENDL;
+        }
+    }
+
+    if (file == NULL && !use_plugin_source)
     {
         if (gDirUtilp->fileExists(open_file_name))
         {
@@ -768,9 +797,19 @@ GLuint LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shader_lev
     bool touched = false;
 #endif
 
-    while(NULL != fgets((char *)buff, 1024, file)
-          && shader_code_count < (LL_ARRAY_SIZE(shader_code_text) - LL_ARRAY_SIZE(extra_code_text)))
+    std::string override_line;
+    while ( (use_plugin_source ? (bool)std::getline(plugin_stream, override_line)
+                              : (NULL != fgets((char *)buff, 1024, file)))
+         && shader_code_count < (LL_ARRAY_SIZE(shader_code_text) - LL_ARRAY_SIZE(extra_code_text)) )
     {
+        if (use_plugin_source)
+        {
+            if (override_line.length() > 1022)
+            {
+                override_line.resize(1022);
+            }
+            snprintf((char *)buff, 1024, "%s\n", override_line.c_str());
+        }
         file_lines_count++;
 
         bool extra_block_area_found = NULL != strstr((const char*)buff, "[EXTRA_CODE_HERE]");
@@ -851,7 +890,10 @@ GLuint LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shader_lev
     }
 #endif
 
-    fclose(file);
+    if (file)
+    {
+        fclose(file);
+    }
 
     //create shader object
     GLuint ret = glCreateShader(type);

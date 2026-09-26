@@ -375,6 +375,13 @@ public:
     bool    validateProgramObject(GLuint obj);
     GLuint loadShaderFile(const std::string& filename, S32 & shader_level, GLenum type, std::map<std::string, std::string>* defines = NULL, S32 texture_index_channels = -1);
 
+    // Optional plugin-driven shader source override.
+    // If set, loadShaderFile will consult this function before (and as a fallback to)
+    // reading shader files from disk.
+    typedef std::function<std::string(const std::string& filename, GLenum type, S32 shader_level)> shader_source_override_fn_t;
+    static shader_source_override_fn_t sShaderSourceOverride;
+    static void setShaderSourceOverride(shader_source_override_fn_t fn);
+
     // Implemented in the application to actually point to the shader directory.
     virtual std::string getShaderDirPrefix(void) = 0; // Pure Virtual
 
