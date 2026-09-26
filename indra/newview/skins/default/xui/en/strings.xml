@@ -3382,4 +3382,7 @@ Your current position: [AVATAR_POS]
   <string name="OmnifilterButtonLabel" translate="false">BUTTON_LABEL</string>
   <string name="FSAvatarAlignToggleMini">Mini</string>
   <string name="FSAvatarAlignToggleFull">Full</string>
+
+  <!-- <FS:TJ> Launch new instance option from macOS dock> -->
+  <string name="FSMacOSNewViewerInstance">New Viewer Instance</string>
 </strings>
