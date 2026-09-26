@@ -29,29 +29,32 @@ endmacro()
 # set up platform specific lists of files that need to be copied
 ###################################################################
 if(WINDOWS)
-    #*******************************
-    # VIVOX - *NOTE: no debug version
-    set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
+    # <FS:TJ> Keep Vivox only for OpenSim viewers
+    if (OPENSIM)
+        #*******************************
+        # VIVOX - *NOTE: no debug version
+        set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
 
-    # ND, it seems there is no such thing defined. At least when building a viewer
-    # Does this maybe matter on some LL buildserver? Otherwise this and the snippet using slvoice_src_dir
-    # can all go
-    if( ARCH_PREBUILT_BIN_RELEASE )
-        set(slvoice_src_dir "${ARCH_PREBUILT_BIN_RELEASE}")
-    endif()
-    set(slvoice_files SLVoice.exe )
-    if (ADDRESS_SIZE EQUAL 64)
-        list(APPEND vivox_libs
-            vivoxsdk_x64.dll
-            ortp_x64.dll
-            )
-    else (ADDRESS_SIZE EQUAL 64)
-        list(APPEND vivox_libs
-            vivoxsdk.dll
-            ortp.dll
-            )
-    endif (ADDRESS_SIZE EQUAL 64)
-
+        # ND, it seems there is no such thing defined. At least when building a viewer
+        # Does this maybe matter on some LL buildserver? Otherwise this and the snippet using slvoice_src_dir
+        # can all go
+        if( ARCH_PREBUILT_BIN_RELEASE )
+            set(slvoice_src_dir "${ARCH_PREBUILT_BIN_RELEASE}")
+        endif()
+        set(slvoice_files SLVoice.exe )
+        if (ADDRESS_SIZE EQUAL 64)
+            list(APPEND vivox_libs
+                vivoxsdk_x64.dll
+                ortp_x64.dll
+                )
+        else (ADDRESS_SIZE EQUAL 64)
+            list(APPEND vivox_libs
+                vivoxsdk.dll
+                ortp.dll
+                )
+        endif (ADDRESS_SIZE EQUAL 64)
+    endif ()
+    # </FS:TJ>
     #*******************************
     # Misc shared libs 
 
@@ -178,12 +181,16 @@ if(WINDOWS)
     endforeach()
 
 elseif(DARWIN)
-    set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
-    set(slvoice_files SLVoice)
-    set(vivox_libs
-        libortp.dylib
-        libvivoxsdk.dylib
-       )
+    # <FS:TJ> Keep Vivox only for OpenSim viewers
+    if (OPENSIM)
+        set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
+        set(slvoice_files SLVoice)
+        set(vivox_libs
+            libortp.dylib
+            libvivoxsdk.dylib
+           )
+    endif ()
+    # </FS:TJ>
     set(debug_src_dir "${ARCH_PREBUILT_DIRS_DEBUG}")
     set(debug_files
        )
@@ -215,14 +222,18 @@ elseif(LINUX)
     set(SHARED_LIB_STAGING_DIR_RELWITHDEBINFO   "${SHARED_LIB_STAGING_DIR}")
     set(SHARED_LIB_STAGING_DIR_RELEASE          "${SHARED_LIB_STAGING_DIR}")
 
-    set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}/../../lib32/")
-    set(vivox_libs
-        libsndfile.so.1
-        libortp.so
-        libvivoxoal.so.1
-        libvivoxsdk.so
-        )
-    set(slvoice_files SLVoice)
+    # <FS:TJ> Keep Vivox only for OpenSim viewers
+    if (OPENSIM)
+        set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}/../../lib32/")
+        set(vivox_libs
+            libsndfile.so.1
+            libortp.so
+            libvivoxoal.so.1
+            libvivoxsdk.so
+            )
+        set(slvoice_files SLVoice)
+    endif ()
+    # </FS:TJ>
 
     # *TODO - update this to use LIBS_PREBUILT_DIR and LL_ARCH_DIR variables
     # or ARCH_PREBUILT_DIRS
@@ -274,8 +285,12 @@ elseif(LINUX)
 
 else(WINDOWS)
     message(STATUS "WARNING: unrecognized platform for staging 3rd party libs, skipping...")
-    set(vivox_lib_dir "${CMAKE_SOURCE_DIR}/newview/vivox-runtime/i686-linux")
-    set(vivox_libs "")
+    # <FS:TJ> Keep Vivox only for OpenSim viewers
+    if (OPENSIM)
+        set(vivox_lib_dir "${CMAKE_SOURCE_DIR}/newview/vivox-runtime/i686-linux")
+        set(vivox_libs "")
+    endif ()
+    # </FS:TJ>
     # *TODO - update this to use LIBS_PREBUILT_DIR and LL_ARCH_DIR variables
     # or ARCH_PREBUILT_DIRS
     set(debug_src_dir "${CMAKE_SOURCE_DIR}/../libraries/i686-linux/lib/debug")
@@ -297,26 +312,29 @@ endif(WINDOWS)
 # Done building the file lists, now set up the copy commands.
 ################################################################
 
-# Curiously, slvoice_files are only copied to SHARED_LIB_STAGING_DIR_RELEASE.
-# It's unclear whether this is oversight or intentional, but anyway leave the
-# single copy_if_different command rather than using to_staging_dirs.
+# <FS:TJ> Keep Vivox only for OpenSim viewers
+if (OPENSIM)
+    # Curiously, slvoice_files are only copied to SHARED_LIB_STAGING_DIR_RELEASE.
+    # It's unclear whether this is oversight or intentional, but anyway leave the
+    # single copy_if_different command rather than using to_staging_dirs.
 
-if( slvoice_src_dir )
-    copy_if_different(
-            ${slvoice_src_dir}
-            "${SHARED_LIB_STAGING_DIR_RELEASE}"
-            out_targets
-            ${slvoice_files}
-    )
-    list(APPEND third_party_targets ${out_targets})
-endif()
+    if( slvoice_src_dir )
+        copy_if_different(
+                ${slvoice_src_dir}
+                "${SHARED_LIB_STAGING_DIR_RELEASE}"
+                out_targets
+                ${slvoice_files}
+        )
+        list(APPEND third_party_targets ${out_targets})
+    endif()
 
-to_staging_dirs(
-    ${vivox_lib_dir}
-    third_party_targets
-    ${vivox_libs}
-    )
-
+    to_staging_dirs(
+        ${vivox_lib_dir}
+        third_party_targets
+        ${vivox_libs}
+        )
+endif ()
+# </FS:TJ>
 to_staging_dirs(
     ${release_src_dir}
     third_party_targets

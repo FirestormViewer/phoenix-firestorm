@@ -17896,6 +17896,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <!-- # <FS:TJ> Keep Vivox only for OpenSim viewers -->
     <key>VivoxAutoPostCrashDumps</key>
     <map>
       <key>Comment</key>
@@ -18007,50 +18008,91 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
-  <key>VivoxVadAuto</key>
-  <map>
-    <key>Comment</key>
-    <string>A flag indicating if the automatic VAD is enabled (1) or disabled (0). The individual settings are ignored if the auto-mode is enabled</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>U32</string>
-    <key>Value</key>
-    <integer>0</integer>
-  </map>
-  <key>VivoxVadHangover</key>
-  <map>
-    <key>Comment</key>
-    <string>The time (in milliseconds) that it takes or the VAD to switch back to silence from speech mode after the last speech frame has been detected</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>U32</string>
-    <key>Value</key>
-    <integer>2000</integer>
-  </map>
-  <key>VivoxVadNoiseFloor</key>
-  <map>
-    <key>Comment</key>
-    <string>A dimensionless value between 0 and 20000 (default 576) that controls the maximum level at which the noise floor may be set at by the VAD's noise tracking</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>U32</string>
-    <key>Value</key>
-    <integer>576</integer>
-  </map>
-  <key>VivoxVadSensitivity</key>
-  <map>
-    <key>Comment</key>
-    <string>A dimensionless value between 0 and 100, indicating the 'sensitivity of the VAD'. Increasing this value corresponds to decreasing the sensitivity of the VAD and 0 is turned off altogether</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>U32</string>
-    <key>Value</key>
-    <integer>0</integer>
-  </map>
+    <key>VivoxVadAuto</key>
+    <map>
+      <key>Comment</key>
+      <string>A flag indicating if the automatic VAD is enabled (1) or disabled (0). The individual settings are ignored if the auto-mode is enabled</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>VivoxVadHangover</key>
+    <map>
+      <key>Comment</key>
+      <string>The time (in milliseconds) that it takes or the VAD to switch back to silence from speech mode after the last speech frame has been detected</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>2000</integer>
+    </map>
+    <key>VivoxVadNoiseFloor</key>
+    <map>
+      <key>Comment</key>
+      <string>A dimensionless value between 0 and 20000 (default 576) that controls the maximum level at which the noise floor may be set at by the VAD's noise tracking</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>576</integer>
+    </map>
+    <key>VivoxVadSensitivity</key>
+    <map>
+      <key>Comment</key>
+      <string>A dimensionless value between 0 and 100, indicating the 'sensitivity of the VAD'. Increasing this value corresponds to decreasing the sensitivity of the VAD and 0 is turned off altogether</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>VoiceHost</key>
+    <map>
+      <key>Comment</key>
+      <string>Client SLVoice host to connect to</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>127.0.0.1</string>
+      <key>Backup</key>
+      <integer>0</integer>
+    </map>
+    <key>VoiceLogFile</key>
+    <map>
+      <key>Comment</key>
+      <string>Log file to use when launching the voice daemon</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string></string>
+      <key>Backup</key>
+      <integer>0</integer>
+    </map>
+    <key>VoicePort</key>
+    <map>
+      <key>Comment</key>
+      <string>Client SLVoice port to connect to</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>44125</integer>
+      <key>Backup</key>
+      <integer>0</integer>
+    </map>
+    <!-- </FS:TJ> -->
+
     <key>VoiceCallsRejectGroup</key>
     <!-- deprecated (see SL-12871) -->
     <map>
@@ -18138,19 +18180,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>VoiceHost</key>
-    <map>
-      <key>Comment</key>
-      <string>Client SLVoice host to connect to</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>127.0.0.1</string>
-      <key>Backup</key>
       <integer>0</integer>
     </map>
     <key>VoiceImageLevel0</key>
@@ -18241,19 +18270,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>Default</string>
     </map>
-    <key>VoiceLogFile</key>
-    <map>
-      <key>Comment</key>
-      <string>Log file to use when launching the voice daemon</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string></string>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
     <key>VoiceOutputAudioDevice</key>
     <map>
       <key>Comment</key>
@@ -18275,19 +18291,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>10</integer>
-    </map>
-    <key>VoicePort</key>
-    <map>
-      <key>Comment</key>
-      <string>Client SLVoice port to connect to</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>U32</string>
-      <key>Value</key>
-      <integer>44125</integer>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>VoiceEchoCancellation</key>
     <map>

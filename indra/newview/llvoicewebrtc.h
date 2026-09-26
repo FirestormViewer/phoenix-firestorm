@@ -93,7 +93,11 @@ public:
     // Returns true if WebRTC has successfully logged in and is not in error state
     bool isVoiceWorking() const override;
 
+// <FS:TJ> Keep Vivox only for OpenSim viewers
+#ifdef OPENSIM
     std::string sipURIFromID(const LLUUID &id) const override;
+#endif
+// </FS:TJ>
     LLSD getP2PChannelInfoTemplate(const LLUUID& id) const override;
 
     void setHidden(bool hidden) override;  // virtual

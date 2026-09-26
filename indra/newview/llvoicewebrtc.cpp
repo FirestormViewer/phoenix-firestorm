@@ -2577,11 +2577,15 @@ void LLWebRTCVoiceClient::avatarNameResolved(const LLUUID &id, const std::string
     sessionState::for_each(boost::bind(predAvatarNameResolution, _1, id, name));
 }
 
+// <FS:TJ> Keep Vivox only for OpenSim viewers
+#ifdef OPENSIM
 // Leftover from vivox PTSN
 std::string LLWebRTCVoiceClient::sipURIFromID(const LLUUID& id) const
 {
     return id.asString();
 }
+#endif
+// </FS:TJ>
 
 LLSD LLWebRTCVoiceClient::getP2PChannelInfoTemplate(const LLUUID& id) const
 {
