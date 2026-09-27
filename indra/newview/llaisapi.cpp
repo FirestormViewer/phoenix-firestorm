@@ -1672,7 +1672,12 @@ void AISUpdate::doUpdate()
                                    << cat->getName() << " " << cat_id
                                    << " with delta " << descendent_delta << " from "
                                    << old_count << " to " << (old_count+descendent_delta) << LL_ENDL;
-            LLInventoryModel::LLCategoryUpdate up(cat_id, descendent_delta);
+            // <FS> FIRE-33455: AIS reported the new absolute version of this category (checked above) and it gets
+            //      applied further down; only account for the descendent count here. Bumping the version relative to
+            //      our local one as well double counts once two responses for the same folder are processed out of order.
+            //LLInventoryModel::LLCategoryUpdate up(cat_id, descendent_delta);
+            LLInventoryModel::LLCategoryUpdate up(cat_id, descendent_delta, false);
+            // </FS>
             gInventory.accountForUpdate(up);
         }
         else
@@ -1792,6 +1797,13 @@ void AISUpdate::doUpdate()
         const LLUUID id = ucv_it->first;
         S32 version = static_cast<S32>(ucv_it->second);
         LLViewerInventoryCategory *cat = gInventory.getCategory(id);
+        // <FS> FIRE-33455: don't dereference a category we don't know about
+        if (!cat)
+        {
+            LL_DEBUGS("Inventory") << "Skipping version update for unknown category " << id << LL_ENDL;
+            continue;
+        }
+        // </FS>
         LL_DEBUGS("Inventory") << "cat version update " << cat->getName() << " to version " << cat->getVersion() << LL_ENDL;
         if (cat->getVersion() != version)
         {
@@ -1804,10 +1816,27 @@ void AISUpdate::doUpdate()
             // is performed.  This occasionally gets out of sync however.
             if (version != LLViewerInventoryCategory::VERSION_UNKNOWN)
             {
-                LL_WARNS() << "Possible version mismatch for category " << cat->getName()
-                    << ", viewer version " << cat->getVersion()
-                    << " AIS version " << version << " !!!Adjusting local version!!!" << LL_ENDL;
-                cat->setVersion(version);
+                // <FS> FIRE-33455: category versions only ever go up on the server. With several AIS requests in flight
+                //      (PoolSizeAIS is 20, and doUpdate() can yield to the next frame) an older response can be processed
+                //      after a newer one; adopting its version rolls the viewer back below the server. For the COF that
+                //      wedges server-side baking ("Cof Version Mismatch") until relog because every retry resends the
+                //      same stale version.
+                //LL_WARNS() << "Possible version mismatch for category " << cat->getName()
+                //    << ", viewer version " << cat->getVersion()
+                //    << " AIS version " << version << " !!!Adjusting local version!!!" << LL_ENDL;
+                //cat->setVersion(version);
+                if ( (LLViewerInventoryCategory::VERSION_UNKNOWN == cat->getVersion()) || (version > cat->getVersion()) )
+                {
+                    LL_DEBUGS("Inventory") << "Updating version for category " << cat->getName()
+                        << " from " << cat->getVersion() << " to AIS version " << version << LL_ENDL;
+                    cat->setVersion(version);
+                }
+                else
+                {
+                    LL_WARNS("Inventory") << "Ignoring stale AIS version " << version << " for category " << cat->getName()
+                        << " (viewer version " << cat->getVersion() << ")" << LL_ENDL;
+                }
+                // </FS>
             }
             else
             {

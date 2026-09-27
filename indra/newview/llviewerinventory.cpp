@@ -1746,7 +1746,14 @@ void remove_inventory_item(
 
             if (immediate_delete)
             {
-                gInventory.onObjectDeletedFromServer(item_id);
+                // <FS> FIRE-33455: remove the object locally right away (RLVa relies on this so nothing re-adds it before
+                //      AIS answers, see FIRE-36976) but only adjust the parent's descendent count. The parent's version
+                //      is set from the AIS response; bumping it here too puts the viewer ahead of the server and, if the
+                //      delete never happens server-side, leaves it there.
+                //gInventory.onObjectDeletedFromServer(item_id);
+                gInventory.accountForUpdate(LLInventoryModel::LLCategoryUpdate(obj->getParentUUID(), -1, false));
+                gInventory.onObjectDeletedFromServer(item_id, true, false);
+                // </FS>
             }
         }
         // </FS:Ansariel> OpenSim compatibility
