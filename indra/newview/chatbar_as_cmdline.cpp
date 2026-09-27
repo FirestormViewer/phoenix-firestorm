@@ -33,6 +33,8 @@
 
 #include "chatbar_as_cmdline.h"
 
+#include "blazingstorm/remote/bsdebugcommands.h"
+
 #include "aoengine.h"
 #include "fscommon.h"
 #include "fsradar.h"
@@ -544,6 +546,14 @@ static void key_to_name_callback(const LLUUID& id, const LLAvatarName& av_name)
 
 bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gesture)
 {
+    // <BlazingStorm> Local-only development commands. Returning false
+    // prevents command text from being sent to nearby chat.
+    if (BlazingStorm::handleDebugChatCommand(revised_text))
+    {
+        return false;
+    }
+    // </BlazingStorm>
+
     static LLCachedControl<bool> sFSCmdLine(gSavedSettings, "FSCmdLine");
     static LLCachedControl<std::string> sFSCmdLinePos(gSavedSettings, "FSCmdLinePos");
     static LLCachedControl<std::string> sFSCmdLineDrawDistance(gSavedSettings, "FSCmdLineDrawDistance");
