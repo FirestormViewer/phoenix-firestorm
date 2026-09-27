@@ -139,7 +139,11 @@ SetOverwrite on							# Overwrite files by default
 
 UninstallText $(UninstallTextMsg)
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
+# <FS:TJ> Keep Vivox only for OpenSim viewers
+!if ${ISOPENSIM} == "1"
 !insertmacro MUI_PAGE_LICENSE "VivoxAUP.txt"
+!endif
+# </FS:TJ>
 ##!insertmacro MULTIUSER_PAGE_INSTALLMODE
 !define MUI_PAGE_CUSTOMFUNCTION_PRE dirPre
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE dirLeave # <FS:Ansariel> Optional start menu entry

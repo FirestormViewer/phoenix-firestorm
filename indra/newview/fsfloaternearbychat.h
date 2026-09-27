@@ -65,7 +65,7 @@ public:
     void         clearChatHistory();
     virtual void updateChatHistoryStyle();
 
-    static void processChatHistoryStyleUpdate(const LLSD& newvalue);
+    static void handleChatHistoryStyleChanged(const LLSD& newvalue);
 
     void loadHistory();
     void reloadMessages(bool clean_messages = false);

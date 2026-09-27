@@ -108,6 +108,13 @@ public:
     static void         initClass(); // Initialize data that's only init'd once per class.
     static void         cleanupClass(); // Cleanup data that's only init'd once per class.
     static void initCloud();
+    // <FS:TP> [FIRE-36987] Selectable avatar loading/bakefail cloud color
+    // Applies the FSCloudColorStart/FSCloudColorEnd settings to sCloud's
+    // particle colors. Safe to call anytime after initCloud() - takes
+    // effect on the very next idle tick for any avatar currently showing
+    // as a cloud, no restart required.
+    static void applyCloudColor();
+    // </FS:TP>
     virtual void        initInstance(); // Called after construction to initialize the class.
 
 protected:
@@ -387,6 +394,13 @@ public:
     static bool     sJointDebug; // output total number of joints being touched for each avatar
 
     static LLPartSysData sCloud;
+
+    // <FS:TP> [FIRE-36987] track the signal connections so initCloud() can
+    // disconnect and reconnect cleanly if it runs more than once (there is
+    // a menu option to reload the particle cloud)
+    static boost::signals2::connection sCloudColorStartConnection;
+    static boost::signals2::connection sCloudColorEndConnection;
+    // </FS:TP>
 
     static LLPointer<LLViewerTexture>  sCloudTexture;
 

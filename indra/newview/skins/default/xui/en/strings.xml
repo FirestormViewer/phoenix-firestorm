@@ -1494,7 +1494,7 @@ Expected .wav, .tga, .bmp, .jpg, .jpeg, or .anim
 	<!-- media -->
 	<string name="Multiple Media">Multiple Media</string>
 	<string name="Play Media">Play/Pause Media</string>
-	<string name="StreamtitleNowPlaying">Now playing:</string>
+	<string name="StreamtitleNowPlaying">Now playing: [TITLE]</string>
 
 	<!-- Drivers support/update pages -->
 	<string name="IntelDriverPage">http://www.intel.com/p/en_US/support/detect/graphics</string>
@@ -3385,4 +3385,7 @@ Your current position: [AVATAR_POS]
   <string name="OmnifilterButtonLabel" translate="false">BUTTON_LABEL</string>
   <string name="FSAvatarAlignToggleMini">Mini</string>
   <string name="FSAvatarAlignToggleFull">Full</string>
+
+  <!-- <FS:TJ> Launch new instance option from macOS dock> -->
+  <string name="FSMacOSNewViewerInstance">New Viewer Instance</string>
 </strings>

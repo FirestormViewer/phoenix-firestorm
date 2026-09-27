@@ -40,7 +40,7 @@
 		Нажмите и тащите, чтобы выбрать землю
 	</floater.string>
 	<floater.string name="status_selectcount">
-		[OBJ_COUNT] объектов выбрано, влияние на землю [LAND_IMPACT]
+		[OBJ_COUNT] объектов выбрано, влияние на землю [LAND_IMPACT], prims [PRIM_COUNT]
 	</floater.string>
 	<floater.string name="status_remaining_capacity">
 		Оставшаяся емкость [LAND_CAPACITY].

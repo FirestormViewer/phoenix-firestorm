@@ -33,9 +33,7 @@
 #include "streamtitledisplay.h"
 
 #include "fscommon.h"
-#include "llagent.h"
 #include "llaudioengine.h"
-#include "llchat.h"
 #include "llnotificationsutil.h"
 #include "llstreamingaudio.h"
 #include "lltrans.h"
@@ -69,32 +67,34 @@ void StreamTitleDisplay::checkMetadata(const LLSD& metadata)
 
     if (ShowStreamMetadata > 0 || StreamMetadataAnnounceToChat)
     {
-        std::string chat{};
+        std::string title{};
 
         if (metadata.has("ARTIST"))
         {
-            chat = metadata["ARTIST"].asString();
+            title = metadata["ARTIST"].asString();
         }
         if (metadata.has("TITLE"))
         {
-            if (chat.length() > 0)
+            if (!title.empty())
             {
-                chat.append(" - ");
+                title.append(" - ");
             }
-            chat.append(metadata["TITLE"].asString());
+            title.append(metadata["TITLE"].asString());
         }
 
-        if (chat.length() > 0)
+        if (!title.empty())
         {
             if (StreamMetadataAnnounceToChat)
             {
-                sendStreamTitleToChat(chat);
+                sendStreamTitleToChat(title);
             }
 
             if (ShowStreamMetadata > 1)
             {
-                chat = LLTrans::getString("StreamtitleNowPlaying") + " " + chat;
-                FSCommon::report_to_nearby_chat(chat);
+                LLSD args;
+                args["TITLE"] = title;
+                title = LLTrans::getString("StreamtitleNowPlaying", args);
+                FSCommon::report_to_nearby_chat(title);
             }
             else if (ShowStreamMetadata == 1 && (metadata.has("TITLE") || metadata.has("ARTIST")))
             {

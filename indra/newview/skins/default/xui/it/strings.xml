@@ -3043,7 +3043,7 @@ Tipi conosciuti .WAV .TGA .BMP .JPG .JPEG .ANIM
 		Riproduci media
 	</string>
 	<string name="StreamtitleNowPlaying">
-		In esecuzione:
+		In esecuzione: [TITLE]
 	</string>
 	<string name="MBCmdLineError">
 		Un errore è stato riscontrato analizzando la linea di comando.

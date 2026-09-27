@@ -3204,7 +3204,7 @@ Gültige Formate: .wav, .tga, .bmp, .jpg, .jpeg oder .anim
 		Medien Abspielen/Pausieren
 	</string>
 	<string name="StreamtitleNowPlaying">
-		Aktueller Titel:
+		Aktueller Titel: [TITLE]
 	</string>
 	<string name="IntelDriverPage">
 		http://www.intel.com/p/de_DE/support/detect/graphics
@@ -7414,5 +7414,8 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="FSAvatarAlignToggleFull">
 		Voll
+	</string>
+	<string name="FSMacOSNewViewerInstance">
+		Neue Viewer-Instanz
 	</string>
 </strings>

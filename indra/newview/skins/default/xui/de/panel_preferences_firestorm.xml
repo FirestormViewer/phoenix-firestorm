@@ -42,6 +42,17 @@
 		<slider label="Überblendzeit für Umgebungseinstellungen:" tool_tip="Intervall in Sekunden in dem Änderungen an den Umgebungseinstellungen ineinander überblenden. 0 = direkt ohne Verzögerung" name="manual_environment_change_transition_period"/>
 		<check_box name="EnvironmentPersistAcrossLogin" label="Sitzungsübergreifende Umgebungseinstellungen aktivieren" tool_tip="Stellt die aktuellen Umgebungseinstellungen nach einem erneuten Login wieder her."/>
 		<check_box name="FSRepeatedEnvTogglesShared" label="Tastenkombinationen für Umgebungseinstellungen sind An-Aus-Schalter" tool_tip="Wiederholtes Drücken von Tastenkombinationen schaltet zwischen der gewünschten Einstellung und gemeinsamer Umgebung um."/>
+		<text name="FSCloudColorLabel">
+			Avatar-Wolke beim Laden/Fehler beim Backen:
+		</text>
+		<text name="FSCloudColorStartLabel">
+			Start:
+		</text>
+		<text name="FSCloudColorEndLabel">
+			Ende:
+		</text>
+		<color_swatch name="FSCloudColorStart" tool_tip="Start-Farbe der Partikelwolke während ein Avatar geladen wird oder im Falle eines Fehlers beim Backen. Tritt sofort in Kraft, kein Neustart benötigt."/>
+		<color_swatch name="FSCloudColorEnd" tool_tip="End-Farbe der Partikelwolke während ein Avatar geladen wird oder im Falle eines Fehlers beim Backen. Tritt sofort in Kraft, kein Neustart benötigt."/>
 	</panel>
 
 	<!--Protection-->

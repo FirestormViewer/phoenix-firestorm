@@ -1875,23 +1875,20 @@ void FSFloaterIM::updateChatHistoryStyle()
     updateMessages();
 }
 
-void FSFloaterIM::processChatHistoryStyleUpdate(const LLSD& newvalue)
+void FSFloaterIM::handleChatHistoryStyleChanged(const LLSD& newvalue)
 {
     LLFontGL* font = LLViewerChat::getChatFont();
-    LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("fs_impanel");
-    for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin();
-         iter != inst_list.end(); ++iter)
+    for (auto floater : LLFloaterReg::getFloaterList("fs_impanel"))
     {
-        FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(*iter);
-        if (floater)
+        if (auto imfloater = dynamic_cast<FSFloaterIM*>(floater))
         {
-            floater->updateChatHistoryStyle();
-            floater->mInputEditor->setFont(font);
+            imfloater->updateChatHistoryStyle();
+            imfloater->mInputEditor->setFont(font);
 
             // Re-set the current text to make style update instant
-            std::string text = floater->mInputEditor->getText();
-            floater->mInputEditor->clear();
-            floater->mInputEditor->setText(text);
+            std::string text = imfloater->mInputEditor->getText();
+            imfloater->mInputEditor->clear();
+            imfloater->mInputEditor->setText(text);
         }
     }
 }
@@ -2349,7 +2346,7 @@ bool FSFloaterIM::enableViewerVersionCallback(const LLSD& notification,const LLS
 
 // <FS:CR> FIRE-11734
 //static
-void FSFloaterIM::clearAllOpenHistories()
+void FSFloaterIM::processChatHistoryStyleUpdate(bool clean_messages /*= false*/)
 {
     LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("fs_impanel");
     for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin();
@@ -2358,14 +2355,14 @@ void FSFloaterIM::clearAllOpenHistories()
         FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(*iter);
         if (floater)
         {
-            floater->reloadMessages(true);
+            floater->reloadMessages(clean_messages);
         }
     }
 
     FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
     if (nearby_chat)
     {
-        nearby_chat->reloadMessages(true);
+        nearby_chat->reloadMessages(clean_messages);
     }
 }
 

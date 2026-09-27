@@ -116,9 +116,9 @@ public:
     void processAgentListUpdates(const LLSD& body);
 
     void updateChatHistoryStyle();
-    static void processChatHistoryStyleUpdate(const LLSD& newvalue);
+    static void handleChatHistoryStyleChanged(const LLSD& newvalue);
 
-    static void clearAllOpenHistories();    // <FS:CR> FIRE-11734
+    static void processChatHistoryStyleUpdate(bool clean_messages = false);    // <FS:CR> FIRE-11734
 
     void onChatSearchButtonClicked();
 

@@ -40,7 +40,7 @@
 		Pulsa y arrastra para seleccionar el terreno.
 	</floater.string>
 	<floater.string name="status_selectcount">
-		[OBJ_COUNT] obj. seleccionados. Impacto en la parcela: [LAND_IMPACT].
+		[OBJ_COUNT] obj. seleccionados. Impacto en la parcela [LAND_IMPACT], prims [PRIM_COUNT]
 	</floater.string>
 	<floater.string name="status_remaining_capacity">
 		Capacidad restante: [LAND_CAPACITY]. 
