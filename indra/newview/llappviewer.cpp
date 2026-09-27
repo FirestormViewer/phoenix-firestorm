@@ -179,6 +179,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include "llviewerinput.h"
+#include "blazingstorm/remote/bsremoteactions.h" // <BlazingStorm>
 #include "lllfsthread.h"
 #include "llworkerthread.h"
 #include "lltexturecache.h"
@@ -5844,6 +5845,11 @@ void LLAppViewer::idle()
             gAgentPilot.updateTarget();
             gAgent.autoPilot(&yaw);
         }
+
+        // <BlazingStorm> Re-apply persistent remote controls after local input
+        // and autopilot, immediately before the ephemeral flags are sent.
+        BlazingStorm::RemoteActions::instance().update();
+        // </BlazingStorm>
 
         send_agent_update(false);
 
