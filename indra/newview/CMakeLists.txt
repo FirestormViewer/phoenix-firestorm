@@ -87,6 +87,7 @@ endif ()
 
 set(viewer_SOURCE_FILES
 # <Add FS includes below this line>
+    blazingstorm/remote/bsremotesession.cpp
     alfloaterregiontracker.cpp
     animationexplorer.cpp
     ao.cpp
@@ -946,6 +947,7 @@ set(viewer_HEADER_FILES
     ViewerInstall.cmake
 
 # <Add FS includes below this line>
+    blazingstorm/remote/bsremotesession.h
     alfloaterregiontracker.h
     animationexplorer.h
     ao.h
