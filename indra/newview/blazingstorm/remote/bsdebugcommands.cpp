@@ -63,7 +63,7 @@ namespace BlazingStorm
 
         if (action.empty() || action == "help")
         {
-            report("Commands: /blaze on | off | status | restrictchat on|off | thoughts | forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text>");
+            report("Commands: /blaze on | off | release | status | restrictchat on|off | thoughts | forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text>");
             return true;
         }
 
@@ -80,6 +80,16 @@ namespace BlazingStorm
             actions.stopMovement();
             session.end();
             report("Local debug possession disabled.");
+            return true;
+        }
+
+        if (action == "release")
+        {
+            // Local emergency release is never permission-gated.
+            actions.stopMovement();
+            session.emergencyRelease();
+            RemoteEvents::instance().clear();
+            report("Emergency release: possession ended locally.");
             return true;
         }
 
