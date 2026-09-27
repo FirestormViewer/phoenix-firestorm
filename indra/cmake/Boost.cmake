@@ -18,6 +18,9 @@ set(addrsfx "-x${ADDRESS_SIZE}")
 
 find_library(BOOST_CONTEXT_LIBRARY
     NAMES
+    libboost_context
+    libboost_context-mt
+    libboost_context-mt${addrsfx}
     boost_context
     boost_context-mt
     boost_context-mt${addrsfx}
@@ -25,6 +28,9 @@ find_library(BOOST_CONTEXT_LIBRARY
 
 find_library(BOOST_FIBER_LIBRARY
     NAMES
+    libboost_fiber
+    libboost_fiber-mt
+    libboost_fiber-mt${addrsfx}
     boost_fiber
     boost_fiber-mt
     boost_fiber-mt${addrsfx}
@@ -32,6 +38,9 @@ find_library(BOOST_FIBER_LIBRARY
 
 find_library(BOOST_FILESYSTEM_LIBRARY
     NAMES
+    libboost_filesystem
+    libboost_filesystem-mt
+    libboost_filesystem-mt${addrsfx}
     boost_filesystem
     boost_filesystem-mt
     boost_filesystem-mt${addrsfx}
@@ -39,6 +48,9 @@ find_library(BOOST_FILESYSTEM_LIBRARY
 
 find_library(BOOST_PROGRAMOPTIONS_LIBRARY
     NAMES
+    libboost_program_options
+    libboost_program_options-mt
+    libboost_program_options-mt${addrsfx}
     boost_program_options
     boost_program_options-mt
     boost_program_options-mt${addrsfx}
@@ -46,6 +58,9 @@ find_library(BOOST_PROGRAMOPTIONS_LIBRARY
 
 find_library(BOOST_REGEX_LIBRARY
     NAMES
+    libboost_regex
+    libboost_regex-mt
+    libboost_regex-mt${addrsfx}
     boost_regex
     boost_regex-mt
     boost_regex-mt${addrsfx}
@@ -53,6 +68,9 @@ find_library(BOOST_REGEX_LIBRARY
 
 find_library(BOOST_SYSTEM_LIBRARY
     NAMES
+    libboost_system
+    libboost_system-mt
+    libboost_system-mt${addrsfx}
     boost_system
     boost_system-mt
     boost_system-mt${addrsfx}
@@ -60,6 +78,9 @@ find_library(BOOST_SYSTEM_LIBRARY
 
 find_library(BOOST_THREAD_LIBRARY
     NAMES
+    libboost_thread
+    libboost_thread-mt
+    libboost_thread-mt${addrsfx}
     boost_thread
     boost_thread-mt
     boost_thread-mt${addrsfx}
@@ -67,6 +88,9 @@ find_library(BOOST_THREAD_LIBRARY
 
 find_library(BOOST_URL_LIBRARY
     NAMES
+    libboost_url
+    libboost_url-mt
+    libboost_url-mt${addrsfx}
     boost_url
     boost_url-mt
     boost_url-mt${addrsfx}
@@ -75,6 +99,9 @@ find_library(BOOST_URL_LIBRARY
 # <FS:Ansariel> LSL Preprocessor support
 find_library(BOOST_WAVE_LIBRARY
     NAMES
+    libboost_wave
+    libboost_wave-mt
+    libboost_wave-mt${addrsfx}
     boost_wave
     boost_wave-mt
     boost_wave-mt${addrsfx}
