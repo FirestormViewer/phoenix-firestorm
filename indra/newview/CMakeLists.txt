@@ -92,6 +92,8 @@ set(viewer_SOURCE_FILES
     blazingstorm/remote/bsdebugcommands.cpp
     blazingstorm/remote/bsremoteevents.cpp
     blazingstorm/remote/bssubjectpolicy.cpp
+    blazingstorm/remote/bsremotecontroller.cpp
+    blazingstorm/remote/bsremotecommanddispatcher.cpp
     alfloaterregiontracker.cpp
     animationexplorer.cpp
     ao.cpp
@@ -956,6 +958,10 @@ set(viewer_HEADER_FILES
     blazingstorm/remote/bsdebugcommands.h
     blazingstorm/remote/bsremoteevents.h
     blazingstorm/remote/bssubjectpolicy.h
+    blazingstorm/remote/bsremoteprotocol.h
+    blazingstorm/remote/bsremotecontroller.h
+    blazingstorm/remote/bsremotecommanddispatcher.h
+    blazingstorm/remote/bsremotetransport.h
     alfloaterregiontracker.h
     animationexplorer.h
     ao.h
