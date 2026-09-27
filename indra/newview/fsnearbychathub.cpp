@@ -29,6 +29,8 @@
 
 #include "fsnearbychathub.h"
 
+#include "blazingstorm/remote/bssubjectpolicy.h" // <BlazingStorm>
+
 #include "chatbar_as_cmdline.h"
 #include "fscommon.h"
 #include "fsfloaternearbychat.h"
@@ -291,8 +293,14 @@ void FSNearbyChat::sendChat(LLWString text, EChatType type)
 
         if (!utf8_revised_text.empty() && cmd_line_chat(utf8_revised_text, type))
         {
-            // Chat with animation
-            sendChatFromViewer(utf8_revised_text, type, gSavedSettings.getBOOL("PlayChatAnim"));
+            // <BlazingStorm> Subject-entered public chat can be converted into
+            // a private thought event during an active possession session.
+            if (!BlazingStorm::SubjectPolicy::handleOutgoingNearbyChat(utf8_revised_text, channel))
+            {
+                // Chat with animation
+                sendChatFromViewer(utf8_revised_text, type, gSavedSettings.getBOOL("PlayChatAnim"));
+            }
+            // </BlazingStorm>
         }
     }
 
