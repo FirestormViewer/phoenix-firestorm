@@ -10,6 +10,7 @@
 		<menu_item_check name="recent_tab" label="Aff. l'onglet Récent"/>
 		<menu_item_check name="worn_tab" label="Aff. l'onglet Portés"/>
 		<menu_item_check name="favorites_tab" label="Aff. l'onglet Favoris"/>
+		<menu_item_check label="Aff. la bibliothèque" name="library"/>
 	</context_menu>
 	<context_menu label="Tri" name="sorting_menu">
 		<menu_item_check name="sort_by_name" label="Trier par nom"/>
