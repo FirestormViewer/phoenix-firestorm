@@ -24,10 +24,28 @@ namespace BlazingStorm
         return session;
     }
 
-    void RemoteSession::begin(std::string controller_id, RemotePermissionMask permissions)
+    RemotePermissionMask RemoteSession::sanitizePermissions(RemotePermissionMask permissions)
+    {
+        const RemotePermissionMask allowed =
+              toMask(RemotePermission::Movement)
+            | toMask(RemotePermission::Chat)
+            | toMask(RemotePermission::Touch)
+            | toMask(RemotePermission::SitStand)
+            | toMask(RemotePermission::Teleport)
+            | toMask(RemotePermission::Camera)
+            | toMask(RemotePermission::Inventory)
+            | toMask(RemotePermission::InstantMessage);
+
+        return permissions & allowed;
+    }
+
+    void RemoteSession::begin(std::string controller_id,
+                              RemotePermissionMask permissions,
+                              SubjectRestrictionMask restrictions)
     {
         mControllerId = std::move(controller_id);
-        mPermissions = permissions;
+        mPermissions = sanitizePermissions(permissions);
+        mSubjectRestrictions = restrictions;
         mActive = true;
     }
 
@@ -36,6 +54,7 @@ namespace BlazingStorm
         mActive = false;
         mControllerId.clear();
         mPermissions = 0;
+        mSubjectRestrictions = 0;
     }
 
     bool RemoteSession::isActive() const
@@ -53,8 +72,33 @@ namespace BlazingStorm
         return mPermissions;
     }
 
+    void RemoteSession::setPermissions(RemotePermissionMask permissions)
+    {
+        mPermissions = sanitizePermissions(permissions);
+    }
+
     bool RemoteSession::hasPermission(RemotePermission permission) const
     {
         return mActive && (mPermissions & toMask(permission)) != 0;
+    }
+
+    SubjectRestrictionMask RemoteSession::subjectRestrictions() const
+    {
+        return mSubjectRestrictions;
+    }
+
+    void RemoteSession::setSubjectRestrictions(SubjectRestrictionMask restrictions)
+    {
+        mSubjectRestrictions = restrictions;
+    }
+
+    bool RemoteSession::isSubjectRestricted(SubjectRestriction restriction) const
+    {
+        return mActive && (mSubjectRestrictions & toMask(restriction)) != 0;
+    }
+
+    void RemoteSession::emergencyRelease()
+    {
+        end();
     }
 }
