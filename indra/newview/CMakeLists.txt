@@ -2295,6 +2295,16 @@ add_executable(${VIEWER_BINARY_NAME}
     ${viewer_SOURCE_FILES}
     )
 
+# <BlazingStorm>
+# Custom sources live below indra/newview/blazingstorm/. Firestorm's original
+# sources normally include local newview headers by filename because they live
+# directly in this directory. Add the newview source root explicitly so nested
+# Blazing Storm sources can follow the same include convention.
+target_include_directories(${VIEWER_BINARY_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+# </BlazingStorm> BlazingStorm nested source include path
+
 # add package files
 file(GLOB EVENT_HOST_SCRIPT_GLOB_LIST
      ${CMAKE_CURRENT_SOURCE_DIR}/../viewer_components/*.py)
