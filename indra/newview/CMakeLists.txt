@@ -88,6 +88,8 @@ endif ()
 set(viewer_SOURCE_FILES
 # <Add FS includes below this line>
     blazingstorm/remote/bsremotesession.cpp
+    blazingstorm/remote/bsremoteactions.cpp
+    blazingstorm/remote/bsdebugcommands.cpp
     alfloaterregiontracker.cpp
     animationexplorer.cpp
     ao.cpp
@@ -948,6 +950,8 @@ set(viewer_HEADER_FILES
 
 # <Add FS includes below this line>
     blazingstorm/remote/bsremotesession.h
+    blazingstorm/remote/bsremoteactions.h
+    blazingstorm/remote/bsdebugcommands.h
     alfloaterregiontracker.h
     animationexplorer.h
     ao.h
