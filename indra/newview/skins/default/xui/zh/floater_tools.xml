@@ -40,7 +40,7 @@
 		按住並拖拽，可以選擇土地
 	</floater.string>
 	<floater.string name="status_selectcount">
-		選擇了 [OBJ_COUNT] 個物件，土地影響 [LAND_IMPACT]
+		選擇了 [OBJ_COUNT] 個物件，土地影響 [LAND_IMPACT], prims [PRIM_COUNT]
 	</floater.string>
 	<floater.string name="status_remaining_capacity">
 		剩餘容納量 [LAND_CAPACITY]。

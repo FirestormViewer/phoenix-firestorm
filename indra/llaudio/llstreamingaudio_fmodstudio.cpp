@@ -250,6 +250,11 @@ void LLStreamingAudio_FMODSTUDIO::update()
                                 name = "ARTIST";
                             break;
                         }
+                        case FMOD_TAGTYPE_SHOUTCAST:
+                        case FMOD_TAGTYPE_ICECAST:
+                            if (name == "title")
+                                name = "TITLE";
+                            break;
                         case FMOD_TAGTYPE_FMOD:
                         {
                             if (name == "Sample Rate Change")

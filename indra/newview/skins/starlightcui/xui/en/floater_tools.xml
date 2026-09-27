@@ -66,7 +66,7 @@
     </floater.string>
     <floater.string
      name="status_selectcount">
-        [OBJ_COUNT] objects selected, land impact [LAND_IMPACT]
+        [OBJ_COUNT] objects selected, land impact [LAND_IMPACT], prims [PRIM_COUNT]
     </floater.string>
     <floater.string
      name="status_remaining_capacity">

@@ -3121,7 +3121,7 @@ Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Sec
 		Lire/pauser le média
 	</string>
 	<string name="StreamtitleNowPlaying">
-		En cours de lecture :
+		En cours de lecture : [TITLE]
 	</string>
 	<string name="IntelDriverPage">
 		http://www.intel.com/p/fr_FR/support/detect/graphics

@@ -2871,7 +2871,7 @@ Se esperaba .wav, .tga, .bmp, .jpg, .jpeg, o .anim
 		Reproduce/Pausa los medios
 	</string>
 	<string name="StreamtitleNowPlaying">
-		Reproduciendo:
+		Reproduciendo: [TITLE]
 	</string>
 	<string name="IntelDriverPage">
 		http://www.intel.com/p/en_US/support/detect/graphics

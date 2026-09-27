@@ -55,6 +55,10 @@ void LLCocoaPlugin::setupCocoa()
         //  Needed for Carbon based applications which call into Cocoa
         NSApplicationLoad();
 
+        // <FS:TJ> [FIRE-36985] Fix multiple Firestorm dock icons in macOS 27.2+
+        [NSApp setActivationPolicy:NSApplicationActivationPolicyAccessory];
+        // </FS:TJ>
+
         //  Must first call [[[NSWindow alloc] init] release] to get the NSWindow machinery set up so that NSCursor can use a window to cache the cursor image
         [[[NSWindow alloc] init] release];
 

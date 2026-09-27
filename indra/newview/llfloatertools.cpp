@@ -687,11 +687,7 @@ void LLFloaterTools::refresh()
     {
         LLObjectSelectionHandle selection = LLSelectMgr::getInstance()->getSelection();
         F32 link_cost = selection->getSelectedLinksetCost();
-// <FS:CR> FIRE-9287 - LI/Prim count not reflected on OpenSim
-#ifdef OPENSIM
-        S32 prim_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
-#endif // OPENSIM
-// </FS:CR>
+        S32 prim_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount(); // <FS:Ansariel> FIRE-36994: Always display prim count too
         S32 link_count = selection->getRootObjectCount();
         //S32 object_count = selection->getObjectCount(); // <FS:Ansariel> We got this already
 
@@ -777,6 +773,7 @@ void LLFloaterTools::refresh()
 #endif // OPENSIM
 // </FS:CR>
         selection_args["LAND_IMPACT"] = llformat("%.1d", (S32)link_cost);
+        selection_args["PRIM_COUNT"] = llformat("%d", prim_count); // <FS:Ansariel> FIRE-36994: Always display prim count too
 
         mTextSelectionCount->setText(getString("status_selectcount", selection_args));
     }

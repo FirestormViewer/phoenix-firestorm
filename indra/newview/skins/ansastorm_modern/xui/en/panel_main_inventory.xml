@@ -129,7 +129,21 @@
 				function="Inventory.GearDefault.Visible"
 				parameter="multi_folder_view" />
 		</menu_item_check>
-		<menu_item_separator/>
+<!-- <FS:TP> [FIRE-34881] Show/hide Library root, matching default skin's gear menu -->
+			<menu_item_check
+				label="Show Library"
+				name="show_library">
+				<menu_item_check.on_click
+					function="Inventory.GearDefault.Custom.Action"
+					parameter="toggle_library" />
+				<menu_item_check.on_check
+					function="Inventory.GearDefault.Check"
+					parameter="library" />
+				<menu_item_check.on_visible
+					function="Inventory.GearDefault.Visible"
+					parameter="multi_folder_view" />
+			</menu_item_check>
+<!-- </FS:TP> -->
 		<menu_item_check
 			label="List view"
 			layout="topleft"

@@ -10,6 +10,7 @@
 		<menu_item_check name="recent_tab" label="Show Recent tab"/>
 		<menu_item_check name="worn_tab" label="Show Worn tab"/>
 		<menu_item_check name="favorites_tab" label="Show Favorites tab"/>
+		<menu_item_check name="library" label="顯示資源庫"/>
 	</context_menu>
 	<context_menu label="Sorting" name="sorting_menu">
 		<menu_item_check name="sort_by_name" label="按名稱排序"/>

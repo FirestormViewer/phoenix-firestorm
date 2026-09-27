@@ -10,6 +10,7 @@
 		<menu_item_check name="recent_tab" label="Pokaż kartę Ostatnie"/>
 		<menu_item_check name="worn_tab" label="Pokaż kartę Założone"/>
 		<menu_item_check name="favorites_tab" label="Pokaż kartę Ulubione"/>
+		<menu_item_check label="Pokaż Bibliotekę" name="library" />
 	</context_menu>
 	<context_menu label="Sortowanie" name="sorting_menu">
 		<menu_item_check name="sort_by_name" label="Porządkuj według nazw"/>

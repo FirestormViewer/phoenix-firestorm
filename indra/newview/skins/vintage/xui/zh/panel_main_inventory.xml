@@ -20,6 +20,10 @@
 			<menu_item_call name="inventory_new_window" label="新庫存視窗" />
 			<menu_item_check name="Protected Folders" label="受保護的檔案夾" />
 			<menu_item_check label="庫存設定..." name="inv_settings" />
+			<menu_item_check name="show_recent_tab" label="顯示最近取得"/>
+			<menu_item_check name="show_worn_tab" label="顯示已穿戴"/>
+			<menu_item_check name="show_favorites_tab" label="顯示已收藏"/>
+			<menu_item_check name="show_library" label="顯示資源庫"/>
 			<menu_item_check label="列表視圖" name="list_view" />
 			<menu_item_check label="圖片視圖" name="gallery_view" />
 			<menu_item_check label="組合視圖" name="combination_view" />

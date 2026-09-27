@@ -124,6 +124,22 @@
              function="Inventory.GearDefault.Visible"
              parameter="multi_folder_view" />
         </menu_item_check>
+        <!-- <FS:TP> [FIRE-34881] Show/hide Library root -->
+        <menu_item_check
+         label="Show Library"
+         layout="topleft"
+         name="library">
+            <on_click
+             function="Inventory.GearDefault.Custom.Action"
+             parameter="toggle_library" />
+            <on_check
+             function="Inventory.GearDefault.Check"
+             parameter="library" />
+            <on_visible
+             function="Inventory.GearDefault.Visible"
+             parameter="multi_folder_view" />
+        </menu_item_check>
+        <!-- </FS:TP> -->
     </context_menu>
     <context_menu label="Sorting" name="sorting_menu" top="0">
         <menu_item_check
