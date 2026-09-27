@@ -40,6 +40,7 @@
 #include <Carbon/Carbon.h> // Used for Text Input Services ("Safe" API - it's supported)
 
 // <FS:TJ> Launch new instance option from macOS dock
+#include <unordered_map>
 #include "linden_common.h"
 #include "lltrans.h"
 // </FS:TJ>
