@@ -3358,7 +3358,7 @@ support@secondlife.com.
 		播放/暫停媒體
 	</string>
 	<string name="StreamtitleNowPlaying">
-		正在播放：
+		正在播放： [TITLE]
 	</string>
 	<!-- Drivers support/update pages -->
 	<string name="IntelDriverPage">

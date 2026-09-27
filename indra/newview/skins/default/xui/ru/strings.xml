@@ -3158,7 +3158,7 @@ https://www.firestormviewer.org/support за помощь в решении эт
 		Воспроизведение/Пауза медиа
 	</string>
 	<string name="StreamtitleNowPlaying">
-		Сейчас играет:
+		Сейчас играет: [TITLE]
 	</string>
 	<string name="IntelDriverPage">
 		http://www.intel.com/p/ru_RU/support/detect/graphics

@@ -3091,7 +3091,7 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .anim
 		Uruchom/Zatrzymaj media
 	</string>
 	<string name="StreamtitleNowPlaying">
-		Teraz odtwarzane:
+		Teraz odtwarzane: [TITLE]
 	</string>
 	<string name="MBCmdLineError">
 		Podczas realizacji podanej komendy wystąpił błąd.

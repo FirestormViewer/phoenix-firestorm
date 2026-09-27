@@ -1491,7 +1491,7 @@ Expected .wav, .tga, .bmp, .jpg, .jpeg, or .anim
 	<!-- media -->
 	<string name="Multiple Media">Multiple Media</string>
 	<string name="Play Media">Play/Pause Media</string>
-	<string name="StreamtitleNowPlaying">Now playing:</string>
+	<string name="StreamtitleNowPlaying">Now playing: [TITLE]</string>
 
 	<!-- Drivers support/update pages -->
 	<string name="IntelDriverPage">http://www.intel.com/p/en_US/support/detect/graphics</string>

@@ -3195,7 +3195,7 @@ Gültige Formate: .wav, .tga, .bmp, .jpg, .jpeg oder .anim
 		Medien Abspielen/Pausieren
 	</string>
 	<string name="StreamtitleNowPlaying">
-		Aktueller Titel:
+		Aktueller Titel: [TITLE]
 	</string>
 	<string name="IntelDriverPage">
 		http://www.intel.com/p/de_DE/support/detect/graphics

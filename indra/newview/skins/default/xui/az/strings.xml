@@ -3054,7 +3054,7 @@ Gözlənilən uzantılar: WAV, TGA, BMP, JPG, JPEG və ya BVH
 		Multimedia – oynat/fasilə   
 	</string>
 	<string name="StreamtitleNowPlaying">
-		İndi oynadılır:
+		İndi oynadılır: [TITLE]
 	</string>
 	<string name="IntelDriverPage">
 		http://www.intel.com/p/en_US/support/detect/graphics

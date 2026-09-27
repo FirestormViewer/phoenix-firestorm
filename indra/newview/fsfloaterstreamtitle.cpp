@@ -61,24 +61,24 @@ void FSStreamTitleManager::initSingleton()
 
 void FSStreamTitleManager::processMetadataUpdate(const LLSD& metadata) noexcept
 {
-    std::string chat{};
+    std::string title{};
 
     if (metadata.has("ARTIST"))
     {
-        chat = metadata["ARTIST"].asString();
+        title = metadata["ARTIST"].asString();
     }
     if (metadata.has("TITLE"))
     {
-        if (chat.length() > 0)
+        if (!title.empty())
         {
-            chat.append(" - ");
+            title.append(" - ");
         }
-        chat.append(metadata["TITLE"].asString());
+        title.append(metadata["TITLE"].asString());
     }
 
-    if (chat != mCurrentStreamTitle)
+    if (title != mCurrentStreamTitle)
     {
-        mCurrentStreamTitle = std::move(chat);
+        mCurrentStreamTitle = std::move(title);
 
         if (!mCurrentStreamTitle.empty() && (mStreamTitleHistory.empty() || mStreamTitleHistory.back() != mCurrentStreamTitle))
         {

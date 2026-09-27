@@ -3016,7 +3016,7 @@ Formatos válidos: .wav, .tga, .bmp, .jpg, .jpeg ou .anim
 		Reproduzir/Pausar mídia
 	</string>
 	<string name="StreamtitleNowPlaying">
-		Reproduzindo:
+		Reproduzindo: [TITLE]
 	</string>
 	<string name="NvidiaDriverPage">
 		http://www.nvidia.com/Download/index.aspx?lang=pt
