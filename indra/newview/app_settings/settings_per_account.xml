@@ -1550,6 +1550,61 @@
             <key>Value</key>
             <map/>
         </map>
+        <key>BlazingStormRelayBrokerUrl</key>
+    <map>
+      <key>Comment</key>
+      <string>Trusted HTTPS base URL of the Blazing Storm Azure Function relay broker. Leave blank to use local loopback debug transport.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string></string>
+    </map>
+        <key>BlazingStormRelayCreateKey</key>
+    <map>
+      <key>Comment</key>
+      <string>Subject-only relay create key used to authorize creation of Azure relay sessions. Never sent to the Controller.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string></string>
+    </map>
+        <key>BlazingStormRelayCreatePath</key>
+    <map>
+      <key>Comment</key>
+      <string>Optional custom Azure Function create-session path. Empty enables automatic route detection.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string></string>
+    </map>
+        <key>BlazingStormRelaySubjectNegotiatePath</key>
+    <map>
+      <key>Comment</key>
+      <string>Optional custom Subject negotiate Function path. Empty enables automatic route detection. Use {session} for the session ID if required by the route.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string></string>
+    </map>
+        <key>BlazingStormRelayControllerNegotiatePath</key>
+    <map>
+      <key>Comment</key>
+      <string>Optional custom Controller negotiate Function path. Empty enables automatic route detection. Use {session} for the session ID if required by the route.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string></string>
+    </map>
         <key>BlazingStormPossessionAcceptedMessage</key>
     <map>
       <key>Comment</key>
