@@ -63,7 +63,7 @@
          top="0"
          right="-15"
          min_width="480"
-         height="675"
+         height="875"
          follows="left|top|right"
          background_visible="false">
 
@@ -270,12 +270,78 @@
             The movement restriction above is session state. This debug checkbox is temporary and resets to OFF whenever possession starts or ends.
           </text>
 
+          <text
+           name="acceptance_messages_header"
+           layout="topleft"
+           left="16"
+           top="598"
+           width="300"
+           height="18"
+           font="SansSerifSmall"
+           font.style="BOLD">
+            Possession acceptance messages
+          </text>
+
+          <text
+           name="accepted_message_label"
+           layout="topleft"
+           left="16"
+           top="626"
+           width="190"
+           height="18">
+            After manual acceptance:
+          </text>
+
+          <line_editor
+           name="accepted_message"
+           layout="topleft"
+           left="16"
+           right="-24"
+           top="648"
+           height="26"
+           follows="left|top|right"
+           max_length_bytes="1023"
+           tool_tip="Nearby chat spoken by your avatar after you manually accept. Leave empty for no announcement." />
+
+          <text
+           name="whitelist_accepted_message_label"
+           layout="topleft"
+           left="16"
+           top="690"
+           width="220"
+           height="18">
+            After whitelist auto-accept:
+          </text>
+
+          <line_editor
+           name="whitelist_accepted_message"
+           layout="topleft"
+           left="16"
+           right="-24"
+           top="712"
+           height="26"
+           follows="left|top|right"
+           max_length_bytes="1023"
+           tool_tip="Nearby chat spoken by your avatar when a whitelisted controller is accepted automatically. Leave empty for no announcement." />
+
+          <text
+           name="acceptance_messages_note"
+           layout="topleft"
+           left="16"
+           right="-24"
+           top="750"
+           height="36"
+           follows="left|top|right"
+           word_wrap="true">
+            These messages are saved per avatar/account. Leave either field blank if you do not want that acceptance type announced in nearby chat.
+          </text>
+
           <button
            name="emergency_release"
            label="EMERGENCY RELEASE"
            layout="topleft"
            left="16"
-           top="600"
+           top="808"
            width="210"
            height="34"
            font="SansSerif"
@@ -437,6 +503,26 @@
             </layout_panel>
           </layout_stack>
 
+          <layout_stack
+           name="movement_flight_row"
+           layout="topleft"
+           orientation="horizontal"
+           left="16"
+           right="-24"
+           top="262"
+           height="28"
+           follows="left|top|right">
+            <layout_panel auto_resize="true" min_width="100">
+              <button name="remote_fly" label="Fly" layout="topleft" follows="all" left="2" right="-2" top="1" height="26" />
+            </layout_panel>
+            <layout_panel auto_resize="true" min_width="100">
+              <button name="remote_land" label="Land" layout="topleft" follows="all" left="2" right="-2" top="1" height="26" />
+            </layout_panel>
+            <layout_panel auto_resize="true" min_width="100">
+              <button name="remote_crouch" label="Crouch / Down" layout="topleft" follows="all" left="2" right="-2" top="1" height="26" />
+            </layout_panel>
+          </layout_stack>
+
           <text
            name="movement_note"
            layout="topleft"
@@ -446,7 +532,7 @@
            height="42"
            follows="left|top|right"
            word_wrap="true">
-            Normal WASD / arrow movement and these buttons follow this mode while paired. Subject only moves the subject; Mirror both moves both avatars; Controller only moves you.
+            Normal movement, vertical movement, fly toggles, and these buttons follow this mode while paired. Subject only moves the subject; Mirror both moves both avatars; Controller only moves you.
           </text>
 
           <text
