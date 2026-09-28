@@ -83,6 +83,7 @@ namespace BlazingStorm
                                    std::string& controller_id,
                                    std::string& nonce) const;
         void tryBootstrapConnect();
+        void announcePossessionAccepted(bool trusted_auto_accept);
         void showPairingPrompt();
         void tryAccept();
         void readAvailable();
@@ -108,6 +109,7 @@ namespace BlazingStorm
         bool mConnected = false;
         bool mPaired = false;
         bool mPendingPairing = false;
+        bool mPendingTrustedAutoAccept = false;
         bool mBootstrapPending = false;
 
         std::uint16_t mPort = DEFAULT_PORT;
