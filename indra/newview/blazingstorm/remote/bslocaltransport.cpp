@@ -13,6 +13,7 @@
 #include "blazingstorm/remote/bsremoteevents.h"
 #include "blazingstorm/remote/bsremotesession.h"
 #include "blazingstorm/remote/bstruststore.h"
+#include "blazingstorm/remote/bsworldinteraction.h"
 #include "fscommon.h"
 #include "fsnearbychathub.h"
 #include "llagent.h"
@@ -505,6 +506,7 @@ namespace BlazingStorm
         mExpectedBootstrapNonce.clear();
         mReceiveBuffer.clear();
         mWriteBuffer.clear();
+        WorldInteraction::instance().reset();
     }
 
     void LocalTransport::closeSocketOnly()
@@ -887,6 +889,43 @@ namespace BlazingStorm
                 return;
             }
 
+            if (fields[0] == "EVT" && fields.size() == 8 && fields[1] == "DIALOG")
+            {
+                ForwardedScriptDialog dialog;
+                dialog.dialogId = fields[2];
+                dialog.sourceObjectId = fields[3];
+                dialog.rootObjectId = fields[4];
+
+                if (!hexDecode(fields[5], dialog.objectName)
+                    || !hexDecode(fields[6], dialog.message))
+                {
+                    return;
+                }
+
+                std::istringstream button_stream(fields[7]);
+                std::string encoded_button;
+                while (std::getline(button_stream, encoded_button, ','))
+                {
+                    std::string button;
+                    if (!encoded_button.empty() && hexDecode(encoded_button, button))
+                    {
+                        dialog.buttons.push_back(button);
+                    }
+                }
+
+                if (!dialog.buttons.empty())
+                {
+                    WorldInteraction::instance().showForwardedDialog(dialog);
+                }
+                return;
+            }
+
+            if (fields[0] == "EVT" && fields.size() == 3 && fields[1] == "DIALOGCLOSED")
+            {
+                WorldInteraction::instance().closeForwardedDialog(fields[2]);
+                return;
+            }
+
             if (fields[0] == "BLOCKED" && fields.size() == 2)
             {
                 FSCommon::report_to_nearby_chat(
@@ -980,6 +1019,35 @@ namespace BlazingStorm
                     queueLine("EVT|THOUGHT|" + hexEncode(event.text));
                 }
             }
+
+            for (const auto& dialog :
+                 WorldInteraction::instance().takeDialogsToForward())
+            {
+                std::string encoded_buttons;
+                for (std::size_t i = 0; i < dialog.buttons.size(); ++i)
+                {
+                    if (i != 0)
+                    {
+                        encoded_buttons.push_back(',');
+                    }
+                    encoded_buttons += hexEncode(dialog.buttons[i]);
+                }
+
+                queueLine("EVT|DIALOG|"
+                    + dialog.dialogId + "|"
+                    + dialog.sourceObjectId + "|"
+                    + dialog.rootObjectId + "|"
+                    + hexEncode(dialog.objectName) + "|"
+                    + hexEncode(dialog.message) + "|"
+                    + encoded_buttons);
+            }
+
+            for (const auto& dialog_id :
+                 WorldInteraction::instance().takeDialogClosures())
+            {
+                queueLine("EVT|DIALOGCLOSED|" + dialog_id);
+            }
+
             flushWrites();
         }
     }
@@ -1076,6 +1144,10 @@ namespace BlazingStorm
             case RemoteCommandType::Stop:              return "stop";
             case RemoteCommandType::Say:               return "say";
             case RemoteCommandType::SendInstantMessage:       return "im";
+            case RemoteCommandType::SitObject:                 return "sit-object";
+            case RemoteCommandType::Stand:                     return "stand";
+            case RemoteCommandType::TouchObject:               return "touch-object";
+            case RemoteCommandType::DialogReply:               return "dialog-reply";
             case RemoteCommandType::RestrictMovementOn:        return "restrictmovement-on";
             case RemoteCommandType::RestrictMovementOff:       return "restrictmovement-off";
             case RemoteCommandType::RestrictNearbyChatOn:      return "restrictchat-on";
@@ -1108,6 +1180,10 @@ namespace BlazingStorm
         if (name == "stop")          return RemoteCommandType::Stop;
         if (name == "say")         return RemoteCommandType::Say;
         if (name == "im")                   return RemoteCommandType::SendInstantMessage;
+        if (name == "sit-object")           return RemoteCommandType::SitObject;
+        if (name == "stand")                return RemoteCommandType::Stand;
+        if (name == "touch-object")         return RemoteCommandType::TouchObject;
+        if (name == "dialog-reply")         return RemoteCommandType::DialogReply;
         if (name == "restrictmovement-on")   return RemoteCommandType::RestrictMovementOn;
         if (name == "restrictmovement-off")  return RemoteCommandType::RestrictMovementOff;
         if (name == "restrictchat-on")       return RemoteCommandType::RestrictNearbyChatOn;
