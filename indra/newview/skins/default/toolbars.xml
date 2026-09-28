@@ -14,6 +14,7 @@
      <command name="voice"/>
      <command name="facebook"/>
      <command name="move"/>
+     <command name="blazing_storm_remote"/>
      <command name="view"/>`
      <command name="people"/>
      <command name="appearance"/>
