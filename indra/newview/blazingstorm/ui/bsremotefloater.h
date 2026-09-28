@@ -18,6 +18,7 @@ namespace BlazingStorm
 
         bool postBuild() override;
         void draw() override;
+        void onClose(bool app_quitting) override;
 
     private:
         void refresh();
@@ -35,6 +36,21 @@ namespace BlazingStorm
         void onSubjectRestrictChat();
         void onSubjectRestrictIM();
 
+        enum class MovementMode
+        {
+            SubjectOnly,
+            MirrorBoth,
+            ControllerOnly
+        };
+
+        MovementMode movementMode() const;
+        bool controlsSubject() const;
+        bool controlsController() const;
+        void onMovementModeChanged();
+        void onMovementCommand(RemoteCommandType type);
+        void applyLocalMovement();
+        void stopLocalMovement();
+
         void sendRemoteCommand(RemoteCommandType type,
                                const std::string& text = {},
                                const std::string& target_id = {});
@@ -44,6 +60,9 @@ namespace BlazingStorm
         void onRemoteRestrictIM();
 
         bool mRefreshing = false;
+        S32 mLocalMoveAt = 0;
+        S32 mLocalMoveLeft = 0;
+        F32 mLocalYaw = 0.f;
     };
 }
 
