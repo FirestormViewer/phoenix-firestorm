@@ -106,8 +106,8 @@ namespace BlazingStorm
         const std::string& controller_id,
         const std::string& nonce) const
     {
-        return u8"🚪 The door has opened. Will you step through?\n"
-            "[Blazing Storm request v1 | " + controller_id + " | " + nonce + "]";
+        return std::string("\xF0\x9F\x9A\xAA The door has opened. Will you step through?\n")
+            + "[Blazing Storm request v1 | " + controller_id + " | " + nonce + "]";
     }
 
     bool LocalTransport::parseBootstrapMessage(
