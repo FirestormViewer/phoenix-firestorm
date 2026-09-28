@@ -1379,12 +1379,15 @@ namespace BlazingStorm
                     + "\",\"controllerName\":\""
                     + jsonEscape(controller_name)
                     + "\",\"nonce\":\""
-                    + jsonEscape(nonce) + "\"}";
+                    + jsonEscape(nonce)
+                    + "\",\"createKey\":\""
+                    + jsonEscape(relay_create_key)
+                    + "\",\"relayCreateKey\":\""
+                    + jsonEscape(relay_create_key) + "\"}";
 
                 const std::vector<std::pair<std::string, std::string>> headers = {
                     {"X-Relay-Create-Key", relay_create_key},
-                    {"X-Blazing-Relay-Create-Key", relay_create_key},
-                    {"Authorization", "Bearer " + relay_create_key}
+                    {"X-Blazing-Relay-Create-Key", relay_create_key}
                 };
 
                 for (const auto& path : createPaths(path_override))
@@ -1470,7 +1473,7 @@ namespace BlazingStorm
 
                 const std::vector<std::pair<std::string, std::string>> headers = {
                     {"X-Relay-Ticket", ticket},
-                    {"Authorization", "Bearer " + ticket}
+                    {"X-Blazing-Relay-Ticket", ticket}
                 };
 
                 for (const auto& path :
