@@ -261,9 +261,11 @@ namespace BlazingStorm
         const auto safe_ticket_char = [](char ch)
         {
             const unsigned char c = static_cast<unsigned char>(ch);
-            return std::isalnum(c)
-                || ch == '-' || ch == '_' || ch == '.'
-                || ch == '~' || ch == '=';
+            // Tickets/session IDs travel inside a visible SL IM. Permit
+            // ordinary signed-token punctuation, but never our field delimiter,
+            // controls, brackets, or whitespace.
+            return c >= 0x21 && c <= 0x7e
+                && ch != '|' && ch != '[' && ch != ']';
         };
         return std::all_of(
                    session_id.begin(), session_id.end(), safe_ticket_char)
