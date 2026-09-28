@@ -1028,10 +1028,16 @@ namespace BlazingStorm
             case RemoteCommandType::StrafeRight:       return "straferight";
             case RemoteCommandType::TurnLeft:          return "turnleft";
             case RemoteCommandType::TurnRight:         return "turnright";
+            case RemoteCommandType::MoveUp:            return "moveup";
+            case RemoteCommandType::MoveDown:          return "movedown";
+            case RemoteCommandType::FlyOn:             return "fly-on";
+            case RemoteCommandType::FlyOff:            return "fly-off";
+            case RemoteCommandType::ToggleFly:         return "fly-toggle";
             case RemoteCommandType::Jump:              return "jump";
             case RemoteCommandType::StopForward:       return "stop-forward";
             case RemoteCommandType::StopStrafe:        return "stop-strafe";
             case RemoteCommandType::StopTurn:          return "stop-turn";
+            case RemoteCommandType::StopVertical:      return "stop-vertical";
             case RemoteCommandType::Stop:              return "stop";
             case RemoteCommandType::Say:               return "say";
             case RemoteCommandType::SendInstantMessage:       return "im";
@@ -1057,8 +1063,9 @@ namespace BlazingStorm
         if (name == "jump")         return RemoteCommandType::Jump;
         if (name == "stop-forward") return RemoteCommandType::StopForward;
         if (name == "stop-strafe")  return RemoteCommandType::StopStrafe;
-        if (name == "stop-turn")    return RemoteCommandType::StopTurn;
-        if (name == "stop")         return RemoteCommandType::Stop;
+        if (name == "stop-turn")     return RemoteCommandType::StopTurn;
+        if (name == "stop-vertical") return RemoteCommandType::StopVertical;
+        if (name == "stop")          return RemoteCommandType::Stop;
         if (name == "say")         return RemoteCommandType::Say;
         if (name == "im")                   return RemoteCommandType::SendInstantMessage;
         if (name == "restrictmovement-on")   return RemoteCommandType::RestrictMovementOn;
