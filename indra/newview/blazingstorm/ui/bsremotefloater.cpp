@@ -25,6 +25,7 @@
 #include "lllineeditor.h"
 #include "lltextbox.h"
 #include "lluuid.h"
+#include "llviewercontrol.h"
 
 namespace
 {
@@ -67,6 +68,28 @@ namespace BlazingStorm
             [this](LLUICtrl*, const LLSD&) { onEmergencyRelease(); });
         getChild<LLButton>("save_current_controller")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onSaveCurrentController(); });
+
+        auto* accepted_message = getChild<LLLineEditor>("accepted_message");
+        accepted_message->setText(
+            gSavedPerAccountSettings.getString("BlazingStormPossessionAcceptedMessage"));
+        accepted_message->setCommitCallback(
+            [](LLUICtrl* ctrl, const LLSD&)
+            {
+                gSavedPerAccountSettings.setString(
+                    "BlazingStormPossessionAcceptedMessage",
+                    ctrl->getValue().asString());
+            });
+
+        auto* whitelist_message = getChild<LLLineEditor>("whitelist_accepted_message");
+        whitelist_message->setText(
+            gSavedPerAccountSettings.getString("BlazingStormWhitelistAcceptedMessage"));
+        whitelist_message->setCommitCallback(
+            [](LLUICtrl* ctrl, const LLSD&)
+            {
+                gSavedPerAccountSettings.setString(
+                    "BlazingStormWhitelistAcceptedMessage",
+                    ctrl->getValue().asString());
+            });
 
         getChild<LLCheckBoxCtrl>("allow_controller_im")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onAllowControllerIM(); });
