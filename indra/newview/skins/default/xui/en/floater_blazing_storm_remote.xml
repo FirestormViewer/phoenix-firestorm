@@ -922,13 +922,15 @@
            layout="topleft"
            left="16"
            right="-24"
-           top="478"
-           height="74"
+           top="502"
+           height="66"
            follows="left|top|right"
            word_wrap="true">
-            Removing a controller from this list restores normal request approval for future sessions. Object touch, sit/stand, forwarded menus, direct IM, and restriction control remain off unless explicitly granted.
+            Removing a controller restores normal request approval. Object touch, sit/stand, menus, camera, direct IM, and restriction control remain off unless explicitly granted.
           </text>
 
+          <check_box name="trusted_camera" label="Control my camera"
+           layout="topleft" left="16" top="462" width="410" height="18" />
           <button
            name="trusted_save"
            label="Save / Update Whitelist"
@@ -953,5 +955,24 @@
       </scroll_container>
     </panel>
 
+    <panel name="camera_panel" label="Camera" layout="topleft" follows="all">
+      <check_box name="allow_camera" label="Subject: allow controller camera control"
+       layout="topleft" left="16" top="20" width="440" height="20" />
+      <text name="camera_help" layout="topleft" left="16" right="-16" top="55"
+       height="64" word_wrap="true" follows="left|top|right">
+        Controller: each click moves the subject camera one step. Requires camera permission and third-person view. RLVa camera locks are respected.
+      </text>
+      <button name="camera_left" label="Orbit Left" layout="topleft" left="16" top="130" width="130" height="28" />
+      <button name="camera_right" label="Orbit Right" layout="topleft" left="156" top="130" width="130" height="28" />
+      <button name="camera_up" label="Look Up" layout="topleft" left="16" top="168" width="130" height="28" />
+      <button name="camera_down" label="Look Down" layout="topleft" left="156" top="168" width="130" height="28" />
+      <button name="camera_in" label="Zoom In" layout="topleft" left="16" top="206" width="130" height="28" />
+      <button name="camera_out" label="Zoom Out" layout="topleft" left="156" top="206" width="130" height="28" />
+      <button name="camera_reset" label="Reset Camera" layout="topleft" left="16" top="244" width="270" height="28" />
+      <text name="camera_release_help" layout="topleft" left="16" right="-16" top="292"
+       height="55" word_wrap="true" follows="left|top|right">
+        Revoking permission or ending possession returns camera focus to the subject avatar. Local camera input remains available.
+      </text>
+    </panel>
   </tab_container>
 </floater>

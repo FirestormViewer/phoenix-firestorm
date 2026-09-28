@@ -28,6 +28,8 @@
 #include "lluuid.h"
 #include "llviewercontrol.h"
 
+#include <utility>
+
 namespace
 {
     void report(const std::string& message)
@@ -55,6 +57,31 @@ namespace BlazingStorm
 
     bool RemoteFloater::postBuild()
     {
+        getChild<LLCheckBoxCtrl>("allow_camera")->setCommitCallback(
+            [this](LLUICtrl* ctrl, const LLSD&)
+            {
+                if (mRefreshing) return;
+                auto& session = RemoteSession::instance();
+                if (!session.isActive()) return;
+                auto permissions = session.permissions();
+                const auto mask = toMask(RemotePermission::Camera);
+                session.setPermissions(ctrl->getValue().asBoolean()
+                    ? permissions | mask : permissions & ~mask);
+            });
+        const std::pair<const char*, RemoteCommandType> camera_buttons[] = {
+            {"camera_left", RemoteCommandType::CameraLeft},
+            {"camera_right", RemoteCommandType::CameraRight},
+            {"camera_up", RemoteCommandType::CameraUp},
+            {"camera_down", RemoteCommandType::CameraDown},
+            {"camera_in", RemoteCommandType::CameraIn},
+            {"camera_out", RemoteCommandType::CameraOut},
+            {"camera_reset", RemoteCommandType::CameraReset}};
+        for (const auto& button : camera_buttons)
+        {
+            getChild<LLButton>(button.first)->setCommitCallback(
+                [this, command = button.second](LLUICtrl*, const LLSD&)
+                { sendRemoteCommand(command); });
+        }
         getChild<LLButton>("start_host")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onStartHost(); });
         getChild<LLButton>("connect")->setCommitCallback(
@@ -231,6 +258,11 @@ namespace BlazingStorm
         allow_sitstand->setValue(session.hasPermission(RemotePermission::SitStand));
 
         auto* allow_dialogs = getChild<LLCheckBoxCtrl>("allow_script_dialogs");
+        getChild<LLCheckBoxCtrl>("allow_camera")->setEnabled(subject_active && is_host);
+        getChild<LLCheckBoxCtrl>("allow_camera")->setValue(session.hasPermission(RemotePermission::Camera));
+        for (const char* name : {"camera_left", "camera_right", "camera_up", "camera_down",
+                                "camera_in", "camera_out", "camera_reset"})
+            getChild<LLButton>(name)->setEnabled(controller_active);
         allow_dialogs->setEnabled(subject_active && is_host);
         allow_dialogs->setValue(session.hasPermission(RemotePermission::ScriptDialogs));
 
@@ -864,6 +896,7 @@ namespace BlazingStorm
         getChild<LLCheckBoxCtrl>("trusted_touch")->setValue(false);
         getChild<LLCheckBoxCtrl>("trusted_sitstand")->setValue(false);
         getChild<LLCheckBoxCtrl>("trusted_dialogs")->setValue(false);
+        getChild<LLCheckBoxCtrl>("trusted_camera")->setValue(false);
         getChild<LLCheckBoxCtrl>("trusted_restrictions")->setValue(false);
     }
 
@@ -897,6 +930,8 @@ namespace BlazingStorm
             (entry->permissions & toMask(RemotePermission::Touch)) != 0);
         getChild<LLCheckBoxCtrl>("trusted_sitstand")->setValue(
             (entry->permissions & toMask(RemotePermission::SitStand)) != 0);
+        getChild<LLCheckBoxCtrl>("trusted_camera")->setValue(
+            (entry->permissions & toMask(RemotePermission::Camera)) != 0);
         getChild<LLCheckBoxCtrl>("trusted_dialogs")->setValue(
             (entry->permissions & toMask(RemotePermission::ScriptDialogs)) != 0);
         getChild<LLCheckBoxCtrl>("trusted_restrictions")->setValue(
@@ -928,6 +963,8 @@ namespace BlazingStorm
             entry.permissions |= toMask(RemotePermission::Touch);
         if (getChild<LLCheckBoxCtrl>("trusted_sitstand")->getValue().asBoolean())
             entry.permissions |= toMask(RemotePermission::SitStand);
+        if (getChild<LLCheckBoxCtrl>("trusted_camera")->getValue().asBoolean())
+            entry.permissions |= toMask(RemotePermission::Camera);
         if (getChild<LLCheckBoxCtrl>("trusted_dialogs")->getValue().asBoolean())
             entry.permissions |= toMask(RemotePermission::ScriptDialogs);
         if (getChild<LLCheckBoxCtrl>("trusted_restrictions")->getValue().asBoolean())
