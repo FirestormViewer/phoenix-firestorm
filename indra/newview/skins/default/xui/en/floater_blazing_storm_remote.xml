@@ -63,7 +63,7 @@
          top="0"
          right="-15"
          min_width="480"
-         height="875"
+         height="960"
          follows="left|top|right"
          background_visible="false">
 
@@ -179,11 +179,39 @@
            height="18" />
 
           <check_box
+           name="allow_touch"
+           label="Allow controller to touch objects as me"
+           layout="topleft"
+           left="16"
+           top="284"
+           width="380"
+           height="18" />
+
+          <check_box
+           name="allow_sitstand"
+           label="Allow controller to sit / stand me"
+           layout="topleft"
+           left="16"
+           top="310"
+           width="380"
+           height="18" />
+
+          <check_box
+           name="allow_script_dialogs"
+           label="Forward relevant object blue menus to controller"
+           layout="topleft"
+           left="16"
+           top="336"
+           width="430"
+           height="18"
+           tool_tip="Only menus from the object/linkset just touched or sat on are forwarded." />
+
+          <check_box
            name="allow_restrictions"
            label="Allow controller to change my movement / chat / IM restrictions"
            layout="topleft"
            left="16"
-           top="284"
+           top="362"
            width="450"
            height="18" />
 
@@ -192,7 +220,7 @@
            layout="topleft"
            left="36"
            right="-24"
-           top="312"
+           top="390"
            height="28"
            word_wrap="true">
             Money actions are never available to the controller.
@@ -202,7 +230,7 @@
            name="subject_restrictions_header"
            layout="topleft"
            left="16"
-           top="356"
+           top="434"
            width="300"
            height="18"
            font="SansSerifSmall"
@@ -215,7 +243,7 @@
            label="Block my local movement controls"
            layout="topleft"
            left="16"
-           top="382"
+           top="460"
            width="360"
            height="18" />
 
@@ -224,7 +252,7 @@
            label="Redirect my nearby chat into controller thoughts"
            layout="topleft"
            left="16"
-           top="408"
+           top="486"
            width="410"
            height="18" />
 
@@ -233,7 +261,7 @@
            label="Redirect my outgoing direct IMs into controller thoughts"
            layout="topleft"
            left="16"
-           top="434"
+           top="512"
            width="450"
            height="18" />
 
@@ -241,7 +269,7 @@
            name="debug_header"
            layout="topleft"
            left="16"
-           top="480"
+           top="558"
            width="280"
            height="18"
            font="SansSerifSmall"
@@ -254,7 +282,7 @@
            label="Debug: disable my local movement controls while possessed"
            layout="topleft"
            left="16"
-           top="506"
+           top="584"
            width="430"
            height="18"
            tool_tip="Temporary debug option. OFF by default and reset for each session." />
@@ -264,7 +292,7 @@
            layout="topleft"
            left="36"
            right="-24"
-           top="534"
+           top="612"
            height="42"
            word_wrap="true">
             The movement restriction above is session state. This debug checkbox is temporary and resets to OFF whenever possession starts or ends.
@@ -274,7 +302,7 @@
            name="acceptance_messages_header"
            layout="topleft"
            left="16"
-           top="598"
+           top="676"
            width="300"
            height="18"
            font="SansSerifSmall"
@@ -286,7 +314,7 @@
            name="accepted_message_label"
            layout="topleft"
            left="16"
-           top="626"
+           top="704"
            width="190"
            height="18">
             After manual acceptance:
@@ -297,7 +325,7 @@
            layout="topleft"
            left="16"
            right="-24"
-           top="648"
+           top="726"
            height="26"
            follows="left|top|right"
            max_length_bytes="1023"
@@ -307,7 +335,7 @@
            name="whitelist_accepted_message_label"
            layout="topleft"
            left="16"
-           top="690"
+           top="768"
            width="220"
            height="18">
             After whitelist auto-accept:
@@ -318,7 +346,7 @@
            layout="topleft"
            left="16"
            right="-24"
-           top="712"
+           top="790"
            height="26"
            follows="left|top|right"
            max_length_bytes="1023"
@@ -329,7 +357,7 @@
            layout="topleft"
            left="16"
            right="-24"
-           top="750"
+           top="828"
            height="36"
            follows="left|top|right"
            word_wrap="true">
@@ -341,7 +369,7 @@
            label="EMERGENCY RELEASE"
            layout="topleft"
            left="16"
-           top="808"
+           top="886"
            width="210"
            height="34"
            font="SansSerif"
@@ -672,10 +700,20 @@
           </text>
 
           <button
+           name="remote_stand"
+           label="Stand Subject"
+           layout="topleft"
+           left="16"
+           top="706"
+           width="155"
+           height="30"
+           tool_tip="Make the possessed avatar stand up" />
+
+          <button
            name="remote_release"
            label="End Possession"
            layout="topleft"
-           left="16"
+           left="181"
            top="706"
            width="155"
            height="30" />
@@ -708,7 +746,7 @@
          top="0"
          right="-15"
          min_width="480"
-         height="650"
+         height="735"
          follows="left|top|right"
          background_visible="false">
 
@@ -844,11 +882,38 @@
            height="18" />
 
           <check_box
+           name="trusted_touch"
+           label="Touch objects as me"
+           layout="topleft"
+           left="16"
+           top="350"
+           width="300"
+           height="18" />
+
+          <check_box
+           name="trusted_sitstand"
+           label="Sit / stand me"
+           layout="topleft"
+           left="16"
+           top="378"
+           width="300"
+           height="18" />
+
+          <check_box
+           name="trusted_dialogs"
+           label="Receive and answer relevant object blue menus"
+           layout="topleft"
+           left="16"
+           top="406"
+           width="420"
+           height="18" />
+
+          <check_box
            name="trusted_restrictions"
            label="Change my movement / chat / IM restrictions"
            layout="topleft"
            left="16"
-           top="350"
+           top="434"
            width="410"
            height="18" />
 
@@ -857,11 +922,11 @@
            layout="topleft"
            left="16"
            right="-24"
-           top="394"
+           top="478"
            height="74"
            follows="left|top|right"
            word_wrap="true">
-            Removing a controller from this list restores normal request approval for future sessions. Movement + Nearby Chat are the defaults for controllers who are not whitelisted. Direct IM and restriction control remain off unless explicitly granted.
+            Removing a controller from this list restores normal request approval for future sessions. Object touch, sit/stand, forwarded menus, direct IM, and restriction control remain off unless explicitly granted.
           </text>
 
           <button
@@ -869,7 +934,7 @@
            label="Save / Update Whitelist"
            layout="topleft"
            left="16"
-           top="492"
+           top="576"
            width="190"
            height="30" />
 
@@ -878,7 +943,7 @@
            layout="topleft"
            left="16"
            right="-24"
-           top="540"
+           top="624"
            height="44"
            follows="left|top|right"
            word_wrap="true">
