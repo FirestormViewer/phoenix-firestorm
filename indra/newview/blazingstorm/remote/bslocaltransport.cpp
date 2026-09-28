@@ -661,8 +661,12 @@ namespace BlazingStorm
             case RemoteCommandType::Jump:              return "jump";
             case RemoteCommandType::Stop:              return "stop";
             case RemoteCommandType::Say:               return "say";
-            case RemoteCommandType::SendInstantMessage:return "im";
-            case RemoteCommandType::EmergencyRelease:  return "release";
+            case RemoteCommandType::SendInstantMessage:       return "im";
+            case RemoteCommandType::RestrictNearbyChatOn:      return "restrictchat-on";
+            case RemoteCommandType::RestrictNearbyChatOff:     return "restrictchat-off";
+            case RemoteCommandType::RestrictInstantMessageOn:  return "restrictim-on";
+            case RemoteCommandType::RestrictInstantMessageOff: return "restrictim-off";
+            case RemoteCommandType::EmergencyRelease:          return "release";
             default:                                   return {};
         }
     }
@@ -678,8 +682,12 @@ namespace BlazingStorm
         if (name == "jump")        return RemoteCommandType::Jump;
         if (name == "stop")        return RemoteCommandType::Stop;
         if (name == "say")         return RemoteCommandType::Say;
-        if (name == "im")          return RemoteCommandType::SendInstantMessage;
-        if (name == "release")     return RemoteCommandType::EmergencyRelease;
+        if (name == "im")               return RemoteCommandType::SendInstantMessage;
+        if (name == "restrictchat-on")  return RemoteCommandType::RestrictNearbyChatOn;
+        if (name == "restrictchat-off") return RemoteCommandType::RestrictNearbyChatOff;
+        if (name == "restrictim-on")    return RemoteCommandType::RestrictInstantMessageOn;
+        if (name == "restrictim-off")   return RemoteCommandType::RestrictInstantMessageOff;
+        if (name == "release")          return RemoteCommandType::EmergencyRelease;
         return RemoteCommandType::None;
     }
 }
