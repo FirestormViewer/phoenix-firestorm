@@ -87,6 +87,11 @@ namespace BlazingStorm
         void setSubjectRestrictions(SubjectRestrictionMask restrictions);
         bool isSubjectRestricted(SubjectRestriction restriction) const;
 
+        // Debug-only subject-side movement suppression. This is session-local,
+        // defaults to false, and never affects emergency release.
+        bool subjectLocalMovementDisabled() const;
+        void setSubjectLocalMovementDisabled(bool disabled);
+
         // Always succeeds locally and is intentionally outside the permission
         // and restriction systems.
         void emergencyRelease();
@@ -100,6 +105,7 @@ namespace BlazingStorm
         std::string mControllerId;
         RemotePermissionMask mPermissions = 0;
         SubjectRestrictionMask mSubjectRestrictions = 0;
+        bool mSubjectLocalMovementDisabled = false;
     };
 }
 
