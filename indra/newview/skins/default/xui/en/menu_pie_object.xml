@@ -562,13 +562,41 @@
         
         </pie_menu>
         
-        <pie_slice
-            label="Inspect"
-            name="Object Inspect">
-            <pie_slice.on_click
-                function="Floater.Show"
-                parameter="inspect" />
-        </pie_slice>
+        <pie_menu
+            label="Blazing &gt;"
+            name="Blazing Storm Object Control">
+            <pie_slice
+                label="Touch Subject"
+                name="Blazing Touch Subject">
+                <pie_slice.on_click
+                    function="BlazingStorm.ObjectTouchSubject" />
+                <pie_slice.on_enable
+                    function="BlazingStorm.ControllerActive" />
+            </pie_slice>
+            <pie_slice
+                label="Sit Subject"
+                name="Blazing Sit Subject">
+                <pie_slice.on_click
+                    function="BlazingStorm.ObjectSitSubject" />
+                <pie_slice.on_enable
+                    function="BlazingStorm.ControllerActive" />
+            </pie_slice>
+            <pie_slice
+                label="Stand Subject"
+                name="Blazing Stand Subject">
+                <pie_slice.on_click
+                    function="BlazingStorm.StandSubject" />
+                <pie_slice.on_enable
+                    function="BlazingStorm.ControllerActive" />
+            </pie_slice>
+            <pie_slice
+                label="Inspect"
+                name="Object Inspect">
+                <pie_slice.on_click
+                    function="Floater.Show"
+                    parameter="inspect" />
+            </pie_slice>
+        </pie_menu>
 
     </pie_menu>
 
