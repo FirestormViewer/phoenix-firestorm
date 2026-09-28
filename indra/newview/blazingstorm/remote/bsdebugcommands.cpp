@@ -71,7 +71,7 @@ namespace BlazingStorm
 
         if (action.empty() || action == "help")
         {
-            report("Commands: /blaze ui | host | connect <code> | accept | reject | disconnect | remote <cmd> | allowim on|off | allowrestrictions on|off | on | off | release | status | restrictchat on|off | restrictim on|off | thoughts | forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text>");
+            report("Commands: /blaze ui | host | request <subject-uuid> | connect <code> | accept | reject | disconnect | remote <cmd> | allowim on|off | allowrestrictions on|off | on | off | release | status | restrictchat on|off | restrictim on|off | thoughts | forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text>");
             return true;
         }
 
@@ -95,6 +95,32 @@ namespace BlazingStorm
                     + std::to_string(transport.port())
                     + ". Pairing code: " + transport.pairingCode());
                 report("On the controller viewer use: /blaze connect " + transport.pairingCode());
+            }
+            else
+            {
+                report(transport.lastStatus());
+            }
+            return true;
+        }
+
+        if (action == "request")
+        {
+            std::string subject_id;
+            input >> subject_id;
+
+            LLUUID subject_uuid(subject_id);
+            if (subject_uuid.isNull())
+            {
+                report("Usage: /blaze request <subject-avatar-uuid>");
+                return true;
+            }
+
+            std::string controller_name;
+            LLAgentUI::buildFullname(controller_name);
+
+            if (transport.requestController(subject_id, gAgentID.asString(), controller_name))
+            {
+                report("Possession request sent. Waiting for subject approval.");
             }
             else
             {
@@ -211,6 +237,18 @@ namespace BlazingStorm
                     return true;
                 }
             }
+            else if (remote_action == "restrictmovement")
+            {
+                std::string state;
+                input >> state;
+                if (state == "on") type = RemoteCommandType::RestrictMovementOn;
+                else if (state == "off") type = RemoteCommandType::RestrictMovementOff;
+                else
+                {
+                    report("Usage: /blaze remote restrictmovement on|off");
+                    return true;
+                }
+            }
             else if (remote_action == "restrictchat")
             {
                 std::string state;
@@ -237,7 +275,7 @@ namespace BlazingStorm
             }
             else
             {
-                report("Remote commands: forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text> | im <avatar-uuid> <text> | restrictchat on|off | restrictim on|off | release");
+                report("Remote commands: forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text> | im <avatar-uuid> <text> | restrictmovement on|off | restrictchat on|off | restrictim on|off | release");
                 return true;
             }
 
@@ -301,6 +339,8 @@ namespace BlazingStorm
                     + "; chat=" + (session.hasPermission(RemotePermission::Chat) ? "yes" : "no")
                     + "; controller-im=" + (session.hasPermission(RemotePermission::InstantMessage) ? "yes" : "no")
                     + "; controller-restrictions=" + (session.hasPermission(RemotePermission::ManageSubjectRestrictions) ? "yes" : "no")
+                    + "; subject-movement="
+                    + (session.isSubjectRestricted(SubjectRestriction::Movement) ? "restricted" : "allowed")
                     + "; subject-nearby-chat="
                     + (session.isSubjectRestricted(SubjectRestriction::NearbyChat) ? "restricted" : "allowed")
                     + "; subject-direct-im="
