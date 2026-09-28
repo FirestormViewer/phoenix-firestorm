@@ -65,6 +65,7 @@ namespace BlazingStorm
         bool mRefreshing = false;
         S32 mLocalMoveAt = 0;
         S32 mLocalMoveLeft = 0;
+        S32 mLocalMoveUp = 0;
         F32 mLocalYaw = 0.f;
     };
 }
