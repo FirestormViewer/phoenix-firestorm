@@ -153,7 +153,7 @@ public:
 
     // *HACK: due to hard enough to have this control aligned with "Move" button while resizing
     // let update its position in each frame
-    /*virtual*/ void draw(){updatePosition(); LLPanel::draw();}
+    /*virtual*/ void draw(){updateBlazingStormButton(); updatePosition(); LLPanel::draw();}
     /*virtual*/ bool handleToolTip(S32 x, S32 y, MASK mask);
 
 
@@ -165,11 +165,14 @@ private:
     static LLPanelStandStopFlying* getStandStopFlyingPanel();
     void onStandButtonClick();
     void onStopFlyingButtonClick();
+    void onBlazingStormRelease();
+    void updateBlazingStormButton();
     void updatePosition();
 
     LLButton* mStandButton;
     LLButton* mStopFlyingButton;
     LLButton* mFlycamButton;
+    LLButton* mBlazingStormReleaseButton;
 
     /**
      * The original parent of the panel.
