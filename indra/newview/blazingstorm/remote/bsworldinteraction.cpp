@@ -201,7 +201,7 @@ namespace BlazingStorm
         }
 
         LLViewerObject* parent =
-            dynamic_cast<LLViewerObject*>(gAgentAvatarp->getParent());
+            static_cast<LLViewerObject*>(gAgentAvatarp->getParent());
         if (!parent)
         {
             return LLUUID::null;
