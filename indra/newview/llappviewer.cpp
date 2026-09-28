@@ -180,6 +180,7 @@
 
 #include "llviewerinput.h"
 #include "blazingstorm/remote/bsremoteactions.h" // <BlazingStorm>
+#include "blazingstorm/remote/bslocaltransport.h" // <BlazingStorm>
 #include "lllfsthread.h"
 #include "llworkerthread.h"
 #include "lltexturecache.h"
@@ -5846,8 +5847,12 @@ void LLAppViewer::idle()
             gAgent.autoPilot(&yaw);
         }
 
-        // <BlazingStorm> Re-apply persistent remote controls after local input
-        // and autopilot, immediately before the ephemeral flags are sent.
+        // <BlazingStorm> Pump the local controller transport on the viewer
+        // thread before applying any command it may have received.
+        BlazingStorm::LocalTransport::instance().update();
+
+        // Re-apply persistent remote controls after local input and autopilot,
+        // immediately before the ephemeral flags are sent.
         BlazingStorm::RemoteActions::instance().update();
         // </BlazingStorm>
 
