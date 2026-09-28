@@ -14,6 +14,7 @@
 #include "blazingstorm/remote/bsremoteprotocol.h"
 #include "blazingstorm/remote/bsremotesession.h"
 #include "blazingstorm/remote/bstruststore.h"
+#include "blazingstorm/remote/bsworldinteraction.h"
 
 #include "fscommon.h"
 #include "llagent.h"
@@ -93,6 +94,12 @@ namespace BlazingStorm
 
         getChild<LLCheckBoxCtrl>("allow_controller_im")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onAllowControllerIM(); });
+        getChild<LLCheckBoxCtrl>("allow_touch")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { onAllowTouch(); });
+        getChild<LLCheckBoxCtrl>("allow_sitstand")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { onAllowSitStand(); });
+        getChild<LLCheckBoxCtrl>("allow_script_dialogs")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { onAllowScriptDialogs(); });
         getChild<LLCheckBoxCtrl>("allow_restrictions")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onAllowRestrictions(); });
         getChild<LLCheckBoxCtrl>("disable_local_movement")->setCommitCallback(
@@ -139,6 +146,8 @@ namespace BlazingStorm
             [this](LLUICtrl*, const LLSD&) { onRemoteRestrictChat(); });
         getChild<LLCheckBoxCtrl>("remote_restrict_im")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onRemoteRestrictIM(); });
+        getChild<LLButton>("remote_stand")->setCommitCallback(
+            [](LLUICtrl*, const LLSD&) { WorldInteraction::instance().requestStand(); });
         getChild<LLButton>("remote_release")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { sendRemoteCommand(RemoteCommandType::EmergencyRelease); });
 
@@ -213,6 +222,18 @@ namespace BlazingStorm
         allow_im->setEnabled(subject_active && is_host);
         allow_im->setValue(session.hasPermission(RemotePermission::InstantMessage));
 
+        auto* allow_touch = getChild<LLCheckBoxCtrl>("allow_touch");
+        allow_touch->setEnabled(subject_active && is_host);
+        allow_touch->setValue(session.hasPermission(RemotePermission::Touch));
+
+        auto* allow_sitstand = getChild<LLCheckBoxCtrl>("allow_sitstand");
+        allow_sitstand->setEnabled(subject_active && is_host);
+        allow_sitstand->setValue(session.hasPermission(RemotePermission::SitStand));
+
+        auto* allow_dialogs = getChild<LLCheckBoxCtrl>("allow_script_dialogs");
+        allow_dialogs->setEnabled(subject_active && is_host);
+        allow_dialogs->setValue(session.hasPermission(RemotePermission::ScriptDialogs));
+
         auto* allow_restrictions = getChild<LLCheckBoxCtrl>("allow_restrictions");
         allow_restrictions->setEnabled(subject_active && is_host);
         allow_restrictions->setValue(session.hasPermission(RemotePermission::ManageSubjectRestrictions));
@@ -248,6 +269,7 @@ namespace BlazingStorm
 
         getChild<LLButton>("remote_say")->setEnabled(controller_active);
         getChild<LLButton>("remote_im")->setEnabled(controller_active);
+        getChild<LLButton>("remote_stand")->setEnabled(controller_active);
         getChild<LLButton>("remote_release")->setEnabled(controller_active);
 
         S32 movement_mode_index = 0;
@@ -389,6 +411,84 @@ namespace BlazingStorm
         auto permissions = session.permissions();
         const auto mask = toMask(RemotePermission::InstantMessage);
         if (getChild<LLCheckBoxCtrl>("allow_controller_im")->getValue().asBoolean())
+        {
+            permissions |= mask;
+        }
+        else
+        {
+            permissions &= ~mask;
+        }
+        session.setPermissions(permissions);
+    }
+
+    void RemoteFloater::onAllowTouch()
+    {
+        if (mRefreshing)
+        {
+            return;
+        }
+
+        auto& session = RemoteSession::instance();
+        if (!session.isActive())
+        {
+            return;
+        }
+
+        auto permissions = session.permissions();
+        const auto mask = toMask(RemotePermission::Touch);
+        if (getChild<LLCheckBoxCtrl>("allow_touch")->getValue().asBoolean())
+        {
+            permissions |= mask;
+        }
+        else
+        {
+            permissions &= ~mask;
+        }
+        session.setPermissions(permissions);
+    }
+
+    void RemoteFloater::onAllowSitStand()
+    {
+        if (mRefreshing)
+        {
+            return;
+        }
+
+        auto& session = RemoteSession::instance();
+        if (!session.isActive())
+        {
+            return;
+        }
+
+        auto permissions = session.permissions();
+        const auto mask = toMask(RemotePermission::SitStand);
+        if (getChild<LLCheckBoxCtrl>("allow_sitstand")->getValue().asBoolean())
+        {
+            permissions |= mask;
+        }
+        else
+        {
+            permissions &= ~mask;
+        }
+        session.setPermissions(permissions);
+    }
+
+    void RemoteFloater::onAllowScriptDialogs()
+    {
+        if (mRefreshing)
+        {
+            return;
+        }
+
+        auto& session = RemoteSession::instance();
+        if (!session.isActive())
+        {
+            return;
+        }
+
+        auto permissions = session.permissions();
+        const auto mask = toMask(RemotePermission::ScriptDialogs);
+        if (getChild<LLCheckBoxCtrl>("allow_script_dialogs")->getValue().asBoolean())
         {
             permissions |= mask;
         }
@@ -761,6 +861,9 @@ namespace BlazingStorm
         getChild<LLCheckBoxCtrl>("trusted_movement")->setValue(true);
         getChild<LLCheckBoxCtrl>("trusted_chat")->setValue(true);
         getChild<LLCheckBoxCtrl>("trusted_im")->setValue(false);
+        getChild<LLCheckBoxCtrl>("trusted_touch")->setValue(false);
+        getChild<LLCheckBoxCtrl>("trusted_sitstand")->setValue(false);
+        getChild<LLCheckBoxCtrl>("trusted_dialogs")->setValue(false);
         getChild<LLCheckBoxCtrl>("trusted_restrictions")->setValue(false);
     }
 
@@ -790,6 +893,12 @@ namespace BlazingStorm
             (entry->permissions & toMask(RemotePermission::Chat)) != 0);
         getChild<LLCheckBoxCtrl>("trusted_im")->setValue(
             (entry->permissions & toMask(RemotePermission::InstantMessage)) != 0);
+        getChild<LLCheckBoxCtrl>("trusted_touch")->setValue(
+            (entry->permissions & toMask(RemotePermission::Touch)) != 0);
+        getChild<LLCheckBoxCtrl>("trusted_sitstand")->setValue(
+            (entry->permissions & toMask(RemotePermission::SitStand)) != 0);
+        getChild<LLCheckBoxCtrl>("trusted_dialogs")->setValue(
+            (entry->permissions & toMask(RemotePermission::ScriptDialogs)) != 0);
         getChild<LLCheckBoxCtrl>("trusted_restrictions")->setValue(
             (entry->permissions & toMask(RemotePermission::ManageSubjectRestrictions)) != 0);
     }
@@ -815,6 +924,12 @@ namespace BlazingStorm
             entry.permissions |= toMask(RemotePermission::Chat);
         if (getChild<LLCheckBoxCtrl>("trusted_im")->getValue().asBoolean())
             entry.permissions |= toMask(RemotePermission::InstantMessage);
+        if (getChild<LLCheckBoxCtrl>("trusted_touch")->getValue().asBoolean())
+            entry.permissions |= toMask(RemotePermission::Touch);
+        if (getChild<LLCheckBoxCtrl>("trusted_sitstand")->getValue().asBoolean())
+            entry.permissions |= toMask(RemotePermission::SitStand);
+        if (getChild<LLCheckBoxCtrl>("trusted_dialogs")->getValue().asBoolean())
+            entry.permissions |= toMask(RemotePermission::ScriptDialogs);
         if (getChild<LLCheckBoxCtrl>("trusted_restrictions")->getValue().asBoolean())
             entry.permissions |= toMask(RemotePermission::ManageSubjectRestrictions);
 
