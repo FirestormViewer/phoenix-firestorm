@@ -9,6 +9,8 @@
 
 #include "blazingstorm/remote/bsremoteactions.h"
 #include "blazingstorm/remote/bsremotesession.h"
+#include "llimview.h"
+#include "llviewermessage.h"
 
 namespace BlazingStorm
 {
@@ -53,6 +55,26 @@ namespace BlazingStorm
                 return true;
             case RemoteCommandType::Say:
                 return actions.say(command.text);
+            case RemoteCommandType::SendInstantMessage:
+            {
+                if (!session.hasPermission(RemotePermission::InstantMessage)
+                    || command.targetId.empty()
+                    || command.text.empty())
+                {
+                    return false;
+                }
+
+                LLUUID target_id(command.targetId);
+                if (target_id.isNull())
+                {
+                    return false;
+                }
+
+                const LLUUID im_session_id =
+                    LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, target_id);
+                send_simple_im(target_id, command.text, IM_NOTHING_SPECIAL, im_session_id);
+                return true;
+            }
             case RemoteCommandType::EmergencyRelease:
                 actions.stopMovement();
                 session.emergencyRelease();
