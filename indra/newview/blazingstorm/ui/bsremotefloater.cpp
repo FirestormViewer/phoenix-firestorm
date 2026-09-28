@@ -106,8 +106,6 @@ namespace BlazingStorm
         getChild<LLButton>("remote_release")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { sendRemoteCommand(RemoteCommandType::EmergencyRelease); });
 
-        getChild<LLComboBox>("movement_mode")->selectFirstItem();
-
         refresh();
         return true;
     }
@@ -198,6 +196,17 @@ namespace BlazingStorm
         getChild<LLButton>("remote_say")->setEnabled(controller_active);
         getChild<LLButton>("remote_im")->setEnabled(controller_active);
         getChild<LLButton>("remote_release")->setEnabled(controller_active);
+
+        S32 movement_mode_index = 0;
+        if (controller.movementMode() == RemoteMovementMode::MirrorBoth)
+        {
+            movement_mode_index = 1;
+        }
+        else if (controller.movementMode() == RemoteMovementMode::ControllerOnly)
+        {
+            movement_mode_index = 2;
+        }
+        getChild<LLComboBox>("movement_mode")->setCurrentByIndex(movement_mode_index);
         getChild<LLComboBox>("movement_mode")->setEnabled(true);
 
         getChild<LLCheckBoxCtrl>("remote_restrict_chat")->setEnabled(controller_active);
@@ -385,34 +394,28 @@ namespace BlazingStorm
         session.setSubjectRestrictions(restrictions);
     }
 
-    RemoteFloater::MovementMode RemoteFloater::movementMode() const
+    RemoteMovementMode RemoteFloater::movementMode() const
     {
-        const S32 index = getChild<LLComboBox>("movement_mode")->getCurrentIndex();
-        if (index == 1)
-        {
-            return MovementMode::MirrorBoth;
-        }
-        if (index == 2)
-        {
-            return MovementMode::ControllerOnly;
-        }
-        return MovementMode::SubjectOnly;
+        return RemoteController::instance().movementMode();
     }
 
     bool RemoteFloater::controlsSubject() const
     {
-        const auto mode = movementMode();
-        return mode == MovementMode::SubjectOnly || mode == MovementMode::MirrorBoth;
+        return RemoteController::instance().controlsSubject();
     }
 
     bool RemoteFloater::controlsController() const
     {
-        const auto mode = movementMode();
-        return mode == MovementMode::MirrorBoth || mode == MovementMode::ControllerOnly;
+        return RemoteController::instance().controlsController();
     }
 
     void RemoteFloater::onMovementModeChanged()
     {
+        if (mRefreshing)
+        {
+            return;
+        }
+
         // Never leave either avatar moving when switching routing modes.
         stopLocalMovement();
 
@@ -422,6 +425,20 @@ namespace BlazingStorm
         {
             RemoteCommand stop = controller.makeCommand(RemoteCommandType::Stop);
             transport.sendCommand(stop);
+        }
+
+        const S32 index = getChild<LLComboBox>("movement_mode")->getCurrentIndex();
+        if (index == 1)
+        {
+            controller.setMovementMode(RemoteMovementMode::MirrorBoth);
+        }
+        else if (index == 2)
+        {
+            controller.setMovementMode(RemoteMovementMode::ControllerOnly);
+        }
+        else
+        {
+            controller.setMovementMode(RemoteMovementMode::SubjectOnly);
         }
     }
 
