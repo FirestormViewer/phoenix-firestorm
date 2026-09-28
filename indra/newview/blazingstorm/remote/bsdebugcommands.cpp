@@ -209,6 +209,11 @@ namespace BlazingStorm
             else if (remote_action == "straferight") type = RemoteCommandType::StrafeRight;
             else if (remote_action == "turnleft") type = RemoteCommandType::TurnLeft;
             else if (remote_action == "turnright") type = RemoteCommandType::TurnRight;
+            else if (remote_action == "up") type = RemoteCommandType::MoveUp;
+            else if (remote_action == "down" || remote_action == "crouch") type = RemoteCommandType::MoveDown;
+            else if (remote_action == "fly") type = RemoteCommandType::FlyOn;
+            else if (remote_action == "land") type = RemoteCommandType::FlyOff;
+            else if (remote_action == "flytoggle") type = RemoteCommandType::ToggleFly;
             else if (remote_action == "jump") type = RemoteCommandType::Jump;
             else if (remote_action == "stop") type = RemoteCommandType::Stop;
             else if (remote_action == "release") type = RemoteCommandType::EmergencyRelease;
@@ -275,7 +280,7 @@ namespace BlazingStorm
             }
             else
             {
-                report("Remote commands: forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text> | im <avatar-uuid> <text> | restrictmovement on|off | restrictchat on|off | restrictim on|off | release");
+                report("Remote commands: forward | back | strafeleft | straferight | turnleft | turnright | up | down/crouch | fly | land | flytoggle | jump | stop | say <text> | im <avatar-uuid> <text> | restrictmovement on|off | restrictchat on|off | restrictim on|off | release");
                 return true;
             }
 
