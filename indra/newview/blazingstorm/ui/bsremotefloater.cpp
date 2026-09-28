@@ -19,6 +19,7 @@
 #include "llagentui.h"
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
+#include "llcombobox.h"
 #include "llfloaterreg.h"
 #include "lllineeditor.h"
 #include "lltextbox.h"
@@ -75,22 +76,25 @@ namespace BlazingStorm
         getChild<LLCheckBoxCtrl>("subject_restrict_im")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onSubjectRestrictIM(); });
 
+        getChild<LLComboBox>("movement_mode")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { onMovementModeChanged(); });
+
         getChild<LLButton>("remote_forward")->setCommitCallback(
-            [this](LLUICtrl*, const LLSD&) { sendRemoteCommand(RemoteCommandType::MoveForward); });
+            [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::MoveForward); });
         getChild<LLButton>("remote_back")->setCommitCallback(
-            [this](LLUICtrl*, const LLSD&) { sendRemoteCommand(RemoteCommandType::MoveBackward); });
+            [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::MoveBackward); });
         getChild<LLButton>("remote_left")->setCommitCallback(
-            [this](LLUICtrl*, const LLSD&) { sendRemoteCommand(RemoteCommandType::StrafeLeft); });
+            [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::StrafeLeft); });
         getChild<LLButton>("remote_right")->setCommitCallback(
-            [this](LLUICtrl*, const LLSD&) { sendRemoteCommand(RemoteCommandType::StrafeRight); });
+            [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::StrafeRight); });
         getChild<LLButton>("remote_turn_left")->setCommitCallback(
-            [this](LLUICtrl*, const LLSD&) { sendRemoteCommand(RemoteCommandType::TurnLeft); });
+            [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::TurnLeft); });
         getChild<LLButton>("remote_turn_right")->setCommitCallback(
-            [this](LLUICtrl*, const LLSD&) { sendRemoteCommand(RemoteCommandType::TurnRight); });
+            [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::TurnRight); });
         getChild<LLButton>("remote_jump")->setCommitCallback(
-            [this](LLUICtrl*, const LLSD&) { sendRemoteCommand(RemoteCommandType::Jump); });
+            [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::Jump); });
         getChild<LLButton>("remote_stop")->setCommitCallback(
-            [this](LLUICtrl*, const LLSD&) { sendRemoteCommand(RemoteCommandType::Stop); });
+            [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::Stop); });
         getChild<LLButton>("remote_say")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onRemoteSay(); });
         getChild<LLButton>("remote_im")->setCommitCallback(
@@ -102,14 +106,23 @@ namespace BlazingStorm
         getChild<LLButton>("remote_release")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { sendRemoteCommand(RemoteCommandType::EmergencyRelease); });
 
+        getChild<LLComboBox>("movement_mode")->selectFirstItem();
+
         refresh();
         return true;
     }
 
     void RemoteFloater::draw()
     {
+        applyLocalMovement();
         refresh();
         LLFloater::draw();
+    }
+
+    void RemoteFloater::onClose(bool app_quitting)
+    {
+        stopLocalMovement();
+        LLFloater::onClose(app_quitting);
     }
 
     void RemoteFloater::refresh()
@@ -161,15 +174,22 @@ namespace BlazingStorm
         restrict_im->setEnabled(subject_active && is_host);
         restrict_im->setValue(session.isSubjectRestricted(SubjectRestriction::InstantMessage));
 
-        const char* remote_buttons[] = {
+        const bool movement_available =
+            controlsController() || (controlsSubject() && controller_active);
+
+        const char* movement_buttons[] = {
             "remote_forward", "remote_back", "remote_left", "remote_right",
-            "remote_turn_left", "remote_turn_right", "remote_jump", "remote_stop",
-            "remote_say", "remote_im", "remote_release"
+            "remote_turn_left", "remote_turn_right", "remote_jump", "remote_stop"
         };
-        for (const char* name : remote_buttons)
+        for (const char* name : movement_buttons)
         {
-            getChild<LLButton>(name)->setEnabled(controller_active);
+            getChild<LLButton>(name)->setEnabled(movement_available);
         }
+
+        getChild<LLButton>("remote_say")->setEnabled(controller_active);
+        getChild<LLButton>("remote_im")->setEnabled(controller_active);
+        getChild<LLButton>("remote_release")->setEnabled(controller_active);
+        getChild<LLComboBox>("movement_mode")->setEnabled(true);
 
         getChild<LLCheckBoxCtrl>("remote_restrict_chat")->setEnabled(controller_active);
         getChild<LLCheckBoxCtrl>("remote_restrict_im")->setEnabled(controller_active);
@@ -354,6 +374,136 @@ namespace BlazingStorm
             restrictions &= ~mask;
         }
         session.setSubjectRestrictions(restrictions);
+    }
+
+    RemoteFloater::MovementMode RemoteFloater::movementMode() const
+    {
+        const S32 index = getChild<LLComboBox>("movement_mode")->getCurrentIndex();
+        if (index == 1)
+        {
+            return MovementMode::MirrorBoth;
+        }
+        if (index == 2)
+        {
+            return MovementMode::ControllerOnly;
+        }
+        return MovementMode::SubjectOnly;
+    }
+
+    bool RemoteFloater::controlsSubject() const
+    {
+        const auto mode = movementMode();
+        return mode == MovementMode::SubjectOnly || mode == MovementMode::MirrorBoth;
+    }
+
+    bool RemoteFloater::controlsController() const
+    {
+        const auto mode = movementMode();
+        return mode == MovementMode::MirrorBoth || mode == MovementMode::ControllerOnly;
+    }
+
+    void RemoteFloater::onMovementModeChanged()
+    {
+        // Never leave either avatar moving when switching routing modes.
+        stopLocalMovement();
+
+        auto& controller = RemoteController::instance();
+        auto& transport = LocalTransport::instance();
+        if (controller.isActive() && transport.isPaired())
+        {
+            RemoteCommand stop = controller.makeCommand(RemoteCommandType::Stop);
+            transport.sendCommand(stop);
+        }
+    }
+
+    void RemoteFloater::onMovementCommand(RemoteCommandType type)
+    {
+        if (type == RemoteCommandType::Stop)
+        {
+            stopLocalMovement();
+            if (controlsSubject())
+            {
+                sendRemoteCommand(RemoteCommandType::Stop);
+            }
+            return;
+        }
+
+        if (controlsSubject())
+        {
+            sendRemoteCommand(type);
+        }
+
+        if (!controlsController())
+        {
+            return;
+        }
+
+        switch (type)
+        {
+            case RemoteCommandType::MoveForward:
+                mLocalMoveAt = 1;
+                mLocalMoveLeft = 0;
+                mLocalYaw = 0.f;
+                break;
+            case RemoteCommandType::MoveBackward:
+                mLocalMoveAt = -1;
+                mLocalMoveLeft = 0;
+                mLocalYaw = 0.f;
+                break;
+            case RemoteCommandType::StrafeLeft:
+                mLocalMoveAt = 0;
+                mLocalMoveLeft = 1;
+                mLocalYaw = 0.f;
+                break;
+            case RemoteCommandType::StrafeRight:
+                mLocalMoveAt = 0;
+                mLocalMoveLeft = -1;
+                mLocalYaw = 0.f;
+                break;
+            case RemoteCommandType::TurnLeft:
+                mLocalMoveAt = 0;
+                mLocalMoveLeft = 0;
+                mLocalYaw = 1.f;
+                break;
+            case RemoteCommandType::TurnRight:
+                mLocalMoveAt = 0;
+                mLocalMoveLeft = 0;
+                mLocalYaw = -1.f;
+                break;
+            case RemoteCommandType::Jump:
+                gAgent.moveUp(1);
+                break;
+            default:
+                break;
+        }
+    }
+
+    void RemoteFloater::applyLocalMovement()
+    {
+        if (!controlsController())
+        {
+            return;
+        }
+
+        if (mLocalMoveAt != 0)
+        {
+            gAgent.moveAt(mLocalMoveAt);
+        }
+        if (mLocalMoveLeft != 0)
+        {
+            gAgent.moveLeft(mLocalMoveLeft);
+        }
+        if (mLocalYaw != 0.f)
+        {
+            gAgent.moveYaw(mLocalYaw);
+        }
+    }
+
+    void RemoteFloater::stopLocalMovement()
+    {
+        mLocalMoveAt = 0;
+        mLocalMoveLeft = 0;
+        mLocalYaw = 0.f;
     }
 
     void RemoteFloater::sendRemoteCommand(RemoteCommandType type,
