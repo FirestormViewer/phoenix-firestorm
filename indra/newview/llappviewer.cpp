@@ -5860,6 +5860,16 @@ void LLAppViewer::idle()
                 BlazingStorm::SubjectRestriction::Movement))
         {
             gAgent.resetControlFlags();
+
+            // Local movement input also leaves directional state in the agent
+            // camera. Clear only avatar-movement keys here (not orbit/pan
+            // camera controls), then RemoteActions::update() may re-apply the
+            // controller's movement immediately below.
+            gAgentCamera.setAtKey(0);
+            gAgentCamera.setWalkKey(0);
+            gAgentCamera.setLeftKey(0);
+            gAgentCamera.setUpKey(0);
+            gAgentCamera.setYawKey(0.f);
         }
 
         // Re-apply persistent remote controls after local input and autopilot,
