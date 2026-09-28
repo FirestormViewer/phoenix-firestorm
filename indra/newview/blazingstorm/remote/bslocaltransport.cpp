@@ -407,8 +407,9 @@ namespace BlazingStorm
                 mRelayControllerTicket = event.controllerTicket;
                 mRelayBrokerPath = event.matchedPath;
 
-                sendRelayInvite();
-
+                // Do not invite the Controller yet. Web PubSub does not
+                // guarantee storage for an absent peer; first make sure the
+                // Subject has connected and joined its inbound commands group.
                 const std::string broker_url =
                     gSavedPerAccountSettings.getString(
                         "BlazingStormRelayBrokerUrl");
@@ -470,8 +471,11 @@ namespace BlazingStorm
                 }
                 else
                 {
+                    // Subject is now listening to its inbound commands
+                    // direction, so it is safe to let the Controller join.
+                    sendRelayInvite();
                     mLastStatus =
-                        "Azure relay connected; waiting for the approved Controller.";
+                        "Azure relay ready; Controller invitation sent through Second Life.";
                 }
                 continue;
             }
