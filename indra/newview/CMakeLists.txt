@@ -95,6 +95,7 @@ set(viewer_SOURCE_FILES
     blazingstorm/remote/bsremotecontroller.cpp
     blazingstorm/remote/bsremotecommanddispatcher.cpp
     blazingstorm/remote/bslocaltransport.cpp
+    blazingstorm/remote/bsrelaytransport.cpp
     blazingstorm/remote/bscontrollerinput.cpp
     blazingstorm/remote/bstruststore.cpp
     blazingstorm/remote/bsrequestactions.cpp
@@ -970,6 +971,7 @@ set(viewer_HEADER_FILES
     blazingstorm/remote/bsremotecommanddispatcher.h
     blazingstorm/remote/bsremotetransport.h
     blazingstorm/remote/bslocaltransport.h
+    blazingstorm/remote/bsrelaytransport.h
     blazingstorm/remote/bscontrollerinput.h
     blazingstorm/remote/bstruststore.h
     blazingstorm/remote/bsrequestactions.h
@@ -2668,7 +2670,8 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         lllogin
         llprimitive
         llappearance
-        ll::boost # <BlazingStorm> Boost.Asio local test transport
+        ll::boost # <BlazingStorm> Boost.Asio local and Azure relay transports
+        ll::openssl # <BlazingStorm> Azure relay TLS
         ${LLPHYSICSEXTENSIONS_LIBRARIES}
         ll::bugsplat
         ll::ndof
