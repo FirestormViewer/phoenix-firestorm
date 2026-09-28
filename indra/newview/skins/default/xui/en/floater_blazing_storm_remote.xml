@@ -119,7 +119,7 @@
            height="52"
            follows="left|top|right"
            word_wrap="true">
-            The local control listener normally stays closed. A Blazing Storm request arrives first as a visible Second Life IM and briefly opens it. Requests from whitelisted controllers auto-accept; everyone else gets an Accept / Decline popup.
+            A possession request arrives first as a visible Second Life IM. With a Relay broker configured, both viewers connect outward through Azure Web PubSub; otherwise local loopback debug mode is used. Whitelisted controllers auto-accept; everyone else gets an Accept / Decline popup.
           </text>
 
           <text
