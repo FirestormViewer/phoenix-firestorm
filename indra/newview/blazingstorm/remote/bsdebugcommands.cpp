@@ -16,6 +16,7 @@
 #include "fscommon.h"
 #include "llagent.h"
 #include "llagentui.h"
+#include "llfloaterreg.h"
 
 #include <sstream>
 #include <string>
@@ -70,7 +71,13 @@ namespace BlazingStorm
 
         if (action.empty() || action == "help")
         {
-            report("Commands: /blaze host | connect <code> | accept | reject | disconnect | remote <cmd> | allowim on|off | allowrestrictions on|off | on | off | release | status | restrictchat on|off | restrictim on|off | thoughts | forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text>");
+            report("Commands: /blaze ui | host | connect <code> | accept | reject | disconnect | remote <cmd> | allowim on|off | allowrestrictions on|off | on | off | release | status | restrictchat on|off | restrictim on|off | thoughts | forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text>");
+            return true;
+        }
+
+        if (action == "ui")
+        {
+            LLFloaterReg::showInstance("blazing_storm_remote");
             return true;
         }
 
