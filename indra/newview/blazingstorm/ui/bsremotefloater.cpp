@@ -381,7 +381,7 @@ namespace BlazingStorm
         if (!text.empty())
         {
             sendRemoteCommand(RemoteCommandType::Say, text);
-            getChild<LLLineEditor>("remote_say_text")->setText("");
+            getChild<LLLineEditor>("remote_say_text")->setText(LLStringExplicit(""));
         }
     }
 
@@ -398,7 +398,7 @@ namespace BlazingStorm
         }
 
         sendRemoteCommand(RemoteCommandType::SendInstantMessage, text, target);
-        getChild<LLLineEditor>("remote_im_text")->setText("");
+        getChild<LLLineEditor>("remote_im_text")->setText(LLStringExplicit(""));
     }
 
     void RemoteFloater::onRemoteRestrictChat()
