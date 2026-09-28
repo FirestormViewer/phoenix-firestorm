@@ -34,6 +34,7 @@ namespace BlazingStorm
         void onAllowControllerIM();
         void onAllowRestrictions();
         void onDisableLocalMovement();
+        void onSubjectRestrictMovement();
         void onSubjectRestrictChat();
         void onSubjectRestrictIM();
 
@@ -50,8 +51,15 @@ namespace BlazingStorm
                                const std::string& target_id = {});
         void onRemoteSay();
         void onRemoteIM();
+        void onRemoteRestrictMovement();
         void onRemoteRestrictChat();
         void onRemoteRestrictIM();
+
+        void refreshTrustedControllers();
+        void onTrustedControllerSelected();
+        void onSaveTrustedController();
+        void onRemoveTrustedController();
+        void clearTrustedControllerEditor();
 
         bool mRefreshing = false;
         S32 mLocalMoveAt = 0;
