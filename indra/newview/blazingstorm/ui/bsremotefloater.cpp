@@ -90,6 +90,27 @@ namespace BlazingStorm
                     getChild<LLCheckBoxCtrl>(name)->setValue(enabled);
                 }
             });
+        for (const char* name : {"trusted_movement", "trusted_chat", "trusted_im",
+                                 "trusted_touch", "trusted_sitstand", "trusted_dialogs",
+                                 "trusted_restrictions", "trusted_camera",
+                                 "trusted_inventory", "trusted_teleport"})
+        {
+            getChild<LLCheckBoxCtrl>(name)->setCommitCallback(
+                [this](LLUICtrl*, const LLSD&)
+                {
+                    if (mRefreshing) return;
+                    bool all_enabled = true;
+                    for (const char* permission_name : {"trusted_movement", "trusted_chat", "trusted_im",
+                                                        "trusted_touch", "trusted_sitstand", "trusted_dialogs",
+                                                        "trusted_restrictions", "trusted_camera",
+                                                        "trusted_inventory", "trusted_teleport"})
+                    {
+                        all_enabled = all_enabled
+                            && getChild<LLCheckBoxCtrl>(permission_name)->getValue().asBoolean();
+                    }
+                    getChild<LLCheckBoxCtrl>("trusted_full_control")->setValue(all_enabled);
+                });
+        }
         getChild<LLCheckBoxCtrl>("allow_camera")->setCommitCallback(
             [this](LLUICtrl* ctrl, const LLSD&)
             {
