@@ -9,6 +9,7 @@
 
 #include "blazingstorm/remote/bsremoteactions.h"
 #include "blazingstorm/remote/bsremotesession.h"
+#include "blazingstorm/remote/bsworldinteraction.h"
 #include "fscommon.h"
 #include "llimview.h"
 #include "llviewermessage.h"
@@ -73,6 +74,37 @@ namespace BlazingStorm
                 return true;
             case RemoteCommandType::Say:
                 return actions.say(command.text);
+            case RemoteCommandType::SitObject:
+                return session.hasPermission(RemotePermission::SitStand)
+                    && WorldInteraction::instance().sitAsSubject(command);
+            case RemoteCommandType::Stand:
+                return session.hasPermission(RemotePermission::SitStand)
+                    && WorldInteraction::instance().standAsSubject();
+            case RemoteCommandType::TouchObject:
+                return session.hasPermission(RemotePermission::Touch)
+                    && WorldInteraction::instance().touchAsSubject(command);
+            case RemoteCommandType::DialogReply:
+            {
+                if (!session.hasPermission(RemotePermission::ScriptDialogs))
+                {
+                    return false;
+                }
+
+                S32 button_index = -1;
+                try
+                {
+                    button_index = std::stoi(command.text);
+                }
+                catch (...)
+                {
+                    return false;
+                }
+
+                return WorldInteraction::instance().replyToScriptDialog(
+                    command.targetId,
+                    button_index);
+            }
+
             case RemoteCommandType::SendInstantMessage:
             {
                 if (!session.hasPermission(RemotePermission::InstantMessage)
