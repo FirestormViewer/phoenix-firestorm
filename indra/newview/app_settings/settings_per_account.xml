@@ -1550,5 +1550,27 @@
             <key>Value</key>
             <map/>
         </map>
+        <key>BlazingStormPossessionAcceptedMessage</key>
+    <map>
+      <key>Comment</key>
+      <string>Nearby chat line spoken by this avatar after manually accepting a Blazing Storm possession request. Empty disables the announcement.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>The door has opened. I let you in.</string>
     </map>
+    <key>BlazingStormWhitelistAcceptedMessage</key>
+    <map>
+      <key>Comment</key>
+      <string>Nearby chat line spoken by this avatar when a whitelisted Blazing Storm controller is auto-accepted. Empty disables the announcement.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>A familiar key turns. The door opens without hesitation.</string>
+    </map>
+</map>
 </llsd>
