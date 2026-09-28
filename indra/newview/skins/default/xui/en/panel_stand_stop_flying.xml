@@ -7,7 +7,7 @@
  name="panel_stand_stop_flying"
  mouse_opaque="false"
  visible="true"
- width="255">
+ width="270">
     <button
      follows="left|bottom"
      height="19"
@@ -49,7 +49,7 @@
      height="19"
      label="Release Control"
      layout="topleft"
-     right="-5"
+     left="84"
      name="blaze_release_btn"
      tool_tip="Immediately end Blazing Storm possession"
      top="2"
