@@ -45,7 +45,7 @@ namespace BlazingStorm
             return;
         }
 
-        llinifstream file(filename.c_str());
+        llifstream file(filename.c_str());
         if (!file.is_open())
         {
             LL_WARNS("BlazingStorm") << "Unable to open trusted-controller file." << LL_ENDL;
