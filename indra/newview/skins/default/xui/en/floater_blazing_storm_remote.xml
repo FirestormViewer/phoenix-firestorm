@@ -6,10 +6,10 @@
  can_resize="true"
  can_dock="false"
  can_close="true"
- height="700"
- width="600"
- min_width="580"
- min_height="650"
+ height="720"
+ width="640"
+ min_width="520"
+ min_height="480"
  layout="topleft"
  save_rect="true"
  save_visibility="true"
@@ -20,9 +20,9 @@
    name="status"
    layout="topleft"
    left="16"
+   right="-16"
    top="28"
-   width="568"
-   height="42"
+   height="34"
    follows="left|top|right"
    word_wrap="true">
     Idle | disconnected | not paired
@@ -32,9 +32,9 @@
    name="remote_tabs"
    layout="topleft"
    left="10"
-   top="74"
-   width="580"
-   height="610"
+   right="-10"
+   top="70"
+   bottom="-10"
    follows="all"
    tab_position="top">
 
@@ -42,501 +42,710 @@
      name="subject_panel"
      label="Subject / Host"
      layout="topleft"
-     left="0"
-     top="0"
-     width="578"
-     height="575"
      follows="all"
      background_visible="true">
 
-      <text
-       name="subject_intro"
+      <scroll_container
+       name="subject_scroll"
        layout="topleft"
-       left="14"
-       top="14"
-       width="540"
-       height="42"
-       word_wrap="true">
-        This viewer normally keeps the local control listener closed. A Blazing Storm request arrives first as a visible Second Life IM, briefly opens the local listener, and still requires your explicit Accept / Decline popup.
-      </text>
+       left="0"
+       right="-1"
+       top="0"
+       bottom="-1"
+       follows="all"
+       opaque="false"
+       reserve_scroll_corner="false">
 
-      <text
-       name="pairing_code_label"
-       layout="topleft"
-       left="14"
-       top="64"
-       width="105"
-       height="18">
-        Your avatar UUID:
-      </text>
+        <panel
+         name="subject_content"
+         layout="topleft"
+         left="0"
+         top="0"
+         width="600"
+         height="675"
+         follows="left|top|right"
+         background_visible="false">
 
-      <line_editor
-       name="pairing_code"
-       layout="topleft"
-       left="122"
-       top="60"
-       width="280"
-       height="26"
-       enabled="false"
-       select_on_focus="true" />
+          <text
+           name="subject_intro"
+           layout="topleft"
+           left="16"
+           right="-24"
+           top="14"
+           height="52"
+           follows="left|top|right"
+           word_wrap="true">
+            The local control listener normally stays closed. A Blazing Storm request arrives first as a visible Second Life IM and briefly opens it. Requests from whitelisted controllers auto-accept; everyone else gets an Accept / Decline popup.
+          </text>
 
-      <button
-       name="start_host"
-       label="Debug: Open Listener"
-       layout="topleft"
-       follows="left|top"
-       visible="true"
-       enabled="true"
-       left="414"
-       top="60"
-       width="145"
-       height="26" />
+          <text
+           name="pairing_code_label"
+           layout="topleft"
+           left="16"
+           top="80"
+           width="105"
+           height="18">
+            Your avatar UUID:
+          </text>
 
-      <!-- Kept for command/UI compatibility; acceptance is intentionally popup-first. -->
-      <button name="accept" label="Accept" layout="topleft" visible="false" enabled="false" left="0" top="0" width="1" height="1" />
-      <button name="reject" label="Reject" layout="topleft" visible="false" enabled="false" left="0" top="0" width="1" height="1" />
+          <line_editor
+           name="pairing_code"
+           layout="topleft"
+           left="124"
+           top="75"
+           width="290"
+           height="26"
+           enabled="false"
+           select_on_focus="true" />
 
-      <button
-       name="disconnect"
-       label="Disconnect Current Session"
-       layout="topleft"
-       follows="left|top"
-       visible="true"
-       enabled="true"
-       left="14"
-       top="100"
-       width="180"
-       height="26" />
+          <button
+           name="start_host"
+           label="Debug: Open Listener"
+           layout="topleft"
+           left="426"
+           top="75"
+           width="150"
+           height="26" />
 
-      <text
-       name="permissions_header"
-       layout="topleft"
-       left="14"
-       top="144"
-       width="260"
-       height="18"
-       font="SansSerifSmall"
-       font.style="BOLD">
-        Current controller permissions
-      </text>
+          <!-- Retained as hidden fallbacks for /blaze accept and /blaze reject. -->
+          <button name="accept" label="Accept" layout="topleft" visible="false" enabled="false" left="0" top="0" width="1" height="1" />
+          <button name="reject" label="Reject" layout="topleft" visible="false" enabled="false" left="0" top="0" width="1" height="1" />
 
-      <check_box
-       name="allow_controller_im"
-       label="Allow controller to send direct IMs as me"
-       layout="topleft"
-       left="14"
-       top="168"
-       width="350"
-       height="18" />
+          <text
+           name="session_header"
+           layout="topleft"
+           left="16"
+           top="124"
+           width="280"
+           height="18"
+           font="SansSerifSmall"
+           font.style="BOLD">
+            Active possession session
+          </text>
 
-      <check_box
-       name="allow_restrictions"
-       label="Allow controller to change my movement / chat / IM restrictions"
-       layout="topleft"
-       left="14"
-       top="192"
-       width="430"
-       height="18" />
+          <button
+           name="disconnect"
+           label="Disconnect Current Session"
+           layout="topleft"
+           left="16"
+           top="150"
+           width="190"
+           height="26" />
 
-      <text
-       name="money_note"
-       layout="topleft"
-       left="34"
-       top="216"
-       width="490"
-       height="28"
-       word_wrap="true">
-        Money actions are never available to the controller.
-      </text>
+          <button
+           name="save_current_controller"
+           label="Add / Update Current Controller"
+           layout="topleft"
+           left="216"
+           top="150"
+           width="220"
+           height="26"
+           tool_tip="Save the current controller and the permissions currently granted to them. Future matching requests will auto-accept." />
 
-      <text
-       name="subject_restrictions_header"
-       layout="topleft"
-       left="14"
-       top="254"
-       width="260"
-       height="18"
-       font="SansSerifSmall"
-       font.style="BOLD">
-        Current subject restrictions
-      </text>
+          <text
+           name="save_current_note"
+           layout="topleft"
+           left="16"
+           right="-24"
+           top="184"
+           height="34"
+           word_wrap="true">
+            Saving the current controller makes this controller pre-authorized for future possession requests using the permissions currently active below.
+          </text>
 
-      <check_box
-       name="subject_restrict_movement"
-       label="Block my local movement controls"
-       layout="topleft"
-       left="14"
-       top="278"
-       width="350"
-       height="18" />
+          <text
+           name="permissions_header"
+           layout="topleft"
+           left="16"
+           top="232"
+           width="300"
+           height="18"
+           font="SansSerifSmall"
+           font.style="BOLD">
+            Current controller permissions
+          </text>
 
-      <check_box
-       name="subject_restrict_chat"
-       label="Redirect my nearby chat into controller thoughts"
-       layout="topleft"
-       left="14"
-       top="302"
-       width="390"
-       height="18" />
+          <check_box
+           name="allow_controller_im"
+           label="Allow controller to send direct IMs as me"
+           layout="topleft"
+           left="16"
+           top="258"
+           width="360"
+           height="18" />
 
-      <check_box
-       name="subject_restrict_im"
-       label="Redirect my outgoing direct IMs into controller thoughts"
-       layout="topleft"
-       left="14"
-       top="326"
-       width="430"
-       height="18" />
+          <check_box
+           name="allow_restrictions"
+           label="Allow controller to change my movement / chat / IM restrictions"
+           layout="topleft"
+           left="16"
+           top="284"
+           width="450"
+           height="18" />
 
-      <text
-       name="debug_header"
-       layout="topleft"
-       left="14"
-       top="370"
-       width="260"
-       height="18"
-       font="SansSerifSmall"
-       font.style="BOLD">
-        Debugging
-      </text>
+          <text
+           name="money_note"
+           layout="topleft"
+           left="36"
+           right="-24"
+           top="312"
+           height="28"
+           word_wrap="true">
+            Money actions are never available to the controller.
+          </text>
 
-      <check_box
-       name="disable_local_movement"
-       label="Debug: disable my local movement controls while possessed"
-       layout="topleft"
-       left="14"
-       top="394"
-       width="410"
-       height="18"
-       tool_tip="Temporary debug option. OFF by default and reset for each session." />
+          <text
+           name="subject_restrictions_header"
+           layout="topleft"
+           left="16"
+           top="356"
+           width="300"
+           height="18"
+           font="SansSerifSmall"
+           font.style="BOLD">
+            Current subject restrictions
+          </text>
 
-      <text
-       name="debug_note"
-       layout="topleft"
-       left="34"
-       top="420"
-       width="500"
-       height="40"
-       word_wrap="true">
-        The controller-controlled movement restriction above is session state. This debug checkbox is temporary and resets to OFF whenever possession starts or ends.
-      </text>
+          <check_box
+           name="subject_restrict_movement"
+           label="Block my local movement controls"
+           layout="topleft"
+           left="16"
+           top="382"
+           width="360"
+           height="18" />
 
-      <button
-       name="emergency_release"
-       label="EMERGENCY RELEASE"
-       layout="topleft"
-       follows="left|bottom"
-       visible="true"
-       enabled="true"
-       left="14"
-       top="500"
-       width="200"
-       height="32"
-       font="SansSerif"
-       tool_tip="Immediately ends possession locally. This can never be disabled." />
+          <check_box
+           name="subject_restrict_chat"
+           label="Redirect my nearby chat into controller thoughts"
+           layout="topleft"
+           left="16"
+           top="408"
+           width="410"
+           height="18" />
+
+          <check_box
+           name="subject_restrict_im"
+           label="Redirect my outgoing direct IMs into controller thoughts"
+           layout="topleft"
+           left="16"
+           top="434"
+           width="450"
+           height="18" />
+
+          <text
+           name="debug_header"
+           layout="topleft"
+           left="16"
+           top="480"
+           width="280"
+           height="18"
+           font="SansSerifSmall"
+           font.style="BOLD">
+            Debugging
+          </text>
+
+          <check_box
+           name="disable_local_movement"
+           label="Debug: disable my local movement controls while possessed"
+           layout="topleft"
+           left="16"
+           top="506"
+           width="430"
+           height="18"
+           tool_tip="Temporary debug option. OFF by default and reset for each session." />
+
+          <text
+           name="debug_note"
+           layout="topleft"
+           left="36"
+           right="-24"
+           top="534"
+           height="42"
+           word_wrap="true">
+            The movement restriction above is session state. This debug checkbox is temporary and resets to OFF whenever possession starts or ends.
+          </text>
+
+          <button
+           name="emergency_release"
+           label="EMERGENCY RELEASE"
+           layout="topleft"
+           left="16"
+           top="600"
+           width="210"
+           height="34"
+           font="SansSerif"
+           tool_tip="Immediately ends possession locally. This can never be disabled." />
+        </panel>
+      </scroll_container>
     </panel>
 
     <panel
      name="controller_panel"
      label="Controller"
      layout="topleft"
-     left="0"
-     top="0"
-     width="578"
-     height="575"
      follows="all"
      background_visible="true">
 
-      <text
-       name="controller_intro"
+      <scroll_container
+       name="controller_scroll"
        layout="topleft"
-       left="14"
-       top="14"
-       width="540"
-       height="36"
-       word_wrap="true">
-        Enter the subject avatar UUID and send a possession request. Blazing Storm first sends a visible themed Second Life IM; the subject viewer then briefly opens its local listener and shows an Accept / Decline popup.
-      </text>
+       left="0"
+       right="-1"
+       top="0"
+       bottom="-1"
+       follows="all"
+       opaque="false"
+       reserve_scroll_corner="false">
 
-      <text
-       name="connect_code_label"
-       layout="topleft"
-       left="14"
-       top="60"
-       width="95"
-       height="18">
-        Subject UUID:
-      </text>
+        <panel
+         name="controller_content"
+         layout="topleft"
+         left="0"
+         top="0"
+         width="600"
+         height="820"
+         follows="left|top|right"
+         background_visible="false">
 
-      <line_editor
-       name="connect_code"
-       layout="topleft"
-       left="110"
-       top="55"
-       width="300"
-       height="26"
-       max_length_chars="36"
-       tool_tip="UUID of the subject avatar logged into another local Blazing Storm viewer" />
+          <text
+           name="controller_intro"
+           layout="topleft"
+           left="16"
+           right="-24"
+           top="14"
+           height="48"
+           follows="left|top|right"
+           word_wrap="true">
+            Enter the subject avatar UUID and send a possession request. Blazing Storm first sends a visible themed Second Life IM. Whitelisted controllers auto-connect; otherwise the subject gets an Accept / Decline popup.
+          </text>
 
-      <button
-       name="connect"
-       label="Send Request"
-       layout="topleft"
-       follows="left|top"
-       visible="true"
-       enabled="true"
-       left="420"
-       top="55"
-       width="120"
-       height="26" />
+          <text
+           name="connect_code_label"
+           layout="topleft"
+           left="16"
+           top="76"
+           width="95"
+           height="18">
+            Subject UUID:
+          </text>
 
-      <text
-       name="movement_mode_label"
-       layout="topleft"
-       left="14"
-       top="100"
-       width="105"
-       height="18">
-        Movement mode:
-      </text>
+          <line_editor
+           name="connect_code"
+           layout="topleft"
+           left="112"
+           top="71"
+           width="310"
+           height="26"
+           max_length_chars="36"
+           tool_tip="UUID of the subject avatar logged into another local Blazing Storm viewer" />
 
-      <combo_box
-       name="movement_mode"
-       layout="topleft"
-       left="120"
-       top="94"
-       width="190"
-       height="26"
-       allow_text_entry="false">
-        <combo_box.item label="Subject only" name="SubjectOnly" value="subject" />
-        <combo_box.item label="Mirror both" name="MirrorBoth" value="mirror" />
-        <combo_box.item label="Controller only" name="ControllerOnly" value="controller" />
-      </combo_box>
+          <button
+           name="connect"
+           label="Send Request"
+           layout="topleft"
+           left="434"
+           top="71"
+           width="130"
+           height="26" />
 
-      <text
-       name="movement_header"
-       layout="topleft"
-       left="14"
-       top="136"
-       width="260"
-       height="18"
-       font="SansSerifSmall"
-       font.style="BOLD">
-        Movement controls
-      </text>
+          <text
+           name="movement_section_header"
+           layout="topleft"
+           left="16"
+           top="120"
+           width="280"
+           height="18"
+           font="SansSerifSmall"
+           font.style="BOLD">
+            Movement
+          </text>
 
-      <button name="remote_forward" label="Forward" layout="topleft" visible="true" enabled="true" left="105" top="160" width="95" height="26" />
-      <button name="remote_left" label="Strafe Left" layout="topleft" visible="true" enabled="true" left="14" top="192" width="95" height="26" />
-      <button name="remote_stop" label="STOP" layout="topleft" visible="true" enabled="true" left="113" top="192" width="95" height="26" />
-      <button name="remote_right" label="Strafe Right" layout="topleft" visible="true" enabled="true" left="212" top="192" width="95" height="26" />
-      <button name="remote_back" label="Back" layout="topleft" visible="true" enabled="true" left="105" top="224" width="95" height="26" />
+          <text
+           name="movement_mode_label"
+           layout="topleft"
+           left="16"
+           top="150"
+           width="105"
+           height="18">
+            Movement mode:
+          </text>
 
-      <button name="remote_turn_left" label="Turn Left" layout="topleft" visible="true" enabled="true" left="330" top="160" width="95" height="26" />
-      <button name="remote_turn_right" label="Turn Right" layout="topleft" visible="true" enabled="true" left="431" top="160" width="95" height="26" />
-      <button name="remote_jump" label="Jump" layout="topleft" visible="true" enabled="true" left="380" top="192" width="95" height="26" />
+          <combo_box
+           name="movement_mode"
+           layout="topleft"
+           left="122"
+           top="144"
+           width="200"
+           height="26"
+           allow_text_entry="false">
+            <combo_box.item label="Subject only" name="SubjectOnly" value="subject" />
+            <combo_box.item label="Mirror both" name="MirrorBoth" value="mirror" />
+            <combo_box.item label="Controller only" name="ControllerOnly" value="controller" />
+          </combo_box>
 
-      <text
-       name="movement_note"
-       layout="topleft"
-       left="14"
-       top="258"
-       width="540"
-       height="36"
-       word_wrap="true">
-        Normal WASD / arrow movement and these buttons follow this mode while paired. Subject only moves the subject; Mirror both moves both avatars; Controller only moves you.
-      </text>
+          <button name="remote_forward" label="Forward" layout="topleft" left="110" top="194" width="100" height="26" />
+          <button name="remote_left" label="Strafe Left" layout="topleft" left="16" top="228" width="100" height="26" />
+          <button name="remote_stop" label="STOP" layout="topleft" left="122" top="228" width="100" height="26" />
+          <button name="remote_right" label="Strafe Right" layout="topleft" left="228" top="228" width="100" height="26" />
+          <button name="remote_back" label="Back" layout="topleft" left="110" top="262" width="100" height="26" />
 
-      <text
-       name="nearby_header"
-       layout="topleft"
-       left="14"
-       top="302"
-       width="260"
-       height="18"
-       font="SansSerifSmall"
-       font.style="BOLD">
-        Speak as subject
-      </text>
+          <button name="remote_turn_left" label="Turn Left" layout="topleft" left="352" top="194" width="100" height="26" />
+          <button name="remote_turn_right" label="Turn Right" layout="topleft" left="458" top="194" width="100" height="26" />
+          <button name="remote_jump" label="Jump" layout="topleft" left="405" top="228" width="100" height="26" />
 
-      <line_editor name="remote_say_text" layout="topleft" left="14" top="326" width="390" height="26" max_length_bytes="1023" />
-      <button name="remote_say" label="Send Nearby" layout="topleft" visible="true" enabled="true" left="412" top="326" width="110" height="26" />
+          <text
+           name="movement_note"
+           layout="topleft"
+           left="16"
+           right="-24"
+           top="304"
+           height="42"
+           follows="left|top|right"
+           word_wrap="true">
+            Normal WASD / arrow movement and these buttons follow this mode while paired. Subject only moves the subject; Mirror both moves both avatars; Controller only moves you.
+          </text>
 
-      <text
-       name="im_header"
-       layout="topleft"
-       left="14"
-       top="362"
-       width="260"
-       height="18"
-       font="SansSerifSmall"
-       font.style="BOLD">
-        Direct IM as subject
-      </text>
+          <text
+           name="nearby_header"
+           layout="topleft"
+           left="16"
+           top="364"
+           width="280"
+           height="18"
+           font="SansSerifSmall"
+           font.style="BOLD">
+            Speak as subject
+          </text>
 
-      <line_editor name="remote_im_target" layout="topleft" left="14" top="386" width="250" height="26" max_length_chars="36" tool_tip="Target avatar UUID" />
-      <line_editor name="remote_im_text" layout="topleft" left="14" top="418" width="390" height="26" max_length_bytes="1023" />
-      <button name="remote_im" label="Send IM" layout="topleft" visible="true" enabled="true" left="412" top="418" width="110" height="26" />
+          <line_editor
+           name="remote_say_text"
+           layout="topleft"
+           left="16"
+           top="390"
+           width="420"
+           height="26"
+           max_length_bytes="1023" />
 
-      <text
-       name="controller_restrictions_header"
-       layout="topleft"
-       left="14"
-       top="454"
-       width="260"
-       height="18"
-       font="SansSerifSmall"
-       font.style="BOLD">
-        Subject restrictions
-      </text>
+          <button
+           name="remote_say"
+           label="Send Nearby"
+           layout="topleft"
+           left="446"
+           top="390"
+           width="112"
+           height="26" />
 
-      <check_box name="remote_restrict_movement" label="Block subject local movement" layout="topleft" left="14" top="478" width="260" height="18" />
-      <check_box name="remote_restrict_chat" label="Restrict subject nearby chat" layout="topleft" left="14" top="502" width="260" height="18" />
-      <check_box name="remote_restrict_im" label="Restrict subject outgoing IMs" layout="topleft" left="14" top="526" width="260" height="18" />
+          <text
+           name="im_header"
+           layout="topleft"
+           left="16"
+           top="438"
+           width="280"
+           height="18"
+           font="SansSerifSmall"
+           font.style="BOLD">
+            Direct IM as subject
+          </text>
 
-      <button
-       name="remote_release"
-       label="End Possession"
-       layout="topleft"
-       visible="true"
-       enabled="true"
-       left="375"
-       top="500"
-       width="145"
-       height="30" />
+          <text
+           name="im_target_label"
+           layout="topleft"
+           left="16"
+           top="466"
+           width="90"
+           height="18">
+            Target UUID:
+          </text>
+
+          <line_editor
+           name="remote_im_target"
+           layout="topleft"
+           left="110"
+           top="461"
+           width="315"
+           height="26"
+           max_length_chars="36"
+           tool_tip="Target avatar UUID" />
+
+          <line_editor
+           name="remote_im_text"
+           layout="topleft"
+           left="16"
+           top="497"
+           width="420"
+           height="26"
+           max_length_bytes="1023" />
+
+          <button
+           name="remote_im"
+           label="Send IM"
+           layout="topleft"
+           left="446"
+           top="497"
+           width="112"
+           height="26" />
+
+          <text
+           name="controller_restrictions_header"
+           layout="topleft"
+           left="16"
+           top="548"
+           width="280"
+           height="18"
+           font="SansSerifSmall"
+           font.style="BOLD">
+            Subject restrictions
+          </text>
+
+          <check_box
+           name="remote_restrict_movement"
+           label="Block subject local movement"
+           layout="topleft"
+           left="16"
+           top="576"
+           width="300"
+           height="18" />
+
+          <check_box
+           name="remote_restrict_chat"
+           label="Restrict subject nearby chat"
+           layout="topleft"
+           left="16"
+           top="602"
+           width="300"
+           height="18" />
+
+          <check_box
+           name="remote_restrict_im"
+           label="Restrict subject outgoing IMs"
+           layout="topleft"
+           left="16"
+           top="628"
+           width="300"
+           height="18" />
+
+          <text
+           name="session_end_header"
+           layout="topleft"
+           left="16"
+           top="678"
+           width="280"
+           height="18"
+           font="SansSerifSmall"
+           font.style="BOLD">
+            Session
+          </text>
+
+          <button
+           name="remote_release"
+           label="End Possession"
+           layout="topleft"
+           left="16"
+           top="706"
+           width="155"
+           height="30" />
+        </panel>
+      </scroll_container>
     </panel>
 
     <panel
      name="trusted_panel"
      label="Trusted Controllers"
      layout="topleft"
-     left="0"
-     top="0"
-     width="578"
-     height="575"
      follows="all"
      background_visible="true">
 
-      <text
-       name="trusted_intro"
+      <scroll_container
+       name="trusted_scroll"
        layout="topleft"
-       left="14"
-       top="14"
-       width="540"
-       height="48"
-       word_wrap="true">
-        Save permission profiles for trusted controllers. A saved profile changes what they receive after you accept a request; it does not auto-accept possession.
-      </text>
+       left="0"
+       right="-1"
+       top="0"
+       bottom="-1"
+       follows="all"
+       opaque="false"
+       reserve_scroll_corner="false">
 
-      <text
-       name="trusted_list_label"
-       layout="topleft"
-       left="14"
-       top="76"
-       width="150"
-       height="18">
-        Saved controller:
-      </text>
+        <panel
+         name="trusted_content"
+         layout="topleft"
+         left="0"
+         top="0"
+         width="600"
+         height="650"
+         follows="left|top|right"
+         background_visible="false">
 
-      <combo_box
-       name="trusted_controller_list"
-       layout="topleft"
-       left="14"
-       top="98"
-       width="360"
-       height="26"
-       allow_text_entry="false" />
+          <text
+           name="trusted_intro"
+           layout="topleft"
+           left="16"
+           right="-24"
+           top="14"
+           height="54"
+           follows="left|top|right"
+           word_wrap="true">
+            Controllers saved here are pre-authorized. A matching possession request will auto-accept and apply this saved permission profile without showing the Accept / Decline popup.
+          </text>
 
-      <button
-       name="trusted_new"
-       label="New"
-       layout="topleft"
-       left="386"
-       top="98"
-       width="80"
-       height="26" />
+          <text
+           name="trusted_list_label"
+           layout="topleft"
+           left="16"
+           top="84"
+           width="150"
+           height="18">
+            Whitelisted controller:
+          </text>
 
-      <button
-       name="trusted_remove"
-       label="Remove"
-       layout="topleft"
-       left="474"
-       top="98"
-       width="80"
-       height="26" />
+          <combo_box
+           name="trusted_controller_list"
+           layout="topleft"
+           left="16"
+           top="108"
+           width="370"
+           height="26"
+           allow_text_entry="false" />
 
-      <text name="trusted_id_label" layout="topleft" left="14" top="146" width="100" height="18">Avatar UUID:</text>
-      <line_editor name="trusted_avatar_id" layout="topleft" left="120" top="141" width="360" height="26" max_length_chars="36" />
+          <button
+           name="trusted_new"
+           label="New"
+           layout="topleft"
+           left="398"
+           top="108"
+           width="76"
+           height="26" />
 
-      <text name="trusted_name_label" layout="topleft" left="14" top="182" width="100" height="18">Display name:</text>
-      <line_editor name="trusted_avatar_name" layout="topleft" left="120" top="177" width="360" height="26" max_length_chars="128" />
+          <button
+           name="trusted_remove"
+           label="Remove"
+           layout="topleft"
+           left="482"
+           top="108"
+           width="76"
+           height="26" />
 
-      <text
-       name="trusted_permissions_header"
-       layout="topleft"
-       left="14"
-       top="224"
-       width="300"
-       height="18"
-       font="SansSerifSmall"
-       font.style="BOLD">
-        Permissions applied after you accept
-      </text>
+          <text
+           name="trusted_id_label"
+           layout="topleft"
+           left="16"
+           top="158"
+           width="100"
+           height="18">
+            Avatar UUID:
+          </text>
 
-      <check_box
-       name="trusted_movement"
-       label="Control movement"
-       layout="topleft"
-       left="14"
-       top="252"
-       width="280"
-       height="18" />
+          <line_editor
+           name="trusted_avatar_id"
+           layout="topleft"
+           left="122"
+           top="153"
+           width="360"
+           height="26"
+           max_length_chars="36" />
 
-      <check_box
-       name="trusted_chat"
-       label="Speak in nearby chat as me"
-       layout="topleft"
-       left="14"
-       top="280"
-       width="280"
-       height="18" />
+          <text
+           name="trusted_name_label"
+           layout="topleft"
+           left="16"
+           top="196"
+           width="100"
+           height="18">
+            Display name:
+          </text>
 
-      <check_box
-       name="trusted_im"
-       label="Send direct IMs as me"
-       layout="topleft"
-       left="14"
-       top="308"
-       width="280"
-       height="18" />
+          <line_editor
+           name="trusted_avatar_name"
+           layout="topleft"
+           left="122"
+           top="191"
+           width="360"
+           height="26"
+           max_length_chars="128" />
 
-      <check_box
-       name="trusted_restrictions"
-       label="Change my movement / chat / IM restrictions"
-       layout="topleft"
-       left="14"
-       top="336"
-       width="390"
-       height="18" />
+          <text
+           name="trusted_permissions_header"
+           layout="topleft"
+           left="16"
+           top="238"
+           width="320"
+           height="18"
+           font="SansSerifSmall"
+           font.style="BOLD">
+            Auto-accepted permissions
+          </text>
 
-      <text
-       name="trusted_note"
-       layout="topleft"
-       left="14"
-       top="378"
-       width="530"
-       height="64"
-       word_wrap="true">
-        Movement + Nearby Chat are the default permissions for controllers without a saved profile. Direct IM and restriction control remain off unless you explicitly save them here or grant them during an active session.
-      </text>
+          <check_box
+           name="trusted_movement"
+           label="Control movement"
+           layout="topleft"
+           left="16"
+           top="266"
+           width="300"
+           height="18" />
 
-      <button
-       name="trusted_save"
-       label="Save / Update Profile"
-       layout="topleft"
-       left="14"
-       top="462"
-       width="180"
-       height="30" />
+          <check_box
+           name="trusted_chat"
+           label="Speak in nearby chat as me"
+           layout="topleft"
+           left="16"
+           top="294"
+           width="300"
+           height="18" />
+
+          <check_box
+           name="trusted_im"
+           label="Send direct IMs as me"
+           layout="topleft"
+           left="16"
+           top="322"
+           width="300"
+           height="18" />
+
+          <check_box
+           name="trusted_restrictions"
+           label="Change my movement / chat / IM restrictions"
+           layout="topleft"
+           left="16"
+           top="350"
+           width="410"
+           height="18" />
+
+          <text
+           name="trusted_note"
+           layout="topleft"
+           left="16"
+           right="-24"
+           top="394"
+           height="74"
+           follows="left|top|right"
+           word_wrap="true">
+            Removing a controller from this list restores normal request approval for future sessions. Movement + Nearby Chat are the defaults for controllers who are not whitelisted. Direct IM and restriction control remain off unless explicitly granted.
+          </text>
+
+          <button
+           name="trusted_save"
+           label="Save / Update Whitelist"
+           layout="topleft"
+           left="16"
+           top="492"
+           width="190"
+           height="30" />
+
+          <text
+           name="trusted_release_note"
+           layout="topleft"
+           left="16"
+           right="-24"
+           top="540"
+           height="44"
+           follows="left|top|right"
+           word_wrap="true">
+            Whitelisting never removes the subject's local Release Control button. An active session can always be ended immediately from the subject viewer.
+          </text>
+        </panel>
+      </scroll_container>
     </panel>
 
   </tab_container>
