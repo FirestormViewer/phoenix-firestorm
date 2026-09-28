@@ -63,7 +63,7 @@ namespace BlazingStorm
 
         if (action.empty() || action == "help")
         {
-            report("Commands: /blaze on | off | release | status | restrictchat on|off | thoughts | forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text>");
+            report("Commands: /blaze on | off | release | status | restrictchat on|off | restrictim on|off | thoughts | forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text>");
             return true;
         }
 
@@ -105,7 +105,9 @@ namespace BlazingStorm
                     + "; movement=" + (session.hasPermission(RemotePermission::Movement) ? "yes" : "no")
                     + "; chat=" + (session.hasPermission(RemotePermission::Chat) ? "yes" : "no")
                     + "; subject-nearby-chat="
-                    + (session.isSubjectRestricted(SubjectRestriction::NearbyChat) ? "restricted" : "allowed"));
+                    + (session.isSubjectRestricted(SubjectRestriction::NearbyChat) ? "restricted" : "allowed")
+                    + "; subject-direct-im="
+                    + (session.isSubjectRestricted(SubjectRestriction::InstantMessage) ? "restricted" : "allowed"));
             }
             return true;
         }
@@ -138,6 +140,33 @@ namespace BlazingStorm
             else
             {
                 report("Usage: /blaze restrictchat on|off");
+            }
+            return true;
+        }
+
+        if (action == "restrictim")
+        {
+            std::string state;
+            input >> state;
+
+            auto restrictions = session.subjectRestrictions();
+            const auto direct_im = toMask(SubjectRestriction::InstantMessage);
+
+            if (state == "on")
+            {
+                restrictions |= direct_im;
+                session.setSubjectRestrictions(restrictions);
+                report("Subject direct IM sending is now diverted to controller thoughts.");
+            }
+            else if (state == "off")
+            {
+                restrictions &= ~direct_im;
+                session.setSubjectRestrictions(restrictions);
+                report("Subject direct IM sending is now allowed.");
+            }
+            else
+            {
+                report("Usage: /blaze restrictim on|off");
             }
             return true;
         }
