@@ -7,6 +7,7 @@
 #define BS_REMOTE_FLOATER_H
 
 #include "llfloater.h"
+#include "blazingstorm/remote/bsremoteprotocol.h"
 
 namespace BlazingStorm
 {
