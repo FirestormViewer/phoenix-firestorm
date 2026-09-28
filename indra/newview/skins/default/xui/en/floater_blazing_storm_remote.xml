@@ -57,7 +57,7 @@
        width="540"
        height="42"
        word_wrap="true">
-        This viewer automatically listens for local Blazing Storm possession requests. A controller request always requires your explicit acceptance popup.
+        This viewer normally keeps the local control listener closed. A Blazing Storm request arrives first as a visible Second Life IM, briefly opens the local listener, and still requires your explicit Accept / Decline popup.
       </text>
 
       <text
@@ -82,7 +82,7 @@
 
       <button
        name="start_host"
-       label="Restart Local Listener"
+       label="Debug: Open Listener"
        layout="topleft"
        follows="left|top"
        visible="true"
@@ -255,7 +255,7 @@
        width="540"
        height="36"
        word_wrap="true">
-        Enter the subject avatar UUID and send a possession request. Their viewer will show an Accept / Decline popup.
+        Enter the subject avatar UUID and send a possession request. Blazing Storm first sends a visible themed Second Life IM; the subject viewer then briefly opens its local listener and shows an Accept / Decline popup.
       </text>
 
       <text
