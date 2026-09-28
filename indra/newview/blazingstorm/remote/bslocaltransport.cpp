@@ -892,6 +892,13 @@ namespace BlazingStorm
         {
             if (!beginApprovedRelaySession())
             {
+                const std::string failure =
+                    mLastStatus.empty()
+                        ? "Could not create the Azure relay session."
+                        : mLastStatus;
+                sendRelayReject();
+                resetConnectionState(false);
+                mLastStatus = failure;
                 return false;
             }
             return true;
@@ -969,6 +976,7 @@ namespace BlazingStorm
         mPendingControllerId.clear();
         mPendingControllerName.clear();
         mExpectedBootstrapControllerId.clear();
+        mExpectedBootstrapControllerName.clear();
         mExpectedBootstrapNonce.clear();
         mLastStatus = "Pairing request rejected; local bootstrap listener closed.";
     }
@@ -1024,6 +1032,7 @@ namespace BlazingStorm
         mBootstrapControllerName.clear();
         mBootstrapNonce.clear();
         mExpectedBootstrapControllerId.clear();
+        mExpectedBootstrapControllerName.clear();
         mExpectedBootstrapNonce.clear();
         mReceiveBuffer.clear();
         mWriteBuffer.clear();
