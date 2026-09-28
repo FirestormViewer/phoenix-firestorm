@@ -13,6 +13,7 @@
 #include "blazingstorm/remote/bsremoteevents.h"
 #include "blazingstorm/remote/bsremoteprotocol.h"
 #include "blazingstorm/remote/bsremotesession.h"
+#include "blazingstorm/remote/bstruststore.h"
 
 #include "fscommon.h"
 #include "llagent.h"
@@ -71,6 +72,8 @@ namespace BlazingStorm
             [this](LLUICtrl*, const LLSD&) { onAllowRestrictions(); });
         getChild<LLCheckBoxCtrl>("disable_local_movement")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onDisableLocalMovement(); });
+        getChild<LLCheckBoxCtrl>("subject_restrict_movement")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { onSubjectRestrictMovement(); });
         getChild<LLCheckBoxCtrl>("subject_restrict_chat")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onSubjectRestrictChat(); });
         getChild<LLCheckBoxCtrl>("subject_restrict_im")->setCommitCallback(
@@ -99,6 +102,8 @@ namespace BlazingStorm
             [this](LLUICtrl*, const LLSD&) { onRemoteSay(); });
         getChild<LLButton>("remote_im")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onRemoteIM(); });
+        getChild<LLCheckBoxCtrl>("remote_restrict_movement")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { onRemoteRestrictMovement(); });
         getChild<LLCheckBoxCtrl>("remote_restrict_chat")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onRemoteRestrictChat(); });
         getChild<LLCheckBoxCtrl>("remote_restrict_im")->setCommitCallback(
@@ -106,6 +111,17 @@ namespace BlazingStorm
         getChild<LLButton>("remote_release")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { sendRemoteCommand(RemoteCommandType::EmergencyRelease); });
 
+        getChild<LLComboBox>("trusted_controller_list")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { onTrustedControllerSelected(); });
+        getChild<LLButton>("trusted_save")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { onSaveTrustedController(); });
+        getChild<LLButton>("trusted_remove")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { onRemoveTrustedController(); });
+        getChild<LLButton>("trusted_new")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { clearTrustedControllerEditor(); });
+
+        refreshTrustedControllers();
+        clearTrustedControllerEditor();
         refresh();
         return true;
     }
@@ -149,7 +165,7 @@ namespace BlazingStorm
         }
         getChild<LLTextBox>("status")->setText(status);
 
-        getChild<LLLineEditor>("pairing_code")->setText(transport.pairingCode());
+        getChild<LLLineEditor>("pairing_code")->setText(gAgentID.asString());
 
         const bool is_host = transport.role() == RemoteRole::Host;
         const bool is_controller = transport.role() == RemoteRole::Controller;
@@ -172,6 +188,10 @@ namespace BlazingStorm
         auto* disable_local = getChild<LLCheckBoxCtrl>("disable_local_movement");
         disable_local->setEnabled(subject_active && is_host);
         disable_local->setValue(session.subjectLocalMovementDisabled());
+
+        auto* restrict_movement = getChild<LLCheckBoxCtrl>("subject_restrict_movement");
+        restrict_movement->setEnabled(subject_active && is_host);
+        restrict_movement->setValue(session.isSubjectRestricted(SubjectRestriction::Movement));
 
         auto* restrict_chat = getChild<LLCheckBoxCtrl>("subject_restrict_chat");
         restrict_chat->setEnabled(subject_active && is_host);
@@ -209,6 +229,7 @@ namespace BlazingStorm
         getChild<LLComboBox>("movement_mode")->setCurrentByIndex(movement_mode_index);
         getChild<LLComboBox>("movement_mode")->setEnabled(true);
 
+        getChild<LLCheckBoxCtrl>("remote_restrict_movement")->setEnabled(controller_active);
         getChild<LLCheckBoxCtrl>("remote_restrict_chat")->setEnabled(controller_active);
         getChild<LLCheckBoxCtrl>("remote_restrict_im")->setEnabled(controller_active);
         getChild<LLLineEditor>("remote_say_text")->setEnabled(controller_active);
@@ -228,7 +249,7 @@ namespace BlazingStorm
         }
 
         auto& transport = LocalTransport::instance();
-        if (!transport.startHost())
+        if (!transport.startHost(LocalTransport::portForAvatarId(gAgentID.asString())))
         {
             report(transport.lastStatus());
         }
@@ -237,10 +258,11 @@ namespace BlazingStorm
 
     void RemoteFloater::onConnect()
     {
-        const std::string code = getChild<LLLineEditor>("connect_code")->getText();
-        if (code.empty())
+        const std::string subject_id = getChild<LLLineEditor>("connect_code")->getText();
+        LLUUID subject_uuid(subject_id);
+        if (subject_uuid.isNull())
         {
-            report("Enter the subject viewer pairing code first.");
+            report("Enter a valid subject avatar UUID.");
             return;
         }
 
@@ -248,7 +270,7 @@ namespace BlazingStorm
         LLAgentUI::buildFullname(controller_name);
 
         auto& transport = LocalTransport::instance();
-        if (!transport.connectController(code, gAgentID.asString(), controller_name))
+        if (!transport.requestController(subject_id, gAgentID.asString(), controller_name))
         {
             report(transport.lastStatus());
         }
@@ -350,6 +372,27 @@ namespace BlazingStorm
         }
         RemoteSession::instance().setSubjectLocalMovementDisabled(
             getChild<LLCheckBoxCtrl>("disable_local_movement")->getValue().asBoolean());
+    }
+
+    void RemoteFloater::onSubjectRestrictMovement()
+    {
+        if (mRefreshing)
+        {
+            return;
+        }
+
+        auto& session = RemoteSession::instance();
+        auto restrictions = session.subjectRestrictions();
+        const auto mask = toMask(SubjectRestriction::Movement);
+        if (getChild<LLCheckBoxCtrl>("subject_restrict_movement")->getValue().asBoolean())
+        {
+            restrictions |= mask;
+        }
+        else
+        {
+            restrictions &= ~mask;
+        }
+        session.setSubjectRestrictions(restrictions);
     }
 
     void RemoteFloater::onSubjectRestrictChat()
@@ -577,6 +620,18 @@ namespace BlazingStorm
         getChild<LLLineEditor>("remote_im_text")->setText(LLStringExplicit(""));
     }
 
+    void RemoteFloater::onRemoteRestrictMovement()
+    {
+        if (mRefreshing)
+        {
+            return;
+        }
+        sendRemoteCommand(
+            getChild<LLCheckBoxCtrl>("remote_restrict_movement")->getValue().asBoolean()
+                ? RemoteCommandType::RestrictMovementOn
+                : RemoteCommandType::RestrictMovementOff);
+    }
+
     void RemoteFloater::onRemoteRestrictChat()
     {
         if (mRefreshing)
@@ -599,5 +654,112 @@ namespace BlazingStorm
             getChild<LLCheckBoxCtrl>("remote_restrict_im")->getValue().asBoolean()
                 ? RemoteCommandType::RestrictInstantMessageOn
                 : RemoteCommandType::RestrictInstantMessageOff);
+    }
+
+    void RemoteFloater::refreshTrustedControllers()
+    {
+        auto* combo = getChild<LLComboBox>("trusted_controller_list");
+        combo->clearRows();
+        combo->add("New controller...", LLSD(""));
+
+        for (const auto& entry : TrustStore::instance().entries())
+        {
+            const std::string label =
+                entry.avatarName.empty() ? entry.avatarId : entry.avatarName;
+            combo->add(label, LLSD(entry.avatarId));
+        }
+
+        combo->selectFirstItem();
+    }
+
+    void RemoteFloater::clearTrustedControllerEditor()
+    {
+        getChild<LLLineEditor>("trusted_avatar_id")->setText(LLStringExplicit(""));
+        getChild<LLLineEditor>("trusted_avatar_name")->setText(LLStringExplicit(""));
+
+        getChild<LLCheckBoxCtrl>("trusted_movement")->setValue(true);
+        getChild<LLCheckBoxCtrl>("trusted_chat")->setValue(true);
+        getChild<LLCheckBoxCtrl>("trusted_im")->setValue(false);
+        getChild<LLCheckBoxCtrl>("trusted_restrictions")->setValue(false);
+    }
+
+    void RemoteFloater::onTrustedControllerSelected()
+    {
+        const std::string avatar_id =
+            getChild<LLComboBox>("trusted_controller_list")->getValue().asString();
+
+        if (avatar_id.empty())
+        {
+            clearTrustedControllerEditor();
+            return;
+        }
+
+        const TrustedController* entry = TrustStore::instance().find(avatar_id);
+        if (!entry)
+        {
+            clearTrustedControllerEditor();
+            return;
+        }
+
+        getChild<LLLineEditor>("trusted_avatar_id")->setText(entry->avatarId);
+        getChild<LLLineEditor>("trusted_avatar_name")->setText(entry->avatarName);
+        getChild<LLCheckBoxCtrl>("trusted_movement")->setValue(
+            (entry->permissions & toMask(RemotePermission::Movement)) != 0);
+        getChild<LLCheckBoxCtrl>("trusted_chat")->setValue(
+            (entry->permissions & toMask(RemotePermission::Chat)) != 0);
+        getChild<LLCheckBoxCtrl>("trusted_im")->setValue(
+            (entry->permissions & toMask(RemotePermission::InstantMessage)) != 0);
+        getChild<LLCheckBoxCtrl>("trusted_restrictions")->setValue(
+            (entry->permissions & toMask(RemotePermission::ManageSubjectRestrictions)) != 0);
+    }
+
+    void RemoteFloater::onSaveTrustedController()
+    {
+        const std::string avatar_id =
+            getChild<LLLineEditor>("trusted_avatar_id")->getText();
+        LLUUID id(avatar_id);
+        if (id.isNull())
+        {
+            report("Enter a valid controller avatar UUID before saving.");
+            return;
+        }
+
+        TrustedController entry;
+        entry.avatarId = avatar_id;
+        entry.avatarName = getChild<LLLineEditor>("trusted_avatar_name")->getText();
+
+        if (getChild<LLCheckBoxCtrl>("trusted_movement")->getValue().asBoolean())
+            entry.permissions |= toMask(RemotePermission::Movement);
+        if (getChild<LLCheckBoxCtrl>("trusted_chat")->getValue().asBoolean())
+            entry.permissions |= toMask(RemotePermission::Chat);
+        if (getChild<LLCheckBoxCtrl>("trusted_im")->getValue().asBoolean())
+            entry.permissions |= toMask(RemotePermission::InstantMessage);
+        if (getChild<LLCheckBoxCtrl>("trusted_restrictions")->getValue().asBoolean())
+            entry.permissions |= toMask(RemotePermission::ManageSubjectRestrictions);
+
+        TrustStore::instance().upsert(entry);
+        refreshTrustedControllers();
+        getChild<LLComboBox>("trusted_controller_list")->setValue(LLSD(avatar_id));
+        onTrustedControllerSelected();
+        report("Saved trusted-controller permission profile.");
+    }
+
+    void RemoteFloater::onRemoveTrustedController()
+    {
+        std::string avatar_id =
+            getChild<LLComboBox>("trusted_controller_list")->getValue().asString();
+        if (avatar_id.empty())
+        {
+            avatar_id = getChild<LLLineEditor>("trusted_avatar_id")->getText();
+        }
+
+        if (!avatar_id.empty())
+        {
+            TrustStore::instance().remove(avatar_id);
+        }
+
+        refreshTrustedControllers();
+        clearTrustedControllerEditor();
+        report("Trusted-controller profile removed.");
     }
 }
