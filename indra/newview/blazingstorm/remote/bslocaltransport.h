@@ -16,6 +16,7 @@
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 
+#include <chrono>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -38,6 +39,14 @@ namespace BlazingStorm
         bool requestController(const std::string& subject_id,
                                const std::string& controller_id,
                                const std::string& controller_name);
+
+        // Recognizes an explicit Blazing Storm bootstrap marker carried by a
+        // normal avatar-to-avatar SL IM. Returns true only for a valid marker
+        // whose embedded controller UUID matches the actual IM sender.
+        bool handleBootstrapInstantMessage(const std::string& from_id,
+                                           const std::string& from_name,
+                                           const std::string& message,
+                                           bool online);
 
         static std::uint16_t portForAvatarId(const std::string& avatar_id);
 
@@ -67,6 +76,13 @@ namespace BlazingStorm
         LocalTransport() = default;
 
         std::string generatePairingCode() const;
+        std::string generateBootstrapNonce() const;
+        std::string buildBootstrapMessage(const std::string& controller_id,
+                                          const std::string& nonce) const;
+        bool parseBootstrapMessage(const std::string& message,
+                                   std::string& controller_id,
+                                   std::string& nonce) const;
+        void tryBootstrapConnect();
         void showPairingPrompt();
         void tryAccept();
         void readAvailable();
@@ -92,12 +108,22 @@ namespace BlazingStorm
         bool mConnected = false;
         bool mPaired = false;
         bool mPendingPairing = false;
-        bool mAutoListenerNeedsRestart = true;
+        bool mBootstrapPending = false;
 
         std::uint16_t mPort = DEFAULT_PORT;
         std::string mPairingCode;
         std::string mPendingControllerId;
         std::string mPendingControllerName;
+
+        std::string mBootstrapSubjectId;
+        std::string mBootstrapControllerId;
+        std::string mBootstrapControllerName;
+        std::string mBootstrapNonce;
+        std::string mExpectedBootstrapControllerId;
+        std::string mExpectedBootstrapNonce;
+        std::chrono::steady_clock::time_point mBootstrapDeadline{};
+        std::chrono::steady_clock::time_point mNextBootstrapAttempt{};
+
         std::string mReceiveBuffer;
         std::string mWriteBuffer;
         std::string mLastStatus;
