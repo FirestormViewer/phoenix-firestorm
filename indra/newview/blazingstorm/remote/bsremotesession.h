@@ -29,7 +29,8 @@ namespace BlazingStorm
         Camera    = 1u << 5,
         Inventory = 1u << 6,
         InstantMessage = 1u << 7,
-        ManageSubjectRestrictions = 1u << 8
+        ManageSubjectRestrictions = 1u << 8,
+        ScriptDialogs = 1u << 9
         // Deliberately no Money permission. A controller may never perform
         // payments, purchases, tips or other money-bearing actions.
     };
