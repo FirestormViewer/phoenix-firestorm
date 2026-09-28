@@ -719,6 +719,8 @@ namespace
             "/api/sessions/create",
             "/api/create-session",
             "/api/createSession",
+            "/api/relay/create-session",
+            "/api/relay/session/create",
             "/api/session",
             "/api/sessions",
             "/api/relay/session",
@@ -744,10 +746,14 @@ namespace
             "/api/negotiate" + camel,
             "/api/" + role_name + "/negotiate",
             "/api/session/" + role_name + "/negotiate",
+            "/api/session/negotiate",
             "/api/session/" + session_id + "/" + role_name + "/negotiate",
             "/api/session/" + session_id + "/" + role_name,
+            "/api/sessions/" + session_id + "/" + role_name + "/negotiate",
             "/api/sessions/" + session_id + "/" + role_name,
             "/api/relay/negotiate/" + role_name,
+            "/api/relay/session/" + session_id + "/" + role_name,
+            "/api/relay/negotiate",
             "/api/negotiate"
         };
     }
