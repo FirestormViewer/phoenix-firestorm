@@ -61,7 +61,8 @@
          layout="topleft"
          left="0"
          top="0"
-         width="600"
+         right="-15"
+         min_width="480"
          height="675"
          follows="left|top|right"
          background_visible="false">
@@ -92,9 +93,10 @@
            name="pairing_code"
            layout="topleft"
            left="124"
+           right="-184"
            top="75"
-           width="290"
            height="26"
+           follows="left|top|right"
            enabled="false"
            select_on_focus="true" />
 
@@ -102,10 +104,11 @@
            name="start_host"
            label="Debug: Open Listener"
            layout="topleft"
-           left="426"
+           right="-24"
            top="75"
            width="150"
-           height="26" />
+           height="26"
+           follows="right|top" />
 
           <!-- Retained as hidden fallbacks for /blaze accept and /blaze reject. -->
           <button name="accept" label="Accept" layout="topleft" visible="false" enabled="false" left="0" top="0" width="1" height="1" />
@@ -136,10 +139,11 @@
            name="save_current_controller"
            label="Add / Update Current Controller"
            layout="topleft"
-           left="216"
+           right="-24"
            top="150"
            width="220"
            height="26"
+           follows="right|top"
            tool_tip="Save the current controller and the permissions currently granted to them. Future matching requests will auto-accept." />
 
           <text
@@ -303,7 +307,8 @@
          layout="topleft"
          left="0"
          top="0"
-         width="600"
+         right="-15"
+         min_width="480"
          height="820"
          follows="left|top|right"
          background_visible="false">
@@ -334,9 +339,10 @@
            name="connect_code"
            layout="topleft"
            left="112"
+           right="-164"
            top="71"
-           width="310"
            height="26"
+           follows="left|top|right"
            max_length_chars="36"
            tool_tip="UUID of the subject avatar logged into another local Blazing Storm viewer" />
 
@@ -344,10 +350,11 @@
            name="connect"
            label="Send Request"
            layout="topleft"
-           left="434"
+           right="-24"
            top="71"
            width="130"
-           height="26" />
+           height="26"
+           follows="right|top" />
 
           <text
            name="movement_section_header"
@@ -384,15 +391,51 @@
             <combo_box.item label="Controller only" name="ControllerOnly" value="controller" />
           </combo_box>
 
-          <button name="remote_forward" label="Forward" layout="topleft" left="110" top="194" width="100" height="26" />
-          <button name="remote_left" label="Strafe Left" layout="topleft" left="16" top="228" width="100" height="26" />
-          <button name="remote_stop" label="STOP" layout="topleft" left="122" top="228" width="100" height="26" />
-          <button name="remote_right" label="Strafe Right" layout="topleft" left="228" top="228" width="100" height="26" />
-          <button name="remote_back" label="Back" layout="topleft" left="110" top="262" width="100" height="26" />
+          <layout_stack
+           name="movement_primary_row"
+           layout="topleft"
+           orientation="horizontal"
+           left="16"
+           right="-24"
+           top="194"
+           height="28"
+           follows="left|top|right">
+            <layout_panel auto_resize="true" min_width="90">
+              <button name="remote_forward" label="Forward" layout="topleft" follows="all" left="2" right="-2" top="1" height="26" />
+            </layout_panel>
+            <layout_panel auto_resize="true" min_width="90">
+              <button name="remote_back" label="Back" layout="topleft" follows="all" left="2" right="-2" top="1" height="26" />
+            </layout_panel>
+            <layout_panel auto_resize="true" min_width="90">
+              <button name="remote_jump" label="Jump" layout="topleft" follows="all" left="2" right="-2" top="1" height="26" />
+            </layout_panel>
+            <layout_panel auto_resize="true" min_width="90">
+              <button name="remote_stop" label="STOP" layout="topleft" follows="all" left="2" right="-2" top="1" height="26" />
+            </layout_panel>
+          </layout_stack>
 
-          <button name="remote_turn_left" label="Turn Left" layout="topleft" left="352" top="194" width="100" height="26" />
-          <button name="remote_turn_right" label="Turn Right" layout="topleft" left="458" top="194" width="100" height="26" />
-          <button name="remote_jump" label="Jump" layout="topleft" left="405" top="228" width="100" height="26" />
+          <layout_stack
+           name="movement_secondary_row"
+           layout="topleft"
+           orientation="horizontal"
+           left="16"
+           right="-24"
+           top="228"
+           height="28"
+           follows="left|top|right">
+            <layout_panel auto_resize="true" min_width="90">
+              <button name="remote_left" label="Strafe Left" layout="topleft" follows="all" left="2" right="-2" top="1" height="26" />
+            </layout_panel>
+            <layout_panel auto_resize="true" min_width="90">
+              <button name="remote_right" label="Strafe Right" layout="topleft" follows="all" left="2" right="-2" top="1" height="26" />
+            </layout_panel>
+            <layout_panel auto_resize="true" min_width="90">
+              <button name="remote_turn_left" label="Turn Left" layout="topleft" follows="all" left="2" right="-2" top="1" height="26" />
+            </layout_panel>
+            <layout_panel auto_resize="true" min_width="90">
+              <button name="remote_turn_right" label="Turn Right" layout="topleft" follows="all" left="2" right="-2" top="1" height="26" />
+            </layout_panel>
+          </layout_stack>
 
           <text
            name="movement_note"
@@ -422,19 +465,21 @@
            name="remote_say_text"
            layout="topleft"
            left="16"
+           right="-146"
            top="390"
-           width="420"
            height="26"
+           follows="left|top|right"
            max_length_bytes="1023" />
 
           <button
            name="remote_say"
            label="Send Nearby"
            layout="topleft"
-           left="446"
+           right="-24"
            top="390"
            width="112"
-           height="26" />
+           height="26"
+           follows="right|top" />
 
           <text
            name="im_header"
@@ -462,9 +507,10 @@
            name="remote_im_target"
            layout="topleft"
            left="110"
+           right="-24"
            top="461"
-           width="315"
            height="26"
+           follows="left|top|right"
            max_length_chars="36"
            tool_tip="Target avatar UUID" />
 
@@ -472,19 +518,21 @@
            name="remote_im_text"
            layout="topleft"
            left="16"
+           right="-146"
            top="497"
-           width="420"
            height="26"
+           follows="left|top|right"
            max_length_bytes="1023" />
 
           <button
            name="remote_im"
            label="Send IM"
            layout="topleft"
-           left="446"
+           right="-24"
            top="497"
            width="112"
-           height="26" />
+           height="26"
+           follows="right|top" />
 
           <text
            name="controller_restrictions_header"
@@ -572,7 +620,8 @@
          layout="topleft"
          left="0"
          top="0"
-         width="600"
+         right="-15"
+         min_width="480"
          height="650"
          follows="left|top|right"
          background_visible="false">
@@ -603,28 +652,31 @@
            name="trusted_controller_list"
            layout="topleft"
            left="16"
+           right="-196"
            top="108"
-           width="370"
            height="26"
+           follows="left|top|right"
            allow_text_entry="false" />
 
           <button
            name="trusted_new"
            label="New"
            layout="topleft"
-           left="398"
+           right="-108"
            top="108"
            width="76"
-           height="26" />
+           height="26"
+           follows="right|top" />
 
           <button
            name="trusted_remove"
            label="Remove"
            layout="topleft"
-           left="482"
+           right="-24"
            top="108"
            width="76"
-           height="26" />
+           height="26"
+           follows="right|top" />
 
           <text
            name="trusted_id_label"
@@ -640,9 +692,10 @@
            name="trusted_avatar_id"
            layout="topleft"
            left="122"
+           right="-24"
            top="153"
-           width="360"
            height="26"
+           follows="left|top|right"
            max_length_chars="36" />
 
           <text
@@ -659,9 +712,10 @@
            name="trusted_avatar_name"
            layout="topleft"
            left="122"
+           right="-24"
            top="191"
-           width="360"
            height="26"
+           follows="left|top|right"
            max_length_chars="128" />
 
           <text
