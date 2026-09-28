@@ -67,6 +67,23 @@ namespace BlazingStorm
         return toMask(lhs) | toMask(rhs);
     }
 
+    // Every remotely controllable ability currently exposed by Blazing Storm.
+    // Money is intentionally absent from RemotePermission and can never be
+    // granted by Full Control.
+    constexpr RemotePermissionMask allRemotePermissions()
+    {
+        return toMask(RemotePermission::Movement)
+            | toMask(RemotePermission::Chat)
+            | toMask(RemotePermission::Touch)
+            | toMask(RemotePermission::SitStand)
+            | toMask(RemotePermission::Teleport)
+            | toMask(RemotePermission::Camera)
+            | toMask(RemotePermission::Inventory)
+            | toMask(RemotePermission::InstantMessage)
+            | toMask(RemotePermission::ManageSubjectRestrictions)
+            | toMask(RemotePermission::ScriptDialogs);
+    }
+
     class RemoteSession final
     {
     public:
