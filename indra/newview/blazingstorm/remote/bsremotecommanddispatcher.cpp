@@ -9,6 +9,7 @@
 
 #include "blazingstorm/remote/bsremoteactions.h"
 #include "blazingstorm/remote/bsremotesession.h"
+#include "fscommon.h"
 #include "llimview.h"
 #include "llviewermessage.h"
 
@@ -73,6 +74,12 @@ namespace BlazingStorm
                 const LLUUID im_session_id =
                     LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, target_id);
                 send_simple_im(target_id, command.text, IM_NOTHING_SPECIAL, im_session_id);
+
+                // Keep controller-authored identity actions visible to the
+                // subject even though send_simple_im() has no local chat echo.
+                FSCommon::report_to_nearby_chat(
+                    "[Blazing Storm] Controller IM sent as you to "
+                    + target_id.asString() + ": " + command.text);
                 return true;
             }
             case RemoteCommandType::EmergencyRelease:
