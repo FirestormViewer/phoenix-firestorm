@@ -13,6 +13,13 @@
 
 namespace BlazingStorm
 {
+    enum class RemoteMovementMode
+    {
+        SubjectOnly,
+        MirrorBoth,
+        ControllerOnly
+    };
+
     class RemoteController final
     {
     public:
@@ -25,6 +32,11 @@ namespace BlazingStorm
         const std::string& sessionId() const;
         const std::string& hostId() const;
 
+        RemoteMovementMode movementMode() const;
+        void setMovementMode(RemoteMovementMode mode);
+        bool controlsSubject() const;
+        bool controlsController() const;
+
         RemoteCommand makeCommand(RemoteCommandType type, std::string text = {}, std::string target_id = {});
 
     private:
@@ -33,6 +45,7 @@ namespace BlazingStorm
         bool mActive = false;
         std::string mSessionId;
         std::string mHostId;
+        RemoteMovementMode mMovementMode = RemoteMovementMode::SubjectOnly;
         std::uint64_t mNextSequence = 1;
     };
 }
