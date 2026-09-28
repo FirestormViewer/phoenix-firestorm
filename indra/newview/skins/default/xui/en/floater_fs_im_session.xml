@@ -406,7 +406,7 @@
      top="0"
      layout="topleft"
      height="20"
-     width="26"
+     width="68"
      follows="left|top"
      visible="false">
      <button
@@ -416,11 +416,11 @@
       image_hover_unselected="Toolbar_Middle_Over"
       image_selected="Toolbar_Middle_Selected"
       image_unselected="Toolbar_Middle_Off"
-      image_overlay="Command_Move_Icon"
+      label="Possess"
       name="blazing_storm_request_btn"
       tool_tip="Request Blazing Storm possession of this resident"
       top="0"
-      width="24" />
+      width="66" />
     </layout_panel>
 
     <layout_panel
