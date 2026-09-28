@@ -7,7 +7,7 @@
  name="panel_stand_stop_flying"
  mouse_opaque="false"
  visible="true"
- width="158">
+ width="255">
     <button
      follows="left|bottom"
      height="19"
@@ -44,4 +44,15 @@
         <commit_callback
          function="View.JoystickFlycam" />
     </button>
+    <button
+     follows="right|bottom"
+     height="19"
+     label="Release Control"
+     layout="topleft"
+     right="-5"
+     name="blaze_release_btn"
+     tool_tip="Immediately end Blazing Storm possession"
+     top="2"
+     visible="false"
+     width="105" />
 </panel>
