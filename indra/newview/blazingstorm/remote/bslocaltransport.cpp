@@ -534,7 +534,6 @@ namespace BlazingStorm
             }
             mListening = false;
             mRole = RemoteRole::None;
-            mAutoListenerNeedsRestart = true;
         }
     }
 
