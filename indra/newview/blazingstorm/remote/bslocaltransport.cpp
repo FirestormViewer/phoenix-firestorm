@@ -384,13 +384,13 @@ namespace BlazingStorm
             "BlazingStormPossessionRequest",
             substitutions,
             payload,
-            [this](const LLSD& notification, const LLSD& response) -> bool
+            [this](const LLSD& notification, const LLSD& response)
             {
                 if (!mPendingPairing
                     || notification["payload"]["controller_id"].asString()
                         != mPendingControllerId)
                 {
-                    return false;
+                    return;
                 }
 
                 const S32 option =
@@ -403,7 +403,6 @@ namespace BlazingStorm
                 {
                     rejectPending();
                 }
-                return false;
             });
     }
 
