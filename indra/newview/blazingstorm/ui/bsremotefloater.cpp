@@ -65,6 +65,8 @@ namespace BlazingStorm
             [this](LLUICtrl*, const LLSD&) { onDisconnect(); });
         getChild<LLButton>("emergency_release")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onEmergencyRelease(); });
+        getChild<LLButton>("save_current_controller")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { onSaveCurrentController(); });
 
         getChild<LLCheckBoxCtrl>("allow_controller_im")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onAllowControllerIM(); });
@@ -176,6 +178,7 @@ namespace BlazingStorm
         getChild<LLButton>("reject")->setEnabled(is_host && transport.hasPendingPairing());
         getChild<LLButton>("disconnect")->setEnabled(transport.role() != RemoteRole::None);
         getChild<LLButton>("emergency_release")->setEnabled(subject_active || is_host);
+        getChild<LLButton>("save_current_controller")->setEnabled(subject_active && is_host);
 
         auto* allow_im = getChild<LLCheckBoxCtrl>("allow_controller_im");
         allow_im->setEnabled(subject_active && is_host);
@@ -310,6 +313,34 @@ namespace BlazingStorm
         RemoteEvents::instance().clear();
         report("Emergency release: possession ended locally.");
         refresh();
+    }
+
+    void RemoteFloater::onSaveCurrentController()
+    {
+        auto& session = RemoteSession::instance();
+        auto& transport = LocalTransport::instance();
+
+        if (!session.isActive() || session.controllerId().empty())
+        {
+            report("There is no active subject possession session to save.");
+            return;
+        }
+
+        TrustedController entry;
+        entry.avatarId = session.controllerId();
+        entry.avatarName = transport.pendingControllerName();
+        if (entry.avatarName.empty())
+        {
+            entry.avatarName = entry.avatarId;
+        }
+        entry.permissions = session.permissions();
+
+        TrustStore::instance().upsert(entry);
+        refreshTrustedControllers();
+        getChild<LLComboBox>("trusted_controller_list")->setValue(LLSD(entry.avatarId));
+        onTrustedControllerSelected();
+
+        report("Current controller added to whitelist. Future matching requests will auto-accept.");
     }
 
     void RemoteFloater::onAllowControllerIM()
