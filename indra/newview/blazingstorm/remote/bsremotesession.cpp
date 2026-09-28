@@ -29,19 +29,7 @@ namespace BlazingStorm
 
     RemotePermissionMask RemoteSession::sanitizePermissions(RemotePermissionMask permissions)
     {
-        const RemotePermissionMask allowed =
-              toMask(RemotePermission::Movement)
-            | toMask(RemotePermission::Chat)
-            | toMask(RemotePermission::Touch)
-            | toMask(RemotePermission::SitStand)
-            | toMask(RemotePermission::Teleport)
-            | toMask(RemotePermission::Camera)
-            | toMask(RemotePermission::Inventory)
-            | toMask(RemotePermission::InstantMessage)
-            | toMask(RemotePermission::ManageSubjectRestrictions)
-            | toMask(RemotePermission::ScriptDialogs);
-
-        return permissions & allowed;
+        return permissions & allRemotePermissions();
     }
 
     void RemoteSession::begin(std::string controller_id,
