@@ -550,6 +550,11 @@ namespace BlazingStorm
         mPendingControllerId.clear();
         mPendingControllerName.clear();
 
+        // Dialog mirrors and remembered object/linkset context are scoped to
+        // one possession connection. Never leave stale object menus alive
+        // after a peer disconnect or failed handoff.
+        WorldInteraction::instance().reset();
+
         if (!keep_listener)
         {
             mBootstrapPending = false;
