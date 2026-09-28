@@ -68,6 +68,28 @@ namespace BlazingStorm
 
     bool RemoteFloater::postBuild()
     {
+        auto* relay_broker = getChild<LLLineEditor>("relay_broker_url");
+        relay_broker->setText(
+            gSavedPerAccountSettings.getString("BlazingStormRelayBrokerUrl"));
+        relay_broker->setCommitCallback(
+            [](LLUICtrl* ctrl, const LLSD&)
+            {
+                gSavedPerAccountSettings.setString(
+                    "BlazingStormRelayBrokerUrl",
+                    ctrl->getValue().asString());
+            });
+
+        auto* relay_key = getChild<LLLineEditor>("relay_create_key");
+        relay_key->setText(
+            gSavedPerAccountSettings.getString("BlazingStormRelayCreateKey"));
+        relay_key->setCommitCallback(
+            [](LLUICtrl* ctrl, const LLSD&)
+            {
+                gSavedPerAccountSettings.setString(
+                    "BlazingStormRelayCreateKey",
+                    ctrl->getValue().asString());
+            });
+
         setupFeatures();
         getChild<LLCheckBoxCtrl>("allow_full_control")->setCommitCallback(
             [this](LLUICtrl* ctrl, const LLSD&)
@@ -299,6 +321,7 @@ namespace BlazingStorm
         auto& controller = RemoteController::instance();
 
         std::string status = transportRoleName(transport.role());
+        status += transport.usingRelay() ? " | Azure relay" : " | local";
         status += transport.isConnected() ? " | connected" : " | disconnected";
         status += transport.isPaired() ? " | paired" : " | not paired";
         if (!transport.lastStatus().empty())
