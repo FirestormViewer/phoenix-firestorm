@@ -455,6 +455,13 @@ namespace BlazingStorm
                 {
                     queueLine("BLOCKED|" + std::to_string(sequence));
                 }
+                else if (command.type == RemoteCommandType::RestrictNearbyChatOn
+                      || command.type == RemoteCommandType::RestrictNearbyChatOff
+                      || command.type == RemoteCommandType::RestrictInstantMessageOn
+                      || command.type == RemoteCommandType::RestrictInstantMessageOff)
+                {
+                    queueLine("APPLIED|" + commandName(command.type));
+                }
 
                 if (command.type == RemoteCommandType::EmergencyRelease
                     && !RemoteSession::instance().isActive())
@@ -507,6 +514,13 @@ namespace BlazingStorm
             {
                 FSCommon::report_to_nearby_chat(
                     "[Blazing Storm] Remote command " + fields[1] + " was blocked by subject permissions.");
+                return;
+            }
+
+            if (fields[0] == "APPLIED" && fields.size() == 2)
+            {
+                FSCommon::report_to_nearby_chat(
+                    "[Blazing Storm] Subject restriction applied: " + fields[1]);
                 return;
             }
 
