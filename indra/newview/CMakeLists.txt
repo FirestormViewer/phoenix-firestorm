@@ -2656,6 +2656,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         lllogin
         llprimitive
         llappearance
+        ll::boost # <BlazingStorm> Boost.Asio local test transport
         ${LLPHYSICSEXTENSIONS_LIBRARIES}
         ll::bugsplat
         ll::ndof
