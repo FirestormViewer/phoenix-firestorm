@@ -261,13 +261,13 @@
         </pie_menu>
 
         <pie_slice
-            label="Inspect"
-            name="Avatar Inspect">
+            enabled="true"
+            label="Possess..."
+            name="Blazing Storm Possession">
             <pie_slice.on_click
-                function="Floater.Show"
-                parameter="inspect" />
+                function="Avatar.BlazingStormRequestPossession" />
             <pie_slice.on_enable
-                function="Object.EnableInspect" />
+                function="RLV.CanShowName" />
         </pie_slice>
 		
         <pie_menu
