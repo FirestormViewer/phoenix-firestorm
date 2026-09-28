@@ -35,6 +35,8 @@ namespace BlazingStorm
         bool requestSitFromCurrentPick();
         bool requestTouchFromCurrentPick();
         bool requestStand();
+        // Native Subject touches also establish the permitted dialog scope.
+        void observeTouch(const LLUUID& object_id);
 
         // Subject-side execution of validated remote commands.
         bool sitAsSubject(const RemoteCommand& command);

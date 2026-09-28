@@ -27,6 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "lltoolgrab.h"
+#include "blazingstorm/remote/bsworldinteraction.h"
 
 // library headers
 #include "indra_constants.h"        // for agent control flags
@@ -1187,6 +1188,9 @@ void send_ObjectGrab_message(LLViewerObject* object, const LLPickInfo & pick, co
     // <FS:Ansariel> Crash fix
     //if (!object) return;
     if (!object || !object->getRegion()) return;
+
+    // Blazing Storm: scope mirrored dialogs to native Subject touches too.
+    BlazingStorm::WorldInteraction::instance().observeTouch(object->getID());
 
     LLMessageSystem *msg = gMessageSystem;
 

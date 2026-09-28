@@ -223,6 +223,12 @@ namespace BlazingStorm
             std::chrono::steady_clock::now() + std::chrono::seconds(120);
     }
 
+    void WorldInteraction::observeTouch(const LLUUID& object_id)
+    {
+        if (RemoteSession::instance().hasPermission(RemotePermission::ScriptDialogs))
+            noteInteraction(object_id, rootIdForObject(object_id));
+    }
+
     bool WorldInteraction::sitAsSubject(const RemoteCommand& command)
     {
         LLUUID object_id(command.targetId);
@@ -351,7 +357,10 @@ namespace BlazingStorm
         const bool permitted = RemoteSession::instance().hasPermission(RemotePermission::ScriptDialogs);
         for (auto it = mPendingDialogs.begin(); it != mPendingDialogs.end(); )
         {
-            if (!permitted || now >= it->second.expiresAt)
+            const auto notification = LLNotifications::instance().find(it->second.subjectNotificationId);
+            const bool closed = it->second.subjectNotificationId.notNull()
+                && (!notification || notification->isCancelled() || notification->isRespondedTo());
+            if (!permitted || closed || now >= it->second.expiresAt)
             {
                 mOutboundClosures.push_back(it->first);
                 it = mPendingDialogs.erase(it);
