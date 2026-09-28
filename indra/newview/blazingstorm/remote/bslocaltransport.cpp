@@ -1093,8 +1093,13 @@ namespace BlazingStorm
         if (name == "back")        return RemoteCommandType::MoveBackward;
         if (name == "strafeleft")  return RemoteCommandType::StrafeLeft;
         if (name == "straferight") return RemoteCommandType::StrafeRight;
-        if (name == "turnleft")    return RemoteCommandType::TurnLeft;
-        if (name == "turnright")   return RemoteCommandType::TurnRight;
+        if (name == "turnleft")     return RemoteCommandType::TurnLeft;
+        if (name == "turnright")    return RemoteCommandType::TurnRight;
+        if (name == "moveup")       return RemoteCommandType::MoveUp;
+        if (name == "movedown")     return RemoteCommandType::MoveDown;
+        if (name == "fly-on")       return RemoteCommandType::FlyOn;
+        if (name == "fly-off")      return RemoteCommandType::FlyOff;
+        if (name == "fly-toggle")   return RemoteCommandType::ToggleFly;
         if (name == "jump")         return RemoteCommandType::Jump;
         if (name == "stop-forward") return RemoteCommandType::StopForward;
         if (name == "stop-strafe")  return RemoteCommandType::StopStrafe;
