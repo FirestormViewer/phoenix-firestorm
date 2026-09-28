@@ -9320,6 +9320,21 @@ Before allowing this access, make sure you know what the object is and why it is
     </footer>
   </notification>
 
+  <notification
+   icon="notify.tga"
+   name="BlazingStormForwardedScriptDialog"
+   show_toast="false"
+   type="notify">
+Blazing Storm forwarded &apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; from the possessed avatar:
+[MESSAGE]
+    <form name="form">
+      <button
+       index="-1"
+       name="Dismiss"
+       text="Dismiss"/>
+    </form>
+  </notification>
+
 	<notification
    icon="notify.tga"
    name="ScriptDialog"
