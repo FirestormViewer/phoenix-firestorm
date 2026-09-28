@@ -35,6 +35,12 @@ namespace BlazingStorm
                                const std::string& controller_name,
                                std::uint16_t port = DEFAULT_PORT);
 
+        bool requestController(const std::string& subject_id,
+                               const std::string& controller_id,
+                               const std::string& controller_name);
+
+        static std::uint16_t portForAvatarId(const std::string& avatar_id);
+
         bool acceptPending();
         void rejectPending();
         void disconnect();
@@ -61,6 +67,7 @@ namespace BlazingStorm
         LocalTransport() = default;
 
         std::string generatePairingCode() const;
+        void showPairingPrompt();
         void tryAccept();
         void readAvailable();
         void processLine(const std::string& line);
@@ -85,6 +92,7 @@ namespace BlazingStorm
         bool mConnected = false;
         bool mPaired = false;
         bool mPendingPairing = false;
+        bool mAutoListenerNeedsRestart = true;
 
         std::uint16_t mPort = DEFAULT_PORT;
         std::string mPairingCode;
