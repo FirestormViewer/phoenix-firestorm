@@ -12,7 +12,10 @@
 #include "blazingstorm/remote/bsremotecontroller.h"
 #include "blazingstorm/remote/bsremoteevents.h"
 #include "blazingstorm/remote/bsremotesession.h"
+#include "blazingstorm/remote/bstruststore.h"
 #include "fscommon.h"
+#include "llagent.h"
+#include "llnotificationsutil.h"
 #include "lluuid.h"
 
 #include <boost/asio/buffer.hpp>
@@ -61,6 +64,20 @@ namespace BlazingStorm
     {
         static LocalTransport transport;
         return transport;
+    }
+
+    std::uint16_t LocalTransport::portForAvatarId(const std::string& avatar_id)
+    {
+        // Stable FNV-1a hash. Each logged-in local viewer gets a predictable
+        // loopback-only listener port derived from its avatar UUID.
+        std::uint32_t hash = 2166136261u;
+        for (const unsigned char ch : avatar_id)
+        {
+            hash ^= ch;
+            hash *= 16777619u;
+        }
+
+        return static_cast<std::uint16_t>(30000u + (hash % 20000u));
     }
 
     std::string LocalTransport::generatePairingCode() const
@@ -113,7 +130,8 @@ namespace BlazingStorm
         mListening = true;
         mPort = port;
         mPairingCode = generatePairingCode();
-        mLastStatus = "Waiting for a controller on this computer.";
+        mAutoListenerNeedsRestart = false;
+        mLastStatus = "Listening for possession requests on this computer.";
         return true;
     }
 
@@ -152,6 +170,53 @@ namespace BlazingStorm
         return mConnected;
     }
 
+    bool LocalTransport::requestController(const std::string& subject_id,
+                                            const std::string& controller_id,
+                                            const std::string& controller_name)
+    {
+        LLUUID subject_uuid(subject_id);
+        if (subject_uuid.isNull())
+        {
+            mLastStatus = "Subject avatar UUID is invalid.";
+            return false;
+        }
+
+        disconnect();
+
+        const std::uint16_t subject_port = portForAvatarId(subject_id);
+
+        boost::system::error_code error;
+        auto socket = std::make_unique<tcp::socket>(mIo);
+        socket->connect(
+            tcp::endpoint(boost::asio::ip::address_v4::loopback(), subject_port),
+            error);
+        if (error)
+        {
+            mLastStatus =
+                "Could not find that subject viewer on this computer. "
+                "Make sure it is logged in to Blazing Storm.";
+            return false;
+        }
+
+        socket->non_blocking(true, error);
+        if (error)
+        {
+            mLastStatus = "Could not make local controller socket nonblocking: " + error.message();
+            return false;
+        }
+
+        mSocket = std::move(socket);
+        mRole = RemoteRole::Controller;
+        mConnected = true;
+        mPort = subject_port;
+        mPairingCode.clear();
+        mLastStatus = "Possession request sent; waiting for subject approval.";
+
+        queueLine("REQUEST|" + controller_id + "|" + hexEncode(controller_name));
+        flushWrites();
+        return mConnected;
+    }
+
     bool LocalTransport::acceptPending()
     {
         if (mRole != RemoteRole::Host || !mConnected || !mPendingPairing || mPaired)
@@ -163,9 +228,15 @@ namespace BlazingStorm
         LLUUID session_id;
         session_id.generate();
 
-        const RemotePermissionMask initial_permissions =
+        RemotePermissionMask initial_permissions =
               toMask(RemotePermission::Movement)
             | toMask(RemotePermission::Chat);
+
+        if (const TrustedController* trusted =
+                TrustStore::instance().find(mPendingControllerId))
+        {
+            initial_permissions = trusted->permissions;
+        }
 
         RemoteCommandDispatcher::instance().reset();
         RemoteActions::instance().stopMovement();
@@ -231,6 +302,7 @@ namespace BlazingStorm
         mPendingControllerName.clear();
         mReceiveBuffer.clear();
         mWriteBuffer.clear();
+        mAutoListenerNeedsRestart = true;
     }
 
     void LocalTransport::closeSocketOnly()
@@ -282,6 +354,7 @@ namespace BlazingStorm
             }
             mListening = false;
             mRole = RemoteRole::None;
+            mAutoListenerNeedsRestart = true;
         }
     }
 
@@ -291,6 +364,47 @@ namespace BlazingStorm
         resetConnectionState(keep_listener);
         mLastStatus = reason;
         FSCommon::report_to_nearby_chat("[Blazing Storm] " + reason);
+    }
+
+    void LocalTransport::showPairingPrompt()
+    {
+        if (!mPendingPairing)
+        {
+            return;
+        }
+
+        LLSD substitutions;
+        substitutions["CONTROLLER"] =
+            mPendingControllerName.empty() ? mPendingControllerId : mPendingControllerName;
+
+        LLSD payload;
+        payload["controller_id"] = mPendingControllerId;
+
+        LLNotificationsUtil::add(
+            "BlazingStormPossessionRequest",
+            substitutions,
+            payload,
+            [this](const LLSD& notification, const LLSD& response) -> bool
+            {
+                if (!mPendingPairing
+                    || notification["payload"]["controller_id"].asString()
+                        != mPendingControllerId)
+                {
+                    return false;
+                }
+
+                const S32 option =
+                    LLNotificationsUtil::getSelectedOption(notification, response);
+                if (option == 0)
+                {
+                    acceptPending();
+                }
+                else
+                {
+                    rejectPending();
+                }
+                return false;
+            });
     }
 
     void LocalTransport::tryAccept()
@@ -426,9 +540,28 @@ namespace BlazingStorm
                 mPendingPairing = true;
                 mLastStatus = "Pairing request from " + controller_name + " is waiting for approval.";
                 queueLine("WAIT");
-                FSCommon::report_to_nearby_chat(
-                    "[Blazing Storm] Pairing request from " + controller_name
-                    + ". Use /blaze accept or /blaze reject.");
+                showPairingPrompt();
+                return;
+            }
+
+            if (fields[0] == "REQUEST" && fields.size() == 3 && !mPaired && !mPendingPairing)
+            {
+                std::string controller_name;
+                if (!hexDecode(fields[2], controller_name))
+                {
+                    queueLine("REJECT|" + hexEncode("Malformed controller identity."));
+                    flushWrites();
+                    closeSocketOnly();
+                    return;
+                }
+
+                mPendingControllerId = fields[1];
+                mPendingControllerName = controller_name;
+                mPendingPairing = true;
+                mLastStatus =
+                    "Possession request from " + controller_name + " is waiting for approval.";
+                queueLine("WAIT");
+                showPairingPrompt();
                 return;
             }
 
@@ -575,6 +708,18 @@ namespace BlazingStorm
 
     void LocalTransport::update()
     {
+        // Local-test discovery: every logged-in idle viewer listens on a
+        // deterministic loopback port based on its avatar UUID. A controller
+        // can therefore initiate the request without the subject opening UI.
+        if (mRole == RemoteRole::None
+            && mAutoListenerNeedsRestart
+            && gAgentID.notNull())
+        {
+            mAutoListenerNeedsRestart = false;
+            startHost(portForAvatarId(gAgentID.asString()));
+            mAutoListenerNeedsRestart = false;
+        }
+
         tryAccept();
         flushWrites();
         readAvailable();
