@@ -5855,7 +5855,9 @@ void LLAppViewer::idle()
         // Optional debug mode: discard locally-generated ephemeral movement
         // input, then re-apply controller movement below. Persistent viewer
         // state such as fly/mouselook is preserved by resetControlFlags().
-        if (BlazingStorm::RemoteSession::instance().subjectLocalMovementDisabled())
+        if (BlazingStorm::RemoteSession::instance().subjectLocalMovementDisabled()
+            || BlazingStorm::RemoteSession::instance().isSubjectRestricted(
+                BlazingStorm::SubjectRestriction::Movement))
         {
             gAgent.resetControlFlags();
         }
