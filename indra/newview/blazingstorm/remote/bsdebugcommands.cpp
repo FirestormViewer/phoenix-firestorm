@@ -343,6 +343,9 @@ namespace BlazingStorm
                     + "; movement=" + (session.hasPermission(RemotePermission::Movement) ? "yes" : "no")
                     + "; chat=" + (session.hasPermission(RemotePermission::Chat) ? "yes" : "no")
                     + "; controller-im=" + (session.hasPermission(RemotePermission::InstantMessage) ? "yes" : "no")
+                    + "; touch=" + (session.hasPermission(RemotePermission::Touch) ? "yes" : "no")
+                    + "; sit-stand=" + (session.hasPermission(RemotePermission::SitStand) ? "yes" : "no")
+                    + "; object-dialogs=" + (session.hasPermission(RemotePermission::ScriptDialogs) ? "yes" : "no")
                     + "; controller-restrictions=" + (session.hasPermission(RemotePermission::ManageSubjectRestrictions) ? "yes" : "no")
                     + "; subject-movement="
                     + (session.isSubjectRestricted(SubjectRestriction::Movement) ? "restricted" : "allowed")
