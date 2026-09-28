@@ -85,6 +85,46 @@ namespace BlazingStorm
         return true;
     }
 
+    bool RemoteActions::moveUp()
+    {
+        if (!canMove()) return false;
+        beginMovement();
+        mVertical = 1;
+        return true;
+    }
+
+    bool RemoteActions::moveDown()
+    {
+        if (!canMove()) return false;
+        beginMovement();
+        mVertical = -1;
+        return true;
+    }
+
+    bool RemoteActions::flyOn()
+    {
+        if (!canMove()) return false;
+        beginMovement();
+        gAgent.setFlying(true, true);
+        return gAgent.getFlying();
+    }
+
+    bool RemoteActions::flyOff()
+    {
+        if (!canMove()) return false;
+        beginMovement();
+        gAgent.setFlying(false);
+        return true;
+    }
+
+    bool RemoteActions::toggleFly()
+    {
+        if (!canMove()) return false;
+        beginMovement();
+        gAgent.setFlying(!gAgent.getFlying(), true);
+        return true;
+    }
+
     bool RemoteActions::jump()
     {
         if (!canMove()) return false;
@@ -119,11 +159,17 @@ namespace BlazingStorm
         mTurn = 0.f;
     }
 
+    void RemoteActions::stopVertical()
+    {
+        mVertical = 0;
+    }
+
     void RemoteActions::stopMovement()
     {
         stopForward();
         stopStrafe();
         stopTurn();
+        stopVertical();
         mJumpPending = false;
     }
 
@@ -148,6 +194,11 @@ namespace BlazingStorm
         if (mTurn != 0.f)
         {
             gAgent.moveYaw(mTurn, false);
+        }
+
+        if (mVertical != 0)
+        {
+            gAgent.moveUp(mVertical);
         }
 
         if (mJumpPending)
