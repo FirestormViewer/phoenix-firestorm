@@ -32,4 +32,22 @@ namespace BlazingStorm
         FSCommon::report_to_nearby_chat("[Thought to controller] " + text);
         return true;
     }
+    bool SubjectPolicy::handleOutgoingInstantMessage(const std::string& text)
+    {
+        auto& session = RemoteSession::instance();
+
+        if (!session.isActive()
+            || !session.isSubjectRestricted(SubjectRestriction::InstantMessage)
+            || text.empty())
+        {
+            return false;
+        }
+
+        // Keep third-party IM privacy intact: only the subject-authored text is
+        // diverted to the controller. Incoming IMs are not mirrored.
+        RemoteEvents::instance().pushThought("[IM thought] " + text);
+        FSCommon::report_to_nearby_chat("[Private thought to controller] " + text);
+        return true;
+    }
+
 }
