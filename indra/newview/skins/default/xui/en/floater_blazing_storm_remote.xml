@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ name="blazing_storm_remote"
+ positioning="centered"
+ legacy_header_height="18"
+ can_resize="true"
+ can_dock="false"
+ can_close="true"
+ height="620"
+ width="560"
+ min_width="520"
+ min_height="560"
+ layout="topleft"
+ save_rect="true"
+ save_visibility="true"
+ single_instance="true"
+ title="Blazing Storm Remote Control">
+
+  <text
+   name="status"
+   left="16"
+   top="28"
+   width="528"
+   height="42"
+   follows="left|top|right"
+   word_wrap="true">
+    Idle | disconnected | not paired
+  </text>
+
+  <tab_container
+   name="remote_tabs"
+   left="10"
+   top="74"
+   width="540"
+   height="530"
+   follows="all"
+   tab_position="top">
+
+    <panel
+     name="subject_panel"
+     label="Subject / Host"
+     layout="topleft"
+     follows="all">
+
+      <text
+       name="subject_intro"
+       left="14"
+       top="14"
+       width="500"
+       height="34"
+       word_wrap="true">
+        Host a possession session on this viewer. The controller cannot act until you accept the pairing request.
+      </text>
+
+      <button
+       name="start_host"
+       label="Start Local Host"
+       left="14"
+       top="54"
+       width="140"
+       height="24" />
+
+      <text
+       name="pairing_code_label"
+       left="170"
+       top="58"
+       width="90"
+       height="18">
+        Pairing code:
+      </text>
+
+      <line_editor
+       name="pairing_code"
+       left="260"
+       top="54"
+       width="120"
+       height="24"
+       enabled="false"
+       select_on_focus="true" />
+
+      <button
+       name="accept"
+       label="Accept"
+       left="14"
+       top="90"
+       width="90"
+       height="24" />
+
+      <button
+       name="reject"
+       label="Reject"
+       left="112"
+       top="90"
+       width="90"
+       height="24" />
+
+      <button
+       name="disconnect"
+       label="Disconnect"
+       left="210"
+       top="90"
+       width="100"
+       height="24" />
+
+      <text
+       name="permissions_header"
+       left="14"
+       top="132"
+       width="260"
+       height="18"
+       font="SansSerifSmall"
+       font.style="BOLD">
+        Controller permissions
+      </text>
+
+      <check_box
+       name="allow_controller_im"
+       label="Allow controller to send direct IMs as me"
+       left="14"
+       top="156"
+       width="330"
+       height="18" />
+
+      <check_box
+       name="allow_restrictions"
+       label="Allow controller to change my chat / IM restrictions"
+       left="14"
+       top="180"
+       width="370"
+       height="18" />
+
+      <text
+       name="money_note"
+       left="34"
+       top="204"
+       width="450"
+       height="30"
+       word_wrap="true">
+        Money actions are never available to the controller.
+      </text>
+
+      <text
+       name="subject_restrictions_header"
+       left="14"
+       top="246"
+       width="260"
+       height="18"
+       font="SansSerifSmall"
+       font.style="BOLD">
+        Subject restrictions
+      </text>
+
+      <check_box
+       name="subject_restrict_chat"
+       label="Redirect my nearby chat into controller thoughts"
+       left="14"
+       top="270"
+       width="360"
+       height="18" />
+
+      <check_box
+       name="subject_restrict_im"
+       label="Redirect my outgoing direct IMs into controller thoughts"
+       left="14"
+       top="294"
+       width="390"
+       height="18" />
+
+      <text
+       name="debug_header"
+       left="14"
+       top="336"
+       width="260"
+       height="18"
+       font="SansSerifSmall"
+       font.style="BOLD">
+        Debugging
+      </text>
+
+      <check_box
+       name="disable_local_movement"
+       label="Disable my local movement controls while possessed"
+       left="14"
+       top="360"
+       width="370"
+       height="18"
+       tool_tip="Debug option. OFF by default. Suppresses subject-side movement input while keeping controller movement active." />
+
+      <text
+       name="debug_note"
+       left="34"
+       top="384"
+       width="470"
+       height="38"
+       word_wrap="true">
+        This option resets to OFF whenever a possession session starts or ends. Emergency release always remains local and available.
+      </text>
+
+      <button
+       name="emergency_release"
+       label="EMERGENCY RELEASE"
+       left="14"
+       top="444"
+       width="190"
+       height="32"
+       font="SansSerif"
+       tool_tip="Immediately ends possession locally. This can never be disabled." />
+    </panel>
+
+    <panel
+     name="controller_panel"
+     label="Controller"
+     layout="topleft"
+     follows="all">
+
+      <text
+       name="controller_intro"
+       left="14"
+       top="14"
+       width="500"
+       height="30"
+       word_wrap="true">
+        Connect to the subject viewer using its pairing code. The subject must accept before controls become active.
+      </text>
+
+      <text
+       name="connect_code_label"
+       left="14"
+       top="54"
+       width="90"
+       height="18">
+        Pairing code:
+      </text>
+
+      <line_editor
+       name="connect_code"
+       left="104"
+       top="50"
+       width="130"
+       height="24"
+       max_length_chars="12" />
+
+      <button
+       name="connect"
+       label="Connect"
+       left="244"
+       top="50"
+       width="90"
+       height="24" />
+
+      <text
+       name="movement_header"
+       left="14"
+       top="96"
+       width="260"
+       height="18"
+       font="SansSerifSmall"
+       font.style="BOLD">
+        Movement
+      </text>
+
+      <button name="remote_forward" label="Forward" left="100" top="120" width="90" height="24" />
+      <button name="remote_left" label="Strafe Left" left="14" top="150" width="90" height="24" />
+      <button name="remote_stop" label="STOP" left="104" top="150" width="90" height="24" />
+      <button name="remote_right" label="Strafe Right" left="194" top="150" width="90" height="24" />
+      <button name="remote_back" label="Back" left="100" top="180" width="90" height="24" />
+
+      <button name="remote_turn_left" label="Turn Left" left="310" top="120" width="90" height="24" />
+      <button name="remote_turn_right" label="Turn Right" left="404" top="120" width="90" height="24" />
+      <button name="remote_jump" label="Jump" left="357" top="150" width="90" height="24" />
+
+      <text
+       name="nearby_header"
+       left="14"
+       top="224"
+       width="260"
+       height="18"
+       font="SansSerifSmall"
+       font.style="BOLD">
+        Speak as subject
+      </text>
+
+      <line_editor
+       name="remote_say_text"
+       left="14"
+       top="248"
+       width="390"
+       height="24"
+       max_length_bytes="1023" />
+
+      <button
+       name="remote_say"
+       label="Send Nearby"
+       left="412"
+       top="248"
+       width="100"
+       height="24" />
+
+      <text
+       name="im_header"
+       left="14"
+       top="290"
+       width="260"
+       height="18"
+       font="SansSerifSmall"
+       font.style="BOLD">
+        Direct IM as subject
+      </text>
+
+      <line_editor
+       name="remote_im_target"
+       left="14"
+       top="314"
+       width="250"
+       height="24"
+       max_length_chars="36"
+       tool_tip="Target avatar UUID" />
+
+      <line_editor
+       name="remote_im_text"
+       left="14"
+       top="344"
+       width="390"
+       height="24"
+       max_length_bytes="1023" />
+
+      <button
+       name="remote_im"
+       label="Send IM"
+       left="412"
+       top="344"
+       width="100"
+       height="24" />
+
+      <text
+       name="restrictions_header"
+       left="14"
+       top="390"
+       width="260"
+       height="18"
+       font="SansSerifSmall"
+       font.style="BOLD">
+        Subject restrictions
+      </text>
+
+      <check_box
+       name="remote_restrict_chat"
+       label="Restrict subject nearby chat"
+       left="14"
+       top="414"
+       width="250"
+       height="18" />
+
+      <check_box
+       name="remote_restrict_im"
+       label="Restrict subject outgoing direct IMs"
+       left="14"
+       top="438"
+       width="280"
+       height="18" />
+
+      <button
+       name="remote_release"
+       label="End Possession"
+       left="318"
+       top="414"
+       width="130"
+       height="28" />
+    </panel>
+  </tab_container>
+</floater>
