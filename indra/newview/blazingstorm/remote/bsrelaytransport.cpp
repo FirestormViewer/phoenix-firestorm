@@ -450,7 +450,7 @@ namespace
         };
 
         std::string output;
-        int accumulator = 0;
+        std::uint32_t accumulator = 0;
         int bits = -8;
         for (const char ch : value)
         {
@@ -655,7 +655,7 @@ namespace
             return result;
         }
 
-        beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(15));
+        beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(8));
         beast::get_lowest_layer(stream).connect(endpoints, error);
         if (error)
         {
@@ -849,6 +849,25 @@ namespace
             if (event.sendGroup.empty())
                 event.sendGroup = firstJsonString(
                     connection, {"sendGroup", "publishGroup", "outboundGroup"});
+
+            if (role == BlazingStorm::RelayBrokerRole::Subject)
+            {
+                if (event.receiveGroup.empty())
+                    event.receiveGroup =
+                        firstJsonString(connection, {"commandGroup", "commandsGroup"});
+                if (event.sendGroup.empty())
+                    event.sendGroup =
+                        firstJsonString(connection, {"eventGroup", "eventsGroup"});
+            }
+            else
+            {
+                if (event.receiveGroup.empty())
+                    event.receiveGroup =
+                        firstJsonString(connection, {"eventGroup", "eventsGroup"});
+                if (event.sendGroup.empty())
+                    event.sendGroup =
+                        firstJsonString(connection, {"commandGroup", "commandsGroup"});
+            }
         }
 
         if (event.clientUrl.empty()) return false;
@@ -1068,7 +1087,7 @@ namespace BlazingStorm
                         http::field::user_agent,
                         "BlazingStormViewer/1");
                     request.set(
-                        http::field::sec_websocket_protocol,
+                        "Sec-WebSocket-Protocol",
                         "json.webpubsub.azure.v1");
                 }));
 
