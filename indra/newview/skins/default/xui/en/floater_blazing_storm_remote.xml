@@ -962,13 +962,13 @@
        height="64" word_wrap="true" follows="left|top|right">
         Controller: each click moves the subject camera one step. Requires camera permission and third-person view. RLVa camera locks are respected.
       </text>
-      <button name="camera_left" label="Orbit Left" layout="topleft" left="16" top="130" width="130" height="28" />
-      <button name="camera_right" label="Orbit Right" layout="topleft" left="156" top="130" width="130" height="28" />
-      <button name="camera_up" label="Look Up" layout="topleft" left="16" top="168" width="130" height="28" />
-      <button name="camera_down" label="Look Down" layout="topleft" left="156" top="168" width="130" height="28" />
-      <button name="camera_in" label="Zoom In" layout="topleft" left="16" top="206" width="130" height="28" />
-      <button name="camera_out" label="Zoom Out" layout="topleft" left="156" top="206" width="130" height="28" />
-      <button name="camera_reset" label="Reset Camera" layout="topleft" left="16" top="244" width="270" height="28" />
+      <button name="camera_left" label="Orbit Left" layout="topleft" follows="left|top" left="16" top="130" width="130" height="28" />
+      <button name="camera_right" label="Orbit Right" layout="topleft" follows="left|top" left="156" top="130" width="130" height="28" />
+      <button name="camera_up" label="Look Up" layout="topleft" follows="left|top" left="16" top="168" width="130" height="28" />
+      <button name="camera_down" label="Look Down" layout="topleft" follows="left|top" left="156" top="168" width="130" height="28" />
+      <button name="camera_in" label="Zoom In" layout="topleft" follows="left|top" left="16" top="206" width="130" height="28" />
+      <button name="camera_out" label="Zoom Out" layout="topleft" follows="left|top" left="156" top="206" width="130" height="28" />
+      <button name="camera_reset" label="Reset Camera" layout="topleft" follows="left|top" left="16" top="244" width="270" height="28" />
       <text name="camera_release_help" layout="topleft" left="16" right="-16" top="292"
        height="55" word_wrap="true" follows="left|top|right">
         Revoking permission or ending possession returns camera focus to the subject avatar. Local camera input remains available.
