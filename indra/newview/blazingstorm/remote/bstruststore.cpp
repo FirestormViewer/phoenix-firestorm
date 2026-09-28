@@ -79,7 +79,7 @@ namespace BlazingStorm
         const std::string filename =
             gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, TRUST_FILE);
 
-        LLSD data = LLSD::emptyMap();
+        LLSD data(LLSD::emptyMap());
         for (const auto& pair : mEntries)
         {
             LLSD item;
