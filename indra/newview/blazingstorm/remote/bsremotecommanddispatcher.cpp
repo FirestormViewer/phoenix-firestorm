@@ -51,6 +51,15 @@ namespace BlazingStorm
             case RemoteCommandType::TurnLeft:     return actions.turnLeft();
             case RemoteCommandType::TurnRight:    return actions.turnRight();
             case RemoteCommandType::Jump:         return actions.jump();
+            case RemoteCommandType::StopForward:
+                actions.stopForward();
+                return true;
+            case RemoteCommandType::StopStrafe:
+                actions.stopStrafe();
+                return true;
+            case RemoteCommandType::StopTurn:
+                actions.stopTurn();
+                return true;
             case RemoteCommandType::Stop:
                 actions.stopMovement();
                 return true;
