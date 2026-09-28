@@ -63,7 +63,7 @@
          top="0"
          right="-15"
          min_width="480"
-         height="960"
+         height="1025"
          follows="left|top|right"
          background_visible="false">
 
@@ -215,12 +215,33 @@
            width="450"
            height="18" />
 
+          <check_box
+           name="allow_full_control"
+           label="FULL CONTROL - allow every Blazing Storm remote ability"
+           layout="topleft"
+           left="16"
+           top="390"
+           width="455"
+           height="20"
+           tool_tip="Grants all current remote permissions. Money actions are still never available." />
+
+          <text
+           name="full_control_warning"
+           layout="topleft"
+           left="36"
+           right="-24"
+           top="416"
+           height="38"
+           word_wrap="true">
+            WARNING: Only give Full Control to someone you truly trust. This grants every current remote ability. Money actions remain unavailable.
+          </text>
+
           <text
            name="money_note"
            layout="topleft"
            left="36"
            right="-24"
-           top="390"
+           top="466"
            height="28"
            word_wrap="true">
             Money actions are never available to the controller.
@@ -230,7 +251,7 @@
            name="subject_restrictions_header"
            layout="topleft"
            left="16"
-           top="434"
+           top="510"
            width="300"
            height="18"
            font="SansSerifSmall"
@@ -243,7 +264,7 @@
            label="Block my local movement controls"
            layout="topleft"
            left="16"
-           top="460"
+           top="536"
            width="360"
            height="18" />
 
@@ -252,7 +273,7 @@
            label="Redirect my nearby chat into controller thoughts"
            layout="topleft"
            left="16"
-           top="486"
+           top="562"
            width="410"
            height="18" />
 
@@ -261,7 +282,7 @@
            label="Redirect my outgoing direct IMs into controller thoughts"
            layout="topleft"
            left="16"
-           top="512"
+           top="588"
            width="450"
            height="18" />
 
@@ -269,7 +290,7 @@
            name="debug_header"
            layout="topleft"
            left="16"
-           top="558"
+           top="634"
            width="280"
            height="18"
            font="SansSerifSmall"
@@ -282,7 +303,7 @@
            label="Debug: disable my local movement controls while possessed"
            layout="topleft"
            left="16"
-           top="584"
+           top="660"
            width="430"
            height="18"
            tool_tip="Temporary debug option. OFF by default and reset for each session." />
@@ -292,7 +313,7 @@
            layout="topleft"
            left="36"
            right="-24"
-           top="612"
+           top="688"
            height="42"
            word_wrap="true">
             The movement restriction above is session state. This debug checkbox is temporary and resets to OFF whenever possession starts or ends.
@@ -302,7 +323,7 @@
            name="acceptance_messages_header"
            layout="topleft"
            left="16"
-           top="676"
+           top="752"
            width="300"
            height="18"
            font="SansSerifSmall"
@@ -314,7 +335,7 @@
            name="accepted_message_label"
            layout="topleft"
            left="16"
-           top="704"
+           top="780"
            width="190"
            height="18">
             After manual acceptance:
@@ -325,7 +346,7 @@
            layout="topleft"
            left="16"
            right="-24"
-           top="726"
+           top="802"
            height="26"
            follows="left|top|right"
            max_length_bytes="1023"
@@ -335,7 +356,7 @@
            name="whitelist_accepted_message_label"
            layout="topleft"
            left="16"
-           top="768"
+           top="844"
            width="220"
            height="18">
             After whitelist auto-accept:
@@ -346,7 +367,7 @@
            layout="topleft"
            left="16"
            right="-24"
-           top="790"
+           top="866"
            height="26"
            follows="left|top|right"
            max_length_bytes="1023"
@@ -357,7 +378,7 @@
            layout="topleft"
            left="16"
            right="-24"
-           top="828"
+           top="904"
            height="36"
            follows="left|top|right"
            word_wrap="true">
@@ -369,7 +390,7 @@
            label="EMERGENCY RELEASE"
            layout="topleft"
            left="16"
-           top="886"
+           top="962"
            width="210"
            height="34"
            font="SansSerif"
@@ -746,7 +767,7 @@
          top="0"
          right="-15"
          min_width="480"
-         height="735"
+         height="820"
          follows="left|top|right"
          background_visible="false">
 
@@ -922,7 +943,7 @@
            layout="topleft"
            left="16"
            right="-24"
-           top="538"
+           top="616"
            height="64"
            follows="left|top|right"
            word_wrap="true">
@@ -935,12 +956,33 @@
            layout="topleft" left="16" top="484" width="450" height="18" />
           <check_box name="trusted_teleport" label="Teleport: travel, send and answer offers"
            layout="topleft" left="16" top="506" width="450" height="18" />
+          <check_box
+           name="trusted_full_control"
+           label="FULL CONTROL - grant every remote ability"
+           layout="topleft"
+           left="16"
+           top="534"
+           width="440"
+           height="20"
+           tool_tip="Selects every available trusted-controller permission. Money actions are never included." />
+
+          <text
+           name="trusted_full_control_warning"
+           layout="topleft"
+           left="36"
+           right="-24"
+           top="560"
+           height="42"
+           follows="left|top|right"
+           word_wrap="true">
+            WARNING: Only give Full Control to someone you truly trust. This profile will auto-accept with every current remote ability enabled.
+          </text>
           <button
            name="trusted_save"
            label="Save / Update Whitelist"
            layout="topleft"
            left="16"
-           top="610"
+           top="694"
            width="190"
            height="30" />
 
@@ -949,7 +991,7 @@
            layout="topleft"
            left="16"
            right="-24"
-           top="658"
+           top="742"
            height="44"
            follows="left|top|right"
            word_wrap="true">
