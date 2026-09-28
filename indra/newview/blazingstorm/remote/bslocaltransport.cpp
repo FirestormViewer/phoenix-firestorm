@@ -455,7 +455,9 @@ namespace BlazingStorm
                 {
                     queueLine("BLOCKED|" + std::to_string(sequence));
                 }
-                else if (command.type == RemoteCommandType::RestrictNearbyChatOn
+                else if (command.type == RemoteCommandType::RestrictMovementOn
+                      || command.type == RemoteCommandType::RestrictMovementOff
+                      || command.type == RemoteCommandType::RestrictNearbyChatOn
                       || command.type == RemoteCommandType::RestrictNearbyChatOff
                       || command.type == RemoteCommandType::RestrictInstantMessageOn
                       || command.type == RemoteCommandType::RestrictInstantMessageOff)
@@ -679,6 +681,8 @@ namespace BlazingStorm
             case RemoteCommandType::Stop:              return "stop";
             case RemoteCommandType::Say:               return "say";
             case RemoteCommandType::SendInstantMessage:       return "im";
+            case RemoteCommandType::RestrictMovementOn:        return "restrictmovement-on";
+            case RemoteCommandType::RestrictMovementOff:       return "restrictmovement-off";
             case RemoteCommandType::RestrictNearbyChatOn:      return "restrictchat-on";
             case RemoteCommandType::RestrictNearbyChatOff:     return "restrictchat-off";
             case RemoteCommandType::RestrictInstantMessageOn:  return "restrictim-on";
@@ -702,8 +706,10 @@ namespace BlazingStorm
         if (name == "stop-turn")    return RemoteCommandType::StopTurn;
         if (name == "stop")         return RemoteCommandType::Stop;
         if (name == "say")         return RemoteCommandType::Say;
-        if (name == "im")               return RemoteCommandType::SendInstantMessage;
-        if (name == "restrictchat-on")  return RemoteCommandType::RestrictNearbyChatOn;
+        if (name == "im")                   return RemoteCommandType::SendInstantMessage;
+        if (name == "restrictmovement-on")   return RemoteCommandType::RestrictMovementOn;
+        if (name == "restrictmovement-off")  return RemoteCommandType::RestrictMovementOff;
+        if (name == "restrictchat-on")       return RemoteCommandType::RestrictNearbyChatOn;
         if (name == "restrictchat-off") return RemoteCommandType::RestrictNearbyChatOff;
         if (name == "restrictim-on")    return RemoteCommandType::RestrictInstantMessageOn;
         if (name == "restrictim-off")   return RemoteCommandType::RestrictInstantMessageOff;
