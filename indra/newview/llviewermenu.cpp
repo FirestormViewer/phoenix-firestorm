@@ -34,6 +34,9 @@
 #include "llviewermenu.h"
 #include "blazingstorm/remote/bsrequestactions.h" // <BlazingStorm>
 #include "blazingstorm/remote/bsremotesession.h" // <BlazingStorm>
+#include "blazingstorm/remote/bsworldinteraction.h" // <BlazingStorm>
+#include "blazingstorm/remote/bslocaltransport.h" // <BlazingStorm>
+#include "blazingstorm/remote/bsremotecontroller.h" // <BlazingStorm>
 
 // linden library includes
 #include "llavatarnamecache.h"  // IDEVO (I Are Not Men!)
@@ -13231,6 +13234,28 @@ void initialize_menus()
     // Object pie menu
     view_listener_t::addMenu(new LLObjectBuild(), "Object.Build");
     commit.add("Object.Touch", boost::bind(&handle_object_touch));
+    commit.add("BlazingStorm.ObjectTouchSubject",
+        [](LLUICtrl*, const LLSD&)
+        {
+            BlazingStorm::WorldInteraction::instance().requestTouchFromCurrentPick();
+        });
+    commit.add("BlazingStorm.ObjectSitSubject",
+        [](LLUICtrl*, const LLSD&)
+        {
+            BlazingStorm::WorldInteraction::instance().requestSitFromCurrentPick();
+        });
+    commit.add("BlazingStorm.StandSubject",
+        [](LLUICtrl*, const LLSD&)
+        {
+            BlazingStorm::WorldInteraction::instance().requestStand();
+        });
+    enable.add("BlazingStorm.ControllerActive",
+        [](LLUICtrl*, const LLSD&) -> bool
+        {
+            return BlazingStorm::RemoteController::instance().isActive()
+                && BlazingStorm::LocalTransport::instance().isPaired();
+        });
+
     commit.add("Object.ShowOriginal", boost::bind(&handle_object_show_original));
     commit.add("Object.SitOrStand", boost::bind(&handle_object_sit_or_stand));
     commit.add("Object.Delete", boost::bind(&handle_object_delete));
