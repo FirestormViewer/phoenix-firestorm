@@ -15,6 +15,8 @@
 #include "blazingstorm/remote/bstruststore.h"
 #include "fscommon.h"
 #include "llagent.h"
+#include "llimview.h"
+#include "llviewermessage.h"
 #include "llnotificationsutil.h"
 #include "lluuid.h"
 
@@ -87,6 +89,65 @@ namespace BlazingStorm
         return std::to_string(value);
     }
 
+    std::string LocalTransport::generateBootstrapNonce() const
+    {
+        static constexpr char digits[] = "0123456789abcdef";
+        std::random_device random;
+        std::string nonce;
+        nonce.reserve(16);
+        for (int i = 0; i < 16; ++i)
+        {
+            nonce.push_back(digits[random() & 0x0f]);
+        }
+        return nonce;
+    }
+
+    std::string LocalTransport::buildBootstrapMessage(
+        const std::string& controller_id,
+        const std::string& nonce) const
+    {
+        return u8"🚪 The door has opened. Will you step through?\n"
+            "[Blazing Storm request v1 | " + controller_id + " | " + nonce + "]";
+    }
+
+    bool LocalTransport::parseBootstrapMessage(
+        const std::string& message,
+        std::string& controller_id,
+        std::string& nonce) const
+    {
+        static const std::string prefix = "[Blazing Storm request v1 | ";
+        const std::size_t begin = message.rfind(prefix);
+        if (begin == std::string::npos || message.empty() || message.back() != ']')
+        {
+            return false;
+        }
+
+        const std::size_t id_begin = begin + prefix.size();
+        const std::size_t separator = message.find(" | ", id_begin);
+        if (separator == std::string::npos)
+        {
+            return false;
+        }
+
+        controller_id = message.substr(id_begin, separator - id_begin);
+        nonce = message.substr(separator + 3, message.size() - (separator + 3) - 1);
+
+        LLUUID controller_uuid(controller_id);
+        if (controller_uuid.isNull() || nonce.size() != 16)
+        {
+            return false;
+        }
+
+        for (const char ch : nonce)
+        {
+            if (!((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f')))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     bool LocalTransport::startHost(std::uint16_t port)
     {
         disconnect();
@@ -130,7 +191,6 @@ namespace BlazingStorm
         mListening = true;
         mPort = port;
         mPairingCode = generatePairingCode();
-        mAutoListenerNeedsRestart = false;
         mLastStatus = "Listening for possession requests on this computer.";
         return true;
     }
@@ -175,46 +235,140 @@ namespace BlazingStorm
                                             const std::string& controller_name)
     {
         LLUUID subject_uuid(subject_id);
-        if (subject_uuid.isNull())
+        LLUUID controller_uuid(controller_id);
+        if (subject_uuid.isNull() || controller_uuid.isNull())
         {
-            mLastStatus = "Subject avatar UUID is invalid.";
+            mLastStatus = "Subject or controller avatar UUID is invalid.";
             return false;
         }
 
         disconnect();
 
-        const std::uint16_t subject_port = portForAvatarId(subject_id);
+        const std::string nonce = generateBootstrapNonce();
+        const std::string bootstrap_message =
+            buildBootstrapMessage(controller_id, nonce);
+        const LLUUID im_session_id =
+            LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, subject_uuid);
+
+        send_simple_im(
+            subject_uuid,
+            bootstrap_message,
+            IM_NOTHING_SPECIAL,
+            im_session_id);
+
+        mRole = RemoteRole::Controller;
+        mBootstrapPending = true;
+        mBootstrapSubjectId = subject_id;
+        mBootstrapControllerId = controller_id;
+        mBootstrapControllerName = controller_name;
+        mBootstrapNonce = nonce;
+
+        const auto now = std::chrono::steady_clock::now();
+        mNextBootstrapAttempt = now + std::chrono::milliseconds(250);
+        mBootstrapDeadline = now + std::chrono::seconds(15);
+
+        mLastStatus =
+            "Bootstrap IM sent through Second Life; waiting for the subject viewer to open its local listener.";
+        return true;
+    }
+
+    bool LocalTransport::handleBootstrapInstantMessage(
+        const std::string& from_id,
+        const std::string& from_name,
+        const std::string& message,
+        bool online)
+    {
+        if (!online || gAgentID.isNull() || RemoteSession::instance().isActive())
+        {
+            return false;
+        }
+
+        std::string embedded_controller_id;
+        std::string nonce;
+        if (!parseBootstrapMessage(message, embedded_controller_id, nonce)
+            || embedded_controller_id != from_id)
+        {
+            return false;
+        }
+
+        LLUUID from_uuid(from_id);
+        if (from_uuid.isNull())
+        {
+            return false;
+        }
+
+        if (!startHost(portForAvatarId(gAgentID.asString())))
+        {
+            return false;
+        }
+
+        mExpectedBootstrapControllerId = from_id;
+        mExpectedBootstrapNonce = nonce;
+        mBootstrapDeadline =
+            std::chrono::steady_clock::now() + std::chrono::seconds(15);
+        mLastStatus =
+            "Blazing Storm bootstrap received from "
+            + (from_name.empty() ? from_id : from_name)
+            + "; waiting briefly for the matching local controller connection.";
+        return true;
+    }
+
+    void LocalTransport::tryBootstrapConnect()
+    {
+        if (mRole != RemoteRole::Controller
+            || !mBootstrapPending
+            || mConnected)
+        {
+            return;
+        }
+
+        const auto now = std::chrono::steady_clock::now();
+        if (now >= mBootstrapDeadline)
+        {
+            mBootstrapPending = false;
+            mRole = RemoteRole::None;
+            mLastStatus =
+                "Possession bootstrap timed out before the subject viewer opened its listener.";
+            return;
+        }
+
+        if (now < mNextBootstrapAttempt)
+        {
+            return;
+        }
+        mNextBootstrapAttempt = now + std::chrono::milliseconds(250);
 
         boost::system::error_code error;
         auto socket = std::make_unique<tcp::socket>(mIo);
         socket->connect(
-            tcp::endpoint(boost::asio::ip::address_v4::loopback(), subject_port),
+            tcp::endpoint(
+                boost::asio::ip::address_v4::loopback(),
+                portForAvatarId(mBootstrapSubjectId)),
             error);
+
         if (error)
         {
-            mLastStatus =
-                "Could not find that subject viewer on this computer. "
-                "Make sure it is logged in to Blazing Storm.";
-            return false;
+            return;
         }
 
         socket->non_blocking(true, error);
         if (error)
         {
-            mLastStatus = "Could not make local controller socket nonblocking: " + error.message();
-            return false;
+            return;
         }
 
         mSocket = std::move(socket);
-        mRole = RemoteRole::Controller;
         mConnected = true;
-        mPort = subject_port;
-        mPairingCode.clear();
-        mLastStatus = "Possession request sent; waiting for subject approval.";
+        mPort = portForAvatarId(mBootstrapSubjectId);
+        mBootstrapPending = false;
+        mLastStatus =
+            "Connected to subject viewer; waiting for explicit possession approval.";
 
-        queueLine("REQUEST|" + controller_id + "|" + hexEncode(controller_name));
+        queueLine(
+            "REQUEST|" + mBootstrapControllerId
+            + "|" + hexEncode(mBootstrapControllerName)
+            + "|" + mBootstrapNonce);
         flushWrites();
-        return mConnected;
     }
 
     bool LocalTransport::acceptPending()
@@ -244,6 +398,8 @@ namespace BlazingStorm
 
         mPendingPairing = false;
         mPaired = true;
+        mExpectedBootstrapControllerId.clear();
+        mExpectedBootstrapNonce.clear();
         mLastStatus = "Controller accepted. Possession session is active.";
 
         queueLine("ACCEPT|" + session_id.asString());
@@ -261,12 +417,14 @@ namespace BlazingStorm
 
         queueLine("REJECT|" + hexEncode("Subject rejected the pairing request."));
         flushWrites();
-        closeSocketOnly();
+        resetConnectionState(false);
 
         mPendingPairing = false;
         mPendingControllerId.clear();
         mPendingControllerName.clear();
-        mLastStatus = "Pairing request rejected; still waiting for another controller.";
+        mExpectedBootstrapControllerId.clear();
+        mExpectedBootstrapNonce.clear();
+        mLastStatus = "Pairing request rejected; local bootstrap listener closed.";
     }
 
     void LocalTransport::disconnect()
@@ -300,9 +458,15 @@ namespace BlazingStorm
         mPairingCode.clear();
         mPendingControllerId.clear();
         mPendingControllerName.clear();
+        mBootstrapPending = false;
+        mBootstrapSubjectId.clear();
+        mBootstrapControllerId.clear();
+        mBootstrapControllerName.clear();
+        mBootstrapNonce.clear();
+        mExpectedBootstrapControllerId.clear();
+        mExpectedBootstrapNonce.clear();
         mReceiveBuffer.clear();
         mWriteBuffer.clear();
-        mAutoListenerNeedsRestart = true;
     }
 
     void LocalTransport::closeSocketOnly()
@@ -360,7 +524,11 @@ namespace BlazingStorm
 
     void LocalTransport::handlePeerDisconnect(const std::string& reason)
     {
-        const bool keep_listener = (mRole == RemoteRole::Host && mListening && !mPaired);
+        const bool keep_listener =
+            (mRole == RemoteRole::Host
+             && mListening
+             && !mPaired
+             && mExpectedBootstrapControllerId.empty());
         resetConnectionState(keep_listener);
         mLastStatus = reason;
         FSCommon::report_to_nearby_chat("[Blazing Storm] " + reason);
@@ -543,14 +711,18 @@ namespace BlazingStorm
                 return;
             }
 
-            if (fields[0] == "REQUEST" && fields.size() == 3 && !mPaired && !mPendingPairing)
+            if (fields[0] == "REQUEST" && fields.size() == 4 && !mPaired && !mPendingPairing)
             {
                 std::string controller_name;
-                if (!hexDecode(fields[2], controller_name))
+                if (!hexDecode(fields[2], controller_name)
+                    || mExpectedBootstrapControllerId.empty()
+                    || fields[1] != mExpectedBootstrapControllerId
+                    || fields[3] != mExpectedBootstrapNonce
+                    || std::chrono::steady_clock::now() >= mBootstrapDeadline)
                 {
-                    queueLine("REJECT|" + hexEncode("Malformed controller identity."));
+                    queueLine("REJECT|" + hexEncode("Bootstrap identity or nonce did not match the SL IM request."));
                     flushWrites();
-                    closeSocketOnly();
+                    resetConnectionState(false);
                     return;
                 }
 
@@ -707,16 +879,18 @@ namespace BlazingStorm
 
     void LocalTransport::update()
     {
-        // Local-test discovery: every logged-in idle viewer listens on a
-        // deterministic loopback port based on its avatar UUID. A controller
-        // can therefore initiate the request without the subject opening UI.
-        if (mRole == RemoteRole::None
-            && mAutoListenerNeedsRestart
-            && gAgentID.notNull())
+        tryBootstrapConnect();
+
+        if (mRole == RemoteRole::Host
+            && mListening
+            && !mConnected
+            && !mExpectedBootstrapControllerId.empty()
+            && std::chrono::steady_clock::now() >= mBootstrapDeadline)
         {
-            mAutoListenerNeedsRestart = false;
-            startHost(portForAvatarId(gAgentID.asString()));
-            mAutoListenerNeedsRestart = false;
+            disconnect();
+            mLastStatus =
+                "Blazing Storm bootstrap listener expired without a matching controller connection.";
+            return;
         }
 
         tryAccept();
