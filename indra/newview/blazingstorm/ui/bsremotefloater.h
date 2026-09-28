@@ -8,6 +8,7 @@
 
 #include "llfloater.h"
 #include "blazingstorm/remote/bsremoteprotocol.h"
+#include "blazingstorm/remote/bsremotecontroller.h"
 
 namespace BlazingStorm
 {
@@ -36,14 +37,7 @@ namespace BlazingStorm
         void onSubjectRestrictChat();
         void onSubjectRestrictIM();
 
-        enum class MovementMode
-        {
-            SubjectOnly,
-            MirrorBoth,
-            ControllerOnly
-        };
-
-        MovementMode movementMode() const;
+        RemoteMovementMode movementMode() const;
         bool controlsSubject() const;
         bool controlsController() const;
         void onMovementModeChanged();
