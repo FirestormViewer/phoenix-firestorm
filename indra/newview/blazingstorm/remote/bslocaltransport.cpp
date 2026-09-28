@@ -543,6 +543,7 @@ namespace BlazingStorm
         }
 
         mPendingPairing = false;
+        mPendingTrustedAutoAccept = false;
         mPendingControllerId.clear();
         mPendingControllerName.clear();
 
@@ -790,12 +791,14 @@ namespace BlazingStorm
 
                 if (TrustStore::instance().find(mPendingControllerId))
                 {
+                    mPendingTrustedAutoAccept = true;
                     mLastStatus =
                         "Trusted controller " + controller_name + " auto-accepted.";
                     acceptPending();
                 }
                 else
                 {
+                    mPendingTrustedAutoAccept = false;
                     mLastStatus =
                         "Possession request from " + controller_name + " is waiting for approval.";
                     queueLine("WAIT");
