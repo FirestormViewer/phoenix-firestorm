@@ -69,6 +69,27 @@ namespace BlazingStorm
     bool RemoteFloater::postBuild()
     {
         setupFeatures();
+        getChild<LLCheckBoxCtrl>("allow_full_control")->setCommitCallback(
+            [this](LLUICtrl* ctrl, const LLSD&)
+            {
+                if (mRefreshing) return;
+                auto& session = RemoteSession::instance();
+                if (!session.isActive() || LocalTransport::instance().role() != RemoteRole::Host) return;
+                session.setPermissions(ctrl->getValue().asBoolean() ? allRemotePermissions() : 0);
+            });
+        getChild<LLCheckBoxCtrl>("trusted_full_control")->setCommitCallback(
+            [this](LLUICtrl* ctrl, const LLSD&)
+            {
+                if (mRefreshing) return;
+                const bool enabled = ctrl->getValue().asBoolean();
+                for (const char* name : {"trusted_movement", "trusted_chat", "trusted_im",
+                                         "trusted_touch", "trusted_sitstand", "trusted_dialogs",
+                                         "trusted_restrictions", "trusted_camera",
+                                         "trusted_inventory", "trusted_teleport"})
+                {
+                    getChild<LLCheckBoxCtrl>(name)->setValue(enabled);
+                }
+            });
         getChild<LLCheckBoxCtrl>("allow_camera")->setCommitCallback(
             [this](LLUICtrl* ctrl, const LLSD&)
             {
@@ -277,6 +298,11 @@ namespace BlazingStorm
         getChild<LLButton>("disconnect")->setEnabled(transport.role() != RemoteRole::None);
         getChild<LLButton>("emergency_release")->setEnabled(subject_active || is_host);
         getChild<LLButton>("save_current_controller")->setEnabled(subject_active && is_host);
+
+        auto* full_control = getChild<LLCheckBoxCtrl>("allow_full_control");
+        full_control->setEnabled(subject_active && is_host);
+        full_control->setValue(subject_active
+            && (session.permissions() & allRemotePermissions()) == allRemotePermissions());
 
         auto* allow_im = getChild<LLCheckBoxCtrl>("allow_controller_im");
         allow_im->setEnabled(subject_active && is_host);
@@ -933,6 +959,7 @@ namespace BlazingStorm
         getChild<LLCheckBoxCtrl>("trusted_inventory")->setValue(false);
         getChild<LLCheckBoxCtrl>("trusted_teleport")->setValue(false);
         getChild<LLCheckBoxCtrl>("trusted_restrictions")->setValue(false);
+        getChild<LLCheckBoxCtrl>("trusted_full_control")->setValue(false);
     }
 
     void RemoteFloater::onTrustedControllerSelected()
@@ -975,6 +1002,8 @@ namespace BlazingStorm
             (entry->permissions & toMask(RemotePermission::ScriptDialogs)) != 0);
         getChild<LLCheckBoxCtrl>("trusted_restrictions")->setValue(
             (entry->permissions & toMask(RemotePermission::ManageSubjectRestrictions)) != 0);
+        getChild<LLCheckBoxCtrl>("trusted_full_control")->setValue(
+            (entry->permissions & allRemotePermissions()) == allRemotePermissions());
     }
 
     void RemoteFloater::onSaveTrustedController()
