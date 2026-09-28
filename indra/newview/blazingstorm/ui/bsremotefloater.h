@@ -30,6 +30,7 @@ namespace BlazingStorm
         void onReject();
         void onDisconnect();
         void onEmergencyRelease();
+        void onSaveCurrentController();
 
         void onAllowControllerIM();
         void onAllowRestrictions();
