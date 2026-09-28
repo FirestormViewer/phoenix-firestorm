@@ -34,6 +34,8 @@ namespace BlazingStorm
         Stop,
         Say,
         SendInstantMessage,
+        RestrictMovementOn,
+        RestrictMovementOff,
         RestrictNearbyChatOn,
         RestrictNearbyChatOff,
         RestrictInstantMessageOn,
