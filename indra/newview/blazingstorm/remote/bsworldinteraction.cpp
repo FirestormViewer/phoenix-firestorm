@@ -13,7 +13,7 @@
 
 #include "fscommon.h"
 #include "llagent.h"
-#include "llmessage.h"
+#include "message.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "lltoolgrab.h"
@@ -28,10 +28,40 @@
 #include "rlvhandler.h"
 
 #include <iomanip>
+#include <algorithm>
+#include <cmath>
+#include <limits>
 #include <sstream>
 
 namespace BlazingStorm
 {
+    namespace
+    {
+        bool parsePickValues(const std::string& text, std::size_t count,
+                             std::vector<F32>& values)
+        {
+            values.clear();
+            if (text.empty() || text.back() == ',') return false;
+            std::istringstream in(text);
+            std::string token;
+            try
+            {
+                while (std::getline(in, token, ','))
+                {
+                    std::size_t used = 0;
+                    const F32 value = std::stof(token, &used);
+                    if (used != token.size() || !std::isfinite(value)
+                        || values.size() == count) return false;
+                    values.push_back(value);
+                }
+            }
+            catch (const std::exception&)
+            {
+                return false;
+            }
+            return values.size() == count;
+        }
+    }
     WorldInteraction& WorldInteraction::instance()
     {
         static WorldInteraction interaction;
@@ -65,21 +95,7 @@ namespace BlazingStorm
                                           F32& x, F32& y, F32& z)
     {
         std::vector<F32> values;
-        std::istringstream in(text);
-        std::string token;
-        try
-        {
-            while (std::getline(in, token, ','))
-            {
-                values.push_back((F32)std::stof(token));
-            }
-        }
-        catch (...)
-        {
-            return false;
-        }
-
-        if (values.size() != 3)
+        if (!parsePickValues(text, 3, values))
         {
             return false;
         }
@@ -119,24 +135,11 @@ namespace BlazingStorm
     bool WorldInteraction::parseTouchPick(const std::string& text,
                                           std::vector<F32>& values)
     {
-        values.clear();
-        std::istringstream in(text);
-        std::string token;
-
-        try
-        {
-            while (std::getline(in, token, ','))
-            {
-                values.push_back((F32)std::stof(token));
-            }
-        }
-        catch (...)
-        {
-            values.clear();
-            return false;
-        }
-
-        return values.size() == 17;
+        if (!parsePickValues(text, 17, values)) return false;
+        // Validate before converting an untrusted float to an integer.
+        const double face = values[3];
+        return face >= -1 && face <= std::numeric_limits<S32>::max()
+            && std::floor(face) == face;
     }
 
     bool WorldInteraction::requestSitFromCurrentPick()
@@ -345,9 +348,10 @@ namespace BlazingStorm
     void WorldInteraction::pruneExpiredDialogs()
     {
         const auto now = std::chrono::steady_clock::now();
+        const bool permitted = RemoteSession::instance().hasPermission(RemotePermission::ScriptDialogs);
         for (auto it = mPendingDialogs.begin(); it != mPendingDialogs.end(); )
         {
-            if (now >= it->second.expiresAt)
+            if (!permitted || now >= it->second.expiresAt)
             {
                 mOutboundClosures.push_back(it->first);
                 it = mPendingDialogs.erase(it);
@@ -491,6 +495,9 @@ namespace BlazingStorm
         pruneExpiredDialogs();
         std::vector<ForwardedScriptDialog> result;
         result.swap(mOutboundDialogs);
+        result.erase(std::remove_if(result.begin(), result.end(),
+            [this](const ForwardedScriptDialog& dialog)
+            { return mPendingDialogs.find(dialog.dialogId) == mPendingDialogs.end(); }), result.end());
         return result;
     }
 
@@ -504,6 +511,7 @@ namespace BlazingStorm
     void WorldInteraction::showForwardedDialog(
         const ForwardedScriptDialog& dialog)
     {
+        closeForwardedDialog(dialog.dialogId);
         LLNotificationForm form;
         for (const auto& button : dialog.buttons)
         {

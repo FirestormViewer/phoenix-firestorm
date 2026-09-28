@@ -908,15 +908,17 @@ namespace BlazingStorm
                     return;
                 }
 
-                std::istringstream button_stream(fields[7]);
-                std::string encoded_button;
-                while (std::getline(button_stream, encoded_button, ','))
+                if (!mPaired || !RemoteController::instance().isActive()) return;
+                std::size_t start = 0;
+                for (;;)
                 {
+                    const auto end = fields[7].find(',', start);
+                    const std::string encoded_button = fields[7].substr(start, end - start);
                     std::string button;
-                    if (!encoded_button.empty() && hexDecode(encoded_button, button))
-                    {
-                        dialog.buttons.push_back(button);
-                    }
+                    if (!hexDecode(encoded_button, button) || dialog.buttons.size() >= 12) return;
+                    dialog.buttons.push_back(button);
+                    if (end == std::string::npos) break;
+                    start = end + 1;
                 }
 
                 if (!dialog.buttons.empty())

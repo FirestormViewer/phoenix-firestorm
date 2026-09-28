@@ -13,6 +13,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "blazingstorm/remote/bsremotesession.h"
+#include "blazingstorm/remote/bsworldinteraction.h"
 
 #include <utility>
 
@@ -45,6 +46,7 @@ namespace BlazingStorm
                               RemotePermissionMask permissions,
                               SubjectRestrictionMask restrictions)
     {
+        WorldInteraction::instance().reset();
         mControllerId = std::move(controller_id);
         mPermissions = sanitizePermissions(permissions);
         mSubjectRestrictions = restrictions;
@@ -54,6 +56,7 @@ namespace BlazingStorm
 
     void RemoteSession::end()
     {
+        WorldInteraction::instance().reset();
         mActive = false;
         mControllerId.clear();
         mPermissions = 0;

@@ -93,7 +93,9 @@ namespace BlazingStorm
                 S32 button_index = -1;
                 try
                 {
-                    button_index = std::stoi(command.text);
+                    std::size_t used = 0;
+                    button_index = std::stoi(command.text, &used);
+                    if (used != command.text.size()) return false;
                 }
                 catch (...)
                 {
