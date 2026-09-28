@@ -34,7 +34,8 @@ namespace BlazingStorm
             | toMask(RemotePermission::Teleport)
             | toMask(RemotePermission::Camera)
             | toMask(RemotePermission::Inventory)
-            | toMask(RemotePermission::InstantMessage);
+            | toMask(RemotePermission::InstantMessage)
+            | toMask(RemotePermission::ManageSubjectRestrictions);
 
         return permissions & allowed;
     }
