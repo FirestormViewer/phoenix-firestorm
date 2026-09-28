@@ -492,6 +492,10 @@ namespace BlazingStorm
 
             if (event.type == RelayEventType::Closed)
             {
+                if (mRole == RemoteRole::Host && !mRelayInviteSent)
+                {
+                    sendRelayReject();
+                }
                 handlePeerDisconnect(
                     event.detail.empty()
                         ? "Azure relay connection closed."
@@ -501,6 +505,10 @@ namespace BlazingStorm
 
             if (event.type == RelayEventType::Error)
             {
+                if (mRole == RemoteRole::Host && !mRelayInviteSent)
+                {
+                    sendRelayReject();
+                }
                 handlePeerDisconnect(
                     event.detail.empty()
                         ? "Azure relay connection failed."
@@ -510,10 +518,14 @@ namespace BlazingStorm
         }
 
         if (mRelayMode
-            && !mConnected
+            && !mPaired
             && std::chrono::steady_clock::now() >= mBootstrapDeadline)
         {
-            handlePeerDisconnect("Azure relay bootstrap timed out.");
+            if (mRole == RemoteRole::Host && !mRelayInviteSent)
+            {
+                sendRelayReject();
+            }
+            handlePeerDisconnect("Azure relay possession bootstrap timed out.");
         }
     }
 
