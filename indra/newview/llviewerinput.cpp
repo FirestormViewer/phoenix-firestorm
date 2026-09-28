@@ -28,6 +28,7 @@
 
 #include "llviewerinput.h"
 #include "blazingstorm/remote/bscontrollerinput.h" // <BlazingStorm>
+#include "blazingstorm/remote/bsremotesession.h" // <BlazingStorm>
 
 #include "llappviewer.h"
 #include "llfloaterreg.h"
@@ -69,6 +70,13 @@ const F32 ORBIT_NUDGE_RATE = 0.05f;  // fraction of normal speed
 
 const LLKeyData agent_control_lbutton(CLICK_LEFT, KEY_NONE, MASK_NONE, true);
 
+static bool blazing_subject_movement_blocked()
+{
+    return BlazingStorm::RemoteSession::instance().isActive()
+        && BlazingStorm::RemoteSession::instance().isSubjectRestricted(
+            BlazingStorm::SubjectRestriction::Movement);
+}
+
 struct LLKeybindFunctionData
 {
     LLKeybindFunctionData(std::function<bool(EKeystate keystate)> function, bool global)
@@ -94,10 +102,15 @@ bool agent_jump( EKeystate s )
 {
     static bool first_fly_attempt(true);
 
+    if (blazing_subject_movement_blocked())
+    {
+        return true;
+    }
+
     const bool blaze_suppress_local =
         BlazingStorm::ControllerInput::routeMovement(
-            BlazingStorm::RemoteCommandType::Jump,
-            BlazingStorm::RemoteCommandType::None,
+            BlazingStorm::RemoteCommandType::MoveUp,
+            BlazingStorm::RemoteCommandType::StopVertical,
             KEYSTATE_DOWN == s,
             KEYSTATE_UP == s);
 
@@ -139,6 +152,20 @@ bool agent_jump( EKeystate s )
 
 bool agent_push_down( EKeystate s )
 {
+    if (blazing_subject_movement_blocked())
+    {
+        return true;
+    }
+
+    if (BlazingStorm::ControllerInput::routeMovement(
+            BlazingStorm::RemoteCommandType::MoveDown,
+            BlazingStorm::RemoteCommandType::StopVertical,
+            KEYSTATE_DOWN == s,
+            KEYSTATE_UP == s))
+    {
+        return true;
+    }
+
     if( KEYSTATE_UP == s  ) return true;
     // <FS:Ansariel> Chalice Yao's crouch toggle
     //gAgent.moveUp(-1);
@@ -239,6 +266,11 @@ bool agent_push_forward( EKeystate s )
     }
     else
     {
+        if (blazing_subject_movement_blocked())
+        {
+            return true;
+        }
+
         if (BlazingStorm::ControllerInput::routeMovement(
                 BlazingStorm::RemoteCommandType::MoveForward,
                 BlazingStorm::RemoteCommandType::StopForward,
@@ -266,6 +298,11 @@ bool agent_push_backward( EKeystate s )
     }
     else
     {
+        if (blazing_subject_movement_blocked())
+        {
+            return true;
+        }
+
         if (BlazingStorm::ControllerInput::routeMovement(
                 BlazingStorm::RemoteCommandType::MoveBackward,
                 BlazingStorm::RemoteCommandType::StopForward,
@@ -308,6 +345,7 @@ static void agent_slide_leftright( EKeystate s, S32 direction, LLAgent::EDoubleT
 bool agent_slide_left( EKeystate s )
 {
     if(gAgent.isMovementLocked()) return true;
+    if (blazing_subject_movement_blocked()) return true;
 
     if (BlazingStorm::ControllerInput::routeMovement(
             BlazingStorm::RemoteCommandType::StrafeLeft,
@@ -326,6 +364,7 @@ bool agent_slide_left( EKeystate s )
 bool agent_slide_right( EKeystate s )
 {
     if(gAgent.isMovementLocked()) return true;
+    if (blazing_subject_movement_blocked()) return true;
 
     if (BlazingStorm::ControllerInput::routeMovement(
             BlazingStorm::RemoteCommandType::StrafeRight,
@@ -352,6 +391,7 @@ bool agent_turn_left(EKeystate s)
     }
 
     if(gAgent.isMovementLocked()) return false;
+    if (blazing_subject_movement_blocked()) return true;
 
     if (LLToolCamera::getInstance()->mouseSteerMode())
     {
@@ -439,6 +479,20 @@ bool agent_look_down( EKeystate s )
 
 bool agent_toggle_fly( EKeystate s )
 {
+    if (blazing_subject_movement_blocked())
+    {
+        return true;
+    }
+
+    if (BlazingStorm::ControllerInput::routeMovement(
+            BlazingStorm::RemoteCommandType::ToggleFly,
+            BlazingStorm::RemoteCommandType::None,
+            KEYSTATE_DOWN == s,
+            KEYSTATE_UP == s))
+    {
+        return true;
+    }
+
     // Only catch the edge
     if (KEYSTATE_DOWN == s )
     {
