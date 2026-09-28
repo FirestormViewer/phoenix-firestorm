@@ -98,6 +98,12 @@ namespace BlazingStorm
             [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::TurnRight); });
         getChild<LLButton>("remote_jump")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::Jump); });
+        getChild<LLButton>("remote_crouch")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::MoveDown); });
+        getChild<LLButton>("remote_fly")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::FlyOn); });
+        getChild<LLButton>("remote_land")->setCommitCallback(
+            [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::FlyOff); });
         getChild<LLButton>("remote_stop")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onMovementCommand(RemoteCommandType::Stop); });
         getChild<LLButton>("remote_say")->setCommitCallback(
@@ -209,7 +215,8 @@ namespace BlazingStorm
 
         const char* movement_buttons[] = {
             "remote_forward", "remote_back", "remote_left", "remote_right",
-            "remote_turn_left", "remote_turn_right", "remote_jump", "remote_stop"
+            "remote_turn_left", "remote_turn_right", "remote_jump", "remote_crouch",
+            "remote_fly", "remote_land", "remote_stop"
         };
         for (const char* name : movement_buttons)
         {
@@ -570,6 +577,21 @@ namespace BlazingStorm
                 mLocalMoveLeft = 0;
                 mLocalYaw = -1.f;
                 break;
+            case RemoteCommandType::MoveUp:
+                mLocalMoveUp = 1;
+                break;
+            case RemoteCommandType::MoveDown:
+                mLocalMoveUp = -1;
+                break;
+            case RemoteCommandType::FlyOn:
+                gAgent.setFlying(true, true);
+                break;
+            case RemoteCommandType::FlyOff:
+                gAgent.setFlying(false);
+                break;
+            case RemoteCommandType::ToggleFly:
+                gAgent.setFlying(!gAgent.getFlying(), true);
+                break;
             case RemoteCommandType::Jump:
                 gAgent.moveUp(1);
                 break;
@@ -597,12 +619,17 @@ namespace BlazingStorm
         {
             gAgent.moveYaw(mLocalYaw);
         }
+        if (mLocalMoveUp != 0)
+        {
+            gAgent.moveUp(mLocalMoveUp);
+        }
     }
 
     void RemoteFloater::stopLocalMovement()
     {
         mLocalMoveAt = 0;
         mLocalMoveLeft = 0;
+        mLocalMoveUp = 0;
         mLocalYaw = 0.f;
     }
 
