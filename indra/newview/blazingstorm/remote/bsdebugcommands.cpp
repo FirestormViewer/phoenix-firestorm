@@ -70,7 +70,7 @@ namespace BlazingStorm
 
         if (action.empty() || action == "help")
         {
-            report("Commands: /blaze host | connect <code> | accept | reject | disconnect | remote <cmd> | allowim on|off | on | off | release | status | restrictchat on|off | restrictim on|off | thoughts | forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text>");
+            report("Commands: /blaze host | connect <code> | accept | reject | disconnect | remote <cmd> | allowim on|off | allowrestrictions on|off | on | off | release | status | restrictchat on|off | restrictim on|off | thoughts | forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text>");
             return true;
         }
 
@@ -126,6 +126,7 @@ namespace BlazingStorm
             {
                 report("Controller accepted. Movement + public chat permissions granted.");
                 report("Controller IM permission is OFF by default. Use /blaze allowim on to grant it.");
+                report("Controller restriction control is OFF by default. Use /blaze allowrestrictions on to grant it.");
             }
             else
             {
@@ -203,9 +204,33 @@ namespace BlazingStorm
                     return true;
                 }
             }
+            else if (remote_action == "restrictchat")
+            {
+                std::string state;
+                input >> state;
+                if (state == "on") type = RemoteCommandType::RestrictNearbyChatOn;
+                else if (state == "off") type = RemoteCommandType::RestrictNearbyChatOff;
+                else
+                {
+                    report("Usage: /blaze remote restrictchat on|off");
+                    return true;
+                }
+            }
+            else if (remote_action == "restrictim")
+            {
+                std::string state;
+                input >> state;
+                if (state == "on") type = RemoteCommandType::RestrictInstantMessageOn;
+                else if (state == "off") type = RemoteCommandType::RestrictInstantMessageOff;
+                else
+                {
+                    report("Usage: /blaze remote restrictim on|off");
+                    return true;
+                }
+            }
             else
             {
-                report("Remote commands: forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text> | im <avatar-uuid> <text> | release");
+                report("Remote commands: forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text> | im <avatar-uuid> <text> | restrictchat on|off | restrictim on|off | release");
                 return true;
             }
 
@@ -268,6 +293,7 @@ namespace BlazingStorm
                     + "; movement=" + (session.hasPermission(RemotePermission::Movement) ? "yes" : "no")
                     + "; chat=" + (session.hasPermission(RemotePermission::Chat) ? "yes" : "no")
                     + "; controller-im=" + (session.hasPermission(RemotePermission::InstantMessage) ? "yes" : "no")
+                    + "; controller-restrictions=" + (session.hasPermission(RemotePermission::ManageSubjectRestrictions) ? "yes" : "no")
                     + "; subject-nearby-chat="
                     + (session.isSubjectRestricted(SubjectRestriction::NearbyChat) ? "restricted" : "allowed")
                     + "; subject-direct-im="
@@ -304,6 +330,38 @@ namespace BlazingStorm
             else
             {
                 report("Usage: /blaze allowim on|off");
+            }
+            return true;
+        }
+
+        if (action == "allowrestrictions")
+        {
+            if (!session.isActive())
+            {
+                report("No subject possession session is active.");
+                return true;
+            }
+
+            std::string state;
+            input >> state;
+            auto permissions = session.permissions();
+            const auto manage_restrictions = toMask(RemotePermission::ManageSubjectRestrictions);
+
+            if (state == "on")
+            {
+                permissions |= manage_restrictions;
+                session.setPermissions(permissions);
+                report("Controller may now change subject nearby-chat and direct-IM restrictions.");
+            }
+            else if (state == "off")
+            {
+                permissions &= ~manage_restrictions;
+                session.setPermissions(permissions);
+                report("Controller subject-restriction permission revoked.");
+            }
+            else
+            {
+                report("Usage: /blaze allowrestrictions on|off");
             }
             return true;
         }
