@@ -180,6 +180,7 @@
 
 #include "llviewerinput.h"
 #include "blazingstorm/remote/bsremoteactions.h" // <BlazingStorm>
+#include "blazingstorm/remote/bsremotesession.h" // <BlazingStorm>
 #include "blazingstorm/remote/bslocaltransport.h" // <BlazingStorm>
 #include "lllfsthread.h"
 #include "llworkerthread.h"
@@ -5850,6 +5851,14 @@ void LLAppViewer::idle()
         // <BlazingStorm> Pump the local controller transport on the viewer
         // thread before applying any command it may have received.
         BlazingStorm::LocalTransport::instance().update();
+
+        // Optional debug mode: discard locally-generated ephemeral movement
+        // input, then re-apply controller movement below. Persistent viewer
+        // state such as fly/mouselook is preserved by resetControlFlags().
+        if (BlazingStorm::RemoteSession::instance().subjectLocalMovementDisabled())
+        {
+            gAgent.resetControlFlags();
+        }
 
         // Re-apply persistent remote controls after local input and autopilot,
         // immediately before the ephemeral flags are sent.
