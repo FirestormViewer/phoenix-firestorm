@@ -25,7 +25,7 @@ namespace BlazingStorm
         const std::string& sessionId() const;
         const std::string& hostId() const;
 
-        RemoteCommand makeCommand(RemoteCommandType type, std::string text = {});
+        RemoteCommand makeCommand(RemoteCommandType type, std::string text = {}, std::string target_id = {});
 
     private:
         RemoteController() = default;
