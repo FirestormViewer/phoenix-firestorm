@@ -33,6 +33,9 @@ namespace BlazingStorm
         void onSaveCurrentController();
 
         void onAllowControllerIM();
+        void onAllowTouch();
+        void onAllowSitStand();
+        void onAllowScriptDialogs();
         void onAllowRestrictions();
         void onDisableLocalMovement();
         void onSubjectRestrictMovement();
