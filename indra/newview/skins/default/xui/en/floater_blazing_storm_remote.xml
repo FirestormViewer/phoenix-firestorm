@@ -362,7 +362,7 @@
        width="520"
        height="28"
        word_wrap="true">
-        Subject only moves the possessed avatar. Mirror both moves both avatars. Controller only moves your own avatar.
+        Normal WASD / arrow movement and these buttons follow this mode while paired. Subject only moves the possessed avatar; Mirror both moves both; Controller only moves your own avatar.
       </text>
 
       <text
