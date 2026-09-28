@@ -31,6 +31,9 @@ namespace BlazingStorm
         bool jump();
         bool say(const std::string& text);
 
+        void stopForward();
+        void stopStrafe();
+        void stopTurn();
         void stopMovement();
         void update();
 
