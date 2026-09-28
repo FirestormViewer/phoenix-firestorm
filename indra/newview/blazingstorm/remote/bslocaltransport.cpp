@@ -673,6 +673,9 @@ namespace BlazingStorm
             case RemoteCommandType::TurnLeft:          return "turnleft";
             case RemoteCommandType::TurnRight:         return "turnright";
             case RemoteCommandType::Jump:              return "jump";
+            case RemoteCommandType::StopForward:       return "stop-forward";
+            case RemoteCommandType::StopStrafe:        return "stop-strafe";
+            case RemoteCommandType::StopTurn:          return "stop-turn";
             case RemoteCommandType::Stop:              return "stop";
             case RemoteCommandType::Say:               return "say";
             case RemoteCommandType::SendInstantMessage:       return "im";
@@ -693,8 +696,11 @@ namespace BlazingStorm
         if (name == "straferight") return RemoteCommandType::StrafeRight;
         if (name == "turnleft")    return RemoteCommandType::TurnLeft;
         if (name == "turnright")   return RemoteCommandType::TurnRight;
-        if (name == "jump")        return RemoteCommandType::Jump;
-        if (name == "stop")        return RemoteCommandType::Stop;
+        if (name == "jump")         return RemoteCommandType::Jump;
+        if (name == "stop-forward") return RemoteCommandType::StopForward;
+        if (name == "stop-strafe")  return RemoteCommandType::StopStrafe;
+        if (name == "stop-turn")    return RemoteCommandType::StopTurn;
+        if (name == "stop")         return RemoteCommandType::Stop;
         if (name == "say")         return RemoteCommandType::Say;
         if (name == "im")               return RemoteCommandType::SendInstantMessage;
         if (name == "restrictchat-on")  return RemoteCommandType::RestrictNearbyChatOn;
