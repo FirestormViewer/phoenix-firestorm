@@ -33,6 +33,7 @@
 
 #include "llviewermenu.h"
 #include "blazingstorm/remote/bsrequestactions.h" // <BlazingStorm>
+#include "blazingstorm/remote/bsremotesession.h" // <BlazingStorm>
 
 // linden library includes
 #include "llavatarnamecache.h"  // IDEVO (I Are Not Men!)
@@ -12723,7 +12724,15 @@ void initialize_menus()
     commit.add("OpenGridStatus", boost::bind(&openGridStatus)); // <FS:Ansariel> FIRE-21236 - Help Menu - Check Grid Status doesn't open using External Browser
 
     // Agent
-    commit.add("Agent.toggleFlying", boost::bind(&LLAgent::toggleFlying));
+    commit.add("Agent.toggleFlying",
+        [](LLUICtrl*, const LLSD&)
+        {
+            if (!BlazingStorm::RemoteSession::instance().isSubjectRestricted(
+                    BlazingStorm::SubjectRestriction::Movement))
+            {
+                LLAgent::toggleFlying();
+            }
+        });
     enable.add("Agent.enableFlyLand", boost::bind(&enable_fly_land));
     enable.add("Agent.enableFlying", boost::bind(&LLAgent::enableFlying)); // <FS:Ansariel> Keep this
     commit.add("Agent.PressMicrophone", boost::bind(&LLAgent::pressMicrophone, _2));
