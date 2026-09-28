@@ -14,6 +14,7 @@
 #define BS_REMOTE_ACTIONS_H
 
 #include <string>
+#include "blazingstorm/remote/bsremoteprotocol.h"
 
 namespace BlazingStorm
 {
@@ -35,6 +36,8 @@ namespace BlazingStorm
         bool toggleFly();
         bool jump();
         bool say(const std::string& text);
+        bool cameraStep(RemoteCommandType command);
+        void releaseCamera();
 
         void stopForward();
         void stopStrafe();
@@ -59,6 +62,7 @@ namespace BlazingStorm
         int mVertical = 0;
         float mTurn = 0.f;
         bool mJumpPending = false;
+        bool mCameraControlled = false;
     };
 }
 

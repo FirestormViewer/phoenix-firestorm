@@ -50,7 +50,14 @@ namespace BlazingStorm
         RestrictNearbyChatOff,
         RestrictInstantMessageOn,
         RestrictInstantMessageOff,
-        EmergencyRelease
+        EmergencyRelease,
+        CameraLeft,
+        CameraRight,
+        CameraUp,
+        CameraDown,
+        CameraIn,
+        CameraOut,
+        CameraReset
     };
 
     struct RemoteCommand

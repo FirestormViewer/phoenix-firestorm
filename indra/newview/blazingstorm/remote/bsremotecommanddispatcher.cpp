@@ -45,6 +45,15 @@ namespace BlazingStorm
 
         switch (command.type)
         {
+            case RemoteCommandType::CameraLeft:
+            case RemoteCommandType::CameraRight:
+            case RemoteCommandType::CameraUp:
+            case RemoteCommandType::CameraDown:
+            case RemoteCommandType::CameraIn:
+            case RemoteCommandType::CameraOut:
+            case RemoteCommandType::CameraReset:
+                return command.text.empty() && command.targetId.empty()
+                    && actions.cameraStep(command.type);
             case RemoteCommandType::MoveForward:  return actions.moveForward();
             case RemoteCommandType::MoveBackward: return actions.moveBackward();
             case RemoteCommandType::StrafeLeft:   return actions.strafeLeft();

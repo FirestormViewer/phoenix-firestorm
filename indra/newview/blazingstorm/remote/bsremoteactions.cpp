@@ -17,6 +17,10 @@
 #include "blazingstorm/remote/bsremotesession.h"
 #include "fsnearbychathub.h"
 #include "llagent.h"
+#include "llagentcamera.h"
+#include "llvoavatarself.h"
+#include "llviewerjoystick.h"
+#include "rlvhandler.h"
 
 namespace BlazingStorm
 {
@@ -30,6 +34,45 @@ namespace BlazingStorm
     {
         return RemoteSession::instance().hasPermission(RemotePermission::Movement)
             && !gAgent.isMovementLocked();
+    }
+
+    bool RemoteActions::cameraStep(RemoteCommandType command)
+    {
+        if (!RemoteSession::instance().hasPermission(RemotePermission::Camera)
+            || !isAgentAvatarValid()
+            || !gAgentCamera.cameraThirdPerson()
+            || LLViewerJoystick::getInstance()->getOverrideCamera()
+            || gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)
+            || gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_UNLOCK)) return false;
+
+        if (command == RemoteCommandType::CameraReset)
+        {
+            releaseCamera();
+            return true;
+        }
+
+        // Orbit with a detached focus so camera permission cannot rotate the avatar.
+        gAgentCamera.unlockView();
+        mCameraControlled = true;
+        switch (command)
+        {
+            case RemoteCommandType::CameraLeft:  gAgentCamera.cameraOrbitAround(0.1f); break;
+            case RemoteCommandType::CameraRight: gAgentCamera.cameraOrbitAround(-0.1f); break;
+            case RemoteCommandType::CameraUp:    gAgentCamera.cameraOrbitOver(0.1f); break;
+            case RemoteCommandType::CameraDown:  gAgentCamera.cameraOrbitOver(-0.1f); break;
+            case RemoteCommandType::CameraIn:    gAgentCamera.cameraOrbitIn(0.25f); break;
+            case RemoteCommandType::CameraOut:   gAgentCamera.cameraOrbitIn(-0.25f); break;
+            default: return false;
+        }
+        return true;
+    }
+
+    void RemoteActions::releaseCamera()
+    {
+        if (!mCameraControlled) return;
+        mCameraControlled = false;
+        // Return normal avatar focus without the resetView avatar-axis side effect.
+        gAgentCamera.setFocusOnAvatar(true, false, false);
     }
 
     void RemoteActions::beginMovement()
@@ -175,6 +218,8 @@ namespace BlazingStorm
 
     void RemoteActions::update()
     {
+        if (!RemoteSession::instance().hasPermission(RemotePermission::Camera))
+            releaseCamera();
         if (!canMove())
         {
             stopMovement();

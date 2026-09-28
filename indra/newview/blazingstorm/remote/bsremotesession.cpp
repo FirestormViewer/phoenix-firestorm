@@ -14,6 +14,7 @@
 
 #include "blazingstorm/remote/bsremotesession.h"
 #include "blazingstorm/remote/bsworldinteraction.h"
+#include "blazingstorm/remote/bsremoteactions.h"
 
 #include <utility>
 
@@ -46,6 +47,7 @@ namespace BlazingStorm
                               RemotePermissionMask permissions,
                               SubjectRestrictionMask restrictions)
     {
+        RemoteActions::instance().releaseCamera();
         WorldInteraction::instance().reset();
         mControllerId = std::move(controller_id);
         mPermissions = sanitizePermissions(permissions);
@@ -56,6 +58,7 @@ namespace BlazingStorm
 
     void RemoteSession::end()
     {
+        RemoteActions::instance().releaseCamera();
         WorldInteraction::instance().reset();
         mActive = false;
         mControllerId.clear();
@@ -82,6 +85,7 @@ namespace BlazingStorm
     void RemoteSession::setPermissions(RemotePermissionMask permissions)
     {
         mPermissions = sanitizePermissions(permissions);
+        if (!hasPermission(RemotePermission::Camera)) RemoteActions::instance().releaseCamera();
     }
 
     bool RemoteSession::hasPermission(RemotePermission permission) const

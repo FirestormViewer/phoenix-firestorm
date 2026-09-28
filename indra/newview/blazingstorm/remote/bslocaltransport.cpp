@@ -1133,6 +1133,13 @@ namespace BlazingStorm
     {
         switch (type)
         {
+            case RemoteCommandType::CameraLeft: return "camera-left";
+            case RemoteCommandType::CameraRight: return "camera-right";
+            case RemoteCommandType::CameraUp: return "camera-up";
+            case RemoteCommandType::CameraDown: return "camera-down";
+            case RemoteCommandType::CameraIn: return "camera-in";
+            case RemoteCommandType::CameraOut: return "camera-out";
+            case RemoteCommandType::CameraReset: return "camera-reset";
             case RemoteCommandType::MoveForward:       return "forward";
             case RemoteCommandType::MoveBackward:      return "back";
             case RemoteCommandType::StrafeLeft:        return "strafeleft";
@@ -1169,6 +1176,13 @@ namespace BlazingStorm
 
     RemoteCommandType LocalTransport::commandType(const std::string& name)
     {
+        if (name == "camera-left") return RemoteCommandType::CameraLeft;
+        if (name == "camera-right") return RemoteCommandType::CameraRight;
+        if (name == "camera-up") return RemoteCommandType::CameraUp;
+        if (name == "camera-down") return RemoteCommandType::CameraDown;
+        if (name == "camera-in") return RemoteCommandType::CameraIn;
+        if (name == "camera-out") return RemoteCommandType::CameraOut;
+        if (name == "camera-reset") return RemoteCommandType::CameraReset;
         if (name == "forward")     return RemoteCommandType::MoveForward;
         if (name == "back")        return RemoteCommandType::MoveBackward;
         if (name == "strafeleft")  return RemoteCommandType::StrafeLeft;
