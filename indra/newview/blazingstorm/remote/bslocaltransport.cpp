@@ -720,9 +720,20 @@ namespace BlazingStorm
                 mPendingControllerId = fields[2];
                 mPendingControllerName = controller_name;
                 mPendingPairing = true;
-                mLastStatus = "Pairing request from " + controller_name + " is waiting for approval.";
-                queueLine("WAIT");
-                showPairingPrompt();
+
+                if (TrustStore::instance().find(mPendingControllerId))
+                {
+                    mLastStatus =
+                        "Trusted controller " + controller_name + " auto-accepted.";
+                    acceptPending();
+                }
+                else
+                {
+                    mLastStatus =
+                        "Pairing request from " + controller_name + " is waiting for approval.";
+                    queueLine("WAIT");
+                    showPairingPrompt();
+                }
                 return;
             }
 
@@ -744,10 +755,20 @@ namespace BlazingStorm
                 mPendingControllerId = fields[1];
                 mPendingControllerName = controller_name;
                 mPendingPairing = true;
-                mLastStatus =
-                    "Possession request from " + controller_name + " is waiting for approval.";
-                queueLine("WAIT");
-                showPairingPrompt();
+
+                if (TrustStore::instance().find(mPendingControllerId))
+                {
+                    mLastStatus =
+                        "Trusted controller " + controller_name + " auto-accepted.";
+                    acceptPending();
+                }
+                else
+                {
+                    mLastStatus =
+                        "Possession request from " + controller_name + " is waiting for approval.";
+                    queueLine("WAIT");
+                    showPairingPrompt();
+                }
                 return;
             }
 
