@@ -27,6 +27,11 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llmoveview.h"
+#include "blazingstorm/remote/bslocaltransport.h"
+#include "blazingstorm/remote/bsremoteactions.h"
+#include "blazingstorm/remote/bsremotecontroller.h"
+#include "blazingstorm/remote/bsremoteevents.h"
+#include "blazingstorm/remote/bsremotesession.h"
 
 // Library includes
 #include "indra_constants.h"
@@ -550,6 +555,7 @@ F32 LLFloaterMove::getCurrentTransparency()
 LLPanelStandStopFlying::LLPanelStandStopFlying() :
     mStandButton(NULL),
     mStopFlyingButton(NULL),
+    mBlazingStormReleaseButton(NULL),
     mAttached(false)
 {
     // make sure we have the only instance of this class
@@ -627,6 +633,11 @@ bool LLPanelStandStopFlying::postBuild()
     mFlycamButton = getChild<LLButton>("flycam_btn");
     mFlycamButton->setVisible(false);
 
+    mBlazingStormReleaseButton = getChild<LLButton>("blaze_release_btn");
+    mBlazingStormReleaseButton->setCommitCallback(
+        boost::bind(&LLPanelStandStopFlying::onBlazingStormRelease, this));
+    mBlazingStormReleaseButton->setVisible(false);
+
     return true;
 }
 
@@ -670,6 +681,37 @@ bool LLPanelStandStopFlying::handleToolTip(S32 x, S32 y, MASK mask)
     }
 
     return LLPanel::handleToolTip(x, y, mask);
+}
+
+void LLPanelStandStopFlying::onBlazingStormRelease()
+{
+    BlazingStorm::RemoteActions::instance().stopMovement();
+    BlazingStorm::LocalTransport::instance().disconnect();
+    BlazingStorm::RemoteSession::instance().emergencyRelease();
+    BlazingStorm::RemoteController::instance().end();
+    BlazingStorm::RemoteEvents::instance().clear();
+}
+
+void LLPanelStandStopFlying::updateBlazingStormButton()
+{
+    if (!mBlazingStormReleaseButton)
+    {
+        return;
+    }
+
+    const bool active = BlazingStorm::RemoteSession::instance().isActive();
+    mBlazingStormReleaseButton->setVisible(active);
+
+    if (active)
+    {
+        setVisible(true);
+    }
+    else if (!mStandButton->getVisible()
+          && !mStopFlyingButton->getVisible()
+          && !mFlycamButton->getVisible())
+    {
+        setVisible(false);
+    }
 }
 
 void LLPanelStandStopFlying::reparent(LLFloaterMove* move_view)
