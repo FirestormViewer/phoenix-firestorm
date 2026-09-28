@@ -529,6 +529,7 @@ namespace BlazingStorm
     void LocalTransport::resetConnectionState(bool keep_listener)
     {
         closeSocketOnly();
+        WorldInteraction::instance().reset();
 
         if (mRole == RemoteRole::Host)
         {
