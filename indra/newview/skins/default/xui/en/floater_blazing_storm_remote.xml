@@ -28,12 +28,55 @@
     Idle | disconnected | not paired
   </text>
 
+  <text
+   name="relay_broker_label"
+   layout="topleft"
+   left="16"
+   top="68"
+   width="92"
+   height="18">
+    Relay broker:
+  </text>
+
+  <line_editor
+   name="relay_broker_url"
+   layout="topleft"
+   left="110"
+   right="-16"
+   top="63"
+   height="26"
+   follows="left|top|right"
+   max_length_chars="512"
+   tool_tip="HTTPS base URL of your Blazing Storm Azure Function relay broker. Configure the same broker on both viewers. Leave blank for local loopback debug mode." />
+
+  <text
+   name="relay_create_key_label"
+   layout="topleft"
+   left="16"
+   top="100"
+   width="92"
+   height="18">
+    Subject key:
+  </text>
+
+  <line_editor
+   name="relay_create_key"
+   layout="topleft"
+   left="110"
+   right="-16"
+   top="95"
+   height="26"
+   follows="left|top|right"
+   max_length_chars="512"
+   is_password="true"
+   tool_tip="Subject-only Relay Create Key. Required only on avatars that may be possessed. It is never sent to the Controller." />
+
   <tab_container
    name="remote_tabs"
    layout="topleft"
    left="10"
    right="-10"
-   top="70"
+   top="132"
    bottom="-10"
    follows="all"
    tab_position="top">
