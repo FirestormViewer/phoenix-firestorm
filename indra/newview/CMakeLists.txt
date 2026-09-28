@@ -95,6 +95,7 @@ set(viewer_SOURCE_FILES
     blazingstorm/remote/bsremotecontroller.cpp
     blazingstorm/remote/bsremotecommanddispatcher.cpp
     blazingstorm/remote/bslocaltransport.cpp
+    blazingstorm/ui/bsremotefloater.cpp
     alfloaterregiontracker.cpp
     animationexplorer.cpp
     ao.cpp
@@ -964,6 +965,7 @@ set(viewer_HEADER_FILES
     blazingstorm/remote/bsremotecommanddispatcher.h
     blazingstorm/remote/bsremotetransport.h
     blazingstorm/remote/bslocaltransport.h
+    blazingstorm/ui/bsremotefloater.h
     alfloaterregiontracker.h
     animationexplorer.h
     ao.h
