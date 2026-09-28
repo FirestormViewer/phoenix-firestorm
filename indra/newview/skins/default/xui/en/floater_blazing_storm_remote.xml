@@ -922,8 +922,8 @@
            layout="topleft"
            left="16"
            right="-24"
-           top="502"
-           height="66"
+           top="538"
+           height="64"
            follows="left|top|right"
            word_wrap="true">
             Removing a controller restores normal request approval. Object touch, sit/stand, menus, camera, direct IM, and restriction control remain off unless explicitly granted.
@@ -931,12 +931,16 @@
 
           <check_box name="trusted_camera" label="Control my camera"
            layout="topleft" left="16" top="462" width="410" height="18" />
+          <check_box name="trusted_inventory" label="Inventory: browse, dress, and rez copies"
+           layout="topleft" left="16" top="484" width="450" height="18" />
+          <check_box name="trusted_teleport" label="Teleport: travel, send and answer offers"
+           layout="topleft" left="16" top="506" width="450" height="18" />
           <button
            name="trusted_save"
            label="Save / Update Whitelist"
            layout="topleft"
            left="16"
-           top="576"
+           top="610"
            width="190"
            height="30" />
 
@@ -945,7 +949,7 @@
            layout="topleft"
            left="16"
            right="-24"
-           top="624"
+           top="658"
            height="44"
            follows="left|top|right"
            word_wrap="true">
@@ -956,11 +960,13 @@
     </panel>
 
     <panel name="camera_panel" label="Camera" layout="topleft" follows="all">
+      <scroll_container name="camera_scroll" layout="topleft" left="0" right="-1" top="0" bottom="-1" follows="all">
+        <panel name="camera_content" layout="topleft" left="0" top="0" right="-15" height="445" follows="left|top|right">
       <check_box name="allow_camera" label="Subject: allow controller camera control"
        layout="topleft" left="16" top="20" width="440" height="20" />
       <text name="camera_help" layout="topleft" left="16" right="-16" top="55"
        height="64" word_wrap="true" follows="left|top|right">
-        Controller: each click moves the subject camera one step. Requires camera permission and third-person view. RLVa camera locks are respected.
+        Controller: click or hold to move the subject camera. Requires camera permission and third-person view. RLVa camera locks are respected.
       </text>
       <button name="camera_left" label="Orbit Left" layout="topleft" follows="left|top" left="16" top="130" width="130" height="28" />
       <button name="camera_right" label="Orbit Right" layout="topleft" follows="left|top" left="156" top="130" width="130" height="28" />
@@ -969,10 +975,67 @@
       <button name="camera_in" label="Zoom In" layout="topleft" follows="left|top" left="16" top="206" width="130" height="28" />
       <button name="camera_out" label="Zoom Out" layout="topleft" follows="left|top" left="156" top="206" width="130" height="28" />
       <button name="camera_reset" label="Reset Camera" layout="topleft" follows="left|top" left="16" top="244" width="270" height="28" />
-      <text name="camera_release_help" layout="topleft" left="16" right="-16" top="292"
+      <line_editor name="camera_target" label="Object/avatar UUID (optional; otherwise use last world pick)" layout="topleft" follows="left|top|right" left="16" right="-16" top="286" height="25" max_length_chars="36" />
+      <button name="camera_focus" label="Focus Object / Avatar" layout="topleft" follows="left|top" left="16" top="320" width="270" height="28" />
+      <text name="camera_release_help" layout="topleft" left="16" right="-16" top="365"
        height="55" word_wrap="true" follows="left|top|right">
         Revoking permission or ending possession returns camera focus to the subject avatar. Local camera input remains available.
       </text>
+        </panel>
+      </scroll_container>
+    </panel>
+    <panel name="inventory_panel" label="Inventory" layout="topleft" follows="all">
+      <scroll_container name="inventory_scroll" layout="topleft" left="0" right="-1" top="0" bottom="-1" follows="all">
+        <panel name="inventory_content" layout="topleft" left="0" top="0" right="-15" height="565" follows="left|top|right">
+          <check_box name="allow_inventory" label="Subject: allow inventory browsing, dressing, and rezzing copies"
+           layout="topleft" left="16" top="16" width="475" height="20" />
+          <text name="inventory_help" layout="topleft" left="16" right="-16" top="46" height="42" follows="left|top|right" word_wrap="true">
+            Select a folder to open it, or select an item/outfit to wear or remove. Rez Copy places an object near the subject. No-copy objects cannot be rezzed.
+          </text>
+          <button name="inventory_root" label="My Inventory" layout="topleft" follows="left|top" left="16" top="100" width="110" height="26" />
+          <button name="inventory_up" label="Up" layout="topleft" follows="left|top" left="132" top="100" width="65" height="26" />
+          <button name="inventory_open" label="Open Folder" layout="topleft" follows="left|top" left="203" top="100" width="110" height="26" />
+          <button name="inventory_refresh" label="Refresh" layout="topleft" follows="left|top" left="319" top="100" width="90" height="26" />
+          <text name="inventory_folder" layout="topleft" follows="left|top|right" left="16" right="-16" top="137" height="22">Select My Inventory to browse the Subject's inventory.</text>
+          <scroll_list name="inventory_list" layout="topleft" follows="left|top|right" left="16" right="-16" top="165" height="220" multi_select="false" draw_heading="true">
+            <column name="name" label="Name" relative_width="0.55" />
+            <column name="kind" label="Type" relative_width="0.25" />
+            <column name="state" label="Status" relative_width="0.20" />
+          </scroll_list>
+          <button name="inventory_previous" label="Previous" layout="topleft" follows="left|top" left="16" top="396" width="90" height="26" />
+          <button name="inventory_next" label="Next" layout="topleft" follows="left|top" left="112" top="396" width="90" height="26" />
+          <button name="inventory_wear" label="Wear / Add" layout="topleft" follows="left|top" left="16" top="433" width="130" height="28" />
+          <button name="inventory_remove" label="Remove" layout="topleft" follows="left|top" left="156" top="433" width="130" height="28" />
+          <button name="inventory_rez" label="Rez Copy" layout="topleft" follows="left|top" left="296" top="433" width="130" height="28" />
+          <text name="inventory_result" layout="topleft" follows="left|top|right" left="16" right="-16" top="477" height="68" word_wrap="true" />
+        </panel>
+      </scroll_container>
+    </panel>
+    <panel name="teleport_panel" label="Teleport" layout="topleft" follows="all">
+      <scroll_container name="teleport_scroll" layout="topleft" left="0" right="-1" top="0" bottom="-1" follows="all">
+        <panel name="teleport_content" layout="topleft" left="0" top="0" right="-15" height="610" follows="left|top|right">
+          <check_box name="allow_teleport" label="Subject: allow travel and sending/answering teleport offers"
+           layout="topleft" left="16" top="16" width="475" height="20" />
+          <text name="teleport_help" layout="topleft" follows="left|top|right" left="16" right="-16" top="48" height="38" word_wrap="true">
+            Teleport the Subject to your location or to a location SLURL. The Subject's restrictions and destination access still apply.
+          </text>
+          <button name="teleport_here" label="Teleport Subject to Me" layout="topleft" follows="left|top" left="16" top="93" width="220" height="28" />
+          <line_editor name="teleport_slurl" label="Paste location SLURL" layout="topleft" follows="left|top|right" left="16" right="-16" top="134" height="25" max_length_chars="512" />
+          <button name="teleport_location" label="Teleport to SLURL" layout="topleft" follows="left|top" left="16" top="169" width="220" height="28" />
+          <text name="teleport_avatar_label" layout="topleft" follows="left|top" left="16" top="214" width="350" height="20">Avatar UUID for an offer or request:</text>
+          <line_editor name="teleport_avatar" layout="topleft" follows="left|top|right" left="16" right="-16" top="240" height="25" max_length_chars="36" />
+          <button name="teleport_offer" label="Offer Teleport as Subject" layout="topleft" follows="left|top" left="16" top="276" width="220" height="28" />
+          <button name="teleport_request" label="Request Teleport as Subject" layout="topleft" follows="left|top" left="246" top="276" width="225" height="28" />
+          <text name="teleport_incoming_label" layout="topleft" follows="left|top|right" left="16" right="-16" top="319" height="20">Pending offers and requests received by the Subject:</text>
+          <scroll_list name="teleport_offers" layout="topleft" follows="left|top|right" left="16" right="-16" top="347" height="130" multi_select="false" draw_heading="true">
+            <column name="kind" label="Type" relative_width="0.45" />
+            <column name="from" label="From avatar" relative_width="0.55" />
+          </scroll_list>
+          <button name="teleport_accept" label="Accept" layout="topleft" follows="left|top" left="16" top="489" width="120" height="28" />
+          <button name="teleport_decline" label="Decline" layout="topleft" follows="left|top" left="146" top="489" width="120" height="28" />
+          <text name="teleport_result" layout="topleft" follows="left|top|right" left="16" right="-16" top="533" height="65" word_wrap="true" />
+        </panel>
+      </scroll_container>
     </panel>
   </tab_container>
 </floater>

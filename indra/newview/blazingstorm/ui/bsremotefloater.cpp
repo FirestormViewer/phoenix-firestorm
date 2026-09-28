@@ -15,6 +15,7 @@
 #include "blazingstorm/remote/bsremotesession.h"
 #include "blazingstorm/remote/bstruststore.h"
 #include "blazingstorm/remote/bsworldinteraction.h"
+#include "blazingstorm/remote/bsremotefeatures.h"
 
 #include "fscommon.h"
 #include "llagent.h"
@@ -27,6 +28,16 @@
 #include "lltextbox.h"
 #include "lluuid.h"
 #include "llviewercontrol.h"
+#include "llscrolllistctrl.h"
+#include "llslurl.h"
+#include "llworldmapmessage.h"
+#include "llregionhandle.h"
+#include "lltoolpie.h"
+#include "llviewerobject.h"
+#include "llviewerwindow.h"
+#include "llviewernetwork.h"
+#include <sstream>
+#include <iomanip>
 
 #include <utility>
 
@@ -57,6 +68,7 @@ namespace BlazingStorm
 
     bool RemoteFloater::postBuild()
     {
+        setupFeatures();
         getChild<LLCheckBoxCtrl>("allow_camera")->setCommitCallback(
             [this](LLUICtrl* ctrl, const LLSD&)
             {
@@ -81,7 +93,27 @@ namespace BlazingStorm
             getChild<LLButton>(button.first)->setCommitCallback(
                 [this, command = button.second](LLUICtrl*, const LLSD&)
                 { sendRemoteCommand(command); });
+            if (button.second != RemoteCommandType::CameraReset)
+                getChild<LLButton>(button.first)->setHeldDownCallback(
+                    [this, command = button.second](LLUICtrl*, const LLSD&)
+                    {
+                        const auto now = std::chrono::steady_clock::now();
+                        if (now < mNextCameraStep) return;
+                        mNextCameraStep = now + std::chrono::milliseconds(100);
+                        sendRemoteCommand(command);
+                    });
         }
+        getChild<LLButton>("camera_focus")->setCommitCallback([this](LLUICtrl*, const LLSD&)
+        {
+            std::string id = getChild<LLLineEditor>("camera_target")->getText();
+            if (id.empty())
+            {
+                LLViewerObject* object = LLToolPie::getInstance()->getPick().getObject();
+                if (object) id = object->getID().asString();
+            }
+            if (!id.empty()) sendRemoteCommand(RemoteCommandType::CameraFocus, {}, id);
+            else report("Right-click an object/avatar first, or enter its UUID.");
+        });
         getChild<LLButton>("start_host")->setCommitCallback(
             [this](LLUICtrl*, const LLSD&) { onStartHost(); });
         getChild<LLButton>("connect")->setCommitCallback(
@@ -218,6 +250,7 @@ namespace BlazingStorm
     void RemoteFloater::refresh()
     {
         mRefreshing = true;
+        refreshFeatures();
 
         auto& transport = LocalTransport::instance();
         auto& session = RemoteSession::instance();
@@ -261,7 +294,7 @@ namespace BlazingStorm
         getChild<LLCheckBoxCtrl>("allow_camera")->setEnabled(subject_active && is_host);
         getChild<LLCheckBoxCtrl>("allow_camera")->setValue(session.hasPermission(RemotePermission::Camera));
         for (const char* name : {"camera_left", "camera_right", "camera_up", "camera_down",
-                                "camera_in", "camera_out", "camera_reset"})
+                                "camera_in", "camera_out", "camera_reset", "camera_focus"})
             getChild<LLButton>(name)->setEnabled(controller_active);
         allow_dialogs->setEnabled(subject_active && is_host);
         allow_dialogs->setValue(session.hasPermission(RemotePermission::ScriptDialogs));
@@ -897,6 +930,8 @@ namespace BlazingStorm
         getChild<LLCheckBoxCtrl>("trusted_sitstand")->setValue(false);
         getChild<LLCheckBoxCtrl>("trusted_dialogs")->setValue(false);
         getChild<LLCheckBoxCtrl>("trusted_camera")->setValue(false);
+        getChild<LLCheckBoxCtrl>("trusted_inventory")->setValue(false);
+        getChild<LLCheckBoxCtrl>("trusted_teleport")->setValue(false);
         getChild<LLCheckBoxCtrl>("trusted_restrictions")->setValue(false);
     }
 
@@ -932,6 +967,10 @@ namespace BlazingStorm
             (entry->permissions & toMask(RemotePermission::SitStand)) != 0);
         getChild<LLCheckBoxCtrl>("trusted_camera")->setValue(
             (entry->permissions & toMask(RemotePermission::Camera)) != 0);
+        getChild<LLCheckBoxCtrl>("trusted_inventory")->setValue(
+            (entry->permissions & toMask(RemotePermission::Inventory)) != 0);
+        getChild<LLCheckBoxCtrl>("trusted_teleport")->setValue(
+            (entry->permissions & toMask(RemotePermission::Teleport)) != 0);
         getChild<LLCheckBoxCtrl>("trusted_dialogs")->setValue(
             (entry->permissions & toMask(RemotePermission::ScriptDialogs)) != 0);
         getChild<LLCheckBoxCtrl>("trusted_restrictions")->setValue(
@@ -965,6 +1004,10 @@ namespace BlazingStorm
             entry.permissions |= toMask(RemotePermission::SitStand);
         if (getChild<LLCheckBoxCtrl>("trusted_camera")->getValue().asBoolean())
             entry.permissions |= toMask(RemotePermission::Camera);
+        if (getChild<LLCheckBoxCtrl>("trusted_inventory")->getValue().asBoolean())
+            entry.permissions |= toMask(RemotePermission::Inventory);
+        if (getChild<LLCheckBoxCtrl>("trusted_teleport")->getValue().asBoolean())
+            entry.permissions |= toMask(RemotePermission::Teleport);
         if (getChild<LLCheckBoxCtrl>("trusted_dialogs")->getValue().asBoolean())
             entry.permissions |= toMask(RemotePermission::ScriptDialogs);
         if (getChild<LLCheckBoxCtrl>("trusted_restrictions")->getValue().asBoolean())
@@ -975,6 +1018,124 @@ namespace BlazingStorm
         getChild<LLComboBox>("trusted_controller_list")->setValue(LLSD(avatar_id));
         onTrustedControllerSelected();
         report("Saved trusted-controller permission profile.");
+    }
+
+    void RemoteFloater::setupFeatures()
+    {
+        for (const auto& binding : {std::make_pair("allow_inventory", RemotePermission::Inventory),
+                                   std::make_pair("allow_teleport", RemotePermission::Teleport)})
+            getChild<LLCheckBoxCtrl>(binding.first)->setCommitCallback(
+                [this, permission = binding.second](LLUICtrl* ctrl, const LLSD&)
+                {
+                    if (mRefreshing) return;
+                    auto& session = RemoteSession::instance();
+                    if (!session.isActive() || LocalTransport::instance().role() != RemoteRole::Host) return;
+                    const auto mask = toMask(permission);
+                    session.setPermissions(ctrl->getValue().asBoolean() ? session.permissions() | mask : session.permissions() & ~mask);
+                });
+        getChild<LLButton>("inventory_root")->setCommitCallback([this](LLUICtrl*,const LLSD&)
+            { sendRemoteCommand(RemoteCommandType::InventoryBrowse); });
+        getChild<LLButton>("inventory_up")->setCommitCallback([this](LLUICtrl*,const LLSD&)
+            { sendRemoteCommand(RemoteCommandType::InventoryBrowse, "0", RemoteFeatures::instance().inventory()["parent"].asString()); });
+        getChild<LLButton>("inventory_open")->setCommitCallback([this](LLUICtrl*,const LLSD&)
+            { sendRemoteCommand(RemoteCommandType::InventoryBrowse, "0", getChild<LLScrollListCtrl>("inventory_list")->getValue().asString()); });
+        for (const auto& binding : {std::make_pair("inventory_previous", -1), std::make_pair("inventory_next", 1), std::make_pair("inventory_refresh", 0)})
+            getChild<LLButton>(binding.first)->setCommitCallback([this, delta = binding.second](LLUICtrl*,const LLSD&)
+            {
+                const auto& page = RemoteFeatures::instance().inventory();
+                sendRemoteCommand(RemoteCommandType::InventoryBrowse, std::to_string(std::max(0,page["page"].asInteger()+delta)), page["folder"].asString());
+            });
+        for (const auto& binding : {std::make_pair("inventory_wear", RemoteCommandType::InventoryWear),
+                                   std::make_pair("inventory_remove", RemoteCommandType::InventoryRemove),
+                                   std::make_pair("inventory_rez", RemoteCommandType::InventoryRez)})
+            getChild<LLButton>(binding.first)->setCommitCallback([this, command = binding.second](LLUICtrl*,const LLSD&)
+            { sendRemoteCommand(command, {}, getChild<LLScrollListCtrl>("inventory_list")->getValue().asString()); });
+        getChild<LLButton>("teleport_here")->setCommitCallback([this](LLUICtrl*,const LLSD&)
+        {
+            const auto pos = gAgent.getPositionGlobal();
+            std::ostringstream out; out << std::setprecision(15) << pos.mdV[0] << ',' << pos.mdV[1] << ',' << pos.mdV[2];
+            sendRemoteCommand(RemoteCommandType::TeleportLocation, out.str());
+        });
+        getChild<LLButton>("teleport_location")->setCommitCallback([this](LLUICtrl*,const LLSD&)
+        {
+            LLSLURL url(getChild<LLLineEditor>("teleport_slurl")->getText());
+            if (url.getType() != LLSLURL::LOCATION) { report("Enter a location SLURL."); return; }
+            if (!url.getGrid().empty() && url.getGrid() != LLGridManager::getInstance()->getGrid())
+            { report("Use a location on the current grid."); return; }
+            const auto session_id = RemoteController::instance().sessionId();
+            const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(30);
+            LLWorldMapMessage::instance().sendNamedRegionRequest(url.getRegion(),
+                [session_id, deadline, position = url.getPosition()](U64 handle, const std::string&, const LLUUID&, bool)
+                {
+                    auto& controller = RemoteController::instance();
+                    if (!handle || !controller.isActive() || controller.sessionId() != session_id
+                        || std::chrono::steady_clock::now() > deadline) return;
+                    const LLVector3d pos = from_region_handle(handle) + LLVector3d(position);
+                    std::ostringstream out; out << std::setprecision(15) << pos.mdV[0] << ',' << pos.mdV[1] << ',' << pos.mdV[2];
+                    LocalTransport::instance().sendCommand(controller.makeCommand(RemoteCommandType::TeleportLocation, out.str()));
+                }, url.getSLURLString(), false);
+        });
+        for (const auto& binding : {std::make_pair("teleport_offer", RemoteCommandType::TeleportOffer),
+                                   std::make_pair("teleport_request", RemoteCommandType::TeleportRequest)})
+            getChild<LLButton>(binding.first)->setCommitCallback([this, command = binding.second](LLUICtrl*,const LLSD&)
+            { sendRemoteCommand(command, {}, getChild<LLLineEditor>("teleport_avatar")->getText()); });
+        for (const auto& binding : {std::make_pair("teleport_accept", RemoteCommandType::TeleportAccept),
+                                   std::make_pair("teleport_decline", RemoteCommandType::TeleportDecline)})
+            getChild<LLButton>(binding.first)->setCommitCallback([this, command = binding.second](LLUICtrl*,const LLSD&)
+            { sendRemoteCommand(command, {}, getChild<LLScrollListCtrl>("teleport_offers")->getValue().asString()); });
+    }
+
+    void RemoteFloater::refreshFeatures()
+    {
+        auto& features = RemoteFeatures::instance();
+        const bool controller = RemoteController::instance().isActive() && LocalTransport::instance().isPaired();
+        auto& session = RemoteSession::instance();
+        const bool host = session.isActive() && LocalTransport::instance().role() == RemoteRole::Host;
+        for (const auto& binding : {std::make_pair("allow_inventory", RemotePermission::Inventory),
+                                   std::make_pair("allow_teleport", RemotePermission::Teleport)})
+        {
+            auto* checkbox = getChild<LLCheckBoxCtrl>(binding.first);
+            checkbox->setEnabled(host); checkbox->setValue(session.hasPermission(binding.second));
+        }
+        const bool inventory = controller && features.state()["inventory_allowed"].asBoolean();
+        const bool teleport = controller && features.state()["teleport_allowed"].asBoolean();
+        for (const char* name : {"inventory_root", "inventory_up", "inventory_open", "inventory_refresh",
+            "inventory_previous", "inventory_next", "inventory_wear", "inventory_remove", "inventory_rez"})
+            getChild<LLButton>(name)->setEnabled(inventory);
+        for (const char* name : {"teleport_here", "teleport_location", "teleport_offer", "teleport_request", "teleport_accept", "teleport_decline"})
+            getChild<LLButton>(name)->setEnabled(teleport);
+        if (mFeatureRevision == features.revision()) return;
+        mFeatureRevision = features.revision();
+        auto* list = getChild<LLScrollListCtrl>("inventory_list");
+        const LLUUID selected = list->getValue().asUUID(); list->deleteAllItems();
+        const auto& page = features.inventory();
+        const auto& rows = page["rows"];
+        for (auto it = rows.beginArray(); it != rows.endArray(); ++it)
+        {
+            LLSD row; row["id"] = (*it)["id"];
+            row["columns"][0]["column"] = "name"; row["columns"][0]["value"] = (*it)["name"];
+            row["columns"][1]["column"] = "kind"; row["columns"][1]["value"] = (*it)["kind"];
+            row["columns"][2]["column"] = "state"; row["columns"][2]["value"] =
+                std::string((*it)["worn"].asBoolean() ? "Worn " : "") + ((*it)["folder"].asBoolean() ? "" : ((*it)["copy"].asBoolean() ? "Copy" : "No copy"));
+            list->addElement(row);
+        }
+        list->selectByID(selected);
+        getChild<LLTextBox>("inventory_folder")->setText(inventory ? page["name"].asString() + "  | Page "
+            + std::to_string(page["page"].asInteger()+1) + (page["loading"].asBoolean() ? " (loading...)" : "") : "Inventory permission is not active.");
+        getChild<LLTextBox>("inventory_result")->setText(features.state()["result"].asString());
+        auto* offers = getChild<LLScrollListCtrl>("teleport_offers");
+        const LLUUID selected_offer = offers->getValue().asUUID(); offers->deleteAllItems();
+        const auto& incoming = features.offers();
+        for (auto it = incoming.beginArray(); it != incoming.endArray(); ++it)
+        {
+            LLSD row; row["id"] = (*it)["id"];
+            row["columns"][0]["column"] = "kind"; row["columns"][0]["value"] = (*it)["kind"];
+            row["columns"][1]["column"] = "from"; row["columns"][1]["value"] = (*it)["from"].asString();
+            offers->addElement(row);
+        }
+        offers->selectByID(selected_offer);
+        getChild<LLTextBox>("teleport_result")->setText(features.state()["result"].asString()
+            + "\nTeleport: " + features.state()["teleport_state"].asString());
     }
 
     void RemoteFloater::onRemoveTrustedController()

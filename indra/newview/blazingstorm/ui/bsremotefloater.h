@@ -9,6 +9,7 @@
 #include "llfloater.h"
 #include "blazingstorm/remote/bsremoteprotocol.h"
 #include "blazingstorm/remote/bsremotecontroller.h"
+#include <chrono>
 
 namespace BlazingStorm
 {
@@ -23,6 +24,10 @@ namespace BlazingStorm
 
     private:
         void refresh();
+        void setupFeatures();
+        void refreshFeatures();
+        unsigned mFeatureRevision = ~0u;
+        std::chrono::steady_clock::time_point mNextCameraStep{};
 
         void onStartHost();
         void onConnect();

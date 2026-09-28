@@ -11,10 +11,13 @@ the active session and sequence; RemoteActions checks Camera permission,
 avatar validity, third-person mode, joystick flycam, and RLVa setcam/unlock locks.
 
 Each controller button click requests one step: 0.1 radians for orbit/pitch or
-0.25 metres for distance. `LLAgentCamera::unlockView()` detaches the focus before
+0.25 metres for distance. Holding repeats steps at up to 10 Hz, without persistent
+Subject-side held input. `LLAgentCamera::unlockView()` detaches the focus before
 `cameraOrbitAround`, `cameraOrbitOver`, or `cameraOrbitIn`, avoiding their
 avatar-yaw/pitch paths. Native camera distance constraints continue to apply.
-There is no continuous input state, mouse interception, or arbitrary target focus.
+There is no continuous input state or mouse interception. Focus accepts an
+object/avatar UUID or the Controller's last world pick; the Subject resolves it
+in its own object list and rejects unavailable objects and HUD attachments.
 
 Reset, permission revocation, session replacement/end, emergency release, and
 transport disconnect release camera ownership. `setFocusOnAvatar(true, false,
@@ -44,4 +47,5 @@ Live two-viewer checks still required:
   for expiry. Verify only one response and closure of stale mirrors.
 - Test empty/duplicate dialog labels, reconnect, and ScriptDialogs revocation.
 
-Object/avatar focus selection and continuous camera input are deferred.
+The Camera panel scrolls at small window sizes and its buttons explicitly follow
+the top edge, fixing the missing-button layout observed in the first increment.
