@@ -7,10 +7,15 @@
 
 #include "blazingstorm/remote/bsdebugcommands.h"
 
+#include "blazingstorm/remote/bslocaltransport.h"
+#include "blazingstorm/remote/bsremotecontroller.h"
+
 #include "blazingstorm/remote/bsremoteactions.h"
 #include "blazingstorm/remote/bsremoteevents.h"
 #include "blazingstorm/remote/bsremotesession.h"
 #include "fscommon.h"
+#include "llagent.h"
+#include "llagentui.h"
 
 #include <sstream>
 #include <string>
@@ -60,10 +65,155 @@ namespace BlazingStorm
 
         auto& session = RemoteSession::instance();
         auto& actions = RemoteActions::instance();
+        auto& transport = LocalTransport::instance();
+        auto& controller = RemoteController::instance();
 
         if (action.empty() || action == "help")
         {
-            report("Commands: /blaze on | off | release | status | restrictchat on|off | restrictim on|off | thoughts | forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text>");
+            report("Commands: /blaze host | connect <code> | accept | reject | disconnect | remote <cmd> | allowim on|off | on | off | release | status | restrictchat on|off | restrictim on|off | thoughts | forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text>");
+            return true;
+        }
+
+        if (action == "host")
+        {
+            actions.stopMovement();
+            if (session.isActive())
+            {
+                session.emergencyRelease();
+            }
+
+            if (transport.startHost())
+            {
+                report("Local host started on 127.0.0.1:"
+                    + std::to_string(transport.port())
+                    + ". Pairing code: " + transport.pairingCode());
+                report("On the controller viewer use: /blaze connect " + transport.pairingCode());
+            }
+            else
+            {
+                report(transport.lastStatus());
+            }
+            return true;
+        }
+
+        if (action == "connect")
+        {
+            std::string code;
+            input >> code;
+            if (code.empty())
+            {
+                report("Usage: /blaze connect <pairing-code>");
+                return true;
+            }
+
+            std::string controller_name;
+            LLAgentUI::buildFullname(controller_name);
+
+            if (transport.connectController(code, gAgentID.asString(), controller_name))
+            {
+                report("Connected to the local subject viewer. Waiting for subject approval.");
+            }
+            else
+            {
+                report(transport.lastStatus());
+            }
+            return true;
+        }
+
+        if (action == "accept")
+        {
+            if (transport.acceptPending())
+            {
+                report("Controller accepted. Movement + public chat permissions granted.");
+                report("Controller IM permission is OFF by default. Use /blaze allowim on to grant it.");
+            }
+            else
+            {
+                report(transport.lastStatus());
+            }
+            return true;
+        }
+
+        if (action == "reject")
+        {
+            transport.rejectPending();
+            report(transport.lastStatus());
+            return true;
+        }
+
+        if (action == "disconnect")
+        {
+            actions.stopMovement();
+            transport.disconnect();
+            if (session.isActive())
+            {
+                session.emergencyRelease();
+            }
+            controller.end();
+            report("Local viewer-to-viewer connection closed.");
+            return true;
+        }
+
+        if (action == "remote")
+        {
+            if (!controller.isActive() || !transport.isPaired())
+            {
+                report("No accepted controller session is active.");
+                return true;
+            }
+
+            std::string remote_action;
+            input >> remote_action;
+
+            RemoteCommandType type = RemoteCommandType::None;
+            std::string target_id;
+            std::string message;
+
+            if (remote_action == "forward") type = RemoteCommandType::MoveForward;
+            else if (remote_action == "back" || remote_action == "backward") type = RemoteCommandType::MoveBackward;
+            else if (remote_action == "strafeleft") type = RemoteCommandType::StrafeLeft;
+            else if (remote_action == "straferight") type = RemoteCommandType::StrafeRight;
+            else if (remote_action == "turnleft") type = RemoteCommandType::TurnLeft;
+            else if (remote_action == "turnright") type = RemoteCommandType::TurnRight;
+            else if (remote_action == "jump") type = RemoteCommandType::Jump;
+            else if (remote_action == "stop") type = RemoteCommandType::Stop;
+            else if (remote_action == "release") type = RemoteCommandType::EmergencyRelease;
+            else if (remote_action == "say")
+            {
+                type = RemoteCommandType::Say;
+                std::getline(input, message);
+                if (!message.empty() && message.front() == ' ')
+                {
+                    message.erase(0, 1);
+                }
+            }
+            else if (remote_action == "im")
+            {
+                type = RemoteCommandType::SendInstantMessage;
+                input >> target_id;
+                std::getline(input, message);
+                if (!message.empty() && message.front() == ' ')
+                {
+                    message.erase(0, 1);
+                }
+
+                if (target_id.empty() || message.empty())
+                {
+                    report("Usage: /blaze remote im <avatar-uuid> <message>");
+                    return true;
+                }
+            }
+            else
+            {
+                report("Remote commands: forward | back | strafeleft | straferight | turnleft | turnright | jump | stop | say <text> | im <avatar-uuid> <text> | release");
+                return true;
+            }
+
+            RemoteCommand command = controller.makeCommand(type, message, target_id);
+            if (!transport.sendCommand(command))
+            {
+                report(transport.lastStatus());
+            }
             return true;
         }
 
@@ -78,8 +228,10 @@ namespace BlazingStorm
         if (action == "off")
         {
             actions.stopMovement();
+            transport.disconnect();
             session.end();
-            report("Local debug possession disabled.");
+            controller.end();
+            report("Possession disabled and local transport disconnected.");
             return true;
         }
 
@@ -87,7 +239,9 @@ namespace BlazingStorm
         {
             // Local emergency release is never permission-gated.
             actions.stopMovement();
+            transport.disconnect();
             session.emergencyRelease();
+            controller.end();
             RemoteEvents::instance().clear();
             report("Emergency release: possession ended locally.");
             return true;
@@ -95,19 +249,61 @@ namespace BlazingStorm
 
         if (action == "status")
         {
+            std::string role = "none";
+            if (transport.role() == RemoteRole::Host) role = "host";
+            else if (transport.role() == RemoteRole::Controller) role = "controller";
+
+            report("Transport: role=" + role
+                + "; connected=" + (transport.isConnected() ? "yes" : "no")
+                + "; paired=" + (transport.isPaired() ? "yes" : "no")
+                + "; status=" + transport.lastStatus());
+
             if (!session.isActive())
             {
-                report("Remote session: inactive.");
+                report("Subject session: inactive.");
             }
             else
             {
-                report("Remote session: active; controller=" + session.controllerId()
+                report("Subject session: active; controller=" + session.controllerId()
                     + "; movement=" + (session.hasPermission(RemotePermission::Movement) ? "yes" : "no")
                     + "; chat=" + (session.hasPermission(RemotePermission::Chat) ? "yes" : "no")
+                    + "; controller-im=" + (session.hasPermission(RemotePermission::InstantMessage) ? "yes" : "no")
                     + "; subject-nearby-chat="
                     + (session.isSubjectRestricted(SubjectRestriction::NearbyChat) ? "restricted" : "allowed")
                     + "; subject-direct-im="
                     + (session.isSubjectRestricted(SubjectRestriction::InstantMessage) ? "restricted" : "allowed"));
+            }
+            return true;
+        }
+
+        if (action == "allowim")
+        {
+            if (!session.isActive())
+            {
+                report("No subject possession session is active.");
+                return true;
+            }
+
+            std::string state;
+            input >> state;
+            auto permissions = session.permissions();
+            const auto direct_im = toMask(RemotePermission::InstantMessage);
+
+            if (state == "on")
+            {
+                permissions |= direct_im;
+                session.setPermissions(permissions);
+                report("Controller may now send direct IMs as the subject.");
+            }
+            else if (state == "off")
+            {
+                permissions &= ~direct_im;
+                session.setPermissions(permissions);
+                report("Controller direct IM permission revoked.");
+            }
+            else
+            {
+                report("Usage: /blaze allowim on|off");
             }
             return true;
         }
