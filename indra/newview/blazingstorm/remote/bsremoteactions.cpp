@@ -104,11 +104,26 @@ namespace BlazingStorm
         return true;
     }
 
-    void RemoteActions::stopMovement()
+    void RemoteActions::stopForward()
     {
         mForward = 0;
+    }
+
+    void RemoteActions::stopStrafe()
+    {
         mStrafe = 0;
+    }
+
+    void RemoteActions::stopTurn()
+    {
         mTurn = 0.f;
+    }
+
+    void RemoteActions::stopMovement()
+    {
+        stopForward();
+        stopStrafe();
+        stopTurn();
         mJumpPending = false;
     }
 
