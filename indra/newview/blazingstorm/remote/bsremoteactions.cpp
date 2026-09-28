@@ -21,6 +21,8 @@
 #include "llvoavatarself.h"
 #include "llviewerjoystick.h"
 #include "rlvhandler.h"
+#include "llviewerobjectlist.h"
+#include "llviewerobject.h"
 
 namespace BlazingStorm
 {
@@ -73,6 +75,23 @@ namespace BlazingStorm
         mCameraControlled = false;
         // Return normal avatar focus without the resetView avatar-axis side effect.
         gAgentCamera.setFocusOnAvatar(true, false, false);
+    }
+
+    bool RemoteActions::cameraFocus(const std::string& object_id)
+    {
+        LLUUID id;
+        if (!id.set(object_id, false) || id.isNull()
+            || !RemoteSession::instance().hasPermission(RemotePermission::Camera)
+            || !isAgentAvatarValid() || !gAgentCamera.cameraThirdPerson()
+            || LLViewerJoystick::getInstance()->getOverrideCamera()
+            || gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)
+            || gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_UNLOCK)) return false;
+        auto* object = gObjectList.findObject(id);
+        if (!object || object->isDead() || !object->getRegion() || object->isHUDAttachment()) return false;
+        gAgentCamera.unlockView();
+        gAgentCamera.setFocusGlobal(object->getPositionGlobal(), id);
+        mCameraControlled = true;
+        return true;
     }
 
     void RemoteActions::beginMovement()

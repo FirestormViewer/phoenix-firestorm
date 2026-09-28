@@ -37,6 +37,7 @@ namespace BlazingStorm
         bool jump();
         bool say(const std::string& text);
         bool cameraStep(RemoteCommandType command);
+        bool cameraFocus(const std::string& object_id);
         void releaseCamera();
 
         void stopForward();

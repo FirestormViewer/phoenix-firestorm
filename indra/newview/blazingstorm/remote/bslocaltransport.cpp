@@ -14,6 +14,7 @@
 #include "blazingstorm/remote/bsremotesession.h"
 #include "blazingstorm/remote/bstruststore.h"
 #include "blazingstorm/remote/bsworldinteraction.h"
+#include "blazingstorm/remote/bsremotefeatures.h"
 #include "fscommon.h"
 #include "fsnearbychathub.h"
 #include "llagent.h"
@@ -467,6 +468,7 @@ namespace BlazingStorm
 
     void LocalTransport::disconnect()
     {
+        RemoteFeatures::instance().reset();
         if (mRole == RemoteRole::Host && RemoteSession::instance().isActive())
         {
             RemoteActions::instance().stopMovement();
@@ -528,6 +530,7 @@ namespace BlazingStorm
 
     void LocalTransport::resetConnectionState(bool keep_listener)
     {
+        RemoteFeatures::instance().reset();
         closeSocketOnly();
         WorldInteraction::instance().reset();
 
@@ -818,7 +821,7 @@ namespace BlazingStorm
             if (fields[0] == "CMD" && fields.size() == 5 && mPaired)
             {
                 std::uint64_t sequence = 0;
-                if (!parseSequence(fields[1], sequence))
+                if (!parseSequence(fields[1], sequence) || sequence == 0)
                 {
                     return;
                 }
@@ -885,6 +888,13 @@ namespace BlazingStorm
                 return;
             }
 
+            if (fields[0] == "EVT" && fields.size() == 3 && fields[1] == "FEATURES" && mPaired)
+            {
+                std::string data;
+                if (fields[2].size() <= 56000 && hexDecode(fields[2], data))
+                    RemoteFeatures::instance().receiveSnapshot(data);
+                return;
+            }
             if (fields[0] == "EVT" && fields.size() == 3 && fields[1] == "THOUGHT")
             {
                 std::string thought;
@@ -1017,6 +1027,9 @@ namespace BlazingStorm
 
         if (mRole == RemoteRole::Host && mPaired && mConnected)
         {
+            const auto features = RemoteFeatures::instance().snapshot();
+            if (!features.empty() && features.size() <= 28000)
+                queueLine("EVT|FEATURES|" + hexEncode(features));
             auto events = RemoteEvents::instance().takeAll();
             for (const auto& event : events)
             {
@@ -1133,6 +1146,15 @@ namespace BlazingStorm
     {
         switch (type)
         {
+            case RemoteCommandType::InventoryBrowse: return "inventory-browse";
+            case RemoteCommandType::InventoryWear: return "inventory-wear";
+            case RemoteCommandType::InventoryRemove: return "inventory-remove";
+            case RemoteCommandType::InventoryRez: return "inventory-rez";
+            case RemoteCommandType::TeleportLocation: return "teleport-location";
+            case RemoteCommandType::TeleportOffer: return "teleport-offer";
+            case RemoteCommandType::TeleportRequest: return "teleport-request";
+            case RemoteCommandType::TeleportAccept: return "teleport-accept";
+            case RemoteCommandType::TeleportDecline: return "teleport-decline";
             case RemoteCommandType::CameraLeft: return "camera-left";
             case RemoteCommandType::CameraRight: return "camera-right";
             case RemoteCommandType::CameraUp: return "camera-up";
@@ -1140,6 +1162,7 @@ namespace BlazingStorm
             case RemoteCommandType::CameraIn: return "camera-in";
             case RemoteCommandType::CameraOut: return "camera-out";
             case RemoteCommandType::CameraReset: return "camera-reset";
+            case RemoteCommandType::CameraFocus: return "camera-focus";
             case RemoteCommandType::MoveForward:       return "forward";
             case RemoteCommandType::MoveBackward:      return "back";
             case RemoteCommandType::StrafeLeft:        return "strafeleft";
@@ -1176,6 +1199,15 @@ namespace BlazingStorm
 
     RemoteCommandType LocalTransport::commandType(const std::string& name)
     {
+        if (name == "inventory-browse") return RemoteCommandType::InventoryBrowse;
+        if (name == "inventory-wear") return RemoteCommandType::InventoryWear;
+        if (name == "inventory-remove") return RemoteCommandType::InventoryRemove;
+        if (name == "inventory-rez") return RemoteCommandType::InventoryRez;
+        if (name == "teleport-location") return RemoteCommandType::TeleportLocation;
+        if (name == "teleport-offer") return RemoteCommandType::TeleportOffer;
+        if (name == "teleport-request") return RemoteCommandType::TeleportRequest;
+        if (name == "teleport-accept") return RemoteCommandType::TeleportAccept;
+        if (name == "teleport-decline") return RemoteCommandType::TeleportDecline;
         if (name == "camera-left") return RemoteCommandType::CameraLeft;
         if (name == "camera-right") return RemoteCommandType::CameraRight;
         if (name == "camera-up") return RemoteCommandType::CameraUp;
@@ -1183,6 +1215,7 @@ namespace BlazingStorm
         if (name == "camera-in") return RemoteCommandType::CameraIn;
         if (name == "camera-out") return RemoteCommandType::CameraOut;
         if (name == "camera-reset") return RemoteCommandType::CameraReset;
+        if (name == "camera-focus") return RemoteCommandType::CameraFocus;
         if (name == "forward")     return RemoteCommandType::MoveForward;
         if (name == "back")        return RemoteCommandType::MoveBackward;
         if (name == "strafeleft")  return RemoteCommandType::StrafeLeft;

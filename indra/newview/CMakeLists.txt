@@ -99,6 +99,7 @@ set(viewer_SOURCE_FILES
     blazingstorm/remote/bstruststore.cpp
     blazingstorm/remote/bsrequestactions.cpp
     blazingstorm/remote/bsworldinteraction.cpp
+    blazingstorm/remote/bsremotefeatures.cpp
     blazingstorm/ui/bsremotefloater.cpp
     alfloaterregiontracker.cpp
     animationexplorer.cpp
@@ -973,6 +974,7 @@ set(viewer_HEADER_FILES
     blazingstorm/remote/bstruststore.h
     blazingstorm/remote/bsrequestactions.h
     blazingstorm/remote/bsworldinteraction.h
+    blazingstorm/remote/bsremotefeatures.h
     blazingstorm/ui/bsremotefloater.h
     alfloaterregiontracker.h
     animationexplorer.h

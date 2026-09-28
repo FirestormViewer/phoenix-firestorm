@@ -10,6 +10,7 @@
 #include "blazingstorm/remote/bsremoteactions.h"
 #include "blazingstorm/remote/bsremotesession.h"
 #include "blazingstorm/remote/bsworldinteraction.h"
+#include "blazingstorm/remote/bsremotefeatures.h"
 #include "fscommon.h"
 #include "llimview.h"
 #include "llviewermessage.h"
@@ -45,6 +46,16 @@ namespace BlazingStorm
 
         switch (command.type)
         {
+            case RemoteCommandType::InventoryBrowse:
+            case RemoteCommandType::InventoryWear:
+            case RemoteCommandType::InventoryRemove:
+            case RemoteCommandType::InventoryRez:
+            case RemoteCommandType::TeleportLocation:
+            case RemoteCommandType::TeleportOffer:
+            case RemoteCommandType::TeleportRequest:
+            case RemoteCommandType::TeleportAccept:
+            case RemoteCommandType::TeleportDecline:
+                return RemoteFeatures::instance().dispatch(command);
             case RemoteCommandType::CameraLeft:
             case RemoteCommandType::CameraRight:
             case RemoteCommandType::CameraUp:
@@ -54,6 +65,8 @@ namespace BlazingStorm
             case RemoteCommandType::CameraReset:
                 return command.text.empty() && command.targetId.empty()
                     && actions.cameraStep(command.type);
+            case RemoteCommandType::CameraFocus:
+                return command.text.empty() && actions.cameraFocus(command.targetId);
             case RemoteCommandType::MoveForward:  return actions.moveForward();
             case RemoteCommandType::MoveBackward: return actions.moveBackward();
             case RemoteCommandType::StrafeLeft:   return actions.strafeLeft();

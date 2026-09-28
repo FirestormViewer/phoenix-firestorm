@@ -57,7 +57,17 @@ namespace BlazingStorm
         CameraDown,
         CameraIn,
         CameraOut,
-        CameraReset
+        CameraReset,
+        InventoryBrowse,
+        InventoryWear,
+        InventoryRemove,
+        InventoryRez,
+        TeleportLocation,
+        TeleportOffer,
+        TeleportRequest,
+        TeleportAccept,
+        TeleportDecline,
+        CameraFocus
     };
 
     struct RemoteCommand
