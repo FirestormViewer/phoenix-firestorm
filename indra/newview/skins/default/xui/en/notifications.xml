@@ -8898,6 +8898,29 @@ Offer a teleport?
 
   <notification
    icon="notify.tga"
+   name="BlazingStormPossessionRequest"
+   label="Blazing Storm possession request"
+   persist="true"
+   fade_toast="false"
+   type="offer">
+    <tag>confirm</tag>
+[CONTROLLER] is asking to control this avatar through Blazing Storm.
+
+Accepting starts a possession session using the permissions currently saved for this controller. You can always end it locally with the visible Release Control button.
+    <form name="form">
+      <button
+       index="0"
+       name="Accept"
+       text="Accept"/>
+      <button
+       index="1"
+       name="Decline"
+       text="Decline"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="notify.tga"
    name="OfferFriendship"
    label="Friendship offer from [NAME_LABEL]"
    log_to_im="true"
