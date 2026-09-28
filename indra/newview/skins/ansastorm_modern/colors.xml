@@ -1130,7 +1130,7 @@
      reference="White" />
     <color
      name="TextBgReadOnlyColor"
-	 reference="DkGray" />
+     reference="DkGray_66" />
     <color
      name="TextBgWriteableColor"
      reference="LtGray" />
