@@ -278,7 +278,11 @@ namespace BlazingStorm
         const std::string& message,
         bool online)
     {
-        if (!online || gAgentID.isNull() || RemoteSession::instance().isActive())
+        if (!online
+            || gAgentID.isNull()
+            || mRole != RemoteRole::None
+            || RemoteSession::instance().isActive()
+            || RemoteController::instance().isActive())
         {
             return false;
         }
@@ -326,6 +330,10 @@ namespace BlazingStorm
         if (now >= mBootstrapDeadline)
         {
             mBootstrapPending = false;
+            mBootstrapSubjectId.clear();
+            mBootstrapControllerId.clear();
+            mBootstrapControllerName.clear();
+            mBootstrapNonce.clear();
             mRole = RemoteRole::None;
             mLastStatus =
                 "Possession bootstrap timed out before the subject viewer opened its listener.";
@@ -510,6 +518,14 @@ namespace BlazingStorm
 
         if (!keep_listener)
         {
+            mBootstrapPending = false;
+            mBootstrapSubjectId.clear();
+            mBootstrapControllerId.clear();
+            mBootstrapControllerName.clear();
+            mBootstrapNonce.clear();
+            mExpectedBootstrapControllerId.clear();
+            mExpectedBootstrapNonce.clear();
+
             if (mAcceptor)
             {
                 boost::system::error_code error;
