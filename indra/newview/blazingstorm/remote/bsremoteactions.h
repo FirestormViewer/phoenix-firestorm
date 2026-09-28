@@ -28,17 +28,24 @@ namespace BlazingStorm
         bool strafeRight();
         bool turnLeft();
         bool turnRight();
+        bool moveUp();
+        bool moveDown();
+        bool flyOn();
+        bool flyOff();
+        bool toggleFly();
         bool jump();
         bool say(const std::string& text);
 
         void stopForward();
         void stopStrafe();
         void stopTurn();
+        void stopVertical();
         void stopMovement();
         void update();
 
         int forwardState() const { return mForward; }
         int strafeState() const { return mStrafe; }
+        int verticalState() const { return mVertical; }
         float turnState() const { return mTurn; }
 
     private:
@@ -49,6 +56,7 @@ namespace BlazingStorm
 
         int mForward = 0;
         int mStrafe = 0;
+        int mVertical = 0;
         float mTurn = 0.f;
         bool mJumpPending = false;
     };
