@@ -47,6 +47,7 @@ namespace BlazingStorm
         mControllerId = std::move(controller_id);
         mPermissions = sanitizePermissions(permissions);
         mSubjectRestrictions = restrictions;
+        mSubjectLocalMovementDisabled = false;
         mActive = true;
     }
 
@@ -56,6 +57,7 @@ namespace BlazingStorm
         mControllerId.clear();
         mPermissions = 0;
         mSubjectRestrictions = 0;
+        mSubjectLocalMovementDisabled = false;
     }
 
     bool RemoteSession::isActive() const
@@ -96,6 +98,16 @@ namespace BlazingStorm
     bool RemoteSession::isSubjectRestricted(SubjectRestriction restriction) const
     {
         return mActive && (mSubjectRestrictions & toMask(restriction)) != 0;
+    }
+
+    bool RemoteSession::subjectLocalMovementDisabled() const
+    {
+        return mActive && mSubjectLocalMovementDisabled;
+    }
+
+    void RemoteSession::setSubjectLocalMovementDisabled(bool disabled)
+    {
+        mSubjectLocalMovementDisabled = mActive && disabled;
     }
 
     void RemoteSession::emergencyRelease()
