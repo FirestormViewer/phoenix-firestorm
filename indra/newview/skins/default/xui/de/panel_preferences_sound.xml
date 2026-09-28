@@ -241,7 +241,7 @@
 
 	<!-- Media -->
 	<panel label="Medien" name="Media Media Panel">
-		<text width="190" name="media_autoplay_label">
+		<text width="210" name="media_autoplay_label">
 			Automatische Medien-Wiedergabe
 		</text>
 		<combo_box name="media_auto_play_combo" width="100">
