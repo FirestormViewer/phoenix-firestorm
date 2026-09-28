@@ -30,12 +30,14 @@ namespace BlazingStorm
         Jump,
         Stop,
         Say,
+        SendInstantMessage,
         EmergencyRelease
     };
 
     struct RemoteCommand
     {
         RemoteCommandType type = RemoteCommandType::None;
+        std::string targetId;
         std::string text;
         std::uint64_t sequence = 0;
     };
