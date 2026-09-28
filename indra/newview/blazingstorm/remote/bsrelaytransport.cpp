@@ -1105,6 +1105,8 @@ namespace BlazingStorm
                     }
 
                     mOpen = true;
+                    mReceiveReady =
+                        mReceiveGroup.empty() || mReceiveAutoJoined;
                     beginRead();
 
                     if (!mReceiveGroup.empty() && !mReceiveAutoJoined)
@@ -1117,12 +1119,6 @@ namespace BlazingStorm
                             + std::to_string(mJoinAck) + "}";
                         mWrites.push_back(join);
                         beginWrite();
-                    }
-                    else
-                    {
-                        RelayEvent event;
-                        event.type = RelayEventType::Connected;
-                        push(std::move(event));
                     }
                 });
         }
@@ -1192,9 +1188,8 @@ namespace BlazingStorm
                                 return;
                             }
                             mJoinAck = 0;
-                            RelayEvent event;
-                            event.type = RelayEventType::Connected;
-                            push(std::move(event));
+                            mReceiveReady = true;
+                            signalConnectedIfReady();
                         }
                         else if (!success)
                         {
@@ -1202,12 +1197,32 @@ namespace BlazingStorm
                             return;
                         }
                     }
+                    else if (type == "system")
+                    {
+                        std::string event_name;
+                        if (jsonString(payload, "event", event_name)
+                            && event_name == "connected")
+                        {
+                            mServiceConnected = true;
+                            signalConnectedIfReady();
+                        }
+                    }
                     else if (type == "message")
                     {
+                        std::string from;
+                        std::string group;
                         std::string data_type;
                         std::string data;
-                        if ((!jsonString(payload, "dataType", data_type)
-                             || data_type == "text")
+                        const bool group_ok =
+                            mReceiveGroup.empty()
+                            || (jsonString(payload, "group", group)
+                                && group == mReceiveGroup);
+
+                        if (group_ok
+                            && (!jsonString(payload, "from", from)
+                                || from == "group")
+                            && (!jsonString(payload, "dataType", data_type)
+                                || data_type == "text")
                             && jsonString(payload, "data", data))
                         {
                             if (data.size() <= RelayTransport::MAX_MESSAGE_BYTES)
@@ -1222,6 +1237,21 @@ namespace BlazingStorm
 
                     beginRead();
                 });
+        }
+
+        void signalConnectedIfReady()
+        {
+            if (mConnectedEventSent
+                || !mServiceConnected
+                || !mReceiveReady)
+            {
+                return;
+            }
+
+            mConnectedEventSent = true;
+            RelayEvent event;
+            event.type = RelayEventType::Connected;
+            push(std::move(event));
         }
 
         void beginWrite()
@@ -1267,6 +1297,9 @@ namespace BlazingStorm
         std::atomic<bool> mStopping{false};
         std::uint64_t mNextAck = 0;
         std::uint64_t mJoinAck = 0;
+        bool mServiceConnected = false;
+        bool mReceiveReady = false;
+        bool mConnectedEventSent = false;
     };
 
     RelayTransport& RelayTransport::instance()
