@@ -32,6 +32,7 @@
 #endif
 
 #include "llviewermenu.h"
+#include "blazingstorm/remote/bsrequestactions.h" // <BlazingStorm>
 
 // linden library includes
 #include "llavatarnamecache.h"  // IDEVO (I Are Not Men!)
@@ -9677,6 +9678,25 @@ class LLAttachmentPointFilled : public view_listener_t
     }
 };
 
+class BSAvatarRequestPossession : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata) override
+    {
+        LLVOAvatar* avatar =
+            find_avatar_from_object(
+                LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+
+        if (avatar
+            && RlvActions::canShowName(
+                RlvActions::SNC_DEFAULT,
+                avatar->getID()))
+        {
+            BlazingStorm::RequestActions::requestPossession(avatar->getID());
+        }
+        return true;
+    }
+};
+
 class LLAvatarSendIM : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -13155,6 +13175,7 @@ void initialize_menus()
     commit.add("Avatar.Eject", boost::bind(&handle_avatar_eject, LLSD()));
     commit.add("Avatar.ShowInspector", boost::bind(&handle_avatar_show_inspector));
     view_listener_t::addMenu(new LLAvatarSendIM(), "Avatar.SendIM");
+    view_listener_t::addMenu(new BSAvatarRequestPossession(), "Avatar.BlazingStormRequestPossession"); // <BlazingStorm>
     view_listener_t::addMenu(new LLAvatarCall(), "Avatar.Call");
 //  enable.add("Avatar.EnableCall", boost::bind(&LLAvatarActions::canCall));
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
