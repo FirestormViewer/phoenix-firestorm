@@ -69,6 +69,9 @@
 #include "rlvui.h"
 // [/RLVa:KB]
 
+// Blazing Storm
+#include "blazingstorm/remote/bslocaltransport.h"
+
 // Firestorm includes
 #include "exogroupmutelist.h"
 #include "fscommon.h"
@@ -949,6 +952,24 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
             break;
 
         case IM_NOTHING_SPECIAL:    // p2p IM
+            // <BlazingStorm> A visible, explicit direct-IM marker may wake a
+            // short-lived localhost listener. It does not accept possession
+            // and is not consumed from IM history.
+            if (offline == IM_ONLINE
+                && from_id.notNull()
+                && to_id.notNull()
+                && !is_muted
+                && (!accept_im_from_only_friend || is_friend)
+                && RlvActions::canReceiveIM(from_id))
+            {
+                BlazingStorm::LocalTransport::instance().handleBootstrapInstantMessage(
+                    from_id.asString(),
+                    name,
+                    message,
+                    true);
+            }
+            // </BlazingStorm>
+
             // Don't show dialog, just do IM
             if (!gAgent.isGodlike()
                 && gAgent.inPrelude()
