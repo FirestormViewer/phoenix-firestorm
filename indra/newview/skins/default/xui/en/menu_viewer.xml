@@ -1054,6 +1054,17 @@
              function="Floater.Toggle"
              parameter="fs_radar" />
         </menu_item_check>
+        <menu_item_check
+         label="Blazing Storm Remote Control"
+         name="Blazing Storm Remote Control">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="blazing_storm_remote" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="blazing_storm_remote" />
+        </menu_item_check>
+
 
         <menu_item_call
          label="Teleport History"
