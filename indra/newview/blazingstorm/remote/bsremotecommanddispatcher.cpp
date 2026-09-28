@@ -82,6 +82,58 @@ namespace BlazingStorm
                     + target_id.asString() + ": " + command.text);
                 return true;
             }
+            case RemoteCommandType::RestrictNearbyChatOn:
+            case RemoteCommandType::RestrictNearbyChatOff:
+            case RemoteCommandType::RestrictInstantMessageOn:
+            case RemoteCommandType::RestrictInstantMessageOff:
+            {
+                if (!session.hasPermission(RemotePermission::ManageSubjectRestrictions))
+                {
+                    return false;
+                }
+
+                auto restrictions = session.subjectRestrictions();
+                SubjectRestriction restriction = SubjectRestriction::None;
+                bool enable = false;
+
+                switch (command.type)
+                {
+                    case RemoteCommandType::RestrictNearbyChatOn:
+                        restriction = SubjectRestriction::NearbyChat;
+                        enable = true;
+                        break;
+                    case RemoteCommandType::RestrictNearbyChatOff:
+                        restriction = SubjectRestriction::NearbyChat;
+                        break;
+                    case RemoteCommandType::RestrictInstantMessageOn:
+                        restriction = SubjectRestriction::InstantMessage;
+                        enable = true;
+                        break;
+                    case RemoteCommandType::RestrictInstantMessageOff:
+                        restriction = SubjectRestriction::InstantMessage;
+                        break;
+                    default:
+                        break;
+                }
+
+                const auto mask = toMask(restriction);
+                if (enable)
+                {
+                    restrictions |= mask;
+                }
+                else
+                {
+                    restrictions &= ~mask;
+                }
+                session.setSubjectRestrictions(restrictions);
+
+                const bool nearby = restriction == SubjectRestriction::NearbyChat;
+                FSCommon::report_to_nearby_chat(
+                    std::string("[Blazing Storm] Controller ")
+                    + (enable ? "enabled " : "disabled ")
+                    + (nearby ? "subject nearby-chat restriction." : "subject direct-IM restriction."));
+                return true;
+            }
             case RemoteCommandType::EmergencyRelease:
                 actions.stopMovement();
                 session.emergencyRelease();
