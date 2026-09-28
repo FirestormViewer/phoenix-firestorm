@@ -122,6 +122,15 @@ namespace BlazingStorm
     void RemoteFloater::onClose(bool app_quitting)
     {
         stopLocalMovement();
+
+        auto& controller = RemoteController::instance();
+        auto& transport = LocalTransport::instance();
+        if (controller.isActive() && transport.isPaired())
+        {
+            RemoteCommand stop = controller.makeCommand(RemoteCommandType::Stop);
+            transport.sendCommand(stop);
+        }
+
         LLFloater::onClose(app_quitting);
     }
 
