@@ -414,6 +414,22 @@ namespace
         return {};
     }
 
+    std::vector<std::string> jsonStringOrArray(
+        const std::string& json,
+        const std::string& key)
+    {
+        auto values = jsonStringArray(json, key);
+        if (!values.empty()) return values;
+
+        std::string value;
+        if (jsonString(json, key, value) && !value.empty())
+        {
+            values.push_back(std::move(value));
+        }
+        return values;
+    }
+
+
     std::string base64UrlDecode(std::string value)
     {
         for (char& ch : value)
@@ -494,8 +510,9 @@ namespace
             base64UrlDecode(token.substr(first_dot + 1, second_dot - first_dot - 1));
         if (payload.empty()) return;
 
-        auto groups = jsonStringArray(payload, "groups");
-        if (groups.empty()) groups = jsonStringArray(payload, "group");
+        auto groups = jsonStringOrArray(payload, "webpubsub.group");
+        if (groups.empty()) groups = jsonStringOrArray(payload, "groups");
+        if (groups.empty()) groups = jsonStringOrArray(payload, "group");
         if (receive_group.empty() && !groups.empty())
         {
             receive_group = groups.front();
@@ -508,8 +525,8 @@ namespace
             receive_auto_joined = true;
         }
 
-        auto roles = jsonStringArray(payload, "roles");
-        if (roles.empty()) roles = jsonStringArray(payload, "role");
+        auto roles = jsonStringOrArray(payload, "roles");
+        if (roles.empty()) roles = jsonStringOrArray(payload, "role");
 
         static const std::string send_prefix = "webpubsub.sendToGroup.";
         static const std::string join_prefix = "webpubsub.joinLeaveGroup.";
@@ -786,6 +803,7 @@ namespace
     }
 
     bool extractNegotiated(const std::string& body,
+                           BlazingStorm::RelayBrokerRole role,
                            BlazingStorm::RelayEvent& event,
                            bool& receive_auto_joined)
     {
@@ -796,8 +814,28 @@ namespace
             body, {"receiveGroup", "subscribeGroup", "inboundGroup",
                    "joinGroup", "receive"});
         event.sendGroup = firstJsonString(
-            body, {"sendGroup", "publishGroup", "outboundGroup",
-                   "commandGroup", "eventGroup", "send"});
+            body, {"sendGroup", "publishGroup", "outboundGroup", "send"});
+
+        // The deployed relay is directional: Controller -> commands and
+        // Subject -> events. Accept explicit group fields when returned.
+        if (role == BlazingStorm::RelayBrokerRole::Subject)
+        {
+            if (event.receiveGroup.empty())
+                event.receiveGroup =
+                    firstJsonString(body, {"commandGroup", "commandsGroup"});
+            if (event.sendGroup.empty())
+                event.sendGroup =
+                    firstJsonString(body, {"eventGroup", "eventsGroup"});
+        }
+        else
+        {
+            if (event.receiveGroup.empty())
+                event.receiveGroup =
+                    firstJsonString(body, {"eventGroup", "eventsGroup"});
+            if (event.sendGroup.empty())
+                event.sendGroup =
+                    firstJsonString(body, {"commandGroup", "commandsGroup"});
+        }
 
         std::string connection;
         if (event.clientUrl.empty()
@@ -1413,7 +1451,7 @@ namespace BlazingStorm
                     event.sessionId = session_id;
                     event.matchedPath = path;
                     bool auto_joined = false;
-                    if (!extractNegotiated(response.body, event, auto_joined))
+                    if (!extractNegotiated(response.body, role, event, auto_joined))
                     {
                         event.type = RelayEventType::Error;
                         event.detail =
@@ -1487,7 +1525,6 @@ namespace BlazingStorm
 
     std::vector<RelayEvent> RelayTransport::takeEvents()
     {
-        joinBrokerThread();
         std::lock_guard<std::mutex> lock(mEventMutex);
         std::vector<RelayEvent> result;
         result.swap(mEvents);
