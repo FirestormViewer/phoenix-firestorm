@@ -14,11 +14,13 @@
 #include "blazingstorm/remote/bsremotesession.h"
 #include "blazingstorm/remote/bstruststore.h"
 #include "fscommon.h"
+#include "fsnearbychathub.h"
 #include "llagent.h"
 #include "llimview.h"
 #include "llviewermessage.h"
 #include "llnotificationsutil.h"
 #include "lluuid.h"
+#include "llviewercontrol.h"
 
 #include <boost/asio/buffer.hpp>
 #include <boost/asio/error.hpp>
@@ -379,6 +381,27 @@ namespace BlazingStorm
         flushWrites();
     }
 
+    void LocalTransport::announcePossessionAccepted(bool trusted_auto_accept)
+    {
+        const char* setting_name = trusted_auto_accept
+            ? "BlazingStormWhitelistAcceptedMessage"
+            : "BlazingStormPossessionAcceptedMessage";
+
+        const std::string message =
+            gSavedPerAccountSettings.getString(setting_name);
+
+        if (!message.empty())
+        {
+            // Use the lower-level nearby chat send path so this system
+            // announcement is spoken by the subject avatar and is not
+            // converted into a "thought" by the subject chat restriction.
+            FSNearbyChat::instance().sendChatFromViewer(
+                message,
+                CHAT_TYPE_NORMAL,
+                true);
+        }
+    }
+
     bool LocalTransport::acceptPending()
     {
         if (mRole != RemoteRole::Host || !mConnected || !mPendingPairing || mPaired)
@@ -400,11 +423,14 @@ namespace BlazingStorm
             initial_permissions = trusted->permissions;
         }
 
+        const bool trusted_auto_accept = mPendingTrustedAutoAccept;
+
         RemoteCommandDispatcher::instance().reset();
         RemoteActions::instance().stopMovement();
         RemoteSession::instance().begin(mPendingControllerId, initial_permissions);
 
         mPendingPairing = false;
+        mPendingTrustedAutoAccept = false;
         mPaired = true;
         mExpectedBootstrapControllerId.clear();
         mExpectedBootstrapNonce.clear();
@@ -412,6 +438,8 @@ namespace BlazingStorm
 
         queueLine("ACCEPT|" + session_id.asString());
         flushWrites();
+
+        announcePossessionAccepted(trusted_auto_accept);
         return true;
     }
 
@@ -428,6 +456,7 @@ namespace BlazingStorm
         resetConnectionState(false);
 
         mPendingPairing = false;
+        mPendingTrustedAutoAccept = false;
         mPendingControllerId.clear();
         mPendingControllerName.clear();
         mExpectedBootstrapControllerId.clear();
@@ -463,6 +492,7 @@ namespace BlazingStorm
         mConnected = false;
         mPaired = false;
         mPendingPairing = false;
+        mPendingTrustedAutoAccept = false;
         mPairingCode.clear();
         mPendingControllerId.clear();
         mPendingControllerName.clear();
@@ -723,12 +753,14 @@ namespace BlazingStorm
 
                 if (TrustStore::instance().find(mPendingControllerId))
                 {
+                    mPendingTrustedAutoAccept = true;
                     mLastStatus =
                         "Trusted controller " + controller_name + " auto-accepted.";
                     acceptPending();
                 }
                 else
                 {
+                    mPendingTrustedAutoAccept = false;
                     mLastStatus =
                         "Pairing request from " + controller_name + " is waiting for approval.";
                     queueLine("WAIT");
