@@ -21,6 +21,7 @@ namespace BlazingStorm
     {
         mSessionId = std::move(session_id);
         mHostId = std::move(host_id);
+        mMovementMode = RemoteMovementMode::SubjectOnly;
         mNextSequence = 1;
         mActive = true;
     }
@@ -30,6 +31,7 @@ namespace BlazingStorm
         mActive = false;
         mSessionId.clear();
         mHostId.clear();
+        mMovementMode = RemoteMovementMode::SubjectOnly;
         mNextSequence = 1;
     }
 
@@ -46,6 +48,30 @@ namespace BlazingStorm
     const std::string& RemoteController::hostId() const
     {
         return mHostId;
+    }
+
+    RemoteMovementMode RemoteController::movementMode() const
+    {
+        return mMovementMode;
+    }
+
+    void RemoteController::setMovementMode(RemoteMovementMode mode)
+    {
+        mMovementMode = mode;
+    }
+
+    bool RemoteController::controlsSubject() const
+    {
+        return mActive
+            && (mMovementMode == RemoteMovementMode::SubjectOnly
+                || mMovementMode == RemoteMovementMode::MirrorBoth);
+    }
+
+    bool RemoteController::controlsController() const
+    {
+        return !mActive
+            || mMovementMode == RemoteMovementMode::MirrorBoth
+            || mMovementMode == RemoteMovementMode::ControllerOnly;
     }
 
     RemoteCommand RemoteController::makeCommand(RemoteCommandType type, std::string text, std::string target_id)
