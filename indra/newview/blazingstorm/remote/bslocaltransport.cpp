@@ -15,6 +15,7 @@
 #include "fscommon.h"
 #include "lluuid.h"
 
+#include <boost/asio/buffer.hpp>
 #include <boost/asio/error.hpp>
 #include <boost/asio/write.hpp>
 
@@ -22,6 +23,7 @@
 #include <charconv>
 #include <random>
 #include <sstream>
+#include <system_error>
 #include <vector>
 
 namespace
@@ -83,7 +85,7 @@ namespace BlazingStorm
             return false;
         }
 
-        acceptor->set_option(tcp::acceptor::reuse_address(true), error);
+        acceptor->set_option(boost::asio::socket_base::reuse_address(true), error);
         error.clear();
         acceptor->bind(endpoint, error);
         if (error)
