@@ -8906,7 +8906,7 @@ Offer a teleport?
     <tag>confirm</tag>
 [CONTROLLER] is asking to control this avatar through Blazing Storm.
 
-Accepting starts a possession session using the permissions currently saved for this controller. You can always end it locally with the visible Release Control button.
+Accepting starts a possession session. If this controller has a saved Trusted Controllers profile, those permissions are applied; otherwise the basic Movement + Nearby Chat defaults are used. You can always end it locally with the visible Release Control button.
     <form name="form">
       <button
        index="0"
