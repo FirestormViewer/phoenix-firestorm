@@ -48,10 +48,11 @@ namespace BlazingStorm
         return mHostId;
     }
 
-    RemoteCommand RemoteController::makeCommand(RemoteCommandType type, std::string text)
+    RemoteCommand RemoteController::makeCommand(RemoteCommandType type, std::string text, std::string target_id)
     {
         RemoteCommand command;
         command.type = type;
+        command.targetId = std::move(target_id);
         command.text = std::move(text);
         command.sequence = mNextSequence++;
         return command;
