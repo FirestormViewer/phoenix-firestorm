@@ -39,6 +39,14 @@
          function="RLV.CanShowName" />
     </menu_item_call>
     <menu_item_call
+     label="Request Possession"
+     name="Blazing Storm Possession">
+        <menu_item_call.on_click
+         function="Avatar.BlazingStormRequestPossession" />
+        <menu_item_call.on_enable
+         function="RLV.CanShowName" />
+    </menu_item_call>
+    <menu_item_call
      label="Give Calling Card"
      name="Give Calling Card">
         <menu_item_call.on_click
