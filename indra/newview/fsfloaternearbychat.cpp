@@ -30,6 +30,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "blazingstorm/remote/bssubjectpolicy.h" // <BlazingStorm>
+
 #include "fsfloaternearbychat.h"
 
 #include "chatbar_as_cmdline.h"
@@ -912,8 +914,14 @@ void FSFloaterNearbyChat::sendChat( EChatType type )
 
             if (!utf8_revised_text.empty() && cmd_line_chat(utf8_revised_text, type))
             {
-                // Chat with animation
-                sendChatFromViewer(utf8_revised_text, type, gSavedSettings.getBOOL("PlayChatAnim"));
+                // <BlazingStorm> The nearby-chat floater has its own send path
+                // and does not pass through FSNearbyChat::sendChat().
+                if (!BlazingStorm::SubjectPolicy::handleOutgoingNearbyChat(utf8_revised_text, channel))
+                {
+                    // Chat with animation
+                    sendChatFromViewer(utf8_revised_text, type, gSavedSettings.getBOOL("PlayChatAnim"));
+                }
+                // </BlazingStorm>
             }
         }
 
