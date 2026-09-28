@@ -28,6 +28,8 @@
 
 #include "llimview.h"
 
+#include "blazingstorm/remote/bssubjectpolicy.h" // <BlazingStorm>
+
 #include "llavatarnamecache.h"  // IDEVO
 #include "llavataractions.h"
 #include "llfloaterconversationlog.h"
@@ -2265,6 +2267,17 @@ void LLIMModel::sendMessage(const std::string& utf8_text,
                      const LLUUID& other_participant_id,
                      EInstantMessage dialog)
 {
+    // <BlazingStorm> Only subject-authored one-to-one IMs are subject to the
+    // possession restriction. Incoming IMs remain private to this viewer, and
+    // group/conference chat is left unchanged for now.
+    if (dialog == IM_NOTHING_SPECIAL
+        && other_participant_id.notNull()
+        && BlazingStorm::SubjectPolicy::handleOutgoingInstantMessage(utf8_text))
+    {
+        return;
+    }
+    // </BlazingStorm>
+
     //<FS:TS> FIRE-787: break up too long chat lines into multiple messages
     size_t split = MAX_MSG_BUF_SIZE - 1;
     size_t pos = 0;
