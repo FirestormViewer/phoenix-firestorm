@@ -304,7 +304,9 @@ namespace BlazingStorm
                     + "; subject-nearby-chat="
                     + (session.isSubjectRestricted(SubjectRestriction::NearbyChat) ? "restricted" : "allowed")
                     + "; subject-direct-im="
-                    + (session.isSubjectRestricted(SubjectRestriction::InstantMessage) ? "restricted" : "allowed"));
+                    + (session.isSubjectRestricted(SubjectRestriction::InstantMessage) ? "restricted" : "allowed")
+                    + "; local-movement-debug="
+                    + (session.subjectLocalMovementDisabled() ? "disabled" : "enabled"));
             }
             return true;
         }
