@@ -91,6 +91,8 @@ namespace BlazingStorm
                     + target_id.asString() + ": " + command.text);
                 return true;
             }
+            case RemoteCommandType::RestrictMovementOn:
+            case RemoteCommandType::RestrictMovementOff:
             case RemoteCommandType::RestrictNearbyChatOn:
             case RemoteCommandType::RestrictNearbyChatOff:
             case RemoteCommandType::RestrictInstantMessageOn:
@@ -107,6 +109,13 @@ namespace BlazingStorm
 
                 switch (command.type)
                 {
+                    case RemoteCommandType::RestrictMovementOn:
+                        restriction = SubjectRestriction::Movement;
+                        enable = true;
+                        break;
+                    case RemoteCommandType::RestrictMovementOff:
+                        restriction = SubjectRestriction::Movement;
+                        break;
                     case RemoteCommandType::RestrictNearbyChatOn:
                         restriction = SubjectRestriction::NearbyChat;
                         enable = true;
@@ -136,11 +145,20 @@ namespace BlazingStorm
                 }
                 session.setSubjectRestrictions(restrictions);
 
-                const bool nearby = restriction == SubjectRestriction::NearbyChat;
+                std::string restriction_name = "subject direct-IM restriction.";
+                if (restriction == SubjectRestriction::Movement)
+                {
+                    restriction_name = "subject movement restriction.";
+                }
+                else if (restriction == SubjectRestriction::NearbyChat)
+                {
+                    restriction_name = "subject nearby-chat restriction.";
+                }
+
                 FSCommon::report_to_nearby_chat(
                     std::string("[Blazing Storm] Controller ")
                     + (enable ? "enabled " : "disabled ")
-                    + (nearby ? "subject nearby-chat restriction." : "subject direct-IM restriction."));
+                    + restriction_name);
                 return true;
             }
             case RemoteCommandType::EmergencyRelease:
