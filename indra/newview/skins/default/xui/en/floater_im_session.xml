@@ -143,6 +143,20 @@
                  tool_tip="Open voice connection"
                  width="31"/>                
                 <button
+                 follows="top|left"
+                 height="25"
+                 image_hover_unselected="Toolbar_Middle_Over"
+                 image_overlay="Command_Move_Icon"
+                 image_selected="Toolbar_Middle_Selected"
+                 image_unselected="Toolbar_Middle_Off"
+                 layout="topleft"
+                 top="1"
+                 left_pad="2"
+                 name="blazing_storm_request_btn"
+                 visible="false"
+                 tool_tip="Request Blazing Storm possession"
+                 width="31"/>
+                <button
                  follows="right|top"
                  height="25"
                  image_hover_unselected="Toolbar_Middle_Over"
