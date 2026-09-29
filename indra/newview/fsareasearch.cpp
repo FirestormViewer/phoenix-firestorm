@@ -1593,7 +1593,7 @@ bool FSPanelAreaSearchList::handleKeyHere(KEY key, MASK mask)
             return true;
         }
     }
-	
+    
     return LLPanel::handleKeyHere(key, mask);
 }
 
@@ -1621,22 +1621,22 @@ void FSPanelAreaSearchList::onCopyToClipboard()
 
     clipboard_text = "Distance\tName\tDescription\tPrice\tLand Impact\tPrim Count\tOwner\tGroup\tCreator\tLast Owner\n";
 
-	for (const auto& item : selected_items)
-	{
-		if (!item)
-			continue;
+    for (const auto& item : selected_items)
+    {
+        if (!item)
+            continue;
 
-		auto getColumnValue = [&](S32 column_idx) {
-			return item->getColumn(column_idx) ? item->getColumn(column_idx)->getValue().asString() : "";
-		};
+        auto getColumnValue = [&](S32 column_idx) {
+            return item->getColumn(column_idx) ? item->getColumn(column_idx)->getValue().asString() : "";
+        };
 
-		const S32 column_count =  item->getNumColumns();
-		for (S32 i = 0; i < column_count; ++i)
-		{
-			clipboard_text += getColumnValue(i);
-			clipboard_text += (i < column_count - 1) ? "\t" : "\n";
-		}
-	}
+        const S32 column_count =  item->getNumColumns();
+        for (S32 i = 0; i < column_count; ++i)
+        {
+            clipboard_text += getColumnValue(i);
+            clipboard_text += (i < column_count - 1) ? "\t" : "\n";
+        }
+    }
 
     // Remove trailing newline
     if (!clipboard_text.empty() && clipboard_text.back() == '\n')
@@ -1645,8 +1645,8 @@ void FSPanelAreaSearchList::onCopyToClipboard()
     }
 
     // Copy to system clipboard
-	LLWString wstr = utf8str_to_wstring(clipboard_text);
-	LLClipboard::instance().copyToClipboard(wstr, 0, static_cast<S32>(wstr.length()));
+    LLWString wstr = utf8str_to_wstring(clipboard_text);
+    LLClipboard::instance().copyToClipboard(wstr, 0, static_cast<S32>(wstr.length()));
 }
 
 void FSPanelAreaSearchList::onCommitCheckboxBeacons()
