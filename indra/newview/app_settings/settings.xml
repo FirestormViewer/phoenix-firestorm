@@ -27800,5 +27800,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       </array>
     </map>
     <!-- </FS:TP> -->
+    <key>FSStreamtitleHistoryLength</key>
+    <map>
+        <key>Comment</key>
+        <string>The maximum number of stream titles shown in the history</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>U32</string>
+        <key>Value</key>
+        <integer>10</integer>
+    </map>
   </map>
 </llsd>
