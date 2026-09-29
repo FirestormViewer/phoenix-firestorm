@@ -9,6 +9,7 @@
  min_height="46"
  min_width="200"
  save_rect="true"
+ save_visibility="true"
 >
 <floater.string name="NoStream">
 	No stream playing

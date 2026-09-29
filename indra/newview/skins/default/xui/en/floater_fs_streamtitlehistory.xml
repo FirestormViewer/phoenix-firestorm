@@ -9,6 +9,7 @@
  min_height="150"
  layout="topleft"
  save_rect="true"
+ save_visibility="true"
 >
 	<fs_scroll_list
 		draw_heading="true"
