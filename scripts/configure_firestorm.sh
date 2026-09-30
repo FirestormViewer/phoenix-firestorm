@@ -468,9 +468,9 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         FMODSTUDIO="-DUSE_FMODSTUDIO:BOOL=OFF"
     fi
     if [ $WANTS_OPENAL -eq $TRUE ] ; then
-        OPENAL="-DOPENAL:BOOL=ON"
+        OPENAL="-DUSE_OPENAL:BOOL=ON"
     else
-        OPENAL="-DOPENAL:BOOL=OFF"
+        OPENAL="-DUSE_OPENAL:BOOL=OFF"
     fi
     if [ $WANTS_OPENSIM -eq $TRUE ] ; then
         OPENSIM="-DOPENSIM:BOOL=ON"
