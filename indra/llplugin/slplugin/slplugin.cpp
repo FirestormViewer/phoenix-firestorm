@@ -136,6 +136,11 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 int main(int argc, char **argv)
 #endif
 {
+    // <FS:Beq> FIRE-36985 - eliminate bundle identifier from parent process (e.g. SL) to avoid plugin being treated as part of the parent bundle
+#if LL_DARWIN
+    unsetenv("__CFBundleIdentifier");
+#endif
+    // </FS:Beq>
 
     ll_init_apr();
 
