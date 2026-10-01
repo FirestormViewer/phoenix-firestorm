@@ -277,14 +277,14 @@ void LLPluginProcessParent::init(const std::string &launcher_filename, const std
 {
     // <FS:Beq> FIRE-36985 - move the env changes higher up the process stack.
     // mProcessParams.executable = launcher_filename;
-  #if LL_DARWIN
-  // Ensure SLPlugin is exec'd without inheriting the viewer's bundle
-  // identifier. macOS 27.2 otherwise associates SLPlugin with the parent
-  // viewer application.
-  mProcessParams.executable = "/usr/bin/env";
-  mProcessParams.args.add("-u");
-  mProcessParams.args.add("__CFBundleIdentifier");
-  mProcessParams.args.add(launcher_filename);
+#if LL_DARWIN
+    // Ensure SLPlugin is exec'd without inheriting the viewer's bundle
+    // identifier. macOS 27.2 otherwise associates SLPlugin with the parent
+    // viewer application.
+    mProcessParams.executable = "/usr/bin/env";
+    mProcessParams.args.add("-u");
+    mProcessParams.args.add("__CFBundleIdentifier");
+    mProcessParams.args.add(launcher_filename);
 #else
     mProcessParams.executable = launcher_filename;
 #endif
