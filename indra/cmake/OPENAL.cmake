@@ -22,6 +22,7 @@ if(OPENAL)
   set(USE_OPENAL ${OPENAL})
 endif()
 
+# <FS:Ansariel> macOS/Linux allow overriding FMOD Studio and use OpenAL instead via environment variable
 if (NOT WINDOWS)
   set(USE_OPENAL ON)
 endif()
