@@ -22,13 +22,7 @@ if(OPENAL)
   set(USE_OPENAL ${OPENAL})
 endif()
 
-# <FS:Ansariel> macOS/Linux allow overriding FMOD Studio and use OpenAL instead via environment variable
-if (NOT WINDOWS)
-  set(USE_OPENAL ON)
-endif()
-
 if (USE_OPENAL)
-  message(STATUS "Building with OpenAL sound library")
   add_library( ll::openal INTERFACE IMPORTED )
   target_include_directories( ll::openal SYSTEM INTERFACE "${LIBS_PREBUILT_DIR}/include/AL")
   target_compile_definitions( ll::openal INTERFACE LL_OPENAL=1)
