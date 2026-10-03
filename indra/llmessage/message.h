@@ -790,6 +790,15 @@ public:
                          const LLSD& message,
                          LLHTTPNode::ResponsePtr responsep);
 
+    // <Mko> Dispatch interceptor for DLL protocol plugins.
+    typedef bool (*dispatch_interceptor_t)(const std::string& msg_name,
+                                           const LLSD& message,
+                                           LLHTTPNode::ResponsePtr responsep);
+    static void setDispatchInterceptor(dispatch_interceptor_t interceptor);
+    static bool callDispatchInterceptor(const std::string& msg_name,
+                                        const LLSD& message,
+                                        LLHTTPNode::ResponsePtr responsep);
+
     void setMessageBans(const LLSD& trusted, const LLSD& untrusted);
 
     /**

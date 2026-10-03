@@ -115,6 +115,9 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
+// <Mko> DLL protocol plugin manager
+#include "mkopluginmanager.h"
+
 #include "llweb.h"
 // <FS:Ansariel> [FS communication UI]
 #include "fsfloatervoicecontrols.h"
@@ -1477,6 +1480,9 @@ bool LLAppViewer::init()
         gDirUtilp->deleteDirAndContents(gDirUtilp->getDumpLogsDirPath());
     }
 #endif
+    // <Mko> Initialize DLL protocol plugins.
+    MkoPluginManager::instance().init();
+
     LL_PROFILER_FRAME_END;
     return true;
 }
@@ -2468,6 +2474,9 @@ bool LLAppViewer::cleanup()
         // Turn off Space Navigator and similar devices
         LLViewerJoystick::getInstance()->terminate();
     }
+
+    // <Mko> Shutdown DLL protocol plugins.
+    MkoPluginManager::instance().shutdown();
 
     LL_INFOS() << "Shutting down message system" << LL_ENDL;
     end_messaging_system();
@@ -6332,6 +6341,48 @@ void LLAppViewer::idle()
 
             // this line actually commits the changes we've made to source positions, etc.
             gAudiop->idle();
+        }
+    }
+
+    // Broadcast viewer state to Mko plugins (Discord rich presence, etc.)
+    {
+        static LLTimer mko_broadcast_timer;
+        if (mko_broadcast_timer.getElapsedTimeF32() > 5.0f)
+        {
+            mko_broadcast_timer.reset();
+
+            std::string text;
+            if (gAgent.getID().isNull())
+            {
+                text = "logged_in=false";
+            }
+            else
+            {
+                text = "logged_in=true";
+
+                LLAvatarName av_name;
+                if (LLAvatarNameCache::get(gAgent.getID(), &av_name))
+                {
+                    text += "|display_name=" + av_name.getDisplayName();
+                    text += "|user_name=" + av_name.getUserName();
+                }
+
+                text += "|grid=" + LLGridManager::getInstance()->getGridLabel();
+
+                if (gAgent.getRegion())
+                {
+                    text += "|region=" + gAgent.getRegion()->getName();
+                }
+
+                LLVector3 pos = gAgent.getPositionAgent();
+                text += "|pos_x=" + std::to_string((S32)(pos.mV[VX] + 0.5f));
+                text += "|pos_y=" + std::to_string((S32)(pos.mV[VY] + 0.5f));
+                text += "|pos_z=" + std::to_string((S32)(pos.mV[VZ] + 0.5f));
+            }
+
+            LLSD info;
+            info["text"] = text;
+            MkoPluginManager::instance().broadcastToPlugins("MkoViewerInfo", info);
         }
     }
 
