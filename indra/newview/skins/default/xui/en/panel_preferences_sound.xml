@@ -798,7 +798,7 @@
           height="15"
           left="28"
           top_pad="10"
-          width="90"
+          width="100"
           name="media_autoplay_label">
         Media auto-play
       </text>

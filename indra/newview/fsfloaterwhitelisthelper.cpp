@@ -48,17 +48,22 @@ void FSFloaterWhiteListHelper::populateWhitelistInfo()
 // Hopefully we can trash this bit soon in favor of webRTC
 #if LL_WINDOWS
     // On windows use exe (not work or RO) directory
+#ifdef OPENSIM
     std::string voiceexe_path = gDirUtilp->getExecutableDir();
     gDirUtilp->append(voiceexe_path, "SLVoice.exe");
+#endif
     std::string dullahan_path = gDirUtilp->getLLPluginDir();
     std::string dullahan_exe =  "dullahan_host.exe";
 #elif LL_DARWIN
     // On MAC use resource directory
+#ifdef OPENSIM
     std::string voiceexe_path = gDirUtilp->getAppRODataDir();
     gDirUtilp->append(voiceexe_path, "SLVoice");
+#endif
     std::string dullahan_path = ""; // ignore dullahan on mac until we can identify it accurately
     std::string dullahan_exe = "";
 #else
+#ifdef OPENSIM
     std::string voiceexe_path = gDirUtilp->getExecutableDir();
     bool usingWine = gSavedSettings.getBOOL("FSLinuxEnableWin64VoiceProxy");
     if (!usingWine)
@@ -69,6 +74,7 @@ void FSFloaterWhiteListHelper::populateWhitelistInfo()
     {
         gDirUtilp->append(voiceexe_path, "win64/SLVoice.exe"); // use bundled win64 version
     }
+#endif
     std::string dullahan_path = gDirUtilp->getExecutableDir(); // linux keeps dullahan in the bin folder
     std::string dullahan_exe = "dullahan_host";
 #endif
@@ -85,8 +91,10 @@ void FSFloaterWhiteListHelper::populateWhitelistInfo()
     std::string whitelist_exe_info = 
         gDirUtilp->getExecutableFilename() + "\n" // Viewer Binary
         + gDirUtilp->getExecutablePathAndName() + "\n" // Viewer Binary full path
+#ifdef OPENSIM
         + gDirUtilp->getBaseFileName(voiceexe_path, false) + "\n" // " Voice Binary"
         + voiceexe_path + "\n" // slvoice full path
+#endif
         + gDirUtilp->getBaseFileName(slpluginexe_path, false) + "\n" // SLPlugin Launcher Binary
         + slpluginexe_path + "\n" // SLPlugin Launcher full path
         + gDirUtilp->getBaseFileName(dullahan_path, false) + "\n" // SLPlugin Launcher Binary

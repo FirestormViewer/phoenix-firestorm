@@ -67,11 +67,12 @@ class FSViewerManifest:
         executable_paths = [
             # self.args['configuration'] + "\\firestorm-bin.exe", # no need to sign this we are not packaging it.
             self.args['configuration'] + "\\slplugin.exe",
-            self.args['configuration'] + "\\SLVoice.exe",
             self.args['configuration'] + "\\llwebrtc.dll",
             self.args['configuration'] + "\\llplugin\\dullahan_host.exe",
             self.args['configuration'] + "\\" + self.final_exe()
         ]
+        if self.fs_is_opensim():
+            executable_paths.append(self.args['configuration'] + "\\SLVoice.exe")
 
         if not signtool_path or not codesigning_dlib_path:
             print("Signing configuration is missing. Skipping signing process.")

@@ -6438,7 +6438,6 @@ bool FSPanelPreferenceSounds::postBuild()
     mMoapInteractionFriendObjects    = getChild<LLCheckBoxCtrl>("media_first_click_friend");
     mMoapInteractionLandownerObjects = getChild<LLCheckBoxCtrl>("media_first_click_land");
 
-#if LL_FMODSTUDIO
     if (gAudiop && mOutputDevicePanel && mOutputDeviceComboBox)
     {
         gSavedSettings.getControl("FSOutputDeviceUUID")->getSignal()->connect(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceChanged, this, _2));
@@ -6448,12 +6447,10 @@ bool FSPanelPreferenceSounds::postBuild()
 
         mOutputDeviceComboBox->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceSelectionChanged, this, _2));
     }
-#else
-    if (mOutputDevicePanel)
+    else if (!gAudiop && mOutputDevicePanel)
     {
         mOutputDevicePanel->setVisible(false);
     }
-#endif
 
     mMoapInteractionAll->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
     mMoapInteractionAny->setCommitCallback(boost::bind(&FSPanelPreferenceSounds::updateMoapInteractionSetting, this));
