@@ -9820,6 +9820,21 @@ Are you sure you want to close all IMs?
      ignoretext="Confirm before I close all IMs"/>
   </notification>
 
+    <!-- <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window -->
+    <notification
+     icon="alert.tga"
+     name="SDConfirmCloseAll"
+     type="alertmodal">
+        Are you sure you want to close all docked Script Dialogs?
+        <tag>confirm</tag>
+        <usetemplate
+         name="okcancelignore"
+         notext="Cancel"
+         yestext="OK"
+         ignoretext="Confirm before I close all docked Script Dialogs"/>
+    </notification>
+    <!-- </FS:minerjr> [FIRE-35859] -->
+
   <notification icon="notifytip.tga"
 		name="AttachmentSaved" type="notifytip">
 Attachment has been saved.

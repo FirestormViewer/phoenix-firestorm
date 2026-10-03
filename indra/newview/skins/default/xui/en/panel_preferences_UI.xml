@@ -468,6 +468,33 @@
          top_delta="4"
          width="256" />
 
+        <!-- <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window -->
+        <check_box
+         control_name="FSSDUseDockFloater"
+         left="10"
+         top_pad="9"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         initial_value="false"
+         label="Use Script Dialog dock window"
+         name="FSSDUseDockFloater"
+         tool_tip="If enabled, the Script Dialogs will dock in a shared window. Once enabled, the Script Dialogs Position feature will be disabled."
+         width="256" />
+        <check_box
+         control_name="FSSDShowOnDocked"
+         left_pad="5"
+         top_delta="0"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         initial_value="false"
+         label="Change focus when Script Dialog dock"
+         name="FSSDShowOnDocked"
+         enabled_control="FSSDUseDockFloater"
+         tool_tip="If enabled, when a Script Dialog is docked the focus is set to Script Dialog in the dock window. Otherwise, the current visible tab will keep focus."
+         width="256" />
+        <!-- </FS:minerjr> [FIRE-35859] -->
         <slider
          control_name="FSRowsPerScriptDialog"
          decimal_digits="0"
