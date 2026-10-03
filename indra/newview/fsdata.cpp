@@ -44,6 +44,7 @@
 #include "llmutelist.h"
 #include "llnotifications.h"
 #include "llsdserialize.h"
+#include "llsdutil.h"
 #include "lltrans.h"
 #include "llversioninfo.h"
 #include "llviewercontrol.h"
@@ -499,19 +500,26 @@ void FSData::processAssets(const LLSD& assets)
     }
 
     const LLSD& asset = assets["assets"];
-    for (LLSD::map_const_iterator itr = asset.beginMap(); itr != asset.endMap(); ++itr)
+    for (auto [keystr, data] : llsd::inMap(asset))
     {
-        LLUUID uid = LLUUID(itr->first);
-        LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
-        cipher.decrypt(uid.mData, UUID_BYTES);
-        LLSD data = itr->second;
-        data["asset_permanent"] = false; // Don't save these locally!
-        if (uid.isNull())
+        LLUUID uid = LLUUID(keystr);
+        if (!uid.isNull())
         {
+            LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
+            cipher.decrypt(uid.mData, UUID_BYTES);
+            if (uid.isNull())
+            {
+                continue;
+            }
+            data["asset_permanent"] = false; // Don't save these locally!
+            FSAssetBlacklist::instance().addNewItemToBlacklistData(uid, FSAssetBlacklistData::fromLLSD(data), false);
+            LL_DEBUGS("fsdata") << "Added " << uid << " to assets list." << LL_ENDL;
+        }
+        else
+        {
+            LL_WARNS("fsdata") << "Found asset with invalid key: " << keystr << LL_ENDL;
             continue;
         }
-        FSAssetBlacklist::instance().addNewItemToBlacklistData(uid, FSAssetBlacklistData::fromLLSD(data), false);
-        LL_DEBUGS("fsdata") << "Added " << uid << " to assets list." << LL_ENDL;
     }
 }
 
@@ -520,34 +528,47 @@ void FSData::processAgents(const LLSD& data)
     if (data.has("Agents"))
     {
         const LLSD& agents = data["Agents"];
-        for (LLSD::map_const_iterator iter = agents.beginMap(); iter != agents.endMap(); ++iter)
+        for (const auto& [keystr, value] : llsd::inMap(agents))
         {
-            LLUUID key = LLUUID(iter->first);
-            mTeamAgents[key] = iter->second.asInteger();
-            LL_DEBUGS("fsdata") << "Added " << key << " with " << mTeamAgents[key] << " flag mask to mSupportAgentList" << LL_ENDL;
+            LLUUID key = LLUUID(keystr);
+            if (!key.isNull())
+            {
+                mTeamAgents[key] = value.asInteger();
+                LL_DEBUGS("fsdata") << "Added " << key << " with " << mTeamAgents[key] << " flag mask to mSupportAgentList" << LL_ENDL;
+            }
+            else
+            {
+                LL_WARNS("fsdata") << "Found agent with invalid key: " << keystr << LL_ENDL;
+            }
         }
     }
     else if (data.has("SupportAgents")) // Legacy format
     {
         const LLSD& support_agents = data["SupportAgents"];
         std::string newFormat;
-        for (LLSD::map_const_iterator iter = support_agents.beginMap(); iter != support_agents.endMap(); ++iter)
+        for (const auto& [keystr, content] : llsd::inMap(support_agents))
         {
-            LLUUID key = LLUUID(iter->first);
-            mTeamAgents[key] = 0;
-            const LLSD& content = iter->second;
-            if(content.has("support"))
+            LLUUID key = LLUUID(keystr);
+            if (!key.isNull())
             {
-                mTeamAgents[key] |= SUPPORT;
-            }
+                mTeamAgents[key] = 0;
+                if (content.has("support"))
+                {
+                    mTeamAgents[key] |= SUPPORT;
+                }
 
-            if(content.has("developer"))
-            {
-                mTeamAgents[key] |= DEVELOPER;
+                if (content.has("developer"))
+                {
+                    mTeamAgents[key] |= DEVELOPER;
+                }
+                LL_DEBUGS("fsdata") << "Added Legacy " << keystr << " with " << mTeamAgents[key] << " flag mask to mSupportAgentList" << LL_ENDL;
+                std::string text = llformat("<key>%s</key><!-- %s -->\n    <integer>%d</integer>\n", key.asString().c_str(), content["name"].asString().c_str(), mTeamAgents[key]);
+                newFormat.append(text);
             }
-            LL_DEBUGS("fsdata") << "Added Legacy " << key << " with " << mTeamAgents[key] << " flag mask to mSupportAgentList" << LL_ENDL;
-            std::string text = llformat("<key>%s</key><!-- %s -->\n    <integer>%d</integer>\n", key.asString().c_str(), content["name"].asString().c_str(), mTeamAgents[key]);
-            newFormat.append(text);
+            else
+            {
+                LL_WARNS("fsdata") << "Found legacy support agent with invalid key: " << keystr << LL_ENDL;
+            }
         }
         LL_DEBUGS("fsdata") << "New format for copy paste:\n" << newFormat << LL_ENDL;
     }
@@ -557,8 +578,16 @@ void FSData::processAgents(const LLSD& data)
         const LLSD& support_groups = data["SupportGroups"];
         for (LLSD::map_const_iterator itr = support_groups.beginMap(); itr != support_groups.endMap(); ++itr)
         {
-            mSupportGroup.insert(LLUUID(itr->first));
-            LL_DEBUGS("fsdata") << "Added " << itr->first << " to mSupportGroup" << LL_ENDL;
+            LLUUID key = LLUUID(itr->first);
+            if (!key.isNull())
+            {
+                mSupportGroup.insert(key);
+                LL_DEBUGS("fsdata") << "Added " << itr->first << " to mSupportGroup" << LL_ENDL;
+            }
+            else
+            {
+                LL_WARNS("fsdata") << "Found support group with invalid key: " << itr->first << LL_ENDL;
+            }
         }
     }
 
@@ -567,8 +596,16 @@ void FSData::processAgents(const LLSD& data)
         const LLSD& testing_groups = data["TestingGroups"];
         for (LLSD::map_const_iterator itr = testing_groups.beginMap(); itr != testing_groups.endMap(); ++itr)
         {
-            mTestingGroup.insert(LLUUID(itr->first));
-            LL_DEBUGS("fsdata") << "Added " << itr->first << " to mTestingGroup" << LL_ENDL;
+            LLUUID key = LLUUID(itr->first);
+            if (!key.isNull())
+            {
+                mTestingGroup.insert(key);
+                LL_DEBUGS("fsdata") << "Added " << itr->first << " to mTestingGroup" << LL_ENDL;
+            }
+            else
+            {
+                LL_WARNS("fsdata") << "Found testing group with invalid key: " << itr->first << LL_ENDL;
+            }
         }
     }
 
