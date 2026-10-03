@@ -19,7 +19,6 @@ if(FMODSTUDIO)
 endif()
 
 if (USE_FMODSTUDIO)
-  message(STATUS "Using FMODSTUDIO sound library")
   add_library( ll::fmodstudio INTERFACE IMPORTED )
   target_compile_definitions( ll::fmodstudio INTERFACE LL_FMODSTUDIO=1)
 
