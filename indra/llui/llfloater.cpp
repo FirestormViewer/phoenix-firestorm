@@ -463,6 +463,7 @@ void LLFloater::addResizeCtrls()
     LLResizeHandle::Params handle_p;
     // handles must not be mouse-opaque, otherwise they block hover events
     // to other buttons like the close box. JC
+    handle_p.name("resizehandle_bottomright"); // <FS:TJ/> Allow resize listeners for corner handles
     handle_p.mouse_opaque(false);
     handle_p.min_width(mMinWidth);
     handle_p.min_height(mMinHeight);
@@ -470,14 +471,17 @@ void LLFloater::addResizeCtrls()
     mResizeHandle[0] = LLUICtrlFactory::create<LLResizeHandle>(handle_p);
     addChild(mResizeHandle[0]);
 
+    handle_p.name("resizehandle_topright"); // <FS:TJ/> Allow resize listeners for corner handles
     handle_p.corner(LLResizeHandle::RIGHT_TOP);
     mResizeHandle[1] = LLUICtrlFactory::create<LLResizeHandle>(handle_p);
     addChild(mResizeHandle[1]);
 
+    handle_p.name("resizehandle_bottomleft"); // <FS:TJ/> Allow resize listeners for corner handles
     handle_p.corner(LLResizeHandle::LEFT_BOTTOM);
     mResizeHandle[2] = LLUICtrlFactory::create<LLResizeHandle>(handle_p);
     addChild(mResizeHandle[2]);
 
+    handle_p.name("resizehandle_topleft"); // <FS:TJ/> Allow resize listeners for corner handles
     handle_p.corner(LLResizeHandle::LEFT_TOP);
     mResizeHandle[3] = LLUICtrlFactory::create<LLResizeHandle>(handle_p);
     addChild(mResizeHandle[3]);

@@ -166,27 +166,32 @@ bool LLPreviewNotecard::postBuild()
     onFontChanged();
     // </FS:Ansariel>
 
-    // <FS:mjr>
-    // Get the resize bars and add a resize listener to the onResizeFloater method.
-    LLResizeBar* resizebar_left = getChild<LLResizeBar>("resizebar_left");
-    if (resizebar_left)
+    // <FS:mjr> Get the resize bars and add a resize listener to the onResizeFloater method.
+    // Edges
+    for (std::string_view resize_name : {
+        "resizebar_left",
+        "resizebar_right",
+        "resizebar_top",
+        "resizebar_bottom"
+    })
     {
-        resizebar_left->setResizeListener(boost::bind(&LLPreviewNotecard::onResizeFloater, this));
+        if (LLResizeBar* resizebar = getChild<LLResizeBar>(resize_name))
+        {
+            resizebar->setResizeListener(boost::bind(&LLPreviewNotecard::onResizeFloater, this));
+        }
     }
-    LLResizeBar* resizebar_right = getChild<LLResizeBar>("resizebar_right");
-    if (resizebar_right)
+    // Corners
+    for (std::string_view resize_name : {
+        "resizehandle_bottomright",
+        "resizehandle_bottomleft",
+        "resizehandle_topleft",
+        "resizehandle_topright"
+    })
     {
-        resizebar_right->setResizeListener(boost::bind(&LLPreviewNotecard::onResizeFloater, this));
-    }
-    LLResizeBar* resizebar_top = getChild<LLResizeBar>("resizebar_top");
-    if (resizebar_top)
-    {
-        resizebar_top->setResizeListener(boost::bind(&LLPreviewNotecard::onResizeFloater, this));
-    }
-    LLResizeBar* resizebar_bottom = getChild<LLResizeBar>("resizebar_bottom");
-    if (resizebar_bottom)
-    {
-        resizebar_bottom->setResizeListener(boost::bind(&LLPreviewNotecard::onResizeFloater, this));
+        if (LLResizeHandle* resizehandle = getChild<LLResizeHandle>(resize_name))
+        {
+            resizehandle->setResizeListener(boost::bind(&LLPreviewNotecard::onResizeFloater, this));
+        }
     }
     // </FS:mjr>
 
