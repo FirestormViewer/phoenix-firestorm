@@ -58,6 +58,10 @@ protected:
     inline callback_list_t::iterator find(callback_t func, void *data);
 
     callback_list_t mCallbackList;
+    // <FS:TJ> [FIRE-36314] Fix crash caused by possible callback erasure during callFunctions()
+    S32 mCallbackDepth = 0;
+    bool mHasPendingDeletions = false;
+    // </FS:TJ>
 };
 
 typedef std::function<void ()> nullary_func_t;
