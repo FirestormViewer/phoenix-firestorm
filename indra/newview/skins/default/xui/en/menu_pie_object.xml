@@ -523,7 +523,7 @@
 
                 <pie_slice
                     enabled="false"
-                    label="LSL on Luau"
+                    label="LSL on Lua"
                     name="CompileLSLonLuau">
                     <pie_slice.on_click
                         function="Tools.SelectedScriptAction"

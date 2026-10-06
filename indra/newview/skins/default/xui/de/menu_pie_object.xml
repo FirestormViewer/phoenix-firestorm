@@ -70,7 +70,7 @@
 					<pie_slice label="Mono" name="CompileMono"/>
 					<pie_slice label="LSL" name="CompileLSL"/>
 					<pie_slice label="Lua" name="CompileLua"/>
-					<pie_slice label="LSL on Luau" name="CompileLSLonLuau"/>
+					<pie_slice label="LSL on Lua" name="CompileLSLonLuau"/>
 				</pie_menu>
 				<pie_slice label="Zurücksetzen" name="Object Reset Scripts"/>
 				<pie_slice label="Starten" name="Object Set Scripts to Running"/>
