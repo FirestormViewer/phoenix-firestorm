@@ -497,7 +497,9 @@ jobs:
             secrets.BUGSPLAT_DEFAULT_DB }}
           application: "Firestorm-${{ steps.version.outputs.viewer_channel}}"
           version: ${{ steps.version.outputs.viewer_version }}.${{ steps.version.outputs.viewer_build }}
-          files: ${{ runner.os == 'Windows' && '**/Release/*.{pdb,exe,dll}' || runner.os == 'macOS' && '**/Release/{Firestorm,*.dSYM}' || '**/{do-not-run-directly-firestorm-bin,*.sym}' }}
+          # llwebrtc stages its PDB/dSYM below symbols/Release/<channel>.
+          # Upload full PDBs; pdbcopy's *-public.pdb files omit source lines.
+          files: ${{ runner.os == 'Windows' && '**/{Release/*.{exe,dll},{Release,symbols/Release/**}/!(*-public).pdb}' || runner.os == 'macOS' && '**/{Release/{Firestorm,*.dSYM},symbols/Release/**/*.dSYM}' || '**/{do-not-run-directly-firestorm-bin,*.sym}' }}
           directory: "build-*"
           node-version: "24"
           dumpSyms: false
