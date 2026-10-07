@@ -84,7 +84,18 @@ bool LLCallbackList::deleteFunction( callback_t func, void *data)
     callback_list_t::iterator iter = find(func,data);
     if (iter != mCallbackList.end())
     {
-        mCallbackList.erase(iter);
+        // <FS:TJ> [FIRE-36314] Fix crash caused by possible callback erasure during callFunctions()
+        //mCallbackList.erase(iter);
+        if (mCallbackDepth > 0)
+        {
+            iter->first = nullptr;
+            mHasPendingDeletions = true;
+        }
+        else
+        {
+            mCallbackList.erase(iter);
+        }
+        // </FS:TJ>
         return true;
     }
     else
@@ -103,17 +114,45 @@ LLCallbackList::find(callback_t func, void *data)
 
 void LLCallbackList::deleteAllFunctions()
 {
+    // <FS:TJ> [FIRE-36314] Fix crash caused by possible callback erasure during callFunctions()
+    if (mCallbackDepth > 0)
+    {
+        for (auto& entry : mCallbackList)
+        {
+            entry.first = nullptr;
+        }
+        mHasPendingDeletions = !mCallbackList.empty();
+        return;
+    }
+    // </FS:TJ>
     mCallbackList.clear();
 }
 
 
 void LLCallbackList::callFunctions()
 {
+    ++mCallbackDepth; // <FS:TJ/> [FIRE-36314] Fix crash caused by possible callback erasure during callFunctions()
     for (callback_list_t::iterator iter = mCallbackList.begin(); iter != mCallbackList.end(); )
     {
         callback_list_t::iterator curiter = iter++;
-        curiter->first(curiter->second);
+        // <FS:TJ> [FIRE-36314] Fix crash caused by possible callback erasure during callFunctions()
+        //curiter->first(curiter->second);
+        if (curiter->first)
+        {
+            curiter->first(curiter->second);
+        }
+        // </FS:TJ>
     }
+
+    // <FS:TJ> [FIRE-36314] Fix crash caused by possible callback erasure during callFunctions()
+    llassert(mCallbackDepth >= 0);
+    if (--mCallbackDepth <= 0 && mHasPendingDeletions)
+    {
+        mCallbackDepth = 0;
+        mHasPendingDeletions = false;
+        mCallbackList.remove_if([](const auto& entry) { return !entry.first; });
+    }
+    // </FS:TJ>
 }
 
 // Shim class to allow arbitrary boost::bind

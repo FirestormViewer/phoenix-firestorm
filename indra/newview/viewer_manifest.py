@@ -1044,6 +1044,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
             '--mainExe', main_exe,
             '--packTitle', pack_title,
             '--exclude', exclude_pattern,
+            '-xy', # <FS:TJ/> Overwrite any existing velopack package of the same Id instead of erroring
             # Suppress Velopack's built-in shortcut creation; we create our own
             # shortcuts in llvelopack.cpp on_after_install hook instead.
             '--shortcuts', '',
@@ -2077,6 +2078,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
             '--outputDir', releases_dir,
             '--noInst',  # Don't generate .pkg installer - we use DMG for distribution
             '--verbose',  # Show detailed output
+            '-xy', # <FS:TJ/> Overwrite any existing velopack package of the same Id instead of erroring
         ]
 
         # Add icon if exists
