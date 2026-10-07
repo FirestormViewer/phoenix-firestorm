@@ -69,7 +69,7 @@ private:
     bool mIsConsoleAllocated;
 
 // <FS:ND> For Windows, purging the cache can take an extraordinary amount of time. Rename the cache dir and purge it using another thread.
-    virtual void startCachePurge();
+    virtual void startCachePurge(const std::string& strCacheDir);
 // </FS:ND>
 
 };

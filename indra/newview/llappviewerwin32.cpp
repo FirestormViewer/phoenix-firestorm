@@ -1556,14 +1556,14 @@ DWORD WINAPI purgeThread( LPVOID lpParameter )
     return 0;
 }
 
-void LLAppViewerWin32::startCachePurge()
+void LLAppViewerWin32::startCachePurge(const std::string& strCacheDir)
 {
     if( isSecondInstance() )
         return;
 
-    std::wstring strCacheDir = wstringize( gDirUtilp->getExpandedFilename( LL_PATH_CACHE, "" ) );
+    std::wstring wstrCacheDir = wstringize(strCacheDir);
 
-    HANDLE hThread = CreateThread( nullptr, 0, purgeThread, _wcsdup( strCacheDir.c_str() ), 0, nullptr );
+    HANDLE hThread = CreateThread( nullptr, 0, purgeThread, _wcsdup( wstrCacheDir.c_str() ), 0, nullptr );
 
     if( !hThread )
     {
