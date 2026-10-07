@@ -11599,6 +11599,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>512</integer>
   </map>
+  <key>RenderMinFreeCommitMemoryThresholdMB</key>
+  <map>
+    <key>Comment</key>
+    <string>If available Windows commit memory is below this value textures get aggressively scaled down</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>512</integer>
+  </map>
   <key>RenderLowMemMinDiscardIncrement</key>
   <map>
     <key>Comment</key>
@@ -27976,5 +27987,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       </array>
     </map>
     <!-- </FS:TP> -->
+    <key>FSStreamtitleHistoryLength</key>
+    <map>
+        <key>Comment</key>
+        <string>The maximum number of stream titles shown in the history</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>U32</string>
+        <key>Value</key>
+        <integer>10</integer>
+    </map>
   </map>
 </llsd>

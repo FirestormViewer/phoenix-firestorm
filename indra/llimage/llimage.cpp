@@ -41,6 +41,8 @@
 #include "llimagedxt.h"
 #include "llmemory.h"
 
+#include <cerrno> // <FS:Beq/> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
+
 #include <boost/preprocessor.hpp>
 
 //..................................................................................
@@ -618,8 +620,29 @@ void LLImage::setLastError(const std::string& message)
 // LLImageBase
 //---------------------------------------------------------------------------
 
-// <FS:ND> Report amount of failed buffer allocations
+// <FS:Beq> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
 U32 LLImageBase::sAllocationErrors;
+std::atomic<LLImageBase::allocation_failure_callback_t> LLImageBase::sAllocationFailureCallback{nullptr};
+thread_local bool LLImageBase::sForceAllocationFailureForTesting = false;
+std::atomic<U64> LLImageBase::sNonFatalAllocationFailureCount{0};
+
+// static
+void LLImageBase::setAllocationFailureCallback(allocation_failure_callback_t callback)
+{
+    sAllocationFailureCallback.store(callback, std::memory_order_release);
+}
+
+// static
+void LLImageBase::forceNextAllocationFailureForTesting()
+{
+    sForceAllocationFailureForTesting = true;
+}
+// static
+U64 LLImageBase::getNonFatalAllocationFailureCount()
+{
+    return sNonFatalAllocationFailureCount.load(std::memory_order_relaxed);
+}
+// </FS:Beq>
 
 LLImageBase::LLImageBase()
 :   mData(NULL),
@@ -710,12 +733,30 @@ U8* LLImageBase::allocateData(S32 size)
     if (!mBadBufferAllocation && (!mData || size != mDataSize))
     {
         deleteData(); // virtual
-        mData = (U8*)ll_aligned_malloc_16(size);
+        // <FS:Beq> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
+        // mData = (U8*)ll_aligned_malloc_16(size);
+        if (sForceAllocationFailureForTesting)
+        {
+            sForceAllocationFailureForTesting = false;
+            errno = ENOMEM;
+            mData = nullptr;
+        }
+        else
+        {
+            errno = 0;
+            mData = static_cast<U8*>(ll_aligned_malloc_16(size));
+        }
+        const S32 alloc_errno = errno;
+        // </FS:Beq>
         if (!mData)
         {
-            constexpr S32 MAX_TOLERANCE = 1024 * 1024 * 4; // 4 MB
-            if (size > MAX_TOLERANCE)
+            // <FS:Beq> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
+            // constexpr S32 MAX_TOLERANCE = 1024 * 1024 * 4; // 4 MB
+            // if (size > MAX_TOLERANCE)
+            if (size > MAX_FATAL_ALLOCATION_SIZE)
             {
+                sNonFatalAllocationFailureCount.fetch_add(1, std::memory_order_relaxed);
+                // </FS:Beq>
                 // If a big image failed to allocate, tollerate it for now.
                 // It's insightfull when crash logs without obvious cause are being analyzed,
                 // so a crash in a random location that normally is a mystery can get proper handling.
@@ -723,6 +764,26 @@ U8* LLImageBase::allocateData(S32 size)
             }
             else
             {
+                // <FS:Beq> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
+                if (const auto callback = sAllocationFailureCallback.load(std::memory_order_acquire))
+                {
+                    const LLImageAllocationFailureInfo failure_info =
+                    {
+                        .mRequestedSize = size,
+                        .mWidth = mWidth,
+                        .mHeight = mHeight,
+                        .mComponents = mComponents,
+                        .mErrno = alloc_errno
+                    };
+                    try
+                    {
+                        callback(failure_info);
+                    }
+                    catch (...) // Diagnostics must not replace the original allocation failure.
+                    {
+                    }
+                }
+                // </FS:Beq>
                 // We are too far gone if we can't allocate a small buffer.
                 LLError::LLUserWarningMsg::showOutOfMemory();
                 LL_ERRS() << "Failed to allocate image data size [" << size << "]" << LL_ENDL;
@@ -752,6 +813,12 @@ U8* LLImageBase::reallocateData(S32 size)
     U8 *new_datap = (U8*)ll_aligned_malloc_16(size);
     if (!new_datap)
     {
+        // <FS:Beq> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
+        if (size > MAX_FATAL_ALLOCATION_SIZE)
+        {
+            sNonFatalAllocationFailureCount.fetch_add(1, std::memory_order_relaxed);
+        }
+        // </FS:Beq>
         LL_WARNS() << "Out of memory in LLImageBase::reallocateData, size: " << size << LL_ENDL;
         return 0;
     }

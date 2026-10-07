@@ -54,6 +54,9 @@ public:
     bool    handleHover(S32 x, S32 y, MASK mask) override;
     bool    handleMouseDown(S32 x, S32 y, MASK mask) override;
     bool    handleMouseUp(S32 x, S32 y, MASK mask) override;
+    // <FS:TJ> Allow resize listeners for corner handles
+    void    setResizeListener(std::function<void()> listener) { mResizeListener = listener; }
+    // </FS:TJ>
 
     void            setResizeLimits( S32 min_width, S32 min_height ) { mMinWidth = min_width; mMinHeight = min_height; }
 
@@ -69,6 +72,7 @@ private:
     S32             mMinWidth;
     S32             mMinHeight;
     const ECorner   mCorner;
+    std::function<void()> mResizeListener; // <FS:TJ/> Allow resize listeners for corner handles
 };
 
 constexpr S32 RESIZE_HANDLE_HEIGHT = 11;

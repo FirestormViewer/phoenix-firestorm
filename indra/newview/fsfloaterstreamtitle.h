@@ -31,8 +31,6 @@
 #include "lleventtimer.h"
 #include "llfloater.h"
 #include "llsingleton.h"
-#include "llstreamingaudio.h"
-#include "streamtitledisplay.h"
 
 class LLButton;
 class LLTextBox;
@@ -45,7 +43,7 @@ class FSStreamTitleManager : public LLSingleton<FSStreamTitleManager>
 public:
     ~FSStreamTitleManager() override;
 
-    using history_vec_t = std::vector<std::string>;
+    using history_vec_t = std::vector<std::pair<LLUUID, std::string>>;
 
     using streamtitle_update_callback_t = boost::signals2::signal<void(std::string_view streamtitle)>;
     boost::signals2::connection setUpdateCallback(const streamtitle_update_callback_t::slot_type& cb) noexcept
@@ -61,6 +59,8 @@ public:
 
     std::string getCurrentStreamTitle() const noexcept { return mCurrentStreamTitle; }
     const history_vec_t& getStreamTitleHistory() const noexcept { return mStreamTitleHistory; }
+
+    void clearHistory() noexcept;
 
 protected:
     void initSingleton() override;
@@ -86,8 +86,13 @@ public:
 
 protected:
     void updateHistory(const FSStreamTitleManager::history_vec_t& history);
+    void updateButtons() noexcept;
+    void onClearHistory() noexcept;
+    void onCopyToClipboard() noexcept;
 
     FSScrollListCtrl* mHistoryCtrl{ nullptr };
+    LLButton* mClearHistoryBtn{ nullptr };
+    LLButton* mCopyToClipboardBtn{ nullptr };
 
     boost::signals2::connection mUpdateConnection{};
 

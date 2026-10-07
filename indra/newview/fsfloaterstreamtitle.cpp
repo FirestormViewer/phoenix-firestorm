@@ -32,11 +32,12 @@
 #include "fsscrolllistctrl.h"
 #include "llaudioengine.h"
 #include "llbutton.h"
+#include "llclipboard.h"
 #include "llfloaterreg.h"
+#include "llstreamingaudio.h"
 #include "lltextbox.h"
 #include "llviewercontrol.h"
 
-static constexpr size_t MAX_HISTORY_ENTRIES{ 10 };
 static constexpr F32 SCROLL_STEP_DELAY{ 0.25f };
 static constexpr F32 SCROLL_END_DELAY{ 4.f };
 
@@ -80,11 +81,12 @@ void FSStreamTitleManager::processMetadataUpdate(const LLSD& metadata) noexcept
     {
         mCurrentStreamTitle = std::move(title);
 
-        if (!mCurrentStreamTitle.empty() && (mStreamTitleHistory.empty() || mStreamTitleHistory.back() != mCurrentStreamTitle))
+        if (!mCurrentStreamTitle.empty() && (mStreamTitleHistory.empty() || mStreamTitleHistory.back().second != mCurrentStreamTitle))
         {
-            mStreamTitleHistory.emplace_back(mCurrentStreamTitle);
+            mStreamTitleHistory.emplace_back(LLUUID::generateNewID(), mCurrentStreamTitle);
 
-            if (mStreamTitleHistory.size() > MAX_HISTORY_ENTRIES)
+            static LLCachedControl<U32> fsStreamtitleHistoryLength(gSavedSettings, "FSStreamtitleHistoryLength");
+            if (mStreamTitleHistory.size() > fsStreamtitleHistoryLength)
             {
                 mStreamTitleHistory.erase(mStreamTitleHistory.begin());
             }
@@ -94,6 +96,16 @@ void FSStreamTitleManager::processMetadataUpdate(const LLSD& metadata) noexcept
 
         mUpdateSignal(mCurrentStreamTitle);
     }
+}
+
+void FSStreamTitleManager::clearHistory() noexcept
+{
+    mStreamTitleHistory.clear();
+    if (!mCurrentStreamTitle.empty() && gSavedSettings.getU32("FSStreamtitleHistoryLength") > 0)
+    {
+        mStreamTitleHistory.emplace_back(LLUUID::generateNewID(), mCurrentStreamTitle);
+    }
+    mHistoryUpdateSignal(mStreamTitleHistory);
 }
 
 
@@ -116,27 +128,64 @@ FSFloaterStreamTitleHistory::~FSFloaterStreamTitleHistory()
 
 bool FSFloaterStreamTitleHistory::postBuild()
 {
-    mHistoryCtrl = findChild<FSScrollListCtrl>("history");
+    mHistoryCtrl = getChild<FSScrollListCtrl>("history");
+    mHistoryCtrl->setCommitCallback([this](LLUICtrl*, const LLSD&) { updateButtons(); });
+
+    mClearHistoryBtn = getChild<LLButton>("clear_history");
+    mClearHistoryBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { onClearHistory(); });
+
+    mCopyToClipboardBtn = getChild<LLButton>("copy_to_clipboard");
+    mCopyToClipboardBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { onCopyToClipboard(); });
 
     FSStreamTitleManager& instance = FSStreamTitleManager::instance();
     mUpdateConnection = instance.setHistoryUpdateCallback([this](const FSStreamTitleManager::history_vec_t& history) { updateHistory(history); });
     updateHistory(instance.getStreamTitleHistory());
+    updateButtons();
 
     return true;
 }
 
 void FSFloaterStreamTitleHistory::updateHistory(const FSStreamTitleManager::history_vec_t& history)
 {
+    // Store current selection and scroll position
+    LLUUID last_selected_id;
+    if (mHistoryCtrl->getLastSelectedItem())
+    {
+        last_selected_id = mHistoryCtrl->getLastSelectedItem()->getUUID();
+    }
+    uuid_vec_t selected_ids;
+    for (auto selected_item : mHistoryCtrl->getAllSelected())
+    {
+        selected_ids.emplace_back(selected_item->getUUID());
+    }
+    S32 lastScroll = mHistoryCtrl->getScrollPos();
+
     mHistoryCtrl->clearRows();
 
-    for (const auto& entry : history)
+    for (const auto& [id, title] : history)
     {
         LLSD data;
+        data["value"] = id;
         data["columns"][0]["name"] = "title";
-        data["columns"][0]["value"] = entry;
+        data["columns"][0]["value"] = title;
 
         mHistoryCtrl->addElement(data, ADD_TOP);
     }
+
+    // Restore scroll position
+    mHistoryCtrl->setScrollPos(lastScroll);
+
+    // Restore selection list
+    if (!selected_ids.empty())
+    {
+        mHistoryCtrl->selectMultiple(selected_ids);
+        if (last_selected_id.notNull())
+        {
+            mHistoryCtrl->setLastSelectedItem(last_selected_id);
+        }
+    }
+
+    updateButtons();
 }
 
 void FSFloaterStreamTitleHistory::setOwnerOrigin(LLView* owner) noexcept
@@ -155,6 +204,40 @@ void FSFloaterStreamTitleHistory::draw()
     }
 }
 
+void FSFloaterStreamTitleHistory::updateButtons() noexcept
+{
+    mClearHistoryBtn->setEnabled(mHistoryCtrl->getItemCount() > 0);
+    mCopyToClipboardBtn->setEnabled(!mHistoryCtrl->getAllSelected().empty());
+}
+
+void FSFloaterStreamTitleHistory::onClearHistory() noexcept
+{
+    FSStreamTitleManager::instance().clearHistory();
+}
+
+void FSFloaterStreamTitleHistory::onCopyToClipboard() noexcept
+{
+    auto selected_item = mHistoryCtrl->getAllSelected();
+
+    if (selected_item.empty())
+    {
+        return;
+    }
+
+    std::string title_list{};
+    for (const auto item : selected_item)
+    {
+        title_list += item->getColumn(0)->getValue().asString() + "\n";
+    }
+
+    if (!title_list.empty() && title_list.back() == '\n')
+    {
+        title_list.pop_back();
+    }
+
+    LLWString wstr = utf8str_to_wstring(title_list);
+    LLClipboard::instance().copyToClipboard(wstr, 0, static_cast<S32>(wstr.length()));
+}
 
 //////////////////////////////////////////////////////////////////////////
 /// FSFloaterStreamTitle
@@ -176,8 +259,8 @@ FSFloaterStreamTitle::~FSFloaterStreamTitle()
 
 bool FSFloaterStreamTitle::postBuild()
 {
-    mTitletext = findChild<LLTextBox>("streamtitle");
-    mHistoryBtn = findChild<LLButton>("btn_history");
+    mTitletext = getChild<LLTextBox>("streamtitle");
+    mHistoryBtn = getChild<LLButton>("btn_history");
 
     FSStreamTitleManager& instance = FSStreamTitleManager::instance();
     mUpdateConnection = instance.setUpdateCallback([this](std::string_view streamtitle) { updateStreamTitle(streamtitle); });
@@ -185,7 +268,6 @@ bool FSFloaterStreamTitle::postBuild()
 
     mHistoryBtn->setCommitCallback(std::bind(&FSFloaterStreamTitle::toggleHistory, this));
     mHistoryBtn->setIsToggledCallback([](LLUICtrl*, const LLSD&) { return LLFloaterReg::instanceVisible("fs_streamtitlehistory"); });
-
 
     setVisibleCallback(boost::bind(&FSFloaterStreamTitle::closeHistory, this));
 

@@ -58,6 +58,12 @@ class LLAudioEngine_OpenAL : public LLAudioEngine
         /*virtual*/ void cleanupWind();
         /*virtual*/ void updateWind(LLVector3 direction, F32 camera_altitude);
 
+        // <FS:Ansariel> Output device selection
+        virtual output_device_map_t getDevices();
+        virtual void setDevice(const LLUUID& device_uuid);
+        void changeDevice();
+        // </FS:Ansariel>
+
     private:
         typedef F32 WIND_SAMPLE_T;
         LLWindGen<WIND_SAMPLE_T> *mWindGen;
@@ -80,6 +86,9 @@ class LLAudioEngine_OpenAL : public LLAudioEngine
         LPALCEVENTCONTROLSOFT mEventControlSOFT;
         LPALCEVENTCALLBACKSOFT mEventCallbackSOFT;
 
+        // <FS:Ansariel> Output device selection
+        bool mHasEnumerateAllExt;
+
         // Set by onDeviceEventSOFT(), consumed by idle()
         LLAtomicBool mDefaultDeviceChanged;
 
@@ -87,6 +96,11 @@ class LLAudioEngine_OpenAL : public LLAudioEngine
                                                      ALCdevice* device, ALCsizei length,
                                                      const ALCchar* message, void* userParam) noexcept;
         void reopenOnDefaultDevice();
+
+        // <FS:Ansariel> Output device selection
+        LLUUID mSelectedDeviceUUID{};
+        ALCcontext* mALContext{ nullptr };
+        // </FS:Ansariel>
 };
 
 class LLAudioChannelOpenAL : public LLAudioChannel
