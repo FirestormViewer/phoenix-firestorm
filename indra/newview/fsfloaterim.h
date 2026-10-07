@@ -31,6 +31,7 @@
 #define FS_FLOATERIM_H
 
 #include "llchat.h"
+#include "llimview.h"
 #include "llinstantmessage.h"
 #include "lllogchat.h"
 #include "lltooldraganddrop.h"
@@ -79,6 +80,8 @@ public:
 
     bool tick() override;
 
+    void draw() override;
+
     // Make IM conversion visible and update the message history
     static FSFloaterIM* show(const LLUUID& session_id);
 
@@ -118,7 +121,7 @@ public:
     void updateChatHistoryStyle();
     static void handleChatHistoryStyleChanged(const LLSD& newvalue);
 
-    static void processChatHistoryStyleUpdate(bool clean_messages = false);    // <FS:CR> FIRE-11734
+    static void processChatHistoryStyleUpdate(bool clean_messages = false);
 
     void onChatSearchButtonClicked();
 
@@ -250,6 +253,8 @@ private:
     void initEmojiRecentPanel();
     void onRecentEmojiPicked(const LLSD& value);
 
+    LLIMModel::LLIMSession* mSession{ nullptr };
+
     FSPanelChatControlPanel* mControlPanel;
     LLUUID mSessionID;
     S32 mLastMessageIndex;
@@ -268,6 +273,7 @@ private:
     LLLayoutPanel* mEmojiRecentPanel;
     LLTextBox* mEmojiRecentEmptyText;
     LLPanelEmojiComplete* mEmojiRecentIconsCtrl;
+    LLPanel* mChatLoadingPanel;
 
     std::string mSavedTitle;
     LLUIString mTypingStart;
@@ -302,6 +308,8 @@ private:
     boost::signals2::connection mRecentEmojisUpdatedCallbackConnection{};
     boost::signals2::connection mEmojiCloseConn{};
     U32 mEmojiHelperLastCallbackFrame{ 0 };
+
+    bool mChatLoadingVisible;
 };
 
 class FSFloaterIMTimer : public LLEventTimer

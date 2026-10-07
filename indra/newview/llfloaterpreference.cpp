@@ -34,6 +34,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llfloaterpreference.h"
+#include "llchatservicehistory.h"
 
 #include "message.h"
 #include "llfloaterautoreplacesettings.h"
@@ -895,7 +896,9 @@ void LLFloaterPreference::onShowGroupNoticesTopRightChanged()
 
 void LLFloaterPreference::updateDeleteTranscriptsButton()
 {
-    mDeleteTranscriptsBtn->setEnabled(LLLogChat::transcriptFilesExist());
+    const bool history_exists =
+        LLLogChat::transcriptFilesExist() || LLChatServiceHistory::localHistoryExists();
+    mDeleteTranscriptsBtn->setEnabled(!mDeleteTranscriptsPending && history_exists);
 }
 
 void LLFloaterPreference::onDoNotDisturbResponseChanged()
@@ -3140,17 +3143,31 @@ void LLFloaterPreference::onDeleteTranscriptsResponse(const LLSD& notification, 
 {
     if (0 == LLNotificationsUtil::getSelectedOption(notification, response))
     {
-        LLLogChat::deleteTranscripts();
+        // Disable repeated requests immediately. The weak handle keeps the
+        // main-queue completion safe if Preferences closes during the durable sweep.
+        LLHandle<LLFloaterPreference> handle = getDerivedHandle<LLFloaterPreference>();
+        mDeleteTranscriptsPending = true;
         updateDeleteTranscriptsButton();
+
+        if (!LLChatServiceHistory::deleteTranscriptsAsync(
+                [handle](bool)
+                {
+                    if (LLFloaterPreference* floater = handle.get())
+                    {
+                        floater->mDeleteTranscriptsPending = false;
+                        floater->updateDeleteTranscriptsButton();
+                    }
+                }))
+        {
+            mDeleteTranscriptsPending = false;
+            updateDeleteTranscriptsButton();
+        }
     }
 }
 
 void LLFloaterPreference::onLogChatHistorySaved()
 {
-    if (!mDeleteTranscriptsBtn->getEnabled())
-    {
-        mDeleteTranscriptsBtn->setEnabled(true);
-    }
+    updateDeleteTranscriptsButton();
 }
 
 // <FS:PP> Load UI Sounds tabs settings

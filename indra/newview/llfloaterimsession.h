@@ -191,6 +191,7 @@ private:
     LLFrameTimer mOtherTypingTimer;
 
     bool mSessionInitialized;
+
     LLSD mQueuedMsgsForInit;
 
     uuid_vec_t mInvitedParticipants;

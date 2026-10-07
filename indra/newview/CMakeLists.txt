@@ -257,6 +257,8 @@ set(viewer_SOURCE_FILES
     llchathistory.cpp
     llchatitemscontainerctrl.cpp
     llchatmsgbox.cpp
+    llchatservicehistory.cpp
+    llchatservicehistorycore.cpp
     llchiclet.cpp
     llchicletbar.cpp
     llclassifiedinfo.cpp
@@ -1132,6 +1134,8 @@ set(viewer_HEADER_FILES
     llchathistory.h
     llchatitemscontainerctrl.h
     llchatmsgbox.h
+    llchatservicehistory.h
+    llchatservicehistorycore.h
     llchiclet.h
     llchicletbar.h
     llclassifiedinfo.h
@@ -3077,6 +3081,8 @@ if (LL_TESTS)
   include(LLAddBuildTest)
   SET(viewer_TEST_SOURCE_FILES
     llagentaccess.cpp
+    llchatservicehistorycore.cpp
+    llconversationlog.cpp
     lldateutil.cpp
 #    llmediadataclient.cpp
     lllogininstance.cpp

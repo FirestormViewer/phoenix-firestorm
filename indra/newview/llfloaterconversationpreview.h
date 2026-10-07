@@ -30,10 +30,12 @@
 //#include "llchathistory.h"
 #include "fschathistory.h"
 // </FS:CR> [FS communication UI]
+#include "llchatservicehistory.h"
 #include "llfloater.h"
 
 extern const std::string LL_FCP_COMPLETE_NAME;  //"complete_name"
 extern const std::string LL_FCP_ACCOUNT_NAME;       //"user_name"
+extern const std::string LL_FCP_PARTICIPANT_ID;     //"participant_id"
 
 class LLSpinCtrl;
 
@@ -55,19 +57,24 @@ public:
     bool hasAccelerators() const override { return true; }
     // </FS:Ansariel>
 
+    // Fence outstanding loads and clear the visible history after account deletion.
+    void invalidateHistory();
+
 private:
+    // Non-P2P previews retain the legacy loader, while P2P previews use the shared
+    // stitched loader and resident snapshot stream.
     void onMoreHistoryBtnClick();
     void showHistory();
     void onBtnOpenExternal();   // <FS:CR> Open chat history externally
     void onClickSearch();   // [FS:CR] FIRE-6545
 
-    LLMutex         mMutex;
     LLSpinCtrl*     mPageSpinner;
     // <FS:CR> [FS communication UI]
     //LLChatHistory*    mChatHistory;
     FSChatHistory*  mChatHistory;
     // </FS:CR> [FS communication UI]
     LLUUID          mSessionID;
+    LLUUID          mParticipantID;
     int             mCurrentPage;
     int             mPageSize;
 
@@ -79,6 +86,11 @@ private:
     bool            mHistoryThreadsBusy;
     bool            mOpened;
     bool            mIsGroup;
+    bool            mIsP2P;
+
+    // Fence legacy completions across close, reopen, and deletion.
+    U64             mServiceToken;
+    LLChatServiceHistory::History mServiceHistory;
 };
 
 #endif /* LLFLOATERCONVERSATIONPREVIEW_H_ */
