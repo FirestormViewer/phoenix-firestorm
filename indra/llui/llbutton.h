@@ -149,7 +149,9 @@ public:
 
         Optional<std::string>       checkbox_control;       // <FS:Zi> Add checkbox control toggle
 
-        Optional<EnableCallbackParam>   is_toggled_callback;    // <FS:Ansariel> Toggle callback check
+        // <FS:Ansariel> Additional callbacks
+        Optional<EnableCallbackParam> is_toggled_callback,
+                                      enabled_callback;
 
         Params();
     };
@@ -202,9 +204,11 @@ public:
     // Passes a 'count' parameter in the commit param payload, i.e. param["count"])
     boost::signals2::connection setHeldDownCallback( const commit_signal_t::slot_type& cb ); // Mouse button held down and in button
 
-    // <FS:Ansariel> Toggle callback check
+    // <FS:Ansariel> Additional callbacks
     boost::signals2::connection setIsToggledCallback(const EnableCallbackParam& cb);
     boost::signals2::connection setIsToggledCallback(const enable_signal_t::slot_type& cb);
+    boost::signals2::connection setEnabledCallback(const EnableCallbackParam& cb);
+    boost::signals2::connection setEnabledCallback(const enable_signal_t::slot_type& cb);
 
 
     // *TODO: Deprecate (for backwards compatability only)
@@ -331,7 +335,9 @@ protected:
     commit_signal_t*            mMouseUpSignal;
     commit_signal_t*            mHeldDownSignal;
 
-    enable_signal_t*            mIsToggledSignal;   // <FS:Ansariel> Toggle callback check
+    // <FS:Ansariel> Additional callbacks
+    enable_signal_t*            mIsToggledSignal;
+    enable_signal_t*            mEnabledSignal;
 
     S32                         mMouseDownFrame;
     S32                         mMouseHeldDownCount;    // Counter for parameter passed to held-down callback

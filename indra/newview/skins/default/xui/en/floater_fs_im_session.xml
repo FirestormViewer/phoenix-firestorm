@@ -346,6 +346,9 @@
         <button.commit_callback
          function="IMSession.Menu.Action"
          parameter="history"/>
+        <button.enabled_callback
+         function="IMSession.Menu.Enable"
+         parameter="history"/>
       </button>
     </layout_panel>
     

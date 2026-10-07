@@ -748,6 +748,10 @@ bool FSFloaterIM::checkEnabled(const LLSD& userdata)
     {
         return LLAvatarActions::canOfferTeleport(mOtherParticipantUUID);
     }
+    else if (command == "history")
+    {
+        return !LLChatServiceHistory::historySuppressed();
+    }
     return false;
 }
 
