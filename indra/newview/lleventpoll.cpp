@@ -227,6 +227,17 @@ namespace Details
 
             if (!status)
             {
+                // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
+#ifdef OPENSIM
+                if (status == LLCore::HttpStatus(HTTP_BAD_GATEWAY) && LLGridManager::instance().isInOpenSim())
+                {   // Pre-coro says this is the default answer for timeouts and it can happen
+                    // frequently on OpenSim - assume this is normal and issue a new request immediately
+                    LL_DEBUGS("LLEventPollImpl") << "Received HTTP 502 - start new request." << LL_ENDL;
+                    errorCount = 0;
+                    continue;
+                }
+#endif
+                // </FS:Ansariel>
                 if (status == LLCore::HttpStatus(LLCore::HttpStatus::EXT_CURL_EASY, CURLE_OPERATION_TIMEDOUT) // A standard timeout, no events.
                     || status == LLCore::HttpStatus(HTTP_BAD_GATEWAY) // An expected 'No events' case.
                     || status == LLCore::HttpStatus(HTTP_INTERNAL_ERROR)
@@ -258,17 +269,6 @@ namespace Details
                         continue;
                     }
                 }
-                // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
-#ifdef OPENSIM
-                else if (status == LLCore::HttpStatus(HTTP_BAD_GATEWAY) && LLGridManager::instance().isInOpenSim())
-                {   // Pre-coro says this is the default answer for timeouts and it can happen
-                    // frequently on OpenSim - assume this is normal and issue a new request immediately
-                    LL_DEBUGS("LLEventPollImpl") << "Received HTTP 502 - start new request." << LL_ENDL;
-                    errorCount = 0;
-                    continue;
-                }
-#endif
-                // </FS:Ansariel>
                 else if ((status == LLCore::HttpStatus(LLCore::HttpStatus::LLCORE, LLCore::HE_OP_CANCELED)) ||
                         (status == LLCore::HttpStatus(HTTP_NOT_FOUND)))
                 {   // Event polling for this server has been canceled.  In
