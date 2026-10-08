@@ -28,6 +28,11 @@
 #define LL_LLDXHARDWARE_H
 
 #include <map>
+// <FS:Beq> [FIRE-36494] Startup hardware cache
+#include <memory>
+#include <optional>
+#include <string>
+// </FS:Beq>
 
 #include "stdtypes.h"
 #include "llsd.h"
@@ -50,7 +55,29 @@ public:
     } EGPUVendor;
     std::string getDriverVersionWMI(EGPUVendor vendor);
 
+    // <FS:Beq> [FIRE-36494] Copied startup hardware values; COM interfaces stay on the worker
+    struct ComputerSystemInfo
+    {
+        std::wstring manufacturer;
+        std::wstring model;
+        std::optional<bool> automatic_managed_pagefile;
+        const char* status = "not_started"; // Static literals keep status reporting allocation-free.
+        long error = 0; // HRESULT
+        S64 elapsed_ms = -1;
+    };
+
+    void startComputerSystemQuery(bool disable_wmi);
+    // Reads the startup cache without waiting for the background WMI query.
+    [[nodiscard]] bool getComputerSystemInfo(ComputerSystemInfo& info) const;
+    // </FS:Beq>
+
     LLSD getDisplayInfo();
+
+    // <FS:Beq> [FIRE-36494] Keep the result state alive until the background query finishes
+private:
+    struct ComputerSystemState;
+    std::shared_ptr<ComputerSystemState> mComputerSystemState;
+    // </FS:Beq>
 };
 
 extern LLDXHardware gDXHardware;
