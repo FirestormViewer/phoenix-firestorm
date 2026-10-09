@@ -906,7 +906,7 @@ int LLFile::rename(const std::filesystem::path& file_path, const std::filesystem
         return warnif("rename", file_path, ec, suppress_warning);
     }
 
-    LL_INFOS("LLFile") << "Rename failure (" << ec.value() << ") - " << ec.message() << " - " << file_path << " - " << new_path << LL_ENDL;
+    LL_INFOS("LLFile") << "Rename failure (" << ec.value() << ") - " << ec.message() << " - " << fsyspath(file_path).string() << " - " << fsyspath(new_path).string() << LL_ENDL;
     LL_INFOS("LLFile") << "Rename across mounts not supported; copying + unlinking the file instead." << LL_ENDL;
 
     ec.clear();
