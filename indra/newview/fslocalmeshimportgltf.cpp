@@ -37,6 +37,7 @@
 #include "llmatrix4a.h"
 #include "lljointdata.h"
 #include "llviewercontrol.h"
+#include "llskinningutil.h"
 
 // glTF headers
 #include "gltf/asset.h"
@@ -51,7 +52,10 @@
 
 // STL headers
 #include <algorithm>
+#include <array>
+#include <ranges>
 #include <set>
+#include <span>
 #include <sstream>
 
 namespace
@@ -85,8 +89,8 @@ namespace
 
     glm::mat4 convertTransformToViewerBasis(const glm::mat4& transform, bool apply_xy_rotation)
     {
-        const glm::mat4 basis = buildViewerBasisTransform(apply_xy_rotation);
-        return basis * transform * glm::inverse(basis);
+        // Match the uploader's conversion of glTF joint poses and bind poses.
+        return buildViewerBasisTransform(apply_xy_rotation) * transform;
     }
 
     std::vector<S32> buildParentMap(const LL::GLTF::Asset& asset)
@@ -161,6 +165,145 @@ namespace
     {
         auto joint_it = joint_map.find(joint_name);
         return joint_it != joint_map.end() ? joint_it->second : joint_name;
+    }
+
+    LL::GLTF::Accessor::ComponentType getJointComponentType(const LL::GLTF::Asset& asset,
+                                                           const LL::GLTF::Primitive& prim)
+    {
+        const auto joint_attr_it = prim.mAttributes.find("JOINTS_0");
+        if (joint_attr_it != prim.mAttributes.end()
+            && joint_attr_it->second >= 0
+            && joint_attr_it->second < static_cast<S32>(asset.mAccessors.size()))
+        {
+            return asset.mAccessors[joint_attr_it->second].mComponentType;
+        }
+        return LL::GLTF::Accessor::ComponentType::UNSIGNED_BYTE;
+    }
+
+    std::array<S32, 4> unpackJointIndices(U64 packed_joints,
+                                        LL::GLTF::Accessor::ComponentType component_type)
+    {
+        if (component_type == LL::GLTF::Accessor::ComponentType::UNSIGNED_SHORT)
+        {
+            const glm::u16vec4 joints = glm::unpackUint4x16(packed_joints);
+            return { joints.x, joints.y, joints.z, joints.w };
+        }
+
+        const glm::u8vec4 joints = glm::unpackUint4x8(static_cast<U32>(packed_joints));
+        return { joints.x, joints.y, joints.z, joints.w };
+    }
+
+    std::vector<S32> collectJointUse(const LL::GLTF::Asset& asset,
+                                     const LL::GLTF::Mesh& mesh,
+                                     const LL::GLTF::Skin& skin,
+                                     const local_joint_map_t& joint_map)
+    {
+        std::vector<S32> joint_use(skin.mJoints.size(), -1);
+        for (size_t i = 0; i < skin.mJoints.size(); ++i)
+        {
+            const S32 node_idx = skin.mJoints[i];
+            if (node_idx >= 0 && node_idx < static_cast<S32>(asset.mNodes.size())
+                && joint_map.contains(asset.mNodes[node_idx].mName))
+            {
+                joint_use[i] = 0;
+            }
+        }
+
+        // Geometry import retains at most this many primitives per object.
+        for (const auto& prim : mesh.mPrimitives | std::views::take(LL_SCULPT_MESH_MAX_FACES))
+        {
+            if (prim.mWeights.size() != prim.mPositions.size()
+                || prim.mJoints.size() != prim.mPositions.size())
+            {
+                continue;
+            }
+
+            const auto joint_component_type = getJointComponentType(asset, prim);
+            for (size_t vertex = 0; vertex < prim.mWeights.size(); ++vertex)
+            {
+                const auto joints = unpackJointIndices(prim.mJoints[vertex], joint_component_type);
+                const F32* weights = prim.mWeights[vertex].getF32ptr();
+                for (size_t influence = 0; influence < joints.size(); ++influence)
+                {
+                    if (weights[influence] > 0.f
+                        && static_cast<size_t>(joints[influence]) < joint_use.size()
+                        && joint_use[joints[influence]] >= 0)
+                    {
+                        ++joint_use[joints[influence]];
+                    }
+                }
+            }
+        }
+        return joint_use;
+    }
+
+    struct JointGroups
+    {
+        std::string mGroup;
+        std::string mParentGroup;
+    };
+
+    using joint_groups_map_t = std::map<std::string, JointGroups, std::less<>>;
+
+    void collectJointGroups(const LLJointData& joint,
+                            const std::string& parent_group,
+                            joint_groups_map_t& groups)
+    {
+        groups[joint.mName] = { .mGroup = joint.mGroup, .mParentGroup = parent_group };
+        for (const auto& child : joint.mChildren)
+        {
+            collectJointGroups(child, joint.mGroup, groups);
+        }
+    }
+
+    std::vector<S32> selectSkinJoints(std::span<const S32> joint_use,
+                                      std::span<const std::string> joint_names,
+                                      std::span<const LLJointData> viewer_skeleton,
+                                      size_t max_joints)
+    {
+        // FIRE-36838: follow LLGLTFLoader::populateModelFromMesh. Unsupported
+        // joints are -1, unused joints are 0, and positive values count uses.
+        std::vector<S32> selected;
+        const auto valid_count = std::ranges::count_if(joint_use, [](S32 uses) { return uses >= 0; });
+        if (static_cast<size_t>(valid_count) <= max_joints)
+        {
+            for (size_t i = 0; i < joint_use.size(); ++i)
+            {
+                if (joint_use[i] >= 0)
+                {
+                    selected.push_back(static_cast<S32>(i));
+                }
+            }
+            return selected;
+        }
+
+        joint_groups_map_t groups;
+        for (const auto& joint : viewer_skeleton)
+        {
+            collectJointGroups(joint, "", groups);
+        }
+
+        std::set<std::string, std::less<>> active_groups{ "Torso" };
+        for (size_t i = 0; i < joint_use.size(); ++i)
+        {
+            if (joint_use[i] > 0)
+            {
+                const auto& group = groups[joint_names[i]];
+                active_groups.insert(group.mGroup);
+                active_groups.insert(group.mParentGroup);
+                // Weighted joints occupy the first palette entries, in source order.
+                selected.push_back(static_cast<S32>(i));
+            }
+        }
+
+        for (size_t i = 0; i < joint_use.size() && selected.size() < max_joints; ++i)
+        {
+            if (joint_use[i] == 0 && active_groups.contains(groups[joint_names[i]].mGroup))
+            {
+                selected.push_back(static_cast<S32>(i));
+            }
+        }
+        return selected;
     }
 
     std::vector<S32> buildJointIndexRemap(const LL::GLTF::Asset& asset,
@@ -423,19 +566,18 @@ namespace
                                                   glm::vec3(0, 0, 0),
                                                   glm::vec4(0, 0, 0, 1));
 
+            // Match LLGLTFLoader::buildOverrideMatrix: viewer joint overrides
+            // carry translation, and collision bones also carry viewer scale.
+            glm::mat4 overridden_joint = node.mOverrideMatrix;
+            rest = parent_rest * overridden_joint;
             if (viewer_data.mIsJoint)
             {
-                // Keep the full local TRS for bind/rest propagation. Using the
-                // translation-only override here causes parent rotations to be
-                // re-encoded as rotated child translations down the chain.
-                rest = parent_rest * translated_joint;
                 node.mOverrideRestMatrix = rest;
             }
             else
             {
-                rest = parent_support_rest * translated_joint;
-                node.mOverrideRestMatrix = rest;
-                rest = node.mOverrideRestMatrix;
+                overridden_joint = glm::scale(overridden_joint, viewer_data.mScale);
+                node.mOverrideRestMatrix = parent_support_rest * overridden_joint;
             }
         }
         else
@@ -670,14 +812,14 @@ bool FSLocalMeshImportGLTF::processNodeMesh(const LL::GLTF::Asset& asset, const 
             || canonical_skin.isNull()
             || canonical_skin->mJointNames.empty())
         {
-            if (!initSkinInfo(asset, skin_idx, object))
+            if (!initSkinInfo(asset, mesh, skin_idx, object, joint_index_remap))
             {
                 skin_idx = -1;
             }
             canonical_skin = object->getObjectMeshSkinInfo();
         }
 
-        if (skin_idx >= 0)
+        if (skin_idx >= 0 && joint_index_remap.empty())
         {
             joint_index_remap = buildJointIndexRemap(asset, skin, joint_map, canonical_skin);
         }
@@ -835,13 +977,7 @@ bool FSLocalMeshImportGLTF::appendPrimitiveToObject(const LL::GLTF::Asset& asset
         && prim.mJoints.size() == prim.mPositions.size())
     {
         const LL::GLTF::Skin& skin = asset.mSkins[skin_idx];
-
-        LL::GLTF::Accessor::ComponentType joint_component_type = LL::GLTF::Accessor::ComponentType::UNSIGNED_BYTE;
-        auto joint_attr_it = prim.mAttributes.find("JOINTS_0");
-        if (joint_attr_it != prim.mAttributes.end() && joint_attr_it->second >= 0)
-        {
-            joint_component_type = asset.mAccessors[joint_attr_it->second].mComponentType;
-        }
+        const auto joint_component_type = getJointComponentType(asset, prim);
 
         auto& list_skin = current_submesh->getSkin();
         list_skin.reserve(prim.mWeights.size());
@@ -854,23 +990,7 @@ bool FSLocalMeshImportGLTF::appendPrimitiveToObject(const LL::GLTF::Asset& asset
             const LLVector4a& weight_vec = prim.mWeights[vert_idx];
             const float* weights = weight_vec.getF32ptr();
 
-            std::array<int, 4> joint_indices{};
-            if (joint_component_type == LL::GLTF::Accessor::ComponentType::UNSIGNED_SHORT)
-            {
-                const glm::u16vec4 unpacked_joints = glm::unpackUint4x16(prim.mJoints[vert_idx]);
-                joint_indices = { static_cast<int>(unpacked_joints.x),
-                                  static_cast<int>(unpacked_joints.y),
-                                  static_cast<int>(unpacked_joints.z),
-                                  static_cast<int>(unpacked_joints.w) };
-            }
-            else
-            {
-                const glm::u8vec4 unpacked_joints = glm::unpackUint4x8(static_cast<U32>(prim.mJoints[vert_idx] & 0xFFFFFFFF));
-                joint_indices = { static_cast<int>(unpacked_joints.x),
-                                  static_cast<int>(unpacked_joints.y),
-                                  static_cast<int>(unpacked_joints.z),
-                                  static_cast<int>(unpacked_joints.w) };
-            }
+            const auto joint_indices = unpackJointIndices(prim.mJoints[vert_idx], joint_component_type);
 
             float weight_values[4] = { weights[0], weights[1], weights[2], weights[3] };
 
@@ -969,7 +1089,11 @@ bool FSLocalMeshImportGLTF::appendPrimitiveToObject(const LL::GLTF::Asset& asset
     return true;
 }
 
-bool FSLocalMeshImportGLTF::initSkinInfo(const LL::GLTF::Asset& asset, S32 skin_idx, LLLocalMeshObject* object)
+bool FSLocalMeshImportGLTF::initSkinInfo(const LL::GLTF::Asset& asset,
+                                       const LL::GLTF::Mesh& mesh,
+                                       S32 skin_idx,
+                                       LLLocalMeshObject* object,
+                                       std::vector<S32>& joint_index_remap)
 {
     if (!object || skin_idx < 0 || skin_idx >= static_cast<S32>(asset.mSkins.size()))
     {
@@ -994,17 +1118,7 @@ bool FSLocalMeshImportGLTF::initSkinInfo(const LL::GLTF::Asset& asset, S32 skin_
     auto joint_map = FSLocalMeshImportBase::loadJointMap();
     const LL::GLTF::Skin& skin = asset.mSkins[skin_idx];
     const bool apply_xy_rotation = checkForXYrotation(asset, skin, mParentMap, joint_map);
-    U32 recognized_joint_count = 0;
     const std::vector<bool> is_skin_joint = buildSkinJointMembership(asset, skin);
-    for (S32 joint_node_idx : skin.mJoints)
-    {
-        if (joint_node_idx >= 0
-            && joint_node_idx < static_cast<S32>(asset.mNodes.size())
-            && joint_map.find(asset.mNodes[joint_node_idx].mName) != joint_map.end())
-        {
-            ++recognized_joint_count;
-        }
-    }
 
     joints_data_map_t joints_data;
     joints_name_to_node_map_t names_to_nodes;
@@ -1059,11 +1173,6 @@ bool FSLocalMeshImportGLTF::initSkinInfo(const LL::GLTF::Asset& asset, S32 skin_
         {
             buildOverrideMatrix(viewer_data, joints_data, names_to_nodes, identity, identity, apply_xy_rotation);
         }
-    }
-
-    if (!enforceRigJointLimit("GLTF Importer", *object, skininfop, recognized_joint_count))
-    {
-        return false;
     }
 
     // Always reset bind shape before rebuilding skin data so reloads do not reuse stale matrices.
@@ -1124,6 +1233,51 @@ bool FSLocalMeshImportGLTF::initSkinInfo(const LL::GLTF::Asset& asset, S32 skin_
             skininfop->mAlternateBindMatrix.push_back(LLMatrix4a(alternate_bind));
         }
     }
+
+    const auto joint_use = collectJointUse(asset, mesh, skin, joint_map);
+    const auto selected = selectSkinJoints(joint_use, skininfop->mJointNames, viewer_skeleton,
+                                           static_cast<size_t>(LLSkinningUtil::getMaxJointCount()));
+    if (!enforceRigJointLimit("GLTF Importer", *object, skininfop, static_cast<U32>(selected.size())))
+    {
+        return false;
+    }
+    if (selected.empty())
+    {
+        object->setObjectMeshSkinInfo(LLPointer<LLMeshSkinInfo>());
+        return false;
+    }
+
+    // As in the uploader, map each original skin index to the palette entry
+    // added for that index. Name lookup is only needed for separate lower LODs.
+    joint_index_remap.assign(skin.mJoints.size(), -1);
+    for (size_t i = 0; i < selected.size(); ++i)
+    {
+        joint_index_remap[selected[i]] = static_cast<S32>(i);
+    }
+
+    const auto retain_selected = [&selected](auto& values)
+    {
+        auto original = std::move(values);
+        values.clear();
+        values.reserve(selected.size());
+        for (S32 index : selected)
+        {
+            if (static_cast<size_t>(index) < original.size())
+            {
+                values.push_back(std::move(original[index]));
+            }
+        }
+    };
+    retain_selected(skininfop->mJointNames);
+    retain_selected(skininfop->mJointNums);
+    retain_selected(skininfop->mInvBindMatrix);
+    retain_selected(skininfop->mAlternateBindMatrix);
+
+    pushLog("GLTF Importer", "Object \"" + object->getObjectName() + "\" defines "
+        + std::to_string(skin.mJoints.size()) + " joints; retaining "
+        + std::to_string(selected.size()) + " joints, including "
+        + std::to_string(std::ranges::count_if(joint_use, [](S32 uses) { return uses > 0; }))
+        + " weighted viewer joints.");
 
     object->setObjectMeshSkinInfo(skininfop);
     return true;
