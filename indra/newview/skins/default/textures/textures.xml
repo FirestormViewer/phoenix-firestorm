@@ -135,6 +135,10 @@ with the same filename but different name
   <texture name="Cam_Load_Pos" file_name="bottomtray/camera_load.png" preload="false" />
   <!-- END FS:Ansariel: FIRE-7758: 7758 -->
   
+  <texture name="Camera_Off" file_name="icons/Camera_Off.png" preload="false" />
+  <texture name="Camera_Over" file_name="icons/Camera_Over.png" preload="false" />
+  <texture name="Camera_Press" file_name="icons/Camera_Press.png" preload="false" />
+  
   <texture name="Checkbox_Off_Disabled" file_name="widgets/Checkbox_Disabled.png" preload="true" />
   <texture name="Checkbox_On_Disabled" file_name="widgets/Checkbox_On_Disabled.png" preload="true" />
   <texture name="Checkbox_Off" file_name="widgets/Checkbox_Off.png" preload="true" />

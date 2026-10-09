@@ -590,14 +590,20 @@ void LLViewerTexture::updateClass()
         // don't execute above until the slam to 1.5 has a chance to take effect
         sEvaluationTimer.reset();
 
-        // lower discard bias over time when at least 10% of budget is free
+        // <FS:Beq> Improve windows memory recovery detection
+        // Lower discard bias when VRAM has room and system memory has recovered.
+        // // lower discard bias over time when at least 10% of budget is free
         constexpr F32 FREE_PERCENTAGE_TRESHOLD = -0.1f;
-        constexpr U32 FREE_SYS_MEM_TRESHOLD = 100;
-        static LLCachedControl<U32> min_free_main_memory(gSavedSettings, "RenderMinFreeMainMemoryThreshold", 512);
-        const S32Megabytes MIN_FREE_MAIN_MEMORY(min_free_main_memory() + FREE_SYS_MEM_TRESHOLD);
+        // constexpr U32 FREE_SYS_MEM_TRESHOLD = 100;
+        // static LLCachedControl<U32> min_free_main_memory(gSavedSettings, "RenderMinFreeMainMemoryThreshold", 512);
+        // const S32Megabytes MIN_FREE_MAIN_MEMORY(min_free_main_memory() + FREE_SYS_MEM_TRESHOLD);
+        // </FS:Beq>
         if (sDesiredDiscardBias > 1.f
             && over_pct < FREE_PERCENTAGE_TRESHOLD
-            && getFreeSystemMemory() > MIN_FREE_MAIN_MEMORY)
+            // <FS:Beq> Improve windows memory recovery detection
+            // && getFreeSystemMemory() > MIN_FREE_MAIN_MEMORY)
+            && isSystemMemoryRecovered())
+            // </FS:Beq>
         {
             static LLCachedControl<F32> high_mem_discard_decrement(gSavedSettings, "RenderHighMemMinDiscardDecrement", .1f);
 
@@ -681,6 +687,33 @@ U32Megabytes LLViewerTexture::getFreeSystemMemory()
     return physical_res;
 }
 
+// <FS:Beq> [FIRE-36494] Track Windows commit pressure independently of physical memory.
+#if LL_WINDOWS
+U32Megabytes getFreeCommitMemory()
+{
+    static LLFrameTimer timer;
+    static U32Megabytes commit_res = U32Megabytes(U32_MAX);
+
+    if (timer.getElapsedTimeF32() < MEMORY_CHECK_WAIT_TIME) //call this once per second.
+    {
+        return commit_res;
+    }
+
+    timer.reset();
+
+    MEMORYSTATUSEX state = {};
+    state.dwLength = sizeof(state);
+    if (GlobalMemoryStatusEx(&state))
+    {
+        // ullAvailPageFile is available commit for this process, not just free pagefile.sys space.
+        commit_res = U32Megabytes::convert(U64Bytes(state.ullAvailPageFile));
+    }
+
+    return commit_res;
+}
+#endif
+// </FS:Beq>
+
 S32Megabytes get_render_free_main_memory_treshold()
 {
     static LLCachedControl<U32> min_free_main_memory(gSavedSettings, "RenderMinFreeMainMemoryThreshold", 512);
@@ -688,17 +721,66 @@ S32Megabytes get_render_free_main_memory_treshold()
     return MIN_FREE_MAIN_MEMORY;
 }
 
+// <FS:Beq> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
+#if LL_WINDOWS
+S32Megabytes get_render_free_commit_memory_threshold()
+{
+    static LLCachedControl<U32> min_free_commit_memory(gSavedSettings, "RenderMinFreeCommitMemoryThresholdMB", 512);
+    const U32Megabytes MIN_FREE_COMMIT_MEMORY(min_free_commit_memory);
+    return MIN_FREE_COMMIT_MEMORY;
+}
+#endif
+// </FS:Beq>
+
 //static
 bool LLViewerTexture::isSystemMemoryLow()
 {
-    return getFreeSystemMemory() < get_render_free_main_memory_treshold();
+    // <FS:Beq> [FIRE-36494] Include Windows commit pressure.
+    // return getFreeSystemMemory() < get_render_free_main_memory_treshold();
+    const bool physical_low = getFreeSystemMemory() < get_render_free_main_memory_treshold();
+
+#if LL_WINDOWS
+    const bool commit_low = getFreeCommitMemory() < get_render_free_commit_memory_threshold();
+    return physical_low || commit_low;
+#else
+    return physical_low;
+#endif
+    // </FS:Beq>
 }
 
 //static
 bool LLViewerTexture::isSystemMemoryCritical()
 {
-    return getFreeSystemMemory() < get_render_free_main_memory_treshold() / 2;
+    // <FS:Beq> [FIRE-36494] Include Windows commit pressure.
+    // return getFreeSystemMemory() < get_render_free_main_memory_treshold() / 2;
+    const bool physical_critical = getFreeSystemMemory() < get_render_free_main_memory_treshold() / 2;
+
+#if LL_WINDOWS
+    const bool commit_critical = getFreeCommitMemory() < get_render_free_commit_memory_threshold() / 2;
+    return physical_critical || commit_critical;
+#else
+    return physical_critical;
+#endif
+    // </FS:Beq>
 }
+
+// <FS:Beq> [FIRE-36494] Require physical and commit memory to recover on Windows.
+//static
+bool LLViewerTexture::isSystemMemoryRecovered()
+{
+    // Leave breathing room above the low-memory thresholds before restoring texture quality.
+    const S32Megabytes margin(100);
+    const bool physical_recovered =
+        getFreeSystemMemory() > get_render_free_main_memory_treshold() + margin;
+
+#if LL_WINDOWS
+    return physical_recovered &&
+        getFreeCommitMemory() > get_render_free_commit_memory_threshold() + margin;
+#else
+    return physical_recovered;
+#endif
+}
+// </FS:Beq>
 
 //end of static functions
 //-------------------------------------------------------------------------------------------
@@ -4208,4 +4290,3 @@ void LLTexturePipelineTester::LLTextureTestSession::reset()
 //----------------------------------------------------------------------------------------------
 //end of LLTexturePipelineTester
 //----------------------------------------------------------------------------------------------
-

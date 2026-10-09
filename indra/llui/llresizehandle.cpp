@@ -55,6 +55,7 @@ LLResizeHandle::LLResizeHandle(const LLResizeHandle::Params& p)
     mImage( NULL ),
     mMinWidth( p.min_width ),
     mMinHeight( p.min_height ),
+    mResizeListener(NULL), // <FS:TJ/> Allow resize listeners for corner handles
     mCorner( p.corner )
 {
     if( RIGHT_BOTTOM == mCorner)
@@ -351,6 +352,13 @@ bool LLResizeHandle::handleHover(S32 x, S32 y, MASK mask)
             break;
         }
     }
+
+    // <FS:TJ> Allow resize listeners for corner handles
+    if (mResizeListener)
+    {
+        mResizeListener();
+    }
+    // </FS:TJ>
 
     return handled;
 } // end handleHover

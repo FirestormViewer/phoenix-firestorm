@@ -2,24 +2,74 @@
 <floater
  name="stream_history"
  title="Recently playing:"
- can_resize="false"
- height="185"
+ can_resize="true"
+ height="208"
  width="400"
+ min_width="400"
+ min_height="150"
  layout="topleft"
  save_rect="true"
+ save_visibility="true"
 >
 	<fs_scroll_list
 		draw_heading="true"
 		top="3"
 		follows="all"
-		bottom="-5"
+		bottom="-28"
 		right="-10"
 		layout="topleft"
 		left="10"
 		name="history"
+		multi_select="true"
 		can_sort="false">
 		<columns
 			label="Title"
-			name="title" />
+			name="title"/>
 	</fs_scroll_list>
+
+	<button
+		top_pad="4"
+		follows="bottom|left"
+		height="20"
+		width="60"
+		layout="topleft"
+		name="clear_history"
+		label="Clear"
+		left="10"/>
+
+	<text
+		top_delta="2"
+		follows="bottom|left"
+		height="20"
+		width="80"
+		layout="topleft"
+		name="max_entries_label"
+		left_pad="10">
+			Max. Entries:
+		</text>
+
+	<spinner
+		allow_text_entry="true"
+		control_name="FSStreamtitleHistoryLength"
+		decimal_digits="0"
+		follows="bottom|left"
+		height="20"
+		increment="1"
+		layout="topleft"
+		left_pad="0"
+		max_val="10000"
+		min_val="0"
+		name="max_entries"
+		top_delta="-3"
+		width="65"/>
+
+	<button
+		top_delta="1"
+		follows="bottom|right"
+		height="20"
+		width="125"
+		layout="topleft"
+		name="copy_to_clipboard"
+		label="Copy to Clipboard"
+		right="-10"/>
 </floater>

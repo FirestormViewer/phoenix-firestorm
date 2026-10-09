@@ -36,8 +36,15 @@
 
 #include <wbemidl.h>
 #include <comdef.h>
+#pragma comment(lib, "wbemuuid.lib") // <FS:Beq/> [FIRE-36494] Link the startup hardware WMI query
 
 #include <boost/tokenizer.hpp>
+// <FS:Beq> [FIRE-36494] Asynchronous startup hardware collection
+#include <chrono>
+#include <mutex>
+#include <thread>
+#include <utility>
+// </FS:Beq>
 
 #include "lldxhardware.h"
 #include <dxgi.h>
@@ -285,6 +292,177 @@ std::string LLDXHardware::getDriverVersionWMI(EGPUVendor vendor)
     return driver_version; // <FS:Beq/> caching version of driver query 
 }
 
+// <FS:Beq> [FIRE-36494] Cache manufacturer, model and pagefile management at startup
+namespace
+{
+struct COMRelease
+{
+    template<typename T>
+    void operator()(T* object) const noexcept
+    { object->Release(); }
+};
+template<typename T>
+using COMPtr  = std::unique_ptr<T, COMRelease>;
+using BSTRPtr = std::unique_ptr<OLECHAR, decltype(&SysFreeString)>;
+
+struct COMApartment
+{
+    COMApartment()                               = default;
+    COMApartment(const COMApartment&)            = delete;
+    COMApartment& operator=(const COMApartment&) = delete;
+    ~COMApartment()
+    {
+        if (SUCCEEDED(result))
+            CoUninitialize();
+    }
+
+    const HRESULT result = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+};
+
+struct WMIProperty
+{
+    VARIANT value;
+    WMIProperty() { VariantInit(&value); }
+    WMIProperty(const WMIProperty&)            = delete;
+    WMIProperty& operator=(const WMIProperty&) = delete;
+    ~WMIProperty() { VariantClear(&value); }
+};
+
+bool getWMIString(IWbemClassObject* object, const wchar_t* name, std::wstring& destination)
+{
+    WMIProperty property;
+    if (FAILED(object->Get(name, 0, &property.value, nullptr, nullptr)) || property.value.vt != VT_BSTR || !property.value.bstrVal)
+    {
+        return false;
+    }
+    destination.assign(property.value.bstrVal, SysStringLen(property.value.bstrVal));
+    return true;
+}
+
+HRESULT queryComputerSystem(LLDXHardware::ComputerSystemInfo& info)
+{
+    // This startup-only query owns its COM apartment and interfaces. Use the
+    // existing process security policy without changing machine-ID probing.
+    COMApartment apartment;
+    if (FAILED(apartment.result))
+        return apartment.result;
+
+    IWbemLocator* locator_raw = nullptr;
+    HRESULT       result =
+        CoCreateInstance(CLSID_WbemLocator, nullptr, CLSCTX_INPROC_SERVER, IID_IWbemLocator, reinterpret_cast<void**>(&locator_raw));
+    COMPtr<IWbemLocator> locator(locator_raw);
+    if (FAILED(result))
+        return result;
+
+    BSTRPtr name_space(SysAllocString(L"ROOT\\CIMV2"), SysFreeString);
+    if (!name_space)
+        return E_OUTOFMEMORY;
+    IWbemServices* services_raw = nullptr;
+    result = locator->ConnectServer(name_space.get(), nullptr, nullptr, nullptr, WBEM_FLAG_CONNECT_USE_MAX_WAIT, nullptr, nullptr,
+                                    &services_raw);
+    COMPtr<IWbemServices> services(services_raw);
+    if (FAILED(result))
+        return result;
+
+    result = CoSetProxyBlanket(services.get(), RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, nullptr, RPC_C_AUTHN_LEVEL_CALL,
+                               RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE);
+    if (FAILED(result))
+        return result;
+
+    BSTRPtr language(SysAllocString(L"WQL"), SysFreeString);
+    BSTRPtr statement(SysAllocString(L"SELECT Manufacturer, Model, AutomaticManagedPagefile FROM Win32_ComputerSystem"), SysFreeString);
+    if (!language || !statement)
+        return E_OUTOFMEMORY;
+    IEnumWbemClassObject* enumerator_raw = nullptr;
+    result = services->ExecQuery(language.get(), statement.get(), WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr,
+                                 &enumerator_raw);
+    COMPtr<IEnumWbemClassObject> enumerator(enumerator_raw);
+    if (FAILED(result))
+        return result;
+
+    IWbemClassObject* object_raw = nullptr;
+    ULONG             returned   = 0;
+    result                       = enumerator->Next(2000, 1, &object_raw, &returned);
+    COMPtr<IWbemClassObject> object(object_raw);
+    if (FAILED(result))
+        return result;
+    if (returned != 1 || !object)
+        return result == WBEM_S_TIMEDOUT ? WBEM_S_TIMEDOUT : WBEM_E_NOT_FOUND;
+
+    getWMIString(object.get(), L"Manufacturer", info.manufacturer);
+    getWMIString(object.get(), L"Model", info.model);
+    WMIProperty automatic;
+    if (SUCCEEDED(object->Get(L"AutomaticManagedPagefile", 0, &automatic.value, nullptr, nullptr)) && automatic.value.vt == VT_BOOL)
+    {
+        info.automatic_managed_pagefile = automatic.value.boolVal != VARIANT_FALSE;
+    }
+    return info.manufacturer.empty() || info.model.empty() || !info.automatic_managed_pagefile.has_value() ? S_FALSE : S_OK;
+}
+} // namespace
+
+struct LLDXHardware::ComputerSystemState
+{
+    std::mutex         mutex;
+    ComputerSystemInfo info;
+    bool               started = false;
+};
+
+void LLDXHardware::startComputerSystemQuery(bool disable_wmi)
+{
+    std::lock_guard lock(mComputerSystemState->mutex);
+    if (mComputerSystemState->started)
+        return;
+    mComputerSystemState->started     = true;
+    mComputerSystemState->info.status = disable_wmi ? "disabled" : "pending";
+    if (disable_wmi)
+        return;
+
+    try
+    {
+        // Own only the result state, not the hardware singleton or viewer. No
+        // COM interfaces cross threads, and shutdown never waits for WMI.
+        std::thread(
+            [state = mComputerSystemState]
+            {
+                ComputerSystemInfo info;
+                const auto         start = std::chrono::steady_clock::now();
+                try
+                {
+                    const HRESULT result = queryComputerSystem(info);
+                    info.error           = result;
+                    info.status          = result == WBEM_S_TIMEDOUT ? "timed_out"
+                                           : FAILED(result)          ? "failed"
+                                           : result == S_OK          ? "succeeded"
+                                                                     : "partial";
+                }
+                catch (...)
+                {
+                    info.error  = E_FAIL;
+                    info.status = "failed";
+                }
+                info.elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
+                std::lock_guard lock(state->mutex);
+                state->info = std::move(info);
+            })
+            .detach();
+    }
+    catch (...)
+    {
+        mComputerSystemState->info.status = "failed";
+        mComputerSystemState->info.error  = E_FAIL;
+    }
+}
+
+bool LLDXHardware::getComputerSystemInfo(ComputerSystemInfo& info) const
+{
+    std::unique_lock lock(mComputerSystemState->mutex, std::try_to_lock);
+    if (!lock.owns_lock())
+        return false;
+    info = mComputerSystemState->info;
+    return true;
+}
+// </FS:Beq>
+
 void get_wstring(IDxDiagContainer* containerp, const WCHAR* wszPropName, WCHAR* wszPropValue, int outputSize)
 {
     HRESULT hr;
@@ -325,6 +503,7 @@ std::string get_string(IDxDiagContainer *containerp, const WCHAR *wszPropName)
 }
 
 LLDXHardware::LLDXHardware()
+    : mComputerSystemState(std::make_shared<ComputerSystemState>()) // <FS:Beq/> [FIRE-36494] Own the startup hardware cache
 {
 }
 

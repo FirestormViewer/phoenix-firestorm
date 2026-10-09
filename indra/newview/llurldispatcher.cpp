@@ -165,7 +165,14 @@ bool LLURLDispatcherImpl::dispatchApp(const LLSLURL& slurl,
                                       LLMediaCtrl* web,
                                       bool trusted_browser)
 {
-    LL_INFOS() << "cmd: " << slurl.getAppCmd() << " path: " << slurl.getAppPath() << " query: " << slurl.getAppQuery() << LL_ENDL;
+    // don't log path/query for sensitive commands
+    std::string app_info = "cmd: " + slurl.getAppCmd();
+    if (!LLCommandDispatcher::isSensitive(slurl.getAppCmd()))
+    {
+        app_info += " path: " + slurl.getAppPath().asString() + " query: " + slurl.getAppQuery();
+    }
+    LL_INFOS() << app_info << LL_ENDL;
+
 
     // <FS:Ansariel> FIRE-6238: Don't try to parse an already unescaped query string - use the already created query map!
     //const LLSD& query_map = LLURI::queryMap(slurl.getAppQuery());
