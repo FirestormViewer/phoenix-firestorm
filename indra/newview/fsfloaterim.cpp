@@ -137,7 +137,7 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
     mUnreadMessagesNotificationTextBox(NULL),
     mApplyRect(true),
     mIMFloaterTimer(NULL),
-    mChatLoadingPanel(nullptr),
+    mChatServiceLoadingPanel(nullptr),
     mChatLoadingVisible(false)
 {
     initIMSession(session_id);
@@ -1059,8 +1059,7 @@ bool FSFloaterIM::postBuild()
 
     mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { initEmojiRecentPanel(); });
 
-    mChatLoadingPanel = getChild<LLPanel>("chat_service_loading");
-    mChatLoadingPanel->getChild<LLTextBox>("chat_service_loading_text")->setValue(LLTrans::getString("loading_chat_logs"));
+    mChatServiceLoadingPanel = getChild<LLPanel>("chat_service_loading");
 
     getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
     getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterIM::onChatSearchButtonClicked, this));
@@ -1897,7 +1896,7 @@ void FSFloaterIM::draw()
     {
         mChatLoadingVisible = loading;
         // The widget animates in draw(); hiding its panel suspends that work.
-        mChatLoadingPanel->setVisible(loading);
+        mChatServiceLoadingPanel->setVisible(loading);
     }
 
     LLFloater::draw();

@@ -273,7 +273,7 @@ private:
     LLLayoutPanel* mEmojiRecentPanel;
     LLTextBox* mEmojiRecentEmptyText;
     LLPanelEmojiComplete* mEmojiRecentIconsCtrl;
-    LLPanel* mChatLoadingPanel;
+    LLPanel* mChatServiceLoadingPanel;
 
     std::string mSavedTitle;
     LLUIString mTypingStart;
