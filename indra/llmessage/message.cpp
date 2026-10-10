@@ -2087,6 +2087,11 @@ void LLMessageSystem::dispatch(
     LL_DEBUGS("Messaging") << "context: " << context << LL_ENDL;
     LL_DEBUGS("Messaging") << "message: " << message << LL_ENDL;
 
+    if (callDispatchInterceptor(msg_name, message, responsep))
+    {
+        return;
+    }
+
     handler->post(responsep, context, message);
 }
 
@@ -2097,6 +2102,25 @@ void LLMessageSystem::dispatchTemplate(const std::string& msg_name,
 {
     LLTemplateMessageDispatcher dispatcher(*(gMessageSystem->mTemplateMessageReader));
     dispatcher.dispatch(msg_name, message, responsep);
+}
+
+// <Mko> Dispatch interceptor state and accessors.
+static LLMessageSystem::dispatch_interceptor_t sDispatchInterceptor = NULL;
+
+void LLMessageSystem::setDispatchInterceptor(dispatch_interceptor_t interceptor)
+{
+    sDispatchInterceptor = interceptor;
+}
+
+bool LLMessageSystem::callDispatchInterceptor(const std::string& msg_name,
+                                              const LLSD& message,
+                                              LLHTTPNode::ResponsePtr responsep)
+{
+    if (sDispatchInterceptor)
+    {
+        return sDispatchInterceptor(msg_name, message, responsep);
+    }
+    return false;
 }
 
 static void check_for_unrecognized_messages(

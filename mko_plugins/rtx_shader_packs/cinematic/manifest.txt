@@ -1,0 +1,12 @@
+# Manikineko RTX cinematic shader pack (native format, loaded by the proprietary mko_rtx plugin)
+# Real viewer shader overrides (LGPL viewer sources, enhanced under RTX defines):
+#   deferred/diffuseF.glsl           - gbuffer albedo fill + filmic grade
+#   deferred/bumpF.glsl              - gbuffer bump-mapped fill + filmic grade
+#   deferred/postDeferredTonemap.glsl- ACES tonemap + cinematic post-grade (contrast/vignette)
+#   effects/glowExtractF.glsl        - bloom extraction boost
+define RTX 1
+define RTX_CINEMATIC 1
+shader deferred/diffuseF.glsl f deferred/diffuseF.glsl
+shader deferred/bumpF.glsl f deferred/bumpF.glsl
+shader deferred/postDeferredTonemap.glsl f deferred/postDeferredTonemap.glsl
+shader effects/glowExtractF.glsl f effects/glowExtractF.glsl

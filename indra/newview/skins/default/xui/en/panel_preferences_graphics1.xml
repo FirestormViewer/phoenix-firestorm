@@ -1877,6 +1877,24 @@ If you do not understand the distinction then leave this control alone."
          top_pad="5"
          width="477"/>
     </panel>
+<!-- <Mko> Plugin-provided shader/rendering settings (populated at runtime). -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Shaders &amp; Plugins"
+     name="mko_plugin_settings">
+      <panel
+       follows="all"
+       height="400"
+       layout="topleft"
+       left="1"
+       top="5"
+       width="536"
+       name="mko_plugin_settings_container" />
+    </panel>
 </tab_container>
 
 <!-- These two check boxes are dummies and will never be displayed.  They are here so the control variables

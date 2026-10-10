@@ -27,6 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llviewerregion.h"
+#include "mkopluginmanager.h" // <Mko> shader-pack policy broadcast
 
 // linden libraries
 #include "indra_constants.h"
@@ -2629,6 +2630,7 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
 
     // copy features to lambda in case the region is deleted before the lambda is executed
     LLSD features = mSimulatorFeatures;
+    std::string region_name = getName();
 
     auto work = [=]()
         {
@@ -2682,6 +2684,16 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
             else
             {
                 gSavedSettings.setBOOL("GLTFEnabled", false);
+            }
+
+            // <Mko> Forward the grid's shader-pack policy (if any) to
+            // rendering plugins so supported grids can force a pack.
+            if (features.has("OpenSimExtras")
+                && features["OpenSimExtras"].has("manikineko-shader-policy"))
+            {
+                LLSD policy = features["OpenSimExtras"]["manikineko-shader-policy"];
+                policy["region"] = region_name;
+                MkoPluginManager::instance().broadcastToPlugins("MkoServerShaderPolicy", policy);
             }
 
             if (features.has("PBRTerrainTransformsEnabled"))
