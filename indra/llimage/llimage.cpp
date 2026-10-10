@@ -735,13 +735,13 @@ U8* LLImageBase::allocateData(S32 size)
         deleteData(); // virtual
         // <FS:Beq> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
         // mData = (U8*)ll_aligned_malloc_16(size);
-        if (sForceAllocationFailureForTesting)
+        if (sForceAllocationFailureForTesting) [[unlikely]]
         {
             sForceAllocationFailureForTesting = false;
             errno = ENOMEM;
             mData = nullptr;
         }
-        else
+        else [[likely]]
         {
             errno = 0;
             mData = static_cast<U8*>(ll_aligned_malloc_16(size));
