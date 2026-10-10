@@ -110,6 +110,18 @@
      label="People"
      name="tab-people">
 
+    <!-- <FS:BADGE> Linux-only LauncherEntry badge preference. -->
+    <check_box
+     control_name="FSShowUnreadLauncherBadge"
+     height="16"
+     label="Show unread IM count on compatible Linux desktop taskbars"
+     layout="topleft"
+     left="10"
+     name="FSShowUnreadLauncherBadge"
+     top="10"
+     tool_tip="Publishes the existing participant unread-message count; disabling this does not mark conversations read."
+     width="450"/>
+    <!-- Original upstream attribute: top="10"; moved below the Linux-only option. -->
     <check_box
      control_name="FSFlashOnMessage"
      height="16"
@@ -117,8 +129,9 @@
      layout="topleft"
      left="10"
      name="FSFlashOnMessage"
-     top="10"
+     top_pad="3"
      width="450"/>
+    <!-- </FS:BADGE> -->
     <check_box
      control_name="FSFlashOnObjectIM"
      enabled_control="FSFlashOnMessage"
