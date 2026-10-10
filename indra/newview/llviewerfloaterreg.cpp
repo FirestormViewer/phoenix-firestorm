@@ -213,6 +213,7 @@
 #include "fsfloaterposestand.h"
 #include "fsfloaterprotectedfolders.h"
 #include "fsfloaterradar.h"
+#include "fsfloaterscriptdialogcontainer.h" // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
 #include "fsfloatersearch.h"
 #include "fsfloatersplashscreensettings.h"
 #include "fsfloaterstatistics.h"
@@ -652,6 +653,7 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("fs_poser", "floater_fs_poser.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPoser>); // <FS:AR> [FIRE-30873]: Poser
     LLFloaterReg::add("fs_protectedfolders", "floater_fs_protectedfolders.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterProtectedFolders>);
     LLFloaterReg::add("fs_radar", "floater_fs_radar.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterRadar>);
+    LLFloaterReg::add("fs_script_dialog_container","floater_fs_script_dialog_container.xml",(LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterScriptDialogContainer>); // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
     LLFloaterReg::add("fs_splash_screen_settings", "floater_fs_splash_screen_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterSplashScreenSettings>);
     LLFloaterReg::add("fs_streamtitle", "floater_fs_streamtitle.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterStreamTitle>);
     LLFloaterReg::add("fs_streamtitlehistory", "floater_fs_streamtitlehistory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterStreamTitleHistory>);
