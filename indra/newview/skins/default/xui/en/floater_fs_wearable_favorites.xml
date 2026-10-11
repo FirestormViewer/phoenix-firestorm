@@ -27,6 +27,7 @@
         </floater.string>
 
         <panel
+         default_tab_group="1"
          follows="left|top|right"
          height="58"
          layout="topleft"
@@ -82,6 +83,7 @@
                  top_delta="0"
                  width="31"/>
                 <filter_editor
+                 tab_group="1"
                  follows="left|top|right"
                  height="25"
                  layout="topleft"
