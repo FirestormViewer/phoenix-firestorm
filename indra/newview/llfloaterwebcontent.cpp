@@ -101,10 +101,10 @@ bool LLFloaterWebContent::postBuild()
     // observe browser events
     mWebBrowser->addObserver( this );
 
-    // Hide the web browser initially so the plugin fail text links can be clicked if needed.
-    // A navigationi begin event will swap these around.
-    mWebBrowser->setVisible( false );
+    // <FS> Display the plugin fail text while the embedded browser is loading.
+    // A navigation begin event or size changed event will hide it again
     mPluginFailText->setVisible( true );
+    // </FS>
 
     // these buttons are always enabled
     mBtnReload->setEnabled( true );
@@ -318,11 +318,13 @@ void LLFloaterWebContent::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent
 
         set_current_url( url );
     }
+    else if(event == MEDIA_EVENT_SIZE_CHANGED)
+    {
+        mPluginFailText->setVisible( false ); // <FS/> Hide the plugin fail text as it's ready
+    }
     else if(event == MEDIA_EVENT_NAVIGATE_BEGIN)
     {
-        // hide the media fail text and bring the web browser to the front
-        mWebBrowser->setVisible( true );
-        mPluginFailText->setVisible( false );
+        mPluginFailText->setVisible( false ); // <FS/> Hide the plugin fail text if it is still visible
         // flags are sent with this event
         mBtnBack->setEnabled( self->getHistoryBackAvailable() );
         mBtnForward->setEnabled( self->getHistoryForwardAvailable() );
