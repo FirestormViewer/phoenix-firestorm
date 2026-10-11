@@ -1730,7 +1730,7 @@ https://secondlife.com/viewer-access-faq
 		[[MARKETPLACE_CREATE_STORE_URL] マーケットプレイスストア]がエラーを返しています。
 	</string>
 	<string name="InventoryMarketplaceError">
-		マーケットプレイスの出品リストを開くときにエラーが発生しました。引き続きこのメッセージを受信するには、Second Lifeのサポート（http://support.secondlife.com）にお問い合わせください
+		マーケットプレイスの出品リストを開くときにエラーが発生しました。引き続きこのメッセージを受信するには、Second Lifeのサポート（https://support.secondlife.com）にお問い合わせください
 	</string>
 	<string name="InventoryMarketplaceConnectionError">
 		マーケットプレイス出品時の接続に失敗しました。
@@ -3185,8 +3185,8 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="StreamtitleNowPlaying">再生中： [TITLE]</string>
 	<!-- Drivers support/update pages -->
 	<string name="IntelDriverPage">https://www.intel.co.jp/content/www/jp/ja/support/detect.html</string>
-	<string name="NvidiaDriverPage">https://www.nvidia.com/Download/index.aspx?lang=ja-jp</string>
-	<string name="AMDDriverPage">https://www.amd.com/ja/support</string>
+	<string name="NvidiaDriverPage">https://www.nvidia.com/ja-jp/drivers/</string>
+	<string name="AMDDriverPage">https://www.amd.com/ja/support/download/drivers.html</string>
 	<!-- OSMessageBox messages -->
 	<string name="MBCmdLineError">
 		コマンドラインにエラーが見つかりました。

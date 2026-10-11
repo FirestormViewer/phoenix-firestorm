@@ -43,7 +43,7 @@
                 <string>agent</string>
             </array>
         <key>loginpage</key>
-            <string>http://phoenixviewer.com/app/loginV3/</string>
+            <string>https://phoenixviewer.com/app/loginV3/</string>
         <key>loginuri</key>
             <array>
                 <string>https://login.aditi.lindenlab.com/cgi-bin/login.cgi</string>
@@ -76,7 +76,7 @@
             <string>agent</string>
         </array>
         <key>loginpage</key>
-        <string>http://phoenixviewer.com/app/loginV3/</string>
+        <string>https://phoenixviewer.com/app/loginV3/</string>
         <key>loginuri</key>
         <array>
             <string>https://login.agni.lindenlab.com/cgi-bin/login.cgi</string>
@@ -84,7 +84,7 @@
         <key>name</key>
         <string>util.agni.lindenlab.com</string>
         <key>slurl_base</key>
-        <string>http://maps.secondlife.com/secondlife/</string>
+        <string>https://maps.secondlife.com/secondlife/</string>
         <key>system_grid</key>
         <integer>1</integer>
         <key>web_profile_url</key>

@@ -312,11 +312,11 @@ bool LLFloaterModelPreview::postBuild()
     std::string validate_url;
     if (LLGridManager::getInstance()->isInSLMain())
     {
-        validate_url = "http://secondlife.com/my/account/mesh.php";
+        validate_url = "https://secondlife.com/my/account/mesh.php";
     }
     else if (LLGridManager::getInstance()->isInSLBeta())
     {
-        validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php", current_grid.c_str());
+        validate_url = llformat("https://secondlife.%s.lindenlab.com/my/account/mesh.php", current_grid.c_str());
     }
 #ifdef OPENSIM // <FS:AW optional opensim support>
     else

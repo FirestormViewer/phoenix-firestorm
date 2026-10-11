@@ -614,7 +614,7 @@ Voulez-vous vraiment continuer ?
 	<notification name="PromptGoToEventsPage">
 		Aller à la page web de [CURRENT_GRID] réservée aux événements ?
 		<url name="url">
-			http://secondlife.com/events/?lang=fr-FR
+			https://secondlife.com/my/community/events/?lang=fr-FR
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
@@ -654,7 +654,7 @@ Voulez-vous arrêter le client et le relancer manuellement afin d'appliquer cett
 	<notification name="GoToAuctionPage">
 		Aller à la page web de [CURRENT_GRID] pour voir le détail des enchères ou enchérir ?
 		<url name="url">
-			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
+			https://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
@@ -842,7 +842,7 @@ Veuillez mettre tous les objets que vous souhaitez acquérir dans la même régi
 
 Aller sur [_URL] pour obtenir des informations sur l&apos;achat de L$ ?
 		<url name="url">
-			http://secondlife.com/app/currency/?lang=fr-FR
+			https://secondlife.com/app/currency/?lang=fr-FR
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
@@ -1794,7 +1794,7 @@ Veuillez choisir un objet à vendre et réessayer.
 	</notification>
 	<notification name="RequiredUpdate">
 		La version [VERSION] est nécessaire pour vous connecter.
-Veuillez télécharger la dernière version sur https://secondlife.com/support/downloads/
+Veuillez télécharger la dernière version sur https://www.firestormviewer.org/choose-your-platform/
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PauseForUpdate">
@@ -1827,7 +1827,7 @@ URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Ouvrir mon navigateur pour consulter une page web" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
-		Accéder à votre [http://secondlife.com/account/ Page d&apos;accueil] pour gérer votre compte ?
+		Accéder à votre [https://secondlife.com/my/account/ Page d&apos;accueil] pour gérer votre compte ?
 		<usetemplate ignoretext="Lancer mon navigateur pour gérer mon compte" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
@@ -2005,7 +2005,7 @@ jusqu'à [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/membership.php? 
 	<notification name="SetDisplayNameSuccess">
 		Bonjour [DISPLAY_NAME],
 
-Comme dans la vie réelle, il faut quelque temps aux gens pour qu&apos;ils se familiarisent avec un nouveau nom. Veuillez compter quelques jours avant la [http://wiki.secondlife.com/wiki/Setting_your_display_name mise à jour de votre nom] au niveau des objets, scripts, recherches, etc.
+Comme dans la vie réelle, il faut quelque temps aux gens pour qu&apos;ils se familiarisent avec un nouveau nom. Veuillez compter quelques jours avant la [https://wiki.secondlife.com/wiki/Setting_your_display_name mise à jour de votre nom] au niveau des objets, scripts, recherches, etc.
 	</notification>
 	<notification name="SetDisplayNameBlocked">
 		Impossible de changer de nom d&apos;affichage. Si vous pensez qu&apos;il s&apos;agit d&apos;une erreur, contactez l&apos;Assistance du réseau.
@@ -2024,7 +2024,7 @@ Veuillez essayer avec un nom plus court.
 	<notification name="AgentDisplayNameUpdateThresholdExceeded">
 		Le délai au bout duquel vous pouvez changer de nom d&apos;affichage n&apos;est pas encore écoulé.
 
-Voir http://wiki.secondlife.com/wiki/Setting_your_display_name
+Voir https://wiki.secondlife.com/wiki/Setting_your_display_name
 
 Veuillez réessayer ultérieurement.
 	</notification>
@@ -2234,7 +2234,7 @@ Souhaitez-vous continuer ?
 	<notification name="RegionEntryAccessBlocked_AdultsOnlyContent">
 		La région que vous essayez de visiter comporte du contenu [REGIONMATURITY] uniquement accessible aux adultes.
 		<url name="url">
-			http://community.secondlife.com/t5/Base-de-connaissances/Cat%C3%A9gories-niveaux-de-contenu/ta-p/700311
+			https://community.secondlife.com/t5/Base-de-connaissances/Cat%C3%A9gories-niveaux-de-contenu/ta-p/700311
 		</url>
 		<usetemplate ignoretext="Passage à une autre région : la région que vous essayez de visiter comporte du contenu uniquement accessible aux adultes." name="okcancelignore" notext="Fermer" yestext="Accéder à la Base de connaissances"/>
 	</notification>
@@ -2263,7 +2263,7 @@ Souhaitez-vous continuer ?
 	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
 		La région que vous essayez de visiter comporte du contenu [REGIONMATURITY] uniquement accessible aux adultes.
 		<url name="url">
-			http://community.secondlife.com/t5/Base-de-connaissances/Cat%C3%A9gories-niveaux-de-contenu/ta-p/700311
+			https://community.secondlife.com/t5/Base-de-connaissances/Cat%C3%A9gories-niveaux-de-contenu/ta-p/700311
 		</url>
 		<usetemplate ignoretext="Téléportation : la région que vous essayez de visiter comporte du contenu uniquement accessible aux adultes." name="okcancelignore" notext="Fermer" yestext="Accéder à la Base de connaissances"/>
 	</notification>
@@ -2294,7 +2294,7 @@ Souhaitez-vous continuer ?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="RegionTPSpecialUsageBlocked">
-		Impossible de pénétrer dans la région. « [REGION_NAME] » est une région de jeux d&apos;adresse et vous devez satisfaire à certains critères pour y pénétrer. Pour en savoir plus, consultez la page [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life FAQ sur les jeux d&apos;adresse].
+		Impossible de pénétrer dans la région. « [REGION_NAME] » est une région de jeux d&apos;adresse et vous devez satisfaire à certains critères pour y pénétrer. Pour en savoir plus, consultez la page [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life FAQ sur les jeux d&apos;adresse].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PreferredMaturityChanged">
@@ -2312,7 +2312,7 @@ Souhaitez-vous continuer ?
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
 		Seuls les adultes sont autorisés à revendiquer ce terrain.
 		<url name="url">
-			http://community.secondlife.com/t5/Base-de-connaissances/Cat%C3%A9gories-niveaux-de-contenu/ta-p/700311
+			https://community.secondlife.com/t5/Base-de-connaissances/Cat%C3%A9gories-niveaux-de-contenu/ta-p/700311
 		</url>
 		<usetemplate ignoretext="Seuls les adultes sont autorisés à revendiquer ce terrain." name="okcancelignore" notext="Fermer" yestext="Accéder à la Base de connaissances"/>
 	</notification>
@@ -2337,7 +2337,7 @@ Souhaitez-vous continuer ?
 	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
 		Seuls les adultes sont autorisés à acheter ce terrain.
 		<url name="url">
-			http://community.secondlife.com/t5/Base-de-connaissances/Cat%C3%A9gories-niveaux-de-contenu/ta-p/700311
+			https://community.secondlife.com/t5/Base-de-connaissances/Cat%C3%A9gories-niveaux-de-contenu/ta-p/700311
 		</url>
 		<usetemplate ignoretext="Seuls les adultes sont autorisés à acheter ce terrain." name="okcancelignore" notext="Fermer" yestext="Accéder à la Base de connaissances"/>
 	</notification>
@@ -2538,7 +2538,7 @@ Déplacer les objets de l&apos;inventaire ?
 		Vous n&apos;êtes autorisé à copier aucun élément dans cet objet.
 	</notification>
 	<notification name="WebLaunchAccountHistory">
-		Accéder à votre [http://secondlife.com/account/ Page d&apos;accueil] pour consulter l&apos;historique de votre compte ?
+		Accéder à votre [https://secondlife.com/my/account/ Page d&apos;accueil] pour consulter l&apos;historique de votre compte ?
 		<usetemplate ignoretext="Lancer mon navigateur pour consulter l&apos;historique de mon compte" name="okcancelignore" notext="Annuler" yestext="Aller sur cette page"/>
 	</notification>
 	<notification name="ConfirmAddingChatParticipants">
@@ -2637,9 +2637,9 @@ Les descriptions précises nous permettent de traiter les rapports plus rapideme
 
 Il semble que vous souhaitiez reporter une infraction à des droits de propriété intellectuelle. Pour signaler correctement cette infraction :
 
-(1) Remplissez un rapport d&apos;infraction. Vous pouvez soumettre un rapport d&apos;infraction si vous pensez qu&apos;un résident exploite le système de droits de [CURRENT_GRID], par exemple en utilisant un CopyBot ou des outils similaires pour enfreindre des droits de propriété intellectuelle. Notre équipe chargée des infractions mènera une enquête et prendra les mesures nécessaires à l&apos;encontre du résident non respectueux des [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Conditions d&apos;utilisation] ou des [http://secondlife.com/corporate/cs.php Règles communautaires]. Sachez toutefois que l&apos;équipe chargée des infractions ne supprimera pas de contenu à l&apos;intérieur de [CURRENT_GRID].
+(1) Remplissez un rapport d&apos;infraction. Vous pouvez soumettre un rapport d&apos;infraction si vous pensez qu&apos;un résident exploite le système de droits de [CURRENT_GRID], par exemple en utilisant un CopyBot ou des outils similaires pour enfreindre des droits de propriété intellectuelle. Notre équipe chargée des infractions mènera une enquête et prendra les mesures nécessaires à l&apos;encontre du résident non respectueux des [CURRENT_GRID] [https://secondlife.com/corporate/tos.php Conditions d&apos;utilisation] ou des [https://secondlife.com/corporate/cs.php Règles communautaires]. Sachez toutefois que l&apos;équipe chargée des infractions ne supprimera pas de contenu à l&apos;intérieur de [CURRENT_GRID].
 
-(2) Demandez à ce que du contenu à l&apos;intérieur de Second Life soit supprimé. Pour demander à ce que du contenu soit supprimé de [CURRENT_GRID], vous devez soumettre un rapport d&apos;infraction valide, tel que fourni dans notre [http://secondlife.com/corporate/dmca.php Règlement contre les violations des droits d&apos;auteur].
+(2) Demandez à ce que du contenu à l&apos;intérieur de Second Life soit supprimé. Pour demander à ce que du contenu soit supprimé de [CURRENT_GRID], vous devez soumettre un rapport d&apos;infraction valide, tel que fourni dans notre [https://secondlife.com/corporate/dmca.php Règlement contre les violations des droits d&apos;auteur].
 
 Si vous souhaitez toujours reporter cette infraction, veuillez fermer cette fenêtre et soumettre votre rapport.  Vous devrez peut-être sélectionner la catégorie CopyBot ou exploitation abusive des droits.
 
@@ -2822,7 +2822,7 @@ Les paramètres ne seront peut-être pas enregistrés en utilisant les textures 
 
 [_URL]
 		<url name="url" option="0">
-			https://secondlife.com/account/index.php?lang=fr
+			https://secondlife.com/my/account/index.php?lang=fr-FR
 		</url>
 		<usetemplate ignoretext="Mes informations de paiement ne sont pas enregistrées" name="okcancelignore" notext="Non" yestext="Oui"/>
 	</notification>
@@ -3133,7 +3133,7 @@ Voulez-vous autoriser [APP_NAME] à poster sur votre compte Flickr?
 	</notification>
 	<notification name="NoQuickTime">
 		Le logiciel Apple QuickTime ne semble pas installé sur votre système.
-Pour voir les vidéos sur les terrains qui le permettent, allez sur le [http://www.apple.com/quicktime site de QuickTime] et installez le lecteur QuickTime.
+Pour voir les vidéos sur les terrains qui le permettent, allez sur le [https://www.apple.com/quicktime site de QuickTime] et installez le lecteur QuickTime.
 	</notification>
 	<notification name="NoPlugin">
 		Aucun Media Plugin n&apos;a été trouvé pour prendre en charge [MIME_TYPE].  Les médias de ce type ne sont pas disponibles.
@@ -3613,7 +3613,7 @@ N&apos;autorisez pas cet accès si vous ne comprenez pas entièrement pourquoi l
 
 Votre solde en L$ sera mis à jour une fois le traitement terminé. Si le traitement prend plus de 20 minutes, il est possible que votre transaction soit annulée. Dans ce cas, le montant de l&apos;achat sera crédité sur votre solde en US$.
 
-Vous pouvez consulter le statut de votre paiement à la page Historique de mes transactions sur votre [http://secondlife.com/account/ Page d&apos;accueil]
+Vous pouvez consulter le statut de votre paiement à la page Historique de mes transactions sur votre [https://secondlife.com/my/account/ Page d&apos;accueil]
 	</notification>
 	<notification name="FirstOverrideKeys">
 		Vos mouvements sont maintenant pris en charge par un objet.

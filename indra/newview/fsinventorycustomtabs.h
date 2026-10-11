@@ -17,7 +17,7 @@
  * Lesser General Public License for more details.
  *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
- * http://www.firestormviewer.org
+ * https://www.firestormviewer.org
  * $/LicenseInfo$
  */
 

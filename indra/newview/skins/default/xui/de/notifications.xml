@@ -624,7 +624,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?
 	<notification name="PromptGoToEventsPage">
 		Zur [CURRENT_GRID] Events-Webseite?
 		<url name="url">
-			http://secondlife.com/events/?lang=de-DE
+			https://secondlife.com/my/community/events/?lang=de-DE
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
@@ -664,7 +664,7 @@ Möchten Sie den Viewer schließen und anschließend manuell neu starten, um die
 	<notification name="GoToAuctionPage">
 		Zur [CURRENT_GRID]-Webseite, um Auktionen anzuzeigen oder ein Gebot abzugeben?
 		<url name="url">
-			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
+			https://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
@@ -837,7 +837,7 @@ Verschieben Sie alle betreffenden Objekte in dieselbe Region.
 
 [_URL] für Informationen zum Kauf von L$ öffnen?
 		<url name="url">
-			http://secondlife.com/app/currency/?lang=de-DE
+			https://secondlife.com/app/currency/?lang=de-DE
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
@@ -1837,7 +1837,7 @@ Geben Sie das Objekt zum Verkauf frei und versuchen Sie es erneut.
 	</notification>
 	<notification name="RequiredUpdate">
 		Für die Anmeldung ist Version [VERSION] erforderlich. 
-Bitte laden Sie die Datei unter https://secondlife.com/support/downloads/ herunter.
+Bitte laden Sie die Datei unter https://www.firestormviewer.org/choose-your-platform/ herunter.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PauseForUpdate">
@@ -1871,7 +1871,7 @@ URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Meinen Browser starten, um eine Webseite anzuzeigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
-		Möchten Sie Ihre [http://secondlife.com/account/ Startseite] aufrufen, um Ihr Konto zu verwalten?
+		Möchten Sie Ihre [https://secondlife.com/my/account/ Startseite] aufrufen, um Ihr Konto zu verwalten?
 		<usetemplate ignoretext="Meinen Browser starten, um mein Konto zu verwalten" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
@@ -2049,7 +2049,7 @@ erlauben bis zu [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/membershi
 	<notification name="SetDisplayNameSuccess">
 		Hallo [DISPLAY_NAME],
 
-wir bitten Sie um Geduld, während Ihr Name im System geändert wird. Es kann einige Tage dauern, bis Ihr [http://wiki.secondlife.com/wiki/Setting_your_display_name neuer Name] in Objekten, Skripts, Suchen usw. erscheint.
+wir bitten Sie um Geduld, während Ihr Name im System geändert wird. Es kann einige Tage dauern, bis Ihr [https://wiki.secondlife.com/wiki/Setting_your_display_name neuer Name] in Objekten, Skripts, Suchen usw. erscheint.
 	</notification>
 	<notification name="SetDisplayNameBlocked">
 		Ihr Anzeigename kann leider nicht geändert werden. Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten haben, wenden Sie sich bitte an den Support des entsprechenden Grids.
@@ -2068,7 +2068,7 @@ Wählen Sie einen kürzeren Namen.
 	<notification name="AgentDisplayNameUpdateThresholdExceeded">
 		Sie müssen leider noch ein bisschen warten, bevor Sie Ihren Anzeigenamen ändern können.
 
-Weitere Informationen finden Sie unter http://wiki.secondlife.com/wiki/Setting_your_display_name.
+Weitere Informationen finden Sie unter https://wiki.secondlife.com/wiki/Setting_your_display_name.
 
 Versuchen Sie es später erneut.
 	</notification>
@@ -2282,7 +2282,7 @@ Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.
 	<notification name="RegionEntryAccessBlocked_AdultsOnlyContent">
 		Die Region, die Sie besuchen möchten, enthält [REGIONMATURITY]-Inhalte, die nur für Erwachsene zugänglich sind.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
 		</url>
 		<usetemplate ignoretext="Regionswechsel: Die Region, die Sie besuchen möchten, enthält Inhalte, die nur für Erwachsene zugänglich sind." name="okcancelignore" notext="Schließen" yestext="Zur Knowledge Base gehen"/>
 	</notification>
@@ -2313,7 +2313,7 @@ Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.
 	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
 		Die Region, die Sie besuchen möchten, enthält [REGIONMATURITY]-Inhalte, die nur für Erwachsene zugänglich sind.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
 		</url>
 		<usetemplate ignoretext="Teleport: Die Region, die Sie besuchen möchten, enthält Inhalte, die nur für Erwachsene zugänglich sind." name="okcancelignore" notext="Schließen" yestext="Zur Knowledge Base gehen"/>
 	</notification>
@@ -2344,7 +2344,7 @@ Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="RegionTPSpecialUsageBlocked">
-		Betreten der Region nicht gestattet. „[REGION_NAME]“ ist eine Region für Geschicklichkeitsspiele. Der Zugang ist Einwohnern vorbehalten, die bestimmte Kriterien erfüllen. Weitere Details finden Sie unter [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
+		Betreten der Region nicht gestattet. „[REGION_NAME]“ ist eine Region für Geschicklichkeitsspiele. Der Zugang ist Einwohnern vorbehalten, die bestimmte Kriterien erfüllen. Weitere Details finden Sie unter [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PreferredMaturityChanged">
@@ -2364,7 +2364,7 @@ Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
 		Nur Erwachsene können dieses Land in Besitz nehmen.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
 		</url>
 		<usetemplate ignoretext="Nur Erwachsene können dieses Land in Besitz nehmen." name="okcancelignore" notext="Schließen" yestext="Zur Knowledge Base gehen"/>
 	</notification>
@@ -2391,7 +2391,7 @@ Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.
 	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
 		Nur Erwachsene können dieses Land kaufen.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
 		</url>
 		<usetemplate ignoretext="Nur Erwachsene können dieses Land kaufen." name="okcancelignore" notext="Schließen" yestext="Zur Knowledge Base gehen"/>
 	</notification>
@@ -2601,7 +2601,7 @@ Inventarobjekt(e) verschieben?
 		Sie haben keine Berechtigung zum Kopieren von Elementen in diesem Objekt.
 	</notification>
 	<notification name="WebLaunchAccountHistory">
-		Möchten Sie Ihre [http://secondlife.com/account/ Startseite] aufrufen, um Ihre Konto-Statistik anzuzeigen?
+		Möchten Sie Ihre [https://secondlife.com/my/account/ Startseite] aufrufen, um Ihre Konto-Statistik anzuzeigen?
 		<usetemplate ignoretext="Meinen Browser starten, um meine Konto-Statistik anzuzeigen" name="okcancelignore" notext="Abbrechen" yestext="Gehe zu Seite"/>
 	</notification>
 	<notification name="ConfirmAddingChatParticipants">
@@ -2696,9 +2696,9 @@ Eine möglichst genaue Beschreibung mit Namen und Einzelheiten hilft uns, Fälle
 
 Sie melden eine Urheberrechtsverletzung. Sind Sie wirklich sicher, dass Sie eine Verletzung des Urheberrechts melden möchten?
 
-1. Missbrauch melden. Wenn Sie der Meinung sind, ein Einwohner nutzt das Berechtigungssystem von [CURRENT_GRID] auf unerlaubte Weise zu seinem Vorteil aus, indem er zum Beispiel einen CopyBot oder ähnliche Kopiertools verwendet und damit eine Urheberrechtsverletzung begeht, können Sie diesen Missbrauch melden. Das Missbrauchsteam untersucht gemeldete Verstöße gegen die  [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Servicebedingungen] oder [http://secondlife.com/corporate/cs.php Community-Standards] und verhängt entsprechende Maßnahmen. Das Missbrauchsteam ist jedoch nicht dafür zuständig, Inhalte aus der  [CURRENT_GRID]-Welt zu entfernen und reagiert auch nicht auf entsprechende Anfragen.
+1. Missbrauch melden. Wenn Sie der Meinung sind, ein Einwohner nutzt das Berechtigungssystem von [CURRENT_GRID] auf unerlaubte Weise zu seinem Vorteil aus, indem er zum Beispiel einen CopyBot oder ähnliche Kopiertools verwendet und damit eine Urheberrechtsverletzung begeht, können Sie diesen Missbrauch melden. Das Missbrauchsteam untersucht gemeldete Verstöße gegen die  [CURRENT_GRID] [https://secondlife.com/corporate/tos.php Servicebedingungen] oder [https://secondlife.com/corporate/cs.php Community-Standards] und verhängt entsprechende Maßnahmen. Das Missbrauchsteam ist jedoch nicht dafür zuständig, Inhalte aus der  [CURRENT_GRID]-Welt zu entfernen und reagiert auch nicht auf entsprechende Anfragen.
 
-2. Der DMCA oder das Entfernen von Inhalten. Sie können das Entfernen von Inhalten aus  [CURRENT_GRID] beantragen. Dazu MÜSSEN Sie eine Urheberrechtsverletzung gemäß den in unserer DMCA-Richtlinie unter  [http://secondlife.com/corporate/dmca.php] dargelegten Anweisungen einreichen.
+2. Der DMCA oder das Entfernen von Inhalten. Sie können das Entfernen von Inhalten aus  [CURRENT_GRID] beantragen. Dazu MÜSSEN Sie eine Urheberrechtsverletzung gemäß den in unserer DMCA-Richtlinie unter  [https://secondlife.com/corporate/dmca.php] dargelegten Anweisungen einreichen.
 
 Wenn Sie mit der Missbrauchmeldung jetzt fortfahren möchten, schließen Sie bitte dieses Fenster und senden Sie Ihren Bericht ein.  Möglicherweise müssen Sie Kategorie „CopyBot oder Berechtigungs-Exploit“ auswählen.
 
@@ -2877,7 +2877,7 @@ Die Einstellungen können nicht mit lokalen Texturen gespeichert werden.
 
 [_URL]
 		<url name="url" option="0">
-			https://secondlife.com/account/index.php?lang=de
+			https://secondlife.com/my/account/index.php?lang=de-DE
 		</url>
 		<usetemplate ignoretext="Meine Zahlungsinformation ist nicht gespeichert" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
@@ -3106,7 +3106,7 @@ Wählen Sie eine kleinere Landfläche.
 	</notification>
 	<notification name="NoQuickTime">
 		AppleQuickTime ist auf Ihrem System anscheinend nicht installiert.
-Laden Sie QuickTime von der [http://www.apple.com/quicktime QuickTime-Webseite]  herunter, um auf Parzellen, die diese Funktion unterstützen, Streaming-Inhalte wiederzugeben.
+Laden Sie QuickTime von der [https://www.apple.com/quicktime QuickTime-Webseite]  herunter, um auf Parzellen, die diese Funktion unterstützen, Streaming-Inhalte wiederzugeben.
 	</notification>
 	<notification name="NoPlugin">
 		Es wurde kein Medien-Plugin gefunden, das &quot;[MIME_TYPE]&quot; ausführen kann.  Medien dieses Dateityps sind nicht verfügbar.
@@ -3592,7 +3592,7 @@ Erlauben Sie keinen Zugriff wenn Sie sich nicht vollständig sicher sind, warum 
 
 Ihr L$-Kontostand wird aktualisiert, sobald die Bearbeitung abgeschlossen ist. Falls die Bearbeitung länger als 20 min dauert, ist es möglich, dass Ihre Transaktion abgebrochen wird. In diesem Fall wird der Kaufbetrag in US$ auf Ihrem Konto gutgeschrieben.
 
-Der Zahlungsstatus kann auf Ihrer [http://secondlife.com/account/ Startseite] unter Transaktionsübersicht überprüft werden.
+Der Zahlungsstatus kann auf Ihrer [https://secondlife.com/my/account/ Startseite] unter Transaktionsübersicht überprüft werden.
 	</notification>
 	<notification name="FirstOverrideKeys">
 		Ihre Bewegungstasten werden jetzt von einem Objekt gesteuert.

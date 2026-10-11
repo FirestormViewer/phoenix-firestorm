@@ -46,7 +46,7 @@
 		</layout_panel>
 		<layout_panel name="layout_panel_msg">
 			<text name="currency_links">
-				[http://www.secondlife.com/my/account/payment_method_management.php ödəniş üsulu] | [http://www.secondlife.com/my/account/currency.php pul]
+				[https://www.secondlife.com/my/account/payment_method_management.php ödəniş üsulu] | [https://www.secondlife.com/my/account/currency.php pul]
 			</text>
 			<text name="exchange_rate_note">
 				Yeni məzənnəni görmək üçün məbləği yenidən daxil edin.

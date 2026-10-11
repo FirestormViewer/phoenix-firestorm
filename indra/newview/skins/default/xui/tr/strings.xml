@@ -201,14 +201,14 @@ Ses Sunucusu Sürümü: [VOICE_VERSION]
 		Second Life Beta Test Ağı (Aditi)
 	</string>
 	<string name="ViewerDownloadURL">
-		http://secondlife.com/download
+		https://www.firestormviewer.org/choose-your-platform/
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Kullandığınız görüntüleyici ile artık Second Life&apos;a erişemezsiniz. Yeni bir görüntüleyiciyi karşıdan yüklemek için lütfen şu sayfayı ziyaret edin:
-http://secondlife.com/download
+https://www.firestormviewer.org/choose-your-platform/
 
 Daha fazla bilgi edinmek için asağıdaki SSS sayfamızı ziyaret edin:
-http://secondlife.com/viewer-access-faq
+https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
 		Opsiyonel görüntüleyici güncelleştirmesi mevcut: [VERSION]
@@ -228,13 +228,13 @@ Ayrıca lütfen Caps Lock tuşuna basmadığınıza emin olun.
 	</string>
 	<string name="LoginFailedPasswordChanged">
 		Güvenlik önlemi olarak parolanız değiştirildi.
-Lütfen hesap sayfanıza gidin: http://secondlife.com/password
+Lütfen hesap sayfanıza gidin: https://secondlife.com/password
 ve parolanızı sıfırlamak için güvenlik sorusunu yanıtlayın.
 Bu sorun için özür dileriz.
 	</string>
 	<string name="LoginFailedPasswordReset">
 		Sistemimizde bazı değişiklikler yaptık, parolanızı sıfırlamanız gerekecek.
-Lütfen hesap sayfanıza gidin: http://secondlife.com/password
+Lütfen hesap sayfanıza gidin: https://secondlife.com/password
 ve parolanızı sıfırlamak için güvenlik sorusunu yanıtlayın.
 Bu sorun için özür dileriz.
 	</string>
@@ -259,7 +259,7 @@ Pasifik Saati ile [TIME].
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		Talebinizi şu anda tamamlayamıyoruz. 
-Lütfen yardım almak için http://support.secondlife.com adresinden Second Life destek bölümüyle iletişime geçin.
+Lütfen yardım almak için https://support.secondlife.com adresinden Second Life destek bölümüyle iletişime geçin.
 	</string>
 	<string name="LoginFailedTransformError">
 		Oturum açılması sırasında veri tutarsızlığı saptandı.
@@ -731,7 +731,7 @@ kartlarına eklenebilir.
 	</string>
 	<string name="AssetUploadRequestInvalid">
 		Karşıya yükleme talebinde hata. Bu sorunu çözmek için lütfen 
-http://secondlife.com/support adresini ziyaret edin.
+https://support.secondlife.com adresini ziyaret edin.
 	</string>
 	<string name="SettingValidationError">
 		[NAME] ayarlarının içeri aktarılması için doğrulama başarısız oldu
@@ -1512,7 +1512,7 @@ http://secondlife.com/support adresini ziyaret edin.
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
 	</string>
 	<string name="MarketplaceURL_CreateStore">
-		http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
+		https://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
 	</string>
 	<string name="MarketplaceURL_Dashboard">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard
@@ -1560,7 +1560,7 @@ http://secondlife.com/support adresini ziyaret edin.
 	</string>
 	<string name="InventoryMarketplaceError">
 		Pazaryeri İlanları açılırken bir hata meydana geldi.
-Bu mesaj size gelmeye devam ederse lütfen http://support.secondlife.com adresinden Second Life destek ekibine başvurun.
+Bu mesaj size gelmeye devam ederse lütfen https://support.secondlife.com adresinden Second Life destek ekibine başvurun.
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Pazaryeri İlanları klasörünüz boş.
@@ -2884,17 +2884,17 @@ Bu mesaj size gelmeye devam ederse lütfen http://support.secondlife.com adresin
 		Ortamı Oynat/Durdur
 	</string>
 	<string name="IntelDriverPage">
-		http://www.intel.com/p/en_US/support/detect/graphics
+		https://www.intel.com/content/www/us/en/support/detect.html
 	</string>
 	<string name="NvidiaDriverPage">
-		http://www.nvidia.com/Download/index.aspx?lang=en-us
+		https://www.nvidia.com/tr-tr/drivers/
 	</string>
 	<string name="AMDDriverPage">
-		http://support.amd.com/us/Pages/AMDSupportHub.aspx
+		https://www.amd.com/en/support/download/drivers.html
 	</string>
 	<string name="MBCmdLineError">
 		Komut satırı ayrıştırılırken bir hata oluştu.
-Lütfen bakınız: http://wiki.secondlife.com/wiki/Client_parameters
+Lütfen bakınız: https://wiki.secondlife.com/wiki/Client_parameters
 Hata:
 	</string>
 	<string name="MBCmdLineUsg">
@@ -5740,7 +5740,7 @@ Düzenleyici yolunu çift tırnakla çevrelemeyi deneyin.
 		Normal
 	</string>
 	<string name="Pathfinding_Wiki_URL">
-		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
+		https://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
 	</string>
 	<string name="Pathfinding_Object_Attr_None">
 		Hiçbiri

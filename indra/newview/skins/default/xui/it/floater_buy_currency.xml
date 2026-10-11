@@ -58,7 +58,7 @@
 		</layout_panel>
 		<layout_panel name="layout_panel_msg">
 			<text name="currency_links">
-				[http://www.secondlife.com/my/account/payment_method_management.php metodo di pagamento] | [http://www.secondlife.com/my/account/currency.php valuta]
+				[https://www.secondlife.com/my/account/payment_method_management.php metodo di pagamento] | [https://www.secondlife.com/my/account/currency.php valuta]
 			</text>
 			<text name="exchange_rate_note">
 				Inserisci di nuovo l'importo per vedere l'ultimo tasso di cambio.

@@ -46,7 +46,7 @@
 		L$ [AMT]
 	</text>
 	<text name="currency_links">
-		[http://www.secondlife.com/my/account/payment_method_management.php payment method] | [http://www.secondlife.com/my/account/currency.php currency]
+		[https://www.secondlife.com/my/account/payment_method_management.php payment method] | [https://www.secondlife.com/my/account/currency.php currency]
 	</text>
 	<text name="exchange_rate_note">
 		Indtast beløbet for at se nyeste valutakurs.

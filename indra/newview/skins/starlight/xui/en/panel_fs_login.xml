@@ -19,7 +19,7 @@
   </string>
   <panel.string
       name="forgot_password_url">
-    http://secondlife.com/account/request.php
+    https://secondlife.com/account/request.php
   </panel.string>
   <string name="ServerComboTooltip">
     An existing grid or a grid URI

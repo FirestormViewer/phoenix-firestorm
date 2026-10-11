@@ -213,10 +213,10 @@ Version serveur vocal : [VOICE_VERSION]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Le client que vous utilisez ne permet plus d&apos;accéder à Second Life. Téléchargez un nouveau client à la page suivante :
-http://secondlife.com/download
+https://www.firestormviewer.org/choose-your-platform/
 
 Pour plus d&apos;informations, consultez la page FAQ ci-dessous :
-http://secondlife.com/viewer-access-faq
+https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">
 		Le processus de connexion n'a pas abouti en raison d'un problème du système. Réessayez dans quelques minutes.
@@ -241,13 +241,13 @@ Assurez-vous également que la touche Verr. maj n&apos;est pas activée.
 	</string>
 	<string name="LoginFailedPasswordChanged">
 		Votre mot de passe a été modifié pour des raisons de sécurité.
-Veuillez accéder à votre compte à la page http://secondlife.com/password
+Veuillez accéder à votre compte à la page https://secondlife.com/password
 et répondre à la question de sécurité afin de réinitialiser votre mot de passe.
 Nous vous prions de nous excuser pour la gêne occasionnée.
 	</string>
 	<string name="LoginFailedPasswordReset">
 		Vous allez devoir réinitialiser votre mot de passe suite à quelques changements effectués sur notre système.
-Pour cela, accédez à votre compte à la page http://secondlife.com/password
+Pour cela, accédez à votre compte à la page https://secondlife.com/password
 et répondez à la question de sécurité. Votre mot de passe sera réinitialisé.
 Nous vous prions de nous excuser pour la gêne occasionnée.
 	</string>
@@ -272,7 +272,7 @@ l&apos;Assistance à l&apos;adresse suivante : support@secondlife.com.
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		Impossible de traiter votre demande à l&apos;heure actuelle.
-Pour obtenir de l&apos;aide, veuillez contacter l&apos;Assistance Second Life à la page suivante : http://support.secondlife.com.
+Pour obtenir de l&apos;aide, veuillez contacter l&apos;Assistance Second Life à la page suivante : https://support.secondlife.com.
 	</string>
 	<string name="LoginFailedTransformError">
 		Incohérence des données lors de la connexion.
@@ -808,7 +808,7 @@ peuvent être joints aux notes.
 	</string>
 	<string name="AssetUploadRequestInvalid">
 		Erreur dans la demande de chargement. Veuillez consulter le site :
-http://secondlife.com/support pour vous aider à résoudre ce problème.
+https://support.secondlife.com pour vous aider à résoudre ce problème.
 	</string>
 	<string name="SettingValidationError">
 		Échec de la validation pour l&apos;importation des paramètres [NAME]
@@ -1683,7 +1683,7 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
 	</string>
 	<string name="MarketplaceURL_CreateStore">
-		http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
+		https://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
 	</string>
 	<string name="MarketplaceURL_Dashboard">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard
@@ -1731,15 +1731,15 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	</string>
 	<string name="InventoryMarketplaceError">
 		Une erreur est survenue lors de l’ouverture des annonces de Marketplace.
-Si vous continuez de recevoir ce message, contactez l’assistance Second Life à http://support.secondlife.com pour obtenir de l’aide.
+Si vous continuez de recevoir ce message, contactez l’assistance Second Life à https://support.secondlife.com pour obtenir de l’aide.
 	</string>
 	<string name="InventoryMarketplaceConnectionError">
 		La connexion au listing de Marketplace a échoué.
-Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Second Life à l'adresse suivante http://support.secondlife.com
+Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Second Life à l'adresse suivante https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceConnectionErrorReason">
 		La connexion au listing de Marketplace a échoué. Raison :: [REASON]
-Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Second Life à l'adresse suivante http://support.secondlife.com
+Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Second Life à l'adresse suivante https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Votre dossier Annonces de Marketplace est vide.
@@ -3124,17 +3124,17 @@ Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Sec
 		En cours de lecture : [TITLE]
 	</string>
 	<string name="IntelDriverPage">
-		http://www.intel.com/p/fr_FR/support/detect/graphics
+		https://www.intel.fr/content/www/fr/fr/support/detect.html
 	</string>
 	<string name="NvidiaDriverPage">
-		http://www.nvidia.com/Download/index.aspx?lang=fr
+		https://www.intel.fr/content/www/fr/fr/support/detect.html
 	</string>
 	<string name="AMDDriverPage">
-		https://www.amd.com/fr/support
+		https://www.amd.com/fr/support/download/drivers.html
 	</string>
 	<string name="MBCmdLineError">
 		Une erreur est survenue lors de la lecture de la ligne de commande.
-Merci de consulter : http://wiki.secondlife.com/wiki/Client_parameters
+Merci de consulter : https://wiki.secondlife.com/wiki/Client_parameters
 Erreur :
 	</string>
 	<string name="MBCmdLineUsg">
@@ -6247,7 +6247,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Normale
 	</string>
 	<string name="Pathfinding_Wiki_URL">
-		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
+		https://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
 	</string>
 	<string name="Pathfinding_Object_Attr_None">
 		Aucun

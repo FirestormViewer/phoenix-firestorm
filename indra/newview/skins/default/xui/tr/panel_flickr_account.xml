@@ -9,7 +9,7 @@
 		<button label="Bağlan..." name="connect_btn"/>
 		<button label="Bağlantıyı kes" name="disconnect_btn"/>
 		<text name="account_learn_more_label">
-			[http://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-Share-Flickr/ta-p/2435609 Flickr&apos;da içerik yayınlama hakkında bilgi edinin]
+			[https://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-Share-Flickr/ta-p/2435609 Flickr&apos;da içerik yayınlama hakkında bilgi edinin]
 		</text>
 	</panel>
 </panel>

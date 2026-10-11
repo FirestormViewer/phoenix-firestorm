@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
 	<panel.string name="forgot_password_url">
-		http://secondlife.com/account/request.php?lang=fr
+		https://secondlife.com/account/request.php?lang=fr-FR
 	</panel.string>
 	<string name="ServerComboTooltip">
 		Une grille connue ou l'URI d'une grille

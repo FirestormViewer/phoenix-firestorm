@@ -64,7 +64,7 @@
 		</layout_panel>
 		<layout_panel name="layout_panel_msg">
 			<text name="currency_links">
-				[http://www.secondlife.com/my/account/payment_method_management.php Zahlungsart] | [https://www.secondlife.com/my/account/currency.php Währung]
+				[https://www.secondlife.com/my/account/payment_method_management.php Zahlungsart] | [https://www.secondlife.com/my/account/currency.php Währung]
 			</text>
 			<text name="exchange_rate_note">
 				Geben Sie den Betrag erneut ein, um die aktuellste Umtauschrate anzuzeigen.

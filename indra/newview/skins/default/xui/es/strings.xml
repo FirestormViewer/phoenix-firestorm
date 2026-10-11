@@ -196,7 +196,7 @@ Versión del servidor de voz: [VOICE_VERSION]
 https://www.firestormviewer.org/choose-your-platform/
  
 Si deseas obtener más información, consulta las preguntas frecuentes que aparecen a continuación:
-http://secondlife.com/viewer-access-faq
+https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
 		Actualización opcional del visor disponible: [VERSION]
@@ -216,13 +216,13 @@ Asimismo, asegúrate de que la tecla Bloq. Mayús. esté desactivada.
 	</string>
 	<string name="LoginFailedPasswordChanged">
 		Como precaución de seguridad, se ha modificado tu contraseña.
-Dirígete a la página de tu cuenta en http://secondlife.com/password
+Dirígete a la página de tu cuenta en https://secondlife.com/password
 y responde a la pregunta de seguridad para restablecer la contraseña.
 Lamentamos las molestias.
 	</string>
 	<string name="LoginFailedPasswordReset">
 		Hemos realizado unos cambios en nuestro sistema, por lo que deberás restablecer la contraseña.
-Dirígete a la página de tu cuenta en http://secondlife.com/password
+Dirígete a la página de tu cuenta en https://secondlife.com/password
 y responde a la pregunta de seguridad para restablecer la contraseña.
 Lamentamos las molestias.
 	</string>
@@ -247,7 +247,7 @@ support@secondlife.com.
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		En este momento no podemos completar la solicitud.
-Si deseas obtener asistencia, ponte en contacto con el departamento de soporte de Second Life a través de la página http://secondlife.com/support.
+Si deseas obtener asistencia, ponte en contacto con el departamento de soporte de Second Life a través de la página https://support.secondlife.com.
 Si no puedes cambiar la contraseña, llama al número (866) 476-9763.
 	</string>
 	<string name="LoginFailedTransformError">
@@ -1529,7 +1529,7 @@ pueden adjuntarse a las notas.
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
 	</string>
 	<string name="MarketplaceURL_CreateStore">
-		http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
+		https://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
 	</string>
 	<string name="MarketplaceURL_Dashboard">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard
@@ -1577,7 +1577,7 @@ pueden adjuntarse a las notas.
 	</string>
 	<string name="InventoryMarketplaceError">
 		Se ha producido un error al abrir Artículos del Mercado.
-Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia de Second Life en http://support.secondlife.com
+Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia de Second Life en https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Tu carpeta Artículos del mercado está vacía.
@@ -2874,17 +2874,17 @@ Se esperaba .wav, .tga, .bmp, .jpg, .jpeg, o .anim
 		Reproduciendo: [TITLE]
 	</string>
 	<string name="IntelDriverPage">
-		http://www.intel.com/p/en_US/support/detect/graphics
+		https://www.intel.la/content/www/xl/es/support/detect.html
 	</string>
 	<string name="NvidiaDriverPage">
-		http://www.nvidia.com/Download/index.aspx?lang=es
+		https://www.nvidia.com/es-es/drivers/
 	</string>
 	<string name="AMDDriverPage">
-		http://support.amd.com/us/Pages/AMDSupportHub.aspx
+		https://www.amd.com/es/support/download/drivers.html
 	</string>
 	<string name="MBCmdLineError">
 		Ha habido un error analizando la línea de comando.
-Por favor, consulta: http://wiki.secondlife.com/wiki/Client_parameters
+Por favor, consulta: https://wiki.secondlife.com/wiki/Client_parameters
 Error:
 	</string>
 	<string name="MBCmdLineUsg">
@@ -5863,7 +5863,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		Normal
 	</string>
 	<string name="Pathfinding_Wiki_URL">
-		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
+		https://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
 	</string>
 	<string name="Pathfinding_Object_Attr_None">
 		Ninguno

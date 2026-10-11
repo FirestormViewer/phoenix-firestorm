@@ -21,7 +21,7 @@
 		</message>
 		<message name="NoHelpIslandTP">
 			Телепортироваться назад на Остров прибытия нельзя.
-Для повторения обучения перейдите на [http://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/6/2701 Firestorm Tutorial].
+Для повторения обучения перейдите на [https://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/6/2701 Firestorm Tutorial].
 		</message>
 		<message name="noaccess_tport">
 			У вас нет доступа к точке назначения этого телепорта.
@@ -51,7 +51,7 @@
 			Для посещения данного региона вам должно быть не менее 18 лет.
 		</message>
 		<message name="RegionTPSpecialUsageBlocked">
-			Невозможно войти в регион. '[REGION_NAME]' является игровым регионом и вы должны отвечать определенным критериям, чтобы войти. Для получения дополнительной информации, пожалуйста, просмотрите [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
+			Невозможно войти в регион. '[REGION_NAME]' является игровым регионом и вы должны отвечать определенным критериям, чтобы войти. Для получения дополнительной информации, пожалуйста, просмотрите [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
 		</message>
 	</message_set>
 	<message_set name="progress">
