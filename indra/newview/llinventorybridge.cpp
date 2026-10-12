@@ -147,7 +147,7 @@ namespace
 {
     constexpr bool is_context_submenu_branch(std::string_view name)
     {
-        return (name == "More") || (name == "create_new") || (name == INVENTORY_SUBMENU_MARKETPLACE) || (name == INVENTORY_SUBMENU_LINKS);
+        return (name == "More") || (name == "create_new") || (name == INVENTORY_SUBMENU_MARKETPLACE);
     }
 }
 
@@ -972,10 +972,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
         {
             if (LLAssetType::lookupCanLink(obj->getType()))
             {
-                // <FS:PP> Submenus grouping
-                // items.push_back(std::string("Find Links"));
-                add_context_submenu_entry(items, INVENTORY_SUBMENU_LINKS, "Find Links");
-                // </FS:PP>
+                items.push_back(std::string("Find Links"));
             }
 
             if (!is_inbox && !single_folder_root)
@@ -1074,10 +1071,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
         // </FS:TT>
         )
     {
-        // <FS:PP> Submenus grouping
-        // items.push_back(std::string("Paste As Link"));
-        add_context_submenu_entry(items, INVENTORY_SUBMENU_LINKS, "Paste As Link");
-        // </FS:PP>
+        items.push_back(std::string("Paste As Link"));
         if (!isClipboardPasteableAsLink() || (flags & FIRST_SELECTED_ITEM) == 0)
         {
             disabled_items.push_back(std::string("Paste As Link"));
@@ -1357,10 +1351,7 @@ void LLInvFVBridge::addLinkReplaceMenuOption(menuentry_vec_t& items, menuentry_v
 
     if (isAgentInventory() && obj && obj->getType() != LLAssetType::AT_CATEGORY && obj->getType() != LLAssetType::AT_LINK_FOLDER)
     {
-        // <FS:PP> Submenus grouping
-        // items.push_back(std::string("Replace Links"));
-        add_context_submenu_entry(items, INVENTORY_SUBMENU_LINKS, "Replace Links");
-        // </FS:PP>
+        items.push_back(std::string("Replace Links"));
 
         if (mRoot->getSelectedCount() != 1)
         {
@@ -4969,7 +4960,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
     // <FS:Ansariel> FIRE-11628: Option to delete broken links from AO folder
     if (mUUID == AOEngine::instance().getAOFolder())
     {
-        add_context_submenu_entry(items, INVENTORY_SUBMENU_LINKS, "Cleanup broken Links");
+        items.push_back(std::string("Cleanup broken Links"));
     }
     // </FS:Ansariel>
 
@@ -5114,7 +5105,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                 }
 
                 // <FS:Ansariel> FIRE-4595: Paste as Link missing for outfit folders
-                add_context_submenu_entry(items, INVENTORY_SUBMENU_LINKS, "Paste As Link");
+                items.push_back(std::string("Paste As Link"));
                 if (!isClipboardPasteableAsLink() || (flags & FIRST_SELECTED_ITEM) == 0)
                 {
                     disabled_items.push_back(std::string("Paste As Link"));
