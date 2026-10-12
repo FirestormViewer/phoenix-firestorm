@@ -1410,6 +1410,17 @@
          name="enable_echo_cancellation"
          top_pad="2"
          width="237"/>
+        <check_box
+         follows="top|left"
+         control_name="StopMicCaptureWhenMuted"
+         height="15"
+         tool_tip="Check to stop microphone capture while muted (WebRTC only). May cause a hiss on unmute but prevents bluetooth devices always being in voice mode."
+         label="Stop microphone capture while muted"
+         layout="topleft"
+         left="25"
+         name="StopMicCaptureWhenMuted"
+         top_pad="2"
+         width="237"/>
         <text
          follows="top|left"
          layout="topleft"
