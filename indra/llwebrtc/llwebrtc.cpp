@@ -838,6 +838,36 @@ void LLWebRTCImpl::workerDeployDevices(bool reset_module)
         return;
     }
 
+    // <FS:TJ> Try and help crash on Mac with device changes
+    // If the ADM is mid-transition, back off and keep trying for ~5s total
+#if WEBRTC_MAC
+    const bool adm_mid_transition =
+        (mDeviceModule->PlayoutIsInitialized() && !mDeviceModule->Playing()) ||
+        (mDeviceModule->RecordingIsInitialized() && !mDeviceModule->Recording());
+    if (adm_mid_transition)
+    {
+        if (mDeployBackoffs++ < 20)
+        {
+            RTC_LOG(LS_WARNING) << "workerDeployDevices: ADM mid-transition, backing off (" << mDeployBackoffs << ")";
+            mWorkerThread->PostDelayedTask([this, reset_module]
+            {
+                workerDeployDevices(reset_module || mDevicesDeployingNeedsReset.exchange(false, std::memory_order_relaxed));
+            }, webrtc::TimeDelta::Millis(250));
+            return;
+        }
+        if (mDeviceModule->PlayoutIsInitialized() && !mDeviceModule->Playing())
+        {
+            mDeviceModule->StopPlayout();
+        }
+        if (mDeviceModule->RecordingIsInitialized() && !mDeviceModule->Recording())
+        {
+            mDeviceModule->ForceStopRecording();
+        }
+    }
+    mDeployBackoffs = 0;
+#endif
+    // </FS:TJ>
+
     // Stop first so the start helpers (which no-op when already running) will
     // re-select the now-current device.
     if (mDeviceModule->Playing())
@@ -1178,7 +1208,21 @@ void LLWebRTCImpl::OnDevicesUpdated()
 {
     // OnDevicesUpdated() is called on macOS CoreAudio's device-change callback
     // thread.  Calling updateDevices() on that thread causes a deadlock.
+    // <FS:TJ> Try and help crash on Mac with device changes
+    // Batch device change events and delay the update to avoid racing stream restarts
+#if WEBRTC_MAC
+    if (!mDevicesUpdatePending.exchange(true))
+    {
+        mWorkerThread->PostDelayedTask([this]
+        {
+            mDevicesUpdatePending.store(false);
+            updateDevices();
+        }, webrtc::TimeDelta::Millis(1500));
+    }
+#else
     mWorkerThread->PostTask([this] { updateDevices(); });
+#endif
+    // </FS:TJ>
 }
 
 
