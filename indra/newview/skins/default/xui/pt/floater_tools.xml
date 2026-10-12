@@ -102,7 +102,7 @@
 		<combo_box.item label="Local" name="Local"/>
 		<combo_box.item label="Referência" name="Reference"/>
 	</combo_box>
-	<button label="Opções..." label_selected="Opções..." name="Options..." tool_tip="Ver mais opções de grade" top="63"/>
+	<button label="Opções..." label_selected="Opções..." name="Options..." tool_tip="Ver mais opções de grade"/>
 	<button label="" label_selected="" name="ToolCube" tool_tip="Cubo"/>
 	<button label="" label_selected="" name="ToolPrism" tool_tip="Prisma"/>
 	<button label="" label_selected="" name="ToolPyramid" tool_tip="Pirâmide"/>

@@ -6738,4 +6738,7 @@ Sua posição atual: [AVATAR_POS]
 	<string name="FSAvatarAlignToggleFull">
 		Completo
 	</string>
+	<string name="FSMacOSNewViewerInstance">
+		Nova instância do viewer
+	</string>
 </strings>

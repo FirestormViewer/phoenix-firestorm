@@ -18,6 +18,7 @@
 			<menu_item_call name="inventory_new_window" label="Nova janela de inventário"/>
 			<menu_item_check name="Protected Folders" label="Pastas protegidas"/>
 			<menu_item_check label="Configurações do inventário..." name="inv_settings"/>
+			<menu_item_check label="Mostrar Biblioteca" name="show_library"/>
 			<menu_item_check label="Visualização em lista" name="list_view"/>
 			<menu_item_check label="Visualização em galeria" name="gallery_view"/>
 			<menu_item_check label="Visualização combinada" name="combination_view"/>
