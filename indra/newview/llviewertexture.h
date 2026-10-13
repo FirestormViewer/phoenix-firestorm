@@ -119,6 +119,7 @@ public:
     static void updateClass();
     static bool isSystemMemoryLow();
     static bool isSystemMemoryCritical();
+    static bool isSystemMemoryRecovered(); // <FS:Beq/> Improve windows memory recovery detection
 
     LLViewerTexture(bool usemipmaps = true);
     LLViewerTexture(const LLUUID& id, bool usemipmaps) ;

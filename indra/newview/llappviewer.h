@@ -174,6 +174,7 @@ public:
     virtual void forceErrorLLErrorMsg();
     virtual void forceErrorBreakpoint();
     virtual void forceErrorBadMemoryAccess();
+    virtual void forceErrorImageAllocationFailure(); // <FS:Beq/> [FIRE-36494] Small memory allocation fail bugsplat reporting improvement
     virtual void forceErrorInfiniteLoop();
     virtual void forceErrorSoftwareException();
     virtual void forceErrorOSSpecificException();
@@ -414,7 +415,7 @@ private:
     // </FS:Zi>
 
     // <FS:ND> For Windows, purging the cache can take an extraordinary amount of time. Rename the cache dir and purge it using another thread.
-    virtual void startCachePurge() {}
+    virtual void startCachePurge(const std::string& strCacheDir) {}
     void startCefCachePurge(); // <FS:TJ/> Purge this in another thread to prevent very slow startup times
 };
 

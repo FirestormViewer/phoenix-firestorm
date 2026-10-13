@@ -1,5 +1,6 @@
 #include "linden_common.h"
 #include "bugsplatattributes.h"
+#include "llstring.h"
 #include <filesystem>
 
 std::string BugSplatAttributes::mCrashContextFileName;
@@ -62,6 +63,7 @@ std::string BugSplatAttributes::to_xml_token(const std::string& input)
 
 
 
+// <FS:Beq/> [FIRE-36494] Escape XML values, including hardware strings and pagefile JSON.
 bool BugSplatAttributes::writeToFile(const std::string& file_path)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_LOGGING;
@@ -87,7 +89,7 @@ bool BugSplatAttributes::writeToFile(const std::string& file_path)
             {
                 const std::string& key = kv.first;
                 const std::string& val = kv.second;
-                ofs << "    <" << key << ">" << val << "</" << key << ">\n";
+                ofs << "    <" << key << ">" << LLStringFn::xml_encode(val) << "</" << key << ">\n";
             }
         }
 
@@ -107,7 +109,7 @@ bool BugSplatAttributes::writeToFile(const std::string& file_path)
             {
                 const std::string& key = kv.first;
                 const std::string& val = kv.second;
-                ofs << "    <" << category << "-" << key << ">" << val << "</" << category << "-" << key << ">\n";
+                ofs << "    <" << category << "-" << key << ">" << LLStringFn::xml_encode(val) << "</" << category << "-" << key << ">\n";
             }
         }
 

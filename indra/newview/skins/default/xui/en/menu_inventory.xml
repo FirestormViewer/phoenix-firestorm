@@ -713,10 +713,6 @@
          function="Inventory.DoToSelected"
          parameter="paste" />
     </menu_item_call>
-    <menu
-     label="Links"
-     layout="topleft"
-     name="Links">
     <menu_item_call
      label="Paste As Link"
      layout="topleft"
@@ -741,15 +737,6 @@
          function="Inventory.DoToSelected"
          parameter="replace_links" />
     </menu_item_call>
-    <menu_item_call
-     label="Cleanup broken Links"
-     layout="topleft"
-     name="Cleanup broken Links">
-        <menu_item_call.on_click
-         function="Inventory.DoToSelected"
-         parameter="cleanup_broken_links"/>
-    </menu_item_call>
-    </menu>
     <menu_item_separator
      layout="topleft" 
      name="Paste Separator" />
@@ -760,6 +747,14 @@
         <menu_item_call.on_click
          function="Inventory.DoToSelected"
          parameter="delete" />
+    </menu_item_call>
+    <menu_item_call
+     label="Cleanup broken Links"
+     layout="topleft"
+     name="Cleanup broken Links">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="cleanup_broken_links"/>
     </menu_item_call>
     <menu_item_call
      label="Move to Default Folder"

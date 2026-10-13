@@ -459,7 +459,10 @@ bool LLWorldMap::insertRegion(U32 x_world, U32 y_world, U16 x_size, U16 y_size, 
     if (accesscode == 255)
     {
         // Checks if the track point is in it and invalidates it if it is
-        if (LLWorldMap::getInstance()->isTrackingInRectangle( x_world, y_world, x_world + REGION_WIDTH_UNITS, y_world + REGION_WIDTH_UNITS))
+        // <FS:TJ> Fix OpenSim tracking not working on first click in VarRegions
+        //if (LLWorldMap::getInstance()->isTrackingInRectangle( x_world, y_world, x_world + REGION_WIDTH_UNITS, y_world + REGION_WIDTH_UNITS))
+        if (LLWorldMap::getInstance()->isTrackingInRectangle(x_world, y_world, x_world + x_size, y_world + y_size))
+        // </FS:TJ>
         {
             LLWorldMap::getInstance()->setTrackingInvalid();
         }
@@ -487,7 +490,10 @@ bool LLWorldMap::insertRegion(U32 x_world, U32 y_world, U16 x_size, U16 y_size, 
 // </FS:CR> Aurora Sim
 
         // Handle the location tracking (for teleport, UI feedback and info display)
-        if (LLWorldMap::getInstance()->isTrackingInRectangle( x_world, y_world, x_world + REGION_WIDTH_UNITS, y_world + REGION_WIDTH_UNITS))
+        // <FS:TJ> Fix OpenSim tracking not working on first click in VarRegions
+        //if (LLWorldMap::getInstance()->isTrackingInRectangle( x_world, y_world, x_world + REGION_WIDTH_UNITS, y_world + REGION_WIDTH_UNITS))
+        if (LLWorldMap::getInstance()->isTrackingInRectangle(x_world, y_world, x_world + x_size, y_world + y_size))
+        // </FS:TJ>
         {
             if (siminfo->isDown())
             {

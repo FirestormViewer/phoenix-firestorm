@@ -82,13 +82,11 @@
 	<menu_item_call label="Köçürt" name="Copy"/>
 	<menu_item_call label="Kəs" name="Cut"/>
 	<menu_item_call label="Yapışdır" name="Paste"/>
-	<menu label="Links" name="Links">
-		<menu_item_call label="Keçid kimi yapışdır" name="Paste As Link"/>
-		<menu_item_call label="Bütün keçidləri tap" name="Find Links"/>
-		<menu_item_call label="Keçidləri əvəz et" name="Replace Links"/>
-		<menu_item_call label="İşləməyən keçidləri təmizlə" name="Cleanup broken Links"/>
-	</menu>
+	<menu_item_call label="Keçid kimi yapışdır" name="Paste As Link"/>
+	<menu_item_call label="Bütün keçidləri tap" name="Find Links"/>
+	<menu_item_call label="Keçidləri əvəz et" name="Replace Links"/>
 	<menu_item_call label="Sil" name="Delete"/>
+	<menu_item_call label="İşləməyən keçidləri təmizlə" name="Cleanup broken Links"/>
 	<menu_item_call label="Susmaya görə olan qovluğa daşı" name="Move to Default Folder"/>
 	<menu_item_call label="'İtmiş və tapılmış'-a daşı" name="Move to Lost And Found"/>
 	<menu_item_call label="Sistem qovluğunu sil" name="Delete System Folder"/>

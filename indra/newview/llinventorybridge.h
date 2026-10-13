@@ -39,8 +39,6 @@
 #include "llfolderviewitem.h"
 #include "llsettingsbase.h"
 
-#include <string_view> // <FS:PP> Submenus grouping
-
 class LLInventoryFilter;
 class LLInventoryPanel;
 class LLInventoryModel;
@@ -913,7 +911,6 @@ void hide_context_entries(LLMenuGL& menu,
 
 // <FS:PP> Submenus grouping
 inline constexpr std::string_view INVENTORY_SUBMENU_MARKETPLACE{ "Marketplace" };
-inline constexpr std::string_view INVENTORY_SUBMENU_LINKS{ "Links" };
 void add_context_submenu_entry(menuentry_vec_t& items, std::string_view submenu, std::string_view item);
 // </FS:PP>
 

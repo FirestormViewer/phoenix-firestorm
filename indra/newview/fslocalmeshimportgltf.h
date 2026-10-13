@@ -42,6 +42,7 @@ namespace LL
         class Asset;
         class Primitive;
         class Node;
+        class Mesh;
     }
 }
 
@@ -64,7 +65,11 @@ private:
                                  const std::vector<std::string>& skin_joint_names,
                                  LLLocalMeshObject* object,
                                  S32 skin_idx);
-    bool initSkinInfo(const LL::GLTF::Asset& asset, S32 skin_idx, LLLocalMeshObject* object);
+    bool initSkinInfo(const LL::GLTF::Asset& asset,
+                      const LL::GLTF::Mesh& mesh,
+                      S32 skin_idx,
+                      LLLocalMeshObject* object,
+                      std::vector<S32>& joint_index_remap);
     void finalizeSkinInfo(LLLocalMeshObject* object) const;
 private:
     std::vector<S32> mParentMap;

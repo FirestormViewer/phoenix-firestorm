@@ -1245,6 +1245,11 @@ void FSLSLBridgeRezCallback::fire(const LLUUID& inv_item)
     LL_INFOS("FSLSLBridge") << "Bridge rez callback fired, looking for object..." << LL_ENDL;
 
     LLViewerInventoryItem* item = gInventory.getItem(inv_item);
+    if (!item)
+    {
+        LL_WARNS("FSLSLBridge") << "Ignoring bridgerezcallback, inventory item is null" << LL_ENDL;
+        return;
+    }
 
     item->setDescription(item->getName());
     item->setComplete(true);

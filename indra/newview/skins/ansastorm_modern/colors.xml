@@ -23,6 +23,9 @@
 	 name="EmphasisColor"
 	 value="0.3 0.82 1 1" />
 	<color
+	 name="EmphasisColor_60"
+	 value="0.3 0.82 1 0.6" />
+	<color
 	 name="EmphasisColor_35"
 	 value="0.426 0.729 1.0 0.368" />
     <color
@@ -497,7 +500,7 @@
      reference="EmphasisColor" />
     <color
      name="ButtonFlashBgColor"
-     reference="White_25" />
+     reference="EmphasisColor_60" />
 <!-- Color Changed -->
     <color
      name="ButtonImageColor"

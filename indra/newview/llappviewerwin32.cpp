@@ -41,6 +41,7 @@
 
 #include <fcntl.h>      //_O_APPEND
 #include <io.h>         //_open_osfhandle()
+#include <psapi.h> // <FS:Beq/> [FIRE-36494] Image allocation failure telemetry
 #include <WERAPI.H>     // for WerAddExcludedApplication()
 #include <process.h>    // _spawnl()
 #include <tchar.h>      // For TCHAR support
@@ -55,6 +56,13 @@
 
 #include "llweb.h"
 
+// <FS:Beq> [FIRE-36494] Pagefile usage telemetry
+#include <algorithm>
+#include <chrono>
+#include <utility>
+#include <vector>
+// </FS:Beq>
+#include <cstdint> // <FS:Beq/> Add reliable telemetry for memory alloc pressure tracking in bugsplat
 #include "llnotificationsutil.h" // <FS:TJ/> Detect and notify if the viewer is trying to run as admin on Windows
 #include "llviewernetwork.h"
 #include "llmd5.h"
@@ -85,6 +93,7 @@
 #include "bugsplatattributes.h"
 #include "BugSplat.h"
 #include "boost/json.hpp"                 // Boost.Json
+#include "llimage.h" // <FS:Beq/> [FIRE-36494] Image allocation failure telemetry
 #include "llagent.h"                // for agent location
 #include "llmemory.h"
 #include "llstartup.h"
@@ -101,6 +110,271 @@ namespace FS
 
 namespace
 {
+    // <FS:Beq> [FIRE-36494] Image allocation failures, pagefile usage and system commit telemetry
+    constexpr U32 IMAGE_ALLOC_TELEMETRY_ERRNO = 1 << 0;
+    constexpr U32 IMAGE_ALLOC_TELEMETRY_MEMORY_STATUS = 1 << 1;
+    constexpr U32 IMAGE_ALLOC_TELEMETRY_COMMIT = 1 << 2;
+    constexpr U32 IMAGE_ALLOC_TELEMETRY_PROCESS_MEMORY = 1 << 3;
+    constexpr U32 IMAGE_ALLOC_TELEMETRY_VIRTUAL_ADDRESS = 1 << 4;
+
+    constexpr S64 UNKNOWN_MEMORY_VALUE = -1;
+
+    S64 bytesToKB(ULONGLONG bytes)
+    {
+        return static_cast<S64>(bytes / 1024);
+    }
+
+    S64 pagesToKB(SIZE_T pages, SIZE_T page_size)
+    {
+        return static_cast<S64>((static_cast<ULONGLONG>(pages) * static_cast<ULONGLONG>(page_size)) / 1024);
+    }
+
+    using Clock = std::chrono::steady_clock;
+
+    std::int64_t elapsedMS(Clock::time_point start)
+    { return std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - start).count(); }
+
+    struct PageFileInfo
+    {
+        std::wstring  name;
+        std::uint64_t allocated_mb = 0;
+        std::uint64_t current_mb   = 0;
+        std::uint64_t peak_mb      = 0;
+    };
+
+    struct PageFilesInfo
+    {
+        bool                      success    = false;
+        unsigned long             error      = 0; // GetLastError(), zero on success
+        std::int64_t              elapsed_ms = -1;
+        std::vector<PageFileInfo> files;
+    };
+
+    struct PageFileContext
+    {
+        std::vector<PageFileInfo> files;
+        DWORD                     page_size         = 0;
+        bool                      allocation_failed = false;
+    };
+
+    BOOL CALLBACK collectPageFile(LPVOID context, PENUM_PAGE_FILE_INFORMATION info, LPCWSTR name) noexcept
+    {
+        auto& result = *static_cast<PageFileContext*>(context);
+        // Never let a C++ exception escape through the Windows callback.
+        try
+        {
+            const auto toMB = [&](SIZE_T pages)
+            {
+                return static_cast<std::uint64_t>(pages) * result.page_size / (1024 * 1024);
+            };
+            result.files.push_back({ name ? name : L"", toMB(info->TotalSize), toMB(info->TotalInUse), toMB(info->PeakUsage) });
+            return TRUE;
+        }
+        catch (...)
+        {
+            result.allocation_failed = true;
+            return FALSE;
+        }
+    }
+
+    PageFilesInfo getPageFiles()
+    {
+        const auto  start       = Clock::now();
+        SYSTEM_INFO system_info = {};
+        GetSystemInfo(&system_info);
+        PageFileContext context{ {}, system_info.dwPageSize };
+        PageFilesInfo   result;
+        if (EnumPageFilesW(collectPageFile, &context) && !context.allocation_failed)
+        {
+            result.success = true;
+            std::ranges::sort(context.files, {}, &PageFileInfo::name);
+            result.files = std::move(context.files);
+        }
+        else
+        {
+            // A failed or interrupted enumeration is not evidence of zero pagefiles.
+            result.error = context.allocation_failed ? ERROR_NOT_ENOUGH_MEMORY : GetLastError();
+        }
+        result.elapsed_ms = elapsedMS(start);
+        return result;
+    }
+
+    void recordPageFileAttributes(BugSplatAttributes& attributes) noexcept
+    {
+        try
+        {
+            const auto info = getPageFiles();
+            attributes.setAttribute("Pagefile Query Succeeded", info.success);
+            attributes.setAttribute("Pagefile Query Error", info.error);
+            attributes.setAttribute("Pagefile Query Duration MS", info.elapsed_ms);
+            attributes.setAttribute("Pagefile Count", info.success ? static_cast<S64>(info.files.size()) : UNKNOWN_MEMORY_VALUE);
+
+            boost::json::array files;
+            S64                allocated_mb = 0;
+            S64                current_mb   = 0;
+            for (const auto& file : info.files)
+            {
+                files.push_back(boost::json::object{ { "Name", ll_convert_wide_to_string(file.name) },
+                                                     { "AllocatedBaseSize_MB", file.allocated_mb },
+                                                     { "CurrentUsage_MB", file.current_mb },
+                                                     { "PeakUsage_MB", file.peak_mb } });
+                allocated_mb += static_cast<S64>(file.allocated_mb);
+                current_mb += static_cast<S64>(file.current_mb);
+            }
+            // One array replaces the previous snapshot, including when pagefiles
+            // disappear. Unknown must be distinct from a successful empty array.
+            attributes.setAttribute("Pagefile Details", info.success ? boost::json::serialize(files) : std::string("unknown"));
+            attributes.setAttribute("Pagefile Allocated MB", info.success ? allocated_mb : UNKNOWN_MEMORY_VALUE);
+            attributes.setAttribute("Pagefile Current Usage MB", info.success ? current_mb : UNKNOWN_MEMORY_VALUE);
+        }
+        catch (...) // Diagnostics must not replace a crash or an allocation failure.
+        {
+            // Avoid leaving a previous successful snapshot looking current.
+            try
+            {
+                attributes.setAttribute("Pagefile Query Succeeded", false);
+                attributes.setAttribute("Pagefile Count", UNKNOWN_MEMORY_VALUE);
+                attributes.setAttribute("Pagefile Details", "unknown");
+                attributes.setAttribute("Pagefile Allocated MB", UNKNOWN_MEMORY_VALUE);
+                attributes.setAttribute("Pagefile Current Usage MB", UNKNOWN_MEMORY_VALUE);
+                attributes.setAttribute("Pagefile Query Error", ERROR_NOT_ENOUGH_MEMORY);
+                attributes.setAttribute("Pagefile Query Duration MS", UNKNOWN_MEMORY_VALUE);
+            }
+            catch (...)
+            {
+            }
+        }
+    }
+
+    bool getLargestFreeVirtualAddressRegionKB(S64& largest_free_region_kb)
+    {
+        largest_free_region_kb = UNKNOWN_MEMORY_VALUE;
+
+        SIZE_T largest_free_region = 0;
+        std::uintptr_t address = 0;
+        MEMORY_BASIC_INFORMATION mbi = {};
+        bool queried_region = false;
+
+        while (VirtualQuery(reinterpret_cast<LPCVOID>(address), &mbi, sizeof(mbi)) == sizeof(mbi))
+        {
+            queried_region = true;
+            if (mbi.State == MEM_FREE && mbi.RegionSize > largest_free_region)
+            {
+                largest_free_region = mbi.RegionSize;
+            }
+
+            const auto base = reinterpret_cast<std::uintptr_t>(mbi.BaseAddress);
+            const auto next = base + mbi.RegionSize;
+            if (next <= address)
+            {
+                break;
+            }
+            address = next;
+        }
+
+        if (!queried_region)
+        {
+            return false;
+        }
+
+        largest_free_region_kb = bytesToKB(static_cast<ULONGLONG>(largest_free_region));
+        return true;
+    }
+
+    void recordImageAllocationFailure(const LLImageAllocationFailureInfo& info)
+    {
+        try
+        {
+            U32 telemetry_flags = IMAGE_ALLOC_TELEMETRY_ERRNO;
+
+            S64 avail_phys_kb = UNKNOWN_MEMORY_VALUE;
+            S64 memory_load_pct = UNKNOWN_MEMORY_VALUE;
+            S64 avail_process_commit_kb = UNKNOWN_MEMORY_VALUE;
+            MEMORYSTATUSEX memory_status = {};
+            memory_status.dwLength = sizeof(memory_status);
+            if (GlobalMemoryStatusEx(&memory_status))
+            {
+                telemetry_flags |= IMAGE_ALLOC_TELEMETRY_MEMORY_STATUS;
+                avail_phys_kb = bytesToKB(memory_status.ullAvailPhys);
+                memory_load_pct = memory_status.dwMemoryLoad;
+                avail_process_commit_kb = bytesToKB(memory_status.ullAvailPageFile);
+            }
+
+            S64 avail_system_commit_kb = UNKNOWN_MEMORY_VALUE;
+            S64 system_commit_limit_kb = UNKNOWN_MEMORY_VALUE;
+            S64 system_commit_total_kb = UNKNOWN_MEMORY_VALUE;
+            PERFORMANCE_INFORMATION performance_info = {};
+            performance_info.cb = sizeof(performance_info);
+            if (GetPerformanceInfo(&performance_info, sizeof(performance_info))
+                && performance_info.PageSize > 0
+                && performance_info.CommitLimit >= performance_info.CommitTotal)
+            {
+                telemetry_flags |= IMAGE_ALLOC_TELEMETRY_COMMIT;
+                system_commit_limit_kb = pagesToKB(performance_info.CommitLimit, performance_info.PageSize);
+                system_commit_total_kb = pagesToKB(performance_info.CommitTotal, performance_info.PageSize);
+                avail_system_commit_kb = pagesToKB(performance_info.CommitLimit - performance_info.CommitTotal, performance_info.PageSize);
+            }
+
+            S64 process_private_kb = UNKNOWN_MEMORY_VALUE;
+            S64 process_working_set_kb = UNKNOWN_MEMORY_VALUE;
+            PROCESS_MEMORY_COUNTERS_EX process_memory = {};
+            process_memory.cb = sizeof(process_memory);
+            if (GetProcessMemoryInfo(GetCurrentProcess(),
+                                     reinterpret_cast<PROCESS_MEMORY_COUNTERS*>(&process_memory),
+                                     sizeof(process_memory)))
+            {
+                telemetry_flags |= IMAGE_ALLOC_TELEMETRY_PROCESS_MEMORY;
+                process_private_kb = bytesToKB(static_cast<ULONGLONG>(process_memory.PrivateUsage));
+                process_working_set_kb = bytesToKB(static_cast<ULONGLONG>(process_memory.WorkingSetSize));
+            }
+
+            const U32 heap_cap = LLMemory::getMaxHeapSizeKB().value();
+            const S64 heap_cap_kb = heap_cap == U32_MAX ? UNKNOWN_MEMORY_VALUE : static_cast<S64>(heap_cap);
+            const S64 heap_budget_headroom_kb = heap_cap_kb != UNKNOWN_MEMORY_VALUE
+                && process_working_set_kb != UNKNOWN_MEMORY_VALUE
+                ? heap_cap_kb - process_working_set_kb : UNKNOWN_MEMORY_VALUE;
+
+            S64 largest_free_va_kb = UNKNOWN_MEMORY_VALUE;
+            if (getLargestFreeVirtualAddressRegionKB(largest_free_va_kb))
+            {
+                telemetry_flags |= IMAGE_ALLOC_TELEMETRY_VIRTUAL_ADDRESS;
+            }
+
+            auto& attributes = BugSplatAttributes::instance();
+            attributes.setAttribute("Viewer Working Set Budget KB", heap_cap_kb);
+            attributes.setAttribute("MemAvailCommitMB", avail_process_commit_kb == UNKNOWN_MEMORY_VALUE
+                ? UNKNOWN_MEMORY_VALUE : avail_process_commit_kb / 1024);
+            attributes.setAttribute("Non-Fatal Img Alloc Failures", LLImageBase::getNonFatalAllocationFailureCount());
+            attributes.setAttribute("ImageAlloc Diag Version", 3);
+            attributes.setAttribute("ImageAlloc Requested Bytes", info.mRequestedSize);
+            attributes.setAttribute("ImageAlloc Width", info.mWidth);
+            attributes.setAttribute("ImageAlloc Height", info.mHeight);
+            attributes.setAttribute("ImageAlloc Components", info.mComponents);
+            attributes.setAttribute("ImageAlloc Errno", info.mErrno);
+            attributes.setAttribute("ImageAlloc Telemetry Flags", telemetry_flags);
+            attributes.setAttribute("ImageAlloc Avail Phys KB", avail_phys_kb);
+            attributes.setAttribute("ImageAlloc Memory Load Pct", memory_load_pct);
+            attributes.setAttribute("ImageAlloc Avail System Commit KB", avail_system_commit_kb);
+            attributes.setAttribute("ImageAlloc System Commit Limit KB", system_commit_limit_kb);
+            attributes.setAttribute("ImageAlloc System Commit Total KB", system_commit_total_kb);
+            attributes.setAttribute("ImageAlloc Avail Process Commit KB", avail_process_commit_kb);
+            attributes.setAttribute("ImageAlloc Process Private KB", process_private_kb);
+            attributes.setAttribute("ImageAlloc Process Working Set KB", process_working_set_kb);
+            attributes.setAttribute("ImageAlloc Working Set Budget Headroom KB", heap_budget_headroom_kb);
+            attributes.setAttribute("ImageAlloc Largest Free VA KB", largest_free_va_kb);
+
+            const std::string& crash_context_file = BugSplatAttributes::getCrashContextFileName();
+            if (!crash_context_file.empty())
+            {
+                attributes.writeToFile(crash_context_file);
+            }
+        }
+        catch (...) // Diagnostics must not replace the original allocation failure.
+        {
+        }
+    }
+    // </FS:Beq>
+
     // MiniDmpSender's constructor is defined to accept __wchar_t* instead of
     // plain wchar_t*. That said, wunder() returns std::basic_string<__wchar_t>,
     // NOT plain __wchar_t*, despite the apparent convenience. Calling
@@ -230,6 +504,15 @@ namespace
             // sBugSplatSender->setAttribute(WCSTR(L"VRAM"), WCSTR(STRINGIZE(gGLManager.mVRAM)));
             // sBugSplatSender->setAttribute(WCSTR(L"RAM"), WCSTR(STRINGIZE(gSysMemory.getPhysicalMemoryKB().value())));
 
+            // const U32 avail_kb = LLMemory::getAvailableMemKB().value();
+            // if (avail_kb != U32_MAX) // filter out initial values, if one is not set, all are not set
+            // {
+            //     // Memory usage at crash time (can be 1s obsolete)
+            //     sBugSplatSender->setAttribute(WCSTR(L"MemAllocatedKB"), WCSTR(std::to_string(LLMemory::getAllocatedMemKB().value())));
+            //     sBugSplatSender->setAttribute(WCSTR(L"MemAvailableKB"), WCSTR(std::to_string(LLMemory::getAvailableMemKB().value())));
+            //     sBugSplatSender->setAttribute(WCSTR(L"MemMaxPhysicalKB"), WCSTR(std::to_string(LLMemory::getMaxMemKB().value())));
+            //     sBugSplatSender->setAttribute(WCSTR(L"MemAvailCommitMB"), WCSTR(std::to_string(LLMemory::getAvailableCommitMemMB().value())));
+            // }
             auto fatal_message = LLError::getFatalMessage();
             if (!sBugsplatDescriptionField.empty())
             {
@@ -251,15 +534,6 @@ namespace
             BugSplatAttributes::instance().setAttribute("AppState", LLStartUp::getStartupStateString());
             // Location
             // </FS:Beq>
-            const U32 avail_kb = LLMemory::getAvailableMemKB().value();
-            if (avail_kb != U32_MAX) // filter out initial values, if one is not set, all are not set
-            {
-                // Memory usage at crash time (can be 1s obsolete)
-                sBugSplatSender->setAttribute(WCSTR(L"MemAllocatedKB"), WCSTR(std::to_string(LLMemory::getAllocatedMemKB().value())));
-                sBugSplatSender->setAttribute(WCSTR(L"MemAvailableKB"), WCSTR(std::to_string(LLMemory::getAvailableMemKB().value())));
-                sBugSplatSender->setAttribute(WCSTR(L"MemMaxPhysicalKB"), WCSTR(std::to_string(LLMemory::getMaxMemKB().value())));
-                sBugSplatSender->setAttribute(WCSTR(L"MemAvailCommitMB"), WCSTR(std::to_string(LLMemory::getAvailableCommitMemMB().value())));
-            }
 
             if (gAgent.getRegion())
             {
@@ -741,12 +1015,35 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     }
 }
 #endif
-// <FS:Beq> Use the Attributes API on Windows to enhance crash metadata
+// <FS:Beq> [FIRE-36494] Use the Attributes API on Windows for hardware and memory crash metadata
 void LLAppViewerWin32::bugsplatAddStaticAttributes(const LLSD& info)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_LOGGING;
 #ifdef LL_BUGSPLAT
     auto& bugSplatMap = BugSplatAttributes::instance();
+
+    // Startup WMI results arrive asynchronously, possibly after STATE_STARTED.
+    // Copy the cached result until complete; never query or wait for WMI here.
+    try
+    {
+        LLDXHardware::ComputerSystemInfo computer;
+        if (gDXHardware.getComputerSystemInfo(computer))
+        {
+            bugSplatMap.setAttribute("System Manufacturer", computer.manufacturer.empty() ? std::wstring(L"unknown") : computer.manufacturer);
+            bugSplatMap.setAttribute("System Model", computer.model.empty() ? std::wstring(L"unknown") : computer.model);
+            bugSplatMap.setAttribute("Automatic Managed Pagefile At Startup",
+                                     !computer.automatic_managed_pagefile.has_value() ? "unknown"
+                                     : *computer.automatic_managed_pagefile           ? "true"
+                                                                                      : "false");
+            bugSplatMap.setAttribute("Computer System Query Status", computer.status);
+            bugSplatMap.setAttribute("Computer System Query HRESULT", computer.error);
+            bugSplatMap.setAttribute("Computer System Query Duration MS", computer.elapsed_ms);
+        }
+    }
+    catch (...)
+    {
+    } // Even copying cached strings can fail under memory pressure.
+
     static bool write_once_after_startup = false;
     if (!write_once_after_startup )
     {
@@ -791,10 +1088,11 @@ void LLAppViewerWin32::bugsplatAddStaticAttributes(const LLSD& info)
     #if LL_DARWIN
         bugSplatMap.setAttribute("HiDPI", info["HIDPI"].asBoolean() ? "Enabled" : "Disabled");
     #endif
-        bugSplatMap.setAttribute("Max Texture Size", gSavedSettings.getU32("RenderMaxTextureResolution"));
     }
 
     // These attributes are potentially dynamic
+    bugSplatMap.setAttribute("Max Texture Size", gSavedSettings.getU32("RenderMaxTextureResolution"));
+    recordPageFileAttributes(bugSplatMap);
     bugSplatMap.setAttribute("Packets Lost", llformat("%.0f/%.0f (%.1f%%)", info["PACKETS_LOST"].asReal(), info["PACKETS_IN"].asReal(), info["PACKETS_PCT"].asReal()));
     bugSplatMap.setAttribute("Window Size", llformat("%sx%s px", info["WINDOW_WIDTH"].asString().c_str(), info["WINDOW_HEIGHT"].asString().c_str()));
     bugSplatMap.setAttribute("Draw Distance (m)", info["DRAW_DISTANCE"].asInteger());
@@ -807,6 +1105,11 @@ void LLAppViewerWin32::bugsplatAddStaticAttributes(const LLSD& info)
     LLMemory::updateMemoryInfo();
     bugSplatMap.setAttribute("Available RAM (KB)", LLMemory::getAvailableMemKB().value());
     bugSplatMap.setAttribute("Allocated RAM (KB)", LLMemory::getAllocatedMemKB().value());
+    const U32 heap_cap_kb = LLMemory::getMaxHeapSizeKB().value();
+    bugSplatMap.setAttribute("Viewer Working Set Budget KB", (heap_cap_kb == U32_MAX) ? UNKNOWN_MEMORY_VALUE : static_cast<S64>(heap_cap_kb));
+    const U32 avail_commit_mb = LLMemory::getAvailableCommitMemMB().value();
+    bugSplatMap.setAttribute("MemAvailCommitMB", (avail_commit_mb == U32_MAX) ? UNKNOWN_MEMORY_VALUE : static_cast<S64>(avail_commit_mb));
+    bugSplatMap.setAttribute("Non-Fatal Img Alloc Failures", LLImageBase::getNonFatalAllocationFailureCount());
     bugSplatMap.setAttribute("GPU VRAM (MB)", info["GRAPHICS_CARD_MEMORY"].asInteger());
 
 
@@ -1078,6 +1381,7 @@ bool LLAppViewerWin32::init()
                         dwFlags);
 
                     sBugSplatSender->setCallback(bugsplatSendLog);
+                    LLImageBase::setAllocationFailureCallback(recordImageAllocationFailure); // <FS:Beq/> [FIRE-36494] Image allocation failure telemetry
 
                     //LL_DEBUGS("BUGSPLAT");
                     //if (needs_log_file)
@@ -1110,6 +1414,15 @@ bool LLAppViewerWin32::init()
     if (success)
         detectRunningAsAdmin();
     // </FS:TJ>
+
+    // <FS:Beq> [FIRE-36494] Collect startup hardware without blocking viewer initialization
+#ifdef LL_BUGSPLAT
+    if (success)
+    {
+        gDXHardware.startComputerSystemQuery(gSavedSettings.getBOOL("FSDisableWMIProbing"));
+    }
+#endif
+    // </FS:Beq>
 
     return success;
 }
@@ -1663,14 +1976,14 @@ DWORD WINAPI purgeThread( LPVOID lpParameter )
     return 0;
 }
 
-void LLAppViewerWin32::startCachePurge()
+void LLAppViewerWin32::startCachePurge(const std::string& strCacheDir)
 {
     if( isSecondInstance() )
         return;
 
-    std::wstring strCacheDir = wstringize( gDirUtilp->getExpandedFilename( LL_PATH_CACHE, "" ) );
+    std::wstring wstrCacheDir = wstringize(strCacheDir);
 
-    HANDLE hThread = CreateThread( nullptr, 0, purgeThread, _wcsdup( strCacheDir.c_str() ), 0, nullptr );
+    HANDLE hThread = CreateThread( nullptr, 0, purgeThread, _wcsdup( wstrCacheDir.c_str() ), 0, nullptr );
 
     if( !hThread )
     {
