@@ -87,10 +87,12 @@
      top_delta="0"
      width="25"/>
     <panel
+     background_visible="true"
+     bg_alpha_color="DkGray2"
      name="chat_service_loading"
      follows="top|right"
      height="24"
-     right="-8"
+     right="-20"
      top="28"
      visible="false"
      width="105">
