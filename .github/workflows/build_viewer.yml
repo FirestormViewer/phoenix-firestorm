@@ -465,11 +465,33 @@ jobs:
           echo "viewer_channel=${{ env.FS_RELEASE_CHAN }}" >> "$GITHUB_OUTPUT"
           echo "viewer_release_type=${{ env.FS_RELEASE_TYPE }}" >> "$GITHUB_OUTPUT"
       
-      - name: Unzip xcarchive.zip files
+      - name: Free macOS intermediates and extract symbols
         if: runner.os == 'macOS'
+        shell: bash
         run: |
-          find . -name '*.xcarchive.zip' -exec sh -c 'unzip -o "{}" -d "$(dirname "{}")"' \;
-      
+          set -euo pipefail
+          shopt -s nullglob
+          roots=(build-darwin-*)
+          if ((${#roots[@]} == 0)); then
+            echo "::error::No build-darwin-* directories found"
+            exit 1
+          fi
+          df -h .
+          for root in "${roots[@]}"; do
+            if [[ -d "$root/build" ]]; then
+              du -sh "$root/build"
+              rm -rf -- "$root/build"
+            fi
+          done
+
+          find "${roots[@]}" -type f -name '*.xcarchive.zip' -print0 |
+            while IFS= read -r -d '' archive; do
+              unzip -o "$archive" -d "$(dirname "$archive")"
+              rm -- "$archive"
+            done
+
+          du -sh "${roots[@]}"
+          df -h .      
 
       - name: Post Bugsplat Symbols
         uses: beqjanus/symbol-upload@main
