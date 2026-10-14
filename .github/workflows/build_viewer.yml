@@ -47,20 +47,26 @@ jobs:
       viewer_build: ${{ steps.version.outputs.viewer_build }}
       viewer_release_type: ${{ steps.version.outputs.viewer_release_type }}
     steps:
-      - name: Install Bash 4 and GNU sed on Mac
+      - name: Ensure Bash 4+ and GNU sed on Mac
         if: runner.os == 'macOS'
+        shell: bash
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+          HOMEBREW_NO_INSTALL_CLEANUP: "1"
         run: |
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          # aws/tap is preinstalled on the runner but is not used by this workflow.
-          if brew tap | grep -qx 'aws/tap'; then
-            brew untap aws/tap
-          fi
-          brew install bash
-          brew install gnu-sed
+          set -euo pipefail
 
-          echo "/usr/local/bin" >> $GITHUB_PATH
-          echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
+          for formula in bash gnu-sed; do
+            if ! brew list --formula --versions "$formula" >/dev/null 2>&1; then
+              brew install --formula "$formula"
+            fi
+          done
 
+          echo "$(brew --prefix bash)/bin" >> "$GITHUB_PATH"
+          echo "$(brew --prefix gnu-sed)/libexec/gnubin" >> "$GITHUB_PATH"
+
+          "$(brew --prefix bash)/bin/bash" --version
+          "$(brew --prefix gnu-sed)/libexec/gnubin/sed" --version
       - uses: actions/checkout@v7
       # Use apt-based Python when inside the Ubuntu 22.04 container
       - name: Install Python 3.11 (container case)
