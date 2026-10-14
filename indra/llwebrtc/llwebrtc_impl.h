@@ -556,6 +556,10 @@ class LLWebRTCImpl : public LLWebRTCDeviceInterface, public webrtc::AudioDeviceO
     webrtc::scoped_refptr<LLWebRTCAudioDeviceModule>           mDeviceModule;
     std::vector<LLWebRTCDevicesObserver *>                     mVoiceDevicesObserverList;
     std::atomic<bool>                                          mDevicesDeployingNeedsReset{ false };
+    // <FS:TJ> Try and help crash on Mac with device changes
+    int                                                        mDeployBackoffs{ 0 };
+    std::atomic<bool>                                          mDevicesUpdatePending{ false };
+    // </FS:TJ>
 
     bool mBuiltinNS;
     bool mBuiltinAGC;

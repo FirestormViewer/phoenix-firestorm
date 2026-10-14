@@ -132,7 +132,6 @@ bool pumpMainLoop()
 
 void cleanupViewer()
 {
-    set_os_hibernation_mode(0); // restore default OS hibernation behavior
     if(!LLApp::isError())
     {
         if (gViewerAppPtr)
@@ -433,12 +432,6 @@ bool LLAppViewerMacOSX::initSLURLHandler()
     register_url_schemes();
 
     return true;
-}
-
-void LLAppViewerMacOSX::setOSHibernationMode(eHibernationMode mode)
-{
-    // pass to objective-c++
-    set_os_hibernation_mode((int)mode);
 }
 
 std::string LLAppViewerMacOSX::generateSerialNumber()

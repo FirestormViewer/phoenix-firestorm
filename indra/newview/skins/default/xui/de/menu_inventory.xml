@@ -89,13 +89,11 @@
 	<menu_item_call label="Name kopieren" name="Copy Name"/>
 	<menu_item_call label="Ausschneiden" name="Cut"/>
 	<menu_item_call label="Einfügen" name="Paste"/>
-	<menu label="Links" name="Links">
-		<menu_item_call label="Als Link einfügen" name="Paste As Link"/>
-		<menu_item_call label="Alle Links suchen" name="Find Links"/>
-		<menu_item_call label="Links ersetzen" name="Replace Links"/>
-		<menu_item_call label="Defekte Links aufräumen" name="Cleanup broken Links"/>
-	</menu>
+	<menu_item_call label="Als Link einfügen" name="Paste As Link"/>
+	<menu_item_call label="Alle Links suchen" name="Find Links"/>
+	<menu_item_call label="Links ersetzen" name="Replace Links"/>
 	<menu_item_call label="Löschen" name="Delete"/>
+	<menu_item_call label="Defekte Links aufräumen" name="Cleanup broken Links"/>
 	<menu_item_call label="In Standardordner verschieben" name="Move to Default Folder"/>
 	<menu_item_call label="In Fundbüro verschieben" name="Move to Lost And Found"/>
 	<menu_item_call label="Systemordner löschen" name="Delete System Folder"/>

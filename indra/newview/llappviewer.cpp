@@ -753,12 +753,6 @@ bool LLAppViewer::sendURLToOtherInstance(const std::string& url)
     return false;
 }
 
-//virtual
-void LLAppViewer::setOSHibernationMode(eHibernationMode mode)
-{
-    // See OS specific files
-}
-
 //----------------------------------------------------------------------------
 // LLAppViewer definition
 
@@ -6995,29 +6989,6 @@ void LLAppViewer::outOfMemorySoftQuit()
     }
 }
 
-void LLAppViewer::setPermitOSHibernation(bool permit)
-{
-    if (permit)
-    {
-        if (mCurrentHibernationMode != LL_HIBERNATE_MODE_DEFAULT)
-        {
-            // Will call OS specific code to let OS hibernate when idle
-            setOSHibernationMode(LL_HIBERNATE_MODE_DEFAULT);
-            mCurrentHibernationMode = LL_HIBERNATE_MODE_DEFAULT;
-        }
-    }
-    else
-    {
-        static LLCachedControl<S32> os_hibernation_mode(gSavedSettings, "OSHibernationMode", 0);
-        eHibernationMode mode = static_cast<eHibernationMode>(os_hibernation_mode());
-        if (mode != LL_HIBERNATE_MODE_DEFAULT && mCurrentHibernationMode != mode)
-        {
-            setOSHibernationMode(mode);
-            mCurrentHibernationMode = mode;
-        }
-    }
-}
-
 void LLAppViewer::idleNameCache()
 {
     // Neither old nor new name cache can function before agent has a region
@@ -7246,9 +7217,6 @@ void LLAppViewer::disconnectViewer()
     // Pass the connection state to LLUrlEntryParcel not to attempt
     // parcel info requests while disconnected.
     LLUrlEntryParcel::setDisconnected(gDisconnected);
-
-    // Restore default OS hibernation mode
-    setPermitOSHibernation(true);
 }
 
 void LLAppViewer::forceErrorLLError()
@@ -7617,15 +7585,6 @@ void LLAppViewer::handleLoginComplete()
     // we logged in successfully, so save settings on logout
     LL_DEBUGS() << "Login successful, per account settings will be saved on log out." << LL_ENDL;
     mSavePerAccountSettings=true;
-
-    // Don't allow hibernation while we're running
-    setPermitOSHibernation(false);
-    // Track 'hibernation' mode changes
-    mOSHibernationModeChangeConnection = gSavedSettings.getControl("OSHibernationMode")->getSignal()->connect([](LLControlVariable* control, const LLSD& new_val, const LLSD& old_val)
-    {
-        // setPermitOSHibernation will sort itself out based on new mode.
-        LLAppViewer::instance()->setPermitOSHibernation(false);
-    });
 }
 
 //virtual

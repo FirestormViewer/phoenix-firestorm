@@ -88,13 +88,11 @@
 	<menu_item_call label="Recortar" name="Cut"/>
 	<menu_item_call label="Copiar" name="Copy"/>
 	<menu_item_call label="Colar" name="Paste"/>
-	<menu label="Links" name="Links">
-		<menu_item_call label="Colar como link" name="Paste As Link"/>
-		<menu_item_call label="Encontrar todos os links" name="Find Links"/>
-		<menu_item_call label="Substituir links" name="Replace Links"/>
-		<menu_item_call label="Limpar links quebrados" name="Cleanup broken Links"/>
-	</menu>
+	<menu_item_call label="Colar como link" name="Paste As Link"/>
+	<menu_item_call label="Encontrar todos os links" name="Find Links"/>
+	<menu_item_call label="Substituir links" name="Replace Links"/>
 	<menu_item_call label="Excluir" name="Delete"/>
+	<menu_item_call label="Limpar links quebrados" name="Cleanup broken Links"/>
 	<menu_item_call label="Mover para a pasta padrão" name="Move to Default Folder"/>
 	<menu_item_call label="Mover para Achados e Perdidos" name="Move to Lost And Found"/>
 	<menu_item_call label="Excluir pasta do sistema" name="Delete System Folder"/>

@@ -25,10 +25,8 @@
 	<menu_item_call label="名前をコピー" name="Copy Name"/>
 	<!-- </FS:MJR> [FIRE-36793] -->
 	<menu_item_call label="ペースト" name="Paste"/>
-	<menu label="リンク" name="Links">
-		<menu_item_call label="リンクとしてペースト" name="Paste As Link"/>
-		<menu_item_call label="リンクを置き換え" name="Replace Links"/>
-	</menu>
+	<menu_item_call label="リンクとしてペースト" name="Paste As Link"/>
+	<menu_item_call label="リンクを置き換え" name="Replace Links"/>
 	<menu_item_call label="削除" name="Delete"/>
 	<menu_item_call label="システムフォルダを削除" name="Delete System Folder"/>
 	<menu_item_call label="再生" name="Sound Play"/>

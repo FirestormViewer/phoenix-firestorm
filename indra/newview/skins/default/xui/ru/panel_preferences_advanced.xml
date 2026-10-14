@@ -9,14 +9,6 @@
 	<check_box label="Показать меню разработчиков (Используйте на свой страх и риск!)" name="show_develop_menu_check"/>
 	<check_box label="Отключить обнаружение VRAM с помощью WMI зондирования в системах Windows" name="FSDisableWMIProbing"/>
 	<!-- <check_box label="Включить использование анимации с временным шагом (Эксперементально)" tool_tip="Эта настройка может уменьшить нагрузку прорисовки на дальних аватаров но также может привести к воспроизведению их анимаций на неправильных скоростях" name="UseAnimationTimeSteps"/> -->
-	<text name="os_hibernation_mode">
-		Предотвращать гибернацию ОС, если пользователь не отошел:
-	</text>
-	<combo_box name="os_hibernation_combobox" tool_tip="Предотвращает переход ОС в сон, только если пользователь не отошел">
-		<combo_box.item label="Гибернация разрешена" name="can_hibernate"/>
-		<combo_box.item label="Гибернация запрещена, экран можно выключать" name="cant_hibernate"/>
-		<combo_box.item label="Гибернация запрещена, экран нельзя выключать" name="cant_hibernate_screen"/>
-	</combo_box>
 	<text name="BackgroundYieldTimeText">
 		Количество времени, в миллисекундах, чтобы получить каждый кадр в другие приложения, когда [APP_NAME] не на переднем плане (по умолчанию: 40; 1 секунда = 1000 миллисекунд):
 	</text>

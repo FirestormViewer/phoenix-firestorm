@@ -76,9 +76,7 @@
 	<menu_item_call label="Copiar" name="Copy"/>
 	<menu_item_call label="Cortar" name="Cut"/>
 	<menu_item_call label="Pegar" name="Paste"/>
-	<menu label="Links" name="Links">
-		<menu_item_call label="Pegar como enlace" name="Paste As Link"/>
-	</menu>
+	<menu_item_call label="Pegar como enlace" name="Paste As Link"/>
 	<menu_item_call label="Borrar" name="Delete"/>
 	<menu_item_call label="Mover a Objetos Perdidos" name="Move to Lost And Found"/>
 	<menu_item_call label="Borrar carpeta del sistema" name="Delete System Folder"/>
