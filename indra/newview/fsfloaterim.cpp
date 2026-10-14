@@ -1609,7 +1609,7 @@ void FSFloaterIM::updateMessages()
             LLUUID from_id = msg["from_id"].asUUID();
             std::string from = msg["from"].asString();
             std::string message = msg["message"].asString();
-            S32 is_history = msg["is_history"].asInteger();
+            bool is_history = msg["is_history"].asBoolean();
             bool is_region_msg = msg["is_region_msg"].asBoolean();
 
             // LL removed updates to the participants list on bigger groups, so at least keep track of
@@ -1634,10 +1634,7 @@ void FSFloaterIM::updateMessages()
             chat.mSessionID = mSessionID;
             chat.mFromName = from;
             chat.mTimeStr = time;
-            if (is_history)
-            {
-                chat.mChatStyle = (EChatStyle) is_history;
-            }
+            chat.mChatStyle = is_history ? CHAT_STYLE_HISTORY : chat.mChatStyle;
             if (is_region_msg)
             {
                 chat.mSourceType = CHAT_SOURCE_REGION;
@@ -1681,6 +1678,11 @@ void FSFloaterIM::updateMessages()
             else
             {
                 chat.mText = message;
+            }
+
+            if (msg.has("is_group_history") && msg["is_group_history"].asBoolean())
+            {
+                chat_args["is_group_history"] = true;
             }
 
             static const LLStyle::Params input_append_params = LLStyle::Params();

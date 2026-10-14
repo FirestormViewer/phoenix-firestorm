@@ -102,9 +102,7 @@ public:
                         const LLUUID& from_id,
                         const std::string& utf8_text,
                         const std::string& time,
-                        // <FS:Zi> Add a distinct color for server side group chat replay
-                        // const bool is_history,
-                        const S32 is_history,
+                        const bool is_history,
                         const bool is_region_msg,
                         U32 timestamp);
 
