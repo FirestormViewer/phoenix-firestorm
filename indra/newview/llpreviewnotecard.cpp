@@ -335,6 +335,14 @@ bool LLPreviewNotecard::canClose()
     }
 }
 
+// <FS:TJ> Byte counter
+void LLPreviewNotecard::onOpen(const LLSD& key)
+{
+    LLPreview::onOpen(key);
+    updateByteCounter();
+}
+// </FS:TJ>
+
 /* virtual */
 void LLPreviewNotecard::setObjectID(const LLUUID& object_id)
 {
