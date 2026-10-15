@@ -5942,6 +5942,14 @@ Instruções detalhadas para colocar [APP_NAME] na lista de permissões - inclui
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+	<notification name="ViewerProcessRunningAsAdmin">
+		Um ou mais processos do viewer estão sendo executados como administrador. Isso costuma causar diversos problemas e impedir que mídias e páginas web funcionem dentro do viewer.
+
+Certifique-se de que nenhum processo do viewer esteja configurado para ser executado como administrador. Para mais informações, leia aqui:
+
+https://wiki.firestormviewer.org/fs_media#one_or_more_viewer_processes_are_currently_running_as_administrator_error_message
+		<usetemplate ignoretext="Avisar quando o viewer estiver sendo executado como administrador" name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmPoserOverwrite">
 		Substituir a pose existente “[POSE_NAME]”?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
@@ -6283,5 +6291,36 @@ Gostaria de salvá-las primeiro?
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
+	</notification>
+	<notification name="FSWearableFavoritesNewFolder">
+		Digite um nome para a nova pasta de Vestíveis favoritos:
+		<form name="form">
+			<input name="message">
+				Nova pasta
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesRenameFolder">
+		Digite um novo nome para a pasta de Vestíveis favoritos [FOLDER_NAME]:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesDeleteFolder">
+		Excluir a pasta de Vestíveis favoritos "[FOLDER_NAME]"?
+
+Isso remove apenas a pasta e seus links de favoritos. Os itens originais do inventário não são excluídos.
+		<form name="form">
+			<button name="Delete" text="Excluir"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesFolderInvalidName">
+		Não foi possível criar a pasta de Vestíveis favoritos "[FOLDER_NAME]".
+Nomes de pasta não podem conter / ou \.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 </notifications>
