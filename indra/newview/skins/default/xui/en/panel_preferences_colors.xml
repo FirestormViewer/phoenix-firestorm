@@ -1923,7 +1923,7 @@
        left="30"
        height="12"
        name="console_opacity"
-       top_pad="10"
+       top_pad="5"
        width="220">
        Console Opacity:
      </text>
@@ -2231,7 +2231,7 @@
      left="30"
      height="12"
      name="FSScriptDialogNoTransparency"
-     top_pad="15"
+     top_pad="10"
      width="450"
      label="Always show script dialogs on an opaque background" />
      <check_box
