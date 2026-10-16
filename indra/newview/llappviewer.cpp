@@ -2082,39 +2082,6 @@ bool LLAppViewer::cleanup()
 
     LL_INFOS() << "Cleaning Up" << LL_ENDL;
 
-    // <FS:Zi> Backup Settings
-    if(mSaveSettingsOnExit)
-    {
-    // </FS:Zi>
-    // FIRE-4871: Save per-account settings earlier -- TS
-    std::string per_account_settings_file = gSavedSettings.getString("PerAccountSettingsFile");
-    if (per_account_settings_file.empty())
-    {
-        LL_INFOS() << "Not saving per-account settings; don't know the account name yet." << LL_ENDL;
-    }
-    // Only save per account settings if the previous login succeeded, otherwise
-    // we might end up with a cleared out settings file in case a previous login
-    // failed after loading per account settings. -Zi
-    else if (!mSavePerAccountSettings)
-    {
-        LL_INFOS() << "Not saving per-account settings; last login was not successful." << LL_ENDL;
-    }
-    else
-    {
-        gSavedPerAccountSettings.saveToFile(per_account_settings_file, true);
-        LL_INFOS() << "First time: Saved per-account settings to " <<
-                per_account_settings_file << LL_ENDL;
-    }
-    gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), true);
-    // /FIRE-4871
-    // <FS:Zi> Backup Settings
-    }
-    else
-    {
-        LL_INFOS() << "Not saving settings, to prevent settings restore failure." << LL_ENDL;
-    }
-    // </FS:Zi>
-
     // shut down mesh streamer
     gMeshRepo.shutdown();
 
@@ -2333,7 +2300,7 @@ bool LLAppViewer::cleanup()
     else
     {
         gSavedPerAccountSettings.saveToFile(per_account_settings_file, true);
-        LL_INFOS() << "Second time: Saved per-account settings to " <<
+        LL_INFOS() << "Saved per-account settings to " <<
                 per_account_settings_file << LL_ENDL;
 
         if (LLViewerParcelAskPlay::instanceExists())
