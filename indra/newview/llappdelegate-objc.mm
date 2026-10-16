@@ -108,8 +108,12 @@
     {
         // Set up recurring calls to oneFrame (repeating timer with timeout 0)
         // until applicationShouldTerminate.
-        frameTimer = [NSTimer scheduledTimerWithTimeInterval:0.0 target:self
-                              selector:@selector(oneFrame) userInfo:nil repeats:YES];
+        // <FS:TJ> Fix double release on frameTimer
+        //frameTimer = [NSTimer scheduledTimerWithTimeInterval:0.0 target:self
+        //                      selector:@selector(oneFrame) userInfo:nil repeats:YES];
+        frameTimer = [[NSTimer scheduledTimerWithTimeInterval:0.0 target:self
+                              selector:@selector(oneFrame) userInfo:nil repeats:YES] retain];
+        // </FS:TJ>
 
     // <FS:TJ> Launch new instance option from macOS dock
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -198,6 +202,7 @@
         return NSTerminateCancel;
     } else {
         // pumpMainLoop() returned true: it's done. Okay, done with frameTimer.
+        [frameTimer invalidate]; // <FS:TJ/> Fix double release on frameTimer
         [frameTimer release];
         cleanupViewer();
         return NSTerminateNow;
@@ -211,7 +216,7 @@
     {
         // Once pumpMainLoop() reports that we're done, cancel frameTimer:
         // stop the repetitive calls.
-        [frameTimer release];
+        //[frameTimer release]; // <FS:TJ/> Fix double release on frameTimer
         [[LLApplication sharedApplication] terminate:self];
     }
 }
