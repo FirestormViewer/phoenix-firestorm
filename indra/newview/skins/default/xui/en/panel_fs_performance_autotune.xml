@@ -154,7 +154,7 @@ follows="top|left"
 name="pref_dd_autotune"
 left_pad="20"
 min_val="32"
-max_val="256"
+max_val="1024"
 width="140">
 </spinner>
 <text
