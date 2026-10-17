@@ -65,6 +65,7 @@ public:
 
     // llfloater
     bool canClose() override;
+    void onOpen(const LLSD& key) override; // <FS:TJ/> Byte counter
 
     // llpanel
     bool postBuild() override;

@@ -45,7 +45,8 @@
    width="295"
    height="324"
    visibility_control="FSInternalCanEditObjectFaces"
->
+   font="DejaVu"
+   font.size="LSmall">
 
 <panel
    follows="all"
@@ -79,7 +80,8 @@
    allow_no_texture="true"
    fallback_image="materials_ui_x_24.png"
    tool_tip="Click to choose a pbr material"
->
+   caption_text.font="DejaVu"
+   caption_text.font.size="LSmall">
    <texture_picker.mouseenter_callback
       function="BuildTool.ShowFindAllButton"
       parameter="btn_select_same_gltf"/>
@@ -100,7 +102,9 @@
    can_apply_immediately="true"
    allow_no_texture="true"
    fallback_image="materials_ui_x_24.png"
-   tool_tip="Click to choose the base color map (Albedo)"/>
+   tool_tip="Click to choose the base color map (Albedo)"
+   caption_text.font="DejaVu"
+   caption_text.font.size="LSmall"/>
 
 <color_swatch
    follows="left|top"
@@ -111,6 +115,8 @@
    name="base_color_tint_picker"
    label="Tint"
    can_apply_immediately="true"
+   caption_text.font="DejaVu"
+   caption_text.font.size="LSmall"
    tool_tip="Click to choose the base color tint"
 />
 
@@ -148,7 +154,8 @@
    allow_no_texture="true"
    fallback_image="materials_ui_x_24.png"
    tool_tip="Click to choose the normal map"
-/>
+   caption_text.font="DejaVu"
+   caption_text.font.size="LSmall"/>
 
 <texture_picker
    follows="left|top"
@@ -162,7 +169,8 @@
    allow_no_texture="true"
    fallback_image="materials_ui_x_24.png"
    tool_tip="Click to choose the emission map"
-/>
+   caption_text.font="DejaVu"
+   caption_text.font.size="LSmall"/>
 
 <color_swatch
    follows="left|top"
@@ -174,7 +182,8 @@
    label="Tint"
    can_apply_immediately="true"
    tool_tip="Click to choose the emissive color tint"
-/>
+   caption_text.font="DejaVu"
+   caption_text.font.size="LSmall"/>
 
 <texture_picker
    follows="left|top"
@@ -189,7 +198,8 @@
    allow_no_texture="true"
    fallback_image="materials_ui_x_24.png"
    tool_tip="Click to choose the metallic-roughness map, which may contain optional occlusion channel"
-/>
+   caption_text.font="DejaVu"
+   caption_text.font.size="LSmall"/>
 
 </panel>	   <!-- panel_material_maps -->
 
@@ -213,7 +223,8 @@
    name="double sided"
    height="22"
    width="96"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <spinner
    follows="right|top"
@@ -227,8 +238,8 @@
    initial_value="0"
    name="transparency"
    decimal_digits="3"
->
-</spinner>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <text
    follows="top|left"
@@ -240,7 +251,8 @@
    type="string"
    length="1"
    name="blend mode label"
->
+   font="DejaVu"
+   font.size="LSmall">
    Mode
 </text>
 
@@ -250,7 +262,9 @@
    right="-1"
    name="alpha mode"
    top_delta="-3"
-   width="80">
+   width="80"
+   drop_down_button.font="DejaVu"
+   drop_down_button.font.size="LSmall">
   <combo_box.item
    label="Opaque"
    name="None"
@@ -277,7 +291,8 @@
    initial_value="0"
    name="alpha cutoff"
    decimal_digits="3"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <spinner
    follows="right|top"
@@ -291,7 +306,8 @@
    initial_value="0"
    name="metalness factor"
    decimal_digits="3"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <spinner
    follows="right|top"
@@ -305,7 +321,8 @@
    initial_value="0"
    name="roughness factor"
    decimal_digits="3"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <button
    follows="right|top"
@@ -316,6 +333,8 @@
    name="save_selected_pbr"
    label="Save"
    width="100"
+   font="DejaVu"
+   font.size="LSmall"
 />
 
 </panel>	<!-- panel_material_parameters -->
@@ -336,7 +355,8 @@
    open_tabs_on_drag_and_drop="true"
    width="295"
    height="70"
->
+   font="DejaVu"
+   font.size="LSmall">
 
 <panel
    follows="all"
@@ -364,7 +384,9 @@
    left="10"
    right="-1"
    name="pbr_transforms_all_scale_label"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Scale
 </text>
 
@@ -377,7 +399,8 @@
    width="12"
    height="19"
    name="labelGltfTextureScaleU_All"
->
+   font="DejaVu"
+   font.size="LSmall">
     U
 </text>
 
@@ -392,7 +415,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="all" />
@@ -426,7 +450,8 @@
    width="12"
    height="19"
    name="labelGltfTextureScaleV_All"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -441,7 +466,8 @@
    max_val="10000"
    decimal_digits="5"
    name="gltfTextureScaleV_All"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="all" />
@@ -486,7 +512,9 @@
    left="10"
    name="pbr_transforms_all_offset_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Offset
 </text>
 
@@ -499,7 +527,8 @@
    width="12"
    height="19"
    name="labelGltfTextureOffsetU_All"
->
+   font="DejaVu"
+   font.size="LSmall">
     U
 </text>
 
@@ -514,7 +543,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="all" />
@@ -529,7 +559,8 @@
    width="12"
    height="19"
    name="labelGltfTextureOffsetV_All"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -544,7 +575,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="all" />
@@ -570,7 +602,9 @@
    left="0"
    name="pbr_transforms_all_rotation_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Rotation
 </text>
 
@@ -587,7 +621,8 @@
    max_val="360"
    decimal_digits="2"
    increment="1"
->
+   font="DejaVu"
+   font.size="LSmall">
 
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
@@ -624,7 +659,9 @@
    left="10"
    name="pbr_transforms_base_color_scale_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Scale
 </text>
 
@@ -637,7 +674,8 @@
    width="12"
    height="19"
    name="labelGltfTextureScaleU_Base"
->
+   font="DejaVu"
+   font.size="LSmall">
     U
 </text>
 
@@ -652,7 +690,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="base" />
@@ -686,7 +725,8 @@
    width="12"
    height="19"
    name="labelGltfTextureScaleV_Base"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -701,7 +741,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="base" />
@@ -746,7 +787,9 @@
    left="10"
    name="pbr_transforms_base_color_offset_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Offset
 </text>
 
@@ -759,7 +802,8 @@
    width="12"
    height="19"
    name="labelGltfTextureOffsetU_Base"
->
+   font="DejaVu"
+   font.size="LSmall">
     U
 </text>
 
@@ -774,7 +818,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="base" />
@@ -789,7 +834,8 @@
    width="12"
    height="19"
    name="labelGltfTextureOffsetV_Base"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -804,7 +850,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="base" />
@@ -830,7 +877,9 @@
    left="0"
    name="pbr_transforms_base_color_rotation_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Rotation
 </text>
 
@@ -847,7 +896,8 @@
    min_val="-360"
    decimal_digits="2"
    increment="1"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="base" />
@@ -883,7 +933,9 @@
    left="10"
    name="pbr_transforms_normal_scale_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Scale
 </text>
 
@@ -896,7 +948,8 @@
    width="12"
    height="19"
    name="labelGltfTextureScaleU_Normal"
->
+   font="DejaVu"
+   font.size="LSmall">
     U
 </text>
 
@@ -911,7 +964,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="normal" />
@@ -945,7 +999,8 @@
    width="12"
    height="19"
    name="labelGltfTextureScaleV_Normal"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -960,7 +1015,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="normal" />
@@ -1005,7 +1061,9 @@
    left="10"
    name="pbr_transforms_normal_offset_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Offset
 </text>
 
@@ -1018,7 +1076,8 @@
    width="12"
    height="19"
    name="labelGltfTextureOffsetU_Normal"
->
+   font="DejaVu"
+   font.size="LSmall">
     U
 </text>
 
@@ -1033,7 +1092,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="normal" />
@@ -1048,7 +1108,8 @@
    width="12"
    height="19"
    name="labelGltfTextureOffsetV_Normal"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -1063,7 +1124,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="normal" />
@@ -1089,7 +1151,9 @@
    left="0"
    name="pbr_transforms_normal_rotation_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Rotation
 </text>
 
@@ -1106,7 +1170,8 @@
    min_val="-360"
    decimal_digits="2"
    increment="1"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="normal" />
@@ -1142,7 +1207,9 @@
    left="10"
    name="pbr_transforms_orm_scale_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Scale
 </text>
 
@@ -1155,7 +1222,8 @@
    width="12"
    height="19"
    name="labelGltfTextureScaleU_Metallic"
->
+   font="DejaVu"
+   font.size="LSmall">
     U
 </text>
 
@@ -1170,7 +1238,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="metallic" />
@@ -1204,7 +1273,8 @@
    width="12"
    height="19"
    name="labelGltfTextureScaleV_Metallic"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -1219,7 +1289,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="metallic" />
@@ -1264,7 +1335,9 @@
    left="10"
    name="pbr_transforms_orm_offset_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Offset
 </text>
 
@@ -1277,7 +1350,8 @@
    width="12"
    height="19"
    name="labelGltfTextureOffsetU_Metallic"
->
+   font="DejaVu"
+   font.size="LSmall">
     U
 </text>
 
@@ -1292,7 +1366,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="metallic" />
@@ -1307,7 +1382,8 @@
    width="12"
    height="19"
    name="labelGltfTextureOffsetU_Metallic"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -1322,7 +1398,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="metallic" />
@@ -1348,7 +1425,9 @@
    left="0"
    name="pbr_transforms_orm_rotation_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Rotation
 </text>
 
@@ -1365,7 +1444,8 @@
    min_val="-360"
    decimal_digits="2"
    increment="1"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="metallic" />
@@ -1401,7 +1481,9 @@
    left="10"
    name="pbr_transforms_emissive_scale_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Scale
 </text>
 
@@ -1414,7 +1496,8 @@
    width="12"
    height="19"
    name="labelGltfTextureScaleU_Emissive"
->
+   font="DejaVu"
+   font.size="LSmall">
     U
 </text>
 
@@ -1429,7 +1512,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="emissive" />
@@ -1463,7 +1547,8 @@
    width="12"
    height="19"
    name="labelGltfTextureScaleV_Emissive"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -1478,7 +1563,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="emissive" />
@@ -1523,7 +1609,9 @@
    left="10"
    name="pbr_transforms_emissive_offset_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Offset
 </text>
 
@@ -1536,7 +1624,8 @@
    width="12"
    height="19"
    name="labelGltfTextureOffsetU_Emissive"
->
+   font="DejaVu"
+   font.size="LSmall">
     U
 </text>
 
@@ -1551,7 +1640,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="emissive" />
@@ -1566,7 +1656,8 @@
    width="12"
    height="19"
    name="labelGltfTextureOffsetV_Emissive"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -1581,7 +1672,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="emissive" />
@@ -1607,7 +1699,9 @@
    left="0"
    name="pbr_transforms_emissive_rotation_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Rotation
 </text>
 
@@ -1624,7 +1718,8 @@
    min_val="-360"
    decimal_digits="2"
    increment="1"
->
+   font="DejaVu"
+   font.size="LSmall">
 <spinner.commit_callback
    function="BuildTool.GLTFUVSpinner"
    parameter="emissive" />
@@ -1680,7 +1775,8 @@
    default_image_name="Default"
    fallback_image="materials_ui_x_24.png"
    tool_tip="Click to choose a picture"
->
+   caption_text.font="DejaVu"
+   caption_text.font.size="LSmall">
    <texture_picker.mouseenter_callback
       function="BuildTool.ShowFindAllButton"
       parameter="btn_select_same_diff"/>
@@ -1700,7 +1796,8 @@
    label="Tint"
    tool_tip="Click to open color picker"
    can_apply_immediately="true"
-/>
+   caption_text.font="DejaVu"
+   caption_text.font.size="LSmall"/>
 
 <button
    enabled="true"
@@ -1737,7 +1834,8 @@
    label="Normal"
    name="bumpytexture control"
    tool_tip="Click to choose a picture"
->
+   caption_text.font="DejaVu"
+   caption_text.font.size="LSmall">
    <texture_picker.mouseenter_callback
       function="BuildTool.ShowFindAllButton"
       parameter="btn_select_same_norm"/>
@@ -1781,7 +1879,8 @@
    label="Specular"
    name="shinytexture control"
    tool_tip="Click to choose a picture"
->
+   caption_text.font="DejaVu"
+   caption_text.font.size="LSmall">
    <texture_picker.mouseenter_callback
       function="BuildTool.ShowFindAllButton"
       parameter="btn_select_same_spec"/>
@@ -1802,7 +1901,8 @@
    name="shinycolorswatch"
    tool_tip="Click to open color picker"
    enabled_control="FSInternalFaceHasBPSpecularMap"
-/>
+   caption_text.font="DejaVu"
+   caption_text.font.size="LSmall"/>
 
 <button
    enabled="true"
@@ -1831,9 +1931,9 @@
    follows="all"
    layout="topleft"
    name="panel_blinn_phong_options"
-   left="140"
+   left="136"
    top="0"
-   width="182"
+   width="186"
    height="212"
    auto_resize="false"
 >
@@ -1848,7 +1948,8 @@
    name="checkbox fullbright"
    width="80"
    word_wrap="down"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <spinner
    follows="top|right"
@@ -1859,12 +1960,13 @@
    height="19"
    name="ColorTrans"
    label="Transparency"
-   label_width="80"
+   label_width="85"
    initial_value="0"
    increment="2"
    max_val="100"
    decimal_digits="0"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <text
    follows="top|right"
@@ -1877,7 +1979,8 @@
    length="1"
    text_color="TextFgColor"
    name="color trans percent"
->
+   font="DejaVu"
+   font.size="LSmall">
    %
 </text>
 
@@ -1892,7 +1995,8 @@
    length="1"
    name="label alphamode"
    text_readonly_color="LabelDisabledColor"
->
+   font="DejaVu"
+   font.size="LSmall">
    Alpha mode
 </text>
 
@@ -1904,7 +2008,8 @@
    right="-1"
    height="22"
    name="combobox alphamode"
->
+   drop_down_button.font="DejaVu"
+   drop_down_button.font.size="LSmall">
 <combo_box.item
    label="None"
    name="None"
@@ -1938,7 +2043,8 @@
    max_val="255"
    increment="1"
    decimal_digits="0"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <text
    follows="left|top"
@@ -1951,7 +2057,8 @@
    length="1"
    name="label bumpiness"
    text_readonly_color="LabelDisabledColor"
->
+   font="DejaVu"
+   font.size="LSmall">
    Bumpiness
 </text>
 
@@ -1963,7 +2070,8 @@
    right="-1"
    height="22"
    name="combobox bumpiness"
->
+   drop_down_button.font="DejaVu"
+   drop_down_button.font.size="LSmall">
 <combo_box.item
    label="None"
    name="None"
@@ -2059,7 +2167,8 @@
    length="1"
    name="label shininess"
    text_readonly_color="LabelDisabledColor"
->
+   font="DejaVu"
+   font.size="LSmall">
    Shininess
 </text>
 
@@ -2071,7 +2180,8 @@
    right="-1"
    height="22"
    name="combobox shininess"
->
+   drop_down_button.font="DejaVu"
+   drop_down_button.font.size="LSmall">
 <combo_box.item
    label="None"
    name="None"
@@ -2110,7 +2220,8 @@
    increment="1"
    decimal_digits="0"
    enabled_control="FSInternalFaceHasBPSpecularMap"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <spinner
    follows="right|top"
@@ -2128,7 +2239,8 @@
    increment="1"
    decimal_digits="0"
    enabled_control="FSInternalFaceHasBPSpecularMap"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 </layout_panel>    <!-- panel_blinn_phong_options -->
 
@@ -2147,7 +2259,8 @@
    tab_position="top"
    tab_height="20"
    open_tabs_on_drag_and_drop="true"
->
+   font="DejaVu"
+   font.size="LSmall">
 
 <panel
    follows="all"
@@ -2175,7 +2288,9 @@
    left="10"
    name="transforms_diffuse_scale_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Scale
 </text>
 
@@ -2188,7 +2303,8 @@
    width="12"
    height="19"
    name="labelTexScaleU"
->
+   font="DejaVu"
+   font.size="LSmall">
     H
 </text>
 
@@ -2203,7 +2319,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <button
    follows="left|top"
@@ -2233,7 +2350,8 @@
    width="12"
    height="19"
    name="labelTexScaleV"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -2248,7 +2366,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <button
    follows="top|left"
@@ -2289,7 +2408,9 @@
    left="10"
    name="transforms_diffuse_offset_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Offset
 </text>
 
@@ -2302,7 +2423,8 @@
    width="12"
    height="19"
    name="labelTexOffsetU"
->
+   font="DejaVu"
+   font.size="LSmall">
     H
 </text>
 
@@ -2317,7 +2439,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <text
    follows="left|top"
@@ -2328,7 +2451,8 @@
    width="12"
    height="19"
    name="labelTexOffsetV"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -2343,7 +2467,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 </panel>	<!-- transforms_diffuse_offset -->
 
@@ -2365,7 +2490,9 @@
    left="0"
    name="transforms_diffuse_rotation_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Rotation
 </text>
 
@@ -2382,7 +2509,8 @@
    max_val="360"
    decimal_digits="2"
    increment="1"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 </panel>    <!-- transforms_diffuse_rotation -->
 
@@ -2415,7 +2543,9 @@
    left="10"
    name="transforms_normal_scale_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Scale
 </text>
 
@@ -2428,7 +2558,8 @@
    width="12"
    height="19"
    name="labelBumpyScaleU"
->
+   font="DejaVu"
+   font.size="LSmall">
     H
 </text>
 
@@ -2443,7 +2574,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <button
    follows="top|left"
@@ -2473,7 +2605,8 @@
    width="12"
    height="19"
    name="labelBumpyScaleV"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -2488,7 +2621,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <button
    follows="top|left"
@@ -2529,7 +2663,9 @@
    left="10"
    name="transforms_normal_offset_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Offset
 </text>
 
@@ -2542,7 +2678,8 @@
    width="12"
    height="19"
    name="labelBumpyOffsetU"
->
+   font="DejaVu"
+   font.size="LSmall">
     H
 </text>
 
@@ -2557,7 +2694,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <text
    follows="left|top"
@@ -2568,7 +2706,8 @@
    width="12"
    height="19"
    name="labelBumpyOffsetU"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -2583,7 +2722,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 </panel>	<!-- transforms_normal_offset -->
 
@@ -2605,7 +2745,9 @@
    left="0"
    name="transforms_normal_rotation_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Rotation
 </text>
 
@@ -2622,7 +2764,8 @@
    max_val="360"
    decimal_digits="2"
    increment="1"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 </panel>    <!-- transforms_normal_rotation -->
 
@@ -2655,7 +2798,9 @@
    left="10"
    name="transforms_specular_scale_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Scale
 </text>
 
@@ -2668,7 +2813,8 @@
    width="12"
    height="19"
    name="labelShinyScaleU"
->
+   font="DejaVu"
+   font.size="LSmall">
     H
 </text>
 
@@ -2683,7 +2829,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <button
    follows="top|left"
@@ -2713,7 +2860,8 @@
    width="12"
    height="19"
    name="labelShinyScaleV"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -2728,7 +2876,8 @@
    min_val="-10000"
    max_val="10000"
    decimal_digits="5"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <button
    follows="top|left"
@@ -2769,7 +2918,9 @@
    left="10"
    name="transforms_specular_offset_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Offset
 </text>
 
@@ -2782,7 +2933,8 @@
    width="12"
    height="19"
    name="labelShinyOffsetU"
->
+   font="DejaVu"
+   font.size="LSmall">
     H
 </text>
 
@@ -2797,7 +2949,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <text
    follows="left|top"
@@ -2808,7 +2961,8 @@
    width="12"
    height="19"
    name="labelShinyOffsetV"
->
+   font="DejaVu"
+   font.size="LSmall">
     V
 </text>
 
@@ -2823,7 +2977,8 @@
    min_val="-1"
    max_val="1"
    decimal_digits="5"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 </panel>	<!-- transforms_specular_offset -->
 
@@ -2845,7 +3000,9 @@
    left="0"
    name="transforms_specular_rotation_label"
    right="-1"
-   height="16">
+   height="16"
+   font="DejaVu"
+   font.size="LSmall">
     Rotation
 </text>
 
@@ -2862,7 +3019,8 @@
    max_val="360"
    decimal_digits="2"
    increment="1"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 </panel>    <!-- transforms_specular_rotation -->
 
@@ -2890,7 +3048,8 @@
    use_ellipses="true"
    read_only="true"
    name="media_info"
->
+   font="DejaVu"
+   font.size="LSmall">
    URL of chosen media, if any, goes here
 </text>
 
@@ -2918,7 +3077,8 @@
    name="add_media"
    label="Choose..."
    tool_tip="Add Media"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <button
    follows="bottom|left"
@@ -2930,7 +3090,8 @@
    name="delete_media"
    label="Remove"
    tool_tip="Delete this media texture"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <button
    follows="bottom|left"
@@ -2943,7 +3104,8 @@
    label="Align"
    label_selected="Align Media"
    tool_tip="Align media texture (must load first)"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 </panel> <!-- panel_material_type_media -->
 
@@ -2982,7 +3144,8 @@
    min_val="-100"
    max_val="100"
    decimal_digits="1"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <check_box
    follows="top|left"
@@ -2995,7 +3158,8 @@
    width="200"
    name="checkbox_sync_settings"
    tool_tip="Synchronize texture map parameters"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <check_box
    follows="left|top"
@@ -3007,6 +3171,8 @@
    initial_value="false"
    name="checkbox planar align"
    tool_tip="Align textures on all selected faces with the last selected face. Requires Planar texture mapping."
+   font="DejaVu"
+   font.size="LSmall"/>
 />
 
 <check_box
@@ -3018,7 +3184,8 @@
    height="16"
    label="Hide water"
    name="checkbox_hide_water"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 <combo_box
    follows="right|top"
@@ -3028,7 +3195,8 @@
    width="80"
    height="23"
    name="combobox texgen"
->
+   drop_down_button.font="DejaVu"
+   drop_down_button.font.size="LSmall">
 <combo_box.item
    label="Default"
    name="Default"
@@ -3051,7 +3219,8 @@
    label="Align"
    name="button align textures"
    tool_tip="Align current texture layers"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 </panel>   <!-- panel_face_params -->
 
@@ -3099,6 +3268,7 @@
    name="glow"
    decimal_digits="3"
    visibility_control="FSInternalCanEditObjectFaces"
-/>
+   font="DejaVu"
+   font.size="LSmall"/>
 
 </panel>    <!-- Texture -->

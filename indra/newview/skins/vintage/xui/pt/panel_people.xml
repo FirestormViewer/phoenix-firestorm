@@ -41,7 +41,7 @@ Procurando pessoas? Use o [secondlife:///app/worldmap Mapa].
 						<container_view name="radarmap_options_container_view" label="Opções">
 							<panel name="radarmap_options_scrolled_panel">
 								<check_box label="Mostrar minimapa acima do radar" name="ShowRadarMinimap"/>
-								<check_box label="Mostrar avatares ignorados e na lista de bloqueio" name="FSRadarShowMutedAndDerendered"/>
+								<check_box label="Mostrar avatares bloqueados e na blacklist" name="FSRadarShowMutedAndDerendered"/>
 								<check_box label="Avisar ao entrar na distância de renderização" name="RadarReportDrawRangeEnter"/>
 								<check_box label="Avisar ao sair da distância de renderização" name="RadarReportDrawRangeLeaving"/>
 								<check_box label="Avisar ao entrar no alcance do chat" name="RadarReportChatRangeEnter"/>

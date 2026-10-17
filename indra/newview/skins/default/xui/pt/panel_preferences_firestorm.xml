@@ -42,6 +42,17 @@
 		<slider label="Tempo de transição das configurações de ambiente:" tool_tip="Intervalo, em segundos, em que mudanças de ambiente fazem transição gradual. 0 = direto, sem transição" name="manual_environment_change_transition_period"/>
 		<check_box name="EnvironmentPersistAcrossLogin" label="Manter ambiente entre sessões" tool_tip="Restaura as configurações atuais de ambiente após novo login."/>
 		<check_box name="FSRepeatedEnvTogglesShared" label="Atalhos de ambiente como alternância" tool_tip="Pressionar o atalho repetidamente alterna entre a configuração desejada e o ambiente compartilhado."/>
+		<text name="FSCloudColorLabel" width="400">
+			Cor da nuvem de carregamento/falha de bake do avatar:
+		</text>
+		<text name="FSCloudColorStartLabel">
+			Início:
+		</text>
+		<text name="FSCloudColorEndLabel">
+			Fim:
+		</text>
+		<color_swatch name="FSCloudColorStart" tool_tip="Cor inicial da &quot;nuvem&quot; de partículas exibida enquanto um avatar está carregando ou quando o bake falhou. Aplicada imediatamente, sem necessidade de reiniciar."/>
+		<color_swatch name="FSCloudColorEnd" tool_tip="Cor final da &quot;nuvem&quot; de partículas exibida enquanto um avatar está carregando ou quando o bake falhou. Aplicada imediatamente, sem necessidade de reiniciar."/>
 	</panel>
 
 	<!--Protection-->
@@ -221,6 +232,15 @@
 		<check_box label="Mostrar info. avançada de script" tool_tip="Se ativado, as informações de script serão complementadas com detalhes adicionais." name="FSScriptInfoExtended"/>
 		<check_box label="Ordenar pontos de anexo alfabeticamente (requer reinício)" tool_tip="Se ativado, as entradas dos menus &quot;Anexar a&quot; serão ordenadas alfabeticamente." name="FSSortAttachmentSpotsAlphabetically"/>
 		<check_box label="Novo painel de textura [APP_NAME] (requer reinício)" tool_tip="Se ativado, as ferramentas de edição de textura usarão o fluxo aprimorado do [APP_NAME] e permitirão editar texturas Blinn-Phong e PBR ao mesmo tempo." name="FSUseNewTexturePanel"/>
+		<text name="buildaxiscolors_label">
+			Aparência dos eixos X/Y/Z da construção:
+		</text>
+		<color_swatch label="Eixo X" name="colorswatchXaxis" tool_tip="Clique para abrir o seletor de cores"/>
+		<color_swatch label="Eixo Y" name="colorswatchYaxis" tool_tip="Clique para abrir o seletor de cores"/>
+		<color_swatch label="Eixo Z" name="colorswatchZaxis" tool_tip="Clique para abrir o seletor de cores"/>
+		<color_swatch label="Fundo texto" name="colorswatchEditTextBackgroundColor" tool_tip="Clique para abrir o seletor de cores"/>
+		<spinner label="Escala" name="editWidgetScaling" tool_tip="Ajusta o tamanho dos controles usados para editar rotação/escala/posição."/>
+		<check_box label="Sombra no texto" tool_tip="Se ativado, o texto de dica exibido durante a edição terá sombra." name="editTextDropShadow"/>
 	</panel>
 
 	<panel label="Editor de script" name="BuildTabScriptEditor">
