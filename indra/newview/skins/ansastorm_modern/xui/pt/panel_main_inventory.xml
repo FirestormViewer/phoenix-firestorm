@@ -11,6 +11,7 @@
 			<menu_item_call name="inventory_open" label="Abrir"/>
 			<menu_item_call name="inventory_share" label="Compartilhar"/>
 			<menu_item_call name="inventory_new_window" label="Nova janela"/>
+			<menu_item_check label="Mostrar Biblioteca" name="show_library"/>
 			<menu_item_check name="add_inv_toggle" label="Vestir"/>
 			<menu_item_call name="inventory_show_filters" label="Mostrar filtros"/>
 			<menu_item_call name="inventory_reset_filters" label="Redefinir filtros"/>

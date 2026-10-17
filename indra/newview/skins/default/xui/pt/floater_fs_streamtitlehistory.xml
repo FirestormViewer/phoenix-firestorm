@@ -3,4 +3,9 @@
 	<fs_scroll_list name="history">
 		<columns label="Título" name="title" />
 	</fs_scroll_list>
+	<button name="clear_history" label="Limpar"/>
+	<text name="max_entries_label" width="85">
+		Máx. itens:
+	</text>
+	<button name="copy_to_clipboard" label="Copiar p/ área transf." width="155"/>
 </floater>

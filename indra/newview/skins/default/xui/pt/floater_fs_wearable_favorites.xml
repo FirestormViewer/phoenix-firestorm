@@ -6,7 +6,13 @@
 	<floater.string name="search_no_items">
 		Nenhum item correspondente encontrado.
 	</floater.string>
+	<floater.string name="root_folder_label">
+		Todos os favoritos
+	</floater.string>
 	<panel name="buttons_panel">
+		<button name="new_folder_btn" tool_tip="Criar nova pasta de favoritos"/>
+		<button name="rename_folder_btn" tool_tip="Renomear a pasta de favoritos selecionada"/>
+		<button name="delete_folder_btn" tool_tip="Excluir a pasta de favoritos selecionada"/>
 		<filter_editor label="Filtrar vestíveis favoritos" name="wearable_filter_input"/>
 		<menu_button name="options_btn" tool_tip="Opções de vestíveis favoritos"/>
 		<button name="remove_btn" tool_tip="Remover vestível da lista de favoritos"/>

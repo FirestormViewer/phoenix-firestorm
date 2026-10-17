@@ -2,6 +2,8 @@
 <context_menu name="Attachment Pie">
 	<menu_item_call label="Tocar" name="Attachment Object Touch"/>
 	<menu_item_call label="Mostrar no inventário" name="Show original"/>
+	<menu_item_call label="Adicionar aos favoritos" name="Add to favorites"/>
+	<menu_item_call label="Remover dos favoritos" name="Remove from favorites"/>
 	<menu_item_call label="Editar" name="Edit..."/>
 	<menu_item_call label="Editar material PBR" name="EditGLTFMaterial"/>
 	<menu_item_call label="Desanexar" name="Detach"/>

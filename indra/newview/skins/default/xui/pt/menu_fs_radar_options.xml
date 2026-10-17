@@ -2,7 +2,7 @@
 <toggleable_menu name="menu_group_plus">
 	<menu_item_check label="Mostrar minimapa acima do Radar" name="ShowRadarMinimap"/>
 	<menu_item_check label="Limitar resultados a um raio específico" name="LimitRadarByRange"/>
-	<menu_item_check label="Mostrar avatares silenciados e na blacklist" name="FSRadarShowMutedAndDerendered"/>
+	<menu_item_check label="Mostrar avatares bloqueados e na blacklist" name="FSRadarShowMutedAndDerendered"/>
 	<context_menu label="Formato de nome no Radar" name="radarNameFormat">
 		<menu_item_check label="Nome de exibição" name="radarFmtDN"/>
 		<menu_item_check label="Nome de usuário" name="radarFmtUN"/>

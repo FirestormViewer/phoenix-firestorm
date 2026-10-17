@@ -238,7 +238,9 @@
 	 top="55"
 	 height="70"
      layout="topleft"
-	 name="edit_radio_group">
+	 name="edit_radio_group"
+     font="DejaVu"
+     font.size="LSmall" >
         <radio_item
 		 label="Move"
 		 layout="topleft"
@@ -274,7 +276,9 @@
      label="Edit linked"
      layout="topleft"     
      name="checkbox edit linked parts"
-     top_pad="0">
+     top_pad="0"
+     font="DejaVu"
+     font.size="LSmall">
 		  <check_box.commit_callback
 			function="BuildTool.selectComponent"/>
 	</check_box>
@@ -312,7 +316,10 @@
      left_pad="2"
      layout="topleft"
      name="link_btn"
-     width="50">
+     width="50"
+     font="DejaVu"
+     font.size="LSmall"
+     pad_bottom="1">
 	  <button.commit_callback
 	     function="BuildTool.LinkObjects"/>
     </button>
@@ -323,7 +330,10 @@
      layout="topleft"
      left_pad="2"
      name="unlink_btn"
-     width="90">
+     width="90"
+     font="DejaVu"
+     font.size="LSmall"
+     pad_bottom="1">
 	  <button.commit_callback
 	     function="BuildTool.UnlinkObjects"/>
     </button>
@@ -335,7 +345,9 @@
      name="combobox grid mode"
      tool_tip="Choose the type of grid ruler for positioning the object"
      top_delta="0"
-     width="108">
+     width="108"
+     drop_down_button.font="DejaVu"
+     drop_down_button.font.size="LSmall">
       <combo_box.item
        label="World grid"
        name="World"
@@ -361,7 +373,9 @@
      top="52"
      label_text.wrap="true"
      label_text.width="120"
-     width="134" />
+     width="134"
+     font="DejaVu"
+     font.size="LSmall" />
     <check_box
      control_name="ScaleStretchTextures"
      height="17"
@@ -372,7 +386,9 @@
      name="checkbox stretch textures"
      top_pad="-2"
      follows="left|top"
-     width="134" />
+     width="134"
+     font="DejaVu"
+     font.size="LSmall" />
    <check_box
      control_name="SnapEnabled"
      height="17"
@@ -381,7 +397,9 @@
      layout="topleft"
      top_pad="-2"
      name="checkbox snap to grid"
-     width="134" />
+     width="134"
+     font="DejaVu"
+     font.size="LSmall" />
   <check_box
      control_name="FSBuildPrefs_ActualRoot"
      height="17"
@@ -390,7 +408,9 @@
      layout="topleft"
      top_pad="-2"
      name="checkbox actual root"
-     width="134" />
+     width="134"
+     font="DejaVu"
+     font.size="LSmall" />
   <check_box
      height="17"
      initial_value="true"
@@ -398,7 +418,9 @@
      layout="topleft"
      top_pad="-2"
      name="checkbox show highlight"
-     width="134" >
+     width="134"
+     font="DejaVu"
+     font.size="LSmall">
 		  <check_box.commit_callback
 			function="BuildTool.commitShowHighlight"/>
 	</check_box>
@@ -410,7 +432,9 @@
      layout="topleft"
      top_pad="-2"
      name="checkbox select probes"
-     width="134" />
+     width="134"
+     font="DejaVu"
+     font.size="LSmall" />
     <button
      left_pad="0"
      image_selected="ForwardArrow_Press"
