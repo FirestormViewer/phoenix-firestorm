@@ -40,6 +40,7 @@ class LLParcelSelection;
 class LLObjectSelection;
 class LLSelectNode;
 class LLViewerObject;
+class LLVector3;
 
 // [RLVa:KB] - Checked: RLVa-2.0.0
 void set_use_wireframe(bool useWireframe);
@@ -125,7 +126,9 @@ bool for_sale_selection(LLSelectNode* nodep);
 void handle_toggle_flycam();
 
 void handle_object_sit_or_stand();
+void handle_object_sit(LLViewerObject* object, const LLVector3& offset);
 void handle_object_sit(const LLUUID& object_id);
+LLViewerObject* find_nearby_seat();
 void handle_give_money_dialog();
 bool enable_pay_object();
 bool enable_buy_object();

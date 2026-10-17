@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<contents>
+    <rows name="flycam_move_forward">
+        <columns name="lst_action" value="Flugkamera Vorwärts" />
+    </rows>
+    <rows name="flycam_move_backward">
+        <columns name="lst_action" value="Flugkamera Rückwärts" />
+    </rows>
+    <rows name="flycam_truck_left">
+        <columns name="lst_action" value="Flugkamera-Fahrt Links" />
+    </rows>
+    <rows name="flycam_truck_right">
+        <columns name="lst_action" value="Flugkamera-Fahrt Rechts" />
+    </rows>
+    <rows name="flycam_move_up">
+        <columns name="lst_action" value="Flugkamera hoch" />
+    </rows>
+    <rows name="flycam_move_down">
+        <columns name="lst_action" value="Flugkamera runter" />
+    </rows>
+    <rows name="flycam_yaw_left">
+        <columns name="lst_action" value="Flugkamera links drehen" />
+    </rows>
+    <rows name="flycam_yaw_right">
+        <columns name="lst_action" value="Flugkamera rechts drehen" />
+    </rows>
+    <rows name="flycam_pitch_up">
+        <columns name="lst_action" value="Flugkamera hochneigen" />
+    </rows>
+    <rows name="flycam_pitch_down">
+        <columns name="lst_action" value="Flugkamera runterneigen" />
+    </rows>
+    <rows name="flycam_unroll">
+        <columns name="lst_action" tool_tip="Flugkamera-Rollen zurücksetzen" value="Flugkamera entrollen" />
+    </rows>
+    <rows name="toggle_flycam">
+        <columns name="lst_action" tool_tip="Flugkamera ein- oder ausschalten" value="Flugkamera umschalten" />
+    </rows>
+</contents>

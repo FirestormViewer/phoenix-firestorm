@@ -122,7 +122,6 @@ LLComboBox::LLComboBox(const LLComboBox::Params& p)
 
     mButton = LLUICtrlFactory::create<LLButton>(button_params);
 
-
     if (mAllowTextEntry)
     {
         //redo to compensate for button hack that leaves space for a character
@@ -145,16 +144,12 @@ LLComboBox::LLComboBox(const LLComboBox::Params& p)
     // Grab the mouse-up event and make sure the button state is correct
     mList->setMouseUpCallback(boost::bind(&LLComboBox::onListMouseUp, this));
 
-    for (LLInitParam::ParamIterator<ItemParams>::const_iterator it = p.items.begin();
-        it != p.items.end();
-        ++it)
+    for (LLComboBox::ItemParams item_params : p.items)
     {
-        LLScrollListItem::Params item_params = *it;
-        if (it->label.isProvided())
+        if (item_params.label.isProvided())
         {
-            item_params.columns.add().value(it->label());
+            item_params.columns.add().value(item_params.label());
         }
-
         mList->addRow(item_params);
     }
 
@@ -238,7 +233,7 @@ void LLComboBox::onCommit()
 bool LLComboBox::isDirty() const
 {
     bool grubby = false;
-    if ( mList )
+    if (mList)
     {
         grubby = mList->isDirty();
     }
@@ -246,9 +241,9 @@ bool LLComboBox::isDirty() const
 }
 
 // virtual   Clear dirty state
-void    LLComboBox::resetDirty()
+void LLComboBox::resetDirty()
 {
-    if ( mList )
+    if (mList)
     {
         mList->resetDirty();
     }
@@ -317,7 +312,7 @@ LLScrollListItem* LLComboBox::add(const std::string& name, void* userdata, EAddP
 {
     LLScrollListItem* item = mList->addSimpleElement(name, pos);
     item->setEnabled(enabled);
-    item->setUserdata( userdata );
+    item->setUserdata(userdata);
     if (!mAllowTextEntry && mLabel.empty())
     {
         if (mControlVariable)
@@ -373,7 +368,6 @@ void LLComboBox::sortByName(bool ascending)
     mList->sortOnce(0, ascending);
 }
 
-
 // Choose an item with a given name in the menu.
 // Returns true if the item was found.
 bool LLComboBox::setSimple(const LLStringExplicit& name)
@@ -399,11 +393,9 @@ void LLComboBox::setValue(const LLSD& value)
             return;
     }
 
-    bool found = mList->selectByValue(value);
-    if (found)
+    if (mList->selectByValue(value))
     {
-        LLScrollListItem* item = mList->getFirstSelected();
-        if (item)
+        if (mList->getFirstSelected())
         {
             updateLabel();
         }
@@ -434,7 +426,8 @@ const std::string LLComboBox::getSelectedItemLabel(S32 column) const
 // virtual
 LLSD LLComboBox::getValue() const
 {
-    if (LLScrollListItem* item = mList->getFirstSelected())
+    LLScrollListItem* item = mList->getFirstSelected();
+    if(item)
     {
         return item->getValue();
     }
@@ -620,8 +613,7 @@ bool LLComboBox::selectPrevItem()
 
 void LLComboBox::setEnabledByValue(const LLSD& value, bool enabled)
 {
-    LLScrollListItem *found = mList->getItem(value);
-    if (found)
+    if (LLScrollListItem* found = mList->getItem(value))
     {
         found->setEnabled(enabled);
     }
@@ -694,7 +686,7 @@ void LLComboBox::setLeftTextPadding(S32 pad)
 void* LLComboBox::getCurrentUserdata()
 {
     LLScrollListItem* item = mList->getFirstSelected();
-    if( item )
+    if (item)
     {
         return item->getUserdata();
     }
@@ -800,15 +792,19 @@ void LLComboBox::hideList()
     if (mList->getVisible())
     {
         // assert selection in list
-        if(mAllowNewValues)
+        if (mAllowNewValues)
         {
             // mLastSelectedIndex = -1 means that we entered a new value, don't select
             // any of existing items in this case.
-            if(mLastSelectedIndex >= 0)
+            if (mLastSelectedIndex >= 0)
+            {
                 mList->selectNthItem(mLastSelectedIndex);
+            }
         }
-        else if(mLastSelectedIndex >= 0)
+        else if (mLastSelectedIndex >= 0)
+        {
             mList->selectNthItem(mLastSelectedIndex);
+        }
 
         mButton->setToggleState(false);
         mList->setVisible(false);
@@ -894,7 +890,7 @@ bool LLComboBox::handleToolTip(S32 x, S32 y, MASK mask)
 {
     std::string tool_tip;
 
-    if(LLUICtrl::handleToolTip(x, y, mask))
+    if (LLUICtrl::handleToolTip(x, y, mask))
     {
         return true;
     }
@@ -911,6 +907,7 @@ bool LLComboBox::handleToolTip(S32 x, S32 y, MASK mask)
             .message(tool_tip)
             .sticky_rect(calcScreenRect()));
     }
+
     return true;
 }
 

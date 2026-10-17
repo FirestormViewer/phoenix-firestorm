@@ -1409,6 +1409,13 @@ char const* const _PREHASH_Experience = LLMessageStringTable::getInstance()->get
 char const* const _PREHASH_ExperienceID = LLMessageStringTable::getInstance()->getString("ExperienceID");
 char const* const _PREHASH_LargeGenericMessage = LLMessageStringTable::getInstance()->getString("LargeGenericMessage");
 char const* const _PREHASH_MetaData = LLMessageStringTable::getInstance()->getString("MetaData");
+char const* const _PREHASH_GameControlInput = LLMessageStringTable::getInstance()->getString("GameControlInput");
+char const* const _PREHASH_AxisData = LLMessageStringTable::getInstance()->getString("AxisData");
+char const* const _PREHASH_GameControlData = LLMessageStringTable::getInstance()->getString("GameControlData");
+char const* const _PREHASH_ActionMode = LLMessageStringTable::getInstance()->getString("ActionMode");
+char const* const _PREHASH_Axes = LLMessageStringTable::getInstance()->getString("Axes");
+char const* const _PREHASH_ModeAxes = LLMessageStringTable::getInstance()->getString("ModeAxes");
+char const* const _PREHASH_ModeButtons = LLMessageStringTable::getInstance()->getString("ModeButtons");
 
 // <FS:CR> Aurora Sim
 char const* const _PREHASH_RegionSizeX = LLMessageStringTable::getInstance()->getString("RegionSizeX");

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="Sterowanie" name="controls">
+<panel label="Sterowanie" name="controls_panel">
 	<combo_box name="key_mode">
 		<combo_box.item label="W trzeciej osobie" name="third_person" />
 		<combo_box.item label="W trybie pierwszoosobowym" name="first_person" />

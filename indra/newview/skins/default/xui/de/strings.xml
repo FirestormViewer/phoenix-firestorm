@@ -1335,6 +1335,9 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="PrivilegedLandAccess">
 		Land in Ihrem Auftrag verkaufen
 	</string>
+	<string name="UseGameControlInputs">
+		Gamepad-Eingaben verwenden
+	</string>
 	<string name="NotConnected">
 		Nicht verbunden
 	</string>

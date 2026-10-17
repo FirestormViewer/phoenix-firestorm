@@ -3,9 +3,9 @@
  legacy_header_height="18"
  height="500"
  layout="topleft"
- name="Joystick"
+ name="3Dconnexion Device"
  help_topic="joystick"
- title="Joystick Configuration"
+ title="3Dconnexion Configuration"
  width="569">
     <floater.string
      name="JoystickDisabled">
@@ -22,7 +22,7 @@
      width="50"
      mouse_opaque="false"
      name="joystick_lbl">
-      Joystick:
+      Device:
     </text>
     <combo_box
      allow_text_entry="false"
@@ -48,7 +48,7 @@
      width="140" />
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="JoystickAxis2"
      decimal_digits="0"
      increment="1"
@@ -62,7 +62,7 @@
      width="140" />
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="JoystickAxis0"
      decimal_digits="0"
      increment="1"
@@ -76,7 +76,7 @@
      width="140" />
     <spinner
      bottom="76"
-     height="10"     
+     height="10"
      control_name="JoystickAxis4"
      decimal_digits="0"
      increment="1"
@@ -90,7 +90,7 @@
      width="140" />
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="JoystickAxis5"
      decimal_digits="0"
      increment="1"
@@ -104,7 +104,7 @@
      width="140" />
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="JoystickAxis3"
      decimal_digits="0"
      increment="1"
@@ -118,7 +118,7 @@
      width="140" />
     <spinner
      bottom="96"
-     height="10"     
+     height="10"
      control_name="JoystickAxis6"
      decimal_digits="0"
      increment="1"
@@ -141,7 +141,7 @@
      width="60" />
     <check_box
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="Cursor3D"
      label="3D Cursor"
      layout="topleft"
@@ -150,7 +150,7 @@
      width="60" />
     <check_box
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="AutoLeveling"
      label="Auto Level"
      layout="topleft"
@@ -173,7 +173,7 @@
     </text>
     <check_box
      bottom="134"
-     height="10"     
+     height="10"
      control_name="JoystickAvatarEnabled"
      halign="center"
      label="Avatar"
@@ -200,6 +200,7 @@
      layout="topleft"
      left="289"
      name="JoystickFlycamEnabled"
+     tool_tip="Lets this device fly the camera."
      width="60" />
 
     <!-- <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes -->
@@ -394,7 +395,7 @@
     </text>
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="AvatarAxisScale1"
      decimal_digits="2"
      label_width="0"
@@ -406,7 +407,7 @@
      width="56" />
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="BuildAxisScale1"
      decimal_digits="2"
      label_width="0"
@@ -418,7 +419,7 @@
      width="56" />
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="FlycamAxisScale1"
      decimal_digits="2"
      label_width="0"
@@ -441,7 +442,7 @@
     </text>
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="AvatarAxisScale2"
      decimal_digits="2"
      label_width="0"
@@ -453,7 +454,7 @@
      width="56" />
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="BuildAxisScale2"
      decimal_digits="2"
      label_width="0"
@@ -465,7 +466,7 @@
      width="56" />
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="FlycamAxisScale2"
      decimal_digits="2"
      label_width="0"
@@ -488,7 +489,7 @@
     </text>
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="AvatarAxisScale0"
      decimal_digits="2"
      label_width="0"
@@ -500,7 +501,7 @@
      width="56" />
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="BuildAxisScale0"
      decimal_digits="2"
      label_width="0"
@@ -512,7 +513,7 @@
      width="56" />
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="FlycamAxisScale0"
      decimal_digits="2"
      label_width="0"
@@ -535,7 +536,7 @@
     </text>
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="AvatarAxisScale4"
      decimal_digits="2"
      label_width="0"
@@ -547,7 +548,7 @@
      width="56" />
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="BuildAxisScale4"
      decimal_digits="2"
      label_width="0"
@@ -559,7 +560,7 @@
      width="56" />
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="FlycamAxisScale4"
      decimal_digits="2"
      label_width="0"
@@ -708,7 +709,7 @@
     </text>
     <spinner
      bottom_delta="0"
-     height="10"     
+     height="10"
      control_name="AvatarAxisDeadZone2"
      decimal_digits="2"
      increment="0.01"

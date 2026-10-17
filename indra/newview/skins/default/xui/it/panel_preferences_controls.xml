@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="Controlli" name="controls">
+<panel label="Controlli" name="controls_panel">
 	<combo_box name="key_mode">
 		<combo_box.item label="In terza persona" name="third_person" />
 		<combo_box.item label="In prima persona (Mouselook)" name="first_person" />

@@ -51,6 +51,9 @@
 	<rows name="toggle_fly">
 		<columns name="lst_action" value="Fliegen starten/stoppen" />
 	</rows>
+	<rows name="toggle_flycam">
+		<columns name="lst_action" value="Flugkamera ein-/ausschalten" />
+	</rows>
 	<rows name="toggle_sit">
 		<columns name="lst_action" value="Sitzen/Aufstehen" />
 	</rows>

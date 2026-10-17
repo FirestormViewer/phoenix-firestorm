@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<panel label="İdarəetmə" name="controls">
+<panel label="İdarəetmə" name="controls_panel">
 	<combo_box name="key_mode">
 		<combo_box.item label="Üçüncü şəxs görünüşü" name="third_person"/>
 		<combo_box.item label="Birinci şəxs görünüşü (Mouselook)" name="first_person"/>

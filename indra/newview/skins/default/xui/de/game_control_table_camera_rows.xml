@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+    <rows name="camera_actions">
+        <columns label="Kamera-Bewegung" name="action"/>
+    </rows>
+    <rows name="advance">
+        <columns name="action" tool_tip="Kamera vorwärts/rückwärts bewegen" value="Vorwärts/Rückwärts" />
+    </rows>
+    <rows name="pan">
+        <columns name="action" tool_tip="Kamera links/rechts schwenken" value="Links/rechts schwenken" />
+    </rows>
+    <rows name="rise">
+        <columns name="action" tool_tip="Kamera steigen/abfallen" value="Hoch/runter bewegen" />
+    </rows>
+    <rows name="pitch">
+        <columns name="action" tool_tip="Kameraneigung anpassen" value="Neigung hoch/runter" />
+    </rows>
+    <rows name="yaw">
+        <columns name="action" tool_tip="Kamera links/rechts drehen" value="Links/rechts drehen" />
+    </rows>
+    <rows name="zoom">
+        <columns name="action" tool_tip="Kamera hinein-/herauszoomen" value="Hinein-/herauszoomen" />
+    </rows>
+    <!--
+    <rows name="roll_ccw">
+        <columns name="action" tool_tip="Kamera gegen den Uhrzeigersinn rollen" value="Rollen (gg. Uhrzeigersinn)" />
+    </rows>
+    <rows name="roll_cw">
+        <columns name="action" tool_tip="Kamera im Uhrzeigersinn rollen" value="Rollen (im Uhrzeigersinn)" />
+    </rows>
+    -->
+</contents>
