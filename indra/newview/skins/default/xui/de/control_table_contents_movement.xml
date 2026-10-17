@@ -33,6 +33,9 @@
 	<rows name="push_down">
 		<columns name="lst_action" value="Ab" />
 	</rows>
+	<rows name="toggle_down">
+		<columns name="lst_action" value="Ab umschalten" />
+	</rows>
 	<rows name="run_forward">
 		<columns name="lst_action" value="Vorwärts rennen" />
 	</rows>

@@ -105,13 +105,6 @@ bool agent_jump( const LLKeyPressState& s )
     F32 time = s.mElapsedTime;
     S32 frame_count = s.mElapsedFrames;
 
-    // <FS:Ansariel> Chalice Yao's crouch toggle
-    if (gSavedPerAccountSettings.getBOOL("FSCrouchToggleStatus"))
-    {
-        gSavedPerAccountSettings.setBOOL("FSCrouchToggleStatus", false);
-    }
-    // </FS:Ansariel>
-
     static LLCachedControl<bool> automatic_fly(gSavedSettings, "AutomaticFly"); // <FS:PP> Speed optimisation
     if( time < FLY_TIME
         || frame_count <= FLY_FRAMES
@@ -135,25 +128,7 @@ bool agent_jump( const LLKeyPressState& s )
 bool agent_push_down( const LLKeyPressState& s )
 {
     if( KEYSTATE_UP == s.mState  ) return true;
-    // <FS:Ansariel> Chalice Yao's crouch toggle
-    //gAgent.moveUp(-1);
-    else if (KEYSTATE_DOWN == s.mState && !gAgent.getFlying() && !gAgentAvatarp->isSitting() && gSavedPerAccountSettings.getBOOL("FSCrouchToggle"))
-    {
-        if (gSavedPerAccountSettings.getBOOL("FSCrouchToggleStatus"))
-        {
-            gSavedPerAccountSettings.setBOOL("FSCrouchToggleStatus", false);
-        }
-        else
-        {
-            gSavedPerAccountSettings.setBOOL("FSCrouchToggleStatus", true);
-            gAgent.moveUp(-1);
-        }
-    }
-    else
-    {
-        gAgent.moveUp(-1);
-    }
-    // </FS:Ansariel>
+    gAgent.moveUp(-1);
     return true;
 }
 

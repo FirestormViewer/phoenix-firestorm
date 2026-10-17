@@ -44,7 +44,6 @@
 			<check_box label="Pulsar teclas alfanuméricas afecta al movimiento (p. ej. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Pulsar-pulsar-mantener para correr" name="tap_tap_hold_to_run"/>
 			<check_box label="Volar/aterrizar al mantener arriba/abajo" name="automatic_fly"/>
-			<check_box label="Activar el modo conmutado para agacharse" name="crouch_toggle_mode"/>
 			<check_box label="Hacer girar al avatar cuando camina hacia atrás" name="backwardsturnavatar" tool_tip="Gira el avatar para encarar la cámara cuando lo haces caminar hacia atrás"/>
 			<check_box label="Si movelock está activado, volver a bloquear tras cambiar de región" name="RelockMoveLockAfterRegionChange"/>
 			<text name="single_click_action_lbl">

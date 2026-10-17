@@ -1846,10 +1846,8 @@ bool LLAppViewer::doFrame()
                     gKeyboard->scanKeyboard();
                     gViewerInput.scanMouse();
 
-                    // <FS:Ansariel> Chalice Yao's crouch toggle
-                    static LLCachedControl<bool> fsCrouchToggle(gSavedPerAccountSettings, "FSCrouchToggle");
-                    static LLCachedControl<bool> fsCrouchToggleStatus(gSavedPerAccountSettings, "FSCrouchToggleStatus");
-                    if (fsCrouchToggle && fsCrouchToggleStatus)
+                    // <FS:Ansariel> Fixed crouch toggle
+                    if (gAgent.isCrouching())
                     {
                         gAgent.moveUp(-1);
                     }

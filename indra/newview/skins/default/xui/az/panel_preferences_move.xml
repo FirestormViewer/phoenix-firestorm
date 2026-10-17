@@ -50,7 +50,6 @@
 			<check_box label="Hərf düymələri (yəni WASD) yerli söhbətə başlamadan hərəkətə təsir edir." name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Qaçış üçün ikili basmaq" name="tap_tap_hold_to_run"/>
 			<check_box label="Uçmaq / Yerə düşmək (yuxarı (hoppan) / aşağı (otur))" name="automatic_fly"/>
-			<check_box label="Çöməl keçid rejimini aktiv edin" name="crouch_toggle_mode"/>
 			<check_box label="Atlamaya hazırlıq animasiyasını söndürün" name="FSIgnoreFinishAnimation"/>
 			<check_box label="Geriyə doğru hərəkət edərkən avatarın kamera ilə üzbəüz dönməsini söndürün" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Geriyə doğru hərəkət edərkən avatarın kamera ilə üzbəüz dönməsini söndürün"/>
 			<check_box label="Seçilmiş obyektə baxmaq üçün avatarı çevirin" name="FSTurnAvatarToSelectedObject" tool_tip="Avatarınızı hal-hazırda seçdiyiniz obyektlə üzbəüz çevirir."/>

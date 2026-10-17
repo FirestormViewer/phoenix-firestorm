@@ -53,7 +53,6 @@
 			<check_box label="Appuyer sur les touches alphabétiques de déplacement (WASD) déplace mon avatar" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Double-pression sur une touche directionnelle pour courir" name="tap_tap_hold_to_run"/>
 			<check_box label="Décoller / Atterrir en maintenant les touches Saut / Accroupi" name="automatic_fly"/>
-			<check_box label="Rester accroupi jusqu'à ce que je me relève" name="crouch_toggle_mode"/>
 			<check_box label="Désactiver la temporisation de l'animation avant le saut et à l'atterrissage" name="FSIgnoreFinishAnimation"/>
 			<check_box label="Ne pas me retourner lorsque je marche à reculons" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Empêche votre avatar de se retourner pour faire face à la caméra lorsque vous marchez à reculons. Cette option n'affecte que votre vision et n'est pas compatible avec les AOs."/>
 			<check_box label="Tourner l'avatar vers l'objet qu'il sélectionne" name="FSTurnAvatarToSelectedObject" tool_tip="Tourne votre avatar face à l'objet que vous sélectionnez actuellement."/>
