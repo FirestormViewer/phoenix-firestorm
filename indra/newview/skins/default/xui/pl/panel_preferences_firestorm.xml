@@ -39,7 +39,7 @@
         <check_box name="EnvironmentPersistAcrossLogin" label="Trzymaj ustawienia otoczenia pomiędzy sesjami" tool_tip="Przywraca aktualne ustawienia otoczenia po następnym zalogowaniu." />
         <check_box name="FSRepeatedEnvTogglesShared" label="Skróty klawiszowe zmiany otocz. przy powtarzaniu przełączają na otocz. współdzielone" tool_tip="Sprawia, że powielone używanie skrótów klawiszowych (np. ctrl+shift+y) przełącza między wybranym wstępnie zapisanym otoczeniem, a otoczeniem współdzielonym." />
 		<text name="FSCloudColorLabel">
-			Kolor chmurki błędu ładowaniu awatara:
+			Kolor chmurki błędu ładowania awatara:
 		</text>
 		<text name="FSCloudColorEndLabel">
 			Koniec:
