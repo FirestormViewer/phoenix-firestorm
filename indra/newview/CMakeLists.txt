@@ -1932,7 +1932,16 @@ if (DARWIN)
 endif (DARWIN)
 
 if (LINUX)
-    LIST(APPEND viewer_SOURCE_FILES llappviewerlinux.cpp)
+# <FS:BADGE> Linux LauncherEntry publisher sources.
+#    LIST(APPEND viewer_SOURCE_FILES llappviewerlinux.cpp)
+    LIST(APPEND viewer_SOURCE_FILES
+        llappviewerlinux.cpp
+        fslauncherentrylinux.cpp
+        fslauncherentrylinuxtransport.cpp)
+    LIST(APPEND viewer_HEADER_FILES
+        fslauncherentrylinux.h
+        fslauncherentrylinuxtransport.h)
+# </FS:BADGE>
     set_source_files_properties(
       llappviewerlinux.cpp
       PROPERTIES
@@ -2303,6 +2312,22 @@ add_executable(${VIEWER_BINARY_NAME}
     MACOSX_BUNDLE
     ${viewer_SOURCE_FILES}
     )
+
+if (LINUX)
+# <FS:BADGE> Allow downstream packages to configure their launcher ID.
+  # The official installer generates firestorm-viewer.desktop.  Downstream
+  # packages may set this cache value to their actual desktop-file storage ID;
+  # the running viewer can additionally accept a validated
+  # FIRESTORM_LAUNCHER_DESKTOP_ID environment override.
+  set(FIRESTORM_LAUNCHER_DESKTOP_ID "firestorm-viewer.desktop" CACHE STRING
+      "Linux LauncherEntry desktop-file ID (must end in .desktop)")
+  if (NOT "${FIRESTORM_LAUNCHER_DESKTOP_ID}" MATCHES "^[A-Za-z0-9][A-Za-z0-9._-]*[.]desktop$")
+    message(FATAL_ERROR "FIRESTORM_LAUNCHER_DESKTOP_ID must be a valid desktop-file ID ending in .desktop")
+  endif()
+  target_compile_definitions(${VIEWER_BINARY_NAME} PRIVATE
+      "FIRESTORM_LAUNCHER_DESKTOP_ID=\"${FIRESTORM_LAUNCHER_DESKTOP_ID}\"")
+# </FS:BADGE>
+endif()
 
 # add package files
 file(GLOB EVENT_HOST_SCRIPT_GLOB_LIST
@@ -3042,6 +3067,12 @@ if (LL_TESTS)
     llworldmipmap.cpp
   )
 
+  if (LINUX AND GLIB_FOUND)
+# <FS:BADGE> Isolated production LauncherEntry transport tests.
+    list(APPEND viewer_TEST_SOURCE_FILES fslauncherentrylinuxtransport.cpp)
+# </FS:BADGE>
+  endif()
+
   set_source_files_properties(
     llworldmap.cpp
     llworldmipmap.cpp
@@ -3110,6 +3141,15 @@ if (LL_TESTS)
           PROPERTY
           LL_TEST_ADDITIONAL_LIBRARIES ${test_libs}
   )
+  if (LINUX AND GLIB_FOUND)
+# <FS:BADGE> Link the isolated test to the existing GIO target dependencies.
+    set_source_files_properties(
+      fslauncherentrylinuxtransport.cpp
+      PROPERTIES
+      LL_TEST_ADDITIONAL_LIBRARIES "${test_libs};${GIO_LIBRARIES}"
+    )
+# </FS:BADGE>
+  endif()
 
   LL_ADD_PROJECT_UNIT_TESTS(${VIEWER_BINARY_NAME} "${viewer_TEST_SOURCE_FILES}")
 

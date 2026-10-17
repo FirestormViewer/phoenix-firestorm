@@ -31,6 +31,13 @@
 #include "llappviewer.h"
 #endif
 
+// <FS:BADGE> Linux LauncherEntry publisher ownership.
+#include <memory>
+// </FS:BADGE>
+
+// <FS:BADGE>
+class FSLauncherEntryLinux;
+// </FS:BADGE>
 class LLCommandLineParser;
 
 class LLAppViewerLinux : public LLAppViewer
@@ -43,6 +50,9 @@ public:
     // Main application logic
     //
     virtual bool init();            // Override to do application initialization
+    // <FS:BADGE>
+    bool cleanup() override;
+    // </FS:BADGE>
     std::string generateSerialNumber();
     bool setupSLURLHandler();
 
@@ -57,6 +67,11 @@ protected:
 
     virtual bool initSLURLHandler();
     virtual bool sendURLToOtherInstance(const std::string& url);
+
+private:
+    // <FS:BADGE>
+    std::unique_ptr<FSLauncherEntryLinux> mLauncherEntry;
+    // </FS:BADGE>
 };
 
 #endif // LL_LLAPPVIEWERLINUX_H

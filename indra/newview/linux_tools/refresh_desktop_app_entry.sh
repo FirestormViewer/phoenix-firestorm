@@ -5,6 +5,15 @@ RUN_PATH=`dirname "${SCRIPTSRC}" || echo .`
 
 install_prefix=${RUN_PATH}/..
 
+# Keep this in sync with FIRESTORM_LAUNCHER_DESKTOP_ID in the Linux viewer
+# build.  The official package uses firestorm-viewer.desktop; downstream
+# packages may export a different valid storage ID before running this script.
+desktop_id="${FIRESTORM_LAUNCHER_DESKTOP_ID:-firestorm-viewer.desktop}"
+if [[ ! "${desktop_id}" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]*\.desktop$ ]]; then
+    echo "Invalid FIRESTORM_LAUNCHER_DESKTOP_ID '${desktop_id}'; using firestorm-viewer.desktop" >&2
+    desktop_id="firestorm-viewer.desktop"
+fi
+
 function install_desktop_entry()
 {
     local installation_prefix="$1"
@@ -23,9 +32,9 @@ StartupNotify=true\n\
 X-Desktop-File-Install-Version=3.0\n\
 StartupWMClass=do-not-directly-run-firestorm-bin"
 
-    echo " - Installing menu entries in ${desktop_entries_dir}"
+    echo " - Installing menu entries in ${desktop_entries_dir} (${desktop_id})"
     mkdir -vp "${desktop_entries_dir}"
-    echo -e $desktop_entry > "${desktop_entries_dir}/firestorm-viewer.desktop" || "Failed to install application menu!"
+    printf '%b\n' "${desktop_entry}" > "${desktop_entries_dir}/${desktop_id}" || echo "Failed to install application menu!" >&2
 }
 
 if [ "$UID" == "0" ]; then
