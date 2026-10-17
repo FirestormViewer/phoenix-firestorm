@@ -35,6 +35,7 @@
 #endif
 #include "llviewernetwork.h"
 #include "llviewercontrol.h"
+#include "llviewerregion.h"
 #include "llcommandhandler.h"
 #include "lldir.h"
 #include "llhttpnode.h"
@@ -218,17 +219,26 @@ void LLVoiceClient::userAuthorized(const std::string& user_id, const LLUUID &age
 void LLVoiceClient::handleSimulatorFeaturesReceived(const LLSD &simulatorFeatures)
 {
     std::string voiceServerType = simulatorFeatures["VoiceServerType"].asString();
+//#ifndef DISABLE_WEBRTC // <FS:TJ/> Keep Vivox only for OpenSim viewers
     if (voiceServerType.empty())
     {
         // <FS:TJ> Keep Vivox only for OpenSim viewers
+        //voiceServerType = WEBRTC_VOICE_SERVER_TYPE;
     #ifdef OPENSIM
         if (!LLGridManager::getInstance()->isInSecondLife())
+        {
             voiceServerType = VIVOX_VOICE_SERVER_TYPE;
+        }
         else
     #endif
+        {
+    #ifndef DISABLE_WEBRTC
+            voiceServerType = WEBRTC_VOICE_SERVER_TYPE;
+    #endif
+        }
         // </FS:TJ>
-        voiceServerType = WEBRTC_VOICE_SERVER_TYPE;
     }
+//#endif // <FS:TJ/> Keep Vivox only for OpenSim viewers
 
     if (mSpatialVoiceModule && !mNonSpatialVoiceModule)
     {
@@ -716,19 +726,28 @@ LLVoiceP2POutgoingCallInterface *LLVoiceClient::getOutgoingCallInterface(const L
         LLVoiceVersionInfo versionInfo = LLVoiceClient::getInstance()->getVersion();
         voice_server_type = versionInfo.internalVoiceServerType;
     }
+//#ifndef DISABLE_WEBRTC // <FS:TJ/> Keep Vivox only for OpenSim viewers
     if (voiceChannelInfo.has("voice_server_type") && voiceChannelInfo["voice_server_type"] != voice_server_type)
     {
         // there's a mismatch between what the peer is offering and what our server
         // can handle, so default to webrtc
         // <FS:TJ> Keep Vivox only for OpenSim viewers
+        //voice_server_type = WEBRTC_VOICE_SERVER_TYPE;
     #ifdef OPENSIM
         if (!LLGridManager::getInstance()->isInSecondLife())
+        {
             voice_server_type = VIVOX_VOICE_SERVER_TYPE;
+        }
         else
     #endif
+        {
+    #ifndef DISABLE_WEBRTC
+            voice_server_type = WEBRTC_VOICE_SERVER_TYPE;
+    #endif
+        }
         // </FS:TJ>
-        voice_server_type = WEBRTC_VOICE_SERVER_TYPE;
     }
+//#endif // <FS:TJ/> Keep Vivox only for OpenSim viewers
     LLVoiceModuleInterface *module = getVoiceModule(voice_server_type);
     return dynamic_cast<LLVoiceP2POutgoingCallInterface *>(module);
 }
