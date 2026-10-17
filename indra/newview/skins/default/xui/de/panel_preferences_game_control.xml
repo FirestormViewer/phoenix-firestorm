@@ -143,7 +143,7 @@
         <combo_box.item label="West" name="BUTTON_2"/>
         <combo_box.item label="Nors" name="BUTTON_3"/>
         <combo_box.item label="Auswählen" name="BUTTON_4"/>
-        <combo_box.item label="Home" name="BUTTON_5"/>
+        <combo_box.item label="Pos1" name="BUTTON_5"/>
         <combo_box.item label="Start" name="BUTTON_6"/>
         <combo_box.item label="L Stick" name="BUTTON_7"/>
         <combo_box.item label="R Stick" name="BUTTON_8"/>
