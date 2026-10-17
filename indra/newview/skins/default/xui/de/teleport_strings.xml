@@ -21,7 +21,7 @@ Versuchen Sie es später noch einmal.
 		</message>
 		<message name="NoHelpIslandTP">
 			Sie können nicht zurück nach Welcome Island teleportieren.
-Gehen Sie zu [http://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/6/2701 Firestorm Tutorial], um das Tutorial zu wiederholen.
+Gehen Sie zu [https://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/6/2701 Firestorm Tutorial], um das Tutorial zu wiederholen.
 		</message>
 		<message name="noaccess_tport">
 			Sie haben leider keinen Zugang zu diesem Teleport-Ziel.
@@ -49,7 +49,7 @@ Ihre Teleport-Anfrage kann nicht sofort bearbeitet werden. Versuchen Sie es in e
 			Sie müssen mindestens 18 Jahre alt sein, um diese Region betreten zu können.
 		</message>
 		<message name="RegionTPSpecialUsageBlocked">
-			Betreten der Region nicht gestattet. „[REGION_NAME]“ ist eine Region für Geschicklichkeitsspiele. Der Zutritt ist Einwohnern vorbehalten, die bestimmte Kriterien erfüllen. Weitere Details finden Sie unter [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
+			Betreten der Region nicht gestattet. „[REGION_NAME]“ ist eine Region für Geschicklichkeitsspiele. Der Zutritt ist Einwohnern vorbehalten, die bestimmte Kriterien erfüllen. Weitere Details finden Sie unter [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
 		</message>
 		<message name="preexisting_tport">
 			Entschuldigung, aber das System konnte deinen Teleport nicht starten. Versuche es bitte in ein paar Minuten noch einmal.

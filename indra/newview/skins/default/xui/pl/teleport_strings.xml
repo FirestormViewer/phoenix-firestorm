@@ -21,7 +21,7 @@ Spróbuj jeszcze raz.
 		</message>
 		<message name="NoHelpIslandTP">
 			Brak możliwości ponownej teleportacji do Welcome Island.
-Odwiedź [http://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/6/2701 Firestorm Tutorial] by powtórzyć szkolenie.
+Odwiedź [https://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/6/2701 Firestorm Tutorial] by powtórzyć szkolenie.
 		</message>
 		<message name="noaccess_tport">
 			Przepraszamy, ale nie masz dostępu do miejsca docelowego.
@@ -53,7 +53,7 @@ Spróbuj jeszcze raz za kilka minut.
 			Musisz mieć 18 lat lub więcej, aby wejść do tego regionu.
 		</message>
 		<message name="RegionTPSpecialUsageBlocked">
-			Nie można wejść do tego regionu. '[REGION_NAME]' jest miejscem z grami (Skill Gaming Region) - musisz spełnić określone wymagania, jeśli chcesz go odwiedzić. Aby dowiedzieć się więcej zapoznaj się z [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
+			Nie można wejść do tego regionu. '[REGION_NAME]' jest miejscem z grami (Skill Gaming Region) - musisz spełnić określone wymagania, jeśli chcesz go odwiedzić. Aby dowiedzieć się więcej zapoznaj się z [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
 		</message>
 	</message_set>
 	<message_set name="progress">

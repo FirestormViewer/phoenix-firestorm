@@ -744,7 +744,7 @@ Sposta tutti gli oggetti che vuoi acquisire su una sola regione.
 
 Vai su [_URL] per informazioni sull&apos;acquisto di L$?
 		<url name="url">
-			http://secondlife.com/app/currency/?lang=it-IT
+			https://secondlife.com/app/currency/?lang=it-IT
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Annulla" />
 	</notification>
@@ -1643,7 +1643,7 @@ Imposta l&apos;oggetto per la vendita e riprova.
 	</notification>
 	<notification name="RequiredUpdate">
 		Per effettuare l&apos;accesso è richiesta la versione [VERSION]. 
-Scaricala dal sito https://secondlife.com/support/downloads/
+Scaricala dal sito https://www.firestormviewer.org/choose-your-platform/
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PauseForUpdate">
@@ -1678,7 +1678,7 @@ URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Lancia il browser per consultare una pagina web" name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="WebLaunchJoinNow">
-		Vuoi andare su [http://secondlife.com/account/ Dashboard] per gestire il tuo account?
+		Vuoi andare su [https://secondlife.com/my/account/ Dashboard] per gestire il tuo account?
 		<usetemplate ignoretext="Lancia il browser per gestire il mio account" name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
@@ -1848,7 +1848,7 @@ consentono fino a [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/members
 	<notification name="SetDisplayNameSuccess">
 		Ciao [DISPLAY_NAME]!
 
-Come nel modo reale, prima che tutti conoscano il tuo nuovo nome ci vorrà del tempo. Saranno necessari alcuni giorni per [http://wiki.secondlife.com/wiki/Setting_your_display_name l&apos;aggiornamento del nome] in oggetti, script, ricerca, ecc.
+Come nel modo reale, prima che tutti conoscano il tuo nuovo nome ci vorrà del tempo. Saranno necessari alcuni giorni per [https://wiki.secondlife.com/wiki/Setting_your_display_name l&apos;aggiornamento del nome] in oggetti, script, ricerca, ecc.
 	</notification>
 	<notification name="SetDisplayNameBlocked">
 		Non puoi cambiare il tuo nome visualizzato. Se ritieni che si tratti di un errore, contatta l&apos;assistenza.
@@ -1867,7 +1867,7 @@ Riprova con un nome più corto.
 	<notification name="AgentDisplayNameUpdateThresholdExceeded">
 		Devi aspettare ancora prima di cambiare il nome visualizzato.
 
-Vedi http://wiki.secondlife.com/wiki/Setting_your_display_name
+Vedi https://wiki.secondlife.com/wiki/Setting_your_display_name
 
 Riprova più tardi.
 	</notification>
@@ -2063,7 +2063,7 @@ Continuare?
 	<notification name="RegionEntryAccessBlocked_AdultsOnlyContent">
 		La regione che cerchi di visitare include contenuti [REGIONMATURITY] accessibili solo ad adulti.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Attraversamento regione: la regione che cerchi di visitare include contenuti accessibili solo ad adulti." name="okcancelignore" notext="Chiudi" yestext="Passa alla Base conoscenze"/>
 	</notification>
@@ -2090,7 +2090,7 @@ Continuare?
 	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
 		La regione che cerchi di visitare include contenuti [REGIONMATURITY] accessibili solo ad adulti.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Teleport: la regione che cerchi di visitare include contenuti accessibili solo ad adulti." name="okcancelignore" notext="Chiudi" yestext="Passa alla Base conoscenze"/>
 	</notification>
@@ -2120,7 +2120,7 @@ Continuare?
 		Si è verificato un problema con il teleport a causa di un errore di sincronizzazione delle preferenze con il server.
 	</notification>
 	<notification name="RegionTPSpecialUsageBlocked">
-		Impossibile entrare nella regione. &apos;[REGION_NAME]&apos; è una regione per giochi di abilità e per entrare è necessario soddisfare alcuni requisiti. Per dettagli, leggi le [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life domande frequenti sui giochi di abilità].
+		Impossibile entrare nella regione. &apos;[REGION_NAME]&apos; è una regione per giochi di abilità e per entrare è necessario soddisfare alcuni requisiti. Per dettagli, leggi le [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life domande frequenti sui giochi di abilità].
 	</notification>
 	<notification name="PreferredMaturityChanged">
 		Non riceverai più notifiche se stai per visitare una regione con contenuti [RATING]. In futuro potrai modificare le preferenze relative ai contenuti selezionando Io &gt; Preferenze &gt; Generale nella barra del menu.
@@ -2134,7 +2134,7 @@ Continuare?
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
 		Solo gli adulti possono richiedere questo terreno.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Solo gli adulti possono richiedere questo terreno." name="okcancelignore" notext="Chiudi" yestext="Passa alla Base conoscenze"/>
 	</notification>
@@ -2158,7 +2158,7 @@ Continuare?
 	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
 		Solo gli adulti possono acquistare questo terreno.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Solo gli adulti possono acquistare questo terreno." name="okcancelignore" notext="Chiudi" yestext="Passa alla Base conoscenze"/>
 	</notification>
@@ -2356,7 +2356,7 @@ Trasferisci gli elementi nell&apos;inventario?
 		Non ci sono elementi in questo oggetto che si possano copiare.
 	</notification>
 	<notification name="WebLaunchAccountHistory">
-		Vai al [http://secondlife.com/account/ Dashboard] per vedere la cronologia del tuo account?
+		Vai al [https://secondlife.com/my/account/ Dashboard] per vedere la cronologia del tuo account?
 		<usetemplate ignoretext="Lancia il browser per vedere la cronologia del mio account" name="okcancelignore" notext="Annulla" yestext="Vai alla pagina"/>
 	</notification>
 	<notification name="ConfirmAddingChatParticipants">
@@ -2451,9 +2451,9 @@ Inserendo una descrizione accurata ci aiuti a gestire ed elaborare le segnalazio
 
 Ci risulta che tu stia segnalando una violazione di proprietà intellettuale. Per segnalare correttamente la violazione:
 
-(1) Definizione di abuso. Puoi inviare una segnalazione di abuso se ritieni che un residente stia sfruttando il sistema di permessi di [CURRENT_GRID], per esempio usando CopyBot o simili strumenti di copia, per rubare i diritti di proprietà intellettuale. L&apos;Ufficio abusi investigherà e deciderà adeguate azioni disciplinari per comportamenti che violano i [http://secondlife.com/corporate/tos.php Termini del servizio] di  [CURRENT_GRID] oppure gli  [http://secondlife.com/corporate/cs.php Standard della comunità]. Tieni comunque presente che l&apos;Ufficio abusi non gestisce e non risponde alle richieste di rimozione di contenuti da [CURRENT_GRID].
+(1) Definizione di abuso. Puoi inviare una segnalazione di abuso se ritieni che un residente stia sfruttando il sistema di permessi di [CURRENT_GRID], per esempio usando CopyBot o simili strumenti di copia, per rubare i diritti di proprietà intellettuale. L&apos;Ufficio abusi investigherà e deciderà adeguate azioni disciplinari per comportamenti che violano i [https://secondlife.com/corporate/tos.php Termini del servizio] di  [CURRENT_GRID] oppure gli  [https://secondlife.com/corporate/cs.php Standard della comunità]. Tieni comunque presente che l&apos;Ufficio abusi non gestisce e non risponde alle richieste di rimozione di contenuti da [CURRENT_GRID].
 
-(2) DMCA o rimozione di contenuti. Per richiedere la rimozione di contenuti da [CURRENT_GRID], devi compilare una denuncia valida di violazione come definito nelle nostra  [http://secondlife.com/corporate/dmca.php Regole DMCA] (leggi sul copyright).
+(2) DMCA o rimozione di contenuti. Per richiedere la rimozione di contenuti da [CURRENT_GRID], devi compilare una denuncia valida di violazione come definito nelle nostra  [https://secondlife.com/corporate/dmca.php Regole DMCA] (leggi sul copyright).
 
 Per continuare con il procedimento di abuso, chiudi questa finestra e completa la compilazione della segnalazione.  È possibile che dovrai specificare la categoria CopyBot o Sfruttamento dei diritti.
 
@@ -2883,7 +2883,7 @@ Prova a selezionare una parte di terreno più piccola.
 	</notification>
 	<notification name="NoQuickTime">
 		Il software QuickTime di Apple sembra non essere installato sul tuo computer.
-Se vuoi vedere contenuto multimediale in streaming sui lotti che lo supportano, vai alla pagina [http://www.apple.com/quicktime QuickTime] e installa il Player QuickTime.
+Se vuoi vedere contenuto multimediale in streaming sui lotti che lo supportano, vai alla pagina [https://www.apple.com/quicktime QuickTime] e installa il Player QuickTime.
 	</notification>
 	<notification name="NoPlugin">
 		Non è stato trovato alcun plugin multimediale per gestire il tipo mime [MIME_TYPE].  Il media di questo tipo non è disponibile.
@@ -3357,7 +3357,7 @@ Non consentire l&apos;accesso se non comprendi perfettamente il motivo per cui d
 
 Il tuo saldo in L$ sarà aggiornato al termine dell&apos;elaborazione. Se l&apos;elaborazione dovesse impiegare più di 20 minuti, la transazione verrà annullata. In quel caso l&apos;ammontare dell&apos;acquisto verrà accreditato sul tuo saldo in US$.
 
-Potrai controllare lo stato del pagamento nella pagina della cronologia delle transazioni nel tuo [http://secondlife.com/account/ Dashboard]
+Potrai controllare lo stato del pagamento nella pagina della cronologia delle transazioni nel tuo [https://secondlife.com/my/account/ Dashboard]
 	</notification>
 	<notification name="FirstOverrideKeys">
 		I tuoi movimenti della tastiera vengono ora gestiti da un oggetto.

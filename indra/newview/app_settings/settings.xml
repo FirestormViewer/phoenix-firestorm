@@ -162,7 +162,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>http://phoenixviewer.com/app/fsdata/grids.xml</string>
+    <string>https://phoenixviewer.com/app/fsdata/grids.xml</string>
   </map>
   <key>FSPrimfeedViewerApiKey</key>
   <map>
@@ -7712,7 +7712,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com</string>
+      <string>https://marketplace.secondlife.com/</string>
     </map>
     <key>MarketplaceURL_physicsMale</key>
     <map>
@@ -7723,7 +7723,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://marketplace.secondlife.com/</string>
+      <string>https://marketplace.secondlife.com/</string>
     </map>
     <key>MarketplaceURL_shirtFemale</key>
     <map>

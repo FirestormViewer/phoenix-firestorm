@@ -8,6 +8,12 @@
 [PAYMENTINFO]
 [FSDEV][FSSUPP][FSQA][FSGW][FIRESTORM]
 	</string>
+	<string name="payment_update_link_url">
+		https://accounts.secondlife.com/billing_information/?lang=it-IT
+	</string>
+	<string name="partner_edit_link_url">
+		https://secondlife.com/my/partners.php?lang=it-IT
+	</string>
 	<string name="BadgeBeta" value="Beta Tester originale" />
 	<string name="BadgeBetaLifetime" value="Membro a vita Beta" />
 	<string name="BadgeLifetime" value="Membro a vita" />

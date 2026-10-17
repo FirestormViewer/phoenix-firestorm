@@ -1738,7 +1738,7 @@ The selected language or time format will be applied after restarting [APP_NAME]
     Go to the [CURRENT_GRID] web page to see auction details or make a bid?
     <tag>confirm</tag>
     <url option="0" name="url">
-			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
+			https://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
     </url>
     <usetemplate
      name="okcancelbuttons"
@@ -2240,7 +2240,7 @@ Go to [_URL] for information on purchasing L$?
     <tag>confirm</tag>
     <url option="0" name="url">
 
-			http://secondlife.com/app/currency/
+			https://secondlife.com/app/currency/
     </url>
     <usetemplate
      name="okcancelbuttons"
@@ -4577,7 +4577,7 @@ Finished download of raw terrain file to:
    name="RequiredUpdate"
    type="alertmodal">
 Version [VERSION] is required for login.
-Please download from https://secondlife.com/support/downloads/
+Please download from https://www.firestormviewer.org/choose-your-platform/
     <tag>confirm</tag>
     <usetemplate
      name="okbutton"
@@ -4682,7 +4682,7 @@ URL: [UNTRUSTED_URL]
    icon="alertmodal.tga"
    name="WebLaunchJoinNow"
    type="alertmodal">
-Go to your [http://secondlife.com/account/ Dashboard] to manage your account?
+Go to your [https://secondlife.com/my/account/ Dashboard] to manage your account?
     <tag>confirm</tag>
     <usetemplate
      ignoretext="Launch my browser to manage my account"
@@ -5145,7 +5145,7 @@ You are no longer frozen.
    type="alert">
 Hi [DISPLAY_NAME]!
 
-Just like in real life, it takes a while for everyone to learn about a new name.  Please allow several days for [http://wiki.secondlife.com/wiki/Setting_your_display_name your name to update] in objects, scripts, search, etc.
+Just like in real life, it takes a while for everyone to learn about a new name.  Please allow several days for [https://wiki.secondlife.com/wiki/Setting_your_display_name your name to update] in objects, scripts, search, etc.
   </notification>
 
   <notification
@@ -5189,7 +5189,7 @@ Please try a shorter name.
    type="alertmodal">
 Sorry, you have to wait longer before you can change your display name.
 
-See http://wiki.secondlife.com/wiki/Setting_your_display_name
+See https://wiki.secondlife.com/wiki/Setting_your_display_name
 
 Please try again later.
   <tag>fail</tag>
@@ -5794,7 +5794,7 @@ Are you sure you want to change the estate covenant?
     <tag>confirm</tag>
     The region you're trying to visit contains [REGIONMATURITY] content, which is accessible to adults only.
     <url option="0" name="url">
-		http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+		https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
     </url>
     <usetemplate
      name="okcancelignore"
@@ -5879,7 +5879,7 @@ Complete information on maturity ratings can be found [https://community.secondl
     <tag>confirm</tag>
     The region you're trying to visit contains [REGIONMATURITY] content, which is accessible to adults only.
     <url option="0" name="url">
-      http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+      https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
     </url>
     <usetemplate
      name="okcancelignore"
@@ -5978,7 +5978,7 @@ Complete information on maturity ratings can be found [https://community.secondl
    name="RegionTPSpecialUsageBlocked"
    type="alertmodal">
     <tag>fail</tag>
-    Unable to enter region. '[REGION_NAME]' is a Skill Gaming Region, and you must meet certain criteria in order to enter. For details, please review the [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
+    Unable to enter region. '[REGION_NAME]' is a Skill Gaming Region, and you must meet certain criteria in order to enter. For details, please review the [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -6027,7 +6027,7 @@ Complete information on maturity ratings can be found [https://community.secondl
     <tag>fail</tag>
     <tag>confirm</tag>
     <url option="0" name="url">
-		http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+		https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
     </url>
     <usetemplate
      name="okcancelignore"
@@ -6098,7 +6098,7 @@ Complete information on maturity ratings can be found [https://community.secondl
     <tag>confirm</tag>
   <tag>fail</tag>
     <url option="0" name="url">
-		http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+		https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
     </url>
     <usetemplate
      name="okcancelignore"
@@ -6626,7 +6626,7 @@ There are no items in this object that you are allowed to copy.
    icon="alertmodal.tga"
    name="WebLaunchAccountHistory"
    type="alertmodal">
-Go to your [http://secondlife.com/account/ Dashboard] to see your account history?
+Go to your [https://secondlife.com/my/account/ Dashboard] to see your account history?
     <tag>confirm</tag>
     <usetemplate
      ignoretext="Launch my browser to see my account history"
@@ -6894,9 +6894,9 @@ Dear Resident,
 
 You appear to be reporting intellectual property infringement. Please make sure you are reporting it correctly:
 
-(1) The Abuse Process. You may submit an abuse report if you believe a resident is exploiting the [CURRENT_GRID] permissions system, for example, by using CopyBot or similar copying tools, to infringe intellectual property rights. The Abuse Team investigates and issues appropriate disciplinary action for behavior that violates the [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Terms of Service] or [http://secondlife.com/corporate/cs.php Community Standards]. However, the Abuse Team does not handle and will not respond to requests to remove content from the [CURRENT_GRID] world.
+(1) The Abuse Process. You may submit an abuse report if you believe a resident is exploiting the [CURRENT_GRID] permissions system, for example, by using CopyBot or similar copying tools, to infringe intellectual property rights. The Abuse Team investigates and issues appropriate disciplinary action for behavior that violates the [CURRENT_GRID] [https://secondlife.com/corporate/tos.php Terms of Service] or [https://secondlife.com/corporate/cs.php Community Standards]. However, the Abuse Team does not handle and will not respond to requests to remove content from the [CURRENT_GRID] world.
 
-(2) The DMCA or Content Removal Process. To request removal of content from [CURRENT_GRID], you MUST submit a valid notification of infringement as provided in our [http://secondlife.com/corporate/dmca.php DMCA Policy].
+(2) The DMCA or Content Removal Process. To request removal of content from [CURRENT_GRID], you MUST submit a valid notification of infringement as provided in our [https://secondlife.com/corporate/dmca.php DMCA Policy].
 
 If you still wish to continue with the abuse process, please close this window and finish submitting your report.  You may need to select the specific category &apos;CopyBot or Permissions Exploit&apos;.
 
@@ -7390,7 +7390,7 @@ You must have payment information on file to visit this area.  Do you want to go
     <tag>confirm</tag>
     <url option="0" name="url">
 
-			https://secondlife.com/account/
+			https://secondlife.com/my/account/
     </url>
     <usetemplate
      ignoretext="I lack payment information on file"
@@ -8146,7 +8146,7 @@ Deactivated gestures with same trigger:
    persist="true"
    type="notify">
 Apple&apos;s QuickTime software does not appear to be installed on your system.
-If you want to view streaming media on parcels that support it you should go to the [http://www.apple.com/quicktime QuickTime site] and install the QuickTime Player.
+If you want to view streaming media on parcels that support it you should go to the [https://www.apple.com/quicktime QuickTime site] and install the QuickTime Player.
   <tag>fail</tag>
   </notification>
 
@@ -9403,7 +9403,7 @@ Thank you for your payment!
 
 Your L$ balance will be updated when processing completes. If processing takes more than 20 mins, your transaction may be canceled. In that case, the purchase amount will be credited to your US$ balance.
 
-The status of your payment can be checked on your Transaction History page on your [http://secondlife.com/account/ Dashboard]
+The status of your payment can be checked on your Transaction History page on your [https://secondlife.com/my/account/ Dashboard]
   </notification>
 
   <notification

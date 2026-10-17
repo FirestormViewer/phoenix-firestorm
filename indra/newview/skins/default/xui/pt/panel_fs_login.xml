@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
 	<panel.string name="create_account_url">
-		https://join.secondlife.com/?lang=pt-BR
+		https://www.firestormviewer.org/join-secondlife/
 	</panel.string>
 	<panel.string name="forgot_password_url">
 		https://accounts.secondlife.com/forgot_password/?lang=pt-BR

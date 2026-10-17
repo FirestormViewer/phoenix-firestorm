@@ -42,9 +42,6 @@
 		<radio_item initial_value="bing" label="Bing Çevirmeni" name="bing"/>
 		<radio_item initial_value="google" label="Google Translate" name="google"/>
 	</radio_group>
-	<text name="bing_api_key_label">
-		Bing [http://www.bing.com/developers/createapp.aspx Uygulama Kimliği]:
-	</text>
 	<button label="Doğrula" name="verify_bing_api_key_btn"/>
 	<text name="google_api_key_label">
 		Google [https://docs.cloud.google.com/translate/docs/authentication#api-keys API anahtarı]:

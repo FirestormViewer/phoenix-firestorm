@@ -46,7 +46,7 @@
 		[AMT] L$
 	</text>
 	<text name="currency_links">
-		[http://www.secondlife.com/my/account/payment_method_management.php método de pago] | [http://www.secondlife.com/my/account/currency.php moneda]
+		[https://www.secondlife.com/my/account/payment_method_management.php método de pago] | [https://www.secondlife.com/my/account/currency.php moneda]
 	</text>
 	<text name="exchange_rate_note">
 		Vuelve a escribir la cantidad para ver el tipo de cambio más reciente.

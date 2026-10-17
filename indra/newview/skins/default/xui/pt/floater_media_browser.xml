@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_about" title="Navegador de mídia">
 	<floater.string name="home_page_url">
-		https://www.secondlife.com/
+		https://secondlife.com/?lang=br
 	</floater.string>
 	<floater.string name="support_page_url">
 		https://support.secondlife.com/?lang=pt
@@ -34,3 +34,8 @@ https://wiki.firestormviewer.org/fs_media
 		</layout_panel>
 	</layout_stack>
 </floater>
+
+
+</floater>
+
+

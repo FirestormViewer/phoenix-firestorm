@@ -16,7 +16,7 @@
                 <menu_item_call.on_click
                  function="PromptShowURL"
                  name="ManageMyAccount_url"
-                 parameter="WebLaunchJoinNow,http://secondlife.com/account/" />
+                 parameter="WebLaunchJoinNow,https://secondlife.com/my/account/" />
                 <menu_item_call.on_visible
                  function="GridCheck"
                  parameter="secondlife"/>
@@ -2635,7 +2635,7 @@
              <menu_item_call.on_click
              function="PromptShowURL"
              name="firestorm_flickr_url"
-             parameter="WebLaunchExternalTarget,http://www.flickr.com/groups/firestormviewer/pool/" />
+             parameter="WebLaunchExternalTarget,https://www.flickr.com/groups/firestormviewer/pool/" />
        </menu_item_call>
     	<menu_item_call
              label="Firestorm YouTube"
@@ -2643,7 +2643,7 @@
              <menu_item_call.on_click
              function="PromptShowURL"
              name="firestorm_youtube_url"
-             parameter="WebLaunchExternalTarget,http://www.youtube.com/user/PhoenixViewerSL" />
+             parameter="WebLaunchExternalTarget,https://www.youtube.com/user/PhoenixViewerSL" />
        </menu_item_call>
     	<menu_item_call
              label="Firestorm Twitter"
@@ -2659,7 +2659,7 @@
              <menu_item_call.on_click
              function="PromptShowURL"
              name="firestorm_plurk_url"
-             parameter="WebLaunchExternalTarget,http://www.plurk.com/ThePhoenixViewerProject" />
+             parameter="WebLaunchExternalTarget,https://www.plurk.com/ThePhoenixViewerProject" />
        </menu_item_call>
        <menu_item_separator/>
        <menu_item_call
@@ -2784,21 +2784,21 @@
              name="Knowledge Base">
              <menu_item_call.on_click
                  function="Advanced.ShowURL"
-            parameter="http://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-User-s-Guide/ta-p/1244857"/>
+            parameter="https://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-User-s-Guide/ta-p/1244857"/>
         </menu_item_call>
         <menu_item_call
              label="Wiki"
              name="Wiki">
              <menu_item_call.on_click
                  function="Advanced.ShowURL"
-                 parameter="http://wiki.secondlife.com"/>
+                 parameter="https://wiki.secondlife.com"/>
         </menu_item_call>
         <menu_item_call
              label="Community Forums"
              name="Community Forums">
              <menu_item_call.on_click
                  function="Advanced.ShowURL"
-                 parameter="http://community.secondlife.com/t5/Forums/ct-p/Forums"/>
+                 parameter="https://community.secondlife.com/t5/Forums/ct-p/Forums"/>
         </menu_item_call>         
         <menu_item_call
              label="Support portal"
@@ -5241,7 +5241,7 @@
              name="Web Browser Test">
                 <menu_item_call.on_click
                  function="Advanced.WebBrowserTest"
-                 parameter="http://secondlife.com/app/search/slurls.html"/>
+                 parameter="https://search.secondlife.com/viewer/search/"/>
             </menu_item_call>
           <menu_item_check
            label="Region Restart Test..."
@@ -6268,7 +6268,7 @@
                 <menu_item_call.on_click
                  function="PromptShowURL"
                  name="OfficialLindenBlog_url"
-                 parameter="WebLaunchSupportWiki,http://blog.secondlife.com/" />
+                 parameter="WebLaunchSupportWiki,https://community.secondlife.com/news/" />
             </menu_item_call>
             <menu_item_call
              label="Scripting Portal"
@@ -6276,7 +6276,7 @@
                 <menu_item_call.on_click
                  function="PromptShowURL"
                  name="ScriptingPortal_url"
-                 parameter="WebLaunchLSLWiki,http://wiki.secondlife.com/wiki/LSL_Portal" />
+                 parameter="WebLaunchLSLWiki,https://wiki.secondlife.com/wiki/LSL_Portal" />
             </menu_item_call>
             <menu
              create_jump_keys="true"
@@ -6297,7 +6297,7 @@
                     <menu_item_call.on_click
                      function="PromptShowURL"
                      name="PublicIssueTrackerHelp_url"
-                     parameter="WebLaunchPublicIssueHelp,http://wiki.secondlife.com/wiki/Issue_tracker" />
+                     parameter="WebLaunchPublicIssueHelp,https://wiki.secondlife.com/wiki/Issue_tracker" />
                 </menu_item_call>
 
                 <menu_item_separator/>
@@ -6308,7 +6308,7 @@
                     <menu_item_call.on_click
                      function="PromptShowURL"
                      name="BugReporting101_url"
-                     parameter="WebLaunchBugReport101,http://wiki.secondlife.com/wiki/Bug_Reporting_101" />
+                     parameter="WebLaunchBugReport101,https://wiki.secondlife.com/wiki/Bug_Reporting_101" />
                 </menu_item_call>
                 <menu_item_call
                  label="Security Issues"
@@ -6316,7 +6316,7 @@
                     <menu_item_call.on_click
                      function="PromptShowURL"
                      name="SecurityIssues_url"
-                     parameter="WebLaunchSecurityIssues,http://wiki.secondlife.com/wiki/Security_issues" />
+                     parameter="WebLaunchSecurityIssues,https://wiki.secondlife.com/wiki/Security_issues" />
                 </menu_item_call>
                 <menu_item_call
                  label="QA Wiki"
@@ -6324,7 +6324,7 @@
                     <menu_item_call.on_click
                      function="PromptShowURL"
                      name="QAWiki_url"
-                     parameter="WebLaunchQAWiki,http://wiki.secondlife.com/wiki/QA_Portal" />
+                     parameter="WebLaunchQAWiki,https://wiki.secondlife.com/wiki/QA_Portal" />
                 </menu_item_call>
             </menu>
         </menu>

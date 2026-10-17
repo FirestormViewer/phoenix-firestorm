@@ -586,7 +586,7 @@ Download til dit Program bibliotek?
 	<notification name="FailedUpdateInstall">
 		Der opstod en fejl ved installation af opdatering.
 Hent og installér venligst den nyeste version fra
-http://secondlife.com/download.
+https://www.firestormviewer.org/choose-your-platform/
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="FailedRequiredUpdateInstall">
@@ -594,13 +594,13 @@ http://secondlife.com/download.
 Du kan ikke logge på før [APP_NAME] er blevet opdateret.
 
 Hent og installer venligst den nyeste klien fra
-http://secondlife.com/download.
+https://www.firestormviewer.org/choose-your-platform/
 		<usetemplate name="okbutton" yestext="Afslut"/>
 	</notification>
 	<notification name="UpdaterServiceNotRunning">
 		Dette er en påkrævet opdatering af din Second Life installation.
 
-Du kan downloade opdateringen fra http://www.secondlife.com/downloads
+Du kan downloade opdateringen fra https://www.firestormviewer.org/choose-your-platform/
 eller du kan installere den nu.
 		<usetemplate name="okcancelbuttons" notext="Afslut Second Life" yestext="Hent og installér nu"/>
 	</notification>
@@ -634,7 +634,7 @@ URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Start min browser for at se hjemmesider" name="okcancelignore" notext="Cancel" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
-		Gå til [http://secondlife.com/account/ Dashboard] for at administrere din konto?
+		Gå til [https://secondlife.com/my/account/ Dashboard] for at administrere din konto?
 		<usetemplate ignoretext="Start min browser for at administrere min konto" name="okcancelignore" notext="Cancel" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
@@ -698,7 +698,7 @@ Chat og personlige beskeder vil blive skjult. Personlige beskeder vil få din &a
 	<notification name="SetDisplayNameSuccess">
 		Hej [DISPLAY_NAME]!
 
-Præcist som i virkeligheden tager det et stykke tid at vænne sig til et nyt navn. Det kan tage flere dage for [http://wiki.secondlife.com/wiki/Setting_your_display_name your name to update] i objekter, scripts, søgninger m.v.
+Præcist som i virkeligheden tager det et stykke tid at vænne sig til et nyt navn. Det kan tage flere dage for [https://wiki.secondlife.com/wiki/Setting_your_display_name your name to update] i objekter, scripts, søgninger m.v.
 	</notification>
 	<notification name="SetDisplayNameBlocked">
 		Beklager, du kan ikke ændre dit visningsnavn. Hvis du mener dette skyldes en fejl, kontakt venligst support.
@@ -717,7 +717,7 @@ Prøv venligst med et kortere navn.
 	<notification name="AgentDisplayNameUpdateThresholdExceeded">
 		Beklager, du er nødt til at vente længere, inden du kan ændre visningsnavn.
 
-Se mere under http://wiki.secondlife.com/wiki/Setting_your_display_name
+Se mere under https://wiki.secondlife.com/wiki/Setting_your_display_name
 
 Prøv venligst igen senere.
 	</notification>
@@ -887,7 +887,7 @@ For at få adgang til voksen regioner, skal beboere være alders-checket, enten 
 		</form>
 	</notification>
 	<notification name="WebLaunchAccountHistory">
-		Gå til [http://secondlife.com/account/ Dashboard] for at se konto-historik?
+		Gå til [https://secondlife.com/my/account/ Dashboard] for at se konto-historik?
 		<usetemplate ignoretext="Start min browser for at se min konto historik" name="okcancelignore" notext="Cancel" yestext="Go to page"/>
 	</notification>
 	<notification name="ConfirmQuit">
@@ -899,7 +899,7 @@ For at få adgang til voksen regioner, skal beboere være alders-checket, enten 
 		<usetemplate ignoretext="Bekræft før sletning af genstande" name="okcancelignore" notext="Annullér" yestext="OK"/>
 	</notification>
 	<notification name="HelpReportAbuseEmailLL">
-		Benyt dette værktøj til at rapportere krænkninger af [http://secondlife.com/corporate/tos.php Terms of Service] og [http://secondlife.com/corporate/cs.php Community Standards].
+		Benyt dette værktøj til at rapportere krænkninger af [https://secondlife.com/corporate/tos.php Terms of Service] og [https://secondlife.com/corporate/cs.php Community Standards].
 
 Alle rapporter om krænkninger vil blive undersøgt og behandlet.
 	</notification>
@@ -910,7 +910,7 @@ Det ser ud til at du indrapporterer krænkelse af ophavsret. Check venligst at d
 
 (1) Krænkelsesproces. Du må sende en rapport, hvis du mener at en beboer udnytter [CURRENT_GRID] rettighedssystemet, for eksempel via CopyBot eller lignende værktøjer, til at overtræde ophavsretten til objekter.
 
-(2) DCMA (”Digital Millennium Copyright Act”) eller fjernelsesproces. For at kræve at indhold fjernes fra [CURRENT_GRID], SKAL du sende en gyldig besked om overtrædelse som beskrevet i [http://secondlife.com/corporate/dmca.php DMCA Policy].
+(2) DCMA (”Digital Millennium Copyright Act”) eller fjernelsesproces. For at kræve at indhold fjernes fra [CURRENT_GRID], SKAL du sende en gyldig besked om overtrædelse som beskrevet i [https://secondlife.com/corporate/dmca.php DMCA Policy].
 
 Hvis du stadig ønsker at fortsætte med rapportering om overtrædelse, luk venligst dette vindue og afslut afsendelse af rapporten. Du skal muligvis vælge en specifik kategori &apos;CopyBot or Permissions Exploit&apos;.
 
@@ -1186,7 +1186,7 @@ Prøv at vælge mindre stykker land.
 	</notification>
 	<notification name="NoQuickTime">
 		Det ser ikke ud til at Apples QuickTime software er installeret på dit system.
-Hvis du ønsker at se streaming media på parceller der understøtter dette skal du besøge siden [http://www.apple.com/quicktime QuickTime site] og installere QuickTime Player.
+Hvis du ønsker at se streaming media på parceller der understøtter dette skal du besøge siden [https://www.apple.com/quicktime QuickTime site] og installere QuickTime Player.
 	</notification>
 	<notification name="NoPlugin">
 		Ingen Media Plugin blev fundet til at håndtere mime af typen &quot;[MIME_TYPE]&quot;.  Media af denne type vil ikke være tilgængelig.
@@ -1508,7 +1508,7 @@ Opfyld dette ønske?
 
 Din L$ balance vil blive opdateret når transaktionen er gennemført. Ved transaktionen tager mere end 20 min., vil den blive annulleret. I så fald vil beløbet blive krediteret din US$ balance.
 
-Status for din betaling kan ses i din &apos;Transaction History&apos; side på din [http://secondlife.com/account/ Dashboard]
+Status for din betaling kan ses i din &apos;Transaction History&apos; side på din [https://secondlife.com/my/account/ Dashboard]
 	</notification>
 	<notification name="FirstOverrideKeys">
 		Dine bevælgelsestaster bliver nu håndteret af et objekt.

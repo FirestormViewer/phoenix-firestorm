@@ -241,7 +241,7 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 https://www.firestormviewer.org/choose-your-platform/
 
 Дополнительные сведения смотрите в разделе вопросов и ответов по адресу:
-http://secondlife.com/viewer-access-faq
+https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">
 		Процесс входа не завершен из-за системных проблем. Повторите попытку через несколько минут.
@@ -266,13 +266,13 @@ http://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailedPasswordChanged">
 		В качестве меры предосторожности ваш пароль изменен.
-Перейдите на страницу своего аккаунта по адресу http://secondlife.com/password
+Перейдите на страницу своего аккаунта по адресу https://secondlife.com/password
 и ответьте на контрольный вопрос, чтобы восстановить свой пароль
 Приносим извинения за неудобство.
 	</string>
 	<string name="LoginFailedPasswordReset">
 		В нашу систему внесены изменения, поэтому вам следует восстановить свой пароль.
-Перейдите на страницу своего аккаунта по адресу http://secondlife.com/password
+Перейдите на страницу своего аккаунта по адресу https://secondlife.com/password
 и ответьте на контрольный вопрос, чтобы восстановить свой пароль
 Приносим извинения за неудобство.
 	</string>
@@ -300,7 +300,7 @@ support@secondlife.com.
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		В данное время нам не удается выполнить ваш запрос.
-Обратитесь за помощью в службу поддержки Second Life по адресу http://secondlife.com/support.
+Обратитесь за помощью в службу поддержки Second Life по адресу https://support.secondlife.com.
 	</string>
 	<string name="LoginFailedTransformError">
 		При входе обнаружена несогласованность данных.
@@ -1747,7 +1747,7 @@ https://www.firestormviewer.org/support за помощь в решении эт
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
 	</string>
 	<string name="MarketplaceURL_CreateStore">
-		http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
+		https://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
 	</string>
 	<string name="MarketplaceURL_Dashboard">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard
@@ -1801,15 +1801,15 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="InventoryMarketplaceError">
 		Произошла ошибка при открытии списков Торговой площадки.
-Если вы продолжаете получать это сообщение, обратитесь за помощью в службу поддержки Second Life по адресу http://support.secondlife.com.
+Если вы продолжаете получать это сообщение, обратитесь за помощью в службу поддержки Second Life по адресу https://support.secondlife.com.
 	</string>
 	<string name="InventoryMarketplaceConnectionError">
 Не удалось подключиться к спискам на Торговой площадке.
-Если вы продолжаете получать это сообщение, обратитесь за помощью в службу поддержки Second Life по адресу http://support.secondlife.com.
+Если вы продолжаете получать это сообщение, обратитесь за помощью в службу поддержки Second Life по адресу https://support.secondlife.com.
 	</string>
 	<string name="InventoryMarketplaceConnectionErrorReason">
 Не удалось подключиться к спискам на Торговой площадке. Причина: [REASON]
-Если вы продолжаете получать это сообщение, обратитесь за помощью в службу поддержки Second Life по адресу http://support.secondlife.com.
+Если вы продолжаете получать это сообщение, обратитесь за помощью в службу поддержки Second Life по адресу https://support.secondlife.com.
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Папка списков товаров торгового центра пуста.
@@ -3161,17 +3161,17 @@ https://www.firestormviewer.org/support за помощь в решении эт
 		Сейчас играет: [TITLE]
 	</string>
 	<string name="IntelDriverPage">
-		http://www.intel.com/p/ru_RU/support/detect/graphics
+		https://www.intel.com/content/www/us/en/support/detect.html
 	</string>
 	<string name="NvidiaDriverPage">
-		http://www.nvidia.com/Download/index.aspx?lang=ru
+		https://www.nvidia.com/ru-ru/drivers/
 	</string>
 	<string name="AMDDriverPage">
-		http://support.amd.com/ru/Pages/AMDSupportHub.aspx
+		https://www.amd.com/en/support/download/drivers.html
 	</string>
 	<string name="MBCmdLineError">
 		При анализе командной строки была обнаружена ошибка.
-Пожалуйста, прочтите: http://wiki.secondlife.com/wiki/Client_parameters
+Пожалуйста, прочтите: https://wiki.secondlife.com/wiki/Client_parameters
 Ошибка:
 	</string>
 	<string name="MBCmdLineUsg">
@@ -6013,7 +6013,7 @@ https://www.firestormviewer.org/support за помощь в решении эт
 		Нормальный
 	</string>
 	<string name="Pathfinding_Wiki_URL">
-		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
+		https://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
 	</string>
 	<string name="Pathfinding_Object_Attr_None">
 		Нет

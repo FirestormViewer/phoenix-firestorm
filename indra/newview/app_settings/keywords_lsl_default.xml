@@ -6238,7 +6238,7 @@
             <key>value</key>
             <integer>4</integer>
             <key>tooltip</key>
-            <string>Uses linear deflection for lift, no hover, and banking to turn.\nSee http://wiki.secondlife.com/wiki/VEHICLE_TYPE_AIRPLANE</string>
+            <string>Uses linear deflection for lift, no hover, and banking to turn.\nSee https://wiki.secondlife.com/wiki/VEHICLE_TYPE_AIRPLANE</string>
          </map>
          <key>VEHICLE_TYPE_BALLOON</key>
          <map>
@@ -6247,7 +6247,7 @@
             <key>value</key>
             <integer>5</integer>
             <key>tooltip</key>
-            <string>Hover, and friction, but no deflection.\nSee http://wiki.secondlife.com/wiki/VEHICLE_TYPE_BALLOON</string>
+            <string>Hover, and friction, but no deflection.\nSee https://wiki.secondlife.com/wiki/VEHICLE_TYPE_BALLOON</string>
          </map>
          <key>VEHICLE_TYPE_BOAT</key>
          <map>
@@ -6256,7 +6256,7 @@
             <key>value</key>
             <integer>3</integer>
             <key>tooltip</key>
-            <string>Hovers over water with lots of friction and some anglar deflection.\nSee http://wiki.secondlife.com/wiki/VEHICLE_TYPE_BOAT</string>
+            <string>Hovers over water with lots of friction and some anglar deflection.\nSee https://wiki.secondlife.com/wiki/VEHICLE_TYPE_BOAT</string>
          </map>
          <key>VEHICLE_TYPE_CAR</key>
          <map>
@@ -6265,7 +6265,7 @@
             <key>value</key>
             <integer>2</integer>
             <key>tooltip</key>
-            <string>Another vehicle that bounces along the ground but needs the motors to be driven from external controls or timer events.\nSee http://wiki.secondlife.com/wiki/VEHICLE_TYPE_CAR</string>
+            <string>Another vehicle that bounces along the ground but needs the motors to be driven from external controls or timer events.\nSee https://wiki.secondlife.com/wiki/VEHICLE_TYPE_CAR</string>
          </map>
          <key>VEHICLE_TYPE_NONE</key>
          <map>
@@ -6283,7 +6283,7 @@
             <key>value</key>
             <integer>1</integer>
             <key>tooltip</key>
-            <string>Simple vehicle that bumps along the ground, and likes to move along its local x-axis.\nSee http://wiki.secondlife.com/wiki/VEHICLE_TYPE_SLED</string>
+            <string>Simple vehicle that bumps along the ground, and likes to move along its local x-axis.\nSee https://wiki.secondlife.com/wiki/VEHICLE_TYPE_SLED</string>
          </map>
          <key>VEHICLE_VERTICAL_ATTRACTION_EFFICIENCY</key>
          <map>

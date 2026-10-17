@@ -148,7 +148,7 @@ The viewer you are using can no longer access Second Life. Please visit the foll
 https://www.firestormviewer.org/choose-your-platform/
 
 For more information, see our FAQ below:
-http://secondlife.com/viewer-access-faq</string>
+https://secondlife.com/viewer-access-faq</string>
 	<string name="LoginFailed">Login process did not complete due to system issues. Try again in a few minutes.
 If you feel this is an error, please contact the grid support.</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">Optional viewer update available: [VERSION]</string>
@@ -162,11 +162,11 @@ Please check to make sure you entered the right
     * Second Factor Token (if enabled)
 Also, please make sure your Caps Lock key is off.</string>
 	<string name="LoginFailedPasswordChanged">As a security precaution your password has been changed.
-Please go to your account page at http://secondlife.com/password
+Please go to your account page at https://secondlife.com/password
 and answer the security question to reset your password.
 We are very sorry for the inconvenience.</string>
 	<string name="LoginFailedPasswordReset">We made some changes to our system and you will need to reset your password.
-Please go to your account page at http://secondlife.com/password
+Please go to your account page at https://secondlife.com/password
 and answer the security question to reset your password.
 We are very sorry for the inconvenience.</string>
 	<string name="LoginFailedEmployeesOnly">Second Life is temporarily closed for maintenance.
@@ -184,7 +184,7 @@ support@secondlife.com.</string>
 [TIME].
 If you feel this is an error, please contact support@secondlife.com.</string>
 	<string name="LoginFailedAccountDisabled">We are unable to complete your request at this time.
-Please contact Second Life support for assistance at http://support.secondlife.com.</string>
+Please contact Second Life support for assistance at https://support.secondlife.com.</string>
 	<string name="LoginFailedTransformError">Data inconsistency found during login.
 Please contact support@secondlife.com.</string>
 	<string name="LoginFailedAccountMaintenance">Your account is undergoing minor maintenance.
@@ -816,7 +816,7 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<string name="InventoryNoMaterial">You do not have a copy of this material in your inventory</string>
 	<string name="InventoryInboxNoItems">Your Marketplace purchases will appear here. You may then drag them into your inventory to use them.</string>
 	<string name="MarketplaceURL">https://marketplace.[MARKETPLACE_DOMAIN_NAME]/</string>
-	<string name="MarketplaceURL_CreateStore">http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3</string>
+	<string name="MarketplaceURL_CreateStore">https://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3</string>
 	<string name="MarketplaceURL_Dashboard">https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard</string>
 	<string name="MarketplaceURL_Imports">https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/imports</string>
 	<string name="MarketplaceURL_LearnMore">https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more</string>
@@ -845,15 +845,15 @@ The [[MARKETPLACE_CREATE_STORE_URL] Marketplace store] is returning errors.
 	</string>
 	<string name="InventoryMarketplaceError">
 An error occurred while opening Marketplace Listings.
-If you continue to receive this message, please contact Second Life support for assistance at http://support.secondlife.com
+If you continue to receive this message, please contact Second Life support for assistance at https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceConnectionError">
 Marketplace Listings failed to connect.
-If you continue to receive this message, please contact Second Life support for assistance at http://support.secondlife.com
+If you continue to receive this message, please contact Second Life support for assistance at https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceConnectionErrorReason">
 Marketplace Listings failed to connect. Reason: [REASON]
-If you continue to receive this message, please contact Second Life support for assistance at http://support.secondlife.com
+If you continue to receive this message, please contact Second Life support for assistance at https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">Your Marketplace Listings folder is empty.</string>
 	<string name="InventoryMarketplaceListingsNoItemsTooltip"></string>
@@ -1494,15 +1494,15 @@ Expected .wav, .tga, .bmp, .jpg, .jpeg, or .anim
 	<string name="StreamtitleNowPlaying">Now playing: [TITLE]</string>
 
 	<!-- Drivers support/update pages -->
-	<string name="IntelDriverPage">http://www.intel.com/p/en_US/support/detect/graphics</string>
-	<string name="NvidiaDriverPage">http://www.nvidia.com/Download/index.aspx?lang=en-us</string>
-	<string name="AMDDriverPage">http://support.amd.com/us/Pages/AMDSupportHub.aspx</string>
+	<string name="IntelDriverPage">https://www.intel.com/content/www/us/en/support/detect.html</string>
+	<string name="NvidiaDriverPage">https://www.nvidia.com/en-us/drivers/</string>
+	<string name="AMDDriverPage">https://www.amd.com/en/support/download/drivers.html</string>
 
 
 	<!-- OSMessageBox messages -->
 	<string name="MBCmdLineError">
 		An error was found parsing the command line.
-Please see: http://wiki.secondlife.com/wiki/Client_parameters
+Please see: https://wiki.secondlife.com/wiki/Client_parameters
 Error:
 	</string>
 	<string name="MBCmdLineUsg">[APP_NAME] Command line usage:</string>
@@ -2893,7 +2893,7 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Normal">Normal</string>
 
   <!-- Pathfinding -->
-  <string name="Pathfinding_Wiki_URL">http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer</string>
+  <string name="Pathfinding_Wiki_URL">https://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer</string>
   <string name="Pathfinding_Object_Attr_None">None</string>
   <string name="Pathfinding_Object_Attr_Permanent">Affects navmesh</string>
   <string name="Pathfinding_Object_Attr_Character">Character</string>

@@ -629,10 +629,10 @@ WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Create Account.url" \
 				"https://www.firestormviewer.org/join-secondlife/"
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Your Account.url" \
 				"InternetShortcut" "URL" \
-				"https://www.secondlife.com/account/"
+				"https://secondlife.com/my/account/"
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\LSL Scripting Language Help.url" \
 				"InternetShortcut" "URL" \
-                "http://wiki.secondlife.com/wiki/LSL_Portal"
+                "https://wiki.secondlife.com/wiki/LSL_Portal"
 CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\Uninstall $INSTSHORTCUT.lnk" \
 				'"$INSTDIR\uninst.exe"' ''
 

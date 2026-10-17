@@ -532,7 +532,7 @@ No se reembolsarán las cuotas pagadas.
 	<notification name="PromptGoToEventsPage">
 		¿Ir a la web de eventos de [CURRENT_GRID]?
 		<url name="url">
-			http://secondlife.com/events/?lang=es-ES
+			https://secondlife.com/my/community/events/?lang=es-ES
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
@@ -764,7 +764,7 @@ misma región.
 
 ¿Ir a [_URL] para informarte sobre la compra de L$?
 		<url name="url">
-			http://secondlife.com/app/currency/?lang=es-ES
+			https://secondlife.com/app/currency/?lang=es-ES
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
@@ -1630,7 +1630,7 @@ Por favor, pon en venta el objeto y vuelve a intentarlo.
 	</notification>
 	<notification name="RequiredUpdate">
 		La versión [VERSION] es necesaria para iniciar sesión. 
-Por favor, realiza la descarga desde https://secondlife.com/support/downloads/
+Por favor, realiza la descarga desde https://www.firestormviewer.org/choose-your-platform/
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="PauseForUpdate">
@@ -1663,7 +1663,7 @@ URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Abrir mi navegador para ver una página web" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
-		¿Ir al [http://secondlife.com/account/ Panel de Control] para administrar tu cuenta?
+		¿Ir al [https://secondlife.com/my/account/ Panel de Control] para administrar tu cuenta?
 		<usetemplate ignoretext="Abrir mi navegador para administrar mi cuenta" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
@@ -1825,7 +1825,7 @@ hasta [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/membership.php? Apr
 	<notification name="SetDisplayNameSuccess">
 		¡Hola, [DISPLAY_NAME]!
 
-Al igual que en la vida real, normalmente se tarda algún tiempo en aprender nombres nuevos.  Te recomendamos que esperes varios días para que [http://wiki.secondlife.com/wiki/Setting_your_display_name tu nombre se actualice] en objetos, scripts, búsquedas, etc.
+Al igual que en la vida real, normalmente se tarda algún tiempo en aprender nombres nuevos.  Te recomendamos que esperes varios días para que [https://wiki.secondlife.com/wiki/Setting_your_display_name tu nombre se actualice] en objetos, scripts, búsquedas, etc.
 	</notification>
 	<notification name="SetDisplayNameBlocked">
 		Lo sentimos. No puedes cambiar tu displayname. Si crees que se trata de un error, ponte en contacto con soporte.
@@ -1844,7 +1844,7 @@ Prueba con un nombre más corto.
 	<notification name="AgentDisplayNameUpdateThresholdExceeded">
 		Lo sentimos. Tendrás que esperar para poder cambiar tu displayname.
 
-Consulta http://wiki.secondlife.com/wiki/Setting_your_display_name
+Consulta https://wiki.secondlife.com/wiki/Setting_your_display_name
 
 Vuelve a intentarlo más tarde.
 	</notification>
@@ -2046,7 +2046,7 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 	<notification name="RegionEntryAccessBlocked_AdultsOnlyContent">
 		La región que intentas visitar tiene un contenido [REGIONMATURITY], que solo es accesible para los adultos.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Paso a otra región: la región que intentas visitar tiene un contenido solo accesible para los adultos." name="okcancelignore" notext="Cerrar" yestext="Ir a la Base de Conocimientos"/>
 	</notification>
@@ -2075,7 +2075,7 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
 		La región que intentas visitar tiene un contenido [REGIONMATURITY], que solo es accesible para los adultos.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Teleportarme: la región que intentas visitar tiene un contenido solo accesible para los adultos." name="okcancelignore" notext="Cerrar" yestext="Ir a la Base de Conocimientos"/>
 	</notification>
@@ -2106,7 +2106,7 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="RegionTPSpecialUsageBlocked">
-		No puedes entrar en la región. &apos;[REGION_NAME]&apos; es una región de juegos de habilidad, y debes cumplir determinados criterios para poder entrar en ella. Consulta los detalles en las [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life P+F de juegos de habilidad].
+		No puedes entrar en la región. &apos;[REGION_NAME]&apos; es una región de juegos de habilidad, y debes cumplir determinados criterios para poder entrar en ella. Consulta los detalles en las [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life P+F de juegos de habilidad].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PreferredMaturityChanged">
@@ -2124,7 +2124,7 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
 		Solo los adultos pueden reclamar ésta parcela.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Solo los adultos pueden reclamar ésta parcela." name="okcancelignore" notext="Cerrar" yestext="Ir a la Base de Conocimientos"/>
 	</notification>
@@ -2149,7 +2149,7 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
 		Solo los adultos pueden comprar esta parcela.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Solo los adultos pueden comprar esta parcela." name="okcancelignore" notext="Cerrar" yestext="Ir a la Base de Conocimientos"/>
 	</notification>
@@ -2347,7 +2347,7 @@ Dado que estos objetos tienen scripts, moverlos a tu inventario puede provocar u
 		En este objeto no hay items que estés autorizado a copiar.
 	</notification>
 	<notification name="WebLaunchAccountHistory">
-		¿Ir a tu [http://secondlife.com/account/ Panel de Control] para ver el historial de tu cuenta?
+		¿Ir a tu [https://secondlife.com/my/account/ Panel de Control] para ver el historial de tu cuenta?
 		<usetemplate ignoretext="Abrir mi navegador para ver el historial de mi cuenta" name="okcancelignore" notext="Cancelar" yestext="Ir a la página"/>
 	</notification>
 	<notification name="ConfirmAddingChatParticipants">
@@ -2375,7 +2375,7 @@ Esta acción no se puede deshacer.
 		<usetemplate ignoretext="Confirmar antes de eliminar elementos" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="HelpReportAbuseEmailLL">
-		Usa esta herramienta para denunciar violaciones de las [http://secondlife.com/corporate/tos.php Condiciones del Servicio] o las [http://secondlife.com/corporate/cs.php Normas de la Comunidad].
+		Usa esta herramienta para denunciar violaciones de las [https://secondlife.com/corporate/tos.php Condiciones del Servicio] o las [https://secondlife.com/corporate/cs.php Normas de la Comunidad].
 
 Se investigan y resuelven todas las infracciones denunciadas.
 	</notification>
@@ -2411,9 +2411,9 @@ Aportar una descripción precisa nos ayuda a clasificar y procesar las denuncias
 
 Parece que estás denunciando una violación de la propiedad intelectual. Por favor, asegúrate de que tu denuncia es correcta.
 
-(1) El proceso de la denuncia. Debes enviar una denuncia de infracción si crees que un Residente está violando el sistema de permisos de [CURRENT_GRID], usando, por ejemplo, un CopyBot u otras herramientas parecidas para copiar, infringiendo los derechos de propiedad intelectual. El Equipo de Infracciones (&apos;Abuse Team&apos;) investiga y lleva a cabo las acciones disciplinarias apropiadas ante toda acción que viole las [http://secondlife.com/corporate/tos.php Condiciones de Servicio] o las [http://secondlife.com/corporate/cs.php Normas de la Comunidad] de [CURRENT_GRID]. Sin embargo, el Equipo de Infracciones ni gestiona ni responde a las solicitudes de eliminar contenidos del mundo de [CURRENT_GRID].
+(1) El proceso de la denuncia. Debes enviar una denuncia de infracción si crees que un Residente está violando el sistema de permisos de [CURRENT_GRID], usando, por ejemplo, un CopyBot u otras herramientas parecidas para copiar, infringiendo los derechos de propiedad intelectual. El Equipo de Infracciones (&apos;Abuse Team&apos;) investiga y lleva a cabo las acciones disciplinarias apropiadas ante toda acción que viole las [https://secondlife.com/corporate/tos.php Condiciones de Servicio] o las [https://secondlife.com/corporate/cs.php Normas de la Comunidad] de [CURRENT_GRID]. Sin embargo, el Equipo de Infracciones ni gestiona ni responde a las solicitudes de eliminar contenidos del mundo de [CURRENT_GRID].
 
-(2) El DMCA o Proceso de Eliminación de Contenido. Para solicitar que se elimine algún contenido de [CURRENT_GRID], DEBES enviar una notificación válida de infracción tal y como se explica en nuestra [http://secondlife.com/corporate/dmca.php &apos;DMCA Policy&apos;].
+(2) El DMCA o Proceso de Eliminación de Contenido. Para solicitar que se elimine algún contenido de [CURRENT_GRID], DEBES enviar una notificación válida de infracción tal y como se explica en nuestra [https://secondlife.com/corporate/dmca.php &apos;DMCA Policy&apos;].
 
 Si todavía quieres seguir con el proceso de infracción, por favor, cierra esta ventana y termina de enviar tu denuncia. En concreto, debes seleccionar la categoría &apos;CopyBot o Programa para saltarse los permisos&apos;.
 
@@ -2554,7 +2554,7 @@ Publícala en una página web para que otros puedan acceder fácilmente a esta p
 
 [_URL]
 		<url name="url" option="0">
-			https://secondlife.com/account/index.php?lang=es
+			https://secondlife.com/my/account/index.php?lang=es-ES
 		</url>
 		<usetemplate ignoretext="No he registrado información de pago" name="okcancelignore" notext="No" yestext="Sí"/>
 	</notification>
@@ -2834,7 +2834,7 @@ Inténtalo seleccionando un trozo más pequeño de terreno.
 	</notification>
 	<notification name="NoQuickTime">
 		No parece que tu sistema tenga instalado el software QuickTime de Apple.
-Si quieres ver medios en streaming en las parcelas que los tienen, deberías ir al [http://www.apple.com/quicktime sitio de QuickTime] e instalar el QuickTime Player.
+Si quieres ver medios en streaming en las parcelas que los tienen, deberías ir al [https://www.apple.com/quicktime sitio de QuickTime] e instalar el QuickTime Player.
 	</notification>
 	<notification name="NoPlugin">
 		No se ha encontrado el &apos;Media Plugin&apos; para manejar el &apos;mime type&apos; &quot;[MIME_TYPE]&quot;. Los medios de este tipo no estarán disponibles.
@@ -3308,7 +3308,7 @@ Tu nuevo saldo se muestra en la esquina superior derecha.
 
 Tu saldo de L$ se actualizará cuando se complete el proceso. Si el proceso tarda más de 20 minutos se cancelará tu transacción, y la cantidad se abonada en tu saldo de US$.
 
-Puedes revisar el estado de tu pago en el Historial de transacciones de tu [http://secondlife.com/account/ Panel de Control]
+Puedes revisar el estado de tu pago en el Historial de transacciones de tu [https://secondlife.com/my/account/ Panel de Control]
 	</notification>
 	<notification name="FirstOverrideKeys">
 		A partir de ahora, tus teclas de movimiento las gestiona un objeto.
