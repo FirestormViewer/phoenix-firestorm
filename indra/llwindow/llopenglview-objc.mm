@@ -194,6 +194,10 @@ attributedStringInfo getSegments(NSAttributedString *str)
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+    [mMarkedString release];
+    [mLocallyCommittedString release];
+    // </FS:HK>
     [super dealloc];
 }
 
@@ -473,16 +477,31 @@ attributedStringInfo getSegments(NSAttributedString *str)
     // e.g. OS Window for upload something or Input Window...
     // mModifiers instance variable is for insertText: or insertText:replacementRange:  (by Pell Smit)
     mModifiers = [theEvent modifierFlags];
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+    [self forgetLocallyCommittedString];
+    // </FS:HK>
     NSString *str_no_modifiers = [theEvent charactersIgnoringModifiers];
     unichar ch = 0;
     if (str_no_modifiers.length)
     {
         ch = [str_no_modifiers characterAtIndex:0];
     }
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+    // While text is being composed the key belongs to the input method, so it is withheld from the viewer.
+    mKeyDownWithheld = mHasMarkedText;
+    mForwardWithheldKeyDown = false;
+    // </FS:HK>
     bool acceptsText = mHasMarkedText ? false : callKeyDown(&eventData, keycode, mModifiers, ch);
 
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+    // acceptsText only tells that some UI element has keyboard focus (it may be a button),
+    // so also check that the focused control takes text before opening the Input Window.
+    // </FS:HK>
     if (acceptsText &&
         !mMarkedTextAllowed &&
+        // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+        callFocusAcceptsTextInput() &&
+        // </FS:HK>
         !(mModifiers & (NSEventModifierFlagControl | NSEventModifierFlagCommand)) &&  // commands don't invoke InputWindow
         ![(LLAppDelegate*)[NSApp delegate] romanScript] &&
         ch > ' ' &&
@@ -494,6 +513,18 @@ attributedStringInfo getSegments(NSAttributedString *str)
     {
         [[self inputContext] handleEvent:theEvent];
     }
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+
+    // The input method committed its text and handed the key back as a command
+    // (e.g. Tab or Backspace pressed while composing): let the viewer handle it now,
+    // otherwise focus does not move and the key is lost.
+    if (mForwardWithheldKeyDown)
+    {
+        callKeyDown(&eventData, keycode, mModifiers, ch);
+    }
+    mKeyDownWithheld = false;
+    mForwardWithheldKeyDown = false;
+    // </FS:HK>
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent
@@ -595,17 +626,70 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (NSRange)markedRange
 {
-    int range[2];
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+    // int range[2];
+    // NSTextInputClient requires {NSNotFound, 0} when there is no marked text.
+    // Returning the cursor position instead makes some input methods believe
+    // a composition is still in progress.
+    if (!mHasMarkedText)
+    {
+        return NSMakeRange(NSNotFound, 0);
+    }
+    int range[2] = {0, 0};
+    // </FS:HK>
     getPreeditMarkedRange(&range[0], &range[1]);
     return NSMakeRange(range[0], range[1]);
 }
 
 - (NSRange)selectedRange
 {
-    int range[2];
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+    // int range[2];
+    // While composing, report the selection the input method set inside the marked text
+    // (e.g. the whole clause after a Japanese conversion) rather than the editor caret,
+    // which is always placed at the end of the preedit.
+    if (mHasMarkedText)
+    {
+        NSRange marked = [self markedRange];
+        return NSMakeRange(marked.location + mMarkedSelectedRange.location, mMarkedSelectedRange.length);
+    }
+    int range[2] = {0, 0};
+    // </FS:HK>
     getPreeditSelectionRange(&range[0], &range[1]);
     return NSMakeRange(range[0], range[1]);
 }
+
+// <FS:HK> macOS IME fixes, secondlife/viewer#6459
+// Drops the marked text from the editor without committing it.
+- (void)clearMarkedText
+{
+    resetPreedit();
+    mHasMarkedText = FALSE;
+    mMarkedTextLength = 0;
+    [mMarkedString release];
+    mMarkedString = nil;
+}
+
+// Commits the marked text into the editor ourselves.
+// Depending on the input method, the same text may still arrive through
+// insertText: right after (some send unmarkText before insertText, some
+// commit on discardMarkedText), so remember it to avoid inserting it twice.
+- (void)commitMarkedTextLocally
+{
+    commitPreedit();
+    mHasMarkedText = FALSE;
+    mMarkedTextLength = 0;
+    [mLocallyCommittedString release];
+    mLocallyCommittedString = mMarkedString;
+    mMarkedString = nil;
+}
+
+- (void)forgetLocallyCommittedString
+{
+    [mLocallyCommittedString release];
+    mLocallyCommittedString = nil;
+}
+// </FS:HK>
 
 - (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange
 {
@@ -623,6 +707,17 @@ attributedStringInfo getSegments(NSAttributedString *str)
             unsigned(selectedRange.length)
         };
 
+        // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+        // NSNotFound means "replace the current marked text (or the selection)",
+        // which setMarkedText() already does by resetting the preedit.
+        // Some input methods pass the current marked range explicitly instead;
+        // treat that the same way, since that text is gone once the preedit is reset.
+        if (replacementRange.location == NSNotFound ||
+            (mHasMarkedText && NSEqualRanges(replacementRange, [self markedRange])))
+        {
+            replacementRange = NSMakeRange(0, 0);
+        }
+        // </FS:HK>
         unsigned int replacement[2] = {
             unsigned(replacementRange.location),
             unsigned(replacementRange.length)
@@ -647,52 +742,89 @@ attributedStringInfo getSegments(NSAttributedString *str)
             segments.seg_standouts.push_back(true);
         }
         setMarkedText(text, selected, replacement, string_length, segments);
+        // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+        [self forgetLocallyCommittedString];
+        // </FS:HK>
         if (string_length > 0)
         {
             mHasMarkedText = TRUE;
             mMarkedTextLength = string_length;
+            // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+            mMarkedSelectedRange = selectedRange;
+            [mMarkedString release];
+            mMarkedString = [[NSString alloc] initWithCharacters:text length:string_length];
+            // </FS:HK>
         }
         else
         {
-            // we must clear the marked text when aString is null.
-            [self unmarkText];
+            // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+            // // we must clear the marked text when aString is null.
+            // [self unmarkText];
+            // An empty string means the input method cleared its composition
+            // (e.g. backspace over the last jamo). Only clear our side; telling
+            // the input method to discard here would reset its state mid-input.
+            [self clearMarkedText];
+            // </FS:HK>
         }
 
         delete [] text;
     } else {
         if (mHasMarkedText)
         {
-            [self unmarkText];
+            // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+            // [self unmarkText];
+            [self clearMarkedText];
+            // </FS:HK>
         }
     }
 }
 
-#if LL_DARWIN
-// For commitEditing deprecation
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-#endif
-
+// <FS:HK> macOS IME fixes, secondlife/viewer#6459
+// #if LL_DARWIN
+// // For commitEditing deprecation
+// #pragma clang diagnostic push
+// #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+// #endif
+//
+// Called by the viewer when focus moves or the mouse is clicked while composing.
+// Commit what is marked into the current editor, then tell the input method
+// its composition is finished so it starts the next one fresh.
+// </FS:HK>
 - (void)commitCurrentPreedit
 {
     if (mHasMarkedText)
     {
-        if ([[self inputContext] respondsToSelector:@selector(commitEditing)])
-        {
-            [[self inputContext] commitEditing];
-        }
+        // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+        // if ([[self inputContext] respondsToSelector:@selector(commitEditing)])
+        // {
+            // [[self inputContext] commitEditing];
+        // }
+        [self commitMarkedTextLocally];
+        [[self inputContext] discardMarkedText];
+        // </FS:HK>
     }
 }
 
-#if LL_DARWIN
-#pragma clang diagnostic pop
-#endif
-
+// <FS:HK> macOS IME fixes, secondlife/viewer#6459
+// #if LL_DARWIN
+// #pragma clang diagnostic pop
+// #endif
+//
+// Called by the input method to accept the marked text as final.
+// The input method does not send the text again via insertText:,
+// so it has to be committed here instead of discarded.
+// </FS:HK>
 - (void)unmarkText
 {
-    [[self inputContext] discardMarkedText];
-    resetPreedit();
-    mHasMarkedText = FALSE;
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+    // [[self inputContext] discardMarkedText];
+    // resetPreedit();
+    // mHasMarkedText = FALSE;
+    if (mHasMarkedText)
+    {
+        [self commitMarkedTextLocally];
+    }
+    // </FS:HK>
 }
 
 // We don't support attributed strings.
@@ -711,12 +843,38 @@ attributedStringInfo getSegments(NSAttributedString *str)
 {
     if (insertString != nil)
     {
-        [self insertText:insertString replacementRange:NSMakeRange(0, [insertString length])];
+        // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+        // [self insertText:insertString replacementRange:NSMakeRange(0, [insertString length])];
+        [self insertText:insertString replacementRange:NSMakeRange(NSNotFound, 0)];
+        // </FS:HK>
     }
 }
 
 - (void)insertText:(id)aString replacementRange:(NSRange)replacementRange
 {
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+    // aString may be an NSString or an NSAttributedString; the latter does not
+    // respond to characterAtIndex:, which used to drop the text entirely.
+    if ([aString isKindOfClass:[NSAttributedString class]])
+    {
+        aString = [(NSAttributedString *)aString string];
+    }
+    if (![aString isKindOfClass:[NSString class]])
+    {
+        return;
+    }
+
+    if (mLocallyCommittedString)
+    {
+        bool already_committed = !mHasMarkedText && [aString isEqualToString:mLocallyCommittedString];
+        [self forgetLocallyCommittedString];
+        if (already_committed)
+        {
+            return;
+        }
+    }
+
+    // </FS:HK>
     // SL-19801 Special workaround for system emoji picker
     if ([aString length] == 2)
     {
@@ -748,15 +906,20 @@ attributedStringInfo getSegments(NSAttributedString *str)
                 callUnicodeCallback([aString characterAtIndex:i], mModifiers);
             }
         } else {
-            resetPreedit();
-            // We may never get this point since unmarkText may be called before insertText ever gets called once we submit our text.
-            // But just in case...
+            // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+            // resetPreedit();
+            // // We may never get this point since unmarkText may be called before insertText ever gets called once we submit our text.
+            // // But just in case...
+            [self clearMarkedText];
+            // </FS:HK>
 
             for (NSInteger i = 0; i < [aString length]; i++)
             {
                 handleUnicodeCharacter([aString characterAtIndex:i]);
             }
-            mHasMarkedText = FALSE;
+            // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+            // mHasMarkedText = FALSE;
+            // </FS:HK>
         }
     }
     @catch(NSException * e)
@@ -795,6 +958,12 @@ attributedStringInfo getSegments(NSAttributedString *str)
     {
         [self insertNewline:self];
     }
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+    else if (mKeyDownWithheld)
+    {
+        mForwardWithheldKeyDown = true;
+    }
+    // </FS:HK>
 }
 
 - (BOOL)drawsVerticallyForCharacterAtIndex:(NSUInteger)charIndex
@@ -804,6 +973,16 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void) allowMarkedTextInput:(bool)allowed
 {
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+    if (mMarkedTextAllowed != allowed)
+    {
+        // Focus moved to a control with a different input mode. Whatever the input method
+        // was still composing for the previous control must not carry over into this one
+        // (e.g. a syllable typed while a button had focus). Any marked text of ours was
+        // already committed by interruptLanguageTextInput() before we get here.
+        [[self inputContext] discardMarkedText];
+    }
+    // </FS:HK>
     mMarkedTextAllowed = allowed;
 }
 
@@ -863,7 +1042,13 @@ attributedStringInfo getSegments(NSAttributedString *str)
 //          In case of user typed next letter after conversion
 - (void) insertText:(id)aString replacementRange:(NSRange)replacementRange
 {
-    [[self inputContext] discardMarkedText];
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+    // [[self inputContext] discardMarkedText];
+    // Let NSTextView finish the composition itself. Calling discardMarkedText here
+    // made the input method drop the syllable it had just started (e.g. Korean),
+    // which emptied and closed the Input Window after every key.
+    [super insertText:aString replacementRange:replacementRange];
+    // </FS:HK>
     [self setString:@""];
     [glview insertText:aString replacementRange:replacementRange];
     if (mKeyPressed == NSEnterCharacter ||

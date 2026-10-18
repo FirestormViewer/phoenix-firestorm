@@ -1923,6 +1923,14 @@ bool LLViewerWindow::handleWindowDidChangeScreen(LLWindow *window)
     return true;
 }
 
+// <FS:HK> macOS IME fixes, secondlife/viewer#6459
+bool LLViewerWindow::handleFocusAcceptsTextInput(LLWindow *window)
+{
+    LLUICtrl* focus = dynamic_cast<LLUICtrl*>(gFocusMgr.getKeyboardFocus());
+    return focus && focus->acceptsTextInput();
+}
+// </FS:HK>
+
 void LLViewerWindow::handlePingWatchdog(LLWindow *window, const char * msg)
 {
     LLAppViewer::instance()->pingMainloopTimeout(msg);

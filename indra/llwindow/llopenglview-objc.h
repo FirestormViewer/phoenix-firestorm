@@ -40,8 +40,17 @@
     float mMousePos[2];
     bool mHasMarkedText;
     unsigned int mMarkedTextLength;
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+    NSString *mMarkedString;            // current marked text as received from the input method
+    NSRange mMarkedSelectedRange;       // selection inside the marked text, as set by the input method
+    NSString *mLocallyCommittedString;  // marked text we committed ourselves, see insertText:replacementRange:
+    // </FS:HK>
     bool mMarkedTextAllowed;
     bool mSimulatedRightClick;
+    // <FS:HK> macOS IME fixes, secondlife/viewer#6459
+    bool mKeyDownWithheld;          // keyDown was not passed to the viewer because text was being composed
+    bool mForwardWithheldKeyDown;   // the input method gave that key back as a command, so pass it on after all
+    // </FS:HK>
 }
 - (id) initWithSamples:(NSUInteger)samples;
 - (id) initWithSamples:(NSUInteger)samples andVsync:(BOOL)vsync;

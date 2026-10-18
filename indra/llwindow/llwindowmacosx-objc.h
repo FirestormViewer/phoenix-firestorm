@@ -154,6 +154,9 @@ void callDeltaUpdate(float *delta, unsigned int mask);
 void callOtherMouseDown(float *pos, unsigned int mask, int button);
 void callOtherMouseUp(float *pos, unsigned int mask, int button);
 void callFocus();
+// <FS:HK> macOS IME fixes, secondlife/viewer#6459
+bool callFocusAcceptsTextInput();
+// </FS:HK>
 void callFocusLost();
 void callModifier(unsigned int mask);
 void callQuitHandler();
@@ -173,6 +176,9 @@ bool handleUnicodeCharacter(wchar_t c);
 void updatePreeditor(unsigned short *str);
 void setPreeditMarkedRange(int position, int length);
 void resetPreedit();
+// <FS:HK> macOS IME fixes, secondlife/viewer#6459
+void commitPreedit();
+// </FS:HK>
 int wstring_length(const std::basic_string<wchar_t> & wstr, const int woffset, const int utf16_length, int *unaligned);
 void setMarkedText(unsigned short *text, unsigned int *selectedRange, unsigned int *replacementRange, long text_len, attributedStringInfo segments);
 void getPreeditLocation(float *location, unsigned int length);

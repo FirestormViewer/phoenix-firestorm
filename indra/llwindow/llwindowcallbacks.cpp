@@ -210,6 +210,13 @@ bool LLWindowCallbacks::handleWindowDidChangeScreen(LLWindow *window)
     return false;
 }
 
+// <FS:HK> macOS IME fixes, secondlife/viewer#6459
+bool LLWindowCallbacks::handleFocusAcceptsTextInput(LLWindow *window)
+{
+    return true;
+}
+// </FS:HK>
+
 void LLWindowCallbacks::handlePingWatchdog(LLWindow *window, const char * msg)
 {
 
