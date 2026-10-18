@@ -828,7 +828,7 @@
              top_pad="8"
              height="16"
              tool_tip="Amount of time a group chat will be muted when pressing the &quot;Snooze&quot; button. Setting a value of 0 will effectively just close the window until the next group message arrives."
-             width="160">
+             width="170">
               Group Chat Snooze Duration:
             </text>
             <spinner
