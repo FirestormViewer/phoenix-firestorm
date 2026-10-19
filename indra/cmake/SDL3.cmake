@@ -5,12 +5,11 @@ include(Prebuilt)
 
 add_library(ll::SDL3 INTERFACE IMPORTED)
 
-# <FS:Ansariel> Commented out because this makes no sense as SDL3 is used for all platforms now
-#if (LINUX)
-#  set(USE_SDL_WINDOW ON CACHE BOOL "Build with SDL window backend")
-#else()
-#  set(USE_SDL_WINDOW OFF CACHE BOOL "Build with SDL window backend")
-#endif (LINUX)
+if (LINUX)
+  set(USE_SDL_WINDOW ON CACHE BOOL "Build with SDL window backend")
+else()
+  set(USE_SDL_WINDOW OFF CACHE BOOL "Build with SDL window backend")
+endif (LINUX)
 
 use_prebuilt_binary(SDL3)
 
