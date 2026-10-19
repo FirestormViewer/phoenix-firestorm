@@ -178,6 +178,8 @@ void setPreeditMarkedRange(int position, int length);
 void resetPreedit();
 // <FS:HK> macOS IME fixes, secondlife/viewer#6459
 void commitPreedit();
+std::basic_string<unsigned short> getPreeditText();
+bool replacePreeditText(unsigned int location, unsigned int length, const unsigned short *text, long text_len);
 // </FS:HK>
 int wstring_length(const std::basic_string<wchar_t> & wstr, const int woffset, const int utf16_length, int *unaligned);
 void setMarkedText(unsigned short *text, unsigned int *selectedRange, unsigned int *replacementRange, long text_len, attributedStringInfo segments);
