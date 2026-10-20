@@ -701,6 +701,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
 
             # These need to be installed as a SxS assembly, currently a 'private' assembly.
             # See http://msdn.microsoft.com/en-us/library/ms235291(VS.80).aspx
+            self.path_optional("concrt140.dll") # <FS:Ansariel> Support for concurrency features
             self.path("msvcp140.dll")
             self.path_optional("msvcp140_1.dll")
             self.path_optional("msvcp140_2.dll")

@@ -150,13 +150,14 @@ if(WINDOWS)
     # msvcp*.dll and msvcr*.dll. VS 2017 has msvcp*.dll and vcruntime*.dll.
     # Check each of them.
     foreach(release_msvc_file
+            concrt${MSVC_VER}.dll # <FS:Ansariel> Support for concurrency features
             msvcp${MSVC_VER}.dll
             msvcp${MSVC_VER}_1.dll
             msvcp${MSVC_VER}_2.dll
             msvcp${MSVC_VER}_atomic_wait.dll
             msvcp${MSVC_VER}_codecvt_ids.dll
             #msvcr${MSVC_VER}.dll # <FS:Ansariel> Can't build with older VS versions anyway - no need trying to copy this file
-            vccorlib${MSVC_VER}.dll
+            #vccorlib${MSVC_VER}.dll # <FS:Ansariel> Not needed (needed for UWP etc. - not packaged anyway)
             vcruntime${MSVC_VER}.dll
             vcruntime${MSVC_VER}_1.dll
             vcruntime${MSVC_VER}_threads.dll
