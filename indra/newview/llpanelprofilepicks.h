@@ -150,6 +150,10 @@ public:
 
     void addLocationChangedCallbacks();
 
+    //<FS:Trish> RLVa showloc
+    void updateButtons();
+    //</FS:Trish>
+
   protected:
 
     /**

@@ -472,6 +472,17 @@ void LLPanelProfilePicks::updateButtons()
         // </FS:Ansariel>
         mDeleteButton->setEnabled(canDeletePick());
     }
+
+    //<FS:Trish> RLVa showloc
+    for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
+    {
+        LLPanelProfilePick* pick_panel = dynamic_cast<LLPanelProfilePick*>(mTabContainer->getPanelByIndex(tab_idx));
+        if (pick_panel)
+        {
+            pick_panel->updateButtons();
+        }
+    }
+    //</FS:Trish>
 }
 
 void LLPanelProfilePicks::apply()
@@ -669,7 +680,9 @@ void LLPanelProfilePick::setAvatarId(const LLUUID& avatar_id)
     {
         mPickName->setEnabled(true);
         mPickDescription->setEnabled(true);
-        mSetCurrentLocationButton->setVisible(true);
+        //<FS:Trish> RLVa showloc
+        updateButtons();
+        //</FS:Trish>
     }
     else
     {
@@ -908,6 +921,13 @@ bool LLPanelProfilePick::isDirty() const
 
 void LLPanelProfilePick::onClickSetLocation()
 {
+    //<FS:Trish> RLVa showloc
+    if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+    {
+        return;
+    }
+    //<\FS:Trish>
+
     // Save location for later use.
     setPosGlobal(gAgent.getPositionGlobal());
 
@@ -1022,6 +1042,14 @@ void LLPanelProfilePick::addLocationChangedCallbacks()
     mRegionCallbackConnection = gAgent.addRegionChangedCallback([this]() { onClickSetLocation(); });
     mParcelCallbackConnection = gAgent.addParcelChangedCallback([this]() { onClickSetLocation(); });
 }
+
+//<FS:Trish> RLVa showloc
+void LLPanelProfilePick::updateButtons()
+{
+    mSetCurrentLocationButton->setVisible(getSelfProfile());
+    mSetCurrentLocationButton->setEnabled(getSelfProfile() && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+}
+//</FS:Trish> RLVa showloc
 
 void LLPanelProfilePick::setParcelID(const LLUUID& parcel_id)
 {
