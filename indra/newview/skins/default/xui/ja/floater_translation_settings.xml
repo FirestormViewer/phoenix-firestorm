@@ -62,16 +62,10 @@
 	<text name="azure_api_region_label">
 		リージョン：
 	</text>
-	<combo_box name="azure_api_endpoint_combo">
-		<combo_box.item label="https://api.cognitive.microsofttranslator.com" name="global"/>
-		<combo_box.item label="https://api-apc.cognitive.microsofttranslator.com" name="api-apc"/>
-		<combo_box.item label="https://api-eur.cognitive.microsofttranslator.com" name="api-eur"/>
-		<combo_box.item label="https://api-nam.cognitive.microsofttranslator.com" name="api-nam"/>
-	</combo_box>
 	<line_editor default_text="グローバルサービスの場合は空のままにすることができます。" name="azure_api_region"/>
 	<button label="認証" name="verify_azure_api_key_btn"/>
 	<text name="google_api_key_label">
-		Google [https://cloud.google.com/translate/docs/quickstarts?csw=1&amp;hl=ja#auth APIキー]：
+		Google [https://docs.cloud.google.com/translate/docs/authentication?hl=ja#api-keys ＡＰＩキー]：
 	</text>
 	<line_editor default_text="Google APIキーを入力して「認証」ボタンをクリックしてください。" name="google_api_key"/>
 	<button label="認証" name="verify_google_api_key_btn"/>

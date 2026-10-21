@@ -1684,7 +1684,10 @@ https://secondlife.com/viewer-access-faq
 		一致するものはありませんでした。
 	</string>
 	<string name="InventoryNoTexture">
-		インベントリ内にこのテクスチャのコピーがありません
+		インベントリ内にこのテクスチャのコピーがありません。
+	</string>
+	<string name="InventoryNoMaterial">
+		インベントリ内にこのマテリアルのコピーがありません。
 	</string>
 	<string name="InventoryInboxNoItems">
 		マーケットプレイスで購入した商品はここに表示されます。その後、アイテムをインベントリにドラッグすれば、それらのアイテムを使用できます。
@@ -6607,4 +6610,7 @@ Rez時間：[OBJECT_REZ_TIME]
 	<string name="OmnifilterExportDescription">包括フィルタのルール設定：[REPLACEMENT]</string>	<!-- Note for translators: This goes into NC's description field, no special chars or diacritics -->
 	<string name="FSAvatarAlignToggleMini">最小</string>
 	<string name="FSAvatarAlignToggleFull">完全</string>
+
+	<!-- <FS:TJ> Launch new instance option from macOS dock> -->
+	<string name="FSMacOSNewViewerInstance">新しいビューアのインスタンス</string>
 </strings>

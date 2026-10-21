@@ -10,6 +10,9 @@
 		<menu_item_check name="recent_tab" label="最新タブを表示"/>
 		<menu_item_check name="worn_tab" label="着用中タブを表示"/>
 		<menu_item_check name="favorites_tab" label="お気に入りタブを表示"/>
+		<!-- <FS:TP> [FIRE-34881] Show/hide Library root -->
+		<menu_item_check label="ライブラリを表示" name="library"/>
+		<!-- </FS:TP> -->
 	</context_menu>
 	<context_menu label="Sorting" name="sorting_menu">
 		<menu_item_check name="sort_by_name" label="名前で並べ替え"/>

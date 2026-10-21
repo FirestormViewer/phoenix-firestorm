@@ -5776,6 +5776,16 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.、またはそのチー
 
 https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
+	<!-- <FS:TJ> Detect and notify if the viewer is trying to run as admin on Windows -->
+	<notification name="ViewerProcessRunningAsAdmin">
+現在、ビューアプロセスの一部または全部が管理者権限で実行されています。これは、ビューア内でメディアやウェブページが正常に動作しないなど、様々な問題を引き起こすことが知られています。
+
+すべてのビューアプロセスが管理者権限で実行されていないことを確認してください。詳細については、こちらをご覧ください：
+
+https://wiki.firestormviewer.org/fs_media#one_or_more_viewer_processes_are_currently_running_as_administrator_error_message
+		<usetemplate ignoretext="管理者権限でビューアを起動したときに警告を出す" name="okignore" yestext="ＯＫ" />
+	</notification>
+	<!-- </FS:TJ> -->
 	<notification name="WaterExclusionSurfacesWarning">
 		水面を非表示にするボックスをチェックすると、テクスチャ、凹凸、光沢の選択が上書きされます。
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="続ける"/>
@@ -5958,4 +5968,41 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	</notification>
 	<!-- </FS:minerjr> [FIRE-36763] -->
 
+	<!-- <FS:Amy> Favorite Wearables folders -->
+	<notification name="FSWearableFavoritesNewFolder">
+新しいお気に入りの着用物のフォルダ名を入力してください：
+		<form name="form">
+			<input name="message">
+新しいフォルダ
+			</input>
+			<button name="OK" text="ＯＫ"/>
+			<button name="Cancel" text="キャンセル"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesRenameFolder">
+新しいお気に入りの着用物のフォルダ名を入力してください。[FOLDER_NAME]：
+		<form name="form">
+			<input name="message">
+[FOLDER_NAME]
+			</input>
+			<button name="OK" text="ＯＫ"/>
+			<button name="Cancel" text="キャンセル"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesDeleteFolder">
+お気に入りの着用物のフォルダ「[FOLDER_NAME]」を削除してもよろしいですか？
+
+これにより、フォルダとその中のお気に入りリンクのみが削除されます。元のインベントリアイテムは削除されません。
+		<form name="form">
+			<button name="Delete" text="削除"/>
+			<button name="Cancel" text="キャンセル"/>
+		</form>
+	</notification>
+	<notification name="FSWearableFavoritesFolderInvalidName">
+お気に入りのお気に入りの着用物フォルダ「[FOLDER_NAME]」を作成できませんでした。
+
+フォルダ名に「/」または「\」を含めることはできません。
+		<usetemplate name="okbutton" yestext="ＯＫ"/>
+	</notification>
+<!-- </FS:Amy> Favorite Wearables folders -->
 </notifications>

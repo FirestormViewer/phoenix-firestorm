@@ -18,6 +18,9 @@
 			<menu_item_call name="inventory_new_window" label="新しいウィンドウ"/>
 			<menu_item_check label="保護フォルダ" name="Protected Folders"/>
 			<menu_item_check label="インベントリ設定…" name="inv_settings"/>
+			<!-- <FS:TP> [FIRE-34881] Show/hide Library root, matching default skin's gear menu -->
+			<menu_item_check label="ライブラリを表示" name="show_library"/>
+			<!-- </FS:TP> -->
 			<menu_item_check label="一覧表示" name="list_view"/>
 			<menu_item_check label="ギャラリー表示" name="gallery_view"/>
 			<menu_item_check label="複合表示" name="combination_view"/>
