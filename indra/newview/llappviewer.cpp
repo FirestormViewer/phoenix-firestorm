@@ -5928,7 +5928,7 @@ void LLAppViewer::idle()
     // <FS:AO> setting to quit after N seconds of being AFK. Note: Server will time us out after 30m regardless
     static LLCachedControl<F32> quitAfterSecondsOfAFK(gSavedSettings, "QuitAfterSecondsOfAFK");
     F32 qas_afk = (F32)quitAfterSecondsOfAFK;
-    if (!mQuitRequested && qas_afk > 0.f && gAgent.getAFK() && gAwayTimer.getElapsedTimeF32() > qas_afk)
+    if (!mQuitRequested && qas_afk > 0.f && gAgent.getAFK() && gAgent.getAFKDuration() > qas_afk)
     {
         // go ahead and just quit gracefully
         LL_INFOS() << "Logout, QuitAfterSecondsAFK expired." << LL_ENDL;
