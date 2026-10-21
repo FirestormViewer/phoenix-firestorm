@@ -111,7 +111,7 @@
 			<text_editor name="away_avatar_response">
 				変更するにはログインしてください。
 			</text_editor>
-			<check_box label="無視しているアバターに自動応答する：" name="send_muted_av_response" tool_tip="無視している人からＩＭが来た時に自動的に以下のメッセージを送信します。"/>
+			<check_box label="ブロック済みアバターへの自動応答：" name="send_muted_av_response" tool_tip="無視している人からＩＭが来た時に自動的に以下のメッセージを送信します。"/>
 			<text_editor name="muted_avatar_response">
 				変更するにはログインしてください。
 			</text_editor>

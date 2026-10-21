@@ -43,6 +43,19 @@
 			<slider name="manual_environment_change_transition_period" label="環境遷移時間:" tool_tip="手動で環境を変更した場合に、現在の設定から変化していく時間を秒単位で設定します。０にすると瞬時に切り替わるようになります。"/>
 			<check_box name="EnvironmentPersistAcrossLogin" label="セッションを越えて環境設定を保持" tool_tip="次回ログイン時にも現在の環境設定を保持するようにします。"/>
 			<check_box name="FSRepeatedEnvTogglesShared" label="環境キーバインドを繰り返し使用したときに共有環境に戻す" tool_tip="キーバインド（例：Ctrl＋Shift＋y）を繰り返して要求されたプリセットと共有環境を交互に切り替えます。"/>
+			<!-- <FS:TP> [FIRE-36987] Selectable avatar loading/bakefail cloud color -->
+			<text name="FSCloudColorLabel">
+				アバターの読み込み／ベイク失敗時のクラウドの色：
+			</text>
+			<text name="FSCloudColorStartLabel">
+				開始色：
+			</text>
+			<text name="FSCloudColorEndLabel">
+				終了色：
+			</text>
+			<color_swatch name="FSCloudColorStart" tool_tip="アバターの読み込み時、またはベイク処理の失敗時に表示されるパーティクル「クラウド」の開始色を指定します。即座に適用され、再起動は不要です。"/>
+			<color_swatch name="FSCloudColorEnd" tool_tip="アバターの読み込み時、またはベイク処理の失敗時に表示されるパーティクル「クラウド」の終了色を指定します。即座に適用され、再起動は不要です。"/>
+			<!-- </FS:TP> -->
 		</panel>
 		<!-- Protection -->
 		<panel label="保護" name="ProtectionTab">

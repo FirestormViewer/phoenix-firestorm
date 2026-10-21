@@ -87,7 +87,7 @@
 				フレンド
 			</text>
 			<text name="muted_tag_label">
-				無視対象
+				ブロック済み
 			</text>
 			<text name="linden_tag_label">
 				リンデン
@@ -184,7 +184,7 @@
 				リンデン
 			</text>
 			<text name="MapAvatarMutedColor_label">
-				無視対象
+				ブロック済み
 			</text>
 			<check_box name="MiniMapChatRing" label="ミニマップ上に、ささやき、発言、シャウトのチャット範囲を示すリングを表示："/>
 			<text name="netmap_chatring_color_label">

@@ -6,7 +6,13 @@
 	<floater.string name="search_no_items">
 		アイテムが見つかりませんでした。
 	</floater.string>
+	<floater.string name="root_folder_label">
+		全てのお気に入り
+	</floater.string>
 	<panel name="buttons_panel">
+		<button name="new_folder_btn" tool_tip="新しいお気に入りフォルダを作成します。"/>
+		<button name="rename_folder_btn" tool_tip="お気にリフォルダの名前を変更します。"/>
+		<button name="delete_folder_btn" tool_tip="選択したお気に入りフォルダを削除します。"/>
 		<filter_editor label="フィルタ" name="wearable_filter_input"/>
 		<menu_button name="options_btn" tool_tip="お気に入りのオプションを表示します。"/>
 		<button name="remove_btn" tool_tip="お気に入りをリストから削除します。"/>

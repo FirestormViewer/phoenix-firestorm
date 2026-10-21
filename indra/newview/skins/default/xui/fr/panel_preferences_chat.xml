@@ -105,8 +105,8 @@
 			<check_box name="FSIgnoreAdHocSessions" label="Ignorer automatiquement toute proposition de conférence écrite"/>
 			<check_box name="FSReportIgnoredAdHocSession" label="Les signaler dans le Chat local"/>
 			<check_box name="FSDontIgnoreAdHocFromFriends" label="Ne pas ignorer les conférences de mes amis"/>
-			<text name="group_snooze_time_label" width="180" tool_tip="Durée pour laquelle le Chat de groupe sera ignoré en appuyant sur le bouton 'Ignorer temporairement'. La fenêtre se fermera jusqu'au prochain message reçu si la valeur est fixée à 0.">
-               Durée de la mise en sourdine :
+			<text name="group_snooze_time_label" width="290" tool_tip="Durée pour laquelle le Chat de groupe sera ignoré en appuyant sur le bouton 'Ignorer temporairement'. La fenêtre se fermera jusqu'au prochain message reçu si la valeur est fixée à 0.">
+				Durée de la mise en sourdine du chat de groupe :
 			</text>
 			<spinner name="GroupSnoozeTime" tool_tip="Durée pour laquelle le Chat de groupe sera ignoré en appuyant sur le bouton 'Ignorer temporairement'. La fenêtre se fermera jusqu'au prochain message reçu si la valeur est fixée à 0."/>
 			<text name="group_snooze_time_seconds_label" tool_tip="Durée pour laquelle le Chat de groupe sera ignoré en appuyant sur le bouton 'Ignorer temporairement'. La fenêtre se fermera jusqu'au prochain message reçu si la valeur est fixée à 0.">secondes</text>

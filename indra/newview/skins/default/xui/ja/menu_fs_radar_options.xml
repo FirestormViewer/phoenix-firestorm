@@ -2,7 +2,7 @@
 <toggleable_menu name="menu_group_plus">
 	<menu_item_check label="ミニマップをレーダーの上に表示" name="ShowRadarMinimap"/>
 	<menu_item_check label="設定した範囲内の結果を表示" name="LimitRadarByRange"/>
-	<menu_item_check label="ミュート／ブラックリストにしたアバターも表示" name="FSRadarShowMutedAndDerendered"/>
+	<menu_item_check label="ブロック済み／ブラックリスト内のアバターを表示" name="FSRadarShowMutedAndDerendered"/>
 	<context_menu label="名前の表示形式" name="radarNameFormat">
 		<menu_item_check label="表示名" name="radarFmtDN"/>
 		<menu_item_check label="ユーザー名" name="radarFmtUN"/>
