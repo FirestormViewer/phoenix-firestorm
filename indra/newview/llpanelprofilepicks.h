@@ -269,6 +269,11 @@ protected:
     boost::signals2::connection mRegionCallbackConnection;
     boost::signals2::connection mParcelCallbackConnection;
 
+    //<FS:Trish> RLVa showloc
+    boost::signals2::connection mRlvBehaviorCallbackConnection;
+    void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+    //</FS:Trish>
+
     bool mLocationChanged;
     bool mNewPick;
     bool mIsEditing;
