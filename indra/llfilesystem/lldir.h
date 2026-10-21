@@ -250,6 +250,7 @@ class LLDir
     virtual bool setSoundCacheDir(const std::string& path);
     // </FS:Ansariel>
 
+    const std::string& getRunContextDescription() const { return mRunContextDescription; }
     virtual void dumpCurrentDirectories(LLError::ELevel level = LLError::LEVEL_DEBUG);
 
     // Open the system file browser to reveal a file or directory
@@ -345,6 +346,11 @@ protected:
     std::string mLLPluginDir;           // Location for plugins and plugin shell
     static std::string sDumpDir;            // Per-run crash report subdir of log directory.
     std::string mUserName;              // Current user name
+
+    // A short, human readable description of how/where the executable is
+    // currently running from
+    std::string mRunContextDescription;
+
     // <FS:Ansariel> Sound cache
     std::string mSoundCacheDir;         // Sound cache
     // </FS:Ansariel>

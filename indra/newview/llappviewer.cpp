@@ -1846,12 +1846,10 @@ bool LLAppViewer::doFrame()
                     gKeyboard->scanKeyboard();
                     gViewerInput.scanMouse();
 
-                    // <FS:Ansariel> Fixed crouch toggle
                     if (gAgent.isCrouching())
                     {
                         gAgent.moveUp(-1);
                     }
-                    // </FS:Ansariel>
                 }
             }
 
@@ -3227,21 +3225,27 @@ bool LLAppViewer::initConfiguration()
     bool success = LLXMLNode::parseFile(settings_file_list, root, NULL);
     if (!success)
     {
-        LL_WARNS() << "Cannot load default configuration file " << settings_file_list << LL_ENDL;
+        std::string parse_error = LLXMLNode::getLastFileError();
+        const std::string& run_context = gDirUtilp->getRunContextDescription();
+
+        LL_WARNS() << "Cannot load default configuration file " << settings_file_list
+            << (parse_error.empty() ? "" : (" - " + parse_error)) << LL_ENDL;
         LLError::LLUserWarningMsg::showMissingFiles();
         if (gDirUtilp->fileExists(settings_file_list))
         {
             LL_ERRS() << "Cannot load default configuration file settings_files.xml. "
                 << "Please reinstall viewer from https://www.firestormviewer.org/choose-your-platform/ "
-                << "and contact https://www.firestormviewer.org/support if issue persists after reinstall."
+                << "and contact https://www.firestormviewer.org/support if issue persists after reinstall. "
+                << "Reason: " << (parse_error.empty() ? "unknown (file is present but could not be parsed)" : parse_error)
+                << ". Install type: " << run_context
                 << LL_ENDL;
         }
         else
         {
             LL_ERRS() << "Default configuration file settings_files.xml not found. "
                 << "Please reinstall viewer from https://www.firestormviewer.org/choose-your-platform/ "
-                << "and contact https://www.firestormviewer.org/support if issue persists after reinstall."
-                << LL_ENDL;
+                << "and contact https://www.firestormviewer.org/support if issue persists after reinstall. "
+                << "Install type: " << run_context                << LL_ENDL;
         }
     }
 
