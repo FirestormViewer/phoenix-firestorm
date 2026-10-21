@@ -431,6 +431,11 @@ public:
     void            clearAFK();
     bool            getAFK() const;
     static const F32 MIN_AFK_TIME;
+    // <FS:Beq> [FIRE-37058] Track continuous Away time separately from activity confirmation.
+    F32             getAFKDuration() const;
+private:
+    LLFrameTimer    mAFKDurationTimer;
+    // </FS:Beq>
 
     //--------------------------------------------------------------------
     // Run

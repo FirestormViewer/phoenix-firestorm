@@ -21,6 +21,9 @@
  			<menu_item_check label="最新タブを表示" name="show_recent_tab"/>
  			<menu_item_check label="着用中タブを表示" name="show_worn_tab"/>
  			<menu_item_check label="お気に入りタブを表示" name="show_favorites_tab"/>
+			<!-- <FS:TP> [FIRE-34881] Show/hide Library root, matching default skin's gear menu -->
+			<menu_item_check label="ライブラリを表示" name="show_library"/>
+			<!-- </FS:TP> -->
 			<menu_item_check label="一覧表示" name="list_view"/>
 			<menu_item_check label="ギャラリー表示" name="gallery_view"/>
 			<menu_item_check label="複合表示" name="combination_view"/>

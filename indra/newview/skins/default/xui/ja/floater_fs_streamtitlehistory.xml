@@ -3,4 +3,9 @@
 	<fs_scroll_list name="history">
 		<columns label="タイトル" name="title" />
 	</fs_scroll_list>
+	<button name="clear_history" label="クリア"/>
+	<text name="max_entries_label">
+		最大エントリ数：
+	</text>
+	<button name="copy_to_clipboard" label="クリップボードにコピー"/>
 </floater>
