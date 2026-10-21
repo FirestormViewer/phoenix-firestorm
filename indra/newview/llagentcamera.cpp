@@ -955,7 +955,7 @@ void LLAgentCamera::cameraOrbitOver(const F32 angle)
 //-----------------------------------------------------------------------------
 void LLAgentCamera::cameraRollOver(const F32 angle)
 {
-    mRollAngle += fmod(angle, F_TWO_PI);
+    mRollAngle += fmodf(angle, F_TWO_PI);
 }
 
 void LLAgentCamera::resetCameraRoll()
@@ -1711,7 +1711,7 @@ void LLAgentCamera::updateCamera()
             diff.mV[VZ] = 0.f;
         }
 #endif
-        static LLCachedControl<bool> useRealisticMouselook(gSavedSettings, "AlchemyRealisticMouselook", false);
+        static LLCachedControl<bool> useRealisticMouselook(gSavedSettings, "RealisticMouselook", false);
         if (useRealisticMouselook)
         {
             auto frame_agent = gAgent.getFrameAgent();
