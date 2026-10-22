@@ -858,6 +858,12 @@ bool LLFloaterPreference::postBuild()
 #endif
     // </FS:Ansariel>
 
+    // <FS:BADGE> Hide the Linux-only LauncherEntry option elsewhere.
+#ifndef LL_LINUX
+    childSetVisible("FSShowUnreadLauncherBadge", false);
+#endif
+    // </FS:BADGE>
+
     // <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
     mPopupList = getChild<LLScrollListCtrl>("all_popups");
     mPopupList->setFilterColumn(COLUMN_POPUP_LABEL);

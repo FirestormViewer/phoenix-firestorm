@@ -28,6 +28,7 @@
 
 #include "llappviewerlinux.h"
 
+#include "fslauncherentrylinux.h"
 #include "llcommandlineparser.h"
 
 #include "lldiriterator.h"
@@ -233,6 +234,15 @@ bool LLAppViewerLinux::init()
 
     bool success = LLAppViewer::init();
 
+    // <FS:BADGE> Base initialization must precede badge/model observation.
+    if (success)
+    {
+        // Base initialization creates the viewer window and IM model objects
+        // consumed by the badge publisher.  Keep this after the base call.
+        mLauncherEntry = std::make_unique<FSLauncherEntryLinux>();
+    }
+    // </FS:BADGE>
+
 #if LL_SEND_CRASH_REPORTS
     S32 nCrashSubmitBehavior = gCrashSettings.getS32("CrashSubmitBehavior");
 
@@ -249,6 +259,16 @@ bool LLAppViewerLinux::init()
 
     return success;
 }
+
+// <FS:BADGE> Release model observers before base viewer teardown.
+bool LLAppViewerLinux::cleanup()
+{
+    // Disconnect model observers and invalidate async callbacks before base
+    // cleanup tears down the viewer window and IM model.
+    mLauncherEntry.reset();
+    return LLAppViewer::cleanup();
+}
+// </FS:BADGE>
 
 bool LLAppViewerLinux::restoreErrorTrap()
 {
