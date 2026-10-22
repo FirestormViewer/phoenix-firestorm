@@ -598,7 +598,7 @@
 	<notification name="GoToAuctionPage">
 		Перейти на веб-страницу [CURRENT_GRID], чтобы посмотреть подробности аукциона или сделать ставку?
 		<url name="url">
-			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
+			https://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
 	</notification>
@@ -787,7 +787,7 @@
 
 Перейти на [_URL] для получения информации о покупке L$?
 		<url name="url">
-			http://secondlife.com/app/currency/
+			https://secondlife.com/app/currency/
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
 	</notification>
@@ -1518,7 +1518,7 @@
 
 Вы можете проверить подключение к интернету, повторить попытку через несколько минут, нажать кнопку «Помощь» для перехода на [SUPPORT_SITE] или нажать кнопку «Телепортация», чтобы телепортироваться домой.
 		<url name="url">
-			http://secondlife.com/support/
+			https://support.secondlife.com/
 		</url>
 		<form name="form">
 			<button name="OK" text="OK"/>
@@ -1759,7 +1759,7 @@
 	</notification>
 	<notification name="RequiredUpdate">
 		Для входа необходима версия [VERSION].
-Скачайте обновление с веб-сайта https://secondlife.com/support/downloads/
+Скачайте обновление с веб-сайта https://www.firestormviewer.org/choose-your-platform/
 	</notification>
 	<notification name="PauseForUpdate">
 		Для входа необходима версия [VERSION].
@@ -1796,7 +1796,7 @@ URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Запустить браузер для просмотра веб-страницы" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
-		Перейти на [http://secondlife.com/account/ личный кабинет] для управления вашим аккаунтом?
+		Перейти на [https://secondlife.com/my/account/ личный кабинет] для управления вашим аккаунтом?
 		<usetemplate ignoretext="Запустить браузер для управления аккаунтом" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
@@ -1970,7 +1970,7 @@ URL: [UNTRUSTED_URL]
 	<notification name="SetDisplayNameSuccess">
 		Привет, [DISPLAY_NAME]!
 
-Как и в реальной жизни, должно пройти какое-то время, прежде чем все узнают ваше новое имя.  Подождите несколько дней, пока [http://wiki.secondlife.com/wiki/Setting_your_display_name ваше имя не будет обновлено] в объектах, скриптах, поиске и т.д.
+Как и в реальной жизни, должно пройти какое-то время, прежде чем все узнают ваше новое имя.  Подождите несколько дней, пока [https://wiki.secondlife.com/wiki/Setting_your_display_name ваше имя не будет обновлено] в объектах, скриптах, поиске и т.д.
 	</notification>
 	<notification name="SetDisplayNameBlocked">
 		Вы не можете сменить свое отображаемое имя. Если вы считаете, что это ошибка, обратитесь в службу поддержки.
@@ -1989,7 +1989,7 @@ URL: [UNTRUSTED_URL]
 	<notification name="AgentDisplayNameUpdateThresholdExceeded">
 		Вам надо подождать, прежде чем вы сможете сменить свое отображаемое имя.
 
-См. http://wiki.secondlife.com/wiki/Setting_your_display_name
+См. https://wiki.secondlife.com/wiki/Setting_your_display_name
 
 Повторите попытку позже.
 	</notification>
@@ -2199,7 +2199,7 @@ URL: [UNTRUSTED_URL]
 	<notification name="RegionEntryAccessBlocked_AdultsOnlyContent">
 		Вы пытаетесь посетить регион, контент в котором имеет рейтинг [REGIONMATURITY] и предназначен только для взрослых.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Пересечение региона: вы пытаетесь посетить регион, контент в котором предназначен только для взрослых." name="okcancelignore" notext="Закрыть" yestext="Перейти в Базу знаний"/>
 	</notification>
@@ -2228,7 +2228,7 @@ URL: [UNTRUSTED_URL]
 	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
 		Вы пытаетесь посетить регион, контент в котором имеет рейтинг [REGIONMATURITY] и предназначен только для взрослых.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Телепортация: вы пытаетесь посетить регион, контент в котором предназначен только для взрослых." name="okcancelignore" notext="Закрыть" yestext="Перейти в Базу знаний"/>
 	</notification>
@@ -2258,7 +2258,7 @@ URL: [UNTRUSTED_URL]
 		При телепортации возникли технические проблемы, так как ваши настройки не синхронизированы с сервером.
 	</notification>
 	<notification name="RegionTPSpecialUsageBlocked">
-		Не удалось войти в регион. &quot;[REGION_NAME]&quot; - это регион развивающих игр, и для входа в него надо соответствовать определенным условиям. Подробнее см. на странице [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
+		Не удалось войти в регион. &quot;[REGION_NAME]&quot; - это регион развивающих игр, и для входа в него надо соответствовать определенным условиям. Подробнее см. на странице [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
 	</notification>
 	<notification name="PreferredMaturityChanged">
 		Вы больше не будете получать уведомлений о посещении региона с контентом рейтинга [RATING]. Настройки для контента можно изменить на будущее с помощью команд меню &quot;Аватар &gt; Настройки &gt; Общие&quot;.
@@ -2274,7 +2274,7 @@ URL: [UNTRUSTED_URL]
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
 		На эту землю могут претендовать только взрослые.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="На эту землю могут претендовать только взрослые." name="okcancelignore" notext="Закрыть" yestext="Перейти в Базу знаний"/>
 	</notification>
@@ -2300,7 +2300,7 @@ URL: [UNTRUSTED_URL]
 	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
 		Эту землю могут купить только взрослые.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Эту землю могут купить только взрослые." name="okcancelignore" notext="Закрыть" yestext="Перейти в Базу знаний"/>
 	</notification>
@@ -2501,7 +2501,7 @@ URL: [UNTRUSTED_URL]
 		В этом объекте нет вещей, которые вам разрешено копировать.
 	</notification>
 	<notification name="WebLaunchAccountHistory">
-		Перейти на [http://secondlife.com/account/ информационную панель], чтобы увидеть историю аккаунта?
+		Перейти на [https://secondlife.com/my/account/ информационную панель], чтобы увидеть историю аккаунта?
 		<usetemplate ignoretext="Запустить браузер для просмотра истории аккаунта" name="okcancelignore" notext="Отмена" yestext="Перейти на страницу"/>
 	</notification>
 	<notification name="ConfirmAddingChatParticipants">
@@ -2602,9 +2602,9 @@ URL: [UNTRUSTED_URL]
 
 Вы уведомляете о нарушении прав интеллектуальной собственности. Убедитесь, что ваше уведомление составлено правильно:
 
-(1) Процесс регистрации нарушения. Вы можете отправить уведомление о нарушении, если считаете, что какой-либо житель злоупотребляет системой разрешений [CURRENT_GRID], например, с помощью CopyBot или аналогичных инструментов копирования, и нарушает таким образом права интеллектуальной собственности. Наш отдел борьбы с нарушениями расследует такие случаи и принимает соответствующие дисциплинарные меры к нарушителям [http://secondlife.com/corporate/tos.php Пользовательского соглашения] или [http://secondlife.com/corporate/cs.php стандартов сообщества] [CURRENT_GRID] . Однако отдел борьбы с нарушениями не рассматривает просьбы об удалении контента из мира [CURRENT_GRID] и не отвечает на них.
+(1) Процесс регистрации нарушения. Вы можете отправить уведомление о нарушении, если считаете, что какой-либо житель злоупотребляет системой разрешений [CURRENT_GRID], например, с помощью CopyBot или аналогичных инструментов копирования, и нарушает таким образом права интеллектуальной собственности. Наш отдел борьбы с нарушениями расследует такие случаи и принимает соответствующие дисциплинарные меры к нарушителям [https://secondlife.com/corporate/tos.php Пользовательского соглашения] или [https://secondlife.com/corporate/cs.php стандартов сообщества] [CURRENT_GRID] . Однако отдел борьбы с нарушениями не рассматривает просьбы об удалении контента из мира [CURRENT_GRID] и не отвечает на них.
 
-(2) Процесс DMCA или удаления контента. Для запроса об удалении контента из [CURRENT_GRID] следует ОБЯЗАТЕЛЬНО представить действительное уведомление о нарушении в соответствии с требованиями нашей [http://secondlife.com/corporate/dmca.php политики DMCA].
+(2) Процесс DMCA или удаления контента. Для запроса об удалении контента из [CURRENT_GRID] следует ОБЯЗАТЕЛЬНО представить действительное уведомление о нарушении в соответствии с требованиями нашей [https://secondlife.com/corporate/dmca.php политики DMCA].
 
 Если вы все же хотите продолжить процесс регистрации нарушения, закройте это окно, составьте уведомление и отправьте его.  При необходимости выберите категорию &quot;CopyBot или Нарушение Разрешений&quot;.
 
@@ -2780,7 +2780,7 @@ URL: [UNTRUSTED_URL]
 
 [_URL]
 		<url name="url">
-			https://secondlife.com/account/
+			https://secondlife.com/my/account/
 		</url>
 		<usetemplate ignoretext="У меня не зарегистрирована информация о платежах" name="okcancelignore" notext="Нет" yestext="Да"/>
 	</notification>
@@ -3083,7 +3083,7 @@ URL: [AUDIOURL]
 	</notification>
 	<notification name="NoQuickTime">
 		В вашей системе не установлено программное обеспечение Apple QuickTime.
-Для просмотра потокового медиа на участках, которые поддерживают его, перейдите на сайт [http://www.apple.com/quicktime QuickTime] и установите QuickTime Player.
+Для просмотра потокового медиа на участках, которые поддерживают его, перейдите на сайт [https://www.apple.com/quicktime QuickTime] и установите QuickTime Player.
 	</notification>
 	<notification name="NoPlugin">
 		Не найден медиа-плагин для обработки данных типа MIME &quot;[MIME_TYPE]&quot;.  Медиа этого типа будет недоступно.
@@ -3565,7 +3565,7 @@ URL: [AUDIOURL]
 
 По окончании обработки баланс вашего счета в L$ будет обновлен. Если обработка займет более 20 мин, ваша транзакция может быть отменена. В этом случае сумма платежа будет записана на ваш баланс в долларах США.
 
-Состояние ваших платежей можно проверить на странице &quot;Журнал транзакций&quot; в вашем [http://secondlife.com/account/ личном кабинете].
+Состояние ваших платежей можно проверить на странице &quot;Журнал транзакций&quot; в вашем [https://secondlife.com/my/account/ личном кабинете].
 	</notification>
 	<notification name="FirstOverrideKeys">
 		Ваши клавиши перемещения теперь обрабатываются объектом.

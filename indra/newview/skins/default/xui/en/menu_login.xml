@@ -87,21 +87,21 @@
              name="Knowledge Base">
              <menu_item_call.on_click
                  function="Advanced.ShowURL"
-            parameter="http://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-User-s-Guide/ta-p/1244857"/>
+            parameter="https://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-User-s-Guide/ta-p/1244857"/>
         </menu_item_call>
         <menu_item_call
              label="Wiki"
              name="Wiki">
              <menu_item_call.on_click
                  function="Advanced.ShowURL"
-                 parameter="http://wiki.secondlife.com"/>
+                 parameter="https://wiki.secondlife.com"/>
         </menu_item_call>
         <menu_item_call
              label="Community Forums"
              name="Community Forums">
              <menu_item_call.on_click
                  function="Advanced.ShowURL"
-                 parameter="http://community.secondlife.com/t5/Forums/ct-p/Forums"/>
+                 parameter="https://community.secondlife.com/t5/Forums/ct-p/Forums"/>
         </menu_item_call>         
         <menu_item_call
              label="Support portal"

@@ -1747,7 +1747,7 @@ Wybierz obiekt na sprzedaż i spróbuj jeszcze raz.
 	</notification>
 	<notification name="RequiredUpdate">
 		Do zalogowania się wymagana jest wersja [VERSION].
-Pobierz ją z https://secondlife.com/support/downloads/
+Pobierz ją z https://www.firestormviewer.org/choose-your-platform/
 	</notification>
 	<notification name="PauseForUpdate">
 		Do zalogowania się wymagana jest wersja [VERSION].
@@ -1789,7 +1789,7 @@ URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Uruchom przeglądarkę internetową by zobaczyć stronę" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="WebLaunchJoinNow">
-		By dokonać zmian i aktualizacji swojego konta, odwiedź [http://secondlife.com/account/ Tablicę].
+		By dokonać zmian i aktualizacji swojego konta, odwiedź [https://secondlife.com/my/account/ Tablicę].
 		<usetemplate ignoretext="Uruchom przeglądarkę internetową by dokonać zmian w konfiguracji mojego konta" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
@@ -1954,7 +1954,7 @@ Premium Plus pozwala na [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/m
 	<notification name="SetDisplayNameSuccess">
 		Witaj [DISPLAY_NAME]!
 
-Podobnie jak w realnym życiu potrzeba trochę czasu zanim wszyscy dowiedzą się o nowym imieniu. Kolejne kilka dni zajmie [http://wiki.secondlife.com/wiki/Setting_your_display_name aktualizacja imienia] w obiektach, skryptach, wyszukiwarce, etc.
+Podobnie jak w realnym życiu potrzeba trochę czasu zanim wszyscy dowiedzą się o nowym imieniu. Kolejne kilka dni zajmie [https://wiki.secondlife.com/wiki/Setting_your_display_name aktualizacja imienia] w obiektach, skryptach, wyszukiwarce, etc.
 	</notification>
 	<notification name="SetDisplayNameBlocked">
 		Przepraszamy, nie można zmienić Twojego Wyświetlanego Imienia. Jeśli uważasz, że jest to spowodowane błędem skontaktuj się z obsługą klienta.
@@ -1973,7 +1973,7 @@ Proszę wprowadzić krótsze imię.
 	<notification name="AgentDisplayNameUpdateThresholdExceeded">
 		Przepraszamy, musisz jeszcze poczekać zanim będzie można zmienić Twoje Wyświetlane Imię.
 
-Zobacz http://wiki.secondlife.com/wiki/Setting_your_display_name
+Zobacz https://wiki.secondlife.com/wiki/Setting_your_display_name
 
 Proszę spróbować ponownie później.
 	</notification>
@@ -2176,7 +2176,7 @@ Czy chcesz kontynuować?
 		Mamy trudności techniczne z Twoim teleportem, ponieważ Twoje preferencje są rozsynchronizowane z serwerem.
 	</notification>
 	<notification name="RegionTPSpecialUsageBlocked">
-		Nie można wejść do tego regionu. '[REGION_NAME]' jest miejscem z grami (Skill Gaming Region) - musisz spełnić określone wymagania, jeśli chcesz go odwiedzić. Aby dowiedzieć się więcej zapoznaj się z [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
+		Nie można wejść do tego regionu. '[REGION_NAME]' jest miejscem z grami (Skill Gaming Region) - musisz spełnić określone wymagania, jeśli chcesz go odwiedzić. Aby dowiedzieć się więcej zapoznaj się z [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
 	</notification>
 	<notification name="RegionEntryAccessBlocked">
 		Region, który próbujesz odwiedzić, ma klasyfikację treści przekraczającą Twoje maksymalne preferencje. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne.
@@ -2459,7 +2459,7 @@ Przenieść obiekty szafy?
 		W tym obiekcie nie ma elementów które możesz skopiować.
 	</notification>
 	<notification name="WebLaunchAccountHistory">
-		Przejść na stronę [http://secondlife.com/account/ Tablicy] żeby zobaczyć historię konta?
+		Przejść na stronę [https://secondlife.com/my/account/ Tablicy] żeby zobaczyć historię konta?
 		<usetemplate ignoretext="Uruchom przeglądarkę internetową by zobaczyć historię konta" name="okcancelignore" notext="Anuluj" yestext="Idź na stronę"/>
 	</notification>
 	<notification name="ConfirmAddingChatParticipants">
@@ -2554,9 +2554,9 @@ Dokładne dane pomogą nam w klasyfikacji i przetwarzaniu raportu.
 
 Jeżeli składasz raport dotyczący naruszenia praw autorskich proszę się upewnić, że robisz to poprawnie:
 
-(1) Przypadek Nadużycia. Możesz złożyć raport jeżeli sądzisz, że Rezydent narusza system przywilejów [CURRENT_GRID], na przykład używając CopyBot lub podobnych narzędzi robiących kopie, naruszając prawa autorskie. Komisja Nadużyć bada wykroczenia i stosuje akcje dyscyplinarne za zachowania sprzeczne z zasadami Warunków Umowy [http://secondlife.com/corporate/tos.php Warunków Umowy] i [http://secondlife.com/corporate/cs.php Standardów Społeczeństwa] w [CURRENT_GRID]. Komisja Nadużyć nie zajmuje się i nie odpowiada na żądania usunięcia treści ze środowiska [CURRENT_GRID].
+(1) Przypadek Nadużycia. Możesz złożyć raport jeżeli sądzisz, że Rezydent narusza system przywilejów [CURRENT_GRID], na przykład używając CopyBot lub podobnych narzędzi robiących kopie, naruszając prawa autorskie. Komisja Nadużyć bada wykroczenia i stosuje akcje dyscyplinarne za zachowania sprzeczne z zasadami Warunków Umowy [https://secondlife.com/corporate/tos.php Warunków Umowy] i [https://secondlife.com/corporate/cs.php Standardów Społeczeństwa] w [CURRENT_GRID]. Komisja Nadużyć nie zajmuje się i nie odpowiada na żądania usunięcia treści ze środowiska [CURRENT_GRID].
 
-(2) Przypadek DMCA lub Usuwanie Treści. Aby wystąpić z żądaniem o usunięcie treści ze środowiska [CURRENT_GRID] MUSISZ przedłożyć ważne zawiadomienie o nadużyciu zgodne z naszą polityką DMCA [http://secondlife.com/corporate/dmca.php DMCA Policy].
+(2) Przypadek DMCA lub Usuwanie Treści. Aby wystąpić z żądaniem o usunięcie treści ze środowiska [CURRENT_GRID] MUSISZ przedłożyć ważne zawiadomienie o nadużyciu zgodne z naszą polityką DMCA [https://secondlife.com/corporate/dmca.php DMCA Policy].
 
 Jeżeli chcesz kontynuować dalej zamknij to okno i dokończ wysyłanie raportu. Może być potrzebny wybór kategorii &apos;CopyBot albo Nadużycie Przywilejów&apos;.
 
@@ -3016,7 +3016,7 @@ Spróbuj wybrać mniejszy obszar.
 	</notification>
 	<notification name="NoQuickTime">
 		Wygląda na to, że Apple QuickTime nie jest zainstalowany na Twoim komputerze.
-Jeżeli chcesz odtwarzać media na tej działce, które używają QuickTime idź do [http://www.apple.com/quicktime strony QuickTime] i zainstaluj odtwarzacz.
+Jeżeli chcesz odtwarzać media na tej działce, które używają QuickTime idź do [https://www.apple.com/quicktime strony QuickTime] i zainstaluj odtwarzacz.
 	</notification>
 	<notification name="NoPlugin">
 		Nie znaleziono wtyczki mediów dla typu mime "[MIME_TYPE]". Media tego typu będą niedostępne.
@@ -3495,7 +3495,7 @@ Nie zezwalaj na dostęp, jeśli nie rozumiesz, dlaczego chce uzyskać dostęp do
 
 Twój stan konta L$ zostanie zaktualizowany w momencie zakończenia transakcji. Jeżeli zajmie to ponad 20 minut, to Twój balans konta nie ulegnie zmianie, a transakcja zostanie anulowana. W tym przypadku pobrana kwota zostanie zwrócona na stan konta w US$.
 
-Status transakcji możesz sprawdzić odwiedzając Historię Transakcji swojego konta na [http://secondlife.com/account/ Tablicy]
+Status transakcji możesz sprawdzić odwiedzając Historię Transakcji swojego konta na [https://secondlife.com/my/account/ Tablicy]
 	</notification>
 	<notification name="FirstOverrideKeys">
 		Twoje klawisze sterujące zostały przejęte przez obiekt.

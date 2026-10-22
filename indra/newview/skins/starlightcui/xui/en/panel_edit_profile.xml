@@ -73,11 +73,11 @@
     value="Not Age-verified" />
    <string
     name="partner_edit_link_url">
-       http://www.secondlife.com/account/partners.php?lang=en
+       https://www.secondlife.com/my/partners.php?lang=en-US
    </string>
    <string
     name="my_account_link_url">
-       http://secondlife.com/my
+       https://secondlife.com/my/?lang=en-US
    </string>
    <string
     name="no_partner_text"
@@ -446,7 +446,7 @@ background_visible="true"
        layout="topleft"
        left="10"
        top_pad="0"
-       value="http://"
+       value="https://"
        name="homepage_edit"
        width="252">
       </line_editor>

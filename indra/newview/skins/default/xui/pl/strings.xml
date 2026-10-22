@@ -219,7 +219,7 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 https://www.firestormviewer.org/choose-your-platform/
 
 Więcej informacji w naszym FAQ:
-http://secondlife.com/viewer-access-faq
+https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">
 		Proces logowania nie został ukończony z powodu problemów systemu. Spróbuj ponownie za kilka minut.
@@ -244,13 +244,13 @@ Sprawdź też, czy klawisz Caps Lock nie jest wciśnięty.
 	</string>
 	<string name="LoginFailedPasswordChanged">
 		W celu zwiększenia bezpieczeństwa Twoje hasło zostało zmienione.
-Przejdź na stronę swojego konta: http://secondlife.com/password
+Przejdź na stronę swojego konta: https://secondlife.com/password
 i odpowiedz na pytanie zabezpieczające, aby zresetować hasło.
 Bardzo przepraszamy za utrudnienia.
 	</string>
 	<string name="LoginFailedPasswordReset">
 		Wprowadziliśmy pewne zmiany do systemu, które wymagają zresetowania hasła.
-Przejdź na stronę swojego konta: http://secondlife.com/password
+Przejdź na stronę swojego konta: https://secondlife.com/password
 i odpowiedz na pytanie zabezpieczające, aby zresetować hasło.
 Bardzo przepraszamy za utrudnienia.
 	</string>
@@ -279,7 +279,7 @@ Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		Nie jesteśmy w stanie na tą chwilę wykonać Twojego żądania.
-Aby uzyskać pomoc skontaktuj się ze wsparciem: http://support.secondlife.com
+Aby uzyskać pomoc skontaktuj się ze wsparciem: https://support.secondlife.com
 	</string>
 	<string name="LoginFailedTransformError">
 		Podczas logowania wykryto niespójność danych.
@@ -1775,15 +1775,15 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="InventoryMarketplaceError">
 		Wystapił błąd podczas otwierania listy rzeczy z Marketplace.
-Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
+Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceConnectionError">
 		Wystapił błąd podczas łączenia z Marketplace.
-Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
+Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceConnectionErrorReason">
 		Wystapił błąd podczas łączenia z Marketplace. Powód: [REASON]
-Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
+Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Twój folder rzeczy na Marketplace jest pusty.
@@ -3095,7 +3095,7 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .anim
 	</string>
 	<string name="MBCmdLineError">
 		Podczas realizacji podanej komendy wystąpił błąd.
-Prosimy odwiedzić stronę internetową: http://wiki.secondlife.com/wiki/Client_parameters
+Prosimy odwiedzić stronę internetową: https://wiki.secondlife.com/wiki/Client_parameters
 Błąd:
 	</string>
 	<string name="MBCmdLineUsg">

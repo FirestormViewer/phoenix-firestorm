@@ -57,16 +57,16 @@
     <string
      name="payment_update_link_url"
     >
-        http://www.secondlife.com/account/billing.php?lang=en
+        https://accounts.secondlife.com/billing_information/?lang=en-US
     </string>
     <string
      name="partner_edit_link_url"
     >
-        http://www.secondlife.com/account/partners.php?lang=en
+        https://secondlife.com/my/partners.php?lang=en-US
     </string>
     <string
      name="my_account_link_url"
-     value="http://secondlife.com/account"
+     value="https://secondlife.com/my/account/?lang=en-US"
     />
     <string
      name="no_partner_text"

@@ -607,7 +607,7 @@ L$が不足しているので、このグループに参加することができ
 	</notification>
 	<notification name="GoToAuctionPage">
 		[CURRENT_GRID]のWebページに移動し、入札あるいはオークションの詳細を確認しますか？
-		<url name="url">http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]&amp;lang=ja-JP</url>
+		<url name="url">https://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]&amp;lang=ja-JP</url>
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
 	<notification name="SaveChanges">
@@ -1803,7 +1803,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 	<notification name="RequiredUpdate">
 		ログインするには、バージョン[VERSION]が必要です。
 下記アドレスから最新バージョンをダウンロードしてください。
-https://secondlife.com/support/downloads/
+https://www.firestormviewer.org/choose-your-platform/
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="PauseForUpdate">
@@ -2597,7 +2597,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
 
 知的財産権の侵害を報告しているようです。正しく報告していることを確認してください。
 
-⑴嫌がらせの報告の手順。居住者が、[CURRENT_GRID]権限システムを悪用していると思われる場合（たとえば、CopyBotまたは同様のコピーツールを使用して、知的財産権を侵害していると思われる場合）は、不正使用報告を提出することができます。不正行為チームは、[SECOND_LIFE][http://secondlife.com/corporate/tos.php 利用規約]や、[http://jp.secondlife.com/corporate/cs.php コミュニティ・スタンダード]に違反する行為を調査し、に違反する行為に対する適切な処罰を下します。ただし、担当チームは[SECOND_LIFE]の世界からコンテンツを削除して欲しいというリクエストには応じません。
+⑴嫌がらせの報告の手順。居住者が、[CURRENT_GRID]権限システムを悪用していると思われる場合（たとえば、CopyBotまたは同様のコピーツールを使用して、知的財産権を侵害していると思われる場合）は、不正使用報告を提出することができます。不正行為チームは、[SECOND_LIFE][https://secondlife.com/corporate/tos.php 利用規約]や、[https://secondlife.com/corporate/cs.php コミュニティ・スタンダード]に違反する行為を調査し、に違反する行為に対する適切な処罰を下します。ただし、担当チームは[SECOND_LIFE]の世界からコンテンツを削除して欲しいというリクエストには応じません。
 
 ⑵ＤＣＭＡまたはコンテンツ削除プロセス。[CURRENT_GRID]からコンテンツの削除をリクエストするには、[https://www.lindenlab.com/legal/intellectual-property-infringement-notification-policy ＤＣＭＡポリシー]に規定されている有効な権利侵害通知を提出する必要があります。
 
@@ -3072,7 +3072,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 	</notification>
 	<notification name="NoQuickTime">
 		Apple QuickTimeソフトウェアがお使いのシステムにインストールされていないようです。
-ストリーミングメディアをサポートする区画で見たい場合は、[http://www.apple.com/jp/quicktime QuickTimeサイト] から QuickTimeプレイヤーをインストールしてください。
+ストリーミングメディアをサポートする区画で見たい場合は、[https://www.apple.com/jp/quicktime QuickTimeサイト] から QuickTimeプレイヤーをインストールしてください。
 	</notification>
 	<notification name="NoPlugin">
 		「[MIME_TYPE]」のmimeタイプを扱うメディアプラグインが見つかりませんでした。
@@ -5485,7 +5485,7 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 		<usetemplate name="okbutton" yestext="ＯＫ"/>
 	</notification>
 	<notification name="ExodusFlickrUploadComplete">
-		スナップショットは[http://www.flickr.com/photos/upload/edit/?ids=[ID] ここ]から閲覧できます。
+		スナップショットは[https://www.flickr.com/photos/upload/edit/?ids=[ID] ここ]から閲覧できます。
 	</notification>
 	<notification name="FSPrimfeedUploadComplete">
 		あなたのPrimfeedへの投稿は[[PF_POSTURL] ここ]から閲覧できます。

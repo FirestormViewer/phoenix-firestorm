@@ -13,11 +13,11 @@
  width="820">
     <floater.string
      name="home_page_url">
-        http://www.secondlife.com
+        https://secondlife.com
     </floater.string>
     <floater.string
      name="support_page_url">
-        http://support.secondlife.com
+        https://support.secondlife.com
     </floater.string>
     <layout_stack
      bottom="440"

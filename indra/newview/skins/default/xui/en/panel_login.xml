@@ -11,7 +11,7 @@
   width="1024">
   <panel.string
     name="forgot_password_url">
-    http://secondlife.com/account/request.php
+    https://secondlife.com/account/request.php
   </panel.string>
   <panel.string
     name="sign_up_url">

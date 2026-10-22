@@ -22,7 +22,7 @@ Bir dakika sonra tekrar deneyin.
 		</message>
 		<message name="NoHelpIslandTP">
 			Karşılama Ada'sına geri ışınlanamazsınız.
-Öğreticiyi tekrarlamak için [http://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/6/2701 Firestorm Tutorial] na gidin.
+Öğreticiyi tekrarlamak için [https://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/6/2701 Firestorm Tutorial] na gidin.
 		</message>
 		<message name="noaccess_tport">
 			Üzgünüz, bu ışınlanma hedef konumuna erişim hakkına sahip değilsiniz.
@@ -49,7 +49,7 @@ Bir dakika sonra tekrar deneyin.
 			Bu bölgeye girebilmek için 18 veya üzeri bir yaşta olmanız gerekir.
 		</message>
 		<message name="RegionTPSpecialUsageBlocked">
-			Bölgeye girilemiyor. "[REGION_NAME]" bir Yetenek Oyunu Bölgesi. Buraya girebilmek için bazı ölçütleri karşılamanız gerekiyor. Ayrıntılar için lütfen [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ] adresini ziyaret edin.
+			Bölgeye girilemiyor. "[REGION_NAME]" bir Yetenek Oyunu Bölgesi. Buraya girebilmek için bazı ölçütleri karşılamanız gerekiyor. Ayrıntılar için lütfen [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ] adresini ziyaret edin.
 		</message>
 	</message_set>
 	<message_set name="progress">

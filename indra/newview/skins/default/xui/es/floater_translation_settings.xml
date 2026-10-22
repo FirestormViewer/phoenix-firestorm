@@ -33,9 +33,6 @@
 		Elige el servicio de traducción:
 	</text>
 	<radio_group left_delta="5" name="translation_service_rg"/>
-	<text name="bing_api_key_label" width="130" left="35">
-		[http://www.bing.com/developers/createapp.aspx AppID] de Bing:
-	</text>	
 	<line_editor default_text="Escribe la AppID de Bing and pulsa &quot;Verificar&quot;" name="bing_api_key" width="225"/>
 	<button label="Verificar" name="verify_bing_api_key_btn" width="65"/>
 	<text name="google_api_key_label" width="130" left="35">

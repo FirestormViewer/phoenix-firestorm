@@ -186,7 +186,7 @@
 				<check_box label="Diqqətləşdirmə Nöqtəsi Göstəricini izləyir" name="FSFocusPointFollowsPointer"
 				tool_tip="DoF diqqətləşdirmə siçan kursorunu izləyəcək, bu davranış uçan kameradan istifadə edərkən müşahidə olunanlara uyğundur. Sahənin Dərinliyi diqqətləşdirmə kilidi ilə istifadə edin"/>
 				<check_box name="MIC_Show_FOV" label="Ekranda Baxış Sahəsini (FOV) göstər"
-				tool_tip="Bu, sizə Kameranın FOV-unu göstərəcək. İzləyicinin içərisində siz real həyatda olduğu kimi obyektiv uzunluğunu dəyişə bilərsiniz. FOV dəyəri nə qədər kiçik olsa, kameranın obyektivi də bir o qədər uzun olar. 50 mm obyektiv 27,0 dərəcə FOV-ə malikdir. Bucağı tənzimləmək üçün Baxış Bucağı ilə obyektiv fokus uzunluğu (mm) arasındakı əlaqəni göstərən cədvəl üçün http://en.wikipedia.org/wiki/Angle_of_view baxmaq üçün aşağıdakı Böyütmə çubuğundan istifadə edin. !"/>
+				tool_tip="Bu, sizə Kameranın FOV-unu göstərəcək. İzləyicinin içərisində siz real həyatda olduğu kimi obyektiv uzunluğunu dəyişə bilərsiniz. FOV dəyəri nə qədər kiçik olsa, kameranın obyektivi də bir o qədər uzun olar. 50 mm obyektiv 27,0 dərəcə FOV-ə malikdir. Bucağı tənzimləmək üçün Baxış Bucağı ilə obyektiv fokus uzunluğu (mm) arasındakı əlaqəni göstərən cədvəl üçün https://en.wikipedia.org/wiki/Angle_of_view baxmaq üçün aşağıdakı Böyütmə çubuğundan istifadə edin. !"/>
 			</panel>
 
 			<panel name="P_Zoom">
@@ -474,7 +474,7 @@
 				<check_box name="CB_Move_Objects" label="3D siçan ilə obyektləri hərəkət etdirin (tikinti)"
 				 tool_tip="Yaradarkən və dəyişdirərkən obyektlərin yerini dəyişdirmək üçün 3D-siçandan istifadə edir."/>
 				<check_box label="Ekranda Baxış Bucağını (FOV) göstərin"
-				 tool_tip="Bu sizə Kameranın Baxış Bucağını göstərəcək. İzləyicinin içərisində siz real həyatda olduğu kimi obyektiv uzunluğunu dəyişə bilərsiniz. FOV dəyəri nə qədər kiçik olsa, kameranın linzaları bir o qədər uzun olur. 50 mm lensin 27,0 dərəcə Baxış Bucağı var. Baxış Bucağını tənzimləmək üçün aşağıdakı Zoom panelindən istifadə edin. Baxış bucağı ilə obyektiv fokus uzunluğu (mm) arasındakı əlaqəni göstərən cədvəl üçün 'http://en.wikipedia.org/wiki/Angle_of_view' ünvanına baxın. ÇEKİLİŞDƏN ƏVVƏL SÖNDÜR YOXSA ŞƏKİLDƏ OLACAQ!"
+				 tool_tip="Bu sizə Kameranın Baxış Bucağını göstərəcək. İzləyicinin içərisində siz real həyatda olduğu kimi obyektiv uzunluğunu dəyişə bilərsiniz. FOV dəyəri nə qədər kiçik olsa, kameranın linzaları bir o qədər uzun olur. 50 mm lensin 27,0 dərəcə Baxış Bucağı var. Baxış Bucağını tənzimləmək üçün aşağıdakı Zoom panelindən istifadə edin. Baxış bucağı ilə obyektiv fokus uzunluğu (mm) arasındakı əlaqəni göstərən cədvəl üçün 'https://en.wikipedia.org/wiki/Angle_of_view' ünvanına baxın. ÇEKİLİŞDƏN ƏVVƏL SÖNDÜR YOXSA ŞƏKİLDƏ OLACAQ!"
 				 name="CAM_Show_FOV"/>
 				<check_box label="Konsolda kamera detallarını göstərin" name="Camera"/>
 			</panel>

@@ -210,7 +210,7 @@ Voice Server Version: [VOICE_VERSION]
 https://www.firestormviewer.org/downloads/
 
 Per maggiori informazioni, consultare le domande frequenti alla pagina:
-http://secondlife.com/viewer-access-faq
+https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
 		Disponibile aggiornamento facoltativo viewer: [VERSION]
@@ -230,13 +230,13 @@ Verificare anche che il blocco delle maiuscole non sia attivato.
 	</string>
 	<string name="LoginFailedPasswordChanged">
 		Come misura precauzionale, la password è stata cambiata.
-Visitare la pagina dell&apos;account a http://secondlife.com/password
+Visitare la pagina dell&apos;account a https://secondlife.com/password
 e rispondere alla domanda di sicurezza per reimpostare la password.
 Ci scusiamo per l&apos;inconveniente.
 	</string>
 	<string name="LoginFailedPasswordReset">
 		Abbiamo effettuato delle modifiche al sistema che richiedono di reimpostare la password.
-Visitare la pagina del proprio account a http://secondlife.com/password
+Visitare la pagina del proprio account a https://secondlife.com/password
 e rispondere alla domanda di sicurezza per reimpostare la password.
 Ci scusiamo per l&apos;inconveniente.
 	</string>
@@ -261,7 +261,7 @@ support@secondlife.com.
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		Non siamo attualmente in grado di completare la richiesta.
-Contattare l&apos;assistenza Second Life alla pagina http://secondlife.com/support.
+Contattare l&apos;assistenza Second Life alla pagina https://support.secondlife.com.
 	</string>
 	<string name="LoginFailedTransformError">
 		Dati incompatibili rilevati durante l&apos;accesso.
@@ -1716,7 +1716,7 @@ https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 	</string>
 	<string name="InventoryMarketplaceError">
 		Si è verificato un errore durante l&apos;apertura degli elenchi Marketplace.
-Se il messaggio persiste, contattare il supporto Second Life per assistenza http://support.secondlife.com
+Se il messaggio persiste, contattare il supporto Second Life per assistenza https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		La cartella degli annunci di Marketplace è vuota.
@@ -3047,7 +3047,7 @@ Tipi conosciuti .WAV .TGA .BMP .JPG .JPEG .ANIM
 	</string>
 	<string name="MBCmdLineError">
 		Un errore è stato riscontrato analizzando la linea di comando.
-Per informazioni: http://wiki.secondlife.com/wiki/Client_parameters
+Per informazioni: https://wiki.secondlife.com/wiki/Client_parameters
 Errore:
 	</string>
 	<string name="MBCmdLineUsg">

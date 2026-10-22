@@ -9,7 +9,7 @@
 		<button label="Qoşul" name="connect_btn"/>
 		<button label="Ayırıl" name="disconnect_btn"/>
 		<text name="account_learn_more_label">
-			[http://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-Share-Flickr/ta-p/2435609 Flickr-ə yükləmə haqqında ətraflı məlumat]
+			[https://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-Share-Flickr/ta-p/2435609 Flickr-ə yükləmə haqqında ətraflı məlumat]
 		</text>
 	</panel>
 </panel>

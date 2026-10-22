@@ -9,7 +9,7 @@
 		<button label="Подключить" name="connect_btn"/>
 		<button label="Отключить" name="disconnect_btn"/>
 		<text name="account_learn_more_label">
-			[http://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-Share-Flickr/ta-p/2435609 Подробнее об отправке на Flickr]
+			[https://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-Share-Flickr/ta-p/2435609 Подробнее об отправке на Flickr]
 		</text>
 	</panel>
 </panel>

@@ -229,7 +229,7 @@ Səs serveri versiyası: [VOICE_VERSION]
 https://www.firestormviewer.org/choose-your-platform/
 
 Ətraflı məlumat üçün FAQ bölməsinə baxın:
-http://secondlife.com/viewer-access-faq
+https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">
 		Şəbəkəyə daxil olmaqda xəta baş verdi.
@@ -254,13 +254,13 @@ Həmçinin, lütfən Caps Lock rejiminin söndürüldüyündən əmin olun.
 </string>
 	<string name="LoginFailedPasswordChanged">
 	Tədbirlərin təhlükəsizliyi üçün, sizin şifrəniz dəyişdirilmişdir.
-Öz hesabınızın səhifəsinə http://secondlife.com/password ünvanında keçin 
+Öz hesabınızın səhifəsinə https://secondlife.com/password ünvanında keçin 
 və şifrənizi bərpa etmək üçün nəzarət sualına cavab verin.
 Narahatçılıq üçün üzr istəyirik.
 	</string>
 	<string name="LoginFailedPasswordReset">
 		Sistemimizdə dəyişikliklər olduğu üçün, şifrənizi bərpa etmək lazımdır.
-Öz hesabınızın səhifəsinə http://secondlife.com/password ünvanında keçin 
+Öz hesabınızın səhifəsinə https://secondlife.com/password ünvanında keçin 
 və şifrənizi bərpa etmək üçün nəzarət sualına cavab verin.
 Narahatçılıq üçün üzr istəyirik.
 	</string>
@@ -288,7 +288,7 @@ support@secondlife.com.
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		Hazırda sorğunuzu tamamlaya bilmirik. 
-Yardım üçün http://support.secondlife.com ünvanında Second Life Dəstək ilə əlaqə saxlayın.
+Yardım üçün https://support.secondlife.com ünvanında Second Life Dəstək ilə əlaqə saxlayın.
 	</string>
 	<string name="LoginFailedTransformError">
 		Giriş zamanı məlumat uyğunsuzluğu aşkar edildi.
@@ -840,7 +840,7 @@ bu bölgədə şərh kartı.
 	</string>
 	<string name="AssetUploadRequestInvalid">
 Transfer sorğusu zamanı xəta baş verdi. Bu problemi həll 
-etmək haqqında kömək almaq üçün http://secondlife.com/support ünvanına keçin.
+etmək haqqında kömək almaq üçün https://support.secondlife.com ünvanına keçin.
 	</string>
 	<string name="SettingValidationError">
 		[NAME] seçimlərini idxal etmək üçün doğrulamaq alınmadı
@@ -1687,7 +1687,7 @@ etmək haqqında kömək almaq üçün http://secondlife.com/support ünvanına 
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
 	</string>
 	<string name="MarketplaceURL_CreateStore">
-		http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
+		https://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
 	</string>
 	<string name="MarketplaceURL_Dashboard">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard
@@ -1735,7 +1735,7 @@ etmək haqqında kömək almaq üçün http://secondlife.com/support ünvanına 
 	</string>
 	<string name="InventoryMarketplaceError">
 		Ticarət mərkəzinin məhsul siyahılarını açarkən xəta.
-Bu mesaj yenidən baş verərsə, kömək üçün http://support.secondlife.com ünvanında Second Life Dəstək ilə əlaqə saxlayın
+Bu mesaj yenidən baş verərsə, kömək üçün https://support.secondlife.com ünvanında Second Life Dəstək ilə əlaqə saxlayın
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Ticarət mərkəzi element siyahısı qovluğu boşdur.
@@ -3057,17 +3057,17 @@ Gözlənilən uzantılar: WAV, TGA, BMP, JPG, JPEG və ya BVH
 		İndi oynadılır: [TITLE]
 	</string>
 	<string name="IntelDriverPage">
-		http://www.intel.com/p/en_US/support/detect/graphics
+		https://www.intel.com/content/www/us/en/support/detect.html
 	</string>
 	<string name="NvidiaDriverPage">
-		http://www.nvidia.com/Download/index.aspx?lang=az
+		https://www.nvidia.com/en-us/drivers/
 	</string>
 	<string name="AMDDriverPage">
-		http://support.amd.com/us/Pages/AMDSupportHub.aspx
+		https://www.amd.com/en/support/download/drivers.html
 	</string>
 	<string name="MBCmdLineError">
 		Əmr sətirini təhlil edərkən xəta baş verdi.
-Baxın: http://wiki.secondlife.com/wiki/Client_parameters
+Baxın: https://wiki.secondlife.com/wiki/Client_parameters
 Xəta:
 	</string>
 	<string name="MBCmdLineUsg">
@@ -5246,7 +5246,7 @@ Mesaj növbəti bir neçə dəqiqə ərzində görünməzsə, o, server tərəfi
 	<string name="server_is_down">
 		Bizim qüvvətimizə baxmayaraq, gözlənilmədən bir şey səhv oldu.
 
-Bu xidmətlə bağlı məlum problemlər üçün http://status.secondlifegrid.net saytına baxın.
+Bu xidmətlə bağlı məlum problemlər üçün https://status.secondlifegrid.net saytına baxın.
 Problemlər davam edərsə, şəbəkə bağlantınızı və firewall seçimlərini yoxlayın.
 	</string>
 	<string name="dateTimeWeekdaysNames">
@@ -5880,7 +5880,7 @@ Dəyişdiricinin yolunu qoşa dırnaq içərisində qoymağa çalışın
 		Normal
 	</string>
 	<string name="Pathfinding_Wiki_URL">
-		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
+		https://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
 	</string>
 	<string name="Pathfinding_Object_Attr_None">
 		Yox
