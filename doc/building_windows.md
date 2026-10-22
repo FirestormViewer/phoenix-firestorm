@@ -124,11 +124,10 @@ If you do not want to install the required Python packages into the default Pyth
   - If you created a Python virtual environment earlier, activate it
   - Enter: <code>pip install -r requirements.txt</code>
   - Autobuild will be installed. **Earlier versions of Autobuild could be made to work by just putting the source files into your path correctly; this is no longer true - Autobuild _must_ be installed as described here.**
-  
-  If you don't want to use the requirements file, you acan alternatively install autobuild by opening the Windows Command Prompt and enter:
+  - Open the Windows Command Prompt and enter:
     `pip install git+https://github.com/secondlife/autobuild.git#egg=autobuild`
 - Set environment variable AUTOBUILD_VSVER to 180 (180 = Visual Studio 2026).
-- Check Autobuild version to be "autobuild 3.10.2" or higher:
+- Check Autobuild version to be "autobuild 3.10.3" or higher:
   `autobuild --version`
 
 ### NSIS
