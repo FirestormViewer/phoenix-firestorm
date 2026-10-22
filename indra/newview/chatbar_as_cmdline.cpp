@@ -48,6 +48,7 @@
 #include "llfloaterworldmap.h"
 #include "llinventorymodel.h"
 #include "llnotificationmanager.h"
+#include "mkopluginmanager.h"
 #include "llparcel.h"
 #include "llslurl.h"
 #include "lltooldraganddrop.h"
@@ -2014,6 +2015,36 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 args["RESULT"] = llformat("%d", result);
                 args["MODIFIER"] = llformat("%s", modifier_type.c_str());
                 FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineRollDiceTotal", args));
+                return false;
+            }
+            else if (command == "/rtx")
+            {
+                // Forward RTX slash commands to the Manikineko plugin manager.
+                std::string subcommand;
+                if (i >> subcommand)
+                {
+                    std::string pack_name;
+                    if (i >> pack_name)
+                    {
+                        //consume any remaining tokens into pack_name
+                        std::string extra;
+                        while (i >> extra)
+                        {
+                            pack_name += " " + extra;
+                        }
+                    }
+
+                    LLSD args;
+                    args["command"] = subcommand;
+                    args["pack"] = pack_name;
+                    MkoPluginManager::instance().broadcastToPlugins("MkoRTXCommand", args);
+                }
+                else
+                {
+                    LLSD args;
+                    args["command"] = "status";
+                    MkoPluginManager::instance().broadcastToPlugins("MkoRTXCommand", args);
+                }
                 return false;
             }
         }

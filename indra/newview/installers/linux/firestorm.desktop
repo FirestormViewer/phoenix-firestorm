@@ -1,8 +1,9 @@
 [Desktop Entry]
 Type=Application
 Name=Firestorm
-Exec=firestorm
+Exec=firestorm %u
 Comment=Client for virtual worlds
 Icon=firestorm_icon
 Categories=Development;
 Terminal=true
+MimeType=x-scheme-handler/hop;x-scheme-handler/x-grid-location-info;x-scheme-handler/x-grid-info;
