@@ -357,7 +357,7 @@ bool RlvActions::canTeleportToLocal(const LLVector3d& posGlobal)
     // User can initiate a local teleport if:
     //   - can stand up (or isn't sitting)
     //   - not restricted from "sit teleporting" (or the destination is within the allowed xyz-radius)
-    //   - not restricted from teleporting locally (or the destination is within the allowed xy-radius)
+    //   - not restricted from teleporting locally (or the destination is within the allowed xyz-radius)
     // NOTE: if we're teleporting due to an active command we should disregard any restrictions from the same object
     const LLUUID& idRlvObjExcept = gRlvHandler.getCurrentObject();
     bool fCanTeleport = RlvActions::canStand(idRlvObjExcept);
@@ -369,9 +369,13 @@ bool RlvActions::canTeleportToLocal(const LLVector3d& posGlobal)
     }
     if ( (fCanTeleport) && (gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOCAL, idRlvObjExcept)) )
     {
-        const F32 nDistSq = (LLVector2((F32)posGlobal.mdV[VX], (F32)posGlobal.mdV[VY]) - LLVector2((F32)gAgent.getPositionGlobal().mdV[VX], (F32)gAgent.getPositionGlobal().mdV[VY])).lengthSquared();
-        const F32 nTpLocalDist = llmin(RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_TPLOCALDIST)->getValue<float>(), RLV_MODIFIER_TPLOCAL_DEFAULT);
+        // <FS:Trish> @tplocal distance is measured in 3D like RLV (and @sittp), so it can't be bypassed by teleporting straight up
+        const F32 nDistSq = (float)(posGlobal - gAgent.getPositionGlobal()).lengthSquared();
+        // </FS:Trish>
+        // <FS:Trish> FIRE-37059 RLV_MODIFIER_TPLOCAL_DEFAULT is now the usual 1.5m RLVa default
+        const F32 nTpLocalDist = llmin(RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_TPLOCALDIST)->getValue<float>(), RLV_MODIFIER_TPLOCAL_MAX);
         fCanTeleport = nDistSq < nTpLocalDist * nTpLocalDist;
+        // </FS:Trish>
     }
     return fCanTeleport;
 }
@@ -386,7 +390,9 @@ bool RlvActions::canTeleportToLocation()
 bool RlvActions::isLocalTp(const LLVector3d& posGlobal)
 {
     const F32 nDistSq = (LLVector2((F32)posGlobal.mdV[VX], (F32)posGlobal.mdV[VY]) - LLVector2((F32)gAgent.getPositionGlobal().mdV[VX], (F32)gAgent.getPositionGlobal().mdV[VY])).lengthSquared();
-    return nDistSq < RLV_MODIFIER_TPLOCAL_DEFAULT * RLV_MODIFIER_TPLOCAL_DEFAULT;
+    // <FS:Trish> FIRE-37059 RLV_MODIFIER_TPLOCAL_DEFAULT is now the usual 1.5m RLVa default
+    return nDistSq < RLV_MODIFIER_TPLOCAL_MAX * RLV_MODIFIER_TPLOCAL_MAX;
+    // </FS:Trish>
 }
 
 // ============================================================================
