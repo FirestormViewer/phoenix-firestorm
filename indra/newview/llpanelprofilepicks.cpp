@@ -246,7 +246,7 @@ bool LLPanelProfilePicks::postBuild()
     mDeleteButton->setCommitCallback(boost::bind(&LLPanelProfilePicks::onClickDelete, this));
 
     // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
-    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfilePicks::updateRlvRestrictions, this, _1, _2));
+    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfilePicks::updateRlvRestrictions, this, _1));
 
     // <FS:Ansariel> Replace hardcoded "Second Life" with grid label
     LLTextBox* intro_txt = getChild<LLTextBox>("header_text");
@@ -538,7 +538,7 @@ void LLPanelProfilePicks::commitUnsavedChanges()
 }
 
 // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
-void LLPanelProfilePicks::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+void LLPanelProfilePicks::updateRlvRestrictions(ERlvBehaviour behavior)
 {
     if (behavior == RLV_BHVR_SHOWLOC)
     {
@@ -712,7 +712,7 @@ bool LLPanelProfilePick::postBuild()
     mSetCurrentLocationButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSetLocation, this));
 
     //<FS:Trish> RLVa showloc
-    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfilePick::updateRlvRestrictions, this, _1, _2));
+    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfilePick::updateRlvRestrictions, this, _1));
     //</FS:Trish>
 
     // <AS:Chanayane> Preview button
@@ -1050,7 +1050,7 @@ void LLPanelProfilePick::updateButtons()
     mSetCurrentLocationButton->setEnabled(getSelfProfile() && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
 }
 
-void LLPanelProfilePick::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+void LLPanelProfilePick::updateRlvRestrictions(ERlvBehaviour behavior)
 {
     if (behavior == RLV_BHVR_SHOWLOC)
     {

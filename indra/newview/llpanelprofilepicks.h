@@ -86,7 +86,7 @@ private:
 
     // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
     boost::signals2::connection mRlvBehaviorCallbackConnection;
-    void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+    void updateRlvRestrictions(ERlvBehaviour behavior);
     // </FS:Ansariel>
 
     bool canAddNewPick();
@@ -271,7 +271,7 @@ protected:
 
     //<FS:Trish> RLVa showloc
     boost::signals2::connection mRlvBehaviorCallbackConnection;
-    void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+    void updateRlvRestrictions(ERlvBehaviour behavior);
     //</FS:Trish>
 
     bool mLocationChanged;
