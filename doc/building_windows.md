@@ -126,7 +126,7 @@ If you do not want to install the required Python packages into the default Pyth
   - Open Windows Command Prompt and enter:
     `pip install git+https://github.com/secondlife/autobuild.git#egg=autobuild`
 - Set environment variable AUTOBUILD_VSVER to 180 (180 = Visual Studio 2026).
-- Check Autobuild version to be "autobuild 3.10.3" or higher:
+- Check Autobuild version to be "autobuild 3.10.2" or higher:
   `autobuild --version`
 
 ### NSIS
