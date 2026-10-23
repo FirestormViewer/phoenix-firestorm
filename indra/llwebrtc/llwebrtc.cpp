@@ -1388,6 +1388,17 @@ void LLWebRTCImpl::intSetMute(bool mute, int delay_ms)
             return;
         }
 
+        // <FS:TJ> [FIRE-36022] - Removing my USB headset crashes entire viewer
+        try
+        {
+        std::unique_lock lock(gAudioDeviceMutex, 1s);
+        if (!lock.owns_lock())
+        {
+            return;
+        }
+
+        gWebRTCUpdateDevices = true;
+        // </FS:TJ>
         mDeviceModule->ForceStopRecording();
         if (start)
         {
@@ -1395,6 +1406,15 @@ void LLWebRTCImpl::intSetMute(bool mute, int delay_ms)
                                                                         : webrtc::AudioDeviceModule::AudioCategory::kCommunications);
             mDeviceModule->ForceStartRecording();
         }
+        // <FS:TJ> [FIRE-36022] - Removing my USB headset crashes entire viewer
+        gWebRTCUpdateDevices = false;
+        }
+        catch (const std::exception& e)
+        {
+            mLogSink->OnLogMessage(std::string("Exception: WebRTC: ") + e.what());
+            gWebRTCUpdateDevices = false;
+        }
+        // </FS:TJ>
     };
 
     if (mute)
