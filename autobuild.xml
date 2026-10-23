@@ -2652,11 +2652,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5339bc81283e7ac2c3852719c3b6ec7b65a093e9</string>
+              <string>320ff13404ea62bf9b77561116a0afde0b6fe8a0</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/viewer_fonts-1.1.3-common-261801750.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/viewer_fonts-1.1.4-common-262961944.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
@@ -2669,7 +2669,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>copyright</key>
         <string>Copyright 2016-2022 Brad Erickson CC-BY-4.0/MIT, Copyright 2016-2022 Twitter, Inc. CC-BY-4.0, Copyright 2013 Joe Loughry and Terence Eden MIT, Copyright (c) 2003 by Bitstream, Inc., Copyright (c) 2006 by Tavmjong Bah.</string>
         <key>version</key>
-        <string>1.0.0.242151216</string>
+        <string>1.1.4.262961944</string>
         <key>name</key>
         <string>viewer-fonts</string>
         <key>description</key>
