@@ -312,10 +312,10 @@ Function CheckCPUFlagsAVX2
     ; AVX2 not supported
     ; Replace %DLURL% in the language string with the URL
     ${WordReplace} "$(MissingAVX2)" "%DLURL%" "${DL_URL}-legacy-cpus" "+*" $3
-    MessageBox MB_OK "$3"
+    MessageBox MB_OK "$3" /SD IDOK
     
-    MessageBox MB_YESNO $(AVX2OverrideConfirmation) IDNO NoInstall
-    MessageBox MB_OKCANCEL $(AVX2OverrideNote) IDCANCEL NoInstall
+    MessageBox MB_YESNO $(AVX2OverrideConfirmation) /SD IDNO IDNO NoInstall
+    MessageBox MB_OKCANCEL $(AVX2OverrideNote) /SD IDCANCEL IDCANCEL NoInstall
 
     ; User chose to proceed
     Pop $3
@@ -324,6 +324,11 @@ Function CheckCPUFlagsAVX2
     Return
 
   NoInstall:
+    # Don't open a browser or report success when silent
+    IfSilent 0 NoInstall_OpenURL
+    SetErrorLevel 2
+    Quit
+  NoInstall_OpenURL:
     ${OpenURL} "${DL_URL}-legacy-cpus"
     Quit
 
@@ -345,7 +350,7 @@ Function CheckCPUFlagsAVX2_Prompt
     ; Replace %DLURL% in the language string with the URL
     ${WordReplace} "$(AVX2Available)" "%DLURL%" "${DL_URL}" "+*" $3
 
-    MessageBox MB_YESNO $3 IDYES DownloadAVX2 IDNO ContinueInstall
+    MessageBox MB_YESNO $3 /SD IDNO IDYES DownloadAVX2 IDNO ContinueInstall
     DownloadAVX2:
       ${OpenURL} '${DL_URL}'
       Quit
@@ -542,19 +547,19 @@ FunctionEnd
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckWindowsVersion
   ${If} ${AtMostWin2003}
-    MessageBox MB_OK $(CheckWindowsVersionMB)
+    MessageBox MB_OK $(CheckWindowsVersionMB) /SD IDOK
     Quit
   ${EndIf}
 
   ${If} ${IsWinVista}
   ${AndIfNot} ${IsServicePack} 2
-    MessageBox MB_OK $(CheckWindowsVersionMB)
+    MessageBox MB_OK $(CheckWindowsVersionMB) /SD IDOK
     Quit
   ${EndIf}
 
   ${If} ${IsWin2008}
   ${AndIfNot} ${IsServicePack} 2
-    MessageBox MB_OK $(CheckWindowsVersionMB)
+    MessageBox MB_OK $(CheckWindowsVersionMB) /SD IDOK
     Quit
   ${EndIf}
 
@@ -594,7 +599,7 @@ Call RemoveProgFilesOnInst		# Remove existing files to prevent certain errors wh
 
 IfErrors 0 INSTALL_FILES_DONE
   StrCmp $SKIP_DIALOGS "true" INSTALL_FILES_DONE
-	MessageBox MB_ABORTRETRYIGNORE $(ErrorSecondLifeInstallRetry) IDABORT INSTALL_FILES_CANCEL IDRETRY INSTALL_FILES_START
+	MessageBox MB_ABORTRETRYIGNORE $(ErrorSecondLifeInstallRetry) /SD IDIGNORE IDABORT INSTALL_FILES_CANCEL IDRETRY INSTALL_FILES_START
     # MB_ABORTRETRYIGNORE does not accept IDIGNORE
     Goto INSTALL_FILES_DONE
 
@@ -603,7 +608,7 @@ INSTALL_FILES_CANCEL:
   # Silence warnings from RemoveProgFilesOnInst.
   StrCpy $SKIP_DIALOGS "true"
   Call RemoveProgFilesOnInst
-  MessageBox MB_OK $(ErrorSecondLifeInstallSupport)
+  MessageBox MB_OK $(ErrorSecondLifeInstallSupport) /SD IDOK
   Quit
 
 INSTALL_FILES_DONE:
@@ -701,7 +706,7 @@ WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "NoModify" 1
 WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "NoRepair" 1
 
 # <FS:Ansariel> Ask before creating protocol registry entries
-MessageBox MB_YESNO|MB_ICONQUESTION $(CreateUrlRegistryEntries) IDNO skip_create_url_registry_entries
+MessageBox MB_YESNO|MB_ICONQUESTION $(CreateUrlRegistryEntries) /SD IDYES IDNO skip_create_url_registry_entries
 
 # Write URL registry info
 WriteRegStr HKEY_CLASSES_ROOT "${URLNAME}" "(default)" "URL:Second Life"
@@ -817,7 +822,7 @@ Function CheckIfAdministrator
     UserInfo::GetAccountType
     Pop $R0
     StrCmp $R0 "Admin" lbl_is_admin
-        MessageBox MB_OK $(CheckAdministratorInstMB)
+        MessageBox MB_OK $(CheckAdministratorInstMB) /SD IDOK
         Quit
 lbl_is_admin:
     Return
@@ -858,7 +863,7 @@ Function CloseSecondLife
   IntCmp $0 0 DONE
   
   StrCmp $SKIP_DIALOGS "true" CLOSE
-    MessageBox MB_OKCANCEL $(CloseSecondLifeInstMB) IDOK CLOSE IDCANCEL CANCEL_INSTALL
+    MessageBox MB_OKCANCEL $(CloseSecondLifeInstMB) /SD IDOK IDOK CLOSE IDCANCEL CANCEL_INSTALL
 
   CANCEL_INSTALL:
     Quit
@@ -894,7 +899,7 @@ Function un.CloseSecondLife
   Push $0
   FindWindow $0 "Second Life" ""
   IntCmp $0 0 DONE
-  MessageBox MB_OKCANCEL $(CloseSecondLifeUnInstMB) IDOK CLOSE IDCANCEL CANCEL_UNINSTALL
+  MessageBox MB_OKCANCEL $(CloseSecondLifeUnInstMB) /SD IDOK IDOK CLOSE IDCANCEL CANCEL_UNINSTALL
 
   CANCEL_UNINSTALL:
     Quit
@@ -956,7 +961,7 @@ IntOp $0 $0 + 1
 IfErrors 0 PREINSTALL_DONE
   IntCmp $0 1 PREINSTALL_REMOVE #try again once
     StrCmp $SKIP_DIALOGS "true" PREINSTALL_DONE
-      MessageBox MB_ABORTRETRYIGNORE $(CloseSecondLifeInstRM) IDABORT PREINSTALL_FAIL IDRETRY PREINSTALL_REMOVE
+      MessageBox MB_ABORTRETRYIGNORE $(CloseSecondLifeInstRM) /SD IDIGNORE IDABORT PREINSTALL_FAIL IDRETRY PREINSTALL_REMOVE
       # MB_ABORTRETRYIGNORE does not accept IDIGNORE
       Goto PREINSTALL_DONE
 
@@ -1206,14 +1211,14 @@ FunctionEnd
 Function CheckWindowsServPack
   ${If} ${IsWin7}
   ${AndIfNot} ${IsServicePack} 1
-    MessageBox MB_OK $(CheckWindowsServPackMB)
+    MessageBox MB_OK $(CheckWindowsServPackMB) /SD IDOK
     DetailPrint $(UseLatestServPackDP)
     Return
   ${EndIf}
 
   ${If} ${IsWin2008R2}
   ${AndIfNot} ${IsServicePack} 1
-    MessageBox MB_OK $(CheckWindowsServPackMB)
+    MessageBox MB_OK $(CheckWindowsServPackMB) /SD IDOK
     DetailPrint $(UseLatestServPackDP)
     Return
   ${EndIf}
