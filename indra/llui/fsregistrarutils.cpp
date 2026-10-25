@@ -28,11 +28,11 @@
 #include "linden_common.h"
 #include "fsregistrarutils.h"
 
-bool FSRegistrarUtils::checkIsEnabled(LLUUID av_id, EFSRegistrarFunctionActionType action)
+bool FSRegistrarUtils::checkIsEnabled(LLUUID av_id, EFSRegistrarFunctionActionType action, LLSD params, void* userdata)
 {
     if (mEnableCheckFunction)
     {
-        return mEnableCheckFunction(av_id, action);
+        return mEnableCheckFunction(av_id, action, params, userdata);
     }
     return false;
 }

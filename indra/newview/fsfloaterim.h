@@ -166,6 +166,8 @@ public:
 
     F32 onGetChatEditorOpacityCallback(ETypeTransparency type, F32 alpha);
 
+    LLUUID getSessionID() const { return mSessionID; }
+
 protected:
     void onClickCloseBtn(bool app_quitting = false) override;
     bool applyRectControl() override;

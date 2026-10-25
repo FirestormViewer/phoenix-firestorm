@@ -240,6 +240,28 @@ public:
             return true;
         }
 
+        if (verb == "groupmute")
+        {
+            // no safety checks, just mute
+            LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(group_id);
+            if (speaker_mgr)
+            {
+                speaker_mgr->moderateVoiceParticipant(target_id, false);
+            }
+            return true;
+        }
+
+        if (verb == "groupunmute")
+        {
+            // no safety checks, just mute
+            LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(group_id);
+            if (speaker_mgr)
+            {
+                speaker_mgr->moderateVoiceParticipant(target_id, true);
+            }
+            return true;
+        }
+
         return false;
     }
 };

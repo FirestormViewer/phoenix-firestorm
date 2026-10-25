@@ -2211,18 +2211,18 @@ bool LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 
             // <FS:Ansariel> Add enable checks for menu items
             LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
-            enable_registrar.add("Url.EnableShowProfile", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SHOW_PROFILE));
-            enable_registrar.add("Url.EnableAddFriend", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ADD_FRIEND));
-            enable_registrar.add("Url.EnableRemoveFriend", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REMOVE_FRIEND));
-            enable_registrar.add("Url.EnableSendIM", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SEND_IM));
-            enable_registrar.add("FS.EnableZoomIn", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ZOOM_IN));
-            enable_registrar.add("FS.EnableOfferTeleport", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_OFFER_TELEPORT));
-            enable_registrar.add("FS.EnableTrackAvatar", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TRACK_AVATAR));
-            enable_registrar.add("FS.EnableTeleportToTarget", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TELEPORT_TO));
-            enable_registrar.add("FS.EnableRequestTeleport", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REQUEST_TELEPORT));
-            enable_registrar.add("FS.CheckIsAgentBlocked", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_AVATAR_BLOCKED));
-            enable_registrar.add("FS.EnableBlockAvatar", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_IS_NOT_SELF));
-            enable_registrar.add("FS.EnableViewLog", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_VIEW_TRANSCRIPT));
+            enable_registrar.add("Url.EnableShowProfile", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SHOW_PROFILE, LLSD(), nullptr));
+            enable_registrar.add("Url.EnableAddFriend", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ADD_FRIEND, LLSD(), nullptr));
+            enable_registrar.add("Url.EnableRemoveFriend", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REMOVE_FRIEND, LLSD(), nullptr));
+            enable_registrar.add("Url.EnableSendIM", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SEND_IM, LLSD(), nullptr));
+            enable_registrar.add("FS.EnableZoomIn", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ZOOM_IN, LLSD(), nullptr));
+            enable_registrar.add("FS.EnableOfferTeleport", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_OFFER_TELEPORT, LLSD(), nullptr));
+            enable_registrar.add("FS.EnableTrackAvatar", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TRACK_AVATAR, LLSD(), nullptr));
+            enable_registrar.add("FS.EnableTeleportToTarget", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TELEPORT_TO, LLSD(), nullptr));
+            enable_registrar.add("FS.EnableRequestTeleport", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REQUEST_TELEPORT, LLSD(), nullptr));
+            enable_registrar.add("FS.CheckIsAgentBlocked", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_AVATAR_BLOCKED, LLSD(), nullptr));
+            enable_registrar.add("FS.EnableBlockAvatar", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_IS_NOT_SELF, LLSD(), nullptr));
+            enable_registrar.add("FS.EnableViewLog", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_VIEW_TRANSCRIPT, LLSD(), nullptr));
             // </FS:Ansariel>
 
             // <FS:Zi> FIRE-30725 - Add more group functions to group URL context menu
@@ -2232,11 +2232,13 @@ bool LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
             registrar.add("FS.LeaveGroup", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupleave", true));
             registrar.add("FS.ActivateGroup", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupactivate", true));
 
-            enable_registrar.add("FS.WaitingForGroupData", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA));
-            enable_registrar.add("FS.HaveGroupData", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_HAVE_GROUP_DATA));
-            enable_registrar.add("FS.EnableJoinGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_JOIN_GROUP));
-            enable_registrar.add("FS.EnableLeaveGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_LEAVE_GROUP));
-            enable_registrar.add("FS.EnableActivateGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_GROUP_NOT_ACTIVE));
+            enable_registrar.add("FS.WaitingForGroupData", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA, LLSD(), nullptr));
+            enable_registrar.add("FS.HaveGroupData", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_HAVE_GROUP_DATA, LLSD(), nullptr));
+            enable_registrar.add("FS.EnableJoinGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_JOIN_GROUP, LLSD(), nullptr));
+            enable_registrar.add("FS.EnableLeaveGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_LEAVE_GROUP, LLSD(), nullptr));
+            enable_registrar.add("FS.EnableActivateGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_GROUP_NOT_ACTIVE, LLSD(), nullptr));
+            enable_registrar.add("FS.EnableModeratorOption", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_GROUP_HAS_MODERATOR_OPTION, LLSD(), nullptr));
+            enable_registrar.add("FS.EnableMentionOption", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_SHOW_MENTION_OPTION, LLSD(), nullptr));
             // </FS:Zi>
 
             // create the context menu from the XUI file and display it

@@ -2495,18 +2495,18 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
     // <FS:Ansariel> Add enable checks for menu items
     LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
     LLUUID target_id(target_id_str);
-    enable_registrar.add("Url.EnableShowProfile", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SHOW_PROFILE));
-    enable_registrar.add("Url.EnableAddFriend", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ADD_FRIEND));
-    enable_registrar.add("Url.EnableRemoveFriend", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REMOVE_FRIEND));
-    enable_registrar.add("Url.EnableSendIM", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SEND_IM));
-    enable_registrar.add("FS.EnableZoomIn", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ZOOM_IN));
-    enable_registrar.add("FS.EnableOfferTeleport", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_OFFER_TELEPORT));
-    enable_registrar.add("FS.EnableTrackAvatar", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TRACK_AVATAR));
-    enable_registrar.add("FS.EnableTeleportToTarget", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TELEPORT_TO));
-    enable_registrar.add("FS.EnableRequestTeleport", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REQUEST_TELEPORT));
-    enable_registrar.add("FS.CheckIsAgentBlocked", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_AVATAR_BLOCKED));
-    enable_registrar.add("FS.EnableBlockAvatar", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_IS_NOT_SELF));
-    enable_registrar.add("FS.EnableViewLog", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_VIEW_TRANSCRIPT));
+    enable_registrar.add("Url.EnableShowProfile", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SHOW_PROFILE, LLSD(), nullptr));
+    enable_registrar.add("Url.EnableAddFriend", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ADD_FRIEND, LLSD(), nullptr));
+    enable_registrar.add("Url.EnableRemoveFriend", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REMOVE_FRIEND, LLSD(), nullptr));
+    enable_registrar.add("Url.EnableSendIM", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SEND_IM, LLSD(), nullptr));
+    enable_registrar.add("FS.EnableZoomIn", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ZOOM_IN, LLSD(), nullptr));
+    enable_registrar.add("FS.EnableOfferTeleport", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_OFFER_TELEPORT, LLSD(), nullptr));
+    enable_registrar.add("FS.EnableTrackAvatar", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TRACK_AVATAR, LLSD(), nullptr));
+    enable_registrar.add("FS.EnableTeleportToTarget", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TELEPORT_TO, LLSD(), nullptr));
+    enable_registrar.add("FS.EnableRequestTeleport", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REQUEST_TELEPORT, LLSD(), nullptr));
+    enable_registrar.add("FS.CheckIsAgentBlocked", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_AVATAR_BLOCKED, LLSD(), nullptr));
+    enable_registrar.add("FS.EnableBlockAvatar", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_IS_NOT_SELF, LLSD(), nullptr));
+    enable_registrar.add("FS.EnableViewLog", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_VIEW_TRANSCRIPT, LLSD(), nullptr));
     // </FS:Ansariel>
 
     // <FS:Zi> Add menu items to copy and/or insert mention URIs into chat
@@ -2526,12 +2526,17 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
     registrar.add("FS.ForbidGroupChat", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupchatforbid", true));
     registrar.add("FS.EjectGroupMember", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupeject", true));
     registrar.add("FS.BanGroupMember", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupban", true));
+    registrar.add("FS.MuteGroupVoice", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupmute", true));
+    registrar.add("FS.UnmuteGroupVoice", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupunmute", true));
 
-    enable_registrar.add("FS.WaitingForGroupData", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA));
-    enable_registrar.add("FS.HaveGroupData", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_HAVE_GROUP_DATA));
-    enable_registrar.add("FS.EnableJoinGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_JOIN_GROUP));
-    enable_registrar.add("FS.EnableLeaveGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_LEAVE_GROUP));
-    enable_registrar.add("FS.EnableActivateGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_GROUP_NOT_ACTIVE));
+    LLFloater* parent_floater = getParentByType<LLFloater>();
+    enable_registrar.add("FS.WaitingForGroupData", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA, LLSD(), nullptr));
+    enable_registrar.add("FS.HaveGroupData", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_HAVE_GROUP_DATA, LLSD(), nullptr));
+    enable_registrar.add("FS.EnableJoinGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_JOIN_GROUP, LLSD(), nullptr));
+    enable_registrar.add("FS.EnableLeaveGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_LEAVE_GROUP, LLSD(), nullptr));
+    enable_registrar.add("FS.EnableActivateGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_GROUP_NOT_ACTIVE, LLSD(), nullptr));
+    enable_registrar.add("FS.EnableModeratorOption", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_GROUP_HAS_MODERATOR_OPTION, std::placeholders::_2, parent_floater));
+    enable_registrar.add("FS.EnableMentionOption", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_SHOW_MENTION_OPTION, LLSD(), parent_floater));
     // </FS:Zi>
 
     // create and return the context menu from the XUI file
@@ -2578,28 +2583,11 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
         if (mIsObjectReachableSignal)
         {
             bool is_reachable = *(*mIsObjectReachableSignal)(LLUUID(LLUrlAction::getObjectId(url)));
-            if (LLView* zoom_btn = menu->getChild<LLView>("zoom_in"))
+            if (LLView* zoom_btn = menu->findChild<LLView>("zoom_in"))
             {
                 zoom_btn->setEnabled(is_reachable);
             }
         }
-
-        // <FS:Zi> hide the moderation tools in the context menu unless we are in a group IM floater
-        LLFloater* parent_floater = getParentByType<LLFloater>();
-        if (!parent_floater || parent_floater->getName() != "panel_im")
-        {
-            menu->getChild<LLView>("GroupModerationSubmenu")->setVisible(false);
-            menu->getChild<LLView>("GroupModerationSeparator")->setVisible(false);
-        }
-        // </FS:Zi>
-
-        // <FS:Zi> Add menu items to copy and/or insert mention URIs into chat
-        if (!parent_floater || (parent_floater->getName() != "panel_im" && parent_floater->getName() != "nearby_chat"))
-        {
-            menu->getChild<LLView>("MentionURISeparator")->setVisible(false);
-            menu->getChild<LLView>("mention_in_chat")->setVisible(false);
-        }
-        // </FS:Zi>
 
         menu->show(x, y);
         LLMenuGL::showPopup(this, menu, x, y);

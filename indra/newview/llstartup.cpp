@@ -2361,7 +2361,7 @@ bool idle_startup()
         // </FS:Ansariel>
 
         // <FS:Ansariel> Register check function for registrar enable checks
-        gFSRegistrarUtils.setEnableCheckFunction(std::bind(&FSCommon::checkIsActionEnabled, std::placeholders::_1, std::placeholders::_2));
+        gFSRegistrarUtils.setEnableCheckFunction(std::bind(&FSCommon::checkIsActionEnabled, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
         // <FS:Techwolf Lupindo> fsdata support
         FSData::instance().addAgents();
