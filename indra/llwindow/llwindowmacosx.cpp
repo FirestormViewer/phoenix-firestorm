@@ -882,27 +882,18 @@ void LLWindowMacOSX::destroyContext()
         // We don't have a context
         return;
     }
-    // Unhook the GL context from any drawable it may have
-    if(mContext != NULL)
-    {
-        LL_DEBUGS("Window") << "destroyContext: unhooking drawable " << LL_ENDL;
-        CGLSetCurrentContext(NULL);
-    }
-
     // Clean up remaining GL state before blowing away window
+    CGLSetCurrentContext(mContext);
     gGLManager.shutdownGL();
+    CGLSetCurrentContext(NULL);
+    // The Cocoa view owns this context and releases it in removeGLView().
+    mContext = NULL;
 
     // Clean up the pixel format
     if(mPixelFormat != NULL)
     {
         CGLDestroyPixelFormat(mPixelFormat);
         mPixelFormat = NULL;
-    }
-
-    // Clean up the GL context
-    if(mContext != NULL)
-    {
-        CGLDestroyContext(mContext);
     }
 
     // Destroy our LLOpenGLView
@@ -1024,6 +1015,8 @@ void LLWindowMacOSX::gatherInput(bool app_has_focus)
 {
     updateCursor();
     LLGameControl::processEvents(app_has_focus);
+    // Cocoa event handling can change the current context between frames.
+    restoreGLContext();
 }
 
 bool LLWindowMacOSX::getPosition(LLCoordScreen *position) const
@@ -1145,12 +1138,17 @@ bool LLWindowMacOSX::setSizeImpl(const LLCoordWindow size)
 
 void LLWindowMacOSX::swapBuffers()
 {
-    CGLFlushDrawable(mContext);
+    if (mContext)
+    {
+        llassert(mGLView && getCGLContextObj(mGLView) == mContext);
+        glSwapBuffers(mGLView);
+    }
 }
 
 void LLWindowMacOSX::restoreGLContext()
 {
     CGLSetCurrentContext(mContext);
+    llassert(CGLGetCurrentContext() == mContext);
 }
 
 F32 LLWindowMacOSX::getGamma() const

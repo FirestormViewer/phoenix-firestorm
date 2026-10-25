@@ -328,11 +328,11 @@ void LLWebRTCVoiceClient::initWebRTC()
                 {
                     if (mWebRTCDeviceInterface)
                     {
-                        mWebRTCDeviceInterface->setStopCaptureOnMute(new_val.asBoolean());
+                        mWebRTCDeviceInterface->setStopCaptureOnMute(new_val.asInteger());
                     }
                 });
     }
-    mWebRTCDeviceInterface->setStopCaptureOnMute(gSavedSettings.getBOOL("StopMicCaptureWhenMuted"));
+    mWebRTCDeviceInterface->setStopCaptureOnMute(gSavedSettings.getS32("StopMicCaptureWhenMuted"));
 
     refreshDeviceLists();
 }
@@ -1845,7 +1845,7 @@ void LLWebRTCVoiceClient::setMuteMic(bool muted)
 
     mMuteMic = muted;
 
-    if (mIsInTuningMode &&!gSavedSettings.getBOOL("StopMicCaptureWhenMuted"))
+    if (mIsInTuningMode &&!gSavedSettings.getS32("StopMicCaptureWhenMuted"))
     {
         return;
     }

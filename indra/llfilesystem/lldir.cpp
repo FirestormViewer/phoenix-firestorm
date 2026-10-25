@@ -1355,6 +1355,8 @@ const char* const LLDir::PORTABLE_USER_DATA_DIRNAME = "UserData";
 // static
 bool LLDir::isPortableInstall(const std::string& install_root)
 {
+    // Todo: portable mac builds don't have a .portable marker file.
+    // Fix mac portable builds to include one.
     if (install_root.empty())
     {
         return false;
