@@ -934,7 +934,11 @@ bool LLFolderView::canCopy() const
     for (selected_items_t::const_iterator selected_it = mSelectedItems.begin(); selected_it != mSelectedItems.end(); ++selected_it)
     {
         const LLFolderViewItem* item = *selected_it;
-        if (!item->getViewModelItem()->isItemCopyable())
+        // <FS:Trish> FIRE-36930: No copy items can be copied for pasting as links (matches context menu behavior)
+        //if (!item->getViewModelItem()->isItemCopyable())
+        const LLFolderViewModelItem* vmi = item->getViewModelItem();
+        if (!vmi->isItemCopyable() && !vmi->isItemLinkable())
+        // </FS:Trish>
         {
             return false;
         }
