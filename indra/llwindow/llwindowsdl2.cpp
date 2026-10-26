@@ -443,6 +443,10 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
 
 #if LL_X11
     mFlashing = false;
+    // <FS:ATTENTION> Bound diagnostics for SDL/X11 fallback failures.
+    mFlashSDLFailureLogged = false;
+    mFlashFallbackFailureLogged = false;
+    // </FS:ATTENTION>
     initialiseX11Clipboard();
 #endif // LL_X11
 
@@ -1371,51 +1375,176 @@ void LLWindowSDL::afterDialog()
 
 #if LL_X11
 // set/reset the XWMHints flag for 'urgency' that usually makes the icon flash
-void LLWindowSDL::x11_set_urgent(bool urgent)
+// <FS:ATTENTION> Preserve the original Linden implementation while adding
+// checked allocation/status handling and an X11-window guard.
+// void LLWindowSDL::x11_set_urgent(bool urgent)
+// {
+//     if (mSDL_Display && !mFullscreen)
+//     {
+//         XWMHints *wm_hints;
+//
+//         LL_INFOS() << "X11 hint for urgency, " << urgent << LL_ENDL;
+//
+//         maybe_lock_display();
+//         wm_hints = XGetWMHints(mSDL_Display, mSDL_XWindowID);
+//         if (!wm_hints)
+//             wm_hints = XAllocWMHints();
+//
+//         if (urgent)
+//             wm_hints->flags |= XUrgencyHint;
+//         else
+//             wm_hints->flags &= ~XUrgencyHint;
+//
+//         XSetWMHints(mSDL_Display, mSDL_XWindowID, wm_hints);
+//         XFree(wm_hints);
+//         XSync(mSDL_Display, False);
+//         maybe_unlock_display();
+//     }
+// }
+// </FS:ATTENTION>
+bool LLWindowSDL::x11_set_urgent(bool urgent)
 {
-    if (mSDL_Display && !mFullscreen)
+    if (mSDL_Display && mSDL_XWindowID != None && !mFullscreen)
     {
-        XWMHints *wm_hints;
-
         LL_INFOS() << "X11 hint for urgency, " << urgent << LL_ENDL;
 
         maybe_lock_display();
-        wm_hints = XGetWMHints(mSDL_Display, mSDL_XWindowID);
+        XWMHints *wm_hints = XGetWMHints(mSDL_Display, mSDL_XWindowID);
         if (!wm_hints)
             wm_hints = XAllocWMHints();
 
-        if (urgent)
-            wm_hints->flags |= XUrgencyHint;
-        else
-            wm_hints->flags &= ~XUrgencyHint;
+        bool result = false;
+        if (wm_hints)
+        {
+            if (urgent)
+                wm_hints->flags |= XUrgencyHint;
+            else
+                wm_hints->flags &= ~XUrgencyHint;
 
-        XSetWMHints(mSDL_Display, mSDL_XWindowID, wm_hints);
-        XFree(wm_hints);
-        XSync(mSDL_Display, False);
+            result = XSetWMHints(mSDL_Display, mSDL_XWindowID, wm_hints) != 0;
+            XFree(wm_hints);
+            XSync(mSDL_Display, False);
+        }
         maybe_unlock_display();
+        return result;
     }
+    return false;
 }
+
+// <FS:ATTENTION> Clear native urgency and local timer state on focus/expiry.
+void LLWindowSDL::clearFlashing()
+{
+    if (!mFlashing)
+        return;
+
+    if (mWindow && mSDL_Display && mSDL_XWindowID != None)
+    {
+        const int result = SDL_FlashWindow(mWindow, SDL_FLASH_CANCEL);
+        if (result < 0)
+        {
+            if (!mFlashSDLFailureLogged)
+            {
+                LL_WARNS() << "SDL_FlashWindow(CANCEL) failed: "
+                           << SDL_GetError() << LL_ENDL;
+                mFlashSDLFailureLogged = true;
+            }
+            if (!x11_set_urgent(false) && !mFlashFallbackFailureLogged)
+            {
+                LL_WARNS() << "X11 urgency fallback could not clear attention"
+                           << LL_ENDL;
+                mFlashFallbackFailureLogged = true;
+            }
+        }
+    }
+
+    mFlashTimer.reset();
+    mFlashing = false;
+}
+// </FS:ATTENTION>
 #endif // LL_X11
 
+// <FS:ATTENTION> Preserve the original Linden implementation while
+// broadening eligibility and suppressing duplicate native requests.
+// void LLWindowSDL::flashIcon(F32 seconds)
+// {
+//     if (getMinimized()) // <FS:CR> Moved this here from llviewermessage.cpp
+//     {
+// #if !LL_X11
+//         LL_INFOS() << "Stub LLWindowSDL::flashIcon(" << seconds << ")" << LL_ENDL;
+// #else
+//         LL_INFOS() << "X11 LLWindowSDL::flashIcon(" << seconds << ")" << LL_ENDL;
+//
+//         F32 remaining_time = mFlashTimer.getRemainingTimeF32();
+//         if (remaining_time < seconds)
+//             remaining_time = seconds;
+//         mFlashTimer.reset();
+//         mFlashTimer.setTimerExpirySec(remaining_time);
+//
+//         x11_set_urgent(true);
+//         mFlashing = true;
+// #endif // LL_X11
+//     }
+// }
+// </FS:ATTENTION>
 void LLWindowSDL::flashIcon(F32 seconds)
 {
-    if (getMinimized()) // <FS:CR> Moved this here from llviewermessage.cpp
-    {
+    // <FS> Qualify attention requests while unfocused or minimized.  An
+    // unknown focus state is only eligible when minimized, so startup cannot
+    // create urgency for a possibly focused window.  This replaces the
+    // upstream minimized-only gate: if (getMinimized()).
+    if (mHaveInputFocus == 1 || (!getMinimized() && mHaveInputFocus != 0))
+        return;
+    // </FS>
+
 #if !LL_X11
-        LL_INFOS() << "Stub LLWindowSDL::flashIcon(" << seconds << ")" << LL_ENDL;
+    LL_INFOS() << "Stub LLWindowSDL::flashIcon(" << seconds << ")" << LL_ENDL;
 #else
+    // SDL 2.28's flash implementation is verified for X11 only.  Native
+    // Wayland treats CANCEL as another activation request, so do not call it.
+    if (!mFlashing && (!mWindow || !mSDL_Display || mSDL_XWindowID == None || mFullscreen))
+        return;
+
+    F32 remaining_time = 0.f;
+    if (mFlashing)
+        remaining_time = static_cast<F32>(mFlashTimer.getRemainingTimeF32());
+    if (remaining_time < seconds)
+        remaining_time = seconds;
+
+    if (!mFlashing)
+    {
+        bool started = false;
+        const int result = SDL_FlashWindow(mWindow, SDL_FLASH_UNTIL_FOCUSED);
+        if (result < 0)
+        {
+            if (!mFlashSDLFailureLogged)
+            {
+                LL_WARNS() << "SDL_FlashWindow(UNTIL_FOCUSED) failed: "
+                           << SDL_GetError() << LL_ENDL;
+                mFlashSDLFailureLogged = true;
+            }
+            started = x11_set_urgent(true);
+            if (!started && !mFlashFallbackFailureLogged)
+            {
+                LL_WARNS() << "X11 urgency fallback could not request attention"
+                           << LL_ENDL;
+                mFlashFallbackFailureLogged = true;
+            }
+        }
+        else
+        {
+            started = true;
+        }
+
+        if (!started)
+            return;
+
         LL_INFOS() << "X11 LLWindowSDL::flashIcon(" << seconds << ")" << LL_ENDL;
-
-        F32 remaining_time = mFlashTimer.getRemainingTimeF32();
-        if (remaining_time < seconds)
-            remaining_time = seconds;
-        mFlashTimer.reset();
-        mFlashTimer.setTimerExpirySec(remaining_time);
-
-        x11_set_urgent(true);
-        mFlashing = true;
-#endif // LL_X11
     }
+
+    mFlashTimer.reset();
+    mFlashTimer.setTimerExpirySec(remaining_time);
+    mFlashing = true;
+#endif // LL_X11
 }
 
 bool LLWindowSDL::isClipboardTextAvailable()
@@ -2036,6 +2165,12 @@ void LLWindowSDL::gatherInput()
                     // can send us two unfocus events in a row for example,
                     // which confuses the focus code [SL-24071].
                     mHaveInputFocus = true;
+#if LL_X11
+                    // <FS:ATTENTION> Focus clears native urgency without
+                    // touching unread/read model state.
+                    clearFlashing();
+                    // </FS:ATTENTION>
+#endif // LL_X11
 
                     mCallbacks->handleFocus(this);
                 }
@@ -2083,8 +2218,11 @@ void LLWindowSDL::gatherInput()
     // expired.
     if (mFlashing && mFlashTimer.hasExpired())
     {
-        x11_set_urgent(false);
-        mFlashing = false;
+        // <FS:ATTENTION> Preserve the original expiry operations:
+        // x11_set_urgent(false);
+        // mFlashing = false;
+        clearFlashing();
+        // </FS:ATTENTION>
     }
 #endif // LL_X11
 }

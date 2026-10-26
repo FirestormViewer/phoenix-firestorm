@@ -1,3 +1,11 @@
 If you wish to install Firestorm on your desktop menus, we no longer do this by default. Instead, run:
 
 ./etc/refresh_desktop_app_entry.sh
+
+The official launcher identity is firestorm-viewer.desktop. A downstream
+package that uses another desktop-file ID must configure the viewer with the
+FIRESTORM_LAUNCHER_DESKTOP_ID CMake value and export the same validated value
+when running this script. At runtime, a valid non-empty
+FIRESTORM_LAUNCHER_DESKTOP_ID environment value overrides the compiled value;
+an invalid value falls back to the compiled value, then to
+firestorm-viewer.desktop. No desktop-file scanning is performed.

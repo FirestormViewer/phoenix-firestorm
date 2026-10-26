@@ -227,8 +227,15 @@ protected:
 
 private:
 #if LL_X11
-    void x11_set_urgent(bool urgent);
+    // <FS:ATTENTION> Preserve the upstream declaration while adding a
+    // success result for checked X11 urgency operations.
+    // void x11_set_urgent(bool urgent);
+    bool x11_set_urgent(bool urgent);
+    void clearFlashing();
     bool mFlashing;
+    bool mFlashSDLFailureLogged;
+    bool mFlashFallbackFailureLogged;
+    // </FS:ATTENTION>
     LLTimer mFlashTimer;
 #endif //LL_X11
 
