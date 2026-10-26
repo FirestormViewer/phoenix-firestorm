@@ -142,6 +142,7 @@
 #include "lllocationhistory.h"
 #include "llpanelblockedlist.h"
 #include "llpanelmaininventory.h"
+#include "llpanelpluginsettings.h" // <Mko> plugin settings UI
 #include "lltoolbarview.h"
 #include "lltoolpie.h"
 #include "llviewermenufile.h" // <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
@@ -647,6 +648,13 @@ void LLFloaterPreference::saveAvatarPropertiesCoro(const std::string cap_url, bo
 bool LLFloaterPreference::postBuild()
 {
     mDeleteTranscriptsBtn = getChild<LLButton>("delete_transcripts");
+
+    // <Mko> Populate plugin-provided settings (Graphics > Shaders & Plugins tab).
+    LLPanel* plugin_settings_container = dynamic_cast<LLPanel*>(getChildView("mko_plugin_settings_container"));
+    if (plugin_settings_container)
+    {
+        LLPanelPluginSettings::populate(plugin_settings_container);
+    }
 
     // <FS:Ansariel> We don't have these buttons
     //mEnabledPopups  = getChild<LLScrollListCtrl>("enabled_popups");

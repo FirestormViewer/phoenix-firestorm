@@ -1,0 +1,7 @@
+# Manikineko RTX shader pack (native format, loaded by the proprietary mko_rtx plugin)
+# Directives: define NAME[=VALUE] | shader <slot> <v|f|g> <file>
+# NOTE: slot names must match the viewer's shader FILE names exactly
+# (see indra/newview/llviewershadermgr.cpp mShaderFiles entries), i.e.
+# they include the .glsl extension.
+define RTX 1
+shader deferred/diffuseF.glsl f deferred/diffuseF.glsl
