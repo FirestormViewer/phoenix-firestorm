@@ -111,7 +111,8 @@ void Omnifilter::onSelectNeedle()
     if (!needle)
     {
         mPanelDetails->setVisible(false);
-        mRemoveNeedleBtn->setEnabled(false);
+        // FIRE-36860: Allow removing a selected rule that has no name (in case a user is stuck with a rule in a bad state)
+        mRemoveNeedleBtn->setEnabled(mNeedleListCtrl->getFirstSelected() != nullptr);
         return;
     }
 
@@ -722,6 +723,15 @@ void Omnifilter::onNeedleNameChanged()
     }
 
     const LLScrollListItem* needle_item = mNeedleListCtrl->getFirstSelected();
+
+    // FIRE-36860: Prevent name edits that would leave the name blank (matches the creation behavior)
+    std::string trimmed_name = new_name;
+    LLStringUtil::trim(trimmed_name);
+    if (trimmed_name.empty())
+    {
+        mNeedleNameCtrl->setValue(old_name);
+        return;
+    }
 
     const LLScrollListItem* name_check_item = mNeedleListCtrl->getItemByLabel(new_name, true, NEEDLE_NAME_COLUMN);
     if (name_check_item && name_check_item != needle_item)
