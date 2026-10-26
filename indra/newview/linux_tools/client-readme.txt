@@ -208,7 +208,7 @@ an Open Source license compatible with the 'LGPL'.
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 For general help and support with Firestorm:
-<http://wiki.firestormviewer.org>
+<https://wiki.firestormviewer.org>
 
 In-world discussion: 
 

@@ -20,7 +20,7 @@ Se você continuar a receber esta mensagem, por favor consulte o [SUPPORT_SITE].
 		</message>
 		<message name="NoHelpIslandTP">
 			Não é possível se teletransportar de volta à Ilha Welcome.
-Vá para a [http://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/6/2701 Firestorm Tutorial] para repetir o tutorial.
+Vá para a [https://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/6/2701 Firestorm Tutorial] para repetir o tutorial.
 		</message>
 		<message name="noaccess_tport">
 			Desculpe, você não tem acesso ao destino deste teletransporte.
@@ -47,7 +47,7 @@ Vá para a [http://maps.secondlife.com/secondlife/Firestorm%20Social%20Island/8/
 			Você deve ter 18 anos ou mais para acessar esta região.
 		</message>
 		<message name="RegionTPSpecialUsageBlocked">
-			Não é possível inserir a região. '[REGION_NAME]' é uma Região de Skill Gaming, portanto você deve atender certos critérios para poder entrar. Para maiores detalhes, consulte as [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
+			Não é possível inserir a região. '[REGION_NAME]' é uma Região de Skill Gaming, portanto você deve atender certos critérios para poder entrar. Para maiores detalhes, consulte as [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
 		</message>
 		<message name="preexisting_tport">
 			Desculpe, mas o sistema falhou ao iniciar o seu teletransporte. Por favor, tente novamente dentro de alguns minutos.

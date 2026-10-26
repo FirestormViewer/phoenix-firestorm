@@ -222,14 +222,14 @@ Voice-Serverversion: [VOICE_VERSION]
 		Second Life Beta Test Grid (Aditi)
 	</string>
 	<string name="ViewerDownloadURL">
-		http://secondlife.com/download
+		https://www.firestormviewer.org/choose-your-platform/
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Mit dem von Ihnen verwendeten Viewer ist der Zugriff nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
 https://www.firestormviewer.org/choose-your-platform/
 
 Weitere Informationen finden Sie auf der folgenden FAQ-Seite: 
-http://secondlife.com/viewer-access-faq
+https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">Login-Prozess konnte aufgrund eines Systemfehlers nicht durchgeführt werden. Bitte versuchen Sie es in ein paar Minuten erneut.
 
@@ -254,13 +254,13 @@ Stellen Sie außerdem sicher, dass die Umschaltsperre deaktiviert ist.
 	</string>
 	<string name="LoginFailedPasswordChanged">
 		Ihr Kennwort wurde aus Sicherheitsgründen geändert.
-Gehen Sie zur Seite „Mein Account“ unter http://secondlife.com/password
+Gehen Sie zur Seite „Mein Account“ unter https://secondlife.com/password
 und beantworten Sie die Sicherheitsfrage, um Ihr Kennwort zurückzusetzen.
 Wir entschuldigen uns für eventuell enstandene Unannehmlichkeiten.
 	</string>
 	<string name="LoginFailedPasswordReset">
 		Aufgrund von Systemänderungen müssen Sie Ihr Kennwort zurücksetzen.
-Gehen Sie zur Seite „Mein Account“ unter http://secondlife.com/password
+Gehen Sie zur Seite „Mein Account“ unter https://secondlife.com/password
 und beantworten Sie die Sicherheitsfrage, um Ihr Kennwort zurückzusetzen.
 Wir entschuldigen uns für eventuell enstandene Unannehmlichkeiten.
 	</string>
@@ -288,7 +288,7 @@ support@secondlife.com.
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		Ihre Anfrage kann derzeit nicht bearbeitet werden. 
-Bitte wenden Sie sich unter http://secondlife.com/support an den Second Life-Support.
+Bitte wenden Sie sich unter https://support.secondlife.com an den Second Life-Support.
 	</string>
 	<string name="LoginFailedTransformError">
 		Nicht übereinstimmende Daten bei der Anmeldung festgestellt.
@@ -1754,7 +1754,7 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
 	</string>
 	<string name="MarketplaceURL_CreateStore">
-		http://community.secondlife.com/t5/Deutsche-Knowledge-Base/Verkaufen-von-Artikeln-im-Marktplatz/ta-p/1443499#Section_.3
+		https://community.secondlife.com/t5/Deutsche-Knowledge-Base/Verkaufen-von-Artikeln-im-Marktplatz/ta-p/1443499#Section_.3
 	</string>
 	<string name="MarketplaceURL_Dashboard">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard
@@ -1802,15 +1802,15 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	</string>
 	<string name="InventoryMarketplaceError">
 		Beim Öffnen der Marktplatz-Auflistungen ist ein Fehler aufgetreten.
-Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://support.secondlife.com an den Support von Second Life.
+Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter https://support.secondlife.com an den Support von Second Life.
 	</string>
 	<string name="InventoryMarketplaceConnectionError">
 		Fehler beim Herstellen der Verbindung mit Marktplatz-Auflistungen.
-Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://support.secondlife.com an den Support von Second Life.
+Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter https://support.secondlife.com an den Support von Second Life.
 	</string>
 	<string name="InventoryMarketplaceConnectionErrorReason">
 		Fehler beim Herstellen der Verbindung mit Marktplatz-Auflistungen. Ursache: [REASON]
-Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://support.secondlife.com an den Support von Second Life.
+Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter https://support.secondlife.com an den Support von Second Life.
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Ihr Ordner mit Marktplatz-Auflistungen ist leer.
@@ -3198,18 +3198,18 @@ Gültige Formate: .wav, .tga, .bmp, .jpg, .jpeg oder .anim
 		Aktueller Titel: [TITLE]
 	</string>
 	<string name="IntelDriverPage">
-		http://www.intel.com/p/de_DE/support/detect/graphics
+		https://www.intel.de/content/www/de/de/support/detect.html
 	</string>
 	<string name="NvidiaDriverPage">
-		http://www.nvidia.com/Download/index.aspx?lang=de-de
+		https://www.nvidia.com/de-de/drivers/
 	</string>
 	<string name="AMDDriverPage">
-		http://support.amd.com/de/Pages/AMDSupportHub.aspx
+		https://www.amd.com/de/support/download/drivers.html
 	</string>
 
 	<string name="MBCmdLineError">
 		Beim Parsen der Befehlszeile wurde ein Fehler festgestellt.
-Weitere Informationen: http://wiki.secondlife.com/wiki/Client_parameters (EN)
+Weitere Informationen: https://wiki.secondlife.com/wiki/Client_parameters (EN)
 Fehler:
 	</string>
 	<string name="MBCmdLineUsg">
@@ -6386,7 +6386,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Normal
 	</string>
 	<string name="Pathfinding_Wiki_URL">
-		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
+		https://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
 	</string>
 	<string name="Pathfinding_Object_Attr_None">
 		Keine

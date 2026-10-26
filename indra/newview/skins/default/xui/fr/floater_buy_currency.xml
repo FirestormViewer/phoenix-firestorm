@@ -58,7 +58,7 @@
 		</layout_panel>
 		<layout_panel name="layout_panel_msg">
 			<text name="currency_links">
-				[http://www.secondlife.com/my/account/payment_method_management.php mode de paiement] | [http://www.secondlife.com/my/account/currency.php devise]
+				[https://www.secondlife.com/my/account/payment_method_management.php mode de paiement] | [https://www.secondlife.com/my/account/currency.php devise]
 			</text>
 			<text name="exchange_rate_note">
 				Saisissez à nouveau le montant pour voir le taux de change actuel.

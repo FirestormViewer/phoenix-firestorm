@@ -9,7 +9,7 @@
 		<button label="Conectar..." name="connect_btn"/>
 		<button label="Desconectar" name="disconnect_btn"/>
 		<text name="account_learn_more_label">
-			[http://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-Share-Flickr/ta-p/2435609 Saiba como publicar no Flickr]
+			[https://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-Share-Flickr/ta-p/2435609 Saiba como publicar no Flickr]
 		</text>
 	</panel>
 </panel>

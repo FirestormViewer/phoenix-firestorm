@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="modal container" title=" ">
 	<floater.string name="real_url">
-		http://secondlife.com/app/tos/
+		https://secondlife.com/app/tos/
 	</floater.string>
 	<floater.string name="loading_url">
-		data:text/html,%3Chtml%3E%3Chead%3E%3C/head%3E%3Cbody text=%22000000%22%3E%3Ch2%3E Cargando %3Ca%20target%3D%22_external%22%20href%3D%22http%3A//secondlife.com/app/tos/%22%3Elas%20Condiciones%20del%20servicio%3C/a%3E...%3C/h2%3E %3C/body%3E %3C/html%3E
+		data:text/html,%3Chtml%3E%3Chead%3E%3C/head%3E%3Cbody text=%22000000%22%3E%3Ch2%3E Cargando %3Ca%20target%3D%22_external%22%20href%3D%22https%3A//secondlife.com/app/tos/%22%3Elas%20Condiciones%20del%20servicio%3C/a%3E...%3C/h2%3E %3C/body%3E %3C/html%3E
 	</floater.string>
 	<text name="tos_heading">
 		Por favor, leer los Términos y Condiciones, la Política de privacidad y las Condiciones del servicio de Second Life, incluyendo el uso de arbitraje cuando fuera necesario y toda clase de renuncia o reclamos grupales para resolver disputas. Para poder iniciar sesión en [SECOND_LIFE], debes aceptar estos términos.

@@ -253,7 +253,7 @@ Voice Server Version: [VOICE_VERSION]
 https://www.firestormviewer.org/choose-your-platform/
 
 更多相關資訊, 請檢視下面的常見問題解答:
-http://secondlife.com/viewer-access-faq
+https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">
 		由於系統錯誤, 登入過程未完成, 請稍後再試.
@@ -278,13 +278,13 @@ http://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailedPasswordChanged">
 		出於安全考慮，你的密碼已被更改。
-請前往你的帳戶頁面 http://secondlife.com/password
+請前往你的帳戶頁面 https://secondlife.com/password
 回答安全驗證問題，並重設你的密碼。
 我們為給你帶來的不便深表歉意。
 	</string>
 	<string name="LoginFailedPasswordReset">
 		我們的系統發生了變更，你需要重設你的密碼
-請前往你的帳戶頁面 http://secondlife.com/password
+請前往你的帳戶頁面 https://secondlife.com/password
 回答安全驗證問題，並重設你的密碼。
 我們為給你帶來的不便深表歉意。
 	</string>
@@ -314,7 +314,7 @@ support@secondlife.com.
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		我們無法完成你的當前請求。
-請前往以下網址 http://support.secondlife.com 尋求幫助。
+請前往以下網址 https://support.secondlife.com 尋求幫助。
 	</string>
 	<string name="LoginFailedTransformError">
 		登入時發現資料不一致。
@@ -1846,7 +1846,7 @@ support@secondlife.com.
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
 	</string>
 	<string name="MarketplaceURL_CreateStore">
-		http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
+		https://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
 	</string>
 	<string name="MarketplaceURL_Dashboard">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard
@@ -1892,15 +1892,15 @@ support@secondlife.com.
 	</string>
 	<string name="InventoryMarketplaceError">
 打開市場列表錯誤。
-如果你持續收到該資訊，請聯絡第二人生尋求幫助，網址：http://support.secondlife.com
+如果你持續收到該資訊，請聯絡第二人生尋求幫助，網址：https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceConnectionError">
 無法打開市場列表。
-如果你持續收到該資訊，請聯絡第二人生尋求幫助，網址：http://support.secondlife.com
+如果你持續收到該資訊，請聯絡第二人生尋求幫助，網址：https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceConnectionErrorReason">
 無法打開市場列表。原因: [REASON]
-如果你持續收到該資訊，請聯絡第二人生尋求幫助，網址：http://support.secondlife.com
+如果你持續收到該資訊，請聯絡第二人生尋求幫助，網址：https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		你的市場銷售列表為空。
@@ -3362,18 +3362,18 @@ support@secondlife.com.
 	</string>
 	<!-- Drivers support/update pages -->
 	<string name="IntelDriverPage">
-		http://www.intel.com/p/en_US/support/detect/graphics
+		https://www.intel.cn/content/www/cn/zh/support/detect.html
 	</string>
 	<string name="NvidiaDriverPage">
-		http://www.nvidia.com/Download/index.aspx?lang=en-us
+		https://www.nvidia.cn/drivers/
 	</string>
 	<string name="AMDDriverPage">
-		http://support.amd.com/us/Pages/AMDSupportHub.aspx
+		https://www.amd.com/zh-cn/support.html
 	</string>
 	<!-- OSMessageBox messages -->
 	<string name="MBCmdLineError">
 		解析指令行時發現錯誤。
-請參考: http://wiki.secondlife.com/wiki/Client_parameters
+請參考: https://wiki.secondlife.com/wiki/Client_parameters
 錯誤:
 	</string>
 	<string name="MBCmdLineUsg">
@@ -6565,7 +6565,7 @@ support@secondlife.com.
 	</string>
 	<!-- Pathfinding -->
 	<string name="Pathfinding_Wiki_URL">
-		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
+		https://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
 	</string>
 	<string name="Pathfinding_Object_Attr_None">
 		無

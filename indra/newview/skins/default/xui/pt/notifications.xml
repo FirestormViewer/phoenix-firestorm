@@ -664,7 +664,7 @@ Gostaria de fechar o visualizador e reiniciá-lo manualmente para que a alteraç
 	<notification name="GoToAuctionPage">
 		Acesse o site [CURRENT_GRID] para ver leilões ou fazer um lance?
 		<url name="url">
-			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
+			https://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
 	</notification>
@@ -1833,7 +1833,7 @@ Libere o item à venda e tente novamente.
 	</notification>
 	<notification name="RequiredUpdate">
 		A versão [VERSION] é necessária para fazer login. 
-Faça download do arquivo em https://secondlife.com/support/downloads/.
+Faça download do arquivo em https://www.firestormviewer.org/choose-your-platform/
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PauseForUpdate">
@@ -2064,7 +2064,7 @@ Escolha um nome mais curto.
 	<notification name="AgentDisplayNameUpdateThresholdExceeded">
 		Infelizmente, você terá que esperar um pouco antes de alterar seu nome de exibição.
 
-Para obter mais informações, consulte http://wiki.secondlife.com/wiki/Setting_your_display_name.
+Para obter mais informações, consulte https://wiki.secondlife.com/wiki/Setting_your_display_name.
 
 Tente novamente mais tarde.
 	</notification>
@@ -2340,7 +2340,7 @@ Para obter informações completas sobre classificações etárias, consulte [ht
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="RegionTPSpecialUsageBlocked">
-		Não é permitido entrar na região. “[REGION_NAME]” é uma região para jogos de habilidade. O acesso é limitado a residentes que atendam a determinados critérios. Para obter mais detalhes, consulte [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
+		Não é permitido entrar na região. “[REGION_NAME]” é uma região para jogos de habilidade. O acesso é limitado a residentes que atendam a determinados critérios. Para obter mais detalhes, consulte [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PreferredMaturityChanged">
@@ -2692,9 +2692,9 @@ Uma descrição tão precisa quanto possível com nomes e detalhes nos ajuda a p
 
 Você está denunciando violação de direitos autorais. Tem certeza de que deseja denunciar uma violação de direitos autorais?
 
-1. Denuncie abuso. Se você acredita que um residente está tirando vantagem não autorizada do sistema de permissões de [CURRENT_GRID], como usando um CopyBot ou ferramentas de cópia semelhantes, cometendo assim uma violação de direitos autorais, você pode denunciar tal abuso. A Equipe de Abuso investiga violações relatadas de [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Termos de Serviço] ou [http://secondlife.com/corporate/cs.php Padrões da Comunidade] e impõe as ações apropriadas. No entanto, a Equipe de Abuso não é responsável por remover conteúdo do mundo [CURRENT_GRID] e não responde a solicitações para fazê-lo.
+1. Denuncie abuso. Se você acredita que um residente está tirando vantagem não autorizada do sistema de permissões de [CURRENT_GRID], como usando um CopyBot ou ferramentas de cópia semelhantes, cometendo assim uma violação de direitos autorais, você pode denunciar tal abuso. A Equipe de Abuso investiga violações relatadas de [CURRENT_GRID] [https://secondlife.com/corporate/tos.php Termos de Serviço] ou [https://secondlife.com/corporate/cs.php Padrões da Comunidade] e impõe as ações apropriadas. No entanto, a Equipe de Abuso não é responsável por remover conteúdo do mundo [CURRENT_GRID] e não responde a solicitações para fazê-lo.
 
-2. O DMCA ou Remoção de Conteúdo. Você pode solicitar a remoção do conteúdo de [CURRENT_GRID]. Para fazer isso, você DEVE enviar um aviso de violação de direitos autorais seguindo as instruções estabelecidas em nossa Política DMCA em [http://secondlife.com/corporate/dmca.php].
+2. O DMCA ou Remoção de Conteúdo. Você pode solicitar a remoção do conteúdo de [CURRENT_GRID]. Para fazer isso, você DEVE enviar um aviso de violação de direitos autorais seguindo as instruções estabelecidas em nossa Política DMCA em [https://secondlife.com/corporate/dmca.php].
 
 Se você quiser continuar denunciando abusos agora, feche esta janela e envie sua denúncia.  Pode ser necessário selecionar a categoria “CopyBot ou Permission Exploit”.
 
@@ -3102,7 +3102,7 @@ Escolha uma área de terreno menor.
 	</notification>
 	<notification name="NoQuickTime">
 		AppleQuickTime não parece estar instalado em seu sistema.
-Baixe o QuickTime do [http://www.apple.com/quicktime site do QuickTime] para reproduzir conteúdo de streaming em pacotes que suportam esse recurso.
+Baixe o QuickTime do [https://www.apple.com/quicktime site do QuickTime] para reproduzir conteúdo de streaming em pacotes que suportam esse recurso.
 	</notification>
 	<notification name="NoPlugin">
 		Não foi encontrado nenhum plug-in de mídia que possa executar &quot;[MIME_TYPE]&quot;.  A mídia deste tipo de arquivo não está disponível.

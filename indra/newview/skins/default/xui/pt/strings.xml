@@ -218,7 +218,7 @@ Versão do servidor de voz: [VOICE_VERSION]
 		O viewer que você está usando não pode mais acessar o Second Life. Acesse a página abaixo para baixar um novo viewer:
 https://www.firestormviewer.org/choose-your-platform/
 Para mais informações, veja o FAQ abaixo:
-http://secondlife.com/viewer-access-faq
+https://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">Não foi possível completar o login por problemas no sistema. Tente novamente em alguns minutos.
 Se achar que é um erro, entre em contato com o suporte do grid.
@@ -242,11 +242,11 @@ Além disso, verifique se o Caps Lock está desativado.
 	</string>
 	<string name="LoginFailedPasswordChanged">
 		Sua senha foi alterada por segurança.
-Acesse http://secondlife.com/password e responda à pergunta de segurança para redefinir sua senha.
+Acesse https://secondlife.com/password e responda à pergunta de segurança para redefinir sua senha.
 	</string>
 	<string name="LoginFailedPasswordReset">
 		Atualizamos o sistema e você precisa redefinir sua senha.
-Acesse http://secondlife.com/password e responda à pergunta de segurança.
+Acesse https://secondlife.com/password e responda à pergunta de segurança.
 	</string>
 	<string name="LoginFailedEmployeesOnly">
 		O Second Life está temporariamente fechado para manutenção.
@@ -271,7 +271,7 @@ Se achar que é um erro, entre em contato com support@secondlife.com.
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		Não foi possível concluir sua solicitação neste momento.
-Entre em contato com o suporte do Second Life em http://support.secondlife.com.
+Entre em contato com o suporte do Second Life em https://support.secondlife.com.
 	</string>
 	<string name="LoginFailedTransformError">
 		Inconsistência de dados encontrada durante o login.
@@ -1738,15 +1738,15 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 	</string>
 	<string name="InventoryMarketplaceError">
 		Ocorreu um erro ao abrir listagens do Marketplace.
-		Se você continuar recebendo esta mensagem, entre em contato com o suporte do Second Life para obter assistência em http://support.secondlife.com
+		Se você continuar recebendo esta mensagem, entre em contato com o suporte do Second Life para obter assistência em https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceConnectionError">
 		Falha ao conectar às listagens do Marketplace.
-Se você continuar recebendo esta mensagem, entre em contato com o suporte do Second Life para obter assistência em http://support.secondlife.com
+Se você continuar recebendo esta mensagem, entre em contato com o suporte do Second Life para obter assistência em https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceConnectionErrorReason">
 		Falha ao conectar às listagens do Marketplace. Motivo: [REASON]
-Se você continuar recebendo esta mensagem, entre em contato com o suporte do Second Life para obter assistência em http://support.secondlife.com
+Se você continuar recebendo esta mensagem, entre em contato com o suporte do Second Life para obter assistência em https://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Sua pasta de listagens do Marketplace está vazia.
@@ -3019,11 +3019,11 @@ Formatos válidos: .wav, .tga, .bmp, .jpg, .jpeg ou .anim
 		Reproduzindo: [TITLE]
 	</string>
 	<string name="NvidiaDriverPage">
-		http://www.nvidia.com/Download/index.aspx?lang=pt
+		https://www.nvidia.com/pt-br/drivers/
 	</string>
 	<string name="MBCmdLineError">
 		Ocorreu um erro ao analisar a linha de comando.
-Consulte: http://wiki.secondlife.com/wiki/Client_parameters
+Consulte: https://wiki.secondlife.com/wiki/Client_parameters
 Erro:
 	</string>
 	<string name="MBCmdLineUsg">

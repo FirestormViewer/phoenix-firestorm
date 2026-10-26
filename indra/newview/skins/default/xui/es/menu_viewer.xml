@@ -224,7 +224,7 @@
 		<menu_item_call label="Guía de usuario" name="User’s guide"/>
 		<menu_item_call label="Base de conocimiento" name="Knowledge Base"/>
 		<menu_item_call label="Wiki" name="Wiki">
-			<menu_item_call.on_click  parameter="http://wiki.secondlife.com/wiki/Main_Page/es"/>
+			<menu_item_call.on_click  parameter="https://wiki.secondlife.com/wiki/Main_Page/es"/>
 		</menu_item_call>
 		<menu_item_call label="Foros de la Comunidad" name="Community Forums"/>
 		<menu_item_call label="Portal de soporte" name="Support portal">

@@ -58,7 +58,7 @@
 		</layout_panel>
 		<layout_panel name="layout_panel_msg">
 			<text name="currency_links">
-				[http://www.secondlife.com/my/account/payment_method_management.php metoda płatności] | [http://www.secondlife.com/my/account/currency.php waluta]
+				[https://www.secondlife.com/my/account/payment_method_management.php metoda płatności] | [https://www.secondlife.com/my/account/currency.php waluta]
 			</text>
 			<text name="exchange_rate_note">
 				Wpisz kwotę ponownie by zobaczyć najnowszy kurs wymiany.

@@ -584,7 +584,7 @@ Bu dəyişikliyi tətbiq etmək üçün izləyicini bağlamaq və onu əl ilə y
 	<notification name="GoToAuctionPage">
 		Hərrac təfərrüatlarına baxmaq və ya təklif vermək üçün [CURRENT_GRID] veb səhifəsinə keçid olunsun?
 		<url name="url">
-			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
+			https://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Ləğv et" yestext="Bəli"/>
 	</notification>
@@ -773,7 +773,7 @@ Bütün satın alınan əşyaları eyni bölgəyə köçürün.
 
 L$ almaq haqqında məlumat üçün [_URL] ünvanına keçmək istədiyinə əminsiniz?
 		<url name="url">
-			http://secondlife.com/app/currency/
+			https://secondlife.com/app/currency/
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Ləğv et" yestext="Bəli"/>
 	</notification>
@@ -1477,7 +1477,7 @@ Siz [APP_NAME] tətbiqindən normal istifadə edə bilərsiniz, digər istifadə
 
 Siz internet bağlantınızı yoxlaya və bir neçə dəqiqədən sonra yenidən qoşulmağa cəhd edə bilərsiniz, [SUPPORT_SITE] səhifəsinə getmək üçün «Kömək» düyməsini və ya ev məkanınıza teleportasiya etmək üçün «Teleport» düyməsini basa bilərsiniz.
 		<url name="url">
-			http://secondlife.com/support/
+			https://support.secondlife.com/
 		</url>
 		<form name="form">
 			<button name="OK" text="OK"/>
@@ -1666,7 +1666,7 @@ Obyekti satmaq seçimini təyin edin və yenidən cəhd edin.
 	</notification>
 	<notification name="RequiredUpdate">
 		Daxil olmaq üçün [VERSION] tələb olunur.
-Yeniləməni https://secondlife.com/support/downloads/ ünvanından endirin.
+Yeniləməni https://www.firestormviewer.org/choose-your-platform/ ünvanından endirin.
 	</notification>
 	<notification name="PauseForUpdate">
 		Daxil olmaq üçün [VERSION] tələb olunur.
@@ -1703,7 +1703,7 @@ URL: [UNTRUSTED_URL]
 		<usetemplate ignoretext="Veb səhifəyə baxmaq üçün brauzeri işə salın" name="okcancelignore" notext="Ləğv et" yestext="Bəli"/>
 	</notification>
 	<notification name="WebLaunchJoinNow">
-		Hesabınızı idarə etmək üçün [http://secondlife.com/account/ şəxsi kabinetə] keçmək istəyirsiniz?
+		Hesabınızı idarə etmək üçün [https://secondlife.com/my/account/ şəxsi kabinetə] keçmək istəyirsiniz?
 		<usetemplate ignoretext="Hesabınızı idarə etmək üçün brauzeri işə salın" name="okcancelignore" notext="Ləğv et" yestext="Bəli"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
@@ -1877,7 +1877,7 @@ Premium hesabı üçün [MAX_PREMIUM] qrup sayına icazə verilir. Premium Plus 
 	<notification name="SetDisplayNameSuccess">
 		Salam, [DISPLAY_NAME]!
 
-Real həyatda olduğu kimi, hər kəsin sizin yeni adınızı bilməsi üçün bir az vaxt lazımdır.  Zəhmət olmasa, obyeklərdə, skriptlərdə, axtarışda və s. [http://wiki.secondlife.com/wiki/Setting_your_display_name adınızın yenilənməsi] üçün bir neçə gün gözləyin.
+Real həyatda olduğu kimi, hər kəsin sizin yeni adınızı bilməsi üçün bir az vaxt lazımdır.  Zəhmət olmasa, obyeklərdə, skriptlərdə, axtarışda və s. [https://wiki.secondlife.com/wiki/Setting_your_display_name adınızın yenilənməsi] üçün bir neçə gün gözləyin.
 	</notification>
 	<notification name="SetDisplayNameBlocked">
 		Siz göstərilən adınızı dəyişə bilməzsiniz. Bunun bir səhv olduğunu düşünürsünüzsə, dəstək xidməti ilə əlaqə saxlayın.
@@ -1896,7 +1896,7 @@ Adınızı qısaltın.
 	<notification name="AgentDisplayNameUpdateThresholdExceeded">
 		Görünən adınızı dəyişməzdən əvvəl gözləməlisiniz.
 
-http://wiki.secondlife.com/wiki/Setting_your_display_name baxın.
+https://wiki.secondlife.com/wiki/Setting_your_display_name baxın.
 
 Zəhmət olmasa bir az sonra yenə cəhd edin.
 	</notification>
@@ -2106,7 +2106,7 @@ Yetkinlik reytinqləri haqqında tam məlumatı [https://community.secondlife.co
 	<notification name="RegionEntryAccessBlocked_AdultsOnlyContent">
 		Ziyarət etməyə çalışdığınız regionda [REGIONMATURITY] məzmun var və bu, yalnız yetkinlər üçün nəzərə tutulub.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Region keçidi: Ziyarət etməyə çalışdığınız regionda yalnız yetkinlər üçün əlçatan olan məzmun var." name="okcancelignore" notext="Bağla" yestext="Bilik bazasına keç"/>
 	</notification>
@@ -2135,7 +2135,7 @@ Yetkinlik reytinqləri haqqında tam məlumatı [https://community.secondlife.co
 	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
 		Ziyarət etməyə çalışdığınız regionda [REGIONMATURITY] məzmun var və bu, yalnız böyüklər üçün əlçatandır.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Teleport: Ziyarət etməyə çalışdığınız bölgədə yalnız böyüklər üçün əlçatan olan məzmun var." name="okcancelignore" notext="Bağla" yestext="Bilik bazasına keç"/>
 	</notification>
@@ -2165,7 +2165,7 @@ Yetkinlik reytinqləri haqqında tam məlumatı [https://community.secondlife.co
 		Seçimləriniz serverlə sinxronlaşdırılmadığı üçün teleportunuzla bağlı texniki çətinliklər yaradıldı.
 	</notification>
 	<notification name="RegionTPSpecialUsageBlocked">
-		Regiona daxil olmaq mümkün deyil. &quot;[REGION_NAME]&quot; Bacarıq Oyunu Regionudur və siz daxil olmaq üçün müəyyən meyarlara cavab verməlisiniz. Təfərrüatlar üçün [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ] səhifəsinə baxın.
+		Regiona daxil olmaq mümkün deyil. &quot;[REGION_NAME]&quot; Bacarıq Oyunu Regionudur və siz daxil olmaq üçün müəyyən meyarlara cavab verməlisiniz. Təfərrüatlar üçün [https://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ] səhifəsinə baxın.
 	</notification>
 	<notification name="PreferredMaturityChanged">
 		[RATING] məzmunu olan regiona səfər etmək üzrə olduğunuz barədə daha çox bildiriş almayacaqsınız. Siz gələcəkdə &quot;Avatar &gt; Seçimlər &gt; Ümumi&quot; menyu panelindən istifadə etməklə məzmun seçimlərinizi dəyişə bilərsiniz.
@@ -2181,7 +2181,7 @@ Yetkinlik reytinqləri haqqında tam məlumatı [https://community.secondlife.co
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
 		Bu torpağa yalnız yetkinlər iddia edə bilər.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Bu torpağa yalnız yetkinlər iddia edə bilər." name="okcancelignore" notext="Bağla" yestext="Bilik bazasına keç"/>
 	</notification>
@@ -2207,7 +2207,7 @@ Yetkinlik reytinqləri haqqında tam məlumatı [https://community.secondlife.co
 	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
 		Bu torpağı yalnız yetkinlər ala bilər.
 		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
+			https://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
 		<usetemplate ignoretext="Bu torpağı yalnız yetkinlər ala bilər." name="okcancelignore" notext="Bağla" yestext="Bilik bazasına keç"/>
 	</notification>
@@ -2398,7 +2398,7 @@ Element(lər) daşınılsın?
 		Bu obyektdə köçürtməyə icazə verilən heç bir şey yoxdur.
 	</notification>
 	<notification name="WebLaunchAccountHistory">
-		Hesab tarixçəsinə baxmaq üçün [http://secondlife.com/account/ idarə pəncərəsinə] keçmək istədiyinizə əminsiniz?
+		Hesab tarixçəsinə baxmaq üçün [https://secondlife.com/my/account/ idarə pəncərəsinə] keçmək istədiyinizə əminsiniz?
 		<usetemplate ignoretext="Hesab tarixçəsinə baxmaq üçün brauzeri işə salın" name="okcancelignore" notext="Ləğv et" yestext="Səhifəyə keç"/>
 	</notification>
 	<notification name="ConfirmAddingChatParticipants">
@@ -2470,9 +2470,9 @@ Göstərişin dəqiqliyi bildirişlərin qeydiyyatını və işlənməsini asanl
 
 Siz əqli mülkiyyət hüquqlarının pozulması barədə məlumat verirsiniz. Bildirişinizin düzgün olduğundan əmin olun:
 
-(1) Pozuntu Qeydiyyat Prosesi. Əgər sakinin əqli mülkiyyət hüquqlarını pozmaq üçün, məsələn, CopyBot və ya oxşar surət çıxarma alətlərindən istifadə etməklə [CURRENT_GRID] icazə sistemindən istifadə etdiyinə inanırsınızsa, siz pozuntu hesabatı təqdim edə bilərsiniz. Pozuntu Komandası [CURRENT_GRID]  [http://secondlife.com/corporate/tos.php Xidmət Şərtlərini] və ya [http://secondlife.com/corporate/cs.php İcma Standartlarını] pozan davranışı araşdırır və müvafiq intizam tədbirləri görür. Bununla belə, Pozuntu Komandası [CURRENT_GRID] dünyasından məzmunun silinməsinə dair sorğuları idarə etmir və onlara cavab verməyəcək.
+(1) Pozuntu Qeydiyyat Prosesi. Əgər sakinin əqli mülkiyyət hüquqlarını pozmaq üçün, məsələn, CopyBot və ya oxşar surət çıxarma alətlərindən istifadə etməklə [CURRENT_GRID] icazə sistemindən istifadə etdiyinə inanırsınızsa, siz pozuntu hesabatı təqdim edə bilərsiniz. Pozuntu Komandası [CURRENT_GRID]  [https://secondlife.com/corporate/tos.php Xidmət Şərtlərini] və ya [https://secondlife.com/corporate/cs.php İcma Standartlarını] pozan davranışı araşdırır və müvafiq intizam tədbirləri görür. Bununla belə, Pozuntu Komandası [CURRENT_GRID] dünyasından məzmunun silinməsinə dair sorğuları idarə etmir və onlara cavab verməyəcək.
 
-(2) DMCA və ya Məzmun Silinmə Prosesi. [CURRENT_GRID] şəbəkəsindən məzmunun silinməsini tələb etmək üçün [http://secondlife.com/corporate/dmca.php DMCA Siyasətimizdə] nəzərdə tutulmuş qaydada pozulma barədə etibarlı bildiriş təqdim etməlisiniz.
+(2) DMCA və ya Məzmun Silinmə Prosesi. [CURRENT_GRID] şəbəkəsindən məzmunun silinməsini tələb etmək üçün [https://secondlife.com/corporate/dmca.php DMCA Siyasətimizdə] nəzərdə tutulmuş qaydada pozulma barədə etibarlı bildiriş təqdim etməlisiniz.
 
 Əgər pozuntu prosesinə hələ də davam etmək istəyirsinizsə, zəhmət olmasa, bu pəncərəni bağlayın və şikayətinizi göndərməyi tamamlayın. Lazım olduqda siz xüsusi &apos;CopyBot və ya İcazələrin istismarı&apos; kateqoriyası seçə bilərsiniz.
 
@@ -2642,7 +2642,7 @@ Seçimləri yerli teksturalardan istifadə etməklə saxlamaq mümkün deyil.
 
 [_URL]
 		<url name="url">
-			https://secondlife.com/account/
+			https://secondlife.com/my/account/
 		</url>
 		<usetemplate ignoretext="Qeydiyyatdan keçmiş ödəniş məlumatım yoxdur" name="okcancelignore" notext="Xeyr" yestext="Bəli"/>
 	</notification>
@@ -2913,7 +2913,7 @@ Daha kiçik bir sahə seçməyə çalışın.
 	</notification>
 	<notification name="NoQuickTime">
 		Sisteminizdə Apple QuickTime proqram təminatı quraşdırılmayıb.
-Onu dəstəkləyən saytlarda axın mediasına baxmaq üçün [http://www.apple.com/quicktime QuickTime] ünvanına keçin və QuickTime Player quraşdırın.
+Onu dəstəkləyən saytlarda axın mediasına baxmaq üçün [https://www.apple.com/quicktime QuickTime] ünvanına keçin və QuickTime Player quraşdırın.
 	</notification>
 	<notification name="NoPlugin">
 		&quot;[MIME_TYPE]&quot; MIME tipli datanı idarə etmək üçün heç bir media plaqini tapılmadı. Bu tip media mövcud olmayacaq.
@@ -3395,7 +3395,7 @@ Bu obyektin nəyə ehtiyacı olduğunu tam başa düşməyincə hesabınıza gir
 
 L$ balansınız emal tamamlandıqda yenilənəcək. Əgər emal 20 dəqiqədən çox çəkirsə, əməliyyatınız ləğv edilə bilər. Bu halda, alış məbləği ABŞ dolları balansınıza köçürüləcək.
 
-Ödənişinizin statusunu [http://secondlife.com/account/ şəxsi kabinetdə] əməliyyat tarixçənizdə yoxlaya bilərsiniz.
+Ödənişinizin statusunu [https://secondlife.com/my/account/ şəxsi kabinetdə] əməliyyat tarixçənizdə yoxlaya bilərsiniz.
 	</notification>
 	<notification name="FirstOverrideKeys">
 		Hərəkət düymələriniz indi obyekt tərəfindən idarə olunur.
