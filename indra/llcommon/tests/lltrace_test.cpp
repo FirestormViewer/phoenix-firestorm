@@ -151,6 +151,7 @@ namespace tut
     static CountStatHandle<S32Bytes> sTestByteTotal("test_byte_total");
     static CountStatHandle<U32Milliseconds> sTestTimeTotal("test_time_total");
     static CountStatHandle<F64Seconds> sTestFractionalTimeTotal("test_fractional_time_total");
+    static CountStatHandle<> sTestResetTotal("test_recording_reset_total");
 
     template<typename T>
     void check_count_totals(CountStatHandle<T>& counter, T first, T second)
@@ -176,6 +177,33 @@ namespace tut
         check_count_totals(sTestFractionalTimeTotal, F64Seconds(0.5), F64Seconds(0.25));
     }
 
+    template<> template<>
+    void trace_object_t::test<3>()
+    {
+        set_test_name("reset active and paused recordings without losing enclosing samples");
+        Recording enclosing(Recording::STARTED);
+        Recording recording(Recording::STARTED);
+        add(sTestResetTotal, 5.0);
+        ensure_equals("initial recording sum", recording.getSum(sTestResetTotal), 5.0);
+
+        recording.restart();
+        ensure("restart keeps recording active", recording.isStarted());
+        ensure_equals("restart clears active samples", recording.getSum(sTestResetTotal), 0.0);
+        ensure_equals("enclosing recording retains earlier samples", enclosing.getSum(sTestResetTotal), 5.0);
+        add(sTestResetTotal, 3.0);
+        ensure_equals("recording collects after restart", recording.getSum(sTestResetTotal), 3.0);
+        ensure_equals("enclosing recording continues collecting", enclosing.getSum(sTestResetTotal), 8.0);
+
+        recording.pause();
+        add(sTestResetTotal, 2.0);
+        recording.reset();
+        ensure("reset preserves paused state", recording.isPaused());
+        ensure_equals("reset clears paused samples", recording.getSum(sTestResetTotal), 0.0);
+        recording.resume();
+        add(sTestResetTotal, 4.0);
+        ensure_equals("recording collects after paused reset", recording.getSum(sTestResetTotal), 4.0);
+        ensure_equals("enclosing recording retains every sample", enclosing.getSum(sTestResetTotal), 14.0);
+    }
     // </FS:Beq>
 
 }
