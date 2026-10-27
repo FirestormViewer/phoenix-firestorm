@@ -232,6 +232,11 @@
             <combo_item name="Large" label="Duża"/>
         </combo_box>
         <check_box label="Zapisuj skrypty edytowane w Szafie jako Mono" tool_tip="Gdy zaznaczone, to wszystkie skrypty edytowane w Szafie są zapisywane jako Mono zamiast LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
+		<check_box label="Synchronizuj WebSocket" name="websocket_sync_enable" />
+		<text name="websocket_tip">
+			Port WebSocket:
+		</text>
+		<check_box label="Przekazuj błędy skryptów i debug do klientów WebSocket" name="websocket_forward_debug" />
         <check_box label="Włącz preprocesor LSL" tool_tip="Preprocesor LSL będzie aktywny, gdy ta opcja zostanie zaznaczona." name="preproc_checkbox" />
         <check_box label="Optymalizator" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor będzie LSL optymalizować miejsce zajmowane przez skrypty." name="preprocoptimizer_checkbox" />
         <check_box label="Instrukcja switch()" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z instrukcji switch() do sterowania przepływem skryptu." name="preprocswitch_checkbox" />
@@ -245,6 +250,7 @@
           Zewnętrzny edytor:
         </text>
         <button label="Przeglądaj" label_selected="Przeglądaj" name="SetExternalEditor" />
+		<check_box label="Integracja z VS Code" name="tight_integration" />
     </panel>
     <panel label="Nowe pliki" name="UploadsTab">
         <text name="title">

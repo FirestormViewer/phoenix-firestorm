@@ -360,6 +360,9 @@
 				<text name="Anisotropic" tool_tip="Poprawia ostrość i klarowność tekstur oglądanych pod kątem, dzięki czemu powierzchnie takie jak podłogi, drogi i ściany wydają się wyraźniejsze. Włączenie filtrowania anizotropowego może nieznacznie wpłynąć na wydajność, szczególnie na słabszym sprzęcie.">
 					Filtr anizotropowy
 				</text>
+				<combo_box name="Anisotropic_level">
+					<combo_box.item label="Wyłączony" name="disabled" />
+				</combo_box>
 				<text name="T_Texture_Bumpiness" tool_tip="Kontroluje siłę i rozdzielczość map normalnych i wypukłości, które dodają szczegóły tekstur do powierzchni bez zwiększania liczby wielokątów. Wyższe ustawienia zwiększają szczegółowość powierzchni, podczas gdy niższe ustawienia poprawiają wydajność poprzez zmniejszenie złożoności wizualnej.">
 					Wypukłości tekstur
 				</text>

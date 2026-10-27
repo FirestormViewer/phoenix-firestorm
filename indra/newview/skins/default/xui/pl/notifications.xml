@@ -115,6 +115,9 @@ Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj 
 
 &apos;[ERROR_CODE]&apos;
 	</notification>
+	<notification name="CannotPasteFolderIntoSelf">
+		Nie można wkleić folderu do niego samego ani do żadnego z jego podfolderów.
+	</notification>
 	<notification name="InvalidKeystroke">
 		Naciśnięto nieprawidłowy klawisz.
 [REASON].
@@ -2237,6 +2240,9 @@ Pełne informacje na temat klasyfikacji treści można znaleźć [https://commun
 	<notification name="MaturityChangeError">
 		Nie można zmienić Twoich preferencji odnośnie treści [PREFERRED_MATURITY] w tej chwili. Twoje preferencje zostały zresetowane do oglądania treści [ACTUAL_MATURITY]. Możesz spróbować zmienić swoją preferencję treści ponownie używając Awatar &gt; Ustawienia &gt; Ogólne w pasku menu.
 	</notification>
+	<notification name="RegionTPAccessBlocked_NotifyAdultsOnly">
+		Region ma rating [REGIONMATURITY_CAP], niedostępny dla Twojego konta.
+	</notification>
 	<notification name="LandClaimAccessBlocked">
 		Ziemia, którą próbujesz odzyskać ma klasyfikację treści przekraczającą Twoje obecne preferencje treści. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne w pasku menu.
 
@@ -2814,6 +2820,15 @@ URL: [AUDIOURL]
 			<button name="WhitelistDomain" text="Biała lista"/>
 		</form>
 	</notification>
+	<notification name="ExternalEditorServerStarted">
+		Serwer edytora zewn. na porcie [PORT].
+	</notification>
+	<notification name="ExternalEditorServerFailed">
+		Nie uruchomiono serwera edytora na porcie [PORT].
+	</notification>
+	<notification name="ExternalEditorServerStopped">
+		Serwer edytora zewnętrznego zatrzymany.
+	</notification>
 	<notification name="Cancelled">
 		Anulowane.
 	</notification>
@@ -3052,7 +3067,7 @@ Nieprzekazywalne obiekty przekazane grupie zostały usunięte.
 	</notification>
 	<notification name="NotSafe">
 		Ta działka pozwala na uszkodzenia.
-Możesz doznać tutaj urazu. Jeżeli zginiesz nastąpi teleportacja do Twojego miejsca startu.
+Możesz doznać tutaj urazu. Jeżeli zginiesz może nastąpić teleportacja do Twojego miejsca startu.
 	</notification>
 	<notification name="NoFly">
 		Ta działka nie pozwala na latanie.

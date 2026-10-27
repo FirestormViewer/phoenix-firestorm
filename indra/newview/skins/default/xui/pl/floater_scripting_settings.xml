@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_scripting_settings" title="USTAWIENIA SKRYPTÓW">
+	<check_box name="show_script_errors" label="Błędy skryptów w:"/>
+	<radio_group name="show_location">
+		<radio_item name="0" label="Czacie w pobliżu"/>
+		<radio_item name="1" label="Osobnym oknie"/>
+	</radio_group>
+	<text name="tip">Zewnętrzny edytor:</text>
+	<button name="browse_btn" label="Przeglądaj..."/>
+	<check_box name="tight_integration" label="Integracja z VS Code"/>
+	<check_box name="websocket_sync_enable" label="Synchronizacja WebSocket"/>
+	<text name="websocket_tip">Port WebSocket:</text>
+	<check_box name="websocket_forward_debug" label="Przekazuj błędy i debug do klientów WebSocket"/>
+	<button name="close_btn" label="Zamknij"/>
+</floater>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="voice_panel" label="Głos">
+	<slider name="Voice Volume" label="Czat głosowy"/>
+	<check_box name="enable_voice_check" label="Włączony"/>
+	<text name="noise_suppression_label">Tłumienie szumów mikrofonu</text>
+	<combo_box name="noise_suppression_combo">
+		<item name="noise_suppression_none" label="Wył."/>
+		<item name="noise_suppression_low" label="Niskie"/>
+		<item name="noise_suppression_moderate" label="Umiark."/>
+		<item name="noise_suppression_high" label="Wysokie"/>
+		<item name="noise_suppression_max" label="Maks."/>
+	</combo_box>
+	<text name="Listen from">Słuchaj głosu z</text>
+	<combo_box name="ear_location_combo">
+		<item name="camera_position" label="Pozycji kamery"/>
+		<item name="avatar_position" label="Pozycji awatara"/>
+	</combo_box>
+	<check_box name="enable_lip_sync" label="Poruszaj ustami awatara podczas mówienia"/>
+	<check_box name="push_to_talk_toggle_check" label="Mówienie przełączane z paska" tool_tip="Tryb przełączania: jedno naciśnięcie włącza/wyłącza mikrofon. Bez przełączania: mikrofon aktywny tylko przy trzymanym klawiszu."/>
+	<check_box name="gesture_audio_play_btn" label="Dźwięki gestów" tool_tip="Odtwarzaj dźwięki z gestów"/>
+	<check_box name="enable_echo_cancellation" label="Eliminacja echa" tool_tip="Włącz eliminację echa"/>
+	<check_box name="voice_automatic_gain_control" label="Automatyczne wzmocnienie" tool_tip="Włącz automatyczne wzmocnienie"/>
+	<check_box name="voice_dot_visualizer" label="Kropka głosu nad awatarami" tool_tip="Pokaż kropkę głosu nad awatarami"/>
+	<button name="device_settings_btn" label="Urządzenia wej./wyj. głosu"/>
+</panel>

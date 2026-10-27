@@ -39,7 +39,9 @@
 		Lumin.:
 	</text>
 	<check_box label="Stosuj teraz" name="apply_immediate"/>
-	<button label="Kopia LSL" tool_tip="Kopiuje wartości koloru do formatu wektora kolorów LSL w postaci &lt;r, g, b&gt;." name="copy_lsl_btn"/>
+	<combo_box name="copy_color_combobox">
+		<combo_box.item label="Kopiuj jako..." name="copy_as" />
+	</combo_box>
 	<button label="Anuluj" label_selected="Anuluj" name="cancel_btn"/>
 	<text name="Current color:">
 		^ Obecny kolor ^

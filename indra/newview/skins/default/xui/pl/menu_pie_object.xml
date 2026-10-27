@@ -66,13 +66,14 @@
 				<pie_slice label="Właśc. cząsteczek" name="Mute Particle"/>
 			</pie_menu>
 			<pie_menu label="Skrypty &gt;" name="ScriptsMenu">
-				<pie_slice label="Kompiluj (Mono)" name="CompileMono"/>
-				<pie_slice label="Kompiluj (LSL)" name="CompileLSL"/>
-				<pie_slice label="Resetuj skrypty" name="Object Reset Scripts"/>
-				<pie_slice label="Włącz skrypty" name="Object Set Scripts to Running"/>
-				<pie_slice label="Wyłącz skrypty" name="Object Set Scripts to Not Running"/>
-				<pie_slice label="Usuń skrypty" name="Remove Scripts From Selection"/>
-				<pie_slice label="Informacje" name="ScriptInfo"/>
+				<pie_menu label="Kompiluj &gt;" name="CompileScriptsMenu">
+					<pie_slice label="LSL na Lua" name="CompileLSLonLuau" />
+				</pie_menu>
+				<pie_slice label="Resetuj" name="Object Reset Scripts" />
+				<pie_slice label="Włącz" name="Object Set Scripts to Running" />
+				<pie_slice label="Wyłącz" name="Object Set Scripts to Not Running" />
+				<pie_slice label="Usuń" name="Remove Scripts From Selection" />
+				<pie_slice label="Informacje" name="ScriptInfo" />
 			</pie_menu>
 			<pie_slice label="Inspekcja" name="Object Inspect"/>
 		</pie_menu>

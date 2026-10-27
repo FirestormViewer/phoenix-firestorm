@@ -70,4 +70,8 @@
 	<combo_box label="Wstaw..." name="Insert..."/>
 	<button label="Edytuj..." name="edit_btn_2"/>
 	<button label="Zapisz" label_selected="Zapisz" name="save_btn_2"/>
+	<combo_box name="compile_target">
+		<combo_box.item label="LSL na Mono" name="compile_target_mono"/>
+		<combo_box.item label="LSL na Lua" name="compile_target_lsl_luau"/>
+	</combo_box>
 </panel>

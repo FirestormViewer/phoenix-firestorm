@@ -487,11 +487,14 @@ Nis ↔ Najniż
 			<spinner label="Gęstość w 100 kg/m^3" name="Physics Density"/>
 			<spinner label="Odbijanie" name="Physics Restitution"/>
 		</panel>
-		<!-- <panel label="Tekstura" name="Texture"/> -->
 		<panel label="Zawart." name="Contents">
-			<button label="Nowy skrypt" label_selected="Nowy skrypt" name="button new script"/>
-			<button label="Nowa notka" label_selected="Nowa notka" name="button new notecard" />
+			<flyout_button label="Nowy skrypt" label_selected="Nowy skrypt" name="button new script">
+				<flyout_button.item label="Nowy skrypt LSL" name="new_lsl_script" />
+				<flyout_button.item label="Nowy skrypt Lua" name="new_lua_script" />
+			</flyout_button>
+			<button label="Nowa notka" name="button new notecard" />
 			<button label="Prawa" name="button permissions"/>
+			<button label="Eksploruj w IDE" label_selected="Eksploracja: Stop" name="button publish" />
 			<button label="Odśwież" name="button refresh"/>
 			<button label="Resetuj skrypty" name="btn_reset_scripts"/>
 			<filter_editor label="Filtruj..." name="contents_filter" />

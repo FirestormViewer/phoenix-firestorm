@@ -88,6 +88,9 @@ na wykonywanie różnych zadań. Istnieje wiele przywilejów.
 		<text name="static4">
 			Przypisane osoby
 		</text>
+		<text name="members_not_loaded">
+			Osoby nie są załadowane
+		</text>
 		<check_box label="Publikuj osoby z funkcją" name="role_visible_in_list" tool_tip="Opcja ta pozwala określić widoczność osób pełniących tę funkcję dla ludzi spoza grupy."/>
 		<text name="static5">
 			Dozwolone przywileje
