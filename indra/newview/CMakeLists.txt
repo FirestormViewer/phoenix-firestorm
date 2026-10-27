@@ -3184,6 +3184,18 @@ if (LL_TESTS)
       "${llslurl_test_sources}"
       "${test_libs}"
     )
+  else ()
+    # Exercise the production Firestorm implementations using offline viewer
+    # service boundaries and a fake HTTP transport.
+    set(opensim_grid_test_sources
+      fsgridhandler.cpp
+      tests/opensim_test_support.cpp
+    )
+    LL_ADD_INTEGRATION_TEST(fsslurl
+      "fsslurl.cpp;${opensim_grid_test_sources}"
+      "${test_libs}"
+    )
+    target_include_directories(INTEGRATION_TEST_fsslurl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
   endif (NOT OPENSIM)#<FS:AW optional opensim support>
   # </FS:Beq>
 
