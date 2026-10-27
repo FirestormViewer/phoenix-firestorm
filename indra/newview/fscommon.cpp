@@ -28,6 +28,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fscommon.h"
+#include "fsfloaterim.h"
 #include "fsradar.h"
 #include "llagent.h"
 #include "llagentbenefits.h"
@@ -37,11 +38,13 @@
 #include "llfloateremojipicker.h"
 #include "llfloaterperms.h"
 #include "llgroupmgr.h"
+#include "llimview.h"
 #include "llinventorymodel.h"
 #include "lllogchat.h"
 #include "llmutelist.h"
 #include "llnotificationmanager.h"
 #include "llparcel.h"
+#include "llspeakers.h"
 #include "lltooldraganddrop.h"
 #include "lltrans.h"
 #include "llviewerinventory.h"
@@ -355,7 +358,7 @@ bool FSCommon::requestGroupData(const LLUUID& groupID)
     return true;
 }
 
-bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionActionType action)
+bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionActionType action, const LLSD& params, void* userdata)
 {
     const bool isSelf = (av_id == gAgentID);
 
@@ -428,6 +431,99 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
             }
 
             return (gAgent.isInGroup(av_id) && gAgent.getGroupID() != av_id);
+        }
+        case EFSRegistrarFunctionActionType::FS_RGSTR_CHK_GROUP_HAS_MODERATOR_OPTION:
+        {
+            std::string option = params.asString();
+
+            if (option.empty())
+                return false;
+
+            if (av_id == gAgentID)
+                return false;
+
+            if (auto imFloater = dynamic_cast<FSFloaterIM*>(static_cast<LLFloater*>(userdata)))
+            {
+                auto sessionId = imFloater->getSessionID();
+
+                auto getSpeakerp = [&sessionId](const LLUUID& av_id) -> LLSpeaker*
+                {
+                    LLSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(sessionId);
+                    if (!speaker_mgr)
+                        return nullptr;
+
+                    speaker_mgr->update(true);
+                    return speaker_mgr->findSpeaker(av_id).get();
+                };
+
+                auto isModerator = [&getSpeakerp]() -> bool
+                {
+                    LLSpeaker* speakerp = getSpeakerp(gAgentID);
+                    return speakerp && speakerp->mIsModerator;
+                };
+
+                // No group chat
+                if (!gAgent.isInGroup(sessionId))
+                    return false;
+
+                if (option == "can_allow_text_chat")
+                {
+                    return isModerator() && getSpeakerp(av_id);
+                }
+                else if (option == "can_mute")
+                {
+                    if (!isModerator())
+                        return false;
+
+                    auto speakerp = getSpeakerp(av_id);
+                    if (!speakerp)
+                        return false;
+
+                    return speakerp->isInVoiceChannel() && speakerp->mStatus != LLSpeaker::STATUS_MUTED;
+                }
+                else if (option == "can_unmute")
+                {
+                    if (!isModerator())
+                        return false;
+
+                    auto speakerp = getSpeakerp(av_id);
+                    return speakerp && speakerp->mStatus == LLSpeaker::STATUS_MUTED;
+                }
+                else if (option == "show_mute")
+                {
+                    auto speakerp = getSpeakerp(av_id);
+                    if (!speakerp)
+                        return false;
+
+                    return speakerp->isInVoiceChannel() && speakerp->mStatus != LLSpeaker::STATUS_MUTED;
+                }
+                else if (option == "show_unmute")
+                {
+                    auto speakerp = getSpeakerp(av_id);
+                    return speakerp && speakerp->mStatus == LLSpeaker::STATUS_MUTED;
+                }
+                else if (option == "can_ban_member")
+                {
+                    return gAgent.hasPowerInGroup(sessionId, GP_ROLE_REMOVE_MEMBER) && gAgent.hasPowerInGroup(sessionId, GP_GROUP_BAN_ACCESS);
+                }
+                else if (option == "can_eject_member")
+                {
+                    return gAgent.hasPowerInGroup(sessionId, GP_MEMBER_EJECT);
+                }
+                else if (option == "can_moderate")
+                {
+                    return (isModerator()) ||
+                           (gAgent.hasPowerInGroup(sessionId, GP_ROLE_REMOVE_MEMBER) && gAgent.hasPowerInGroup(sessionId, GP_GROUP_BAN_ACCESS)) ||
+                           gAgent.hasPowerInGroup(sessionId, GP_MEMBER_EJECT);
+                }
+            }
+
+            return false;
+        }
+        case EFSRegistrarFunctionActionType::FS_RGSTR_CHK_SHOW_MENTION_OPTION:
+        {
+            auto parentFloater = static_cast<LLFloater*>(userdata);
+            return parentFloater && (parentFloater->getName() == "panel_im" || parentFloater->getName() == "nearby_chat");
         }
         default:;
     }

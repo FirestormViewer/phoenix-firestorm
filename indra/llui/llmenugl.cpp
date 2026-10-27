@@ -1840,6 +1840,13 @@ LLMenuGL::LLMenuGL(const LLMenuGL::Params& p)
     }
     setLabel(new_menu_label);
 
+    // <FS:Ansariel> Optional on_visible callback for menus
+    if (p.on_visible.isProvided())
+    {
+        mVisibleSignal.connect(initEnableCallback(p.on_visible));
+    }
+    // </FS:Ansariel>
+
     mFadeTimer.stop();
 }
 
@@ -2744,6 +2751,7 @@ bool LLMenuGL::appendMenu( LLMenuGL* menu )
     p.disabled_color=LLUIColorTable::instance().getColor("MenuItemDisabledColor");
     p.highlight_bg_color=LLUIColorTable::instance().getColor("MenuItemHighlightBgColor");
     p.highlight_fg_color=LLUIColorTable::instance().getColor("MenuItemHighlightFgColor");
+    p.visible = menu->mVisibleSignal(this, LLSD()); // <FS:Ansariel> Optional on_visible callback for menus
 
     LLMenuItemBranchGL* branch = LLUICtrlFactory::create<LLMenuItemBranchGL>(p);
     success &= append( branch );
@@ -2771,6 +2779,7 @@ bool LLMenuGL::appendContextSubMenu(LLMenuGL *menu)
     p.disabled_color=LLUIColorTable::instance().getColor("MenuItemDisabledColor");
     p.highlight_bg_color=LLUIColorTable::instance().getColor("MenuItemHighlightBgColor");
     p.highlight_fg_color=LLUIColorTable::instance().getColor("MenuItemHighlightFgColor");
+    p.visible = menu->mVisibleSignal(this, LLSD()); // <FS:Ansariel> Optional on_visible callback for menus
 
     item = LLUICtrlFactory::create<LLContextMenuBranch>(p);
     LLMenuGL::sMenuContainer->addChild(item->getBranch());

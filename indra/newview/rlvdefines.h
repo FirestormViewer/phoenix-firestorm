@@ -80,7 +80,10 @@ const S32 RLVa_IMPL_ID = 13;
 #define RLV_ROOT_FOLDER                 "#RLV"
 #define RLV_CMD_PREFIX                  '@'
 #define RLV_MODIFIER_ANIMATION_FREQUENCY 10
-#define RLV_MODIFIER_TPLOCAL_DEFAULT    256.f           // Any teleport that's more than a region away is non-local
+// <FS:Trish>  FIRE-37059  @tplocal without an explicit distance should not default to region-wide distance.
+#define RLV_MODIFIER_TPLOCAL_DEFAULT    1.5f            // Specifies the default @tplocal distance
+#define RLV_MODIFIER_TPLOCAL_MAX        256.f           // Any teleport that's more than a region away is non-local
+// </FS:Trish>
 #define RLV_MODIFIER_FARTOUCH_DEFAULT   1.5f            // Specifies the default @fartouch distance
 #define RLV_MODIFIER_SITTP_DEFAULT      1.5f            // Specifies the default @sittp distance
 #define RLV_OPTION_SEPARATOR            ";"             // Default separator used in command options

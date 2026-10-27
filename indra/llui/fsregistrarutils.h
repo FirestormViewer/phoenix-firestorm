@@ -49,7 +49,9 @@ enum class EFSRegistrarFunctionActionType
     FS_RGSTR_CHK_HAVE_GROUP_DATA,
     FS_RGSTR_CHK_CAN_LEAVE_GROUP,
     FS_RGSTR_CHK_CAN_JOIN_GROUP,
-    FS_RGSTR_CHK_GROUP_NOT_ACTIVE
+    FS_RGSTR_CHK_GROUP_NOT_ACTIVE,
+    FS_RGSTR_CHK_GROUP_HAS_MODERATOR_OPTION,
+    FS_RGSTR_CHK_SHOW_MENTION_OPTION
 };
 
 class FSRegistrarUtils
@@ -58,13 +60,13 @@ public:
     FSRegistrarUtils() = default;
     ~FSRegistrarUtils() = default;
 
-    using enable_check_function_t = std::function<bool(const LLUUID&, EFSRegistrarFunctionActionType)>;
+    using enable_check_function_t = std::function<bool(const LLUUID&, EFSRegistrarFunctionActionType, const LLSD& params, void* userdata)>;
     void setEnableCheckFunction(const enable_check_function_t& func)
     {
         mEnableCheckFunction = func;
     }
 
-    bool checkIsEnabled(LLUUID av_id, EFSRegistrarFunctionActionType action);
+    bool checkIsEnabled(LLUUID av_id, EFSRegistrarFunctionActionType action, LLSD params = LLSD(), void* userdata = nullptr);
 
 private:
     enable_check_function_t mEnableCheckFunction{ nullptr };

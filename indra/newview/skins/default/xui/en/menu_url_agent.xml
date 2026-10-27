@@ -130,38 +130,58 @@
      label="Moderator Options"
      layout="topleft"
      name="GroupModerationSubmenu">
+        <context_menu.on_visible
+         function="FS.EnableModeratorOption" parameter="can_moderate"/>
       <menu_item_call
        label="Allow text chat"
        layout="topleft"
        name="AllowGroupChat">
         <on_click function="FS.AllowGroupChat" />
-        <!-- on_enable function="AvatarIcon.Enable" parameter="can_allow_text_chat" /-->
+        <on_enable function="FS.EnableModeratorOption" parameter="can_allow_text_chat" />
       </menu_item_call>
       <menu_item_call
        label="Forbid text chat"
        layout="topleft"
        name="ForbidGroupChat">
         <on_click function="FS.ForbidGroupChat" />
-        <!-- on_enable function="AvatarIcon.Enable" parameter="can_allow_text_chat" /-->
+        <on_enable function="FS.EnableModeratorOption" parameter="can_allow_text_chat" />
+      </menu_item_call>
+      <menu_item_call
+       label="Mute this participant"
+       layout="topleft"
+       name="ModerateVoiceMute">
+        <on_click function="FS.MuteGroupVoice" />
+        <on_enable function="FS.EnableModeratorOption" parameter="can_mute" />
+        <on_visible function="FS.EnableModeratorOption" parameter="show_mute" />
+      </menu_item_call>
+      <menu_item_call
+       label="Unmute this participant"
+       layout="topleft"
+       name="ModerateVoiceUnMute">
+        <on_click function="FS.UnmuteGroupVoice" />
+        <on_enable function="FS.EnableModeratorOption" parameter="can_unmute" />
+        <on_visible function="FS.EnableModeratorOption" parameter="show_unmute" />
       </menu_item_call>
       <menu_item_call
        label="Ban member"
        layout="topleft"
        name="BanGroupMember">
         <on_click function="FS.BanGroupMember" />
-        <!-- on_enable function="AvatarIcon.Enable" parameter="can_allow_text_chat" /-->
+        <on_enable function="FS.EnableModeratorOption" parameter="can_ban_member" />
       </menu_item_call>
       <menu_item_call
        label="Eject member"
        layout="topleft"
        name="BanEjectMember">
         <on_click function="FS.EjectGroupMember" />
-        <!-- on_enable function="AvatarIcon.Enable" parameter="can_allow_text_chat" /-->
+        <on_enable function="FS.EnableModeratorOption" parameter="can_eject_member" />
       </menu_item_call>
     </context_menu>
     <menu_item_separator
      name="GroupModerationSeparator"
-     layout="topleft" />
+     layout="topleft">
+        <menu_item_separator.on_visible function="FS.EnableModeratorOption" parameter="can_moderate"/>
+    </menu_item_separator>
     <!-- </FS:Zi> -->
     <menu_item_call
      label="Copy Name to clipboard"
@@ -187,13 +207,15 @@
     </menu_item_call>
     <menu_item_separator
      name="MentionURISeparator"
-     layout="topleft" />
+     layout="topleft">
+        <menu_item_separator.on_visible function="FS.EnableMentionOption"/>
+    </menu_item_separator>
     <menu_item_call
      label="Mention User in Chat"
      layout="topleft"
      name="mention_in_chat">
-        <menu_item_call.on_click
-         function="Mention.Chat" />
+        <menu_item_call.on_click function="Mention.Chat" />
+        <menu_item_call.on_visible function="FS.EnableMentionOption"/>
     </menu_item_call>
     <!-- </FS:Zi> -->
 </context_menu>

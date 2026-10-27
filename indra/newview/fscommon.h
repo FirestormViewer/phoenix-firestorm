@@ -83,7 +83,7 @@ namespace FSCommon
     // request group data from the server if it's not already cached
     bool requestGroupData(const LLUUID& groupID);
 
-    bool checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionActionType);
+    bool checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionActionType, const LLSD& params = LLSD(), void* userdata = nullptr);
     LLSD populateGroupCount();
 
     std::string getAvatarNameByDisplaySettings(const LLAvatarName& av_name);

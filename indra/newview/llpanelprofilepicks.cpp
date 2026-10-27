@@ -248,7 +248,7 @@ bool LLPanelProfilePicks::postBuild()
     mDeleteButton->setCommitCallback(boost::bind(&LLPanelProfilePicks::onClickDelete, this));
 
     // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
-    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfilePicks::updateRlvRestrictions, this, _1, _2));
+    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfilePicks::updateRlvRestrictions, this, _1));
 
     // <FS:Ansariel> Replace hardcoded "Second Life" with grid label
     LLTextBox* intro_txt = getChild<LLTextBox>("header_text");
@@ -540,7 +540,7 @@ void LLPanelProfilePicks::commitUnsavedChanges()
 }
 
 // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
-void LLPanelProfilePicks::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+void LLPanelProfilePicks::updateRlvRestrictions(ERlvBehaviour behavior)
 {
     if (behavior == RLV_BHVR_SHOWLOC)
     {
@@ -580,6 +580,7 @@ LLPanelProfilePick::LLPanelProfilePick()
  , mIsEditing(false)
  , mRegionCallbackConnection()
  , mParcelCallbackConnection()
+ , mRlvBehaviorCallbackConnection() //<FS:Trish/> RLVa showloc
 // <AS:Chanayane> Preview button
  , mPreview(false)
 // </AS:Chanayane>
@@ -609,6 +610,12 @@ LLPanelProfilePick::~LLPanelProfilePick()
     {
         mParcelCallbackConnection.disconnect();
     }
+    //<FS:Trish> RLVa showloc
+    if (mRlvBehaviorCallbackConnection.connected())
+    {
+        mRlvBehaviorCallbackConnection.disconnect();
+    }
+    //</FS:Trish>
 }
 
 void LLPanelProfilePick::setAvatarId(const LLUUID& avatar_id)
@@ -671,7 +678,9 @@ void LLPanelProfilePick::setAvatarId(const LLUUID& avatar_id)
     {
         mPickName->setEnabled(true);
         mPickDescription->setEnabled(true);
-        mSetCurrentLocationButton->setVisible(true);
+        //<FS:Trish> RLVa showloc
+        updateButtons();
+        //</FS:Trish>
     }
     else
     {
@@ -704,6 +713,10 @@ bool LLPanelProfilePick::postBuild()
     mCreateButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSave, this));
     mCancelButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickCancel, this));
     mSetCurrentLocationButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSetLocation, this));
+
+    //<FS:Trish> RLVa showloc
+    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfilePick::updateRlvRestrictions, this, _1));
+    //</FS:Trish>
 
     // <AS:Chanayane> Preview button
     mPreviewButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickPreview, this));
@@ -927,6 +940,13 @@ bool LLPanelProfilePick::isDirty() const
 
 void LLPanelProfilePick::onClickSetLocation()
 {
+    //<FS:Trish> RLVa showloc
+    if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+    {
+        return;
+    }
+    //</FS:Trish>
+
     // Save location for later use.
     setPosGlobal(gAgent.getPositionGlobal());
 
@@ -1062,6 +1082,22 @@ void LLPanelProfilePick::addLocationChangedCallbacks()
     mRegionCallbackConnection = gAgent.addRegionChangedCallback([this]() { onClickSetLocation(); });
     mParcelCallbackConnection = gAgent.addParcelChangedCallback([this]() { onClickSetLocation(); });
 }
+
+//<FS:Trish> RLVa showloc
+void LLPanelProfilePick::updateButtons()
+{
+    mSetCurrentLocationButton->setVisible(getSelfProfile());
+    mSetCurrentLocationButton->setEnabled(getSelfProfile() && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+}
+
+void LLPanelProfilePick::updateRlvRestrictions(ERlvBehaviour behavior)
+{
+    if (behavior == RLV_BHVR_SHOWLOC)
+    {
+        updateButtons();
+    }
+}
+//</FS:Trish> RLVa showloc
 
 void LLPanelProfilePick::setParcelID(const LLUUID& parcel_id)
 {

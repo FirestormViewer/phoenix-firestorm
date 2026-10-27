@@ -517,13 +517,14 @@ void FSAvatarAlignBase::onClickFaceNearestAvatar()
 void FSAvatarAlignBase::repositionOnToggle(LLFloater* next, const LLRect& old_rect)
 {
     LLRect view  = gFloaterView->getRect();
-    S32 new_w    = next->getRect().getWidth();
-    S32 new_h    = next->getRect().getHeight();
+    LLRect rect  = next->getRect();
     bool on_left = (old_rect.getCenterX() < view.getCenterX());
     bool on_bot  = (old_rect.getCenterY() < view.getCenterY());
-    S32 new_left = on_left ? old_rect.mLeft : (old_rect.mRight - new_w);
-    S32 new_bot  = on_bot  ? old_rect.mBottom : (old_rect.mTop - new_h);
-    next->setOrigin(new_left, new_bot);
+    rect.setOriginAndSize(on_left ? old_rect.mLeft   : (old_rect.mRight - rect.getWidth()),
+                        on_bot  ? old_rect.mBottom : (old_rect.mTop - rect.getHeight()),
+                        rect.getWidth(), rect.getHeight());
+    // FIRE-36531: Use setShape to store the new position for next login.
+    next->setShape(rect, true);
 }
 
 // ============================================================
