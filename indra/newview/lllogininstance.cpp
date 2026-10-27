@@ -140,7 +140,11 @@ void LLLoginInstance::reconnect()
     std::vector<std::string> uris;
     LLGridManager::getInstance()->getLoginURIs(uris);
     mLoginModule->connect(uris.front(), mRequestData);
-    gViewerWindow->setShowProgress(true,!gSavedSettings.getBOOL("FSDisableLoginScreens"));
+    // <FS:Beq> Guard reconnect progress updates when no viewer window exists.
+    // gViewerWindow->setShowProgress(true,!gSavedSettings.getBOOL("FSDisableLoginScreens"));
+    if (gViewerWindow)
+        gViewerWindow->setShowProgress(true,!gSavedSettings.getBOOL("FSDisableLoginScreens"));
+    // </FS:Beq>
 }
 
 void LLLoginInstance::disconnect()
