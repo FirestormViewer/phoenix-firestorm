@@ -569,7 +569,7 @@ void LLScriptEdCore::updateTabs(bool is_lua)
     }
 
     mPreprocTab->selectTabByName("Script");
-    mPreprocTab->setTabVisibility(mPreprocTab->getPanelByIndex(mPreprocTab->getPanelIndexByTitle("Preprocessed")), !is_lua);
+    mPreprocTab->setTabVisibility(mPreprocTab->getPanelByName("Preprocessed"), !is_lua);
 }
 // </FS:Zi>
 
@@ -820,7 +820,7 @@ void LLScriptEdCore::processKeywords(bool luau_language)
     if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && mPostEditor)
     {
         mPostEditor->clearSegments();
-        mPostEditor->initKeywords();
+        mPostEditor->initKeywords(luau_language);
 
         mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
 #ifdef OPENSIM
@@ -2408,7 +2408,7 @@ void LLScriptEdContainer::updateStyle()
 {
     if (mScriptEd && mScriptEd->mEditor)
     {
-        mScriptEd->mEditor->initKeywords();
+        mScriptEd->mEditor->initKeywords(mScriptEd->mEditor->getIsLuauLanguage());
         mScriptEd->mEditor->loadKeywords();
     }
 }

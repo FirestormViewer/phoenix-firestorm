@@ -549,6 +549,20 @@ void LLAvatarNameCache::exportFile(std::ostream& ostr)
 
 void LLAvatarNameCache::setNameLookupURL(const std::string& name_lookup_url)
 {
+    // <FS:TJ> Re-request names if any are temporary/placeholder names such as (???).(???)
+    if (!name_lookup_url.empty() && name_lookup_url != mNameLookupURL)
+    {
+        for (auto& [agent_id, av_name] : mCache)
+        {
+            if (!av_name.isValidName())
+            {
+                // Retry name lookups right away so they aren't temporary/placeholders for up to a minute
+                av_name.setExpires(1);
+            }
+        }
+    }
+    // </FS:TJ>
+
     mNameLookupURL = name_lookup_url;
 }
 

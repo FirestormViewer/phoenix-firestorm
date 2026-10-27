@@ -10103,7 +10103,7 @@ void handle_selected_script_action(const std::string& action)
     if (action == "compile mono")
     {
         name = "compile_queue";
-        std::string target = "mono";
+        target = "mono";
         msg = "Recompile";
         title = LLTrans::getString("CompileQueueTitle");
     }

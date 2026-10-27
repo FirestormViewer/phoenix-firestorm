@@ -42,6 +42,7 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
     mName(LLTrans::getString("AvatarNameWaiting")),
     mUserName(LLStringUtil::null),
     mDisplayName(LLStringUtil::null),
+    mNameIsTemporary(false),
     mRange(0.f),
     mFirstSeen(time(nullptr)),
     mGlobalPos(LLVector3d(0.0, 0.0, 0.0)),
@@ -111,6 +112,8 @@ void FSRadarEntry::updateName()
 
 void FSRadarEntry::onAvatarNameCache(const LLUUID& av_id, const LLAvatarName& av_name)
 {
+    mNameIsTemporary = !av_name.isValidName();
+
     if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
     {
         mUserName = av_name.getUserNameForDisplay();

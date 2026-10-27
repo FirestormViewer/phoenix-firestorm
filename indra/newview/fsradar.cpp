@@ -277,6 +277,18 @@ void FSRadar::updateRadarList()
         mEntryList.emplace(avid, std::make_shared<FSRadarEntry>(avid));
     }
 
+    // Re-request names if any are temporary/placeholder names such as (???).(???)
+    if (LLAvatarNameCache::getInstance()->hasNameLookupURL())
+    {
+        for (const auto& [av_id, entry] : mEntryList)
+        {
+            if (entry->isNameTemporary())
+            {
+                entry->updateName();
+            }
+        }
+    }
+
     speakermgr->update(true);
 
     //STEP 2: Transform detected model list data into more flexible multimap data structure;

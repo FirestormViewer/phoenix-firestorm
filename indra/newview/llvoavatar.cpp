@@ -701,6 +701,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
     mLastAppearanceBlendTime(0.f),
     mAppearanceAnimating(false),
     mNameIsSet(false),
+    mNameIsTemporary(false), // <FS:TJ/> Re-request names if any are temporary/placeholder names such as (???).(???)
     // <FS:Ansariel> FIRE-13414: Avatar name isn't updated when the simulator sends a new name
     mNameFirstname(),
     mNameLastname(),
@@ -4187,6 +4188,17 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
     }
     // </FS:Ansariel>
 
+    // <FS:TJ> Re-request names if any are temporary/placeholder names such as (???).(???)
+    if (mNameIsSet && mNameIsTemporary && LLAvatarNameCache::getInstance()->hasNameLookupURL())
+    {
+        LLAvatarName cached_name;
+        if (LLAvatarNameCache::get(getID(), &cached_name) && cached_name.isValidName())
+        {
+            new_name = true;
+        }
+    }
+    // </FS:TJ>
+
     // Rebuild name tag if state change detected
     if (!mNameIsSet
         || new_name
@@ -4308,6 +4320,8 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
                 // Note: do not connect a callback on idle().
                 clearNameTag();
             }
+
+            mNameIsTemporary = !av_name.isValidName(); // <FS:TJ/> Re-request names if any are temporary/placeholder names such as (???).(???)
 
 // [RLVa:KB] - Checked: RLVa-1.2.2
             if ( (fRlvShowAvName) || (isSelf()) )
