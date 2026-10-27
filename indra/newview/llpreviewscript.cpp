@@ -820,7 +820,7 @@ void LLScriptEdCore::processKeywords(bool luau_language)
     if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && mPostEditor)
     {
         mPostEditor->clearSegments();
-        mPostEditor->initKeywords();
+        mPostEditor->initKeywords(luau_language);
 
         mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
 #ifdef OPENSIM
