@@ -46,6 +46,13 @@ template<> template<> void grid_object::test<2>()
     ensure_equals("lookup by nick", manager().getGridByGridNick("TESTGRID"), manager().getGrid());
     ensure_equals("lookup by host", manager().getGridByHostName("GRID.EXAMPLE.INVALID:8002"), manager().getGrid());
     ensure_equals("unknown grid", manager().getGridByProbing("missing.example.invalid"), "");
+    for (const char* alias : {"TESTGRID", "TEST GRID"})
+    {
+        manager().setGridChoice(alias);
+        ensure_equals("aliases select the canonical grid", manager().getGrid(), grid()[GRID_VALUE].asString());
+        ensure("alias selection keeps OpenSim classification", manager().isInOpenSim());
+        ensure_equals("canonical selection persisted", gSavedSettings.getString("CurrentGrid"), manager().getGrid());
+    }
     gSavedSettings.setString("CmdLineHelperURI", "https://override.example.invalid/helpers");
     gSavedSettings.setString("LoginPage", "https://override.example.invalid/welcome");
     ensure_equals("helper override", manager().getHelperURI(), "https://override.example.invalid/helpers");
