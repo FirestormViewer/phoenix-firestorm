@@ -518,7 +518,7 @@
                         function="Tools.SelectedScriptAction"
                         parameter="compile lua" />
                     <pie_slice.on_enable
-                        function="EditableSelected" />
+                        function="EditableSelectedLua" />
                 </pie_slice>
 
                 <pie_slice
@@ -529,7 +529,7 @@
                         function="Tools.SelectedScriptAction"
                         parameter="compile lsl-luau" />
                     <pie_slice.on_enable
-                        function="EditableSelected" />
+                        function="EditableSelectedLua" />
                 </pie_slice>
 
             </pie_menu>
