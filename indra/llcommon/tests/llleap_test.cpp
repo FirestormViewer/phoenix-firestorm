@@ -298,13 +298,19 @@ namespace tut
         std::string BADPYTHON(PYTHON.substr(0, PYTHON.length()-1) + "x");
         CaptureLog log;
         std::string threw = catch_what<LLLeap::Error>([&BADPYTHON](){
-                LLLeap::create("bad exe", BADPYTHON);
+                // <FS:Beq> The string overload takes a command line: quote paths with spaces.
+                // LLLeap::create("bad exe", BADPYTHON);
+                LLLeap::create("bad exe", "\"" + BADPYTHON + "\"");
+                // </FS:Beq>
             });
         ensure_contains("LLLeap::create() didn't throw", threw, "failed");
         log.messageWith("failed");
         log.messageWith(BADPYTHON);
         // try the suppress-exception variant
-        ensure("bad launch returned non-NULL", ! LLLeap::create("bad exe", BADPYTHON, false));
+        // <FS:Beq> Preserve the full executable path in the non-throwing case too.
+        // ensure("bad launch returned non-NULL", ! LLLeap::create("bad exe", BADPYTHON, false));
+        ensure("bad launch returned non-NULL", ! LLLeap::create("bad exe", "\"" + BADPYTHON + "\"", false));
+        // </FS:Beq>
     }
 
     // Generic self-contained listener: derive from this and override its
@@ -657,4 +663,22 @@ namespace tut
         set_test_name("very large message");
         test_or_split(PYTHON, reader_module, get_test_name(), BUFFERED_LENGTH);
     }
+    // <FS:Beq> Exercise successful command-line parsing with quoted paths and arguments.
+    template<> template<>
+    void object::test<11>()
+    {
+        set_test_name("quoted command line");
+        NamedTempFile script("leap script with spaces ",
+                             "import sys\n"
+                             "print('quoted argument: ' + sys.argv[1], file=sys.stderr)\n",
+                             ".py");
+        // generic_string() avoids interpreting Windows path separators as escapes.
+        const std::string python = std::filesystem::path(PYTHON).generic_string();
+        const std::string command = "\"" + python + "\" \"" +
+                                    script.getPath().generic_string() + "\" \"argument with spaces\"";
+        CaptureLog log(LLError::LEVEL_INFO);
+        waitfor(LLLeap::create(get_test_name(), command));
+        log.messageWith("quoted argument: argument with spaces");
+    }
+    // </FS:Beq>
 } // namespace tut
