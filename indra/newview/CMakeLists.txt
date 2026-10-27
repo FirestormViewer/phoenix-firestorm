@@ -3222,6 +3222,12 @@ if (LL_TESTS)
       llviewernetwork.cpp
       "${test_libs}"
     )
+  else ()
+    LL_ADD_INTEGRATION_TEST(fsgridhandler
+      "${opensim_grid_test_sources}"
+      "${test_libs}"
+    )
+    target_include_directories(INTEGRATION_TEST_fsgridhandler PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
   endif ()
   # </FS:Beq>
 
