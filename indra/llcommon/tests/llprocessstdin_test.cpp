@@ -4,6 +4,7 @@
 // <FS:Beq> Keep asynchronous stdin data valid when subsequent output grows the stream buffer.
 #include "llprocess.h"
 #include "llstring.h"
+#include "fsyspath.h"
 #include "../test/lltut.h"
 #include "../test/namedtempfile.h"
 
@@ -50,8 +51,12 @@ namespace tut
         LLProcess::Params params;
         params.desc = get_test_name();
         params.executable = python;
-        params.args.add(script.getPath().string());
-        params.args.add(release_reader.getPath().string());
+        // Keep path arguments UTF-8 when the Windows temp directory contains
+        // characters outside the native narrow code page.
+        // params.args.add(script.getPath().string());
+        // params.args.add(release_reader.getPath().string());
+        params.args.add(fsyspath(script.getPath()).string());
+        params.args.add(fsyspath(release_reader.getPath()).string());
         params.args.add(std::to_string(first_size));
         params.args.add(std::to_string(appended_size));
         params.files.add(LLProcess::FileParam("pipe")); // stdin
