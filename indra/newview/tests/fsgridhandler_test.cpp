@@ -185,4 +185,30 @@ template<> template<> void grid_object::test<9>()
     ensure("known-grid URL bases do not fetch metadata", requests.empty());
 }
 
+template<> template<> void grid_object::test<10>()
+{
+    set_test_name("probe saved grid aliases through public lookup APIs");
+    const LLSD data = grid();
+    const std::string canonical = data[GRID_VALUE].asString();
+    add(manager(), data);
+    manager().setGridChoice(canonical);
+    for (const char* alias : {"grid.example.invalid:8002", "GRID.EXAMPLE.INVALID:8002",
+                             "testgrid", "TESTGRID", "Test Grid", "TEST GRID"})
+    {
+        ensure_equals(std::string("probe ") + alias,
+                      manager().getGridByProbing(alias), canonical);
+        ensure_equals(std::string("resolve ") + alias,
+                      manager().getGrid(alias), canonical);
+        ensure_equals(std::string("grid ID through ") + alias,
+                      manager().getGridId(alias), "testgrid");
+    }
+    ensure_equals("case-sensitive nickname lookup", manager().getGridByProbing("testgrid", true), canonical);
+    ensure_equals("case-sensitive label lookup", manager().getGridByProbing("Test Grid", true), canonical);
+    ensure("case-sensitive nickname rejects different case", manager().getGridByProbing("TESTGRID", true).empty());
+    ensure("case-sensitive label rejects different case", manager().getGridByProbing("TEST GRID", true).empty());
+    ensure("unknown alias stays unresolved", manager().getGridByProbing("unknown grid").empty());
+    ensure_equals("probing does not change the selected grid", manager().getGrid(), canonical);
+    ensure("alias lookups do not start discovery", requests.empty());
+}
+
 }
