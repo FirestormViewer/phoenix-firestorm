@@ -569,7 +569,7 @@ void LLScriptEdCore::updateTabs(bool is_lua)
     }
 
     mPreprocTab->selectTabByName("Script");
-    mPreprocTab->setTabVisibility(mPreprocTab->getPanelByIndex(mPreprocTab->getPanelIndexByTitle("Preprocessed")), !is_lua);
+    mPreprocTab->setTabVisibility(mPreprocTab->getPanelByName("Preprocessed"), !is_lua);
 }
 // </FS:Zi>
 
@@ -2408,7 +2408,7 @@ void LLScriptEdContainer::updateStyle()
 {
     if (mScriptEd && mScriptEd->mEditor)
     {
-        mScriptEd->mEditor->initKeywords();
+        mScriptEd->mEditor->initKeywords(mScriptEd->mEditor->getIsLuauLanguage());
         mScriptEd->mEditor->loadKeywords();
     }
 }
