@@ -143,4 +143,39 @@ namespace tut
                 && after_3pm.getMax(sCaffeineLevelStat) == sCaffeinePerOz * ((S32Ounces)S32TallCup(1) + (S32Ounces)S32GrandeCup(3) + (S32Ounces)S32VentiCup(1)).value());
     }
 
+    // <FS:Beq> Cover lifetime totals for both scalar and unit-valued counters.
+    // Register handles before the fixture allocates the thread recorder's buffers.
+    static CountStatHandle<S32> sTestSignedTotal("test_signed_total");
+    static CountStatHandle<U32> sTestUnsignedTotal("test_unsigned_total");
+    static CountStatHandle<F64> sTestFractionalTotal("test_fractional_total");
+    static CountStatHandle<S32Bytes> sTestByteTotal("test_byte_total");
+    static CountStatHandle<U32Milliseconds> sTestTimeTotal("test_time_total");
+    static CountStatHandle<F64Seconds> sTestFractionalTimeTotal("test_fractional_time_total");
+
+    template<typename T>
+    void check_count_totals(CountStatHandle<T>& counter, T first, T second)
+    {
+        ensure_equals("new counter has no samples", counter.getTotalSampleCount(), U64(0));
+        ensure("new counter has a zero total", counter.getTotalSamples() == T());
+
+        add(counter, first);
+        add(counter, second);
+        ensure_equals("each add counts one sample", counter.getTotalSampleCount(), U64(2));
+        ensure("lifetime total includes both samples", counter.getTotalSamples() == first + second);
+    }
+
+    template<> template<>
+    void trace_object_t::test<2>()
+    {
+        set_test_name("scalar and unit-valued lifetime count totals");
+        check_count_totals(sTestSignedTotal, S32(3), S32(-1));
+        check_count_totals(sTestUnsignedTotal, U32(3), U32(2));
+        check_count_totals(sTestFractionalTotal, F64(0.5), F64(0.25));
+        check_count_totals(sTestByteTotal, S32Bytes(1024), S32Bytes(512));
+        check_count_totals(sTestTimeTotal, U32Milliseconds(100), U32Milliseconds(200));
+        check_count_totals(sTestFractionalTimeTotal, F64Seconds(0.5), F64Seconds(0.25));
+    }
+
+    // </FS:Beq>
+
 }
