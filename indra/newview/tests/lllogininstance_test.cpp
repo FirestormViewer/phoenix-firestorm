@@ -604,5 +604,29 @@ namespace tut
         ensure("new attempt clears failure", !logininstance->authFailure());
     }
 
+    template<> template<>
+    void lllogininstance_object::test<6>()
+    {
+        set_test_name("reconnect waits for an available endpoint and preserves request parameters");
+        logininstance->connect(agentCredential);
+        ensure_equals("initial endpoint", gLoginURI, VIEWERLOGIN_URI);
+        const LLSD request = gLoginCreds;
+
+        // A grid's endpoints can become unavailable between the initial
+        // connection and a TOS/critical-message retry.
+        gGridLoginURIs.clear();
+        gLoginURI.clear();
+        gLoginCreds.clear();
+        logininstance->reconnect();
+        ensure("no transport connection without a reconnect endpoint", gLoginURI.empty());
+        ensure("no request sent without a reconnect endpoint", gLoginCreds.isUndefined());
+        ensure("missing reconnect endpoint does not authenticate", !logininstance->authSuccess());
+
+        gGridLoginURIs = {"https://retry.example.invalid/login"};
+        logininstance->reconnect();
+        ensure_equals("reconnect uses the available endpoint", gLoginURI, gGridLoginURIs.front());
+        ensure_equals("reconnect retains the original authentication request", gLoginCreds, request);
+    }
+
     // </FS:Beq>
 }
