@@ -404,10 +404,10 @@ LLSLURL::LLSLURL(const std::string& slurl)
 
             mRegion = LLURI::unescape(path_array[0].asString());
 
-            if(LLStringUtil::containsNonprintable(mRegion))
-            {
-                LLStringUtil::stripNonprintable(mRegion);
-            }
+            // Strip ASCII controls without treating signed UTF-8 bytes as
+            // negative, nonprintable characters in international region names.
+            mRegion.erase(std::remove_if(mRegion.begin(), mRegion.end(),
+                [](unsigned char c) { return c < 0x20; }), mRegion.end());
 
             path_array.erase(0);
 
