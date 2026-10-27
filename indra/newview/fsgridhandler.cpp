@@ -1054,11 +1054,11 @@ std::string LLGridManager::getGridByProbing(const std::string& probe_for, bool c
     ret = getGridByHostName(probe_for, case_sensitive);
     if (ret.empty())
     {
-        getGridByGridNick(probe_for, case_sensitive);
+        ret = getGridByGridNick(probe_for, case_sensitive);
     }
     if (ret.empty())
     {
-        getGridByLabel(probe_for, case_sensitive);
+        ret = getGridByLabel(probe_for, case_sensitive);
     }
 
     return ret;
