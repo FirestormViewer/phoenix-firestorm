@@ -834,7 +834,12 @@ namespace tut
         data = handler->getProtectedData("test_data_type1", "test_data_not_found");
         ensure("not found", data.isUndefined());
 
-        // cause a 'write' by using 'LLPointer' to delete then instantiate a handler
+        // <FS:Beq> Test explicit credential persistence and current credential interfaces.
+        // // cause a 'write' by using 'LLPointer' to delete then instantiate a handler
+        // Persistence is explicit: destruction must not overwrite credentials
+        // after a failed read (for example, after the machine ID changes).
+        handler->syncProtectedMap();
+        // </FS:Beq>
         handler = NULL;
         handler = new LLSecAPIBasicHandler("sechandler_settings.tmp", "test_password.dat");
         handler->init();
@@ -850,7 +855,10 @@ namespace tut
         temp_file2.write((const char *)&binary_data[0], binary_data.size());
         temp_file2.close();
 
-        // cause a 'write'
+        // <FS:Beq> Test explicit credential persistence and current credential interfaces.
+        // // cause a 'write'
+        // Reload the original fixture.
+        // </FS:Beq>
         handler = new LLSecAPIBasicHandler("sechandler_settings.tmp", "test_password.dat");
         handler->init();
         data = handler->getProtectedData("test_data_type1", "test_data_id");
@@ -864,6 +872,9 @@ namespace tut
         handler->init();
         data = handler->getProtectedData("test_data_type1", "test_data_id");
         ensure("not found", data.isUndefined());
+        // <FS:Beq> Test explicit credential persistence and current credential interfaces.
+        handler->syncProtectedMap();
+        // </FS:Beq>
         handler = NULL;
 
         ensure(LLFile::isfile("sechandler_settings.tmp"));
@@ -889,7 +900,10 @@ namespace tut
         // test retrieval of credential components
         ensure_equals("basic credential creation: identifier", my_id, my_cred->getIdentifier());
         ensure_equals("basic credential creation: authenticator", my_authenticator, my_cred->getAuthenticator());
-        ensure_equals("basic credential creation: grid", "my_grid", my_cred->getGrid());
+        // <FS:Beq> Test explicit credential persistence and current credential interfaces.
+        // ensure_equals("basic credential creation: grid", "my_grid", my_cred->getGrid());
+        ensure_equals("basic credential creation: grid", "my_grid", my_cred->getCredentialName());
+        // </FS:Beq>
 
         // test setting/overwriting of credential components
         my_id["first_name"] = "firstname";
@@ -900,7 +914,10 @@ namespace tut
         my_cred->setCredentialData(my_id, my_authenticator);
         ensure_equals("set credential data: identifier", my_id, my_cred->getIdentifier());
         ensure_equals("set credential data: authenticator", my_authenticator, my_cred->getAuthenticator());
-        ensure_equals("set credential data: grid", "my_grid", my_cred->getGrid());
+        // <FS:Beq> Test explicit credential persistence and current credential interfaces.
+        // ensure_equals("set credential data: grid", "my_grid", my_cred->getGrid());
+        ensure_equals("set credential data: grid", "my_grid", my_cred->getCredentialName());
+        // </FS:Beq>
 
         // test loading of a credential, that hasn't been saved, without
         // any legacy saved credential data
@@ -916,14 +933,21 @@ namespace tut
         my_new_cred = handler->loadCredential("my_grid");
         ensure_equals("load a known credential: identifier", my_id, my_new_cred->getIdentifier());
         ensure_equals("load a known credential: authenticator",my_authenticator, my_new_cred->getAuthenticator());
-        ensure_equals("load a known credential: grid", "my_grid", my_cred->getGrid());
+        // <FS:Beq> Test explicit credential persistence and current credential interfaces.
+        // ensure_equals("load a known credential: grid", "my_grid", my_cred->getGrid());
+        ensure_equals("load a known credential: grid", "my_grid", my_new_cred->getCredentialName());
+        // </FS:Beq>
 
         // test deletion of a credential
         handler->deleteCredential(my_new_cred);
 
         ensure("delete credential: identifier", my_new_cred->getIdentifier().isUndefined());
-        ensure("delete credentialt: authenticator", my_new_cred->getIdentifier().isUndefined());
-        ensure_equals("delete credential: grid", "my_grid", my_cred->getGrid());
+        // <FS:Beq> Test explicit credential persistence and current credential interfaces.
+        // ensure("delete credentialt: authenticator", my_new_cred->getIdentifier().isUndefined());
+        // ensure_equals("delete credential: grid", "my_grid", my_cred->getGrid());
+        ensure("delete credential: authenticator", my_new_cred->getAuthenticator().isUndefined());
+        ensure_equals("delete credential: grid", "my_grid", my_new_cred->getCredentialName());
+        // </FS:Beq>
         // load unknown cred
 
         my_new_cred = handler->loadCredential("my_grid");
