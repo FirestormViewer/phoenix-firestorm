@@ -34,6 +34,10 @@
 #include "../llviewertexture.h"
 #include "../llviewercontrol.h"
 #include "../llworldmapmessage.h"
+// <FS:Beq> Adapt map test fixtures to Firestorm texture and variable-region interfaces.
+#include "../llappviewer.h"
+#include "../lltexturecache.h"
+// </FS:Beq>
 // Class to test
 #include "../llworldmap.h"
 // Tut header
@@ -52,6 +56,15 @@ void LLGLTexture::setBoostLevel(S32 ) { }
 void LLGLTexture::setAddressMode(LLTexUnit::eTextureAddressMode ) { }
 LLViewerFetchedTexture* LLViewerTextureManager::getFetchedTexture(const LLUUID&, FTType, bool, LLGLTexture::EBoostLevel, S8,
                                                                   LLGLint, LLGLenum, LLHost ) { return NULL; }
+// <FS:Beq> Adapt map test fixtures to Firestorm texture and variable-region interfaces.
+LLViewerFetchedTexture* LLViewerTextureManager::findFetchedTexture(const LLUUID&, S32) { return nullptr; }
+LLTextureCache* LLAppViewer::sTextureCache = nullptr;
+bool LLTextureCache::removeFromCache(const LLUUID&)
+{
+    tut::fail("Unexpected texture cache access in LLWorldMap test");
+    return false;
+}
+// </FS:Beq>
 
 // Stub related map calls
 
@@ -414,6 +427,10 @@ namespace tut
         std::string name_sim = SIM_NAME_TEST;
         success = mWorld->insertRegion( U32(X_WORLD_TEST),
                         U32(Y_WORLD_TEST),
+                                        // <FS:Beq> Adapt map test fixtures to Firestorm texture and variable-region interfaces.
+                                        REGION_WIDTH_UNITS,
+                                        REGION_WIDTH_UNITS,
+                                        // </FS:Beq>
                                         name_sim,
                                         id,
                                         SIM_ACCESS_PG,
