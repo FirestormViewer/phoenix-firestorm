@@ -3158,22 +3158,34 @@ if (LL_TESTS)
     llsecapi.cpp
     "${test_libs}"
   )
+  # <FS:Beq> Exercise the appropriate SLURL implementation with offline OpenSim fixtures.
+  # if (NOT OPENSIM)#<FS:AW optional opensim support>
+  #   set(llslurl_test_sources
+  #       llslurl.cpp
+  #       llviewernetwork.cpp
+  #   )
+  # endif (NOT OPENSIM)#<FS:AW optional opensim support>
+  #
+  # set(llslurl_test_sources
+  #   llslurl.cpp
+  #   llviewernetwork.cpp
+  # )
+  #
+  # LL_ADD_INTEGRATION_TEST(llslurl
+  #   "${llslurl_test_sources}"
+  #   "${test_libs}"
+  # )
   if (NOT OPENSIM)#<FS:AW optional opensim support>
     set(llslurl_test_sources
         llslurl.cpp
         llviewernetwork.cpp
     )
+    LL_ADD_INTEGRATION_TEST(llslurl
+      "${llslurl_test_sources}"
+      "${test_libs}"
+    )
   endif (NOT OPENSIM)#<FS:AW optional opensim support>
-
-  set(llslurl_test_sources
-    llslurl.cpp
-    llviewernetwork.cpp
-  )
-
-  LL_ADD_INTEGRATION_TEST(llslurl
-    "${llslurl_test_sources}"
-    "${test_libs}"
-  )
+  # </FS:Beq>
 
   set(llviewercontrollistener_test_sources
     llviewercontrollistener.cpp
@@ -3188,10 +3200,18 @@ if (LL_TESTS)
     "${test_libs}"
   )
 
-  LL_ADD_INTEGRATION_TEST(llviewernetwork
-    llviewernetwork.cpp
-    "${test_libs}"
-  )
+  # <FS:Beq> Test the production grid manager for each build configuration.
+  # LL_ADD_INTEGRATION_TEST(llviewernetwork
+  #   llviewernetwork.cpp
+  #   "${test_libs}"
+  # )
+  if (NOT OPENSIM)
+    LL_ADD_INTEGRATION_TEST(llviewernetwork
+      llviewernetwork.cpp
+      "${test_libs}"
+    )
+  endif ()
+  # </FS:Beq>
 
   LL_ADD_INTEGRATION_TEST(llviewerassetstats
     llviewerassetstats.cpp
