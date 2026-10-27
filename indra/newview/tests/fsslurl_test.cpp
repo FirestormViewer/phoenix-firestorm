@@ -30,6 +30,22 @@ template<> template<> void slurl_object::test<1>()
     ensure("invalid inputs cause no discovery", requests.empty());
 }
 
+template<> template<> void slurl_object::test<2>()
+{
+    set_test_name("hop URL preserves grid, Unicode region, and var-region coordinates");
+    const std::string region = "\xE6\xB5\x8B\xE8\xAF\x95 \xD0\x9C\xD0\xB8\xD1\x80";
+    const std::string url = "hop://grid.example.invalid:8002/%E6%B5%8B%E8%AF%95%20%D0%9C%D0%B8%D1%80/512/768/42";
+    LLSLURL location(url);
+    ensure_equals("location type", location.getType(), LLSLURL::LOCATION);
+    ensure("Hypergrid flag", location.getHypergrid());
+    ensure_equals("destination grid", location.getGrid(), manager().getGrid());
+    ensure_equals("decoded Unicode region", location.getRegion(), region);
+    ensure_equals("coordinates are not wrapped at 256", location.getPosition(), LLVector3(512, 768, 42));
+    ensure_equals("canonical URL", location.getSLURLString(), url);
+    ensure("round trip", location == LLSLURL(location.getSLURLString()));
+    ensure("known location remains offline", requests.empty());
+}
+
 template<> template<> void slurl_object::test<3>()
 {
     set_test_name("typed location defaults and optional height");
@@ -86,6 +102,15 @@ template<> template<> void slurl_object::test<7>()
     ensure_equals("region", location.getRegion(), "Ahern");
     ensure_equals("coordinates", location.getPosition(), LLVector3(128, 64, 30));
 }
+
+template<> template<> void slurl_object::test<8>()
+{
+    set_test_name("strip ASCII controls while preserving UTF-8 region bytes");
+    LLSLURL location("hop://grid.example.invalid:8002/%01%E6%B5%8B%E8%AF%95%0A/600/700/42");
+    ensure_equals("UTF-8 region survives control filtering", location.getRegion(), "\xE6\xB5\x8B\xE8\xAF\x95");
+    ensure_equals("valid coordinates survive filtering", location.getPosition(), LLVector3(600, 700, 42));
+}
+
 
 template<> template<> void slurl_object::test<9>()
 {
