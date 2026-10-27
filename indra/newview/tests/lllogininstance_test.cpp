@@ -551,4 +551,58 @@ namespace tut
         logininstance->connect(test_uri, agentCredential);
         ensure_equals("Default for agree to tos", gLoginCreds["params"]["read_critical"].asBoolean(), false);
     }
+    // <FS:Beq> Update login test interfaces, initialize fixture state, and cover OpenSim login flows.
+    template<> template<>
+    void lllogininstance_object::test<3>()
+    {
+        set_test_name("OpenSim login requests include grid-specific options");
+#ifdef OPENSIM
+        logininstance->connect(agentCredential);
+        ensure_equals("login method", gLoginCreds["method"].asString(), "login_to_simulator");
+        for (const char* option : {"currency", "max_groups", "search", "destination_guide_url", "avatar_picker_url"})
+        {
+            bool found = false;
+            for (const LLSD& requested : llsd::inArray(gLoginCreds["options"]))
+                found = found || requested.asString() == option;
+            ensure(std::string("request OpenSim option ") + option, found);
+        }
+        gOpenSimGrid = false;
+        logininstance->connect(agentCredential);
+        for (const LLSD& requested : llsd::inArray(gLoginCreds["options"]))
+            ensure("SL grid does not request OpenSim currency", requested.asString() != "currency");
+#else
+        skip("OpenSim-specific options");
+#endif
+    }
+
+    template<> template<>
+    void lllogininstance_object::test<4>()
+    {
+        set_test_name("missing login endpoints do not start a transport request");
+        gGridLoginURIs.clear();
+        logininstance->connect(agentCredential);
+        ensure("no transport connection without an endpoint", gLoginURI.empty());
+        ensure("no authentication success", !logininstance->authSuccess());
+    }
+
+    template<> template<>
+    void lllogininstance_object::test<5>()
+    {
+        set_test_name("explicit endpoint and authentication failure are propagated");
+        logininstance->connect("https://other.example.invalid/login", accountCredential);
+        ensure_equals("explicit endpoint", gLoginURI, "https://other.example.invalid/login");
+        LLSD response;
+        response["state"] = "offline";
+        response["change"] = "fail.login";
+        response["data"]["reason"] = "key";
+        response["progress"] = 0.0;
+        response["data"]["message"] = "Invalid test credentials";
+        gTestPump.post(response);
+        ensure("authentication failed", logininstance->authFailure());
+        ensure_equals("failure message", logininstance->getResponse()["message"].asString(), "Invalid test credentials");
+        logininstance->connect(agentCredential);
+        ensure("new attempt clears failure", !logininstance->authFailure());
+    }
+
+    // </FS:Beq>
 }
