@@ -361,6 +361,11 @@ if (LL_TESTS)
   LL_ADD_INTEGRATION_TEST(lleventfilter "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llevents "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llfile "" "${test_libs}")
+  # <FS:Beq> Extended non-ASCII path test coverage; temp discovery needs fresh processes.
+  LL_ADD_INTEGRATION_TEST(llfilepaths "" "${test_libs}"
+    "${PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/llfilepaths_test.py")
+  set_tests_properties(INTEGRATION_TEST_RUNNER_llfilepaths PROPERTIES TIMEOUT 100 LABELS "nonascii")
+  # </FS:Beq>
   LL_ADD_INTEGRATION_TEST(llframetimer "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llhttpdate "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llheteromap "" "${test_libs}")

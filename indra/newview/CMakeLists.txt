@@ -1028,6 +1028,7 @@ set(viewer_HEADER_FILES
     fslslbridge.h
     fslslbridgerequest.h
     fslslpreproc.h
+    fslslpreprocpath.h # <FS:Beq> Extended non-ASCII path test coverage. </FS:Beq>
     fslslpreprocviewer.h
     fsmoneytracker.h
     fsmaniprotatejoint.h
@@ -3148,6 +3149,10 @@ if (LL_TESTS)
     ""
     "${test_libs}"
   )
+  # <FS:Beq> Extended non-ASCII path test coverage for the production LSL basename helper.
+  LL_ADD_INTEGRATION_TEST(fslslpreprocpath "" "llcommon")
+  set_tests_properties(INTEGRATION_TEST_RUNNER_fslslpreprocpath PROPERTIES TIMEOUT 30 LABELS "nonascii")
+  # </FS:Beq>
 
   LL_ADD_INTEGRATION_TEST(llsechandler_basic
     llsechandler_basic.cpp

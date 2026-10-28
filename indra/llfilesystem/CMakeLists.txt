@@ -82,4 +82,21 @@ if (LL_TESTS)
 
     # TODO: Some of these need refactoring to be proper Unit tests rather than Integration tests.
     LL_ADD_INTEGRATION_TEST(lldir "" "${test_libs}")
+    # <FS:Beq> FIRE-37081: Exercise startup cache operations with Unicode profile paths.
+    LL_ADD_INTEGRATION_TEST(lldiskcache "" "${test_libs}")
+    set_tests_properties(INTEGRATION_TEST_RUNNER_lldiskcache PROPERTIES TIMEOUT 30)
+    # </FS:Beq>
+    # <FS:Beq> Extended non-ASCII path test coverage; strict assertions expose existing defects.
+    LL_ADD_INTEGRATION_TEST(llnonasciipaths "" "${test_libs}")
+    LL_ADD_INTEGRATION_TEST(llstaticassetpaths "" "${test_libs}")
+    # A second process permits another singleton lifecycle and distinguishes
+    # Unicode-specific failures from general protected-cache accounting bugs.
+    SET_TEST_PATH(STATIC_ASSET_TEST_PATH)
+    LL_TEST_COMMAND(STATIC_ASSET_ASCII_COMMAND "${STATIC_ASSET_TEST_PATH}"
+      "${CMAKE_COMMAND}" -E env "LL_TEST_ASCII_PROFILE=1" "$<TARGET_FILE:INTEGRATION_TEST_llstaticassetpaths>")
+    add_test(NAME INTEGRATION_TEST_RUNNER_llstaticassetpaths_ascii COMMAND ${STATIC_ASSET_ASCII_COMMAND})
+    set_tests_properties(INTEGRATION_TEST_RUNNER_llnonasciipaths
+      INTEGRATION_TEST_RUNNER_llstaticassetpaths INTEGRATION_TEST_RUNNER_llstaticassetpaths_ascii
+      PROPERTIES TIMEOUT 30 LABELS "nonascii")
+    # </FS:Beq>
 endif (LL_TESTS)

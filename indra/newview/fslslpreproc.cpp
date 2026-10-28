@@ -34,6 +34,9 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fslslpreproc.h"
+// <FS:Beq> Extended non-ASCII path test coverage: unchanged basename helper shared with tests.
+#include "fslslpreprocpath.h"
+// </FS:Beq>
 
 #include "fsyspath.h"
 #include "fslslpreprocviewer.h"
@@ -534,10 +537,12 @@ struct ProcCacheInfo
     FSLSLPreprocessor* self;
 };
 
-static inline std::string shortfile(const std::string& in)
-{
-    return std::filesystem::path(fsyspath(in)).filename().string();
-}
+// <FS:Beq> Extended non-ASCII path test coverage: unchanged helper, independently testable.
+// static inline std::string shortfile(const std::string& in)
+// {
+//     return std::filesystem::path(fsyspath(in)).filename().string();
+// }
+// </FS:Beq>
 
 
 class trace_include_files : public boost::wave::context_policies::default_preprocessing_hooks
