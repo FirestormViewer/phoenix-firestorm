@@ -425,7 +425,14 @@ inline int decode_access_mode(std::ios_base::openmode omode)
 
 inline int decode_open_mode(std::ios_base::openmode omode)
 {
-    int flags = O_CREAT | decode_access_mode(omode);
+    // <FS:Beq> Read-only opens must not create missing files.
+    // int flags = O_CREAT | decode_access_mode(omode);
+    int flags = decode_access_mode(omode);
+    if (omode & (LLFile::out | LLFile::app))
+    {
+        flags |= O_CREAT;
+    }
+    // </FS:Beq>
     if (omode & LLFile::app)
     {
         flags |= O_APPEND;

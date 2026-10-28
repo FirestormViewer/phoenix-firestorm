@@ -7,6 +7,8 @@
 #include "llerrorcontrol.h"
 #include "nonasciipaths.h"
 
+#include <memory>
+
 namespace
 {
     using namespace nonascii;
@@ -61,10 +63,10 @@ namespace tut
             ensure("native/UTF-8 exists agree", LLFile::exists(input));
             ensure_equals("native/UTF-8 sizes agree", LLFile::size(input), S64(payload.size()));
             ensure_equals("read through supplied path", LLFile::getContents(input), payload);
-            LLUniqueFile file(LLFile::fopen(input, LLFILE_MODE("rb")));
+            std::unique_ptr<LLFILE, int (*)(LLFILE*)> file(LLFile::fopen(input, LLFILE_MODE("rb")), &LLFile::close);
             ensure("fopen supplied path", bool(file));
             std::vector<char> bytes(payload.size());
-            ensure_equals("fread all bytes", fread(bytes.data(), 1, bytes.size(), file), payload.size());
+            ensure_equals("fread all bytes", fread(bytes.data(), 1, bytes.size(), file.get()), payload.size());
             ensure_equals("fopen exact contents", std::string(bytes.begin(), bytes.end()), payload);
         }
     };
