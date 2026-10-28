@@ -236,7 +236,13 @@
 				Ausgabegerät:
 			</text>
 		</panel>
-
+		<text name="bluetooth_lbl">
+			Nur Bluetooth
+		</text>
+		<radio_group name="bluetooth_behavior">
+			<radio_item label="Besseres Voice" name="better_voice"/>
+			<radio_item label="Besseres In-World-Audio" name="better_audio"/>
+		</radio_group>
 	</panel>
 
 	<!-- Media -->
