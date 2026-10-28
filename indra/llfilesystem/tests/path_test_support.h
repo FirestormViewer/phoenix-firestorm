@@ -5,9 +5,39 @@
 #include "lldir.h"
 #include "llapp.h"
 #include "nonasciipaths.h"
+#include "llerrorcontrol.h"
 
 namespace nonascii
 {
+    class Messages : public LLError::Recorder
+    {
+    public:
+        std::string text;
+        std::function<void(const std::string&)> on_message;
+        Messages() { showMultiline(true); }
+        void recordMessage(LLError::ELevel, const std::string& message) override
+        {
+            text += message + '\n';
+            if (on_message) on_message(message);
+        }
+    };
+
+    struct LogCapture
+    {
+        LLError::SettingsStoragePtr previous = LLError::saveAndResetSettings();
+        std::shared_ptr<Messages> messages = std::make_shared<Messages>();
+        LogCapture()
+        {
+            LLError::setDefaultLevel(LLError::LEVEL_DEBUG);
+            LLError::addRecorder(messages);
+        }
+        ~LogCapture()
+        {
+            LLError::removeRecorder(messages);
+            LLError::restoreSettings(previous);
+        }
+    };
+
     class Dirs : public LLDir
     {
     public:

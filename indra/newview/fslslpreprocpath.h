@@ -38,7 +38,8 @@
 
 static inline std::string shortfile(const std::string& in)
 {
-    return std::filesystem::path(fsyspath(in)).filename().string();
+    const fsyspath path(in);
+    return fsyspath(path.filename()).string();
 }
 // </FS:Beq>
 #endif

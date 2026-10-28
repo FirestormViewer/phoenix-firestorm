@@ -123,7 +123,10 @@ namespace tut
         // A cache file can disappear between the existence check and timestamp
         // update. Reporting that failure must not itself throw on its path.
         nonascii::fs::remove(path);
+        nonascii::LogCapture logs;
         reader.updateFileAccessTime();
+        ensure_contains("timestamp warning preserves exact UTF-8 path", logs.messages->text, nonascii::utf8(path));
+        ensure_contains("timestamp query error was reported", logs.messages->text, "Failed to read last write time");
         ensure("missing asset was not recreated", !nonascii::fs::exists(path));
     }
 }

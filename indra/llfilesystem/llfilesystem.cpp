@@ -370,7 +370,10 @@ void LLFileSystem::updateFileAccessTime()
     const std::filesystem::file_time_type last_write_time = std::filesystem::last_write_time(mPath, ec);
     if (ec)
     {
-        LL_WARNS() << "Failed to read last write time for cache file " << mPath << ": " << ec.message() << LL_ENDL;
+        // <FS:Beq> Reporting a filesystem error must preserve the UTF-8 filename.
+        // LL_WARNS() << "Failed to read last write time for cache file " << mPath << ": " << ec.message() << LL_ENDL;
+        LL_WARNS() << "Failed to read last write time for cache file " << fsyspath(mPath).string() << ": " << ec.message() << LL_ENDL;
+        // </FS:Beq>
         return;
     }
 
@@ -386,6 +389,9 @@ void LLFileSystem::updateFileAccessTime()
 
     if (ec)
     {
-        LL_WARNS() << "Failed to update last write time for cache file " << mPath << ": " << ec.message() << LL_ENDL;
+        // <FS:Beq> Reporting a filesystem error must preserve the UTF-8 filename.
+        // LL_WARNS() << "Failed to update last write time for cache file " << mPath << ": " << ec.message() << LL_ENDL;
+        LL_WARNS() << "Failed to update last write time for cache file " << fsyspath(mPath).string() << ": " << ec.message() << LL_ENDL;
+        // </FS:Beq>
     }
 }

@@ -95,8 +95,16 @@ if (LL_TESTS)
     LL_TEST_COMMAND(STATIC_ASSET_ASCII_COMMAND "${STATIC_ASSET_TEST_PATH}"
       "${CMAKE_COMMAND}" -E env "LL_TEST_ASCII_PROFILE=1" "$<TARGET_FILE:INTEGRATION_TEST_llstaticassetpaths>")
     add_test(NAME INTEGRATION_TEST_RUNNER_llstaticassetpaths_ascii COMMAND ${STATIC_ASSET_ASCII_COMMAND})
+    # Detail logging must not change filesystem outcomes or summary counters.
+    LL_TEST_COMMAND(STATIC_ASSET_DEBUG_COMMAND "${STATIC_ASSET_TEST_PATH}"
+      "${CMAKE_COMMAND}" -E env "LL_TEST_CACHE_DEBUG=1" "$<TARGET_FILE:INTEGRATION_TEST_llstaticassetpaths>")
+    LL_TEST_COMMAND(STATIC_ASSET_ASCII_DEBUG_COMMAND "${STATIC_ASSET_TEST_PATH}"
+      "${CMAKE_COMMAND}" -E env "LL_TEST_ASCII_PROFILE=1" "LL_TEST_CACHE_DEBUG=1" "$<TARGET_FILE:INTEGRATION_TEST_llstaticassetpaths>")
+    add_test(NAME INTEGRATION_TEST_RUNNER_llstaticassetpaths_debug COMMAND ${STATIC_ASSET_DEBUG_COMMAND})
+    add_test(NAME INTEGRATION_TEST_RUNNER_llstaticassetpaths_ascii_debug COMMAND ${STATIC_ASSET_ASCII_DEBUG_COMMAND})
     set_tests_properties(INTEGRATION_TEST_RUNNER_llnonasciipaths
       INTEGRATION_TEST_RUNNER_llstaticassetpaths INTEGRATION_TEST_RUNNER_llstaticassetpaths_ascii
+      INTEGRATION_TEST_RUNNER_llstaticassetpaths_debug INTEGRATION_TEST_RUNNER_llstaticassetpaths_ascii_debug
       PROPERTIES TIMEOUT 30 LABELS "nonascii")
     # </FS:Beq>
 endif (LL_TESTS)
