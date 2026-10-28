@@ -50,7 +50,7 @@ public:
 
     // <FS> Improved Home-key behavior
     // LLTextBase override
-    virtual void    startOfLine() override;
+    void    startOfLine() override;
 
     void    initKeywords(bool luau_language = false);
     void    loadKeywords();
@@ -103,7 +103,7 @@ private:
     void    resetPendingSyntaxApply();
 
     // <FS:Ansariel> Show keyword help on F1
-    /*virtual*/ bool handleKeyHere(KEY key, MASK mask) override;
+    bool handleKeyHere(KEY key, MASK mask) override;
 
     LLKeywords  mKeywordsLua;
     LLKeywords  mKeywordsLSL;
