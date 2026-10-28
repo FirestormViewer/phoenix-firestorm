@@ -59,10 +59,25 @@ class FSViewerManifest:
     def fs_channel_unique(self):
         return self.channel().replace("Firestorm", "").strip()
 
+    def fs_windows_signing_config(self):
+        # CI explicitly distinguishes optional unsigned builds from required signing.
+        if os.getenv('CI_SIGNING_REQUIRED') == 'false':
+            print("Unsigned build requested; skipping Windows signing.")
+            return None
+        config = tuple(os.getenv(name) for name in (
+            'SIGNTOOL_PATH', 'CODESIGNING_DLIB_PATH', 'CODESIGNING_METADATA_PATH'))
+        if not any(config) and os.getenv('CI_SIGNING_REQUIRED') != 'true':
+            print("No Windows signing requested.")
+            return None
+        if not all(config):
+            raise RuntimeError("Required Windows signing configuration is incomplete")
+        return config
+
     def fs_sign_win_binaries(self):
-        signtool_path = os.getenv('SIGNTOOL_PATH')
-        codesigning_dlib_path = os.getenv('CODESIGNING_DLIB_PATH')
-        metadata_file = os.getenv("CODESIGNING_METADATA_PATH")
+        config = self.fs_windows_signing_config()
+        if config is None:
+            return
+        signtool_path, codesigning_dlib_path, metadata_file = config
         # at some point we might want to sign other DLLs as well.
         executable_paths = [
             # self.args['configuration'] + "\\firestorm-bin.exe", # no need to sign this we are not packaging it.
@@ -74,41 +89,28 @@ class FSViewerManifest:
         if self.fs_is_opensim():
             executable_paths.append(self.args['configuration'] + "\\SLVoice.exe")
 
-        if not signtool_path or not codesigning_dlib_path:
-            print("Signing configuration is missing. Skipping signing process.")
-            return
-
         print("Signing executables.")
         for exe_path in executable_paths:
-            try:
-                subprocess.check_call([
-                    signtool_path, "sign", "/v", "/debug", "/fd", "SHA256",
-                    "/tr", "http://timestamp.acs.microsoft.com", "/td", "SHA256",
-                    "/dlib", codesigning_dlib_path, "/dmdf", metadata_file, exe_path
-                ], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-                print(f"Signed {exe_path}")
-            except Exception as e:
-                print(f"Couldn't sign binary: {exe_path}. Error: {e}")
-
-    def fs_sign_win_installer(self, substitution_strings):
-        signtool_path = os.getenv('SIGNTOOL_PATH')
-        codesigning_dlib_path = os.getenv('CODESIGNING_DLIB_PATH')
-        metadata_file = os.getenv("CODESIGNING_METADATA_PATH")
-        installer_path = self.args['configuration'] + "\\" + substitution_strings['installer_file']
-
-        if not signtool_path or not codesigning_dlib_path:
-            print("Signing configuration is missing. Skipping signing process.")
-            return
-        print("Signing installer.")
-
-        try:
             subprocess.check_call([
                 signtool_path, "sign", "/v", "/debug", "/fd", "SHA256",
                 "/tr", "http://timestamp.acs.microsoft.com", "/td", "SHA256",
-                "/dlib", codesigning_dlib_path, "/dmdf", metadata_file, installer_path
-            ], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-        except Exception as e:
-            print(f"Couldn't sign windows installer: {installer_path}. Error: {e}")
+                "/dlib", codesigning_dlib_path, "/dmdf", metadata_file, exe_path
+            ])
+            print(f"Signed {exe_path}")
+
+    def fs_sign_win_installer(self, substitution_strings):
+        config = self.fs_windows_signing_config()
+        if config is None:
+            return
+        signtool_path, codesigning_dlib_path, metadata_file = config
+        installer_path = self.args['configuration'] + "\\" + substitution_strings['installer_file']
+
+        print("Signing installer.")
+        subprocess.check_call([
+            signtool_path, "sign", "/v", "/debug", "/fd", "SHA256",
+            "/tr", "http://timestamp.acs.microsoft.com", "/td", "SHA256",
+            "/dlib", codesigning_dlib_path, "/dmdf", metadata_file, installer_path
+        ])
 
     def fs_delete_linux_symbols( self ):
         debugDir = os.path.join( self.get_dst_prefix(), "bin", ".debug" )
