@@ -234,6 +234,13 @@
 					Urządzenie wyjściowe:
 				</text>
 			</panel>
+			<text name="bluetooth_lbl">
+				Tylko Bluetooth
+			</text>
+			<radio_group name="bluetooth_behavior">
+				<radio_item label="Lepszy głos" name="better_voice" />
+				<radio_item label="Lepsze audio świata" name="better_audio" />
+			</radio_group>
 		</panel>
 		<panel name="Media Media Panel">
 			<text name="media_autoplay_label" width="150">
