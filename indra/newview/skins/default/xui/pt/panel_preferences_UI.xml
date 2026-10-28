@@ -273,14 +273,12 @@ Padrão 0. Valores maiores podem não funcionar corretamente.
 		</text>
 		<text name="tooltip_textbox4">
 			Pixel (requer reinicialização)
-[VIEWER_GENERATION]-Padrão 0. Visualizador 1-Padrão 2.
 		</text>
 		<text name="Label_FolderItemViewHeight">
 			Altura da entrada da pasta:
 		</text>
 		<text name="Label_FolderItemViewHeight_Scale">
 			Pixel (requer reinicialização)
-[VIEWER_GENERATION]-Padrão 20. Visualizador 1-Padrão 18.
 		</text>
 		<text name="text_box_notecard_font" width="125">
 			Fonte para cartões de nota:
