@@ -7,8 +7,7 @@ import zipfile
 import glob
 import shutil
 import hashlib
-import pytz
-from datetime import datetime
+from datetime import datetime, timezone
 import requests
 from discord_webhook import DiscordWebhook
 from pathlib import Path
@@ -17,7 +16,7 @@ from typing import Tuple
 from build_config import BuildConfig
 
 def get_current_date_str():
-    now = datetime.now(pytz.timezone('UTC'))
+    now = datetime.now(timezone.utc)
     day = now.day
     month = now.month
     year = now.year
