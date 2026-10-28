@@ -361,6 +361,11 @@ if (LL_TESTS)
   LL_ADD_INTEGRATION_TEST(lleventfilter "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llevents "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llfile "" "${test_libs}")
+  # <FS:Beq> Extended non-ASCII path test coverage; temp discovery needs fresh processes.
+  LL_ADD_INTEGRATION_TEST(llfilepaths "" "${test_libs}"
+    "${PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/llfilepaths_test.py")
+  set_tests_properties(INTEGRATION_TEST_RUNNER_llfilepaths PROPERTIES TIMEOUT 100 LABELS "nonascii")
+  # </FS:Beq>
   LL_ADD_INTEGRATION_TEST(llframetimer "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llhttpdate "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llheteromap "" "${test_libs}")
@@ -368,7 +373,16 @@ if (LL_TESTS)
   LL_ADD_INTEGRATION_TEST(llleap "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llmainthreadtask "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llpounceable "" "${test_libs}")
+  # <FS:Beq> Reinstate process lifecycle and pipe coverage, verified locally on Windows.
   #LL_ADD_INTEGRATION_TEST(llprocess "" "${test_libs}")  RIDER: Test is a known failure.  Disabling for the moment.
+  LL_ADD_INTEGRATION_TEST(llprocess "" "${test_libs}")
+  # Bound the full suite, including its existing latency and Windows-only cases.
+  set_tests_properties(INTEGRATION_TEST_RUNNER_llprocess PROPERTIES TIMEOUT 180)
+  # </FS:Beq>
+  # <FS:Beq> Exercise pending stdin buffer lifetime alongside the general process suite.
+  LL_ADD_INTEGRATION_TEST(llprocessstdin "" "${test_libs}")
+  set_tests_properties(INTEGRATION_TEST_RUNNER_llprocessstdin PROPERTIES TIMEOUT 45)
+  # </FS:Beq>
   LL_ADD_INTEGRATION_TEST(llprocessor "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llprocinfo "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llrand "" "${test_libs}")

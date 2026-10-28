@@ -180,7 +180,10 @@ public:
     CountStatHandle(const char* name, const char* description = NULL)
     :   stat_t(name, description)
     , mTotalSamplesCount(0)
-    , mTotalSamples(0.0)
+    // <FS:Beq> Zero-initialize scalar and unit-valued totals without narrowing.
+    // , mTotalSamples(0.0)
+    , mTotalSamples()
+    // </FS:Beq>
     {}
 
     /*virtual*/ const char* getUnitLabel() const { return LLGetUnitLabel<T>::getUnitLabel(); }

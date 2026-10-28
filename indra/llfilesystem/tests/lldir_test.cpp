@@ -132,6 +132,14 @@ struct LLDir_Dummy: public LLDir
         // pathname exists in our set.
         return (mFilesystem.find(pathname) != mFilesystem.end());
     }
+    
+    // <FS:Beq> Adapt directory test fixtures to Firestorm directory and skin APIs.
+    bool getNextFileInDir(const std::string&, const std::string&, std::string&) override
+    {
+        tut::fail("LLDir_Dummy does not implement directory iteration");
+        return false;
+    }
+    // </FS:Beq>
 
     virtual std::string getLLPluginLauncher()
     {
@@ -570,7 +578,10 @@ namespace tut
         // Setting "default" means we shouldn't consider any "*/skins/steam"
         // directories; setting "en" means we shouldn't consider any "xui/fr"
         // directories.
-        lldir.setSkinFolder("default", "en");
+        // <FS:Beq> Adapt directory test fixtures to Firestorm directory and skin APIs.
+        // lldir.setSkinFolder("default", "en");
+        lldir.setSkinFolder("default", "", "en");
+        // </FS:Beq>
         ensure_equals(lldir.getSkinFolder(), "default");
         ensure_equals(lldir.getLanguage(), "en");
 
@@ -628,7 +639,10 @@ namespace tut
         /*------------------------ "default", "fr" -------------------------*/
         // We start being able to distinguish localized subdirs from
         // unlocalized when we ask for a non-English language.
-        lldir.setSkinFolder("default", "fr");
+        // <FS:Beq> Adapt directory test fixtures to Firestorm directory and skin APIs.
+        // lldir.setSkinFolder("default", "fr");
+        lldir.setSkinFolder("default", "", "fr");
+        // </FS:Beq>
         ensure_equals(lldir.getLanguage(), "fr");
 
         // pass merge=true to request this filename in all relevant skins
@@ -656,13 +670,19 @@ namespace tut
                       StringVec{ "install/skins/default/html/en-us/welcome.html", "install/skins/default/html/fr/welcome.html" });
 
         /*------------------------ "default", "zh" -------------------------*/
-        lldir.setSkinFolder("default", "zh");
+        // <FS:Beq> Adapt directory test fixtures to Firestorm directory and skin APIs.
+        // lldir.setSkinFolder("default", "zh");
+        lldir.setSkinFolder("default", "", "zh");
+        // </FS:Beq>
         // Because strings.xml has only a "fr" override but no "zh" override
         // in any skin, the most localized version we can find is "en".
         ensure_equals(lldir.findSkinnedFilenames(LLDir::XUI, "strings.xml"), StringVec{ "user/skins/default/xui/en/strings.xml" });
 
         /*------------------------- "steam", "en" --------------------------*/
-        lldir.setSkinFolder("steam", "en");
+        // <FS:Beq> Adapt directory test fixtures to Firestorm directory and skin APIs.
+        // lldir.setSkinFolder("steam", "en");
+        lldir.setSkinFolder("steam", "", "en");
+        // </FS:Beq>
 
         ensure_equals(lldir.findSkinnedFilenames(LLDir::SKINBASE, "colors.xml", LLDir::ALL_SKINS),
                       StringVec{ "install/skins/default/colors.xml", "install/skins/steam/colors.xml", "user/skins/default/colors.xml",
@@ -689,7 +709,10 @@ namespace tut
                                  "user/skins/default/xui/en/strings.xml", "user/skins/steam/xui/en/strings.xml" });
 
         /*------------------------- "steam", "fr" --------------------------*/
-        lldir.setSkinFolder("steam", "fr");
+        // <FS:Beq> Adapt directory test fixtures to Firestorm directory and skin APIs.
+        // lldir.setSkinFolder("steam", "fr");
+        lldir.setSkinFolder("steam", "", "fr");
+        // </FS:Beq>
 
         // pass CURRENT_SKIN to request only the most specialized files
         ensure_equals(lldir.findSkinnedFilenames(LLDir::XUI, "strings.xml"),

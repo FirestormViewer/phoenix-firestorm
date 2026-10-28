@@ -31,6 +31,9 @@
 #include "../llviewercontrol.h"
 // Class to test
 #include "../llworldmipmap.h"
+// <FS:Beq> Isolate simulator feature services from coordinate and empty-cache tests.
+#include "../lfsimfeaturehandler.h"
+// </FS:Beq>
 // Tut header
 #include "../test/lltut.h"
 
@@ -41,6 +44,14 @@
 // * Add as little as possible (let the link errors guide you)
 // * Do not make any assumption as to how those classes or methods work (i.e. don't copy/paste code)
 // * A simulator for a class can be implemented here. Please comment and document thoroughly.
+// <FS:Beq> Isolate simulator feature services from coordinate and empty-cache tests.
+
+// Map-service access is outside these coordinate and empty-cache tests.
+LFSimFeatureHandler::LFSimFeatureHandler()
+{
+    tut::fail("Unexpected simulator feature access in LLWorldMipmap test");
+}
+// </FS:Beq>
 
 void LLGLTexture::setBoostLevel(S32 ) { }
 LLViewerFetchedTexture* LLViewerTextureManager::getFetchedTextureFromUrl(const std::string&, FTType, bool, LLGLTexture::EBoostLevel, S8,

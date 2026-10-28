@@ -200,8 +200,10 @@ public:
     }
 
     // Called from LLProcess::tick() to initiate writing buffered data.
-    // Self-chains: each completed write immediately starts the next one if
-    // more data is waiting, so large transfers don't stall between ticks.
+    // <FS:Beq> Keep next-frame pipe-write scheduling comments accurate.
+    // // Self-chains: each completed write immediately starts the next one if
+    // // more data is waiting, so large transfers don't stall between ticks.
+    // </FS:Beq>
     void tick() override
     {
         startAsyncWrite();
@@ -214,25 +216,44 @@ private:
             return;
 
         mWritePending = true;
+        // <FS:Beq> Own asynchronous write buffers until completion to prevent LEAP message corruption.
+        //
+        //     // Snapshot the number of bytes currently buffered so the async_write
+        //     // operates on a fixed-size, stable view. Any data written to
+        //     // get_ostream() while this write is in flight lands in the streambuf's
+        //     // put area and is excluded from the current operation; it will be sent
+        //     // on the next tick(). Without this snapshot, a concurrent write to
+        //     // get_ostream() could reallocate/invalidate the buffer sequence.
+        //     std::size_t writeSize = mStreambuf.size();
+        // Own the bytes until completion. Limiting the buffer sequence to a
+        // fixed size does not stabilize its storage: replies queued through
+        // get_ostream() can grow and relocate mStreambuf during this write.
+        // Keep the original bytes in mStreambuf until completion so size()
+        // continues to include both in-flight and newly queued data.
+        auto data = std::make_shared<std::string>(
+            asio::buffers_begin(mStreambuf.data()), asio::buffers_end(mStreambuf.data()));
+        //
+        // </FS:Beq>
 
-        // Snapshot the number of bytes currently buffered so the async_write
-        // operates on a fixed-size, stable view. Any data written to
-        // get_ostream() while this write is in flight lands in the streambuf's
-        // put area and is excluded from the current operation; it will be sent
-        // on the next tick(). Without this snapshot, a concurrent write to
-        // get_ostream() could reallocate/invalidate the buffer sequence.
-        std::size_t writeSize = mStreambuf.size();
+        // <FS:Beq> Fix the the next-frame buffer handling.
+        //     // Write all buffered data asynchronously. Do NOT self-chain in the
+        //     // completion handler: sending the next buffer immediately can cause
+        //     // the child to respond within the same tick(), which posts a read
+        //     // event before the test listener has a chance to disconnect -- that
+        //     // was the root cause of test 18 "more than 3 events" and test 9
+        //     // "many small messages" failures. tick() calls mWritePipe->tick() on
+        //     // every mainloop frame, so any newly-queued data will be sent then.
+        //     asio::async_write(*mPipe, asio::buffer(mStreambuf.data(), writeSize),
+        //         [this](const boost::system::error_code& ec, std::size_t bytes_transferred)
+        //     {
 
-        // Write all buffered data asynchronously. Do NOT self-chain in the
-        // completion handler: sending the next buffer immediately can cause
-        // the child to respond within the same tick(), which posts a read
-        // event before the test listener has a chance to disconnect -- that
-        // was the root cause of test 18 "more than 3 events" and test 9
-        // "many small messages" failures. tick() calls mWritePipe->tick() on
-        // every mainloop frame, so any newly-queued data will be sent then.
-        asio::async_write(*mPipe, asio::buffer(mStreambuf.data(), writeSize),
-            [this](const boost::system::error_code& ec, std::size_t bytes_transferred)
+        // Start newly queued data on the next mainloop frame rather than
+        // self-chaining in this handler, preserving pipe-event scheduling.
+        asio::async_write(*mPipe, asio::buffer(*data),
+            [this, data](const boost::system::error_code& ec, std::size_t bytes_transferred)
         {
+        // </FS:Beq>
+
             mWritePending = false;
 
             if (!ec)

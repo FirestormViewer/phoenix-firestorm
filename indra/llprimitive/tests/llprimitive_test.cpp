@@ -32,6 +32,9 @@
 
 #include "../../llmath/llvolumemgr.h"
 
+
+#include <stdexcept> // <FS:Beq/> Complete the texture-list test double and fail unexpected entry access.
+
 class DummyVolumeMgr : public LLVolumeMgr
 {
 public:
@@ -107,6 +110,13 @@ void LLPrimTextureList::take(LLPrimTextureList &other_list) { }
 void LLPrimTextureList::setSize(S32 new_size) { mEntryList.resize(new_size); }
 void LLPrimTextureList::setAllIDs(const LLUUID &id) { }
 LLTextureEntry * LLPrimTextureList::getTexture(const U8 index) const { return nullptr; }
+// <FS:Beq> Complete the texture-list test double and fail unexpected entry access.
+LLTextureEntry& LLPrimTextureList::getTextureRef(const U8 index) const
+{
+    // These primitive tests only exercise texture-list sizing, not entries.
+    throw std::logic_error("Unexpected texture entry access in LLPrimitive test");
+}
+// </FS:Beq>
 S32 LLPrimTextureList::size() const { return static_cast<S32>(mEntryList.size()); }
 
 class PRIMITIVE_TEST_SETUP

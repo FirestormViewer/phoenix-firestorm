@@ -1028,6 +1028,7 @@ set(viewer_HEADER_FILES
     fslslbridge.h
     fslslbridgerequest.h
     fslslpreproc.h
+    fslslpreprocpath.h # <FS:Beq> Extended non-ASCII path test coverage. </FS:Beq>
     fslslpreprocviewer.h
     fsmoneytracker.h
     fsmaniprotatejoint.h
@@ -3148,6 +3149,10 @@ if (LL_TESTS)
     ""
     "${test_libs}"
   )
+  # <FS:Beq> Extended non-ASCII path test coverage for the production LSL basename helper.
+  LL_ADD_INTEGRATION_TEST(fslslpreprocpath "" "llcommon")
+  set_tests_properties(INTEGRATION_TEST_RUNNER_fslslpreprocpath PROPERTIES TIMEOUT 30 LABELS "nonascii")
+  # </FS:Beq>
 
   LL_ADD_INTEGRATION_TEST(llsechandler_basic
     llsechandler_basic.cpp
@@ -3158,22 +3163,46 @@ if (LL_TESTS)
     llsecapi.cpp
     "${test_libs}"
   )
+  # <FS:Beq> Exercise the appropriate SLURL implementation with offline OpenSim fixtures.
+  # if (NOT OPENSIM)#<FS:AW optional opensim support>
+  #   set(llslurl_test_sources
+  #       llslurl.cpp
+  #       llviewernetwork.cpp
+  #   )
+  # endif (NOT OPENSIM)#<FS:AW optional opensim support>
+  #
+  # set(llslurl_test_sources
+  #   llslurl.cpp
+  #   llviewernetwork.cpp
+  # )
+  #
+  # LL_ADD_INTEGRATION_TEST(llslurl
+  #   "${llslurl_test_sources}"
+  #   "${test_libs}"
+  # )
   if (NOT OPENSIM)#<FS:AW optional opensim support>
     set(llslurl_test_sources
         llslurl.cpp
         llviewernetwork.cpp
     )
+    LL_ADD_INTEGRATION_TEST(llslurl
+      "${llslurl_test_sources}"
+      "${test_libs}"
+    )
+  else ()
+    # Exercise the production Firestorm implementations using offline viewer
+    # service boundaries and a fake HTTP transport.
+    set(opensim_grid_test_sources
+      fsgridhandler.cpp
+      tests/opensim_test_support.cpp
+    )
+    LL_ADD_INTEGRATION_TEST(fsslurl
+      "fsslurl.cpp;${opensim_grid_test_sources}"
+      "${test_libs}"
+    )
+    target_include_directories(INTEGRATION_TEST_fsslurl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
   endif (NOT OPENSIM)#<FS:AW optional opensim support>
-
-  set(llslurl_test_sources
-    llslurl.cpp
-    llviewernetwork.cpp
-  )
-
-  LL_ADD_INTEGRATION_TEST(llslurl
-    "${llslurl_test_sources}"
-    "${test_libs}"
-  )
+  # </FS:Beq>
 
   set(llviewercontrollistener_test_sources
     llviewercontrollistener.cpp
@@ -3188,10 +3217,24 @@ if (LL_TESTS)
     "${test_libs}"
   )
 
-  LL_ADD_INTEGRATION_TEST(llviewernetwork
-    llviewernetwork.cpp
-    "${test_libs}"
-  )
+  # <FS:Beq> Test the production grid manager for each build configuration.
+  # LL_ADD_INTEGRATION_TEST(llviewernetwork
+  #   llviewernetwork.cpp
+  #   "${test_libs}"
+  # )
+  if (NOT OPENSIM)
+    LL_ADD_INTEGRATION_TEST(llviewernetwork
+      llviewernetwork.cpp
+      "${test_libs}"
+    )
+  else ()
+    LL_ADD_INTEGRATION_TEST(fsgridhandler
+      "${opensim_grid_test_sources}"
+      "${test_libs}"
+    )
+    target_include_directories(INTEGRATION_TEST_fsgridhandler PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+  endif ()
+  # </FS:Beq>
 
   LL_ADD_INTEGRATION_TEST(llviewerassetstats
     llviewerassetstats.cpp
