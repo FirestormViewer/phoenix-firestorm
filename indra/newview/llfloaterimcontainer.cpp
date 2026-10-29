@@ -1367,6 +1367,12 @@ void LLFloaterIMContainer::doToParticipants(const std::string& command, uuid_vec
         {
             banSelectedMember(userID);
         }
+        // <FS:PP> Ban from all groups
+        else if ("ban_from_all_groups" == command)
+        {
+            LLGroupActions::banFromAllGroups(userID);
+        }
+        // </FS:PP>
     }
     else if (selectedIDS.size() > 1)
     {
@@ -1682,6 +1688,12 @@ bool LLFloaterIMContainer::enableContextMenuItem(const std::string& item, uuid_v
     {
         return canBanSelectedMember(single_id);
     }
+    // <FS:PP> Ban from all groups
+    else if ("can_ban_from_all_groups" == item)
+    {
+        return is_single_select && LLGroupActions::canBanFromAnyGroup(single_id);
+    }
+    // </FS:PP>
     else if (is_moderator_option)
     {
         // *TODO : get that out of here...

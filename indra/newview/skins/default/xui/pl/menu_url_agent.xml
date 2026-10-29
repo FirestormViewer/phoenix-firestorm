@@ -20,6 +20,7 @@
 		<menu_item_call label="Odblokuj tego rozmówcę" name="ModerateVoiceUnMute" />
 		<menu_item_call label="Zbanuj" name="BanGroupMember" />
 		<menu_item_call label="Wyrzuć z grupy" name="BanEjectMember" />
+		<menu_item_call label="Zbanuj we wszystkich moich grupach" name="BanFromAllGroups" />
 	</context_menu>
 	<menu_item_call label="Kopiuj nazwę do schowka" name="url_copy_label"/>
 	<menu_item_call label="Kopiuj SLurl do schowka" name="url_copy"/>

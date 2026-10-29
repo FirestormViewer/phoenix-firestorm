@@ -912,6 +912,64 @@ If you no longer wish to have these abilities granted to this role, disable them
   </notification>
 
   <notification
+   icon="alertmodal.tga"
+   name="FSBanFromAllGroups"
+   type="alertmodal">
+You are about to ban [AVATAR_NAME] from all [COUNT] groups you can manage bans in:
+
+[GROUPS]
+    <tag>group</tag>
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Ban"/>
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="FSUnbanFromAllGroups"
+   type="alertmodal">
+You are about to lift the ban on [AVATAR_NAME] in all [COUNT] groups you can manage bans in:
+
+[GROUPS]
+    <tag>group</tag>
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Unban"/>
+  </notification>
+  <notification
+   icon="notify.tga"
+   name="FSBanFromAllGroupsStarted"
+   type="notify">
+    Updating group bans for [AVATAR_NAME] in [COUNT] groups, one group at a time. A report will follow when done.
+    <tag>group</tag>
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="FSBanFromAllGroupsReport"
+   type="alertmodal">
+[AVATAR_NAME] has been banned in [DONE] of [COUNT] groups.
+
+Banned in: [SUCCEEDED]
+
+Failed in: [FAILED]
+    <tag>group</tag>
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="FSUnbanFromAllGroupsReport"
+   type="alertmodal">
+The ban on [AVATAR_NAME] has been lifted in [DONE] of [COUNT] groups.
+
+Lifted in: [SUCCEEDED]
+
+Failed in: [FAILED]
+    <tag>group</tag>
+  </notification>
+
+  <notification
     icon="notify.tga"
     name="GroupBanUserOnBanlist"
     type="notify">
