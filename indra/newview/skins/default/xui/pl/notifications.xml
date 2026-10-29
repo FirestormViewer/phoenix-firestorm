@@ -290,6 +290,35 @@ Jeśli nie chcesz, aby te przywileje były dłużej przypisane do tej roli, to w
 		Zamierzasz zbanować [COUNT] osób z grupy.
 		<usetemplate ignoretext="Potwierdź przed zbanowaniem z grupy kilku osób na raz" name="okcancelignore" notext="Anuluj" yestext="Banuj" />
 	</notification>
+	<notification name="FSBanFromAllGroups">
+		Zamierzasz zbanować [AVATAR_NAME] we wszystkich grupach, w których możesz zarządzać banami (liczba grup: [COUNT]):
+
+[GROUPS]
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Banuj" />
+	</notification>
+	<notification name="FSUnbanFromAllGroups">
+		Zamierzasz odbanować [AVATAR_NAME] we wszystkich grupach, w których możesz zarządzać banami (liczba grup: [COUNT]):
+
+[GROUPS]
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Odbanuj" />
+	</notification>
+	<notification name="FSBanFromAllGroupsStarted">
+		Aktualizowanie banów dla [AVATAR_NAME], grupa po grupie (liczba grup: [COUNT]). Raport pojawi się po zakończeniu.
+	</notification>
+	<notification name="FSBanFromAllGroupsReport">
+		Zbanowano [AVATAR_NAME] w [DONE] z [COUNT] grup.
+
+Zbanowano w: [SUCCEEDED]
+
+Nie udało się w: [FAILED]
+	</notification>
+	<notification name="FSUnbanFromAllGroupsReport">
+		Odbanowano [AVATAR_NAME] w [DONE] z [COUNT] grup.
+
+Odbanowano w: [SUCCEEDED]
+
+Nie udało się w: [FAILED]
+	</notification>
 	<notification name="GroupBanUserOnBanlist">
 		Niektórzy rezydenci nie dostali zaproszenia, ponieważ są zbanowani w grupie.
 	</notification>

@@ -58,11 +58,19 @@
 #include "fsfloaterim.h"
 #include "llpanelgroup.h"
 #include "llresmgr.h"
+// <FS:PP> Ban from all groups
+#include "llcorehttputil.h"
+#include "llcoros.h"
+#include "lleventcoro.h"
+#include "llhttpconstants.h"
+#include "llviewerregion.h"
+// </FS:PP>
 
 //
 // Globals
 //
 static LLGroupChatListener sGroupChatListener;
+S32 LLGroupActions::sBanFromAllGroupsRuns = 0; // <FS:PP> Ban from all groups
 
 class LLGroupHandler : public LLCommandHandler
 {
@@ -894,6 +902,224 @@ bool LLGroupActions::callbackEject(const LLSD& notification, const LLSD& respons
     return false;
 }
 // [/SL:KB]
+
+// <FS:PP> Ban or unban an avatar from every group the agent can manage bans in
+//static
+bool LLGroupActions::canBanFromAnyGroup(const LLUUID& idAgent)
+{
+    if (idAgent.isNull() || idAgent == gAgent.getID())
+    {
+        return false;
+    }
+
+    for (const LLGroupData& group : gAgent.mGroups)
+    {
+        if (group.mPowers & GP_GROUP_BAN_ACCESS)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+//static
+// <FS:PP> Ban from all groups
+bool LLGroupActions::isBanFromAllGroupsRunning()
+{
+    return sBanFromAllGroupsRuns > 0;
+}
+// </FS:PP>
+
+//static
+void LLGroupActions::banFromAllGroups(const LLUUID& idAgent)
+{
+    confirmBanFromAllGroups(idAgent, true);
+}
+
+//static
+void LLGroupActions::unbanFromAllGroups(const LLUUID& idAgent)
+{
+    confirmBanFromAllGroups(idAgent, false);
+}
+
+//static
+void LLGroupActions::confirmBanFromAllGroups(const LLUUID& idAgent, bool ban)
+{
+    if (!canBanFromAnyGroup(idAgent))
+    {
+        return;
+    }
+
+    typedef std::pair<std::string, LLUUID> group_entry_t;
+    std::vector<group_entry_t> groups;
+    for (const LLGroupData& group : gAgent.mGroups)
+    {
+        if (group.mPowers & GP_GROUP_BAN_ACCESS)
+        {
+            groups.emplace_back(group.mName, group.mID);
+        }
+    }
+    std::sort(groups.begin(), groups.end(), [](const group_entry_t& a, const group_entry_t& b) { return LLStringUtil::compareDict(a.first, b.first) < 0; });
+
+    std::string listed;
+    LLSD payload;
+    payload["avatar_id"] = idAgent;
+    payload["ban"] = ban;
+    payload["group_ids"] = LLSD::emptyArray();
+    payload["group_names"] = LLSD::emptyArray();
+    for (const group_entry_t& group : groups)
+    {
+        payload["group_ids"].append(group.second);
+        payload["group_names"].append(group.first);
+        listed += (listed.empty() ? "" : ", ") + group.first;
+    }
+
+    LLSD args;
+    args["AVATAR_NAME"] = LLSLURL("agent", idAgent, "completename").getSLURLString();
+    args["COUNT"] = llformat("%d", (S32)groups.size());
+    args["GROUPS"] = listed;
+    LLNotificationsUtil::add(ban ? "FSBanFromAllGroups" : "FSUnbanFromAllGroups", args, payload, callbackBanFromAllGroups);
+}
+
+//static
+bool LLGroupActions::callbackBanFromAllGroups(const LLSD& notification, const LLSD& response)
+{
+    if (LLNotificationsUtil::getSelectedOption(notification, response) != 0)
+    {
+        return false;
+    }
+
+    const LLSD& payload = notification["payload"];
+    const LLSD& ids = payload["group_ids"];
+    const LLSD& names = payload["group_names"];
+
+    uuid_vec_t group_ids;
+    std::vector<std::string> group_names;
+    for (LLSD::array_const_iterator it = ids.beginArray(); it != ids.endArray(); ++it)
+    {
+        group_ids.push_back(it->asUUID());
+    }
+    for (LLSD::array_const_iterator it = names.beginArray(); it != names.endArray(); ++it)
+    {
+        group_names.push_back(it->asString());
+    }
+
+    const LLUUID agent_id = payload["avatar_id"].asUUID();
+    const bool ban = payload["ban"].asBoolean();
+
+    LLSD args;
+    args["AVATAR_NAME"] = LLSLURL("agent", agent_id, "completename").getSLURLString();
+    args["COUNT"] = llformat("%d", (S32)group_ids.size());
+    LLNotificationsUtil::add("FSBanFromAllGroupsStarted", args);
+
+    LLCoros::instance().launch("LLGroupActions::banFromAllGroupsCoro", [group_ids, group_names, agent_id, ban]() { banFromAllGroupsCoro(group_ids, group_names, agent_id, ban); });
+    return false;
+}
+
+//static
+void LLGroupActions::banFromAllGroupsCoro(uuid_vec_t group_ids, std::vector<std::string> group_names, LLUUID idAgent, bool ban)
+{
+    LLViewerRegion* region = gAgent.getRegion();
+    std::string cap_url = region ? region->getCapability("GroupAPIv1") : std::string();
+    if (cap_url.empty())
+    {
+        LL_WARNS("GrpMgr") << "No GroupAPIv1 capability, cannot change group bans" << LL_ENDL;
+        return;
+    }
+
+    LLCore::HttpRequest::policy_t http_policy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t http_adapter = std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("banFromAllGroups", http_policy);
+    LLCore::HttpRequest::ptr_t http_request = std::make_shared<LLCore::HttpRequest>();
+    LLCore::HttpHeaders::ptr_t http_headers = std::make_shared<LLCore::HttpHeaders>();
+    LLCore::HttpOptions::ptr_t http_options = std::make_shared<LLCore::HttpOptions>();
+    http_options->setFollowRedirects(false);
+    http_headers->append(HTTP_OUT_HEADER_CONTENT_TYPE, HTTP_CONTENT_LLSD_XML);
+
+    LLSD post_data = LLSD::emptyMap();
+    post_data["ban_action"] = LLSD::Integer(ban ? LLGroupMgr::BAN_CREATE : LLGroupMgr::BAN_DELETE);
+    post_data["ban_ids"] = LLSD::emptyArray();
+    post_data["ban_ids"].append(idAgent);
+
+    // <FS:PP> Ban from all groups
+    // the server answers every eject of a non-member with an alert, muted while this runs
+    ++sBanFromAllGroupsRuns;
+    // </FS:PP>
+
+    std::string succeeded;
+    std::string failed;
+    S32 done = 0;
+    for (size_t i = 0; i < group_ids.size(); ++i)
+    {
+        if (i > 0)
+        {
+            // one group at a time, with a pause, so this never looks like a request flood
+            llcoro::suspendUntilTimeout(0.5f);
+        }
+
+        const LLUUID& group_id = group_ids[i];
+        LLSD result = http_adapter->postAndSuspend(http_request, cap_url + "?group_id=" + group_id.asString(), post_data, http_options, http_headers);
+        LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS]);
+        if (!status)
+        {
+            LL_WARNS("GrpMgr") << (ban ? "Banning " : "Unbanning ") << idAgent << " in group " << group_id << " failed: " << status.toString() << LL_ENDL;
+            failed += (failed.empty() ? "" : ", ") + group_names[i];
+            continue;
+        }
+
+        ++done;
+        succeeded += (succeeded.empty() ? "" : ", ") + group_names[i];
+
+        // <FS:PP> Ban from all groups
+        // if (LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(group_id))
+        LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(group_id);
+        if (gdatap)
+        // </FS:PP>
+        {
+            if (ban)
+            {
+                gdatap->createBanEntry(idAgent);
+            }
+            else
+            {
+                gdatap->removeBanEntry(idAgent);
+            }
+        }
+
+        // a ban alone does not remove a current member, ejecting a non-member is ignored by the server
+        // <FS:PP> Ban from all groups
+        // if (ban && gAgent.hasPowerInGroup(group_id, GP_MEMBER_EJECT))
+        bool known_non_member = gdatap && gdatap->isMemberDataComplete() && gdatap->mMembers.find(idAgent) == gdatap->mMembers.end();
+        if (ban && !known_non_member && gAgent.hasPowerInGroup(group_id, GP_MEMBER_EJECT))
+        // </FS:PP>
+        {
+            LLMessageSystem* msg = gMessageSystem;
+            msg->newMessage("EjectGroupMemberRequest");
+            msg->nextBlock("AgentData");
+            msg->addUUID("AgentID", gAgent.getID());
+            msg->addUUID("SessionID", gAgent.getSessionID());
+            msg->nextBlock("GroupData");
+            msg->addUUID("GroupID", group_id);
+            msg->nextBlock("EjectData");
+            msg->addUUID("EjecteeID", idAgent);
+            gAgent.sendReliableMessage();
+        }
+    }
+
+    LLSD args;
+    args["AVATAR_NAME"] = LLSLURL("agent", idAgent, "completename").getSLURLString();
+    args["COUNT"] = llformat("%d", (S32)group_ids.size());
+    args["DONE"] = llformat("%d", done);
+    args["SUCCEEDED"] = succeeded.empty() ? std::string("-") : succeeded;
+    args["FAILED"] = failed.empty() ? std::string("-") : failed;
+    LLNotificationsUtil::add(ban ? "FSBanFromAllGroupsReport" : "FSUnbanFromAllGroupsReport", args);
+
+    // <FS:PP> Ban from all groups
+    // eject replies trail the last request
+    llcoro::suspendUntilTimeout(5.f);
+    --sBanFromAllGroupsRuns;
+    // </FS:PP>
+}
+// </FS:PP>
 
 //-- Private methods ----------------------------------------------------------
 

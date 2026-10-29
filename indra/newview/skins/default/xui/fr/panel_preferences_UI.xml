@@ -194,14 +194,12 @@
 			</text>
 			<text name="tooltip_textbox4">
 				pixels (Redémarrage requis)
-0 par défaut pour le [VIEWER_GENERATION], 2 pour le Client 1.
 			</text>
 			<text name="Label_FolderItemViewHeight" width="195">
 				Hauteur d'une ligne d'inventaire :
 			</text>
 			<text name="Label_FolderItemViewHeight_Scale">
 				pixels (Redémarrage requis)
-20 par défaut pour le [VIEWER_GENERATION], 18 pour le Client 1.
 			</text>
 			<text name="text_box_notecard_font" width="170">
 				Police de l'éditeur de notices :

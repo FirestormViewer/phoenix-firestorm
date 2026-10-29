@@ -266,14 +266,12 @@ Domyślnie 0.
         </text>
         <text name="tooltip_textbox4">
           pikseli (wymaga restartu)
-Second Life viewer domyślnie 0. V1 domyślnie 2.
         </text>
         <text name="Label_FolderItemViewHeight">
            Wysokość - foldery:
         </text>
         <text name="Label_FolderItemViewHeight_Scale">
           pikseli (wymaga restartu)
-Second Life viewer domyślnie 20. V1 domyślnie 18.
         </text>
         <text name="text_box_notecard_font" width="135">
             Czcionka edytora notek:

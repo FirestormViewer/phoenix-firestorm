@@ -268,14 +268,12 @@
 			</text>
 			<text name="tooltip_textbox4">
 				畫素（需要重新啟動）
-[VIEWER_GENERATION] 預設 0。Viewer 1 預設 2。
 			</text>
 			<text name="Label_FolderItemViewHeight">
 				檔案夾項目視圖高度：
 			</text>
 			<text name="Label_FolderItemViewHeight_Scale">
 				畫素（需要重新啟動）
-[VIEWER_GENERATION] 預設 20。Viewer 1 預設 18。
 			</text>
 			<text name="text_box_notecard_font" width="125">
 				記事卡字型：

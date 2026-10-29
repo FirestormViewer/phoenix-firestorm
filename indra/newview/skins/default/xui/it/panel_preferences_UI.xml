@@ -257,14 +257,12 @@ Predefinito 0. Valori più grandi non funzionano bene
 		</text>
 		<text name="tooltip_textbox4">
 			pixel (richiede riavvio)
-[VIEWER_GENERATION]-Default 0. V1 Default 2.
 		</text>
 		<text name="Label_FolderItemViewHeight">
 			Altezza cartella:
 		</text>
 		<text name="Label_FolderItemViewHeight_Scale">
 			pixel (richiede riavvio)
-[VIEWER_GENERATION]-Default 20. V1 Default 18.
 		</text>
 		<text name="text_box_notecard_font" width="135">
 			Carattere annotazioni:

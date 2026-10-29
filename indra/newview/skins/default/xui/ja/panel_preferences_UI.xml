@@ -288,14 +288,12 @@
 			</text>
 			<text name="tooltip_textbox4">
 				ピクセル（要再起動）
-Second Lifeビューアのデフォルト値は0で、1系列のビューアのデフォルト値は2です。
 			</text>
 			<text name="Label_FolderItemViewHeight">
 				フォルダ表示の高さ：
 			</text>
 			<text name="Label_FolderItemViewHeight_Scale">
 				ピクセル（要再起動）
-Second Lifeビューアのデフォルト値は20で、1系列のビューアのデフォルト値は18です。
 			</text>
 			<text name="text_box_notecard_font">
 				ノートカードエディタのフォント：
