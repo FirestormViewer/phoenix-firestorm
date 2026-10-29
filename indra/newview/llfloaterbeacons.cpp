@@ -64,9 +64,11 @@ void LLFloaterBeacons::onClickUICheck(LLUICtrl *ctrl)
 {
     LLCheckBoxCtrl *check = (LLCheckBoxCtrl *)ctrl;
     std::string name = check->getName();
+    // <FS:Trish> FIRE-37087 The checkbox already updated the setting, which refreshes the
+    // pipeline state (FIRE-36767). Set it from the checkbox state instead to avoid flipping the settings back.
     if(name == "touch_only")
     {
-        LLPipeline::toggleRenderScriptedTouchBeacons();
+        //LLPipeline::toggleRenderScriptedTouchBeacons();
         // Don't allow both to be ON at the same time. Toggle the other one off if both now on.
         if (
             LLPipeline::getRenderScriptedTouchBeacons() &&
@@ -81,7 +83,7 @@ void LLFloaterBeacons::onClickUICheck(LLUICtrl *ctrl)
     }
     else if(name == "scripted")
     {
-        LLPipeline::toggleRenderScriptedBeacons();
+        //LLPipeline::toggleRenderScriptedBeacons();
         // Don't allow both to be ON at the same time. Toggle the other one off if both now on.
         if (
             LLPipeline::getRenderScriptedTouchBeacons() &&
@@ -100,7 +102,7 @@ void LLFloaterBeacons::onClickUICheck(LLUICtrl *ctrl)
     else if(name == "moapbeacon")     LLPipeline::setRenderMOAPBeacons(check->get());
     else if(name == "highlights")
     {
-        LLPipeline::toggleRenderHighlights();
+        //LLPipeline::toggleRenderHighlights();
         // FS:LO Allow beacons to be turned off fully by unchecking both boxes
         // Don't allow both to be OFF at the same time. Toggle the other one on if both now off.
         // if (
@@ -116,7 +118,7 @@ void LLFloaterBeacons::onClickUICheck(LLUICtrl *ctrl)
     }
     else if(name == "beacons")
     {
-        LLPipeline::toggleRenderBeacons();
+        //LLPipeline::toggleRenderBeacons();
         // FS:LO Allow beacons to be turned off fully by unchecking both boxes
         // Don't allow both to be OFF at the same time. Toggle the other one on if both now off.
         // if (
@@ -130,4 +132,5 @@ void LLFloaterBeacons::onClickUICheck(LLUICtrl *ctrl)
         //  getChild<LLCheckBoxCtrl>("beacons")->setValue(false);
         // }
     }
+    // </FS:Trish>
 }
