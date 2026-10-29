@@ -50,7 +50,7 @@ public:
 
     // <FS> Improved Home-key behavior
     // LLTextBase override
-    void    startOfLine() override; // <FS:Beq/> Mark the existing base-class override for Clang.
+    void    startOfLine() override;
 
     void    initKeywords(bool luau_language = false);
     void    loadKeywords();
@@ -103,7 +103,7 @@ private:
     void    resetPendingSyntaxApply();
 
     // <FS:Ansariel> Show keyword help on F1
-    bool handleKeyHere(KEY key, MASK mask) override; // <FS:Beq/> Mark the existing base-class override for Clang.
+    bool handleKeyHere(KEY key, MASK mask) override;
 
     LLKeywords  mKeywordsLua;
     LLKeywords  mKeywordsLSL;
