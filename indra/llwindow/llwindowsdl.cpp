@@ -812,7 +812,10 @@ void LLWindowSDL::setMouseClipping(bool b)
 {
     if (mWindow)
     {
-        SDL_SetWindowMouseGrab(mWindow, b);
+        // <FS:Zi> Fix window raising on mouse click when auto raise is disabled in the window manager
+        // SDL_SetWindowMouseGrab(mWindow, b);
+        SDL_CaptureMouse(b);
+        // </FS:Zi>
     }
 }
 
