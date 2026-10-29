@@ -64,6 +64,10 @@ LLDiskCache::LLDiskCache(const std::string& cache_dir,
 // </FS:Beq>
                          ) :
     mMaxSizeBytes(max_size_bytes),
+// <FS:Beq> Add High/Low water mark support
+    mHighPercent(llclamp(highwater_mark_percent, 0.f, 100.f)),
+    mLowPercent(llclamp(lowwater_mark_percent, 0.f, mHighPercent)),
+// </FS:Beq>
     mEnableCacheDebugInfo(enable_cache_debug_info)
 {
     sCacheDir = cache_dir;
