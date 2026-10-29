@@ -32,6 +32,8 @@
 #include "lluictrlfactory.h"
 #include "llkeyboard.h"
 
+#include <cmath>
+
 // Globals
 static LLDefaultChildRegistry::Register<FSVirtualTrackpad> register_virtual_trackball("fs_virtual_trackpad");
 
@@ -129,9 +131,9 @@ void FSVirtualTrackpad::determineThumbClickError(S32 x, S32 y)
     errorX -= x;
     errorY -= y;
 
-    if (fabs(errorX) > mImgSunFront->getWidth() / 2.0)
+    if (std::fabs(static_cast<F64>(errorX)) > mImgSunFront->getWidth() / 2.0)
         return;
-    if (fabs(errorY) > mImgSunFront->getHeight() / 2.0)
+    if (std::fabs(static_cast<F64>(errorY)) > mImgSunFront->getHeight() / 2.0)
         return;
 
     mThumbClickOffsetX = errorX;
@@ -184,9 +186,9 @@ void FSVirtualTrackpad::determineThumbClickErrorForPinch(S32 x, S32 y)
     errorX -= x;
     errorY -= y;
 
-    if (fabs(errorX) > mImgMoonFront->getWidth() / 2.0)
+    if (std::fabs(static_cast<F64>(errorX)) > mImgMoonFront->getWidth() / 2.0)
         return;
-    if (fabs(errorY) > mImgMoonFront->getHeight() / 2.0)
+    if (std::fabs(static_cast<F64>(errorY)) > mImgMoonFront->getHeight() / 2.0)
         return;
 
     mPinchThumbClickOffsetX = errorX;

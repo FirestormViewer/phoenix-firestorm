@@ -478,8 +478,11 @@ inline int seek_mode_from_dir(std::ios_base::seekdir seekdir)
             return SEEK_CUR;
         case LLFile::end:
             return SEEK_END;
+        // <FS:Beq> Preserve the fallback for implementation-specific seekdir values.
+        default:
+            return SEEK_SET;
+        // </FS:Beq>
     }
-    return SEEK_SET;
 }
 
 #endif
