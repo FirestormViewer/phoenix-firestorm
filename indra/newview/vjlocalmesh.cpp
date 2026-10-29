@@ -850,11 +850,14 @@ bool LLLocalMeshFile::readLastModified(const std::string& filename, std::time_t&
     }
 
     // Avoid chrono::clock_cast for now until LLVM eventually implement it
-    //last_modified = std::chrono::system_clock::to_time_t(std::chrono::clock_cast<std::chrono::system_clock>(file_time));
+#ifdef LL_MSVC
+    last_modified = std::chrono::system_clock::to_time_t(std::chrono::clock_cast<std::chrono::system_clock>(file_time));
+#else
     last_modified = std::chrono::system_clock::to_time_t(
         std::chrono::time_point_cast<std::chrono::system_clock::duration>(
             std::chrono::system_clock::now() +
             (file_time - decltype(file_time)::clock::now())));
+#endif
     return true;
 }
 
