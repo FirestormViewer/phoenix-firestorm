@@ -351,6 +351,35 @@ Wenn diese Rolle nicht mehr diese Fähigkeiten haben soll, deaktivieren Sie sie 
 		Sie sind dabei, [COUNT] Mitglieder aus der Gruppe zu verbannen.
 		<usetemplate ignoretext="Verbannen mehrerer Gruppenmitglieder bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Verbannen"/>
 	</notification>
+	<notification name="FSBanFromAllGroups">
+		Sie sind dabei, [AVATAR_NAME] aus allen [COUNT] Gruppen zu verbannen, in denen Sie Banns verwalten können:
+
+[GROUPS]
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Verbannen"/>
+	</notification>
+	<notification name="FSUnbanFromAllGroups">
+		Sie sind dabei, die Verbannung von [AVATAR_NAME] aus allen [COUNT] Gruppen aufzuheben, in denen Sie Banns verwalten können:
+
+[GROUPS]
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Verbannung aufheben"/>
+	</notification>
+	<notification name="FSBanFromAllGroupsStarted">
+		Aktualisierung der Gruppen-Verbannung für [AVATAR_NAME] in [COUNT] Gruppen wurde gestartet, jeweils eine Gruppe zur selben Zeit. Eine Bericht erfolgt, sobald die Aktion abgeschlossen ist.
+	</notification>
+	<notification name="FSBanFromAllGroupsReport">
+		[AVATAR_NAME] wurde in [DONE] von [COUNT] Gruppen verbannt.
+
+Verbannt in: [SUCCEEDED]
+
+Fehlgeschlagen in: [FAILED]
+	</notification>
+	<notification name="FSUnbanFromAllGroupsReport">
+		Die Verbannung von [AVATAR_NAME] wurde in [DONE] von [COUNT] Gruppen aufgehoben.
+
+Aufgehoben in: [SUCCEEDED]
+
+Fehlgeschlagen in: [FAILED]
+	</notification>
 	<notification name="GroupBanUserOnBanlist">
 		Manchen Einwohnern wurde keine Einladung gesendet, weil sie aus der Gruppe ausgeschlossen sind.
 	</notification>
