@@ -6788,6 +6788,18 @@ bool handle_special_alerts(const std::string &pAlertName)
 
 void process_alert_core(const std::string& message, bool modal)
 {
+    // <FS:PP> Ban from all groups
+    if (LLGroupActions::isBanFromAllGroupsRunning())
+    {
+        std::string lowered = message;
+        LLStringUtil::toLower(lowered);
+        if (lowered.find("unable to eject") != std::string::npos || lowered.find("ejectee") != std::string::npos)
+        {
+            return;
+        }
+    }
+    // </FS:PP>
+
     const std::string ALERT_PREFIX("ALERT: ");
     const std::string NOTIFY_PREFIX("NOTIFY: ");
     if (message.find(ALERT_PREFIX) == 0)

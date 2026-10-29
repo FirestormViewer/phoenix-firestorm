@@ -127,6 +127,7 @@ public:
     static bool canBanFromAnyGroup(const LLUUID& idAgent);
     static void banFromAllGroups(const LLUUID& idAgent);
     static void unbanFromAllGroups(const LLUUID& idAgent);
+    static bool isBanFromAllGroupsRunning();
     // </FS:PP>
 
 private:
@@ -143,6 +144,7 @@ private:
     static void confirmBanFromAllGroups(const LLUUID& idAgent, bool ban);
     static bool callbackBanFromAllGroups(const LLSD& notification, const LLSD& response);
     static void banFromAllGroupsCoro(uuid_vec_t group_ids, std::vector<std::string> group_names, LLUUID idAgent, bool ban);
+    static S32 sBanFromAllGroupsRuns;
     // </FS:PP>
 
     friend class LLFetchLeaveGroupData;

@@ -70,6 +70,7 @@
 // Globals
 //
 static LLGroupChatListener sGroupChatListener;
+S32 LLGroupActions::sBanFromAllGroupsRuns = 0; // <FS:PP> Ban from all groups
 
 class LLGroupHandler : public LLCommandHandler
 {
@@ -922,6 +923,14 @@ bool LLGroupActions::canBanFromAnyGroup(const LLUUID& idAgent)
 }
 
 //static
+// <FS:PP> Ban from all groups
+bool LLGroupActions::isBanFromAllGroupsRunning()
+{
+    return sBanFromAllGroupsRuns > 0;
+}
+// </FS:PP>
+
+//static
 void LLGroupActions::banFromAllGroups(const LLUUID& idAgent)
 {
     confirmBanFromAllGroups(idAgent, true);
@@ -1031,6 +1040,11 @@ void LLGroupActions::banFromAllGroupsCoro(uuid_vec_t group_ids, std::vector<std:
     post_data["ban_ids"] = LLSD::emptyArray();
     post_data["ban_ids"].append(idAgent);
 
+    // <FS:PP> Ban from all groups
+    // the server answers every eject of a non-member with an alert, muted while this runs
+    ++sBanFromAllGroupsRuns;
+    // </FS:PP>
+
     std::string succeeded;
     std::string failed;
     S32 done = 0;
@@ -1055,7 +1069,11 @@ void LLGroupActions::banFromAllGroupsCoro(uuid_vec_t group_ids, std::vector<std:
         ++done;
         succeeded += (succeeded.empty() ? "" : ", ") + group_names[i];
 
-        if (LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(group_id))
+        // <FS:PP> Ban from all groups
+        // if (LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(group_id))
+        LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(group_id);
+        if (gdatap)
+        // </FS:PP>
         {
             if (ban)
             {
@@ -1068,7 +1086,11 @@ void LLGroupActions::banFromAllGroupsCoro(uuid_vec_t group_ids, std::vector<std:
         }
 
         // a ban alone does not remove a current member, ejecting a non-member is ignored by the server
+        // <FS:PP> Ban from all groups
         if (ban && gAgent.hasPowerInGroup(group_id, GP_MEMBER_EJECT))
+        bool known_non_member = gdatap && gdatap->isMemberDataComplete() && gdatap->mMembers.find(idAgent) == gdatap->mMembers.end();
+        if (ban && !known_non_member && gAgent.hasPowerInGroup(group_id, GP_MEMBER_EJECT))
+        // </FS:PP>
         {
             LLMessageSystem* msg = gMessageSystem;
             msg->newMessage("EjectGroupMemberRequest");
@@ -1090,6 +1112,12 @@ void LLGroupActions::banFromAllGroupsCoro(uuid_vec_t group_ids, std::vector<std:
     args["SUCCEEDED"] = succeeded.empty() ? std::string("-") : succeeded;
     args["FAILED"] = failed.empty() ? std::string("-") : failed;
     LLNotificationsUtil::add(ban ? "FSBanFromAllGroupsReport" : "FSUnbanFromAllGroupsReport", args);
+
+    // <FS:PP> Ban from all groups
+    // eject replies trail the last request
+    llcoro::suspendUntilTimeout(5.f);
+    --sBanFromAllGroupsRuns;
+    // </FS:PP>
 }
 // </FS:PP>
 
