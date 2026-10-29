@@ -3120,6 +3120,13 @@ if (LL_TESTS)
     lllogin
   )
 
+  # <FS:Beq> Fixtures need viewer header paths, but the real UI/appearance/login
+  # implementations belong to the viewer. Linking them into standalone tests
+  # pulls in RLVa callbacks and settings services already supplied by fixtures.
+  set(test_header_libs ${test_libs})
+  list(REMOVE_ITEM test_libs llui llplugin llappearance llprimitive lllogin)
+  # </FS:Beq>
+
   set_property(SOURCE
     ${viewer_TEST_SOURCE_FILES}
     PROPERTY
@@ -3134,15 +3141,9 @@ if (LL_TESTS)
     lllogininstance.cpp
     llremoteparcelrequest.cpp
     llviewerhelputil.cpp
+    llworldmap.cpp
+    llworldmipmap.cpp
     PROPERTY LL_TEST_ADDITIONAL_LIBRARIES "")
-  foreach(test_library IN LISTS test_libs)
-    set_property(SOURCE
-      lllogininstance.cpp
-      llremoteparcelrequest.cpp
-      llviewerhelputil.cpp
-      APPEND PROPERTY LL_TEST_ADDITIONAL_INCLUDE_DIRS
-      "$<TARGET_PROPERTY:${test_library},INTERFACE_INCLUDE_DIRECTORIES>")
-  endforeach()
   # Parcel lookup uses the real coroutine HTTP adapter, but mocks legacy
   # message-system and UI entry points. Do not bring llui into this link.
   # Repeat llmessage after llcorehttp to resolve the HTTP adapter's LLProxy
@@ -3180,12 +3181,12 @@ if (LL_TESTS)
 
   LL_ADD_INTEGRATION_TEST(llsechandler_basic
     llsechandler_basic.cpp
-    "${test_libs}"
+    "llfilesystem;llxml;llmessage;ll::openssl" # <FS:Beq/> Use the real XOR cipher; settings/credentials are mocked. Do not link llui.
   )
 
   LL_ADD_INTEGRATION_TEST(llsecapi
     llsecapi.cpp
-    "${test_libs}"
+    "llcommon" # <FS:Beq/> Both the settings and basic security handler are test doubles.
   )
   # <FS:Beq> Exercise the appropriate SLURL implementation with offline OpenSim fixtures.
   # if (NOT OPENSIM)#<FS:AW optional opensim support>
@@ -3220,9 +3221,13 @@ if (LL_TESTS)
       fsgridhandler.cpp
       tests/opensim_test_support.cpp
     )
+    # <FS:Beq> Grid selection uses the real material table, and the login-state
+    # fixture owns a login pointer whose destructor is supplied by lllogin.
+    set(opensim_grid_test_libs ${test_libs} llprimitive lllogin)
+    # </FS:Beq>
     LL_ADD_INTEGRATION_TEST(fsslurl
       "fsslurl.cpp;${opensim_grid_test_sources}"
-      "${test_libs}"
+      "${opensim_grid_test_libs}"
     )
     target_include_directories(INTEGRATION_TEST_fsslurl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
   endif (NOT OPENSIM)#<FS:AW optional opensim support>
@@ -3254,22 +3259,10 @@ if (LL_TESTS)
   else ()
     LL_ADD_INTEGRATION_TEST(fsgridhandler
       "${opensim_grid_test_sources}"
-      "${test_libs}"
+      "${opensim_grid_test_libs}"
     )
     target_include_directories(INTEGRATION_TEST_fsgridhandler PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
   endif ()
-  # </FS:Beq>
-
-  # <FS:Beq> The SL grid/SLURL fixtures mock translation and settings services;
-  # inherit their header paths without linking real UI service implementations.
-  foreach(grid_test llslurl llviewernetwork)
-    if(TARGET INTEGRATION_TEST_${grid_test})
-      foreach(test_library IN LISTS test_libs)
-        target_include_directories(INTEGRATION_TEST_${grid_test} PRIVATE
-          "$<TARGET_PROPERTY:${test_library},INTERFACE_INCLUDE_DIRECTORIES>")
-      endforeach()
-    endif()
-  endforeach()
   # </FS:Beq>
 
   LL_ADD_INTEGRATION_TEST(llviewerassetstats
@@ -3288,6 +3281,20 @@ if (LL_TESTS)
   )
   LL_ADD_INTEGRATION_TEST(lltextureinfo "${lltextureinfo_test_sources}" "${test_libs}")
   #LL_ADD_INTEGRATION_TEST(lltextureinfodetails "" "${test_libs}") test cases currently empty
+
+  # <FS:Beq> Supply headers independently of link dependencies to every viewer
+  # test, including newly added fixtures. No viewer-owned service is linked
+  # solely to make its include directories available.
+  get_property(viewer_test_targets DIRECTORY PROPERTY BUILDSYSTEM_TARGETS)
+  foreach(viewer_test IN LISTS viewer_test_targets)
+    if(viewer_test MATCHES "^(PROJECT_.*_TEST_|INTEGRATION_TEST_)")
+      foreach(test_library IN LISTS test_header_libs)
+        target_include_directories(${viewer_test} PRIVATE
+          "$<TARGET_PROPERTY:${test_library},INTERFACE_INCLUDE_DIRECTORIES>")
+      endforeach()
+    endif()
+  endforeach()
+  # </FS:Beq>
 endif (LL_TESTS)
 
 check_message_template(${VIEWER_BINARY_NAME})
