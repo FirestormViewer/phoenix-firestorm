@@ -3186,7 +3186,7 @@ if (LL_TESTS)
 
   LL_ADD_INTEGRATION_TEST(llsecapi
     llsecapi.cpp
-    "llcommon" # <FS:Beq/> Both the settings and basic security handler are test doubles.
+    "llcommon;ll::openssl" # <FS:Beq/> Settings/handler are mocked; initialization uses real OpenSSL.
   )
   # <FS:Beq> Exercise the appropriate SLURL implementation with offline OpenSim fixtures.
   # if (NOT OPENSIM)#<FS:AW optional opensim support>
