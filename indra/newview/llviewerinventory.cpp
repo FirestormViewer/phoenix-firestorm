@@ -2381,7 +2381,14 @@ void menu_create_inventory_item(LLInventoryPanel* panel, LLUUID dest_id, const L
         bool custom_script_inserted = false;
         if (gSavedPerAccountSettings.getBOOL("FSBuildPrefs_UseCustomScript"))
         {
-            if (LLUUID custom_script_id(gSavedPerAccountSettings.getString("FSBuildPrefs_CustomScriptItem")); custom_script_id.notNull())
+            bool lua_region = false;
+            if (LLViewerRegion* region = gAgent.getRegion(); region && region->simulatorFeaturesReceived())
+            {
+                LLSD simulator_features;
+                region->getSimulatorFeatures(simulator_features);
+                lua_region = simulator_features["LuaScriptsEnabled"].asBoolean();
+            }
+            if (LLUUID custom_script_id(gSavedPerAccountSettings.getString(lua_region ? "FSBuildPrefs_CustomLuaScriptItem" : "FSBuildPrefs_CustomScriptItem")); custom_script_id.notNull())
             {
                 if (auto custom_script = gInventory.getItem(custom_script_id); custom_script && custom_script->getType() == LLAssetType::AT_LSL_TEXT)
                 {

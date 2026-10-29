@@ -1189,6 +1189,19 @@
             <key>Value</key>
                 <string/>
         </map>
+    <key>FSBuildPrefs_CustomLuaScriptItem</key>
+        <map>
+            <key>HideFromEditor</key>
+                <integer>1</integer>
+            <key>Comment</key>
+                <string>Lua script UUID to use as template for New Script button</string>
+            <key>Persist</key>
+                <integer>1</integer>
+            <key>Type</key>
+                <string>String</string>
+            <key>Value</key>
+                <string/>
+        </map>
 	<key>FSllOwnerSayToScriptDebugWindow</key>
 		<map>
 			<key>Comment</key>
