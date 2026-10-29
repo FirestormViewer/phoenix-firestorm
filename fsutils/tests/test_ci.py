@@ -313,6 +313,153 @@ add_custom_target(BUILD_TESTS)
                 shutil.rmtree('build-check')
 
 
+class CISigning(Workspace):
+    def test_signing_policy(self):
+        for channel in ci.CHANNELS:
+            with self.subTest(channel=channel):
+                self.assertEqual(ci.signing_required(channel), channel in ('Release', 'Beta'))
+                self.assertTrue(ci.signing_required(channel, override=True))
+
+    def test_prepare_records_the_same_signing_policy_for_builds_and_gate(self):
+        version = Path('indra/newview/VIEWER_VERSION_FS.txt')
+        version.parent.mkdir(parents=True)
+        version.write_text('7.3.0')
+        for event, branch, override, expected in (
+                ('push', 'Firestorm7.3.0', 'false', True),
+                ('push', '7.3preview', 'false', True),
+                ('schedule', 'Firestorm7.3.0', 'false', False),
+                ('workflow_dispatch', 'Firestorm7.3.0', 'false', False),
+                ('workflow_dispatch', 'Firestorm7.3.0', 'true', True)):
+            os.environ.update(GITHUB_EVENT_NAME=event, GITHUB_REF_NAME=branch, OVERRIDE_SIGNING=override)
+            Path(os.environ['GITHUB_OUTPUT']).write_text('')
+            with self.subTest(event=event, branch=branch, override=override):
+                with patch.object(ci.subprocess, 'check_output', return_value='123'):
+                    ci.prepare(argparse.Namespace(mac_only=False))
+                self.assertEqual(ci.read_json('ci-plan.json')['signing_required'], expected)
+                self.assertIn('signing_required=' + str(expected).lower(),
+                              Path(os.environ['GITHUB_OUTPUT']).read_text().splitlines())
+
+    def test_unsigned_ci_builds_ignore_inherited_signing_configuration(self):
+        for platform in ('Windows', 'macOS'):
+            for channel in ('Nightly', 'Manual', 'Profiling', 'Alpha'):
+                os.environ.update(RUNNER_OS=platform, FS_RELEASE_TYPE=channel,
+                                  CI_SIGNING_REQUIRED='false', SIGNTOOL_PATH='signtool',
+                                  CODESIGNING_DLIB_PATH='signing.dll', CODESIGNING_METADATA_PATH='metadata.json',
+                                  build_secrets_checkout='signing')
+                with self.subTest(platform=platform, channel=channel), patch.object(ci.subprocess, 'run') as run:
+                    ci.build(None)
+                    env = run.call_args.kwargs['env']
+                    self.assertEqual(env['CI_SIGNING_REQUIRED'], 'false')
+                    for name in ('SIGNTOOL_PATH', 'CODESIGNING_DLIB_PATH', 'CODESIGNING_METADATA_PATH'):
+                        self.assertNotIn(name, env)
+                    if platform == 'macOS':
+                        self.assertNotIn('build_secrets_checkout', {key.lower() for key in env})
+                    self.assertEqual(os.environ['SIGNTOOL_PATH'], 'signtool')
+
+    def test_required_windows_builds_reject_missing_configuration_before_build(self):
+        for channel in ('Release', 'Beta', 'Manual'):
+            os.environ.update(RUNNER_OS='Windows', FS_RELEASE_TYPE=channel,
+                              CI_SIGNING_REQUIRED='true' if channel == 'Manual' else 'false')
+            with self.subTest(channel=channel), patch.object(ci.subprocess, 'run') as run:
+                with self.assertRaises(ValueError):
+                    ci.build(None)
+                run.assert_not_called()
+
+    def test_required_macos_build_cannot_fall_back_to_ad_hoc_signing(self):
+        os.environ.update(RUNNER_OS='macOS', FS_RELEASE_TYPE='Release', CI_SIGNING_REQUIRED='false')
+        with patch.object(ci.subprocess, 'run') as run, self.assertRaises(ValueError):
+            ci.build(None)
+        run.assert_not_called()
+
+    def test_required_ci_builds_preserve_signing_configuration(self):
+        secrets = Path('signing/code-signing-osx')
+        secrets.mkdir(parents=True)
+        (secrets / 'password.txt').write_text('fixture')
+        (secrets / 'notarize_creds.sh').write_text('fixture')
+        for platform in ('Windows', 'macOS'):
+            for channel, override in (('Release', 'false'), ('Beta', 'false'), ('Manual', 'true')):
+                os.environ.update(RUNNER_OS=platform, FS_RELEASE_TYPE=channel,
+                                  CI_SIGNING_REQUIRED=override, SIGNTOOL_PATH='signtool',
+                                  CODESIGNING_DLIB_PATH='signing.dll', CODESIGNING_METADATA_PATH='metadata.json',
+                                  build_secrets_checkout='signing', addrsize='64')
+                with self.subTest(platform=platform, channel=channel), patch.object(ci.subprocess, 'run') as run:
+                    ci.build(None)
+                    self.assertEqual(run.call_args.args[0],
+                                     ['autobuild', 'build', '-c', 'ReleaseFS', '-A64', '--no-configure'])
+                    self.assertTrue(run.call_args.kwargs['check'])
+                    env = run.call_args.kwargs['env']
+                    self.assertEqual(env['CI_SIGNING_REQUIRED'], 'true')
+                    normalized = {key.lower(): value for key, value in env.items()}
+                    for name in ('SIGNTOOL_PATH', 'CODESIGNING_DLIB_PATH',
+                                 'CODESIGNING_METADATA_PATH', 'build_secrets_checkout'):
+                        self.assertEqual(normalized[name.lower()], os.environ[name])
+
+    def windows_package(self, channel='Release', grid='sl'):
+        os.environ.update(RUNNER_OS='Windows', FS_RELEASE_TYPE=channel,
+                          CI_SIGNING_REQUIRED='false', SIGNTOOL_PATH='signtool',
+                          CODESIGNING_DLIB_PATH='signing.dll', CODESIGNING_METADATA_PATH='metadata.json',
+                          CI_CELL=json.dumps({'grid': grid}))
+        root = Path('build-vc170-64/newview/Release')
+        root.mkdir(parents=True, exist_ok=True)
+        ci.write_json(root / 'build_data.json', {'Executable': 'Firestorm.exe'})
+        names = ['Firestorm.exe', 'slplugin.exe', 'llwebrtc.dll', 'llplugin/dullahan_host.exe', 'ViewerSetup.exe']
+        if grid == 'os':
+            names.append('SLVoice.exe')
+        for name in names:
+            file = root / name
+            file.parent.mkdir(parents=True, exist_ok=True)
+            file.write_bytes(b'fixture')
+        return root, names
+
+    def test_required_windows_deliverables_verify_installer_and_all_signing_targets(self):
+        for grid in ('sl', 'os'):
+            with self.subTest(grid=grid):
+                root, names = self.windows_package(grid=grid)
+                with patch.object(ci.subprocess, 'run') as run:
+                    ci.deliverables(None)
+                verified = {Path(call.args[0][-1]).relative_to(root).as_posix()
+                            for call in run.call_args_list}
+                self.assertEqual(verified, set(names))
+                self.assertTrue(all(call.args[0][:4] == ['signtool', 'verify', '/pa', '/all']
+                                    and call.kwargs['check'] for call in run.call_args_list))
+                self.assertTrue(ci.read_json('ci-results/deliverables.json')[0]['signature_verified'])
+
+    def test_unsigned_or_invalid_windows_signatures_block_deliverables(self):
+        self.windows_package(channel='Beta')
+        with patch.object(ci.subprocess, 'run', side_effect=subprocess.CalledProcessError(1, 'signtool')):
+            with self.assertRaises(ValueError):
+                ci.deliverables(None)
+        self.assertFalse(Path('ci-results/deliverables.json').exists())
+
+    def test_missing_required_windows_binary_blocks_deliverables(self):
+        root, _ = self.windows_package(grid='os')
+        (root / 'SLVoice.exe').unlink()
+        with patch.object(ci.subprocess, 'run'), self.assertRaises(ValueError):
+            ci.deliverables(None)
+
+    def test_nightly_deliverables_do_not_require_signatures_unless_overridden(self):
+        self.windows_package(channel='Nightly')
+        with patch.object(ci.subprocess, 'run') as run:
+            ci.deliverables(None)
+            run.assert_not_called()
+        os.environ['CI_SIGNING_REQUIRED'] = 'true'
+        with patch.object(ci.subprocess, 'run') as run:
+            ci.deliverables(None)
+            self.assertEqual(run.call_count, 5)
+
+    def test_gate_rejects_unverified_release_beta_and_override_windows_artifacts(self):
+        for channel, override in (('Release', False), ('Beta', False), ('Manual', True)):
+            plan, records, jobs, artifacts = self.fixture([{'os': 'windows-2022', 'grid': 'sl', 'variant': 'avx'}])
+            plan.update(release_type=channel, signing_required=override)
+            artifacts[0]['name'] = ci.artifact_name(channel, plan['cells'][0])
+            with self.subTest(channel=channel):
+                gate = ci.check_results(plan, records, jobs, artifacts, 'success')
+                self.assertFalse(gate['passed'])
+                self.assertIn('Required Windows signatures were not verified', ci.report_text(gate))
+                records[0]['deliverables'][0]['signature_verified'] = True
+                self.assertTrue(ci.check_results(plan, records, jobs, artifacts, 'success')['passed'])
+
+
 class Signing(Workspace):
     def setUp(self):
         super().setUp()
@@ -320,28 +467,59 @@ class Signing(Workspace):
         self.manifest.args = {'configuration': 'Release', 'viewer_flavor': 'hvk'}
         self.manifest.final_exe = lambda: 'viewer.exe'
 
-    def test_required_signing_rejects_missing_configuration(self):
-        os.environ['CI_SIGNING_REQUIRED'] = 'true'
-        with self.assertRaises(RuntimeError):
-            self.manifest.fs_sign_win_binaries()
-        with self.assertRaises(RuntimeError):
-            self.manifest.fs_sign_win_installer({'installer_file': 'Setup.exe'})
+    def test_windows_missing_tools_skip_signing(self):
+        for policy in (None, 'true', 'false'):
+            for config in ({}, {'SIGNTOOL_PATH': 'signtool'},
+                           {'CODESIGNING_DLIB_PATH': 'signing.dll',
+                            'CODESIGNING_METADATA_PATH': 'metadata.json'}):
+                env = dict(config)
+                if policy is not None:
+                    env['CI_SIGNING_REQUIRED'] = policy
+                with self.subTest(policy=policy, config=config), patch.dict(os.environ, env, clear=True):
+                    captured = io.StringIO()
+                    with patch.object(manifest_module.subprocess, 'check_call') as sign, redirect_stdout(captured):
+                        self.manifest.fs_sign_win_binaries()
+                        self.manifest.fs_sign_win_installer({'installer_file': 'Setup.exe'})
+                    sign.assert_not_called()
+                    self.assertEqual(captured.getvalue().count('Skipping signing process.'), 2)
 
-    def test_signing_failures_propagate(self):
+    def test_windows_signing_attempts_all_configured_files(self):
+        for policy in (None, 'true', 'false'):
+            for flavor in ('hvk', 'oss'):
+                env = dict(SIGNTOOL_PATH='signtool', CODESIGNING_DLIB_PATH='signing.dll',
+                           CODESIGNING_METADATA_PATH='metadata.json')
+                if policy is not None:
+                    env['CI_SIGNING_REQUIRED'] = policy
+                self.manifest.args['viewer_flavor'] = flavor
+                with self.subTest(policy=policy, flavor=flavor), patch.dict(os.environ, env, clear=True):
+                    with patch.object(manifest_module.subprocess, 'check_call') as sign, redirect_stdout(io.StringIO()):
+                        self.manifest.fs_sign_win_binaries()
+                        self.manifest.fs_sign_win_installer({'installer_file': 'Setup.exe'})
+                    expected = ['Release\\slplugin.exe', 'Release\\llwebrtc.dll',
+                                'Release\\llplugin\\dullahan_host.exe', 'Release\\viewer.exe']
+                    if flavor == 'oss':
+                        expected.append('Release\\SLVoice.exe')
+                    expected.append('Release\\Setup.exe')
+                    self.assertEqual([call.args[0][-1] for call in sign.call_args_list], expected)
+                    for call in sign.call_args_list:
+                        self.assertEqual(call.args[0][:2], ['signtool', 'sign'])
+                        self.assertEqual(call.args[0][-5:-1],
+                                         ['/dlib', 'signing.dll', '/dmdf', 'metadata.json'])
+
+    def test_windows_signing_errors_are_reported_without_aborting(self):
         os.environ.update(CI_SIGNING_REQUIRED='true', SIGNTOOL_PATH='signtool',
                           CODESIGNING_DLIB_PATH='signing.dll', CODESIGNING_METADATA_PATH='metadata.json')
-        with patch.object(manifest_module.subprocess, 'check_call', side_effect=subprocess.CalledProcessError(1, 'signtool')):
-            with self.assertRaises(subprocess.CalledProcessError):
-                self.manifest.fs_sign_win_binaries()
-            with self.assertRaises(subprocess.CalledProcessError):
-                self.manifest.fs_sign_win_installer({'installer_file': 'Setup.exe'})
-
-    def test_explicit_unsigned_build_does_not_attempt_signing(self):
-        os.environ.update(CI_SIGNING_REQUIRED='false', SIGNTOOL_PATH='signtool')
-        with patch.object(manifest_module.subprocess, 'check_call') as sign:
-            self.manifest.fs_sign_win_binaries()
-            self.manifest.fs_sign_win_installer({'installer_file': 'Setup.exe'})
-            sign.assert_not_called()
+        for error in (subprocess.CalledProcessError(1, 'signtool'), OSError('tool unavailable'),
+                      TypeError('invalid signing argument')):
+            with self.subTest(error=type(error).__name__):
+                captured = io.StringIO()
+                with patch.object(manifest_module.subprocess, 'check_call', side_effect=error) as sign:
+                    with redirect_stdout(captured):
+                        self.manifest.fs_sign_win_binaries()
+                        self.manifest.fs_sign_win_installer({'installer_file': 'Setup.exe'})
+                self.assertEqual(sign.call_count, 5)
+                self.assertEqual(captured.getvalue().count("Couldn't sign binary:"), 4)
+                self.assertIn("Couldn't sign windows installer: Release\\Setup.exe", captured.getvalue())
 
     def notarize(self, status='Accepted', submit_exit='0', staple_fail='false'):
         bins = Path('bin')

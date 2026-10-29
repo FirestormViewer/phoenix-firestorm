@@ -69,6 +69,36 @@ def release_type(event, branch, profiling=False):
     raise ValueError(f'Cannot determine release type for {event}: {branch}')
 
 
+def signing_required(channel, override=False):
+    return channel in ('Release', 'Beta') or override
+
+
+def build(args):
+    """Apply CI signing policy without changing the local packaging defaults."""
+    env = dict(os.environ)
+    required = signing_required(env['FS_RELEASE_TYPE'], env.get('CI_SIGNING_REQUIRED') == 'true')
+    env['CI_SIGNING_REQUIRED'] = 'true' if required else 'false'
+    if env['RUNNER_OS'] in ('Windows', 'macOS'):
+        if not required:
+            for name in ('SIGNTOOL_PATH', 'CODESIGNING_DLIB_PATH', 'CODESIGNING_METADATA_PATH'):
+                env.pop(name, None)
+            if env['RUNNER_OS'] == 'macOS':
+                # The existing packager then uses ad hoc signing for Apple silicon.
+                env.pop('build_secrets_checkout', None)
+                env.pop('BUILD_SECRETS_CHECKOUT', None)
+        elif env['RUNNER_OS'] == 'Windows':
+            if not all(env.get(name) for name in (
+                    'SIGNTOOL_PATH', 'CODESIGNING_DLIB_PATH', 'CODESIGNING_METADATA_PATH')):
+                raise ValueError('Required Windows signing configuration is incomplete')
+        else:
+            secrets = os.environ.get('build_secrets_checkout')
+            if not secrets or not all((Path(secrets) / 'code-signing-osx' / name).is_file()
+                                      for name in ('password.txt', 'notarize_creds.sh')):
+                raise ValueError('Required macOS signing configuration is incomplete')
+    subprocess.run(['autobuild', 'build', '-c', 'ReleaseFS', '-A' + os.environ.get('addrsize', '64'),
+                    '--no-configure'], env=env, check=True)
+
+
 def matrix(mac_only=False):
     if mac_only:
         return [{'os': 'macos-15', 'grid': 'sl', 'variant': 'avx'}]
@@ -97,10 +127,12 @@ def prepare(args):
     cells = matrix(args.mac_only)
     version = Path('indra/newview/VIEWER_VERSION_FS.txt').read_text().strip()
     build = subprocess.check_output(['git', 'rev-list', '--count', 'HEAD'], text=True).strip()
-    plan = dict(identity(), release_type=channel, version=version, build=build, cells=cells)
+    required = signing_required(channel, os.environ.get('OVERRIDE_SIGNING') == 'true')
+    plan = dict(identity(), release_type=channel, signing_required=required,
+                version=version, build=build, cells=cells)
     write_json('ci-plan.json', plan)
     outputs(release_type=channel, fail_fast=channel not in ('Nightly', 'Manual', 'Profiling'),
-            version=version, build=build, matrix={'include': cells})
+            signing_required=required, version=version, build=build, matrix={'include': cells})
 
 
 def junit_summary(path):
@@ -159,6 +191,30 @@ def file_digest(path):
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 
+def verify_windows_signatures(installer):
+    root = installer.parent
+    executable = read_json(root / 'build_data.json')['Executable']
+    if Path(executable).name != executable or Path(executable).suffix.lower() != '.exe':
+        raise ValueError('Invalid packaged viewer executable name')
+    grid = json.loads(os.environ['CI_CELL'])['grid']
+    if grid not in ('sl', 'os'):
+        raise ValueError('Unknown viewer grid for Windows signature verification')
+    targets = [installer, root / executable, root / 'slplugin.exe', root / 'llwebrtc.dll',
+               root / 'llplugin/dullahan_host.exe']
+    if grid == 'os':
+        targets.append(root / 'SLVoice.exe')
+    if not all(path.is_file() and path.stat().st_size > 0 for path in targets):
+        raise ValueError('A required Windows signing target is missing or empty')
+    tool = os.environ.get('SIGNTOOL_PATH')
+    if not tool:
+        raise ValueError('SignTool is required to verify Windows deliverables')
+    for path in targets:
+        try:
+            subprocess.run([tool, 'verify', '/pa', '/all', str(path)], check=True)
+        except subprocess.CalledProcessError as error:
+            raise ValueError(f'Windows signature verification failed: {path.name}') from error
+
+
 def deliverables(args):
     patterns = {
         'Windows': 'build-*/newview/Release/*Setup.exe',
@@ -178,9 +234,14 @@ def deliverables(args):
             files = [target]
     if len(files) != 1:
         raise ValueError(f'Expected one nonempty installer/archive; found {len(files)}')
+    required = signing_required(os.environ.get('FS_RELEASE_TYPE'),
+                                os.environ.get('CI_SIGNING_REQUIRED') == 'true')
+    verified = os.environ['RUNNER_OS'] == 'Windows' and required
+    if verified:
+        verify_windows_signatures(files[0])
     write_json('ci-results/deliverables.json', [
-        {'name': path.name, 'size': path.stat().st_size, 'sha256': file_digest(path)}
-        for path in files])
+        dict(name=path.name, size=path.stat().st_size, sha256=file_digest(path),
+             **({'signature_verified': True} if verified else {})) for path in files])
 
 
 def record(args):
@@ -266,6 +327,11 @@ def check_results(plan, records, jobs, artifacts, matrix_result):
         result = valid.get(key, {})
         detail = ', '.join(failed_steps) or state
         tests = result.get('tests') or {}
+        deliverables = result.get('deliverables') or []
+        requires_signatures = cell['os'].startswith('windows') and signing_required(
+            plan['release_type'], plan.get('signing_required', False))
+        signatures_ok = not requires_signatures or (
+            bool(deliverables) and all(item.get('signature_verified') is True for item in deliverables))
         artifact = artifact_ids.get(str(result.get('artifact_id')), {})
         expected = artifact_name(plan['release_type'], cell)
         complete = (
@@ -273,18 +339,20 @@ def check_results(plan, records, jobs, artifacts, matrix_result):
             and all(result.get('steps', {}).get(step) == 'success' for step in REQUIRED_STEPS)
             and tests.get('state') == 'passed' and tests.get('total', 0) > 0
             and tests.get('passed', 0) > 0 and tests.get('failed') == 0
-            and bool(result.get('deliverables'))
+            and bool(deliverables) and signatures_ok
             and artifact.get('name') == expected and not artifact.get('expired', True)
             and artifact.get('size_in_bytes', 0) > 0)
         if complete:
             state, detail = 'passed', 'Build, tests and deliverable checks passed'
         elif state == 'success':
-            state, detail = 'failed', 'Incomplete results, tests or required artifact'
+            state = 'failed'
+            detail = ('Required Windows signatures were not verified' if not signatures_ok
+                      else 'Incomplete results, tests or required artifact')
         elif state in ('failure', 'timed_out'):
             state = 'failed'
         rows.append({'cell': cell, 'state': state, 'detail': detail, 'tests': tests,
                      'url': job.get('html_url', ''), 'artifact': artifact,
-                     'deliverables': result.get('deliverables') or []})
+                     'deliverables': deliverables})
     passed = matrix_result == 'success' and bool(rows) and all(row['state'] == 'passed' for row in rows)
     return dict(plan, passed=passed, matrix_result=matrix_result, results=rows)
 
@@ -431,15 +499,15 @@ def main():
     sub.add_argument('--timeout', type=int, default=300)
     sub = commands.add_parser('stage')
     sub.add_argument('--gate', default='ci-gate.json')
-    for name in ('deliverables', 'record', 'collect', 'resolve-source', 'verify-source', 'select-hook'):
+    for name in ('build', 'deliverables', 'record', 'collect', 'resolve-source', 'verify-source', 'select-hook'):
         commands.add_parser(name)
     args = parser.parse_args()
-    handlers = {'prepare': prepare, 'test': run_tests, 'deliverables': deliverables,
+    handlers = {'prepare': prepare, 'build': build, 'test': run_tests, 'deliverables': deliverables,
                 'record': record, 'collect': collect, 'resolve-source': resolve_source,
                 'verify-source': verify_source, 'stage': stage, 'select-hook': select_hook}
     try:
         handlers[args.command](args)
-    except (ValueError, OSError, KeyError, ET.ParseError) as error:
+    except (ValueError, OSError, KeyError, ET.ParseError, subprocess.CalledProcessError) as error:
         print(f'::error::{error}', file=sys.stderr)
         return 1
     return 0
