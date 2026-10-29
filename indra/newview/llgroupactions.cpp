@@ -1087,7 +1087,7 @@ void LLGroupActions::banFromAllGroupsCoro(uuid_vec_t group_ids, std::vector<std:
 
         // a ban alone does not remove a current member, ejecting a non-member is ignored by the server
         // <FS:PP> Ban from all groups
-        if (ban && gAgent.hasPowerInGroup(group_id, GP_MEMBER_EJECT))
+        // if (ban && gAgent.hasPowerInGroup(group_id, GP_MEMBER_EJECT))
         bool known_non_member = gdatap && gdatap->isMemberDataComplete() && gdatap->mMembers.find(idAgent) == gdatap->mMembers.end();
         if (ban && !known_non_member && gAgent.hasPowerInGroup(group_id, GP_MEMBER_EJECT))
         // </FS:PP>
