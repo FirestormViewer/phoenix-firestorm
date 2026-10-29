@@ -339,9 +339,9 @@ void setupBreakpad()
         return;
     }
 
-    gVersion = STRINGIZE(
-            LL_VIEWER_VERSION_MAJOR << '.' << LL_VIEWER_VERSION_MINOR << '.' << LL_VIEWER_VERSION_PATCH
-                                    << '.' << LL_VIEWER_VERSION_BUILD);
+    // <FS:Beq> Use the current version service; the legacy macros were removed.
+    gVersion = LLVersionInfo::instance().getVersion();
+    // </FS:Beq>
 
     boost::json::value BugSplat_DB = build_data.at("BugSplat DB");
     gBugsplatDB = boost::json::value_to<std::string>(BugSplat_DB);

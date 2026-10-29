@@ -3127,6 +3127,30 @@ if (LL_TESTS)
     ${test_libs}
   )
 
+  # <FS:Beq> These unit tests provide their own viewer/UI/message-service doubles.
+  # Linking the real service libraries duplicates those definitions under LTO
+  # and brings the viewer-owned RLVa name service into otherwise isolated tests.
+  set_property(SOURCE
+    lllogininstance.cpp
+    llremoteparcelrequest.cpp
+    llviewerhelputil.cpp
+    PROPERTY LL_TEST_ADDITIONAL_LIBRARIES "")
+  foreach(test_library IN LISTS test_libs)
+    set_property(SOURCE
+      lllogininstance.cpp
+      llremoteparcelrequest.cpp
+      llviewerhelputil.cpp
+      APPEND PROPERTY LL_TEST_ADDITIONAL_INCLUDE_DIRS
+      "$<TARGET_PROPERTY:${test_library},INTERFACE_INCLUDE_DIRECTORIES>")
+  endforeach()
+  # Parcel lookup uses the real coroutine HTTP adapter, but mocks legacy
+  # message-system and UI entry points. Do not bring llui into this link.
+  # Repeat llmessage after llcorehttp to resolve the HTTP adapter's LLProxy
+  # references when linking static archives (also used by the SL grid tests).
+  set_property(SOURCE llremoteparcelrequest.cpp PROPERTY
+    LL_TEST_ADDITIONAL_LIBRARIES llmessage llcorehttp llmessage)
+  # </FS:Beq>
+
   set_source_files_properties(
     llworldmap.cpp
     llworldmipmap.cpp
@@ -3187,7 +3211,7 @@ if (LL_TESTS)
     )
     LL_ADD_INTEGRATION_TEST(llslurl
       "${llslurl_test_sources}"
-      "${test_libs}"
+      "llfilesystem;llmessage;llcorehttp;llmessage;llxml"
     )
   else ()
     # Exercise the production Firestorm implementations using offline viewer
@@ -3225,7 +3249,7 @@ if (LL_TESTS)
   if (NOT OPENSIM)
     LL_ADD_INTEGRATION_TEST(llviewernetwork
       llviewernetwork.cpp
-      "${test_libs}"
+      "llfilesystem;llmessage;llcorehttp;llmessage;llxml"
     )
   else ()
     LL_ADD_INTEGRATION_TEST(fsgridhandler
@@ -3234,6 +3258,18 @@ if (LL_TESTS)
     )
     target_include_directories(INTEGRATION_TEST_fsgridhandler PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
   endif ()
+  # </FS:Beq>
+
+  # <FS:Beq> The SL grid/SLURL fixtures mock translation and settings services;
+  # inherit their header paths without linking real UI service implementations.
+  foreach(grid_test llslurl llviewernetwork)
+    if(TARGET INTEGRATION_TEST_${grid_test})
+      foreach(test_library IN LISTS test_libs)
+        target_include_directories(INTEGRATION_TEST_${grid_test} PRIVATE
+          "$<TARGET_PROPERTY:${test_library},INTERFACE_INCLUDE_DIRECTORIES>")
+      endforeach()
+    endif()
+  endforeach()
   # </FS:Beq>
 
   LL_ADD_INTEGRATION_TEST(llviewerassetstats
