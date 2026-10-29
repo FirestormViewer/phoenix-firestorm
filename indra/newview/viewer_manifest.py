@@ -1770,6 +1770,8 @@ class Darwin_x86_64_Manifest(ViewerManifest):
 
     def package_finish(self):
         global CHANNEL_VENDOR_BASE
+        # Check the installer resources before creating or mounting a disk image.
+        dmg_template = self.fs_mac_dmg_template()
         # MBW -- If the mounted volume name changes, it breaks the .DS_Store's background image and icon positioning.
         #  If we really need differently named volumes, we'll need to create multiple DS_Store file images, or use some other trick.
 
@@ -1803,25 +1805,6 @@ class Darwin_x86_64_Manifest(ViewerManifest):
             # Copy everything in to the mounted .dmg
 
             app_name = self.app_name()
-
-            # Hack:
-            # Because there is no easy way to coerce the Finder into positioning
-            # the app bundle in the same place with different app names, we are
-            # adding multiple .DS_Store files to svn. There is one for release,
-            # one for release candidate and one for first look. Any other channels
-            # will use the release .DS_Store, and will look broken.
-            # - Ambroff 2008-08-20
-            #<FS:TS> Select proper directory based on flavor and build type
-            dmg_template_prefix = 'firestorm'
-            if self.fs_is_opensim():
-                dmg_template_prefix = 'firestormos'
-            dmg_template = os.path.join(
-                'installers', 'darwin', '%s-%s-dmg' % (dmg_template_prefix, self.channel_type()))
-            print ("Trying template directory", dmg_template)
-
-            if not os.path.exists (self.src_path_of(dmg_template)):
-                dmg_template = os.path.join ('installers', 'darwin', 'release-dmg')
-                print ("Not found, trying template directory", dmg_template)
 
             for s,d in list({self.get_dst_prefix():app_name + ".app",
                         #os.path.join(dmg_template, "_VolumeIcon.icns"): ".VolumeIcon.icns",
