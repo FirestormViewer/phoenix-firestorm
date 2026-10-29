@@ -2166,6 +2166,9 @@ class LinuxManifest(ViewerManifest):
         with self.prefix(dst="bin"):
             self.path( os.path.join(os.pardir,'build_data.json'), "build_data.json" )
             self.path("firestorm-bin","do-not-directly-run-firestorm-bin")
+            # <FS:Beq> Package the independent crash reporter at the path the viewer launches.
+            self.path("../linux_crash_logger/linux-crash-logger", "linux-crash-logger.bin")
+            # </FS:Beq>
             self.path2basename("../llplugin/slplugin", "SLPlugin")
             #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322 and SL-323
             # <FS:Ansariel> Remove VMP

@@ -4101,6 +4101,11 @@ bool LLAppViewer::initWindow()
 void LLAppViewer::writeDebugInfo(bool isStatic)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_LOGGING; // <FS:Beq/> improve instrumentation 
+    // <FS:Beq> Linux snapshots report context outside the crash handler.
+#if LL_LINUX && LL_SEND_CRASH_REPORTS
+    if (!LLApp::isError()) bugsplatAddStaticAttributes(getViewerInfo());
+#endif
+    // </FS:Beq>
 #if LL_WINDOWS && LL_BUGSPLAT
     // <FS:Beq> Improve Bugsplat tracking by using attributes for certain static data items.
     const LLSD& info = getViewerInfo();
