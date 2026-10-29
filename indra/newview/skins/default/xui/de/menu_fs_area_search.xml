@@ -14,4 +14,5 @@
 	<menu_item_call label="Eigene Objekte filtern" name="filter_my_objects" />
 	<menu_item_call label="Alles auswählen" name="select_all" />
 	<menu_item_call label="Auswahl aufheben" name="clear_selection" />
+	<menu_item_call label="Aus allen meinen Gruppen verbannen" name="BanFromAllGroups"/>
 </context_menu>
