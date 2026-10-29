@@ -60,7 +60,7 @@ jobs:
           INCLUDE_TRACY: ${{ inputs.include_tracy }}
         run: python fsutils/ci.py prepare
       - name: Check CI helpers
-        run: python -m unittest discover -s fsutils/tests -v
+        run: python -m unittest discover -s fsutils/tests -v --buffer
       - name: Save CI plan
         if: always() && steps.plan.outcome == 'success'
         uses: actions/upload-artifact@v7

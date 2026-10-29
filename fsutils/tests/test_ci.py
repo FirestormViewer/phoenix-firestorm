@@ -1,5 +1,7 @@
 """Regression checks for the CI deployment boundary and failure reporting."""
 import argparse
+from contextlib import redirect_stdout
+import io
 import importlib.util
 import json
 import os
@@ -158,11 +160,16 @@ class CIWorkflow(Workspace):
         plan, _, _, _ = self.fixture()
         ci.write_json('ci-plan.json', plan)
         os.environ['CI_MATRIX_RESULT'] = 'failure'
-        with patch.object(ci, 'pages', side_effect=ValueError('API unavailable')):
+        captured = io.StringIO()
+        # The simulated failure emits a real Actions annotation. Keep it out of
+        # the surrounding test runner's output while asserting it is generated.
+        with redirect_stdout(captured), patch.object(ci, 'pages', side_effect=ValueError('API unavailable')):
             with patch.object(ci, 'send_failure') as send:
                 with self.assertRaises(ValueError):
                     ci.collect(None)
                 self.assertFalse(send.call_args.args[0]['passed'])
+        self.assertIn('::error::CI result collection failed: API unavailable', captured.getvalue())
+        self.assertIn('DEPLOYMENT BLOCKED', captured.getvalue())
         self.assertFalse(ci.read_json('ci-gate.json')['passed'])
 
     def test_notification_delivery_retries_are_bounded_and_redacted(self):
@@ -294,11 +301,13 @@ add_custom_target(BUILD_TESTS)
                                check=True, stdout=subprocess.DEVNULL)
                 # Remove the preceding run's XML to also exercise missing-report behaviour.
                 shutil.rmtree('ci-results', ignore_errors=True)
-                if case == 'pass':
-                    ci.run_tests(argparse.Namespace(timeout=5))
-                else:
-                    with self.assertRaises(ValueError):
+                captured = io.StringIO()
+                with redirect_stdout(captured):
+                    if case == 'pass':
                         ci.run_tests(argparse.Namespace(timeout=5))
+                    else:
+                        with self.assertRaises(ValueError):
+                            ci.run_tests(argparse.Namespace(timeout=5))
                 self.assertEqual(ci.read_json('ci-results/tests.json')['state'],
                                  'passed' if case == 'pass' else 'failed')
                 shutil.rmtree('build-check')

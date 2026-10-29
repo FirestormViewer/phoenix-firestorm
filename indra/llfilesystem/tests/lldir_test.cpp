@@ -103,26 +103,28 @@ struct LLDir_Dummy: public LLDir
         }
     }
 
-    virtual ~LLDir_Dummy() {}
+    // <FS:Beq> Complete the directory fixture overrides, including Firestorm's
+    // directory iteration API, consistently for Clang warning-as-error builds.
+    ~LLDir_Dummy() override {}
 
-    virtual void initAppDirs(const std::string& app_name, const std::string& app_read_only_data_dir)
+    void initAppDirs(const std::string& app_name, const std::string& app_read_only_data_dir) override
     {
         // Implement this when we write a test that needs it
     }
 
-    virtual std::string getCurPath()
+    std::string getCurPath() override
     {
         // Implement this when we write a test that needs it
         return "";
     }
 
-    virtual U32 countFilesInDir(const std::string& dirname, const std::string& mask)
+    U32 countFilesInDir(const std::string& dirname, const std::string& mask) override
     {
         // Implement this when we write a test that needs it
         return 0;
     }
 
-    virtual bool fileExists(const std::string& pathname) const
+    bool fileExists(const std::string& pathname) const override
     {
         // Record fileExists() calls so we can check whether caching is
         // working right. Certain LLDir calls should be able to make decisions
@@ -133,25 +135,24 @@ struct LLDir_Dummy: public LLDir
         return (mFilesystem.find(pathname) != mFilesystem.end());
     }
     
-    // <FS:Beq> Adapt directory test fixtures to Firestorm directory and skin APIs.
     bool getNextFileInDir(const std::string&, const std::string&, std::string&) override
     {
         tut::fail("LLDir_Dummy does not implement directory iteration");
         return false;
     }
+
+    std::string getLLPluginLauncher() override
+    {
+        // Implement this when we write a test that needs it
+        return "";
+    }
+
+    std::string getLLPluginFilename(std::string base_name) override
+    {
+        // Implement this when we write a test that needs it
+        return "";
+    }
     // </FS:Beq>
-
-    virtual std::string getLLPluginLauncher()
-    {
-        // Implement this when we write a test that needs it
-        return "";
-    }
-
-    virtual std::string getLLPluginFilename(std::string base_name)
-    {
-        // Implement this when we write a test that needs it
-        return "";
-    }
 
     /*----------------------------- Dummy data -----------------------------*/
     void clearFilesystem() { mFilesystem.clear(); }
