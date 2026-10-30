@@ -17,7 +17,7 @@
 
 inline std::time_t fs_file_time_to_time_t(std::filesystem::file_time_type time)
 {
-#ifdef _WIN32
+#ifdef LL_MSVC
     const auto system_time = std::chrono::clock_cast<std::chrono::system_clock>(time);
 #else
     const auto system_time = std::chrono::file_clock::to_sys(time);
@@ -29,7 +29,7 @@ inline std::time_t fs_file_time_to_time_t(std::filesystem::file_time_type time)
 inline std::filesystem::file_time_type fs_file_time_from_time_t(std::time_t time)
 {
     const auto system_time = std::chrono::system_clock::from_time_t(time);
-#ifdef _WIN32
+#ifdef LL_MSVC
     return std::chrono::clock_cast<std::chrono::file_clock>(system_time);
 #else
     return std::chrono::file_clock::from_sys(system_time);
