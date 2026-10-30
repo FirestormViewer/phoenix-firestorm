@@ -2438,8 +2438,8 @@ class Linux_x86_64_Manifest(LinuxManifest):
                     print("Skipping libfmod.so - not found")
                     pass
 
-        self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
-        self.strip_binaries()
+        # package_finish() extracts Breakpad symbols before stripping the staged
+        # binaries. Keep DWARF information intact during the copy phase.
 ################################################################
 # <FS:Ansariel> Added back for Mac compatibility reason
 def symlinkf(src, dst):
