@@ -116,6 +116,8 @@ private:
 
 private:
     boost::signals2::connection mGridListChangedCallbackConnection;
+    boost::signals2::connection mStartLocationFocusLostConnection;
+    boost::signals2::connection mUsernameFocusLostConnection;
 
     void updateLoginButtons();
 

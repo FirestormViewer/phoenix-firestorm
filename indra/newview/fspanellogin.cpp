@@ -229,7 +229,7 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 
     LLComboBox* favorites_combo = getChild<LLComboBox>("start_location_combo");
     updateLocationSelectorsVisibility(); // separate so that it can be called from preferences
-    favorites_combo->setFocusLostCallback(boost::bind(&FSPanelLogin::onLocationSLURL, this));
+    mStartLocationFocusLostConnection = favorites_combo->setFocusLostCallback(boost::bind(&FSPanelLogin::onLocationSLURL, this));
 
     LLComboBox* server_choice_combo = getChild<LLComboBox>("server_combo");
     server_choice_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectServer, this));
@@ -317,7 +317,7 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
     LLComboBox* username_combo(getChild<LLComboBox>("username_combo"));
     username_combo->setTextChangedCallback(boost::bind(&FSPanelLogin::onUsernameTextChanged, this));
     username_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
-    username_combo->setFocusLostCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
+    mUsernameFocusLostConnection = username_combo->setFocusLostCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
     mPreviousUsername = username_combo->getValue().asString();
 
     childSetAction("password_show_btn", onShowHidePasswordClick, this);
@@ -405,6 +405,16 @@ FSPanelLogin::~FSPanelLogin()
     if (mGridListChangedCallbackConnection.connected())
     {
         mGridListChangedCallbackConnection.disconnect();
+    }
+
+    if (mStartLocationFocusLostConnection.connected())
+    {
+        mStartLocationFocusLostConnection.disconnect();
+    }
+
+    if (mUsernameFocusLostConnection.connected())
+    {
+        mUsernameFocusLostConnection.disconnect();
     }
 
     FSPanelLogin::sInstance = NULL;
