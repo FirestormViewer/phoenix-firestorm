@@ -350,7 +350,7 @@ void FSPrimfeedPhotoPanel::sendPhoto()
     LLSD params;
     params["rating"]                 = ratingToString(content_rating);
     params["content"]                = description;
-    params["is_commercial"]          = commercial_content;
+    params["commercial"]             = commercial_content;
     params["post_to_public_gallery"] = post_to_public_gallery;
     // Add the location if required
 
