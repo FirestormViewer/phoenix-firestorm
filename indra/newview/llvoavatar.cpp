@@ -3961,11 +3961,12 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
         mVisibleChat = visible_chat;
         new_name = true;
     }
-        if (visible_typing != mVisibleTyping)
-        {
-            mVisibleTyping = visible_typing;
-            new_name = true;
-        }
+
+    if (visible_typing != mVisibleTyping)
+    {
+        mVisibleTyping = visible_typing;
+        new_name = true;
+    }
 
 // [RLVa:KB] - Checked: RLVa-0.2.0
     if (!fRlvShowAvName)
