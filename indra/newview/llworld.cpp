@@ -103,12 +103,41 @@ F32 LLWorld::mWidthInMeters = mWidth * mScale;
 
 // allocate the stack
 LLWorld::LLWorld() :
+    // <AW: opensim-limits>
+    mRegionMaxHeight(SL_MAX_OBJECT_Z),
+    mRegionMinPrimScale(SL_MIN_PRIM_SCALE),
+    mRegionMaxPrimScale(SL_DEFAULT_MAX_PRIM_SCALE),
+    mRegionMaxPrimScaleNoMesh(SL_DEFAULT_MAX_PRIM_SCALE_NO_MESH),
+    mRegionMaxHollowSize(SL_OBJECT_MAX_HOLLOW_SIZE),
+    mRegionMinHoleSize(SL_OBJECT_MIN_HOLE_SIZE),
+    mMaxLinkedPrims(MAX_CHILDREN_PER_TASK),
+    mMaxPhysLinkedPrims(MAX_CHILDREN_PER_PHYSICAL_TASK),
+    mMaxInventoryItemsTransfer(42),
+    mAllowRenderName(2),
+    mAllowMinimap(true),
+    mAllowPhysicalPrims(true),
+    mAllowRenderWater(true),
+    mMaxPrimXPos(256.f),
+    mMaxPrimYPos(256.f),
+    mMaxPrimZPos(SL_MAX_OBJECT_Z),
+    mMinPrimXPos(0.f),
+    mMinPrimYPos(0.f),
+    mMinPrimZPos(SL_MIN_OBJECT_Z),
+    mMaxDragDistance(10000.f),
+    mMaxPhysPrimScale(SL_DEFAULT_MAX_PRIM_SCALE),
+    mAllowParcelWindLight(false),
+    mEnableTeenMode(false),
+    mEnforceMaxBuild(false),
+    mLockedDrawDistance(false),
+    mDrawDistance(-1.f),
+    mTerrainDetailScale(-1.f),
+    mLimitsNeedRefresh(true),
+    // </AW: opensim-limits>
     mLandFarClip(DEFAULT_FAR_PLANE),
     mLastPacketsIn(0),
     mLastPacketsOut(0),
     mLastPacketsLost(0),
-    mSpaceTimeUSec(0),
-    mLimitsNeedRefresh(true)// <AW: opensim-limits>
+    mSpaceTimeUSec(0)
 {
     for (S32 i = 0; i < EDGE_WATER_OBJECTS_COUNT; i++)
     {
