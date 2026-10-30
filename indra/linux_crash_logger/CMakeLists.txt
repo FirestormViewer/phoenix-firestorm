@@ -1,65 +1,30 @@
 # -*- cmake -*-
-
 project(linux_crash_logger)
 
+# <FS:Beq> Reuse the viewer's bundled SDL3; no additional GUI toolkit.
 include(00-Common)
-include(Linking)
-include(UI)
-include(CURL)
+include(Boost)
 include(OpenSSL)
+include(NGHTTP2)
 include(ZLIBNG)
+include(CURL)
+include(SDL3)
 
-include_directories(
-    ${LLCOREHTTP_INCLUDE_DIRS}
-    ${LLCOMMON_INCLUDE_DIRS}
-    ${LLCRASHLOGGER_INCLUDE_DIRS}
-    ${LLMATH_INCLUDE_DIRS}
-    ${LLFILESYSTEM_INCLUDE_DIRS}
-    ${LLXML_INCLUDE_DIRS}
-    ${FREETYPE_INCLUDE_DIRS}
-    )
-include_directories(SYSTEM
-    ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
-    ${LLXML_SYSTEM_INCLUDE_DIRS}
-    )
-include_directories(SYSTEM
-    ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
-    ${LLXML_SYSTEM_INCLUDE_DIRS}
-    )
+add_library(linux-crash-report STATIC linux_crash_report.cpp)
+target_include_directories(linux-crash-report PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(linux-crash-report PUBLIC ll::libcurl ll::boost)
+add_executable(linux-crash-logger linux_crash_logger.cpp)
+target_link_libraries(linux-crash-logger PRIVATE linux-crash-report ll::SDL3)
+add_custom_target(linux-crash-logger-target ALL DEPENDS linux-crash-logger)
 
-set(linux_crash_logger_SOURCE_FILES
-    linux_crash_logger.cpp
-    )
-
-set(linux_crash_logger_HEADER_FILES
-    CMakeLists.txt
-
-    llcrashloggerlinux.h
-    )
-
-list(APPEND linux_crash_logger_SOURCE_FILES
-     ${linux_crash_logger_HEADER_FILES}
-     )
-
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
-
-add_executable(linux-crash-logger ${linux_crash_logger_SOURCE_FILES})
-
-# llcommon uses `clock_gettime' which is provided by librt on linux.
-set(LIBRT_LIBRARY rt)
-
-
-target_link_libraries(linux-crash-logger
-#        llcrashlogger
-        llfilesystem
-        llxml
-        llmessage
-        llmath
-        llcorehttp
-        llcommon
-        ll::uilibraries
-    X11
-    )
-
-add_custom_target(linux-crash-logger-target ALL
-    DEPENDS linux-crash-logger)
+if(LL_TESTS)
+  add_executable(linux-crash-report-test-driver tests/report_driver.cpp)
+  target_link_libraries(linux-crash-report-test-driver PRIVATE linux-crash-report)
+  add_dependencies(BUILD_TESTS linux-crash-report-test-driver linux-crash-logger)
+  add_test(NAME linux-crash-report
+    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_report.py
+            $<TARGET_FILE:linux-crash-report-test-driver> $<TARGET_FILE:linux-crash-logger>)
+  set_tests_properties(linux-crash-report PROPERTIES
+    ENVIRONMENT "LD_LIBRARY_PATH=${LIBS_PREBUILT_DIR}/lib/release:$ENV{LD_LIBRARY_PATH}")
+endif()
+# </FS:Beq>

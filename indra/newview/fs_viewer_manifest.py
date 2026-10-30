@@ -24,6 +24,26 @@ class FSViewerManifest:
     def fs_is_avx2(self):
         return self.args['avx2'] == 'ON' 
 
+    def fs_mac_dmg_template(self):
+        """Select and validate the DMG artwork for this channel and flavor."""
+        prefix = 'firestormos' if self.fs_is_opensim() else 'firestorm'
+        template = os.path.join('installers', 'darwin',
+                                '%s-%s-dmg' % (prefix, self.channel_type()))
+        print("Trying template directory", template)
+        if not os.path.isdir(self.src_path_of(template)):
+            # Alpha, Manual and Profiling have no dedicated artwork. Use the
+            # release template for the same flavor, not the obsolete release-dmg.
+            template = os.path.join('installers', 'darwin', '%s-release-dmg' % prefix)
+            print("Not found, trying template directory", template)
+
+        missing = [self.src_path_of(os.path.join(template, name))
+                   for name in ('background.png', '_DS_Store', '_VolumeIcon.icns',
+                                'Applications-alias.r')
+                   if not os.path.isfile(self.src_path_of(os.path.join(template, name)))]
+        if missing:
+            raise FileNotFoundError("Missing macOS DMG template assets: " + ', '.join(missing))
+        return template
+
     def fs_splice_grid_substitution_strings( self, subst_strings ):
         ret = subst_strings
 

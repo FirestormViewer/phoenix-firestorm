@@ -60,6 +60,12 @@
 #endif
 
 #include "boost/json.hpp"
+// <FS:Beq> Persist Linux report metadata before a crash, never from its callback.
+#include "llagent.h"
+#include "llvoavatarself.h"
+#include "llprocess.h"
+#include <filesystem>
+// </FS:Beq>
 
 #define VIEWERAPI_SERVICE "com.secondlife.ViewerAppAPIService"
 #define VIEWERAPI_PATH "/com/secondlife/ViewerAppAPI"
@@ -306,8 +312,15 @@ std::string gCrashBehavior;
 
 static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* context, bool succeeded)
 {
+    // <FS:Beq> Only exec the separate reporter after a successful dump. A failed
+    // exec must terminate the child, not resume the crashed viewer's callback.
+    if (!succeeded) return false;
     if( fork() == 0 )
+    {
         execl( gCrashLogger.c_str(), gCrashLogger.c_str(), descriptor.path(), gVersion.c_str(), gBugsplatDB.c_str(),  gCrashBehavior.c_str(), nullptr );
+        _exit(127);
+    }
+    // </FS:Beq>
     return succeeded;
 }
 
@@ -339,9 +352,9 @@ void setupBreakpad()
         return;
     }
 
-    gVersion = STRINGIZE(
-            LL_VIEWER_VERSION_MAJOR << '.' << LL_VIEWER_VERSION_MINOR << '.' << LL_VIEWER_VERSION_PATCH
-                                    << '.' << LL_VIEWER_VERSION_BUILD);
+    // <FS:Beq> Use the current version service; the legacy macros were removed.
+    gVersion = LLVersionInfo::instance().getVersion();
+    // </FS:Beq>
 
     boost::json::value BugSplat_DB = build_data.at("BugSplat DB");
     gBugsplatDB = boost::json::value_to<std::string>(BugSplat_DB);
@@ -368,11 +381,72 @@ bool LLAppViewerLinux::init()
         else
             gCrashBehavior = "send";
         setupBreakpad();
+        // <FS:Beq> Capture defaults now and reopen an unsent report in the
+        // standalone reporter when a previous dialog/upload could not finish.
+        bugsplatAddStaticAttributes(getViewerInfo());
+        LLProcess::Params retry;
+        retry.executable = gCrashLogger;
+        retry.args.add("--pending");
+        retry.args.add(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, ""));
+        retry.autokill = false;
+        retry.attached = false;
+        LLProcess::create(retry);
+        // </FS:Beq>
     }
 #endif
 
     return success;
 }
+
+// <FS:Beq> This runs at initialization and when normal debug information is
+// refreshed (including login). The crash callback only forks/execs the helper.
+void LLAppViewerLinux::bugsplatAddStaticAttributes(const LLSD& info)
+{
+#if LL_SEND_CRASH_REPORTS
+    if (gCrashSettings.getS32("CrashSubmitBehavior") == CRASH_BEHAVIOR_NEVER_SEND) return;
+    try
+    {
+        boost::json::object system;
+        for (const auto* key : {"CPU", "OS_VERSION", "GRAPHICS_CARD", "GRAPHICS_DRIVER_VERSION", "MEMORY_MB"})
+            system[key] = info[key].asString();
+        boost::json::object report{
+            {"product", "Firestorm-Releasex64"},
+            {"version", LLVersionInfo::instance().getVersion()},
+            {"channel", LLVersionInfo::instance().getChannel()},
+            {"description", "Firestorm closed unexpectedly."},
+            {"system", system},
+            {"name", gCrashSettings.getBOOL("CrashSubmitName") && gAgentAvatarp
+                         ? gAgentAvatarp->getFullname() : std::string()},
+            {"include_settings", bool(gCrashSettings.getBOOL("CrashSubmitSettings"))},
+            {"debug_file", isSecondInstance() ? std::string() : *getStaticDebugFile()},
+            {"settings_file", gSavedSettings.getString("ClientSettingsFile")},
+            {"account_settings_file", gAgentAvatarp
+                         ? gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "settings_per_account.xml") : std::string()},
+            {"ca_file", gDirUtilp->getCAFile()}
+        };
+#ifdef OPENSIM
+        report["flavor"] = "oss";
+#else
+        report["flavor"] = "hvk";
+#endif
+        const auto path = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "report-context.json");
+        const auto temporary = path + ".tmp";
+        {
+            llofstream output(temporary, std::ios::trunc);
+            std::filesystem::permissions(temporary, std::filesystem::perms::owner_read | std::filesystem::perms::owner_write);
+            output << boost::json::serialize(report) << '\n';
+            output.close();
+            if (!output) throw std::runtime_error("Cannot write Linux crash context");
+        }
+        std::filesystem::rename(temporary, path);
+    }
+    catch (const std::exception& error)
+    {
+        LL_WARNS("BUGSPLAT") << "Cannot snapshot crash report context: " << error.what() << LL_ENDL;
+    }
+#endif
+}
+// </FS:Beq>
 
 bool LLAppViewerLinux::restoreErrorTrap()
 {

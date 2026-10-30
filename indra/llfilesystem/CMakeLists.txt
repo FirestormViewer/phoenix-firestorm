@@ -89,6 +89,9 @@ if (LL_TESTS)
     # <FS:Beq> Extended non-ASCII path test coverage; strict assertions expose existing defects.
     LL_ADD_INTEGRATION_TEST(llnonasciipaths "" "${test_libs}")
     LL_ADD_INTEGRATION_TEST(llstaticassetpaths "" "${test_libs}")
+    # A separate process exercises constructor watermarks before any settings callback.
+    LL_ADD_INTEGRATION_TEST(llcachewatermarks "" "${test_libs}")
+    set_tests_properties(INTEGRATION_TEST_RUNNER_llcachewatermarks PROPERTIES TIMEOUT 30 LABELS "nonascii")
     # A second process permits another singleton lifecycle and distinguishes
     # Unicode-specific failures from general protected-cache accounting bugs.
     SET_TEST_PATH(STATIC_ASSET_TEST_PATH)
