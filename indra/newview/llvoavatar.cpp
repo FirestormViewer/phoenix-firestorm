@@ -695,6 +695,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
     mVisible(false),
     mLastImpostorUpdateFrameTime(0.f),
     mLastImpostorUpdateReason(0),
+    mIsAnimesh(false), // <FS:minerjr/> FIRE-35735: Imposter/Impostor Avatar Exclusions
     mWindFreq(0.f),
     mRipplePhase( 0.f ),
     mBelowWater(false),
