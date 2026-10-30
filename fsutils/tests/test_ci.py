@@ -1,4 +1,4 @@
-"""Regression checks for the CI deployment boundary and failure reporting."""
+"""Regression checks for the CI deployment boundary and result reporting."""
 import argparse
 from contextlib import redirect_stdout
 import io
@@ -143,18 +143,42 @@ class CIWorkflow(Workspace):
                 ci.junit_summary('junit.xml')
 
     def test_discord_report_is_bounded_routed_and_has_no_mentions(self):
-        gate = ci.check_results(*self.fixture(), 'failure')
-        for channel, (_, secret) in ci.CHANNELS.items():
-            gate['release_type'] = channel
-            os.environ[secret] = 'https://discord.invalid/test'
-            with patch.object(ci, 'request_json') as send:
-                ci.send_failure(gate)
-                self.assertEqual(send.call_args.args[0], os.environ[secret])
-                payload = send.call_args.kwargs['payload']
-                self.assertLessEqual(len(payload['content']), 2000)
-                self.assertEqual(payload['allowed_mentions'], {'parse': []})
-                self.assertIn('DEPLOYMENT BLOCKED', payload['content'])
-                self.assertIn('/actions/runs/42/attempts/2', payload['content'])
+        for result in ('success', 'failure'):
+            gate = ci.check_results(*self.fixture(), result)
+            for channel, (_, secret) in ci.CHANNELS.items():
+                with self.subTest(result=result, channel=channel):
+                    gate['release_type'] = channel
+                    os.environ[secret] = 'https://discord.invalid/test'
+                    with patch.object(ci, 'request_json') as send:
+                        ci.send_report(gate)
+                        self.assertEqual(send.call_args.args[0], os.environ[secret])
+                        payload = send.call_args.kwargs['payload']
+                        self.assertLessEqual(len(payload['content']), 2000)
+                        self.assertEqual(payload['allowed_mentions'], {'parse': []})
+                        expected = 'DEPLOYMENT ALLOWED' if result == 'success' else 'DEPLOYMENT BLOCKED'
+                        self.assertIn(expected, payload['content'])
+                        self.assertIn('/actions/runs/42/attempts/2', payload['content'])
+                        if result == 'success':
+                            self.assertIn('CI passed', payload['content'])
+                            self.assertIn('CTest: 5 passed', payload['content'])
+
+    def test_successful_manual_collect_posts_report_without_deployment(self):
+        plan, records, jobs, artifacts = self.fixture()
+        plan['release_type'] = 'Manual'
+        for artifact, cell in zip(artifacts, plan['cells']):
+            artifact['name'] = ci.artifact_name('Manual', cell)
+        ci.write_json('ci-plan.json', plan)
+        for index, record in enumerate(records):
+            ci.write_json(Path('ci-reports') / str(index) / 'result.json', record)
+        os.environ.update(CI_MATRIX_RESULT='success', MANUAL_WEBHOOK_URL='https://discord.invalid/test')
+        with redirect_stdout(io.StringIO()), patch.object(ci, 'pages', side_effect=[jobs, artifacts]), \
+                patch.object(ci, 'request_json') as send:
+            ci.collect(None)
+        send.assert_called_once()
+        self.assertEqual(send.call_args.args[0], os.environ['MANUAL_WEBHOOK_URL'])
+        self.assertIn('Firestorm Manual — CI passed', send.call_args.kwargs['payload']['content'])
+        self.assertTrue(ci.read_json('ci-gate.json')['passed'])
+        self.assertIn('artifact_ids=', Path(os.environ['GITHUB_OUTPUT']).read_text())
 
     def test_collection_failure_still_notifies_and_blocks(self):
         plan, _, _, _ = self.fixture()
@@ -164,7 +188,7 @@ class CIWorkflow(Workspace):
         # The simulated failure emits a real Actions annotation. Keep it out of
         # the surrounding test runner's output while asserting it is generated.
         with redirect_stdout(captured), patch.object(ci, 'pages', side_effect=ValueError('API unavailable')):
-            with patch.object(ci, 'send_failure') as send:
+            with patch.object(ci, 'send_report') as send:
                 with self.assertRaises(ValueError):
                     ci.collect(None)
                 self.assertFalse(send.call_args.args[0]['passed'])

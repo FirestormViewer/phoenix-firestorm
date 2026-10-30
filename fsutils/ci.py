@@ -380,13 +380,13 @@ def report_text(gate, failures_only=False):
     return '\n'.join(lines)
 
 
-def send_failure(gate):
+def send_report(gate):
     hook = os.environ.get(CHANNELS[gate['release_type']][1])
     if not hook:
-        raise ValueError('Failure report webhook is not configured for this channel')
+        raise ValueError('CI report webhook is not configured for this channel')
     url = f"{os.environ.get('GITHUB_SERVER_URL', 'https://github.com')}/{gate['repository']}/actions/runs/{gate['run_id']}/attempts/{gate['attempt']}"
     # Complete results remain in the GitHub summary. Discord gets a bounded digest.
-    content = report_text(gate, failures_only=True)
+    content = report_text(gate, failures_only=not gate['passed'])
     if len(content) > 1800:
         content = content[:1760] + '\n… remaining results in the full report.'
     content += '\n\nFull report and logs: ' + url
@@ -410,8 +410,8 @@ def collect(args):
     print(text)
     with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as summary:
         summary.write(text + '\n')
+    send_report(gate)
     if not gate['passed']:
-        send_failure(gate)
         raise ValueError('CI gate rejected this build; deployment is blocked')
     outputs(artifact_ids=','.join(str(row['artifact']['id']) for row in gate['results']))
 

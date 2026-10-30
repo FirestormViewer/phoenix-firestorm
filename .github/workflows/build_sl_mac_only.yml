@@ -598,7 +598,7 @@ jobs:
         with:
           pattern: ci-result-*-${{ github.run_attempt }}
           path: ci-reports
-      - name: Check builds, tests and deliverables; report failures
+      - name: Check builds, tests and deliverables; report results
         id: gate
         if: always()
         env:
