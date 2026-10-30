@@ -16,6 +16,8 @@
 		<menu_item_check label="編輯聯結部分" name="Object Edit Linked Parts" />
 		<menu_item_call label="編譯（Mono）" name="Mono" />
 		<menu_item_call label="編譯（LSL）" name="LSL" />
+		<menu_item_call label="編譯（Lua）" name="Lua" />
+		<menu_item_call label="編譯（LSL on Lua）" name="LSL on Luau" />
 		<menu_item_call label="重設指令碼" name="Object Reset Scripts" />
 		<menu_item_call label="運行指令碼" name="Object Set Scripts to Running" />
 		<menu_item_call label="停止指令碼" name="Object Set Scripts to Not Running" />

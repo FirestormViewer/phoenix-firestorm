@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_maturity_dialog" title="內容分級">
+	<floater.string name="location_rated_string" value="你所選擇的地點分級為 [MATURITY]。" />
+	<floater.string name="update_maturity_string" value="你目前的內容偏好不包含 [MATURITY] 內容。允許後將會更新你的偏好設定。" />
+	<floater.string name="allow_maturity_string" value="允許 [MATURITY] 內容" />
+	<text name="location_rated_lbl">
+		你所選擇的地點分級為成人。
+	</text>
+	<text name="current_maturity_lbl">
+		你目前的內容偏好不包含成人內容。允許後將會更新你的偏好設定。
+	</text>
+	<button label="允許內容" name="continue_btn" />
+	<button label="取消" name="cancel_btn" />
+	<text name="learn_more_lbl">
+		[https://lindenlab.freshdesk.com/support/solutions/articles/31000135220-i-can-t-access-adult-land-and-content- 進一步了解]內容分級。
+	</text>
+</floater>

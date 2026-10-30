@@ -403,6 +403,12 @@ support@secondlife.com.
 	<string name="LoggingOut">
 		正在登出...
 	</string>
+	<string name="CompressingInventoryCache">
+		正在壓縮庫存快取...
+	</string>
+	<string name="ShutdownCleanup">
+		正在釋放資源...
+	</string>
 	<string name="ShuttingDown">
 		正在關閉...
 	</string>
@@ -536,6 +542,9 @@ support@secondlife.com.
 		矩陣
 	</string>
 	<!-- Tooltip -->
+	<string name="ReorderClothingTooltip">
+		拖曳以重新排列圖層，或使用箭頭
+	</string>
 	<string name="TooltipPerson">
 		人名
 	</string>
@@ -1543,8 +1552,8 @@ support@secondlife.com.
 	<string name="Validator_ShouldBeASCII">
 		無效字元 [NR]: '[CH]' (應為ASCII字元)
 	</string>
-	<string name="Validator_ShouldBeNewLineOrASCII">
-		無效字元 [NR]: '[CH]' (應為ASCII字元或換行符)
+	<string name="Validator_ShouldBeNewLineOrASCIINoPipe">
+		位置 [NR] 的字元 [CH] 應為可列印的 ASCII（不含豎線）或換行
 	</string>
 	<!-- LSL Usage Hover Tips -->
 	<string name="LSLTipSleepTime" translate="false">
@@ -1801,7 +1810,7 @@ support@secondlife.com.
 	</string>
 	<!-- inventory -->
 	<string name="InventoryNoMatchingItems">
-		未找到你想要的？ 嘗試 [secondlife:///app/search/all/[SEARCH_TERM] 搜尋].
+		沒有符合的項目。
 	</string>
 	<string name="InventoryNoMatchingRecentItems">
 		未找到你想要的？ 嘗試 [secondlife:///app/inventory/filters 更改過濾器].
@@ -5714,6 +5723,12 @@ support@secondlife.com.
 	</string>
 	<string name="ExternalEditorFailedToRun">
 		執行外部編輯器失敗。
+	</string>
+	<string name="ExternalEditorFailedToStart">
+		無法啟動 WebSocket 伺服器。請確認已開啟 ExternalWebsocketSyncEnable 設定。
+	</string>
+	<string name="VSCodeLaunchFailed">
+		無法啟動 VS Code。請確認 'code' 指令已存在於系統的 PATH 中。
 	</string>
 	<!--  Machine translation of chat messahes -->
 	<string name="TranslationFailed">

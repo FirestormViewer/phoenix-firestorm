@@ -10,6 +10,7 @@
 		<menu_item_call label="除錯" name="Troubleshooting" />
 		<menu_item_call label="白名單顧問" name="whitelist_folders" />
 		<menu_item_call label="報告問題" name="Report Bug" />
+		<menu_item_call label="將界面大小設為預設值" name="Set UI Size to Default" />
 		<menu_item_call label="關於 [APP_NAME]" name="About Second Life" />
 		<menu_item_call label="[CURRENT_GRID] 幫助" name="current_grid_help_login" />
 		<menu_item_call label="關於 [CURRENT_GRID]" name="current_grid_about_login" />

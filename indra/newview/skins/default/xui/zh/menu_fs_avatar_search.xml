@@ -12,4 +12,5 @@
 	<menu_item_call label="請求瞬間傳送" name="request_teleport" />
 	<menu_item_call label="邀請加入群組" name="GroupInvite" />
 	<menu_item_check label="封鎖/解除封鎖" name="Block/Unblock" />
+	<menu_item_call label="從我所有群組封鎖" name="BanFromAllGroups" />
 </context_menu>

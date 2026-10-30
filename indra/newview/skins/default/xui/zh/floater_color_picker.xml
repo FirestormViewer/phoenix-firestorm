@@ -39,7 +39,14 @@
 		亮度：
 	</text>
 	<check_box label="立即應用" name="apply_immediate" />
-	<button label="複製到 LSL" name="copy_lsl_btn" tool_tip="將顏色代碼複製到 LSL 顏色向量中，格式為 &lt;r, g, b&gt;." />
+	<combo_box name="copy_color_combobox" tool_tip="以不同格式複製顏色值。">
+		<combo_box.item label="複製為..." name="copy_as" />
+		<combo_box.item label="LSL" name="lsl_color" />
+		<combo_box.item label="HEX" name="hex_color" />
+		<combo_box.item label="RGB" name="rgb_color" />
+		<combo_box.item label="HSL" name="hsl_color" />
+		<combo_box.item label="CMYK" name="cmyk_color" />
+	</combo_box>
 	<button label="確定" label_selected="確定" name="select_btn" />
 	<button label="取消" label_selected="取消" name="cancel_btn" />
 	<text name="Current color:">

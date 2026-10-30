@@ -29,5 +29,6 @@
 		<menu_item_call label="取消此參與者的靜音" name="ModerateVoiceUnMuteSelected" />
 	</context_menu>
 	<menu_item_call label="封鎖成員" name="BanMember" />
+	<menu_item_call label="從我所有群組封鎖" name="BanFromAllGroups" />
 	<menu_item_call label="在聊天中提及用戶" name="mention_in_chat" />
 </toggleable_menu>

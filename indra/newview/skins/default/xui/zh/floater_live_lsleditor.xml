@@ -28,7 +28,6 @@
 		來自物件: [SOURCE_OBJECT]
 	</text>
 	<button label="重設" label_selected="重設" name="Reset" />
-	<check_box initial_value="true" label="運行中" name="running" />
-	<check_box initial_value="true" label="Mono" name="mono" />
+	<check_box label="運行中" name="running" />
 	<check_box label="使用體驗：" name="enable_xp" />
 </floater>

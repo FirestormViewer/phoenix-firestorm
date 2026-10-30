@@ -8,6 +8,8 @@
 	<menu_item_call label="複製名稱" name="copy_name_to_clipboard" />
 	<menu_item_call label="複製URI" name="copy_uri_to_clipboard" />
 	<menu_item_call label="複製UUID/使用者識別碼" name="copy_key_to_clipboard" />
+	<menu_item_call label="從我所有群組封鎖" name="ban_from_all_groups" />
+	<menu_item_call label="從我所有群組解除封鎖" name="unban_from_all_groups" />
 	<menu_item_call label="踢出" name="kick" />
 	<menu_item_call label="凍結" name="freeze" />
 	<menu_item_call label="解凍" name="unfreeze" />

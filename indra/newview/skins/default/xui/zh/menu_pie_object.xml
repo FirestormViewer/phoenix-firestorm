@@ -66,13 +66,17 @@
 				<pie_slice label="粒子所有者" name="Mute Particle" />
 			</pie_menu>
 			<pie_menu label="指令碼 &gt;" name="ScriptsMenu">
-				<pie_slice label="編譯（Mono）" name="CompileMono" />
-				<pie_slice label="編譯（LSL）" name="CompileLSL" />
-				<pie_slice label="重設指令碼" name="Object Reset Scripts" />
-				<pie_slice label="運行指令碼" name="Object Set Scripts to Running" />
-				<pie_slice label="停止指令碼" name="Object Set Scripts to Not Running" />
-				<pie_slice label="移除指令碼" name="Remove Scripts From Selection" />
-				<pie_slice label="指令碼資訊" name="ScriptInfo" />
+				<pie_menu label="編譯 &gt;" name="CompileScriptsMenu">
+					<pie_slice label="Mono" name="CompileMono" />
+					<pie_slice label="LSL" name="CompileLSL" />
+					<pie_slice label="Lua" name="CompileLua" />
+					<pie_slice label="LSL on Lua" name="CompileLSLonLuau" />
+				</pie_menu>
+				<pie_slice label="重設" name="Object Reset Scripts" />
+				<pie_slice label="運行" name="Object Set Scripts to Running" />
+				<pie_slice label="停止" name="Object Set Scripts to Not Running" />
+				<pie_slice label="移除" name="Remove Scripts From Selection" />
+				<pie_slice label="資訊" name="ScriptInfo" />
 			</pie_menu>
 			<pie_slice label="檢查" name="Object Inspect" />
 		</pie_menu>

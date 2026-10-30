@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_scripting_settings" title="指令碼開發設定">
+	<check_box name="show_script_errors" label="顯示指令碼錯誤於：" />
+	<radio_group name="show_location">
+		<radio_item name="0" label="本地聊天" />
+		<radio_item name="1" label="單獨視窗" />
+	</radio_group>
+	<text name="tip">
+		外部指令碼編輯器：
+	</text>
+	<button name="browse_btn" label="瀏覽..." />
+	<check_box name="tight_integration" label="VS Code 緊密整合" />
+	<check_box name="websocket_sync_enable" label="啟用 WebSocket 同步" />
+	<text name="websocket_tip">
+		WebSocket 監聽埠：
+	</text>
+	<check_box name="websocket_forward_debug" label="將指令碼錯誤和除錯訊息轉送給 WebSocket 用戶端" />
+	<button name="close_btn" label="關閉" />
+</floater>

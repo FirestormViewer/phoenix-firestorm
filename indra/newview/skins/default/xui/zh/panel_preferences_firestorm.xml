@@ -182,6 +182,11 @@
 				<combo_item name="Large" label="大" />
 			</combo_box>
 			<check_box label="將編輯的指令碼儲存到 Mono 中" tool_tip="啟用此選項將直接將儲存在庫存中的指令碼儲存為 Mono，而不是 LSL。" name="FSSaveInventoryScriptsAsMono_toggle" />
+			<check_box label="啟用 WebSocket 同步" name="websocket_sync_enable" />
+			<text name="websocket_tip">
+				WebSocket 監聽埠：
+			</text>
+			<check_box label="將指令碼錯誤和除錯訊息轉送給 WebSocket 用戶端" name="websocket_forward_debug" />
 			<check_box label="啟用 LSL 前處理器" tool_tip="勾選此項將啟用 LSL 前處理器。" name="preproc_checkbox" />
 			<check_box label="最佳化指令碼" tool_tip="勾選此項，LSL 前處理器將最佳化指令碼所佔用的空間。" name="preprocoptimizer_checkbox" />
 			<check_box label="switch() 語句" tool_tip="勾選後，LSL 前處理器將允許使用 switch() 語句進行指令碼流程控制。" name="preprocswitch_checkbox" />
@@ -191,6 +196,7 @@
 			<button label="瀏覽" label_selected="瀏覽" name="SetPreprocInclude" />
 			<text name="externaleditor_textbox">外部編輯器：</text>
 			<button label="瀏覽" label_selected="瀏覽" name="SetExternalEditor" />
+			<check_box label="VS Code 緊密整合" name="tight_integration" />
 		</panel>
 		<panel label="上傳" name="UploadsTab">
 			<text name="title">上傳的目標檔案夾：</text>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="voice_panel" label="語音">
+	<slider name="Voice Volume" label="語音聊天" />
+	<check_box name="enable_voice_check" label="啟用" />
+	<text name="noise_suppression_label">
+		麥克風噪音抑制
+	</text>
+	<combo_box name="noise_suppression_combo">
+		<item name="noise_suppression_none" label="關閉" />
+		<item name="noise_suppression_low" label="低" />
+		<item name="noise_suppression_moderate" label="中等" />
+		<item name="noise_suppression_high" label="高" />
+		<item name="noise_suppression_max" label="最大" />
+	</combo_box>
+	<text name="Listen from">
+		收聽語音來源
+	</text>
+	<combo_box name="ear_location_combo">
+		<item name="camera_position" label="相機位置" />
+		<item name="avatar_position" label="化身位置" />
+	</combo_box>
+	<check_box name="enable_lip_sync" label="說話時讓化身嘴型動作" />
+	<check_box name="push_to_talk_toggle_check" label="使用工具列按鈕切換說話開關" tool_tip="切換模式下，按下並放開觸發鍵一次即可開啟或關閉麥克風。非切換模式下，只有按住觸發鍵時才會傳送語音。" />
+	<check_box name="gesture_audio_play_btn" label="播放手勢音效" tool_tip="勾選以聽見手勢的音效" />
+	<check_box name="enable_echo_cancellation" label="回音消除" tool_tip="勾選以啟用語音回音消除" />
+	<check_box name="voice_automatic_gain_control" label="自動增益控制" tool_tip="勾選以啟用自動增益控制" />
+	<check_box name="voice_dot_visualizer" label="在化身頭上顯示語音指示點" tool_tip="勾選以在化身頭上顯示語音指示點" />
+	<button name="device_settings_btn" label="語音輸入/輸出裝置" />
+</panel>
