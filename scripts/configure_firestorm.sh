@@ -44,6 +44,7 @@ WANTS_TESTBUILD=$FALSE
 WANTS_TRACY=$FALSE
 WANTS_LTO=$FALSE
 WANTS_BUILD=$FALSE
+WANTS_RUN_TESTS=$FALSE
 WANTS_CRASHREPORTING=$FALSE
 WANTS_CACHE=$FALSE
 TARGET_PLATFORM="darwin" # darwin, windows, linux
@@ -69,6 +70,7 @@ showUsage()
     echo "  --clean                  : Remove past builds & configuration"
     echo "  --config                 : Generate a new architecture-specific config"
     echo "  --build                  : Build Firestorm"
+    echo "  --run-tests              : Enable tests when configuring; run them after building"
     echo "  --version                : Update version number"
     echo "  --chan  [Release|Beta|Private]   : Private is the default, sets channel"
     echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
@@ -85,7 +87,7 @@ showUsage()
     echo "  --avx2                   : Build with Advanced Vector Extensions 2"
     echo "  --tracy                  : Build with Tracy Profiler support"
     echo "  --lto                    : Build with Link Time Optimization"
-    echo "  --crashreporting         : Build with crash reporting enabled (Windows only)"
+    echo "  --crashreporting         : Build with crash reporting enabled"
     echo "  --testbuild <days>       : Create time-limited test build (build date + <days>)"
     echo "  --platform <platform>    : Build for specified platform (darwin | windows | linux)"
     echo "  --jobs <num>             : Build with <num> jobs in parallel (Linux and Darwin only)"
@@ -101,7 +103,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package velopack no-package fmodstudio ninja vscode compiler-cache jobs: platform: kdu opensim no-opensim singlegrid: havok avx avx2 tracy lto crashreporting testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build run-tests config version package velopack no-package fmodstudio ninja vscode compiler-cache jobs: platform: kdu opensim no-opensim singlegrid: havok avx avx2 tracy lto crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -141,6 +143,7 @@ getArgs()
                           WANTS_VELOPACK=$TRUE;;
           no-package)     WANTS_PACKAGE=$FALSE;;
           build)          WANTS_BUILD=$TRUE;;
+          run-tests)      WANTS_RUN_TESTS=$TRUE;;
           platform)       TARGET_PLATFORM="$OPTARG";;
           jobs)           JOBS="$OPTARG";;
           ninja)          WANTS_NINJA=$TRUE;;
@@ -307,6 +310,11 @@ function getopt()
 
 
 getArgs $*
+# The native build commands below modify JOBS, so keep the test limit separate.
+TEST_JOBS="$JOBS"
+if [ "$TEST_JOBS" == "0" ] ; then
+    TEST_JOBS=2
+fi
 if [ ! -d `dirname "$LOG"` ] ; then
         mkdir -p `dirname "$LOG"`
 fi
@@ -336,6 +344,7 @@ echo -e "        PACKAGE: `b2a $WANTS_PACKAGE`"                                |
 echo -e "       VELOPACK: `b2a $WANTS_VELOPACK`"                               | tee -a "$LOG"
 echo -e "          CLEAN: `b2a $WANTS_CLEAN`"                                  | tee -a "$LOG"
 echo -e "          BUILD: `b2a $WANTS_BUILD`"                                  | tee -a "$LOG"
+echo -e "      RUN TESTS: `b2a $WANTS_RUN_TESTS`"                              | tee -a "$LOG"
 echo -e "         CONFIG: `b2a $WANTS_CONFIG`"                                 | tee -a "$LOG"
 echo -e "          NINJA: `b2a $WANTS_NINJA`"                                  | tee -a "$LOG"
 echo -e "         VSCODE: `b2a $WANTS_VSCODE`"                                 | tee -a "$LOG"
@@ -597,8 +606,13 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         fi
     fi
 
+    TESTS="-DLL_TESTS:BOOL=OFF"
+    if [ $WANTS_RUN_TESTS -eq $TRUE ] ; then
+        TESTS="-DLL_TESTS:BOOL=ON"
+    fi
+
     cmake -G "$TARGET" $CMAKE_ARCH ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $LTO $TESTBUILD $PACKAGE $VELOPACK \
-          $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
+          $UNATTENDED $TESTS -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee "$LOG"
     configure_status=${PIPESTATUS[0]}
 
@@ -609,6 +623,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     fi    
 fi
 if [ $WANTS_BUILD -eq $TRUE ] ; then
+    if [ $WANTS_RUN_TESTS -eq $TRUE ] && \
+       ! grep -Eiq '^LL_TESTS:BOOL=(ON|TRUE|YES|Y|1)$' CMakeCache.txt ; then
+        echo "Tests are not enabled in this build tree. Reconfigure with --run-tests or -DLL_TESTS:BOOL=ON."
+        exit 1
+    fi
     echo "Building $TARGET_PLATFORM..."
     build_status=0
     if [ $TARGET_PLATFORM == "darwin" ] ; then
@@ -651,6 +670,24 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         echo "Build failed!"
         exit 1
     fi    
+
+    if [ $WANTS_RUN_TESTS -eq $TRUE ] ; then
+        echo "Building test executables..."
+        cmake --build . --config "$BTYPE" --target BUILD_TESTS --parallel "$TEST_JOBS" 2>&1 | tee -a "$LOG"
+        test_status=${PIPESTATUS[0]}
+        if [ $test_status -ne 0 ] ; then
+            echo "Test compilation failed!"
+            exit "$test_status"
+        fi
+
+        echo "Running automated tests..."
+        ctest --build-config "$BTYPE" --parallel "$TEST_JOBS" --output-on-failure --no-tests=error 2>&1 | tee -a "$LOG"
+        test_status=${PIPESTATUS[0]}
+        if [ $test_status -ne 0 ] ; then
+            echo "Tests failed!"
+            exit "$test_status"
+        fi
+    fi
 fi
 echo "finished"
 exit 0

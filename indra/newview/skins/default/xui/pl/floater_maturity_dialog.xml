@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_maturity_dialog" title="Dojrzałość">
+	<floater.string name="location_rated_string" value="Wybrana lokacja ma ocenę [MATURITY]."/>
+	<floater.string name="update_maturity_string" value="Twoje ustawienia nie obejmują [MATURITY]. Zgoda zaktualizuje preferencje."/>
+	<floater.string name="allow_maturity_string" value="Zezwól na treści [MATURITY]"/>
+	<text name="location_rated_lbl">
+		Wybrana lokacja jest dla dorosłych.
+	</text>
+	<text name="current_maturity_lbl">
+		Twoje ustawienia nie obejmują treśći dla dorosłych. Zgoda zaktualizuje preferencje.
+	</text>
+	<button label="Zezwól" name="continue_btn"/>
+	<button label="Anuluj" name="cancel_btn"/>
+	<text name="learn_more_lbl">
+		[https://lindenlab.freshdesk.com/support/solutions/articles/31000135220-i-can-t-access-adult-land-and-content- Więcej] o ocenach.
+	</text>
+</floater>

@@ -21,6 +21,9 @@
 	<floater.string name="LoadingObjInv">
 		Ładowanie zawartości dla: [OBJECT_NAME]
 	</floater.string>
+	<floater.string name="SkippingIncompatibleScript">
+		Pomijanie "[SCRIPT_NAME]" (nie można rekompilować do [TARGET])
+	</floater.string>
 	<floater.string name="Deleting">
 		Usuwanie
 	</floater.string>

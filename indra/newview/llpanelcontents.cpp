@@ -349,9 +349,9 @@ void LLPanelContents::onNewScriptFlyoutCommit(LLUICtrl* ctrl)
     ctrl->setValue(mNewScriptIsLua ? "lua" : "lsl");
 
     // <FS:PP> FIRE-36059 Optional custom script template for New Script button
-    if (!mNewScriptIsLua && gSavedPerAccountSettings.getBOOL("FSBuildPrefs_UseCustomScript"))
+    if (gSavedPerAccountSettings.getBOOL("FSBuildPrefs_UseCustomScript"))
     {
-        if (LLUUID custom_script_id(gSavedPerAccountSettings.getString("FSBuildPrefs_CustomScriptItem")); custom_script_id.notNull())
+        if (LLUUID custom_script_id(gSavedPerAccountSettings.getString(mNewScriptIsLua ? "FSBuildPrefs_CustomLuaScriptItem" : "FSBuildPrefs_CustomScriptItem")); custom_script_id.notNull())
         {
             if (auto custom_script = gInventory.getItem(custom_script_id); custom_script && custom_script->getType() == LLAssetType::AT_LSL_TEXT)
             {

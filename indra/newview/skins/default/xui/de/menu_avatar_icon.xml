@@ -29,5 +29,6 @@
 		<menu_item_call label="Stummschaltung für diesen Teilnehmer aufheben" name="ModerateVoiceUnMuteSelected"/>
 	</context_menu>
 	<menu_item_call label="Mitglied verbannen" name="BanMember"/>
+	<menu_item_call label="Aus allen meinen Gruppen verbannen" name="BanFromAllGroups"/>
 	<menu_item_call label="Einwohner in Chat erwähnen" name="mention_in_chat"/>
 </toggleable_menu>

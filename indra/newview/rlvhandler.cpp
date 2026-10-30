@@ -149,8 +149,6 @@ static bool rlvParseGetStatusOption(const std::string& strOption, std::string& s
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.1d
 RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_posSitSource(), m_pGCTimer(NULL)
 {
-    gAgent.addListener(this, "new group");
-
     // Array auto-initialization to 0 is still not supported in VS2013
     memset(m_Behaviours, 0, sizeof(S16) * RLV_BHVR_COUNT);
 }
@@ -1555,6 +1553,8 @@ bool RlvHandler::setEnabled(bool fEnable)
     {
         RLV_INFOS << "Enabling Restrained Love API support - " << RlvStrings::getVersionAbout() << RLV_ENDL;
         m_fEnabled = true;
+
+        gAgent.addListener(RlvHandler::getInstance(), "new group");
 
         // Initialize static classes
         RlvSettings::initClass();

@@ -5,15 +5,15 @@
     <floater.string name="medium_lod" value="Średni" />
     <floater.string name="high_lod" value="Wysoki" />
     <floater.string name="multiple_lods" value="Wiele" />
-    <text name="selected_text" value="WYBRANE"/>
+    <text name="selected_text" value="Wybrane"/>
     <text name="objects_label" value="Obiekty"/>
     <text name="prims_label" value="Primy"/>
-    <text name="weights_of_selected_text" value="WAGA ZAZNACZONYCH"/>
+    <text name="weights_of_selected_text" value="Waga zaznaczonych"/>
     <text name="download_label" value="Pobieranie"/>
     <text name="physics_label" value="Fizyka"/>
     <text name="server_label" value="Serwer"/>
     <text name="display_label" value="Ekran"/>
-    <text name="land_impacts_text" value="WPŁYW NA ZIEMIĘ"/>
+    <text name="land_impacts_text" value="Wpływ na ziemię"/>
     <text name="selected_label" value="Zaznaczone"/>
     <text name="rezzed_on_land_label" value="Zrezzowane na ziemi"/>
     <text name="remaining_capacity_label" value="Pozostała pojemność"/>
@@ -22,4 +22,9 @@
     <text name="lod_level_label" value="LOD (poziom detali)" />
     <text name="triangles_shown_label" value="Wyświetlane trójkąty" />
     <text name="pixel_area_label" value="Obszar pikseli" />
+	<text name="lod_info_text" value="Info LOD" />
+	<text name="high_lod_tris_label" value="Trójkąty (wys.)" />
+	<text name="medium_lod_tris_label" value="Trójkąty (śr.)" />
+	<text name="low_lod_tris_label" value="Trójkąty (nis.)" />
+	<text name="lowest_lod_tris_label" value="Trójkąty (min.)" />
 </floater>

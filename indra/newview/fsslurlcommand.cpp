@@ -158,6 +158,12 @@ public:
             return true;
         }
 
+        if (verb == "groupbanall")
+        {
+            LLGroupActions::banFromAllGroups(target_id);
+            return true;
+        }
+
         // please someone tell me there is an easier way to get the group UUID of the
         // currently focused group, or transfer the UUID through the context menu somehow - Zi
         LLFloater* focused_floater = gFloaterView->getFocusedFloater();
@@ -237,6 +243,28 @@ public:
             LLGroupMgr::getInstance()->sendGroupMemberEjects(group_id, ids);
             LLGroupMgr::getInstance()->sendGroupMembersRequest(group_id);
 
+            return true;
+        }
+
+        if (verb == "groupmute")
+        {
+            // no safety checks, just mute
+            LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(group_id);
+            if (speaker_mgr)
+            {
+                speaker_mgr->moderateVoiceParticipant(target_id, false);
+            }
+            return true;
+        }
+
+        if (verb == "groupunmute")
+        {
+            // no safety checks, just mute
+            LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(group_id);
+            if (speaker_mgr)
+            {
+                speaker_mgr->moderateVoiceParticipant(target_id, true);
+            }
             return true;
         }
 

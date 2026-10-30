@@ -14,19 +14,15 @@ This is needed for compiling any viewer based on the Linden Lab open source code
 
 All installations are done with default settings (unless told explicitly) - if you change that, you're on your own!
 
-### Windows
+### Microsoft Visual Studio 2026
 
-- Install Windows 10/11 64bit using your own product key
-
-### Microsoft Visual Studio 2022
-
-- Install Visual Studio 2022
+- Install Visual Studio 2026
   - Run the installer as Administrator (right click, "Run as administrator")
   - Check "Desktop development with C++" on the "Workloads" tab.
   - All other workload options can be unchecked
 
 > [!TIP]
-> If you don't own a copy of a commercial edition of Visual Studio 2022 (e.g. Professional), you might consider installing the [Community version](https://visualstudio.microsoft.com/free-developer-offers)
+> If you don't own a copy of a commercial edition of Visual Studio 2026 (e.g. Professional), you might consider installing the [Community version](https://visualstudio.microsoft.com/free-developer-offers)
 
 ### Command Prompt vs Powershell
 - Make sure that you use the Windows Command Prompt / Terminal (cmd.exe) and not Powershell or it won't detect the Visual Studio build tools properly.
@@ -92,7 +88,7 @@ All installations are done with default settings (unless told explicitly) - if y
   - Make sure that the following directory was added to your path: `C:\Python3`
 
 > [!TIP]
-> On Windows 10/11, you also might want to disable the app alias for Python. Open the Windows settings app, search for "Manage app execution aliases" and disable the alias for "python3.exe"
+> You also might want to disable the app alias for Python. Open the Windows settings app, search for "Manage app execution aliases" and disable the alias for "python3.exe"
 
 ### Intermediate check
 
@@ -122,15 +118,16 @@ If you do not want to install the required Python packages into the default Pyth
 ### Set up Autobuild
 
 - Install Autobuild
-   You can install autobuild and its dependencies using the `requirements.txt` file that is part of the repo, this will build using the same versions that our official builds use.
+
+  You can install autobuild and its dependencies using the `requirements.txt` file that is part of the repo, this will build using the same versions that our official builds use.
   - Open Windows Command Prompt
   - If you created a Python virtual environment earlier, activate it
   - Enter: <code>pip install -r requirements.txt</code>
   - Autobuild will be installed. **Earlier versions of Autobuild could be made to work by just putting the source files into your path correctly; this is no longer true - Autobuild _must_ be installed as described here.**
-  - Open Windows Command Prompt and enter:
+  - Open the Windows Command Prompt and enter:
     `pip install git+https://github.com/secondlife/autobuild.git#egg=autobuild`
-- Set environment variable AUTOBUILD_VSVER to 170 (170 = Visual Studio 2022).
-- Check Autobuild version to be "autobuild 3.8" or higher:
+- Set environment variable AUTOBUILD_VSVER to 180 (180 = Visual Studio 2026).
+- Check Autobuild version to be "autobuild 3.10.3" or higher:
   `autobuild --version`
 
 ### NSIS
@@ -149,11 +146,6 @@ In order to make it easier to build collections of related packages (such as the
   `git clone https://github.com/FirestormViewer/fs-build-variables.git <path-to-your-variables-file>`
 - Set the environment variable AUTOBUILD_VARIABLES_FILE to
   `<path-to-your-variables-file>\variables`
-
-## Configure Visual Studio 2022 (optional)
-
-- Start the IDE
-- Navigate to **Tools** > **Options** > **Projects and Solutions** > **Build and Run** and set **maximum number of parallel projects builds** to **1**.
 
 ## Set up your source code tree
 

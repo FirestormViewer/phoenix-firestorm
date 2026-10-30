@@ -1844,7 +1844,6 @@ default 0.
          length="1"
          line_spacing.pixels="5">
           pixels (requires restart)
-Second Life viewer default 0. Viewer 1 default 2.
         </text>
 
         <text
@@ -1885,7 +1884,6 @@ Second Life viewer default 0. Viewer 1 default 2.
          length="1"
          line_spacing.pixels="5">
           pixels (requires restart)
-Second Life viewer default 20. Viewer 1 default 18.
         </text>
 
         <text

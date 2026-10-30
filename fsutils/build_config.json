@@ -12,6 +12,8 @@
         "Beta": "preview",
         "Alpha": "test",
         "Nightly": "nightly",
+        "Manual": "test",
+        "Profiling": "test",
         "Unknown": "test"
     },
     "os_hosted_folder": {
@@ -33,7 +35,9 @@
         "Release": "release",
         "Beta": "beta",
         "Alpha": "alpha",
-        "Nightly": "nightly"
+        "Nightly": "nightly",
+        "Manual": "test",
+        "Profiling": "test"
     },
     "variant_printable": {
         "regular": "Older CPUs",

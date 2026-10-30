@@ -91,8 +91,8 @@
 			</combo_box>
 			<slider label="Maks. złożoność awatarów" name="IndirectMaxComplexity" tool_tip="Kontroluje w jakim momencie awatar, który jest graficznie złożony zostanie zastąpiony przez mniej obciążającą komputer formę (tzw. JellyDoll)" />
 			<slider label="Maks. il. widocznych awatarów" name="IndirectMaxNonImpostors"/>
-			<slider label="Jakość post-procesu" name="RenderPostProcess"/>
-			<text name="PostProcessText">
+			<slider label="Jakość blasku" name="GlowResolution"/>
+			<text name="GlowResolutionText">
 				Niska
 			</text>
 			<slider label="Maks. świateł" name="MaxLights" />
@@ -106,7 +106,10 @@
 			<slider label="  Drzewa" name="TreeMeshDetail"/>
 			<slider label="  Awatary" name="AvatarMeshDetail"/>
 			<slider label="  Teren" name="TerrainMeshDetail"/>
-			<slider label="  Niebo" name="SkyMeshDetail"/>
+			<slider label="  Jakość post-procesu" name="RenderPostProcess"/>
+			<text name="PostProcessText">
+				Niska
+			</text>
 			<text name="Presets_Label">
 				Ustawienia:
 			</text>
@@ -115,9 +118,14 @@
 			<button label="Usuń" name="PrefDeleteButton" />
 		</panel>
 		<panel label="Ustawienia sprzętowe" name="Hardware Settings">
-			<check_box label="Filtrowanie anizotropowe (wolniej, gdy włączone)" name="ani" tool_tip="To pole wyboru włącza filtrowanie anizotropowe, które jest metodą polepszania jakości tekstur, gdy są one oglądane pod względnie dużymi kątami w stosunku do położenia kamery. Zazwyczaj sprawia, że wydają się mniej rozmyte przy większych odległościach." />
 			<check_box label="Włącz stratną kompresję tekstur (wymaga restartu)" name="texture compression" tool_tip="Kompresuje tekstury w pamięci wideo. Umożliwi to ładowanie tekstur w wyższej rozdzielczości / większej ich ilości, ale kosztem jakości obrazu."/>
 			<check_box label="Włącz wsparcie dla ekranów HiDPI (tylko macOS; wymaga restartu)" name="use HiDPI" tool_tip="Włącz funkcje OpenGL dla rysowania w wysokich rozdzielczościach." />
+			<text name="af strength label">
+				Filtrowanie anizotropowe:
+			</text>
+			<combo_box label="Filtrowanie anizotropowe" name="anisotropic_filter">
+				<combo_box.item label="Wyłączone" name="disabled" />
+			</combo_box>
 			<text name="antialiasing label" tool_tip="Zmiana tego ustawienia może wymagać ponownego uruchomienia na niektórych urządzeniach.">
 				Antyaliasing (zalecany restart):
 			</text>

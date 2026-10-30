@@ -107,7 +107,7 @@ private:
 
      // <FS:Ansariel> RLVa support
     boost::signals2::connection mRlvBehaviorCallbackConnection;
-    void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+    void updateRlvRestrictions(ERlvBehaviour behavior);
     // </FS:Ansariel>
 
     LLTabContainer* mTabContainer;

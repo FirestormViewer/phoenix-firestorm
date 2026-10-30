@@ -144,6 +144,7 @@ public:
     AOState*      getStateByName(const std::string& name);
     AOState*      getStateByRemapID(const LLUUID& id);
     void          getAnimationsForState(AOState* state, uuid_vec_t& animations) const;
+    static void   getAnimationsForStep(AOAnimationStep& step, uuid_vec_t& animations);
     LLUUID        getAnimationForTrack(AOTrack& track) const;
     static LLUUID resolveAssetUUID(AOAnimation& anim);
 

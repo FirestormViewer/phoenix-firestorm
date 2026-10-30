@@ -8,6 +8,8 @@
 	<menu_item_call label="Name kopieren" name="copy_name_to_clipboard"/>
 	<menu_item_call label="URI kopieren" name="copy_uri_to_clipboard"/>
 	<menu_item_call label="UUID / Schlüssel kopieren" name="copy_key_to_clipboard"/>
+	<menu_item_call label="Aus allen meinen Gruppen verbannen" name="ban_from_all_groups"/>
+	<menu_item_call label="Verbannung aus allen meinen Gruppen aufheben" name="unban_from_all_groups"/>
 	<menu_item_call label="Ignorieren" name="block"/>
 	<menu_item_call label="Freischalten" name="unblock"/>
 	<menu_item_call label="Hinauswerfen" name="kick"/>

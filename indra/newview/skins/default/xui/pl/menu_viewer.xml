@@ -149,6 +149,7 @@
 			<menu_item_call label="Moje otoczenia..." name="my_environs" />
 			<menu_item_call label="Własne oświetlenie..." name="adjustment_tool" />
 			<menu_item_check label="Pauzuj chmury" name="pause_clouds" />
+			<menu_item_check label="Wycisz / odcisz dźwięk" name="toggle_sound" shortcut="control|alt|shift|M" />
 			<menu label="Import wielu plików" name="WL Bulk Import">
 				<menu_item_call label="Dni..." name="WL Bulk Import Days" />
 				<menu_item_call label="Nieba..." name="WL Bulk Import Skies" />
@@ -223,12 +224,15 @@
 		<menu label="Skrypty" name="Scripts">
 			<menu_item_call label="Ostrzeżenia/błędy skryptów" name="Script Debug"/>
 			<menu_item_call label="Info o skryptach (Licznik)" name="Script Info"/>
-			<menu_item_call label="Zrekompiluj skrypty (Mono)" name="Mono"/>
-			<menu_item_call label="Zrekompiluj skrypty (LSL)" name="LSL"/>
+			<menu_item_call label="Zrekompiluj LSL (Mono)" name="Mono"/>
+			<menu_item_call label="Zrekompiluj LSL (Legacy)" name="LSL"/>
+			<menu_item_call label="Zrekompiluj LSL (Lua)" name="LSL on Luau"/>
+			<menu_item_call label="Zrekompiluj skrypty Lua" name="Lua"/>
 			<menu_item_call label="Reset skryptów" name="Reset Scripts"/>
 			<menu_item_call label="Przestaw skrypty na stan Włączony" name="Set Scripts to Running"/>
 			<menu_item_call label="Przestaw skrypty na stan Wyłączony" name="Set Scripts to Not Running"/>
 			<menu_item_call label="Usuń skrypty z zaznaczenia" name="Remove Scripts From Selection"/>
+			<menu_item_check label="Serwer edytora skryptów" name="Script Editor Server" />
 		</menu>
 		<menu label="Odnajdywanie ścieżek" name="Pathfinding">
 			<menu_item_call label="Obiekty w regionie" name="pathfinding_linksets_menu_item"/>
@@ -554,6 +558,7 @@
 			<menu_item_check label="Renderowanie animowanej odzieży systemowej" name="Render Avatar Cloth" />
 			<menu_item_check label="Zmniejsz pole widzenia, gdy VRAM jest pełny" name="Reduce Draw Distance when VRAM is full" />
 			<menu_item_check label="Zbierz Vertex Buffer czcionek" name="Collect Font Vertex Buffers" />
+			<menu_item_check label="Zbierz Vertex Buffer grafik UI" name="Collect UI Image Vertex Buffers" />
 			<menu_item_check label="Pamięć podręczna modułu cieniującego" name="Enable Shader Cache" />
 			<menu_item_call label="Wyczyść pamięć podręczną modułu cieniującego" name="Shader Cache Clear" />
 		</menu>

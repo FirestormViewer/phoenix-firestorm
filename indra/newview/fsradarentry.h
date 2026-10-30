@@ -57,6 +57,7 @@ public:
     bool        getIgnore() const { return mIgnore; }
     bool        hasAlertAge() const { return mAlertAge; }
     bool        hasAgeAlertPerformed() const { return mAgeAlertPerformed; }
+    bool        isNameTemporary() const { return mNameIsTemporary; }
 
     void        setZOffset(F32 offset) { mZOffset = offset; }
     void        checkAge();
@@ -89,6 +90,7 @@ private:
     bool        mAlertAge;
     bool        mAgeAlertPerformed;
     bool        mPropertiesRequested;
+    bool        mNameIsTemporary;
 
     LLAvatarNameCache::callback_connection_t mAvatarNameCallbackConnection;
 };

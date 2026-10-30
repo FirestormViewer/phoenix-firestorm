@@ -10,6 +10,10 @@ on:
         description: 'Manual builds are not signed by default. Force code signing for this run.'
         required: false
         default: 'false'
+      deploy:
+        description: 'Deploy after the CI gate passes (leave disabled for a CI trial)'
+        type: boolean
+        default: false
   push:
     branches:
       - "Firestorm*.*.*"
@@ -31,13 +35,52 @@ env:
   FS_GRID: "GRID FLAGS NOT SET"
   PYTHON: Unknown
 
+permissions:
+  contents: read
+
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      release_type: ${{ steps.plan.outputs.release_type }}
+      signing_required: ${{ steps.plan.outputs.signing_required }}
+      fail_fast: ${{ steps.plan.outputs.fail_fast }}
+      matrix: ${{ steps.plan.outputs.matrix }}
+      version: ${{ steps.plan.outputs.version }}
+      build: ${{ steps.plan.outputs.build }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Resolve CI policy and matrix
+        id: plan
+        env:
+          INCLUDE_TRACY: ${{ inputs.include_tracy }}
+          OVERRIDE_SIGNING: ${{ inputs.override_signing }}
+        run: python fsutils/ci.py prepare
+      - name: Check CI helpers
+        run: python -m unittest discover -s fsutils/tests -v --buffer
+      - name: Save CI plan
+        if: always() && steps.plan.outcome == 'success'
+        uses: actions/upload-artifact@v7
+        with:
+          name: ci-plan-${{ github.run_attempt }}
+          path: ci-plan.json
+          if-no-files-found: error
+
   build_matrix:
+    name: Build / ${{ matrix.os }}/${{ matrix.grid }}/${{ matrix.variant }}
+    needs: prepare
+    env:
+      FS_RELEASE_TYPE: ${{ needs.prepare.outputs.release_type }}
+      CI_SIGNING_REQUIRED: ${{ needs.prepare.outputs.signing_required }}
+      CI_CELL: ${{ toJSON(matrix) }}
     strategy:
-      matrix:
-        os: ["macos-15","ubuntu-24.04","windows-2022"]
-        grid: ["sl","os"]
-        variant: ["regular","avx"]
+      fail-fast: ${{ fromJSON(needs.prepare.outputs.fail_fast) }}
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container_image }}
     outputs:
@@ -68,6 +111,9 @@ jobs:
           "$(brew --prefix bash)/bin/bash" --version
           "$(brew --prefix gnu-sed)/libexec/gnubin/sed" --version
       - uses: actions/checkout@v7
+      - name: Reclaim macOS build space
+        if: runner.os == 'macOS'
+        run: python3 fsutils/ci_macos.py prepare
       # Use apt-based Python when inside the Ubuntu 22.04 container
       - name: Install Python 3.11 (container case)
         if: matrix.container_image == 'ubuntu:22.04'
@@ -165,46 +211,16 @@ jobs:
         run: echo "FS_GRID=-DOPENSIM:BOOL=$([ "${{ matrix.grid }}" == "os" ] && echo "ON" || echo "OFF") -DHAVOK_TPV:BOOL=$([ "${{ matrix.grid }}" == "sl" ] && echo "ON" || echo "OFF")" >> $GITHUB_ENV
         shell: bash
 
-      - name: find channel from Branch name
+      - name: Set viewer channel
         id: channel
-        run: | 
-          if [[ "${{ github.ref_name }}" == Firestorm* ]]; then
-            FS_RELEASE_TYPE=Release
-          elif [[ "${{ github.ref_name }}" == *review* ]]; then
-            FS_RELEASE_TYPE=Beta
-          elif [[ "${{ github.ref_name }}" == *alpha* ]]; then
-            FS_RELEASE_TYPE=Alpha
-          elif [[ "${{ github.ref_name }}" == *nightly* ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
-            FS_RELEASE_TYPE=Nightly
-          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            if [[ "${{ github.event.inputs.include_tracy }}" == "false" ]]; then
-              FS_RELEASE_TYPE=Manual
-            elif [[ "${{ github.event.inputs.include_tracy }}" == "true" ]]; then
-              FS_RELEASE_TYPE=Profiling
-            fi
-          fi
+        shell: bash
+        run: |
+          FS_RELEASE_CHAN="$FS_RELEASE_TYPE"
           if [[ "${{ matrix.variant }}" == "avx" ]]; then
             FS_RELEASE_CHAN="${FS_RELEASE_TYPE}x64"
-          else
-            FS_RELEASE_CHAN=${FS_RELEASE_TYPE}
           fi
-          echo "FS_RELEASE_TYPE=${FS_RELEASE_TYPE}" >> $GITHUB_ENV
-          echo "FS_RELEASE_CHAN=${FS_RELEASE_CHAN}" >> $GITHUB_ENV
-          echo "Building for channel ${FS_RELEASE_CHAN}"
-          viewer_channel=${FS_RELEASE_CHAN}
-        shell: bash
-      - name: Check if release type is signable
-        if: runner.os == 'Windows'
-        run: |
-          if [[ "${FS_RELEASE_TYPE}" == "Release" || "${FS_RELEASE_TYPE}" == "Beta" ]]; then
-            CODESIGNING_ENABLED=true
-          else
-            CODESIGNING_ENABLED=false
-          fi
-          echo "CODESIGNING_ENABLED=${CODESIGNING_ENABLED}" >> $GITHUB_ENV
-          echo "Codesigning enabled: ${CODESIGNING_ENABLED}"
-        shell: bash
-    
+          echo "FS_RELEASE_CHAN=$FS_RELEASE_CHAN" >> "$GITHUB_ENV"
+          echo "viewer_channel=$FS_RELEASE_CHAN" >> "$GITHUB_OUTPUT"
       - name: Get the code
         uses: actions/checkout@v7
         with:
@@ -239,7 +255,7 @@ jobs:
         shell: bash
 
       - name: Install certificate
-        if: runner.os == 'macOS'
+        if: runner.os == 'macOS' && env.CI_SIGNING_REQUIRED == 'true'
         env:
           FS_CERT: ${{ secrets.FS_CERT }}
           FS_CERT_PASS: ${{ secrets.FS_CERT_PASS }}
@@ -262,7 +278,14 @@ jobs:
       - name: Install required Ubuntu packages and release some space.
         if: runner.os == 'Linux'
         run: |
-          dependencies=("python3-setuptools" "mesa-common-dev" "libgl1-mesa-dev" "libxinerama-dev" "libxrandr-dev" "libpulse-dev" "libglu1-mesa-dev" "libfreetype6-dev" "libfontconfig1-dev")
+          dependencies=(
+            python3-setuptools pkg-config ninja-build mesa-common-dev
+            libgl1-mesa-dev libglu1-mesa-dev libosmesa6-dev
+            libxinerama-dev libxrandr-dev libxcursor-dev libxfixes-dev libxft-dev
+            libpulse-dev libunwind-dev libpipewire-0.3-dev libdbus-1-dev
+            libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+            libvlc-dev libwayland-dev libfreetype6-dev libfontconfig1-dev
+          )
           sudo apt-get update
           sudo apt-get install -y "${dependencies[@]}"
           sudo apt-get install -y wget apt-transport-https software-properties-common
@@ -371,12 +394,16 @@ jobs:
         run: rm *${{ env.fallback_platform }}*bz2
         shell: bash
       - name: Configure
+        id: configure
         run: |
-          autobuild configure -c ReleaseFS -A${addrsize} -- --package --chan ${{env.FS_RELEASE_CHAN}} ${{env.EXTRA_ARGS}} ${{env.FS_GRID}}
+          autobuild configure -c ReleaseFS -A${addrsize} -- --package --chan ${{env.FS_RELEASE_CHAN}} ${{env.EXTRA_ARGS}} ${{env.FS_GRID}} -DLL_TESTS:BOOL=ON
           echo "BUGSPLAT_DB=$BUGSPLAT_DB" >> $GITHUB_ENV
         shell: bash
+      - name: Discard downloaded macOS dependency archives
+        if: runner.os == 'macOS'
+        run: python fsutils/ci_macos.py after-configure
       - name: Generate metadata.json
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && env.CI_SIGNING_REQUIRED == 'true'
         run: |
           echo '{
             "Endpoint": "${{ secrets.AZURE_ENDPOINT }}",
@@ -389,7 +416,7 @@ jobs:
           echo "CODESIGNING_METADATA_PATH=${{github.workspace}}/metadata.json" >> $env:GITHUB_ENV            
         shell: pwsh
       - name: Validate Windows 10 SDK version and find signtool.exe IFF codesigning is enabled for these builds or overridden
-        if: ${{ runner.os == 'Windows' && (env.CODESIGNING_ENABLED == 'true' || github.event.inputs.override_signing == 'true') }}
+        if: runner.os == 'Windows' && env.CI_SIGNING_REQUIRED == 'true'
         id: validate-sdk
         run: |
           try {
@@ -419,19 +446,19 @@ jobs:
           echo "SIGNTOOL_PATH=signtool.exe" >> $env:GITHUB_ENV
         shell: pwsh          
       - name: Install nuget.exe
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && env.CI_SIGNING_REQUIRED == 'true'
         run: |
           Invoke-WebRequest -Uri https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile nuget.exe
         shell: pwsh
 
       - name: Install Microsoft.Trusted.Signing.Client
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && env.CI_SIGNING_REQUIRED == 'true'
         run: |
           .\nuget.exe install Microsoft.Trusted.Signing.Client -Version 1.0.86 -OutputDirectory .
         shell: pwsh
 
       - name: Locate Azure.CodeSigning.Dlib.dll
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && env.CI_SIGNING_REQUIRED == 'true'
         run: |
           $dllPath = (Get-ChildItem ".\Microsoft.Trusted.Signing.Client.1.0.86\bin\x64\Azure.CodeSigning.Dlib.dll" -Recurse -File | Select-Object -First 1).FullName
           if (-not $dllPath) {
@@ -441,7 +468,7 @@ jobs:
           echo "CODESIGNING_DLIB_PATH=$dllPath" >> $env:GITHUB_ENV
         shell: pwsh
       - name: Prep env for Trusted code on Windows only
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && env.CI_SIGNING_REQUIRED == 'true'
         run: |
           echo "AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
           echo "AZURE_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
@@ -449,14 +476,20 @@ jobs:
         shell: bash
       - name: build
         id: build
-        run: autobuild build -c ReleaseFS -A${addrsize} --no-configure
+        run: python fsutils/ci.py build
         shell: bash
-      - name: List macOS build tree
-        if: runner.os == 'macOS'
-        run: |
-          echo "macOS build directories for debugging:"
-          ls -R build-darwin-* || true
-        shell: bash
+      - name: Build and run automated tests
+        id: tests
+        timeout-minutes: 30
+        run: python fsutils/ci.py test
+
+      - name: Verify required installer or archive
+        id: deliverables
+        run: python fsutils/ci.py deliverables
+
+      - name: Report macOS disk usage
+        if: always() && runner.os == 'macOS'
+        run: python fsutils/ci_macos.py report
       - name: Extract version number
         id: version
         shell: bash
@@ -500,6 +533,7 @@ jobs:
           df -h .      
 
       - name: Post Bugsplat Symbols
+        id: symbols
         uses: beqjanus/symbol-upload@main
         with:
           clientId: ${{ 
@@ -532,86 +566,160 @@ jobs:
           node-version: "24"
           dumpSyms: false
       - name: Publish artifacts
+        id: publish_windows
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v7
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{ matrix.grid }}-artifacts.zip
+          if-no-files-found: error
+          overwrite: true
           path: |
             build-*/newview/Release/*Setup.exe
             build-*/newview/Release/*.xz
 
       - name: publish Linux artifacts
+        id: publish_linux
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v7
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{matrix.grid}}-artifacts.zip
+          if-no-files-found: error
+          overwrite: true
           path: | 
             build-linux-*/newview/*.xz
             build-linux-*/newview/*.bz2
 
       - name: publish MacOS artifacts
+        id: publish_macos
         if: runner.os == 'macOS'
         uses: actions/upload-artifact@v7
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.variant }}-${{matrix.grid}}-artifacts.zip
+          if-no-files-found: error
+          overwrite: true
           path: |
             build-darwin-*/newview/*.dmg
             build-darwin-*/newview/*.bz2
+      - name: Record build and test outcomes
+        if: always()
+        env:
+          CI_STEPS: ${{ toJSON(steps) }}
+          CI_CELL: ${{ toJSON(matrix) }}
+        run: python fsutils/ci.py record
+
+      - name: Preserve CI results and test logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ci-result-${{ matrix.os }}-${{ matrix.grid }}-${{ matrix.variant }}-${{ github.run_attempt }}
+          path: ci-results/
+          if-no-files-found: error
+
+  ci_gate:
+    name: CI gate
+    if: always()
+    needs: [prepare, build_matrix]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      artifact_ids: ${{ steps.gate.outputs.artifact_ids }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Recreate CI plan independently of failed build runners
+        env:
+          INCLUDE_TRACY: ${{ inputs.include_tracy }}
+          OVERRIDE_SIGNING: ${{ inputs.override_signing }}
+        run: python fsutils/ci.py prepare
+      - name: Download available CI results
+        continue-on-error: true
+        uses: actions/download-artifact@v8
+        with:
+          pattern: ci-result-*-${{ github.run_attempt }}
+          path: ci-reports
+      - name: Check builds, tests and deliverables; report results
+        id: gate
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CI_MATRIX_RESULT: ${{ needs.build_matrix.result }}
+          RELEASE_WEBHOOK_URL: ${{ secrets.RELEASE_WEBHOOK_URL }}
+          BETA_WEBHOOK_URL: ${{ secrets.BETA_WEBHOOK_URL }}
+          NIGHTLY_WEBHOOK_URL: ${{ secrets.NIGHTLY_WEBHOOK_URL }}
+          MANUAL_WEBHOOK_URL: ${{ secrets.MANUAL_WEBHOOK_URL }}
+        run: python fsutils/ci.py collect
+      - name: Preserve gate report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ci-gate-${{ github.run_attempt }}
+          path: ci-gate.json
+          if-no-files-found: error
+
   deploy:
     runs-on: ubuntu-latest
-    needs: build_matrix
+    needs: [prepare, build_matrix, ci_gate]
     env:
       FS_BUILD_WEBHOOK_URL:
       FS_RELEASE_FOLDER:
-    if: always()
+    if: github.event_name != 'workflow_dispatch' || inputs.deploy
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
           sparse-checkout: |
+            requirements.txt
+            fsutils/ci.py
             fsutils/download_list.py
             fsutils/build_config.json
             fsutils/build_config.py
           sparse-checkout-cone-mode: false
-          ref: ${{ github.head_ref || github.ref_name || 'master' }}
+          ref: ${{ github.sha }}
           fetch-depth: 1
 
-      - name: Install discord-webhook library
-        run: pip install discord-webhook
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+
+      - name: Install python requirements
+        run: python -m pip install -r requirements.txt
 
       - name: Download artifacts
         uses: actions/download-artifact@v8
         id: download
         with:
-          path: to_deploy        
+          artifact-ids: ${{ needs.ci_gate.outputs.artifact_ids }}
+          path: downloaded-artifacts
+          merge-multiple: false
 
-      - name: find channel and webhook from build_matrix outputs
-        run: | 
-          viewer_release_type=${{ needs.build_matrix.outputs.viewer_release_type }}
-          if [[ "$viewer_release_type" == "Release" ]]; then
-            FS_RELEASE_FOLDER=release
-            FS_BUILD_WEBHOOK_URL=${{ secrets.RELEASE_WEBHOOK_URL }}
-          elif [[ "$viewer_release_type" == "Beta" ]]; then
-            FS_RELEASE_FOLDER=preview
-            FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
-          elif [[ "$viewer_release_type" == "Alpha" ]]; then
-            FS_RELEASE_FOLDER=test
-            FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
-            elif [[ "$viewer_release_type" == "Nightly" ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
-            FS_RELEASE_FOLDER=nightly
-            FS_BUILD_WEBHOOK_URL=${{ secrets.NIGHTLY_WEBHOOK_URL }}
-            elif [[ "$viewer_release_type" == "Manual" ]]; then
-            FS_RELEASE_FOLDER=test
-            FS_BUILD_WEBHOOK_URL=${{ secrets.MANUAL_WEBHOOK_URL }}
-          else
-            FS_RELEASE_TYPE=Unknown
-          fi
-          echo "FS_RELEASE_FOLDER=${FS_RELEASE_FOLDER}" >> $GITHUB_ENV
-          echo "FS_BUILD_WEBHOOK_URL=${FS_BUILD_WEBHOOK_URL}" >> $GITHUB_ENV
+      - name: Download passing CI gate
+        uses: actions/download-artifact@v8
+        with:
+          name: ci-gate-${{ github.run_attempt }}
+          path: .
+
+      - name: Verify and stage the complete artifact set
+        run: python fsutils/ci.py stage
+
+      - name: Select deployment channel and Discord hook
+        env:
+          FS_RELEASE_TYPE: ${{ needs.prepare.outputs.release_type }}
+          RELEASE_WEBHOOK_URL: ${{ secrets.RELEASE_WEBHOOK_URL }}
+          BETA_WEBHOOK_URL: ${{ secrets.BETA_WEBHOOK_URL }}
+          NIGHTLY_WEBHOOK_URL: ${{ secrets.NIGHTLY_WEBHOOK_URL }}
+          MANUAL_WEBHOOK_URL: ${{ secrets.MANUAL_WEBHOOK_URL }}
+        run: python fsutils/ci.py select-hook
 
       - name: List artifacts download
         run: ls -R
-        working-directory: ${{steps.download.outputs.download-path}}
+        working-directory: to_deploy
 
       - name: Create Build Info artifact
         env:
@@ -623,9 +731,9 @@ jobs:
           cat <<EOF > build_info.json
           {
             "build_run_number": "${{ github.run_number }}",
-            "release_type": "${{ needs.build_matrix.outputs.viewer_release_type }}",
-            "viewer_version": "${{ needs.build_matrix.outputs.viewer_version }}",
-            "viewer_build": "${{ needs.build_matrix.outputs.viewer_build }}"
+            "release_type": "${{ needs.prepare.outputs.release_type }}",
+            "viewer_version": "${{ needs.prepare.outputs.version }}",
+            "viewer_build": "${{ needs.prepare.outputs.build }}"
           }
           EOF
           echo "Build info created: $(cat build_info.json)"
@@ -639,11 +747,11 @@ jobs:
 
       - name: Reorganise artifacts ready for server upload.
         env:
-          FS_VIEWER_VERSION: ${{ needs.build_matrix.outputs.viewer_version }}
-          FS_VIEWER_BUILD: ${{ needs.build_matrix.outputs.viewer_build }}
-          FS_VIEWER_RELEASE_TYPE: ${{ needs.build_matrix.outputs.viewer_release_type }}
+          FS_VIEWER_VERSION: ${{ needs.prepare.outputs.version }}
+          FS_VIEWER_BUILD: ${{ needs.prepare.outputs.build }}
+          FS_VIEWER_RELEASE_TYPE: ${{ needs.prepare.outputs.release_type }}
           FS_VERSION_MGR_KEY: ${{ secrets.FS_VERSION_MGR_KEY }}
-        run: python ./fsutils/download_list.py ${{steps.download.outputs.download-path}} -w ${{ env.FS_BUILD_WEBHOOK_URL }}
+        run: python ./fsutils/download_list.py ./to_deploy -w "$FS_BUILD_WEBHOOK_URL"
 
       - name: Setup rclone and download the folder
         uses: beqjanus/setup-rclone@main
@@ -651,4 +759,4 @@ jobs:
           rclone_config: ${{ secrets.RCLONE_CONFIG }}
 
       - name: Copy files to remote host
-        run: rclone copy ${{steps.download.outputs.download-path}}/${{ env.FS_RELEASE_FOLDER }} fs_r2_deploy:downloads/${{ env.FS_RELEASE_FOLDER }}
+        run: rclone copy ./to_deploy/${{ env.FS_RELEASE_FOLDER }} fs_r2_deploy:downloads/${{ env.FS_RELEASE_FOLDER }}

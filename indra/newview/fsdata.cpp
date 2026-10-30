@@ -36,6 +36,8 @@
 #include "fsassetblacklist.h"
 
 #include "fsyspath.h"
+// LLDate stores Unix/system time, not leap-second-adjusted UTC time.
+#include "fsfiletime.h"
 #include "llappviewer.h"
 #include "llagent.h"
 #include "llagentui.h"
@@ -788,7 +790,8 @@ void FSData::saveLLSD(const LLSD& data, const std::string& filename, const LLDat
     }
     file.close();
 
-    std::filesystem::file_time_type new_time = std::chrono::clock_cast<std::chrono::file_clock>(std::chrono::utc_time(std::chrono::seconds((U64)last_modified.secondsSinceEpoch())));
+    // Share the portable conversion used by local mesh reloading.
+    const auto new_time = fs_file_time_from_time_t(static_cast<std::time_t>(last_modified.secondsSinceEpoch()));
     std::filesystem::last_write_time(fsyspath(filename), new_time);
 }
 

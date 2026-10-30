@@ -367,6 +367,12 @@ Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	<string name="LoggingOut">
 		Wylogowywanie...
 	</string>
+	<string name="CompressingInventoryCache">
+		Kompresja pamięci podręcznej szafy...
+	</string>
+	<string name="ShutdownCleanup">
+		Zwalnianie zasobów...
+	</string>
 	<string name="ShuttingDown">
 		Zamykanie...
 	</string>
@@ -492,6 +498,9 @@ Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	</string>
 	<string name="Sharpen">
 		Wyostrzenie
+	</string>
+	<string name="ReorderClothingTooltip">
+		Przeciągnij, by zmienić kolejność warstw
 	</string>
 	<string name="TooltipPerson">
 		Osoba
@@ -1455,8 +1464,8 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="Validator_ShouldBeASCII">
 		Nieprawidłowy znak [NR]: '[CH]' (powinien być tylko znakiem ASCII)
 	</string>
-	<string name="Validator_ShouldBeNewLineOrASCII">
-		Nieprawidłowy znak [NR]: '[CH]' (powinien być tylko znakiem ASCII lub nową linią)
+	<string name="Validator_ShouldBeNewLineOrASCIINoPipe">
+		Znak [CH] na poz. [NR]: ASCII bez '|' lub nowa linia
 	</string>
 	<string name="LSLTipSleepTime">
 		Usypia skrypt na [SLEEP_TIME] sekund.
@@ -1693,7 +1702,7 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 		Naciśnij ESC aby powrócić do trybu widoku normalnego
 	</string>
 	<string name="InventoryNoMatchingItems">
-		Nie udało Ci się znaleźć tego, czego szukasz? Spróbuj [secondlife:///app/search/all/[SEARCH_TERM] Wyszukiwarki].
+		Brak pasujących przedmiotów.
 	</string>
 	<string name="InventoryNoMatchingRecentItems">
 		Nie udało Ci się znaleźć tego, czego szukasz? Spróbuj [secondlife:///app/inventory/filters Filtrowania].
@@ -5309,6 +5318,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="ExternalEditorFailedToRun">
 		Uruchomienie zewnętrznego edytora nie powiodło się.
+	</string>
+	<string name="ExternalEditorFailedToStart">
+		Nie uruchomiono serwera WebSocket. Włącz ExternalWebsocketSyncEnable.
+	</string>
+	<string name="VSCodeLaunchFailed">
+		Nie uruchomiono VS Code. Polecenie 'code' musi być w PATH.
 	</string>
 	<string name="TranslationFailed">
 		Tłumaczenie nie powiodło się: [REASON]

@@ -1234,7 +1234,7 @@
          bevel_style="in"
          top_delta="20"
          follows="left|top"
-         height="16"
+         height="24"
          left_delta="0"
          mouse_opaque="false"
          name="embed_item_drop_target_rect"
@@ -1247,20 +1247,20 @@
          font="SansSerifSmall"
          h_pad="0"
          halign="center"
-         height="16"
+         height="24"
          left_delta="0"
          mouse_opaque="true"
          name="embed_item"
          tool_tip="Drop an inventory item here."
-         v_pad="2"
+         v_pad="4"
          width="255">
          Drop an inventory item here.
         </fs_embedded_item_drop_target>
         <view_border
          bevel_style="in"
-         top_delta="18"
+         top_delta="26"
          follows="left|top"
-         height="16"
+         height="26"
          left_delta="0"
          mouse_opaque="false"
          name="build_item_add_disp_rect"
@@ -1273,12 +1273,12 @@
          font="SansSerifSmall"
          h_pad="0"
          halign="center"
-         height="16"
+         height="24"
          left_delta="0"
          mouse_opaque="true"
          name="build_item_add_disp_rect_txt"
          tool_tip=""
-         v_pad="2"
+         v_pad="4"
          width="255">
          Currently set to: [ITEM]
         </text>
@@ -1317,10 +1317,10 @@
          left_delta="0"
          mouse_opaque="true"
          name="custom_script"
-         tool_tip="Drop a script from your inventory here."
+         tool_tip="Drop an LSL or Lua script from your inventory here."
          v_pad="2"
          width="250">
-         Drop a script here.
+         Drop an LSL or Lua script here.
         </fs_embedded_item_drop_target>
         <view_border
          bevel_style="in"
@@ -1346,7 +1346,33 @@
          tool_tip=""
          v_pad="2"
          width="250">
-         Currently set to: [SCRIPT]
+         LSL script: [SCRIPT]
+        </text>
+        <view_border
+         bevel_style="in"
+         top_delta="18"
+         follows="left|top"
+         height="16"
+         left_delta="0"
+         mouse_opaque="false"
+         name="custom_lua_script_disp_rect"
+         width="250"/>
+        <text
+         bg_visible="false"
+         border_visible="false"
+         top_delta="0"
+         follows="left|top"
+         font="SansSerifSmall"
+         h_pad="0"
+         halign="center"
+         height="16"
+         left_delta="0"
+         mouse_opaque="true"
+         name="custom_lua_script_disp_rect_txt"
+         tool_tip=""
+         v_pad="2"
+         width="250">
+         Lua script: [SCRIPT]
         </text>
 
         <button
@@ -1356,7 +1382,7 @@
          layout="topleft"
          name="fs_default_creation_permissions"
          left="8"
-         top="185"
+         top="200"
          width="250">
          <button.commit_callback
              function="Pref.PermsDefault" />
@@ -1516,7 +1542,7 @@
          control_name="FSTextureDefaultSaveAsFormat"/>
 
         <text
-         top="185"
+         top="200"
          left_delta="377"
          follows="left|top"
          height="10"

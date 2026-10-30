@@ -1273,6 +1273,7 @@ protected:
     static void     getAnimNames(std::vector<std::string>* names);
 private:
     bool            mNameIsSet;
+    bool            mNameIsTemporary; // <FS:TJ/> Re-request names if any are temporary/placeholder names such as (???).(???)
     LLSD            mClientTagData;
     bool            mHasClientTagColor;
     std::string     mTitle;

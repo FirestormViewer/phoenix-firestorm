@@ -53,7 +53,7 @@ public:
 
 private:
 #if LL_LINUX || LL_WINDOWS
-    VolumeCatcherImpl *pimpl;
+    [[maybe_unused]] VolumeCatcherImpl *pimpl; // <FS:Beq/> Unused by the null Linux implementation.
 #endif
 };
 

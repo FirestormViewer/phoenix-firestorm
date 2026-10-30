@@ -1084,6 +1084,29 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
     owner_name = RLVa_hideNameIfRestricted(owner_name);
     last_owner_name = RLVa_hideNameIfRestricted(last_owner_name);
 
+    // FIRE-35212: The displayed name is setting-depending and can fail to find a user if the
+    // format entered in the search input does not match the format used in the UI.
+    // This matches the behavior of other LL floaters
+    auto name_matches = [this](const LLUUID& id, const std::string& shown_name, bool group, const std::string& search, const boost::regex& regex)
+    {
+        auto matches = [&](const std::string& name)
+        {
+            return mRegexSearch ? boost::regex_match(name, regex) : !boost::ifind_first(name, search).empty();
+        };
+
+        if (matches(shown_name))
+        {
+            return true;
+        }
+
+        LLAvatarName av_name;
+        if (group || gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES) || !LLAvatarNameCache::get(id, &av_name))
+        {
+            return false;
+        }
+        return matches(av_name.getLegacyName()) || matches(av_name.getAccountName()) || matches(av_name.getDisplayName(true));
+    };
+
     if (mRegexSearch)
     {
         try
@@ -1096,7 +1119,7 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
             {
                 return;
             }
-            if (!mSearchOwner.empty() && !boost::regex_match(owner_name, mRegexSearchOwner))
+            if (!mSearchOwner.empty() && !name_matches(details.ownership_id, owner_name, details.group_owned, mSearchOwner, mRegexSearchOwner))
             {
                 return;
             }
@@ -1104,11 +1127,11 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
             {
                 return;
             }
-            if (!mSearchCreator.empty() && !boost::regex_match(creator_name, mRegexSearchCreator))
+            if (!mSearchCreator.empty() && !name_matches(details.creator_id, creator_name, false, mSearchCreator, mRegexSearchCreator))
             {
                 return;
             }
-            if (!mSearchLastOwner.empty() && !boost::regex_match(last_owner_name, mRegexSearchLastOwner))
+            if (!mSearchLastOwner.empty() && !name_matches(details.last_owner_id, last_owner_name, false, mSearchLastOwner, mRegexSearchLastOwner))
             {
                 return;
             }
@@ -1140,7 +1163,7 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
         {
             return;
         }
-        if (!mSearchOwner.empty() && boost::ifind_first(owner_name, mSearchOwner).empty())
+        if (!mSearchOwner.empty() && !name_matches(details.ownership_id, owner_name, details.group_owned, mSearchOwner, mRegexSearchOwner))
         {
             return;
         }
@@ -1148,11 +1171,11 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
         {
             return;
         }
-        if (!mSearchCreator.empty() && boost::ifind_first(creator_name, mSearchCreator).empty())
+        if (!mSearchCreator.empty() && !name_matches(details.creator_id, creator_name, false, mSearchCreator, mRegexSearchCreator))
         {
             return;
         }
-        if (!mSearchLastOwner.empty() && boost::ifind_first(last_owner_name, mSearchLastOwner).empty())
+        if (!mSearchLastOwner.empty() && !name_matches(details.last_owner_id, last_owner_name, false, mSearchLastOwner, mRegexSearchLastOwner))
         {
             return;
         }

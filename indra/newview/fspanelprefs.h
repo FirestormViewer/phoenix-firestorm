@@ -56,6 +56,7 @@ private:
 
     void onDADEmbeddedItem(const LLUUID& item_id);
     void onDADCustomScript(const LLUUID& item_id);
+    void showCustomScript(const std::string& text_name, const std::string& item_id);
 
     void onResetDefaultFolders();
 
@@ -63,6 +64,7 @@ private:
     FSEmbeddedItemDropTarget*   mCustomScriptDropTarget;
     std::string                 mEmbeddedItem;
     std::string                 mCustomScriptItem;
+    std::string                 mCustomLuaScriptItem;
 };
 
 #endif // FS_PANELPREFS_H

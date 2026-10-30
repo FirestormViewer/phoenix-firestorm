@@ -58,14 +58,24 @@ namespace tut
         F32 f_val2 = 12344.443232f, f_unpkval2;
         F32 f_val3 = 44.4456789f, f_unpkval3;
         LLDataPackerBinaryBuffer lldp(packbuf,128);
-        lldp.packFixed( f_val1, "linden_lab", FALSE, 8, 8);
-        lldp.packFixed( f_val2, "linden_lab", FALSE, 14, 16);
-        lldp.packFixed( f_val3, "linden_lab", FALSE, 8, 23);
+        // <FS:Beq> Use C++ booleans after removal of the legacy FALSE macro.
+        // lldp.packFixed( f_val1, "linden_lab", FALSE, 8, 8);
+        // lldp.packFixed( f_val2, "linden_lab", FALSE, 14, 16);
+        // lldp.packFixed( f_val3, "linden_lab", FALSE, 8, 23);
+        lldp.packFixed( f_val1, "linden_lab", false, 8, 8);
+        lldp.packFixed( f_val2, "linden_lab", false, 14, 16);
+        lldp.packFixed( f_val3, "linden_lab", false, 8, 23);
+        // </FS:Beq>
 
         LLDataPackerBinaryBuffer lldp1(packbuf, lldp.getCurrentSize());
-        lldp1.unpackFixed(f_unpkval1, "linden_lab", FALSE, 8, 8);
-        lldp1.unpackFixed(f_unpkval2, "linden_lab", FALSE, 14, 16);
-        lldp1.unpackFixed(f_unpkval3, "linden_lab", FALSE, 8, 23);
+        // <FS:Beq> Use C++ booleans after removal of the legacy FALSE macro.
+        // lldp1.unpackFixed(f_unpkval1, "linden_lab", FALSE, 8, 8);
+        // lldp1.unpackFixed(f_unpkval2, "linden_lab", FALSE, 14, 16);
+        // lldp1.unpackFixed(f_unpkval3, "linden_lab", FALSE, 8, 23);
+        lldp1.unpackFixed(f_unpkval1, "linden_lab", false, 8, 8);
+        lldp1.unpackFixed(f_unpkval2, "linden_lab", false, 14, 16);
+        lldp1.unpackFixed(f_unpkval3, "linden_lab", false, 8, 23);
+        // </FS:Beq>
         ensure_approximately_equals("LLDataPackerBinaryBuffer::packFixed 8 failed", f_val1, f_unpkval1, 8);
         ensure_approximately_equals("LLDataPackerBinaryBuffer::packFixed 16 failed", f_val2, f_unpkval2, 16);
         ensure_approximately_equals("LLDataPackerBinaryBuffer::packFixed 23 failed", f_val3, f_unpkval3, 31);
@@ -223,10 +233,16 @@ namespace tut
         char packbuf[128];
         F32 f_val = 44.44f, f_unpkval;
         LLDataPackerAsciiBuffer lldp(packbuf,128);
-        lldp.packFixed( f_val, "linden_lab", FALSE, 8, 8);
+        // <FS:Beq> Use C++ booleans after removal of the legacy FALSE macro.
+        // lldp.packFixed( f_val, "linden_lab", FALSE, 8, 8);
+        lldp.packFixed( f_val, "linden_lab", false, 8, 8);
+        // </FS:Beq>
 
         LLDataPackerAsciiBuffer lldp1(packbuf, lldp.getCurrentSize());
-        lldp1.unpackFixed(f_unpkval, "linden_lab", FALSE, 8, 8);
+        // <FS:Beq> Use C++ booleans after removal of the legacy FALSE macro.
+        // lldp1.unpackFixed(f_unpkval, "linden_lab", FALSE, 8, 8);
+        lldp1.unpackFixed(f_unpkval, "linden_lab", false, 8, 8);
+        // </FS:Beq>
         ensure_approximately_equals("LLDataPackerAsciiBuffer::packFixed failed", f_val, f_unpkval, 8);
     }
 
@@ -356,13 +372,19 @@ namespace tut
         }
 
         LLDataPackerAsciiFile lldp(fp,2);
-        lldp.packFixed( f_val, "linden_lab", FALSE, 8, 8);
+        // <FS:Beq> Use C++ booleans after removal of the legacy FALSE macro.
+        // lldp.packFixed( f_val, "linden_lab", FALSE, 8, 8);
+        lldp.packFixed( f_val, "linden_lab", false, 8, 8);
+        // </FS:Beq>
 
         fflush(fp);
         fseek(fp,0,SEEK_SET);
         LLDataPackerAsciiFile lldp1(fp,2);
 
-        lldp1.unpackFixed(f_unpkval, "linden_lab", FALSE, 8, 8);
+        // <FS:Beq> Use C++ booleans after removal of the legacy FALSE macro.
+        // lldp1.unpackFixed(f_unpkval, "linden_lab", FALSE, 8, 8);
+        lldp1.unpackFixed(f_unpkval, "linden_lab", false, 8, 8);
+        // </FS:Beq>
         fclose(fp);
 
         ensure_approximately_equals("LLDataPackerAsciiFile::packFixed failed", f_val, f_unpkval, 8);
@@ -472,12 +494,18 @@ namespace tut
 
         std::ostringstream ostr;
         LLDataPackerAsciiFile lldp(ostr,2);
-        lldp.packFixed( f_val, "linden_lab", FALSE, 8, 8);
+        // <FS:Beq> Use C++ booleans after removal of the legacy FALSE macro.
+        // lldp.packFixed( f_val, "linden_lab", FALSE, 8, 8);
+        lldp.packFixed( f_val, "linden_lab", false, 8, 8);
+        // </FS:Beq>
 
         std::istringstream istr(ostr.str());
         LLDataPackerAsciiFile lldp1(istr,2);
 
-        lldp1.unpackFixed(f_unpkval, "linden_lab", FALSE, 8, 8);
+        // <FS:Beq> Use C++ booleans after removal of the legacy FALSE macro.
+        // lldp1.unpackFixed(f_unpkval, "linden_lab", FALSE, 8, 8);
+        lldp1.unpackFixed(f_unpkval, "linden_lab", false, 8, 8);
+        // </FS:Beq>
 
         ensure_approximately_equals("LLDataPackerAsciiFile::packFixed (iostring) failed", f_val, f_unpkval, 8);
     }

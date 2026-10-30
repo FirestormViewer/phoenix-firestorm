@@ -3690,7 +3690,7 @@ Low ↔ Lwst
              top="6"
              width="90"
              font="DejaVu"
-             font.size="LSmall" />
+             font.size="LSmall">
                 <flyout_button.item
                  label="New LSL Script"
                  name="new_lsl_script"

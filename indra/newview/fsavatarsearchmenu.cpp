@@ -32,6 +32,7 @@
 #include "llagent.h"
 #include "llavataractions.h"
 #include "llcallingcard.h"
+#include "llgroupactions.h"
 #include "lluictrl.h"
 #include "llviewermenu.h"
 #include "rlvhandler.h"
@@ -59,6 +60,7 @@ LLContextMenu* FSAvatarSearchMenu::createMenu()
         registrar.add("Avatar.Share",                           boost::bind(&LLAvatarActions::share,                        id));
         registrar.add("Avatar.Pay",                             boost::bind(&LLAvatarActions::pay,                          id));
         registrar.add("Avatar.BlockUnblock",                    boost::bind(&LLAvatarActions::toggleBlock,                  id));
+        registrar.add("Avatar.BanFromAllGroups",                boost::bind(&LLGroupActions::banFromAllGroups,              id));
 
         enable_registrar.add("Avatar.EnableItem",               boost::bind(&FSAvatarSearchMenu::onContextMenuItemEnable,   this, _2));
         enable_registrar.add("Avatar.CheckItem",                boost::bind(&FSAvatarSearchMenu::onContextMenuItemCheck,    this, _2));
@@ -169,6 +171,10 @@ bool FSAvatarSearchMenu::onContextMenuItemEnable(const LLSD& userdata)
     else if (item == std::string("can_open_inventory"))
     {
         return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV));
+    }
+    else if (item == std::string("can_ban_from_all_groups"))
+    {
+        return mUUIDs.size() == 1 && LLGroupActions::canBanFromAnyGroup(mUUIDs.front());
     }
 
     return false;

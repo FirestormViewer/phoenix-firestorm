@@ -1036,9 +1036,11 @@ void LLGridManager::setGridChoice(const std::string& grid)
     else
     {
         LL_DEBUGS("GridManager") << "setting grid choice: " << grid << LL_ENDL;
-        mGrid = grid; // AW: don't set mGrid anywhere else
+        // The caller can supply a nickname or label. Store the resolved key
+        // so endpoint lookup and the persisted selection use the same entry.
+        mGrid = grid_name; // AW: don't set mGrid anywhere else
         getGridData(mConnectedGrid);
-        gSavedSettings.setString("CurrentGrid", grid);
+        gSavedSettings.setString("CurrentGrid", mGrid);
         LLTrans::setDefaultArg("CURRENT_GRID", getGridLabel()); //<FS:AW make CURRENT_GRID a default substitution>
         updateIsInProductionGrid();
         LLMaterialTable::basic.replaceCollsionSounds(isInOpenSim()); // <FS:Beq> FIRE-31628 Use OpenSim collision sounds when in OpenSim
@@ -1052,11 +1054,11 @@ std::string LLGridManager::getGridByProbing(const std::string& probe_for, bool c
     ret = getGridByHostName(probe_for, case_sensitive);
     if (ret.empty())
     {
-        getGridByGridNick(probe_for, case_sensitive);
+        ret = getGridByGridNick(probe_for, case_sensitive);
     }
     if (ret.empty())
     {
-        getGridByLabel(probe_for, case_sensitive);
+        ret = getGridByLabel(probe_for, case_sensitive);
     }
 
     return ret;

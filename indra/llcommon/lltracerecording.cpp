@@ -117,10 +117,24 @@ void Recording::handleReset()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
 #if LL_TRACE_ENABLED
+    // <FS:Beq> Flush the active partial recording before clearing its target.
+    // Otherwise getSum() adds the pre-reset partial samples back into the result.
+    const bool was_started = isStarted();
+    if (was_started)
+    {
+        handleStop();
+    }
+    // </FS:Beq>
     mBuffers.write()->reset();
 
     mElapsedSeconds = F64Seconds(0.0);
     mSamplingTimer.reset();
+    // <FS:Beq> Resume with fresh partial buffers while preserving the play state.
+    if (was_started)
+    {
+        handleStart();
+    }
+    // </FS:Beq>
 #endif
 }
 

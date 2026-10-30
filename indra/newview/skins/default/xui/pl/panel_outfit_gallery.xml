@@ -7,7 +7,7 @@
 		Nie ma jeszcze żadnych strojów. Spróbuj [secondlife:///app/search/all/ Wyszukiwarki]
 	</string>
 	<string name="no_matched_outfits_msg">
-		Nie udało Ci się znaleźć tego, czego szukasz? Spróbuj [secondlife:///app/search/all/[SEARCH_TERM] Wyszukiwarki].
+		Brak wyników.
 	</string>
 	<text name="no_outfits_txt">
 		Szukam...

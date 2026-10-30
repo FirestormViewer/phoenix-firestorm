@@ -190,7 +190,7 @@ private:
 
     // <FS:Ansariel> Update voice volume slider on RLVa shownames restriction update
     boost::signals2::connection mRlvBehaviorCallbackConnection;
-    void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+    void updateRlvRestrictions(ERlvBehaviour behavior);
     // </FS:Ansariel>
 };
 

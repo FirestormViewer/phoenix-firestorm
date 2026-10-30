@@ -273,6 +273,9 @@ std::string LLTeleportHistoryFlatItem::getTimestamp()
     args["datetime"] = date.secondsSinceEpoch();
     static bool use_24h = gSavedSettings.getBOOL("Use24HourClock");
     timestamp = use_24h ? getString("DateFmt") : getString("DateFmtAMPM");
+    // <FS:Trish> FIRE-34952: Show which timezone the time is in
+    timestamp += " [timezone,datetime,utc]";
+    // </FS:Trish>
     //<FS:Beq [timezone support for teleport history]>
     // Check whether we have an override for the timezone
     static const std::string xml_timezone = "utc"; // In case we decide to change the XML default !

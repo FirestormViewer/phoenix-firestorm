@@ -675,9 +675,17 @@ void LLWorldMap::dropImagePriorities()
 void LLWorldMap::updateRegions(S32 x0, S32 y0, S32 x1, S32 y1)
 {
     constexpr S32 MAX_REQUEST_REGIONS = 64; // Server side enforced limit.
-    constexpr S32 REGIONS_PER_BLOCK = MAP_BLOCK_SIZE * MAP_BLOCK_SIZE; // 4 x 4 = 16 regions per block
-    constexpr S32 MAX_TOTAL_BLOCKS = MAX_REQUEST_REGIONS / REGIONS_PER_BLOCK; // 64 / 16 = 4 blocks total
-    constexpr S32 MAX_BLOCKS_PER_SIDE = MAX_TOTAL_BLOCKS; // Can have up to 4 blocks in one dimension (e.g., 4x1, 1x4, 2x2)
+    // <FS:Beq> Respect the 64-region request limit with Firestorm cache block sizes.
+    // constexpr S32 REGIONS_PER_BLOCK = MAP_BLOCK_SIZE * MAP_BLOCK_SIZE; // 4 x 4 = 16 regions per block
+    // constexpr S32 MAX_TOTAL_BLOCKS = MAX_REQUEST_REGIONS / REGIONS_PER_BLOCK; // 64 / 16 = 4 blocks total
+    // constexpr S32 MAX_BLOCKS_PER_SIDE = MAX_TOTAL_BLOCKS; // Can have up to 4 blocks in one dimension (e.g., 4x1, 1x4, 2x2)
+    constexpr S32 REGIONS_PER_BLOCK = MAP_BLOCK_SIZE * MAP_BLOCK_SIZE;
+    // A Firestorm cache block can exceed the server's request limit. Keep
+    // tracking whole blocks, but split their requests into smaller rectangles.
+    constexpr S32 MAX_TOTAL_BLOCKS = REGIONS_PER_BLOCK > MAX_REQUEST_REGIONS
+        ? 1 : MAX_REQUEST_REGIONS / REGIONS_PER_BLOCK;
+    constexpr S32 MAX_BLOCKS_PER_SIDE = MAX_TOTAL_BLOCKS;
+    // </FS:Beq>
 
     // Convert region coordinates to block coordinates
     // We use fixed sized blocks for ease of storage and lookup,
@@ -768,7 +776,20 @@ void LLWorldMap::updateRegions(S32 x0, S32 y0, S32 x1, S32 y1)
                     << ") to (" << (block_x + request_width - 1) << "," << (block_y + request_height - 1)
                     << ") [" << (request_width * request_height * MAP_BLOCK_SIZE * MAP_BLOCK_SIZE) << " regions]" << LL_ENDL;
 
-                LLWorldMapMessage::getInstance()->sendMapBlockRequest(min_x, min_y, max_x, max_y);
+                // <FS:Beq> Respect the 64-region request limit with Firestorm cache block sizes.
+                // LLWorldMapMessage::getInstance()->sendMapBlockRequest(min_x, min_y, max_x, max_y);
+                const S32 chunk_width = llmin(max_x - min_x + 1, MAX_REQUEST_REGIONS);
+                const S32 chunk_height = MAX_REQUEST_REGIONS / chunk_width;
+                for (S32 y = min_y; y <= max_y; y += chunk_height)
+                {
+                    for (S32 x = min_x; x <= max_x; x += chunk_width)
+                    {
+                        LLWorldMapMessage::getInstance()->sendMapBlockRequest(
+                            x, y, llmin(x + chunk_width - 1, max_x),
+                            llmin(y + chunk_height - 1, max_y));
+                    }
+                }
+                // </FS:Beq>
 
                 // Mark all blocks in the requested rectangle as loaded
                 for (S32 y = 0; y < request_height; ++y)

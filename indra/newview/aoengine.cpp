@@ -69,31 +69,7 @@ AOEngine::AOEngine() :
 
 AOEngine::~AOEngine()
 {
-    LLSD currentState = LLSD::emptyMap();
-    if (mCurrentSet)
-    {
-        currentState = LLSD().with("CurrentSet", mCurrentSet->getName());
-        LLSD currentAnimations;
-        for (S32 index = 0; index < AOSet::AOSTATES_MAX; ++index)
-        {
-            // store the active step's first member asset as the shadow id
-            if (auto state = mCurrentSet->getState(index); state && state->mCurrentAnimation < state->mSteps.size() && !state->mSteps[state->mCurrentAnimation].mMembers.empty())
-            {
-                LL_DEBUGS("AOEngine") << "Storing current animation for state " << index << ": Step index " << state->mCurrentAnimation << LL_ENDL;
-                LLUUID shadow_id{ state->mSteps[state->mCurrentAnimation].mMembers.front().mAssetUUID };
-                LLXORCipher cipher(ENCRYPTION_MAGIC_ID.mData, UUID_BYTES);
-                cipher.encrypt(shadow_id.mData, UUID_BYTES);
-                currentAnimations.insert(state->mName, shadow_id);
-            }
-            else
-            {
-                LL_DEBUGS("AOEngine") << "No state " << index << " or no animations defined for this state" << LL_ENDL;
-            }
-        }
-        currentState.insert("CurrentStateAnimations", currentAnimations);
-    }
-    LL_DEBUGS("AOEngine") << "Stored AO state: " << currentState << LL_ENDL;
-    gSavedPerAccountSettings.setLLSD("FSCurrentAOState", currentState);
+    updatePersistedStateAnimations();
 
     clear(false);
 
@@ -258,6 +234,74 @@ bool AOEngine::swapStateAnimations(AOSet::AOState* state, const uuid_vec_t& anim
     }
 
     return true;
+}
+
+// true while the engine has animations running for this state
+bool AOEngine::isStatePlaying(const AOSet::AOState* state) const
+{
+    if (!mEnabled || !mCurrentSet || !state || state->mCurrentAnimationIDs.empty())
+    {
+        return false;
+    }
+
+    if (state->mNum == AOSet::AlwaysPlay)
+    {
+        return state == mActiveAlwaysState;
+    }
+
+    return state == getStateForMotion(mCurrentSet->getMotion());
+}
+
+// make a playing state follow its list after the current position or the steps changed
+void AOEngine::syncPlayingStep(AOSet::AOState* state)
+{
+    if (!isStatePlaying(state) || state->mSteps.empty())
+    {
+        return;
+    }
+
+    if (state->mCurrentAnimation >= state->mSteps.size())
+    {
+        state->mCurrentAnimation = 0;
+    }
+
+    uuid_vec_t animations;
+    AOSet::getAnimationsForStep(state->mSteps[state->mCurrentAnimation], animations);
+    if (animations.empty())
+    {
+        return;
+    }
+
+    if (swapStateAnimations(state, animations))
+    {
+        // manual change, restart the cycle interval
+        if (state == mActiveAlwaysState)
+        {
+            refreshAlwaysTimers();
+        }
+        else
+        {
+            mCurrentSet->resetTimer();
+        }
+        mAnimationChangedSignal(state->mSteps[state->mCurrentAnimation].mInventoryUUID);
+    }
+}
+
+// keep the current position on the same step after the step at stepIndex was erased
+void AOEngine::onStepRemoved(AOSet::AOState* state, S32 stepIndex)
+{
+    if (state->mCurrentAnimation > static_cast<U32>(stepIndex))
+    {
+        state->mCurrentAnimation--;
+    }
+    else if (state->mCurrentAnimation == static_cast<U32>(stepIndex))
+    {
+        if (state->mCurrentAnimation >= state->mSteps.size())
+        {
+            state->mCurrentAnimation = 0;
+        }
+        syncPlayingStep(state);
+    }
 }
 
 void AOEngine::startStateTracks(AOSet::AOState* state)
@@ -736,7 +780,7 @@ void AOEngine::enable(bool enable)
         return;
     }
 
-    AOSet::AOState* state = mCurrentSet->getStateByRemapID(mLastMotion);
+    AOSet::AOState* state = getStateForMotion(mLastMotion);
     if (mEnabled)
     {
         startAlwaysAnimations();
@@ -864,7 +908,7 @@ LLUUID AOEngine::override(const LLUUID& motion, bool start)
     {
         if (start && mCurrentSet)
         {
-            const AOSet::AOState* state = mCurrentSet->getStateByRemapID(motion);
+            const AOSet::AOState* state = getStateForMotion(motion);
             if (state)
             {
                 setLastMotion(motion);
@@ -1134,7 +1178,7 @@ LLUUID AOEngine::override(const LLUUID& motion, bool start)
         {
             stopCurrentAnimations(state, true);
             mAnimationChangedSignal(LLUUID::null);
-            AOSet::AOState* previousState = mCurrentSet->getStateByRemapID(mLastMotion);
+            AOSet::AOState* previousState = getStateForMotion(mLastMotion);
             if (previousState)
             {
                 setStateCycleTimer(previousState);
@@ -1245,7 +1289,7 @@ void AOEngine::cycle(eCycleMode cycleMode, bool resetTimer)
         return;
     }
 
-    AOSet::AOState* state = mCurrentSet->getStateByRemapID(mLastMotion);
+    AOSet::AOState* state = getStateForMotion(mLastMotion);
     if (!state)
     {
         LL_DEBUGS("AOEngine") << "cycle without state." << LL_ENDL;
@@ -1369,7 +1413,7 @@ void AOEngine::playAnimation(S32 stepIndex, S32 memberIndex)
         return;
     }
 
-    AOSet::AOState* state = mCurrentSet->getStateByRemapID(mLastMotion);
+    AOSet::AOState* state = getStateForMotion(mLastMotion);
     if (!state)
     {
         LL_DEBUGS("AOEngine") << "cycle without state." << LL_ENDL;
@@ -1457,7 +1501,7 @@ const AOSet* AOEngine::getCurrentSet() const
 }
 const AOSet::AOState* AOEngine::getCurrentState() const
 {
-    return mCurrentSet->getStateByRemapID(mLastMotion);
+    return getStateForMotion(mLastMotion);
 }
 
 void AOEngine::setItemDescription(const LLUUID& itemID, const std::string& description)
@@ -2116,6 +2160,10 @@ bool AOEngine::swapTrackAnimationWithPrevious(AOSet::AOState* state, S32 trackIn
     }
     std::swap(track.mAnimations[memberIndex], track.mAnimations[memberIndex - 1]);
     updateMemberSortOrder(track.mAnimations);
+    if (track.mCurrentAnimationID.notNull() && ((S32)track.mCurrentAnimation == memberIndex || (S32)track.mCurrentAnimation == memberIndex - 1))
+    {
+        playTrackAnimation(state, trackIndex, -1);
+    }
     return true;
 }
 
@@ -2132,6 +2180,10 @@ bool AOEngine::swapTrackAnimationWithNext(AOSet::AOState* state, S32 trackIndex,
     }
     std::swap(track.mAnimations[memberIndex], track.mAnimations[memberIndex + 1]);
     updateMemberSortOrder(track.mAnimations);
+    if (track.mCurrentAnimationID.notNull() && ((S32)track.mCurrentAnimation == memberIndex || (S32)track.mCurrentAnimation == memberIndex + 1))
+    {
+        playTrackAnimation(state, trackIndex, -1);
+    }
     return true;
 }
 
@@ -2139,8 +2191,20 @@ void AOEngine::setTrackCycle(AOSet::AOState* state, S32 trackIndex, bool cycle)
 {
     if (state && trackIndex >= 0 && trackIndex < (S32)state->mTracks.size())
     {
-        state->mTracks[trackIndex].mCycle = cycle;
-        saveTrack(state->mTracks[trackIndex]);
+        AOSet::AOTrack& track = state->mTracks[trackIndex];
+        bool wasCycling = track.mCycle;
+        track.mCycle = cycle;
+        saveTrack(track);
+
+        if (wasCycling && !cycle)
+        {
+            track.mCurrentAnimation = 0;
+            if (track.mCurrentAnimationID.notNull())
+            {
+                playTrackAnimation(state, trackIndex, -1);
+            }
+        }
+
         if (state == mActiveAlwaysState)
         {
             refreshAlwaysTimers();
@@ -2397,10 +2461,17 @@ bool AOEngine::removeAnimation(const AOSet* set, AOSet::AOState* state, S32 step
         {
             purgeFolder(step.mInventoryUUID);
             state->mSteps.erase(state->mSteps.begin() + stepIndex);
+            onStepRemoved(state, stepIndex);
+            return true;
         }
         else
         {
             updateMemberSortOrder(step.mMembers);
+        }
+
+        if (state->mCurrentAnimation == static_cast<U32>(stepIndex))
+        {
+            syncPlayingStep(state);
         }
 
         return true;
@@ -2445,6 +2516,8 @@ bool AOEngine::removeAnimation(const AOSet* set, AOSet::AOState* state, S32 step
 
         state->mSteps.erase(state->mSteps.begin() + stepIndex);
     }
+
+    onStepRemoved(state, stepIndex);
 
     // count steps, not raw inventory items - group subfolders alone must not keep a state folder alive once its last step is gone
     if (state->mSteps.empty() && state->mTracks.empty())
@@ -2517,6 +2590,11 @@ bool AOEngine::swapWithPrevious(AOSet::AOState* state, S32 stepIndex, S32 member
     std::swap(state->mSteps[stepIndex], state->mSteps[stepIndex - 1]);
     updateSortOrder(state);
 
+    if (state->mCurrentAnimation == static_cast<U32>(stepIndex) || state->mCurrentAnimation == static_cast<U32>(stepIndex - 1))
+    {
+        syncPlayingStep(state);
+    }
+
     return true;
 }
 
@@ -2546,6 +2624,11 @@ bool AOEngine::swapWithNext(AOSet::AOState* state, S32 stepIndex, S32 memberInde
 
     std::swap(state->mSteps[stepIndex], state->mSteps[stepIndex + 1]);
     updateSortOrder(state);
+
+    if (state->mCurrentAnimation == static_cast<U32>(stepIndex) || state->mCurrentAnimation == static_cast<U32>(stepIndex + 1))
+    {
+        syncPlayingStep(state);
+    }
 
     return true;
 }
@@ -3019,6 +3102,9 @@ void AOEngine::reload(bool fromTimer)
 
     mTimerCollection.enableReloadTimer(false);
 
+    // reloadStateAnimations() picks the positions up from here
+    updatePersistedStateAnimations();
+
     if (wasEnabled)
     {
         enable(false);
@@ -3071,7 +3157,7 @@ void AOEngine::selectSet(AOSet* set)
     {
         stopActiveTracks();
         stopAlwaysAnimations();
-        if (AOSet::AOState* state = mCurrentSet->getStateByRemapID(mLastOverriddenMotion))
+        if (AOSet::AOState* state = getStateForMotion(mLastOverriddenMotion))
         {
             stopCurrentAnimations(state);
             mCurrentSet->stopTimer();
@@ -3371,8 +3457,17 @@ void AOEngine::setDisableMouselookStands(AOSet* set, bool disabled)
 
 void AOEngine::setCycle(AOSet::AOState* state, bool cycle)
 {
+    bool wasCycling = state->mCycle;
     state->mCycle = cycle;
     state->mDirty = true;
+
+    // without cycling the first step plays, don't stay parked where the cycle stopped
+    if (wasCycling && !cycle)
+    {
+        state->mCurrentAnimation = 0;
+        syncPlayingStep(state);
+    }
+
     if (state == mActiveAlwaysState)
     {
         refreshAlwaysTimers();
@@ -3888,7 +3983,33 @@ void AOEngine::onRegionChange()
 
 void AOEngine::updatePersistedStateAnimations()
 {
+    if (!mCurrentSet)
+    {
+        return;
+    }
 
+    LLSD currentState = LLSD().with("CurrentSet", mCurrentSet->getName());
+    LLSD currentAnimations;
+    for (S32 index = 0; index < AOSet::AOSTATES_MAX; ++index)
+    {
+        // store the active step's first member asset as the shadow id
+        if (auto state = mCurrentSet->getState(index); state && state->mCurrentAnimation < state->mSteps.size() && !state->mSteps[state->mCurrentAnimation].mMembers.empty())
+        {
+            LL_DEBUGS("AOEngine") << "Storing current animation for state " << index << ": Step index " << state->mCurrentAnimation << LL_ENDL;
+            LLUUID shadow_id{ state->mSteps[state->mCurrentAnimation].mMembers.front().mAssetUUID };
+            LLXORCipher cipher(ENCRYPTION_MAGIC_ID.mData, UUID_BYTES);
+            cipher.encrypt(shadow_id.mData, UUID_BYTES);
+            currentAnimations.insert(state->mName, shadow_id);
+        }
+        else
+        {
+            LL_DEBUGS("AOEngine") << "No state " << index << " or no animations defined for this state" << LL_ENDL;
+        }
+    }
+    currentState.insert("CurrentStateAnimations", currentAnimations);
+
+    LL_DEBUGS("AOEngine") << "Stored AO state: " << currentState << LL_ENDL;
+    gSavedPerAccountSettings.setLLSD("FSCurrentAOState", currentState);
 }
 
 // ----------------------------------------------------

@@ -224,7 +224,7 @@ LLAvatarList::LLAvatarList(const Params& p)
     // </FS:PP>
 
     // <FS:Ansariel> Update voice volume slider on RLVa shownames restriction update
-    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLAvatarList::updateRlvRestrictions, this, _1, _2));
+    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLAvatarList::updateRlvRestrictions, this, _1));
 }
 
 // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
@@ -284,7 +284,7 @@ std::string LLAvatarList::getAvatarName(LLAvatarName av_name)
 }
 
 // <FS:Ansariel> Update voice volume slider on RLVa shownames restriction update
-void LLAvatarList::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+void LLAvatarList::updateRlvRestrictions(ERlvBehaviour behavior)
 {
     if (behavior == RLV_BHVR_SHOWNAMES)
     {
