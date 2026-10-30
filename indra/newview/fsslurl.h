@@ -64,7 +64,7 @@ public:
         EMPTY
     };
 
-    LLSLURL(): mType(INVALID)  { }
+    LLSLURL(): mType(INVALID), mHypergrid(false) { }
     LLSLURL(const std::string& slurl);
     LLSLURL(const std::string& grid, const std::string& region, bool hypergrid = false);
     LLSLURL(const std::string& region, const LLVector3& position, bool hypergrid = false);
