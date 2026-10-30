@@ -2217,6 +2217,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
     case 'e': // edit
     case 'd': // delete
     case 'r': // return
+    case 'o': // o_return_separate
     {
         // select the objects first
         LLSelectMgr::getInstance()->deselectAll();
@@ -2229,7 +2230,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
             if (objectp)
             {
                 LLSelectMgr::getInstance()->selectObjectAndFamily(objectp);
-                if (c == 'r')
+                if (c == 'r' || c == 'o')
                 {
                     // need to set permissions for object return
                     LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->findNode(objectp);
@@ -2265,11 +2266,12 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
             handle_object_delete();
             break;
         case 'r': // return
+        case 'o': // o_return_separate
             if (RlvActions::isRlvEnabled() && !rlvCanDeleteOrReturn())
             {
                 break;
             }
-            handle_object_return();
+            handle_object_return(c == 'o');
             break;
         default:
             break;
