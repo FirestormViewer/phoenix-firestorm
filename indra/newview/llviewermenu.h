@@ -88,7 +88,10 @@ void handle_script_info();
 bool handle_zoom_to_object(const LLUUID& object_id, const std::optional<LLVector3d>& object_pos = std::nullopt);
 // </FS:Ansariel> Option to try via exact position
 bool save_object_back_to_contents(LLViewerObject* object, const LLUUID& source_task_id);
-void handle_object_return();
+// <FS:Trish> Return Separately
+//void handle_object_return();
+void handle_object_return(bool separate = false);
+// </FS:Trish>
 void handle_object_delete();
 void handle_object_edit();
 void handle_object_edit_gltf_material();
