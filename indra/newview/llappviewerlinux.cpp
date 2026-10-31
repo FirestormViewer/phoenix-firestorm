@@ -410,7 +410,7 @@ void LLAppViewerLinux::bugsplatAddStaticAttributes(const LLSD& info)
         for (const auto* key : {"CPU", "OS_VERSION", "GRAPHICS_CARD", "GRAPHICS_DRIVER_VERSION", "MEMORY_MB"})
             system[key] = info[key].asString();
         boost::json::object report{
-            {"product", "Firestorm-Releasex64"},
+            {"product", LLVersionInfo::instance().getChannel()},
             {"version", LLVersionInfo::instance().getVersion()},
             {"channel", LLVersionInfo::instance().getChannel()},
             {"description", "Firestorm closed unexpectedly."},

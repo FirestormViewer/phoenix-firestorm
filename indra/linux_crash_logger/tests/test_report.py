@@ -12,8 +12,8 @@ import tempfile
 import threading
 import unittest
 
-DRIVER, LOGGER = sys.argv[1:3]
-del sys.argv[1:3]
+DRIVER, LOGGER, PRODUCT = sys.argv[1:4]
+del sys.argv[1:4]
 
 
 class ReportTests(unittest.TestCase):
@@ -27,7 +27,7 @@ class ReportTests(unittest.TestCase):
         self.dump.write_bytes(b'LOCAL TEST DUMP')
         (self.root / 'settings.xml').write_text('PRIVATE SETTINGS')
         (self.root / 'viewer.log').write_text('PRIVATE VIEWER LOG')
-        self.context = {'product': 'Firestorm-Releasex64', 'version': '1.2.3.4',
+        self.context = {'product': 'Firestorm-Nightlyx64', 'version': '1.2.3.4',
                         'name': 'Test Resident', 'description': 'Test crash',
                         'settings_file': str(self.root / 'settings.xml'),
                         'log_file': str(self.root / 'viewer.log'),
@@ -107,7 +107,7 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
         parts = self.parts()
         self.assertEqual(parts['upload_file_minidump'], b'LOCAL TEST DUMP')
-        self.assertEqual(parts['product'], b'Firestorm-Releasex64')
+        self.assertEqual(parts['product'], b'Firestorm-Nightlyx64')
         self.assertEqual(parts['version'], b'1.2.3.4')
         self.assertEqual(parts['user'], b'Test Resident')
         self.assertEqual(parts['list_annotations'], b'Test crash')
@@ -165,6 +165,15 @@ class ReportTests(unittest.TestCase):
         (self.run / 'report-context.json').write_text('{ broken json')
         manifest = self.capture()
         self.assertEqual((manifest.parent / 'minidump.dmp').read_bytes(), b'LOCAL TEST DUMP')
+        self.assertEqual(json.loads(manifest.read_text())['product'], PRODUCT)
+
+    def test_missing_context_uses_build_channel_for_upload(self):
+        (self.run / 'report-context.json').unlink()
+        manifest = self.capture()
+        self.assertEqual(json.loads(manifest.read_text())['product'], PRODUCT)
+        result = self.upload(manifest)
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertEqual(self.parts()['product'], PRODUCT.encode())
 
     def test_bad_arguments_do_not_crash(self):
         result = self.native(self.dump, '1.2.3.4', 'local_test', executable=LOGGER)
