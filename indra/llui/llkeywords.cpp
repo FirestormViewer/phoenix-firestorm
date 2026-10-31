@@ -1065,7 +1065,10 @@ bool LLKeywords::loadFromLegacyFile(const std::string& filename)
             for (LLXMLNode* pStringNode = pNode->getFirstChild(); pStringNode != NULL; pStringNode = pStringNode->getNextSibling())
             {
                 std::string tool_tip;
-                LLColor4 cur_color(LLUIColorTable::instance().getColor("ScriptText"));
+                // <FS:Trish> FIRE-34900: Keep the color table reference so color preference changes apply live, like the other tokens
+                //LLColor4 cur_color(LLUIColorTable::instance().getColor("ScriptText"));
+                LLUIColor cur_color(LLUIColorTable::instance().getColor("ScriptText"));
+                // </FS:Trish>
                 LLKeywordToken::ETokenType cur_type = LLKeywordToken::TT_WORD;
                 if (!pStringNode->getAttributeString("name", keyword))
                     continue;
