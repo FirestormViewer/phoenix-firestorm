@@ -4865,6 +4865,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
             0,
             LLUUID::null,
             "",
+            LLSD(),
             true
             );
     }
