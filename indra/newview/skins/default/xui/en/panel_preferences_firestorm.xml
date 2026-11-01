@@ -1827,7 +1827,7 @@
          height="16"
          follows="left|top"
          name="text_box_scripting_font"
-         width="100">
+         width="105">
           Script Editor Font:
         </text>
         <combo_box
