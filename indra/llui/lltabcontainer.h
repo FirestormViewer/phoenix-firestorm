@@ -44,18 +44,20 @@ public:
         BOTTOM,
         LEFT
     };
-    typedef enum e_insertion_point
-    {
 // [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-06-22 (Catznip-3.3)
+//  typedef enum e_insertion_point
+//  {
+//      START,
+//      END,
+//      LEFT_OF_CURRENT,
+//      RIGHT_OF_CURRENT
+    typedef enum e_insertion_point : S32
+    {
         START = -1,
         END = -2,
         LEFT_OF_CURRENT = -3,
         RIGHT_OF_CURRENT = -4
 // [/SL:KB]
-//      START,
-//      END,
-//      LEFT_OF_CURRENT,
-//      RIGHT_OF_CURRENT
     } eInsertionPoint;
 
     struct TabPositions : public LLInitParam::TypeValuesHelper<LLTabContainer::TabPosition, TabPositions>

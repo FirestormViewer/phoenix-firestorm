@@ -7,7 +7,7 @@
 		您還沒有任何裝扮。嘗試 [secondlife:///app/search/all/ 搜尋]。
 	</string>
 	<string name="no_matched_outfits_msg">
-		沒找到合適的裝扮？嘗試 [secondlife:///app/search/all/[SEARCH_TERM] 搜尋]。
+		沒有符合的項目。
 	</string>
 	<text name="no_outfits_txt">
 		搜尋中...

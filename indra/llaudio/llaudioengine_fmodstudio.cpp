@@ -202,7 +202,7 @@ LLAudioEngine_FMODSTUDIO::~LLAudioEngine_FMODSTUDIO()
 
 bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title)
 {
-    U32 version;
+    U32 version = 0;
     FMOD_RESULT result;
 
     LL_DEBUGS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() initializing FMOD" << LL_ENDL;
@@ -367,9 +367,9 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
     mSystem->getAdvancedSettings(&settings_dump);
     LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init(): resampler=" << settings_dump.resamplerMethod << " bytes" << LL_ENDL;
 
-    int r_numbuffers, r_samplerate, r_channels;
-    unsigned int r_bufferlength;
-    char r_name[512];
+    int r_numbuffers = 0, r_samplerate = 0, r_channels = 0;
+    unsigned int r_bufferlength = 0;
+    char r_name[512] = {};
     int latency = 100;
     mSystem->getDSPBufferSize(&r_bufferlength, &r_numbuffers);
     LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init(): r_bufferlength=" << r_bufferlength << " bytes" << LL_ENDL;
@@ -718,6 +718,9 @@ bool LLAudioChannelFMODSTUDIO::updateBuffer()
             Check_FMOD_Error(result, "FMOD::System::playSound");
         }
 
+        if (!mChannelp)
+            return false;
+
         // Setting up channel mChannelID
     }
 
@@ -791,7 +794,7 @@ void LLAudioChannelFMODSTUDIO::updateLoop()
     // sample position looks like it's going backwards.  Not reliable; may
     // yield false negatives.
     //
-    U32 cur_pos;
+    U32 cur_pos = 0;
     Check_FMOD_Error(mChannelp->getPosition(&cur_pos, FMOD_TIMEUNIT_PCMBYTES), "FMOD::Channel::getPosition");
 
     if (cur_pos < (U32)mLastSamplePos)
@@ -844,11 +847,15 @@ void LLAudioChannelFMODSTUDIO::playSynced(LLAudioChannel *channelp)
         return;
     }
 
-    U32 cur_pos;
+    U32 cur_pos = 0;
     if (Check_FMOD_Error(mChannelp->getPosition(&cur_pos, FMOD_TIMEUNIT_PCMBYTES), "Unable to retrieve current position"))
         return;
 
-    cur_pos %= mCurrentBufferp->getLength();
+    U32 length = mCurrentBufferp->getLength();
+    if (!length)
+        return;
+
+    cur_pos %= length;
 
     // Try to match the position of our sync master
     Check_FMOD_Error(mChannelp->setPosition(cur_pos, FMOD_TIMEUNIT_PCMBYTES), "Unable to set current position");
@@ -865,7 +872,7 @@ bool LLAudioChannelFMODSTUDIO::isPlaying()
         return false;
     }
 
-    bool paused, playing;
+    bool paused = false, playing = false;
     Check_FMOD_Error(mChannelp->getPaused(&paused),"FMOD::Channel::getPaused");
     Check_FMOD_Error(mChannelp->isPlaying(&playing),"FMOD::Channel::isPlaying");
     return !paused && playing;
@@ -949,7 +956,7 @@ U32 LLAudioBufferFMODSTUDIO::getLength()
         return 0;
     }
 
-    U32 length;
+    U32 length = 0;
     Check_FMOD_Error(mSoundp->getLength(&length, FMOD_TIMEUNIT_PCMBYTES), "FMOD::Sound::getLength");
     return length;
 }

@@ -140,6 +140,10 @@
 „[ERROR_CODE]「
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
+	<notification name="CannotPasteFolderIntoSelf">
+		你無法將資料夾貼到它自己或它的子資料夾中。
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
 	<notification name="InvalidKeystroke">
 輸入的按鍵無效。
 [REASON]
@@ -325,6 +329,37 @@
 	</notification>
 	<notification name="GroupBanUserOnBanlist">
 		有些居民因為被封鎖所以沒有收到邀請。
+	</notification>
+	<notification name="FSBanFromAllGroups">
+		你即將在你有封鎖權限的全部 [COUNT] 個群組中封鎖 [AVATAR_NAME]：
+
+[GROUPS]
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="封鎖"/>
+	</notification>
+	<notification name="FSUnbanFromAllGroups">
+		你即將解除 [AVATAR_NAME] 在你有封鎖權限的全部 [COUNT] 個群組中的封鎖：
+
+[GROUPS]
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="解除封鎖"/>
+	</notification>
+	<notification name="FSBanFromAllGroupsStarted">
+		正在更新 [AVATAR_NAME] 在 [COUNT] 個群組中的封鎖狀態，一次處理一個群組。完成後會提供報告。
+	</notification>
+	<notification name="FSBanFromAllGroupsReport">
+		[AVATAR_NAME] 已在 [COUNT] 個群組中的 [DONE] 個遭到封鎖。
+
+已封鎖：[SUCCEEDED]
+
+失敗：[FAILED]
+		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="FSUnbanFromAllGroupsReport">
+		[AVATAR_NAME] 在 [COUNT] 個群組中的 [DONE] 個已被解除封鎖。
+
+已解除：[SUCCEEDED]
+
+失敗：[FAILED]
+		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="AttachmentDrop">
 		你即將卸除你的附件。
@@ -3226,7 +3261,7 @@ URL：[AUDIOURL]
 	</notification>
 	<notification name="NotSafe">
 		這塊土地允許傷害。
-在這裡你可能會受傷害。 你如果死亡，會被瞬間傳送回你的家。
+在這裡你可能會受傷害。 你如果死亡，可能會被瞬間傳送到你的家、區域傳送樞紐或地塊降落點。
 	</notification>
 	<notification name="NoFly">
 		這區域禁止飛行。
@@ -3277,6 +3312,10 @@ URL：[AUDIOURL]
 		你所欲前往的區域含有超過你當前偏好的分級的內容。  你可以到「我自己 &gt; 偏好設定 &gt; 一般設定」變更你的偏好設定。
 
 完整的年齡分級資訊請存取這裡 [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/]
+	</notification>
+	<notification name="RegionTPAccessBlocked_NotifyAdultsOnly">
+		你所嘗試前往的區域被評為 [REGIONMATURITY_CAP] 等級，你的帳戶類型無法造訪此區域。
+		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="RegionAboutToShutdown">
 	您正試圖進入的區域即將關閉。
@@ -6069,5 +6108,14 @@ https://wiki.firestormviewer.org/fs_media#one_or_more_viewer_processes_are_curre
 		無法建立裝扮收藏資料夾「[FOLDER_NAME]」。
 資料夾名稱不能包含 / 或 \。
 		<usetemplate name="okbutton" yestext="確定"/>
+	</notification>
+	<notification name="ExternalEditorServerStarted">
+		外部編輯器伺服器已在埠 [PORT] 上啟動。
+	</notification>
+	<notification name="ExternalEditorServerFailed">
+		無法在埠 [PORT] 上啟動外部編輯器伺服器。
+	</notification>
+	<notification name="ExternalEditorServerStopped">
+		外部編輯器伺服器已停止。
 	</notification>
 </notifications>

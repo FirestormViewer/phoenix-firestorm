@@ -229,6 +229,9 @@
             Czcionka edytora skryptów:
         </text>
         <combo_box name="FSScriptingFontName" tool_tip="Nazwa czcionki używanej w edytorze skryptów LSL" />
+		<text name="text_box_scripting_font_size">
+			Rozmiar:
+		</text>
         <combo_box name="FSScriptingFontSize" tool_tip="Rozmiar czcionki używanej w edytorze skryptów LSL">
             <combo_item name="Small" label="Mała"/>
             <combo_item name="Medium" label="Średnia"/>

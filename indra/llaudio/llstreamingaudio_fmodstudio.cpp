@@ -151,10 +151,10 @@ void LLStreamingAudio_FMODSTUDIO::update()
         return;
     }
 
-    unsigned int progress;
-    bool starving;
-    bool diskbusy;
-    FMOD_OPENSTATE open_state;
+    unsigned int progress = 0;
+    bool starving = false;
+    bool diskbusy = false;
+    FMOD_OPENSTATE open_state = FMOD_OPENSTATE_CONNECTING;
 
     if (Check_FMOD_Error(mCurrentInternetStreamp->getOpenState(open_state, &progress, &starving, &diskbusy), "FMOD::Sound::getOpenState"))
     {
