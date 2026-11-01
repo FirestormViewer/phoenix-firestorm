@@ -115,6 +115,13 @@
 			</text>
 			<fs_copytrans_inventory_drop_target name="autoresponse_item" right="-70" tool_tip="Hier Inventarobjekt via Drag&amp;Drop ablegen"/>
 			<button label="Löschen" name="clear_autoresponse_item" width="60"/>
+			<text name="autoresponse_variables_label">
+				Verfügbare Variablen für die Nutzung in automatischen Antworten:
+ • #n für Empfängername
+ • #tl, #tu, #ts für lokale, UTC- oder SLT-Zeit
+ • #p für Ihre aktuelle Position
+ • #i für Abewesenheitsdauer in Minuten
+        </text>
 		</panel>
 	</tab_container>
 </panel>

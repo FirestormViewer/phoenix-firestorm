@@ -775,6 +775,23 @@
          top_delta="0"
          width="40"/>
 
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="80"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autoresponse_variables_label"
+         top_pad="15"
+         right="-15">
+          Available variables for use with all autoresponses:
+ • #n for recipient's name
+ • #tl, #tu, #ts for local, UTC or SLT time
+ • #p for your current location
+ • #i for away time in minutes
+        </text>
     </panel>
 </tab_container>
 </panel>

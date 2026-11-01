@@ -2592,24 +2592,38 @@ void send_do_not_disturb_message (LLMessageSystem* msg, const LLUUID& from_id, c
 {
     if (gAgent.isDoNotDisturb())
     {
-        std::string my_name;
-        LLAgentUI::buildFullname(my_name);
         // <FS> FS autoresponse feature
-        // std::string response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
-        std::string response = LLIMProcessing::getAutoresponseTextForAvatar(from_id, true, false, false, false, false, false);
+        //std::string my_name;
+        //LLAgentUI::buildFullname(my_name);
+        //std::string response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
+        //pack_instant_message(
+        //    msg,
+        //    gAgent.getID(),
+        //    false,
+        //    gAgent.getSessionID(),
+        //    from_id,
+        //    my_name,
+        //    response,
+        //    IM_ONLINE,
+        //    IM_DO_NOT_DISTURB_AUTO_RESPONSE,
+        //    session_id);
+        //gAgent.sendReliableMessage();
+
+        LLAvatarNameCache::get(from_id, [=](const LLUUID& from_id, const LLAvatarName& avatar_name)
+            {
+                LLIMProcessing::sendAutoresponseTextForAvatar(from_id,
+                    avatar_name,
+                    session_id,
+                    true,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false);
+            }
+        );
         // </FS>
-        pack_instant_message(
-            msg,
-            gAgent.getID(),
-            false,
-            gAgent.getSessionID(),
-            from_id,
-            my_name,
-            response,
-            IM_ONLINE,
-            IM_DO_NOT_DISTURB_AUTO_RESPONSE,
-            session_id);
-        gAgent.sendReliableMessage();
     }
 }
 

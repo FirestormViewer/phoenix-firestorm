@@ -4839,7 +4839,7 @@ void LLIMMgr::processIMTypingStop(const LLUUID& from_id, const EInstantMessage i
 }
 
 // <FS:Ansariel> Announce incoming IMs
-void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& session_id)
+static void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& session_id)
 {
     LLStringUtil::format_map_t args;
     args["[NAME]"] = av_name.getCompleteName();
@@ -4874,7 +4874,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
     // later because a session has already been created by showing the
     // incoming IM announcement.
     // The logic was originally copied from process_improved_im() in llviewermessage.cpp
-    bool is_busy = gAgent.isDoNotDisturb();
+    bool is_do_not_disturb = gAgent.isDoNotDisturb();
     bool is_autorespond = gAgent.getAutorespond();
     bool is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
     bool is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
@@ -4884,74 +4884,23 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
 
     if (RlvActions::canReceiveIM(av_id) && !is_linden &&
         (!VoiceCallsFriendsOnly || is_friend) &&
-        ((is_busy && (!is_muted || (is_muted && !is_autorespond_muted))) ||
+        ((is_do_not_disturb && (!is_muted || (is_muted && !is_autorespond_muted))) ||
         (is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted) || (FSSendAwayAvatarResponse && is_afk && !is_muted)) )
     {
-        std::string my_name;
-        std::string response;
-        LLAgentUI::buildFullname(my_name);
-        response = LLIMProcessing::getAutoresponseTextForAvatar(av_id, is_busy, is_autorespond, is_autorespond_nonfriends, is_afk, FSSendAwayAvatarResponse, is_friend);
-        pack_instant_message(
-            gMessageSystem,
-            gAgent.getID(),
-            false,
-            gAgent.getSessionID(),
-            av_id,
-            my_name,
-            response,
-            IM_ONLINE,
-            IM_DO_NOT_DISTURB_AUTO_RESPONSE,
-            session_id);
-        gAgent.sendReliableMessage();
-
-        LLStringUtil::format_map_t args;
-        args["MESSAGE"] = response;
-
-        gIMMgr->addMessage(
-            session_id,
-            gAgentID,
-            LLStringUtil::null, // Pass null value so no name gets prepended
-            LLTrans::getString("IM_autoresponse_sent", args),
-            false,
-            LLStringUtil::null,
-            IM_NOTHING_SPECIAL,
-            0,
-            LLUUID::null,
-            LLVector3::zero,
-            false,
-            0,
-            LLUUID::null,
-            "",
-            LLSD(),
-            true
-            );
-
-        // Send inventory item on autoresponse
-        LLUUID item_id(gSavedPerAccountSettings.getString("FSAutoresponseItemUUID"));
-        if (item_id.notNull())
-        {
-            LLInventoryItem* item = dynamic_cast<LLInventoryItem*>(gInventory.getItem(item_id));
-            if (item)
+        LLAvatarNameCache::get(av_id, [=](const LLUUID& av_id, const LLAvatarName& avatar_name)
             {
-                gIMMgr->addMessage(
-                        session_id,
-                        gAgentID,
-                        LLStringUtil::null, // Pass null value so no name gets prepended
-                        LLTrans::getString("IM_autoresponse_item_sent", LLSD().with("[ITEM_NAME]", item->getName())),
-                        false,
-                        LLStringUtil::null,
-                        IM_NOTHING_SPECIAL,
-                        0,
-                        LLUUID::null,
-                        LLVector3::zero,
-                        false,
-                        0,
-                        LLUUID::null,
-                        "",
-                        true);
-                LLGiveInventory::doGiveInventoryItem(av_id, item, session_id);
+                LLIMProcessing::sendAutoresponseTextForAvatar(av_id,
+                    avatar_name,
+                    session_id,
+                    is_do_not_disturb,
+                    is_autorespond,
+                    is_autorespond_nonfriends,
+                    is_afk,
+                    FSSendAwayAvatarResponse(),
+                    is_friend,
+                    true);
             }
-        }
+        );
     }
 }
 // </FS:Ansariel>

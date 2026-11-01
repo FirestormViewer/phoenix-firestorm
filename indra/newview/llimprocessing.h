@@ -33,7 +33,20 @@ class LLIMProcessing
 {
 public:
     // <FS> FS autoresponse feature
-    static std::string getAutoresponseTextForAvatar(const LLUUID& from_id, bool is_do_not_disturb, bool is_autorespond, bool is_autorespond_nonfriends, bool is_afk, bool send_away_response, bool is_friend);
+    static void sendAutoresponseTextForAvatar(const LLUUID&       from_id,
+                                              const LLAvatarName& avatar_name,
+                                              const LLUUID&       session_id,
+                                              bool                is_do_not_disturb,
+                                              bool                is_autorespond,
+                                              bool                is_autorespond_nonfriends,
+                                              bool                is_afk,
+                                              bool                send_away_response,
+                                              bool                is_friend,
+                                              bool                is_standard_im,
+                                              const std::string&  session_name     = LLStringUtil::null,
+                                              U32                 parent_estate_id = 0,
+                                              const LLUUID&       region_id        = LLUUID::null,
+                                              const LLVector3&    position         = LLVector3::zero);
 
     // Pre-process message for IM manager
     static void processNewMessage(LLUUID from_id,
