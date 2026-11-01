@@ -271,8 +271,8 @@
 			<text name="textFSKeywords">
 				Palavras-chave (separadas por vírgulas):
 			</text>
-			<check_box name="FSKeywordChangeColor" label="Ativar marcação colorida" />
-			<color_swatch name="colorswatch" left="220" tool_tip="Clique para abrir o seletor de cores" />
+			<check_box name="FSKeywordChangeColor" label="Ativar marcação colorida" width="165"/>
+			<color_swatch name="colorswatch" tool_tip="Clique para abrir o seletor de cores" />
 			<check_box name="FSKeywordPlaySound" label="Reproduzir som" />
 			<text name="textFSKeywordSound" width="200">
 				UUID para notificação sonora:

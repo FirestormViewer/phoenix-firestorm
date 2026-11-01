@@ -247,7 +247,7 @@
 			<text name="textFSKeywords">
 				Parole chiave (separate da virgole):
 			</text>
-			<check_box name="FSKeywordChangeColor" label="Segnala con colore"/>
+			<check_box name="FSKeywordChangeColor" label="Segnala con colore" width="130"/>
 			<color_swatch name="colorswatch" tool_tip="Clic per scegliere colore"/>
 			<check_box name="FSKeywordPlaySound" label="Segnala con suono"/>
 			<text name="textFSKeywordSound">
