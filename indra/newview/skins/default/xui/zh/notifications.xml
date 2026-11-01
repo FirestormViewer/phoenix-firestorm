@@ -5639,7 +5639,7 @@ Flickr 驗證失敗。請重試並檢查輸入的程式碼。
 由於伺服器負載限制，此批次變更可能需要較長時間才能生效，部分好友可能會暫時無法正常查看您的在線狀態。
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
-	<notification name="GlobalOnlineStatusToggle">
+	<notification name="GlobalOnlineStatusToggleInfo">
 		根據伺服器負載情況，切換在線狀態的可見性可能需要一段時間才能生效。
 		<usetemplate ignoretext="提醒我切換在線狀態的可見性可能需要一些時間。" name="okignore" yestext="確定"/>
 	</notification>

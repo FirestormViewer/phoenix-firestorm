@@ -5865,7 +5865,7 @@ Que nome deve ser dado à região?
 Dependendo da carga do servidor, a alternância da visibilidade do status online pode demorar um pouco para entrar em vigor e pode causar problemas intermitentes com seu status online para seus amigos.
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
 	</notification>
-	<notification name="GlobalOnlineStatusToggle">
+	<notification name="GlobalOnlineStatusToggleInfo">
 		Dependendo da carga do servidor, a alternância de visibilidade do status online pode demorar um pouco para entrar em vigor.
 		<usetemplate ignoretext="Observe que a mudança da visibilidade do status online pode levar algum tempo." name="okignore" yestext="OK"/>
 	</notification>

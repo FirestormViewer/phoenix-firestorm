@@ -5385,7 +5385,7 @@ https://wiki.firestormviewer.org/fs_voice
 	<notification name="PickLimitReached">
 		Не удалось создать подборку, потому что максимальное количество подборок уже были созданы.
 	</notification>
-	<notification name="GlobalOnlineStatusToggle">
+	<notification name="GlobalOnlineStatusToggleInfo">
 		Из-за нагрузки на сервер массовое переключение видимости состояния в сети может занять некоторое время, чтобы стать эффективным. Пожалуйста, будьте терпеливы.
 		<usetemplate ignoretext="Сообщить мне, что переключение видимости статуса в сети может занять некоторое время" name="okignore" yestext="Да"/>
 	</notification>

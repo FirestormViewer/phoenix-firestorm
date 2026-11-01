@@ -5496,7 +5496,7 @@ la région &quot;[REGION]&quot; ?
 En raison de la charge du serveur, cette modification en masse peut prendre un certain temps avant de prendre effet et peut entraîner des problèmes temporaires pour certains amis qui voient votre statut en ligne.
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
-	<notification name="GlobalOnlineStatusToggle">
+	<notification name="GlobalOnlineStatusToggleInfo">
 		En raison de la charge du serveur, le basculement massif de la visibilité du statut en ligne peut prendre un certain temps avant d'être effectif. Veuillez être patient.
 		<usetemplate ignoretext="Informez-moi que le changement de visibilité du statut en ligne peut prendre un certain temps." name="okignore" yestext="OK"/>
 	</notification>

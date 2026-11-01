@@ -5946,7 +5946,7 @@ Welche Bezeichnung soll für die Region
 Abhängig von der Serverauslastung kann es einen Moment dauern, bis das Umschalten der Sichtbarkeit des Online-Status effektiv wird, und es kann zeitweise zu Problemen mit Ihrem Online-Status für Ihre Freunde führen.
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
-	<notification name="GlobalOnlineStatusToggle">
+	<notification name="GlobalOnlineStatusToggleInfo">
 		Abhängig von der Serverauslastung kann es einen Moment dauern, bis das Umschalten der Sichtbarkeit des Online-Status effektiv wird.
 		<usetemplate ignoretext="Weise mich darauf hin, dass das Umschalten der Sichtbarkeit des Online-Status etwas dauern kann." name="okignore" yestext="OK"/>
 	</notification>
