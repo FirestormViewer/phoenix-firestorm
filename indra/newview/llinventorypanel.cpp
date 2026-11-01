@@ -2617,6 +2617,20 @@ bool LLInventoryPanel::handleKeyHere( KEY key, MASK mask )
             handled = true;
         }
         break;
+    // <FS:Trish> Ctrl+Shift+V pastes as link
+    case 'V':
+        if (mask == (MASK_CONTROL | MASK_SHIFT))
+        {
+            LLFolderViewItem* folder_item = mFolderRoot.get()->getCurSelectedItem();
+            LLInvFVBridge* bridge = folder_item ? dynamic_cast<LLInvFVBridge*>(folder_item->getViewModelItem()) : nullptr;
+            if (bridge && bridge->canPasteAsLink())
+            {
+                bridge->performAction(mInventory, "paste_link");
+                handled = true;
+            }
+        }
+        break;
+    // </FS:Trish>
     }
     return handled;
 }

@@ -747,6 +747,14 @@ bool LLInvFVBridge::isClipboardPasteable() const
     return true;
 }
 
+// <FS:Trish> "Paste As Link" context menu entry and Ctrl+Shift+V
+bool LLInvFVBridge::canPasteAsLink() const
+{
+    static LLCachedControl<bool> inventory_linking(gSavedSettings, "InventoryLinking", true);
+    return inventory_linking && !isLockedFolder() && isClipboardPasteableAsLink();
+}
+// </FS:Trish>
+
 bool LLInvFVBridge::isClipboardPasteableAsLink() const
 {
     if (!LLClipboard::instance().hasContents() || !isAgentInventory())
@@ -1075,7 +1083,15 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
     {
         items.push_back(std::string("Paste"));
     }
-    if (!isClipboardPasteable() || ((flags & FIRST_SELECTED_ITEM) == 0))
+    // <FS:Trish> FSPasteNoCopyAsLink: An item pastes into its folder, which can also take no-copy items as links
+    //if (!isClipboardPasteable() || ((flags & FIRST_SELECTED_ITEM) == 0))
+    bool can_paste = isClipboardPasteable();
+    if (!can_paste && mParent && !(obj && obj->getType() == LLAssetType::AT_CATEGORY))
+    {
+        can_paste = mParent->isClipboardPasteable();
+    }
+    if (!can_paste || ((flags & FIRST_SELECTED_ITEM) == 0))
+    // </FS:Trish>
     {
         disabled_items.push_back(std::string("Paste"));
     }
@@ -1088,7 +1104,10 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
         )
     {
         items.push_back(std::string("Paste As Link"));
-        if (!isClipboardPasteableAsLink() || (flags & FIRST_SELECTED_ITEM) == 0)
+        // <FS:Trish> Same check as Ctrl+Shift+V
+        //if (!isClipboardPasteableAsLink() || (flags & FIRST_SELECTED_ITEM) == 0)
+        if (!canPasteAsLink() || (flags & FIRST_SELECTED_ITEM) == 0)
+        // </FS:Trish>
         {
             disabled_items.push_back(std::string("Paste As Link"));
         }
@@ -2904,7 +2923,10 @@ bool LLFolderBridge::isItemLinkable() const
 
 bool LLFolderBridge::isClipboardPasteable() const
 {
-    if ( ! LLInvFVBridge::isClipboardPasteable() )
+    // <FS:Trish> FSPasteNoCopyAsLink: No-copy items can be pasted as links
+    //if ( ! LLInvFVBridge::isClipboardPasteable() )
+    if (!LLInvFVBridge::isClipboardPasteable() && !isClipboardPasteableMixed())
+    // </FS:Trish>
         return false;
 
     // Don't allow pasting duplicates to the Calling Card/Friends subfolders, see bug EXT-1599
@@ -2934,6 +2956,147 @@ bool LLFolderBridge::isClipboardPasteable() const
     }
     return true;
 }
+
+// <FS:Trish> FSPasteNoCopyAsLink: Paste copies of what can be copied and links of no-copy items
+void LLFolderBridge::splitClipboardForMixedPaste(const std::vector<LLUUID>& objects, std::vector<LLUUID>& copy_ids, std::vector<LLUUID>& link_ids) const
+{
+    const LLInventoryModel* model = getInventoryModel();
+    for (const auto& obj_id : objects)
+    {
+        bool copyable = false;
+        if (model && model->getCategory(obj_id))
+        {
+            copyable = LLFolderBridge(mInventoryPanel.get(), mRoot, obj_id).isItemCopyable(false);
+        }
+        else
+        {
+            copyable = LLItemBridge(mInventoryPanel.get(), mRoot, obj_id).isItemCopyable(false);
+        }
+        (copyable ? copy_ids : link_ids).push_back(obj_id);
+    }
+}
+
+bool LLFolderBridge::isClipboardPasteableMixed() const
+{
+    static LLCachedControl<bool> inventory_linking(gSavedSettings, "InventoryLinking", true);
+    if (!inventory_linking || LLClipboard::instance().isCutMode() || isLockedFolder() || !isAgentInventory())
+    {
+        return false;
+    }
+
+    // Setting off and the prompt ignored means "No, don't ask again", no-copy items can't be pasted and Paste stays disabled
+    static LLCachedControl<bool> paste_no_copy_as_link(gSavedSettings, "FSPasteNoCopyAsLink", false);
+    if (!paste_no_copy_as_link && LLNotifications::instance().getIgnored("FSPasteNoCopyAsLinkPrompt"))
+    {
+        return false;
+    }
+
+    const LLInventoryModel* model = getInventoryModel();
+    // Marketplace listings is a special folder that can't hold links
+    if (!model || gInventory.isObjectDescendentOf(mUUID, gInventory.getMarketplaceListingsUUID()))
+    {
+        return false;
+    }
+
+    // Only needed when there is something that can't be copied
+    std::vector<LLUUID> objects, copy_ids, link_ids;
+    LLClipboard::instance().pasteFromClipboard(objects);
+    splitClipboardForMixedPaste(objects, copy_ids, link_ids);
+    if (link_ids.empty())
+    {
+        return false;
+    }
+
+    // A no copy item that needs to be pasted as link needs to be linkable
+    for (const auto& obj_id : link_ids)
+    {
+        if (const LLInventoryItem* item = model->getItem(obj_id))
+        {
+            // Materials and empty notecards are refused by pasteLinkFromClipboard()
+            if (!LLAssetType::lookupCanLink(item->getActualType()) ||
+                item->getActualType() == LLAssetType::AT_MATERIAL ||
+                (item->getActualType() == LLAssetType::AT_NOTECARD && item->getAssetUUID().isNull()) ||
+                gInventory.isObjectDescendentOf(obj_id, gInventory.getLibraryRootFolderID()))
+            {
+                return false;
+            }
+        }
+        else if (const LLViewerInventoryCategory* cat = model->getCategory(obj_id))
+        {
+            if (LLFolderType::lookupIsProtectedType(cat->getPreferredType()))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void LLFolderBridge::pasteMixedFromClipboard()
+{
+    static LLCachedControl<bool> paste_no_copy_as_link(gSavedSettings, "FSPasteNoCopyAsLink", false);
+    if (paste_no_copy_as_link)
+    {
+        doPasteMixedFromClipboard();
+        return;
+    }
+
+    // Ask first; If "don't ask again" is checked, the answer is remembered
+    LLHandle<LLInventoryPanel> panel_handle = mInventoryPanel;
+    LLUUID folder_id = mUUID;
+    LLNotificationsUtil::add("FSPasteNoCopyAsLinkPrompt", LLSD(), LLSD(),
+        [panel_handle, folder_id](const LLSD& notification, const LLSD& response)
+        {
+            if (LLNotificationsUtil::getSelectedOption(notification, response) != 0)
+            {
+                return;
+            }
+            if (response["ignore"].asBoolean())
+            {
+                gSavedSettings.setBOOL("FSPasteNoCopyAsLink", true);
+            }
+            LLInventoryPanel* panel = panel_handle.get();
+            LLFolderViewItem* folder_item = panel ? panel->getItemByID(folder_id) : nullptr;
+            LLFolderBridge* bridge = folder_item ? dynamic_cast<LLFolderBridge*>(folder_item->getViewModelItem()) : nullptr;
+            if (bridge && bridge->isClipboardPasteableMixed())
+            {
+                bridge->doPasteMixedFromClipboard();
+            }
+        });
+}
+
+void LLFolderBridge::doPasteMixedFromClipboard()
+{
+    std::vector<LLUUID> objects, copy_ids, link_ids;
+    LLClipboard::instance().pasteFromClipboard(objects);
+    splitClipboardForMixedPaste(objects, copy_ids, link_ids);
+
+    // Reuse the normal paste functions
+    auto set_clipboard = [](const std::vector<LLUUID>& ids)
+    {
+        LLClipboard::instance().reset();
+        for (const auto& id : ids)
+        {
+            LLClipboard::instance().addToClipboard(id);
+        }
+    };
+
+    // Use typical paste-as-link rules for this folder (no pasting a folder into itself, Friends folder, ...).
+    set_clipboard(link_ids);
+    if (isClipboardPasteableAsLink())
+    {
+        pasteLinkFromClipboard();
+        if (!copy_ids.empty())
+        {
+            set_clipboard(copy_ids);
+            pasteFromClipboard();
+        }
+    }
+
+    // Put the original clipboard back so it can be pasted again
+    set_clipboard(objects);
+}
+// </FS:Trish>
 
 bool LLFolderBridge::isClipboardPasteableAsLink() const
 {
@@ -4460,6 +4623,14 @@ void LLFolderBridge::updateHierarchyCreationDate(time_t date)
 
 void LLFolderBridge::pasteFromClipboard()
 {
+    // <FS:Trish> FSPasteNoCopyAsLink: Copy what can be copied, link the no-copy items
+    if (isClipboardPasteableMixed())
+    {
+        pasteMixedFromClipboard();
+        return;
+    }
+    // </FS:Trish>
+
     LLInventoryModel* model = getInventoryModel();
     if (model && isClipboardPasteable())
     {
