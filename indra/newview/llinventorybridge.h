@@ -909,11 +909,6 @@ void hide_context_entries(LLMenuGL& menu,
                           const menuentry_vec_t &entries_to_show,
                           const menuentry_vec_t &disabled_entries);
 
-// <FS:PP> Submenus grouping
-inline constexpr std::string_view INVENTORY_SUBMENU_MARKETPLACE{ "Marketplace" };
-void add_context_submenu_entry(menuentry_vec_t& items, std::string_view submenu, std::string_view item);
-// </FS:PP>
-
 // Helper functions to classify actions.
 bool isAddAction(const std::string& action);
 bool isRemoveAction(const std::string& action);

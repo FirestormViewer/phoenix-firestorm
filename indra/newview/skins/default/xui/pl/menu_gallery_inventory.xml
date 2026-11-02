@@ -102,9 +102,7 @@
 		<menu_item_check label="Dla nowych modeli" name="Model uploads" />
 		<menu_item_check label="Dla nowych materiałów PBR" name="PBR uploads" />
 	</menu>
-	<menu label="Marketplace" name="Marketplace">
-		<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy" />
-		<menu_item_call label="Przenieś do rzeczy Marketplace" name="Marketplace Move" />
-	</menu>
+	<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy" />
+	<menu_item_call label="Przenieś do rzeczy Marketplace" name="Marketplace Move" />
 	<menu_item_call label="--brak opcji--" name="--no options--" />
 </context_menu>
