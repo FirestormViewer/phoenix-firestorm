@@ -7688,25 +7688,43 @@ public:
     std::vector<LLViewerObjectPtr> mReturnableObjects;
     std::string mError;
     LLViewerRegion *mFirstRegion;
+    bool mSeparate{ false }; // <FS:Trish/> Return Separately
 };
 
 static void return_objects(LLObjectsReturnPackage *objectsReturnPackage, const LLSD& notification, const LLSD& response)
 {
     if (LLNotificationsUtil::getSelectedOption(notification, response) == 0)
     {
-        // Ignore category ID for this derez destination.
-        derez_objects(DRD_RETURN_TO_OWNER, LLUUID::null, objectsReturnPackage->mFirstRegion, objectsReturnPackage->mError, &objectsReturnPackage->mReturnableObjects);
+        // <FS:Trish> Added for area search option to Return Separately
+        if (objectsReturnPackage->mSeparate)
+        {
+            for (const LLViewerObjectPtr& object : objectsReturnPackage->mReturnableObjects)
+            {
+                std::vector<LLViewerObjectPtr> single_object{ object };
+                derez_objects(DRD_RETURN_TO_OWNER, LLUUID::null, objectsReturnPackage->mFirstRegion, objectsReturnPackage->mError, &single_object);
+            }
+        }
+        else
+        {
+            // Ignore category ID for this derez destination.
+            derez_objects(DRD_RETURN_TO_OWNER, LLUUID::null, objectsReturnPackage->mFirstRegion, objectsReturnPackage->mError, &objectsReturnPackage->mReturnableObjects);
+        }
+        // </FS:Trish>
     }
 
     delete objectsReturnPackage;
 }
 
-void handle_object_return()
+// <FS:Trish> Return Separately
+//void handle_object_return()
+void handle_object_return(bool separate)
+// </FS:Trish>
 {
     if (!LLSelectMgr::getInstance()->getSelection()->isEmpty())
     {
         LLObjectsReturnPackage *objectsReturnPackage = new LLObjectsReturnPackage();
         objectsReturnPackage->mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
+        objectsReturnPackage->mSeparate = separate; // <FS:Trish/> Return Separately
 
         // Save selected objects, so that we still know what to return after the confirmation dialog resets selection.
         get_derezzable_objects(DRD_RETURN_TO_OWNER, objectsReturnPackage->mError, objectsReturnPackage->mFirstRegion, &objectsReturnPackage->mReturnableObjects);
