@@ -1248,8 +1248,16 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
     {
         LLSliderCtrl* slider = (LLSliderCtrl*)widget;
         slider->setPrecision(decimals);
-        slider->setMinValue(entry.min_value);
-        slider->setMaxValue(entry.max_value);
+        if (entry.min_value >= slider->getMaxValue())
+        {
+            slider->setMaxValue(entry.max_value);
+            slider->setMinValue(entry.min_value);
+        }
+        else
+        {
+            slider->setMinValue(entry.min_value);
+            slider->setMaxValue(entry.max_value);
+        }
         slider->setIncrement(entry.increment);
     }
     else if (entry.type == ControlTypeColor4)
