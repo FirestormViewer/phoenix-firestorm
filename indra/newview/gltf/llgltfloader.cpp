@@ -62,14 +62,16 @@
 #include <boost/exception/diagnostic_information.hpp>
 #include <fstream>
 
-static const std::string lod_suffix[LLModel::NUM_LODS] =
-{
-    "_LOD0",
-    "_LOD1",
-    "_LOD2",
-    "",
-    "_PHYS",
-};
+// <FS> moved to allow configuration
+// static const std::string lod_suffix[LLModel::NUM_LODS] =
+// {
+//  "_LOD0",
+//  "_LOD1",
+//  "_LOD2",
+//  "",
+//  "_PHYS",
+// };
+// </FS>
 
 // Premade rotation matrix, GLTF is Y-up while SL is Z-up
 static const glm::mat4 coord_system_rotation(
@@ -103,8 +105,12 @@ LLGLTFLoader::LLGLTFLoader(std::string                filename,
     U32                                               maxJointsPerMesh,
     U32                                               modelLimit,
     U32                                               debugMode,
-    std::vector<LLJointData>                          viewer_skeleton) //,
-    //bool                                            preprocess)
+    // <FS> mesh loader suffix configuration
+    // std::vector<LLJointData>                       viewer_skeleton) //,
+    // //bool                                         preprocess)
+    std::vector<LLJointData>                          viewer_skeleton,
+    const LODSuffixArray&                             lod_suffix)
+    // </FS>
     : LLModelLoader( filename,
                      lod,
                      load_cb,
@@ -122,9 +128,18 @@ LLGLTFLoader::LLGLTFLoader(std::string                filename,
     , mGltfLoaded(false)
     , mApplyXYRotation(false)
 {
+    // <FS> mesh loader suffix configuration
+    for (int i = 0; i < LLModel::NUM_LODS; i++)
+    {
+        LLGLTFLoader::sLODSuffix[i] = lod_suffix[i];
+    }
+    // </FS>
 }
 
 LLGLTFLoader::~LLGLTFLoader() {}
+
+//static
+LODSuffixArray LLGLTFLoader::sLODSuffix{};// <FS/> configurable lod suffixes
 
 bool LLGLTFLoader::OpenFile(const std::string &filename)
 {
@@ -320,7 +335,13 @@ void LLGLTFLoader::addModelToScene(
         // Add suffix. Suffix is nessesary for model matching logic
         // because sometimes higher lod can be used as a lower one, so models
         // need unique names not just in scope of one lod, but across lods.
-        model->mLabel += lod_suffix[mLod];
+        // <FS> Support altenate LOD naming conventions
+        // model->mLabel += lod_suffix[mLod];
+        if (sLODSuffix[mLod].size() > 0)
+        {
+            model->mLabel +=  "_" + sLODSuffix[mLod];
+        }
+        // </FS>
         mScene[transformation].push_back(LLModelInstance(model, instance_name, transformation, materials));
         stretch_extents(model, transformation);
     }
@@ -1982,10 +2003,19 @@ void LLGLTFLoader::notifyUnsupportedExtension(bool unsupported)
 
 size_t LLGLTFLoader::getSuffixPosition(const std::string &label)
 {
-    if ((label.find("_LOD") != -1) || (label.find("_PHYS") != -1))
+    // <FS> Selectable suffixes
+    //if ((label.find("_LOD") != -1) || (label.find("_PHYS") != -1))
+    //{
+    //  return label.rfind('_');
+    //}
+    for(int i=0; i < LLModel::NUM_LODS; i++)
     {
-        return label.rfind('_');
+        if (sLODSuffix[i].size() && label.find(sLODSuffix[i]) != std::string::npos)
+        {
+            return label.rfind('_');
+        }
     }
+    // </FS>
     return -1;
 }
 
