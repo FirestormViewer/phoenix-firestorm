@@ -1550,7 +1550,7 @@
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>
-            <string>Integer</string>
+            <string>S32</string> <!-- </FS:Beq> Integer is not a supported control type. -->
         <key>Value</key>
             <integer>1</integer>
         </map>
@@ -1561,7 +1561,7 @@
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>
-            <string>Integer</string>
+            <string>S32</string> <!-- </FS:Beq> Integer is not a supported control type. -->
         <key>Value</key>
             <integer>1</integer>
         </map>
