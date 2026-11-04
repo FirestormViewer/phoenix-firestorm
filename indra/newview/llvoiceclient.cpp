@@ -290,12 +290,20 @@ void LLVoiceClient::setSpatialVoiceModule(const std::string &voice_server_type)
     }
     if (module != mSpatialVoiceModule)
     {
-        if (inProximalChannel())
+        // <FS:FLO> [FIRE-36672] Fix WebRTC spatial session establishment ordering
+        // if (inProximalChannel())
+        // {
+        //     mSpatialVoiceModule->processChannels(false);
+        //     module->processChannels(true);
+        // }
+        // mSpatialVoiceModule = module;
+        if (mSpatialVoiceModule)
         {
             mSpatialVoiceModule->processChannels(false);
-            module->processChannels(true);
         }
         mSpatialVoiceModule = module;
+        mSpatialVoiceModule->processChannels(true);
+        // </FS:FLO>
         mSpatialVoiceModule->updateSettings();
     }
 }
