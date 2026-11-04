@@ -701,6 +701,10 @@ Möchten Sie den Viewer schließen und anschließend manuell neu starten, um die
 		Änderungen speichern?
 		<usetemplate canceltext="Abbrechen" name="yesnocancelbuttons" notext="Nicht speichern" yestext="Speichern"/>
 	</notification>
+	<notification name="SaveScriptChanges">
+		Änderungen an [NAME] speichern?
+		<usetemplate canceltext="Abbrechen" name="yesnocancelbuttons" notext="Nicht speichern" yestext="Speichern"/>
+	</notification>
 	<notification name="DeleteNotecard">
 		Notizkarte wirklich löschen?
 		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="OK" ignoretext="Bestätigen, wenn eine Notizkarte gelöscht wird"/>
