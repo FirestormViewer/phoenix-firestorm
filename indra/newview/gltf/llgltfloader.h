@@ -35,7 +35,6 @@
 #include "lljointdata.h"
 #include "llmodelloader.h"
 
-using LODSuffixArray = std::array<std::string,LLModel::NUM_LODS>; // <FS/> configurable lod suffixes
 class LLGLTFLoader : public LLModelLoader
 {
   public:
@@ -178,7 +177,10 @@ private:
 
     static size_t getSuffixPosition(const std::string& label);
     static std::string getLodlessLabel(const LL::GLTF::Node& mesh);
-    static LODSuffixArray sLODSuffix; // <FS/> mesh loader suffix configuration
+
+    // <FS> Multi-LOD file
+    bool mFilterByLodSuffix = false; // only load nodes matching mLod
+    // </FS>
 
     //    bool mPreprocessGLTF;
 
