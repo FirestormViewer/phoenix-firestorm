@@ -2414,6 +2414,31 @@ void LLViewerFetchedTexture::forceToDeleteRequest()
     mDesiredDiscardLevel = getMaxDiscardLevel() + 1;
 }
 
+// <FS:Kitely> Transfer a bake request from the previous region to the current region
+void LLViewerFetchedTexture::changeTargetHost(const LLHost& host)
+{
+    if (host == mTargetHost)
+    {
+        return;
+    }
+
+    LL_INFOS("Texture") << mID << ": changing the target host from " << mTargetHost << " to " << host << LL_ENDL;
+    mTargetHost = host;
+
+    // Cancel the old fetcher, which asks the old host.
+    // The next updateFetch() will ask the new host.
+    if (mHasFetcher)
+    {
+        LLAppViewer::getTextureFetch()->deleteRequest(getID(), true);
+        mHasFetcher = false;
+        mIsFetching = false;
+        mLastPacketTimer.reset();
+        mFetchState = 0;
+        mFetchPriority = 0;
+    }
+}
+// </FS:Kitely>
+
 void LLViewerFetchedTexture::setIsMissingAsset(bool is_missing)
 {
     if (is_missing == mIsMissingAsset)

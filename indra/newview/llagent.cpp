@@ -1237,6 +1237,14 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
             {
                 regionp->setCapabilitiesReceivedCallback(LLAgent::capabilityReceivedCallback);
             }
+
+            // <FS:Kitely> The avatar moved to another region. Fetch our bakes from the new region,
+            // not the old one.
+            if (isAgentAvatarValid())
+            {
+                gAgentAvatarp->changeBakesTargetHost(regionp->getHost());
+            }
+            // </FS:Kitely>
         }
         else
         {
