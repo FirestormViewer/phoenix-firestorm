@@ -1407,7 +1407,10 @@ bool LLTextureFetchWorker::doWork(S32 param)
                 // </FS:Ansariel> [UDP Assets]
                 if (!http_url.empty())
                 {
-                    if (mFTType != FTT_DEFAULT)
+                    // <FS:Kitely> Fetch bakes by UUID, too (required for loading using HTTP instead of UDP)
+                    //if (mFTType != FTT_DEFAULT)
+                    if (mFTType != FTT_DEFAULT && mFTType != FTT_HOST_BAKE)
+                    // </FS:Kitely>
                     {
                         LL_WARNS(LOG_TXT) << "Trying to fetch a texture of non-default type by UUID. This probably won't work!" << LL_ENDL;
                     }
@@ -1809,6 +1812,21 @@ bool LLTextureFetchWorker::doWork(S32 param)
                     //return false;
                     return doWork(param);
                 }
+
+                // <FS:Kitely> If we couldn't get a host bake using HTTP then try UDP. UDP might
+                // work where HTTP fails because some regions can't send bakes over HTTP:
+                // the bake exists only in the region's own cache, so if the grid serves the
+                // texture cap from another server then it's incapable of serving the bake.
+                if (mFTType == FTT_HOST_BAKE && mCanUseNET)
+                {
+                    LL_INFOS(LOG_TXT) << mID << ": couldn't get the host bake over HTTP, trying UDP" << LL_ENDL;
+                    setState(INIT);
+                    mCanUseHTTP = false;
+                    mUrl.clear();
+                    releaseHttpSemaphore();
+                    return doWork(param);
+                }
+                // </FS:Kitely>
 
                 // Fail harder
                 resetFormattedData();
