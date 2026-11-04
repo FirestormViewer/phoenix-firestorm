@@ -432,9 +432,12 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
                         LLFace* facep = mDrawable->getFace(i);
                         if (facep && facep->mTextureMatrix)
                         {
+                            // <FS:Beq> Existing draw batches retain the matrix until rebuilt.
                             // delete or reset
-                            delete facep->mTextureMatrix;
-                            facep->mTextureMatrix = NULL;
+                            // delete facep->mTextureMatrix;
+                            // facep->mTextureMatrix = NULL;
+                            facep->mTextureMatrix.reset();
+                            // </FS:Beq>
                         }
                     }
 
@@ -636,9 +639,12 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
                     LLFace* facep = mDrawable->getFace(i);
                     if (facep && facep->mTextureMatrix)
                     {
+                        // <FS:Beq> Existing draw batches retain the matrix until rebuilt.
                         // delete or reset
-                        delete facep->mTextureMatrix;
-                        facep->mTextureMatrix = NULL;
+                        // delete facep->mTextureMatrix;
+                        // facep->mTextureMatrix = NULL;
+                        facep->mTextureMatrix.reset();
+                        // </FS:Beq>
                     }
                 }
 
@@ -781,7 +787,10 @@ void LLVOVolume::animateTextures()
 
                 if (!facep->mTextureMatrix)
                 {
-                    facep->mTextureMatrix = new LLMatrix4();
+                    // <FS:Beq> Share the live matrix with draw batches.
+                    // facep->mTextureMatrix = new LLMatrix4();
+                    facep->mTextureMatrix = std::make_shared<LLMatrix4>();
+                    // </FS:Beq>
                     if (facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
                     {
                         // Fix the one edge case missed in
@@ -1003,6 +1012,9 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
                 // animated faces get moved to a smaller partition to reduce
                 // side-effects of their updates (see shrinkWrap in
                 // LLVOVolume::animateTextures).
+                // <FS:Beq> LLDrawInfo now shares ownership of the live matrix;
+                // retired batches keep it alive until the rebuild releases them.
+                // </FS:Beq>
                 if (mDrawable->getSpatialGroup())
                 {
                     mDrawable->getSpatialGroup()->dirtyGeom();
@@ -5637,7 +5649,10 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
         return;
     }
 
-    const LLMatrix4* tex_mat = NULL;
+    // <FS:Beq> Transfer shared matrix ownership to the draw batch.
+    // const LLMatrix4* tex_mat = NULL;
+    std::shared_ptr<const LLMatrix4> tex_mat;
+    // </FS:Beq>
     if (facep->isState(LLFace::TEXTURE_ANIM) && facep->getVirtualSize() > MIN_TEX_ANIM_SIZE)
     {
         tex_mat = facep->mTextureMatrix;
