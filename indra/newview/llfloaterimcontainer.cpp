@@ -421,7 +421,7 @@ void LLFloaterIMContainer::onNewMessageReceived(const LLSD& data)
     LLFloater* floaterp = get_ptr_in_map(mSessions, session_id);
     LLFloater* current_floater = LLMultiFloater::getActiveFloater();
 
-    if(floaterp && current_floater && floaterp != current_floater)
+    if (floaterp && floaterp != current_floater)
     {
         if(LLMultiFloater::isFloaterFlashing(floaterp))
             LLMultiFloater::setFloaterFlashing(floaterp, false);
