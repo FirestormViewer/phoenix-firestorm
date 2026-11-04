@@ -1448,7 +1448,25 @@ bool LLScriptEdCore::canClose()
         {
             mSaveDialogShown = true;
             // Bring up view-modal dialog: Save changes? Yes, No, Cancel
-            LLNotificationsUtil::add("SaveChanges", LLSD(), LLSD(), boost::bind(&LLScriptEdCore::handleSaveChangesDialog, this, _1, _2));
+            // <FS:Trish> FIRE-32374: make it more obvious which floater is asking to be closed
+            // several editors can be asked to close at once
+            //LLNotificationsUtil::add("SaveChanges", LLSD(), LLSD(), boost::bind(&LLScriptEdCore::handleSaveChangesDialog, this, _1, _2));
+            LLFloater* floater = dynamic_cast<LLFloater*>(getParent());
+            if (floater)
+            {
+                floater->setVisibleAndFrontmost(true);
+            }
+            LLSD args;
+            std::string name = floater ? floater->getTitle() : mScriptName;
+            // Scripts in different objects often share a name, such as "New Script"
+            LLLiveLSLEditor* live_editor = dynamic_cast<LLLiveLSLEditor*>(floater);
+            if (live_editor && !live_editor->getObjectName().empty())
+            {
+                name += " (" + live_editor->getObjectName() + ")";
+            }
+            args["NAME"] = name;
+            LLNotificationsUtil::add("SaveScriptChanges", args, LLSD(), boost::bind(&LLScriptEdCore::handleSaveChangesDialog, this, _1, _2));
+            // </FS:Trish>
         }
         return false;
     }
