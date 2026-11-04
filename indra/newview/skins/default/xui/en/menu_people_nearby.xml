@@ -87,6 +87,26 @@
          parameter="can_delete" />
     </menu_item_call>
     <menu_item_call
+     label="Pin Friend"
+     layout="topleft"
+     name="pin_friend">
+        <menu_item_call.on_click
+         function="Avatar.Pin" />
+        <menu_item_call.on_visible
+         function="Avatar.EnableItem"
+         parameter="can_pin" />
+    </menu_item_call>
+    <menu_item_call
+     label="Unpin Friend"
+     layout="topleft"
+     name="unpin_friend">
+        <menu_item_call.on_click
+         function="Avatar.Unpin" />
+        <menu_item_call.on_visible
+         function="Avatar.EnableItem"
+         parameter="can_unpin" />
+    </menu_item_call>
+    <menu_item_call
      label="Invite to group..."
      layout="topleft"
      name="invite_to_group">

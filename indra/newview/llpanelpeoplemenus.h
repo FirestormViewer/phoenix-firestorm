@@ -57,6 +57,10 @@ private:
 
     // <FS:Ansariel> Add to contact set
     void addToContactSet();
+    // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
+    void pinFriend();
+    void unpinFriend();
+    // </FS:TP>
 // [RLVa:KB] - Checked: RLVa-1.5.0
 protected:
     bool m_fRlvCheck;
