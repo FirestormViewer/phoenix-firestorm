@@ -123,23 +123,17 @@ LLGLTFLoader::LLGLTFLoader(std::string                filename,
                      jointAliasMap,
                      maxJointsPerMesh,
                      modelLimit,
-                     debugMode)
+                     // <FS> mesh loader suffix configuration
+                     // debugMode)
+                     debugMode,
+                     lod_suffix)
     , mViewerJointData(viewer_skeleton)
     , mGltfLoaded(false)
     , mApplyXYRotation(false)
 {
-    // <FS> mesh loader suffix configuration
-    for (int i = 0; i < LLModel::NUM_LODS; i++)
-    {
-        LLGLTFLoader::sLODSuffix[i] = lod_suffix[i];
-    }
-    // </FS>
 }
 
 LLGLTFLoader::~LLGLTFLoader() {}
-
-//static
-LODSuffixArray LLGLTFLoader::sLODSuffix{};// <FS/> configurable lod suffixes
 
 bool LLGLTFLoader::OpenFile(const std::string &filename)
 {
@@ -379,8 +373,31 @@ bool LLGLTFLoader::parseMeshes()
     // Track how many times each mesh name has been used
     std::map<std::string, S32> mesh_name_counts;
 
-    // For now use mesh count, but might be better to do 'mNodes.size() - joints count'.
-    U32 submodel_limit = mGLTFAsset.mMeshes.size() > 0 ? mGeneratedModelLimit / (U32)mGLTFAsset.mMeshes.size() : 0;
+    // <FS> Multi-LOD file
+    // If the file contains nodes of more than one LOD, only load the nodes that
+    // belong to the LOD being loaded. Files containing a single LOD are loaded
+    // as a whole.
+    mAvailableLodMask = 0;
+    U32 needed_lod_count = 0;
+    for (const auto& node : mGLTFAsset.mNodes)
+    {
+        if (node.mMesh >= 0)
+        {
+            S32 lod = getLodFromName(node.mName);
+            mAvailableLodMask |= 1u << lod;
+            if (lod == mLod)
+            {
+                needed_lod_count++;
+            }
+        }
+    }
+    const bool multi_lod_file = (mAvailableLodMask & (mAvailableLodMask - 1)) != 0; // more than one bit set
+    mFilterByLodSuffix = multi_lod_file && mLod >= 0 && needed_lod_count > 0;
+    U32 mesh_count = (mFilterByLodSuffix) ? needed_lod_count : (U32)mGLTFAsset.mMeshes.size();
+
+    // U32 submodel_limit = mGLTFAsset.mMeshes.size() > 0 ? mGeneratedModelLimit / (U32)mGLTFAsset.mMeshes.size() : 0,
+    U32 submodel_limit = mesh_count > 0 ? mGeneratedModelLimit / mesh_count : 0;
+    // </FS>
 
     // Check if we have scenes defined
     if (!mGLTFAsset.mScenes.empty())
@@ -430,8 +447,12 @@ void LLGLTFLoader::processNodeHierarchy(S32 node_idx, std::map<std::string, S32>
                             << " - has mesh: " << (node.mMesh >= 0 ? "yes" : "no")
                             << " - children: " << node.mChildren.size() << LL_ENDL;
 
+    // <FS> Multi-LOD file: skip meshes that belong to a different LOD,
+    // but still process the children, they might belong to this LOD.
+    const bool skip_for_lod = node.mMesh >= 0 && mFilterByLodSuffix && getLodFromName(node.mName) != mLod;
+
     // Process this node's mesh if it has one
-    if (node.mMesh >= 0 && node.mMesh < mGLTFAsset.mMeshes.size())
+    if (node.mMesh >= 0 && node.mMesh < mGLTFAsset.mMeshes.size() && !skip_for_lod)
     {
         // Get base node name and track usage
         // Potentially multiple nodes can reuse the same mesh and Collada used
@@ -533,7 +554,7 @@ void LLGLTFLoader::processNodeHierarchy(S32 node_idx, std::map<std::string, S32>
             return;
         }
     }
-    else if (node.mMesh >= 0)
+    else if (node.mMesh >= 0 && !skip_for_lod)
     {
         // Log invalid mesh reference
         LL_WARNS("GLTF_IMPORT") << "Node " << node_idx << " (" << node.mName

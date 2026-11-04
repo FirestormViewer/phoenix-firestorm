@@ -108,19 +108,22 @@ void LLModelLoader::stretch_extents(const LLModel* model, const LLMatrix4& mat)
 // LLModelLoader
 //-----------------------------------------------------------------------------
 LLModelLoader::LLModelLoader(
-    std::string         filename,
-    S32                 lod,
-    load_callback_t     load_cb,
-    joint_lookup_func_t joint_lookup_func,
-    texture_load_func_t texture_load_func,
-    state_callback_t    state_cb,
-    void*               opaque_userdata,
-    JointTransformMap&  jointTransformMap,
-    JointNameSet&       jointsFromNodes,
-    JointMap&           legalJointNamesMap,
-    U32                 maxJointsPerMesh,
-    U32                 modelLimit,
-    U32                 debugMode)
+    std::string           filename,
+    S32                   lod,
+    load_callback_t       load_cb,
+    joint_lookup_func_t   joint_lookup_func,
+    texture_load_func_t   texture_load_func,
+    state_callback_t      state_cb,
+    void*                 opaque_userdata,
+    JointTransformMap&    jointTransformMap,
+    JointNameSet&         jointsFromNodes,
+    JointMap&             legalJointNamesMap,
+    U32                   maxJointsPerMesh,
+    U32                   modelLimit,
+    // <FS> mesh loader   suffix configuration
+    // U32                debugMode)
+    U32                   debugMode,
+    const LODSuffixArray& lod_suffix)
 : mJointList( jointTransformMap )
 , mJointsFromNode( jointsFromNodes )
 , LLThread("Model Loader")
@@ -147,6 +150,13 @@ LLModelLoader::LLModelLoader(
     assert_main_thread();
     sActiveLoaderList.push_back(this) ;
     mWarningsArray = LLSD::emptyArray();
+
+    // <FS> mesh loader suffix configuration
+    for (int i = 0; i < LLModel::NUM_LODS; i++)
+    {
+        LLModelLoader::sLODSuffix[i] = lod_suffix[i];
+    }
+    // </FS>
 }
 
 LLModelLoader::~LLModelLoader()
@@ -256,7 +266,32 @@ void LLModelLoader::setLoadState(U32 state)
 {
     mStateCallback(state, mOpaqueData);
 }
+
 extern std::string stripSuffix(std::string); // <FS:Beq/> mesh loader suffix configuration
+
+//static
+LODSuffixArray LLModelLoader::sLODSuffix{};// <FS/> configurable lod suffixes
+
+// <FS> Multi-LOD file
+// static
+S32 LLModelLoader::getLodFromName(const std::string& name)
+{
+    for (S32 lod = 0; lod < LLModel::NUM_LODS; ++lod)
+    {
+        if (sLODSuffix[lod].size() > 0)
+        {
+            const std::string suffix = "_" + sLODSuffix[lod];
+            if (name.size() > suffix.size()
+                && name.compare(name.size() - suffix.size(), suffix.size(), suffix) == 0)
+            {
+                return lod;
+            }
+        }
+    }
+    return LLModel::LOD_HIGH;
+}
+// </FS>
+
 bool LLModelLoader::loadFromSLM(const std::string& filename)
 {
     //only need to populate mScene with data from slm

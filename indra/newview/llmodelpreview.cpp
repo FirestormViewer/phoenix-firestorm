@@ -1304,6 +1304,11 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
     mModelLoader->loadTextures();
     warnTextureScaling();
 
+    // <FS> Multi-LOD file
+    U32 lod_mask = mModelLoader->getAvailableLodMask();
+    const std::string loaded_filename = mModelLoader->mFilename;
+    // </FS>
+
     if (loaded_lod == -1)
     { //populate all LoDs from model loader scene
         mBaseModel.clear();
@@ -1584,6 +1589,64 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
     mModelLoadedSignal();
 
     mModelLoader = NULL;
+
+    // <FS> Multi-LOD file
+    // after the high LOD (or the previous LOD of the chain) was loaded, load
+    // the next LOD present in the same file.
+    if (mFMP && loaded_lod >= 0 && lod_mask && !mLODFile[LLModel::LOD_HIGH].empty()
+        && (loaded_lod == LLModel::LOD_HIGH || loaded_filename == mLODFile[LLModel::LOD_HIGH]))
+    {
+        static const S32 lod_sequence[] =
+        {
+            LLModel::LOD_HIGH,
+            LLModel::LOD_MEDIUM,
+            LLModel::LOD_LOW,
+            LLModel::LOD_IMPOSTOR,
+            LLModel::LOD_PHYSICS,
+        };
+        const S32 num_seq = (S32)(sizeof(lod_sequence) / sizeof(lod_sequence[0]));
+
+        bool past_loaded_lod = false;
+        for (S32 i = 0; i < num_seq; ++i)
+        {
+            const S32 next_lod = lod_sequence[i];
+            if (past_loaded_lod)
+            {
+                if (lod_mask & (1u << next_lod))
+                {
+                    if (next_lod == LLModel::LOD_PHYSICS)
+                    {
+                        mPhysicsSearchLOD = LLModel::LOD_PHYSICS;
+                        if (LLFloaterModelPreview* fmp = LLFloaterModelPreview::sInstance)
+                        {
+                            if (LLCtrlSelectionInterface* iface = fmp->childGetSelectionInterface("physics_lod_combo"))
+                            {
+                                S32 file_mode = iface->getItemCount() - 1;
+                                if (file_mode >= 0)
+                                {
+                                    iface->selectNthItem(file_mode);
+                                }
+                            }
+                        }
+                    }
+                    else if (LLComboBox* lod_combo = mFMP->findChild<LLComboBox>("lod_source_" + lod_name[next_lod]))
+                    {
+                        lod_combo->setCurrentByIndex(LOD_FROM_FILE);
+                        updateLodControls(next_lod);
+                    }
+                    LL_INFOS() << "Loading LOD " << next_lod << " from the same file: " << loaded_filename << LL_ENDL;
+                    mLoading = true;
+                    loadModel(loaded_filename, next_lod);
+                    break;
+                }
+            }
+            else if (next_lod == loaded_lod)
+            {
+                past_loaded_lod = true;
+            }
+        }
+    }
+    // </FS>
 }
 
 void LLModelPreview::resetPreviewTarget()
