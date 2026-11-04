@@ -196,10 +196,16 @@ namespace tut
     template<> template<>
     void control_group_t::test<7>()
     {
-        ensure("negative enum cannot read before table", LLControlGroup::typeEnumToString(static_cast<eControlType>(-1)).empty());
+        for (const auto* invalid : {"Integer", "NotBetween", ""})
+        {
+            const auto type = LLControlGroup::typeStringToEnum(invalid);
+            ensure_equals("unknown type uses a valid sentinel", type, TYPE_COUNT);
+            ensure("unknown type cannot index the table", LLControlGroup::typeEnumToString(type).empty());
+        }
         ensure("end sentinel cannot read beyond table", LLControlGroup::typeEnumToString(TYPE_COUNT).empty());
+        ensure_equals("valid type still parses", LLControlGroup::typeStringToEnum("S32"), TYPE_S32);
         ensure_equals("valid enum still converts", LLControlGroup::typeEnumToString(TYPE_S32), std::string("S32"));
-        ensure("invalid API declaration rejected", !mCG->declareControl("Invalid", static_cast<eControlType>(-1), LLSD(1),
+        ensure("invalid API declaration rejected", !mCG->declareControl("Invalid", TYPE_COUNT, LLSD(1),
             "Invalid type", SANITY_TYPE_NONE, LLSD(), "", LLControlVariable::PERSIST_ALWAYS));
         ensure("invalid API declaration not registered", !mCG->getControl("Invalid"));
     }

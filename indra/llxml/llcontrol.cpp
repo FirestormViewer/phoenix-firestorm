@@ -530,7 +530,10 @@ eControlType LLControlGroup::typeStringToEnum(const std::string& typestr)
     {
         if(mTypeString[i] == typestr) return (eControlType)i;
     }
-    return (eControlType)-1;
+    // <FS:Beq> Keep unknown types inside the enum's valid range for UBSan and optimizers.
+    // return (eControlType)-1;
+    return TYPE_COUNT;
+    // </FS:Beq>
 }
 
 eSanityType LLControlGroup::sanityTypeStringToEnum(const std::string& sanitystr)
@@ -544,8 +547,8 @@ eSanityType LLControlGroup::sanityTypeStringToEnum(const std::string& sanitystr)
 
 std::string LLControlGroup::typeEnumToString(eControlType typeenum)
 {
-    // <FS:Beq> Unknown serialized types map to -1; never index outside the table.
-    if (typeenum < 0 || typeenum >= TYPE_COUNT)
+    // <FS:Beq> Unknown serialized types map to TYPE_COUNT; never index outside the table.
+    if (typeenum >= TYPE_COUNT)
     {
         LL_WARNS("Settings") << "Invalid control type " << static_cast<int>(typeenum) << LL_ENDL;
         return std::string();
@@ -565,7 +568,7 @@ LLControlVariable* LLControlGroup::declareControl(const std::string& name, eCont
 // </FS:Zi>
 {
     // <FS:Beq> Reject invalid declarations before they can reach settings saving.
-    if (type < 0 || type >= TYPE_COUNT)
+    if (type >= TYPE_COUNT)
     {
         LL_WARNS("Settings") << "Invalid type for control " << name << LL_ENDL;
         return nullptr;
@@ -1194,7 +1197,7 @@ U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_v
         if (!existing_control || set_default_values)
         {
             const auto type = typeStringToEnum(control_map["Type"].asString());
-            if (type < 0 || type >= TYPE_COUNT)
+            if (type >= TYPE_COUNT)
             {
                 LL_WARNS("Settings") << "Skipping control " << name
                     << " with invalid Type in " << filename << LL_ENDL;

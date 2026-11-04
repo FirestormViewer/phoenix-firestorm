@@ -28,6 +28,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include <utility> // </FS:Beq> Move shared matrix ownership into a new draw batch.
+
 #include "llvovolume.h"
 
 #include <sstream>
@@ -5806,7 +5808,10 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
         info = draw_info;
 
         draw_vec.push_back(draw_info);
-        draw_info->mTextureMatrix = tex_mat;
+        // <FS:Beq> Transfer the last use of this local owner without an extra reference-count pair.
+        // draw_info->mTextureMatrix = tex_mat;
+        draw_info->mTextureMatrix = std::move(tex_mat);
+        // </FS:Beq>
         draw_info->mModelMatrix = model_mat;
 
         draw_info->mBump  = bump;
