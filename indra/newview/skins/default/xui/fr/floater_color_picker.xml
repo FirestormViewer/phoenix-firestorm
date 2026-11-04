@@ -19,7 +19,14 @@
 	<text name="s_val_text">Saturation :</text>
 	<text name="l_val_text">Lumière :</text>
 	<check_box label="Appliquer" name="apply_immediate"/>
-	<button label="Copier LSL" tool_tip="Copie la valeur de couleur dans un format LSL (&lt;r, g, b&gt;)." name="copy_lsl_btn"/>
+	<combo_box name="copy_color_combobox">
+		<combo_box.item label="Copier" name="copy_as"/>
+		<combo_box.item label="LSL" name="lsl_color"/>
+		<combo_box.item label="HEX" name="hex_color"/>
+		<combo_box.item label="RVB" name="rgb_color"/>
+		<combo_box.item label="TSL" name="hsl_color"/>
+		<combo_box.item label="CMJN" name="cmyk_color"/>
+	</combo_box>
 	<button label="Annuler" label_selected="Annuler" name="cancel_btn"/>
 	<text name="Current color:">^ Couleur actuelle ^</text>
 	<text name="(Drag below to save.)">Glissez pour enregistrer</text>

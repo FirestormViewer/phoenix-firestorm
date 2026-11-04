@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="queue" title="RÉINITIALISER LES PROGRÈS">
+<floater name="queue" title="Réinitialiser les progrès">
 	<floater.string name="Starting">
 		Lancement de [START] sur [COUNT] objets.
 	</floater.string>
@@ -20,6 +20,24 @@
 	</floater.string>
 	<floater.string name="LoadingObjInv">
 		Chargement de l’inventaire pour : [OBJECT_NAME]
+	</floater.string>
+	<floater.string name="SkippingIncompatibleScript">
+		Saute le script "[SCRIPT_NAME]" (impossible de recompiler vers [TARGET])
+	</floater.string>
+	<floater.string name="Deleting">
+		Supression en cours
+	</floater.string>
+	<floater.string name="SkippingPermissions">
+		Sauter : [OBJECT_NAME] (Permissions)
+	</floater.string>
+	<floater.string name="Compiling">
+		Compilation de "[OBJECT_NAME]"...
+	</floater.string>
+	<floater.string name="CompileSuccess">
+		Succés de la compilation de "[OBJECT_NAME]"
+	</floater.string>
+	<floater.string name="CompileFailure">
+		Échec de la compilation de "[OBJECT_NAME]" :
 	</floater.string>
 	<button label="Fermer" label_selected="Fermer" name="close"/>
 </floater>

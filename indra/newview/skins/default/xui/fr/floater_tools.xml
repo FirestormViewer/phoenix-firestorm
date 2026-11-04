@@ -502,9 +502,13 @@ Bas ↔ + bas
 			<spinner label="Restitution" name="Physics Restitution"/>
 		</panel>
 		<panel label="Contenu" name="Contents">
-			<button label="Nouveau script" label_selected="Nouveau script" name="button new script"/>
+			<flyout_button label="Nouveau script" label_selected="Nouveau script" name="button new script">
+				<flyout_button.item label="Nouveau script LSL" name="new_lsl_script"/>
+				<flyout_button.item label="Nouveau script Lua" name="new_lua_script"/>
+			</flyout_button>
 			<button label="Nouvelle notice" label_selected="Nouvelle notice" name="button new notecard"/>
 			<button label="Droits" name="button permissions"/>
+			<button label="Explorer dans l'IDE" label_selected="Arrêter d'explorer" name="button publish"/>
 			<button label="Rafraîchir" name="button refresh"/>
 			<button label="Réinit. scripts" name="btn_reset_scripts"/>
 			<filter_editor label="Saisir le texte du filtre" name="contents_filter"/>

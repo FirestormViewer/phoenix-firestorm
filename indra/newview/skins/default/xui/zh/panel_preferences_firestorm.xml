@@ -169,11 +169,10 @@
 		<panel label="指令碼編輯器" name="BuildTabScriptEditor">
 			<text name="text_box_scripting_font" width="155">指令碼編輯器字型：</text>
 			<combo_box name="FSScriptingFontName" tool_tip="LSL 指令碼編輯器中使用的字型名稱">
-				<combo_item name="Monospace" label="等寬" />
-				<combo_item name="Scripting" label="斜體" />
-				<combo_item name="Cascadia" label="新型等寬" />
-			</combo_box>
-			<combo_box name="FSScriptingFontSize" tool_tip="LSL 指令碼編輯器中使用的字型大小">
+			<text name="text_box_scripting_font_size">
+				字型大小：
+			</text>
+			<combo_box name="FSScriptingFontSize" tool_tip="LSL 指令碼編輯器中使用的字型大小"/>
 				<combo_item name="Monospace" label="等寬" />
 				<combo_item name="Scripting" label="斜體" />
 				<combo_item name="Cascadia" label="新型等寬" />

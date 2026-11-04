@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="object_weights" title="Avancé">
 	<floater.string name="nothing_selected" value="--"/>
-	<text name="selected_text" value="SÉLECTIONNÉ"/>
+	<text name="selected_text" value="Sélectionné"/>
 	<text name="objects" value="--"/>
 	<text name="objects_label" value="Objets"/>
 	<text name="prims" value="--"/>
 	<text name="prims_label" value="Prims"/>
-	<text name="weights_of_selected_text" value="POIDS DE LA SÉLECTION"/>
+	<text name="weights_of_selected_text" value="Poids de la sélection"/>
 	<text name="download" value="--"/>
 	<text name="download_label" value="Téléchargement"/>
 	<text name="physics" value="--"/>
@@ -15,7 +15,7 @@
 	<text name="server_label" value="Serveur"/>
 	<text name="display" value="--"/>
 	<text name="display_label" value="Affichage"/>
-	<text name="land_impacts_text" value="IMPACTS SUR LE TERRAIN"/>
+	<text name="land_impacts_text" value="Impacts sur le terrain"/>
 	<text name="selected" value="--"/>
 	<text name="selected_label" value="Sélectionné"/>
 	<text name="rezzed_on_land" value="--"/>
@@ -24,5 +24,21 @@
 	<text name="remaining_capacity_label" value="Capacité restante"/>
 	<text name="total_capacity" value="--"/>
 	<text name="total_capacity_label" value="Capacité totale"/>
+	<text name="rendering_info_text" value="Info de rendu"/>
+	<text name="lod_level" value="--"/>
+	<text name="lod_level_label" value="LOD (Niveau de détails)"/>
+	<text name="triangles_shown" value="--"/>
+	<text name="triangles_shown_label" value="Triangles affichés"/>
+	<text name="pixel_area" value="--"/>
+	<text name="pixel_area_label" value="Zone de pixels"/>
+	<text name="lod_info_text" value="Info LOD"/>
+	<text name="high_lod_tris" value="--"/>
+	<text name="high_lod_tris_label" value="Grand triangles"/>
+	<text name="medium_lod_tris" value="--"/>
+	<text name="medium_lod_tris_label" value="Triangles moyens"/>
+	<text name="low_lod_tris" value="--"/>
+	<text name="low_lod_tris_label" value="Triangles petits"/>
+	<text name="lowest_lod_tris" value="--"/>
+	<text name="lowest_lod_tris_label" value="Triangles plus petits"/>
 	<text name="help_SLURL" value="[secondlife:///app/help/object_weights Qu'est-ce que tout ça ?...]"/>
 </floater>
