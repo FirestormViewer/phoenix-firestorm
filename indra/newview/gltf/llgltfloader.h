@@ -35,6 +35,7 @@
 #include "lljointdata.h"
 #include "llmodelloader.h"
 
+using LODSuffixArray = std::array<std::string,LLModel::NUM_LODS>; // <FS/> configurable lod suffixes
 class LLGLTFLoader : public LLModelLoader
 {
   public:
@@ -80,20 +81,24 @@ class LLGLTFLoader : public LLModelLoader
     };
 
     LLGLTFLoader(std::string filename,
-                    S32                                               lod,
-                    LLModelLoader::load_callback_t                    load_cb,
-                    LLModelLoader::joint_lookup_func_t                joint_lookup_func,
-                    LLModelLoader::texture_load_func_t                texture_load_func,
-                    LLModelLoader::state_callback_t                   state_cb,
-                    void *                                            opaque_userdata,
-                    JointTransformMap &                               jointTransformMap,
-                    JointNameSet &                                    jointsFromNodes,
-                    std::map<std::string, std::string, std::less<>> & jointAliasMap,
-                    U32                                               maxJointsPerMesh,
-                    U32                                               modelLimit,
-                    U32                                               debugMode,
-                    std::vector<LLJointData>                          viewer_skeleton); //,
-                    //bool                                            preprocess );
+        S32                                               lod,
+        LLModelLoader::load_callback_t                    load_cb,
+        LLModelLoader::joint_lookup_func_t                joint_lookup_func,
+        LLModelLoader::texture_load_func_t                texture_load_func,
+        LLModelLoader::state_callback_t                   state_cb,
+        void *                                            opaque_userdata,
+        JointTransformMap &                               jointTransformMap,
+        JointNameSet &                                    jointsFromNodes,
+        std::map<std::string, std::string, std::less<>> & jointAliasMap,
+        U32                                               maxJointsPerMesh,
+        U32                                               modelLimit,
+        U32                                               debugMode,
+        // <FS> configrable lod suffix support
+        // std::vector<LLJointData>                       viewer_skeleton); //,
+        // //bool                                         preprocess );
+        std::vector<LLJointData>                          viewer_skeleton,
+        const LODSuffixArray&                             lod_suffix);
+        // </FS>
     virtual ~LLGLTFLoader();
 
     virtual bool OpenFile(const std::string &filename);
@@ -173,6 +178,7 @@ private:
 
     static size_t getSuffixPosition(const std::string& label);
     static std::string getLodlessLabel(const LL::GLTF::Node& mesh);
+    static LODSuffixArray sLODSuffix; // <FS/> mesh loader suffix configuration
 
     //    bool mPreprocessGLTF;
 

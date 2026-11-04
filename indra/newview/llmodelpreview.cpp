@@ -1031,20 +1031,20 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
     auto load_textures_cb =
             [preview_handle](LLImportMaterial& material, void* opaque) { return LLModelPreview::loadTextures(material, preview_handle); };
 
+    // <FS> allow LOD suffix configuration
+    std::array<std::string, LLModel::NUM_LODS> lod_suffix;
+    for (int i = 0; i < LLModel::NUM_LODS; i++)
+    {
+        lod_suffix[i] = gSavedSettings.getString(sSuffixVarNames[i]);
+    }
+    // </FS>
+
     // three possible file extensions, .dae .gltf .glb
     // check for .dae and if not then assume one of the .gl??
     std::string filename_lc(filename);
     LLStringUtil::toLower(filename_lc);
     if (std::string::npos != filename_lc.rfind(".dae"))
     {
-        // <FS> allow LOD suffix configuration
-        std::array<std::string, LLModel::NUM_LODS> lod_suffix;
-        for (int i = 0; i < LLModel::NUM_LODS; i++)
-        {
-            lod_suffix[i] = gSavedSettings.getString(sSuffixVarNames[i]);
-        }
-        // </FS>
-
         mModelLoader = new LLDAELoader(
             filename,
             lod,
@@ -1083,7 +1083,10 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
             LLSkinningUtil::getMaxJointCount(),
             gSavedSettings.getU32("ImporterModelLimit"),
             gSavedSettings.getU32("ImporterDebugMode"),
-            viewer_skeleton);
+            // <FS> allow LOD suffix configuration
+            //viewer_skeleton);
+            viewer_skeleton,
+            lod_suffix);
     }
 
     if (force_disable_slm)
