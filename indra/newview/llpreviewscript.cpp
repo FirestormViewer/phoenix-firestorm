@@ -1665,6 +1665,7 @@ void LLScriptEdCore::doSave(bool close_after_save, bool sync /*= true*/)
     }
     else
     {
+        enableSave(true); // <FS:Trish> FIRE-37113 Necessary while Lua skips the preprocessor
         if( mSaveCallback )
         {
             mSaveCallback( mUserdata, close_after_save, sync );
