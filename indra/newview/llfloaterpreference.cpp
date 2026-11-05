@@ -3956,7 +3956,7 @@ public:
     }
 
     // <FS:Ansariel> Send inventory item on autoresponse
-    /*virtual*/ void apply()
+    void apply() override
     {
         LLPanelPreference::apply();
         if (LLStartUp::getStartupState() == STATE_STARTED)
@@ -3967,7 +3967,7 @@ public:
     // </FS:Ansariel>
 
     // <FS:Ansariel> DebugLookAt checkbox status not working properly
-    /*virtual*/ bool postBuild()
+    bool postBuild() override
     {
         getChild<LLUICtrl>("showlookat")->setCommitCallback(boost::bind(&LLPanelPreferencePrivacy::onClickDebugLookAt, this, _2));
         gSavedPerAccountSettings.getControl("DebugLookAt")->getSignal()->connect(boost::bind(&LLPanelPreferencePrivacy::onChangeDebugLookAt, this));
@@ -3982,7 +3982,7 @@ public:
     // </FS:Ansariel>
 
     // <FS:Ansariel> Send inventory item on autoresponse
-    /* virtual */ void onOpen(const LLSD& key)
+    void onOpen(const LLSD& key) override
     {
         LLButton* clear_item_btn = getChild<LLButton>("clear_autoresponse_item");
         clear_item_btn->setEnabled(false);
