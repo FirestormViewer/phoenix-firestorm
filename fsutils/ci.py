@@ -15,6 +15,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -69,23 +70,22 @@ def release_type(event, branch, profiling=False):
     raise ValueError(f'Cannot determine release type for {event}: {branch}')
 
 
-def signing_required(channel, override=False):
-    return channel in ('Release', 'Beta') or override
+def signing_required(channel, override=False, platform='Windows'):
+    # Preserve Developer ID signing and notarization for every macOS CI build,
+    # including Nightly and manual builds. Windows has a narrower policy.
+    return platform == 'macOS' or channel in ('Release', 'Beta') or override
 
 
 def build(args):
     """Apply CI signing policy without changing the local packaging defaults."""
     env = dict(os.environ)
-    required = signing_required(env['FS_RELEASE_TYPE'], env.get('CI_SIGNING_REQUIRED') == 'true')
+    required = signing_required(env['FS_RELEASE_TYPE'], env.get('CI_SIGNING_REQUIRED') == 'true',
+                                env['RUNNER_OS'])
     env['CI_SIGNING_REQUIRED'] = 'true' if required else 'false'
     if env['RUNNER_OS'] in ('Windows', 'macOS'):
         if not required:
             for name in ('SIGNTOOL_PATH', 'CODESIGNING_DLIB_PATH', 'CODESIGNING_METADATA_PATH'):
                 env.pop(name, None)
-            if env['RUNNER_OS'] == 'macOS':
-                # The existing packager then uses ad hoc signing for Apple silicon.
-                env.pop('build_secrets_checkout', None)
-                env.pop('BUILD_SECRETS_CHECKOUT', None)
         elif env['RUNNER_OS'] == 'Windows':
             if not all(env.get(name) for name in (
                     'SIGNTOOL_PATH', 'CODESIGNING_DLIB_PATH', 'CODESIGNING_METADATA_PATH')):
@@ -132,7 +132,8 @@ def prepare(args):
                 version=version, build=build, cells=cells)
     write_json('ci-plan.json', plan)
     outputs(release_type=channel, fail_fast=channel not in ('Nightly', 'Manual', 'Profiling'),
-            signing_required=required, version=version, build=build, matrix={'include': cells})
+            signing_required=required, macos_signing_required=signing_required(channel, platform='macOS'),
+            version=version, build=build, matrix={'include': cells})
 
 
 def junit_summary(path):
@@ -215,6 +216,24 @@ def verify_windows_signatures(installer):
             raise ValueError(f'Windows signature verification failed: {path.name}') from error
 
 
+def verify_macos_signatures(installer):
+    # Verify the app actually shipped in the final DMG, after ditto and conversion.
+    with tempfile.TemporaryDirectory(prefix='firestorm-verify-') as temporary:
+        mount = Path(temporary) / 'mounted'
+        mount.mkdir()
+        subprocess.run(['hdiutil', 'attach', '-readonly', '-nobrowse', '-mountpoint', str(mount),
+                        str(installer.resolve())], check=True)
+        try:
+            apps = [path for path in mount.glob('*.app') if path.is_dir()]
+            if len(apps) != 1:
+                raise ValueError(f'Expected one app in macOS installer; found {len(apps)}')
+            subprocess.run(['codesign', '--verify', '--deep', '--strict', '--verbose=2',
+                            str(apps[0])], check=True)
+            subprocess.run(['xcrun', 'stapler', 'validate', str(apps[0])], check=True)
+        finally:
+            subprocess.run(['hdiutil', 'detach', str(mount)], check=True)
+
+
 def deliverables(args):
     patterns = {
         'Windows': 'build-*/newview/Release/*Setup.exe',
@@ -235,10 +254,14 @@ def deliverables(args):
     if len(files) != 1:
         raise ValueError(f'Expected one nonempty installer/archive; found {len(files)}')
     required = signing_required(os.environ.get('FS_RELEASE_TYPE'),
-                                os.environ.get('CI_SIGNING_REQUIRED') == 'true')
-    verified = os.environ['RUNNER_OS'] == 'Windows' and required
+                                os.environ.get('CI_SIGNING_REQUIRED') == 'true',
+                                os.environ['RUNNER_OS'])
+    verified = os.environ['RUNNER_OS'] in ('Windows', 'macOS') and required
     if verified:
-        verify_windows_signatures(files[0])
+        if os.environ['RUNNER_OS'] == 'macOS':
+            verify_macos_signatures(files[0])
+        else:
+            verify_windows_signatures(files[0])
     write_json('ci-results/deliverables.json', [
         dict(name=path.name, size=path.stat().st_size, sha256=file_digest(path),
              **({'signature_verified': True} if verified else {})) for path in files])
@@ -328,8 +351,10 @@ def check_results(plan, records, jobs, artifacts, matrix_result):
         detail = ', '.join(failed_steps) or state
         tests = result.get('tests') or {}
         deliverables = result.get('deliverables') or []
-        requires_signatures = cell['os'].startswith('windows') and signing_required(
-            plan['release_type'], plan.get('signing_required', False))
+        platform = ('macOS' if cell['os'].startswith('macos') else
+                    'Windows' if cell['os'].startswith('windows') else 'Linux')
+        requires_signatures = platform in ('Windows', 'macOS') and signing_required(
+            plan['release_type'], plan.get('signing_required', False), platform)
         signatures_ok = not requires_signatures or (
             bool(deliverables) and all(item.get('signature_verified') is True for item in deliverables))
         artifact = artifact_ids.get(str(result.get('artifact_id')), {})
@@ -346,7 +371,7 @@ def check_results(plan, records, jobs, artifacts, matrix_result):
             state, detail = 'passed', 'Build, tests and deliverable checks passed'
         elif state == 'success':
             state = 'failed'
-            detail = ('Required Windows signatures were not verified' if not signatures_ok
+            detail = (f'Required {platform} signatures were not verified' if not signatures_ok
                       else 'Incomplete results, tests or required artifact')
         elif state in ('failure', 'timed_out'):
             state = 'failed'

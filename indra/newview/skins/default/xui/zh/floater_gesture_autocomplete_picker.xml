@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="gesture_autocomplete_picker" title="選擇手勢">
+	<floater.string name="showing_count">
+		顯示 [COUNT] 項，共 [TOTAL] 項
+	</floater.string>
+	<scroll_list name="gesture_list">
+		<scroll_list.columns name="trigger" label="觸發鍵" />
+		<scroll_list.columns name="name" label="手勢" />
+	</scroll_list>
+</floater>

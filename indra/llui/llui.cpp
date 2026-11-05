@@ -429,6 +429,10 @@ void LLUI::glRectToScreen(const LLRect& gl, LLRect *screen)
 
 LLControlGroup& LLUI::getControlControlGroup (std::string_view controlname)
 {
+    // <FS:Trish> FIRE-37092: mSettingGroups is unordered, so prefer an actual setting over a prompt.
+    //                        old setting files from old users can carry such issues even after a rename.
+    LLControlGroup* ignores_match = nullptr;
+    
     for (settings_map_t::iterator itor = mSettingGroups.begin();
          itor != mSettingGroups.end(); ++itor)
     {
@@ -436,9 +440,23 @@ LLControlGroup& LLUI::getControlControlGroup (std::string_view controlname)
         if(control_group != NULL)
         {
             if (control_group->controlExists(controlname))
-                return *control_group;
+            {
+                if (itor->first == "ignores")
+                {
+                    ignores_match = control_group;
+                    continue;
+                }
+                return *control_group; // Non-ignores group takes priority
+            }
+            //    return *control_group;
         }
     }
+
+    if (ignores_match)
+    {
+        return *ignores_match;
+    }
+    // </FS:Trish>
 
     return *mSettingGroups["config"]; // default group
 }

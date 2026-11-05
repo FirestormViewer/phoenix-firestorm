@@ -160,7 +160,10 @@ void LLFace::init(LLDrawable* drawablep, LLViewerObject* objp)
 
     mReferenceIndex = -1;
 
-    mTextureMatrix = NULL;
+    // <FS:Beq> Release shared texture-matrix ownership.
+    // mTextureMatrix = NULL;
+    mTextureMatrix.reset();
+    // </FS:Beq>
     mDrawInfo = NULL;
 
     mFaceColor = LLColor4(1,0,0,1);
@@ -207,8 +210,11 @@ void LLFace::destroy()
 
     if (mTextureMatrix)
     {
-        delete mTextureMatrix;
-        mTextureMatrix = NULL;
+        // <FS:Beq> Outstanding draw batches retain the matrix until rebuilt.
+        // delete mTextureMatrix;
+        // mTextureMatrix = NULL;
+        mTextureMatrix.reset();
+        // </FS:Beq>
 
         if (mDrawablep)
         {

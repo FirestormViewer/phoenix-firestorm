@@ -22,4 +22,9 @@
 	<text name="lod_level_label" value="LOD（細節層次）" />
 	<text name="triangles_shown_label" value="顯示的三角形" />
 	<text name="pixel_area_label" value="像素面積" />
+	<text name="lod_info_text" value="LOD 資訊" />
+	<text name="high_lod_tris_label" value="高 LOD 三角形" />
+	<text name="medium_lod_tris_label" value="中 LOD 三角形" />
+	<text name="low_lod_tris_label" value="低 LOD 三角形" />
+	<text name="lowest_lod_tris_label" value="最低 LOD 三角形" />
 </floater>

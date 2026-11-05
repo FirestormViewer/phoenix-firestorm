@@ -150,6 +150,7 @@
 			<menu_item_call label="我的環境" name="my_environs" />
 			<menu_item_call label="個人光照" name="adjustment_tool" />
 			<menu_item_check label="凍結雲層" name="pause_clouds" />
+			<menu_item_check label="靜音/取消靜音" name="toggle_sound" />
 			<menu label="批次匯入" name="WL Bulk Import">
 				<menu_item_call label="時間..." name="WL Bulk Import Days" />
 				<menu_item_call label="天空..." name="WL Bulk Import Skies" />
@@ -210,12 +211,15 @@
 		<menu label="指令碼" name="Scripts">
 			<menu_item_call label="指令碼警告/錯誤…" name="Script Debug" />
 			<menu_item_call label="指令碼資訊 (計數器)" name="Script Info" />
-			<menu_item_call label="重新編譯指令碼（Mono）" name="Mono" />
-			<menu_item_call label="重新編譯指令碼（LSL）" name="LSL" />
+			<menu_item_call label="重新編譯 LSL 指令碼（Mono）" name="Mono" />
+			<menu_item_call label="重新編譯 LSL 指令碼（傳統 LSL）" name="LSL" />
+			<menu_item_call label="重新編譯 LSL 指令碼（LSL on Lua）" name="LSL on Luau" />
+			<menu_item_call label="重新編譯 Lua 指令碼" name="Lua" />
 			<menu_item_call label="重設指令碼" name="Reset Scripts" />
 			<menu_item_call label="運行指令碼" name="Set Scripts to Running" />
 			<menu_item_call label="停止指令碼" name="Set Scripts to Not Running" />
 			<menu_item_call label="從選擇中移除指令碼" name="Remove Scripts From Selection" />
+			<menu_item_check label="指令碼編輯器伺服器" name="Script Editor Server" />
 		</menu>
 		<menu label="尋路" name="Pathfinding">
 			<menu_item_call label="區域物件" name="pathfinding_linksets_menu_item" />
@@ -534,6 +538,7 @@
 			<menu_item_check label="彩現帶動畫的化身系統服裝" name="Render Avatar Cloth"/>
 			<menu_item_check label="當視訊記憶體已滿時減少繪製距離" name="Reduce Draw Distance when VRAM is full" />
 			<menu_item_check label="收集字型頂點緩衝區" name="Collect Font Vertex Buffers"/>
+			<menu_item_check label="收集UI圖像頂點緩衝區" name="Collect UI Image Vertex Buffers" />
 			<menu_item_check label="啟用著色器快取" name="Enable Shader Cache" />
 			<menu_item_call label="清除著色器快取" name="Shader Cache Clear" />
 		</menu>

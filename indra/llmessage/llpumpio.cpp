@@ -422,6 +422,11 @@ void LLPumpIO::pump()
 
 LLPumpIO::current_chain_t LLPumpIO::removeRunningChain(LLPumpIO::current_chain_t& run_chain)
 {
+    // <FS:Beq> Every removal path must rebuild before polling again: the old
+    // pollset still holds pointers to the client IDs freed below, including
+    // when a chain times out or its request becomes invalid.
+    mRebuildPollset = true;
+    // </FS:Beq>
     std::for_each(
                 (*run_chain).mDescriptors.begin(),
                 (*run_chain).mDescriptors.end(),

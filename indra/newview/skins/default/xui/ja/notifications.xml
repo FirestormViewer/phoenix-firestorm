@@ -5515,7 +5515,7 @@ http://opensimulator.org/wiki/inventory を使用して問題を修正できま�
 サーバーの負荷状況により、この一括変更が反映されるまでに時間がかかる場合があります。また、一部のフレンドがあなたのオンラインステータスを表示できないという一時的な問題が発生する可能性があります。
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ"/>
 	</notification>
-	<notification name="GlobalOnlineStatusToggle">
+	<notification name="GlobalOnlineStatusToggleInfo">
 		サーバーの負荷により、オンライン ステータスの表示を一括で切り替える場合、有効になるまでに時間がかかることがあります。しばらくお待ちください。
 		<usetemplate ignoretext="オンラインステータスの表示の切り替えには時間がかかる場合があることの通知" name="okignore" yestext="ＯＫ"/>
 	</notification>

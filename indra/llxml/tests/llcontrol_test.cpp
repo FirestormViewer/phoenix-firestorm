@@ -35,6 +35,7 @@
 #include "../test/lltut.h"
 #include <memory>
 #include <vector>
+#include <filesystem> // </FS:Beq> Validate the shipped rating-setting declarations.
 
 namespace tut
 {
@@ -150,5 +151,86 @@ namespace tut
         mCG->setU32("TestSetting", 13);
         ensure("listener fired on changed setting", mListenerFired);
     }
+
+    // <FS:Beq> Regress invalid control types reported by ASan during shutdown.
+    template<> template<>
+    void control_group_t::test<5>()
+    {
+        LLSD config;
+        for (const auto& name : {"BadInteger", "BadSavedType", "MissingType", "Valid"})
+        {
+            config[name]["Comment"] = "Type validation regression";
+            config[name]["Persist"] = 1;
+            config[name]["Value"] = 2;
+        }
+        config["BadInteger"]["Type"] = "Integer";
+        config["BadSavedType"]["Type"] = "NotBetween";
+        config["Valid"]["Type"] = "S32";
+        writeSettingsFile(config);
+        ensure_equals("only valid declaration loaded", mCG->loadFromFile(mTestConfigFile, true), U32(1));
+        ensure("invalid declaration absent", !mCG->getControl("BadInteger"));
+        ensure("missing type absent", !mCG->getControl("MissingType"));
+        mCG->setS32("Valid", 3);
+        ensure_equals("valid settings still saved", mCG->saveToFile(mTestConfigFile, true), U32(1));
+    }
+
+    template<> template<>
+    void control_group_t::test<6>()
+    {
+        mCG->declareS32("Rating", 1, "Previously malformed rating");
+        LLSD config;
+        config["Rating"]["Type"] = "NotBetween";
+        config["Rating"]["Comment"] = "Previously malformed rating";
+        config["Rating"]["Value"] = 2;
+        writeSettingsFile(config);
+        ensure_equals("existing control value recovered", mCG->loadFromFile(mTestConfigFile, false), U32(1));
+        ensure_equals("user rating retained", mCG->getS32("Rating"), S32(2));
+        ensure_equals("declared type retained", mCG->getControl("Rating")->type(), TYPE_S32);
+        ensure_equals("repaired setting saved", mCG->saveToFile(mTestConfigFile, true), U32(1));
+        LLSD saved;
+        llifstream input(mTestConfigFile);
+        LLSDSerialize::fromXML(saved, input);
+        ensure_equals("saved type repaired", saved["Rating"]["Type"].asString(), std::string("S32"));
+    }
+
+    template<> template<>
+    void control_group_t::test<7>()
+    {
+        for (const auto* invalid : {"Integer", "NotBetween", ""})
+        {
+            const auto type = LLControlGroup::typeStringToEnum(invalid);
+            ensure_equals("unknown type uses a valid sentinel", type, TYPE_COUNT);
+            ensure("unknown type cannot index the table", LLControlGroup::typeEnumToString(type).empty());
+        }
+        ensure("end sentinel cannot read beyond table", LLControlGroup::typeEnumToString(TYPE_COUNT).empty());
+        ensure_equals("valid type still parses", LLControlGroup::typeStringToEnum("S32"), TYPE_S32);
+        ensure_equals("valid enum still converts", LLControlGroup::typeEnumToString(TYPE_S32), std::string("S32"));
+        ensure("invalid API declaration rejected", !mCG->declareControl("Invalid", TYPE_COUNT, LLSD(1),
+            "Invalid type", SANITY_TYPE_NONE, LLSD(), "", LLControlVariable::PERSIST_ALWAYS));
+        ensure("invalid API declaration not registered", !mCG->getControl("Invalid"));
+    }
+
+    template<> template<>
+    void control_group_t::test<8>()
+    {
+        const auto source = std::filesystem::path(__FILE__).parent_path().parent_path().parent_path()
+            / "newview/app_settings/settings_per_account.xml";
+        LLSD shipped;
+        llifstream input(source.string());
+        ensure("shipped settings opened", input.is_open());
+        ensure("shipped settings parsed", LLSDSerialize::fromXML(shipped, input) != LLSDParser::PARSE_FAILURE);
+        LLSD config;
+        for (const auto& name : {"FSPrimfeedPhotoRating", "FlickrPhotoRating"})
+        {
+            ensure_equals("rating uses a supported integer type", shipped[name]["Type"].asString(), std::string("S32"));
+            config[name] = shipped[name];
+        }
+        writeSettingsFile(config);
+        ensure_equals("both rating declarations loaded", mCG->loadFromFile(mTestConfigFile, true), U32(2));
+        mCG->setS32("FSPrimfeedPhotoRating", 2);
+        mCG->setS32("FlickrPhotoRating", 2);
+        ensure_equals("both ratings survive shutdown saving", mCG->saveToFile(mTestConfigFile, true), U32(2));
+    }
+    // </FS:Beq>
 
 }

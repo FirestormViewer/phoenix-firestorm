@@ -32,6 +32,7 @@
 #include <iterator>
 
 #include "apr_pools.h"
+#include "apr_file_io.h" // </FS:Beq> Local pipe descriptors for pollset lifetime regression tests.
 
 #include "llbuffer.h"
 #include "llbufferstream.h"
@@ -843,6 +844,78 @@ namespace tut
     typedef test_group<PumpAndChainTestData>    PumpAndChainTestGroup;
     typedef PumpAndChainTestGroup::object       PumpAndChainTestObject;
     PumpAndChainTestGroup pumpAndChainTestGroup("pump_and_chain");
+
+    // <FS:Beq> A ready local pipe makes stale pollset client_data deterministic,
+    // without network sockets, sleeps or access to LLPumpIO private state.
+#if LL_LINUX
+    class PollsetLifetimePipe : public LLIOPipe
+    {
+    public:
+        apr_pollfd_t descriptor{};
+        bool expire = false, valid = true;
+        U32 calls = 0, errors = 0;
+        bool isValid() override { return valid; }
+        EStatus handleError(EStatus status, LLPumpIO*) override
+        {
+            ++errors;
+            return status;
+        }
+        EStatus process_impl(const LLChannelDescriptors&, buffer_ptr_t&, bool&, LLSD&, LLPumpIO* pump) override
+        {
+            ++calls;
+            pump->setConditional(this, &descriptor);
+            if (expire) pump->adjustTimeoutSeconds(-100.f);
+            return STATUS_BREAK;
+        }
+    };
+
+    template<> template<>
+    void PumpAndChainTestObject::test<2>()
+    {
+        set_test_name("expired chain retires its pollset before the next poll");
+        apr_file_t *reader = nullptr, *writer = nullptr;
+        ensure_equals("create local pipe", apr_file_pipe_create(&reader, &writer, mPool), APR_SUCCESS);
+        apr_size_t size = 1;
+        ensure_equals("make descriptor readable", apr_file_write(writer, "x", &size), APR_SUCCESS);
+        ensure_equals("wrote byte", size, apr_size_t(1));
+        auto* pipe = new PollsetLifetimePipe;
+        pipe->descriptor.p = mPool;
+        pipe->descriptor.desc_type = APR_POLL_FILE;
+        pipe->descriptor.desc.f = reader;
+        pipe->descriptor.reqevents = APR_POLLIN;
+        pipe->expire = true;
+        mChain.push_back(LLIOPipe::ptr_t(pipe));
+        ensure("add chain", mPump->addChain(mChain, 10.f));
+        mPump->pump(0); // Register descriptor and expire the initialized chain.
+        mPump->pump(0); // Build pollset, then remove expired chain.
+        ensure_equals("expiry handled", pipe->errors, U32(1));
+        mPump->pump(0); // Must not read the freed client ID in the old pollset.
+        ensure_equals("expired pipe never runs again", pipe->calls, U32(1));
+    }
+
+    template<> template<>
+    void PumpAndChainTestObject::test<3>()
+    {
+        set_test_name("invalid request chain also retires its pollset");
+        apr_file_t *reader = nullptr, *writer = nullptr;
+        ensure_equals("create local pipe", apr_file_pipe_create(&reader, &writer, mPool), APR_SUCCESS);
+        apr_size_t size = 1;
+        ensure_equals("make descriptor readable", apr_file_write(writer, "x", &size), APR_SUCCESS);
+        auto* pipe = new PollsetLifetimePipe;
+        pipe->descriptor.p = mPool;
+        pipe->descriptor.desc_type = APR_POLL_FILE;
+        pipe->descriptor.desc.f = reader;
+        pipe->descriptor.reqevents = APR_POLLIN;
+        mChain.push_back(LLIOPipe::ptr_t(pipe));
+        ensure("add request chain", mPump->addChain(mChain, 10.f, true));
+        mPump->pump(0);
+        pipe->valid = false;
+        mPump->pump(0);
+        mPump->pump(0);
+        ensure_equals("invalid pipe never runs again", pipe->calls, U32(1));
+    }
+#endif
+    // </FS:Beq>
 
     template<> template<>
     void PumpAndChainTestObject::test<1>()

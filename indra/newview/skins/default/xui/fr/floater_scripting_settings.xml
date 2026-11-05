@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_scripting_settings" title="Paramètres de développement de scripts">
+	<check_box label="Afficher les erreurs de script dans :" name="show_script_errors"/>
+	<radio_group name="show_location">
+		<radio_item label="Chat de proximité" name="0"/>
+		<radio_item label="Fenêtre séparée" name="1"/>
+	</radio_group>
+	<text name="tip">
+		Éditeur de scripts externe :
+	</text>
+	<button label="Parcourir..." name="browse_btn"/>
+	<check_box label="Intégration étroite avec VS Code" name="tight_integration"/>
+	<check_box label="Activer WebSocket Sync" name="websocket_sync_enable"/>
+	<text name="websocket_tip">
+		Port d'écoute WebSocket :
+	</text>
+	<check_box label="Transmettre erreurs script et info débogage aux clients WebSocket" name="websocket_forward_debug"/>
+	<button label="Fermer" name="close_btn"/>
+</floater>

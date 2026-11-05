@@ -27,6 +27,9 @@
 			<button label="踢出" name="member_eject" />
 			<button label="禁絕成員" name="member_ban" />
 			<button name="export_list" label="匯出" />
+			<text name="members_not_loaded">
+				成員尚未載入
+			</text>
 		</panel>
 		<panel label="角色" name="roles_sub_tab" tool_tip="角色">
 			<panel.string name="help_text">

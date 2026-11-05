@@ -27,6 +27,8 @@
 #ifndef LL_LLSPATIALPARTITION_H
 #define LL_LLSPATIALPARTITION_H
 
+#include <memory> // </FS:Beq> Share texture-animation matrices with faces.
+
 #define SG_MIN_DIST_RATIO 0.00001f
 
 #include "lldrawable.h"
@@ -112,7 +114,11 @@ public:
 
     const LLMatrix4* mSpecularMapMatrix = nullptr;
     const LLMatrix4* mNormalMapMatrix = nullptr;
-    const LLMatrix4* mTextureMatrix = nullptr;
+    // <FS:Beq> Keep the animated matrix alive until this batch is retired. Share the
+    // live matrix so animation updates remain visible without rebuilding.
+    // const LLMatrix4* mTextureMatrix = nullptr;
+    std::shared_ptr<const LLMatrix4> mTextureMatrix;
+    // </FS:Beq>
     const LLMatrix4* mModelMatrix = nullptr;
 
     LLPointer<LLVOAvatar> mAvatar = nullptr;

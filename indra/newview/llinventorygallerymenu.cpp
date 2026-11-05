@@ -1083,13 +1083,9 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
 
         if (can_list)
         {
-            // <FS:PP> Submenus grouping
-            // items.push_back(std::string("Marketplace Separator"));
-            // items.push_back(std::string("Marketplace Copy"));
-            // items.push_back(std::string("Marketplace Move"));
-            add_context_submenu_entry(items, INVENTORY_SUBMENU_MARKETPLACE, "Marketplace Copy");
-            add_context_submenu_entry(items, INVENTORY_SUBMENU_MARKETPLACE, "Marketplace Move");
-            // </FS:PP>
+            items.push_back(std::string("Marketplace Separator"));
+            items.push_back(std::string("Marketplace Copy"));
+            items.push_back(std::string("Marketplace Move"));
 
             if (!can_list_on_marketplace(selected_id))
             {

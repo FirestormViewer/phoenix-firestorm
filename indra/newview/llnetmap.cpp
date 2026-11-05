@@ -129,6 +129,7 @@ LLNetMap::LLNetMap (const Params & p)
     mPopupWorldPos(0.f, 0.f, 0.f),
     mMouseDown(0, 0),
     mPanning(false),
+    mCentering(false),
 //  mUpdateNow(false),
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
     mUpdateObjectImage(false),

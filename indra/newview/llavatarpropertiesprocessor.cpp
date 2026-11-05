@@ -360,6 +360,7 @@ void LLAvatarPropertiesProcessor::requestAvatarPropertiesCoro(std::string cap_ur
     avatar_data.profile_url = getProfileURL(avatar_id.asString());
     avatar_data.customer_type = result["customer_type"].asString();
     avatar_data.notes = result["notes"].asString();
+    avatar_data.allow_publish = result["allow_publish"].asBoolean(); // <FS:TJ/> UDP profiles
 
     avatar_data.flags = 0;
     // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
@@ -403,6 +404,7 @@ void LLAvatarPropertiesProcessor::requestAvatarPropertiesCoro(std::string cap_ur
         const LLSD& group_info = *it;
         LLAvatarData::LLGroupData group_data;
         group_data.group_powers = 0; // Not in use?
+        group_data.accept_notices = false; // Not in use?
         group_data.group_title = group_info["name"].asString(); // Missing data, not in use?
         group_data.group_id = group_info["id"].asUUID();
         group_data.group_name = group_info["name"].asString();
@@ -635,6 +637,7 @@ void LLAvatarPropertiesProcessor::processAvatarGroupsReply(LLMessageSystem* msg,
         LLAvatarGroups::LLGroupData group_data;
 
         msg->getU64(    _PREHASH_GroupData, _PREHASH_GroupPowers,   group_data.group_powers, i );
+        msg->getBOOL(   _PREHASH_GroupData, _PREHASH_AcceptNotices, group_data.accept_notices, i); // Not in use?
         msg->getStringFast(_PREHASH_GroupData, _PREHASH_GroupTitle, group_data.group_title, i );
         msg->getUUIDFast(  _PREHASH_GroupData, _PREHASH_GroupID,    group_data.group_id, i);
         msg->getStringFast(_PREHASH_GroupData, _PREHASH_GroupName,  group_data.group_name, i );

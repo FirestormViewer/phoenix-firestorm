@@ -416,6 +416,7 @@ public:
     void experienceChanged();
 
     void setObjectName(std::string name) { mObjectName = name; }
+    std::string getObjectName() const { return mObjectName; } // <FS:Trish/> FIRE-32374
 
     bool getIsModifiable() const { return mIsModifiable; } // Evaluated on load assert
 

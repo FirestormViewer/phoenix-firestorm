@@ -184,6 +184,9 @@ L&apos;initialisation de Marketplace a échoué en raison d&apos;une erreur syst
 &apos;[ERROR_CODE]&apos;
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="CannotPasteFolderIntoSelf">
+		Vous ne pouvez pas coller un dossier dans lui-même ni dans l'un de ses sous-dossiers.
+	</notification>
 	<notification name="InvalidKeystroke">
 Une entrée de touche non valide a été saisie.
 [REASON].
@@ -361,6 +364,35 @@ Si vous ne voulez plus que ce rôle dispose de ces pouvoirs, désactivez-les imm
 	<notification name="BanGroupMembersWarning">
 		Vous allez bannir [COUNT] membres du groupe.
 		<usetemplate ignoretext="Confirmer le bannissement de plusieurs membres du groupe" name="okcancelignore" notext="Annuler" yestext="Bannir"/>
+	</notification>
+	<notification name="FSBanFromAllGroups">
+Vous êtes sur le point de bannir [AVATAR_NAME] des [COUNT] groupes que vous pouvez gérer dans :
+
+[GROUPS]
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Bannir"/>
+	</notification>
+	<notification name="FSUnbanFromAllGroups">
+Vous êtes sur le point de lever le bannissement de [AVATAR_NAME] des [COUNT] groupes dont vous pouvez gérer les bannissements dans :
+
+[GROUPS]
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Débloquer"/>
+	</notification>
+	<notification name="FSBanFromAllGroupsStarted">
+		Mettre à jour les bannissements de groupe pour [AVATAR_NAME] dans [COUNT] groupes, un groupe à la fois. Un rapport suivra lorsque ce sera terminé..
+	</notification>
+	<notification name="FSBanFromAllGroupsReport">
+[AVATAR_NAME] a été banni dans [DONE] de [COUNT] groups.
+
+Banni dans : [SUCCEEDED]
+
+Échec dans : [FAILED]
+	</notification>
+	<notification name="FSUnbanFromAllGroupsReport">
+Le bannissement de [AVATAR_NAME] a été levé dans [DONE] de [COUNT] groupes.
+
+Repris dans : [SUCCEEDED]
+
+Échec dans : [FAILED]
 	</notification>
 	<notification name="GroupBanUserOnBanlist">
 		Il est possible qu’une invitation n’ait pas été envoyée à certains résidents, car ils sont bannis du groupe.
@@ -660,6 +692,10 @@ Voulez-vous arrêter le client et le relancer manuellement afin d'appliquer cett
 	</notification>
 	<notification name="SaveChanges">
 		Enregistrer les changements ?
+		<usetemplate canceltext="Annuler" name="yesnocancelbuttons" notext="Ne pas enregistrer" yestext="Enregistrer"/>
+	</notification>
+	<notification name="SaveScriptChanges">
+		Enregistrer les modifications dans [NAME]?
 		<usetemplate canceltext="Annuler" name="yesnocancelbuttons" notext="Ne pas enregistrer" yestext="Enregistrer"/>
 	</notification>
 	<notification name="DeleteNotecard">
@@ -2304,6 +2340,9 @@ Souhaitez-vous continuer ?
 		Impossible de modifier vos préférences afin d&apos;afficher le contenu [PREFERRED_MATURITY] à l&apos;heure actuelle. Le paramètre [ACTUAL_MATURITY] a été rétabli. Vous pouvez réessayer de modifier vos préférences en accédant à Moi &gt; Préférences &gt; Général, à partir de la barre de menus.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="RegionTPAccessBlocked_NotifyAdultsOnly">
+		La région que vous essayez de visiter est classée [REGIONMATURITY_CAP], qui n'est pas disponible pour votre type de compte.
+	</notification>
 	<notification name="LandClaimAccessBlocked">
 		Le niveau de contenu du terrain que vous essayez de revendiquer dépasse celui défini dans vos préférences actuelles. Vous pouvez modifier vos préférences en accédant à Moi &gt; Préférences &gt; Général.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -2904,6 +2943,15 @@ URL : [AUDIOURL]
 			<button name="WhitelistDomain" text="Whitelister"/>
 		</form>
 	</notification>
+	<notification name="ExternalEditorServerStarted">
+		Le serveur de l'éditeur externe a démarré sur le port [PORT].
+	</notification>
+	<notification name="ExternalEditorServerFailed">
+		Échec du démarrage du serveur de l'éditeur externe sur le port [PORT].
+	</notification>
+	<notification name="ExternalEditorServerStopped">
+		Le serveur de l'éditeur externe s'est arrêté.
+	</notification>
 	<notification name="Cancelled">
 		Annulé
 	</notification>
@@ -3169,7 +3217,7 @@ Les objets non transférables donnés au groupe ont été supprimés.
 	</notification>
 	<notification name="NotSafe">
 		Les dégâts sont autorisés sur ce terrain.
-Vous pouvez être blessé ici. Si vous décédez, vous serez téléporté à votre domicile.
+Vous pouvez être blessé ici. Si vous mourez, vous pourrez être téléporté vers votre lieu de résidence, le centre de téléportation de votre région ou le point d'atterrissage de votre parcelle.
 	</notification>
 	<notification name="NoFly">
 		Le vol est interdit dans cette zone.
@@ -5496,7 +5544,7 @@ la région &quot;[REGION]&quot; ?
 En raison de la charge du serveur, cette modification en masse peut prendre un certain temps avant de prendre effet et peut entraîner des problèmes temporaires pour certains amis qui voient votre statut en ligne.
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
-	<notification name="GlobalOnlineStatusToggle">
+	<notification name="GlobalOnlineStatusToggleInfo">
 		En raison de la charge du serveur, le basculement massif de la visibilité du statut en ligne peut prendre un certain temps avant d'être effectif. Veuillez être patient.
 		<usetemplate ignoretext="Informez-moi que le changement de visibilité du statut en ligne peut prendre un certain temps." name="okignore" yestext="OK"/>
 	</notification>

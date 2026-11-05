@@ -1661,14 +1661,16 @@ bool LLInventoryPanel::handleToolTip(S32 x, S32 y, MASK mask)
             LLUUID thumbnailUUID = vm_item_p->getThumbnailUUID();
             if (thumbnailUUID.isNull() && vm_item_p->getInventoryType() == LLInventoryType::IT_CATEGORY)
             {
-                LLViewerInventoryCategory* cat = static_cast<LLViewerInventoryCategory*>(vm_item_p->getInventoryObject());
+                LLInventoryObject* inv_object = vm_item_p->getInventoryObject();
+                LLViewerInventoryCategory* cat = inv_object ?
+                    gInventory.getCategory(inv_object->getLinkedUUID()) : nullptr;
                 if (cat && cat->getPreferredType() == LLFolderType::FT_OUTFIT)
                 {
                     LLInventoryModel::cat_array_t cats;
                     LLInventoryModel::item_array_t items;
                     // Not LLIsOfAssetType, because we allow links
                     LLIsTextureType f;
-                    gInventory.getDirectDescendentsOf(vm_item_p->getUUID(), cats, items, f);
+                    gInventory.getDirectDescendentsOf(cat->getUUID(), cats, items, f);
 
                     // Exactly one texture found => show the texture tooltip
                     if (1 == items.size())

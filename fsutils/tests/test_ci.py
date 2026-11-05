@@ -48,6 +48,8 @@ class Workspace(unittest.TestCase):
                                 steps=dict.fromkeys(ci.REQUIRED_STEPS, 'success'), artifact_id=str(index),
                                 tests={'state': 'passed', 'total': 5, 'passed': 5, 'failed': 0, 'skipped': 0},
                                 deliverables=[{'name': 'Phoenix-test.dmg', 'size': 5, 'sha256': 'unused'}]))
+            if cell['os'].startswith('macos'):
+                records[-1]['deliverables'][0]['signature_verified'] = True
             jobs.append({'name': 'Build / ' + ci.cell_key(cell), 'conclusion': 'success',
                          'html_url': 'https://github.com/example/job', 'steps': []})
             artifacts.append({'id': index, 'name': ci.artifact_name('Nightly', cell),
@@ -244,7 +246,9 @@ class CIWorkflow(Workspace):
         with self.assertRaises(ValueError):
             ci.deliverables(None)
         (root / 'viewer.dmg').write_bytes(b'installer')
-        ci.deliverables(None)
+        with patch.object(ci, 'verify_macos_signatures') as verify:
+            ci.deliverables(None)
+        verify.assert_called_once_with(root / 'viewer.dmg')
         self.assertEqual(ci.read_json('ci-results/deliverables.json')[0]['name'], 'viewer.dmg')
 
     def test_linux_runner_temp_archive_is_staged_for_upload(self):
@@ -343,6 +347,7 @@ class CISigning(Workspace):
             with self.subTest(channel=channel):
                 self.assertEqual(ci.signing_required(channel), channel in ('Release', 'Beta'))
                 self.assertTrue(ci.signing_required(channel, override=True))
+                self.assertTrue(ci.signing_required(channel, platform='macOS'))
 
     def test_prepare_records_the_same_signing_policy_for_builds_and_gate(self):
         version = Path('indra/newview/VIEWER_VERSION_FS.txt')
@@ -362,23 +367,22 @@ class CISigning(Workspace):
                 self.assertEqual(ci.read_json('ci-plan.json')['signing_required'], expected)
                 self.assertIn('signing_required=' + str(expected).lower(),
                               Path(os.environ['GITHUB_OUTPUT']).read_text().splitlines())
+                self.assertIn('macos_signing_required=true',
+                              Path(os.environ['GITHUB_OUTPUT']).read_text().splitlines())
 
-    def test_unsigned_ci_builds_ignore_inherited_signing_configuration(self):
-        for platform in ('Windows', 'macOS'):
-            for channel in ('Nightly', 'Manual', 'Profiling', 'Alpha'):
-                os.environ.update(RUNNER_OS=platform, FS_RELEASE_TYPE=channel,
-                                  CI_SIGNING_REQUIRED='false', SIGNTOOL_PATH='signtool',
-                                  CODESIGNING_DLIB_PATH='signing.dll', CODESIGNING_METADATA_PATH='metadata.json',
-                                  build_secrets_checkout='signing')
-                with self.subTest(platform=platform, channel=channel), patch.object(ci.subprocess, 'run') as run:
-                    ci.build(None)
-                    env = run.call_args.kwargs['env']
-                    self.assertEqual(env['CI_SIGNING_REQUIRED'], 'false')
-                    for name in ('SIGNTOOL_PATH', 'CODESIGNING_DLIB_PATH', 'CODESIGNING_METADATA_PATH'):
-                        self.assertNotIn(name, env)
-                    if platform == 'macOS':
-                        self.assertNotIn('build_secrets_checkout', {key.lower() for key in env})
-                    self.assertEqual(os.environ['SIGNTOOL_PATH'], 'signtool')
+    def test_unsigned_windows_builds_ignore_inherited_signing_configuration(self):
+        for channel in ('Nightly', 'Manual', 'Profiling', 'Alpha'):
+            os.environ.update(RUNNER_OS='Windows', FS_RELEASE_TYPE=channel,
+                              CI_SIGNING_REQUIRED='false', SIGNTOOL_PATH='signtool',
+                              CODESIGNING_DLIB_PATH='signing.dll', CODESIGNING_METADATA_PATH='metadata.json',
+                              build_secrets_checkout='signing')
+            with self.subTest(channel=channel), patch.object(ci.subprocess, 'run') as run:
+                ci.build(None)
+                env = run.call_args.kwargs['env']
+                self.assertEqual(env['CI_SIGNING_REQUIRED'], 'false')
+                for name in ('SIGNTOOL_PATH', 'CODESIGNING_DLIB_PATH', 'CODESIGNING_METADATA_PATH'):
+                    self.assertNotIn(name, env)
+                self.assertEqual(os.environ['SIGNTOOL_PATH'], 'signtool')
 
     def test_required_windows_builds_reject_missing_configuration_before_build(self):
         for channel in ('Release', 'Beta', 'Manual'):
@@ -390,10 +394,12 @@ class CISigning(Workspace):
                 run.assert_not_called()
 
     def test_required_macos_build_cannot_fall_back_to_ad_hoc_signing(self):
-        os.environ.update(RUNNER_OS='macOS', FS_RELEASE_TYPE='Release', CI_SIGNING_REQUIRED='false')
-        with patch.object(ci.subprocess, 'run') as run, self.assertRaises(ValueError):
-            ci.build(None)
-        run.assert_not_called()
+        for channel in ci.CHANNELS:
+            os.environ.update(RUNNER_OS='macOS', FS_RELEASE_TYPE=channel, CI_SIGNING_REQUIRED='false')
+            with self.subTest(channel=channel), patch.object(ci.subprocess, 'run') as run:
+                with self.assertRaises(ValueError):
+                    ci.build(None)
+                run.assert_not_called()
 
     def test_required_ci_builds_preserve_signing_configuration(self):
         secrets = Path('signing/code-signing-osx')
@@ -401,7 +407,10 @@ class CISigning(Workspace):
         (secrets / 'password.txt').write_text('fixture')
         (secrets / 'notarize_creds.sh').write_text('fixture')
         for platform in ('Windows', 'macOS'):
-            for channel, override in (('Release', 'false'), ('Beta', 'false'), ('Manual', 'true')):
+            policies = [('Release', 'false'), ('Beta', 'false'), ('Manual', 'true')]
+            if platform == 'macOS':
+                policies.extend((channel, 'false') for channel in ('Nightly', 'Alpha', 'Manual', 'Profiling'))
+            for channel, override in policies:
                 os.environ.update(RUNNER_OS=platform, FS_RELEASE_TYPE=channel,
                                   CI_SIGNING_REQUIRED=override, SIGNTOOL_PATH='signtool',
                                   CODESIGNING_DLIB_PATH='signing.dll', CODESIGNING_METADATA_PATH='metadata.json',
@@ -482,6 +491,57 @@ class CISigning(Workspace):
                 self.assertIn('Required Windows signatures were not verified', ci.report_text(gate))
                 records[0]['deliverables'][0]['signature_verified'] = True
                 self.assertTrue(ci.check_results(plan, records, jobs, artifacts, 'success')['passed'])
+
+    def test_gate_rejects_unverified_macos_artifacts_on_every_channel(self):
+        for channel in ci.CHANNELS:
+            plan, records, jobs, artifacts = self.fixture([{'os': 'macos-15', 'grid': 'sl', 'variant': 'avx'}])
+            plan.update(release_type=channel, signing_required=False)
+            artifacts[0]['name'] = ci.artifact_name(channel, plan['cells'][0])
+            records[0]['deliverables'][0].pop('signature_verified')
+            with self.subTest(channel=channel):
+                gate = ci.check_results(plan, records, jobs, artifacts, 'success')
+                self.assertFalse(gate['passed'])
+                self.assertIn('Required macOS signatures were not verified', ci.report_text(gate))
+                records[0]['deliverables'][0]['signature_verified'] = True
+                self.assertTrue(ci.check_results(plan, records, jobs, artifacts, 'success')['passed'])
+
+    def test_macos_deliverables_verify_shipped_app_and_always_detach(self):
+        os.environ.update(RUNNER_OS='macOS', FS_RELEASE_TYPE='Nightly', CI_SIGNING_REQUIRED='false')
+        root = Path('build-darwin-universal/newview')
+        root.mkdir(parents=True)
+        installer = root / 'Phoenix-test.dmg'
+        installer.write_bytes(b'fixture')
+        for failure in (None, 'attach', 'codesign', 'stapler', 'missing-app', 'extra-app', 'detach'):
+            report = Path('ci-results/deliverables.json')
+            report.unlink(missing_ok=True)
+            def command(args, **kwargs):
+                self.assertTrue(kwargs['check'])
+                phase = args[1] if args[0] == 'hdiutil' else args[0]
+                if phase == failure or (args[:2] == ['xcrun', 'stapler'] and failure == 'stapler'):
+                    raise subprocess.CalledProcessError(1, args)
+                if phase == 'attach':
+                    mount = Path(args[args.index('-mountpoint') + 1])
+                    if failure != 'missing-app':
+                        (mount / 'Firestorm Nightly.app').mkdir()
+                    if failure == 'extra-app':
+                        (mount / 'Other.app').mkdir()
+            with self.subTest(failure=failure), patch.object(ci.subprocess, 'run', side_effect=command) as run:
+                if failure:
+                    with self.assertRaises((ValueError, subprocess.CalledProcessError)):
+                        ci.deliverables(None)
+                    self.assertFalse(report.exists())
+                else:
+                    ci.deliverables(None)
+                    self.assertTrue(ci.read_json(report)[0]['signature_verified'])
+                    commands = [call.args[0] for call in run.call_args_list]
+                    self.assertEqual(commands[0][-1], str(installer.resolve()))
+                    self.assertIn('-readonly', commands[0])
+                    self.assertEqual(commands[1][:-1],
+                                     ['codesign', '--verify', '--deep', '--strict', '--verbose=2'])
+                    self.assertEqual(commands[2][:-1], ['xcrun', 'stapler', 'validate'])
+                    self.assertEqual(commands[1][-1], commands[2][-1])
+                if failure != 'attach':
+                    self.assertEqual(run.call_args.args[0][:2], ['hdiutil', 'detach'])
 
 
 class Signing(Workspace):

@@ -92,8 +92,8 @@
 			</combo_box>
 			<slider label="化身最大複雜度" name="IndirectMaxComplexity" tool_tip="控制在什麼時候將視覺複雜的頭貼繪製成 JellyDoll（果凍娃娃）。" />
 			<slider label="最大3D化身數" name="IndirectMaxNonImpostors" />
-			<slider label="後期處理品質" name="RenderPostProcess" />
-			<text name="PostProcessText">低</text>
+			<slider label="輝光品質" name="GlowResolution" />
+			<text name="GlowResolutionText">低</text>
 			<slider label="附近最大光源數：" name="MaxLights" />
 			<slider label="化身物理特性" name="AvatarPhysicsDetail" />
 			<slider label="曝光" name="RenderExposure" />
@@ -103,7 +103,8 @@
 			<slider label="  樹木" name="TreeMeshDetail" />
 			<slider label="  化身" name="AvatarMeshDetail" />
 			<slider label="  地形" name="TerrainMeshDetail" />
-			<slider label="  天空" name="SkyMeshDetail" />
+			<slider label="  後期處理品質" name="RenderPostProcess" />
+			<text name="PostProcessText">低</text>
 			<text name="Presets_Label">
 				預設值:
 			</text>
@@ -112,7 +113,16 @@
 			<button label="刪除" name="PrefDeleteButton" />
 		</panel>
 		<panel label="硬體設定" name="Hardware Settings">
-			<check_box label="各向異性過濾（啟用後速度變慢）" name="ani" tool_tip="將影格率同步到顯示器的更新率，可能會導致增加的卡頓和輸入延遲" />
+			<text name="af strength label">
+				各向異性過濾：
+			</text>
+			<combo_box label="各向異性過濾" name="anisotropic_filter">
+				<combo_box.item label="關閉" name="disabled" />
+				<combo_box.item label="2x" name="2x" />
+				<combo_box.item label="4x" name="4x" />
+				<combo_box.item label="8x" name="8x" />
+				<combo_box.item label="16x" name="16x" />
+			</combo_box>
 			<text name="tc label">
 				啟用有損紋理壓縮（S3TC）:
 			</text>

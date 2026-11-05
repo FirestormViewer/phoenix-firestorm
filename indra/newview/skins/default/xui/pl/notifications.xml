@@ -616,6 +616,10 @@ Czy chcesz zamknąć przeglądarkę i uruchomić ją ponownie, ręcznie, aby zas
 		Zapisać zmiany?
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Nie zapisuj" yestext="Zapisz"/>
 	</notification>
+	<notification name="SaveScriptChanges">
+		Zapisać zmiany w [NAME]?
+		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Nie zapisuj" yestext="Zapisz"/>
+	</notification>
 	<notification name="DeleteNotecard">
 		Czy na pewno chcesz usunąć tą notkę?
 		<usetemplate ignoretext="Potwierdź usuwanie notki" name="okcancelignore" notext="Anuluj" />
@@ -5398,7 +5402,7 @@ Czy chcesz autoryzować [APP_NAME] do przesyłania zdjęć na Flickr?
 Ze względu na obciążenie serwera taka masowa zmiana może chwilę potrwać i tymczasowo powodować problemy z wyświetlaniem Twojego statusu online u niektórych znajomych.
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
-	<notification name="GlobalOnlineStatusToggle">
+	<notification name="GlobalOnlineStatusToggleInfo">
 		Ze względu na obciążenie serwera masowa zmiana widoczności online może zająć trochę czasu. Prosimy o cierpliwość.
 		<usetemplate ignoretext="Informuj mnie, że masowa zmiana widoczności online może zająć trochę czasu" name="okignore" />
 	</notification>

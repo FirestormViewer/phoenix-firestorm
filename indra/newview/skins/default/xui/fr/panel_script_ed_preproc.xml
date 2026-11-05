@@ -61,5 +61,9 @@
 	<combo_box label="Insérer..." name="Insert..."/>
 	<text name="line_col" value="Ligne 0, Colonne 0"/>
 	<button label="Éditer..." name="edit_btn_2"/>
-	<button label="Sauvegarder" label_selected="Conserver" name="save_btn_2"/>
+	<button label="Enregistrer" label_selected="Conserver" name="save_btn_2"/>
+	<combo_box name="compile_target">
+		<combo_box.item label="LSL sur Mono" name="compile_target_mono"/>
+		<combo_box.item label="LSL sur Lua" name="compile_target_lsl_luau"/>
+	</combo_box>
 </panel>

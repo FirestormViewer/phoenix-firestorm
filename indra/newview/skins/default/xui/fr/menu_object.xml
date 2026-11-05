@@ -16,6 +16,8 @@
 		<menu_item_check label="Modifier les parties liées" name="Object Edit Linked Parts"/>
 		<menu_item_call label="Compiler (Mono)" name="Mono"/>
 		<menu_item_call label="Compiler (LSL)" name="LSL"/>
+		<menu_item_call label="Compiler (Lua)" name="Lua"/>
+		<menu_item_call label="Compiler (LSL sur Lua)" name="LSL on Luau"/>
 		<menu_item_call label="Réinitialiser les scripts" name="Object Reset Scripts"/>
 		<menu_item_call label="Exécuter les scripts" name="Object Set Scripts to Running"/>
 		<menu_item_call label="Arrêter les scripts" name="Object Set Scripts to Not Running"/>

@@ -366,6 +366,13 @@
 				<text name="Anisotropic" tool_tip="提高在角度觀察時紋理的銳度和清晰度，使地面、道路和牆壁等表面看起來更加清晰。雖然增強了視覺質量，但啟用各向異性過濾可能會略微影響效能，尤其是在低端圖形硬體上。">
 					各向異性過濾
 				</text>
+				<combo_box name="Anisotropic_level">
+					<combo_box.item label="關閉" name="disabled" />
+					<combo_box.item label="2x" name="2x" />
+					<combo_box.item label="4x" name="4x" />
+					<combo_box.item label="8x" name="8x" />
+					<combo_box.item label="16x" name="16x" />
+				</combo_box>
 				<text name="T_Texture_Bumpiness" tool_tip="控制法線和凹凸貼圖的強度與解析度，這些貼圖可在不增加多邊形數量的情況下為表面添加紋理細節。較高的設定能增強表面細節，而較低的設定則能透過減少視覺複雜度來提升效能。">
 					紋理凹凸度
 				</text>

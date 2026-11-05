@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Voix" name="voice_panel">
+	<slider label="Chat vocal" name="Voice Volume"/>
+	<check_box label="Activé" name="enable_voice_check"/>
+	<text name="noise_suppression_label">
+		Réduction du bruit du micro
+	</text>
+	<combo_box name="noise_suppression_combo">
+		<item label="Off" name="noise_suppression_none"/>
+		<item label="Faible" name="noise_suppression_low"/>
+		<item label="Modérée" name="noise_suppression_moderate"/>
+		<item label="Élevée" name="noise_suppression_high"/>
+		<item label="Max" name="noise_suppression_max"/>
+	</combo_box>
+	<text name="Listen from">
+		Écouter la voix de
+	</text>
+	<combo_box name="ear_location_combo">
+		<item label="Position de la caméra" name="camera_position"/>
+		<item label="Position de l'avatar" name="avatar_position"/>
+	</combo_box>
+	<check_box label="Faire bouger les lèvres de l'avatar lorsqu'il parle" name="enable_lip_sync"/>
+	<check_box label="Activer/désactiver la voix avec le bouton de la barre d'outils" name="push_to_talk_toggle_check" tool_tip="En mode « bascule », appuyez UNE FOIS sur la touche de déclenchement puis relâchez-la pour activer ou désactiver votre microphone. En dehors du mode « bascule », le microphone ne diffuse votre voix que tant que vous maintenez la touche de déclenchement enfoncée."/>
+	<check_box name="gesture_audio_play_btn" tool_tip="Cochez cette case pour entendre les sons associés aux gestes" label="Jouer les sons des gestes"/>
+	<check_box tool_tip="Cochez cette case pour activer la suppression de l'écho vocal" label="Annulation de l'écho" name="enable_echo_cancellation"/>
+	<check_box tool_tip="Cochez cette case pour activer le contrôle automatique du gain" label="Contrôle automatique du gain" name="voice_automatic_gain_control"/>
+	<check_box tool_tip="Cochez cette case pour afficher le point indicateur de voix au-dessus des avatars" label="Afficher l'indicateur de voix au-dessus des avatars" name="voice_dot_visualizer"/>
+	<button label="Périphériques entrée/sortie voix" name="device_settings_btn"/>
+</panel>

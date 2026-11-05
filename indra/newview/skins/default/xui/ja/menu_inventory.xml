@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Popup">
+	<menu_item_call label="出品リストを作成" name="Marketplace Create Listing"/>
+	<menu_item_call label="出品リストを関連付け" name="Marketplace Associate Listing"/>
+	<menu_item_call label="出品リストを取得 (更新)" name="Marketplace Get Listing"/>
+	<menu_item_call label="エラーを確認" name="Marketplace Check Listing"/>
+	<menu_item_call label="出品リストを編集" name="Marketplace Edit Listing"/>
+	<menu_item_call label="出品リスト" name="Marketplace List"/>
+	<menu_item_call label="出品リストから取り除く" name="Marketplace Unlist"/>
+	<menu_item_call label="有効化" name="Marketplace Activate"/>
+	<menu_item_call label="無効化" name="Marketplace Deactivate"/>
 	<menu_item_call label="共有" name="Share"/>
 	<menu_item_call label="開く" name="Task Open"/>
 	<menu_item_call label="再生" name="Task Play"/>
@@ -130,18 +139,7 @@
 		<menu_item_check label="モデルのアップロード" name="Model uploads"/>
 		<menu_item_check label="ＰＢＲマテリアルのアップロード" name="PBR uploads"/>
 	</menu>
-	<menu label="マーケットプレイス" name="Marketplace">
-		<menu_item_call label="出品リストを作成" name="Marketplace Create Listing"/>
-		<menu_item_call label="出品リストを関連付け" name="Marketplace Associate Listing"/>
-		<menu_item_call label="出品リストを取得 (更新)" name="Marketplace Get Listing"/>
-		<menu_item_call label="エラーを確認" name="Marketplace Check Listing"/>
-		<menu_item_call label="出品リストを編集" name="Marketplace Edit Listing"/>
-		<menu_item_call label="出品リスト" name="Marketplace List"/>
-		<menu_item_call label="出品リストから取り除く" name="Marketplace Unlist"/>
-		<menu_item_call label="有効化" name="Marketplace Activate"/>
-		<menu_item_call label="無効化" name="Marketplace Deactivate"/>
-		<menu_item_call label="マーケットプレイスの出品リストにコピー" name="Marketplace Copy"/>
-		<menu_item_call label="マーケットプレイスの出品リストに移動" name="Marketplace Move"/>
-	</menu>
+	<menu_item_call label="マーケットプレイスの出品リストにコピー" name="Marketplace Copy"/>
+	<menu_item_call label="マーケットプレイスの出品リストに移動" name="Marketplace Move"/>
 	<menu_item_call label="－オプション無し－" name="--no options--"/>
 </menu>

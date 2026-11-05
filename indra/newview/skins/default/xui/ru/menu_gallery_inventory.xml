@@ -68,9 +68,7 @@
 		<menu_item_check label="Загрузки модели" name="Model uploads"/>
 		<menu_item_check label="Загрузки PBR материала" name="PBR uploads"/>
 	</menu>
-	<menu label="Marketplace" name="Marketplace">
-		<menu_item_call label="Копировать в списки торговой площадки" name="Marketplace Copy"/>
-		<menu_item_call label="Перейти в списки торговой площадки" name="Marketplace Move"/>
-	</menu>
+	<menu_item_call label="Копировать в списки торговой площадки" name="Marketplace Copy"/>
+	<menu_item_call label="Перейти в списки торговой площадки" name="Marketplace Move"/>
 	<menu_item_call label="--no options--" name="--no options--" />
 </context_menu>

@@ -43,7 +43,10 @@
 		</pie_menu>
 		<pie_slice label="Renvoyer" name="Return..."/>
 		<pie_menu label="Plus &gt;" name="Object Pie More 2">
-			<pie_slice label="Actualiser les textures" name="Texture Refresh"/>
+			<pie_menu name="ResetMenu" label="Réinit. &gt;">
+				<pie_slice label="Actualiser textures" name="Texture Refresh"/>
+				<pie_slice label="Squelette" name="Reset Skeleton"/>
+			</pie_menu>
 			<pie_menu name="DerenderMenu" label="Faire disparaitre &gt;">
 				<pie_slice label="Blacklister" name="DerenderPermanent"/>
 				<pie_slice label="Temporairement" name="Derender"/>
@@ -61,9 +64,13 @@
 				<pie_slice label="Ignorer" name="Object Mute"/>
 				<pie_slice label="Prop. des Particules" name="Mute Particle"/>
 			</pie_menu>
+			<pie_menu label="Compile &gt;" name="CompileScriptsMenu">
+				<pie_slice label="Mono" name="CompileMono"/>
+				<pie_slice label="LSL" name="CompileLSL"/>
+				<pie_slice label="Lua" name="CompileLua"/>
+				<pie_slice label="LSL on Lua" name="CompileLSLonLuau"/>
+			</pie_menu>
 			<pie_menu label="Scripts &gt;" name="ScriptsMenu">
-				<pie_slice label="Compiler (Mono)" name="CompileMono"/>
-				<pie_slice label="Compiler (LSL)" name="CompileLSL"/>
 				<pie_slice label="Réinitialiser" name="Object Reset Scripts"/>
 				<pie_slice label="Exécuter" name="Object Set Scripts to Running"/>
 				<pie_slice label="Arrêter" name="Object Set Scripts to Not Running"/>

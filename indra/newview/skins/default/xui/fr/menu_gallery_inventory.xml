@@ -61,9 +61,7 @@
 		<menu_item_check label="Le chargement de modèles" name="Model uploads"/>
 		<menu_item_check label="Chargements de matériaux PBR" name="PBR uploads"/>
 	</menu>
-	<menu label="Marketplace" name="Marketplace">
-		<menu_item_call label="Copier dans la liste de Marketplace" name="Marketplace Copy"/>
-		<menu_item_call label="Déplacer vers la liste de Marketplace" name="Marketplace Move"/>
-	</menu>
+	<menu_item_call label="Copier dans la liste de Marketplace" name="Marketplace Copy"/>
+	<menu_item_call label="Déplacer vers la liste de Marketplace" name="Marketplace Move"/>
 	<menu_item_call label="--pas d'options--" name="--no options--"/>
 </context_menu>

@@ -173,7 +173,7 @@ Report capture(const fs::path& dump, const std::string& version, const std::stri
     fs::create_directory(report.directory);
     fs::permissions(report.directory, fs::perms::owner_all);
     report.database = database;
-    report.product = "Firestorm-Releasex64";
+    report.product = FS_CRASH_PRODUCT;
     report.version = version;
     report.timestamp = now();
     json::object context;

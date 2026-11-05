@@ -16,13 +16,13 @@ Name=Firestorm Viewer\n\
 GenericName=Firestorm Viewer\n\
 Comment=Client for accessing 3D virtual worlds\n\
 Path=${installation_prefix}\n\
-Exec=${installation_prefix}/secondlife\n\
+Exec=${installation_prefix}/firestorm\n\
 Icon=${installation_prefix}/firestorm_icon.png\n\
 Terminal=false\n\
 Type=Application\n\
 Categories=Game;Simulation;\n\
 StartupNotify=true\n\
-StartupWMClass="com.secondlife.indra.viewer"\n\
+StartupWMClass="org.firestormviewer.firestorm"\n\
 X-Desktop-File-Install-Version=3.0"
 
     echo " - Installing menu entries in ${desktop_entries_dir}"

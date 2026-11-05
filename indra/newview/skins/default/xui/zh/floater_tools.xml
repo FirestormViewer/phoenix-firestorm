@@ -490,9 +490,13 @@
 			<spinner label="彈性" name="Physics Restitution" />
 		</panel>
 		<panel label="內容" name="Contents">
-			<button label="新指令碼" label_selected="新指令碼" name="button new script" />
-			<button label="新記事卡" label_selected="新記事卡" name="button new notecard" />
+			<flyout_button label="新指令碼" label_selected="新指令碼" name="button new script">
+				<flyout_button.item label="新 LSL 指令碼" name="new_lsl_script" />
+				<flyout_button.item label="新 Lua 指令碼" name="new_lua_script" />
+			</flyout_button>
+			<button label="新記事卡" name="button new notecard" />
 			<button label="權限" name="button permissions" />
+			<button label="在 IDE 中探索" label_selected="停止探索" name="button publish" />
 			<button label="更新" name="button refresh" />
 			<button label="重設指令碼" name="btn_reset_scripts" />
 			<filter_editor label="輸入篩選文字" name="contents_filter"/>

@@ -273,8 +273,8 @@
 			<text name="textFSKeywords">
 				Schlüsselwörter (getrennt durch Komma):
 			</text>
-			<check_box name="FSKeywordChangeColor" label="Farbliche Markierung aktivieren"/>
-			<color_swatch name="colorswatch" left="220" tool_tip="Anklicken um Farbauswahl zu öffnen"/>
+			<check_box name="FSKeywordChangeColor" label="Farbliche Markierung aktivieren" width="205"/>
+			<color_swatch name="colorswatch" tool_tip="Anklicken um Farbauswahl zu öffnen"/>
 			<check_box name="FSKeywordPlaySound" label="Klang abspielen"/>
 			<text name="textFSKeywordSound" width="200">
 				UUID für Klangbenachrichtigung:

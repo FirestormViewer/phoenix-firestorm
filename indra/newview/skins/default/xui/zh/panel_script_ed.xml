@@ -64,4 +64,10 @@
 	<combo_box label="插入..." name="Insert..." />
 	<button label="編輯..." name="edit_btn_2" />
 	<button label="儲存" label_selected="儲存" name="save_btn_2" />
+	<combo_box name="compile_target">
+		<combo_box.item label="LSL（Mono）" name="compile_target_mono" />
+		<combo_box.item label="LSL 舊版" name="compile_target_lsl2" />
+		<combo_box.item label="LSL（Lua）" name="compile_target_lsl_luau" />
+		<combo_box.item label="Lua" name="compile_target_luau" />
+	</combo_box>
 </panel>

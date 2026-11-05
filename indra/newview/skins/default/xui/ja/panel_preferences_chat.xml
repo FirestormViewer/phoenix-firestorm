@@ -267,7 +267,7 @@
 			<text name="textFSKeywords">
 				キーワード（コンマで区切る）：
 			</text>
-			<check_box label="キーワードの色を変える" name="FSKeywordChangeColor"/>
+			<check_box label="キーワードの色を変える" name="FSKeywordChangeColor" width="150"/>
 			<color_swatch name="colorswatch" tool_tip="クリックで色を選択します。"/>
 			<check_box label="キーワードが出たら通知音を鳴らします" name="FSKeywordPlaySound"/>
 			<text name="textFSKeywordSound">

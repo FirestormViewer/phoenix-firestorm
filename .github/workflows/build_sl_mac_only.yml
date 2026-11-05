@@ -7,7 +7,7 @@ on:
         required: false
         default: 'false'
       override_signing:
-        description: 'Manual builds are not signed by default. Force code signing for this run.'
+        description: 'Force Windows code signing for manual builds. macOS builds are always signed and notarized.'
         required: false
         default: 'false'
       deploy:
@@ -42,6 +42,7 @@ jobs:
     outputs:
       release_type: ${{ steps.plan.outputs.release_type }}
       signing_required: ${{ steps.plan.outputs.signing_required }}
+      macos_signing_required: ${{ steps.plan.outputs.macos_signing_required }}
       fail_fast: ${{ steps.plan.outputs.fail_fast }}
       matrix: ${{ steps.plan.outputs.matrix }}
       version: ${{ steps.plan.outputs.version }}
@@ -74,7 +75,8 @@ jobs:
     needs: prepare
     env:
       FS_RELEASE_TYPE: ${{ needs.prepare.outputs.release_type }}
-      CI_SIGNING_REQUIRED: ${{ needs.prepare.outputs.signing_required }}
+      # Certificate setup must use the same platform policy as ci.py build.
+      CI_SIGNING_REQUIRED: ${{ startsWith(matrix.os, 'macos') && needs.prepare.outputs.macos_signing_required || needs.prepare.outputs.signing_required }}
       CI_CELL: ${{ toJSON(matrix) }}
     strategy:
       fail-fast: ${{ fromJSON(needs.prepare.outputs.fail_fast) }}

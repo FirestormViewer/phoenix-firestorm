@@ -16,8 +16,11 @@
 	<context_menu label="主持人選項" name="GroupModerationSubmenu">
 		<menu_item_call label="允許文字聊天" name="AllowGroupChat" />
 		<menu_item_call label="禁止文字聊天" name="ForbidGroupChat" />
+		<menu_item_call label="將此參與者設為靜音" name="ModerateVoiceMute"/>
+		<menu_item_call label="取消此參與者的靜音" name="ModerateVoiceUnMute"/>
 		<menu_item_call label="從群組封鎖成員" name="BanGroupMember" />
 		<menu_item_call label="從群組移除成員" name="BanEjectMember" />
+		<menu_item_call label="從我所有群組封鎖" name="BanFromAllGroups" />
 	</context_menu>
 	<menu_item_call label="複製名稱到剪貼簿" name="url_copy_label" />
 	<menu_item_call label="複製URI到剪貼簿" name="url_copy" />

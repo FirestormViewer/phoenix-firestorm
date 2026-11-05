@@ -21,6 +21,9 @@
 	<floater.string name="LoadingObjInv">
 		正載入以下物件的庫存：[OBJECT_NAME]
 	</floater.string>
+	<floater.string name="SkippingIncompatibleScript">
+		跳過指令碼「[SCRIPT_NAME]」（無法重新編譯為 [TARGET]）
+	</floater.string>
 	<floater.string name="Deleting">
 		正在刪除
 	</floater.string>

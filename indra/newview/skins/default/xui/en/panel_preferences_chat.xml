@@ -2019,7 +2019,7 @@
 		 follows="left|top"
 		 top_pad="10"
 		 left="20"
-		 width="50"
+		 width="125"
 		 height="20"
 		 control_name="FSKeywordChangeColor"
 		 name="FSKeywordChangeColor"
@@ -2034,7 +2034,7 @@
 		 layout="topleft"
 		 follows="left|top"
 		 top_delta="2"
-		 left="150"
+		 left_pad="10"
 		 height="15"
 		 width="15"
 		 name="colorswatch"
@@ -2058,7 +2058,7 @@
 		 follows="left|top"
 		 top_delta="30"
 		 left="20"
-		 height="14"
+		 height="18"
 		 width="120"
 		 name="textFSKeywordSound">
 		  Alert Sound UUID:
