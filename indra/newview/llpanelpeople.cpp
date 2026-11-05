@@ -134,6 +134,16 @@ protected:
      */
     virtual bool doCompare(const LLAvatarListItem* item1, const LLAvatarListItem* item2) const
     {
+        // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - float pinned items to the top; a no-op
+        // wherever isPinned() is never set (every list except the Friends tabs).
+        bool pinned1 = item1->isPinned();
+        bool pinned2 = item2->isPinned();
+        if (pinned1 != pinned2)
+        {
+            return pinned1 > pinned2;
+        }
+        // </FS:TP>
+
         LLAvatarTracker& at = LLAvatarTracker::instance();
         bool online1 = at.isBuddyOnline(item1->getAvatarId());
         bool online2 = at.isBuddyOnline(item2->getAvatarId());
@@ -732,6 +742,12 @@ bool LLPanelPeople::postBuild()
     // <FS:Ansariel> Firestorm radar
     mOnlineFriendList = friends_tab->getChild<LLAvatarList>("avatars_online");
     mAllFriendList = friends_tab->getChild<LLAvatarList>("avatars_all");
+    // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - only the two Friends tabs opt in; every
+    // other LLAvatarList (Nearby, Recent, group members, Contact Sets) is
+    // unaffected since isPinned() stays false there.
+    mOnlineFriendList->setShowPinnedFriends(true);
+    mAllFriendList->setShowPinnedFriends(true);
+    // </FS:TP>
     mOnlineFriendList->setNoItemsCommentText(getString("no_friends_online"));
     mOnlineFriendList->setShowIcons("FriendsListShowIcons");
     mOnlineFriendList->showPermissions(gSavedSettings.getBOOL("FriendsListShowPermissions"));

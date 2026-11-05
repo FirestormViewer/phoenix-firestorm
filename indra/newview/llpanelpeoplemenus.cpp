@@ -51,6 +51,7 @@
 // [RLVa:KB] - Checked: RLVa-2.0.1
 #include "rlvactions.h"
 // [/RLVa:KB]
+#include "fspinnedfriends.h" // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
 
 namespace LLPanelPeopleMenus
 {
@@ -99,6 +100,10 @@ LLContextMenu* PeopleContextMenu::createMenu()
         // <FS:Ansariel> Firestorm additions
         registrar.add("Avatar.GroupInvite",     boost::bind(&LLAvatarActions::inviteToGroup,            id));
         registrar.add("Avatar.AddToContactSet", boost::bind(&PeopleContextMenu::addToContactSet,        this)); // [FS:CR]
+        // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
+        registrar.add("Avatar.Pin",             boost::bind(&PeopleContextMenu::pinFriend,              this));
+        registrar.add("Avatar.Unpin",           boost::bind(&PeopleContextMenu::unpinFriend,            this));
+        // </FS:TP>
 
         enable_registrar.add("Avatar.EnableItem", boost::bind(&PeopleContextMenu::enableContextMenuItem, this, _2));
         enable_registrar.add("Avatar.CheckItem",  boost::bind(&PeopleContextMenu::checkContextMenuItem, this, _2));
@@ -162,6 +167,10 @@ void PeopleContextMenu::buildContextMenu(class LLMenuGL& menu, U32 flags)
         items.push_back(std::string("separator_chat_history"));
         items.push_back(std::string("add_friend"));
         items.push_back(std::string("remove_friend"));
+        // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
+        items.push_back(std::string("pin_friend"));
+        items.push_back(std::string("unpin_friend"));
+        // </FS:TP>
         items.push_back(std::string("invite_to_group"));
         items.push_back(std::string("separator_invite_to_group"));
         items.push_back(std::string("map"));
@@ -253,6 +262,18 @@ bool PeopleContextMenu::enableContextMenuItem(const LLSD& userdata)
 
         return result;
     }
+    // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
+    else if (item == std::string("can_pin"))
+    {
+        const LLUUID& id = mUUIDs.front();
+        return mUUIDs.size() == 1 && LLAvatarActions::isFriend(id) && !FSPinnedFriends::getInstance()->isPinned(id);
+    }
+    else if (item == std::string("can_unpin"))
+    {
+        const LLUUID& id = mUUIDs.front();
+        return mUUIDs.size() == 1 && LLAvatarActions::isFriend(id) && FSPinnedFriends::getInstance()->isPinned(id);
+    }
+    // </FS:TP>
     else if (item == std::string("can_call"))
     {
         return LLAvatarActions::canCall();
@@ -452,6 +473,18 @@ void PeopleContextMenu::addToContactSet()
     LLAvatarActions::addToContactSet(mUUIDs);
 }
 // </FS:Ansariel>
+
+// <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
+void PeopleContextMenu::pinFriend()
+{
+    FSPinnedFriends::getInstance()->addPinned(mUUIDs.front());
+}
+
+void PeopleContextMenu::unpinFriend()
+{
+    FSPinnedFriends::getInstance()->removePinned(mUUIDs.front());
+}
+// </FS:TP>
 
 //== NearbyPeopleContextMenu ===============================================================
 
