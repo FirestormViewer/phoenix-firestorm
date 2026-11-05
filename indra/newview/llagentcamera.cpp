@@ -1711,6 +1711,8 @@ void LLAgentCamera::updateCamera()
             diff.mV[VZ] = 0.f;
         }
 #endif
+        // <FS:Ansariel> Why was this set to false instead of adding adding the debug setting???
+        //bool useRealisticMouselook = false;
         static LLCachedControl<bool> useRealisticMouselook(gSavedSettings, "RealisticMouselook", false);
         if (useRealisticMouselook)
         {

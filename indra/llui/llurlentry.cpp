@@ -2047,7 +2047,7 @@ std::string LLUrlEntryGameController::getLabel(const std::string& url, const LLU
     if (pControllerHandler && pControllerHandler->hasHandlingDevice())
     {
         keybind = pControllerHandler->getBindingAsString(control);
-        LL_WARNS() << "Game Control Translate:" << control << " = " << keybind << LL_ENDL;
+        LL_DEBUGS() << "Game Control Translate:" << control << " = " << keybind << LL_ENDL;
         if(!keybind.empty())
         {
             std::map<std::string, LLLocalizationData>::iterator iter = mLocalizations.find(keybind);
@@ -2064,7 +2064,7 @@ std::string LLUrlEntryGameController::getLabel(const std::string& url, const LLU
     {
         LLStringUtil::toLower(control);
         keybind = pKeyHandler->getKeyBindingAsString(getMode(url), "game_control_" + control);
-        LL_WARNS() << "Key Binding Translate:" << control << " = " << keybind << LL_ENDL;
+        LL_DEBUGS() << "Key Binding Translate:" << control << " = " << keybind << LL_ENDL;
         if(!keybind.empty())
         {
             // Debug text change for testing

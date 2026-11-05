@@ -258,10 +258,6 @@ LLFloaterJoystick::~LLFloaterJoystick()
 }
 
 
-void LLFloaterJoystick::apply()
-{
-}
-
 void LLFloaterJoystick::initFromSettings()
 {
     mJoystickEnabled = gSavedSettings.getBOOL("JoystickEnabled");
