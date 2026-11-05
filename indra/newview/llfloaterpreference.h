@@ -175,6 +175,9 @@ protected:
     // <FS:Ansariel> Correct enabled state of Animated Script Dialogs option
     void updateAnimatedScriptDialogs();
 
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    void updateScriptDialogsPosition();
+
     // <FS:Zi> Group Notices and chiclets location setting conversion bool => S32
     void onShowGroupNoticesTopRightChanged();
 
