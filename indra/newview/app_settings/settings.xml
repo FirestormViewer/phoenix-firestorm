@@ -344,6 +344,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSPasteNoCopyAsLink</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, pasting inventory item copies the items that can be copied and pastes no-copy items as links. If false, pasting no copy items silently does nothing.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>FSPaymentInfoInChat</key>
   <map>
     <key>Comment</key>
