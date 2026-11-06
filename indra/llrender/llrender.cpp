@@ -799,6 +799,7 @@ bool LLRender::init(bool needs_vertex_buffer)
         U32 ret;
         glGenVertexArrays(1, &ret);
         glBindVertexArray(ret);
+        LLVertexBuffer::invalidateAttributeSetup(); // </FS:Beq> A new VAO has no configured pointers.
     }
 
     if (needs_vertex_buffer)
