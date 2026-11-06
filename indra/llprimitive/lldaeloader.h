@@ -40,7 +40,6 @@ class domController;
 class domSkin;
 class domMesh;
 
-using LODSuffixArray = std::array<std::string,LLModel::NUM_LODS>; // <FS:Beq/> configurable lod suffixes
 class LLDAELoader : public LLModelLoader
 {
 public:
@@ -106,7 +105,10 @@ protected:
     static std::string getElementLabel(daeElement *element);
     static size_t getSuffixPosition(const std::string& label);
     static std::string getLodlessLabel(daeElement *element);
-    static LODSuffixArray sLODSuffix; // <FS:Beq/> mesh loader suffix configuration
+
+    // <FS> Multi-LOD file
+    bool mFilterByLodSuffix = false; // only load nodes matching mLod
+    // </FS>
 public: // <FS:Beq/> open up for local mesh to use
     static std::string preprocessDAE(std::string filename);
 
