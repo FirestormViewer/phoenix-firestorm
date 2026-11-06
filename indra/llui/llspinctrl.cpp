@@ -240,7 +240,7 @@ void LLSpinCtrl::onDownBtn( const LLSD& data )
             F32 cur_val = (F32) atof(text.c_str());
 
             // <FS:KC> alt/ctrl/shift keys modify increment
-            //F32 val = cur_val - step;
+            //F32 val = cur_val + step;
             F32 inc = step;
             if (gKeyboard->getKeyDown(KEY_ALT))
             {
@@ -254,7 +254,7 @@ void LLSpinCtrl::onDownBtn( const LLSD& data )
             {
                 inc *= 0.01f;
             }
-            F32 val = cur_val - inc;
+            F32 val = cur_val + inc;
             // </FS:KC>
             val = clamp_precision(val, mPrecision);
             if (val < mMinValue) val = mMinValue;
