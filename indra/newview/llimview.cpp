@@ -2114,6 +2114,8 @@ LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, 
     //{
     //    history_context = LLChatServiceHistory::prepareLiveMessage(utf8_text, timestamp, history_context);
     //}
+    //// Append without recomposing stale history. History loads and snapshot
+    //// updates reconcile copies when their source data is published.
     //addToHistory(session_id, from_name, from_id, utf8_text, is_region_msg, timestamp);
     //if (session->isP2P())
     //{
@@ -2126,6 +2128,8 @@ LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, 
     {
         history_context = LLChatServiceHistory::prepareLiveMessage(utf8_text, timestamp, history_context);
     }
+    // Append without recomposing stale history. History loads and snapshot
+    // updates reconcile copies when their source data is published.
     addToHistory(session_id, from_name, from_id, utf8_text, is_region_msg, timestamp, is_announcement);
     if (session->isP2P() && !is_announcement)
     {
@@ -2287,7 +2291,7 @@ void LLIMModel::sendLeaveSession(const LLUUID& session_id, const LLUUID& other_p
 // *TODO this method is better be moved to the LLIMMgr
 //<FS:TS> FIRE-787: break up too long chat lines into multiple messages
 // This code is broken out for proper handling of multiple IMs after splitting.
-void deliverMessage(const std::string& utf8_text,
+LLSD deliverMessage(const std::string& utf8_text,
                      const LLUUID& im_session_id,
                      const LLUUID& other_participant_id,
                      EInstantMessage dialog)
@@ -2301,6 +2305,10 @@ void deliverMessage(const std::string& utf8_text,
 
     U8 offline = (!info || info->isOnline()) ? IM_ONLINE : IM_OFFLINE;
 
+    // Resolve the session before dispatch so its history boundary predates this send.
+    LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(im_session_id);
+    LLSD history_context;
+
     if(!sent)
     {
         // Send message normally.
@@ -2313,6 +2321,14 @@ void deliverMessage(const std::string& utf8_text,
         {
             new_dialog = IM_SESSION_SEND;
         }
+
+        // Capture once before transport; translation may finish after service publication.
+        if (dialog == IM_NOTHING_SPECIAL && other_participant_id.notNull() &&
+            session && session->isP2P())
+        {
+            history_context = session->mChatServiceHistory.outgoingContext(other_participant_id);
+        }
+
         pack_instant_message(
             gMessageSystem,
             gAgent.getID(),
@@ -2328,7 +2344,6 @@ void deliverMessage(const std::string& utf8_text,
     }
 
     bool is_group_chat = false;
-    LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(im_session_id);
     if(session)
     {
         is_group_chat = session->isGroupSessionType();
@@ -2356,6 +2371,8 @@ void deliverMessage(const std::string& utf8_text,
         default: ; // do nothing
         }
     }
+
+    return history_context;
 }
 //</FS:TS> FIRE-787
 
@@ -2368,6 +2385,7 @@ void LLIMModel::sendMessage(const std::string& utf8_text,
     size_t split = MAX_MSG_BUF_SIZE - 1;
     size_t pos = 0;
     size_t total = utf8_text.length();
+    LLSD history_context;
 
     while (pos < total)
     {
@@ -2408,8 +2426,12 @@ void LLIMModel::sendMessage(const std::string& utf8_text,
         std::string send = utf8_text.substr(pos, next_split);
         pos += next_split;
 
-        // *FIXME: Queue messages and wait for server
-        deliverMessage(send, im_session_id, other_participant_id, dialog);
+        // The context contains the information which was the last message ID sent to the chat service.
+        // Because we might be splitting up a message into multiple messages, but internally
+        // adding the entire message as one to the session history, we only need keep track
+        // of the context of the last actually sent message for the chat history service
+        // to pick up from later.
+        history_context = deliverMessage(send, im_session_id, other_participant_id, dialog);
     }
 
     LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(im_session_id);
@@ -2425,10 +2447,11 @@ void LLIMModel::sendMessage(const std::string& utf8_text,
             LLChatServiceHistory::noteDirectMessageActivity(other_participant_id);
         }
 
-        // Do we have to replace the /me's here?
+        // Keep the pre-send boundary on the local echo through asynchronous translation.
         std::string from;
         LLAgentUI::buildFullname(from);
-        LLIMModel::getInstance()->addMessage(im_session_id, from, gAgentID, utf8_text);
+        LLIMModel::getInstance()->addMessage(im_session_id, from, gAgentID, utf8_text,
+                                           true, false, 0, history_context);
 
         //local echo for the legacy communicate panel
         std::string history_echo;
