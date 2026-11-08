@@ -21,6 +21,13 @@ export mesa_glthread=true
 #export ASAN_OPTIONS="halt_on_error=0 detect_leaks=1 symbolize=1"
 #export UBSAN_OPTIONS="print_stacktrace=1 print_summary=1 halt_on_error=0"
 
+FSJEMALLOC="$(pwd)/lib/libjemalloc.so"
+if [ -f ${FSJEMALLOC} ]
+then
+        echo "Using jemalloc"
+        export LD_PRELOAD="${LD_PRELOAD}:${FSJEMALLOC}"
+fi
+
 ## Nothing worth editing below this line.
 ##-------------------------------------------------------------------
 
