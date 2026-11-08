@@ -7,7 +7,8 @@
 	<menu_item_call label="檢視" name="look_at_object" />
 	<menu_item_call label="檢查" name="inspect_object" />
 	<menu_item_call label="編輯" name="edit_object" />
-	<menu_item_call label="退回" name="return_object" />
+	<menu_item_call label="以組合物件的形式退回" name="return_object"/>
+	<menu_item_call label="以單獨物件的形式退回" name="return_object_separate"/>
 	<menu_item_call label="刪除" name="delete_object" />
 	<menu_item_call label="封鎖物件" name="blacklist_object" />
 	<menu_item_call label="購買物件" name="object_buy" />

@@ -673,6 +673,10 @@
 		儲存變更？
 		<usetemplate canceltext="取消" name="yesnocancelbuttons" notext="不要儲存" yestext="儲存"/>
 	</notification>
+	<notification name="SaveScriptChanges">
+		是否儲存 [NAME] 的變更？
+		<usetemplate canceltext="取消" name="yesnocancelbuttons" notext="不儲存" yestext="儲存"/>
+	</notification>
 	<notification name="DeleteNotecard">
 		您確定要刪除這張記事卡嗎？
 		<usetemplate name="okcancelignore" ignoretext="確認刪除記事卡" notext="取消" yestext="確定"/>
