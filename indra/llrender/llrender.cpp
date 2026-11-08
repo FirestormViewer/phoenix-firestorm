@@ -1952,14 +1952,7 @@ void LLRender::setLineWidth(F32 width)
 {
     gGL.flush();
 
-    // <FS:Ansariel> For for smooth line width
-    //width = llclamp(width, gGLManager.mAliasedLineRange[0], gGLManager.mAliasedLineRange[1]);
-    if (glIsEnabled(GL_LINE_SMOOTH))
-        width = llclamp(width, gGLManager.mSmoothLineRange[0], gGLManager.mSmoothLineRange[1]);
-    else
-        width = llclamp(width, gGLManager.mAliasedLineRange[0], gGLManager.mAliasedLineRange[1]);
-    // </FS:Ansariel>
-
+    width = llclamp(width, gGLManager.mAliasedLineRange[0], gGLManager.mAliasedLineRange[1]);
     if(mLineWidth != width)
     {
         mLineWidth = width;
