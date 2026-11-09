@@ -8249,6 +8249,14 @@ class LLWorldCreateLandmark : public view_listener_t
             return true;
 // [/RLVa:KB]
 
+        // <FS:Trish> The toolbar button doesn't do this check, run it before attempting to add a landmark.
+        if (LLLandmarkActions::landmarkAlreadyExists())
+        {
+            LLNotificationsUtil::add("LandmarkAlreadyExists");
+            return true;
+        }
+        // </FS:Trish>
+
         LLFloaterReg::showInstance("add_landmark");
 
         return true;
