@@ -1329,7 +1329,7 @@
       reference="Black"/>
    <color
       name="simpleeditor_bg_selected"
-      reference="White"/>
+      value="0.498 0.357 0.000 1"/>
    <color
       name="ScriptEditorTextRColor"
       reference="White"/>
