@@ -1596,6 +1596,16 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "SDL2IMEEnabled", handleSDL2IMEEnabledChanged);
 #endif
     // </FS:Zi>
+
+    // <FS:Trish> FSPasteNoCopyAsLink asks every time if off
+    setting_setup_signal_listener(gSavedSettings, "FSPasteNoCopyAsLink", [](const LLSD& newvalue)
+    {
+        if (!newvalue.asBoolean())
+        {
+            LLNotifications::instance().setIgnored("FSPasteNoCopyAsLinkPrompt", false);
+        }
+    });
+    // </FS:Trish>
 }
 
 #if TEST_CACHED_CONTROL
