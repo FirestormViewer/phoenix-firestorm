@@ -462,7 +462,7 @@ void FSFloaterIMContainer::onNewMessageReceived(const LLSD& msg)
     LLFloater* current_floater = LLMultiFloater::getActiveFloater();
 
     // KC: Don't flash tab on friend status changes per setting
-    if (floaterp && current_floater && floaterp != current_floater
+    if (floaterp && floaterp != current_floater
         && (gSavedSettings.getBOOL("FSIMChatFlashOnFriendStatusChange") || !msg.has("from_id") || msg["from_id"].asUUID().notNull()))
     {
         startFlashingTab(floaterp, msg["message"].asString());

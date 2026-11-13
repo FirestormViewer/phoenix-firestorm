@@ -117,3 +117,10 @@ endif()
 if (USE_PRECOMPILED_HEADERS)
  target_precompile_headers(llrender REUSE_FROM llprecompiled)
 endif ()
+
+# <FS:Beq> Context-free regression tests for pooled-buffer binding and layout.
+if (LL_TESTS AND LINUX AND USE_SDL_WINDOW)
+  include(LLAddBuildTest)
+  LL_ADD_INTEGRATION_TEST(llvertexbuffer_pool "" "llrender")
+endif ()
+# </FS:Beq>

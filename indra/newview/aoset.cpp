@@ -227,17 +227,22 @@ void AOSet::getAnimationsForState(AOState* state, uuid_vec_t& animations) const
             state->mCurrentAnimation = 0;
         }
 
-        for (AOAnimation& anim : state->mSteps[state->mCurrentAnimation].mMembers)
-        {
-            if (LLUUID assetId = resolveAssetUUID(anim); assetId.notNull())
-            {
-                animations.emplace_back(assetId);
-            }
-        }
+        getAnimationsForStep(state->mSteps[state->mCurrentAnimation], animations);
     }
     else
     {
         LL_DEBUGS("AOEngine") << "animation state has no animations assigned" << LL_ENDL;
+    }
+}
+
+void AOSet::getAnimationsForStep(AOAnimationStep& step, uuid_vec_t& animations)
+{
+    for (AOAnimation& anim : step.mMembers)
+    {
+        if (LLUUID assetId = resolveAssetUUID(anim); assetId.notNull())
+        {
+            animations.emplace_back(assetId);
+        }
     }
 }
 

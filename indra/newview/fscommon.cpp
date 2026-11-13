@@ -37,6 +37,7 @@
 #include "llemojidictionary.h"
 #include "llfloateremojipicker.h"
 #include "llfloaterperms.h"
+#include "llgroupactions.h"
 #include "llgroupmgr.h"
 #include "llimview.h"
 #include "llinventorymodel.h"
@@ -505,6 +506,10 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
                 else if (option == "can_ban_member")
                 {
                     return gAgent.hasPowerInGroup(sessionId, GP_ROLE_REMOVE_MEMBER) && gAgent.hasPowerInGroup(sessionId, GP_GROUP_BAN_ACCESS);
+                }
+                else if (option == "can_ban_from_all_groups")
+                {
+                    return LLGroupActions::canBanFromAnyGroup(av_id);
                 }
                 else if (option == "can_eject_member")
                 {

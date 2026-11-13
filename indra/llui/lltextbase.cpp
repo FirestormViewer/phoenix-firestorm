@@ -2530,6 +2530,7 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
     registrar.add("FS.ForbidGroupChat", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupchatforbid", true));
     registrar.add("FS.EjectGroupMember", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupeject", true));
     registrar.add("FS.BanGroupMember", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupban", true));
+    registrar.add("FS.BanFromAllGroups", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupbanall", true)); // <FS:PP> Ban from all groups
     registrar.add("FS.MuteGroupVoice", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupmute", true));
     registrar.add("FS.UnmuteGroupVoice", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupunmute", true));
 

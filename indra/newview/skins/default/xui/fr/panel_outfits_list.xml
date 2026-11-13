@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="Outfits">
 	<accordion name="outfits_accordion">
-		<no_matched_tabs_text name="no_matched_outfits_msg" value="Vous n'avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/people/[SEARCH_TERM] La recherche]."/>
+		<no_matched_tabs_text name="no_matched_outfits_msg" value="Aucun élément correspondant."/>
 		<no_visible_tabs_text name="no_outfits_msg" value="Vous n'avez pas encore défini de tenue !"/>
 	</accordion>
 	<panel name="bottom_panel">

@@ -27,6 +27,8 @@
 #ifndef LL_LLFACE_H
 #define LL_LLFACE_H
 
+#include <memory> // </FS:Beq> Share texture-animation matrices with draw batches.
+
 #include "llstrider.h"
 #include "llrender.h"
 #include "v2math.h"
@@ -268,7 +270,10 @@ public:
     F32         mLastUpdateTime;
     F32         mLastSkinTime;
     F32         mLastMoveTime;
-    LLMatrix4*  mTextureMatrix;
+    // <FS:Beq> Draw batches may outlive this face or a texture-animation update.
+    // LLMatrix4*  mTextureMatrix;
+    std::shared_ptr<LLMatrix4> mTextureMatrix;
+    // </FS:Beq>
     LLMatrix4*  mSpecMapMatrix;
     LLMatrix4*  mNormalMapMatrix;
     LLDrawInfo* mDrawInfo;

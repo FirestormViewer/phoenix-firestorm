@@ -2345,7 +2345,8 @@ F32 LLAgentCamera::getCameraMaxZoomDistance(bool allow_disabled_constraints /* =
     // Ignore "DisableCameraConstraints", we don't want to be out of draw range when we focus onto objects or avatars
     // Freeing the camera movement some more... ok, a lot -KC
     static LLCachedControl<bool> disable_constraints(gSavedSettings,"DisableCameraConstraints");
-    return (allow_disabled_constraints && disable_constraints) ? INT_MAX : llmin(MAX_CAMERA_DISTANCE_FROM_OBJECT,
+    // <FS:Beq/> Make the existing conversion to the floating-point camera distance explicit.
+    return (allow_disabled_constraints && disable_constraints) ? static_cast<F32>(INT_MAX) : llmin(MAX_CAMERA_DISTANCE_FROM_OBJECT,
                  mDrawDistance - 1, // convenience, don't hit draw limit when focusing on something
                  LLWorld::getInstance()->getRegionWidthInMeters() - CAMERA_FUDGE_FROM_OBJECT);
 }

@@ -267,14 +267,12 @@
         </text>
         <text name="tooltip_textbox4">
           пикселей (необходим перезапуск)
-[VIEWER_GENERATION] по умолчанию 0. V1 по умолчанию 2.
         </text>
         <text name="Label_FolderItemViewHeight">
            Высота папок:
         </text>
         <text name="Label_FolderItemViewHeight_Scale">
           пикселей (необходим перезапуск)
-[VIEWER_GENERATION] по умолчанию 20. V1 по умолчанию 18.
         </text>
         <text name="text_box_notecard_font" width="120">
           Шрифт Редактора Заметок:

@@ -7,7 +7,9 @@
 		<combo_box.item label="Petite (128x128)" name="Small(128x128)"/>
 		<combo_box.item label="Moyenne (256x256)" name="Medium(256x256)"/>
 		<combo_box.item label="Grande (512x512)" name="Large(512x512)"/>
+		<combo_box.item label="Large (1024x512)" name="Wide(1024x512)"/>
 		<combo_box.item label="Très grande (1024x1024)" name="Very Large(1024x1024)"/>
+		<combo_box.item label="Pleine largeur (2048x1024)" name="Full(2048x1024)"/>
 		<combo_box.item label="Énorme (2048x2048)" name="Huge(2048x2048)"/>
 		<combo_box.item label="Fenêtre actuelle" name="CurrentWindow"/>
 		<combo_box.item label="Personnalisée" name="Custom"/>

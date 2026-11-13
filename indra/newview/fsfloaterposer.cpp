@@ -2748,7 +2748,7 @@ void FSFloaterPoser::refreshTextHighlightingOnAvatarScrollList()
         LLUUID selectedAvatarId = cell->getValue().asUUID();
         LLVOAvatar* listAvatar = getAvatarByUuid(selectedAvatarId);
 
-        ((LLScrollListText*)listItem->getColumn(COL_ICON))->setValue(getIconNameForAvatar(listAvatar));
+        listItem->getColumn(COL_ICON)->setValue(getIconNameForAvatar(listAvatar));
 
         if (mPoserAnimator.isPosingAvatar(listAvatar))
             ((LLScrollListText*)listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);
@@ -2790,7 +2790,7 @@ void FSFloaterPoser::addBoldToScrollList(LLScrollListCtrl* list, LLVOAvatar* ava
         if (!poserJoint)
             continue;
 
-        ((LLScrollListText*)listItem->getColumn(COL_ICON))->setValue(getScrollListIconForJoint(avatar, *poserJoint));
+        listItem->getColumn(COL_ICON)->setValue(getScrollListIconForJoint(avatar, *poserJoint));
 
         if (mPoserAnimator.isPosingAvatarJoint(avatar, *poserJoint))
             ((LLScrollListText*)listItem->getColumn(COL_NAME))->setFontStyle(LLFontGL::BOLD);

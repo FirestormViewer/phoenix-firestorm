@@ -221,6 +221,9 @@ protected:
 
     void        stopCurrentAnimations(AOSet::AOState* state, bool skipFirst = false);
     bool        swapStateAnimations(AOSet::AOState* state, const uuid_vec_t& animations);
+    bool        isStatePlaying(const AOSet::AOState* state) const;
+    void        syncPlayingStep(AOSet::AOState* state);
+    void        onStepRemoved(AOSet::AOState* state, S32 stepIndex);
     void        startStateTracks(AOSet::AOState* state);
     void        stopActiveTracks();
     void        startAlwaysAnimations();

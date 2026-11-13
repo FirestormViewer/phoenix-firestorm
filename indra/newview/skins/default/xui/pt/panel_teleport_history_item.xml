@@ -13,8 +13,8 @@
 		<layout_panel name="lp_position">
 			<text name="position" value="0, 0, 0"/>
 		</layout_panel>
-		<layout_panel name="lp_date" width="100">
-			<text name="timestamp" value="01.01.2000 12:00" width="100"/>
+		<layout_panel name="lp_date" width="125">
+			<text name="timestamp" value="01.01.2000 12:00" width="125"/>
 		</layout_panel>
 	</layout_stack>
 	<button name="profile_btn" tool_tip="Mostrar informações do item"/>

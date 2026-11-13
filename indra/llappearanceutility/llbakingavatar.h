@@ -93,8 +93,8 @@ public:
 
     // <FS:Ansariel> [Legacy Bake]
     // *TODO* Zi: It looks like these two functions are never called for this subclass
-    bool isUsingServerBakes() const;
-    void bodySizeChanged();
+    bool isUsingServerBakes() const override;
+    void bodySizeChanged() override;
     // </FS:Ansariel> [Legacy Bake]
 
 private:

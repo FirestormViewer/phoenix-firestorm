@@ -49,10 +49,14 @@
 		</layout_panel>
 	</layout_stack>
 	<script_editor name="Script Editor">
-     Chargement...
+		Chargement...
 	</script_editor>
 	<combo_box label="Insérer..." name="Insert..."/>
 	<text name="line_col" value="Ligne 0, Colonne 0"/>
-	<button label="Éditer..." name="edit_btn_2"/>
+	<button label="Modifier..." name="edit_btn_2"/>
 	<button label="Enregistrer" label_selected="Enregistrer" name="save_btn_2"/>
+	<combo_box name="compile_target">
+		<combo_box.item label="LSL sur Mono" name="compile_target_mono"/>
+		<combo_box.item label="LSL sur Lua" name="compile_target_lsl_luau"/>
+	</combo_box>
 </panel>

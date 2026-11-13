@@ -69,6 +69,9 @@ LLPointer<LLCredential> LLSecAPIBasicHandler::createCredential(const std::string
 LLPointer<LLCredential> LLSecAPIBasicHandler::loadCredential(const std::string& grid) { return NULL; }
 void LLSecAPIBasicHandler::saveCredential(LLPointer<LLCredential> cred, bool save_authenticator) {}
 void LLSecAPIBasicHandler::deleteCredential(LLPointer<LLCredential> cred) {}
+// <FS:Beq> Complete the security-handler test double for the current interface.
+std::vector<std::string> LLSecAPIBasicHandler::listCredentials() { return {}; }
+// </FS:Beq>
 bool LLSecAPIBasicHandler::hasCredentialMap(const std::string& storage, const std::string& grid) { return false; }
 bool LLSecAPIBasicHandler::emptyCredentialMap(const std::string& storage, const std::string& grid) { return false; }
 void LLSecAPIBasicHandler::loadCredentialMap(const std::string& storage, const std::string& grid, credential_map_t& credential_map) {}
@@ -89,9 +92,11 @@ namespace tut
 
         secapiTest()
         {
+            clearSecHandler(); // <FS:Beq/> Keep handler registration isolated between tests.
         }
         ~secapiTest()
         {
+            clearSecHandler(); // <FS:Beq/> Release registered handlers after each test.
         }
     };
 
@@ -130,4 +135,19 @@ namespace tut
                retrieved_test2_handler == test2_handler);
 
     }
+
+    // <FS:Beq> Exercise production crypto initialization so LTO cannot discard
+    // its OpenSSL calls and hide a missing direct link dependency.
+    template<> template<>
+    void secapiTestObject::test<2>()
+    {
+        initializeSecHandler();
+        ensure("Default security handler was created", gSecAPIHandler.notNull());
+        ensure("Default security handler was registered",
+               getSecHandler(BASIC_SECHANDLER) == gSecAPIHandler);
+        clearSecHandler();
+        ensure("Default security handler was released", gSecAPIHandler.isNull());
+        ensure("Default registration was cleared", getSecHandler(BASIC_SECHANDLER).isNull());
+    }
+    // </FS:Beq>
 }

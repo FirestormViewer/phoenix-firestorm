@@ -489,6 +489,11 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 
     mLandImpactsObserver(NULL),
 
+    // <FS:KC>
+    mOpen(false),
+    mCollapsedHeight(0),
+    mExpandedHeight(0),
+    // </FS:KC>
     mDirty(true),
     mHasSelection(true)
 {

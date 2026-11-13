@@ -43,6 +43,7 @@
 #include "llavataractions.h"
 #include "llavatariconctrl.h"
 #include "llcallingcard.h" //for LLAvatarTracker
+#include "llgroupactions.h" // <FS:PP> Ban from all groups
 #include "llgroupmgr.h"
 #include "llspeakers.h" //for LLIMSpeakerMgr
 #include "lltrans.h"
@@ -619,6 +620,12 @@ public:
             LLGroupMgr::getInstance()->sendGroupMembersRequest(mSessionID);
             // </FS:Zi>
         }
+        // <FS:PP> Ban from all groups
+        else if (param == "ban_from_all_groups")
+        {
+            LLGroupActions::banFromAllGroups(getAvatarId());
+        }
+        // </FS:PP>
     }
 
     bool onAvatarIconContextMenuItemChecked(const LLSD& userdata)
@@ -672,6 +679,12 @@ public:
         {
             return canBanGroupMember(getAvatarId());
         }
+        // <FS:PP> Ban from all groups
+        else if (param == "can_ban_from_all_groups")
+        {
+            return LLGroupActions::canBanFromAnyGroup(getAvatarId());
+        }
+        // </FS:PP>
         return false;
     }
 
@@ -1147,7 +1160,11 @@ protected:
             menu->setItemEnabled("Remove Friend", is_friend);
             menu->setItemVisible("Moderator Options Separator", is_group_session && isGroupModerator());
             menu->setItemVisible("Moderator Options", is_group_session && isGroupModerator());
-            menu->setItemVisible("Group Ban Separator", is_group_session && canBanInGroup());
+            // <FS:PP> Ban from all groups
+            bool show_ban_all = is_group_session && LLGroupActions::canBanFromAnyGroup(mAvatarID);
+            menu->setItemVisible("Group Ban Separator", (is_group_session && canBanInGroup()) || show_ban_all);
+            menu->setItemVisible("BanFromAllGroups", show_ban_all);
+            // </FS:PP>
             menu->setItemVisible("BanMember", is_group_session && canBanInGroup());
 
             if(gAgentID == mAvatarID)

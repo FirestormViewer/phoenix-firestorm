@@ -290,6 +290,35 @@ Jeśli nie chcesz, aby te przywileje były dłużej przypisane do tej roli, to w
 		Zamierzasz zbanować [COUNT] osób z grupy.
 		<usetemplate ignoretext="Potwierdź przed zbanowaniem z grupy kilku osób na raz" name="okcancelignore" notext="Anuluj" yestext="Banuj" />
 	</notification>
+	<notification name="FSBanFromAllGroups">
+		Zamierzasz zbanować [AVATAR_NAME] we wszystkich grupach, w których możesz zarządzać banami (liczba grup: [COUNT]):
+
+[GROUPS]
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Banuj" />
+	</notification>
+	<notification name="FSUnbanFromAllGroups">
+		Zamierzasz odbanować [AVATAR_NAME] we wszystkich grupach, w których możesz zarządzać banami (liczba grup: [COUNT]):
+
+[GROUPS]
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Odbanuj" />
+	</notification>
+	<notification name="FSBanFromAllGroupsStarted">
+		Aktualizowanie banów dla [AVATAR_NAME], grupa po grupie (liczba grup: [COUNT]). Raport pojawi się po zakończeniu.
+	</notification>
+	<notification name="FSBanFromAllGroupsReport">
+		Zbanowano [AVATAR_NAME] w [DONE] z [COUNT] grup.
+
+Zbanowano w: [SUCCEEDED]
+
+Nie udało się w: [FAILED]
+	</notification>
+	<notification name="FSUnbanFromAllGroupsReport">
+		Odbanowano [AVATAR_NAME] w [DONE] z [COUNT] grup.
+
+Odbanowano w: [SUCCEEDED]
+
+Nie udało się w: [FAILED]
+	</notification>
 	<notification name="GroupBanUserOnBanlist">
 		Niektórzy rezydenci nie dostali zaproszenia, ponieważ są zbanowani w grupie.
 	</notification>
@@ -585,6 +614,10 @@ Czy chcesz zamknąć przeglądarkę i uruchomić ją ponownie, ręcznie, aby zas
 	</notification>
 	<notification name="SaveChanges">
 		Zapisać zmiany?
+		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Nie zapisuj" yestext="Zapisz"/>
+	</notification>
+	<notification name="SaveScriptChanges">
+		Zapisać zmiany w [NAME]?
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Nie zapisuj" yestext="Zapisz"/>
 	</notification>
 	<notification name="DeleteNotecard">
@@ -5369,7 +5402,7 @@ Czy chcesz autoryzować [APP_NAME] do przesyłania zdjęć na Flickr?
 Ze względu na obciążenie serwera taka masowa zmiana może chwilę potrwać i tymczasowo powodować problemy z wyświetlaniem Twojego statusu online u niektórych znajomych.
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
-	<notification name="GlobalOnlineStatusToggle">
+	<notification name="GlobalOnlineStatusToggleInfo">
 		Ze względu na obciążenie serwera masowa zmiana widoczności online może zająć trochę czasu. Prosimy o cierpliwość.
 		<usetemplate ignoretext="Informuj mnie, że masowa zmiana widoczności online może zająć trochę czasu" name="okignore" />
 	</notification>

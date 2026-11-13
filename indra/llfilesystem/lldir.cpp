@@ -149,7 +149,8 @@ std::vector<std::string> LLDir::getDirectoriesInDir(const std::string& dirname)
     {
         if (auto status = dir_itr->status(ec); !ec && std::filesystem::is_directory(status))
         {
-            v.push_back(dir_itr->path().filename().string());
+            // Return UTF-8 names even when the native narrow code page cannot represent them.
+            v.push_back(fsyspath(dir_itr->path().filename()).string());
         }
 
         dir_itr.increment(ec);

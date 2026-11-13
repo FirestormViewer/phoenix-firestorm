@@ -232,4 +232,12 @@
         <on_click function="Avatar.DoToSelected" parameter="ban_member" />
         <on_enable function="Avatar.EnableItem" parameter="can_ban_member" />
     </menu_item_call>
+    <menu_item_call
+         label="Ban from all my groups"
+         layout="topleft"
+         name="BanFromAllGroups">
+        <on_click function="Avatar.DoToSelected" parameter="ban_from_all_groups" />
+        <on_enable function="Avatar.EnableItem" parameter="can_ban_from_all_groups" />
+        <on_visible function="Avatar.EnableItem" parameter="can_ban_from_all_groups" />
+    </menu_item_call>
 </toggleable_menu>

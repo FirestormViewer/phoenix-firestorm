@@ -908,7 +908,6 @@ bool LLKeywords::applySegmentOpsRange(std::vector<LLTextSegmentPtr> *seg_list,
             //LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(style, op.start);
             LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(getDefaultStyle(editor), op.start);
             // </FS:Ansariel>
-            text_segment->setToken( 0 );
             insertSegment( *seg_list, text_segment, text_len, style, editor);
         }
         else
@@ -974,7 +973,6 @@ void LLKeywords::insertSegments(const LLWString& wtext, std::vector<LLTextSegmen
         //LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(style, static_cast<S32>(pos));
         LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(getDefaultStyle(editor), static_cast<S32>(pos));
         // </FS:Ansariel>
-        text_segment->setToken( cur_token );
         insertSegment( seg_list, text_segment, text_len, style, editor);
 
         seg_start = static_cast<S32>(pos) + 1;
@@ -1065,7 +1063,10 @@ bool LLKeywords::loadFromLegacyFile(const std::string& filename)
             for (LLXMLNode* pStringNode = pNode->getFirstChild(); pStringNode != NULL; pStringNode = pStringNode->getNextSibling())
             {
                 std::string tool_tip;
-                LLColor4 cur_color(LLUIColorTable::instance().getColor("ScriptText"));
+                // <FS:Trish> FIRE-34900: Keep the color table reference so color preference changes apply live, like the other tokens
+                //LLColor4 cur_color(LLUIColorTable::instance().getColor("ScriptText"));
+                LLUIColor cur_color(LLUIColorTable::instance().getColor("ScriptText"));
+                // </FS:Trish>
                 LLKeywordToken::ETokenType cur_type = LLKeywordToken::TT_WORD;
                 if (!pStringNode->getAttributeString("name", keyword))
                     continue;

@@ -1,10 +1,11 @@
 /**
  * @file linux_crash_logger.cpp
- * @brief Linux crash logger implementation
+ * @brief Standalone SDL3 Linux crash report consent and submission
  *
  * $LicenseInfo:firstyear=2003&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2026, The Phoenix Firestorm Project, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,123 +25,153 @@
  * $/LicenseInfo$
  */
 
-#include <iostream>
-#include <string>
+// <FS:Beq> Only the separate process displays UI or uploads a saved crash report.
+#include "linux_crash_report.h"
+#include <SDL3/SDL_messagebox.h>
+#include <SDL3/SDL_error.h>
 #include <curl/curl.h>
-// #include <FL/fl_ask.H> // <FS:Zi> *TODO*
+#include <iostream>
+#include <sstream>
+#include <sys/file.h>
+#include <fcntl.h>
+#include <unistd.h>
 
-/* Called via
-        execl( gCrashLogger.c_str(), gCrashLogger.c_str(), descriptor.path(), gVersion.c_str(), gBugsplatDB.c_str(), nullptr );
-*/
-int main(int argc, char **argv)
+namespace
 {
-    std::cerr << "linux crash logger called: ";
-    for( int i = 1; i < argc; ++i )
-        std::cerr << argv[i] << " ";
+enum Choice { LATER = 0, SEND = 1, DECLINE = 2, DETAILS = 3 };
 
-    std::cerr << std::endl;
-
-    if( argc < 4 )
+int message(const std::string& text, const SDL_MessageBoxButtonData* buttons, int count)
+{
+    const SDL_MessageBoxData box = {SDL_MESSAGEBOX_WARNING, nullptr,
+        "Firestorm crash report — BugSplat", text.c_str(), count, buttons, nullptr};
+    int choice = -1;
+    if (!SDL_ShowMessageBox(&box, &choice))
     {
-        std::cerr << argv[0] << "Not enough arguments" << std::endl;
-        return 1;
+        std::cerr << "Cannot display crash report: " << SDL_GetError() << '\n';
+        return -1;
     }
+    // A window-manager close is never permission to send.
+    return choice < 0 ? LATER : choice;
+}
 
-    std::string dmpFile{ argv[1] };
-    std::string version{ argv[2] };
-    std::string strDb{ argv[3] };
-    std::string strAsk{ argv[4] };
+std::string details(const FSCrashReport::Report& report)
+{
+    std::ostringstream text;
+    text << report.product << " " << report.version << "\nRecorded: " << report.timestamp;
+    text << "\nName: " << (report.name.empty() ? "Not included" : report.name);
+    text << "\n\nFiles to send:\n";
+    for (const auto& attachment : report.attachments)
+        if (attachment.included || attachment.required)
+            text << "  " << attachment.file << " — " << attachment.label << '\n';
+    text << "\nThe viewer log is not sent. Settings are included only when enabled in your crash-reporting preferences."
+            "\nCrash dumps may contain personal information from memory."
+            "\n\nReport files and submission log (bugsplat.log):\n" << report.directory.string()
+         << "\n\nPrivacy policy: https://www.firestormviewer.org/privacy-policy";
+    return text.str();
+}
 
-    if( strAsk == "ask" )
+int review(FSCrashReport::Report& report)
+{
+    // Prevent a restart from opening a second dialog for a report already shown.
+    const int lock = open((report.directory / "dialog.lock").c_str(), O_CREAT | O_RDWR | O_CLOEXEC, 0600);
+    if (lock < 0 || flock(lock, LOCK_EX | LOCK_NB) != 0)
     {
-        auto choice = 0; // <FS:Zi> *TODO*  // fl_choice( "Firestorm has crashed, submit the minidump?", "No", "Yes", nullptr );
-        if( choice == 0 )
+        if (lock >= 0) close(lock);
+        return 0;
+    }
+    struct Unlock { int fd; ~Unlock() { flock(fd, LOCK_UN); close(fd); } } unlock{lock};
+    constexpr SDL_MessageBoxButtonData choices[] = {
+        {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT | SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, LATER, "Send later"},
+        {0, DECLINE, "Don't send"}, {0, DETAILS, "Report details"}, {0, SEND, "Send report"}
+    };
+    constexpr SDL_MessageBoxButtonData back[] = {
+        {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT | SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, LATER, "Back"}
+    };
+    std::string prompt = "Firestorm closed unexpectedly. Send a crash report to Firestorm via BugSplat?\n\n"
+                         "The report includes a crash dump and diagnostic information.\n"
+                         "Your crash-reporting preferences control inclusion of your name and settings.\n"
+                         "Choose Report details to see the files before sending.";
+    for (;;)
+    {
+        switch (message(prompt, choices, 4))
         {
-            std::cerr << "Abort send due to users choice" << std::endl;
+        case SEND:
+        {
+            std::string error;
+            bool sent = false;
+            try { sent = FSCrashReport::upload(report, error); }
+            catch (const std::exception& failure)
+            {
+                error = failure.what();
+                FSCrashReport::log(report, error + "; report retained for retry.");
+            }
+            if (sent)
+            {
+                message("Thank you. BugSplat accepted your crash report.", back, 1);
+                return 0;
+            }
+            prompt = error + "\n\nYour report has been kept. Choose Send report to retry, or Send later.";
+            break;
+        }
+        case DECLINE:
+            report.status = "discarded";
+            FSCrashReport::save(report);
+            FSCrashReport::log(report, "User chose not to send this report.");
             return 0;
+        case DETAILS:
+            if (message(details(report), back, 1) < 0) return 2;
+            break;
+        case LATER:
+            FSCrashReport::log(report, "Report retained for later; no submission requested.");
+            return 0;
+        default:
+            FSCrashReport::log(report, "No graphical dialog available; report retained without submission.");
+            return 2;
         }
     }
+}
+}
 
-    std::string url{ "https://" };
-    url += strDb;
-    url += ".bugsplat.com/post/bp/crash/crashpad.php";
-
-    curl_global_init(CURL_GLOBAL_ALL);
-
-    auto curl = curl_easy_init();
-
-//Not compatible with LL's crusty old curl - support for the curl_mime functions
-//was introduced in curl 7.57.0, LL is still using 7.54 :(
-
-/*
-    if( curl)
+int main(int argc, char** argv)
+{
+    try
     {
-        auto form = curl_mime_init(curl);
-
-        auto field = curl_mime_addpart(form);
-        curl_mime_name(field, "upload_file_minidump");
-        curl_mime_filedata(field, dmpFile.c_str() );
-
-        field = curl_mime_addpart(form);
-        curl_mime_name(field, "product");
-        curl_mime_data(field, "Firestorm-Releasex64", CURL_ZERO_TERMINATED);
-
-        field = curl_mime_addpart(form);
-        curl_mime_name(field, "version");
-        curl_mime_data(field, version.c_str(), CURL_ZERO_TERMINATED);
-
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str() );
-        curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
-
-        auto res = curl_easy_perform(curl);
-
-        if(res != CURLE_OK)
-            std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
-
-        curl_easy_cleanup(curl);
-
-        curl_mime_free(form);
-    }*/
-
-if (auto curl_handle = curl_easy_init()) {
-    struct curl_httppost* formpost = NULL;
-    struct curl_httppost* lastptr = NULL;
-
-    // Add the file part
-    curl_formadd(&formpost, &lastptr,
-                 CURLFORM_COPYNAME, "upload_file_minidump",
-                 CURLFORM_FILE, dmpFile.c_str(),
-                 CURLFORM_END);
-
-    // Add the 'product' part
-    curl_formadd(&formpost, &lastptr,
-                 CURLFORM_COPYNAME, "product",
-                 CURLFORM_COPYCONTENTS, "Firestorm-Releasex64",
-                 CURLFORM_END);
-
-    // Add the 'version' part
-    curl_formadd(&formpost, &lastptr,
-                 CURLFORM_COPYNAME, "version",
-                 CURLFORM_COPYCONTENTS, version.c_str(),
-                 CURLFORM_END);
-
-    // Set the URL
-    curl_easy_setopt(curl_handle, CURLOPT_URL, url.c_str());
-
-    // Set the form post data
-    curl_easy_setopt(curl_handle, CURLOPT_HTTPPOST, formpost);
-
-    // Perform the request
-    auto res = curl_easy_perform(curl_handle);
-
-    // Cleanup
-    curl_easy_cleanup(curl_handle);
-    curl_formfree(formpost);
-
-    // Check for errors
-    if (res != CURLE_OK)
-        std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+        FSCrashReport::Report report;
+        bool ask = true;
+        if (argc == 3 && std::string(argv[1]) == "--report")
+            report = FSCrashReport::load(argv[2]);
+        else if (argc == 3 && std::string(argv[1]) == "--pending")
+        {
+            const auto reports = FSCrashReport::pending(argv[2]);
+            if (reports.empty()) return 0;
+            report = FSCrashReport::load(reports.front());
+        }
+        else if (argc == 5 && (std::string(argv[4]) == "ask" || std::string(argv[4]) == "send"))
+        {
+            report = FSCrashReport::capture(argv[1], argv[2], argv[3]);
+            ask = std::string(argv[4]) == "ask";
+        }
+        else
+        {
+            std::cerr << "Usage: linux-crash-logger dump version database ask|send\n"
+                         "       linux-crash-logger --report report.json\n"
+                         "       linux-crash-logger --pending viewer-log-directory\n";
+            return 1;
+        }
+        if (report.status != "pending") return 0;
+        if (curl_global_init(CURL_GLOBAL_DEFAULT) != CURLE_OK)
+            throw std::runtime_error("Cannot initialize crash uploader");
+        struct CurlCleanup { ~CurlCleanup() { curl_global_cleanup(); } } cleanup;
+        if (ask) return review(report);
+        std::string error;
+        const bool sent = FSCrashReport::upload(report, error);
+        if (!sent) std::cerr << error << '\n';
+        return sent ? 0 : 1;
+    }
+    catch (const std::exception& error)
+    {
+        std::cerr << "Crash reporter: " << error.what() << '\n';
+        return 1;
+    }
 }
-
-    return 0;
-}
+// </FS:Beq>

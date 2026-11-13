@@ -841,10 +841,9 @@
        parameter="def_pbr_material" />
     </menu_item_check>
   </menu>
-	<menu
-        label="Marketplace"
-        layout="topleft"
-        name="Marketplace">
+	<menu_item_separator
+	 layout="topleft"
+	 name="Marketplace Separator" />
 	<menu_item_call
         label="Copy to Marketplace Listings"
         layout="topleft"
@@ -861,7 +860,6 @@
         function="Inventory.DoToSelected"
         parameter="move_to_marketplace_listings" />
 	</menu_item_call>
-	</menu>
 	<menu_item_call
      label="--no options--"
      layout="topleft"

@@ -534,6 +534,7 @@ LLContextMenu* FSParticipantList::FSParticipantListMenu::createMenu()
     registrar.add("Avatar.AddToContactSet", boost::bind(&FSParticipantList::FSParticipantListMenu::handleAddToContactSet, this));
     registrar.add("Avatar.ZoomIn", boost::bind(&LLAvatarActions::zoomIn, mUUIDs.front()));
     registrar.add("Avatar.BanMember", boost::bind(&FSParticipantList::FSParticipantListMenu::banSelectedMember, this, mUUIDs.front()));
+    registrar.add("Avatar.BanFromAllGroups", boost::bind(&LLGroupActions::banFromAllGroups, mUUIDs.front())); // <FS:PP> Ban from all groups
 
     registrar.add("ParticipantList.ModerateVoice", boost::bind(&FSParticipantList::FSParticipantListMenu::moderateVoice, this, _2));
 
@@ -562,7 +563,11 @@ LLContextMenu* FSParticipantList::FSParticipantListMenu::createMenu()
     main_menu->setItemVisible("View Icons Separator", mParent.mAvatarListToggleIconsConnection.connected());
     main_menu->setItemVisible("View Icons", mParent.mAvatarListToggleIconsConnection.connected());
     bool show_ban_member = mParent.getType() == FSParticipantList::CONV_SESSION_GROUP && hasAbilityToBan();
-    main_menu->setItemVisible("Group Ban Separator", show_ban_member);
+    // <FS:PP> Ban from all groups
+    bool show_ban_all = mParent.getType() == FSParticipantList::CONV_SESSION_GROUP && LLGroupActions::canBanFromAnyGroup(mUUIDs.front());
+    main_menu->setItemVisible("Group Ban Separator", show_ban_member || show_ban_all);
+    main_menu->setItemVisible("BanFromAllGroups", show_ban_all);
+    // </FS:PP>
     main_menu->setItemVisible("BanMember", show_ban_member);
     main_menu->arrangeAndClear();
 
@@ -947,6 +952,12 @@ bool FSParticipantList::FSParticipantListMenu::enableContextMenuItem(const LLSD&
     {
         return canBanSelectedMember(mUUIDs.front());
     }
+    // <FS:PP> Ban from all groups
+    else if (item == "can_ban_from_all_groups")
+    {
+        return LLGroupActions::canBanFromAnyGroup(mUUIDs.front());
+    }
+    // </FS:PP>
 
     return true;
 }

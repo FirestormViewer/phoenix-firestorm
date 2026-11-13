@@ -2243,6 +2243,16 @@ void LLPanelProfileSecondLife::onCommitMenu(const LLSD& userdata)
         LLAvatarActions::report(agent_id);
     }
     // </FS:Ansariel>
+    // <FS:PP> Ban from all groups
+    else if (item_name == "ban_from_all_groups")
+    {
+        LLGroupActions::banFromAllGroups(agent_id);
+    }
+    else if (item_name == "unban_from_all_groups")
+    {
+        LLGroupActions::unbanFromAllGroups(agent_id);
+    }
+    // </FS:PP>
     // <AS:Chanayane> Preview button
     else if (item_name == "preview")
     {
@@ -2312,6 +2322,12 @@ bool LLPanelProfileSecondLife::onEnableMenu(const LLSD& userdata)
     {
         return LLAvatarActions::isFriend(agent_id);
     }
+    // <FS:PP> Ban from all groups
+    else if (item_name == "ban_from_all_groups" || item_name == "unban_from_all_groups")
+    {
+        return LLGroupActions::canBanFromAnyGroup(agent_id);
+    }
+    // </FS:PP>
     else if (item_name == "copy_display_name"
         || item_name == "copy_username")
     {

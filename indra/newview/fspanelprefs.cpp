@@ -50,6 +50,7 @@ FSPanelPrefs::FSPanelPrefs() : LLPanelPreference()
 
     mEmbeddedItem = gSavedPerAccountSettings.getString("FSBuildPrefs_Item");
     mCustomScriptItem = gSavedPerAccountSettings.getString("FSBuildPrefs_CustomScriptItem");
+    mCustomLuaScriptItem = gSavedPerAccountSettings.getString("FSBuildPrefs_CustomLuaScriptItem");
 }
 
 bool FSPanelPrefs::postBuild()
@@ -108,24 +109,10 @@ void FSPanelPrefs::onOpen(const LLSD& key)
         
         getChild<LLCheckBoxCtrl>("FSBuildPrefs_UseCustomScript")->setEnabled(true);
         mCustomScriptItem = gSavedPerAccountSettings.getString("FSBuildPrefs_CustomScriptItem");
-        LLUUID script_id(mCustomScriptItem);
-        if (script_id.isNull())
-        {
-            getChild<LLTextBox>("custom_script_disp_rect_txt")->setTextArg("[SCRIPT]", getString("EmbeddedItemNotSet"));
-        }
-        else
-        {
-            LLInventoryObject* script = gInventory.getObject(script_id);
-            if (script)
-            {
-                getChild<LLTextBox>("custom_script_disp_rect_txt")->setTextArg("[SCRIPT]", script->getName());
-            }
-            else
-            {
-                getChild<LLTextBox>("custom_script_disp_rect_txt")->setTextArg("[SCRIPT]", getString("EmbeddedItemNotAvailable"));
-            }
-        }
-        
+        mCustomLuaScriptItem = gSavedPerAccountSettings.getString("FSBuildPrefs_CustomLuaScriptItem");
+        showCustomScript("custom_script_disp_rect_txt", mCustomScriptItem);
+        showCustomScript("custom_lua_script_disp_rect_txt", mCustomLuaScriptItem);
+
         getChild<LLUICtrl>("reset_default_folders")->setEnabled(true);
     }
     else
@@ -134,6 +121,7 @@ void FSPanelPrefs::onOpen(const LLSD& key)
         getChild<LLTextBox>("build_item_add_disp_rect_txt")->setTextArg("[ITEM]", getString("EmbeddedItemNotLoggedIn"));
         getChild<LLCheckBoxCtrl>("FSBuildPrefs_UseCustomScript")->setEnabled(false);
         getChild<LLTextBox>("custom_script_disp_rect_txt")->setTextArg("[SCRIPT]", getString("EmbeddedItemNotLoggedIn"));
+        getChild<LLTextBox>("custom_lua_script_disp_rect_txt")->setTextArg("[SCRIPT]", getString("EmbeddedItemNotLoggedIn"));
         getChild<LLUICtrl>("reset_default_folders")->setEnabled(false);
     }
 }
@@ -146,6 +134,7 @@ void FSPanelPrefs::apply()
     {
         gSavedPerAccountSettings.setString("FSBuildPrefs_Item", mEmbeddedItem);
         gSavedPerAccountSettings.setString("FSBuildPrefs_CustomScriptItem", mCustomScriptItem);
+        gSavedPerAccountSettings.setString("FSBuildPrefs_CustomLuaScriptItem", mCustomLuaScriptItem);
     }
 }
 
@@ -307,12 +296,35 @@ void FSPanelPrefs::onDADEmbeddedItem(const LLUUID& item_id)
 
 void FSPanelPrefs::onDADCustomScript(const LLUUID& item_id)
 {
-    LLInventoryObject* item = gInventory.getObject(item_id);
-    if (item && item->getType() == LLAssetType::AT_LSL_TEXT)
+    LLViewerInventoryItem* item = gInventory.getItem(item_id);
+    if (!item || item->getType() != LLAssetType::AT_LSL_TEXT)
     {
-        getChild<LLTextBox>("custom_script_disp_rect_txt")->setTextArg("[SCRIPT]", item->getName());
-        mCustomScriptItem = item_id.asString();
+        return;
     }
+
+    // one drop area, the script's own language picks the slot
+    if (item->getInventorySubType() == SST_LUA)
+    {
+        mCustomLuaScriptItem = item_id.asString();
+        showCustomScript("custom_lua_script_disp_rect_txt", mCustomLuaScriptItem);
+    }
+    else
+    {
+        mCustomScriptItem = item_id.asString();
+        showCustomScript("custom_script_disp_rect_txt", mCustomScriptItem);
+    }
+}
+
+void FSPanelPrefs::showCustomScript(const std::string& text_name, const std::string& item_id)
+{
+    LLUUID script_id(item_id);
+    std::string label = getString("EmbeddedItemNotSet");
+    if (script_id.notNull())
+    {
+        LLInventoryObject* script = gInventory.getObject(script_id);
+        label = script ? script->getName() : getString("EmbeddedItemNotAvailable");
+    }
+    getChild<LLTextBox>(text_name)->setTextArg("[SCRIPT]", label);
 }
 
 void FSPanelPrefs::onResetDefaultFolders()

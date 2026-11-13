@@ -812,7 +812,10 @@ void LLWindowSDL::setMouseClipping(bool b)
 {
     if (mWindow)
     {
-        SDL_SetWindowMouseGrab(mWindow, b);
+        // <FS:Zi> Fix window raising on mouse click when auto raise is disabled in the window manager
+        // SDL_SetWindowMouseGrab(mWindow, b);
+        SDL_CaptureMouse(b);
+        // </FS:Zi>
     }
 }
 
@@ -1153,7 +1156,10 @@ bool LLWindowSDL::SDLReallyCaptureInput(bool capture)
         if (wantGrab)
         {
             // LL_INFOS() << "X11 POINTER GRABBY" << LL_ENDL;
-            result = SDL_SetWindowMouseGrab(mWindow, true);
+            // <FS:Zi> Fix window raising on pressing e.g. ctrl when auto raise is disabled in the window manager
+            // result = SDL_SetWindowMouseGrab(mWindow, true);
+            result = SDL_CaptureMouse(true);
+            // </FS:Zi>
             if (0 == result)
                 newGrab = true;
             else
@@ -1162,7 +1168,10 @@ bool LLWindowSDL::SDLReallyCaptureInput(bool capture)
         else
         {
             newGrab = false;
-            result = SDL_SetWindowMouseGrab(mWindow, false);
+            // <FS:Zi> Fix window raising on pressing e.g. ctrl when auto raise is disabled in the window manager
+            // result = SDL_SetWindowMouseGrab(mWindow, false);
+             result = SDL_CaptureMouse(false);
+           // </FS:Zi>
         }
     }
         // pretend we got what we wanted, when really we don't care.

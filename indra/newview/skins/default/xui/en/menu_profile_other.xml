@@ -137,6 +137,33 @@
      function="Profile.EnableItem"
      parameter="toggle_block_agent"/>
   </menu_item_check>
+  <menu_item_separator name="separator_group_bans">
+    <menu_item_separator.on_visible
+     function="Profile.EnableItem"
+     parameter="ban_from_all_groups"/>
+  </menu_item_separator>
+  <menu_item_call
+   label="Ban from all my groups"
+   layout="topleft"
+   name="ban_from_all_groups">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="ban_from_all_groups"/>
+    <menu_item_call.on_visible
+     function="Profile.EnableItem"
+     parameter="ban_from_all_groups"/>
+  </menu_item_call>
+  <menu_item_call
+   label="Unban from all my groups"
+   layout="topleft"
+   name="unban_from_all_groups">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="unban_from_all_groups"/>
+    <menu_item_call.on_visible
+     function="Profile.EnableItem"
+     parameter="unban_from_all_groups"/>
+  </menu_item_call>
   <menu_item_separator name="separator_copy_options"/>
   <menu_item_call
    label="Copy Display Name"

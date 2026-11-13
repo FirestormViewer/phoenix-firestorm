@@ -123,6 +123,13 @@ public:
 // [/SL:KB]
     static bool callbackEject(const LLSD& notification, const LLSD& response);  // <FS:CR> FIRE-8499 - Eject from group confirmation
 
+    // <FS:PP> Ban or unban an avatar from every group the agent can manage bans in
+    static bool canBanFromAnyGroup(const LLUUID& idAgent);
+    static void banFromAllGroups(const LLUUID& idAgent);
+    static void unbanFromAllGroups(const LLUUID& idAgent);
+    static bool isBanFromAllGroupsRunning();
+    // </FS:PP>
+
 private:
     static bool onJoinGroup(const LLSD& notification, const LLSD& response);
     static bool onLeaveGroup(const LLSD& notification, const LLSD& response);
@@ -132,6 +139,13 @@ private:
      * members data request.
      */
     static void processLeaveGroupDataResponse(const LLUUID group_id);
+
+    // <FS:PP> Ban or unban from all groups
+    static void confirmBanFromAllGroups(const LLUUID& idAgent, bool ban);
+    static bool callbackBanFromAllGroups(const LLSD& notification, const LLSD& response);
+    static void banFromAllGroupsCoro(uuid_vec_t group_ids, std::vector<std::string> group_names, LLUUID idAgent, bool ban);
+    static S32 sBanFromAllGroupsRuns;
+    // </FS:PP>
 
     friend class LLFetchLeaveGroupData;
 };

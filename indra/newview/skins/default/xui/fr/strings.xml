@@ -360,6 +360,12 @@ Si vous pensez qu'il s'agit d'une erreur, veuillez contacter support@secondlife.
 	<string name="LoggingOut">
 		Déconnexion...
 	</string>
+	<string name="CompressingInventoryCache">
+		Compression du cache d'inventaire...
+	</string>
+	<string name="ShutdownCleanup">
+		Libération de ressources...
+	</string>
 	<string name="ShuttingDown">
 		Arrêt en cours...
 	</string>
@@ -459,6 +465,9 @@ Si vous pensez qu'il s'agit d'une erreur, veuillez contacter support@secondlife.
 	<string name="Toycamera">
 		Toy Camera
 	</string>
+	<string name="ReorderClothingTooltip">
+		Faites glisser pour réorganiser les calques, ou utilisez les flèches
+	</string> 
 	<string name="TooltipPerson">
 		Personne
 	</string>
@@ -1387,18 +1396,42 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	<string name="executable_files">
 		Fichiers de programmes exécutables
 	</string>
-	<string name="Validator_InvalidNumericString">Chaîne numérique non valide : "[STR]"</string>
-	<string name="Validator_ShouldNotBeMinus">Caractère initial non valide : '[CH]' (ne doit pas être un moins)</string>
-	<string name="Validator_ShouldNotBeMinusOrZero">Caractère initial non valide : '[CH]' (ne doit être ni un moins ni un zéro)</string>
-	<string name="Validator_ShouldBeDigit">Caractère non valide [NR] : '[CH]' (ne doit être qu'un chiffre)</string>
-	<string name="Validator_ShouldBeDigitOrDot">Caractère non valide [NR] : '[CH]' (ne doit être qu'un chiffre ou un point décimal)</string>
-	<string name="Validator_ShouldBeDigitOrAlpha">Caractère non valide [NR] : '[CH]' (ne peut être qu'un chiffre ou un caractère alphanumérique ASCII)</string>
-	<string name="Validator_ShouldBeDigitOrAlphaOrSpace">Caractère non valide [NR] : '[CH]' (ne peut être qu'un chiffre, un caractère alphanumérique ASCII ou un espace.)</string>
-	<string name="Validator_ShouldBeDigitOrAlphaOrPunct">Caractère non valide [NR] : '[CH]' (ne peut être qu'un chiffre, un caractère alphanumérique ASCII ou un signe de ponctuation.)</string>
-	<string name="Validator_ShouldBeDigitOrAlphaOrPunctNotSpace">Caractère non valide [NR] : '[CH]' (ne peut être qu'un chiffre ou un caractère alphanumérique ASCII ou une ponctuation sans espace.)</string>
-	<string name="Validator_ShouldBeDigitNotSpace">Caractère non valide [NR] : '[CH]' (ne doit être qu'un chiffre sans espace)</string>
-	<string name="Validator_ShouldBeASCII">Caractère non valide [NR] : '[CH]' (ne peut être qu'un caractère ASCII)</string>
-	<string name="Validator_ShouldBeNewLineOrASCII">Caractère non valide [NR] : '[CH]' (ne doit être qu'un caractère ASCII ou une nouvelle ligne.)</string>
+	<string name="Validator_InvalidNumericString">
+		Chaîne numérique non valide : "[STR]"
+	</string>
+	<string name="Validator_ShouldNotBeMinus">
+		Caractère initial non valide : '[CH]' (ne doit pas être un moins)
+	</string>
+	<string name="Validator_ShouldNotBeMinusOrZero">
+		Caractère initial non valide : '[CH]' (ne doit être ni un moins ni un zéro)
+	</string>
+	<string name="Validator_ShouldBeDigit">
+		Caractère non valide [NR] : '[CH]' (ne doit être qu'un chiffre)
+	</string>
+	<string name="Validator_ShouldBeDigitOrDot">
+		Caractère non valide [NR] : '[CH]' (ne doit être qu'un chiffre ou un point décimal)
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlpha">
+		Caractère non valide [NR] : '[CH]' (ne peut être qu'un chiffre ou un caractère alphanumérique ASCII)
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrSpace">
+		Caractère non valide [NR] : '[CH]' (ne peut être qu'un chiffre, un caractère alphanumérique ASCII ou un espace.)
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrPunct">
+		Caractère non valide [NR] : '[CH]' (ne peut être qu'un chiffre, un caractère alphanumérique ASCII ou un signe de ponctuation.)
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrPunctNotSpace">
+		Caractère non valide [NR] : '[CH]' (ne peut être qu'un chiffre ou un caractère alphanumérique ASCII ou une ponctuation sans espace.)
+	</string>
+	<string name="Validator_ShouldBeDigitNotSpace">
+		Caractère non valide [NR] : '[CH]' (ne doit être qu'un chiffre sans espace)
+	</string>
+	<string name="Validator_ShouldBeASCII">
+		Le caractère [CH] à la position [NR] doit être un caractère ASCII imprimable (à l'exception du barre verticale) ou un saut de ligne.
+	</string>
+	<string name="Validator_ShouldBeNewLineOrASCII">
+		Caractère non valide [NR] : '[CH]' (ne doit être qu'un caractère ASCII ou une nouvelle ligne.)
+	</string>
 	<string name="LSLTipSleepTime" translate="false">Pause le script pendant [SLEEP_TIME] secondes.</string>
 	<string name="shape">
 		Silhouette
@@ -1638,7 +1671,7 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 		Appuyez sur ESC pour quitter la vue subjective
 	</string>
 	<string name="InventoryNoMatchingItems">
-		Vous n&apos;avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/all/[SEARCH_TERM] Rechercher].
+		Aucun élément correspondant.
 	</string>
 	<string name="InventoryNoMatchingRecentItems">
 		Avez-vous trouvé ce que vous cherchiez ? Essayez [secondlife:///app/inventory/filters Show filters].
@@ -5444,6 +5477,12 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	</string>
 	<string name="ExternalEditorFailedToRun">
 		Échec d&apos;exécution de l&apos;éditeur externe.
+	</string>
+	<string name="ExternalEditorFailedToStart">
+		Échec du démarrage du serveur WebSocket. Vérifiez que le paramètre ExternalWebsocketSyncEnable est activé.
+	</string>
+	<string name="VSCodeLaunchFailed">
+		Échec du lancement de VS Code. Assurez-vous que la commande « code » figure dans votre variable PATH.
 	</string>
 	<string name="TranslationFailed">
 		Échec de traduction : [REASON]

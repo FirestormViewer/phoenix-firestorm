@@ -186,11 +186,14 @@
 			Aktuell gesetzt: [ITEM]
 		</text>
 		<check_box name="FSBuildPrefs_UseCustomScript" label="Benutzerdef. Skript für Button „Neues Skript“"/>
-		<fs_embedded_item_drop_target name="custom_script" tool_tip="Skript aus Inventar hier hinziehen und ablegen.">
-			Skript hier ablegen.
+		<fs_embedded_item_drop_target name="custom_script" tool_tip="LSL- oder Lua-Skript aus Inventar hier hinziehen und ablegen.">
+			LSL- oder Lua-Skript hier ablegen.
 		</fs_embedded_item_drop_target>
 		<text name="custom_script_disp_rect_txt">
-			Aktuell gesetzt: [SCRIPT]
+			LSL-Skript: [SCRIPT]
+		</text>
+		<text name="custom_lua_script_disp_rect_txt">
+			Lua-Skript: [SCRIPT]
 		</text>
 		<button label="Standard-Erstellungsberechtigungen" name="fs_default_creation_permissions"/>
 		<check_box label="Ausgewählte Primitive hervorheben" tool_tip="Deaktivieren, um die gelben und blauen Grundrisse nicht anzuzeigen. Verbessert die Performanz, wenn eine Vielzahl an Primitiven ausgewählt wird." name="FSBuildPrefsRenderHighlight_toggle"/>
@@ -248,6 +251,9 @@
 		<text name="text_box_scripting_font" width="140">
 			Schrift für Skript-Editor:
 		</text>
+		<text name="text_box_scripting_font_size" width="40">
+			Größe:
+		</text>
 		<check_box label="WebSocket-Synchronisierung aktivieren" name="websocket_sync_enable"/>
 		<text name="websocket_tip">
 			WebSocket Listen-Port:
@@ -259,9 +265,9 @@
 			<combo_item name="Cascadia" label="Cascadia Code"/>
 		</combo_box>
 		<combo_box name="FSScriptingFontSize" tool_tip="Größe der Schrift, die für den Skript-Editor verwendet wird">
-			<combo_item name="Monospace" label="Monospace"/>
-			<combo_item name="Scripting" label="Scripting"/>
-			<combo_item name="Cascadia" label="Cascadia Code"/>
+			<combo_item name="Monospace" label="Monospace Standard"/>
+			<combo_item name="Scripting" label="Scripting Standard"/>
+			<combo_item name="Cascadia" label="Cascadia Code Standard"/>
 			<combo_item name="Small" label="Klein"/>
 			<combo_item name="Medium" label="Mittel"/>
 			<combo_item name="Large" label="Groß"/>

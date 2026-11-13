@@ -31,6 +31,9 @@
 #include "../llslurl.h"
 #include "../../llxml/llcontrol.h"
 #include "llsdserialize.h"
+// <FS:Beq> Use the real translation declaration; RLVa also includes this header.
+#include "lltrans.h"
+// </FS:Beq>
 
 namespace
 {
@@ -43,22 +46,25 @@ static const char * const TEST_FILENAME("llslurl_test.xml");
 //
 // Stub implementation for LLTrans
 //
-class LLTrans
-{
-public:
-    static std::string getString(std::string_view xml_desc, const LLStringUtil::format_map_t& args, bool def_string = false);
-};
+// <FS:Beq> Supply only the test implementation, without redefining LLTrans.
 
 std::string LLTrans::getString(std::string_view xml_desc, const LLStringUtil::format_map_t& args, bool def_string)
 {
     return std::string();
 }
+void LLTrans::setDefaultArg(const std::string&, const std::string&) {}
+// </FS:Beq>
 
 // [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 // Stub implementation to get the test to compile properly
 #include "../rlvhandler.h"
 
+// <FS:Beq> Match the current RLVa string-view API and handler members.
+#ifdef CATZNIP_STRINGVIEW
+const std::string& RlvStrings::getString(const std::string_view& strStringName)
+#else
 const std::string& RlvStrings::getString(const std::string& strStringName)
+#endif
 {
     static const std::string strMissing = "(Missing RLVa string)";
     return strMissing;
@@ -69,7 +75,7 @@ bool RlvUtil::isNearbyRegion(const std::string& strRegion)
     return false;
 }
 
-RlvHandler::RlvHandler() : m_pGCTimer(NULL), m_pWLSnapshot(NULL)
+RlvHandler::RlvHandler() : m_pGCTimer(NULL)
 {
     // Array auto-initialization to 0 is non-standard? (Compiler warning in VC-8.0)
     memset(m_Behaviours, 0, sizeof(S16) * RLV_BHVR_COUNT);
@@ -78,8 +84,14 @@ RlvHandler::RlvHandler() : m_pGCTimer(NULL), m_pWLSnapshot(NULL)
 RlvHandler::~RlvHandler()
 {
 }
+bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent>, const LLSD&)
+{
+    return false;
+}
+void RlvHandler::changed(const LLUUID&, LLGroupChange) {}
 
 RlvHandler gRlvHandler;
+// </FS:Beq>
 // [/RLVa:KB]
 
 //----------------------------------------------------------------------------
@@ -248,27 +260,25 @@ namespace tut
         ensure_equals(" slurl, region + coords", slurl.getSLURLString(),
                       "https://maps.secondlife.com/secondlife/my%20region/1/2/3");
 
+        // <FS:Beq> The SL build accepts only its built-in grids; external grid
+        // files are deliberately ignored. Unrelated web links are not SLURLs.
         LLGridManager::getInstance()->setGridChoice("my.grid.com");
+        ensure_equals("unknown grid leaves selection unchanged",
+                      LLGridManager::getInstance()->getGridId(), "Agni");
         slurl = LLSLURL("https://my.grid.com/region/my%20region/1/2/3");
-        ensure_equals("grid slurl, region + coords - type", slurl.getType(), LLSLURL::LOCATION);
-        ensure_equals("grid slurl, region + coords", slurl.getSLURLString(),
-                      "https://my.grid.com/region/my%20region/1/2/3");
+        ensure_equals("unrelated grid URL is invalid", slurl.getType(), LLSLURL::INVALID);
 
-        slurl = LLSLURL("https://my.grid.com/region/my region");
-        ensure_equals("grid slurl, region + coords - type", slurl.getType(), LLSLURL::LOCATION);
-        ensure_equals("grid slurl, region + coords", slurl.getSLURLString(),
-                      "https://my.grid.com/region/my%20region/128/128/0");
-
-        LLGridManager::getInstance()->setGridChoice("foo.bar.com");
+        LLGridManager::getInstance()->setGridChoice("Aditi");
         slurl = LLSLURL("/myregion/1/2/3");
         ensure_equals("/: slurl, region + coords - type", slurl.getType(), LLSLURL::LOCATION);
         ensure_equals("/ slurl, region + coords", slurl.getSLURLString(),
-                      "https://foo.bar.com/region/myregion/1/2/3");
+                      "secondlife://Aditi/secondlife/myregion/1/2/3");
 
         slurl = LLSLURL("myregion/1/2/3");
         ensure_equals(": slurl, region + coords - type", slurl.getType(), LLSLURL::LOCATION);
         ensure_equals(" slurl, region + coords", slurl.getSLURLString(),
-                      "https://foo.bar.com/region/myregion/1/2/3");
+                      "secondlife://Aditi/secondlife/myregion/1/2/3");
+        // </FS:Beq>
 
         slurl = LLSLURL(LLSLURL::SIM_LOCATION_HOME);
         ensure_equals("home", slurl.getType(), LLSLURL::HOME_LOCATION);
@@ -282,7 +292,7 @@ namespace tut
         ensure_equals("apppath", slurl.getAppPath().size(), 1);
         ensure_equals("apppath2", slurl.getAppPath()[0].asString(), "bar");
         ensure_equals("appquery", slurl.getAppQuery(), "12345");
-        ensure_equals("grid1", slurl.getGrid(), "FooBar");
+        ensure_equals("grid1", slurl.getGrid(), "Aditi"); // <FS:Beq/> Current grid.
 
         slurl = LLSLURL("secondlife://Aditi/app/foo/bar?12345");
         ensure_equals("app", slurl.getType(), LLSLURL::APP);
@@ -292,7 +302,7 @@ namespace tut
         ensure_equals("appquery", slurl.getAppQuery(), "12345");
         ensure_equals("grid2",  slurl.getGrid(), "Aditi");
 
-        LLGridManager::getInstance()->setGridChoice("foo.bar.com");
+        LLGridManager::getInstance()->setGridChoice("Aditi"); // <FS:Beq/> Supported grid.
         slurl = LLSLURL("secondlife:///secondlife/myregion/1/2/3");
         ensure_equals("/: slurl, region + coords - type", slurl.getType(), LLSLURL::LOCATION);
         ensure_equals("location", slurl.getType(), LLSLURL::LOCATION);
@@ -305,8 +315,10 @@ namespace tut
         ensure_equals("region" , "myregion", slurl.getRegion());
         ensure_equals("grid4", slurl.getGrid(), "Aditi" );
 
-        LLGridManager::getInstance()->setGridChoice("my.grid.com");
-        slurl = LLSLURL("https://my.grid.com/app/foo/bar?12345");
+        // <FS:Beq> Exercise HTTP app URLs on the selected, supported grid.
+        LLGridManager::getInstance()->setGridChoice("Agni");
+        slurl = LLSLURL("https://maps.secondlife.com/app/foo/bar?12345");
+        // </FS:Beq>
         ensure_equals("app", slurl.getType(), LLSLURL::APP);
         ensure_equals("appcmd", slurl.getAppCmd(), "foo");
         ensure_equals("apppath", slurl.getAppPath().size(), 1);
@@ -325,15 +337,16 @@ namespace tut
 
         LLGridManager::getInstance()->initialize(TEST_FILENAME);
 
-        LLSLURL slurl = LLSLURL("my.grid.com", "my region");
+        // <FS:Beq> Use the built-in grids available in SL builds.
+        LLSLURL slurl = LLSLURL("util.agni.lindenlab.com", "my region");
         ensure_equals("grid/region - type", slurl.getType(), LLSLURL::LOCATION);
         ensure_equals("grid/region", slurl.getSLURLString(),
-                      "https://my.grid.com/region/my%20region/128/128/0");
+                      "https://maps.secondlife.com/secondlife/my%20region/128/128/0");
 
-        slurl = LLSLURL("my.grid.com", "my region", LLVector3(1,2,3));
+        slurl = LLSLURL("util.aditi.lindenlab.com", "my region", LLVector3(1,2,3));
         ensure_equals("grid/region/vector - type", slurl.getType(), LLSLURL::LOCATION);
         ensure_equals(" grid/region/vector", slurl.getSLURLString(),
-                      "https://my.grid.com/region/my%20region/1/2/3");
+                      "secondlife://Aditi/secondlife/my%20region/1/2/3");
 
         LLGridManager::getInstance()->setGridChoice("util.agni.lindenlab.com");
         slurl = LLSLURL("my region", LLVector3(1,2,3));
@@ -341,11 +354,12 @@ namespace tut
         ensure_equals(" default grid/region/vector", slurl.getSLURLString(),
                       "https://maps.secondlife.com/secondlife/my%20region/1/2/3");
 
-        LLGridManager::getInstance()->setGridChoice("MyGrid");
+        LLGridManager::getInstance()->setGridChoice("Aditi");
         slurl = LLSLURL("my region", LLVector3(1,2,3));
         ensure_equals("default grid/region/vector - type", slurl.getType(), LLSLURL::LOCATION);
         ensure_equals(" default grid/region/vector", slurl.getSLURLString(),
-                      "https://my.grid.com/region/my%20region/1/2/3");
+                      "secondlife://Aditi/secondlife/my%20region/1/2/3");
+        // </FS:Beq>
 
     }
     // Accessors
@@ -358,13 +372,15 @@ namespace tut
 
         LLGridManager::getInstance()->initialize(TEST_FILENAME);
 
-        LLGridManager::getInstance()->setGridChoice("my.grid.com");
-        LLSLURL slurl = LLSLURL("https://my.grid.com/region/my%20region/1/2/3");
+        // <FS:Beq> Accessors require a URL accepted by the SL grid manager.
+        LLGridManager::getInstance()->setGridChoice("Agni");
+        LLSLURL slurl = LLSLURL("https://maps.secondlife.com/secondlife/my%20region/1/2/3");
         ensure_equals("login string", slurl.getLoginString(), "uri:my region&amp;1&amp;2&amp;3");
         ensure_equals("location string", slurl.getLocationString(), "my region/1/2/3");
-        ensure_equals("grid", slurl.getGrid(), "my.grid.com");
+        ensure_equals("grid", slurl.getGrid(), "util.agni.lindenlab.com");
         ensure_equals("region", slurl.getRegion(), "my region");
         ensure_equals("position", slurl.getPosition(), LLVector3(1, 2, 3));
+        // </FS:Beq>
 
     }
 }

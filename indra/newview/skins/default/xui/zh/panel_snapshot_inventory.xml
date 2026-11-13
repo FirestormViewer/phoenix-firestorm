@@ -7,7 +7,9 @@
 		<combo_box.item label="小（128x128）" name="Small(128x128)" />
 		<combo_box.item label="中（256x256）" name="Medium(256x256)" />
 		<combo_box.item label="大（512x512）" name="Large(512x512)" />
+		<combo_box.item label="寬 (1024x512)" name="Wide(1024x512)" />
 		<combo_box.item label="非常大 (1024x1024)" name="Very Large(1024x1024)"/>
+		<combo_box.item label="全寬 (2048x1024)" name="Full(2048x1024)" />
 		<combo_box.item label="巨大 (2048x2048)" name="Huge(2048x2048)"/>
 		<combo_box.item label="當前視窗" name="CurrentWindow" />
 		<combo_box.item label="自訂" name="Custom" />

@@ -132,6 +132,7 @@ struct LLAvatarData
         customer_type = legacy_data.customer_type;
         flags = legacy_data.flags;
         hide_age = legacy_data.hide_age;
+        allow_publish = (legacy_data.flags & AVATAR_ALLOW_PUBLISH) != 0;
     }
     // </FS:Ansariel>
 };

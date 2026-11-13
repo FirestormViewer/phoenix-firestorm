@@ -7,11 +7,13 @@
 	<menu_item_call label="Heranzoomen" name="look_at_object"/>
 	<menu_item_call label="Untersuchen" name="inspect_object"/>
 	<menu_item_call label="Bearbeiten" name="edit_object"/>
-	<menu_item_call label="Zurückgeben" name="return_object"/>
+	<menu_item_call label="Zurückgeben als kombiniertes Objekt" name="return_object"/>
+	<menu_item_call label="Zurückgeben als einzelne Objekte" name="return_object_separate"/>
 	<menu_item_call label="Löschen" name="delete_object"/>
 	<menu_item_call label="Zur Blacklist hinzufügen" name="blacklist_object"/>
 	<menu_item_call label="Objekt kaufen" name="object_buy"/>
 	<menu_item_call label="Eigene Objekte filtern" name="filter_my_objects" />
 	<menu_item_call label="Alles auswählen" name="select_all" />
 	<menu_item_call label="Auswahl aufheben" name="clear_selection" />
+	<menu_item_call label="Aus allen meinen Gruppen verbannen" name="BanFromAllGroups"/>
 </context_menu>

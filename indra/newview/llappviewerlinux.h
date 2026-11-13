@@ -51,6 +51,9 @@ public:
     bool setupSLURLHandler();
 
 protected:
+    // <FS:Beq> Snapshot crash context while the viewer is healthy.
+    void bugsplatAddStaticAttributes(const LLSD& info) override;
+    // </FS:Beq>
     bool beingDebugged() override;
 
     bool restoreErrorTrap() override;

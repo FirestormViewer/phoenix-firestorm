@@ -36,6 +36,10 @@
 
 class LLMessageSystem;
 class LLRemoteParcelInfoObserver;
+// <FS:Beq> Keep vector declarations independent of forced precompiled headers.
+class LLVector3;
+class LLVector3d;
+// </FS:Beq>
 
 struct LLParcelData
 {

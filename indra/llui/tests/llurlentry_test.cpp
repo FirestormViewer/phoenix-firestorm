@@ -36,6 +36,14 @@
 
 #include <boost/regex.hpp>
 
+// <FS:Beq> Isolate the viewer-owned RLVa name service in URL parser tests.
+// RLVa's name service belongs to the viewer, outside this URL parser test.
+std::string rlvGetAnonym(const LLAvatarName&)
+{
+    return "Anonymous";
+}
+// </FS:Beq>
+
 #if LL_WINDOWS
 // because something pulls in window and lldxdiag dependencies which in turn need wbemuuid.lib
     #pragma comment(lib, "wbemuuid.lib")

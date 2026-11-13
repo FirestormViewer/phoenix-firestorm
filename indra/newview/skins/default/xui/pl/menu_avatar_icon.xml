@@ -29,5 +29,6 @@
 		<menu_item_call label="Odblokuj tego rozmówcę" name="ModerateVoiceUnMuteSelected" />
 	</context_menu>
 	<menu_item_call label="Zbanuj" name="BanMember" />
+	<menu_item_call label="Zbanuj we wszystkich moich grupach" name="BanFromAllGroups" />
 	<menu_item_call label="Wzmianka użytkownika na czacie" name="mention_in_chat" />
 </toggleable_menu>

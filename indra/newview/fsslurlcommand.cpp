@@ -158,6 +158,12 @@ public:
             return true;
         }
 
+        if (verb == "groupbanall")
+        {
+            LLGroupActions::banFromAllGroups(target_id);
+            return true;
+        }
+
         // please someone tell me there is an easier way to get the group UUID of the
         // currently focused group, or transfer the UUID through the context menu somehow - Zi
         LLFloater* focused_floater = gFloaterView->getFocusedFloater();

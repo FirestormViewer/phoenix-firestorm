@@ -93,6 +93,9 @@ spécifiques dans ce groupe. Il existe une large liste de droits.
 			<text name="assigned_members_label">
 				Membres assignés
 			</text>
+			<text name="members_not_loaded">
+				La liste des membres n'est pas chargés
+			</text>
 		</panel>
 		<panel name="group_roles_layout_panel2">
 			<text name="allowed_abilities_label">

@@ -167,11 +167,14 @@
          Obecnie: [ITEM]
         </text>
         <check_box name="FSBuildPrefs_UseCustomScript" label="Własny skrypt pod guzikiem Nowy Skrypt"/>
-        <fs_embedded_item_drop_target name="custom_script" tool_tip="Upuść skrypt w tym miejscu.">
-         Upuść skrypt w tym miejscu.
+        <fs_embedded_item_drop_target name="custom_script" tool_tip="Upuść skrypt LSL lub Lua w tym miejscu.">
+         Upuść skrypt LSL lub Lua w tym miejscu.
         </fs_embedded_item_drop_target>
         <text name="custom_script_disp_rect_txt">
-         Obecnie: [SCRIPT]
+         Skrypt LSL: [SCRIPT]
+        </text>
+        <text name="custom_lua_script_disp_rect_txt">
+         Skrypt Lua: [SCRIPT]
         </text>
         <button label="Domyślne uprawnienia tworzenia" name="fs_default_creation_permissions" />
         <check_box label="Podświetlanie wybranych primów" tool_tip="Gdy odznaczysz tą opcję, to żółte/niebieskie podświetlenia krawędzi nie są renderowane - zwiększa wydajność, gdy zaznaczonych jest wiele primów." name="FSBuildPrefsRenderHighlight_toggle" />
@@ -226,6 +229,9 @@
             Czcionka edytora skryptów:
         </text>
         <combo_box name="FSScriptingFontName" tool_tip="Nazwa czcionki używanej w edytorze skryptów LSL" />
+		<text name="text_box_scripting_font_size">
+			Rozmiar:
+		</text>
         <combo_box name="FSScriptingFontSize" tool_tip="Rozmiar czcionki używanej w edytorze skryptów LSL">
             <combo_item name="Small" label="Mała"/>
             <combo_item name="Medium" label="Średnia"/>
