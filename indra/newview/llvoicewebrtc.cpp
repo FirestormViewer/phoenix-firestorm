@@ -1721,15 +1721,37 @@ void LLWebRTCVoiceClient::processChannels(bool process)
 
 bool LLWebRTCVoiceClient::inProximalChannel()
 {
+    // <FS:FLO> [FIRE-36672] Check process channels, region and parcel voice flags
+    if (!mProcessChannels || !inSpatialChannel())
+    {
+        return false;
+    }
+
+    LLViewerRegion *regionp = gAgent.getRegion();
+    if (!regionp || !regionp->isVoiceEnabled())
+    {
+        return false;
+    }
+
+    LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+    if (parcel && parcel->getLocalID() != INVALID_PARCEL_ID && !parcel->getParcelFlagAllowVoice())
+    {
+        return false;
+    }
+    // </FS:FLO>
+
     // <FS:PP> FIRE-36672: Voice status indicator behavior change
-    // inSpatialChannel() defaults to true with no session (parcel voice disabled), which keeps the conversation voice indicator green
     // Only report proximal when a spatial session is established
     static LLCachedControl<bool> require_established_session(gSavedSettings, "DebugWebRTCRequireEstablishedSpatialSession", false);
     if (require_established_session)
     {
-        return mProcessChannels && mSession && mSession->isSpatial();
+        // <FS:FLO> [FIRE-36672] Also check mNextSession during session establishment
+        // return mProcessChannels && mSession && mSession->isSpatial();
+        return (mSession && mSession->isSpatial()) || (mNextSession && mNextSession->isSpatial());
+        // </FS:FLO>
     }
     // </FS:PP>
+
     return inSpatialChannel();
 }
 
