@@ -447,6 +447,9 @@ public:
     void                    sendViewerAppearanceChangeMetrics(); // send data associated with completing a change.
     // <FS:Ansariel> [Legacy Bake]
     void                    checkForUnsupportedServerBakeAppearance();
+    // <FS:Kitely> Fetch our bakes from a different host, because the avatar changed regions
+    void                    changeBakesTargetHost(const LLHost& host);
+    // </FS:Kitely>
 private:
     LLFrameTimer            mDebugSelfLoadTimer;
     F32                     mDebugTimeWearablesLoaded;
