@@ -49,6 +49,7 @@
 #include "llviewercontrol.h"    // for gSavedSettings
 #include "lltooldraganddrop.h"
 #include "lggcontactsets.h" // <FS:PP> FIRE-36478: Ignore alias quotation marks when comparing names from contact sets
+#include "fspinnedfriends.h" // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
 // [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
 #include "rlvhandler.h"
 #include "rlvactions.h"
@@ -79,7 +80,13 @@ void LLAvatarList::toggleIcons()
     getItems(items);
     for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
     {
-        static_cast<LLAvatarListItem*>(*it)->setAvatarIconVisible(mShowIcons);
+        // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - skip the (non-LLAvatarListItem) separator
+        // static_cast<LLAvatarListItem*>(*it)->setAvatarIconVisible(mShowIcons);
+        if (LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(*it))
+        {
+            item->setAvatarIconVisible(mShowIcons);
+        }
+        // </FS:TP>
     }
 }
 
@@ -93,7 +100,13 @@ void LLAvatarList::setSpeakingIndicatorsVisible(bool visible)
     getItems(items);
     for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
     {
-        static_cast<LLAvatarListItem*>(*it)->showSpeakingIndicator(mShowSpeakingIndicator);
+        // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - skip the (non-LLAvatarListItem) separator
+        // static_cast<LLAvatarListItem*>(*it)->showSpeakingIndicator(mShowSpeakingIndicator);
+        if (LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(*it))
+        {
+            item->showSpeakingIndicator(mShowSpeakingIndicator);
+        }
+        // </FS:TP>
     }
 }
 
@@ -107,7 +120,13 @@ void LLAvatarList::showPermissions(bool visible)
     getItems(items);
     for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
     {
-        static_cast<LLAvatarListItem*>(*it)->setShowPermissions(mShowPermissions);
+        // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - skip the (non-LLAvatarListItem) separator
+        // static_cast<LLAvatarListItem*>(*it)->setShowPermissions(mShowPermissions);
+        if (LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(*it))
+        {
+            item->setShowPermissions(mShowPermissions);
+        }
+        // </FS:TP>
     }
 }
 
@@ -118,7 +137,13 @@ void LLAvatarList::showDisplayName(bool visible)
     getItems(items);
     for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
     {
-        static_cast<LLAvatarListItem*>(*it)->showDisplayName(visible);
+        // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - skip the (non-LLAvatarListItem) separator
+        // static_cast<LLAvatarListItem*>(*it)->showDisplayName(visible);
+        if (LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(*it))
+        {
+            item->showDisplayName(visible);
+        }
+        // </FS:TP>
     }
     mNeedUpdateNames = true;
 }
@@ -130,7 +155,13 @@ void LLAvatarList::showUsername(bool visible)
     getItems(items);
     for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
     {
-        static_cast<LLAvatarListItem*>(*it)->showUsername(visible);
+        // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - skip the (non-LLAvatarListItem) separator
+        // static_cast<LLAvatarListItem*>(*it)->showUsername(visible);
+        if (LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(*it))
+        {
+            item->showUsername(visible);
+        }
+        // </FS:TP>
     }
     mNeedUpdateNames = true;
 }
@@ -250,7 +281,13 @@ void LLAvatarList::handleDisplayNamesOptionChanged()
     getItems(items);
     for (auto panel : items)
     {
-        LLAvatarListItem* item = static_cast<LLAvatarListItem*>(panel);
+        // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - skip the (non-LLAvatarListItem) separator
+        LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(panel);
+        if (!item)
+        {
+            continue;
+        }
+        // </FS:TP>
         item->showUsername(mShowUsername, false);
         item->showDisplayName(mShowDisplayName, false);
     }
@@ -270,7 +307,119 @@ LLAvatarList::~LLAvatarList()
         mRlvBehaviorCallbackConnection.disconnect();
     }
     // </FS:Ansariel>
+
+    // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
+    if (mPinnedChangedConnection.connected())
+    {
+        mPinnedChangedConnection.disconnect();
+    }
+    // </FS:TP>
 }
+
+// <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
+void LLAvatarList::setShowPinnedFriends(bool show)
+{
+    mShowPinnedFriends = show;
+
+    if (show && !mPinnedChangedConnection.connected())
+    {
+        mPinnedChangedConnection = FSPinnedFriends::getInstance()->setPinnedChangedCallback(boost::bind(&LLAvatarList::onPinnedChanged, this));
+    }
+    else if (!show && mPinnedChangedConnection.connected())
+    {
+        mPinnedChangedConnection.disconnect();
+    }
+
+    setDirty(true);
+}
+
+void LLAvatarList::onPinnedChanged()
+{
+    // refresh()'s add/remove diff is keyed on UUID membership, so it never
+    // revisits an item that's still in the list when only its pinned status
+    // changed - sync every visible item's pinned flag directly here instead
+    // of relying on setDirty()/addNewItem() to pick it up, then re-sort so
+    // the pinned-first comparators take effect immediately.
+    std::vector<LLPanel*> items;
+    getItems(items);
+    for (auto* panel : items)
+    {
+        // Skip the (non-LLAvatarListItem) separator - it has no pinned
+        // status of its own, and updatePinnedSeparator() below repositions
+        // or removes it based on the real items' pinned status anyway.
+        if (LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(panel))
+        {
+            item->setPinned(FSPinnedFriends::getInstance()->isPinned(item->getAvatarId()));
+        }
+    }
+    sort();
+    updatePinnedSeparator();
+}
+
+// Called after every sort() that could change whether a pinned/unpinned
+// boundary exists (refresh() and onPinnedChanged()). Mirrors
+// LLGroupList::addFavoritesSeparator()'s approach, adapted for this list's
+// incremental refresh(): since the separator's UUID is never part of
+// getIDs(), refresh()'s own added/removed diff drops it every pass anyway,
+// so it's simplest to always drop it here first and re-add it only if it's
+// still needed, rather than tracking whether it's already in the right spot.
+void LLAvatarList::updatePinnedSeparator()
+{
+    static const LLUUID PINNED_SEPARATOR_UUID("00000000-0000-0000-0000-0000000000a1");
+
+    removeItemByUUID(PINNED_SEPARATOR_UUID);
+
+    // Scoped to the Friends tabs (mShowPinnedFriends), and - like
+    // LLGroupList's favorites separator - suppressed while a name filter is
+    // active, since a filtered-down list may no longer have both a pinned
+    // and an unpinned friend visible.
+    if (!mShowPinnedFriends || !mNameFilter.empty())
+    {
+        return;
+    }
+
+    std::vector<LLPanel*> items;
+    getItems(items);
+
+    bool has_pinned = false;
+    bool has_unpinned = false;
+    for (auto* panel : items)
+    {
+        if (LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(panel))
+        {
+            if (item->isPinned())
+            {
+                has_pinned = true;
+            }
+            else
+            {
+                has_unpinned = true;
+            }
+        }
+    }
+
+    if (has_pinned && has_unpinned)
+    {
+        addItem(new LLAvatarListSeparator(), PINNED_SEPARATOR_UUID, ADD_BOTTOM, false);
+        sort();
+    }
+}
+
+/************************************************************************/
+/*          LLAvatarListSeparator implementation                        */
+/************************************************************************/
+
+LLAvatarListSeparator::LLAvatarListSeparator()
+    : LLPanel()
+{
+    buildFromFile("panel_avatar_list_separator.xml");
+}
+
+bool LLAvatarListSeparator::postBuild()
+{
+    return true;
+}
+// </FS:TP>
 
 void LLAvatarList::setShowIcons(std::string param_name)
 {
@@ -292,7 +441,13 @@ void LLAvatarList::updateRlvRestrictions(ERlvBehaviour behavior)
         getItems(items);
         for (auto panel : items)
         {
-            LLAvatarListItem* item = static_cast<LLAvatarListItem*>(panel);
+            // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - skip the (non-LLAvatarListItem) separator
+            LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(panel);
+            if (!item)
+            {
+                continue;
+            }
+            // </FS:TP>
             item->updateRlvRestrictions();
         }
     }
@@ -478,6 +633,10 @@ void LLAvatarList::refresh()
     // has already sorted. JC
     sort();
 
+    // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
+    updatePinnedSeparator();
+    // </FS:TP>
+
     // re-select items
     //  selectMultiple(selected_ids); // TODO: implement in LLFlatListView if need
     selectItemByUUID(current_id);
@@ -499,7 +658,13 @@ void LLAvatarList::refresh()
         getItems(items);
         for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
         {
-            static_cast<LLAvatarListItem*>(*it)->setHighlight(mNameFilter);
+            // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - skip the (non-LLAvatarListItem) separator
+            // static_cast<LLAvatarListItem*>(*it)->setHighlight(mNameFilter);
+            if (LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(*it))
+            {
+                item->setHighlight(mNameFilter);
+            }
+            // </FS:TP>
         }
 
         // Send refresh_complete signal.
@@ -518,7 +683,13 @@ void LLAvatarList::updateAvatarNames()
 
     for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
     {
-        LLAvatarListItem* item = static_cast<LLAvatarListItem*>(*it);
+        // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - skip the (non-LLAvatarListItem) separator
+        LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(*it);
+        if (!item)
+        {
+            continue;
+        }
+        // </FS:TP>
         item->setUseContactSetColors(mUseContactSetColors); // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
         item->setUseContactSetListStyle(mUseContactSetListStyle); // <FS:PP> FIRE-31733: Make contact sets lists more readable
         item->setShowCompleteName(mShowCompleteName, mForceCompleteName);
@@ -624,6 +795,14 @@ void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, bool is
     item->setUseContactSetColors(mUseContactSetColors); // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
     item->setUseContactSetListStyle(mUseContactSetListStyle); // <FS:PP> FIRE-31733: Make contact sets lists more readable
 
+    // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - only looked up for lists that opted in
+    // (the Friends tabs); isPinned() stays false everywhere else.
+    if (mShowPinnedFriends)
+    {
+        item->setPinned(FSPinnedFriends::getInstance()->isPinned(id));
+    }
+    // </FS:TP>
+
     item->setDoubleClickCallback(boost::bind(&LLAvatarList::onItemDoubleClicked, this, _1, _2, _3, _4));
     item->setMouseDownCallback(boost::bind(&LLAvatarList::onItemClicked, this, _1, _2, _3, _4));
 
@@ -634,6 +813,13 @@ void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, bool is
 bool LLAvatarList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
     bool handled = LLUICtrl::handleRightMouseDown(x, y, mask);
+    // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - never show the context menu for the separator
+    LLPanel* selected_item = getSelectedItem();
+    if (dynamic_cast<LLAvatarListSeparator*>(selected_item))
+    {
+        return handled;
+    }
+    // </FS:TP>
 //  if ( mContextMenu)
 // [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a) | Modified: RLVa-1.2.0d
     if (mContextMenu && ((!mRlvCheckShowNames) || (!RlvActions::hasBehaviour(RLV_BHVR_SHOWNAMES))) )
@@ -775,7 +961,13 @@ void LLAvatarList::updateLastInteractionTimes()
     for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
     {
         // *TODO: error handling
-        LLAvatarListItem* item = static_cast<LLAvatarListItem*>(*it);
+        // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - skip the (non-LLAvatarListItem) separator
+        LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(*it);
+        if (!item)
+        {
+            continue;
+        }
+        // </FS:TP>
         S32 secs_since = now - (S32) LLRecentPeople::instance().getDate(item->getAvatarId()).secondsSinceEpoch();
         if (secs_since >= 0)
             item->setLastInteractionTime(secs_since);
@@ -821,17 +1013,39 @@ bool LLAvatarItemComparator::compare(const LLPanel* item1, const LLPanel* item2)
     const LLAvatarListItem* avatar_item1 = dynamic_cast<const LLAvatarListItem*>(item1);
     const LLAvatarListItem* avatar_item2 = dynamic_cast<const LLAvatarListItem*>(item2);
 
+    // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - gracefully order the (non-LLAvatarListItem)
+    // pinned-separator panel between pinned and unpinned items, instead of
+    // the LL_ERRS this used to be. Mirrors llgrouplist.cpp's LLGroupComparator
+    // handling of its own favorites separator exactly.
     if (!avatar_item1 || !avatar_item2)
     {
-        LL_ERRS() << "item1 and item2 cannot be null" << LL_ENDL;
-        return true;
+        if (!avatar_item1 && avatar_item2)
+        {
+            return avatar_item2->isPinned() ? false : true;
+        }
+        if (avatar_item1 && !avatar_item2)
+        {
+            return avatar_item1->isPinned() ? true : false;
+        }
+        return false;
     }
+    // </FS:TP>
 
     return doCompare(avatar_item1, avatar_item2);
 }
 
 bool LLAvatarItemNameComparator::doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const
 {
+    // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - float pinned items to the top; a no-op
+    // wherever isPinned() is never set (every list except the Friends tabs).
+    bool pinned1 = avatar_item1->isPinned();
+    bool pinned2 = avatar_item2->isPinned();
+    if (pinned1 != pinned2)
+    {
+        return pinned1 > pinned2;
+    }
+    // </FS:TP>
+
     // <FS:PP> FIRE-36478: Ignore alias quotation marks when comparing names from contact sets
     // std::string name1 = avatar_item1->getAvatarName();
     // std::string name2 = avatar_item2->getAvatarName();
@@ -876,6 +1090,16 @@ bool LLAvatarItemAgentOnTopComparator::doCompare(const LLAvatarListItem* avatar_
 // <FS:Ansariel> FIRE-5283: Sort by username
 bool LLAvatarItemUserNameComparator::doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const
 {
+    // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - float pinned items to the top; a no-op
+    // wherever isPinned() is never set (every list except the Friends tabs).
+    bool pinned1 = avatar_item1->isPinned();
+    bool pinned2 = avatar_item2->isPinned();
+    if (pinned1 != pinned2)
+    {
+        return pinned1 > pinned2;
+    }
+    // </FS:TP>
+
     std::string name1 = avatar_item1->getUserName();
     std::string name2 = avatar_item2->getUserName();
 
