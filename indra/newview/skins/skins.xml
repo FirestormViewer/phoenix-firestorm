@@ -90,6 +90,13 @@
           <key>folder</key>
           <string>ctrlaltstudio</string>
         </map>
+        <!-- Sin Enchantment's black & gold & red theme -->
+        <map>
+          <key>name</key>
+          <string>Sin Enchantment</string>
+          <key>folder</key>
+          <string>sin.enchantment</string>
+        </map>
       </array>
     </map>
 
