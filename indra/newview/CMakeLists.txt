@@ -3074,6 +3074,11 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
 endif ()
 
 if (LL_TESTS)
+  # <FS:Beq> regression test NVidia thread optimization settings on Linux.
+  if (LINUX)
+    add_subdirectory(linux_tools/tests)
+  endif ()
+  # </FS:Beq>
   # To add a viewer unit test, just add the test .cpp file below
   # This creates a separate test project per file listed.
   include(LLAddBuildTest)
