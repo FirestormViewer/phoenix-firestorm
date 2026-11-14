@@ -1,6 +1,7 @@
 #include "linden_common.h"
 #include "bugsplatattributes.h"
 #include "llstring.h"
+#include "fsyspath.h"
 #include <filesystem>
 
 std::string BugSplatAttributes::mCrashContextFileName;
@@ -121,11 +122,11 @@ bool BugSplatAttributes::writeToFile(const std::string& file_path)
 
     // Rename the temp file to the final file. If rename fails, leave the old file intact.
     std::error_code ec;
-    std::filesystem::rename(tmp_file, file_path, ec);
+    std::filesystem::rename(fsyspath(tmp_file), fsyspath(file_path), ec);
     if (ec)
     {
         // Rename failed, remove the temp file and return false
-        std::filesystem::remove(tmp_file, ec);
+        std::filesystem::remove(fsyspath(tmp_file), ec);
         return false;
     }
 
