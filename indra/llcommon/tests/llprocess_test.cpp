@@ -146,30 +146,40 @@ void yield(int seconds=1)
 constexpr int EOF_EVENT_RETRY_COUNT = 20;
 constexpr auto EOF_EVENT_RETRY_DELAY = std::chrono::milliseconds(50);
 
+template <typename PREDICATE>
+bool wait_until(PREDICATE done, int timeout=60)
+{
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(timeout);
+    while (!done())
+    {
+        if (std::chrono::steady_clock::now() >= deadline)
+        {
+            return false;
+        }
+        // Async pipe transfers need frequent mainloop ticks. Sleeping a second
+        // between ticks can make a healthy transfer exceed the test deadline.
+        yield(0);
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+    return true;
+}
+
 void waitfor(LLProcess& proc, int timeout=60)
 {
-    int i = 0;
-    for ( ; i < timeout && proc.isRunning(); ++i)
-    {
-        yield();
-    }
+    wait_until([&] { return !proc.isRunning(); }, timeout);
     // Pump once more after the process exits to flush any final events such as EOF.
     yield(0);
     std::string msg = "process took longer than " + std::to_string(timeout) + " seconds to terminate";
-    tut::ensure(msg, i < timeout);
+    tut::ensure(msg, !proc.isRunning());
 }
 
 void waitfor(LLProcess::handle h, const std::string& desc, int timeout=60)
 {
-    int i = 0;
-    for ( ; i < timeout && LLProcess::isRunning(h, desc); ++i)
-    {
-        yield();
-    }
+    wait_until([&] { h = LLProcess::isRunning(h, desc); return !h; }, timeout);
     // Pump once more after the process exits to flush any final events such as EOF.
     yield(0);
     std::string msg = "process took longer than " + std::to_string(timeout) + " seconds to terminate";
-    tut::ensure(msg, i < timeout);
+    tut::ensure(msg, !h);
 }
 
 /**
@@ -1329,12 +1339,10 @@ namespace tut
         py.mParams.files.add(LLProcess::FileParam("pipe")); // stdout
         py.launch();
         LLProcess::ReadPipe& childout(py.mPy->getReadPipe(LLProcess::STDOUT));
-        int i, timeout = 60;
-        for (i = 0; i < timeout && py.mPy->isRunning() && childout.size() < 3; ++i)
+        ensure("script never started", wait_until([&]
         {
-            yield();
-        }
-        ensure("script never started", i < timeout);
+            return childout.size() >= 3 || !py.mPy->isRunning();
+        }));
         ensure_equals("bad wakeup from stdin/stdout script",
                       childout.getline(), "ok");
         // important to get the implicit flush from std::endl
@@ -1422,13 +1430,11 @@ namespace tut
         // every time we see output
         LLTempBoundListener connection(
             childout.getPump().listen("ack", boost::bind(ack, boost::ref(childin), _1)));
-        int i, timeout = 60;
         // wait through stuttering first line
-        for (i = 0; i < timeout && py.mPy->isRunning() && ! childout.contains("\n"); ++i)
+        ensure("couldn't get first line", wait_until([&]
         {
-            yield();
-        }
-        ensure("couldn't get first line", i < timeout);
+            return childout.contains("\n") || !py.mPy->isRunning();
+        }));
         // disconnect from listener
         listener.mConnection.disconnect();
         // finish out the run
@@ -1623,15 +1629,11 @@ namespace tut
         LLProcess::id childid(py.mPy->getProcessID());
         // Don't use waitfor(), which calls isRunning(); instead wait for an
         // event on pumpname.
-        int i, timeout = 60;
-        for (i = 0; i < timeout && listener.mHistory.empty(); ++i)
-        {
-            yield();
-        }
+        wait_until([&] { return !listener.mHistory.empty(); });
         listener.checkHistory(
-            [i, timeout, childid](const EventListener::Listory& history)
+            [childid](const EventListener::Listory& history)
             {
-                ensure("no postend event", i < timeout);
+                ensure("no postend event", !history.empty());
                 ensure_equals("number of postend events", history.size(), 1);
                 LLSD postend(history.front());
                 ensure_equals("id",    postend["id"].asInteger(), childid);
@@ -1715,12 +1717,10 @@ namespace tut
         childin.write(payload.data(), payload.size());
         childin.flush();
 
-        int i, timeout = 20;
-        for (i = 0; i < timeout && py.mPy->isRunning() && ! childout.contains("\n"); ++i)
+        ensure("large stdin write timed out", wait_until([&]
         {
-            yield();
-        }
-        ensure("large stdin write timed out", i < timeout);
+            return childout.contains("\n") || !py.mPy->isRunning();
+        }, 20));
         ensure("child never replied", childout.contains("\n"));
         ensure_equals("large stdin ack", childout.getline(), "ok");
         waitfor(*py.mPy);
@@ -1749,12 +1749,10 @@ namespace tut
         LLProcess::ReadPipe& childerr = py.mPy->getReadPipe(LLProcess::STDERR);
 
         // Wait for initial output
-        int i, timeout = 60;
-        for (i = 0; i < timeout && (!childout.contains("\n") || !childerr.contains("\n")); ++i)
+        ensure("initial output timeout", wait_until([&]
         {
-            yield();
-        }
-        ensure("initial output timeout", i < timeout);
+            return childout.contains("\n") && childerr.contains("\n");
+        }));
 
         ensure_equals("stdout message", childout.getline(), "stdout message");
         ensure_equals("stderr message", childerr.getline(), "stderr message");
