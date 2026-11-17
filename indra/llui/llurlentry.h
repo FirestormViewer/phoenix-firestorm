@@ -558,6 +558,19 @@ public:
     /*virtual*/ std::string getLocation(const std::string &url) const;
 };
 
+// <FS:Trish> Camera links
+///
+/// FSUrlEntryCamera Describes a camera link, e.g.
+/// secondlife:///app/camera/Clawed/93.08/215.72/34.50?focus=102.30,215.55,31.44&fov=60.0
+///
+class FSUrlEntryCamera : public LLUrlEntryBase
+{
+public:
+    FSUrlEntryCamera();
+    /*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
+};
+// </FS:Trish>
+
 // <FS:Ansariel> Wear folder SLUrl
 ///
 /// FSUrlEntryWear Describes wear folder SLURL, e.g.

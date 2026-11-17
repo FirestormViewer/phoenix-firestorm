@@ -90,6 +90,7 @@ LLUrlRegistry::LLUrlRegistry()
     registerUrl(new LLUrlEntryGroup());
     registerUrl(new LLUrlEntryParcel());
     registerUrl(new LLUrlEntryTeleport());
+    registerUrl(new FSUrlEntryCamera()); // <FS:Trish/> Camera links
     registerUrl(new LLUrlEntryRegion());
     registerUrl(new LLUrlEntryWorldMap());
     registerUrl(new LLUrlEntryObjectIM());

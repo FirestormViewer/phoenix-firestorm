@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu
+ layout="topleft"
+ name="Camera Bookmarks popup">
+	<menu_item_call
+	 label="Go"
+	 layout="topleft"
+	 name="go">
+		<menu_item_call.on_click
+		 function="CameraBookmark.Action"
+		 parameter="go"/>
+		<menu_item_call.on_enable
+		 function="CameraBookmark.Enable"
+		 parameter="go"/>
+	</menu_item_call>
+	<menu_item_call
+	 label="Copy Link"
+	 layout="topleft"
+	 name="copy">
+		<menu_item_call.on_click
+		 function="CameraBookmark.Action"
+		 parameter="copy"/>
+		<menu_item_call.on_enable
+		 function="CameraBookmark.Enable"
+		 parameter="copy"/>
+	</menu_item_call>
+	<menu_item_call
+	 label="Add to Tour"
+	 layout="topleft"
+	 name="add_to_tour">
+		<menu_item_call.on_click
+		 function="CameraBookmark.Action"
+		 parameter="add_to_tour"/>
+		<menu_item_call.on_enable
+		 function="CameraBookmark.Enable"
+		 parameter="add_to_tour"/>
+	</menu_item_call>
+	<menu_item_separator
+	 layout="topleft"/>
+	<menu_item_call
+	 label="Rename..."
+	 layout="topleft"
+	 name="rename">
+		<menu_item_call.on_click
+		 function="CameraBookmark.Action"
+		 parameter="rename"/>
+		<menu_item_call.on_enable
+		 function="CameraBookmark.Enable"
+		 parameter="rename"/>
+	</menu_item_call>
+	<menu_item_call
+	 label="Set to Current View"
+	 layout="topleft"
+	 name="update">
+		<menu_item_call.on_click
+		 function="CameraBookmark.Action"
+		 parameter="update"/>
+		<menu_item_call.on_enable
+		 function="CameraBookmark.Enable"
+		 parameter="update"/>
+	</menu_item_call>
+	<menu_item_separator
+	 layout="topleft"/>
+	<menu_item_call
+	 label="Delete"
+	 layout="topleft"
+	 name="delete">
+		<menu_item_call.on_click
+		 function="CameraBookmark.Action"
+		 parameter="delete"/>
+		<menu_item_call.on_enable
+		 function="CameraBookmark.Enable"
+		 parameter="delete"/>
+	</menu_item_call>
+</context_menu>

@@ -2231,6 +2231,25 @@
 	  tool_tip=""
 	  control_name="FSCmdLinePasteCam"
 	  width="200"/>
+	<!--cambm-->
+	<text
+	  top_pad="3"
+	  follows="left|top"
+	  height="16"
+	  name="FSCmdLineCamBookmark_txt"
+	  width="235">
+	  Camera bookmarks (usage: cmd add | go)
+	</text>
+	<line_editor
+	  enabled_control="FSCmdLine"
+	  top_pad="-2"
+	  follows="left|top"
+	  height="18"
+	  max_length_chars="256"
+	  name="FSCmdLineCamBookmark"
+	  tool_tip="cmd add [name], cmd follow [name], cmd followturn [name]: bookmark the current view. cmd go name: go to a bookmark. cmd print [name]: say a camera link in nearby chat. cmd tour name: play a tour. cmd stop: end the tour. cmd list: list the bookmarks."
+	  control_name="FSCmdLineCamBookmark"
+	  width="200"/>
 	<!--cao-->
 	<text
 	  top_pad="3"

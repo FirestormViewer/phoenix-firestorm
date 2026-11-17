@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ name="fs_camera_bookmarks"
+ title="Camera Bookmarks"
+ help_topic="fs_camera_bookmarks"
+ can_resize="true"
+ height="440"
+ width="820"
+ min_width="810"
+ min_height="400"
+ layout="topleft"
+ save_rect="true"
+ single_instance="true">
+    <string name="invalid_link">(invalid link)</string>
+    <string name="following">Following [NAME]</string>
+    <string name="following_unnamed">Following an object</string>
+    <string name="show_tours">Tours &gt;&gt;</string>
+    <string name="hide_tours">&lt;&lt; Tours</string>
+    <string name="compact_view">Compact</string>
+    <string name="full_view">Full</string>
+    <string name="no_tours">(no tours yet)</string>
+    <string name="new_tour_name">My tour</string>
+    <string name="pasted_tour_name">Pasted tour</string>
+    <string name="tour_play">Play</string>
+    <string name="tour_stop">Stop</string>
+    <string name="tour_status">[TOUR]: stop [NUMBER] of [COUNT], [NAME]</string>
+    <string name="tour_status_skipped">[TOUR]: stop [NUMBER] of [COUNT], [NAME] ([SKIPPED] out of reach, skipped)</string>
+    <string name="tour_duration">Stops: [COUNT]. Once through: [TIME]</string>
+    <string name="duration_seconds">[SECONDS] s</string>
+    <string name="duration_minutes">[MINUTES]:[SECONDS]</string>
+    <string name="invalid_stop">[NAME] (invalid link)</string>
+    <string name="unit_degrees">degrees</string>
+    <string name="unit_percent">%</string>
+    <string name="unit_metres">m</string>
+    <string name="move_none">-</string>
+    <string name="move_orbit_left">Orbit left [AMOUNT]°</string>
+    <string name="move_orbit_right">Orbit right [AMOUNT]°</string>
+    <string name="move_pan_left">Pan left [AMOUNT]°</string>
+    <string name="move_pan_right">Pan right [AMOUNT]°</string>
+    <string name="move_push_in">Push in [AMOUNT]%</string>
+    <string name="move_pull_out">Pull out [AMOUNT]%</string>
+    <string name="move_rise">Rise [AMOUNT] m</string>
+    <string name="move_sink">Sink [AMOUNT] m</string>
+    <panel
+     name="bookmarks_panel"
+     layout="topleft"
+     follows="left|top"
+     left="0"
+     top="0"
+     width="380"
+     height="440">
+        <filter_editor
+         name="filter"
+         label="Filter by name or region"
+         layout="topleft"
+         follows="left|top|right"
+         left="8"
+         top="4"
+         right="-156"
+         height="22" />
+        <button
+         name="compact_toggle"
+         label="Compact"
+         tool_tip="Compact mode only keeps the bookmark list."
+         layout="topleft"
+         follows="right|top"
+         right="-94"
+         top="4"
+         height="22"
+         width="58" />
+        <button
+         name="tours_toggle"
+         label="&lt;&lt; Tours"
+         tool_tip="Show or hide the tours panel."
+         layout="topleft"
+         follows="right|top"
+         right="-6"
+         top="4"
+         height="22"
+         width="84" />
+        <scroll_list
+         name="bookmarks"
+         layout="topleft"
+         follows="all"
+         left="8"
+         right="-6"
+         top="30"
+         bottom="-86"
+         draw_heading="true"
+         multi_select="true"
+         can_sort="false"
+         tool_tip="Double-click to go to the view; a view in another region offers a teleport first, and a view following something follows it. Right-click for more. Select several with Ctrl or Shift to copy, delete or add them to a tour together.">
+            <scroll_list.columns name="name" label="Name" relative_width="0.55" />
+            <scroll_list.columns name="region" label="Region" relative_width="0.45" />
+        </scroll_list>
+        <button
+         name="add_following"
+         label="Add View Following Target"
+         tool_tip="Save the current view kept relative to what the camera is on: the object or avatar you alt-clicked, else the selected object, else your avatar."
+         layout="topleft"
+         follows="left|bottom"
+         left="8"
+         bottom="-56"
+         height="22"
+         width="166" />
+        <check_box
+         name="follow_turns"
+         label="Turn with it"
+         initial_value="false"
+         tool_tip="The camera also turns relative to the moving target. Unticked, the camera keeps its own direction and only moves along."
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="8"
+         height="22"
+         width="110" />
+        <button
+         name="add"
+         label="Add Current View"
+         tool_tip="Save the current camera view under a name, with its field of view and roll"
+         layout="topleft"
+         follows="left|bottom"
+         left="8"
+         bottom="-30"
+         height="22"
+         width="114" />
+        <button
+         name="paste"
+         label="Paste Links"
+         tool_tip="Add the camera links in the clipboard."
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="4"
+         height="22"
+         width="80" />
+        <button
+         name="go"
+         label="Go"
+         tool_tip="Move the camera to the selected view, teleporting first if it is in another region"
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="4"
+         height="22"
+         width="40" />
+        <button
+         name="copy"
+         label="Copy Link"
+         tool_tip="Copy the selected view's camera link, to paste in chat or a notecard. Several selected are copied as 'name: link' lines."
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="4"
+         height="22"
+         width="72" />
+        <button
+         name="rename"
+         label="Rename"
+         layout="topleft"
+         follows="left|bottom"
+         left="8"
+         bottom="-4"
+         height="22"
+         width="62" />
+        <button
+         name="update_view"
+         label="Set to Current View"
+         tool_tip="Replace the selected bookmark's view with the current camera view."
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="4"
+         height="22"
+         width="120" />
+        <button
+         name="delete"
+         label="Delete"
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="4"
+         height="22"
+         width="56" />
+        <button
+         name="move_up"
+         label="Up"
+         tool_tip="Move the selected bookmark up"
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="8"
+         height="22"
+         width="36" />
+        <button
+         name="move_down"
+         label="Down"
+         tool_tip="Move the selected bookmark down"
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="4"
+         height="22"
+         width="46" />
+    </panel>
+    <panel
+     name="tours_panel"
+     layout="topleft"
+     follows="left|top"
+     left="380"
+     top="0"
+     width="440"
+     height="440">
+        <view_border
+         name="tours_divider"
+         bevel_style="in"
+         layout="topleft"
+         follows="left|top|bottom"
+         left="0"
+         top="2"
+         bottom="-2"
+         width="2" />
+        <text
+         name="tour_label"
+         layout="topleft"
+         follows="left|top"
+         left="8"
+         top="7"
+         height="18"
+         width="34">Tour:</text>
+        <combo_box
+         name="tour_combo"
+         tool_tip="The tour to edit and play"
+         layout="topleft"
+         follows="left|top|right"
+         left_pad="2"
+         top="4"
+         right="-178"
+         height="22" />
+        <button
+         name="new_tour"
+         label="New"
+         tool_tip="Start a new, empty tour"
+         layout="topleft"
+         follows="right|top"
+         right="-124"
+         top="4"
+         height="22"
+         width="50" />
+        <button
+         name="rename_tour"
+         label="Rename"
+         layout="topleft"
+         follows="right|top"
+         right="-64"
+         top="4"
+         height="22"
+         width="58" />
+        <button
+         name="delete_tour"
+         label="Delete"
+         layout="topleft"
+         follows="right|top"
+         right="-6"
+         top="4"
+         height="22"
+         width="56" />
+        <scroll_list
+         name="stops"
+         layout="topleft"
+         follows="all"
+         left="8"
+         right="-6"
+         top="30"
+         bottom="-190"
+         draw_heading="true"
+         multi_select="true"
+         can_sort="false"
+         tool_tip="The tour's bookmarks. Select one or several to change their timing and camera move below. Double-click to go to a bookmark.">
+            <scroll_list.columns name="number" label="#" width="26" />
+            <scroll_list.columns name="name" label="Stop" relative_width="1" />
+            <scroll_list.columns name="fly" label="Fly s" width="44" tool_tip="Seconds flying here from the stop before" />
+            <scroll_list.columns name="hold" label="Hold s" width="48" tool_tip="Seconds here" />
+            <scroll_list.columns name="move" label="Camera move" width="110" tool_tip="What the camera does while it holds here" />
+        </scroll_list>
+        <button
+         name="add_stops"
+         label="Add Bookmarks"
+         tool_tip="Add the bookmarks selected on the left to the end of this tour, in order (a new tour is made if there is none)."
+         layout="topleft"
+         follows="left|bottom"
+         left="8"
+         bottom="-162"
+         height="22"
+         width="100" />
+        <button
+         name="add_current_stop"
+         label="Add Current View"
+         tool_tip="Add the current camera view to the end of this tour, without saving it as a bookmark"
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="4"
+         height="22"
+         width="114" />
+        <button
+         name="remove_stops"
+         label="Remove"
+         tool_tip="Remove the selected bookmarks from this tour."
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="4"
+         height="22"
+         width="62" />
+        <button
+         name="stop_up"
+         label="Up"
+         tool_tip="Move the selected bookmark up"
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="8"
+         height="22"
+         width="36" />
+        <button
+         name="stop_down"
+         label="Down"
+         tool_tip="Move the selected bookmark down"
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="4"
+         height="22"
+         width="46" />
+        <!-- the selected stops -->
+        <view_border
+         name="stop_editor_border"
+         bevel_style="in"
+         layout="topleft"
+         follows="left|right|bottom"
+         left="8"
+         right="-6"
+         bottom="-82"
+         height="76" />
+        <text
+         name="stop_editor_label"
+         layout="topleft"
+         follows="left|bottom"
+         left="14"
+         bottom="-140"
+         height="16"
+         width="300">Selected stops:</text>
+        <spinner
+         name="stop_travel"
+         label="Fly s"
+         label_width="32"
+         decimal_digits="1"
+         increment="0.5"
+         min_val="0"
+         max_val="60"
+         tool_tip="Seconds the camera takes to fly to this stop from the one before"
+         layout="topleft"
+         follows="left|bottom"
+         left="14"
+         bottom="-114"
+         height="22"
+         width="80" />
+        <spinner
+         name="stop_hold"
+         label="Hold s"
+         label_width="38"
+         decimal_digits="1"
+         increment="0.5"
+         min_val="0"
+         max_val="600"
+         tool_tip="Seconds the camera stays at this stop, moving as set below"
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="6"
+         height="22"
+         width="88" />
+        <combo_box
+         name="stop_ease"
+         tool_tip="How the camera speeds up and slows down flying here. Smooth starts and arrives slowly; linear keeps a steady speed, for one continuous shot through stops that don't hold; ease in starts slowly; ease out arrives slowly."
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="6"
+         height="22"
+         width="100">
+            <combo_box.item label="Smooth" name="smooth" value="smooth" />
+            <combo_box.item label="Linear" name="linear" value="linear" />
+            <combo_box.item label="Ease in" name="ease_in" value="ease_in" />
+            <combo_box.item label="Ease out" name="ease_out" value="ease_out" />
+        </combo_box>
+        <combo_box
+         name="stop_move"
+         tool_tip="Movement style of the camera while held in place. Orbit circles around the point it looks at; pan turns the camera in place; push in and pull out move towards or away from that point; rise and sink move straight up or down."
+         layout="topleft"
+         follows="left|bottom"
+         left="14"
+         bottom="-88"
+         height="22"
+         width="100">
+            <combo_box.item label="Still" name="none" value="none" />
+            <combo_box.item label="Orbit left" name="orbit_left" value="orbit_left" />
+            <combo_box.item label="Orbit right" name="orbit_right" value="orbit_right" />
+            <combo_box.item label="Pan left" name="pan_left" value="pan_left" />
+            <combo_box.item label="Pan right" name="pan_right" value="pan_right" />
+            <combo_box.item label="Push in" name="push_in" value="push_in" />
+            <combo_box.item label="Pull out" name="pull_out" value="pull_out" />
+            <combo_box.item label="Rise" name="rise" value="rise" />
+            <combo_box.item label="Sink" name="sink" value="sink" />
+        </combo_box>
+        <spinner
+         name="stop_amount"
+         decimal_digits="0"
+         increment="5"
+         min_val="0"
+         max_val="1000"
+         tool_tip="How far the camera moves over the hold: degrees for orbit and pan, a percent of the distance for push in and pull out, metres for rise and sink"
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="6"
+         height="22"
+         width="56" />
+        <text
+         name="stop_amount_unit"
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="4"
+         bottom="-90"
+         height="18"
+         width="50" />
+        <!-- the tour's options -->
+        <combo_box
+         name="tour_repeat"
+         tool_tip="After the last stop: stay there, start over at the first, or come back through the stops and go round again"
+         layout="topleft"
+         follows="left|bottom"
+         left="8"
+         bottom="-56"
+         height="22"
+         width="110">
+            <combo_box.item label="Play once" name="once" value="once" />
+            <combo_box.item label="Loop" name="loop" value="loop" />
+            <combo_box.item label="Back and forth" name="bounce" value="bounce" />
+        </combo_box>
+        <combo_box
+         name="tour_path"
+         tool_tip="Straight flies in a line from stop to stop; curved sweeps through the stops on a smooth curve, for one flowing shot (with linear stops that don't hold)"
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="4"
+         height="22"
+         width="104">
+            <combo_box.item label="Straight path" name="straight" value="straight" />
+            <combo_box.item label="Curved path" name="curved" value="curved" />
+        </combo_box>
+        <spinner
+         name="tour_speed"
+         label="Speed"
+         label_width="38"
+         decimal_digits="2"
+         increment="0.25"
+         min_val="0.1"
+         max_val="10"
+         initial_value="1"
+         tool_tip="Playback speed."
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="6"
+         height="22"
+         width="92" />
+        <check_box
+         name="tour_hide_ui"
+         label="Hide UI"
+         tool_tip="Hide the interface while the tour plays. ESC ends the tour and brings the interface back."
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="6"
+         height="22"
+         width="70" />
+        <button
+         name="play_tour"
+         label="Play"
+         tool_tip="Fly the camera through the stops in order, from the selected one (or the first). Stops that would need a teleport, or are past your camera restrictions, are skipped. Esc or walking ends the tour."
+         layout="topleft"
+         follows="left|bottom"
+         left="8"
+         bottom="-30"
+         height="22"
+         width="60" />
+        <button
+         name="go_stop"
+         label="Go to Stop"
+         tool_tip="Move the camera to the selected stop"
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="4"
+         height="22"
+         width="74" />
+        <button
+         name="copy_tour"
+         label="Copy Tour"
+         tool_tip="Copy this tour as text, with its name, options and each stop's timing and move, to hand out. Paste Tour turns it back into the tour."
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="8"
+         height="22"
+         width="76" />
+        <button
+         name="paste_tour"
+         label="Paste Tour"
+         tool_tip="Add the tour in the clipboard as a new tour."
+         layout="topleft"
+         follows="left|bottom"
+         left_pad="4"
+         height="22"
+         width="76" />
+        <text
+         name="tour_status"
+         layout="topleft"
+         follows="left|right|bottom"
+         left="8"
+         right="-6"
+         bottom="-4"
+         height="18"
+         word_wrap="false"
+         use_ellipses="true" />
+    </panel>
+</floater>
