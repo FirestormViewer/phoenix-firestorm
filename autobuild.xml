@@ -174,9 +174,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0008a7b291fa1863ba41424b4e3ac302</string>
+              <string>3b1b7ab55d6d9ca199317bf9816d37285e0e60e2</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/jemalloc-5.3.0-linux64-222631217.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/jemalloc-5.4.0-linux64-263110659.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>

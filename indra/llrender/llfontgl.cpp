@@ -325,6 +325,11 @@ S32 LLFontGL::render(const LLWString &wstr, S32 begin_offset, F32 x, F32 y, cons
             // otherwise the queued glyphs will be taken from wrong textures.
             if (glyph_count > 0)
             {
+                // <FS:Beq> Retain Trish's queued-glyph atlas defence from the investigation.
+                // Glyph lookup or kerning look-ahead can upload an atlas and
+                // change the bound texture. Restore the queued glyphs' page.
+                gGL.getTexUnit(0)->bind(font_bitmap_cache->getImageGL(bitmap_entry.first, bitmap_entry.second));
+                // </FS:Beq>
                 gGL.begin(LLRender::TRIANGLES);
                 {
                     gGL.vertexBatchPreTransformed(vertices, uvs, colors, glyph_count * 6);
@@ -375,6 +380,7 @@ S32 LLFontGL::render(const LLWString &wstr, S32 begin_offset, F32 x, F32 y, cons
 
         if (glyph_count >= GLYPH_BATCH_SIZE)
         {
+            gGL.getTexUnit(0)->bind(font_bitmap_cache->getImageGL(bitmap_entry.first, bitmap_entry.second)); // </FS:Beq> Restore the page after glyph uploads.
             gGL.begin(LLRender::TRIANGLES);
             {
                 gGL.vertexBatchPreTransformed(vertices, uvs, colors, glyph_count * 6);
@@ -413,6 +419,12 @@ S32 LLFontGL::render(const LLWString &wstr, S32 begin_offset, F32 x, F32 y, cons
         cur_render_y = cur_y;
     }
 
+    // <FS:Beq> Restore the final batch's page; bitmap_entry is unset for an empty batch.
+    if (glyph_count > 0)
+    {
+        gGL.getTexUnit(0)->bind(font_bitmap_cache->getImageGL(bitmap_entry.first, bitmap_entry.second));
+    }
+    // </FS:Beq>
     gGL.begin(LLRender::TRIANGLES);
     {
         gGL.vertexBatchPreTransformed(vertices, uvs, colors, glyph_count * 6);

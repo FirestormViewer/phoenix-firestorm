@@ -8,6 +8,53 @@
 ## GL Driver Options
 export mesa_glthread=true
 
+# Cache NVIDIA display-hardware detection without requiring diagnostic tools.
+# Require the NVIDIA driver too; Nouveau uses Mesa and does not need this policy.
+has_nvidia_gpu=false
+for pci_device in /sys/bus/pci/devices/*; do
+    [[ -r "$pci_device/vendor" && -r "$pci_device/class" ]] || continue
+    if [[ "$(< "$pci_device/vendor")" == "0x10de" &&
+          "$(< "$pci_device/class")" == 0x03* &&
+          "$(readlink -- "$pci_device/driver" 2>/dev/null)" == */nvidia ]]; then
+        has_nvidia_gpu=true
+        break
+    fi
+done
+
+# Leave SDL backend selection and NVIDIA-specific variables alone on other GPUs.
+if "$has_nvidia_gpu"; then
+    # Detect the desktop session and read SDL's preferred backend once.
+    is_wayland=false
+    if [[ -n "${WAYLAND_DISPLAY:-}" || "${XDG_SESSION_TYPE:-}" == "wayland" ]]; then
+        is_wayland=true
+    fi
+    sdl_video_driver="${SDL_VIDEO_DRIVER:-${SDL_VIDEODRIVER:-}}"
+
+    # On Wayland, default to X11/XWayland without replacing an explicit backend.
+    if "$is_wayland" && [[ -z "$sdl_video_driver" ]]; then
+        export SDL_VIDEO_DRIVER=x11
+        export SDL_VIDEODRIVER=x11
+        sdl_video_driver=x11
+    fi
+
+    # Respect explicit backends; otherwise assume X11 outside Wayland sessions.
+    is_using_x11_sdl=false
+    if [[ -n "$sdl_video_driver" ]]; then
+        if [[ "$sdl_video_driver" == "x11" ]]; then
+            is_using_x11_sdl=true
+        fi
+    elif ! "$is_wayland"; then
+        is_using_x11_sdl=true
+    fi
+
+    # Native Wayland and ambiguous fallback lists keep NVIDIA threading disabled.
+    if "$is_using_x11_sdl"; then
+        export __GL_THREADED_OPTIMIZATIONS=1
+    else
+        export __GL_THREADED_OPTIMIZATIONS=0
+    fi
+fi
+
 ## Everything below this line is just for advanced troubleshooters.
 ##-------------------------------------------------------------------
 
@@ -20,6 +67,13 @@ export mesa_glthread=true
 #export LL_WRAPPER='valgrind --smc-check=all --error-limit=no --log-file=secondlife.vg --leak-check=full --suppressions=/usr/lib/valgrind/glibc-2.5.supp --suppressions=secondlife-i686.supp'
 #export ASAN_OPTIONS="halt_on_error=0 detect_leaks=1 symbolize=1"
 #export UBSAN_OPTIONS="print_stacktrace=1 print_summary=1 halt_on_error=0"
+
+FSJEMALLOC="$(pwd)/lib/libjemalloc.so"
+if [ -f ${FSJEMALLOC} ]
+then
+        echo "Using jemalloc"
+        export LD_PRELOAD="${LD_PRELOAD}:${FSJEMALLOC}"
+fi
 
 ## Nothing worth editing below this line.
 ##-------------------------------------------------------------------

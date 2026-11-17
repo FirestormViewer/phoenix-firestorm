@@ -12,6 +12,7 @@ import itertools
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -216,6 +217,29 @@ def verify_windows_signatures(installer):
             raise ValueError(f'Windows signature verification failed: {path.name}') from error
 
 
+def validate_macos_ticket(app):
+    # CloudKit connection loss can make stapler fail even with a valid ticket.
+    # Retry only the observed transport error, never Error 68 by itself.
+    # https://github.com/actions/runner-images/issues/14924
+    command = ['xcrun', 'stapler', 'validate', str(app)]
+    for attempt in range(1, 6):
+        print(f'Validating notarization ticket (attempt {attempt} of 5)...', flush=True)
+        try:
+            result = subprocess.run(command, check=True, stdout=subprocess.PIPE,
+                                    stderr=subprocess.STDOUT, text=True, errors='replace')
+        except subprocess.CalledProcessError as error:
+            output = error.stdout or ''
+            print(output, end='', flush=True)
+            if attempt == 5 or not re.search(r'\bNSURLErrorDomain\s+Code=-1005\b', output):
+                raise
+            delay = 5 * 2 ** (attempt - 1)
+            print(f'CloudKit connection lost; retrying validation in {delay}s.', flush=True)
+            time.sleep(delay)
+        else:
+            print(result.stdout, end='', flush=True)
+            return
+
+
 def verify_macos_signatures(installer):
     # Verify the app actually shipped in the final DMG, after ditto and conversion.
     with tempfile.TemporaryDirectory(prefix='firestorm-verify-') as temporary:
@@ -229,7 +253,7 @@ def verify_macos_signatures(installer):
                 raise ValueError(f'Expected one app in macOS installer; found {len(apps)}')
             subprocess.run(['codesign', '--verify', '--deep', '--strict', '--verbose=2',
                             str(apps[0])], check=True)
-            subprocess.run(['xcrun', 'stapler', 'validate', str(apps[0])], check=True)
+            validate_macos_ticket(apps[0])
         finally:
             subprocess.run(['hdiutil', 'detach', str(mount)], check=True)
 

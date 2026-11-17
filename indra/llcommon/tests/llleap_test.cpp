@@ -15,7 +15,9 @@
 #include "llleap.h"
 // STL headers
 // std headers
+#include <chrono>
 #include <functional>
+#include <thread>
 // external library headers
 // other Linden headers
 #include "../test/lltut.h"
@@ -29,8 +31,6 @@
 #include "StringVec.h"
 
 #if defined(LL_WINDOWS)
-#define sleep(secs) _sleep((secs) * 1000)
-
 // WOLF-300: It appears that driving a megabyte of data through an LLLeap pipe
 // causes Windows abdominal pain such that it later fails code-signing in some
 // mysterious way. Entirely suppressing these LLLeap tests pushes the failure
@@ -47,8 +47,8 @@ typedef std::vector<std::weak_ptr<LLLeap>> LLLeapVector;
 
 void waitfor(const LLLeapVector& instances, int timeout=60)
 {
-    int i;
-    for (i = 0; i < timeout; ++i)
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(timeout);
+    for (;;)
     {
         // Every iteration, test whether any of the passed LLLeap instances
         // still exist (are still running).
@@ -65,20 +65,17 @@ void waitfor(const LLLeapVector& instances, int timeout=60)
         // still running, we're done.
         if (! found)
         {
-/*==========================================================================*|
-            std::cout << instances.size() << " LLLeap instances terminated in "
-                      << i << " seconds, proceeding" << std::endl;
-|*==========================================================================*/
             return;
         }
-        // Found an instance that's still running. Wait and pump LLProcess.
-        sleep(1);
+        tut::ensure(STRINGIZE("at least 1 of " << instances.size()
+                              << " LLLeap instances timed out ("
+                              << timeout << " seconds) without terminating"),
+                    std::chrono::steady_clock::now() < deadline);
+        // Keep async pipe transfers moving even when the OS pipe buffer is
+        // small. Measure the deadline independently of the polling interval.
         LLEventPumps::instance().obtain("mainloop").post(LLSD());
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
-    tut::ensure(STRINGIZE("at least 1 of " << instances.size()
-                          << " LLLeap instances timed out ("
-                          << timeout << " seconds) without terminating"),
-                i < timeout);
 }
 
 void waitfor(LLLeap* instance, int timeout=60)

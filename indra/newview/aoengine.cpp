@@ -3947,6 +3947,20 @@ void AOEngine::onRegionChange()
 
     reassertAlwaysAnimations(false);
 
+    // FIRE-35825: Transient animations (ground sit, jump, landing, standing up) are managed by the
+    // simulator's own agent state. After a region change, reset to standing to avoid getting stuck.
+    if (mLastMotion == ANIM_AGENT_SIT_GROUND ||
+        mLastMotion == ANIM_AGENT_SIT_GROUND_CONSTRAINED ||
+        mLastMotion == ANIM_AGENT_PRE_JUMP ||
+        mLastMotion == ANIM_AGENT_STANDUP ||
+        mLastMotion == ANIM_AGENT_LAND ||
+        mLastMotion == ANIM_AGENT_MEDIUM_LAND)
+    {
+        LL_DEBUGS("AOEngine") << "not restarting transient motion " << gAnimLibrary.animationName(mLastMotion) << " on region change" << LL_ENDL;
+        setLastMotion(ANIM_AGENT_STAND);
+        return;
+    }
+
     // sitting needs special attention
     if (mLastMotion == ANIM_AGENT_SIT)
     {

@@ -511,7 +511,8 @@ class CISigning(Workspace):
         root.mkdir(parents=True)
         installer = root / 'Phoenix-test.dmg'
         installer.write_bytes(b'fixture')
-        for failure in (None, 'attach', 'codesign', 'stapler', 'missing-app', 'extra-app', 'detach'):
+        for failure in (None, 'attach', 'codesign', 'stapler', 'connection',
+                        'missing-app', 'extra-app', 'detach'):
             report = Path('ci-results/deliverables.json')
             report.unlink(missing_ok=True)
             def command(args, **kwargs):
@@ -519,13 +520,19 @@ class CISigning(Workspace):
                 phase = args[1] if args[0] == 'hdiutil' else args[0]
                 if phase == failure or (args[:2] == ['xcrun', 'stapler'] and failure == 'stapler'):
                     raise subprocess.CalledProcessError(1, args)
+                if args[:2] == ['xcrun', 'stapler'] and failure == 'connection':
+                    raise subprocess.CalledProcessError(
+                        68, args, output='Error Domain=NSURLErrorDomain Code=-1005\n')
                 if phase == 'attach':
                     mount = Path(args[args.index('-mountpoint') + 1])
                     if failure != 'missing-app':
                         (mount / 'Firestorm Nightly.app').mkdir()
                     if failure == 'extra-app':
                         (mount / 'Other.app').mkdir()
-            with self.subTest(failure=failure), patch.object(ci.subprocess, 'run', side_effect=command) as run:
+                return subprocess.CompletedProcess(args, 0, stdout='')
+            with self.subTest(failure=failure), \
+                    patch.object(ci.subprocess, 'run', side_effect=command) as run, \
+                    patch.object(ci.time, 'sleep'):
                 if failure:
                     with self.assertRaises((ValueError, subprocess.CalledProcessError)):
                         ci.deliverables(None)
@@ -542,6 +549,56 @@ class CISigning(Workspace):
                     self.assertEqual(commands[1][-1], commands[2][-1])
                 if failure != 'attach':
                     self.assertEqual(run.call_args.args[0][:2], ['hdiutil', 'detach'])
+
+
+class StaplerValidation(unittest.TestCase):
+    def test_connection_loss_retries_then_succeeds_and_logs_every_attempt(self):
+        command = ['xcrun', 'stapler', 'validate', '/mounted/Firestorm.app']
+        outputs = ['Error Domain=NSURLErrorDomain Code=-1005 connection lost\n'] * 4
+        outputs.append('The validate action worked!\n')
+        results = [subprocess.CalledProcessError(68, command, output=text)
+                   for text in outputs[:-1]]
+        results.append(subprocess.CompletedProcess(command, 0, stdout=outputs[-1]))
+        captured = io.StringIO()
+        with patch.object(ci.subprocess, 'run', side_effect=results) as run, \
+                patch.object(ci.time, 'sleep') as sleep, redirect_stdout(captured):
+            ci.validate_macos_ticket(Path(command[-1]))
+        self.assertEqual(run.call_count, 5)
+        self.assertEqual([call.args[0] for call in sleep.call_args_list], [5, 10, 20, 40])
+        self.assertEqual(captured.getvalue().count(outputs[0]), 4)
+        self.assertIn(outputs[-1], captured.getvalue())
+        for call in run.call_args_list:
+            self.assertEqual(call.args[0], command)
+            self.assertEqual(call.kwargs, dict(check=True, stdout=subprocess.PIPE,
+                                              stderr=subprocess.STDOUT, text=True, errors='replace'))
+
+    def test_connection_loss_exhaustion_raises_and_preserves_output(self):
+        error = subprocess.CalledProcessError(
+            68, ['xcrun', 'stapler', 'validate', 'viewer.app'],
+            output='Error Domain=NSURLErrorDomain Code=-1005 connection lost\n')
+        captured = io.StringIO()
+        with patch.object(ci.subprocess, 'run', side_effect=error) as run, \
+                patch.object(ci.time, 'sleep') as sleep, redirect_stdout(captured), \
+                self.assertRaises(subprocess.CalledProcessError) as raised:
+            ci.validate_macos_ticket('viewer.app')
+        self.assertIs(raised.exception, error)
+        self.assertEqual(run.call_count, 5)
+        self.assertEqual([call.args[0] for call in sleep.call_args_list], [5, 10, 20, 40])
+        self.assertEqual(captured.getvalue().count(error.stdout), 5)
+
+    def test_other_failures_are_not_retried(self):
+        for output in (None, 'The validate action failed! Error 68.\n',
+                       'No stapled ticket found.\n',
+                       'Error Domain=NSURLErrorDomain Code=-10050\n'):
+            error = subprocess.CalledProcessError(68, ['xcrun'], output=output)
+            with self.subTest(output=output), \
+                    patch.object(ci.subprocess, 'run', side_effect=error) as run, \
+                    patch.object(ci.time, 'sleep') as sleep, redirect_stdout(io.StringIO()), \
+                    self.assertRaises(subprocess.CalledProcessError) as raised:
+                ci.validate_macos_ticket('viewer.app')
+            self.assertIs(raised.exception, error)
+            run.assert_called_once()
+            sleep.assert_not_called()
 
 
 class Signing(Workspace):

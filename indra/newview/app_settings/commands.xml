@@ -498,7 +498,6 @@
            label_ref="Command_Landmark_Here_Label"
            tooltip_ref="Command_Landmark_Here_Tooltip"
            execute_function="World.CreateLandmark"
-           is_enabled_function="World.EnableCreateLandmark"
            />
   <command name="teleport_history"
            available_in_toybox="true"

@@ -227,7 +227,7 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
 void LLScriptFloater::onStackClicked()
 {
     LLFloater* floater = LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater", getNotificationId());
-    if (floater->isFrontmost())
+    if (floater && floater->isFrontmost())
     {
         const LLUUID& next_notification = DialogStack::instance().flip(getNotificationId());
         floater = LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater", next_notification);
@@ -1075,6 +1075,12 @@ void LLScriptFloater::draw()
 LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 {
     LLScriptFloater* floater = LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater", notification_id);
+    if (!floater)
+    {
+        LL_WARNS() << "Unable to create script floater for notification " << notification_id << LL_ENDL;
+        return nullptr;
+    }
+
     floater->setNotificationId(notification_id);
     floater->createForm(notification_id);
 

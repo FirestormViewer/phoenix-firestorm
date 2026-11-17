@@ -109,6 +109,12 @@ public:
 
     static void unbind(); //unbind any bound vertex buffer
 
+    // <FS:Beq> Make external VAO changes invalidate the layout cache.
+    // Call after switching/creating the current VAO or otherwise changing its
+    // attribute pointers outside setupVertexBuffer(). Does not issue GL calls.
+    static void invalidateAttributeSetup();
+    // </FS:Beq>
+
     //get the size of a vertex with the given typemask
     static U32 calcVertexSize(const U32& typemask);
 
@@ -324,6 +330,12 @@ private:
     // add to set of mapped buffers
     void _mapBuffer();
     bool mMapped = false;
+
+    // <FS:Beq> Distinguish layouts even when pooled storage reuses the GL name.
+    // Unique across buffer lifetimes; renewed when storage/layout changes.
+    // A GL name alone cannot identify the attribute layout of pooled storage.
+    U64 mAttributeLayoutID = 0;
+    // </FS:Beq>
 
 public:
 

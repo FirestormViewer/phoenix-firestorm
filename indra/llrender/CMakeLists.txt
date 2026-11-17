@@ -121,4 +121,10 @@ endif ()
 if (LL_TESTS)
   include(LLAddBuildTest)
   LL_ADD_INTEGRATION_TEST(llgltexture "" "llrender")
+  # <FS:Beq> Context-free regression tests for pooled-buffer binding and layout.
+  if (LINUX AND USE_SDL_WINDOW)
+    LL_ADD_INTEGRATION_TEST(llvertexbuffer_pool "" "llrender")
+  endif ()
+  # </FS:Beq>
 endif ()
+

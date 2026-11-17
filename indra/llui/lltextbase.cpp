@@ -1030,7 +1030,10 @@ void LLTextBase::drawText()
         }
 
         LLRectf text_rect((F32)line.mRect.mLeft, (F32)line.mRect.mTop, (F32)line.mRect.mRight, (F32)line.mRect.mBottom);
-        text_rect.mRight = (F32)mDocumentView->getRect().getWidth(); // clamp right edge to document extents
+        // <FS:TJ> Fix nearby chat bar cutting off the last letter as you type
+        //text_rect.mRight = (F32)mDocumentView->getRect().getWidth(); // clamp right edge to document extents
+        text_rect.mRight = (F32)(mDocumentView->getRect().getWidth() + mHPad); // clamp right edge to document extents
+        // </FS:TJ>
         text_rect.translate((F32)mDocumentView->getRect().mLeft, (F32)mDocumentView->getRect().mBottom); // adjust by scroll position
 
         // draw a single line of text
