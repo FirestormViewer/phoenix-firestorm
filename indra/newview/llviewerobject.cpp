@@ -553,8 +553,7 @@ void LLViewerObject::markDead()
 
         sNumZombieObjects++;
 
-        // We can't assume the region will still be around beyond this point
-        mRegionp = nullptr;
+        mRegionp = nullptr; // <FS:KB/> We can't assume the region will still be around beyond this point
     }
 }
 

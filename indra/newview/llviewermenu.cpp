@@ -3415,10 +3415,12 @@ void derenderObject(bool permanent)
 
             select_mgr->deselectObjectOnly(objp);
             gObjectList.addDerenderedItem(id, permanent);
+
+            LLViewerRegion* obj_region = objp->getRegion();
             gObjectList.killObject(objp);
-            if (LLViewerRegion::sVOCacheCullingEnabled && objp->getRegion())
+            if (LLViewerRegion::sVOCacheCullingEnabled && obj_region)
             {
-                objp->getRegion()->killCacheEntry(objp->getLocalID());
+                obj_region->killCacheEntry(objp->getLocalID());
             }
 
             LLTool* tool = LLToolMgr::getInstance()->getCurrentTool();
