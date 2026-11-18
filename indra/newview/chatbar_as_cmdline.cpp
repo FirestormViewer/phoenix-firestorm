@@ -34,10 +34,10 @@
 #include "chatbar_as_cmdline.h"
 
 #include "aoengine.h"
-#include "fscameralinks.h" // <FS:Trish/>
-#include "fsnearbychathub.h" // <FS:Trish/>
+#include "fscameralinks.h"
+#include "fsnearbychathub.h"
 #include "fscommon.h"
-#include "fsfloatercamerabookmarks.h" // <FS:Trish/>
+#include "fsfloatercamerabookmarks.h"
 #include "fsradar.h"
 #include "llagent.h"
 #include "llagentcamera.h"
@@ -698,7 +698,7 @@ void cmdline_track(std::string_view params)
     }
 }
 
-// <FS:Trish> Camera bookmarks from the chat bar:
+// Camera bookmarks from the chat bar:
 //   cmd add [name]          the current view
 //   cmd follow [name]       the current view, following a target
 //   cmd followturn [name]   
@@ -826,7 +826,6 @@ static void cmdline_camera_bookmark(std::string params)
         FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineCamBookmarkUsage"));
     }
 }
-// </FS:Trish>
 
 bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gesture)
 {
@@ -851,7 +850,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
     static LLCachedControl<std::string> sFSCmdLineTrackPos(gSavedSettings, "FSCmdLineTrackPos");
     static LLCachedControl<std::string> sFSCmdLineCopyCam(gSavedSettings, "FSCmdLineCopyCam");
     static LLCachedControl<std::string> sFSCmdLinePasteCam(gSavedSettings, "FSCmdLinePasteCam");
-    static LLCachedControl<std::string> sFSCmdLineCamBookmark(gSavedSettings, "FSCmdLineCamBookmark"); // <FS:Trish/>
+    static LLCachedControl<std::string> sFSCmdLineCamBookmark(gSavedSettings, "FSCmdLineCamBookmark");
     static LLCachedControl<std::string> sFSCmdLineRollDice(gSavedSettings, "FSCmdLineRollDice");
     static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings, "FSCmdLineBandWidth");
 
@@ -1923,13 +1922,12 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 }
                 return false;
             }
-            // <FS:Trish> Camera bookmarks
+            // Camera bookmarks
             else if (command == sFSCmdLineCamBookmark())
             {
                 cmdline_camera_bookmark(revised_text.length() > command.length() ? std::string(revised_text.substr(command.length())) : std::string());
                 return false;
             }
-            // </FS:Trish>
             else if (command == sFSCmdLineRollDice())
             {
                 S32 dice;

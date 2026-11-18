@@ -100,16 +100,15 @@ namespace
     F32 sFovBefore = 0.f;
     F32 sFovSet = 0.f;
 
-    bool parse_number(const std::string& text, F32& value)
+    bool parse_number(std::string text, F32& value)
     {
-        std::string trimmed = text;
-        LLStringUtil::trim(trimmed);
-        if (trimmed.empty())
+        LLStringUtil::trim(text);
+        if (text.empty())
         {
             return false;
         }
         char* end = nullptr;
-        const double parsed = strtod(trimmed.c_str(), &end);
+        const double parsed = strtod(text.c_str(), &end);
         if (!end || *end != '\0' || !std::isfinite(parsed))
         {
             return false;
@@ -753,17 +752,16 @@ namespace
     FSCameraLinkHandler gFSCameraLinkHandler;
 
     // "<x, y, z>", the cpcampos cmd form of a vector
-    bool parse_bracket_vector(const std::string& text, LLVector3& out)
+    bool parse_bracket_vector(std::string text, LLVector3& out)
     {
-        std::string trimmed = text;
-        LLStringUtil::trim(trimmed);
-        if (trimmed.size() < 5 || trimmed.front() != '<' || trimmed.back() != '>')
+        LLStringUtil::trim(text);
+        if (text.size() < 5 || text.front() != '<' || text.back() != '>')
         {
             return false;
         }
-        trimmed = trimmed.substr(1, trimmed.size() - 2);
-        LLStringUtil::replaceString(trimmed, ",", " ");
-        return LLVector3::parseVector3(trimmed, &out);
+        text = text.substr(1, text.size() - 2);
+        LLStringUtil::replaceString(text, ",", " ");
+        return LLVector3::parseVector3(text, &out);
     }
 }
 
@@ -1104,7 +1102,7 @@ namespace FSCameraLinks
 ///////////////////////////////////////////////////////////////////////////////
 // Camera tours
 
-namespace
+namespace FSCameraTour
 {
     struct TourPose
     {
@@ -1459,6 +1457,8 @@ namespace
 
 namespace FSCameraLinks
 {
+    using namespace FSCameraTour;
+
     std::string tourMoveName(TourMove move)
     {
         switch (move)

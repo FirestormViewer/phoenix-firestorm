@@ -45,7 +45,7 @@ LLUrlRegistry::LLUrlRegistry()
 {
 //  mUrlEntry.reserve(20);
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-    mUrlEntry.reserve(32);
+    mUrlEntry.reserve(38);
 // [/RLVa:KB]
 
     // Urls are matched in the order that they were registered
@@ -90,7 +90,6 @@ LLUrlRegistry::LLUrlRegistry()
     registerUrl(new LLUrlEntryGroup());
     registerUrl(new LLUrlEntryParcel());
     registerUrl(new LLUrlEntryTeleport());
-    registerUrl(new FSUrlEntryCamera()); // <FS:Trish/> Camera links
     registerUrl(new LLUrlEntryRegion());
     registerUrl(new LLUrlEntryWorldMap());
     registerUrl(new LLUrlEntryObjectIM());
@@ -114,6 +113,7 @@ LLUrlRegistry::LLUrlRegistry()
     registerUrl(new LLUrlEntryIPv6());
     // parse jira issue names to links -KC
     registerUrl(new LLUrlEntryJira());
+    registerUrl(new FSUrlEntryCamera()); // <FS:Trish/> Camera links
 }
 
 LLUrlRegistry::~LLUrlRegistry()
