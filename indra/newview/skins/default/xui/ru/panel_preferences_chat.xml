@@ -255,74 +255,70 @@
 		</panel>
 		<panel label="Команды" name="tab-CmdLine">
 			<check_box label="Включить использование строки чата как командную строку" name="chat_cmd_toggle" />
-			<scroll_container name="cmdline_scroll">
-				<panel name="cmdline_commands">
-					<text name="FSCmdLineCalc_txt">
-						Калькулятор
-					</text>
-					<text name="FSCmdLineDrawDistance_txt">
-						Дальность видимости (в метрах)
-					</text>
-					<text name="FSCmdLineBandWidth_txt">
-						Пропускная способность (kbps)
-					</text>
-					<text name="FSCmdLineCopyCam_txt">
-						Копировать положение камеры в буфер
-					</text>
-					<text name="FSCmdLineAO_txt">
-						Включить/Выключить АО (on/off)
-					</text>
-					<text name="FSCmdLineClearChat_txt">
-						Очистить историю чата
-					</text>
-					<line_editor tool_tip="Очищает расшифровку чата, чтобы предотвратить эффект задержки от спамеров в чате." name="FSCmdLineClearChat" />
-					<text name="FSCmdLineMedia_txt">
-						Установить url для медиа
-					</text>
-					<line_editor tool_tip="Устанавливает и воспроизводит ваш медиапоток по введенному URL-адресу" name="FSCmdLineMedia" />
-					<text name="FSCmdLineMusic_txt">
-						Установить url для потоковой музыки
-					</text>
-					<line_editor tool_tip="устанавливает и воспроизводит ваш музыкальный поток по введенному URL-адресу" name="FSCmdLineMusic" />
-					<text name="FSCmdLineRezPlatform_txt">
-						Выложить платформу (0 - 64)
-					</text>
-					<slider name="FSCmdLinePlatformSize" label="Ширина:" tool_tip="Насколько большой будет платформа?" />
-					<text name="FSCmdLineKeyToName_txt">
-						Узнать имя аватара по UUID
-					</text>
-					<text name="FSCmdLineRollDice_txt">
-						Бросать кости
-					</text>
-					<line_editor tool_tip="Бросать кости - [количество костей] [количество стенок] [модификатор типа (опционально)] [значение модификатора (по желанию)]. Пример: CMD 1 20 2 40 Ctrl + 5." name="FSCmdLineRollDice" />
-					<text name="FSCmdLinePos_txt">
-						Телепорт внутри сима (x y z)
-					</text>
-					<text name="FSCmdLineGround_txt">
-						Телепорт на землю
-					</text>
-					<text name="FSCmdLineHeight_txt">
-						Телепорт на высоту (z)
-					</text>
-					<text name="FSCmdTeleportToCam_txt">
-						Телепортироваться к позиции камеры
-					</text>
-					<text name="FSCmdLineOfferTp_txt">
-						Предложить телепорт аватару (UUID)
-					</text>
-					<text name="FSCmdLineTP2_txt">
-						Телепортироваться к аватару (имя)
-					</text>
-					<line_editor tool_tip="Синтаксис не чувствителен к регистру, но рекомендуется писать имя как это указано в радаре" name="FSCmdLineTP2" />
-					<text name="FSCmdLineTeleportHome_txt">
-						Телепортация домой
-					</text>
-					<text name="FSCmdLineMapTo_txt">
-						Телепорт в регион (регион | x y z)
-					</text>
-					<check_box label="Сохранять положение после телепорта" name="toggle" />
-				</panel>
-			</scroll_container>
+			<text name="FSCmdLineCalc_txt">
+				Калькулятор
+			</text>
+			<text name="FSCmdLineDrawDistance_txt">
+				Дальность видимости (в метрах)
+			</text>
+			<text name="FSCmdLineBandWidth_txt">
+				Пропускная способность (kbps)
+			</text>
+			<text name="FSCmdLineCopyCam_txt">
+				Копировать положение камеры в буфер
+			</text>
+			<text name="FSCmdLineAO_txt">
+				Включить/Выключить АО (on/off)
+			</text>
+			<text name="FSCmdLineClearChat_txt">
+				Очистить историю чата
+			</text>
+			<line_editor tool_tip="Очищает расшифровку чата, чтобы предотвратить эффект задержки от спамеров в чате." name="FSCmdLineClearChat" />
+			<text name="FSCmdLineMedia_txt">
+				Установить url для медиа
+			</text>
+			<line_editor tool_tip="Устанавливает и воспроизводит ваш медиапоток по введенному URL-адресу" name="FSCmdLineMedia" />
+			<text name="FSCmdLineMusic_txt">
+				Установить url для потоковой музыки
+			</text>
+			<line_editor tool_tip="устанавливает и воспроизводит ваш музыкальный поток по введенному URL-адресу" name="FSCmdLineMusic" />
+			<text name="FSCmdLineRezPlatform_txt">
+				Выложить платформу (0 - 64)
+			</text>
+			<slider name="FSCmdLinePlatformSize" label="Ширина:" tool_tip="Насколько большой будет платформа?" />
+			<text name="FSCmdLineKeyToName_txt">
+				Узнать имя аватара по UUID
+			</text>
+			<text name="FSCmdLineRollDice_txt">
+				Бросать кости
+			</text>
+			<line_editor tool_tip="Бросать кости - [количество костей] [количество стенок] [модификатор типа (опционально)] [значение модификатора (по желанию)]. Пример: CMD 1 20 2 40 Ctrl + 5." name="FSCmdLineRollDice" />
+			<text name="FSCmdLinePos_txt">
+				Телепорт внутри сима (x y z)
+			</text>
+			<text name="FSCmdLineGround_txt">
+				Телепорт на землю
+			</text>
+			<text name="FSCmdLineHeight_txt">
+				Телепорт на высоту (z)
+			</text>
+			<text name="FSCmdTeleportToCam_txt">
+				Телепортироваться к позиции камеры
+			</text>
+			<text name="FSCmdLineOfferTp_txt">
+				Предложить телепорт аватару (UUID)
+			</text>
+			<text name="FSCmdLineTP2_txt">
+				Телепортироваться к аватару (имя)
+			</text>
+			<line_editor tool_tip="Синтаксис не чувствителен к регистру, но рекомендуется писать имя как это указано в радаре" name="FSCmdLineTP2" />
+			<text name="FSCmdLineTeleportHome_txt">
+				Телепортация домой
+			</text>
+			<text name="FSCmdLineMapTo_txt">
+				Телепорт в регион (регион | x y z)
+			</text>
+			<check_box label="Сохранять положение после телепорта" name="toggle" />
 		</panel>
 	</tab_container>
 </panel>

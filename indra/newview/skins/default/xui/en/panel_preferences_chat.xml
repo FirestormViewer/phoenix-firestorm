@@ -2135,26 +2135,9 @@
 	  name="chat_cmd_toggle"
 	  width="350"
 	  control_name="FSCmdLine"/>.
-	<scroll_container
-	  follows="all"
-	  layout="topleft"
-	  left="0"
-	  name="cmdline_scroll"
-	  reserve_scroll_corner="false"
-	  right="-1"
-	  top="28"
-	  bottom="-50">
-	<panel
-	  follows="left|top"
-	  height="412"
-	  layout="topleft"
-	  left="0"
-	  name="cmdline_commands"
-	  top="0"
-	  width="520">
 	<!--calc-->
 	<text
-	  top="4"
+	  top="30"
 	  follows="left|top"
 	  height="16"
 	  left="10"
@@ -2383,16 +2366,16 @@
 	<view_border
 	  bevel_style="none"
 	  border_thickness="1"
-	  top="4"
+	  top="30"
 	  left="249"
-	  bottom="-4"
+	  bottom="-25"
 	  width="0"
 	  follows="top|left|bottom"
 	  name="EmDivisor"/>
 
 	<!--key2name-->
 	<text
-	  top="4"
+	  top="30"
 	  left_delta="5"
 	  follows="left|top"
 	  height="16"
@@ -2609,8 +2592,6 @@
 	  name="toggle"
 	  width="270"
 	  control_name="FSCmdLineMapToKeepPos"/>
-	</panel>
-	</scroll_container>
 	<check_box
 	  bottom="-30"
 	  enabled_control="FSCmdLine"
