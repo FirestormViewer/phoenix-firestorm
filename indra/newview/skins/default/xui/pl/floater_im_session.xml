@@ -16,7 +16,7 @@
 				<menu_button name="gear_btn" tool_tip="Akcje dotyczące wybranej osoby" />
 				<button name="add_btn" tool_tip="Dodaj osobę do tej rozmowy" />
 				<button name="voice_call_btn" tool_tip="Rozpocznij rozmowę głosową" />
-				<button name="close_btn" tool_tip="Zakończ tą rozmowę" />
+				<button name="close_btn" tool_tip="Zakończ tę rozmowę" />
 				<button name="expand_collapse_btn" tool_tip="Zwiń/Rozwiń ten panel" />
 			</layout_panel>
 			<layout_panel name="chat_layout_panel">

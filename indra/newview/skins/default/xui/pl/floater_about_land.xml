@@ -30,7 +30,7 @@
 				ID aukcji: [ID]
 			</panel.string>
 			<panel.string name="need_tier_to_modify">
-				Musisz zaakceptować zakup by móc modyfikować tą działkę.
+				Musisz zaakceptować zakup by móc modyfikować tę działkę.
 			</panel.string>
 			<panel.string name="group_owned_text">
 				(Własność Grupy)
@@ -245,7 +245,7 @@
 		</panel>
 		<panel label="Opcje" name="land_options_panel">
 			<panel.string name="search_enabled_tooltip">
-				Udostępnij tą działkę w wyszukiwarce
+				Udostępnij tę działkę w wyszukiwarce
 			</panel.string>
 			<panel.string name="search_disabled_small_tooltip">
 				Wybrana opcja jest wyłączona, ponieważ wielkość działki wynosi 128 m² bądź mniej.

@@ -167,9 +167,9 @@
 			<text name="textUseKeyboardShortcuts">
 				Używaj skrótów klawiszowych:
 			</text>
-			<check_box name="FSUseCtrlShout" label="Ctrl+Enter (krzyk)" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Ctrl+Enter, aby krzyczeć poprzez czat w pobliżu." />
-			<check_box name="FSUseShiftWhisper" label="Shift+Enter (szept)" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Shift+Enter, aby szeptać poprzez czat w pobliżu" />
-			<check_box name="FSUseAltOOC" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Alt+Enter, aby wysyłać wiadomości ((OOC)) poprzez czat w pobliżu." />
+			<check_box name="FSUseCtrlShout" label="Ctrl+Enter (krzyk)" tool_tip="Zaznacz tę opcję, jeśli chcesz używać skrótu klawiszowego Ctrl+Enter, aby krzyczeć poprzez czat w pobliżu." />
+			<check_box name="FSUseShiftWhisper" label="Shift+Enter (szept)" tool_tip="Zaznacz tę opcję, jeśli chcesz używać skrótu klawiszowego Shift+Enter, aby szeptać poprzez czat w pobliżu" />
+			<check_box name="FSUseAltOOC" tool_tip="Zaznacz tę opcję, jeśli chcesz używać skrótu klawiszowego Alt+Enter, aby wysyłać wiadomości ((OOC)) poprzez czat w pobliżu." />
 		</panel>
 		<panel label="Komunikaty" name="ChatNotices">
 			<text name="disable_toast_label">

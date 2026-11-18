@@ -26,7 +26,7 @@
 			<text name="ignorecameraconstraints_requires_restart">
 				(wymaga restartu)
 			</text>
-			<check_box label="Po teleportacji pokaż ponownie tymczasowo zderenderowane obiekty" name="FSTempDerenderUntilTeleport" tool_tip="Gdy włączysz tą opcję, to tymczasowo zderenderowane obiekty pozostaną niewidoczne do momentu teleportacji. Gdy ją wyłączysz, to pozostaną niewidoczne do końca sesji lub do momentu, gdy zostaną ręcznie zrenderowane ponownie przez okno czarnej listy zasobów danych." />
+			<check_box label="Po teleportacji pokaż ponownie tymczasowo zderenderowane obiekty" name="FSTempDerenderUntilTeleport" tool_tip="Gdy włączysz tę opcję, to tymczasowo zderenderowane obiekty pozostaną niewidoczne do momentu teleportacji. Gdy ją wyłączysz, to pozostaną niewidoczne do końca sesji lub do momentu, gdy zostaną ręcznie zrenderowane ponownie przez okno czarnej listy zasobów danych." />
 			<text name="mouse_warp_lbl">
 				Skok kursora:
 			</text>
@@ -60,7 +60,7 @@
 			<check_box label="Przytrzymaj klawisz skoku lub kucania, aby zacząć lub przestać latać" name="automatic_fly"/>
 			<check_box label="Włącz tryb przełączania kucania" name="crouch_toggle_mode"/>
 			<check_box label="Wyłącz oczekiwanie na animacje przed-skoku oraz lądowania (szybki skok)" name="FSIgnoreFinishAnimation"/>
-			<check_box label="Awatary mogą chodzić do tyłu na Twoim ekranie (efekt jest wyłącznie lokalny)" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Gdy zaznaczysz tą opcję, to zezwolisz awatarom poruszającym się w tył na bycie widzianymi tak, jak gdyby się cofały - bez odwracania się. To ustawienie ma wpływ tylko na to, co pokazuje Twoja przeglądarka, a nie to, co awatar faktycznie robi. Takie ustawienie jest domyślnym dla standardowej przeglądarki Second Life. Jeśli awatar posiada AO zmuszające go do obracania się, to zachowanie to może zostać nadpisane."/>
+			<check_box label="Awatary mogą chodzić do tyłu na Twoim ekranie (efekt jest wyłącznie lokalny)" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Gdy zaznaczysz tę opcję, to zezwolisz awatarom poruszającym się w tył na bycie widzianymi tak, jak gdyby się cofały - bez odwracania się. To ustawienie ma wpływ tylko na to, co pokazuje Twoja przeglądarka, a nie to, co awatar faktycznie robi. Takie ustawienie jest domyślnym dla standardowej przeglądarki Second Life. Jeśli awatar posiada AO zmuszające go do obracania się, to zachowanie to może zostać nadpisane."/>
 			<check_box label="Obróć awatara w kierunku zaznaczonego obiektu" name="FSTurnAvatarToSelectedObject" tool_tip="Obracaj awatara w taki sposób, aby twarz była skierowana w stronę zaznaczonego w danej chwili obiektu."/>
 			<slider label="Prędkość obrotu awatara:" name="av_turn_spd" tool_tip="Zmienia szybkość, z jaką Twój awatar reaguje na obracanie się. 0-100 to szacunkowy procent maksymalnej szybkości obrotu. Domyślnie: 0. Wysokie wartości będą powodować szarpanie." />
 			<check_box label="Wyłącz łączenie z sąsiednimi regionami (uwaga: zobacz chmurkę pomocy)" name="FSDisableNeighbourRegionConnections" tool_tip="Pokazuje/ładuje tylko region, w którym jesteś. Może to poprawić wydajność i stabilność połączenia, ale przechodzenie do innych regionów pieszo lub pojazdem będzie mniej niezawodne i może wymagać ręcznego teleportu." />
