@@ -283,94 +283,98 @@
 			</text>
 			<check_box label="チャットバーをコマンドラインとして使用できるようにする" name="chat_cmd_toggle"/>
 			<!-- 計算機 -->
-			<text name="FSCmdLineCalc_txt">
-				式を計算（例：cmd SIN(2+2)）
-			</text>
 			<!-- 描画距離 -->
-			<text name="FSCmdLineDrawDistance_txt">
-				描画距離を変更（使用法：cmd 数字（m））
-			</text>
 			<!-- 帯域幅 -->
-			<text name="FSCmdLineBandWidth_txt">
-				最大帯域幅を設定（使用法：cmd 数字（kbps））
-			</text>
 			<!--cpcampos-->
-			<text name="FSCmdLineCopyCam_txt">
-				カメラの位置をクリップボードにコピー
-			</text>
 			<!-- AOオン／オフ -->
-			<text name="FSCmdLineAO_txt">
-				ＡＯをオン／オフ（使用法：cmd on/off）
-			</text>
 			<!-- チャットクリア -->
-			<text name="FSCmdLineClearChat_txt">
-				チャット履歴を消去（使用法：cmd）
-			</text>
-			<line_editor tool_tip="スパムチャットがあった時に、その影響でラグが発生するのを防ぐためにチャット履歴を消去します。" name="FSCmdLineClearChat"/>
 			<!-- メディア -->
-			<text name="FSCmdLineMedia_txt">
-				メディアＵＲＬを設定（使用法：cmd URL タイプ）
-			</text>
-			<line_editor tool_tip="入力したURLのメディアに設定、メディアをプレイします。" name="FSCmdLineMedia"/>
 			<!-- 音楽 -->
-			<text name="FSCmdLineMusic_txt">
-				音楽ストリーミングＵＲＬを設定（使用法：cmd URL）
-			</text>
-			<line_editor tool_tip="入力したURLの音楽ストリーミングに設定、音楽をプレイします。" name="FSCmdLineMusic"/>
 			<!-- プラットフォームをRez -->
-			<text name="FSCmdLineRezPlatform_txt">
-				プラットフォームをRez（使用法：cmd 0〜64）
-			</text>
-			<slider name="FSCmdLinePlatformSize" label="幅" tool_tip="Rezするプラットフォームの幅を設定します。"/>
 			<!-- キーからアバター名取得 -->
-			<text name="FSCmdLineKeyToName_txt">
-				ＵＵＩＤからアバター名を取得（使用法：cmd UUID）
-			</text>
 			<!--dice-->
-			<text name="FSCmdLineRollDice_txt">
-				サイコロを振る（使用法：cmd サイコロ番号 サイコロの面数 演算子 係数）
-			</text>
 			<!--trkpos-->
-			<text name="FSCmdLineTrackPos_txt">
-				位置かアバターを追跡（使用方法：cmd posかアバター名）
-			</text>
-			<line_editor name="FSCmdLineTrackPos" tool_tip="ワールドマップビーコンを、指定した位置（cpcampos形式）またはアバター名の一部に設定します。"/>
-			<line_editor tool_tip="サイコロを振ります。cmd [サイコロの番号] [サイコロの面数] [演算子の種類（任意）] [係数（任意）] の文法で記述します。例えば、cmd 1 20, cmd 2 40, + 5 のように表記します。これらのパラメータを省略すると、cmd 1 6 が適用され、つまり、普通のサイコロを１つ振ります。" name="FSCmdLineRollDice"/>
 			<!-- SIM内テレポート-->
-			<text name="FSCmdLinePos_txt">
-				同じＳＩＭ内でテレポート（使用法：cmd x y z）
-			</text>
 			<!-- 地上にテレポート -->
-			<text name="FSCmdLineGround_txt">
-				地上にテレポート（使用法：cmd）
-			</text>
 			<!-- 指定高度にテレポート -->
-			<text name="FSCmdLineHeight_txt">
-				指定した高さにテレポート（使用法：cmd z）
-			</text>
 			<!-- カメラ位置にテレポート -->
-			<text name="FSCmdTeleportToCam_txt">
-				カメラ位置にテレポート（使用法：cmd）
-			</text>
 			<!-- テレポートを送る -->
-			<text name="FSCmdLineOfferTp_txt">
-				アバターにテレポートを送る（使用法：cmd UUID）
-			</text>
 			<!-- アバターにテレポート -->
-			<text name="FSCmdLineTP2_txt">
-				アバターのいる場所にテレポート（使用法：cmd アバター名）
-			</text>
-			<line_editor tool_tip="このコマンドで使用するアバター名はフルネームでなくてよく、また大文字小文字を区別しません。レーダーを開いて同様の名前の人がいないか確認してお使いになることをお勧めします。" name="FSCmdLineTP2"/>
 			<!-- ホームにテレポート -->
-			<text name="FSCmdLineTeleportHome_txt">
-				ホームにテレポート（使用法：cmd）
-			</text>
 			<!-- 指定SIMに移動 -->
-			<text name="FSCmdLineMapTo_txt">
-				指定したＳＩＭに移動（使用法：cmd SIM名 | x y z）
-			</text>
-			<check_box label="目標ＳＩＭの同じ座標に移動" name="toggle"/>
 			<check_box label="コマンド実行結果の送信先チャンネル：" name="FSCmdLineAnnounceToChannel"/>
+			<scroll_container name="cmdline_scroll">
+				<panel name="cmdline_commands">
+					<text name="FSCmdLineCalc_txt">
+						式を計算（例：cmd SIN(2+2)）
+					</text>
+					<text name="FSCmdLineDrawDistance_txt">
+						描画距離を変更（使用法：cmd 数字（m））
+					</text>
+					<text name="FSCmdLineBandWidth_txt">
+						最大帯域幅を設定（使用法：cmd 数字（kbps））
+					</text>
+					<text name="FSCmdLineCopyCam_txt">
+						カメラの位置をクリップボードにコピー
+					</text>
+					<text name="FSCmdLineAO_txt">
+						ＡＯをオン／オフ（使用法：cmd on/off）
+					</text>
+					<text name="FSCmdLineClearChat_txt">
+						チャット履歴を消去（使用法：cmd）
+					</text>
+					<line_editor tool_tip="スパムチャットがあった時に、その影響でラグが発生するのを防ぐためにチャット履歴を消去します。" name="FSCmdLineClearChat"/>
+					<text name="FSCmdLineMedia_txt">
+						メディアＵＲＬを設定（使用法：cmd URL タイプ）
+					</text>
+					<line_editor tool_tip="入力したURLのメディアに設定、メディアをプレイします。" name="FSCmdLineMedia"/>
+					<text name="FSCmdLineMusic_txt">
+						音楽ストリーミングＵＲＬを設定（使用法：cmd URL）
+					</text>
+					<line_editor tool_tip="入力したURLの音楽ストリーミングに設定、音楽をプレイします。" name="FSCmdLineMusic"/>
+					<text name="FSCmdLineRezPlatform_txt">
+						プラットフォームをRez（使用法：cmd 0〜64）
+					</text>
+					<slider name="FSCmdLinePlatformSize" label="幅" tool_tip="Rezするプラットフォームの幅を設定します。"/>
+					<text name="FSCmdLineKeyToName_txt">
+						ＵＵＩＤからアバター名を取得（使用法：cmd UUID）
+					</text>
+					<text name="FSCmdLineRollDice_txt">
+						サイコロを振る（使用法：cmd サイコロ番号 サイコロの面数 演算子 係数）
+					</text>
+					<text name="FSCmdLineTrackPos_txt">
+						位置かアバターを追跡（使用方法：cmd posかアバター名）
+					</text>
+					<line_editor name="FSCmdLineTrackPos" tool_tip="ワールドマップビーコンを、指定した位置（cpcampos形式）またはアバター名の一部に設定します。"/>
+					<line_editor tool_tip="サイコロを振ります。cmd [サイコロの番号] [サイコロの面数] [演算子の種類（任意）] [係数（任意）] の文法で記述します。例えば、cmd 1 20, cmd 2 40, + 5 のように表記します。これらのパラメータを省略すると、cmd 1 6 が適用され、つまり、普通のサイコロを１つ振ります。" name="FSCmdLineRollDice"/>
+					<text name="FSCmdLinePos_txt">
+						同じＳＩＭ内でテレポート（使用法：cmd x y z）
+					</text>
+					<text name="FSCmdLineGround_txt">
+						地上にテレポート（使用法：cmd）
+					</text>
+					<text name="FSCmdLineHeight_txt">
+						指定した高さにテレポート（使用法：cmd z）
+					</text>
+					<text name="FSCmdTeleportToCam_txt">
+						カメラ位置にテレポート（使用法：cmd）
+					</text>
+					<text name="FSCmdLineOfferTp_txt">
+						アバターにテレポートを送る（使用法：cmd UUID）
+					</text>
+					<text name="FSCmdLineTP2_txt">
+						アバターのいる場所にテレポート（使用法：cmd アバター名）
+					</text>
+					<line_editor tool_tip="このコマンドで使用するアバター名はフルネームでなくてよく、また大文字小文字を区別しません。レーダーを開いて同様の名前の人がいないか確認してお使いになることをお勧めします。" name="FSCmdLineTP2"/>
+					<text name="FSCmdLineTeleportHome_txt">
+						ホームにテレポート（使用法：cmd）
+					</text>
+					<text name="FSCmdLineMapTo_txt">
+						指定したＳＩＭに移動（使用法：cmd SIM名 | x y z）
+					</text>
+					<check_box label="目標ＳＩＭの同じ座標に移動" name="toggle"/>
+				</panel>
+			</scroll_container>
 		</panel>
 	</tab_container>
 </panel>

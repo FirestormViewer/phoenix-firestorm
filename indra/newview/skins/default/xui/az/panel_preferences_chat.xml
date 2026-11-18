@@ -252,70 +252,74 @@
 		</panel>
 		<panel label="Komandalar" name="tab-CmdLine">
 			<check_box label="Söhbət sətrini əmrlər üçün istifadə etmək" name="chat_cmd_toggle" />
-			<text name="FSCmdLineCalc_txt">
-				Kalkulyator
-			</text>
-			<text name="FSCmdLineDrawDistance_txt">
-				Görmə məsafəsi (metr)
-			</text>
-			<text name="FSCmdLineBandWidth_txt">
-				Band genişliyi (kbps)
-			</text>
-			<text name="FSCmdLineCopyCam_txt">
-				Kamera yerləşməsini buferə köçürtmək
-			</text>
-			<text name="FSCmdLineAO_txt">
-				AO aç / bağla (on/off)
-			</text>
-			<text name="FSCmdLineClearChat_txt">
-				Söhbət tarixçəsini təmizləmək
-			</text>
-			<line_editor tool_tip="Spamların yol açdığı gecikmələri önəmək üçün söhbət jurnalını silir." name="FSCmdLineClearChat" />
-			<text name="FSCmdLineMedia_txt">
-				Media üçün URL təyin edin
-			</text>
-			<line_editor tool_tip="Verilən URL üçün media axını quraşdırır və çalır" name="FSCmdLineMedia" />
-			<text name="FSCmdLineMusic_txt">
-				Streaming musiqi üçün URL təyin edin
-			</text>
-			<line_editor tool_tip="Verilən URL üçün musiqi axını quraşdırır və çalır" name="FSCmdLineMusic" />
-			<text name="FSCmdLineRezPlatform_txt">
-				Platforma yerləşdir (0 - 64)
-			</text>
-			<slider name="FSCmdLinePlatformSize" label="Eni:" tool_tip="Platformanın ölçüsünü necə böyük etmək istəyirsiniz?" />
-			<text name="FSCmdLineKeyToName_txt">
-				UUID əsasında avatarın adını öyrənin
-			</text>
-			<text name="FSCmdLineRollDice_txt">
-				Zər atmaq
-			</text>
-			<line_editor tool_tip="Zar atmaq - [zar sayı] [bölmə sayı] [növ modifikatoru (seçimli)] [dəyər modifikatoru (arzuya görə)]. Nümunə: CMD 1 20 2 40 Ctrl + 5." name="FSCmdLineRollDice" />
-			<text name="FSCmdLinePos_txt">
-				Sim daxilində teleport (x y z)
-			</text>
-			<text name="FSCmdLineGround_txt">
-				Yerdə teleport
-			</text>
-			<text name="FSCmdLineHeight_txt">
-				Yüksəklikdə teleport (z)
-			</text>
-			<text name="FSCmdTeleportToCam_txt">
-				Kamera yerləşməsinə teleport etmək
+			<scroll_container name="cmdline_scroll">
+				<panel name="cmdline_commands">
+					<text name="FSCmdLineCalc_txt">
+						Kalkulyator
+					</text>
+					<text name="FSCmdLineDrawDistance_txt">
+						Görmə məsafəsi (metr)
+					</text>
+					<text name="FSCmdLineBandWidth_txt">
+						Band genişliyi (kbps)
+					</text>
+					<text name="FSCmdLineCopyCam_txt">
+						Kamera yerləşməsini buferə köçürtmək
+					</text>
+					<text name="FSCmdLineAO_txt">
+						AO aç / bağla (on/off)
+					</text>
+					<text name="FSCmdLineClearChat_txt">
+						Söhbət tarixçəsini təmizləmək
+					</text>
+					<line_editor tool_tip="Spamların yol açdığı gecikmələri önəmək üçün söhbət jurnalını silir." name="FSCmdLineClearChat" />
+					<text name="FSCmdLineMedia_txt">
+						Media üçün URL təyin edin
+					</text>
+					<line_editor tool_tip="Verilən URL üçün media axını quraşdırır və çalır" name="FSCmdLineMedia" />
+					<text name="FSCmdLineMusic_txt">
+						Streaming musiqi üçün URL təyin edin
+					</text>
+					<line_editor tool_tip="Verilən URL üçün musiqi axını quraşdırır və çalır" name="FSCmdLineMusic" />
+					<text name="FSCmdLineRezPlatform_txt">
+						Platforma yerləşdir (0 - 64)
+					</text>
+					<slider name="FSCmdLinePlatformSize" label="Eni:" tool_tip="Platformanın ölçüsünü necə böyük etmək istəyirsiniz?" />
+					<text name="FSCmdLineKeyToName_txt">
+						UUID əsasında avatarın adını öyrənin
+					</text>
+					<text name="FSCmdLineRollDice_txt">
+						Zər atmaq
+					</text>
+					<line_editor tool_tip="Zar atmaq - [zar sayı] [bölmə sayı] [növ modifikatoru (seçimli)] [dəyər modifikatoru (arzuya görə)]. Nümunə: CMD 1 20 2 40 Ctrl + 5." name="FSCmdLineRollDice" />
+					<text name="FSCmdLinePos_txt">
+						Sim daxilində teleport (x y z)
+					</text>
+					<text name="FSCmdLineGround_txt">
+						Yerdə teleport
+					</text>
+					<text name="FSCmdLineHeight_txt">
+						Yüksəklikdə teleport (z)
+					</text>
+					<text name="FSCmdTeleportToCam_txt">
+						Kamera yerləşməsinə teleport etmək
    			</text>
-			<text name="FSCmdLineOfferTp_txt">
-				Avatara teleport təklif etmək (UUID)
-			</text>
-			<text name="FSCmdLineTP2_txt">
-				Avatara teleport olmaq (ad)
-			</text>
-			<line_editor tool_tip="Sintaksis böyük hərflərə həssas deyil, lakin adı radarda göründüyü kimi yazmaq tövsiyə olunur" name="FSCmdLineTP2" />
-			<text name="FSCmdLineTeleportHome_txt">
-				Evə teleport olmaq
-			</text>
-			<text name="FSCmdLineMapTo_txt">
-				Regiona teleport (region | x y z)
-			</text>
-			<check_box label="Teleportdan sonra yerləşməni saxla" name="toggle" />
+					<text name="FSCmdLineOfferTp_txt">
+						Avatara teleport təklif etmək (UUID)
+					</text>
+					<text name="FSCmdLineTP2_txt">
+						Avatara teleport olmaq (ad)
+					</text>
+					<line_editor tool_tip="Sintaksis böyük hərflərə həssas deyil, lakin adı radarda göründüyü kimi yazmaq tövsiyə olunur" name="FSCmdLineTP2" />
+					<text name="FSCmdLineTeleportHome_txt">
+						Evə teleport olmaq
+					</text>
+					<text name="FSCmdLineMapTo_txt">
+						Regiona teleport (region | x y z)
+					</text>
+					<check_box label="Teleportdan sonra yerləşməni saxla" name="toggle" />
+				</panel>
+			</scroll_container>
 		</panel>
 	</tab_container>
 </panel>

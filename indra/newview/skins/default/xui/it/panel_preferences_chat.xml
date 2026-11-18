@@ -258,70 +258,74 @@
 		</panel>
 		<panel label="Riga di Comando" name="tab-CmdLine" >
 			<check_box label="Abilita comandi dalla barra chat" name="chat_cmd_toggle"/>.
-			<text name="FSCmdLineCalc_txt">
-				Calcola espressione (uso: cmd SIN(2+2))
-			</text>
-			<text name="FSCmdLineDrawDistance_txt">
-				Cambia distanza disegno (uso: cmd metri)
-			</text>
-			<text name="FSCmdLineBandWidth_txt">
-				Banda max. (uso: cmd kbps)
-			</text>
-			<text name="FSCmdLineCopyCam_txt">
-				Copia posizione camera
-			</text>
-			<text name="FSCmdLineAO_txt">
-				Accendi/spegni AO (uso: cmd on/off)
-			</text>
-			<text name="FSCmdLineClearChat_txt">
-				Cancella storico chat (uso: cmd)
-			</text>
-			<line_editor tool_tip="Cancella la chat per evitare lag dovuto agli spammer." name="FSCmdLineClearChat"/>
-			<text name="FSCmdLineMedia_txt">
-				Imposta URL media (uso: cmd url type)
-			</text>
-			<line_editor tool_tip="Imposta lo stream all&apos;URL indicato" name="FSCmdLineMedia"/>
-			<text name="FSCmdLineMusic_txt">
-				Imposta URL musica (uso: cmd url)
-			</text>
-			<line_editor tool_tip="Imposta lo stream audio all&apos;URL indicato" name="FSCmdLineMusic"/>
-			<text name="FSCmdLineRezPlatform_txt">
-				Rezza una piattaforma (uso: cmd 0 - 64)
-			</text>
-			<slider name="FSCmdLinePlatformSize" label="Ampiezza" tool_tip="Ampiezza della piattaforma"/>
-			<text name="FSCmdLineKeyToName_txt">
-				Trova nome avatar dall&apos;UUID (uso: cmd key)
-			</text>
-			<text name="FSCmdLineRollDice_txt">
-				Tira un dado (uso: cmd dadi facce mt mv)
-			</text>
-			<line_editor tool_tip="Tira dadi - cmd [numero di dadi] [numero di facce] [tipo modifica (opzionale)] [valore modifica (opzionale)]. Es: cmd 1 20, cmd 2 40 + 5. Senza parametri è cmd 1 6 (dado standard)" name="FSCmdLineRollDice"/>
-			<text name="FSCmdLinePos_txt">
-				Teleport entro la sim (uso: cmd x y z)
-			</text>
-			<text name="FSCmdLineGround_txt">
-				Teleport a terra (uso: cmd)
-			</text>
-			<text name="FSCmdLineHeight_txt">
-				Teleport ad altezza (uso: cmd z)
-			</text>
-			<text name="FSCmdTeleportToCam_txt">
-				Teleport a posizione camera (uso: cmd)
-			</text>
-			<text name="FSCmdLineOfferTp_txt">
-				Offri TP ad avatar (uso: cmd key)
-			</text>
-			<text name="FSCmdLineTP2_txt">
-				Teleport ad avatar (uso: cmd name)
-			</text>
-			<line_editor tool_tip="Funziona anche con nomi parziali e non è sensibile alle maiuscole. Lavora meglio con il radar aperto" name="FSCmdLineTP2"/>
-			<text name="FSCmdLineTeleportHome_txt">
-				Teleport a casa (uso: cmd)
-			</text>
-			<text name="FSCmdLineMapTo_txt">
-				Teleport alla sim (uso: cmd nomesim)
-			</text>
-			<check_box label="Usa stesse posizioni tra sim" name="toggle"/>
+			<scroll_container name="cmdline_scroll">
+				<panel name="cmdline_commands">
+					<text name="FSCmdLineCalc_txt">
+						Calcola espressione (uso: cmd SIN(2+2))
+					</text>
+					<text name="FSCmdLineDrawDistance_txt">
+						Cambia distanza disegno (uso: cmd metri)
+					</text>
+					<text name="FSCmdLineBandWidth_txt">
+						Banda max. (uso: cmd kbps)
+					</text>
+					<text name="FSCmdLineCopyCam_txt">
+						Copia posizione camera
+					</text>
+					<text name="FSCmdLineAO_txt">
+						Accendi/spegni AO (uso: cmd on/off)
+					</text>
+					<text name="FSCmdLineClearChat_txt">
+						Cancella storico chat (uso: cmd)
+					</text>
+					<line_editor tool_tip="Cancella la chat per evitare lag dovuto agli spammer." name="FSCmdLineClearChat"/>
+					<text name="FSCmdLineMedia_txt">
+						Imposta URL media (uso: cmd url type)
+					</text>
+					<line_editor tool_tip="Imposta lo stream all&apos;URL indicato" name="FSCmdLineMedia"/>
+					<text name="FSCmdLineMusic_txt">
+						Imposta URL musica (uso: cmd url)
+					</text>
+					<line_editor tool_tip="Imposta lo stream audio all&apos;URL indicato" name="FSCmdLineMusic"/>
+					<text name="FSCmdLineRezPlatform_txt">
+						Rezza una piattaforma (uso: cmd 0 - 64)
+					</text>
+					<slider name="FSCmdLinePlatformSize" label="Ampiezza" tool_tip="Ampiezza della piattaforma"/>
+					<text name="FSCmdLineKeyToName_txt">
+						Trova nome avatar dall&apos;UUID (uso: cmd key)
+					</text>
+					<text name="FSCmdLineRollDice_txt">
+						Tira un dado (uso: cmd dadi facce mt mv)
+					</text>
+					<line_editor tool_tip="Tira dadi - cmd [numero di dadi] [numero di facce] [tipo modifica (opzionale)] [valore modifica (opzionale)]. Es: cmd 1 20, cmd 2 40 + 5. Senza parametri è cmd 1 6 (dado standard)" name="FSCmdLineRollDice"/>
+					<text name="FSCmdLinePos_txt">
+						Teleport entro la sim (uso: cmd x y z)
+					</text>
+					<text name="FSCmdLineGround_txt">
+						Teleport a terra (uso: cmd)
+					</text>
+					<text name="FSCmdLineHeight_txt">
+						Teleport ad altezza (uso: cmd z)
+					</text>
+					<text name="FSCmdTeleportToCam_txt">
+						Teleport a posizione camera (uso: cmd)
+					</text>
+					<text name="FSCmdLineOfferTp_txt">
+						Offri TP ad avatar (uso: cmd key)
+					</text>
+					<text name="FSCmdLineTP2_txt">
+						Teleport ad avatar (uso: cmd name)
+					</text>
+					<line_editor tool_tip="Funziona anche con nomi parziali e non è sensibile alle maiuscole. Lavora meglio con il radar aperto" name="FSCmdLineTP2"/>
+					<text name="FSCmdLineTeleportHome_txt">
+						Teleport a casa (uso: cmd)
+					</text>
+					<text name="FSCmdLineMapTo_txt">
+						Teleport alla sim (uso: cmd nomesim)
+					</text>
+					<check_box label="Usa stesse posizioni tra sim" name="toggle"/>
+				</panel>
+			</scroll_container>
 		</panel>
 	</tab_container>
 </panel>

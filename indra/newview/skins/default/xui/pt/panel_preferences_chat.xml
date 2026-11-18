@@ -284,70 +284,75 @@
 		
 		<panel label="CmdLine" name="tab-CmdLine">
 			<check_box label="Use a linha de entrada do chat para inserir comandos" name="chat_cmd_toggle" />
-			<text name="FSCmdLineCalc_txt">
-				Calcular (Comando: cmd SIN(2+2))
-			</text>
-			<text name="FSCmdLineDrawDistance_txt">
-				Alterar distância de renderização (uso: cmd metros)
-			</text>
-			<text name="FSCmdLineBandWidth_txt">
-				Máx. Largura de banda (comando: cmd kbps)
-			</text>
-			<text name="FSCmdLineCopyCam_txt">
-				câmerapos. copiar para a área de transferência
-			</text>
-			<text name="FSCmdLineAO_txt">
-				Ligar/desligar AO (comando: cmd ligar/desligar)
-			</text>
-			<text name="FSCmdLineClearChat_txt">
-				Excluir histórico de bate-papo (comando: cmd)
-			</text>
-			<line_editor tool_tip="Exclui o histórico de bate-papo para evitar atrasos causados ​​por spammers." name="FSCmdLineClearChat" />
-			<text name="FSCmdLineMedia_txt">
-				Definir URL de mídia (comando: tipo de URL cmd)
-			</text>
-			<line_editor tool_tip="Define o fluxo de mídia para o URL especificado e o reproduz." name="FSCmdLineMedia" />
-			<text name="FSCmdLineMusic_txt">
-				Definir URL do stream de música (comando: URL cmd)
-			</text>
-			<line_editor tool_tip="Define o stream de música para o URL especificado e o reproduz." name="FSCmdLineMusic" />
-			<text name="FSCmdLineRezPlatform_txt">
-				Plataforma Rez (comando: cmd 0 - 64)
-			</text>
-			<slider name="FSCmdLinePlatformSize" label="Largura" label_width="37" tool_tip="Define o tamanho da plataforma como rez." />
-			<text name="FSCmdLineKeyToName_txt">
-				Determinar Av. nome via UUID (comando: chave cmd)
-			</text>
-			<text name="FSCmdLineRollDice_txt">
-				Role os dados (comando: cmd dice lados mt mw)
-			</text>
-			<line_editor tool_tip="Rola dados - cmd [número de dados] [faces por dado] [tipo de modificador (opcional)] [valor do modificador (opcional)]. Exemplo: cmd 1 20, cmd 1 20 + 5. A omissão dos parâmetros corresponde a cmd 1 6 (dado padrão)" name="FSCmdLineRollDice" />
-			<text name="FSCmdLinePos_txt">
-				Teleporte dentro da região (comando: cmd x z y)
-			</text>
-			<text name="FSCmdLineGround_txt">
-				Teleporte para a superfície (comando: cmd)
-			</text>
-			<text name="FSCmdLineHeight_txt">
-				Teleporte para altura (comando: cmd z)
-			</text>
-			<text name="FSCmdTeleportToCam_txt">
-				Teleporte para a posição da câmera (comando: cmd)
-			</text>
-			<text name="FSCmdLineOfferTp_txt">
-				Oferecer teletransporte de avatar (comando: tecla cmd)
-			</text>
-			<text name="FSCmdLineTP2_txt">
-				Teleporte para Avatar (Comando: nome cmd)
-			</text>
-			<line_editor tool_tip="A sintaxe deste comando permite nomes de avatar parciais e não diferencia maiúsculas de minúsculas." name="FSCmdLineTP2" />		
-			<text name="FSCmdLineTeleportHome_txt">
-				Teleporte para casa (comando: cmd)
-			</text>
-			<text name="FSCmdLineMapTo_txt">
-				Teleporte para região (cmd nome da região | x y z)
-			</text>
-			<check_box label="Manter posição na nova região" name="toggle" />
+
+			<scroll_container name="cmdline_scroll">
+				<panel name="cmdline_commands">
+					<text name="FSCmdLineCalc_txt">
+						Calcular (Comando: cmd SIN(2+2))
+					</text>
+					<text name="FSCmdLineDrawDistance_txt">
+						Alterar distância de renderização (uso: cmd metros)
+					</text>
+					<text name="FSCmdLineBandWidth_txt">
+						Máx. Largura de banda (comando: cmd kbps)
+					</text>
+					<text name="FSCmdLineCopyCam_txt">
+						câmerapos. copiar para a área de transferência
+					</text>
+					<text name="FSCmdLineAO_txt">
+						Ligar/desligar AO (comando: cmd ligar/desligar)
+					</text>
+					<text name="FSCmdLineClearChat_txt">
+						Excluir histórico de bate-papo (comando: cmd)
+					</text>
+					<line_editor tool_tip="Exclui o histórico de bate-papo para evitar atrasos causados ​​por spammers." name="FSCmdLineClearChat" />
+					<text name="FSCmdLineMedia_txt">
+						Definir URL de mídia (comando: tipo de URL cmd)
+					</text>
+					<line_editor tool_tip="Define o fluxo de mídia para o URL especificado e o reproduz." name="FSCmdLineMedia" />
+					<text name="FSCmdLineMusic_txt">
+						Definir URL do stream de música (comando: URL cmd)
+					</text>
+					<line_editor tool_tip="Define o stream de música para o URL especificado e o reproduz." name="FSCmdLineMusic" />
+					<text name="FSCmdLineRezPlatform_txt">
+						Plataforma Rez (comando: cmd 0 - 64)
+					</text>
+					<slider name="FSCmdLinePlatformSize" label="Largura" label_width="37" tool_tip="Define o tamanho da plataforma como rez." />
+					<text name="FSCmdLineKeyToName_txt">
+						Determinar Av. nome via UUID (comando: chave cmd)
+					</text>
+					<text name="FSCmdLineRollDice_txt">
+						Role os dados (comando: cmd dice lados mt mw)
+					</text>
+					<line_editor tool_tip="Rola dados - cmd [número de dados] [faces por dado] [tipo de modificador (opcional)] [valor do modificador (opcional)]. Exemplo: cmd 1 20, cmd 1 20 + 5. A omissão dos parâmetros corresponde a cmd 1 6 (dado padrão)" name="FSCmdLineRollDice" />
+					<text name="FSCmdLinePos_txt">
+						Teleporte dentro da região (comando: cmd x z y)
+					</text>
+					<text name="FSCmdLineGround_txt">
+						Teleporte para a superfície (comando: cmd)
+					</text>
+					<text name="FSCmdLineHeight_txt">
+						Teleporte para altura (comando: cmd z)
+					</text>
+					<text name="FSCmdTeleportToCam_txt">
+						Teleporte para a posição da câmera (comando: cmd)
+					</text>
+					<text name="FSCmdLineOfferTp_txt">
+						Oferecer teletransporte de avatar (comando: tecla cmd)
+					</text>
+					<text name="FSCmdLineTP2_txt">
+						Teleporte para Avatar (Comando: nome cmd)
+					</text>
+					<line_editor tool_tip="A sintaxe deste comando permite nomes de avatar parciais e não diferencia maiúsculas de minúsculas." name="FSCmdLineTP2" />
+					<text name="FSCmdLineTeleportHome_txt">
+						Teleporte para casa (comando: cmd)
+					</text>
+					<text name="FSCmdLineMapTo_txt">
+						Teleporte para região (cmd nome da região | x y z)
+					</text>
+					<check_box label="Manter posição na nova região" name="toggle" />
+				</panel>
+			</scroll_container>
 		</panel>
 
 	</tab_container>
