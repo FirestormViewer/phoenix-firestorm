@@ -1556,22 +1556,12 @@ static void finish_sit_on_ground(bool success, void*)
     }
 }
 
-// <FS:Ansariel> Fix expected ground-sit behavior introduced by game controls
-//void LLAgent::sitDown()
-void LLAgent::sitDown(bool is_gamecontrol_action)
+void LLAgent::sitDown()
 {
 // [RLVa:KB] - Checked: RLVa-1.2.1
     if (!RlvActions::canGroundSit())
         return;
 // [/RLVa:KB]
-
-    // <FS:Ansariel> Fix expected ground-sit behavior introduced by game controls
-    if (!is_gamecontrol_action)
-    {
-        setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
-        return;
-    }
-    // </FS:Ansariel>
 
     // Sit on the ground directly beneath (or above) the agent's current position.
     // Refuse if that spot is too far away, and otherwise walk/fly there first,
@@ -6227,9 +6217,7 @@ void LLAgent::applyExternalActions(const LLGameControl::AgentActions& actions)
         }
         else
         {
-            // <FS:Ansariel> Fix expected ground-sit behavior introduced by game controls
-            //sitDown();
-            sitDown(true);
+            sitDown();
         }
     }
 
@@ -6531,9 +6519,7 @@ void LLAgent::applyExternalActions(const LLGameControl::AgentActions& actions)
     {
         // "Sit": only sit if currently standing; a no-op otherwise
         // (already sitting, flying, or airborne).
-        // <FS:Ansariel> Fix expected ground-sit behavior introduced by game controls
-        //sitDown();
-        sitDown(true);
+        sitDown();
     }
     else if ((mExternalActionFlags & AGENT_CONTROL_STAND_UP) > 0 && isSitting())
     {
