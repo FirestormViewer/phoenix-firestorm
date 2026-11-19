@@ -930,7 +930,11 @@ namespace FSCameraLinks
     {
         // Check what the camera is currently alt-clicked on, or what is selected.
         LLViewerObject* target = nullptr;
-        if (!gAgentCamera.getFocusOnAvatar())
+        if (sFollowActive)
+        {
+            target = find_target(sFollowView.mTarget);
+        }
+        if (!target && !gAgentCamera.getFocusOnAvatar())
         {
             target = follow_root(gAgentCamera.getFocusObject().get());
         }
