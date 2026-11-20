@@ -9,7 +9,7 @@
   </combo_box>
   <combo_box name="metric_combo">
     <item name="Time" label="Czas"/>
-    <item name="Number of Calls" label="Ilość odwołań"/>
+    <item name="Number of Calls" label="Liczba odwołań"/>
   </combo_box>
   <button name="pause_btn" label="Pauza" />
 </floater>

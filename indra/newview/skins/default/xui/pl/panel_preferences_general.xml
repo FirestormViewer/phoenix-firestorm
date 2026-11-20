@@ -88,7 +88,7 @@
 	<text name="title_afk_quit_text">
 		Wyloguj po czasie:
 	</text>
-	<combo_box label="Limit dla Zaśnięcia:" name="afk">
+	<combo_box label="Zasypiaj po czasie:" name="afk">
 		<combo_box.item label="2 minuty" name="item0"/>
 		<combo_box.item label="5 minut" name="item1"/>
 		<combo_box.item label="10 minut" name="item2"/>

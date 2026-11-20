@@ -130,6 +130,11 @@
 			Strona internetowa (XHTML)
 		</label>
 	</mimetype>
+	<mimetype name="application/octet-stream">
+		<label name="application/octet-stream_label">
+			Strumień
+		</label>
+	</mimetype>
 	<mimetype name="audio/mid">
 		<label name="audio/mid_label">
 			Dźwięk (MIDI)

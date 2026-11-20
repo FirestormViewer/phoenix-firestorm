@@ -35,8 +35,9 @@
             <combo_box.item label="Pomocnik lotu: Silne przyspieszanie" name="flight_strong" />
             <combo_box.item label="Pomocnik lotu: Ekstremalne przyspieszanie" name="flight_extreme" />
         </combo_box>
-        <slider name="manual_environment_change_transition_period" label="Czas przejścia otoczenia:" tool_tip="Interwał w sekundach, w czasie którego ręczne zmiany środowiska będą zachodzić. Zero oznacza natychmiast." />
+        <slider name="manual_environment_change_transition_period" label="Czas przejścia otoczenia:" tool_tip="Interwał w sekundach, w czasie którego ręczne zmiany otoczenia będą zachodzić. Zero oznacza natychmiast." />
         <check_box name="EnvironmentPersistAcrossLogin" label="Trzymaj ustawienia otoczenia pomiędzy sesjami" tool_tip="Przywraca aktualne ustawienia otoczenia po następnym zalogowaniu." />
+        <check_box name="SwitchToSharedEnvAfterTeleport" label="Przełączaj na otoczenie współdzielone po teleportacji" tool_tip="Po każdej teleportacji odrzuca własne ustawienia otoczenia i zamiast nich używa otoczenia regionu/działki." />
         <check_box name="FSRepeatedEnvTogglesShared" label="Skróty klawiszowe zmiany otocz. przy powtarzaniu przełączają na otocz. współdzielone" tool_tip="Sprawia, że powielone używanie skrótów klawiszowych (np. ctrl+shift+y) przełącza między wybranym wstępnie zapisanym otoczeniem, a otoczeniem współdzielonym." />
 		<text name="FSCloudColorLabel">
 			Kolor chmurki błędu ładowania awatara:
@@ -68,13 +69,13 @@
         <check_box label="Włącz antyspam" name="UseAntiSpam" />
         <check_box label="Włącz antyspam nawet dla Twoich własnych obiektów" name="FSUseAntiSpamMine" tool_tip="Włączenie tej opcji spowoduje aktywowanie ochrony antyspamowej nawet dla Twoich własnych obiektów."/>
         <text name="AntiSpamText1">
-           Maks. ilość linii w poj. wiadomości:
+           Maks. liczba linii w poj. wiadomości:
         </text>
-        <spinner name="_NACL_AntiSpamNewlines" tool_tip="Maksymalna ilość linii, jaka zostanie zaakceptowana w pojedynczej wiadomości tekstowej [domyślnie: 70]" />
+        <spinner name="_NACL_AntiSpamNewlines" tool_tip="Maksymalna liczba linii, jaka zostanie zaakceptowana w pojedynczej wiadomości tekstowej [domyślnie: 70]" />
         <text name="AntiSpamText2">
-           Maks. ilość zdarzeń z poj. źródła:
+           Maks. liczba zdarzeń z poj. źródła:
         </text>
-        <spinner name="_NACL_AntiSpamAmount" tool_tip="Maksymalna ilość podobnych zdarzeń, jaka zostanie zaakceptowana w ciągu 2 sekund z tego samego źródła [domyślnie: 10]" />
+        <spinner name="_NACL_AntiSpamAmount" tool_tip="Maksymalna liczba podobnych zdarzeń, jaka zostanie zaakceptowana w ciągu 2 sekund z tego samego źródła [domyślnie: 10]" />
         <text name="AntiSpamText3">
            Mnożnik dla zdarzeń odtw. dźwięku:
         </text>
@@ -233,6 +234,9 @@
 			Rozmiar:
 		</text>
         <combo_box name="FSScriptingFontSize" tool_tip="Rozmiar czcionki używanej w edytorze skryptów LSL">
+            <combo_item name="Monospace" label="Monospace (domyślna)"/>
+            <combo_item name="Scripting" label="Scripting (domyślna)"/>
+            <combo_item name="Cascadia" label="Cascadia Code (domyślna)"/>
             <combo_item name="Small" label="Mała"/>
             <combo_item name="Medium" label="Średnia"/>
             <combo_item name="Large" label="Duża"/>

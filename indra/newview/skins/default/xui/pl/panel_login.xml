@@ -25,7 +25,7 @@
 						<layout_panel name="login_panel">
 							<button label="Zaloguj" name="connect_btn" />
 							<text name="forgot_password_text">
-								Potrzebujesz pomocy z logowaniem?
+								Problem z logowaniem?
 							</text>
 							<button label="Utwórz konto" name="sign_btn" />
 						</layout_panel>

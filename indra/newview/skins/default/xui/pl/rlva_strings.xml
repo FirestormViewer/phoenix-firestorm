@@ -195,10 +195,31 @@
 		<key>anonyms</key>
 		<array>
 			<string>Rezydent</string>
+			<string>Ten Rezydent</string>
+			<string>Tamten Rezydent</string>
+			<string>Postać</string>
+			<string>Ta postać</string>
+			<string>Tamta postać</string>
 			<string>Osoba</string>
+			<string>Ta osoba</string>
+			<string>Tamta osoba</string>
 			<string>Nieznajomy</string>
+			<string>Ten nieznajomy</string>
+			<string>Tamten nieznajomy</string>
+			<string>Istota</string>
+			<string>Ta istota</string>
+			<string>Tamta istota</string>
+			<string>Agent</string>
+			<string>Ten agent</string>
+			<string>Tamten agent</string>
+			<string>Dusza</string>
+			<string>Ta dusza</string>
+			<string>Tamta dusza</string>
+			<string>Pewna osoba</string>
+			<string>Pewni ludzie</string>
 			<string>Ktoś</string>
 			<string>Tajemniczy ktoś</string>
+			<string>Nieznana istota</string>
 			<string>Ktoś niezidentyfikowany</string>
 			<string>Nieznana osoba</string>
 		</array>

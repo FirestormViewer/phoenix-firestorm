@@ -31,7 +31,7 @@
 			<radio_item label="Osobnym oknie" name="script_1"/>
 		</radio_group>
 		<check_box label="Gdy zmienia się liczba skryptów w regionie:" name="FSReportTotalScriptCountChanges"/>
-		<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Próg zmiany całkowitej ilości skryptów w regionie, od którego pokazana zostanie informacja [Domyślnie: 100]"/>
+		<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Próg zmiany całkowitej liczby skryptów w regionie, od którego pokazana zostanie informacja [Domyślnie: 100]"/>
 		<check_box label="Przesyłaj skryptom powiad. o kolizjach na kanał:" name="FSReportCollisionMessages"/>
 		<spinner name="FSReportCollisionMessagesChannel" tool_tip="Kanał używany do przesyłania skryptom powiadomień o kolizjach [Domyślnie: -25000]"/>
 	</panel>

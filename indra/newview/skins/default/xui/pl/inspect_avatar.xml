@@ -5,7 +5,7 @@
 	<button label="Napisz" name="im_btn"/>
 	<button label="Profil" name="view_profile_btn"/>
 	<panel name="moderator_panel">
-		<button label="Wyłącz komunikację głosową" name="disable_voice"/>
-		<button label="Włącz komunikację głosową" name="enable_voice"/>
+		<button label="Wyłącz głos" name="disable_voice"/>
+		<button label="Włącz głos" name="enable_voice"/>
 	</panel>
 </floater>

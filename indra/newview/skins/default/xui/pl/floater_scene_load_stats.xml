@@ -53,11 +53,11 @@
 					<stat_bar label="Czas skryptu" name="simscriptmsec"/>
 					<stat_bar name="simsparemsec" label="Czas wolny"/>
 					<stat_view name="timedetails" label="Szczegóły czasu">
-						<stat_bar name="simsimphysicsstepmsec" label="  Skok fizyki"/>
+						<stat_bar name="simsimphysicsstepmsec" label="  Krok fizyki"/>
 						<stat_bar name="simsimphysicsshapeupdatemsec" label="  Akt. kształtów fizyki"/>
 						<stat_bar name="simsimphysicsothermsec" label="  Inna fizyka"/>
 						<stat_bar name="simsleepmsec" label="  Czas pauzy"/>
-						<stat_bar name="simpumpiomsec" label="  Skok IO"/>
+						<stat_bar name="simpumpiomsec" label="  Pompowanie IO"/>
 					</stat_view>
 				</stat_view>
 			</stat_view>

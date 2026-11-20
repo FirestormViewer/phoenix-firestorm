@@ -7,7 +7,7 @@
 		Wybrana lokacja jest dla dorosłych.
 	</text>
 	<text name="current_maturity_lbl">
-		Twoje ustawienia nie obejmują treśći dla dorosłych. Zgoda zaktualizuje preferencje.
+		Twoje ustawienia nie obejmują treści dla dorosłych. Zgoda zaktualizuje preferencje.
 	</text>
 	<button label="Zezwól" name="continue_btn"/>
 	<button label="Anuluj" name="cancel_btn"/>
