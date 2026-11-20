@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="search replace" title="検索／置き換え">
+<floater title="検索／置き換え" name="search replace">
 	<check_box label="大文字と小文字を区別しない" name="case_text"/>
 	<check_box label="上に向かって検索" name="find_previous"/>
 	<button label="検索" label_selected="検索" name="search_btn"/>

@@ -20,8 +20,8 @@
 	<text name="notice_list_none_found">
 		見つかりませんでした。
 	</text>
-	<button label="新しい通知" name="create_new_notice" tool_tip="新しい通知を作成します。"/>
-	<button name="refresh_notices" tool_tip="通知リストを更新します。"/>
+	<button label="新しい通知" tool_tip="新しい通知を作成します。" name="create_new_notice"/>
+	<button tool_tip="通知リストを更新します。" name="refresh_notices"/>
 	<panel label="新しい通知の作成" name="panel_create_new_notice">
 		<text name="lbl">
 			通知の作成
@@ -38,28 +38,13 @@
 		<text name="drag_and_drop_help">
 			添付したいアイテムをここにドラッグアンドドロップしてください：
 		</text>
-		<button label="インベントリ" name="open_inventory" tool_tip="インベントリを開きます。"/>
-		<button name="remove_attachment" tool_tip="あなたの通知から添付されたアイテムを削除します。"/>
+		<button label="インベントリ" tool_tip="インベントリを開きます。" name="open_inventory"/>
+		<button tool_tip="あなたの通知から添付されたアイテムを削除します。" name="remove_attachment"/>
 		<button label="送信" label_selected="送信" name="send_notice"/>
-		<group_drop_target name="drop_target" tool_tip="インベントリのアイテムをこのボックスにドラッグして、通知と一緒に送ります。添付するには、そのアイテムのコピーと再販・譲渡の権限があなたにある必要があります。"/>
-	</panel>
-	<panel label="過去の通知を表示" name="panel_view_past_notice">
-		<text name="lbl">
-			アーカイブ通知
-		</text>
-		<text name="lbl2">
-			新しい通知を送信するには、＋ボタンを押してください。
-		</text>
-		<text name="lbl3">
-			件名：
-		</text>
-		<text name="lbl4">
-			内容：
-		</text>
-		<button label="添付アイテムを開く" name="open_attachment"/>
+		<group_drop_target tool_tip="インベントリのアイテムをこのボックスにドラッグして、通知と一緒に送ります。添付するには、そのアイテムに複製と再販・譲渡の権限があなたにある必要があります。" name="drop_target"/>
 	</panel>
 	<!-- View Past Notices -->
-	<panel label="過去の通知を見る" name="panel_view_past_notice">
+	<panel label="過去の通知を表示" name="panel_view_past_notice">
 		<text name="lbl6">
 			アーカイブされた通知
 		</text>
@@ -75,6 +60,6 @@
 		<text name="lbl10">
 			添付物：
 		</text>
-		<button label="添付物を開く" name="open_attachment"/>
+		<button label="添付アイテムを開く" name="open_attachment"/>
 	</panel>
 </panel>

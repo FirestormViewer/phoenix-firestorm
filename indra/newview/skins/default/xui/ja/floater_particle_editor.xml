@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="particle_editor_floater" title="パーティクルエディタ">
+<floater title="パーティクルエディタ" name="particle_editor_floater">
 	<panel name="particle_editor_panel">
 		<panel name="top_left_panel">
 			<text name="Pattern_Label">
@@ -82,25 +82,25 @@
 			</text>
 		</panel>
 		<panel name="top_right_panel">
-			<check_box name="bounce_checkbox" label="跳ねる"/>
-			<check_box name="emissive_checkbox" label="放射性"/>
-			<check_box name="follow_source_checkbox" label="ソースに従う"/>
-			<check_box name="follow_velocity_checkbox" label="速度に従う"/>
-			<check_box name="interpolate_color_checkbox" label="色を補間"/>
-			<check_box name="interpolate_scale_checkbox" label="スケールを補間"/>
-			<check_box name="target_position_checkbox" label="目標位置"/>
-			<check_box name="target_linear_checkbox" label="線形の目標"/>
-			<check_box name="wind_checkbox" label="風"/>
-			<check_box name="ribbon_checkbox" label="リボン"/>
-			<button name="copy_button" label="コピー" tool_tip="パーティクルシステムのパラメータをＬＳＬスクリプトとしてクリップボードにコピーします。"/>
-			<button name="inject_button" label="注入" tool_tip="このパーティクルシステムを選択したオブジェクトに注入します。"/>
+			<check_box label="跳ねる" name="bounce_checkbox"/>
+			<check_box label="放射性" name="emissive_checkbox"/>
+			<check_box label="ソースに従う" name="follow_source_checkbox"/>
+			<check_box label="速度に従う" name="follow_velocity_checkbox"/>
+			<check_box label="色を補間" name="interpolate_color_checkbox"/>
+			<check_box label="スケールを補間" name="interpolate_scale_checkbox"/>
+			<check_box label="目標位置" name="target_position_checkbox"/>
+			<check_box label="線形の目標" name="target_linear_checkbox"/>
+			<check_box label="風" name="wind_checkbox"/>
+			<check_box label="リボン" name="ribbon_checkbox"/>
+			<button label="コピー" tool_tip="パーティクルシステムのパラメータをＬＳＬスクリプトとしてクリップボードにコピーします。" name="copy_button"/>
+			<button label="注入" tool_tip="このパーティクルシステムを選択したオブジェクトに注入します。" name="inject_button"/>
 		</panel>
 		<panel name="bottom_left_panel">
 			<text name="Target_Key_Label">
 				ターゲットキー：
 			</text>
-			<button name="clear_target_button" tool_tip="目標のオブジェクトまたはアバターをクリアします。"/>
-			<button name="pick_target_button" tool_tip="ここをクリックして、パーティクルの目標オブジェクトまたはアバターを選択します。"/>
+			<button tool_tip="目標のオブジェクトまたはアバターをクリアします。" name="clear_target_button"/>
+			<button tool_tip="ここをクリックして、パーティクルの目標オブジェクトまたはアバターを選択します。" name="pick_target_button"/>
 			<text name="Acceleration_Label">
 				加速度：
 			</text>

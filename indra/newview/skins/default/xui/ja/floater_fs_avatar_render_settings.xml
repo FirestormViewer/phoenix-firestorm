@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="avatarrendersettings" title="アバター表示の例外">
+<floater title="アバター表示の例外" name="avatarrendersettings">
 	<floater.string name="av_render_never">
 		しない
 	</floater.string>
@@ -7,10 +7,10 @@
 		常時
 	</floater.string>
 	<filter_editor label="アバターをフィルタ" name="filter_input"/>
-	<menu_button name="plus_btn" tool_tip="新しい人物をリストに追加します。"/>
+	<menu_button tool_tip="新しい人物をリストに追加します。" name="plus_btn"/>
 	<name_list name="avatar_list">
 		<name_list.columns label="名前" name="name"/>
 		<name_list.columns label="詳細" name="render_setting"/>
 	</name_list>
-	<button name="close_btn" label="閉じる"/>
+	<button label="閉じる" name="close_btn"/>
 </floater>

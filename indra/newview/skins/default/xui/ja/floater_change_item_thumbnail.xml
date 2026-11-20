@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="change_item_thumbnail" title="アイテム画像の変更">
+<floater title="アイテム画像の変更" name="change_item_thumbnail">
 	<floater.string name="multiple_item_names">
 		複数のアイテムが選択されています。
 	</floater.string>

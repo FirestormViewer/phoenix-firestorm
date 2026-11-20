@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="gltf asset editor" title="[OBJECT_NAME]">
+<floater title="[OBJECT_NAME]" name="gltf asset editor">
 	<floater.string name="floater_title" value="ＧＬＴＦシーンエディタ"/>
 	<floater.string name="scene_title" value="シーン"/>
 	<floater.string name="node_title" value="ノード"/>
@@ -7,22 +7,22 @@
 	<floater.string name="skin_title" value="スキン"/>
 	<layout_stack name="main_layout">
 		<layout_panel name="transforms_panel">
-			<menu_button name="clipboard_pos_btn" tool_tip="ペースト時のオプション"/>
-			<text name="label position" tool_tip="位置（メートル）">
+			<menu_button tool_tip="ペースト時のオプション" name="clipboard_pos_btn"/>
+			<text tool_tip="位置（メートル）" name="label position">
 				位置（ｍ）
 			</text>
 			<spinner label="Ｘ" name="Pos X"/>
 			<spinner label="Ｙ" name="Pos Y"/>
 			<spinner label="Ｚ" name="Pos Z"/>
-			<menu_button name="clipboard_size_btn" tool_tip="ペースト時のオプション"/>
-			<text name="label size" tool_tip="サイズ（メートル）">
+			<menu_button tool_tip="ペースト時のオプション" name="clipboard_size_btn"/>
+			<text tool_tip="サイズ（メートル）" name="label size">
 				サイズ（ｍ）
 			</text>
 			<spinner label="Ｘ" name="Scale X"/>
 			<spinner label="Ｙ" name="Scale Y"/>
 			<spinner label="Ｚ" name="Scale Z"/>
-			<menu_button name="clipboard_rot_btn" tool_tip="ペースト時のオプション"/>
-			<text name="label rotation" tool_tip="回転（度）">
+			<menu_button tool_tip="ペースト時のオプション" name="clipboard_rot_btn"/>
+			<text tool_tip="回転（度）" name="label rotation">
 				回転（°）
 			</text>
 			<spinner label="Ｘ" name="Rot X"/>

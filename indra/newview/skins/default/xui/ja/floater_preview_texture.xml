@@ -20,11 +20,11 @@
 		<text name="dimensions">
 			[WIDTH]px✕[HEIGHT]px
 		</text>
-		<button label="ＵＵＩＤ" name="copyuuid" tool_tip="ＵＵＩＤをクリップボードにコピーします。"/>
+		<button label="ＵＵＩＤ" tool_tip="ＵＵＩＤをクリップボードにコピーします。" name="copyuuid"/>
 		<text name="aspect_ratio">
 			縦横比のプレビュー
 		</text>
-		<combo_box name="combo_aspect_ratio" tool_tip="固定した縦横比でプレビューします。"/>
+		<combo_box tool_tip="固定した縦横比でプレビューします。" name="combo_aspect_ratio"/>
 	</panel>
 	<panel name="button_panel">
 		<button label="ＯＫ" name="Keep" />

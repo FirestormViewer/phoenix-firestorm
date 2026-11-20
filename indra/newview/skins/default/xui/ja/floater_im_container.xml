@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<multi_floater name="floater_im_box" title="会話">
+<multi_floater title="会話" name="floater_im_box">
 	<layout_stack name="conversations_stack">
 		<layout_panel name="conversations_layout_panel">
 			<layout_stack name="conversations_pane_buttons_stack">
 				<layout_panel name="conversations_pane_buttons_expanded">
-					<menu_button name="sort_btn" tool_tip="表示／並べ替えのオプションを表示します。"/>
-					<button name="add_btn" tool_tip="新しい会話を開始します"/>
-					<button name="speak_btn" tool_tip="マイクを使って人と話します。"/>
+					<menu_button tool_tip="表示／並べ替えのオプションを表示します。" name="sort_btn"/>
+					<button tool_tip="新しい会話を開始します" name="add_btn"/>
+					<button tool_tip="マイクを使って人と話します。" name="speak_btn"/>
 				</layout_panel>
 				<layout_panel name="conversations_pane_buttons_collapsed">
-					<button name="expand_collapse_btn" tool_tip="このリストを最大化／最小化します。"/>
+					<button tool_tip="このリストを最大化／最小化します。" name="expand_collapse_btn"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
 		<layout_panel name="messages_layout_panel">
 			<panel_container name="im_box_tab_container">
 				<panel name="stub_panel">
-					<button name="stub_collapse_btn" tool_tip="このペインを最小化します。"/>
+					<button tool_tip="このペインを最小化します。" name="stub_collapse_btn"/>
 					<text name="stub_textbox">
 						この会話は別ウィンドウで表示されます。[secondlife:/// 戻る]
 					</text>

@@ -58,18 +58,50 @@
 		飛ぶ
 	</string>
 	<panel name="panel_actions">
-		<button name="turn left btn" tool_tip="左を向く（←かAを押す）"/>
-		<joystick_slide name="move left btn" tool_tip="左に歩く（Shift＋←かAを押す）"/>
-		<button name="turn right btn" tool_tip="右を向く（→かDを押す）"/>
-		<joystick_slide name="move right btn" tool_tip="右に歩く（Shift＋→かDを押す）"/>
-		<joystick_turn name="forward btn" tool_tip="前に進む（↑かWを押す）"/>
-		<joystick_turn name="backward btn" tool_tip="後ろに歩く（↓かSを押す）"/>
-		<button name="move up btn" tool_tip="上昇（Eを押す）"/>
-		<button name="move down btn" tool_tip="下降（Cを押す）"/>
-	</panel>
-	<panel name="panel_modes">
-		<button name="mode_walk_btn" tool_tip="歩行モード"/>
-		<button name="mode_run_btn" tool_tip="走行モード"/>
-		<button name="mode_fly_btn" tool_tip="飛行モード"/>
+		<layout_stack name="ls_vertical">
+			<layout_panel name="lp_row1">
+				<layout_stack name="ls_horizontal1">
+					<layout_panel name="lp_col1_1">
+						<button tool_tip="左を向く（←かAを押す）" name="turn left btn"/>
+					</layout_panel>
+					<layout_panel name="lp_col1_2">
+						<joystick_turn tool_tip="前に進む（↑かWを押す）" name="forward btn"/>
+					</layout_panel>
+					<layout_panel name="lp_col1_3">
+						<button tool_tip="右を向く（→かDを押す）" name="turn right btn"/>
+					</layout_panel>
+					<layout_panel name="lp_col1_4">
+						<button tool_tip="上昇する（Eを押す）" name="move up btn"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="lp_row2">
+				<layout_stack name="ls_horizontal2">
+					<layout_panel name="lp_col2_1">
+						<joystick_slide tool_tip="左に水平移動（Shift＋←かAを押す）" name="move left btn"/>
+					</layout_panel>
+					<layout_panel name="lp_col2_2">
+						<joystick_turn tool_tip="後ろに下がる（↓かSを押す）" name="backward btn"/>
+					</layout_panel>
+					<layout_panel name="lp_col2_3">
+						<joystick_slide tool_tip="右に水平移動（Shift＋→かDを押す）" name="move right btn"/>
+					</layout_panel>
+					<layout_panel name="lp_col2_4">
+						<button tool_tip="下降する（Cを押す）" name="move down btn"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="lp_row3">
+				<layout_stack name="ls_horizontal3">
+					<layout_panel name="modes_container">
+						<panel name="panel_modes">
+							<button tool_tip="歩行モード" name="mode_walk_btn"/>
+							<button tool_tip="走行モード" name="mode_run_btn"/>
+							<button tool_tip="飛行モード" name="mode_fly_btn"/>
+						</panel>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>
 	</panel>
 </floater>

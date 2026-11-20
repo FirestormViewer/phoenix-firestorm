@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="queue" title="進行のリセット">
+<floater title="進行のリセット" name="queue">
 	<floater.string name="Starting">
 		[COUNT]件の項目の[START]を開始します。
 	</floater.string>
@@ -24,6 +24,7 @@
 	<floater.string name="LoadingObjInv">
 		以下のインベントリを読み込んでいます：[OBJECT_NAME]
 	</floater.string>
+	<floater.string name="SkippingIncompatibleScript">スクリプト「[SCRIPT_NAME]」をスキップしています（[TARGET]に再コンパイルできません）</floater.string>
 	<floater.string name="SkippingPermissions">
 		[OBJECT_NAME]（権）限をスキップしています。
 	</floater.string>

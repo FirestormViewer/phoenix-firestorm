@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="contact_sets_panel">
 	<panel label="ボトムパネル" name="contact_sets_buttons_panel">
-		<menu_button name="contact_sets_gear_btn" tool_tip="選択した人またはグループに対する操作です。"/>
-		<menu_button name="contact_sets_plus_btn" tool_tip="グループまたは住人を追加します。"/>
-		<menu_button name="contact_sets_remove_btn" tool_tip="グループまたは住人を削除します。"/>
+		<menu_button tool_tip="選択した人またはグループに対する操作です。" name="contact_sets_gear_btn"/>
+		<menu_button tool_tip="グループまたは住人を追加します。" name="contact_sets_plus_btn"/>
+		<menu_button tool_tip="グループまたは住人を削除します。" name="contact_sets_remove_btn"/>
 		<filter_editor label="人物をフィルタ" name="contact_sets_filter_input"/>
 	</panel>
 </panel>

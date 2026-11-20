@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="script_recover" title="スクリプトの復元">
+<floater title="スクリプトの復元" name="script_recover">
 	<text name="txt2">
 		[APP_NAME]は、最近のビューアのクラッシュによって残された可能性のある復元可能なスクリプトを検出しました。これらのスクリプトを復元することを選択した場合、それらはインベントリの「紛失物」フォルダに配置されます。
 	</text>

@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="group_titles" title="グループのタイトル">
+<floater title="グループのタイトル" name="group_titles">
 	<floater.string name="NoGroupTitle" value="＜グループタイトルなし＞"/>
 	<floater.string name="ClearAllRegions" value="全リージョンをクリア"/>
 	<filter_editor label="グループのタイトルでフィルタ" name="filter_input"/>
 	<scroll_list name="title_list">
-		<column name="grouptitle" label="タイトル"/>
-		<column name="groupname" label="グループ"/>
-		<column name="regionname" label="自動リージョン"/>
+		<column label="D" tool_tip="割り当てのないリージョンで使用するデフォルトのタイトル" name="default_marker"/>
+		<column label="タイトル" name="grouptitle"/>
+		<column label="グループ" name="groupname"/>
+		<column label="自動リージョン" name="regionname"/>
 	</scroll_list>
 	<button tool_tip="グループの使用可能なタイトル一覧を更新します。" name="btnRefresh" />
-	<button name="btnSetRegion" label="このリージョン" tool_tip="現在のリージョンに選択したタイトルを割り当てます。"/>
-	<button name="btnSetRegionManual" label="リージョン名を入力" tool_tip="割り当てたいリージョン名を手動で入力します。"/>
-	<button name="btnClearRegion" label="リージョンを消去" tool_tip="リージョンの割り当てを削除します。"/>
-	<button name="btnInfo" label="情報" tool_tip="選択したタイトルからリージョンの割り当てを削除します。" />
-	<button name="btnActivate" label="アクティブ" tool_tip="選択したグループのタイトルをアクティブにします。"/>
+	<check_box label="割り当てのないリージョンではデフォルトのタイトルを使用" tool_tip="タイトルが割り当てられていないリージョンに入ったとき、デフォルトに設定したタイトルに切り替えます。デフォルトが「＜グループタイトルなし＞」の場合はタグを表示しません。" name="use_default_title"/>
+	<button label="デフォルトに設定" tool_tip="選択したタイトルを、割り当てのないリージョンでのデフォルトに設定します。" name="btnSetDefault"/>
+	<button label="このリージョン" tool_tip="現在のリージョンに選択したタイトルを割り当てます。" name="btnSetRegion"/>
+	<button label="リージョン名を入力" tool_tip="割り当てたいリージョン名を手動で入力します。" name="btnSetRegionManual"/>
+	<button label="リージョンを消去" tool_tip="リージョンの割り当てを削除します。" name="btnClearRegion"/>
+	<button label="情報" tool_tip="選択したタイトルからリージョンの割り当てを削除します。" name="btnInfo" />
+	<button label="アクティブ" tool_tip="選択したグループのタイトルをアクティブにします。" name="btnActivate"/>
 </floater>

@@ -12,19 +12,19 @@
 		検索語句を入力：
 	</text>
 	<combo_box name="Category">
-		<combo_item name="AnyCategory" label="全カテゴリ"/>
-		<combo_item name="LindenLocation" label="Linden所在地"/>
-		<combo_item name="Arts&amp;Culture" label="芸術と文化"/>
-		<combo_item name="Business" label="ビジネス"/>
-		<combo_item name="Educational" label="教育的"/>
-		<combo_item name="Gaming" label="ゲーム"/>
-		<combo_item name="Hangout" label="たまり場"/>
-		<combo_item name="NewcomerFriendly" label="新住民歓迎"/>
-		<combo_item name="Parks&amp;Nature" label="公園と自然"/>
-		<combo_item name="Residential" label="住居用"/>
-		<combo_item name="Shopping" label="ショッピング"/>
-		<combo_item name="Adult" label="アダルト"/>
-		<combo_item name="Other" label="その他"/>
+		<combo_item label="全カテゴリ" name="AnyCategory"/>
+		<combo_item label="Linden所在地" name="LindenLocation"/>
+		<combo_item label="芸術と文化" name="Arts&amp;Culture"/>
+		<combo_item label="ビジネス" name="Business"/>
+		<combo_item label="教育的" name="Educational"/>
+		<combo_item label="ゲーム" name="Gaming"/>
+		<combo_item label="たまり場" name="Hangout"/>
+		<combo_item label="新住民歓迎" name="NewcomerFriendly"/>
+		<combo_item label="公園と自然" name="Parks&amp;Nature"/>
+		<combo_item label="住居用" name="Residential"/>
+		<combo_item label="ショッピング" name="Shopping"/>
+		<combo_item label="アダルト" name="Adult"/>
+		<combo_item label="その他" name="Other"/>
 	</combo_box>
 	<scroll_list name="results">
 		<column label="名前" name="name"/>

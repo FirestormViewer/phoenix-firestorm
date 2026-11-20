@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<multi_floater name="script debug floater" title="スクリプト警告／エラー"/>
+<multi_floater title="スクリプト警告／エラー" name="script debug floater"/>

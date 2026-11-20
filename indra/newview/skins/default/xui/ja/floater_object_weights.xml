@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="object_weights" title="高度な情報">
+<floater title="高度な情報" name="object_weights">
 	<floater.string name="nothing_selected" value="－"/>
 	<floater.string name="lowest_lod" value="最低"/>
 	<floater.string name="low_lod" value="低"/>
@@ -36,4 +36,9 @@
 	<text name="triangles_shown_label" value="表示される三角形"/>
 	<text name="pixel_area" value="－"/>
 	<text name="pixel_area_label" value="ピクセルエリア"/>
+	<text name="lod_info_text" value="LOD情報"/>
+	<text name="high_lod_tris_label" value="高ポリゴン数"/>
+	<text name="medium_lod_tris_label" value="中ポリゴン数"/>
+	<text name="low_lod_tris_label" value="低ポリゴン数"/>
+	<text name="lowest_lod_tris_label" value="最低ポリゴン数"/>
 </floater>

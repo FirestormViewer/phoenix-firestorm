@@ -6,23 +6,23 @@
 			<text name="HoverTipText">
 				ヒント：
 			</text>
-			<check_box label="マウスを重ねるとヒントを表示（最初に設定）" name="ShowHoverTips" tool_tip="アバターやその他インワールドのものにマウスを重ねるとヒントが表示されるようにします。ヒントを使うにはまず最初にここにチェックを入れて下さい。"/>
+			<check_box label="マウスを重ねるとヒントを表示（最初に設定）" tool_tip="アバターやその他インワールドのものにマウスを重ねるとヒントが表示されるようにします。ヒントを使うにはまず最初にここにチェックを入れて下さい。" name="ShowHoverTips"/>
 			<check_box label="全てのオブジェクトに表示" tool_tip="インワールドのオブジェクトについてのヒントを表示する場合にチェックして下さい。" name="ShowAllHoverTips"/>
 			<check_box label="土地に表示" tool_tip="土地についてのヒントを表示する場合にチェックして下さい。" name="ShowLandHoverTips"/>
-			<check_box name="FSAdvancedTooltips" label="ヒントに詳細情報を表示する"/>
-			<check_box name="FSShowGroupTitleInTooltip" label="ヒントにアバターのグループタイトルを表示する"/>
+			<check_box label="ヒントに詳細情報を表示する" name="FSAdvancedTooltips"/>
+			<check_box label="ヒントにアバターのグループタイトルを表示する" name="FSShowGroupTitleInTooltip"/>
 			<text name="tooltip_textbox">
 				ヒント表示までの時間：
 			</text>
-			<slider label="ツール：" name="ToolTipDelay_slider" tool_tip="ボタンのようなユーザインターフェイスに関するヒントを表示するまでの時間。（0.7秒がデフォルト）"/>
+			<slider label="ツール：" tool_tip="ボタンのようなユーザインターフェイスに関するヒントを表示するまでの時間。（0.7秒がデフォルト）" name="ToolTipDelay_slider"/>
 			<text name="ToolTipDelay_text">
 				秒
 			</text>
-			<slider label="アバター：" name="AvatarInspectorTooltipDelay_slider" tool_tip="アバターに関するヒントを表示するまでの時間。（0.35秒がデフォルト）"/>
+			<slider label="アバター：" tool_tip="アバターに関するヒントを表示するまでの時間。（0.35秒がデフォルト）" name="AvatarInspectorTooltipDelay_slider"/>
 			<text name="AvatarInspectorTooltipDelay_text">
 				秒
 			</text>
-			<slider label="オブジェクト" name="ObjectInspectorTooltipDelay_slider" tool_tip="オブジェクトに関するヒントを表示するまでの時間。（0.35秒がデフォルト）"/>
+			<slider label="オブジェクト" tool_tip="オブジェクトに関するヒントを表示するまでの時間。（0.35秒がデフォルト）" name="ObjectInspectorTooltipDelay_slider"/>
 			<text name="ObjectInspectorTooltipDelay_text">
 				秒
 			</text>
@@ -35,12 +35,12 @@
 			<slider label="フローティングテキストのフェード開始距離（ｍ）：" tool_tip="フローティングテキストが薄く消え始める距離をメートル単位で設定します。" name="FSHudTextFadeDistance"/>
 			<slider label="フローティングテキストのフェード範囲（ｍ）：" tool_tip="フローティングテキストがはっきりと見える状態から完全に見えなくなるまでの距離をメートル単位で設定します。" name="FSHudTextFadeRange"/>
 			<!-- Added new check box to disable the highlight floating text feature -->
-			<check_box name="FSHudTextUseHoverHighlight" label="オブジェクトの上にマウスを置くとフローティングテキストを強調表示する：" tool_tip="オブジェクトにマウスを移動したときに、フローティングテキスト（ホバーテキスト）を前面に移動して強調表示し、アルファを無効にします。"/>
+			<check_box label="オブジェクトの上にマウスを置くとフローティングテキストを強調表示する：" tool_tip="オブジェクトにマウスを移動したときに、フローティングテキスト（ホバーテキスト）を前面に移動して強調表示し、アルファを無効にします。" name="FSHudTextUseHoverHighlight"/>
 			<text name="FSHudTextShowBackgroundLabel">
 				フローティングテキストに背景を表示する：
 			</text>
 			<!-- Added combo box to control the background behavior for prims -->
-			<combo_box name="FSHudTextShowBackgroundDropdown" tool_tip="フローティングテキスト（ホバーテキスト）の背後に黒／白の背景を表示して、読みやすくします。不透明度は、「カラー」＞「その他」で変更できます。">
+			<combo_box tool_tip="フローティングテキスト（ホバーテキスト）の背後に黒／白の背景を表示して、読みやすくします。不透明度は、「カラー」＞「その他」で変更できます。" name="FSHudTextShowBackgroundDropdown">
 				<combo_box.item label="オフ" name="ScriptDialogOption_0"/>
 				<combo_box.item label="ハイライトされたオブジェクトのみ" name="ScriptDialogOption_1"/>
 				<combo_box.item label="全てのオブジェクト" name="ScriptDialogOption_2"/>
@@ -70,22 +70,22 @@
 			<text name="ScriptDialogsPositionLabel">
 				スクリプトダイアログの表示位置：
 			</text>
-			<combo_box name="ScriptDialogsPositionDropdown" tool_tip="スクリプトダイアログ（メニュー）を表示したい場所を選択して下さい。">
+			<combo_box tool_tip="スクリプトダイアログ（メニュー）を表示したい場所を選択して下さい。" name="ScriptDialogsPositionDropdown">
 				<combo_box.item label="ミニアイコンにドッキング" name="ScriptDialogPositionOption_1"/>
 				<combo_box.item label="左上　↖" name="ScriptDialogPositionOption_2"/>
 				<combo_box.item label="右上　↗" name="ScriptDialogPositionOption_3"/>
 				<combo_box.item label="左下　↙" name="ScriptDialogPositionOption_4"/>
 				<combo_box.item label="右下　↘" name="ScriptDialogPositionOption_5"/>
 			</combo_box>
-			<check_box label="スクリプトダイアログのアニメーションを再生" name="FSAnimatedScriptDialogs" tool_tip="ここをチェックすると、スクリプトダイアログを開いたときにアニメーション表示します。（クラシックなＶ１．ｘの動作）ダイアログが上から下へ開く場合にのみ機能します。"/>
-			<slider label="スクリプトダイアログ当たりの表示行数：" name="FSRowsPerScriptDialog" tool_tip="同時に見ることのできるスクリプトダイアログの最大行数を指定します。"/>
-			<check_box label="パイメニューを使用" name="UsePieMenu" tool_tip="土地やアバター、オブジェクト、装着物を右クリックしたときに、長方形のコンテキストメニューの代わりに、クラシックなＶ１リングメニューを使用します。"/>
-			<check_box label="テキストに動きを付ける" name="PieMenuPopupFontEffect" tool_tip="パイメニューが開く時のアニメーションに合わせて、パイメニューの中のテキストも動くようにします。"/>
-			<check_box label="外側に丸い影を付ける" name="PieMenuOuterRingShade" tool_tip="パイメニューの縁に丸い影をつけてサブメニューを見やすくします。"/>
+			<check_box label="スクリプトダイアログのアニメーションを再生" tool_tip="ここをチェックすると、スクリプトダイアログを開いたときにアニメーション表示します。（クラシックなＶ１．ｘの動作）ダイアログが上から下へ開く場合にのみ機能します。" name="FSAnimatedScriptDialogs"/>
+			<slider label="スクリプトダイアログ当たりの表示行数：" tool_tip="同時に見ることのできるスクリプトダイアログの最大行数を指定します。" name="FSRowsPerScriptDialog"/>
+			<check_box label="パイメニューを使用" tool_tip="土地やアバター、オブジェクト、装着物を右クリックしたときに、長方形のコンテキストメニューの代わりに、クラシックなＶ１リングメニューを使用します。" name="UsePieMenu"/>
+			<check_box label="テキストに動きを付ける" tool_tip="パイメニューが開く時のアニメーションに合わせて、パイメニューの中のテキストも動くようにします。" name="PieMenuPopupFontEffect"/>
+			<check_box label="外側に丸い影を付ける" tool_tip="パイメニューの縁に丸い影をつけてサブメニューを見やすくします。" name="PieMenuOuterRingShade"/>
 			<text name="ShowGroupNoticesTopRightLabel">
 				グループ通知とミニアイコンの位置：
 			</text>
-			<radio_group name="ShowGroupNoticesTopRight" tool_tip="グループ通知やミニアイコンの画面上の位置を選択します。">
+			<radio_group tool_tip="グループ通知やミニアイコンの画面上の位置を選択します。" name="ShowGroupNoticesTopRight">
 				<radio_item label="右下　↘" name="radio"/>
 				<radio_item label="右上　↗" name="radio1"/>
 			</radio_group>
@@ -95,15 +95,15 @@
 			<text name="GroupTopRightRequiresRestart">
 				（要再起動）
 			</text>
-			<check_box label="グループチャットとＩＭのミニアイコンを表示しない" name="FSDisableIMChiclets" tool_tip="チェックを入れるとFirestormは全てのグループチャットやＩＭのミニアイコンを表示しないようになります。（通知の封筒アイコンとＩＭ数の合計は画面上に残ります。）"/>
-			<check_box label="通知ウィンドウにクラシックなリスト表示レイアウトを使用" name="FSLegacyNotificationWell" tool_tip="ここにチェックを入れるとFirestormは保存された通知の表示にクラシックなリスト表示形式を使用するようになります"/>
+			<check_box label="グループチャットとＩＭのミニアイコンを表示しない" tool_tip="チェックを入れるとFirestormは全てのグループチャットやＩＭのミニアイコンを表示しないようになります。（通知の封筒アイコンとＩＭ数の合計は画面上に残ります。）" name="FSDisableIMChiclets"/>
+			<check_box label="通知ウィンドウにクラシックなリスト表示レイアウトを使用" tool_tip="ここにチェックを入れるとFirestormは保存された通知の表示にクラシックなリスト表示形式を使用するようになります" name="FSLegacyNotificationWell"/>
 			<text name="FSLegacyNotificationWellRequiresRestart">
 				（要再起動）
 			</text>
-			<check_box label="会話ウィンドウとクラシックな通知リストを自動リサイズ" name="FSLegacyNotificationWellAutoResize" tool_tip="ここにチェックを入れると、会話ウィンドウやクラシックな通知リストに項目が追加になったり削除されたりするのに合わせてサイズを自動調整します。"/>
-			<check_box label="Linuxで既に使用されているショートカットを再配置（Linuxのみ、再起動が必要）" name="FSRemapLinuxShortcuts" tool_tip="ここにチェックを入れるとLinux OSで既に使用されているショートカット（Ctrl-Alt-Fxなど）を再配置します。"/>
-			<check_box label="統計ウィンドウにフォーカスが移動しないようにする" name="FSStatisticsNoFocus" tool_tip="ここにチェックを入れると他のウィンドウを閉じた時に、統計ウィンドウにフォーカスが遷移しないようにすることができます（但し、アイテムの表示レイアウトを変更したような場合はチェックを入れてもフォーカスが移ります）。"/>
-			<check_box label="ツールチップにインベントリアイテムのサムネイルを表示する" name="FSShowInventoryThumbnailTooltips" tool_tip="有効にすると、サムネイルを含むインベントリアイテムにマウスを移動すると、ツールチップにサムネイルが表示されます。"/>
+			<check_box label="会話ウィンドウとクラシックな通知リストを自動リサイズ" tool_tip="ここにチェックを入れると、会話ウィンドウやクラシックな通知リストに項目が追加になったり削除されたりするのに合わせてサイズを自動調整します。" name="FSLegacyNotificationWellAutoResize"/>
+			<check_box label="Linuxで既に使用されているショートカットを再配置（Linuxのみ、再起動が必要）" tool_tip="ここにチェックを入れるとLinux OSで既に使用されているショートカット（Ctrl-Alt-Fxなど）を再配置します。" name="FSRemapLinuxShortcuts"/>
+			<check_box label="統計ウィンドウにフォーカスが移動しないようにする" tool_tip="ここにチェックを入れると他のウィンドウを閉じた時に、統計ウィンドウにフォーカスが遷移しないようにすることができます（但し、アイテムの表示レイアウトを変更したような場合はチェックを入れてもフォーカスが移ります）。" name="FSStatisticsNoFocus"/>
+			<check_box label="ツールチップにインベントリアイテムのサムネイルを表示する" tool_tip="有効にすると、サムネイルを含むインベントリアイテムにマウスを移動すると、ツールチップにサムネイルが表示されます。" name="FSShowInventoryThumbnailTooltips"/>
 			<slider label="サムネイルツールチップが表示されるまでの時間：" tool_tip="インベントリアイテムのサムネイルのツールチップが表示されるまでの時間を設定します。" name="FSInventoryThumbnailTooltipsDelay"/>
 			<text name="FSInventoryThumbnailTooltipsDelayText">
 				秒
@@ -119,13 +119,13 @@
 			<text name="statusbar_textbox">
 				ステータスバー
 			</text>
-			<check_box name="ShowNetStats" label="トラフィックインジケータを画面の右上に表示する" tool_tip="ステータスオーバーレイにトラフィックインジケータを表示します。"/>
-			<check_box label="トラフィックインジケータは１秒当りの平均周期を表示する（クラシックな表示方法）" name="FSStatbarLegacyMeanPerSec" tool_tip="ここにチェックを入れると、Firestorm は現在測定されている値でなく、１秒当りの平均周期をラグメータに表示するクラシックな表示方法を使用します。"/>
+			<check_box label="トラフィックインジケータを画面の右上に表示する" tool_tip="ステータスオーバーレイにトラフィックインジケータを表示します。" name="ShowNetStats"/>
+			<check_box label="トラフィックインジケータは１秒当りの平均周期を表示する（クラシックな表示方法）" tool_tip="ここにチェックを入れると、Firestorm は現在測定されている値でなく、１秒当りの平均周期をラグメータに表示するクラシックな表示方法を使用します。" name="FSStatbarLegacyMeanPerSec"/>
 			<check_box label="トラフィックインジケータをクリックしたときにラグメーターでなく統計情報を表示する" name="FSUseStatsInsteadOfLagMeter"/>
-			<check_box name="FSEnableVolumeControls" label="メディアコントロールをトップメニューに表示する" tool_tip="ここにチェックを入れると、ファイアーストームの画面右上にメディアコントロール（音量、メディア、ストリーム）が表示されるようになります。既に独自の場所にコントロールが配置されている場合にこのチェックを外しておくと便利です。"/>
-			<check_box name="FSStatusbarShowSimulatorVersion" label="ステータスバーにシミュレータのチャンネルを表示する" tool_tip="Ｖ１形式のステータスバーに現在のシミュレータのチャンネル（RC Magnum, RC Le Tigre, RC BlueSteel等）を表示します。"/>
+			<check_box label="メディアコントロールをトップメニューに表示する" tool_tip="ここにチェックを入れると、ファイアーストームの画面右上にメディアコントロール（音量、メディア、ストリーム）が表示されるようになります。既に独自の場所にコントロールが配置されている場合にこのチェックを外しておくと便利です。" name="FSEnableVolumeControls"/>
+			<check_box label="ステータスバーにシミュレータのチャンネルを表示する" tool_tip="Ｖ１形式のステータスバーに現在のシミュレータのチャンネル（RC Magnum, RC Le Tigre, RC BlueSteel等）を表示します。" name="FSStatusbarShowSimulatorVersion"/>
 			<!-- <FS:MJR> [FIRE-36776] - Add omnifilter to the top status bar -->
-			<check_box label="包括フィルタのコントロールを表示" name="show_omnifilter_controls_check" tool_tip="コントロールには、包括フィルターの有効化／無効化、包括フィルタのルールエディタの表示切り替え、アクティブなルールセットの変更が含まれます。"/>
+			<check_box label="包括フィルタのコントロールを表示" tool_tip="コントロールには、包括フィルターの有効化／無効化、包括フィルタのルールエディタの表示切り替え、アクティブなルールセットの変更が含まれます。" name="show_omnifilter_controls_check"/>
 			<!-- <FS:MJR> [FIRE-36776] -->
 			<check_box label="トップメニューに現在の場所を表示" name="ShowMenuBarLocation"/>
 			<check_box label="メニュー検索を表示" name="show_search_menu_check"/>
@@ -134,7 +134,7 @@
 			<text name="statusbar_timeformat_textbox">
 				時計の形式：
 			</text>
-			<combo_box name="FSStatusBarTimeFormat" tool_tip="メインメニューバーで使用した時刻形式を選択します。">
+			<combo_box tool_tip="メインメニューバーで使用した時刻形式を選択します。" name="FSStatusBarTimeFormat">
 				<combo_box.item label="言語デフォルト" name="Language"/>
 				<combo_box.item label="１２時間制" name="12_Hour"/>
 				<combo_box.item label="１２時間制：秒あり" name="12_Hour_Seconds"/>
@@ -154,33 +154,33 @@
 		</panel>
 		<!-- Interface Windows -->
 		<panel label="インターフェイス" name="UI-interface-windows-tab">
-			<check_box label="名前クリックでアバターのプロフィールを表示する" name="FSInspectAvatarSlurlOpensProfile" tool_tip="ここにチェックを入れると、名前の表示されているリンクをクリックすると Firestormはそのアバターのプロフィールを表示します。"/>
-			<check_box label="無視リストが自動的に開かないようにする" name="FSDisableBlockListAutoOpen" tool_tip="アバターやオブジェクトをブロックした時に、無視リストが自動的に開かないようにします。"/>
-			<check_box label="「コミュニケーション」メニューの「フレンド」と「所属グループ」を[SHORT_VIEWER_GENERATION]形式のウィンドウで開く" name="FSUseV2Friends" tool_tip="ここにチェックを入れると、「フレンド」や「所属グループ」を「人物」パネルで開くようになります。チェックを入れない場合は、「連絡先」パネルで開きます。"/>
-			<check_box label="古いタイプのオブジェクトプロパティを使用" name="FSUseLegacyObjectProperties" tool_tip="ここにチェックを入れると、オブジェクトのプロパティを開く時に、古いタイプのオブジェクト・プロパティが使用されます。"/>
-			<check_box label="小さいカメラウィンドウを使用" name="FSUseSmallCameraFloater" tool_tip="ここにチェックを入れると、クラシックなプリセットコントロールのない小さなカメラウィンドウが利用できるようになります。"/>
-			<check_box label="カメラコントロールのリセットボタンを無効化する" name="DisableCameraJoystickCenterReset" tool_tip="軌道の中心を狙い、カメラコントロールを移動してもカメラがリセットされないようにします。"/>
+			<check_box label="名前クリックでアバターのプロフィールを表示する" tool_tip="ここにチェックを入れると、名前の表示されているリンクをクリックすると Firestormはそのアバターのプロフィールを表示します。" name="FSInspectAvatarSlurlOpensProfile"/>
+			<check_box label="無視リストが自動的に開かないようにする" tool_tip="アバターやオブジェクトをブロックした時に、無視リストが自動的に開かないようにします。" name="FSDisableBlockListAutoOpen"/>
+			<check_box label="「コミュニケーション」メニューの「フレンド」と「所属グループ」を[SHORT_VIEWER_GENERATION]形式のウィンドウで開く" tool_tip="ここにチェックを入れると、「フレンド」や「所属グループ」を「人物」パネルで開くようになります。チェックを入れない場合は、「連絡先」パネルで開きます。" name="FSUseV2Friends"/>
+			<check_box label="古いタイプのオブジェクトプロパティを使用" tool_tip="ここにチェックを入れると、オブジェクトのプロパティを開く時に、古いタイプのオブジェクト・プロパティが使用されます。" name="FSUseLegacyObjectProperties"/>
+			<check_box label="小さいカメラウィンドウを使用" tool_tip="ここにチェックを入れると、クラシックなプリセットコントロールのない小さなカメラウィンドウが利用できるようになります。" name="FSUseSmallCameraFloater"/>
+			<check_box label="カメラコントロールのリセットボタンを無効化する" tool_tip="軌道の中心を狙い、カメラコントロールを移動してもカメラがリセットされないようにします。" name="DisableCameraJoystickCenterReset"/>
 			<text name="standalone_textbox">
 				次の項目に独立したウィンドウを使用：
 			</text>
-			<check_box name="FSUseStandaloneGroupFloater" label="グループのプロフィール" tool_tip="チェックを入れるとグループのプロフィールは別のウィンドウで開くようになります。"/>
-			<check_box name="FSUseStandaloneTeleportHistoryFloater" label="テレポート履歴" tool_tip="チェックを入れると、ショートカットを使ってテレポート履歴が別ウィンドウで開くようになります。"/>
-			<check_box name="FSUseStandaloneBlocklistFloater" label="無視リスト" tool_tip="チェックを入れると、ブロックしたりミュートしたレジデントやオブジェクトの一覧が別ウィンドウで開くようになります。"/>
-			<check_box name="FSUseStandalonePlaceDetailsFloater" label="ランドマーク、土地の詳細情報、テレポート履歴の詳細" tool_tip="チェックを入れると、ランドマーク、土地の詳細情報、テレポート履歴の詳細情報が別ウィンドウで開くようになります。"/>
+			<check_box label="グループのプロフィール" tool_tip="チェックを入れるとグループのプロフィールは別のウィンドウで開くようになります。" name="FSUseStandaloneGroupFloater"/>
+			<check_box label="テレポート履歴" tool_tip="チェックを入れると、ショートカットを使ってテレポート履歴が別ウィンドウで開くようになります。" name="FSUseStandaloneTeleportHistoryFloater"/>
+			<check_box label="無視リスト" tool_tip="チェックを入れると、ブロックしたりミュートしたレジデントやオブジェクトの一覧が別ウィンドウで開くようになります。" name="FSUseStandaloneBlocklistFloater"/>
+			<check_box label="ランドマーク、土地の詳細情報、テレポート履歴の詳細" tool_tip="チェックを入れると、ランドマーク、土地の詳細情報、テレポート履歴の詳細情報が別ウィンドウで開くようになります。" name="FSUseStandalonePlaceDetailsFloater"/>
 			<text name="ExtendedTeleportHistoryLabel">
 				テレポート履歴項目の拡張：
 			</text>
-			<check_box name="FSTeleportHistoryShowPosition" label="位置" tool_tip="チェックを入れると、テレポート履歴にそのリージョンを表示での座標が表示されるようになります。"/>
-			<check_box name="FSTeleportHistoryShowDate" label="日付" tool_tip="チェックを入れると、テレポート履歴にテレポートした日時が表示されるようになります。"/>
+			<check_box label="位置" tool_tip="チェックを入れると、テレポート履歴にそのリージョンを表示での座標が表示されるようになります。" name="FSTeleportHistoryShowPosition"/>
+			<check_box label="日付" tool_tip="チェックを入れると、テレポート履歴にテレポートした日時が表示されるようになります。" name="FSTeleportHistoryShowDate"/>
 			<text name="textFriendlistOptions">
 				フレンドリストオプション：
 			</text>
 			<text name="textFriendlistColumns">
 				表示する名前：
 			</text>
-			<check_box label="ユーザ名" name="FSFriendListColumnShowUserName" tool_tip="コンタクトリストにフレンドのユーザ名を表示します。"/>
-			<check_box label="表示名" name="FSFriendListColumnShowDisplayName" tool_tip="コンタクトリストにフレンドの表示名を表示します。"/>
-			<check_box label="フルネーム" name="FSFriendListColumnShowFullName" tool_tip="コンタクトリストにフレンドのフルネームを表示します。"/>
+			<check_box label="ユーザ名" tool_tip="コンタクトリストにフレンドのユーザ名を表示します。" name="FSFriendListColumnShowUserName"/>
+			<check_box label="表示名" tool_tip="コンタクトリストにフレンドの表示名を表示します。" name="FSFriendListColumnShowDisplayName"/>
+			<check_box label="フルネーム" tool_tip="コンタクトリストにフレンドのフルネームを表示します。" name="FSFriendListColumnShowFullName"/>
 			<text name="textFriendListSortOrder">
 				並び順：
 			</text>
@@ -195,15 +195,15 @@
 				<radio_item label="ユーザ名（表示名）" name="username_displayname"/>
 				<radio_item label="表示名（ユーザ名）" name="displayname_username"/>
 			</radio_group>
-			<check_box label="権限を表示" name="FSFriendListColumnShowPermissions" tool_tip="コンタクトリストにあなたがこのアバターに与えた、またはこのアバターから与えられた権限を表示します。"/>
-			<check_box label="検索フィルタを表示" name="FSContactListShowSearch" tool_tip="コンタクトリストに検索テキストボックスを表示し、リストをフィルタすることができるようになります。"/>
+			<check_box label="権限を表示" tool_tip="コンタクトリストにあなたがこのアバターに与えた、またはこのアバターから与えられた権限を表示します。" name="FSFriendListColumnShowPermissions"/>
+			<check_box label="検索フィルタを表示" tool_tip="コンタクトリストに検索テキストボックスを表示し、リストをフィルタすることができるようになります。" name="FSContactListShowSearch"/>
 			<text name="textInventoryOptions">
 				インベントリのオプション：
 			</text>
-			<check_box label="空のシステムフォルダをインベントリに表示しない" name="DebugHideEmptySystemFolders" tool_tip="ここにチェックを入れると、インベントリウィンドウにお気に入り、ランドマークといったシステムフォルダのうち、中身が空のものが表示されなくなります。"/>
-			<check_box label="受け取ったアイテムのフォルダを通常のインベントリ内に表示" name="FSShowInboxFolder" tool_tip="ここにチェックを入れると、インベントリウィンドウに受け取りアイテムフォルダも表示されるようになります。"/>
-			<check_box label="受け取ったアイテムのボタンをインベントリの下に常に表示" name="FSAlwaysShowInboxButton" tool_tip="ここにチェックを入れると、インベントリ内にそのフォルダが表示されている場合でも、受け取りアイテムのボタンを常に表示するようにします。"/>
-			<check_box label="インベントリのタブでそれぞれ異なる検索キーワードを設定可能にする" name="FSSplitInventorySearchOverTabs" tool_tip="こにチェックを入れると、インベントリのそれぞれのタブに異なる検索キーワードを入力することが可能になります。"/>
+			<check_box label="空のシステムフォルダをインベントリに表示しない" tool_tip="ここにチェックを入れると、インベントリウィンドウにお気に入り、ランドマークといったシステムフォルダのうち、中身が空のものが表示されなくなります。" name="DebugHideEmptySystemFolders"/>
+			<check_box label="受け取ったアイテムのフォルダを通常のインベントリ内に表示" tool_tip="ここにチェックを入れると、インベントリウィンドウに受け取りアイテムフォルダも表示されるようになります。" name="FSShowInboxFolder"/>
+			<check_box label="受け取ったアイテムのボタンをインベントリの下に常に表示" tool_tip="ここにチェックを入れると、インベントリ内にそのフォルダが表示されている場合でも、受け取りアイテムのボタンを常に表示するようにします。" name="FSAlwaysShowInboxButton"/>
+			<check_box label="インベントリのタブでそれぞれ異なる検索キーワードを設定可能にする" tool_tip="こにチェックを入れると、インベントリのそれぞれのタブに異なる検索キーワードを入力することが可能になります。" name="FSSplitInventorySearchOverTabs"/>
 		</panel>
 		<!-- トースト -->
 		<panel label="トースト通知" name="UI-toasts-tab">
@@ -298,15 +298,17 @@
 			<text name="text_box_notecard_font">
 				ノートカードエディタのフォント：
 			</text>
-			<combo_box name="FSNotecardFontName" tool_tip="ノートカードエディタで使用するフォント名をしています。">
-				<combo_item name="Sans Serif" label="サンセリフ"/>
-				<combo_item name="Monospace" label="等幅"/>
+			<combo_box tool_tip="ノートカードエディタで使用するフォント名をしています。" name="FSNotecardFontName">
+				<combo_item label="サンセリフ" name="Sans Serif"/>
+				<combo_item label="等幅" name="Monospace"/>
+				<combo_item label="スクリプト" name="Scripting"/>
 			</combo_box>
-			<combo_box name="FSNotecardFontSize" tool_tip="ノートカードエディタで使用するフォントサイズを指定します。">
-				<combo_item name="Monospace" label="等幅"/>
-				<combo_item name="Small" label="小"/>
-				<combo_item name="Medium" label="中"/>
-				<combo_item name="Large" label="大"/>
+			<combo_box tool_tip="ノートカードエディタで使用するフォントサイズを指定します。" name="FSNotecardFontSize">
+				<combo_item label="等幅" name="Monospace"/>
+				<combo_item label="スクリプト" name="Scripting"/>
+				<combo_item label="小" name="Small"/>
+				<combo_item label="中" name="Medium"/>
+				<combo_item label="大" name="Large"/>
 			</combo_box>
 			<text name="emoji_font_settings_label">
 				絵文字フォント設定（完全な効果を得るには再起動が必要です）

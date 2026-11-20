@@ -86,5 +86,5 @@
 犠牲になることがよくあります。[APP_NAME]フォトツールは
 適切なバランスを見つけるのに役立ちます。
 	</text>
-	<button name="open_phototools" label="フォトツール" tool_tip="高度なフォト設定を行うには、専用のフォトツールを開きます。"/>
+	<button label="フォトツール" tool_tip="高度なフォト設定を行うには、専用のフォトツールを開きます。" name="open_phototools"/>
 </panel>

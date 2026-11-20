@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Web" name="panel_dir_web">
+	<button tool_tip="戻る" name="back_btn"/>
+	<button tool_tip="進む" name="forward_btn"/>
+	<button tool_tip="検索ページ" name="home_btn"/>
+</panel>

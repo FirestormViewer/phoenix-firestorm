@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="ban_duration" title="バン期間">
+<floater title="バン期間" name="ban_duration">
 	<text name="duration_textbox">
 		バンする期間：
 	</text>

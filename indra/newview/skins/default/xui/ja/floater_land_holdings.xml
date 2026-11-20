@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="land holdings floater" title="自分の土地">
+<floater title="自分の土地" name="land holdings floater">
 	<scroll_list name="parcel list">
 		<column label="区画" name="name"/>
 		<column label="リージョン" name="location"/>
 		<column label="種類" name="type"/>
 		<column label="面積" name="area"/>
 	</scroll_list>
-	<button label="テレポート" label_selected="テレポート" name="Teleport" tool_tip="この土地の中心にテレポートします。"/>
-	<button label="マップ" label_selected="マップ" name="Show on Map" tool_tip="この土地をワールドマップ上に表示します。"/>
+	<button label="テレポート" label_selected="テレポート" tool_tip="この土地の中心にテレポートします。" name="Teleport"/>
+	<button label="マップ" label_selected="マップ" tool_tip="この土地をワールドマップ上に表示します。" name="Show on Map"/>
 	<text name="contrib_label">
 		所属グループへの貢献：
 	</text>

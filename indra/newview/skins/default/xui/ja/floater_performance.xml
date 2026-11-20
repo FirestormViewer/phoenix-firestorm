@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="performance" title="グラフィックの最適化">
+<floater title="グラフィックの最適化" name="performance">
 	<string name="fps_text" value="フレーム／秒"/>
 	<string name="max_text" value="（最大）"/>
 	<panel name="panel_top">

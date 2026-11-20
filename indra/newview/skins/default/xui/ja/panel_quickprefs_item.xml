@@ -5,7 +5,7 @@
 	<panel name="option_ordering_panel">
 		<layout_stack name="option_inner_stack">
 			<layout_panel name="option_panel_updown">
-				<button name="remove_button" tool_tip="このコントロールを削除します。" />
+				<button tool_tip="このコントロールを削除します。" name="remove_button" />
 			</layout_panel>
 			<layout_panel name="text_panel">
 				<text name="option_label">
@@ -15,8 +15,8 @@
 			<layout_panel name="option_panel">
 				<!-- one of these controls will be chosen by the user, all others remain hidden -->
 				<radio_group name="option_radio_control">
-					<radio_item name="on" label="オン"/>
-					<radio_item name="off" label="オフ"/>
+					<radio_item label="オン" name="on"/>
+					<radio_item label="オフ" name="off"/>
 				</radio_group>
 				<!-- one of these controls will be chosen by the user, all others remain hidden -->
 			</layout_panel>

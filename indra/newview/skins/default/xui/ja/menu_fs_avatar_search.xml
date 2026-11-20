@@ -12,4 +12,5 @@
 	<menu_item_call label="テレポートのリクエスト" name="request_teleport"/>
 	<menu_item_call label="グループに招待" name="GroupInvite"/>
 	<menu_item_check label="ブロック／ブロック解除" name="Block/Unblock"/>
+	<menu_item_call label="自分のすべてのグループからバンする" name="BanFromAllGroups"/>
 </context_menu>

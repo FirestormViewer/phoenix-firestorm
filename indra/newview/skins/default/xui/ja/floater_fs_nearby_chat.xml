@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="nearby_chat" title="近くのチャット">
+<floater title="近くのチャット" name="nearby_chat">
 	<floater.string name="chatbox_label">
 		近くのチャットに
 	</floater.string>
@@ -14,7 +14,7 @@
 			<menu_button tool_tip="チャットのオプション" name="chat_options_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_chat_search_btn">
-			<button name="chat_search_btn" tool_tip="近くのチャットを検索します。"/>
+			<button tool_tip="近くのチャットを検索します。" name="chat_search_btn"/>
 		</layout_panel>
 	</layout_stack>
 	<layout_stack name="ls_chat">
@@ -28,21 +28,21 @@
 				<layout_panel name="chat_layout_panel">
 					<layout_stack name="input_panels">
 						<layout_panel name="emoji_button_layout_panel">
-							<button name="emoji_picker_toggle_btn" tool_tip="絵文字パネルを表示します。"/>
-							<button name="emoji_recent_panel_toggle_btn" tool_tip="最近使用した絵文字を表示／非表示します。"/>
+							<button tool_tip="絵文字パネルを表示します。" name="emoji_picker_toggle_btn"/>
+							<button tool_tip="最近使用した絵文字を表示／非表示します。" name="emoji_recent_panel_toggle_btn"/>
 						</layout_panel>
 						<layout_panel name="input_button_layout_panel">
-							<spinner name="ChatChannel" tool_tip="チャットを表示するチャンネルを選択します。初期設定＞チャット＞Firestorm＞「チャットバーにチャンネル選択を表示」で有効化できます。"/>
+							<spinner tool_tip="チャットを表示するチャンネルを選択します。初期設定＞チャット＞Firestorm＞「チャットバーにチャンネル選択を表示」で有効化できます。" name="ChatChannel"/>
 						</layout_panel>
 						<layout_panel name="chat_type_layout_panel">
 							<!-- Makeshift split button since LLSplitButton is broken -->
-							<combo_box name="chat_type" tool_tip="ささやき＝10ｍ、通常＝20ｍ、シャウト＝100ｍ">
-								<combo_box.item name="chat_type_whisper" label="ささやき"/>
-								<combo_box.item name="chat_type_say" label="通常"/>
-								<combo_box.item name="chat_type_shout" label="シャウト"/>
+							<combo_box tool_tip="ささやき＝10ｍ、通常＝20ｍ、シャウト＝100ｍ" name="chat_type">
+								<combo_box.item label="ささやき" name="chat_type_whisper"/>
+								<combo_box.item label="通常" name="chat_type_say"/>
+								<combo_box.item label="シャウト" name="chat_type_shout"/>
 							</combo_box>
 							<!-- pad_bottom used to move the button text away so it's invisible under the combo box -->
-							<button name="send_chat" label="Say" tool_tip="ささやき＝10ｍ、通常＝20ｍ、シャウト＝100ｍ"/>
+							<button label="Say" tool_tip="ささやき＝10ｍ、通常＝20ｍ、シャウト＝100ｍ" name="send_chat"/>
 							<!-- Makeshift split button since LLSplitButton is broken -->
 						</layout_panel>
 					</layout_stack>

@@ -34,7 +34,7 @@
 		アップロードしたサイズ：[X_RES]✕[Y_RES]，[ALPHA]
 	</text>
 	<check_box label="可逆圧縮" name="lossless_check"/>
-	<check_box name="temp_check" label="一時的（無料）" tool_tip="アセットを一時的なものに設定します。つまり、アセットは無料ですが、その代わり、アセットが存在しなくなるまでの短期間のみ有効となります。"/>
+	<check_box label="一時的（無料）" tool_tip="アセットを一時的なものに設定します。つまり、アセットは無料ですが、その代わり、アセットが存在しなくなるまでの短期間のみ有効となります。" name="temp_check"/>
 	<button label="キャンセル" name="cancel_btn"/>
 	<button label="アップロードﾞL$[AMOUNT]" name="ok_btn"/>
 	<text name="info_text" value="＝アップロード費用はここに表示されます＝" />

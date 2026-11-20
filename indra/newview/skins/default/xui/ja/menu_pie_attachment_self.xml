@@ -2,7 +2,7 @@
 <pie_menu name="Attachment Pie">
 	<pie_slice label="プロフィール…" name="Profile..."/>
 	<pie_slice label="下に置く" name="Drop"/>
-	<pie_menu name="Attachment Pie More" label="詳細　＞">
+	<pie_menu label="詳細　＞" name="Attachment Pie More">
 		<pie_slice label="テクスチャをリフレッシュ" name="Texture Refresh"/>
 		<pie_slice label="スクリプト情報" name="ScriptInfo"/>
 		<pie_slice label="触る" name="Attachment Object Touch"/>
@@ -10,11 +10,11 @@
 			<pie_slice label="描画解除" name="Derender"/>
 			<pie_slice label="描画解除リストに追加" name="DerenderPermanent"/>
 		</pie_menu>
-		<pie_menu name="ExportMenu" label="名前をつけて保存　＞">
+		<pie_menu label="名前をつけて保存　＞" name="ExportMenu">
 			<pie_slice label="バックアップ" name="Backup"/>
 			<pie_slice label="Collada" name="Collada"/>
 		</pie_menu>
-		<pie_menu name="Inventory" label="インベントリ　＞">
+		<pie_menu label="インベントリ　＞" name="Inventory">
 			<pie_slice label="お気に入りに追加" name="Add to favorites"/>
 			<pie_slice label="お気に入りから削除" name="Remove from favorites"/>
 			<pie_slice label="オリジナルを表示" name="Show original"/>
@@ -28,7 +28,7 @@
 	<pie_slice label="ジェスチャー…" name="Gestures"/>
 	<pie_menu label="容姿　＞" name="Appearance &gt;">
 		<pie_slice label="シェイプを編集" name="Edit My Shape"/>
-		<pie_menu name="ResetMenu" label="リセット　＞">
+		<pie_menu label="リセット　＞" name="ResetMenu">
 			<pie_slice label="スケルトン＋アニメ" name="Reset Skeleton And Animations"/>
 			<pie_slice label="スケルトン" name="Reset Skeleton"/>
 			<pie_slice label="メッシュのＬＯＤ" name="Reset Mesh LOD"/>

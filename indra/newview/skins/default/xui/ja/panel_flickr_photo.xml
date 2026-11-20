@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_flickr_photo">
-	<combo_box name="resolution_combobox" tool_tip="画像解像度">
+	<combo_box tool_tip="画像解像度" name="resolution_combobox">
 		<combo_box.item label="現在のウィンドウ" name="CurrentWindow"/>
 		<combo_box.item label="320✕240" name="320x240"/>
 		<combo_box.item label="640✕480" name="640x480"/>
@@ -10,7 +10,7 @@
 		<combo_box.item label="1600✕1200" name="1600x1200"/>
 		<combo_box.item label="カスタム" name="Custom"/>
 	</combo_box>
-	<combo_box name="filters_combobox" tool_tip="画像フィルタ">
+	<combo_box tool_tip="画像フィルタ" name="filters_combobox">
 		<combo_box.item label="フィルタなし" name="NoFilter"/>
 	</combo_box>
 	<check_box label="縦横比を固定" name="keep_aspect_ratio"/>
@@ -22,8 +22,8 @@
 		<check_box label="構図ガイドを表示" tool_tip="スナップショットのフレーム内に構図ヘルパーを表示します。" name="show_guides"/>
 		<button tool_tip="フレームガイド設定を開きます。" name="guide_settings_btn"/>
 	</panel>
-	<button label="更新" name="new_snapshot_btn" tool_tip="クリックして更新"/>
-	<button label="プレビュー" name="big_preview_btn" tool_tip="クリックしてプレビューを切り替えます。"/>
+	<button label="更新" tool_tip="クリックして更新" name="new_snapshot_btn"/>
+	<button label="プレビュー" tool_tip="クリックしてプレビューを切り替えます。" name="big_preview_btn"/>
 	<text name="title_label">
 		タイトル：
 	</text>
@@ -31,10 +31,10 @@
 		説明：
 	</text>
 	<check_box label="ＳＬの場所を説明の最後に含める" name="add_location_cb"/>
-	<text name="tags_label" tool_tip="タグはスペースで区切って下さい。複数の単語から成るタグについては、&quot;&quot; で囲んで下さい。">
+	<text tool_tip="タグはスペースで区切って下さい。複数の単語から成るタグについては、&quot;&quot; で囲んで下さい。" name="tags_label">
 		タグ：
 	</text>
-	<combo_box name="rating_combobox" tool_tip="Flickrコンテンツのレーティング区分">
+	<combo_box tool_tip="Flickrコンテンツのレーティング区分" name="rating_combobox">
 		<combo_box.item label="Flickrレーティング区分「Safe」" name="SafeRating"/>
 		<combo_box.item label="Flickrレーティング区分「Moderate」" name="ModerateRating"/>
 		<combo_box.item label="Flickrレーティング区分「Restricted」" name="RestrictedRating"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
 	<panel name="parcel_info_panel">
-		<button name="buy_land_btn" tool_tip="区画販売中です。"/>
+		<button tool_tip="区画販売中です。" name="buy_land_btn"/>
 		<text tool_tip="あなたがいる土地の区画名です。土地情報についてはクリックしてください。" name="parcel_info_text" value="（読み込んでいます…）"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">
@@ -20,21 +20,21 @@
 		L$ [AMT]
 	</panel.string>
 	<panel name="omnifilter_controls_panel">
-		<check_box name="enable_omnifilter" tool_tip="包括フィルタを有効化します。"/>
-		<button name="btn_show_omnifilter" tool_tip="包括フィルタを表示します。"/>
-		<combo_box name="cmb_omnifilter_rule_sets" tool_tip="使用したい包括フィルタのルールを選んでください。"/>
+		<check_box tool_tip="包括フィルタを有効化します。" name="enable_omnifilter"/>
+		<button tool_tip="包括フィルタを表示します。" name="btn_show_omnifilter"/>
+		<combo_box tool_tip="使用したい包括フィルタのルールを選んでください。" name="cmb_omnifilter_rule_sets"/>
 	</panel>
 	<panel name="menu_search_panel" left="-514">
-		<search_editor label="メニュー検索" name="search_menu_edit" tool_tip="検索したい内容をここに入力してください。メニューに部分的に一致する結果が表示されます。"/>
+		<search_editor label="メニュー検索" tool_tip="検索したい内容をここに入力してください。メニューに部分的に一致する結果が表示されます。" name="search_menu_edit"/>
 	</panel>
 	<panel name="balance_bg" left="-382">
-		<text name="balance" tool_tip="クリックしてL$残高を更新します。"/>
-		<button label="L$を購入" name="buyL" tool_tip="クリックしてL$を購入します。"/>
+		<text tool_tip="クリックしてL$残高を更新します。" name="balance"/>
+		<button label="L$を購入" tool_tip="クリックしてL$を購入します。" name="buyL"/>
 	</panel>
 	<panel name="time_and_media_bg" width="280">
-		<text name="TimeText" tool_tip="現在時刻（太平洋時間）" width="130">午前　24：00：00　PST</text>
-		<button name="stream_toggle_btn" tool_tip="区画のオーディストリームを再生／停止します。"/>
-		<button name="media_toggle_btn" tool_tip="すべてのメディア（音楽、ビデオ、Webページ）を開始／停止します。"/>
-		<text name="FPSText" tool_tip="フレーム毎秒（クリックで上限を調整できます。）" />
+		<text tool_tip="現在時刻（太平洋時間）" name="TimeText" width="130">午前　24：00：00　PST</text>
+		<button tool_tip="区画のオーディストリームを再生／停止します。" name="stream_toggle_btn"/>
+		<button tool_tip="すべてのメディア（音楽、ビデオ、Webページ）を開始／停止します。" name="media_toggle_btn"/>
+		<text tool_tip="フレーム毎秒（クリックで上限を調整できます。）" name="FPSText" />
 	</panel>
 </panel>

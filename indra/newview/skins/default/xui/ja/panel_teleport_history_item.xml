@@ -14,5 +14,5 @@
 			<text name="timestamp" value="2000年01月01日　午後12：00"/>
 		</layout_panel>
 	</layout_stack>
-	<button name="profile_btn" tool_tip="アイテム情報を表示します。"/>
+	<button tool_tip="アイテム情報を表示します。" name="profile_btn"/>
 </panel>

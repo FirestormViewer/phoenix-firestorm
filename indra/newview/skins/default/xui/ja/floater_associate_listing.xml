@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="associate listing" title="一覧の関連付け">
+<floater title="一覧の関連付け" name="associate listing">
 	<text name="message">
 		一覧ＩＤ：
 	</text>

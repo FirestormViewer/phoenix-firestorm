@@ -98,7 +98,7 @@
 			画像
 		</label>
 	</mimetype>
-	<mimetype menu="1" name="video/vnd.secondlife.qt.legacy">
+	<mimetype name="video/vnd.secondlife.qt.legacy" menu="1">
 		<label name="vnd.secondlife.qt.legacy_label">
 			ムービー（QuickTime）
 		</label>
@@ -168,22 +168,22 @@
 			オーディオ（WAV）
 		</label>
 	</mimetype>
-	<mimetype menu="1" name="image/bmp">
+	<mimetype name="image/bmp" menu="1">
 		<label name="image/bmp_label">
 			画像（BMP）
 		</label>
 	</mimetype>
-	<mimetype menu="1" name="image/gif">
+	<mimetype name="image/gif" menu="1">
 		<label name="image/gif_label">
 			画像（GIF）
 		</label>
 	</mimetype>
-	<mimetype menu="1" name="image/jpeg">
+	<mimetype name="image/jpeg" menu="1">
 		<label name="image/jpeg_label">
 			画像（JPEG）
 		</label>
 	</mimetype>
-	<mimetype menu="1" name="image/png">
+	<mimetype name="image/png" menu="1">
 		<label name="image/png_label">
 			画像（PNG）
 		</label>
@@ -193,17 +193,17 @@
 			画像（SVG）
 		</label>
 	</mimetype>
-	<mimetype menu="1" name="image/tiff">
+	<mimetype name="image/tiff" menu="1">
 		<label name="image/tiff_label">
 			画像（TIFF）
 		</label>
 	</mimetype>
-	<mimetype menu="1" name="text/html">
+	<mimetype name="text/html" menu="1">
 		<label name="text/html_label">
 			Webページ
 		</label>
 	</mimetype>
-	<mimetype menu="1" name="text/plain">
+	<mimetype name="text/plain" menu="1">
 		<label name="text/plain_label">
 			テキスト
 		</label>
@@ -213,7 +213,7 @@
 			XML
 		</label>
 	</mimetype>
-	<mimetype menu="1" name="video/mpeg">
+	<mimetype name="video/mpeg" menu="1">
 		<label name="video/mpeg_label">
 			ムービー（MPEG）
 		</label>
@@ -233,7 +233,7 @@
 			ムービー
 		</label>
 	</mimetype>
-	<mimetype menu="1" name="video/quicktime">
+	<mimetype name="video/quicktime" menu="1">
 		<label name="video/quicktime_label">
 			ムービー（QuickTime）
 		</label>
@@ -248,7 +248,7 @@
 			ムービー（Windows Media WMV）
 		</label>
 	</mimetype>
-	<mimetype menu="1" name="video/x-msvideo">
+	<mimetype name="video/x-msvideo" menu="1">
 		<label name="video/x-msvideo_label">
 			ムービー（AVI）
 		</label>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_profile" label="プロフィール">
+<panel label="プロフィール" name="panel_profile">
 	<string name="status_online">
 		オンライン
 	</string>
@@ -30,9 +30,9 @@
 	<text name="name_label" value="名前："/>
 	<panel name="name_holder">
 		<text_editor name="complete_name" value="（読み込んでいます…）"/>
-		<menu_button name="copy_btn" tool_tip="コピーするときのオプションです。"/>
+		<menu_button tool_tip="コピーするときのオプションです。" name="copy_btn"/>
 	</panel>
-	<button name="set_name" tool_tip="表示名を設定します。"/>
+	<button tool_tip="表示名を設定します。" name="set_name"/>
 	<icon tool_tip="フレンドは私のオンラインステータスを見ることができます。" name="can_see_online"/>
 	<icon tool_tip="フレンドは私のオンラインステータスを見ることができません。" name="cant_see_online"/>
 	<icon tool_tip="フレンドはマップ上で私を見ることができます。" name="can_see_on_map"/>
@@ -43,7 +43,7 @@
 	<text_editor name="user_key" value="（読み込んでいます…）"/>
 	<layout_stack name="imagepositioner">
 		<layout_panel name="image_action_panel">
-			<menu_button name="image_action_btn" tool_tip="プロフィール写真関連のアクションを実行します。"/>
+			<menu_button tool_tip="プロフィール写真関連のアクションを実行します。" name="image_action_btn"/>
 		</layout_panel>
 		<layout_panel name="label_stack">
 			<text name="label" value="誕生日："/>
@@ -53,10 +53,10 @@
 				<layout_panel name="badge_layout">
 					<layout_stack name="badge_stacker">
 						<layout_panel name="top_badge_layout">
-							<icon name="top_badge_icon" tool_tip="Linden Lab従業員" />
+							<icon tool_tip="Linden Lab従業員" name="top_badge_icon" />
 						</layout_panel>
 						<layout_panel name="bottom_badge_layout">
-							<icon name="bottom_badge_icon" tool_tip="Linden Lab従業員"/>
+							<icon tool_tip="Linden Lab従業員" name="bottom_badge_icon"/>
 						</layout_panel>
 					</layout_stack>
 				</layout_panel>
@@ -66,32 +66,32 @@
 	</layout_stack>
 	<text name="About:" value="概要："/>
 	<!-- [AS:chanayane] Preview button -->
-	<button name="btn_preview" tool_tip="プロフィールの「概要」セクションのプレビューを切り替えます。"/>
+	<button tool_tip="プロフィールの「概要」セクションのプレビューを切り替えます。" name="btn_preview"/>
 	<!-- [/AS:chanayane] -->
 	<text name="Groups:" value="グループ："/>
-	<button name="group_invite" label="＋" tool_tip="グループに招待する。" label_selected="＋"/>
+	<button label="＋" label_selected="＋" tool_tip="グループに招待する。" name="group_invite"/>
 	<text name="Give item:" value="共有："/>
-	<text name="Give inventory" tool_tip="この人物に渡したいインベントリアイテムをここにドロップしてください。">
+	<text tool_tip="この人物に渡したいインベントリアイテムをここにドロップしてください。" name="Give inventory">
 		インベントリアイテムをここにドロップ
 	</text>
 	<layout_stack name="buttonstack">
 		<layout_panel name="left_buttonstack">
-			<button name="show_on_map_btn" label="マップ上で探す" tool_tip="マップ上で居住者の位置を確認します。" label_selected="マップ上で探す"/>
-			<button name="pay" label="支払う" tool_tip="この住民にお金を支払います。" label_selected="支払う"/>
+			<button label="マップ上で探す" label_selected="マップ上で探す" tool_tip="マップ上で居住者の位置を確認します。" name="show_on_map_btn"/>
+			<button label="支払う" label_selected="支払う" tool_tip="この住民にお金を支払います。" name="pay"/>
 		</layout_panel>
 		<layout_panel name="middle_buttonstack">
-			<button name="teleport" label="テレポートのオファー" tool_tip="この住民にテレポートのオファーを送ります。" label_selected="テレポートのオファー"/>
-			<button name="im" label="インスタントメッセージ" tool_tip="インスタントメッセージのセッションを開きます。" label_selected="インスタントメッセージ"/>
+			<button label="テレポートのオファー" label_selected="テレポートのオファー" tool_tip="この住民にテレポートのオファーを送ります。" name="teleport"/>
+			<button label="インスタントメッセージ" label_selected="インスタントメッセージ" tool_tip="インスタントメッセージのセッションを開きます。" name="im"/>
 		</layout_panel>
 		<layout_panel name="right_buttonstack">
-			<button name="add_friend" label="フレンドに追加" tool_tip="この住民にフレンドシップの申込みをします。" label_selected="フレンド追加"/>
-			<button name="remove_friend" label="フレンド削除" tool_tip="この住民とのフレンドシップを終了します。" label_selected="フレンド削除"/>
-			<button name="block" label="ブロック" tool_tip="この住民をブロックします。"/>
-			<button name="unblock" label="ブロック解除" tool_tip="この住民のブロックを解除します。"/>
+			<button label="フレンドに追加" label_selected="フレンド追加" tool_tip="この住民にフレンドシップの申込みをします。" name="add_friend"/>
+			<button label="フレンド削除" label_selected="フレンド削除" tool_tip="この住民とのフレンドシップを終了します。" name="remove_friend"/>
+			<button label="ブロック" tool_tip="この住民をブロックします。" name="block"/>
+			<button label="ブロック解除" tool_tip="この住民のブロックを解除します。" name="unblock"/>
 		</layout_panel>
 	</layout_stack>
-	<check_box name="show_in_search" label="検索に表示" tool_tip="検索結果に情報が表示されるようにします。"/>
-	<check_box name="hide_sl_age" label="完全な誕生日を表示" tool_tip="ＳＬ年齢を他の人に見せましょう"/>
-	<button name="save_description_changes" label="保存"/>
-	<button name="discard_description_changes" label="破棄"/>
+	<check_box label="検索に表示" tool_tip="検索結果に情報が表示されるようにします。" name="show_in_search"/>
+	<check_box label="完全な誕生日を表示" tool_tip="ＳＬ年齢を他の人に見せましょう" name="hide_sl_age"/>
+	<button label="保存" name="save_description_changes"/>
+	<button label="破棄" name="discard_description_changes"/>
 </panel>

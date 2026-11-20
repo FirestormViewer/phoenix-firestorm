@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_combo" title="フローターのコンボ">
+<floater title="フローターのコンボ" name="floater_combo">
 	<text name="combo_text">
 		オブションを選択：
 	</text>

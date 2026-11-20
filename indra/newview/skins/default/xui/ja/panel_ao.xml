@@ -2,34 +2,41 @@
 <panel name="animation_overrider_outer_panel">
 	<!-- Main Panel -->
 	<panel name="animation_overrider_panel">
-		<combo_box name="ao_set_selection_combo" tool_tip="編集したいアニメーションを選択してください。"/>
-		<button name="ao_activate" tool_tip="このアニメーションを今すぐ有効化します。"/>
-		<check_box name="ao_default" label="デフォルト" tool_tip="このアニメーションセットを、ログイン時に再生されるデフォルトのセットにします。デフォルトのアニメーションセットがない場合は、前回のセッションのアニメーションセットを使用します。"/>
-		<menu_button name="ao_add" tool_tip="新しいアニメーションセットを追加します。"/>
-		<button name="ao_remove" tool_tip="このアニメーションセットを削除します。"/>
-		<check_box name="ao_sit_override" label="座るを上書き" tool_tip="座るアニメーションをオーバーライドする場合は、これをチェックします。"/>
-		<check_box name="ao_smart" label="スマートモード" tool_tip="スマートモードは、座るオーバーライドが、オブジェクト自体のアニメーションと衝突するかどうかを判断し、オーバーライダーを一時的に無効にします。"/>
-		<check_box name="ao_disable_stands_in_mouselook" label="立ったときにマウスルックを無効化" tool_tip="カスタムスタンドアニメーションをマウスルックで保持する必要がある場合は、このボックスをオンにします。"/>
-		<combo_box name="ao_state_selection_combo" tool_tip="編集するアニメーションの状態を選択します。"/>
+		<combo_box tool_tip="編集したいアニメーションを選択してください。" name="ao_set_selection_combo"/>
+		<button tool_tip="このアニメーションを今すぐ有効化します。" name="ao_activate"/>
+		<check_box label="デフォルト" tool_tip="このアニメーションセットを、ログイン時に再生されるデフォルトのセットにします。デフォルトのアニメーションセットがない場合は、前回のセッションのアニメーションセットを使用します。" name="ao_default"/>
+		<menu_button tool_tip="新しいアニメーションセットを追加します。" name="ao_add"/>
+		<button tool_tip="このアニメーションセットを削除します。" name="ao_remove"/>
+		<check_box label="座るを上書き" tool_tip="座るアニメーションをオーバーライドする場合は、これをチェックします。" name="ao_sit_override"/>
+		<check_box label="スマートモード" tool_tip="スマートモードは、座るオーバーライドが、オブジェクト自体のアニメーションと衝突するかどうかを判断し、オーバーライダーを一時的に無効にします。" name="ao_smart"/>
+		<check_box label="立ったときにマウスルックを無効化" tool_tip="カスタムスタンドアニメーションをマウスルックで保持する必要がある場合は、このボックスをオンにします。" name="ao_disable_stands_in_mouselook"/>
+		<combo_box tool_tip="編集するアニメーションの状態を選択します。" name="ao_state_selection_combo"/>
 		<panel name="ao_animation_move_trash_panel">
-			<button name="ao_move_up" tool_tip="選択したアニメーションをリストの上に移動します。"/>
-			<button name="ao_move_down" tool_tip="選択したアニメーションをリストの下に移動します。"/>
-			<button name="ao_trash" tool_tip="選択したアニメーションをリストから削除します。"/>
+			<button tool_tip="選択したアニメーションをリストの上に移動します。" name="ao_move_up"/>
+			<button tool_tip="選択したアニメーションをリストの下に移動します。" name="ao_move_down"/>
+			<button tool_tip="選択したアニメーショングループの名前を変更します。" name="ao_rename"/>
+			<button tool_tip="選択したアニメーションをリストから削除します。" name="ao_trash"/>
 		</panel>
-		<check_box name="ao_cycle" label="サイクル" tool_tip="アニメーション状態が呼び出されるたびに、リストから異なるアニメーションを再生します。"/>
-		<check_box name="ao_randomize" label="順序をランダム化" tool_tip="サイクルモードでアニメーションの順序をランダム化します。"/>
+		<combo_box tool_tip="このステートで表示するアニメーショントラックを選択します。メインのリストは通常どおり再生され、追加のトラックはそれと並行して独立して再生・循環します（例：すべての歩行アニメーションと同時に尻尾を振る）。" name="ao_track_selection_combo"/>
+		<button tool_tip="このステートに新しい独立したアニメーショントラックを追加します。" name="ao_track_add"/>
+		<check_box label="サイクル" tool_tip="アニメーション状態が呼び出されるたびに、リストから異なるアニメーションを再生します。" name="ao_cycle"/>
+		<check_box label="順序をランダム化" tool_tip="サイクルモードでアニメーションの順序をランダム化します。" name="ao_randomize"/>
 		<text name="ao_cycle_time_seconds_label" value="サイクル時間（秒）："/>
-		<spinner name="ao_cycle_time" tool_tip="リスト内の次のアニメーションに切り替わるまでの時間を指定します。自動アニメーション循環を無効にするには、これを０に設定します。"/>
-		<button name="ao_reload" label="リロード" tool_tip="アニメーションオーバーライド設定をリロードします。"/>
+		<spinner tool_tip="リスト内の次のアニメーションに切り替わるまでの時間を指定します。自動アニメーション循環を無効にするには、これを０に設定します。" name="ao_cycle_time"/>
+		<button label="リロード" tool_tip="アニメーションオーバーライド設定をリロードします。" name="ao_reload"/>
 		<layout_stack name="next_previous_buttons_stack">
 			<layout_panel name="next_previous_buttons_stack_left">
-				<button name="ao_previous" tool_tip="前のステートのアニメーションに切り替えます。"/>
+				<button tool_tip="前のステートのアニメーションに切り替えます。" name="ao_previous"/>
 			</layout_panel>
 			<layout_panel name="next_previous_buttons_stack_right">
-				<button name="ao_next" tool_tip="次のステートのアニメーションに切り替えます。"/>
+				<button tool_tip="次のステートのアニメーションに切り替えます。" name="ao_next"/>
 			</layout_panel>
 		</layout_stack>
-		<button name="ao_less" tool_tip="インターフェースを縮小表示にします。"/>
+		<button tool_tip="インターフェースを縮小表示にします。" name="ao_less"/>
+		<panel name="ao_drop_zone_panel">
+			<text name="ao_drop_zone_add_label">ここにドロップして追加</text>
+			<text name="ao_drop_zone_group_label">既存のものにドロップしてグループ化</text>
+		</panel>
 	</panel>
 	<!-- Reload Cover Panel -->
 	<panel name="ao_reload_cover">
@@ -44,10 +51,10 @@
 	</panel>
 	<!-- Small Panel -->
 	<panel name="animation_overrider_panel_small">
-		<combo_box name="ao_set_selection_combo_small" tool_tip="編集したいアニメーションセットを選択してください。"/>
-		<button name="ao_more" tool_tip="インターフェースをフルサイズ表示にします。"/>
-		<button name="ao_previous_small" tool_tip="前のステートのアニメーションに切り替えます。"/>
-		<button name="ao_next_small" tool_tip="次のステートのアニメーションに切り替えます。"/>
-		<check_box name="ao_sit_override_small" label="座った時" tool_tip="座るアニメーションをオーバーライドする場合は、これをチェックします。"/>
+		<combo_box tool_tip="編集したいアニメーションセットを選択してください。" name="ao_set_selection_combo_small"/>
+		<button tool_tip="インターフェースをフルサイズ表示にします。" name="ao_more"/>
+		<button tool_tip="前のステートのアニメーションに切り替えます。" name="ao_previous_small"/>
+		<button tool_tip="次のステートのアニメーションに切り替えます。" name="ao_next_small"/>
+		<check_box label="座った時" tool_tip="座るアニメーションをオーバーライドする場合は、これをチェックします。" name="ao_sit_override_small"/>
 	</panel>
 </panel>

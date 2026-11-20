@@ -13,7 +13,7 @@
 		<text name="currentlook_name">
 			ムースのようなとても長い名前のアウトフィット
 		</text>
-		<button name="edit_outfit_btn" tool_tip="このアウトフィットを編集します。"/>
+		<button tool_tip="このアウトフィットを編集します。" name="edit_outfit_btn"/>
 	</panel>
 	<layout_stack name="top_menu_panel">
 		<layout_panel name="filter_panel">
@@ -26,7 +26,7 @@
 			<menu_button tool_tip="並べ替えオプションを表示します。" name="sorting_menu_btn"/>
 		</layout_panel>
 		<layout_panel name="trash_btn_panel">
-			<dnd_button name="trash_btn" tool_tip="選択されたアウトフィットを削除します。"/>
+			<dnd_button tool_tip="選択されたアウトフィットを削除します。" name="trash_btn"/>
 		</layout_panel>
 	</layout_stack>
 </panel>

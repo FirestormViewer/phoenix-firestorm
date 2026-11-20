@@ -9,7 +9,7 @@
 	<menu_item_call label="ワールドマップ" name="Map"/>
 	<menu_item_call label="追跡する" name="Track"/>
 	<menu_item_call label="アバターに顔を向ける" name="FaceTowards"/>
-	<menu name="MarkAvatar" label="マーク…">
+	<menu label="マーク…" name="MarkAvatar">
 		<menu_item_call label="赤" name="MarkRed"/>
 		<menu_item_call label="緑" name="MarkGreen"/>
 		<menu_item_call label="青" name="MarkBlue"/>

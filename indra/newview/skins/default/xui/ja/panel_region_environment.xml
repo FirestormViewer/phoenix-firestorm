@@ -84,7 +84,7 @@
 						<line_editor name="edt_invname_alt1">
 							不明
 						</line_editor>
-						<settings_drop_target name="sdt_alt1" tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在のスカイとして選択します。"/>
+						<settings_drop_target tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在のスカイとして選択します。" name="sdt_alt1"/>
 					</panel>
 					<panel name="pnl_alt2">
 						<text name="txt_alt2">
@@ -93,7 +93,7 @@
 						<line_editor name="edt_invname_alt2">
 							不明
 						</line_editor>
-						<settings_drop_target name="sdt_alt2" tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在のスカイとして選択します。"/>
+						<settings_drop_target tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在のスカイとして選択します。" name="sdt_alt2"/>
 					</panel>
 					<panel name="pnl_alt3">
 						<text name="txt_alt3">
@@ -102,7 +102,7 @@
 						<line_editor name="edt_invname_alt3">
 							不明
 						</line_editor>
-						<settings_drop_target name="sdt_alt3" tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在のスカイとして選択します。"/>
+						<settings_drop_target tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在のスカイとして選択します。" name="sdt_alt3"/>
 					</panel>
 					<text name="sky_altitudes_label">
 						スカイの高度
@@ -114,7 +114,7 @@
 						<line_editor name="edt_invname_ground">
 							不明
 						</line_editor>
-						<settings_drop_target name="sdt_ground" tool_tip="インベントリからターゲットボックスに設定をドラッグし、地表の空として選択します。"/>
+						<settings_drop_target tool_tip="インベントリからターゲットボックスに設定をドラッグし、地表の空として選択します。" name="sdt_ground"/>
 					</panel>
 					<panel name="pnl_water">
 						<text name="txt_water">
@@ -123,7 +123,7 @@
 						<line_editor name="edt_invname_water">
 							不明
 						</line_editor>
-						<settings_drop_target name="sdt_water" tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在の水面として選択します。"/>
+						<settings_drop_target tool_tip="インベントリからターゲットボックスに設定をドラッグし、現在の水面として選択します。" name="sdt_water"/>
 					</panel>
 					<button label="リセット" tool_tip="デフォルトの高度にリセットします。" name="btn_rst_altitudes"/>
 				</layout_panel>

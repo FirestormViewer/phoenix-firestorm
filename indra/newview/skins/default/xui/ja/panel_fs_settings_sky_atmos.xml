@@ -39,7 +39,7 @@
 		<text name="scene_gamma_label">
 			輝度：
 		</text>
-		<text name="probe_ambiance_label" tool_tip="放射照度制御。ゼロ以外の場合、ＨＤＲ光源モデルが有効になります。">
+		<text tool_tip="放射照度制御。ゼロ以外の場合、ＨＤＲ光源モデルが有効になります。" name="probe_ambiance_label">
 			周辺環境の反射プローブ（ＨＤＲ）：
 		</text>
 	</panel>

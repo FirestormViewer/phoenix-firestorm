@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Model Preview" title="モデルのアップロード">
+<floater title="モデルのアップロード" name="Model Preview">
 	<string name="status_parse_error">
 		エラー：DAEファイルに問題が見つかりました。－詳細につきましてはログをご確認ください。
 	</string>
@@ -221,17 +221,17 @@
 		<tab_container name="import_tab">
 			<!-- for log tab -->
 			<!-- LOD PANEL -->
-			<panel label="ＬｏＤ" name="lod_panel" title="詳細度">
+			<panel label="ＬｏＤ" title="詳細度" name="lod_panel">
 				<text name="source" value="ソース"/>
 				<text name="triangles" value="三角形数"/>
 				<text name="vertices" value="頂点数"/>
 				<text name="high_label" value="高"/>
 				<combo_box name="lod_source_high">
-					<item name="Load from file" label="ファイルから読み込む"/>
-					<item name="MeshOpt Auto" label="自動生成"/>
-					<item name="MeshOptCombine" label="正確な生成"/>
-					<item name="MeshOptSloppy" label="簡易生成"/>
-					<item name="Generate" label="信頼性の高い生成"/>
+					<item label="ファイルから読み込む" name="Load from file"/>
+					<item label="自動生成" name="MeshOpt Auto"/>
+					<item label="正確な生成" name="MeshOptCombine"/>
+					<item label="簡易生成" name="MeshOptSloppy"/>
+					<item label="信頼性の高い生成" name="Generate"/>
 				</combo_box>
 				<button label="参照…" name="lod_browse_high"/>
 				<combo_box name="lod_mode_high">
@@ -240,12 +240,12 @@
 				</combo_box>
 				<text name="medium_label" value="中"/>
 				<combo_box name="lod_source_medium">
-					<item name="Load from file" label="ファイルから読み込む"/>
-					<item name="MeshOpt Auto" label="自動生成"/>
-					<item name="MeshOptCombine" label="正確な生成"/>
-					<item name="MeshOptSloppy" label="簡易生成"/>
-					<item name="Generate" label="信頼性の高い生成"/>
-					<item name="Use LoD above" label="上記のＬｏＤ設定を使用"/>
+					<item label="ファイルから読み込む" name="Load from file"/>
+					<item label="自動生成" name="MeshOpt Auto"/>
+					<item label="正確な生成" name="MeshOptCombine"/>
+					<item label="簡易生成" name="MeshOptSloppy"/>
+					<item label="信頼性の高い生成" name="Generate"/>
+					<item label="上記のＬｏＤ設定を使用" name="Use LoD above"/>
 				</combo_box>
 				<button label="参照…" name="lod_browse_medium"/>
 				<combo_box name="lod_mode_medium">
@@ -254,12 +254,12 @@
 				</combo_box>
 				<text name="low_label" value="低"/>
 				<combo_box name="lod_source_low">
-					<item name="Load from file" label="ファイルから読み込む"/>
-					<item name="MeshOpt Auto" label="自動生成"/>
-					<item name="MeshOptCombine" label="正確な生成"/>
-					<item name="MeshOptSloppy" label="簡易生成"/>
-					<item name="Generate" label="信頼性の高い生成"/>
-					<item name="Use LoD above" label="上記のＬｏＤ設定を使用"/>
+					<item label="ファイルから読み込む" name="Load from file"/>
+					<item label="自動生成" name="MeshOpt Auto"/>
+					<item label="正確な生成" name="MeshOptCombine"/>
+					<item label="簡易生成" name="MeshOptSloppy"/>
+					<item label="信頼性の高い生成" name="Generate"/>
+					<item label="上記のＬｏＤ設定を使用" name="Use LoD above"/>
 				</combo_box>
 				<button label="参照…" name="lod_browse_low"/>
 				<combo_box name="lod_mode_low">
@@ -268,19 +268,19 @@
 				</combo_box>
 				<text name="lowest_label" value="最低"/>
 				<combo_box name="lod_source_lowest">
-					<item name="Load from file" label="ファイルから読み込む"/>
-					<item name="MeshOpt Auto" label="自動生成"/>
-					<item name="MeshOptCombine" label="正確な生成"/>
-					<item name="MeshOptSloppy" label="簡易生成"/>
-					<item name="Generate" label="信頼性の高い生成"/>
-					<item name="Use LoD above" label="上記のＬｏＤ設定を使用"/>
+					<item label="ファイルから読み込む" name="Load from file"/>
+					<item label="自動生成" name="MeshOpt Auto"/>
+					<item label="正確な生成" name="MeshOptCombine"/>
+					<item label="簡易生成" name="MeshOptSloppy"/>
+					<item label="信頼性の高い生成" name="Generate"/>
+					<item label="上記のＬｏＤ設定を使用" name="Use LoD above"/>
 				</combo_box>
 				<button label="参照…" name="lod_browse_lowest"/>
 				<combo_box name="lod_mode_lowest">
-					<item name="Triangle Limit" label="三角形の限度数"/>
-					<item name="Error Threshold" label="エラーのしきい値"/>
+					<item label="三角形の限度数" name="Triangle Limit"/>
+					<item label="エラーのしきい値" name="Error Threshold"/>
 				</combo_box>
-				<check_box name="gen_normals" label="法線を生成"/>
+				<check_box label="法線を生成" name="gen_normals"/>
 				<text name="crease_label" value="折り目の角度："/>
 			</panel>
 			<!-- PHYSYCS PANEL -->
@@ -290,7 +290,7 @@
 					<text name="first_step_name">
 						ステップ１：描画詳細度
 					</text>
-					<combo_box name="physics_lod_combo" tool_tip="実像に適用するＬｏＤを定義します。">
+					<combo_box tool_tip="実像に適用するＬｏＤを定義します。" name="physics_lod_combo">
 						<combo_item name="choose_one">
 							１つを選択…
 						</combo_item>
@@ -322,7 +322,7 @@
 							ファイルから
 						</combo_item>
 					</combo_box>
-					<button name="physics_browse" label="参照…"/>
+					<button label="参照…" name="physics_browse"/>
 					<!--
 					<check_box name="physics_optimize" label="最適化"/>
 					<check_box name="physics_use_hull" label="凸包を使用"/>
@@ -416,11 +416,8 @@
 					[X]✕[Y]✕[Z]
 				</text>
 				<check_box label="テクスチャを含む" name="upload_textures"/>
-				<text name="pelvis_offset_label">
-					Ｚオフセット（アバターの上下調整）：
-				</text>
 			</panel>
-			<panel label="オーバーライド" name="rigging_panel" title="リグ">
+			<panel label="オーバーライド" title="リグ" name="rigging_panel">
 				<check_box label="スキンのウエイトを含める" name="upload_skin"/>
 				<check_box label="ジョイント位置を含める" name="upload_joints"/>
 				<check_box label="スケールをロック" name="lock_scale_if_joint_position"/>
@@ -463,7 +460,7 @@
 				<text name="lod_suffix_label">
 					ＬｏＤサフィックス：
 				</text>
-				<combo_box name="lod_suffix_combo" tool_tip="プリセットを選択するか、独自の設定をします。">
+				<combo_box tool_tip="プリセットを選択するか、独自の設定をします。" name="lod_suffix_combo">
 					<combo_item name="choose_one">
 						標準を選択するか、手動で編集します…
 					</combo_item>
@@ -480,27 +477,27 @@
 				<text name="suf_lowest_lab">
 					最低：
 				</text>
-				<line_editor name="suf_lowest" tool_tip="ディスク上の最低ＬｏＤファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。"/>
+				<line_editor tool_tip="ディスク上の最低ＬｏＤファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。" name="suf_lowest"/>
 				<text name="suf_low_lab">
 					低：
 				</text>
-				<line_editor name="suf_low" tool_tip="ディスク上の低ＬｏＤファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。"/>
+				<line_editor tool_tip="ディスク上の低ＬｏＤファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。" name="suf_low"/>
 				<text name="suf_medium_lab">
 					中：
 				</text>
-				<line_editor name="suf_medium" tool_tip="ディスク上の中ＬｏＤファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。"/>
+				<line_editor tool_tip="ディスク上の中ＬｏＤファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。" name="suf_medium"/>
 				<text name="suf_high_lab">
 					高：
 				</text>
-				<line_editor name="suf_high" tool_tip="ディスク上の高ＬｏＤファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。"/>
+				<line_editor tool_tip="ディスク上の高ＬｏＤファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。" name="suf_high"/>
 				<text name="suf_physics_lab">
 					物理効果：
 				</text>
-				<line_editor name="suf_physics" tool_tip="ディスク上の物理ファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。"/>
+				<line_editor tool_tip="ディスク上の物理ファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。" name="suf_physics"/>
 				<text name="mesh_preview_ud_preset_label">
 					ユーザー定義の物理プリセット：
 				</text>
-				<line_editor name="ud_physics" tool_tip="物理効果で使用するシンプルなColladaメッシュ定義への完全なシステムパスを指定します。"/>
+				<line_editor tool_tip="物理効果で使用するシンプルなColladaメッシュ定義への完全なシステムパスを指定します。" name="ud_physics"/>
 				<button label="参照" label_selected="参照" name="set_user_def_phys"/>
 				<text name="mesh_preview_colors_label">
 					モデルアップロードプレビューの色：
@@ -524,9 +521,9 @@
 			</panel>
 		</tab_container>
 		<panel name="weights_and_warning_panel">
-			<button label="ウェイトと料金の計算" name="calculate_btn" tool_tip="ウェイトと料金を計算します。"/>
+			<button label="ウェイトと料金の計算" tool_tip="ウェイトと料金を計算します。" name="calculate_btn"/>
 			<button label="キャンセル" name="cancel_btn"/>
-			<button label="アップロード" name="ok_btn" tool_tip="シミュレーターにアップロードします。"/>
+			<button label="アップロード" tool_tip="シミュレーターにアップロードします。" name="ok_btn"/>
 			<button label="設定をクリアしてフォームをリセット" name="reset_btn"/>
 			<!-- ========== WEIGHTS ==========-->
 			<text name="upload_fee" width="170">
@@ -590,7 +587,7 @@
 					<text name="preview_controls_title">
 						プレビュー操作
 					</text>
-					<combo_box name="preview_lod_combo" tool_tip="プレビューレンダリングで表示したいＬｏＤを選びます。">
+					<combo_box tool_tip="プレビューレンダリングで表示したいＬｏＤを選びます。" name="preview_lod_combo">
 						<combo_item name="high">
 							高
 						</combo_item>

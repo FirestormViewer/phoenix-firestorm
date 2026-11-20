@@ -91,6 +91,7 @@
 	<menu_item_call label="名前変更" name="Rename"/>
 	<menu_item_call label="カット" name="Cut"/>
 	<menu_item_call label="コピー" name="Copy"/>
+	<menu_item_call label="名前をコピー" name="Copy Name"/>
 	<menu_item_call label="ペースト" name="Paste"/>
 	<menu_item_call label="リンクとしてペースト" name="Paste As Link"/>
 	<menu_item_call label="すべてのリンクを探す" name="Find Links"/>

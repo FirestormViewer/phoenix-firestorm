@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="sound_explorer" title="サウンド">
+<floater title="サウンド" name="sound_explorer">
 	<floater.string name="Playing">
 		再生中
 	</floater.string>
@@ -12,11 +12,11 @@
 	<floater.string name="Type_Avatar">
 		アバター
 	</floater.string>
-	<check_box name="avatars_chk" label="アバター"/>
-	<check_box name="objects_chk" label="オブジェクト"/>
-	<check_box left_delta="96" name="collision_chk" label="既定の衝突音"/>
-	<check_box left_delta="128" name="repeated_asset_chk" label="繰り返し再生"/>
-	<check_box name="pause_chk" label="ログ取得一時停止"/>
+	<check_box label="アバター" name="avatars_chk"/>
+	<check_box label="オブジェクト" name="objects_chk"/>
+	<check_box label="既定の衝突音" name="collision_chk" left_delta="96"/>
+	<check_box label="繰り返し再生" name="repeated_asset_chk" left_delta="128"/>
+	<check_box label="ログ取得一時停止" name="pause_chk"/>
 	<scroll_list name="sound_list">
 		<columns label="再生中" name="playing"/>
 		<columns label="種類" name="type"/>

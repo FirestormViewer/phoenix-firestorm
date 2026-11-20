@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater title="検索" name="directory">
+	<tab_container name="Directory Tabs">
+		<panel label="人物" name="panel_dir_people"/>
+		<panel label="グループ" name="panel_dir_groups"/>
+		<panel label="場所" name="panel_dir_places"/>
+		<panel label="不動産販売" name="panel_dir_land"/>
+		<panel label="イベント" name="panel_dir_events"/>
+		<panel label="クラシファイド" name="panel_dir_classified"/>
+	</tab_container>
+	<button label="プロフィールを表示" name="open_profile_btn"/>
+</floater>

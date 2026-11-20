@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_stand_stop_flying">
-	<button label="立ち上がる" name="stand_btn" tool_tip="ここをクリックして立ち上がります。"/>
-	<button label="飛ぶのをやめる" name="stop_fly_btn" tool_tip="飛行を停止します。"/>
-	<button label="フライカム" name="flycam_btn" tool_tip="フライカムモードを停止します。"/>
+	<button label="立ち上がる" tool_tip="ここをクリックして立ち上がります。" name="stand_btn"/>
+	<button label="飛ぶのをやめる" tool_tip="飛行を停止します。" name="stop_fly_btn"/>
+	<button label="フライカム" tool_tip="フライカムモードを停止します。" name="flycam_btn"/>
 </panel>

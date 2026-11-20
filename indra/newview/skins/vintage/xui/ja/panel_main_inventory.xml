@@ -89,7 +89,7 @@
 			<menu_item_check name="inventory_filter_only_links" label="リンクのみ表示"/>
 			<menu_item_check name="inventory_filter_hide_links" label="リンクを表示しない"/>
 			<menu_item_check name="inventory_filter_only_modify" label="修正可のみ"/>
-			<menu_item_check name="inventory_filter_only_copy" label="コピー可のみ"/>
+			<menu_item_check name="inventory_filter_only_copy" label="複製可のみ"/>
 			<menu_item_check name="inventory_filter_only_transfer" label="再販・譲渡可のみ"/>
 		</menu>
 	</menu_bar>

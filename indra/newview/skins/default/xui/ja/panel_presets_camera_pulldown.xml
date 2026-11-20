@@ -3,5 +3,5 @@
 	<text name="Camera Presets">
 		カメラのプリセット
 	</text>
-	<button name="open_prefs_btn" label="カメラ操作を開く" tool_tip="カメラ操作ウィンドウを開きます。"/>
+	<button label="カメラ操作を開く" tool_tip="カメラ操作ウィンドウを開きます。" name="open_prefs_btn"/>
 </panel>

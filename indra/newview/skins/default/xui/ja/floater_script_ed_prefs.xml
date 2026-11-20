@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_script_colors" title="スクリプトエディタの初期設定">
+<floater title="スクリプトエディタの初期設定" name="floater_script_colors">
 	<text name="color_pickers_label">
 		希望の色を選択：
 	</text>
@@ -66,7 +66,7 @@ default
 	<text name="prefs_label">
 		スクリプトエディタオプション：
 	</text>
-	<check_box name="convert_tabs_to_spaces_checkbox" label="タブ文字をスペースに変換"/>
+	<check_box label="タブ文字をスペースに変換" name="convert_tabs_to_spaces_checkbox"/>
 	<check_box label="ＬＳＬプリプロセッサを有効化" tool_tip="チェックすると、ＬＳＬプリプロセッサが有効になります。" name="preproc_checkbox"/>
 	<check_box label="スクリプト最適化" tool_tip="チェックすると、ＬＳＬプリプロセッサはスクリプトが使用するスペースを最適化します。" name="preprocoptimizer_checkbox"/>
 	<check_box label="switch()ステートメント" tool_tip="チェックすると、ＬＳＬプリプロセッサはスクリプトのフロー制御にswitch()ステートメントの使用を許可します。" name="preprocswitch_checkbox"/>
@@ -79,7 +79,7 @@ default
 	<text name="advanced_label">
 		高度なオプション：
 	</text>
-	<check_box name="FSllOwnerSayToScriptDebugWindow_checkbox" label="llOwnerSayをスクリプトデバッグウィンドウにルーティングする"/>
-	<check_box name="FSScriptEditorRecompileButton_checkbox" label="再コンパイルボタンを有効にする（#includeスクリプトに便利）"/>
-	<button name="close_btn" label="ＯＫ"/>
+	<check_box label="llOwnerSayをスクリプトデバッグウィンドウにルーティングする" name="FSllOwnerSayToScriptDebugWindow_checkbox"/>
+	<check_box label="再コンパイルボタンを有効にする（#includeスクリプトに便利）" name="FSScriptEditorRecompileButton_checkbox"/>
+	<button label="ＯＫ" name="close_btn"/>
 </floater>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_bumps" title="衝突・プッシュ・打撃">
+<floater title="衝突・プッシュ・打撃" name="floater_bumps">
 	<floater.string name="none_detected">
 		検出なし
 	</floater.string>

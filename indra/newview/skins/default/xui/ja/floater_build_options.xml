@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="build options floater" title="グリッドオプション">
+<floater title="グリッドオプション" name="build options floater">
 	<spinner label="単位（メートル）" name="GridResolution"/>
 	<spinner label="範囲（メートル）" name="GridDrawSize"/>
 	<spinner label="小数精度" name="DecimalPrecision"/>
-	<spinner label="角度（度）" name="RotationStep" tool_tip="回転ツールによるすべての回転は、この単位の倍数に制限されます。［デフォルト：1.0］"/>
+	<spinner label="角度（度）" tool_tip="回転ツールによるすべての回転は、この単位の倍数に制限されます。［デフォルト：1.0］" name="RotationStep"/>
 	<check_box label="より細かい単位でスナップフィット" name="GridSubUnit"/>
-	<text name="grid_opacity_label" tool_tip="グリッドの不透明度">
+	<text tool_tip="グリッドの不透明度" name="grid_opacity_label">
 		不透明度：
 	</text>
 </floater>

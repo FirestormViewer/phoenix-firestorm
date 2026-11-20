@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Local Mesh" title="ローカルメッシュ">
+<floater title="ローカルメッシュ" name="Local Mesh">
 	<tab_container name="local_mesh_tabs">
-		<panel name="local_mesh_assets_panel" label="ローカルメッシュのアセット" title="ローカルメッシュのアセット">
+		<panel label="ローカルメッシュのアセット" title="ローカルメッシュのアセット" name="local_mesh_assets_panel">
 			<fs_scroll_list name="l_name_list">
-				<column name="unit_status" label="状況"/>
-				<column name="unit_name" label="名前"/>
-				<column name="unit_lods" label="ＬｏＤ"/>
-				<column name="unit_objects" label="オブジェクト"/>
-				<column name="unit_id_HIDDEN" label="ＩＤ"/>
+				<column label="状況" name="unit_status"/>
+				<column label="名前" name="unit_name"/>
+				<column label="ＬｏＤ" name="unit_lods"/>
+				<column label="オブジェクト" name="unit_objects"/>
+				<column label="ＩＤ" name="unit_id_HIDDEN"/>
 			</fs_scroll_list>
 		</panel>
-		<panel name="logs_panel" label="ログ"/>
-		<panel name="local_mesh_settings_panel" label="設定">
-			<check_box name="local_mesh_scale_use_meters" label="スケールはメートル単位であると想定" tool_tip="Mayaなどのツールで使用される㎝スケール単位を無視します。"/>
-			<check_box name="checkbox_apply_joint_offsets" label="ジョイントオフセットを適用" tool_tip="メッシュ内のジョイントオフセットを適用します。デフォルトではこれらは無視されます。"/>
-			<check_box name="checkbox_auto_reload" label="変更されたファイルを自動リロード" tool_tip="ディスク上のローカルメッシュファイルを監視し、変更があった場合は自動的に再読み込みします。"/>
+		<panel label="ログ" name="logs_panel"/>
+		<panel label="設定" name="local_mesh_settings_panel">
+			<check_box label="スケールはメートル単位であると想定" tool_tip="Mayaなどのツールで使用される㎝スケール単位を無視します。" name="local_mesh_scale_use_meters"/>
+			<check_box label="ジョイントオフセットを適用" tool_tip="メッシュ内のジョイントオフセットを適用します。デフォルトではこれらは無視されます。" name="checkbox_apply_joint_offsets"/>
+			<check_box label="変更されたファイルを自動リロード" tool_tip="ディスク上のローカルメッシュファイルを監視し、変更があった場合は自動的に再読み込みします。" name="checkbox_auto_reload"/>
 			<text name="auto_reload_period_label">
 				スキャン期間（秒）：
 			</text>
-			<spinner name="auto_reload_period" tool_tip="監視対象のローカルメッシュファイルをどのくらいの頻度でスキャンして変更を検出するかを指定します。"/>
+			<spinner tool_tip="監視対象のローカルメッシュファイルをどのくらいの頻度でスキャンして変更を検出するかを指定します。" name="auto_reload_period"/>
 			<text name="lod_suffix_label">
 				ＬＯＤサフィックス：
 			</text>
-			<combo_box name="lod_suffix_combo" tool_tip="標準を選択するか、手動で編集します…。｜｜ＳＬのデフォルト－（最低はLOD0、最高はサフィックスなし)｜｜ゲームエンジン－Unity／UE5など（最低=LOD3、最高=LOD0）｜｜ＬＯＤ名－英語のＬＯＤ名（最低=「LOWEST」、最高=「HIGH」）">
+			<combo_box tool_tip="標準を選択するか、手動で編集します…。｜｜ＳＬのデフォルト－（最低はLOD0、最高はサフィックスなし)｜｜ゲームエンジン－Unity／UE5など（最低=LOD3、最高=LOD0）｜｜ＬＯＤ名－英語のＬＯＤ名（最低=「LOWEST」、最高=「HIGH」）" name="lod_suffix_combo">
 				<combo_item name="choose_one">
 					現在
 				</combo_item>
@@ -39,29 +39,29 @@
 			<text name="suf_lowest_lab">
 				最低：
 			</text>
-			<line_editor name="suf_lowest" tool_tip="ディスク上の最低ＬＯＤファイルとファイル内のモデルを識別するために使用されるサフィックスです。"/>
+			<line_editor tool_tip="ディスク上の最低ＬＯＤファイルとファイル内のモデルを識別するために使用されるサフィックスです。" name="suf_lowest"/>
 			<text name="suf_low_lab">
 				低：
 			</text>
-			<line_editor name="suf_low" tool_tip="ディスク上の低ＬＯＤファイルとファイル内のモデルを識別するために使用されるサフィックスです。"/>
+			<line_editor tool_tip="ディスク上の低ＬＯＤファイルとファイル内のモデルを識別するために使用されるサフィックスです。" name="suf_low"/>
 			<text name="suf_medium_lab">
 				中：
 			</text>
-			<line_editor name="suf_medium" tool_tip="ディスク上の中ＬＯＤファイルとファイル内のモデルを識別するために使用されるサフィックスです。"/>
+			<line_editor tool_tip="ディスク上の中ＬＯＤファイルとファイル内のモデルを識別するために使用されるサフィックスです。" name="suf_medium"/>
 			<text name="suf_high_lab">
 				高：
 			</text>
-			<line_editor name="suf_high" tool_tip="ディスク上の高ＬＯＤファイルとファイル内のモデルを識別するために使用されるサフィックスです。"/>
+			<line_editor tool_tip="ディスク上の高ＬＯＤファイルとファイル内のモデルを識別するために使用されるサフィックスです。" name="suf_high"/>
 			<text name="suf_physics_lab">
 				物理：
 			</text>
-			<line_editor name="suf_physics" tool_tip="ディスク上の物理ファイルとファイル内のモデルを識別するために使用されるサフィックスです。"/>
+			<line_editor tool_tip="ディスク上の物理ファイルとファイル内のモデルを識別するために使用されるサフィックスです。" name="suf_physics"/>
 		</panel>
 	</tab_container>
-	<button name="btn_apply" label="適用"/>
-	<button name="btn_add" label="追加"/>
-	<button name="btn_remove" label="削除"/>
-	<button name="btn_reload" label="リロード"/>
-	<button name="btn_clear" label="クリア"/>
-	<button name="btn_rez" label="選択をRez" tool_tip="インワールドでドナーメッシュを作成し、選択したローカルメッシュを入力します。これにより、インワールドに空のオブジェクトが作成されます。"/>
+	<button label="適用" name="btn_apply"/>
+	<button label="追加" name="btn_add"/>
+	<button label="削除" name="btn_remove"/>
+	<button label="リロード" name="btn_reload"/>
+	<button label="クリア" name="btn_clear"/>
+	<button label="選択をRez" tool_tip="インワールドでドナーメッシュを作成し、選択したローカルメッシュを入力します。これにより、インワールドに空のオブジェクトが作成されます。" name="btn_rez"/>
 </floater>

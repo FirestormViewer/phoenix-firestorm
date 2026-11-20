@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="volume_controls" title="ボリューム設定"/>
+<floater title="ボリューム設定" name="volume_controls"/>
