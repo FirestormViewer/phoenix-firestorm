@@ -914,7 +914,7 @@
 				 height="20"
 				 layout="topleft"
 				 left_pad="0"
-				 top_delta=""
+				 top_delta="-2"
 				 name="LocalLightsDetail"
 				 right="-2">
 				  <combo_box.item
@@ -970,11 +970,9 @@
 				</text>
 				<slider_bar
 				 name="SB_Local_Lights"
-				 can_edit_text="true"
 				 control_name="RenderLocalLightCount"
 				 follows="left|right"
 				 height="16"
-				 decimal_digits="0"
 				 increment="1"
 				 layout="topleft"
 				 left_pad="0"
@@ -984,7 +982,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Local_Lights"
-				 can_edit_text="true"
 				 control_name="RenderLocalLightCount"
 				 top_delta="-3"
 				 label_width="0"
@@ -994,8 +991,7 @@
 				 max_val="10000"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Local_Lights"
@@ -1308,12 +1304,10 @@
 				</text>
 				<slider_bar
 				 name="SB_Spot_Cutoff"
-				 can_edit_text="true"
 				 control_name="RenderSpotShadowOffset"
 				 follows="left|right"
 				 height="16"
 				 increment="0.0001"
-				 decimal_digits="4"
 				 layout="topleft"
 				 left_pad="0"
 				 min_val="0"
@@ -1322,7 +1316,6 @@
 				 width="123"/>
 				<spinner
 				 name="S_Spot_Cutoff"
-				 can_edit_text="true"
 				 control_name="RenderSpotShadowOffset"
 				 top_delta="-3"
 				 label_width="0"
@@ -1332,8 +1325,7 @@
 				 max_val="100"
 				 min_val="0"
 				 width="57"
-				 increment="0.001"
-				 border_visible="false"/>
+				 increment="0.001"/>
 				<button
 				 follows="left|top"
 				 name="Spot_Cutoff_Reset"
@@ -1361,12 +1353,10 @@
 				</text>
 				<slider_bar
 				 name="SB_Shd_Bias"
-				 can_edit_text="true"
 				 control_name="RenderShadowBias"
 				 follows="left|right"
 				 height="16"
 				 increment="0.000001"
-				 decimal_digits="6"
 				 layout="topleft"
 				 left_pad="0"
 				 min_val="-0.002"
@@ -1375,7 +1365,6 @@
 				 width="107"/>
 				<spinner
 				 name="S_Shd_Bias"
-				 can_edit_text="true"
 				 control_name="RenderShadowBias"
 				 top_delta="-3"
 				 label_width="0"
@@ -1385,8 +1374,7 @@
 				 max_val="5"
 				 min_val="-5"
 				 width="73"
-				 increment="0.000001"
-				 border_visible="false"/>
+				 increment="0.000001"/>
 				<button
 				 follows="left|top"
 				 name="Shd_Bias_Reset"
@@ -1620,12 +1608,10 @@
 				</text>
 				<slider_bar
 				 name="SB_I_Max"
-				 can_edit_text="true"
 				 control_name="RenderSSAOIrradianceMax"
 				 follows="left|right"
 				 height="16"
 				 increment="1"
-				 decimal_digits="0"
 				 layout="topleft"
 				 left_pad="0"
 				 min_val="0"
@@ -1634,7 +1620,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_I_Max"
-				 can_edit_text="true"
 				 control_name="RenderSSAOIrradianceMax"
 				 top_delta="-3"
 				 label_width="0"
@@ -1644,8 +1629,7 @@
 				 max_val="10000000"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_I_Max"
@@ -1673,8 +1657,6 @@
 				</text>
 				<slider_bar
 				 name="SB_I_Scaling"
-				 decimal_digits="2"
-				 can_edit_text="true"
 				 control_name="RenderSSAOIrradianceScale"
 				 follows="left|right"
 				 height="16"
@@ -1687,7 +1669,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_I_Scaling"
-				 can_edit_text="true"
 				 control_name="RenderSSAOIrradianceScale"
 				 top_delta="-3"
 				 label_width="0"
@@ -1697,8 +1678,7 @@
 				 max_val="100000"
 				 min_val="0"
 				 width="53"
-				 increment="0.5"
-				 border_visible="false"/>
+				 increment="0.5"/>
 				<button
 				 follows="left|top"
 				 name="Reset_I_Scaling"
@@ -2352,11 +2332,9 @@
 				</text>
 				<slider_bar
 				 name="SB_Tonemap_Type"
-				 can_edit_text="true"
 				 control_name="RenderTonemapMix"
 				 follows="left|right"
 				 height="16"
-				 decimal_digits="2"
 				 increment="0.05"
 				 layout="topleft"
 				 left_pad="0"
@@ -2366,7 +2344,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Tonemap_Type"
-				 can_edit_text="true"
 				 control_name="RenderTonemapMix"
 				 top_delta="-3"
 				 label_width="0"
@@ -2376,8 +2353,7 @@
 				 max_val="1"
 				 min_val="0"
 				 width="53"
-				 increment="0.001"
-				 border_visible="false"/>
+				 increment="0.001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Tonemap_Type"
@@ -2478,7 +2454,6 @@
 				 control_name="RenderGlowResolutionPow"
 				 follows="top|left"
 				 height="16"
-				 decimal_digits="0"
 				 increment="1"
 				 layout="topleft"
 				 left_pad="0"

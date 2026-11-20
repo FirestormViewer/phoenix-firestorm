@@ -37,6 +37,7 @@
 #include "llemojihelper.h"
 #include "llfloaterchatmentionpicker.h"
 #include "llfocusmgr.h"
+#include "llgestureautocompletehelper.h"
 #include "llscrollcontainer.h"
 #include "llworld.h"
 #include "rlvactions.h"
@@ -282,6 +283,12 @@ bool FSNearbyChatControl::handleKeyHere(KEY key, MASK mask)
     }
     else if (KEY_RETURN == key)
     {
+        // Fill in the highlighted gesture from the autocomplete picker before sending
+        if (mask == MASK_NONE)
+        {
+            LLGestureAutocompleteHelper::instance().handleKey(this, key, mask);
+        }
+
         if (mask == MASK_CONTROL && gSavedSettings.getBOOL("FSUseCtrlShout"))
         {
             // shout

@@ -5032,7 +5032,10 @@ void LLAgent::handleTeleportFinished()
         }
     }
     static LLCachedControl<bool> shared_env_on_teleport(gSavedSettings, "SwitchToSharedEnvAfterTeleport", true);
-    if (shared_env_on_teleport)
+    // <FS:Trish> FIRE-31115 Don't discard an environment set by RLVa
+    //if (shared_env_on_teleport)
+    if (shared_env_on_teleport && !gRlvHandler.hasBehaviour(RLV_BHVR_SETENV) && !gRlvHandler.hasBehaviour(RLV_BHVR_SETSPHERE))
+    // </FS:Trish>
     {
         LLEnvironment::instance().setSharedEnvironment();
     }

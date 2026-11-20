@@ -157,6 +157,7 @@
 			<menu_item_check label="Sonnenuntergang" name="Sunset"/>
 			<menu_item_check label="Mitternacht" name="Midnight"/>
 			<menu_item_check label="Gemeinsame Umgebung verwenden" name="Use Shared Environment"/>
+			<menu_item_check label="Zur gemeinsamen Umgebung nach Teleport wechseln" name="Switch to Shared after teleport"/>
 			<menu_item_call label="Meine Umgebungen..." name="my_environs"/>
 			<menu_item_call label="Persönliche Beleuchtung..." name="adjustment_tool"/>
 			<menu_item_check label="Wolken pausieren" name="pause_clouds"/>

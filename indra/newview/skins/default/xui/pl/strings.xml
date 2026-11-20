@@ -278,7 +278,7 @@ support@secondlife.com
 Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	</string>
 	<string name="LoginFailedAccountDisabled">
-		Nie jesteśmy w stanie na tą chwilę wykonać Twojego żądania.
+		Nie jesteśmy w stanie na tę chwilę wykonać Twojego żądania.
 Aby uzyskać pomoc skontaktuj się ze wsparciem: http://support.secondlife.com
 	</string>
 	<string name="LoginFailedTransformError">
@@ -1784,15 +1784,15 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="InventoryMarketplaceError">
 		Wystapił błąd podczas otwierania listy rzeczy z Marketplace.
-Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
+Jeśli ciągle otrzymujesz tę wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceConnectionError">
 		Wystapił błąd podczas łączenia z Marketplace.
-Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
+Jeśli ciągle otrzymujesz tę wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceConnectionErrorReason">
 		Wystapił błąd podczas łączenia z Marketplace. Powód: [REASON]
-Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
+Jeśli ciągle otrzymujesz tę wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Twój folder rzeczy na Marketplace jest pusty.
@@ -3124,7 +3124,7 @@ Jeżeli problem nadal występuje, proponujemy całkowite odinstalowanie aplikacj
 		Błąd aplikacji - nie panikuj
 	</string>
 	<string name="MBApplicationErrorDetails">
-		Przepraszamy, ale [APP_NAME] uległ awarii i musi zostać zamknięty. Jeśli ten problem się powtarza skontaktuj się z nami i dodaj tą wiadomość:
+		Przepraszamy, ale [APP_NAME] uległ awarii i musi zostać zamknięty. Jeśli ten problem się powtarza skontaktuj się z nami i dodaj tę wiadomość:
 
 [ERROR_DETAILS]
 	</string>
@@ -4643,7 +4643,7 @@ Zainstaluj ponownie przeglądarkę z [DOWNLOAD_URL] i skontaktuj się z [SUPPORT
 		Historia odwiedzonych miejsc
 	</string>
 	<string name="LocationCtrlForSaleTooltip">
-		Kup tą działkę
+		Kup tę działkę
 	</string>
 	<string name="LocationCtrlVoiceTooltip">
 		Głos niedostępny w tym miejscu
@@ -4748,7 +4748,7 @@ Zainstaluj ponownie przeglądarkę z [DOWNLOAD_URL] i skontaktuj się z [SUPPORT
 		(Zapisano [LONG_TIMESTAMP])
 	</string>
 	<string name="IM_unblock_only_groups_friends">
-		Aby zobaczyć tą wiadomość musisz odznaczyć &apos;Tylko znajomi i grupy mogą wysyłać mi wiad. prywatne (IM) oraz rozmowy głosowe&apos; w Ustawieniach/Prywatności.
+		Aby zobaczyć tę wiadomość musisz odznaczyć &apos;Tylko znajomi i grupy mogą wysyłać mi wiad. prywatne (IM) oraz rozmowy głosowe&apos; w Ustawieniach/Prywatności.
 	</string>
 	<string name="OnlineStatus">
 		dostępny/a
@@ -5767,7 +5767,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Otwiera listę ulubionych rzeczy
 	</string>
 	<string name="Command_RFO_Tooltip">
-		Renderuj tylko Twoich znajomych w przeglądarce, wszystkie inne awatary będą niewidoczne. Teleportacja jest wymagana aby przywrócić widzialność innych osób, jeśli włączysz tą opcję.
+		Renderuj tylko Twoich znajomych w przeglądarce, wszystkie inne awatary będą niewidoczne. Teleportacja jest wymagana aby przywrócić widzialność innych osób, jeśli włączysz tę opcję.
 	</string>
 	<string name="Command_DAO_Tooltip">
 		Derenderuj animowane obiekty (znane też jako animesz) - Tymczasowo derenderuj wszystkie aktualnie widoczne animowane mesze (dołączone i wolnostojące). Zderenderowane animesze pojawią się ponownie po teleportacji.
