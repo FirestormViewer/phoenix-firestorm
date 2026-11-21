@@ -130,6 +130,8 @@ public:
     std::string getUserName() const { return mUserName; }
     std::string getAvatarToolTip() const;
     bool getShowingBothNames() const;
+    bool isPinned() const         { return mIsPinned; } // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
+    void setPinned(bool pinned)   { mIsPinned = pinned; } // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
 
     void onInfoBtnClick();
     void onVolumeChange(const LLSD& data);
@@ -259,6 +261,7 @@ private:
 // [RLVa:KB] - Checked: RLVa-1.2.0
     bool mRlvCheckShowNames;
 // [/RLVa:KB]
+    bool mIsPinned{ false }; // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
     std::string mUserName; //KC - username cache used for sorting
 
     /// indicates whether to show icons representing permissions granted
