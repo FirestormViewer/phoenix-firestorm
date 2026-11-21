@@ -3088,6 +3088,16 @@ and report the problem.
   <string name="FSCmdLineTrackPosNotFound">Could not find avatar matching &apos;[NAME]&apos; on radar.</string>
   <string name="FSCmdLineTrackPosMapError">Could not open the world map.</string>
 
+  <string name="FSCmdLineCamBookmarkUsage">Camera bookmarks (usage: cmd add [name], cmd follow [name], cmd followturn [name], cmd go name, cmd print [name], cmd tour name, cmd stop, cmd list). Print says the link to the current view, or to a bookmark, in nearby chat. Follow keeps the camera relative to what it is on: an alt-click focus, the selected object or your avatar; followturn also turns with it. The command word is the FSCmdLineCamBookmark setting.</string>
+  <string name="FSCmdLineCamBookmarkAdded">Camera bookmark &apos;[NAME]&apos; added: [LINK]</string>
+  <string name="FSCmdLineCamBookmarkGo">Going to the camera bookmark &apos;[NAME]&apos;.</string>
+  <string name="FSCmdLineCamBookmarkNotFound">No camera bookmark matches &apos;[NAME]&apos;.</string>
+  <string name="FSCmdLineCamTourNotFound">No camera tour matches &apos;[NAME]&apos;.</string>
+  <string name="FSCmdLineCamTourPlaying">Playing the camera tour &apos;[NAME]&apos;. Press ESC to end it.</string>
+  <string name="FSCmdLineCamTourStopped">Camera tour stopped.</string>
+  <string name="FSCmdLineCamBookmarkList">Camera bookmarks: [BOOKMARKS]. Camera tours: [TOURS].</string>
+  <string name="FSCameraTourUnnamed">Tour</string>
+
   <string name="FSCmdLineDrawDistanceSet">Draw Distance set to [DISTANCE]m.</string>
   <string name="FSCmdLineRollDiceTotal">Total result for [DICE]d[FACES][MODIFIER]: [RESULT].</string>
   <string name="FSCmdLineRollDiceLimits">You must provide positive values for dice (max 100) and faces (max 1000).</string>
@@ -3353,6 +3363,10 @@ Your current position: [AVATAR_POS]
   <string name="Yes">Yes</string>
   <string name="No">No</string>
   <string name="FSUrlEntryWearLabel">Wear inventory folder</string>
+  <!-- <FS:Trish> Camera links -->
+  <string name="FSUrlEntryCameraLabel">Camera view in</string>
+  <string name="TooltipFSUrlEntryCamera">Click to move your camera to this view</string>
+  <!-- </FS:Trish> -->
   <string name="TexturePickerOutfitHeader">Item Snapshot</string>
   <string name="unknown_script">(Unknown script)</string>
   <string name="FSAreaSearch_Cost_Label">L$[COST]</string>

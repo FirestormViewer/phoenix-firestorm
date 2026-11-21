@@ -19549,6 +19549,17 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Value</key>
 			<string>pstcampos</string>
 		</map>
+		<key>FSCmdLineCamBookmark</key>
+		<map>
+			<key>Comment</key>
+			<string>Camera bookmarks from the chat bar: cmd add|follow|followturn [name], cmd go name, cmd print [name], cmd tour name|stop, cmd list</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>cambm</string>
+		</map>
 		<key>FSCmdLineRollDice</key>
 		<map>
 			<key>Comment</key>
@@ -21944,6 +21955,28 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>Boolean</string>
     <key>Value</key>
     <integer>0</integer>
+  </map>
+  <key>FSCameraBookmarksCompact</key>
+  <map>
+    <key>Comment</key>
+    <string>Camera Bookmarks: compact mode, show only the bookmark list.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSCameraBookmarksShowTours</key>
+  <map>
+    <key>Comment</key>
+    <string>Camera Bookmarks: show the Tours side panel.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
   </map>
   <key>FSTagShowDistanceColors</key>
   <map>
