@@ -23,6 +23,7 @@
 		<menu_item_call label="Remover silêncio de todos" name="ModerateVoiceUnmute"/>
 	</context_menu>
 	<menu_item_call label="Banir membro" name="BanMember"/>
+	<menu_item_call label="Banir de todos os meus grupos" name="BanFromAllGroups"/>
 	<menu_item_call label="Copiar URI de menção" name="mention_copy_label"/>
 	<menu_item_call label="Mencionar usuário no chat" name="mention_in_chat"/>
 </context_menu>

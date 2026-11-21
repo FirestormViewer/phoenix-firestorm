@@ -104,6 +104,10 @@
 		<text name="PostProcessText">
 			Baixa
 		</text>
+		<slider label="Qualidade do brilho" name="GlowResolution" />
+		<text name="GlowResolutionText">
+			Baixa
+		</text>
 		<slider label="Máx. luzes próximas" name="MaxLights" />
 		<slider label="Física do Avatar" name="AvatarPhysicsDetail" />
 		<slider label="Exposição" name="RenderExposure" />
@@ -129,6 +133,12 @@
 		<check_box label="Filtragem Anisotrópica (mais lenta, quando ativado)" name="ani" tool_tip="Ativa a filtragem anisotrópica, um método que melhora a qualidade das texturas visualizadas em ângulos relativamente grandes em relação à posição da câmera. Geralmente faz com que pareçam menos borradas a distâncias maiores." />
 		<check_box label="Compressão de textura com perda (requer reinício)" name="texture compression" tool_tip="Comprime texturas na memória de vídeo, permitindo texturas com maior resolução e/ou mais texturas carregadas, com alguma perda de qualidade de cor." />
 		<check_box label="Ativar suporte a monitores HiDPI (somente macOS; requer reinício)" name="use HiDPI" tool_tip="Ativa OpenGL para renderização em alta resolução." />
+		<text name="af strength label">
+			Filtragem anisotrópica:
+		</text>
+		<combo_box label="Filtragem anisotrópica" name="anisotropic_filter">
+			<combo_box.item label="Desativado" name="disabled" />
+		</combo_box>
 		<text name="antialiasing label" tool_tip="Alterações nesta configuração podem exigir reinício em alguns equipamentos.">
 			Antialiasing (reinício recomendado):
 		</text>
