@@ -40,6 +40,9 @@
 	</text>
 	<check_box label="Aplicar agora" name="apply_immediate"/>
 	<button label="" label_selected="" name="color_pipette" left_pad="40"/>
+	<combo_box name="copy_color_combobox">
+		<combo_box.item label="Copiar como..." name="copy_as"/>
+	</combo_box>
 	<button label="Cancelar" label_selected="Cancelar" name="cancel_btn"/>
 	<button label="OK" label_selected="OK" name="select_btn"/>
 	<button label="Copiar LSL" label_selected="Copiar LSL" name="copy_lsl_btn" tool_tip="Copia o valor da cor para um vetor de cor LSL no formato &lt;r, g, b&gt;."/>

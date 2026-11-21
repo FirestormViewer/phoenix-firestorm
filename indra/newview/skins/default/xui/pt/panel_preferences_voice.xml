@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Voz" name="voice_panel">
+	<slider label="Chat de voz" name="Voice Volume"/>
+	<check_box label="Ativado" name="enable_voice_check"/>
+	<text name="noise_suppression_label">
+		Supressão de ruído do microfone
+	</text>
+	<combo_box name="noise_suppression_combo">
+		<item label="Desativado" name="noise_suppression_none"/>
+		<item label="Baixo" name="noise_suppression_low"/>
+		<item label="Médio" name="noise_suppression_moderate"/>
+		<item label="Alto" name="noise_suppression_high"/>
+		<item label="Máximo" name="noise_suppression_max"/>
+	</combo_box>
+	<text name="Listen from">
+		Ouvir a voz a partir de
+	</text>
+	<combo_box name="ear_location_combo">
+		<item label="Posição da câmera" name="camera_position"/>
+		<item label="Posição do avatar" name="avatar_position"/>
+	</combo_box>
+	<check_box label="Mover os lábios do avatar ao falar" name="enable_lip_sync"/>
+	<check_box label="Alternar função de voz ao pressionar o botão na barra de ferramentas" name="push_to_talk_toggle_check" tool_tip="Se o modo de alternância estiver ativado, pressione a tecla de acionamento UMA VEZ para ligar ou desligar o microfone. Se não estiver ativado, o microfone só ficará ligado enquanto a tecla de acionamento estiver pressionada."/>
+	<check_box label="Reproduzir sons de gestos" name="gesture_audio_play_btn" tool_tip="Marque para ouvir sons de gestos"/>
+	<check_box label="Cancelamento de eco" name="enable_echo_cancellation" tool_tip="Marque para ativar o cancelamento de eco de voz"/>
+	<check_box label="Controle automático de volume" name="voice_automatic_gain_control" tool_tip="Marque para ativar o controle automático de volume"/>
+	<check_box label="Mostrar ponto de voz acima dos avatares" name="voice_dot_visualizer" tool_tip="Marque para mostrar o ponto de voz acima dos avatares"/>
+	<button label="Dispositivos de entrada/saída de voz" name="device_settings_btn"/>
+</panel>

@@ -27,6 +27,11 @@
 	<text name="rezzed_on_land_label" value="Rezzados no terreno"/>
 	<text name="remaining_capacity" value="--"/>
 	<text name="remaining_capacity_label" value="Capacidade restante"/>
+	<text name="lod_info_text" value="Informações de LOD"/>
+	<text name="high_lod_tris_label" value="Triângulos altos"/>
+	<text name="medium_lod_tris_label" value="Triângulos médios"/>
+	<text name="low_lod_tris_label" value="Triângulos baixos"/>
+	<text name="lowest_lod_tris_label" value="Triângulos mínimos"/>
 	<text name="total_capacity" value="--"/>
 	<text name="total_capacity_label" value="Capacidade total"/>
 	<text name="rendering_info_text" value="Informações de renderização"/>

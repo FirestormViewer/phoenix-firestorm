@@ -41,6 +41,7 @@
 		</combo_box>
 		<slider label="Tempo de transição das configurações de ambiente:" tool_tip="Intervalo, em segundos, em que mudanças de ambiente fazem transição gradual. 0 = direto, sem transição" name="manual_environment_change_transition_period"/>
 		<check_box name="EnvironmentPersistAcrossLogin" label="Manter ambiente entre sessões" tool_tip="Restaura as configurações atuais de ambiente após novo login."/>
+		<check_box name="SwitchToSharedEnvAfterTeleport" label="Mudar para o ambiente compartilhado após o teleporte" tool_tip="Descarta qualquer ambiente pessoal após cada teleporte e usa o ambiente da região ou do lote."/>
 		<check_box name="FSRepeatedEnvTogglesShared" label="Atalhos de ambiente como alternância" tool_tip="Pressionar o atalho repetidamente alterna entre a configuração desejada e o ambiente compartilhado."/>
 		<text name="FSCloudColorLabel" width="400">
 			Cor da nuvem de carregamento/falha de bake do avatar:
@@ -185,11 +186,14 @@
 			Definido no momento: [ITEM]
 		</text>
 		<check_box name="FSBuildPrefs_UseCustomScript" label="Script personalizado no &quot;Novo script&quot;"/>
-		<fs_embedded_item_drop_target name="custom_script" tool_tip="Arraste e solte aqui um script do inventário.">
-			Solte o script aqui.
+		<fs_embedded_item_drop_target name="custom_script" tool_tip="Arraste um script LSL ou Lua do inventário para cá.">
+			Solte um script LSL ou Lua aqui.
 		</fs_embedded_item_drop_target>
 		<text name="custom_script_disp_rect_txt">
-			Definido no momento: [SCRIPT]
+			Script LSL: [SCRIPT]
+		</text>
+		<text name="custom_lua_script_disp_rect_txt">
+			Script Lua: [SCRIPT]
 		</text>
 		<button label="Permissões padrão de criação" name="fs_default_creation_permissions"/>
 		<check_box label="Destacar prims ao selecionar" tool_tip="Desative para não mostrar os contornos amarelos e azuis. Melhora o desempenho quando muitos prims estão selecionados." name="FSBuildPrefsRenderHighlight_toggle"/>
@@ -252,15 +256,24 @@
 			<combo_item name="Scripting" label="Script"/>
 			<combo_item name="Cascadia" label="Cascadia Code"/>
 		</combo_box>
+		<text name="text_box_scripting_font_size">
+			Tamanho:
+		</text>
 		<combo_box name="FSScriptingFontSize" tool_tip="Tamanho da fonte usada no editor de script">
-			<combo_item name="Monospace" label="Monospace"/>
-			<combo_item name="Scripting" label="Script"/>
-			<combo_item name="Cascadia" label="Cascadia Code"/>
+			<combo_item name="Monospace" label="Monospace padrão"/>
+			<combo_item name="Scripting" label="Script padrão"/>
+			<combo_item name="Cascadia" label="Cascadia Code padrão"/>
 			<combo_item name="Small" label="Pequeno"/>
 			<combo_item name="Medium" label="Médio"/>
 			<combo_item name="Large" label="Grande"/>
 		</combo_box>
 		<check_box label="Salvar scripts do inventário como Mono" tool_tip="Salva scripts editados diretamente do inventário como Mono em vez de LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
+		<check_box label="Ativar sincronização WebSocket" name="websocket_sync_enable"/>
+		<text name="websocket_tip">
+			Porta de escuta do WebSocket:
+		</text>
+		<check_box label="Encaminhar erros e mensagens de depuração de script para clientes WebSocket" name="websocket_forward_debug"/>
+		<check_box label="Integração direta com o VS Code" name="tight_integration"/>
 		<check_box label="Ativar pré-processador LSL" tool_tip="Ativa suporte de pré-processador para scripts LSL" name="preproc_checkbox"/>
 		<check_box label="Otimizar Scripts" tool_tip="Otimiza o espaço necessário para scripts." name="preprocoptimizer_checkbox"/>
 		<check_box label="Comando switch()" tool_tip="Disponibiliza o comando switch() para controle de fluxo." name="preprocswitch_checkbox"/>
