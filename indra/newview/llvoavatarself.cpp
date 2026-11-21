@@ -3679,6 +3679,34 @@ void LLVOAvatarSelf::checkForUnsupportedServerBakeAppearance()
     LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( image_url, CheckAgentAppearanceService_httpSuccess, CheckAgentAppearanceService_httpFailure );
 }
 
+// <FS:Kitely> When the agent moves to another region, our own bakes might still be loading from the
+// old region. In that case they might never arrive, because the old region might have closed its
+// circuit to the viewer. We have a fix for this in getBakedTextureImage(), but that fix works only
+// for the appearance of *other* avatars. It doesn't work for our own avatar, because we ignore the
+// new region's appearance messages for it (see processAvatarAppearance). So we have to do a similar
+// fix here, by moving the requests to the current region.
+void LLVOAvatarSelf::changeBakesTargetHost(const LLHost& host)
+{
+    if (!host.isOk())
+    {
+        return;
+    }
+    for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; ++baked_index)
+    {
+        ETextureIndex te = LLAvatarAppearance::getDictionary()->bakedToLocalTextureIndex((EBakedTextureIndex)baked_index);
+        if (te >= getNumTEs())
+        {
+            continue;
+        }
+        LLViewerFetchedTexture* tex = LLViewerTextureManager::staticCastToFetchedTexture(getTEImage(te), false);
+        if (tex && tex->getFTType() == FTT_HOST_BAKE && tex->getTargetHost() != host)
+        {
+            tex->changeTargetHost(host);
+        }
+    }
+}
+// </FS:Kitely>
+
 void LLVOAvatarSelf::setNewBakedTexture(LLAvatarAppearanceDefines::EBakedTextureIndex i, const LLUUID &uuid)
 {
     ETextureIndex index = LLAvatarAppearance::getDictionary()->bakedToLocalTextureIndex(i);

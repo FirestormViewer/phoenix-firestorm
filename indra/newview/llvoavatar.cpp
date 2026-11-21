@@ -3086,6 +3086,17 @@ LLViewerFetchedTexture *LLVOAvatar::getBakedTextureImage(const U8 te, const LLUU
             result = LLViewerTextureManager::getFetchedTexture(
                 uuid, FTT_HOST_BAKE, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
             // </FS:Ansariel> [Legacy Bake]
+
+            // <FS:Kitely> If the avatar changed regions before we could load the texture, then the
+            // LLViewerFetchedTexture still stores the old region's host. But the old region might
+            // never send us the texture, because it closed its circuit to the viewer. So we request
+            // the texture from the current region.
+            if (result && host.isOk() && result->getFTType() == FTT_HOST_BAKE &&
+                result->getTargetHost() != host)
+            {
+                result->changeTargetHost(host);
+            }
+            // </FS:Kitely>
         }
         LL_DEBUGS("Avatar") << avString() << "get server-bake image from URL " << url << LL_ENDL;
         result = LLViewerTextureManager::getFetchedTextureFromUrl(

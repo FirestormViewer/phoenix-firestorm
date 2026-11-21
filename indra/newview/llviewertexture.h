@@ -343,6 +343,9 @@ public:
     // Host we think might have this image, used for baked av textures.
     void setTargetHost(LLHost host)         { mTargetHost = host; }
     LLHost getTargetHost() const            { return mTargetHost; }
+    // <FS:Kitely> Fetch the image from a different host
+    void changeTargetHost(const LLHost& host);
+    // </FS:Kitely>
 
     void updateVirtualSize() ;
 
