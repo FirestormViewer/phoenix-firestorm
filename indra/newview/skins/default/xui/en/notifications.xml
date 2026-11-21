@@ -15647,4 +15647,31 @@ Folder names cannot contain / or \.
   </notification>
   <!-- </FS:Amy> Favorite Wearables folders -->
 
+  <!-- <FS:Trish> Paste no-copy items as links -->
+  <notification
+   icon="alertmodal.tga"
+   name="FSPasteNoCopyAsLinkPrompt"
+   type="alertmodal">
+Do you want to paste selected no-copy objects as links?
+(This setting can be changed in inventory settings.)
+    <tag>confirm</tag>
+    <form name="form">
+      <ignore name="ignore"
+       save_option="true"
+       text="Paste no-copy objects as links"/>
+      <button
+       default="true"
+       ignore="Paste as links"
+       index="0"
+       name="Yes"
+       text="Yes"/>
+      <button
+       ignore="Never paste as links"
+       index="1"
+       name="No"
+       text="No"/>
+    </form>
+  </notification>
+  <!-- </FS:Trish> -->
+
 </notifications>

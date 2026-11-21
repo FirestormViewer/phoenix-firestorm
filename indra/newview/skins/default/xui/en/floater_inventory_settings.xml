@@ -4,7 +4,7 @@
  can_minimize="true"
  can_resize="false"
  save_rect="true"
- height="483"
+ height="543"
  width="483"
  name="inventory_settings"
  title="Inventory Settings">
@@ -288,4 +288,41 @@
       name="0"
       value="0"/>
   </combo_box>
+  <!-- <FS:Trish> Paste no-copy items as links -->
+  <icon
+   follows="top|left"
+   height="18"
+   image_name="Inv_LinkItem"
+   layout="topleft"
+   left="18"
+   mouse_opaque="true"
+   name="paste_icon"
+   top_pad="19"
+   width="18" />
+  <text
+   type="string"
+   length="1"
+   follows="left|top|right"
+   height="13"
+   layout="topleft"
+   left_pad="12"
+   top_delta="2"
+   name="paste_txt"
+   text_color="White"
+   width="420">
+   Copy and paste
+  </text>
+  <check_box
+   control_name="FSPasteNoCopyAsLink"
+   follows="left|top"
+   top_pad="8"
+   layout="topleft"
+   left="60"
+   width="350"
+   height="18"
+   label="Enable pasting of no-copy objects as links"
+   name="paste_no_copy_as_link"
+   label_text.text_color="White"
+   initial_value="false"/>
+  <!-- </FS:Trish> -->
 </floater>
