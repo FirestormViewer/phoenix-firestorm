@@ -173,9 +173,7 @@
 			<spinner tool_tip="-1 tutto, 0 niente" name="FSShowGroupNameLength"/>
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Apri finestra conversazioni quando ci sono messaggi offline"/>
 			<check_box label="Invia IM alla mia Email quando sono offline ([EMAIL])" name="send_im_to_email" />
-			<text name="email_settings">
-				[https://accounts.secondlife.com/change_email Apri le impostazioni per le e-mail di notifica degli IM offline]
-			</text>
+			<button name="email_settings" label="Apri le impostazioni per le e-mail di notifica degli IM offline..."/>
 			<text name="email_settings_login_to_change">
 				Accedi per modificare le impostazioni e-mail per gli IM offline
 			</text>

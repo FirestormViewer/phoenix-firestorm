@@ -187,9 +187,7 @@
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Otwórz okno Rozmów, gdy pojawia się wiadomość offline"/>
 			<check_box name="FSRestoreOpenIMs" label="Przywróć rozmowy z rezydentami z poprzedniej sesji" />
 			<check_box label="Ślij IM-y na mój e-mail, gdy jestem offline ([EMAIL])" name="send_im_to_email"/>
-			<text name="email_settings">
-				[https://accounts.secondlife.com/change_email Pokaż opcje powiadomień e-mail dla IM-ów offline]
-			</text>
+			<button name="email_settings" label="Pokaż opcje powiadomień e-mail dla IM-ów offline..."/>
 			<text name="email_settings_login_to_change">
 				Zaloguj się, by ustawić opcje e-mail dla IM-ów offline
 			</text>
