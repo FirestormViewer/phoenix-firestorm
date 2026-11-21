@@ -942,23 +942,17 @@ LLDAELoader::LLDAELoader(
         jointAliasMap,
         maxJointsPerMesh,
         modelLimit,
-        debugMode),
+        // <FS> mesh loader suffix configuration
+        // debugMode),
+        debugMode,
+        lod_suffix),
   mPreprocessDAE(preprocess)
 {
-    // <FS:Beq> mesh loader suffix configuration
-    for (int i = 0; i < LLModel::NUM_LODS; i++)
-    {
-        LLDAELoader::sLODSuffix[i] = lod_suffix[i];
-    }
-    // </FS:Beq>
 }
 
 LLDAELoader::~LLDAELoader()
 {
 }
-
-//static
-LODSuffixArray LLDAELoader::sLODSuffix{};// <FS:Beq/> configurable lod suffixes
 
 struct ModelSort
 {
@@ -1111,7 +1105,32 @@ bool LLDAELoader::OpenFile(const std::string& filename)
 
     mTransform.condition();
 
-    U32 submodel_limit = count > 0 ? mGeneratedModelLimit/count : 0;
+    // <FS> Multi-LOD file
+    // If the file contains meshes of more than one LOD, only load the meshes
+    // that belong to the LOD being loaded. Files containing a single LOD are
+    // loaded as a whole.
+    mAvailableLodMask = 0;
+    U32 needed_lod_count = 0;
+    for (daeInt idx = 0; idx < count; ++idx)
+    {
+        domMesh* mesh = NULL;
+        db->getElement((daeElement**) &mesh, idx, NULL, COLLADA_TYPE_MESH);
+        if (mesh)
+        {
+            S32 lod = getLodFromName(getElementLabel(mesh));
+            mAvailableLodMask |= 1u << lod;
+            if (lod == mLod)
+            {
+                needed_lod_count++;
+            }
+        }
+    }
+    const bool multi_lod_file = (mAvailableLodMask & (mAvailableLodMask - 1)) != 0; // more than one bit set
+    mFilterByLodSuffix = multi_lod_file && mLod >= 0 && needed_lod_count > 0;
+    U32 mesh_count = (mFilterByLodSuffix) ? needed_lod_count : (U32)count;
+    U32 submodel_limit = mesh_count > 0 ? mGeneratedModelLimit / mesh_count : 0;
+    // </FS>
+
     for (daeInt idx = 0; idx < count; ++idx)
     { //build map of domEntities to LLModel
         domMesh* mesh = NULL;
@@ -1119,6 +1138,11 @@ bool LLDAELoader::OpenFile(const std::string& filename)
 
         if (mesh)
         {
+            // <FS> Multi-LOD file: skip meshes that belong to a different LOD
+            if (mFilterByLodSuffix && getLodFromName(getElementLabel(mesh)) != mLod)
+            {
+                continue;
+            }
 
             std::vector<LLModel*> models;
 
