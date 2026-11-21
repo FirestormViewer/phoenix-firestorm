@@ -152,9 +152,7 @@
 			<spinner tool_tip="設定為-1表示完整名稱，設定為0表示禁用" name="FSShowGroupNameLength" />
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="連線時顯示離線訊息" />
 			<check_box name="FSRestoreOpenIMs" label="啟動時恢復上次登入時開啟的私聊訊息"/>
-			<text name="email_settings">
-				[https://accounts.secondlife.com/change_email 設定離線私聊的電子郵件通知]
-			</text>
+			<button name="email_settings" label="設定離線私聊的電子郵件通知..."/>
 			<check_box label="如果我離線，則通過電子郵件傳送私聊 ([EMAIL])" name="send_im_to_email" />
 			<text name="email_settings_login_to_change">登入以更改離線私聊傳送到電子郵件的設定</text>
 			<check_box name="FSShowIMInChatHistory" label="在本地聊天中顯示私聊" />

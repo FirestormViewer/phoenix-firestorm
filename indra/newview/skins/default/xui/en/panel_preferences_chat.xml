@@ -1137,6 +1137,9 @@
 	 follows="all"
 	 label="Notices"
 	 name="ChatNotices" >
+		<!-- <FS:Trish> FIRE-33025 -->
+		<string name="email_settings_url">https://accounts.secondlife.com/change_email</string>
+		<!-- </FS:Trish> -->
 
 		<text
 		 top="10"
@@ -1254,6 +1257,8 @@
 		 height="18"
 		 label="Email me IMs when I'm offline ([EMAIL])"
 		 name="send_im_to_email" />
+		<!-- <FS:Trish> FIRE-33025 Make this label a button, so it looks clickable -->
+		<!--
 		<text
 		 font="SansSerifSmall"
 		 follows="left|top"
@@ -1268,6 +1273,21 @@
 		 width="400">
 		 [https://accounts.secondlife.com/change_email Open email notification settings for offline IMs]
 		</text>
+		-->
+		<button
+		 follows="left|top"
+		 height="20"
+		 label="Open email notification settings for offline IMs..."
+		 layout="topleft"
+		 left_delta="5"
+		 name="email_settings"
+		 top_delta="3"
+		 width="330">
+			<button.commit_callback
+			 function="Pref.OpenEmailSettings" />
+		</button>
+		<!-- </FS:Trish> -->
+		<!-- <FS:Trish> FIRE-33025 top_delta 0 -> 2 -->
 		<text
 		 font="SansSerifSmall"
 		 follows="left|top"
@@ -1276,15 +1296,16 @@
 		 length="1"
 		 name="email_settings_login_to_change"
 		 skip_link_underline="true"
-		 top_delta="0"
+		 top_delta="2"
 		 type="string"
 		 width="400">
 		 Login to change offline IMs to Email settings
 		</text>
+		<!-- <FS:Trish> FIRE-33025 top_pad -1 -> 2 -->
 		<check_box
 		 layout="topleft"
 		 follows="left|top"
-		 top_pad="-1"
+		 top_pad="2"
 		 left_delta="-5"
 		 width="400"
 		 height="18"

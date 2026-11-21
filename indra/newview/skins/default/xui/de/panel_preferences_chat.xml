@@ -180,6 +180,7 @@
 
 		<!-- Chat: Notices -->
 		<panel label="Benachrichtigung" name="ChatNotices">
+			<string name="email_settings_url">https://accounts.secondlife.com/change_email?lang=de-DE</string>
 			<text name="disable_toast_label">
 				Chat-Popups aktivieren für eingehende:
 			</text>
@@ -195,9 +196,7 @@
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Gespräche öffnen, wenn eine Offline-Nachricht empfangen wurde"/>
 			<check_box name="FSRestoreOpenIMs" label="Beim Starten offene Instant Messages der letzten Sitzung wiederherstellen"/>
 			<check_box label="IMs per E-Mail zuschicken, wenn ich offline bin ([EMAIL])" name="send_im_to_email"/>
-			<text name="email_settings">
-				[https://accounts.secondlife.com/change_email?lang=de-DE Einstellungen für E-Mail-Benachrichtigungs für Offline-IMs öffnen]
-			</text>
+			<button name="email_settings" label="Einstellungen für E-Mail-Benachrichtigungs für Offline-IMs öffnen..."/>
 			<text name="email_settings_login_to_change">
 				Zum Anpassen der Offline-IM-Benachrichtigung per E-Mail einloggen
 			</text>
