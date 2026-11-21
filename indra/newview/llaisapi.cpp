@@ -414,21 +414,45 @@ void AISAPI::UpdateItem(const LLUUID &itemId, const LLSD &updates, completion_t 
 }
 
 /*static*/
-void AISAPI::FetchItem(const LLUUID &itemId, ITEM_TYPE type, completion_t callback)
+// <FS:SmurfCat> Coalesce overlapping ordinary AIS item reads.
+// void AISAPI::FetchItem(const LLUUID &itemId, ITEM_TYPE type, completion_t callback)
+bool AISAPI::FetchItem(const LLUUID &itemId, ITEM_TYPE type, completion_t callback, bool force)
 {
-    std::string cap;
-
-    cap = (type == INVENTORY) ? getInvCap() : getLibCap();
+    // std::string cap;
+    // cap = (type == INVENTORY) ? getInvCap() : getLibCap();
+    const std::string cap = (type == INVENTORY) ? getInvCap() : getLibCap();
     if (cap.empty())
     {
         LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
-        if (callback)
-        {
-            callback(LLUUID::null);
-        }
-        return;
+        // if (callback)
+        // {
+        //     callback(LLUUID::null);
+        // }
+        // return;
+        return false;
     }
     std::string url = cap + std::string("/item/") + itemId.asString();
+
+    // AIS runs on viewer coroutines. Own the key from enqueue through completion,
+    // including time spent waiting in the pool. A new capability has its own key.
+    static std::set<std::pair<ITEM_TYPE, std::string>> pending_item_fetches;
+    if (!force)
+    {
+        const auto key = std::make_pair(type, url);
+        if (!pending_item_fetches.insert(key).second)
+        {
+            return false;
+        }
+        callback = [key, completion = std::move(callback)](const LLUUID& id)
+        {
+            pending_item_fetches.erase(key);
+            if (completion)
+            {
+                completion(id);
+            }
+        };
+    }
+    // </FS:SmurfCat>
 
     invokationFn_t getFn = boost::bind(
         // Humans ignore next line.  It is just a cast to specify which LLCoreHttpUtil::HttpCoroutineAdapter routine overload.
@@ -446,6 +470,7 @@ void AISAPI::FetchItem(const LLUUID &itemId, ITEM_TYPE type, completion_t callba
         _1, getFn, url, itemId, LLSD(), callback, FETCHITEM));
 
     EnqueueAISCommand("FetchItem", proc);
+    return true; // </FS:SmurfCat> An AIS item read was enqueued.
 }
 
 /*static*/
