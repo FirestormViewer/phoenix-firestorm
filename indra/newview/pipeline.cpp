@@ -9026,7 +9026,7 @@ void LLPipeline::renderFinalize()
 
     // <FS:Beq> Restore shader post proc for Vignette
     LLRenderTarget* auxActiveBuffer = sourceBuffer;
-    LLRenderTarget* auxTargetBuffer = RenderFSAAType ? &mRT->screen : &mPostPingMap;
+    LLRenderTarget* auxTargetBuffer = targetBuffer;
 // [RLVa:KB] - @setsphere
     if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
     {
