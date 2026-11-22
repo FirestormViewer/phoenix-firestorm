@@ -175,6 +175,10 @@ A inicialização do Marketplace falhou devido a um erro de sistema ou de rede. 
 		Para criar o seu anúncio, corrigimos a hierarquia do conteúdo do anúncio.
 		<usetemplate ignoretext="Mostrar um aviso se a hierarquia do conteúdo for corrigida ao criar uma coleção" name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="CannotPasteFolderIntoSelf">
+		Não é possível colar uma pasta dentro dela mesma ou de uma subpasta.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmMerchantActiveChange">
 		Esta ação altera o conteúdo ativo desta listagem. Você gostaria de continuar?
 		<usetemplate ignoretext="Confirme antes de alterar uma listagem ativa no marketplace" name="okcancelignore" notext="Cancelar" yestext="OK"/>
@@ -350,6 +354,35 @@ Se você não deseja mais que esta função tenha esses recursos, desative-a ime
 	<notification name="BanGroupMembersWarning">
 		Você está banindo [COUNT] membros do grupo.
 		<usetemplate ignoretext="Confirme o banimento de vários membros do grupo" name="okcancelignore" notext="Cancelar" yestext="Banir"/>
+	</notification>
+	<notification name="FSBanFromAllGroups">
+		Você está prestes a banir [AVATAR_NAME] de todos os [COUNT] grupos em que você pode gerenciar banimentos:
+
+[GROUPS]
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Banir"/>
+	</notification>
+	<notification name="FSUnbanFromAllGroups">
+		Você está prestes a remover o banimento de [AVATAR_NAME] em todos os [COUNT] grupos em que você pode gerenciar banimentos:
+
+[GROUPS]
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Desbanir"/>
+	</notification>
+	<notification name="FSBanFromAllGroupsStarted">
+		Atualizando os banimentos de [AVATAR_NAME] em [COUNT] grupos, um grupo por vez. Um relatório será enviado ao terminar.
+	</notification>
+	<notification name="FSBanFromAllGroupsReport">
+		[AVATAR_NAME] foi banido em [DONE] de [COUNT] grupos.
+
+Banido em: [SUCCEEDED]
+
+Falhou em: [FAILED]
+	</notification>
+	<notification name="FSUnbanFromAllGroupsReport">
+		O banimento de [AVATAR_NAME] foi removido em [DONE] de [COUNT] grupos.
+
+Removido em: [SUCCEEDED]
+
+Falhou em: [FAILED]
 	</notification>
 	<notification name="GroupBanUserOnBanlist">
 		Alguns moradores não receberam convite porque estão excluídos do grupo.
@@ -670,6 +703,10 @@ Gostaria de fechar o visualizador e reiniciá-lo manualmente para que a alteraç
 	</notification>
 	<notification name="SaveChanges">
 		Salvar alterações?
+		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="Não salvar" yestext="Salvar"/>
+	</notification>
+	<notification name="SaveScriptChanges">
+		Salvar alterações em [NAME]?
 		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="Não salvar" yestext="Salvar"/>
 	</notification>
 	<notification name="DeleteNotecard">
@@ -2881,6 +2918,15 @@ As configurações não podem ser salvas com texturas locais.
 	<notification name="SystemMessageTip">
 		[MESSAGE]
 	</notification>
+	<notification name="ExternalEditorServerStarted">
+		Servidor do editor externo iniciado na porta [PORT].
+	</notification>
+	<notification name="ExternalEditorServerFailed">
+		Falha ao iniciar o servidor do editor externo na porta [PORT].
+	</notification>
+	<notification name="ExternalEditorServerStopped">
+		Servidor do editor externo interrompido.
+	</notification>
 	<notification name="IMSystemMessageTip">
 		[MESSAGE]
 	</notification>
@@ -3136,8 +3182,8 @@ Os objetos intransferíveis transferidos para o grupo foram excluídos.
 &lt;nolink&gt;[MSG]&lt;/nolink&gt;
 	</notification>
 	<notification name="NotSafe">
-		O dano é ativado neste terreno.
-Lesões são possíveis. Se você morrer, será teletransportado para o local de sua casa.
+		O dano está ativado neste terreno.
+Você pode se machucar aqui. Se você morrer, pode ser teletransportado para sua casa, para o telehub da região ou para o ponto de pouso do lote.
 	</notification>
 	<notification name="NoFly">
 		O voo está desativado nesta área.
@@ -3186,6 +3232,10 @@ Somente scripts de propriedade do proprietário funcionarão aqui.
 	</notification>
 	<notification name="ClaimPublicLand">
 		Terrenos públicos só podem ser propriedade da região em que você está localizado.
+	</notification>
+	<notification name="RegionTPAccessBlocked_NotifyAdultsOnly">
+		A região que você está tentando visitar é classificada como [REGIONMATURITY_CAP], o que não está disponível para o seu tipo de conta.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="RegionTPAccessBlocked">
 		A região que você deseja visitar tem uma classificação etária que excede as configurações atuais. Você pode alterar suas configurações em “Avatar” &gt; “Configurações” &gt; “Geral”.

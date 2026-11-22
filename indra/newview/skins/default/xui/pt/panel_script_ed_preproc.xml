@@ -70,4 +70,10 @@
 	<combo_box label="Inserir..." name="Insert..."/>
 	<button label="Editar..." name="edit_btn_2"/>
 	<button label="Salvar" name="save_btn_2"/>
+	<combo_box name="compile_target">
+		<combo_box.item label="LSL em Mono" name="compile_target_mono"/>
+		<combo_box.item label="LSL legado" name="compile_target_lsl2"/>
+		<combo_box.item label="LSL em Lua" name="compile_target_lsl_luau"/>
+		<combo_box.item label="Lua" name="compile_target_luau"/>
+	</combo_box>
 </panel>

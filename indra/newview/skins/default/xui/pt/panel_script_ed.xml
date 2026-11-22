@@ -4,7 +4,7 @@
 		Carregando...
 	</panel.string>
 	<panel.string name="can_not_view">
-		Este script não pode ser exibido nem editado porque possui permissões restritas. Para exibir ou editar um script dentro de um objeto, você precisa de permissão total.
+		Não é possível ver ou editar este script, pois ele foi definido como &quot;sem cópia&quot; ou &quot;sem modificação&quot;. Você precisa dessas permissões para ver ou editar um script.
 	</panel.string>
 	<panel.string name="public_objects_can_not_run">
 		Objetos públicos não podem executar scripts
@@ -61,4 +61,10 @@
 	<combo_box label="Inserir..." name="Insert..."/>
 	<button label="Editar..." name="edit_btn_2"/>
 	<button label="Salvar" name="save_btn_2"/>
+	<combo_box name="compile_target">
+		<combo_box.item label="LSL em Mono" name="compile_target_mono"/>
+		<combo_box.item label="LSL legado" name="compile_target_lsl2"/>
+		<combo_box.item label="LSL em Lua" name="compile_target_lsl_luau"/>
+		<combo_box.item label="Lua" name="compile_target_luau"/>
+	</combo_box>
 </panel>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_maturity_dialog" title="Maturidade">
+	<floater.string name="location_rated_string" value="O local escolhido é classificado como [MATURITY]."/>
+	<floater.string name="update_maturity_string" value="Sua preferência de maturidade atual não inclui conteúdo [MATURITY]. Permitir isso atualizará sua preferência."/>
+	<floater.string name="allow_maturity_string" value="Permitir conteúdo [MATURITY]"/>
+	<text name="location_rated_lbl">
+		O local escolhido é classificado como Adulto.
+	</text>
+	<text name="current_maturity_lbl">
+		Sua preferência de maturidade atual não inclui conteúdo Adulto. Permitir isso atualizará sua preferência.
+	</text>
+	<button label="Permitir conteúdo" name="continue_btn"/>
+	<button label="Cancelar" name="cancel_btn"/>
+	<text name="learn_more_lbl">
+		[https://lindenlab.freshdesk.com/support/solutions/articles/31000135220-i-can-t-access-adult-land-and-content- Saiba mais] sobre classificações de maturidade.
+	</text>
+</floater>

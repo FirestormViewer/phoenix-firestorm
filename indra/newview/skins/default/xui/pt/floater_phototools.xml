@@ -446,6 +446,12 @@
 					<combo_box.item label="Alto" name="High"/>
 					<combo_box.item label="Ultra" name="Ultra"/>
 				</combo_box>
+				<text name="Anisotropic" tool_tip="Melhora a nitidez das texturas vistas em ângulo, deixando superfícies como chãos, estradas e paredes mais nítidas. Melhora a qualidade visual, mas pode reduzir um pouco o desempenho, sobretudo em placas de vídeo mais simples.">
+					Filtragem anisotrópica
+				</text>
+				<combo_box name="Anisotropic_level">
+					<combo_box.item label="Desativado" name="disabled"/>
+				</combo_box>
 				<text name="T_Texture_Bumpiness" tool_tip="Define a intensidade e qualidade de normal maps e bump maps.">
 					Relevo da textura
 				</text>
