@@ -3189,6 +3189,21 @@ if (LL_TESTS)
 
   LL_ADD_PROJECT_UNIT_TESTS(${VIEWER_BINARY_NAME} "${viewer_TEST_SOURCE_FILES}")
 
+  # The conversation formatter caches the clock setting, so exercise each mode
+  # in its own process. Serialize them because the runner uses one log filename.
+  set(conversation_test PROJECT_${VIEWER_BINARY_NAME}_TEST_llconversationlog)
+  set_tests_properties(${conversation_test} PROPERTIES
+    ENVIRONMENT "LL_CONVERSATIONLOG_TEST_CLOCK=24"
+    RESOURCE_LOCK conversation_log_test)
+  SET_TEST_PATH(conversation_test_libpath)
+  LL_TEST_COMMAND(conversation_test_command "${conversation_test_libpath}"
+    $<TARGET_FILE:${conversation_test}> --sourcedir=${CMAKE_CURRENT_SOURCE_DIR})
+  add_test(NAME ${conversation_test}_12h COMMAND ${conversation_test_command})
+  set_tests_properties(${conversation_test}_12h PROPERTIES
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    ENVIRONMENT "LL_CONVERSATIONLOG_TEST_CLOCK=12"
+    RESOURCE_LOCK conversation_log_test)
+
   #set(TEST_DEBUG on)
   LL_ADD_INTEGRATION_TEST(cppfeatures
     ""
