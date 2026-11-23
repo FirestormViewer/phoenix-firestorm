@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="avatarpicker" title="住人を選択">
+<floater title="住人を選択" name="avatarpicker">
 	<floater.string name="not_found">
 		「[TEXT]」は見つかりませんでした。
 	</floater.string>

@@ -2,9 +2,9 @@
 <floater name="profile_permissions">
 	<string name="description_string" value="エージェントの[AGENT_NAME]に許可："/>
 	<text name="perm_description" value="許可するエージェント："/>
-	<check_box name="online_check" label="自分のオンライン状況"/>
-	<check_box name="map_check" label="ワールドマップ上の自分の位置"/>
-	<check_box name="objects_check" label="自分の土地からの自分のオブジェクトの編集、削除、または取得"/>
-	<button name="perms_btn_ok" label="ＯＫ"/>
-	<button name="perms_btn_cancel" label="キャンセル"/>
+	<check_box label="自分のオンライン状況" name="online_check"/>
+	<check_box label="ワールドマップ上の自分の位置" name="map_check"/>
+	<check_box label="自分の土地からの自分のオブジェクトの編集、削除、または取得" name="objects_check"/>
+	<button label="ＯＫ" name="perms_btn_ok"/>
+	<button label="キャンセル" name="perms_btn_cancel"/>
 </floater>

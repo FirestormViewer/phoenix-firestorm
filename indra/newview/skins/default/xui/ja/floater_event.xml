@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater label="イベント" name="Event" title="イベントの情報">
+<floater label="イベント" title="イベントの情報" name="Event">
 	<floater.string name="loading_text">
 		読み込んでいます…
 	</floater.string>

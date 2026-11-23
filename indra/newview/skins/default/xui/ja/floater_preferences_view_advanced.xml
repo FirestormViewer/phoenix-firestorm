@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floaterpreferencesviewadvanced" title="カメラ位置">
+<floater title="カメラ位置" name="floaterpreferencesviewadvanced">
 	<text name="camera_offset_lbl">
 		カメラのオフセット値：
 	</text>
@@ -14,15 +14,6 @@
 	<spinner label="Ｚ" name="focus_z"/>
 	<text name="offset_scale_lbl">
 		カメラのオフセット倍率：
-	</text>
-	<text name="offset_scale_lbl">
-		カメラの視野角：
-	</text>
-	<text name="offset_scale_lbl">
-		ズーム速度：
-	</text>
-	<text name="offset_scale_lbl">
-		位置のスムージング：
 	</text>
 	<button label="プリセットとして保存…" name="save_preset_btn"/>
 	<button label="閉じる" name="close_btn"/>

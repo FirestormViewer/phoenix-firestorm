@@ -5,7 +5,7 @@
 			<text name="add_grid_text">
 				グリッドを追加
 			</text>
-			<line_editor name="add_grid" label="ログインＵＲＩ入力"/>
+			<line_editor label="ログインＵＲＩ入力" name="add_grid"/>
 			<button label="クリア" label_selected="クリア" name="clear_grid"/>
 			<button label="適用" name="apply_new_grid"/>
 			<text name="add_grid_text">

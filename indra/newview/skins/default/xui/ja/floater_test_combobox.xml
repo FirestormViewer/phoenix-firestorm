@@ -31,13 +31,13 @@
 	</combo_box>
 	<combo_box name="multi_column_combo">
 		<combo_item name="combo_item1">
-			<column name="longtext" label="全文一致" />
+			<column label="全文一致" name="longtext" />
 		</combo_item>
 		<combo_item name="combo_item2">
-			<column name="longtext" label="部分文字列に一致"/>
+			<column label="部分文字列に一致" name="longtext"/>
 		</combo_item>
 		<combo_item name="combo_item3">
-			<column name="longtext" label="正規表現に一致"/>
+			<column label="正規表現に一致" name="longtext"/>
 		</combo_item>
 	</combo_box>
 </floater>

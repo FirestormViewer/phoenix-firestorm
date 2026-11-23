@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="preview lsl text" title="スクリプト：回転スクリプト">
+<floater title="スクリプト：回転スクリプト" name="preview lsl text">
 	<floater.string name="Title">
 		スクリプト：[NAME]
 	</floater.string>
-	<text name="path_txt" tool_tip="インベントリの位置：[PATH]">
+	<text tool_tip="インベントリの位置：[PATH]" name="path_txt">
 		インベントリの位置：[PATH]
 	</text>
 	<text name="desc txt">

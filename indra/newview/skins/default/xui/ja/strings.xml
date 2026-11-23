@@ -3,6 +3,7 @@
 	<string name="SUPPORT_SITE">
 		Firestormサポートポータル
 	</string>
+	<string name="VIEWER_GENERATION">ビューア [VERSION]</string>
 	<string name="StartupLoading">
 		[APP_NAME]をインストールしています…
 	</string>
@@ -41,6 +42,17 @@ SLURL：&lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 		あなたは、[REGION]にいます。
 [SERVER_VERSION]
 [SERVER_RELEASE_NOTES_URL]
+	</string>
+	<string name="AboutSystem">
+		CPU：[CPU]
+メモリ：[MEMORY_MB] MB（使用中：[USED_RAM] MB）
+並列数：[CONCURRENCY]
+OSのバージョン：[OS_VERSION]
+グラフィックカードのメーカー：[GRAPHICS_CARD_VENDOR]
+グラフィックカード：[GRAPHICS_CARD]
+グラフィックカードのメモリ：[GRAPHICS_CARD_MEMORY] MB
+グラフィックカードのメモリ（検出値）：[GRAPHICS_CARD_MEMORY_DETECTED] MB
+グラフィックカードのメモリ（割り当て）：[VRAM_BUDGET]
 	</string>
 	<string name="AboutDriver">
 		Windowsグラフィックドライババージョン：[GRAPHICS_DRIVER_VERSION]
@@ -352,6 +364,8 @@ https://secondlife.com/viewer-access-faq
 	<string name="LoggingOut">
 		ログアウトしています…
 	</string>
+	<string name="CompressingInventoryCache">インベントリのキャッシュを圧縮しています…</string>
+	<string name="ShutdownCleanup">リソースを解放しています…</string>
 	<string name="ShuttingDown">
 		シャットダウンしています…
 	</string>
@@ -439,6 +453,7 @@ https://secondlife.com/viewer-access-faq
 	<string name="Rotatecolors180">カラーシフト</string>
 	<string name="Sharpen">鋭く</string>
 	<string name="Thematrix">マトリックス</string>
+	<string name="ReorderClothingTooltip">ドラッグするか矢印を使ってレイヤーを並べ替えます</string>
 	<!-- Tooltip -->
 	<string name="TooltipPerson">
 		人物
@@ -568,6 +583,8 @@ https://secondlife.com/viewer-access-faq
 	<string name="TooltipSLURL">
 		クリックしてこの場所の情報を閲覧します。
 	</string>
+	<string name="FSChatLinkTagTrusted">［信頼済み］</string>
+	<string name="FSChatLinkTagUntrusted">［リンク］</string>
 	<string name="TooltipAgentUrl">
 		クリックしてこの住人のプロフィールを閲覧します。
 	</string>
@@ -687,7 +704,7 @@ https://secondlife.com/viewer-access-faq
 添付できます。
 	</string>
 	<string name="TooltipTextureRestrictedDrop">
-		無制限のコピーおよび
+		無制限の複製および
 譲渡権限を持つテクスチャのみが
 許可されます。
 	</string>
@@ -698,6 +715,7 @@ https://secondlife.com/viewer-access-faq
 	<string name="NoneFound">
 		見つかりませんでした。
 	</string>
+	<string name="ServerUnavailable">サービスを利用できません。</string>
 	<!-- Indicates that an avatar name or other similar datum is being retrieved. General usage. -->
 	<string name="RetrievingData">
 		取得しています…
@@ -1391,9 +1409,7 @@ https://secondlife.com/viewer-access-faq
 	<string name="Validator_ShouldBeASCII">
 		無効な文字[NR]です：「[CH]」（アスキー文字のみを使用してください）
 	</string>
-	<string name="Validator_ShouldBeNewLineOrASCII">
-		無効な文字[NR]です：「[CH]」（アスキー文字または改行のみを使用してください）
-	</string>
+	<string name="Validator_ShouldBeNewLineOrASCIINoPipe">[NR]文字目の文字[CH]は、表示可能なASCII文字（パイプを除く）か改行である必要があります</string>
 	<!-- Wearable Types -->
 	<string name="shape">
 		シェイプ
@@ -1684,10 +1700,10 @@ https://secondlife.com/viewer-access-faq
 		一致するものはありませんでした。
 	</string>
 	<string name="InventoryNoTexture">
-		インベントリ内にこのテクスチャのコピーがありません。
+		インベントリ内にこのテクスチャの複製がありません。
 	</string>
 	<string name="InventoryNoMaterial">
-		インベントリ内にこのマテリアルのコピーがありません。
+		インベントリ内にこのマテリアルの複製がありません。
 	</string>
 	<string name="InventoryInboxNoItems">
 		マーケットプレイスで購入した商品はここに表示されます。その後、アイテムをインベントリにドラッグすれば、それらのアイテムを使用できます。
@@ -1761,7 +1777,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 		バージョンフォルダには、在庫フォルダが含まれなければなりません。
 	</string>
 	<string name="Marketplace Validation Error Mixed Stock">
-		エラー：在庫フォルダ内のすべてのアイテムは、コピー不可で同じ種類でなければなりません。
+		エラー：在庫フォルダ内のすべてのアイテムは、複製不可で同じ種類でなければなりません。
 	</string>
 	<string name="Marketplace Validation Error Subfolder In Stock">
 		エラー：在庫フォルダにサブフォルダを含めることはできません。
@@ -1782,7 +1798,7 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 		：警告：フォルダの中身が在庫フォルダに移されました。空のフォルダを削除します。
 	</string>
 	<string name="Marketplace Validation Error Stock Item">
-		：エラー：在庫フォルダには、コピー不可アイテムを含める必要があります。
+		：エラー：在庫フォルダには、複製不可アイテムを含める必要があります。
 	</string>
 	<string name="Marketplace Validation Warning Unwrapped Item">
 		：警告：バージョンフォルダには、アイテムが含まれていなければなりません。
@@ -1851,13 +1867,13 @@ https://support.secondlife.com よりSecond Lifeのサポートまでお問い�
 	<string name="active" value="（アクティブ）"/>
 	<string name="no_transfer" value="（再販・譲渡不可）"/>
 	<string name="no_modify" value="（編集不可）"/>
-	<string name="no_copy" value="（コピー不可）"/>
+	<string name="no_copy" value="（複製不可）"/>
 	<string name="worn" value="（着用中）"/>
 	<string name="link" value="　リンク"/>
 	<string name="broken_link" value="　壊れたリンク"/>
 	<string name="no_transfer_lbl" value="　再販・譲渡不可"/>
 	<string name="no_modify_lbl" value="　編集不可"/>
-	<string name="no_copy_lbl" value="　コピー不可"/>
+	<string name="no_copy_lbl" value="　複製不可"/>
 	<string name="LoadingContents">
 		コンテンツを読み込んでいます…
 	</string>
@@ -5377,6 +5393,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="dance8">
 		ダンス８
 	</string>
+	<string name="AvatarBirthDateFormatFull">[year,datetime,utc]年[mthnum,datetime,utc]月[day,datetime,utc]日</string>
 	<!-- birth date format shared by avatar inspector and profile panels -->
 	<string name="AvatarBirthDateFormat_legacy">
 		[year,datetime,slt]年[mthnum,datetime,slt]月[day,datetime,slt]日
@@ -5519,6 +5536,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="ExternalEditorFailedToRun">
 		外部エディターを実行できませんでした。
 	</string>
+	<string name="ExternalEditorFailedToStart">WebSocketサーバーを開始できませんでした。ExternalWebsocketSyncEnableの設定がオンになっていることを確認してください。</string>
+	<string name="VSCodeLaunchFailed">VS Codeを起動できませんでした。「code」コマンドがPATHから利用できることを確認してください。</string>
 	<!--  Machine translation of chat messahes -->
 	<string name="TranslationFailed">
 		翻訳できませんでした：[REASON]
@@ -5526,6 +5545,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="TranslationResponseParseError">
 		翻訳の応答にエラーが発生しました。
 	</string>
+	<string name="Space">スペース</string>
 	<!-- Key names begin -->
 	<string name="Left">
 		←
@@ -5736,6 +5756,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Poser_Tooltip">アバターとアニメーションオブジェクトにポーズをつけます。</string>
 	<string name="Command_Primfeed_Tooltip">Primfeedに直接投稿します。</string>
 	<string name="Command_Omnifilter_Label">包括フィルタ</string>
+	<string name="Command_AvatarAlign_Label">アバターの配置</string>
+	<string name="Command_FaceNearest_Label">最も近いアバターに向ける</string>
 
 	<string name="Command_360_Capture_Tooltip">
 		３６０度の正距円筒図法のスナップショット画像を撮影します。
@@ -5856,6 +5878,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Blocklist_Tooltip">ブロック／ミュートリストを開きます。</string>
 	<string name="Command_ResyncAnimations_Tooltip">アバターアニメーションを同期します。</string>
 	<string name="Command_RegionTracker_Tooltip">さまざまなリージョンの状況を追跡します。</string>
+	<string name="Command_AvatarAlign_Tooltip">アバターを東西南北のいずれかに向けるか、最も近いアバターの方を向かせます</string>
+	<string name="Command_FaceNearest_Tooltip">20m以内で最も近いアバターの方を向く</string>
 	<string name="Command_Group_Titles_Tooltip">アクティブなグループタグを変更します。</string>
 	<string name="Command_Wearable_Favorites_Tooltip">お気に入りの着用物のリストを開きます。</string>
 	<string name="Command_RFO_Tooltip">ビューアにはフレンドのアバターのみが表示され、他のすべてのアバターは削除されます。有効にすると、他のユーザを見えるようにするＴＰが必要になります。</string>
@@ -6053,6 +6077,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="TeleportMaturityExceeded">
 		住人はこのリージョンを訪問できません。
 	</string>
+	<string name="UserDictionary">［ユーザー］</string>
 	<!-- RLVa -->
 	<string name="RLVaPendingRestart">
 		（再起動待ち）

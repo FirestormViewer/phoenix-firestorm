@@ -683,7 +683,7 @@ LLReflectionMap* LLReflectionMapManager::registerViewerObject(LLViewerObject* vo
 {
     // <FS:Beq> [FIRE-35070] Don't register manual probes if we're not using them
     // if (!LLPipeline::sReflectionProbesEnabled)
-    if (LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::NONE)
+    if (!LLPipeline::sReflectionProbesEnabled || LLPipeline::sReflectionProbeLevel == (S32)LLReflectionMap::ProbeLevel::NONE)
     // </FS:Beq>
     {
         return nullptr;

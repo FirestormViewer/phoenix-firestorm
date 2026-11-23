@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="worldmap" title="ワールドマップ">
+<floater title="ワールドマップ" name="worldmap">
 	<floater.string name="UnnamedParcel">（名前のない区画）</floater.string>
 	<layout_stack name="resizing_stack">
 		<layout_panel name="map_details_panel">
@@ -9,7 +9,7 @@
 				</text>
 			</panel>
 			<panel name="layout_panel_2">
-				<button name="Show My Location" tool_tip="現在、自分のアバターがいる場所をマップの中心にします。"/>
+				<button tool_tip="現在、自分のアバターがいる場所をマップの中心にします。" name="Show My Location"/>
 				<text name="me_label">
 					自分
 				</text>
@@ -28,7 +28,7 @@
 				<text name="by_owner_label">
 					所有者で
 				</text>
-				<button name="Go Home" tool_tip="自分のホームの場所にテレポートします。"/>
+				<button tool_tip="自分のホームの場所にテレポートします。" name="Go Home"/>
 				<text name="Home_label">
 					ホーム
 				</text>
@@ -42,24 +42,24 @@
 				</text>
 			</panel>
 			<panel name="layout_panel_4">
-				<combo_box label="オンラインのフレンド" name="friend combo" tool_tip="マップにフレンドを表示します。">
+				<combo_box label="オンラインのフレンド" tool_tip="マップにフレンドを表示します。" name="friend combo">
 					<combo_box.item label="オンラインのフレンド" name="item1"/>
 				</combo_box>
-				<combo_box label="ランドマーク" name="landmark combo" tool_tip="マップにランドマークを表示します。">
+				<combo_box label="ランドマーク" tool_tip="マップにランドマークを表示します。" name="landmark combo">
 					<combo_box.item label="ランドマーク" name="item1"/>
 				</combo_box>
-				<search_editor label="リージョン名で" name="location" tool_tip="リージョン名を入力してください。"/>
-				<button label="探す" name="DoSearch" tool_tip="リージョンを検索します。"/>
+				<search_editor label="リージョン名で" tool_tip="リージョン名を入力してください。" name="location"/>
+				<button label="探す" tool_tip="リージョンを検索します。" name="DoSearch"/>
 			</panel>
 			<panel name="layout_panel_7">
 				<text name="events_label">
 					場所：
 				</text>
-				<button label="テレポート" name="Teleport" tool_tip="選択した場所にテレポートします。"/>
-				<button label="SLurlをコピー" name="copy_slurl" tool_tip="現在の場所をWebで使えるSLurlにしてコピーします。"/>
-				<button label="消去" name="Clear" tool_tip="トラッキングラインを消去し、マップをリセットします。"/>
-				<button label="選択を表示" name="Show Destination" tool_tip="選択した場所をマップの中心にします。"/>
-				<button label="リージョン追跡" name="track_region" tool_tip="このリージョンをリージョントラッカーに追加します。"/>
+				<button label="テレポート" tool_tip="選択した場所にテレポートします。" name="Teleport"/>
+				<button label="SLurlをコピー" tool_tip="現在の場所をWebで使えるSLurlにしてコピーします。" name="copy_slurl"/>
+				<button label="消去" tool_tip="トラッキングラインを消去し、マップをリセットします。" name="Clear"/>
+				<button label="選択を表示" tool_tip="選択した場所をマップの中心にします。" name="Show Destination"/>
+				<button label="リージョン追跡" tool_tip="このリージョンをリージョントラッカーに追加します。" name="track_region"/>
 			</panel>
 		</layout_panel>
 	</layout_stack>

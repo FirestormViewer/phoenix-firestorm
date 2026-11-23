@@ -20,10 +20,10 @@
 						<!-- delete_container -->
 						<layout_panel name="password_container">
 							<!-- The max length might be changed in FSPanelLogin.cpp for Opensim! -->
-							<line_editor name="password_edit" label="パスワード"/>
+							<line_editor label="パスワード" name="password_edit"/>
 							<check_box label="パスワードを記憶" name="remember_check"/>
-							<button name="password_show_btn" tool_tip="パスワードテキストを表示する。"/>
-							<button name="password_hide_btn" tool_tip="パスワードテキストを隠す。"/>
+							<button tool_tip="パスワードテキストを表示する。" name="password_show_btn"/>
+							<button tool_tip="パスワードテキストを隠す。" name="password_hide_btn"/>
 						</layout_panel>
 						<!-- password_container -->
 						<layout_panel name="start_location_panel">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floatermedialists" title="Media Lists">
+<floater title="Media Lists" name="floatermedialists">
 	<floater.string name="EnterUrlAllow">
 		常に許可するドメインまたはＵＲＬを入力してください：
 	</floater.string>

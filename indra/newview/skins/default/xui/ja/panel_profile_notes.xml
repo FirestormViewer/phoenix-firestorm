@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="ノート" name="panel_notes">
 	<text name="status_message" value="このアバターのノート："/>
-	<button name="notes_save_changes" label="保存"/>
-	<button name="notes_discard_changes" label="破棄"/>
+	<button label="保存" name="notes_save_changes"/>
+	<button label="破棄" name="notes_discard_changes"/>
 </panel>

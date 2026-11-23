@@ -12,16 +12,16 @@
 		検索語を入力：
 	</text>
 	<combo_box name="Category">
-		<combo_item name="AnyCategory" label="全カテゴリ"/>
-		<combo_item name="Shopping" label="ショッピング"/>
-		<combo_item name="LandRental" label="土地のレンタル"/>
-		<combo_item name="PropertyRental" label="物件のレンタル"/>
-		<combo_item name="SpecialAttraction" label="特別なアトラクション"/>
-		<combo_item name="NewProducts" label="新製品"/>
-		<combo_item name="Employment" label="雇用"/>
-		<combo_item name="Wanted" label="募集"/>
-		<combo_item name="Service" label="サービス"/>
-		<combo_item name="Personal" label="個人"/>
+		<combo_item label="全カテゴリ" name="AnyCategory"/>
+		<combo_item label="ショッピング" name="Shopping"/>
+		<combo_item label="土地のレンタル" name="LandRental"/>
+		<combo_item label="物件のレンタル" name="PropertyRental"/>
+		<combo_item label="特別なアトラクション" name="SpecialAttraction"/>
+		<combo_item label="新製品" name="NewProducts"/>
+		<combo_item label="雇用" name="Employment"/>
+		<combo_item label="募集" name="Wanted"/>
+		<combo_item label="サービス" name="Service"/>
+		<combo_item label="個人" name="Personal"/>
 	</combo_box>
 	<scroll_list name="results">
 		<column label="名前" name="name"/>

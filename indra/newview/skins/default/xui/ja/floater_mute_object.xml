@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="block by name" title="名前でオブジェクトをブロック">
+<floater title="名前でオブジェクトをブロック" name="block by name">
 	<text name="message">
 		オブジェクトをブロックします：
 	</text>

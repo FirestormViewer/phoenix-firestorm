@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="Terrain" label="地形">
+<panel label="地形" name="Terrain">
 	<text name="region_text_lbl">
 		リージョン：
 	</text>
@@ -12,7 +12,7 @@
 	<text name="detail_material_text">
 		地形のマテリアル
 	</text>
-	<check_box label="ＰＢＲメタリック／粗さ" name="terrain_material_type" tool_tip="チェックされている場合、地形にＰＢＲメタリック／粗さマテリアルを使用します。チェックされていない場合は、テクスチャを使用します。"/>
+	<check_box label="ＰＢＲメタリック／粗さ" tool_tip="チェックされている場合、地形にＰＢＲメタリック／粗さマテリアルを使用します。チェックされていない場合は、テクスチャを使用します。" name="terrain_material_type"/>
 	<text name="height_text_lbl">
 		１（低）
 	</text>

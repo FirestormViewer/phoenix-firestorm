@@ -13,7 +13,7 @@
 				ユーザ名：
 			</text>
 			<button tool_tip="このユーザ名を削除する。" name="remove_user_btn"/>
-			<combo_box name="username_combo" tool_tip="登録時に自分で選んだユーザ名（例：bobsmith12、Steller Sunshineなど）"/>
+			<combo_box tool_tip="登録時に自分で選んだユーザ名（例：bobsmith12、Steller Sunshineなど）" name="username_combo"/>
 			<text name="password_text">
 				パスワード：
 			</text>
@@ -46,14 +46,15 @@
 			<button label="ログイン" name="connect_btn"/>
 			<check_box label="ユーザネームを記憶" name="remember_username_check"/>
 			<check_box label="パスワードを記憶" name="remember_check"/>
-			<button name="password_show_btn" tool_tip="パスワードテキストを表示します。"/>
-			<button name="password_hide_btn" tool_tip="パスワードテキストを隠します。"/>
+			<button tool_tip="パスワードテキストを表示します。" name="password_show_btn"/>
+			<button tool_tip="パスワードテキストを隠します。" name="password_hide_btn"/>
 		</layout_panel>
 		<layout_panel name="mode_selection">
 			<text name="mode_selection_text">
 				モード選択
 			</text>
 			<combo_box tool_tip="最も使い慣れているビューアのスタイルを選択して、デフォルトを適切に設定します。" name="mode_combo">
+				<combo_box.item label="モダン" name="Modern"/>
 				<combo_box.item label="ハイブリッド" name="Hybrid"/>
 				<combo_box.item label="テキスト" name="Text"/>
 			</combo_box>

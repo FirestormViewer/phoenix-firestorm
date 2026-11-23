@@ -38,14 +38,13 @@
 	<string name="server_forbidden_text">
 		この場所の情報は、アクセス制限のためご利用いただけません。許可については区画所有者にお問い合わせください。
 	</string>
+	<string name="acquired_date_ampm">[year,datetime,local]年[mth,datetime,local]月[day,datetime,local]日（[wkday,datetime,local]）[ampm,datetime,local][hour12,datetime,local]：[min,datetime,local]：[second,datetime,local]</string>
 	<string name="acquired_date">
 		[year,datetime,local]年[mth,datetime,local]月[day,datetime,local]日（[wkday,datetime,local]）　[hour,datetime,local]：[min,datetime,local]：[second,datetime,local]
 	</string>
-	<button name="back_btn" tool_tip="戻る"/>
-	<text name="title" value="場所のプロフィール"/>
 	<layout_stack name="place_info_sidetray_main">
 		<layout_panel name="header_container">
-			<button name="back_btn" tool_tip="戻る"/>
+			<button tool_tip="戻る" name="back_btn"/>
 			<text name="title" value="場所のプロフィール"/>
 		</layout_panel>
 		<layout_panel name="place_info_content">
@@ -59,7 +58,7 @@
 			<text name="parcel_owner" value="不明"/>
 			<text name="maturity_value" value="不明"/>
 			<accordion name="advanced_info_accordion">
-				<accordion_tab name="parcel_characteristics_tab" title="区画">
+				<accordion_tab title="区画" name="parcel_characteristics_tab">
 					<panel name="parcel_characteristics_panel">
 						<text name="rating_label" value="レーティング："/>
 						<text name="rating_value" value="不明"/>
@@ -80,7 +79,7 @@
 						<button label="土地情報" name="about_land_btn"/>
 					</panel>
 				</accordion_tab>
-				<accordion_tab name="region_information_tab" title="リージョン">
+				<accordion_tab title="リージョン" name="region_information_tab">
 					<panel name="region_information_panel">
 						<text name="region_name_label" value="リージョン名："/>
 						<text name="region_name" value="ムースランド"/>
@@ -96,7 +95,7 @@
 						<button label="リージョン／不動産" name="region_info_btn"/>
 					</panel>
 				</accordion_tab>
-				<accordion_tab name="estate_information_tab" title="不動産">
+				<accordion_tab title="不動産" name="estate_information_tab">
 					<panel name="estate_information_panel">
 						<text name="estate_name_label" value="不動産名："/>
 						<text name="estate_rating_label" value="レーティング："/>
@@ -105,7 +104,7 @@
 						<text name="covenant_label" value="約款："/>
 					</panel>
 				</accordion_tab>
-				<accordion_tab name="sales_tab" title="販売中">
+				<accordion_tab title="販売中" name="sales_tab">
 					<panel name="sales_panel">
 						<text name="sales_price_label" value="価格："/>
 						<text name="area_label" value="面積："/>

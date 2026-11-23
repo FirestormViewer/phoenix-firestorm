@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="item properties" title="アイテムのプロフィール">
+<panel title="アイテムのプロフィール" name="item properties">
 	<panel.string name="loading_experience">
 		（読み込んでいます…）
 	</panel.string>
@@ -32,7 +32,7 @@
 	</panel.string>
 	<layout_stack name="main_stack">
 		<layout_panel name="layout_item_name">
-			<line_editor name="LabelItemName" tool_tip="使用できる名前の文字数は最大６３文字までです。長いプリム名は短縮されます。名前に使用できる文字は ASCII-7（非拡張）に含まれる印字可能な文字のみです（縦線「|」は例外）。"/>
+			<line_editor tool_tip="使用できる名前の文字数は最大６３文字までです。長いプリム名は短縮されます。名前に使用できる文字は ASCII-7（非拡張）に含まれる印字可能な文字のみです（縦線「|」は例外）。" name="LabelItemName"/>
 		</layout_panel>
 		<layout_panel name="layout_item_details">
 			<text name="LabelOwnerTitle">
@@ -59,8 +59,8 @@
 			<text name="LabelItemDescTitle">
 				説明：
 			</text>
-			<line_editor name="LabelItemDescSingleLine" tool_tip="ビューアの設定で「すべてのオブジェクト上でヒントを表示」が選択されている場合、オブジェクトにマウスのポインタをかざすと、そのオブジェクトの説明がポップアップ表示されます。プリムの説明は最大１２７バイトまでに制限されているため、それよりも長い文字列は切り捨てられます。"/>
-			<text_editor name="LabelItemDescMultiLine" tool_tip="ビューアの設定で「すべてのオブジェクト上でヒントを表示」が選択されている場合、オブジェクトにマウスのポインタをかざすと、そのオブジェクトの説明がポップアップ表示されます。プリムの説明は最大１２７バイトまでに制限されているため、それよりも長い文字列は切り捨てられます。"/>
+			<line_editor tool_tip="ビューアの設定で「すべてのオブジェクト上でヒントを表示」が選択されている場合、オブジェクトにマウスのポインタをかざすと、そのオブジェクトの説明がポップアップ表示されます。プリムの説明は最大１２７バイトまでに制限されているため、それよりも長い文字列は切り捨てられます。" name="LabelItemDescSingleLine"/>
+			<text_editor tool_tip="ビューアの設定で「すべてのオブジェクト上でヒントを表示」が選択されている場合、オブジェクトにマウスのポインタをかざすと、そのオブジェクトの説明がポップアップ表示されます。プリムの説明は最大１２７バイトまでに制限されているため、それよりも長い文字列は切り捨てられます。" name="LabelItemDescMultiLine"/>
 			<text name="LabelItemExperienceTitle">
 				体験：
 			</text>
@@ -73,29 +73,29 @@
 				あなたができること：
 			</text>
 			<check_box label="修正" name="CheckOwnerModify"/>
-			<check_box label="コピー" name="CheckOwnerCopy"/>
+			<check_box label="複製" name="CheckOwnerCopy"/>
 			<check_box label="再販・譲渡" name="CheckOwnerTransfer"/>
 			<text name="AnyoneLabel">
 				全員：
 			</text>
-			<check_box label="コピー" name="CheckEveryoneCopy" tool_tip="オブジェクトのコピーは誰でも受け取ることができます。オブジェクトとそのオブジェクトの中身はすべて、コピーまたは譲渡できるように設定する必要があります。"/>
+			<check_box label="複製" tool_tip="オブジェクトの複製は誰でも受け取ることができます。オブジェクトとそのオブジェクトの中身はすべて、複製または譲渡できるように設定する必要があります。" name="CheckEveryoneCopy"/>
 			<text name="GroupLabel">
 				グループ：
 			</text>
-			<check_box label="共有" name="CheckShareWithGroup" tool_tip="設定したグループのメンバー全員にこのオブジェクトの修正権限を与えます。譲渡しない限り、役割制限を有効にはできません。"/>
+			<check_box label="共有" tool_tip="設定したグループのメンバー全員にこのオブジェクトの修正権限を与えます。譲渡しない限り、役割制限を有効にはできません。" name="CheckShareWithGroup"/>
 			<text name="NextOwnerLabel">
 				次の所有者：
 			</text>
-			<check_box label="編集" name="CheckNextOwnerModify" tool_tip="次の所有者は、アイテム名などのプロパティを編集したり、サイズ変更ができるようになります。"/>
-			<check_box label="コピー" name="CheckNextOwnerCopy" tool_tip="次の所有者は、このオブジェクトを無制限にコピーできるようになります。コピーには制作者の情報が含まれ、コピー元のアイテムと違って許可などに関して制約があります。"/>
-			<check_box label="再販・譲渡" name="CheckNextOwnerTransfer" tool_tip="次の所有者は、このオブジェクトを他の人に譲渡したり、再販することができるようになります。"/>
-			<check_box label="販売対象とする" name="CheckPurchase" tool_tip="このオブジェクトやオブジェクトの中身を購入できるようにするか、指定価格でインワールドにコピーできるようになります。"/>
-			<combo_box name="ComboBoxSaleType" tool_tip="購入者がコピー、コピーの中身、またはアイテム自体を受け取るのか選択してください。">
-				<combo_box.item label="コピー" name="Copy"/>
+			<check_box label="編集" tool_tip="次の所有者は、アイテム名などのプロパティを編集したり、サイズ変更ができるようになります。" name="CheckNextOwnerModify"/>
+			<check_box label="複製" tool_tip="次の所有者は、このオブジェクトを無制限に複製できるようになります。複製には制作者の情報が含まれ、複製元のアイテムと違って許可などに関して制約があります。" name="CheckNextOwnerCopy"/>
+			<check_box label="再販・譲渡" tool_tip="次の所有者は、このオブジェクトを他の人に譲渡したり、再販することができるようになります。" name="CheckNextOwnerTransfer"/>
+			<check_box label="販売対象とする" tool_tip="このオブジェクトやオブジェクトの中身を購入できるようにするか、指定価格でインワールドに複製できるようになります。" name="CheckPurchase"/>
+			<combo_box tool_tip="購入者が複製、複製の中身、またはアイテム自体を受け取るのか選択してください。" name="ComboBoxSaleType">
+				<combo_box.item label="複製" name="Copy"/>
 				<combo_box.item label="中身" name="Contents"/>
 				<combo_box.item label="オリジナル" name="Original"/>
 			</combo_box>
-			<spinner label="価格：L$" name="Edit Cost" tool_tip="オブジェクトの価格を指定します。"/>
+			<spinner label="価格：L$" tool_tip="オブジェクトの価格を指定します。" name="Edit Cost"/>
 		</layout_panel>
 		<layout_panel name="layout_debug_permissions">
 			<text name="BaseMaskDebug">

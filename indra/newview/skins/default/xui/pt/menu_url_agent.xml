@@ -16,8 +16,11 @@
 	<context_menu label="Opções de moderador" name="GroupModerationSubmenu">
 		<menu_item_call label="Permitir chat de texto" name="AllowGroupChat"/>
 		<menu_item_call label="Proibir chat de texto" name="ForbidGroupChat"/>
+		<menu_item_call label="Silenciar este participante" name="ModerateVoiceMute"/>
+		<menu_item_call label="Reativar áudio deste participante" name="ModerateVoiceUnMute"/>
 		<menu_item_call label="Banir membro" name="BanGroupMember"/>
 		<menu_item_call label="Expulsar membro" name="BanEjectMember"/>
+		<menu_item_call label="Banir de todos os meus grupos" name="BanFromAllGroups"/>
 	</context_menu>
 	<menu_item_call label="Copiar nome para a área de transferência" name="url_copy_label"/>
 	<menu_item_call label="Copiar URL para a área de transferência" name="url_copy"/>

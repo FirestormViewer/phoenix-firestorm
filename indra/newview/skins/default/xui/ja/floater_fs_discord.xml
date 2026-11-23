@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<floater name="floater_discord" title="Discord">
+<floater title="Discord" name="floater_discord">
 	<string name="discord_connected">
 		次のアカウント名でDiscordに接続：
 	</string>

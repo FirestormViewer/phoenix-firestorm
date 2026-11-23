@@ -29,10 +29,10 @@
 	</text>
 	<!-- Overlapping buttons for all default actions.  Show "Buy" if
 	for sale, "Sit" if can sit, etc. -->
-	<icon name="secure_browsing" tool_tip="セキュアブラウジング"/>
+	<icon tool_tip="セキュアブラウジング" name="secure_browsing"/>
 	<button label="買う" name="buy_btn"/>
 	<button label="支払う" name="pay_btn"/>
-	<button label="コピーを取る" name="take_free_copy_btn"/>
+	<button label="複製を取る" name="take_free_copy_btn"/>
 	<button label="触る" name="touch_btn"/>
 	<button label="座る" name="sit_btn"/>
 	<button label="開く" name="open_btn"/>

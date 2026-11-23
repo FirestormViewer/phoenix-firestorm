@@ -6,8 +6,8 @@
 			<layout_stack name="ui_stack">
 				<layout_panel name="ui_container">
 					<combo_box label="ユーザ名" tool_tip="bobsmith12やSteller Sunshineのような、登録したときのユーザ名を選んでください。" name="username_combo"/>
-					<check_box label="ユーザ名を記録" name="remember_name" tool_tip="既に記憶されているユーザ名は、私＞初期設定＞詳細設定＞記憶されているユーザ名から削除できます。"/>
-					<line_editor name="password_edit" label="パスワード"/>
+					<check_box label="ユーザ名を記録" tool_tip="既に記憶されているユーザ名は、私＞初期設定＞詳細設定＞記憶されているユーザ名から削除できます。" name="remember_name"/>
+					<line_editor label="パスワード" name="password_edit"/>
 					<check_box label="パスワードを記録" name="remember_password"/>
 					<text name="location_text">
 						開始位置

@@ -3,6 +3,6 @@
 Not can_close / no title to avoid window chrome
 Single instance - only have one at a time, recycle it each spawn
 -->
-<floater name="floater_voice_volume" title="ボイス音量">
-	<slider name="volume_slider" tool_tip="ボイス音量"/>
+<floater title="ボイス音量" name="floater_voice_volume">
+	<slider tool_tip="ボイス音量" name="volume_slider"/>
 </floater>

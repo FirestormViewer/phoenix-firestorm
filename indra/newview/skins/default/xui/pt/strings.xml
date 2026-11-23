@@ -1662,7 +1662,25 @@ https://www.firestormviewer.org/support para obter ajuda com este problema.
 		Pressione ESC para sair do Mouselook
 	</string>
 	<string name="InventoryNoMatchingItems">
-		Não encontrou o que procura? Tente [secondlife:///app/search/all/[SEARCH_TERM] Buscar].
+		Nenhum item correspondente.
+	</string>
+	<string name="CompressingInventoryCache">
+		Compactando o cache do inventário...
+	</string>
+	<string name="ShutdownCleanup">
+		Liberando recursos...
+	</string>
+	<string name="ReorderClothingTooltip">
+		Arraste para reordenar as camadas ou use as setas
+	</string>
+	<string name="Validator_ShouldBeNewLineOrASCIINoPipe">
+		O caractere [CH] na posição [NR] deve ser ASCII imprimível (exceto barra vertical) ou quebra de linha
+	</string>
+	<string name="ExternalEditorFailedToStart">
+		Falha ao iniciar o servidor WebSocket. Verifique se a configuração ExternalWebsocketSyncEnable está ativada.
+	</string>
+	<string name="VSCodeLaunchFailed">
+		Falha ao iniciar o VS Code. Verifique se o comando &apos;code&apos; está disponível no PATH.
 	</string>
 	<string name="InventoryNoMatchingRecentItems">
 		Não encontrou o que procura? [secondlife:///app/inventory/filters Mostrar filtros].

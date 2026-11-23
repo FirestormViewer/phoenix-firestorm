@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="script_experience" title="体験">
+<panel title="体験" name="script_experience">
 	<!-- 
 	<floater.string name="EXPERIENCE">体験！！！！</floater.string>
 	<floater.string name="Script:">スクリプト：</floater.string>
@@ -12,7 +12,7 @@
 	<floater.string name="体験を選択…">Choose Experience...</floater.string>
 	<floater.string name="You are not a contributor to any experiences.">あなたは、いかなる経験にも貢献していません。</floater.string>
 	-->
-	<button name="Expand Experience" label="体験"/>
+	<button label="体験" name="Expand Experience"/>
 	<check_box label="体験を使用" name="enable_xp"/>
 	<layout_stack name="xp_details">
 		<layout_panel name="xp_layout_panel">

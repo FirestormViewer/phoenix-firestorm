@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="inspect" title="オブジェクトの調査">
+<floater title="オブジェクトの調査" name="inspect">
+	<floater.string name="timeStampAMPM">[year,datetime,slt]年[mth,datetime,slt]月[day,datetime,slt]日（[wkday,datetime,slt]）　[ampm,datetime,slt][hour12,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]</floater.string>
 	<floater.string name="timeStamp">
 		[year,datetime,slt]年[mth,datetime,slt]月[day,datetime,slt]日（[wkday,datetime,slt]）[hour,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]
 	</floater.string>
@@ -22,7 +23,7 @@
 ＶＲＡＭ：[VRAM_USAGE]㎅
 	</floater.string>
 	<text_editor name="linksetstats_text" value="（読み込んでいます…）"/>
-	<scroll_list name="object_list" tool_tip="このリストからオブジェクトを選択して、インワールドでハイライトします。">
+	<scroll_list tool_tip="このリストからオブジェクトを選択して、インワールドでハイライトします。" name="object_list">
 		<scroll_list.columns label="オブジェクト名" name="object_name"/>
 		<scroll_list.columns label="説明" name="description"/>
 		<scroll_list.columns label="所有者" name="owner_name"/>
@@ -34,7 +35,7 @@
 		<scroll_list.columns label="ＶＲＡＭ" name="vramcount"/>
 		<scroll_list.columns label="制作日" name="creation_date"/>
 	</scroll_list>
-	<menu_button name="options_btn" tool_tip="オプションを表示します。"/>
-	<button label="所有者のプロフィール…" name="button owner" tool_tip="ハイライトされたオブジェクトの所有者のプロフィールを見る。"/>
-	<button label="制作者のプロフィール…" name="button creator" tool_tip="ハイライトされたオブジェクトの作成者のプロフィールを見る。"/>
+	<menu_button tool_tip="オプションを表示します。" name="options_btn"/>
+	<button label="所有者のプロフィール…" tool_tip="ハイライトされたオブジェクトの所有者のプロフィールを見る。" name="button owner"/>
+	<button label="制作者のプロフィール…" tool_tip="ハイライトされたオブジェクトの作成者のプロフィールを見る。" name="button creator"/>
 </floater>

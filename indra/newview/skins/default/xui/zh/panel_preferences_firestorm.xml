@@ -27,6 +27,7 @@
 			</combo_box>
 			<slider name="manual_environment_change_transition_period" label="環境過渡時長：" tool_tip="在環境之間的轉換間隔時間（以秒為單位）。0 表示瞬時。" />
 			<check_box name="EnvironmentPersistAcrossLogin" label="在每次登入時保持環境設定" tool_tip="在下次登入時保留當前的環境設定。" />
+			<check_box name="SwitchToSharedEnvAfterTeleport" label="傳送後切換至共享環境設定" tool_tip="每次傳送後捨棄個人環境設定，改用區域／地塊的環境設定。"/>
 			<check_box name="FSRepeatedEnvTogglesShared" label="環境設定快捷鍵為開關式" tool_tip="重複按下快捷鍵可在想要的環境設定和共享環境之間切換。"/>
 			<text name="FSCloudColorLabel">
 				化身載入中／烘焙錯誤時的粒子雲顏色：

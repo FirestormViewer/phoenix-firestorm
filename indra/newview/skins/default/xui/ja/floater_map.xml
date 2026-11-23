@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Map" title="ミニマップ">
+<floater title="ミニマップ" name="Map">
 	<!-- RLVa shows the anonymized name on the regular tooltip when @shownames=n restricted (rather than show the avatar inspector) -->
 	<floater.string name="ParcelSalePriceMsg">
 		価格：L$ [PRICE]（L$[PRICE_PER_SQM]／㎡）

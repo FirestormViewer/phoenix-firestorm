@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="avatar_align_mini" title="コンパス">
+<floater title="コンパス" name="avatar_align_mini">
 	<panel name="pnl_toolbar">
-		<button name="btn_rotate_left_1" tool_tip="アバターを左に1度回転させます。"/>
-		<button name="btn_rotate_right_1" tool_tip="アバターを右に1度回転させます。"/>
-		<button name="btn_avatar" tool_tip="最も近いアバターの方に向けます。"/>
+		<button tool_tip="アバターを左に1度回転させます。" name="btn_rotate_left_1"/>
+		<button tool_tip="アバターを右に1度回転させます。" name="btn_rotate_right_1"/>
+		<button tool_tip="最も近いアバターの方に向けます。" name="btn_avatar"/>
 	</panel>
 </floater>

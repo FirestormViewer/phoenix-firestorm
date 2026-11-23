@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_tphistory" title="テレポート履歴">
+<floater title="テレポート履歴" name="floater_tphistory">
 	<filter_editor label="テレポート履歴" name="Filter"/>
 	<menu_button tool_tip="オプションを表示" name="options_gear_btn"/>
 	<menu_button tool_tip="並べ替えオプションを表示" name="sorting_menu_btn"/>
@@ -8,13 +8,13 @@
 			<layout_panel name="show_lm_panel">
 				<layout_stack name="bottom_bar_ls1">
 					<layout_panel name="teleport_btn_lp">
-						<button label="テレポート" name="teleport_btn" tool_tip="選択したリージョンにテレポートします。"/>
+						<button label="テレポート" tool_tip="選択したリージョンにテレポートします。" name="teleport_btn"/>
 					</layout_panel>
 					<layout_panel name="chat_btn_lp">
-						<button label="マップ上に表示" name="map_btn" tool_tip="該当するリージョンをワールドマップ上に表示します。"/>
+						<button label="マップ上に表示" tool_tip="該当するリージョンをワールドマップ上に表示します。" name="map_btn"/>
 					</layout_panel>
 					<layout_panel name="profile_btn_lp">
-						<button label="プロフィールを表示" name="profile_btn" tool_tip="この場所のプロフィールを表示します。"/>
+						<button label="プロフィールを表示" tool_tip="この場所のプロフィールを表示します。" name="profile_btn"/>
 					</layout_panel>
 				</layout_stack>
 			</layout_panel>

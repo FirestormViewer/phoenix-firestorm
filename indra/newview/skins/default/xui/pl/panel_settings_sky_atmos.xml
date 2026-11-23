@@ -53,7 +53,7 @@
 					<text name="probe_ambiance_label" tool_tip="Kontrola natężenia promieniowania. Jeśli nie jest zerem, włącza model oświetlenia HDR.">
 						Nastrój sondy refleksyjnej (HDR):
 					</text>
-					<slider name="probe_ambiance" tool_tip="Intensywność oświetlenia pośredniego opartego na środowisku. Po ustawieniu na zero HDR zmienia się w Jasność." />
+					<slider name="probe_ambiance" tool_tip="Intensywność oświetlenia pośredniego opartego na otoczeniu. Po ustawieniu na zero HDR zmienia się w Jasność." />
 					<text name="scene_gamma_label">
 						Jasność:
 					</text>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="ColorPicker" title="カラーピッカー">
+<floater title="カラーピッカー" name="ColorPicker">
 	<tab_container name="scale_type_container">
 		<panel name="RGB">
 			<text name="r_val_text">
@@ -42,7 +42,9 @@
 		輝度：
 	</text>
 	<check_box label="すぐ反映" name="apply_immediate"/>
-	<button label="ＬＳＬコピー" tool_tip="色の値を&lt;r, g, b&gt;の形式でＬＳＬ色ベクトルとしてコピーします。" name="copy_lsl_btn"/>
+	<combo_box name="copy_color_combobox">
+		<combo_box.item label="形式を指定してコピー…" name="copy_as"/>
+	</combo_box>
 	<button label="ＯＫ" label_selected="ＯＫ" name="select_btn"/>
 	<button label="キャンセル" label_selected="キャンセル" name="cancel_btn"/>
 	<text name="Current color:">

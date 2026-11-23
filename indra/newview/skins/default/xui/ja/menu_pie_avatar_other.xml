@@ -13,7 +13,7 @@
 		<pie_slice label="コンタクトセットに追加" name="Add to set"/>
 	</pie_menu>
 	<pie_slice label="支払う…" name="Pay..."/>
-	<pie_menu name="Avatar Pie More 1" label="詳細　＞">
+	<pie_menu label="詳細　＞" name="Avatar Pie More 1">
 		<pie_slice label="動けなくする" name="Freeze..."/>
 		<pie_slice label="コーリングカードを渡す" name="Give Calling Card"/>
 		<pie_slice label="グループに招待" name="Group Invite..."/>
@@ -21,23 +21,23 @@
 		<pie_slice label="顔を向ける" name="Face towards"/>
 		<!-- [/FS:Chanayane] -->
 		<pie_slice label="追放する…" name="Eject..."/>
-		<pie_menu name="Avatar Pie More 2" label="詳細　＞">
+		<pie_menu label="詳細　＞" name="Avatar Pie More 2">
 			<!-- ## Zi: Is this the right thing to use for avatar textures? -->
 			<pie_slice label="テクスチャ" name="Debug..."/>
 			<pie_slice label="スクリプト情報" name="ScriptInfo"/>
 			<pie_slice label="コール" name="Call"/>
 			<pie_slice label="ズームイン" name="Zoom In"/>
 			<pie_slice label="テクスチャ更新" name="Texture Refresh"/>
-			<pie_menu name="ResetMenu" label="リセット　＞">
+			<pie_menu label="リセット　＞" name="ResetMenu">
 				<pie_slice label="スケルトンとアニメ" name="Reset Skeleton And Animations"/>
 				<pie_slice label="スケルトン" name="Reset Skeleton"/>
 				<pie_slice label="メッシュのＬＯＤ" name="Reset Mesh LOD"/>
 			</pie_menu>
 			<pie_slice label="ＸＭＬとしてダンプ" name="Dump XML"/>
-			<pie_menu name="RenderMenu" label="描画　＞">
-				<pie_slice name="RenderNormally" label="通常描画"/>
-				<pie_slice name="DoNotRender" label="描画しない"/>
-				<pie_slice name="AlwaysRenderFully" label="常に描画"/>
+			<pie_menu label="描画　＞" name="RenderMenu">
+				<pie_slice label="通常描画" name="RenderNormally"/>
+				<pie_slice label="描画しない" name="DoNotRender"/>
+				<pie_slice label="常に描画" name="AlwaysRenderFully"/>
 			</pie_menu>
 		</pie_menu>
 		<pie_menu label="描画解除　＞" name="DerenderMenu">

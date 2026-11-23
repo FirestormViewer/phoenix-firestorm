@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="cof_wearables">
 	<tab_container name="wearable_accordion">
-		<panel name="tab_clothing" title="衣装"/>
+		<panel title="衣装" name="tab_clothing"/>
 		<!-- The Attachments title is overwritten by the definition of "Attachments remain" in strings.xml -->
-		<panel name="tab_attachments" title="装着物"/>
-		<panel name="tab_body_parts" title="身体部位"/>
+		<panel title="装着物" name="tab_attachments"/>
+		<panel title="身体部位" name="tab_body_parts"/>
 	</tab_container>
 </panel>

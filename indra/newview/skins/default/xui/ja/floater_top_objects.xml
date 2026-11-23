@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="top_objects" title="トップオブジェクト">
+<floater title="トップオブジェクト" name="top_objects">
 	<floater.string name="top_scripts_title">
 		トップ・スクリプト
 	</floater.string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_fs_wearable_favorites" title="お気に入りの着用物やＨＵＤ">
+<floater title="お気に入りの着用物やＨＵＤ" name="floater_fs_wearable_favorites">
 	<floater.string name="empty_list">
 		装着可能な着用物やＨＵＤをドラッグしてリストに追加します。
 	</floater.string>
@@ -10,11 +10,11 @@
 		全てのお気に入り
 	</floater.string>
 	<panel name="buttons_panel">
-		<button name="new_folder_btn" tool_tip="新しいお気に入りフォルダを作成します。"/>
-		<button name="rename_folder_btn" tool_tip="お気にリフォルダの名前を変更します。"/>
-		<button name="delete_folder_btn" tool_tip="選択したお気に入りフォルダを削除します。"/>
+		<button tool_tip="新しいお気に入りフォルダを作成します。" name="new_folder_btn"/>
+		<button tool_tip="お気にリフォルダの名前を変更します。" name="rename_folder_btn"/>
+		<button tool_tip="選択したお気に入りフォルダを削除します。" name="delete_folder_btn"/>
 		<filter_editor label="フィルタ" name="wearable_filter_input"/>
-		<menu_button name="options_btn" tool_tip="お気に入りのオプションを表示します。"/>
-		<button name="remove_btn" tool_tip="お気に入りをリストから削除します。"/>
+		<menu_button tool_tip="お気に入りのオプションを表示します。" name="options_btn"/>
+		<button tool_tip="お気に入りをリストから削除します。" name="remove_btn"/>
 	</panel>
 </floater>

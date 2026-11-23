@@ -146,6 +146,7 @@
 			<menu_item_check label="Zachód Słońca" name="Sunset"/>
 			<menu_item_check label="Północ" name="Midnight"/>
 			<menu_item_check label="Użyj otoczenia współdzielonego" name="Use Shared Environment" />
+			<menu_item_check label="Przełączaj na otoczenie współdzielone po teleportacji" name="Switch to Shared after teleport" />
 			<menu_item_call label="Moje otoczenia..." name="my_environs" />
 			<menu_item_call label="Własne oświetlenie..." name="adjustment_tool" />
 			<menu_item_check label="Pauzuj chmury" name="pause_clouds" />
@@ -496,8 +497,8 @@
 		</menu>
 		<menu label="Wideo" name="Video" />
 		<menu label="Testy renderowania" name="Render Tests">
-			<menu_item_check label="Kamera poza zasiegiem" name="Camera Offset"/>
-			<menu_item_check label="Losowa ilość klatek" name="Randomize Framerate"/>
+			<menu_item_check label="Kamera poza zasięgiem" name="Camera Offset"/>
+			<menu_item_check label="Losowa liczba klatek" name="Randomize Framerate"/>
 			<menu_item_check label="Okresowe spowolnienie" name="Periodic Slow Frame"/>
 			<menu_item_call label="Profil klatek obrazu" name="Frame Profile"/>
 			<menu_item_call label="Testowanie (benchmark)" name="Benchmark"/>
@@ -743,7 +744,6 @@
 				<menu_item_call label="Raportowanie błędów 101" name="Bug Reporing 101"/>
 				<menu_item_call label="Problemy z bezpieczeństwem" name="Security Issues"/>
 				<menu_item_call label="Wiki kontroli jakości" name="QA Wiki"/>
-				<menu_item_call label="Oficjalny blog Lindenów" name="Official Linden Blog"/>
 			</menu>
 		</menu>
 	</menu>

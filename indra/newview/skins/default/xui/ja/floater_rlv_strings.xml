@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="rlva_strings" title="ＲＬＶａ文章">
+<floater title="ＲＬＶａ文章" name="rlva_strings">
 	<panel name="bottom_panel">
 		<button label="デフォルトに戻す" name="default_btn"/>
 	</panel>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_notifications_tabbed" title="通知">
+<floater title="通知" name="floater_notifications_tabbed">
 	<floater.string name="system_tab_title">
 		システム（[COUNT]）
 	</floater.string>

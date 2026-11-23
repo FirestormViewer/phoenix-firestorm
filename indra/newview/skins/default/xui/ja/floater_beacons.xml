@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="beacons" title="ビーコン">
+<floater title="ビーコン" name="beacons">
 	<panel name="beacons_panel">
 		<text name="label_show">
 			表示：
@@ -10,7 +10,7 @@
 		<check_box label="ビーコン" name="beacons"/>
 		<check_box label="ハイライト" name="highlights"/>
 		<check_box label="ビーコン情報をビューアウィンドウに載せる" name="FSRenderBeaconText"/>
-		<text name="beacon_width_label" tool_tip="ビーコンの幅を設定します。">
+		<text tool_tip="ビーコンの幅を設定します。" name="beacon_width_label">
 			幅：
 		</text>
 		<text name="label_objects">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="price_for_listing" title="クラシファイド広告の掲載">
+<floater title="クラシファイド広告の掲載" name="price_for_listing">
 	<text name="explanation_text">
 		あなたのクラシファイド広告は、公開された日から１週間有効です。
 クラシファイドリストのあなたの広告の位置は、広告費をいくら支払うかで決まります。

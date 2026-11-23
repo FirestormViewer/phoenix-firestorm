@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_placedetails" title="ランドマーク">
+<floater title="ランドマーク" name="floater_placedetails">
 	<string name="title_place">
 		土地の詳細情報
 	</string>
@@ -26,13 +26,13 @@
 			<layout_panel name="lp1">
 				<layout_stack name="bottom_bar_ls1">
 					<layout_panel name="teleport_btn_lp">
-						<button label="テレポート" name="teleport_btn" tool_tip="選択したリージョンにテレポートします。"/>
+						<button label="テレポート" tool_tip="選択したリージョンにテレポートします。" name="teleport_btn"/>
 					</layout_panel>
 					<layout_panel name="map_btn_lp">
-						<button label="マップ" name="map_btn" tool_tip="該当するリージョンをワールドマップ上に表示します。"/>
+						<button label="マップ" tool_tip="該当するリージョンをワールドマップ上に表示します。" name="map_btn"/>
 					</layout_panel>
 					<layout_panel name="overflow_btn_lp">
-						<menu_button name="overflow_btn" tool_tip="追加オプションを表示します。"/>
+						<menu_button tool_tip="追加オプションを表示します。" name="overflow_btn"/>
 					</layout_panel>
 				</layout_stack>
 			</layout_panel>

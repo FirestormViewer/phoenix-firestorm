@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_buy_contents" title="中身の購入">
+<floater title="中身の購入" name="floater_buy_contents">
 	<text name="contains_text">
 		&lt;nolink&gt;[NAME]&lt;/nolink&gt;に含まれるもの：
 	</text>
@@ -10,7 +10,7 @@
 	<button label="購入" label_selected="購入" name="buy_btn"/>
 	<check_box label="今すぐ着る" name="wear_check"/>
 	<text name="no_copy_text">
-		（コピー不可）
+		（複製不可）
 	</text>
 	<text name="no_modify_text">
 		（修正不可）

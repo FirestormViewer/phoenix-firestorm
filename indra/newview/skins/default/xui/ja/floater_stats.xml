@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Statistics" title="統計">
+<floater title="統計" name="Statistics">
 	<scroll_container name="statistics_scroll">
 		<container_view name="statistics_view">
 			<stat_view label="基本情報" name="basic">
-				<stat_bar label="ＦＰＳ" name="fps" unit_label="／秒"/>
-				<stat_bar name="frame_mean" label="フレーム（平均）" unit_label="㎳"/>
-				<stat_bar name="frame_median" label="フレーム（中央値）" unit_label="㎳"/>
-				<stat_bar name="framet_jitter" label="ジッタ"/>
-				<stat_bar name="normalized_cumulative_frametime" label="正規化されたセッションのジッタ"/>
-				<stat_bar name="normalized_period_jitter" label="正規化された周期ジッタ"/>
-				<stat_bar name="normalized_frametime_variation" label="正規化されたフレームタイム変動"/>
-				<stat_bar name="frame_events_per_minute" label="フレームイベント／分"/>
-				<stat_bar name="frame_events_last_minute" label="フレームイベントの最終分"/>
+				<stat_bar label="ＦＰＳ" unit_label="／秒" name="fps"/>
+				<stat_bar label="フレーム（平均）" unit_label="㎳" name="frame_mean"/>
+				<stat_bar label="フレーム（中央値）" unit_label="㎳" name="frame_median"/>
+				<stat_bar label="ジッタ" name="framet_jitter"/>
+				<stat_bar label="正規化されたセッションのジッタ" name="normalized_cumulative_frametime"/>
+				<stat_bar label="正規化された周期ジッタ" name="normalized_period_jitter"/>
+				<stat_bar label="正規化されたフレームタイム変動" name="normalized_frametime_variation"/>
+				<stat_bar label="フレームイベント／分" name="frame_events_per_minute"/>
+				<stat_bar label="フレームイベントの最終分" name="frame_events_last_minute"/>
 				<stat_bar label="受信したＵＤＰデータ" name="bandwidth"/>
 				<stat_bar label="パケットロス" name="packet_loss"/>
 				<stat_bar label="シムのPing" name="ping"/>
 			</stat_view>
 			<stat_view label="高度な情報" name="advanced">
 				<stat_view label="描画" name="render">
-					<stat_bar label="フレームあたりのKTris" name="ktrisframe" unit_label="ktris／フレーム"/>
-					<stat_bar name="framet_cumulative" label="累積ジッタ"/>
-					<stat_bar name="framet_jitter_99th" label="ジッタ９９の分布"/>
-					<stat_bar name="framet_jitter_95th" label="ジッタ９５の分布"/>
-					<stat_bar name="framet_jitter_stddev" label="ジッタの標準偏差"/>
-					<stat_bar name="framet_99th" label="フレームタイム９９の分布"/>
-					<stat_bar name="framet_95th" label="フレームタイム９５の分布"/>
-					<stat_bar name="framet_stddev" label="フレームタイムの標準偏差"/>
-					<stat_bar name="framet_events" label="フレームタイムのイベント"/>
+					<stat_bar label="フレームあたりのKTris" unit_label="ktris／フレーム" name="ktrisframe"/>
+					<stat_bar label="累積ジッタ" name="framet_cumulative"/>
+					<stat_bar label="ジッタ９９の分布" name="framet_jitter_99th"/>
+					<stat_bar label="ジッタ９５の分布" name="framet_jitter_95th"/>
+					<stat_bar label="ジッタの標準偏差" name="framet_jitter_stddev"/>
+					<stat_bar label="フレームタイム９９の分布" name="framet_99th"/>
+					<stat_bar label="フレームタイム９５の分布" name="framet_95th"/>
+					<stat_bar label="フレームタイムの標準偏差" name="framet_stddev"/>
+					<stat_bar label="フレームタイムのイベント" name="framet_events"/>
 					<stat_bar label="秒あたりのKTris" name="ktrissec"/>
-					<stat_bar name="objs" label="オブジェクトの総計"/>
+					<stat_bar label="オブジェクトの総計" name="objs"/>
 					<stat_bar label="キャッシュされたオブジェクト" name="cachedobjs"/>
 					<stat_bar label="新規オブジェクト" name="newobjs"/>
 					<stat_bar label="オブジェクトキャッシュヒット率" name="object_cache_hits"/>
@@ -45,9 +45,9 @@
 					<stat_bar label="フォーマット済メモリ" name="formattedmemstat"/>
 					<stat_bar label="ＲＡＷメモリ" name="rawmemstat"/>
 					<stat_bar label="統合メモリ" name="glboundmemstat"/>
-					<stat_view name="material" label="マテリアル">
-						<stat_bar name="nummaterials" label="個"/>
-					</stat_view>
+				</stat_view>
+				<stat_view label="マテリアル" name="material">
+					<stat_bar label="個" name="nummaterials"/>
 				</stat_view>
 				<stat_view label="ネットワーク" name="network">
 					<stat_bar label="パケットイン" name="packetsinstat"/>
@@ -76,14 +76,14 @@
 				<stat_bar label="アクティブなオブジェクト" name="simactiveobjects"/>
 				<stat_bar label="アクティブなスクリプト" name="simactivescripts"/>
 				<stat_bar label="スクリプト実行" name="simpctscriptsrun"/>
-				<stat_bar label="スクリプトイベント" name="simscripteps" unit_label="eps"/>
+				<stat_bar label="スクリプトイベント" unit_label="eps" name="simscripteps"/>
 				<stat_view label="経路探索" name="simpathfinding">
 					<stat_bar label="ＡＩステップ時間" name="simsimaistepmsec"/>
-					<stat_bar label="スキップされたシルエットステップ" name="simsimskippedsilhouettesteps" unit_label="／秒"/>
-					<stat_bar label="更新されたキャラクター" name="simsimpctsteppedcharacters" unit_label="％"/>
+					<stat_bar label="スキップされたシルエットステップ" unit_label="／秒" name="simsimskippedsilhouettesteps"/>
+					<stat_bar label="更新されたキャラクター" unit_label="％" name="simsimpctsteppedcharacters"/>
 				</stat_view>
-				<stat_bar label="入力パケット" name="siminpps" unit_label="パケット／秒"/>
-				<stat_bar label="出力パケット" name="simoutpps" unit_label="パケット／秒"/>
+				<stat_bar label="入力パケット" unit_label="パケット／秒" name="siminpps"/>
+				<stat_bar label="出力パケット" unit_label="パケット／秒" name="simoutpps"/>
 				<stat_bar label="保留中のダウンロード" name="simpendingdownloads"/>
 				<stat_bar label="保留中のアップロード" name="simpendinguploads"/>
 				<stat_bar label="未承認の合計データ" name="simtotalunackedbytes"/>
@@ -105,19 +105,19 @@
 					</stat_view>
 				</stat_view>
 			</stat_view>
-			<stat_view name="voice" label="ボイス">
-				<stat_bar name="webrtc_latency" label="遅延" unit_label="㎳"/>
-				<stat_bar name="webrtc_upload_bandwidth" label="アップロード帯域" unit_label="kbps"/>
-				<stat_view name="incoming_audio" label="受信オーディオ">
-					<stat_bar name="incoming_packet_recv" label="受信パケット"/>
-					<stat_bar name="packets_in_lost" label="パケットロス"/>
-					<stat_bar name="jitter_in" label="ジッタ" unit_label="㎳"/>
-					<stat_bar name="jitter_buffer" label="ジッタバッファ" unit_label="㎳"/>
+			<stat_view label="ボイス" name="voice">
+				<stat_bar label="遅延" unit_label="㎳" name="webrtc_latency"/>
+				<stat_bar label="アップロード帯域" unit_label="kbps" name="webrtc_upload_bandwidth"/>
+				<stat_view label="受信オーディオ" name="incoming_audio">
+					<stat_bar label="受信パケット" name="incoming_packet_recv"/>
+					<stat_bar label="パケットロス" name="packets_in_lost"/>
+					<stat_bar label="ジッタ" unit_label="㎳" name="jitter_in"/>
+					<stat_bar label="ジッタバッファ" unit_label="㎳" name="jitter_buffer"/>
 				</stat_view>
-				<stat_view name="outgoing_audio" label="送信オーディオ">
-					<stat_bar name="packets_out_sent" label="送信したパケット"/>
-					<stat_bar name="packets_out_lost" label="パケットロス"/>
-					<stat_bar name="jitter_out" label="ジッタ" unit_label="㎳"/>
+				<stat_view label="送信オーディオ" name="outgoing_audio">
+					<stat_bar label="送信したパケット" name="packets_out_sent"/>
+					<stat_bar label="パケットロス" name="packets_out_lost"/>
+					<stat_bar label="ジッタ" unit_label="㎳" name="jitter_out"/>
 				</stat_view>
 			</stat_view>
 		</container_view>

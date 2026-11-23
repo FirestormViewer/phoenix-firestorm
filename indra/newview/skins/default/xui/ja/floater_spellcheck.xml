@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="spellcheck_floater" title="スペルチェッカーの設定">
+<floater title="スペルチェッカーの設定" name="spellcheck_floater">
 	<check_box label="スペルチェッカーを有効にする" name="spellcheck_enable"/>
 	<text name="spellcheck_main">
 		メイン辞書：

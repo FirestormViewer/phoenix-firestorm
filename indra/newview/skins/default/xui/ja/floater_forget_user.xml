@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="groups" title="記録済みのユーザ名">
+<floater title="記録済みのユーザ名" name="groups">
 	<button label="削除" label_selected="削除" name="forget"/>
-	<check_box label="このユーザー名のローカルデータも削除する" name="delete_data" tool_tip="削除対象：チャット履歴、最後のセッションのスクリーンショット、ブラウザのCookie、テレポート履歴、ツールバー設定など。一部のローカルファイルは、グリッド間で共有されます。"/>
+	<check_box label="このユーザー名のローカルデータも削除する" tool_tip="削除対象：チャット履歴、最後のセッションのスクリーンショット、ブラウザのCookie、テレポート履歴、ツールバー設定など。一部のローカルファイルは、グリッド間で共有されます。" name="delete_data"/>
 </floater>

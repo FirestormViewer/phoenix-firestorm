@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="env_adjust_snapshot" title="個人的な光源">
+<floater title="個人的な光源" name="env_adjust_snapshot">
 	<string name="hdr_string">
 		ＨＤＲスケール：
 	</string>
@@ -55,7 +55,7 @@
 					<text name="reflection_probe_ambiance_label">
 						周辺環境の反射プローブ（ＨＤＲ）：
 					</text>
-					<slider name="probe_ambiance" tool_tip="環境ベースの間接照明の強度を指定します。 0の場合、ＨＤＲスケールは輝度パラメータになります。"/>
+					<slider tool_tip="環境ベースの間接照明の強度を指定します。 0の場合、ＨＤＲスケールは輝度パラメータになります。" name="probe_ambiance"/>
 					<text name="scene_gamma_label">
 						輝度：
 					</text>

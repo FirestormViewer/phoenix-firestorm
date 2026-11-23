@@ -13,17 +13,17 @@
 		<panel name="content_panel">
 			<layout_stack name="layout">
 				<layout_panel name="group_info">
-					<panel name="group_info_top">
-						<texture_picker name="insignia" tool_tip="クリックして画像を選択してください。"/>
+					<panel name="group_info_top2">
+						<texture_picker tool_tip="クリックして画像を選択してください。" name="insignia"/>
 						<text_editor name="charter">
 							グループ憲章
 						</text_editor>
 					</panel>
 					<panel name="preferences_container">
-						<check_box label="誰でも入会可能" name="open_enrollement" tool_tip="このグループが招待なしで、新しいメンバーに入ることができるようにするかどうかを設定します。"/>
-						<check_box label="入会費" name="check_enrollment_fee" tool_tip="グループに入るのに入会費が必要かどうかを設定します。"/>
-						<spinner name="spin_enrollment_fee" tool_tip="入会費にチェックされている場合、新しいメンバーはグループに加入するためにこの料金を支払う必要があります。"/>
-						<combo_box name="group_mature_check" tool_tip="レーティングは、グループで許可されるコンテンツと活動内容の種類を指定します。">
+						<check_box label="誰でも入会可能" tool_tip="このグループが招待なしで、新しいメンバーに入ることができるようにするかどうかを設定します。" name="open_enrollement"/>
+						<check_box label="入会費" tool_tip="グループに入るのに入会費が必要かどうかを設定します。" name="check_enrollment_fee"/>
+						<spinner tool_tip="入会費にチェックされている場合、新しいメンバーはグループに加入するためにこの料金を支払う必要があります。" name="spin_enrollment_fee"/>
+						<combo_box tool_tip="レーティングは、グループで許可されるコンテンツと活動内容の種類を指定します。" name="group_mature_check">
 							<combo_item name="select_mature">
 								－レーティングの選択－
 							</combo_item>
@@ -42,8 +42,8 @@
 				<layout_panel name="create_actions">
 					<layout_stack name="button_row_ls">
 						<layout_panel name="layout_crt">
-							<button label="グループ作成：L$ [COST]" name="btn_create" tool_tip="新しいグループを作成します。"/>
-							<button name="back" label="キャンセル"/>
+							<button label="グループ作成：L$ [COST]" tool_tip="新しいグループを作成します。" name="btn_create"/>
+							<button label="キャンセル" name="back"/>
 						</layout_panel>
 					</layout_stack>
 					<text name="info_deletion">

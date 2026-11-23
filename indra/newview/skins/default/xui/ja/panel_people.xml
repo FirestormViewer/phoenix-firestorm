@@ -51,25 +51,25 @@
 		<panel label="フレンド" name="friends_panel">
 			<panel label="bottom_panel" name="friends_buttons_panel">
 				<filter_editor label="人物をフィルタ" name="friends_filter_input"/>
-				<button name="gear_btn" tool_tip="選択した人物に対するアクションを表示します。"/>
-				<menu_button name="friends_view_btn" tool_tip="表示／並べ替えオプションを表示します。"/>
-				<button name="friends_add_btn" tool_tip="フレンド登録を申し込みます。"/>
-				<button name="GlobalOnlineStatusToggle" tool_tip="グローバルオンライン状況の表示を切り替えます。"/>
-				<dnd_button name="friends_del_btn" tool_tip="フレンドとして選択されている人物を削除します。"/>
+				<button tool_tip="選択した人物に対するアクションを表示します。" name="gear_btn"/>
+				<menu_button tool_tip="表示／並べ替えオプションを表示します。" name="friends_view_btn"/>
+				<button tool_tip="フレンド登録を申し込みます。" name="friends_add_btn"/>
+				<button tool_tip="グローバルオンライン状況の表示を切り替えます。" name="GlobalOnlineStatusToggle"/>
+				<dnd_button tool_tip="フレンドとして選択されている人物を削除します。" name="friends_del_btn"/>
 			</panel>
 			<accordion name="friends_accordion">
-				<accordion_tab name="tab_online" title="オンライン"/>
-				<accordion_tab name="tab_all" title="全員"/>
+				<accordion_tab title="オンライン" name="tab_online"/>
+				<accordion_tab title="全員" name="tab_all"/>
 			</accordion>
 		</panel>
 		<!-- ================================= GROUPS tab =========================== -->
 		<panel label="グループ" name="groups_panel">
 			<panel label="bottom_panel" name="groups_buttons_panel">
 				<filter_editor label="グループをフィルタ" name="groups_filter_input"/>
-				<menu_button name="groups_gear_btn" tool_tip="選択したグループに対するアクションを表示します。"/>
-				<menu_button name="groups_view_btn" tool_tip="表示／並べ替えのオプションを表示します。"/>
-				<menu_button name="plus_btn" tool_tip="グループに参加／新規グループを作成します。"/>
-				<dnd_button name="minus_btn" tool_tip="選択したグループから脱退します。"/>
+				<menu_button tool_tip="選択したグループに対するアクションを表示します。" name="groups_gear_btn"/>
+				<menu_button tool_tip="表示／並べ替えのオプションを表示します。" name="groups_view_btn"/>
+				<menu_button tool_tip="グループに参加／新規グループを作成します。" name="plus_btn"/>
+				<dnd_button tool_tip="選択したグループから脱退します。" name="minus_btn"/>
 			</panel>
 			<text name="groupcount">
 				現在、[COUNT]件のグループに属しています。あと[REMAINING]件のグループに参加できます。
@@ -79,10 +79,10 @@
 		<panel label="最新" name="recent_panel">
 			<panel label="bottom_panel" name="recent_buttons_panel">
 				<filter_editor label="人物をフィルタ" name="recent_filter_input"/>
-				<button name="gear_btn" tool_tip="選択した人物に対するアクションを表示します。"/>
-				<menu_button name="recent_view_btn" tool_tip="表示／並べ替えのオプションを表示します。"/>
-				<button name="add_friend_btn" tool_tip="フレンド登録を申し込みます。"/>
-				<dnd_button name="recent_del_btn" tool_tip="選択されているフレンドを削除します。"/>
+				<button tool_tip="選択した人物に対するアクションを表示します。" name="gear_btn"/>
+				<menu_button tool_tip="表示／並べ替えのオプションを表示します。" name="recent_view_btn"/>
+				<button tool_tip="フレンド登録を申し込みます。" name="add_friend_btn"/>
+				<dnd_button tool_tip="選択されているフレンドを削除します。" name="recent_del_btn"/>
 			</panel>
 		</panel>
 		<!-- ================================= BLOCKED tab ========================== -->
@@ -91,7 +91,7 @@
 		</panel>
 		<!-- ================================= CONTACT SETS tab ====================== -->
 		<panel label="コンタクトセット" name="contact_sets_panel">
-			<panel name="panel_people_contacts_sidetray" label="コンタクトセット"/>
+			<panel label="コンタクトセット" name="panel_people_contacts_sidetray"/>
 		</panel>
 	</tab_container>
 </panel>

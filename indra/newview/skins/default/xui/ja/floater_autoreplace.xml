@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="autoreplace_floater" title="自動置換設定">
-	<check_box label="自動置換を有効にする" name="autoreplace_enable" tool_tip="チャットテキストを入力するにつれて、入力したキーワードを対応する置換キーワードに置き換えます"/>
-	<button label="リストをインポート…" name="autoreplace_import_list" tool_tip="以前にエクスポートしたリストをファイルからロードします。"/>
-	<button label="リストをエクスポート…" name="autoreplace_export_list" tool_tip="選択したリストをファイルに保存して、共有できるようにします。"/>
-	<button label="新規リスト…" name="autoreplace_new_list" tool_tip="新規リストを作成します。"/>
-	<button label="リストを削除" name="autoreplace_delete_list" tool_tip="選択したリストを削除します。"/>
-	<button name="autoreplace_list_up" tool_tip="このリストの優先度を上げます。"/>
-	<button name="autoreplace_list_down" tool_tip="このリストの優先度を下げます。"/>
+<floater title="自動置換設定" name="autoreplace_floater">
+	<check_box label="自動置換を有効にする" tool_tip="チャットテキストを入力するにつれて、入力したキーワードを対応する置換キーワードに置き換えます" name="autoreplace_enable"/>
+	<button label="リストをインポート…" tool_tip="以前にエクスポートしたリストをファイルからロードします。" name="autoreplace_import_list"/>
+	<button label="リストをエクスポート…" tool_tip="選択したリストをファイルに保存して、共有できるようにします。" name="autoreplace_export_list"/>
+	<button label="新規リスト…" tool_tip="新規リストを作成します。" name="autoreplace_new_list"/>
+	<button label="リストを削除" tool_tip="選択したリストを削除します。" name="autoreplace_delete_list"/>
+	<button tool_tip="このリストの優先度を上げます。" name="autoreplace_list_up"/>
+	<button tool_tip="このリストの優先度を下げます。" name="autoreplace_list_down"/>
 	<scroll_list name="autoreplace_list_replacements">
 		<scroll_list.columns label="キーワード" name="keyword"/>
 		<scroll_list.columns label="置換" name="replacement"/>
@@ -19,7 +19,7 @@
 	<text name="autoreplace_replacement_txt">
 		置換：
 	</text>
-	<button label="エントリを保存" name="autoreplace_save_entry" tool_tip="このエントリを保存します。"/>
-	<button label="変更を保存" name="autoreplace_save_changes" tool_tip="変更をすべて保存します。"/>
-	<button label="キャンセル" name="autoreplace_cancel" tool_tip="変更をすべて破棄します。"/>
+	<button label="エントリを保存" tool_tip="このエントリを保存します。" name="autoreplace_save_entry"/>
+	<button label="変更を保存" tool_tip="変更をすべて保存します。" name="autoreplace_save_changes"/>
+	<button label="キャンセル" tool_tip="変更をすべて破棄します。" name="autoreplace_cancel"/>
 </floater>

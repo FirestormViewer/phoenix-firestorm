@@ -33,4 +33,5 @@
 		<menu_item_call label="全員のミュートを解除する" name="ModerateVoiceUnmute"/>
 	</context_menu>
 	<menu_item_call label="メンバーをバンする" name="BanMember"/>
+	<menu_item_call label="自分のすべてのグループからバンする" name="BanFromAllGroups"/>
 </toggleable_menu>

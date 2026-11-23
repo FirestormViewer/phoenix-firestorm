@@ -13,6 +13,10 @@
 	<text name="find">
 		検索語句を入力：
 	</text>
+	<combo_box name="groups_maturity">
+		<combo_box.item label="GeneralとModerate" name="Desired_Mature"/>
+		<combo_box.item label="GeneralとModerate、Adult" name="Desired_Adult"/>
+	</combo_box>
 	<!-- <FS:TJ> Fix legacy group search to better support maturity settings
 	<check_box label="成人向けグループを含む" name="incmature"/>
 	</FS:TJ> -->

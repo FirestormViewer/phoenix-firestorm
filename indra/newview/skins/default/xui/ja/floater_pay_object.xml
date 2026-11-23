@@ -12,7 +12,7 @@
 	<text name="object_name_label">
 		以下のオブジェクトを介して支払う：
 	</text>
-	<icon name="icon_object" tool_tip="オブジェクト"/>
+	<icon tool_tip="オブジェクト" name="icon_object"/>
 	<text name="object_name_text">
 		非常に長い名前が途中で切れていないかをテストして確認
 	</text>

@@ -14,9 +14,9 @@
 		Zamknij
 	</global>
 	<notification label="Nieznany rodzaj komunikatu" name="MissingAlert">
-		Twoja wersja klienta [APP_NAME] nie może wyświetlić odebranej wiadomości. Upewnij się, że posiadasz najnowszą wersję klienta.
+		Twoja wersja klienta [APP_NAME] nie może wyświetlić odebranego powiadomienia. Upewnij się, że posiadasz najnowszą wersję klienta [APP_NAME].
 
-Szczegóły błędu: Błąd o nazwie &apos;[_NAME]&apos; nie został odnaleziony w pliku notifications.xml.
+Szczegóły błędu: Powiadomienie o nazwie &apos;[_NAME]&apos; nie zostało odnalezione w pliku notifications.xml.
 	</notification>
 	<notification name="FloaterNotFound">
 		Błąd: nie można znaleźć następujących elementów:
@@ -450,7 +450,7 @@ Skrypty muszą pozostać aktywne dla prawidłowego działania broni.
 	<notification name="MultipleFacesSelected">
 		Obecnie zaznaczono wiele powierzchni.
 Jeśli kontynuujesz, to oddzielne instancje mediów będą ustawione na wielu powierzchniach obiektu.
-W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia wyboru powierzchni i kliknij na ten wybranej oraz na Dodaj.
+W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia wyboru powierzchni, kliknij wybraną powierzchnię obiektu, a potem kliknij "Dodaj".
 		<usetemplate ignoretext="Media zostaną ustawione na wielu zaznaczonych powierzchniach" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="MustBeInParcel">
@@ -532,7 +532,7 @@ Potrzebujesz konta aby się zalogować do [CURRENT_GRID]. Czy chcesz utworzyć j
 	</notification>
 	<notification name="DeleteClassified">
 		Usunąć reklamę &apos;[NAME]&apos;?
-Pamiętaj! Nie ma rekompensaty za poniesione koszta.
+Pamiętaj! Nie ma rekompensaty za poniesione koszty.
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="DeleteMedia">
@@ -901,7 +901,7 @@ wybierz &apos;Pobierz info&apos;, a następnie zaznacz &apos;Otwórz przy użyci
 		Nieznany błąd kodowania Vorbis w: [FILE]
 	</notification>
 	<notification name="CannotEncodeFile">
-		Kodowanie pliku: [FILE] nie powidło się.
+		Kodowanie pliku: [FILE] nie powiodło się.
 	</notification>
 	<notification name="CorruptedProtectedDataStore">
 		Nie można zdekodować pliku zawierającego nazwy użytkowników i haseł. Jeśli teraz je zapiszesz lub usuniesz, to wymażesz te, które były trzymane w nim wcześniej.
@@ -1067,7 +1067,7 @@ Działka nie została wybrana.
 	</notification>
 	<notification name="CannotContentifyNoRegion">
 		Nie można sfinalizować:
-Region nie znaleziony.
+Nie znaleziono regionu.
 	</notification>
 	<notification name="CannotReleaseLandNothingSelected">
 		Nie można porzucić działki:
@@ -1075,7 +1075,7 @@ Działka nie została wybrana.
 	</notification>
 	<notification name="CannotReleaseLandNoRegion">
 		Nie można porzucić działki:
-Region nie znaleziony.
+Nie znaleziono regionu.
 	</notification>
 	<notification name="CannotBuyLandNothingSelected">
 		Nie można kupić działki:
@@ -1223,7 +1223,7 @@ Połączyć działki?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Skopiuj"/>
 	</notification>
 	<notification name="ResolutionSwitchFail">
-		Zmiana rozdzielczości do [RESX] x [RESY] nie powidła się
+		Zmiana rozdzielczości do [RESX] x [RESY] nie powiodła się
 	</notification>
 	<notification name="ErrorUndefinedGrasses">
 		Błąd: niezdefiniowane trawy: [SPECIES]
@@ -1837,7 +1837,7 @@ URL: [UNTRUSTED_URL]
 	</notification>
 	<notification name="WebLaunchPublicIssue">
 		Odwiedź [CURRENT_GRID] katalog publicznych problemów, gdzie możesz zgłaszać błędy i inne problemy.
-		<usetemplate ignoretext="Uruchom przeglądarkę internetową by wysłać Błędy klienta" name="okcancelignore" notext="Anuluj" />
+		<usetemplate ignoretext="Uruchom przeglądarkę internetową by wysłać Błędy klienta" name="okcancelignore" notext="Anuluj" yestext="Pokaż stronę" />
 	</notification>
 	<notification name="WebLaunchSupportWiki">
 		Otwórz oficjalny blog Lindenów żeby zobaczyć nowe wiadomości i informacje.
@@ -1932,7 +1932,7 @@ Wszystkie nadchodzące zaproszenia do grup będą automatycznie odrzucane. Nie b
 		<usetemplate ignoretext="Status zmieniony na odrzucanie wszystkich zaproszeń do grup" name="okignore" />
 	</notification>
 	<notification name="JoinedTooManyGroupsMember">
-		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
+		Należysz już do maksymalnej liczby grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
 [NAME] oferuje Ci członkostwo w grupie.
 		<usetemplate name="okcancelbuttons" notext="Odmów" yestext="Przyjmij"/>
 	</notification>
@@ -1948,7 +1948,7 @@ Premium Plus pozwala na [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/m
 		<usetemplate name="okbutton" yestext="Zamknij" />
 	</notification>
 	<notification name="JoinedTooManyGroups">
-		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
+		Należysz już do maksymalnej liczby grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
 	</notification>
 	<notification name="KickUser">
 		Wyrzuć tego Rezydenta, wysyłając następujący komunikat.
@@ -2564,7 +2564,7 @@ Przed usunięciem tych elementów należy je najpierw czymś zastąpić.
 	</notification>
 	<notification name="HelpReportAbuseConfirm">
 		Dziękujemy za poświęcenie czasu na poinformowanie nas o tym problemie.
-Przejrzymy Twoje zgłoszenie pod kątem ewentualnych nadużyć i podejmiemy odpowiednią akcję.
+Przejrzymy Twoje zgłoszenie pod kątem ewentualnych nadużyć i podejmiemy odpowiednie działania.
 	</notification>
 	<notification name="HelpReportAbuseSelectCategory">
 		Wybierz kategorię dla tego raportu o nadużyciu.
@@ -2584,7 +2584,7 @@ Dokładne dane pomogą nam w klasyfikacji i przetwarzaniu raportu.
 	</notification>
 	<notification name="HelpReportAbuseDetailsEmpty">
 		Wprowadź szczegółowy opis popełnionego nadużycia.
-Podaj maksymalną ilość szczegółów oraz imiona/nazwy osób związanych z nadużyciem, które zgłaszasz.
+Podaj jak najwięcej szczegółów oraz imiona/nazwy osób związanych z nadużyciem, które zgłaszasz.
 Dokładne dane pomogą nam w klasyfikacji i przetwarzaniu raportu.
 	</notification>
 	<notification name="HelpReportAbuseContainsCopyright">
@@ -5309,7 +5309,7 @@ Nie można tego cofnąć.
 	</notification>
 	<notification name="RemoveContactsFromSet">
 		Na pewno chcesz usunąć [TARGET] osób z [SET_NAME]?
-		<usetemplate ignoretext="Potwierdź przed usunięciem większej ilości awatarów z Zestawu Kontaktów" name="okcancelignore" notext="Anuluj" />
+		<usetemplate ignoretext="Potwierdź przed usunięciem większej liczby awatarów z Zestawu Kontaktów" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="AddToContactSetSingleSuccess">
 		[NAME] został/a dodany/a do [SET].
@@ -5394,7 +5394,7 @@ Czy chcesz autoryzować [APP_NAME] do przesyłania zdjęć na Flickr?
 		Okres tymczasowego wyciszenia czatu grupowego musi być liczbą!
 	</notification>
 	<notification name="PickLimitReached">
-		Nie można utworzyć kolejnego Miejsca, ponieważ limit ich ilości został osiągnięty.
+		Nie można utworzyć kolejnego Miejsca, ponieważ osiągnięto limit.
 	</notification>
 	<notification name="ConfirmGlobalOnlineStatusToggle">
 		Czy na pewno chcesz zmienić widoczność swojego statusu online dla wszystkich znajomych naraz?
@@ -5731,7 +5731,7 @@ Komunikat błędu:
 	</notification>
 	<notification name="ChatHistoryIsMissing">
 		Brak pliku z zapisem rozmowy. Albo nie istnieją żadne logi dla tej rozmowy, albo zapisywanie nie jest włączone.
-Zapisywanie rozmów możesz włączyć w Preferencje &gt; Prywatność &gt; Logi rozmów.
+Zapisywanie rozmów możesz włączyć w Ustawienia &gt; Prywatność &gt; Logi rozmów.
 	</notification>
 
 	<notification name="FSSetTitleRegion">

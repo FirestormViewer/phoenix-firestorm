@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="performance" title="グラフィックの最適化">
+<floater title="グラフィックの最適化" name="performance">
 	<floater.string name="frame_stats">
 		フレーム：[TOT_FRAME_TIME]㎳－背景：[SCENERY_FRAME_PCT]％　アバター：[AV_FRAME_PCT]％　ＵＩ[UI_FRAME_PCT]％　ＨＵＤ：[HUDS_FRAME_PCT]％　スワップ：[SWAP_FRAME_PCT]％　タスク：[IDLE_FRAME_PCT]％
 	</floater.string>
@@ -48,17 +48,17 @@
 			</text>
 		</panel>
 		<panel name="target_subpanel">
-			<text name="settings_lbl" tool_tip="ＦＰＳを維持するために設定を自動的に調整します。目標を希望のフレームレートに設定すると、ビューアは設定を動的に変更してこれに一致させようとします。">
+			<text tool_tip="ＦＰＳを維持するために設定を自動的に調整します。目標を希望のフレームレートに設定すると、ビューアは設定を動的に変更してこれに一致させようとします。" name="settings_lbl">
 				自動調整：
 			</text>
 			<text name="targetfps_desc">
 				目標フレームレート（ｆｐｓ）
 			</text>
-			<spinner name="target_fps" tool_tip="目標ＦＰＳ－希望するＦＰＳのレベルです。ビューアはグラフィック設定を調整することでこれを達成しようとします。"/>
-			<button label="開始" label_selected="停止" name="AutoTuneFPS" tool_tip="ビューアは目標ＦＰＳを満たすように設定を調整しようとします。"/>
-			<check_box label="継続的に" name="AutoTuneContinuous" tool_tip="ビューアは、フローターが閉じられても停止するまで、目標ＦＰＳを満たすように設定を継続的に調整します。無効にすると、「自動調整」ボタンをクリックすると、現在の設定に合わせて調整され停止します。"/>
-			<button name="PrefSaveButton" tool_tip="将来使用するために、現在の設定をデフォルトとして保存します。"/>
-			<button name="PrefLoadButton" tool_tip="既存のプリセットを読み込みます。"/>
+			<spinner tool_tip="目標ＦＰＳ－希望するＦＰＳのレベルです。ビューアはグラフィック設定を調整することでこれを達成しようとします。" name="target_fps"/>
+			<button label="開始" label_selected="停止" tool_tip="ビューアは目標ＦＰＳを満たすように設定を調整しようとします。" name="AutoTuneFPS"/>
+			<check_box label="継続的に" tool_tip="ビューアは、フローターが閉じられても停止するまで、目標ＦＰＳを満たすように設定を継続的に調整します。無効にすると、「自動調整」ボタンをクリックすると、現在の設定に合わせて調整され停止します。" name="AutoTuneContinuous"/>
+			<button tool_tip="将来使用するために、現在の設定をデフォルトとして保存します。" name="PrefSaveButton"/>
+			<button tool_tip="既存のプリセットを読み込みます。" name="PrefLoadButton"/>
 			<!--Reset Button-->
 			<button tool_tip="お使いのハードウェアのデフォルトのグラフィック設定でリロードします。" name="Defaults"/>
 			<text name="settings_desc">
@@ -68,7 +68,7 @@
 				<combo_box.item label="アバターのみ" name="av_only"/>
 				<combo_box.item label="アバターとシーン" name="av_and_scene" />
 			</combo_box>
-			<button name="target_btn" tool_tip="チューニング戦略の動作を変更します。"/>
+			<button tool_tip="チューニング戦略の動作を変更します。" name="target_btn"/>
 		</panel>
 	</panel>
 	<panel name="panel_performance_main">

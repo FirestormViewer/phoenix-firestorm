@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_hide_beacon">
-	<button label="ビーコンを隠す" name="hide_beacon_btn" tool_tip="トラッキングを停止してビーコンを隠します。"/>
+	<button label="ビーコンを隠す" tool_tip="トラッキングを停止してビーコンを隠します。" name="hide_beacon_btn"/>
 </panel>

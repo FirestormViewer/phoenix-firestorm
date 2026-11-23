@@ -6,7 +6,7 @@
 		<scroll_list.columns label="目標オブジェクト／ポイント" name="lock_target"/>
 		<scroll_list.columns label="ロック元" name="lock_origin"/>
 	</scroll_list>
-	<panel name="bottom_panel" label="ボトムパネル">
+	<panel label="ボトムパネル" name="bottom_panel">
 		<button label="リフレッシュ" name="refresh_btn"/>
 	</panel>
 </panel>

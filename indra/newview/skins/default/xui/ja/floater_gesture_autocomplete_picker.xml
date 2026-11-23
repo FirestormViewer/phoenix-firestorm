@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater title="ジェスチャーを選択" name="gesture_autocomplete_picker">
+	<floater.string name="showing_count">[TOTAL]件中[COUNT]件を表示</floater.string>
+	<scroll_list name="gesture_list">
+		<scroll_list.columns label="トリガー" name="trigger"/>
+		<scroll_list.columns label="ジェスチャー" name="name"/>
+	</scroll_list>
+</floater>

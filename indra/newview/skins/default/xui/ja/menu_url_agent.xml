@@ -17,8 +17,11 @@
 	<context_menu label="モデレーターオプション" name="GroupModerationSubmenu">
 		<menu_item_call label="テキストチャットを許可" name="AllowGroupChat"/>
 		<menu_item_call label="テキストチャットを禁止" name="ForbidGroupChat"/>
+		<menu_item_call label="この参加者をミュートする" name="ModerateVoiceMute"/>
+		<menu_item_call label="この参加者のミュートを解除する" name="ModerateVoiceUnMute"/>
 		<menu_item_call label="メンバーをバン" name="BanGroupMember"/>
 		<menu_item_call label="メンバーを追放" name="BanEjectMember"/>
+		<menu_item_call label="自分のすべてのグループからバンする" name="BanFromAllGroups"/>
 	</context_menu>
 	<!-- </FS:Zi> -->
 	<menu_item_call label="名前をクリップボードにコピー" name="url_copy_label"/>

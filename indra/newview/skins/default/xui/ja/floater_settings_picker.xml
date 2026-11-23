@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="settings picker" title="選択：自然環境の設定">
+<floater title="選択：自然環境の設定" name="settings picker">
 	<floater.string name="pick title">
 		選択：
 	</floater.string>

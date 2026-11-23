@@ -9,7 +9,7 @@
 				Nazwa Regionu:
 			</text>
 			<check_box label="Wstęp" name="check prelude" tool_tip="Zaznacz, aby ustawić region jako Wstęp"/>
-			<check_box label="Stałe słońce" name="check fixed sun" tool_tip="Stałe słońce (jak w Region/Majtek &gt; Teren)."/>
+			<check_box label="Stałe słońce" name="check fixed sun" tool_tip="Stałe słońce (jak w Region/Majątek &gt; Teren)."/>
 			<check_box label="Resetuj Start po teleportacji" name="check reset home" tool_tip="Gdy Rezydent się wyteleportowywuje, to jego pozycja startowa zostaje ustawiona na pozycję docelową."/>
 			<check_box label="Widoczny" name="check visible" tool_tip="Wybierz tę opcję by ustawić region widocznym dla wszystkich."/>
 			<check_box label="Uszkodzenia" name="check damage" tool_tip="Wybierz tę opcję by uruchomić opcję uszkodzeń w regionie."/>
@@ -40,7 +40,7 @@
 			<text name="land cost text">
 				L$/m²:
 			</text>
-			<button label="Odśwież" label_selected="Odśwież" name="Refresh" tool_tip="Kliknij tutaj aby odswieżyć powyższe informacje"/>
+			<button label="Odśwież" label_selected="Odśwież" name="Refresh" tool_tip="Kliknij tutaj aby odświeżyć powyższe informacje"/>
 			<button label="Zastosuj" label_selected="Zastosuj" name="Apply" tool_tip="Kliknij tutaj aby zastosować powyższe zmiany"/>
 			<button label="Wybierz Region" label_selected="Wybierz Region" name="Select Region" tool_tip="Wybierz cały Region za pomocą narzędzi edycji terenu"/>
 			<button label="Autozapisz teraz" label_selected="Autozapisz teraz" name="Autosave now" tool_tip="Zapisz spakowany gzipem stan do katalogu autozapisu"/>
@@ -61,7 +61,7 @@
 				(brak celu)
 			</text>
 			<button label="Usuń oskryptowane obiekty celu na innych działkach" label_selected="Usuń oskryptowane obiekty celu na innych działkach" name="Delete Target&apos;s Scripted Objects On Others Land" tool_tip="Skasuj wszystkie oskryptowane obiekty posiadane przez cel na działki, której nie jest właścicielem (obiekty bez praw kopiowania zostaną zwrócone)."/>
-			<button label="Usuń oskryptowane obiekty celu na jakichkolwiek działkach" label_selected="Usuń oskryptowane obiekty celu na jakichkolwiek działkach" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Skasuj wszystkie oksryptowane obiekty posiadane przez cel w tym Regionie (obiekty bez praw kopiowania zostaną zwrócone)."/>
+			<button label="Usuń oskryptowane obiekty celu na jakichkolwiek działkach" label_selected="Usuń oskryptowane obiekty celu na jakichkolwiek działkach" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Skasuj wszystkie oskryptowane obiekty posiadane przez cel w tym Regionie (obiekty bez praw kopiowania zostaną zwrócone)."/>
 			<button label="Usuń wszystkie obiekty celu" label_selected="Usuń wszystkie obiekty celu" name="Delete *ALL* Of Target&apos;s Objects" tool_tip="Skasuj wszystkie obiekty posiadane przez cel w tym Regionie (obiekty bez praw kopiowania zostaną zwrócone)."/>
 			<button label="Główne kolizje" label_selected="Główne kolizje" name="Get Top Colliders" tool_tip="Lista obiektów, które najbardziej doświadczają kolizji"/>
 			<button label="Główne skrypty" label_selected="Główne skrypty" name="Get Top Scripts" tool_tip="Lista obiektów, które najdłużej podtrzymują działanie skryptów"/>

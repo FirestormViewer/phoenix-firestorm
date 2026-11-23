@@ -5,7 +5,7 @@
 		<text name="base_color_lbl">
 			ベースカラー（アルベド）：
 		</text>
-		<texture_picker name="base_color_texture" tool_tip="ベースカラー（アルベド）マップを指定します。アルファチャンネルはオプションで透明度で使用されます。"/>
+		<texture_picker tool_tip="ベースカラー（アルベド）マップを指定します。アルファチャンネルはオプションで透明度で使用されます。" name="base_color_texture"/>
 		<text name="base_color_upload_fee">
 			アップロード料金なし
 		</text>
@@ -31,7 +31,7 @@
 		<text name="metallic_roughness_lbl">
 			メタリック／粗さ：
 		</text>
-		<texture_picker name="metallic_roughness_texture" tool_tip="オプションでオクルージョンを備えたＧＬＴＦによるメタリック／ラフネスマップを指定できます。赤チャンネルはオクルージョン（環境遮蔽）、緑チャンネルは粗さ（ラフネス）、青チャンネルはメタリック（金属度）です。"/>
+		<texture_picker tool_tip="オプションでオクルージョンを備えたＧＬＴＦによるメタリック／ラフネスマップを指定できます。赤チャンネルはオクルージョン（環境遮蔽）、緑チャンネルは粗さ（ラフネス）、青チャンネルはメタリック（金属度）です。" name="metallic_roughness_texture"/>
 		<text name="metallic_upload_fee">
 			アップロード費用なし
 		</text>

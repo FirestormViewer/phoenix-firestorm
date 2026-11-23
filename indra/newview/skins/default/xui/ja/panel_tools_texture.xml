@@ -16,7 +16,7 @@
 		色
 	</text>
 	<!-- label is blank because control places it below the box -->
-	<color_swatch name="colorswatch" tool_tip="クリックしてカラーピッカーを開きます。"/>
+	<color_swatch tool_tip="クリックしてカラーピッカーを開きます。" name="colorswatch"/>
 	<text name="color trans">
 		透過度
 	</text>
@@ -25,8 +25,8 @@
 	</text>
 	<check_box label="明るさ全開" name="checkbox fullbright"/>
 	<check_box label="水面を隠す" name="checkbox_hide_water"/>
-	<button name="copy_face_btn" tool_tip="テクスチャのパラメータをクリップボードにコピーします。"/>
-	<button name="paste_face_btn" tool_tip="テクスチャのパラメータをクリップボードにペーストします。"/>
+	<button tool_tip="テクスチャのパラメータをクリップボードにコピーします。" name="copy_face_btn"/>
+	<button tool_tip="テクスチャのパラメータをクリップボードにペーストします。" name="paste_face_btn"/>
 	<!-- <text name="label_matmedia">
 		マテリアル
 	</text> -->
@@ -50,16 +50,16 @@
 	<!-- Removed (again) to prefer the name and location of the FS control
 	<check_box label="繰り返しをロック" name="checkbox_sync_settings" tool_tip="すべてのマップの繰り返しを同時に調整します。"/>
 	-->
-	<texture_picker label="ＰＢＲマテリアル" name="pbr_control" tool_tip="クリックでＰＢＲマテリアルを選択します。"/>
+	<texture_picker label="ＰＢＲマテリアル" tool_tip="クリックでＰＢＲマテリアルを選択します。" name="pbr_control"/>
 	<!-- <FS:Zi> We don't need this button, clicking the texture picker does the same thing
 	<button name="pbr_from_inventory" label="インベントリから選ぶ"/>
 	-->
 	<text name="material_permissions_loading_label">
 		コンテンツを読み込んでいます…
 	</text>
-	<button name="edit_selected_pbr" label="選択を編集"/>
-	<button name="save_selected_pbr" label="インベントリに保存"/>
-	<texture_picker label="拡散" name="texture control" tool_tip="クリックで拡散（ディフューズ）マップのテクスチャを選択します。"/>
+	<button label="選択を編集" name="edit_selected_pbr"/>
+	<button label="インベントリに保存" name="save_selected_pbr"/>
+	<texture_picker label="拡散" tool_tip="クリックで拡散（ディフューズ）マップのテクスチャを選択します。" name="texture control"/>
 	<text name="label alphamode">
 		アルファモード
 	</text>
@@ -72,7 +72,7 @@
 	<text name="label maskcutoff">
 		マスクカットオフ
 	</text>
-	<texture_picker label="法線" name="bumpytexture control" tool_tip="クリックで法線（ノーマル）マップのテクスチャを選択します。"/>
+	<texture_picker label="法線" tool_tip="クリックで法線（ノーマル）マップのテクスチャを選択します。" name="bumpytexture control"/>
 	<text name="label bumpiness">
 		凹凸
 	</text>
@@ -99,7 +99,7 @@
 		<combo_box.item label="テクスチャを使用" name="Use texture"/>
 		-->
 	</combo_box>
-	<texture_picker label="鏡面反射" name="shinytexture control" tool_tip="クリックで鏡面反射（スペキュラ）マップのテクスチャを選択します。"/>
+	<texture_picker label="鏡面反射" tool_tip="クリックで鏡面反射（スペキュラ）マップのテクスチャを選択します。" name="shinytexture control"/>
 	<text name="label shininess">
 		光の鋭さ
 	</text>
@@ -128,13 +128,13 @@
 		光沢色
 	</text>
 	<!-- label is blank because control places it below the box -->
-	<color_swatch name="shinycolorswatch" tool_tip="クリックしてカラーピッカーを開きます。"/>
+	<color_swatch tool_tip="クリックしてカラーピッカーを開きます。" name="shinycolorswatch"/>
 	<text name="media_info">
 		ここに選択したメディアのＵＲＬを入力します。
 	</text>
-	<button label="選択…" name="add_media" tool_tip="メディアを追加します。"/>
-	<button label="削除" name="delete_media" tool_tip="このメディアテクスチャを削除します。"/>
-	<button label="揃える" label_selected="揃える" name="button align" tool_tip="メディアテクスチャを一列に揃えます。（最初に読み込む必要があります）"/>
+	<button label="選択…" tool_tip="メディアを追加します。" name="add_media"/>
+	<button label="削除" tool_tip="このメディアテクスチャを削除します。" name="delete_media"/>
+	<button label="揃える" label_selected="揃える" tool_tip="メディアテクスチャを一列に揃えます。（最初に読み込む必要があります）" name="button align"/>
 	<text name="tex gen">
 		マッピング
 	</text>
@@ -143,9 +143,9 @@
 		<combo_box.item label="平面" name="Planar"/>
 	</combo_box>
 	<spinner label="水平スケール" name="TexScaleU"/>
-	<button name="flipTextureScaleU" tool_tip="反転"/>
+	<button tool_tip="反転" name="flipTextureScaleU"/>
 	<spinner label="垂直スケール" name="TexScaleV"/>
-	<button name="flipTextureScaleV" tool_tip="反転"/>
+	<button tool_tip="反転" name="flipTextureScaleV"/>
 	<spinner label="メートル毎の繰り返し" name="rptctrl"/>
 	<spinner label="回転度" name="TexRot"/>
 	<spinner label="水平オフセット" name="TexOffsetU"/>
@@ -168,12 +168,12 @@
 	<spinner label="水平オフセット" name="gltfTextureOffsetU"/>
 	<spinner label="垂直オフセット" name="gltfTextureOffsetV"/>
 	<!-- END PBR Material texture transform parameters -->
-	<check_box label="平面を揃える" name="checkbox planar align" tool_tip="テクスチャを最後に選択された面を基準に揃えます。平面テクスチャのマッピングが必要です。"/>
-	<check_box label="マテリアルを同期" name="checkbox_sync_settings" tool_tip="全てのマップの繰り返しを同期させます。"/>
-	<button label="揃える" name="button align textures" tool_tip="現在のテクスチャレイヤーのオフセット値を基準に揃えます。"/>
+	<check_box label="平面を揃える" tool_tip="テクスチャを最後に選択された面を基準に揃えます。平面テクスチャのマッピングが必要です。" name="checkbox planar align"/>
+	<check_box label="マテリアルを同期" tool_tip="全てのマップの繰り返しを同期させます。" name="checkbox_sync_settings"/>
+	<button label="揃える" tool_tip="現在のテクスチャレイヤーのオフセット値を基準に揃えます。" name="button align textures"/>
 	<!-- <FS:Zi> Find all faces with same texture -->
-	<button label="全て検索" name="btn_select_same_diff" tool_tip="この面と同じ拡散反射（ディフューズ）マップを貼り付けた、すべての面を選択します。"/>
-	<button label="全て検索" name="btn_select_same_norm" tool_tip="この面と同じ法線（ノーマル）マップを貼り付けた、すべての面を選択します。"/>
-	<button label="全て検索" name="btn_select_same_spec" tool_tip="この面と同じ鏡面反射（スペキュラ）マップを貼り付けた、すべての面を選択します。"/>
+	<button label="全て検索" tool_tip="この面と同じ拡散反射（ディフューズ）マップを貼り付けた、すべての面を選択します。" name="btn_select_same_diff"/>
+	<button label="全て検索" tool_tip="この面と同じ法線（ノーマル）マップを貼り付けた、すべての面を選択します。" name="btn_select_same_norm"/>
+	<button label="全て検索" tool_tip="この面と同じ鏡面反射（スペキュラ）マップを貼り付けた、すべての面を選択します。" name="btn_select_same_spec"/>
 	<!-- </FS:Zi> -->
 </panel>

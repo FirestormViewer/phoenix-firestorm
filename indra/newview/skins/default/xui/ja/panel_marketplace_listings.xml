@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="マーケットプレイス出品" name="Marketplace Panel">
 	<panel name="tool_panel">
-		<menu_button name="sort_btn" tool_tip="表示／並べ替えオプションを表示します。"/>
-		<button name="add_btn" tool_tip="新しい出品リストフォルダを作成します。"/>
-		<button label="エラーを確認" name="audit_btn" tool_tip="マーケットプレイスの出品リストを確認します。"/>
+		<menu_button tool_tip="表示／並べ替えオプションを表示します。" name="sort_btn"/>
+		<button tool_tip="新しい出品リストフォルダを作成します。" name="add_btn"/>
+		<button label="エラーを確認" tool_tip="マーケットプレイスの出品リストを確認します。" name="audit_btn"/>
 	</panel>
 	<panel name="tab_container_panel">
 		<filter_editor label="マーケットプレイスの出品リストをフィルタ" name="filter_editor"/>

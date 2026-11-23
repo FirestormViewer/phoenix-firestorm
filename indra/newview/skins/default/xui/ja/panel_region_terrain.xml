@@ -15,7 +15,7 @@
 	<text name="detail_material_text">
 		地形のマテリアル
 	</text>
-	<check_box label="地形のメタリック／粗さ" name="terrain_material_type" tool_tip="チェックすると、地形にＰＢＲメタリック／粗さマテリアルを使用します。それ以外の場合は、テクスチャを使用します。"/>
+	<check_box label="地形のメタリック／粗さ" tool_tip="チェックすると、地形にＰＢＲメタリック／粗さマテリアルを使用します。それ以外の場合は、テクスチャを使用します。" name="terrain_material_type"/>
 	<text name="height_text_lbl">
 		１（低）
 	</text>
@@ -66,8 +66,8 @@
 	<spinner label="低" name="height_start_spin_2"/>
 	<spinner label="高" name="height_range_spin_0"/>
 	<spinner label="高" name="height_range_spin_2"/>
-	<button label="ＲＡＷ地形ダウンロード…" name="download_raw_btn" tool_tip="不動産オーナーのみ利用可能、管理者は利用不可です。"/>
-	<button label="ＲＡＷ地形アップロード…" name="upload_raw_btn" tool_tip="不動産オーナーのみ利用可能、管理者は利用不可です。"/>
-	<button label="地形の構築" name="bake_terrain_btn" tool_tip="現在の地形を上昇・下降範囲の中間点として設定します。"/>
+	<button label="ＲＡＷ地形ダウンロード…" tool_tip="不動産オーナーのみ利用可能、管理者は利用不可です。" name="download_raw_btn"/>
+	<button label="ＲＡＷ地形アップロード…" tool_tip="不動産オーナーのみ利用可能、管理者は利用不可です。" name="upload_raw_btn"/>
+	<button label="地形の構築" tool_tip="現在の地形を上昇・下降範囲の中間点として設定します。" name="bake_terrain_btn"/>
 	<button label="適用" name="apply_btn"/>
 </panel>

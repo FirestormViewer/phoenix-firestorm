@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="delete_pref_preset" title="プリセットの削除">
+<floater title="プリセットの削除" name="delete_pref_preset">
 	<string name="title_graphic">
 		グラフィックのプリセットを削除
 	</string>

@@ -529,10 +529,14 @@ Baix ↔ Mín
 		</panel>
 		<panel label="Textura" name="Texture"/>
 		<panel label="Conteúdo" name="Contents">
-			<button label="Novo script" label_selected="Novo script" name="button new script" width="80"/>
-			<button label="Permissões" name="button permissions" width="95" left_pad="3"/>
-			<button label="Atualizar" name="button refresh" width="92" left_pad="3"/>
-			<button label="Reiniciar scripts" name="btn_reset_scripts" width="92"/>
+			<button label="Novo script" label_selected="Novo script" name="button new script">
+				<flyout_button.item label="Novo script LSL" name="new_lsl_script"/>
+				<flyout_button.item label="Novo script Lua" name="new_lua_script"/>
+			</button>
+			<button label="Explorar no IDE" label_selected="Parar exploração" name="button publish"/>
+			<button label="Permissões" name="button permissions" />
+			<button label="Atualizar" name="button refresh" />
+			<button label="Reiniciar scripts" name="btn_reset_scripts" />
 			<filter_editor label="Filtrar conteúdo" name="contents_filter"/>
 		</panel>
 	</tab_container>

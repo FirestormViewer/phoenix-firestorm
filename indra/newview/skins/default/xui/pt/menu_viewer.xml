@@ -159,6 +159,7 @@
 			<menu_item_call label="Meus ambientes..." name="my_environs"/>
 			<menu_item_call label="Iluminação pessoal..." name="adjustment_tool"/>
 			<menu_item_check label="Pausar nuvens" name="pause_clouds"/>
+			<menu_item_check label="Silenciar/reativar som" name="toggle_sound"/>
 			<menu label="Importação em lote" name="WL Bulk Import">
 				<menu_item_call label="Dias..." name="WL Bulk Import Days"/>
 				<menu_item_call label="Céus..." name="WL Bulk Import Skies"/>
@@ -219,8 +220,10 @@
 		<menu label="Scripts" name="Scripts">
 			<menu_item_call label="Mostrar avisos/erros de script" name="Script Debug"/>
 			<menu_item_call label="Informações de script (contador)" name="Script Info"/>
-			<menu_item_call label="Recompilar scripts (Mono)" name="Mono"/>
-			<menu_item_call label="Recompilar scripts (LSL)" name="LSL"/>
+			<menu_item_call label="Recompilar scripts LSL (Mono)" name="Mono"/>
+			<menu_item_call label="Recompilar scripts LSL (LSL legado)" name="LSL"/>
+			<menu_item_call label="Recompilar scripts LSL (LSL em Lua)" name="LSL on Luau"/>
+			<menu_item_call label="Recompilar scripts Lua" name="Lua"/>
 			<menu_item_call label="Redefinir scripts" name="Reset Scripts"/>
 			<menu_item_call label="Definir scripts para executando" name="Set Scripts to Running"/>
 			<menu_item_call label="Definir scripts para não executar" name="Set Scripts to Not Running"/>

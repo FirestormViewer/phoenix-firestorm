@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="prefs_graphics_advanced" title="高度なグラフィック設定">
+<floater title="高度なグラフィック設定" name="prefs_graphics_advanced">
 	<!-- This block shows Advanced Settings -->
 	<text name="GeneralText">
 		全般
@@ -9,6 +9,7 @@
 		ｍ
 	</text>
 	<slider label="最大パーティクル数：" name="MaxParticleCount"/>
+	<text name="GlowResolutionText">低</text>
 	<slider label="ポストプロセスの品質：" name="RenderPostProcess"/>
 	<text name="PostProcessText">
 		低
@@ -17,8 +18,8 @@
 	<text name="MaxTextureResolutionLabel">
 		最大ＬｏＤ解像度：
 	</text>
-	<combo_box name="MaxTextureResolution" tool_tip="「詳細レベル」テクスチャの最大解像度を指定します。"/>
-	<check_box label="垂直同期を有効化" name="vsync" tool_tip="フレームレートをモニターのリフレッシュレートに同期させ、スムーズなパフォーマンスを実現します。"/>
+	<combo_box tool_tip="「詳細レベル」テクスチャの最大解像度を指定します。" name="MaxTextureResolution"/>
+	<check_box label="垂直同期を有効化" tool_tip="フレームレートをモニターのリフレッシュレートに同期させ、スムーズなパフォーマンスを実現します。" name="vsync"/>
 	<text name="AvatarText">
 		アバター
 	</text>
@@ -30,7 +31,7 @@
 		<combo_box.item label="フレンドは常に表示" name="1"/>
 		<combo_box.item label="フレンドのみ表示" name="2"/>
 	</combo_box>
-	<slider tool_tip="複雑なアバターがどの時点でJellyDollとして描画されるかを制御します。" label="最大複雑度：" name="IndirectMaxComplexity"/>
+	<slider label="最大複雑度：" tool_tip="複雑なアバターがどの時点でJellyDollとして描画されるかを制御します。" name="IndirectMaxComplexity"/>
 	<slider label="簡略化せずに描画する最大数：" name="IndirectMaxNonImpostors"/>
 	<slider label="詳細：" name="AvatarMeshDetail"/>
 	<text name="AvatarMeshDetailText">
@@ -43,9 +44,12 @@
 	<text name="HardwareText">
 		ハードウェア
 	</text>
-	<check_box label="異方向性フィルタリング（有効にすると遅くなります）" name="ani"/>
-	<check_box control_name="RenderCompressTextures" label="テクスチャ圧縮の有効化 (再起動後に反映)" name="texture compression" tool_tip="ビデオメモリ内のテクスチャを圧縮し、色の品質をある程度犠牲にして、より高解像度のテクスチャを読み込むようにします。"/>
-	<check_box label="HiDPIディスプレイのサポートを有効にする（再起動後に反映）" name="use HiDPI" tool_tip="ＯｐｅｎＧＬの高解像描画を有効化します。"/>
+	<check_box label="テクスチャ圧縮の有効化 (再起動後に反映)" tool_tip="ビデオメモリ内のテクスチャを圧縮し、色の品質をある程度犠牲にして、より高解像度のテクスチャを読み込むようにします。" name="texture compression" control_name="RenderCompressTextures"/>
+	<check_box label="HiDPIディスプレイのサポートを有効にする（再起動後に反映）" tool_tip="ＯｐｅｎＧＬの高解像描画を有効化します。" name="use HiDPI"/>
+	<text name="af strength label">異方性フィルタリング：</text>
+	<combo_box label="異方性フィルタリング" name="anisotropic_filter">
+		<combo_box.item label="無効" name="disabled"/>
+	</combo_box>
 	<text name="antialiasing label">
 		アンチエイリアス：
 	</text>
@@ -89,10 +93,6 @@
 		シェーダー
 	</text>
 	<check_box label="透明な水" name="TransparentWater"/>
-	<slider label="空：" name="SkyMeshDetail"/>
-	<text name="SkyMeshDetailText">
-		低
-	</text>
 	<check_box label="アンビエントオクルージョン" name="UseSSAO"/>
 	<check_box label="被写界深度（ＤｏＦ）" name="UseDoF"/>
 	<check_box label="ＨＤＲと放射" name="VintageMode"/>

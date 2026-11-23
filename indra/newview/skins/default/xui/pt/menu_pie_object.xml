@@ -66,13 +66,17 @@
 				<pie_slice label="Dono particulas" name="Mute Particle"/>
 			</pie_menu>
 			<pie_menu label="Scripts &gt;" name="ScriptsMenu">
-				<pie_slice label="Compilar (Mono)" name="CompileMono"/>
-				<pie_slice label="Compilar (LSL)" name="CompileLSL"/>
-				<pie_slice label="Redefinir scripts" name="Object Reset Scripts"/>
-				<pie_slice label="Iniciar scripts" name="Object Set Scripts to Running"/>
-				<pie_slice label="Parar scripts" name="Object Set Scripts to Not Running"/>
-				<pie_slice label="Remover scripts" name="Remove Scripts From Selection"/>
-				<pie_slice label="Info de script" name="ScriptInfo"/>
+				<pie_menu label="Compilar &gt;" name="CompileScriptsMenu">
+					<pie_slice label="Mono" name="CompileMono"/>
+					<pie_slice label="LSL" name="CompileLSL"/>
+					<pie_slice label="Lua" name="CompileLua"/>
+					<pie_slice label="LSL em Lua" name="CompileLSLonLuau"/>
+				</pie_menu>
+				<pie_slice label="Redefinir" name="Object Reset Scripts"/>
+				<pie_slice label="Iniciar" name="Object Set Scripts to Running"/>
+				<pie_slice label="Parar" name="Object Set Scripts to Not Running"/>
+				<pie_slice label="Remover" name="Remove Scripts From Selection"/>
+				<pie_slice label="Info" name="ScriptInfo"/>
 			</pie_menu>
 			<pie_slice label="Inspecionar" name="Object Inspect"/>
 		</pie_menu>

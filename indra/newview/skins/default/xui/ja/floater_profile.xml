@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="avatarinfo" title="プロフィール">
+<floater title="プロフィール" name="avatarinfo">
 	<panel name="panel_profile_view">
 		<tab_container name="panel_profile_tabs">
 			<panel label="Second Life" name="panel_profile_secondlife"/>

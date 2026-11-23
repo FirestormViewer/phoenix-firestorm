@@ -31,8 +31,8 @@
 		グループから複数の住人を一括でバンすることができます。「リストから住人を選択」をクリックしてください。
 	</text>
 	<button label="リストから住人を選択" name="add_button"/>
-	<name_list name="banned_agent_list" tool_tip="Ctrlキーを押しながらクリックすることで複数の住人を選択できます。"/>
-	<button label="選択した住人をリストから削除" name="remove_button" tool_tip="バンリストから、選択した住人を削除します。"/>
+	<name_list tool_tip="Ctrlキーを押しながらクリックすることで複数の住人を選択できます。" name="banned_agent_list"/>
+	<button label="選択した住人をリストから削除" tool_tip="バンリストから、選択した住人を削除します。" name="remove_button"/>
 	<button label="住人をバン" name="ban_button"/>
 	<button label="キャンセル" name="cancel_button"/>
 	<string name="GroupBulkBan">

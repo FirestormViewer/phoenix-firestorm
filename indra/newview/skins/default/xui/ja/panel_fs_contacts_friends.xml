@@ -6,25 +6,25 @@
 		</layout_panel>
 		<layout_panel name="lp_friend_list">
 			<fs_scroll_list name="friend_list">
-				<fs_scroll_list.column name="icon_online_status" tool_tip="オンライン状況です。"/>
-				<fs_scroll_list.column label="ユーザ名" name="user_name" tool_tip="この連絡先のユーザ名です。"/>
-				<fs_scroll_list.column label="表示名" name="display_name" tool_tip="この連絡先の表示名です。"/>
-				<fs_scroll_list.column label="名前" name="full_name" tool_tip="この連絡先が選択した名前の表示です。"/>
-				<fs_scroll_list.column name="icon_visible_online" tool_tip="フレンドは、あなたがオンラインかどうか確認することができます。"/>
-				<fs_scroll_list.column name="icon_visible_map" tool_tip="フレンドは、マップであなたの居場所を見つけることができます。"/>
-				<fs_scroll_list.column name="icon_edit_mine" tool_tip="フレンドは、オブジェクトを編集、削除、または取得することができます。"/>
-				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="あなたは、マップでフレンドの居場所を見つけることができます。"/>
-				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="あなたは、このフレンドのオブジェクトを編集することができます。"/>
+				<fs_scroll_list.column tool_tip="オンライン状況です。" name="icon_online_status"/>
+				<fs_scroll_list.column label="ユーザ名" tool_tip="この連絡先のユーザ名です。" name="user_name"/>
+				<fs_scroll_list.column label="表示名" tool_tip="この連絡先の表示名です。" name="display_name"/>
+				<fs_scroll_list.column label="名前" tool_tip="この連絡先が選択した名前の表示です。" name="full_name"/>
+				<fs_scroll_list.column tool_tip="フレンドは、あなたがオンラインかどうか確認することができます。" name="icon_visible_online"/>
+				<fs_scroll_list.column tool_tip="フレンドは、マップであなたの居場所を見つけることができます。" name="icon_visible_map"/>
+				<fs_scroll_list.column tool_tip="フレンドは、オブジェクトを編集、削除、または取得することができます。" name="icon_edit_mine"/>
+				<fs_scroll_list.column tool_tip="あなたは、マップでフレンドの居場所を見つけることができます。" name="icon_visible_map_theirs"/>
+				<fs_scroll_list.column tool_tip="あなたは、このフレンドのオブジェクトを編集することができます。" name="icon_edit_theirs"/>
 			</fs_scroll_list>
 		</layout_panel>
 	</layout_stack>
-	<button label="ＩＭ／コール" name="im_btn" tool_tip="インスタントメッセージ・セッションを開く"/>
-	<button label="プロフィール" name="profile_btn" tool_tip="写真、グループ、およびその他の情報を表示します。"/>
-	<button label="テレポート…" name="offer_teleport_btn" tool_tip="このフレンドに、あなたの現在のロケーションまでのテレポートを送ります。"/>
-	<button label="マップ…" name="map_btn" tool_tip="このフレンドの現在の居場所をワールドマップに表示します。"/>
-	<button label="支払う…" name="pay_btn" tool_tip="リンデンドル（L$）をこのフレンドに送金します。"/>
-	<button label="削除…" name="remove_btn" tool_tip="この人物をフレンドリストから除外します。"/>
-	<button label="追加…" name="add_btn" tool_tip="住人にフレンドシップを申請します。"/>
+	<button label="ＩＭ／コール" tool_tip="インスタントメッセージ・セッションを開く" name="im_btn"/>
+	<button label="プロフィール" tool_tip="写真、グループ、およびその他の情報を表示します。" name="profile_btn"/>
+	<button label="テレポート…" tool_tip="このフレンドに、あなたの現在のロケーションまでのテレポートを送ります。" name="offer_teleport_btn"/>
+	<button label="マップ…" tool_tip="このフレンドの現在の居場所をワールドマップに表示します。" name="map_btn"/>
+	<button label="支払う…" tool_tip="リンデンドル（L$）をこのフレンドに送金します。" name="pay_btn"/>
+	<button label="削除…" tool_tip="この人物をフレンドリストから除外します。" name="remove_btn"/>
+	<button label="追加…" tool_tip="住人にフレンドシップを申請します。" name="add_btn"/>
 	<text name="friend_count">
 		フレンド数：[COUNT]人
 	</text>

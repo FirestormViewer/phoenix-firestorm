@@ -115,19 +115,19 @@
 	<text name="description_label">
 		説明：
 	</text>
-	<spinner label="優先度" name="priority" tool_tip="このアニメーションでどのアニメーションを上書きできるかを決めます。"/>
-	<check_box label="ループ" name="loop_check" tool_tip="このアニメーションをループ再生にします。"/>
+	<spinner label="優先度" tool_tip="このアニメーションでどのアニメーションを上書きできるかを決めます。" name="priority"/>
+	<check_box label="ループ" tool_tip="このアニメーションをループ再生にします。" name="loop_check"/>
 	<text name="frames_label">
 		300フレーム　30秒　10FPS
 	</text>
-	<spinner label="イン（％）" name="loop_in_point" tool_tip="アニメーションのループ復帰点を設定します。"/>
-	<spinner label="アウト（％）" name="loop_out_point" tool_tip="アニメーションのループ終了点を設定します。"/>
-	<spinner label="イン (frm)" name="loop_in_frames" tool_tip="アニメーションがループして戻る、開始フレームを設定します。"/>
-	<spinner label="アウト (frm)" name="loop_out_frames" tool_tip="アニメーションのループが終了する、終点フレームを設定します。"/>
+	<spinner label="イン（％）" tool_tip="アニメーションのループ復帰点を設定します。" name="loop_in_point"/>
+	<spinner label="アウト（％）" tool_tip="アニメーションのループ終了点を設定します。" name="loop_out_point"/>
+	<spinner label="イン (frm)" tool_tip="アニメーションがループして戻る、開始フレームを設定します。" name="loop_in_frames"/>
+	<spinner label="アウト (frm)" tool_tip="アニメーションのループが終了する、終点フレームを設定します。" name="loop_out_frames"/>
 	<text name="hand_label">
 		手のポーズ
 	</text>
-	<combo_box name="hand_pose_combo" tool_tip="アニメーション再生中の手の動きを決めます。">
+	<combo_box tool_tip="アニメーション再生中の手の動きを決めます。" name="hand_pose_combo">
 		<combo_box.item label="広げる" name="Spread"/>
 		<combo_box.item label="リラックス" name="Relaxed"/>
 		<combo_box.item label="指を指す・両手" name="PointBoth"/>
@@ -145,7 +145,7 @@
 	<text name="emote_label">
 		表情
 	</text>
-	<combo_box name="emote_combo" tool_tip="アニメーション再生中の表情を決めます。">
+	<combo_box tool_tip="アニメーション再生中の表情を決めます。" name="emote_combo">
 		<item label="（なし）" name="[None]"/>
 		<item label="アーーーーー" name="Aaaaah"/>
 		<item label="恐れる" name="Afraid"/>
@@ -170,17 +170,17 @@
 	<text name="preview_label">
 		プレビュー時の動作
 	</text>
-	<combo_box name="preview_base_anim" tool_tip="これを使用して、アバターが一般的なアクションを実行している間にアニメーションの動作をテストします。">
+	<combo_box tool_tip="これを使用して、アバターが一般的なアクションを実行している間にアニメーションの動作をテストします。" name="preview_base_anim">
 		<item label="立つ" name="Standing"/>
 		<item label="歩く" name="Walking"/>
 		<item label="座る" name="Sitting"/>
 		<item label="飛ぶ" name="Flying"/>
 	</combo_box>
-	<spinner label="イーズ・イン（秒）" name="ease_in_time" tool_tip="アニメーションのブレンドイン時間（秒）を指定します。"/>
-	<spinner label="イーズ・アウト（秒）" name="ease_out_time" tool_tip="アニメーションのブレンドアウト時間（秒）を指定します。"/>
-	<button name="play_btn" tool_tip="アニメーションを再生します。"/>
-	<button name="pause_btn" tool_tip="アニメーションを一時停止します。"/>
-	<button name="stop_btn" tool_tip="アニメーションの再生を停止します。"/>
+	<spinner label="イーズ・イン（秒）" tool_tip="アニメーションのブレンドイン時間（秒）を指定します。" name="ease_in_time"/>
+	<spinner label="イーズ・アウト（秒）" tool_tip="アニメーションのブレンドアウト時間（秒）を指定します。" name="ease_out_time"/>
+	<button tool_tip="アニメーションを再生します。" name="play_btn"/>
+	<button tool_tip="アニメーションを一時停止します。" name="pause_btn"/>
+	<button tool_tip="アニメーションの再生を停止します。" name="stop_btn"/>
 	<text name="bad_animation_text">
 		アニメーションファイルを読み取れません。Poser 4からエクスポートしたBVHファイルをお勧めします。
 	</text>

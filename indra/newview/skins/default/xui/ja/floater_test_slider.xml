@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_test_slider">
+	<slider label="汎用スライダー" name="generic_slider"/>
 	<slider label="コールバックスライダー" name="callback_slider"/>
 	<slider label="値スライダー" name="value_slider"/>
 	<slider label="ミニスライダー１" name="mini_slider_1"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_pathfinding_linksets" title="リージョンのオブジェクト">
+<floater title="リージョンのオブジェクト" name="floater_pathfinding_linksets">
 	<floater.string name="messaging_get_inprogress">
 		経路探索リンクセットを照会しています…
 	</floater.string>
@@ -134,7 +134,7 @@
 		</text>
 		<check_box label="ビーコンを表示" name="show_beacon"/>
 		<button label="取る" name="take_objects"/>
-		<button label="コピーを取る" name="take_copy_objects"/>
+		<button label="複製を取る" name="take_copy_objects"/>
 		<button label="その場所にテレポート" name="teleport_me_to_object"/>
 		<button label="返却" name="return_objects"/>
 		<button label="削除" name="delete_objects"/>
@@ -147,13 +147,13 @@
 			歩行可能性：
 		</text>
 		<text name="edit_a_label">Ａ</text>
-		<line_editor name="edit_a_value" tool_tip="タイプＡのキャラクターの歩行可能性。キャラクタータイプの例はヒューマノイドです。"/>
+		<line_editor tool_tip="タイプＡのキャラクターの歩行可能性。キャラクタータイプの例はヒューマノイドです。" name="edit_a_value"/>
 		<text name="edit_b_label">Ｂ</text>
-		<line_editor name="edit_b_value" tool_tip="タイプＢのキャラクターの歩行可能性。キャラクタータイプの例はクリーチャーです。"/>
+		<line_editor tool_tip="タイプＢのキャラクターの歩行可能性。キャラクタータイプの例はクリーチャーです。" name="edit_b_value"/>
 		<text name="edit_c_label">Ｃ</text>
-		<line_editor name="edit_c_value" tool_tip="タイプＣのキャラクターの歩行可能性。キャラクタータイプの例はメカニカルです。"/>
+		<line_editor tool_tip="タイプＣのキャラクターの歩行可能性。キャラクタータイプの例はメカニカルです。" name="edit_c_value"/>
 		<text name="edit_d_label">Ｄ</text>
-		<line_editor name="edit_d_value" tool_tip="タイプＤのキャラクターの歩行可能性。キャラクタータイプの例はその他です。"/>
+		<line_editor tool_tip="タイプＤのキャラクターの歩行可能性。キャラクタータイプの例はその他です。" name="edit_d_value"/>
 		<button label="変更を適用" name="apply_edit_values"/>
 		<text name="suggested_use_a_label">（ヒューマノイド）</text>
 		<text name="suggested_use_b_label">（クリーチャー）</text>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_scripting_settings" title="CONFIGURAÇÕES DE DESENVOLVIMENTO DE SCRIPT">
+	<check_box label="Mostrar erros de script em:" name="show_script_errors"/>
+	<radio_group name="show_location">
+		<radio_item label="Chat local" name="0"/>
+		<radio_item label="Janela separada" name="1"/>
+	</radio_group>
+	<text name="tip">
+		Editor de script externo:
+	</text>
+	<button label="Procurar..." name="browse_btn"/>
+	<check_box label="Integração direta com o VS Code" name="tight_integration"/>
+	<check_box label="Ativar sincronização WebSocket" name="websocket_sync_enable"/>
+	<text name="websocket_tip">
+		Porta de escuta do WebSocket:
+	</text>
+	<check_box label="Encaminhar erros e depuração de script para clientes WebSocket" name="websocket_forward_debug"/>
+	<button label="Fechar" name="close_btn"/>
+</floater>

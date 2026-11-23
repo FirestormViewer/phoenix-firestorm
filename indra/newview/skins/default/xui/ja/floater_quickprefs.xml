@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="quickprefs" title="簡易設定">
+<floater title="簡易設定" name="quickprefs">
 	<panel name="quickprefs">
 		<layout_stack name="wl_options_stack">
 			<layout_panel name="wl_options_panel">
-				<text name="HoverHeightLabel" tool_tip="地面やオブジェクトからのアバターの高さを調整します。">
+				<text tool_tip="地面やオブジェクトからのアバターの高さを調整します。" name="HoverHeightLabel">
 					ホバーする高さ：
 				</text>
 				<!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
-				<text name="Maximum bandwidth" tool_tip="あなたのネットワーク帯域幅をKbps（１秒あたり１キロビット）単位で設定します。">
+				<text tool_tip="あなたのネットワーク帯域幅をKbps（１秒あたり１キロビット）単位で設定します。" name="Maximum bandwidth">
 					最大帯域幅：
 				</text>
-				<text name="Maximum complexity" tool_tip="複雑度の高いアバターをJerryDoll表示し始める値を設定します。">
+				<text tool_tip="複雑度の高いアバターをJerryDoll表示し始める値を設定します。" name="Maximum complexity">
 					最大複雑度：
 				</text>
 				<text name="IndirectMaxComplexityText">
 					無制限
 				</text>
 				<!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
-				<text name="WL Sky" tool_tip="空のプリセットです。">
+				<text tool_tip="空のプリセットです。" name="WL Sky">
 					空：
 				</text>
-				<text name="WL Water" tool_tip="水面のプリセットです。">
+				<text tool_tip="水面のプリセットです。" name="WL Water">
 					水面：
 				</text>
-				<text name="Day Cycle" tool_tip="デイサイクルのプリセットです。">
+				<text tool_tip="デイサイクルのプリセットです。" name="Day Cycle">
 					デイサイクル：
 				</text>
-				<button name="btn_personal_lighting" label="個人的光源…"/>
-				<button name="ResetToRegionDefault" tool_tip="自然環境のオプションを共有された環境にリセットします。"/>
+				<button label="個人的光源…" name="btn_personal_lighting"/>
+				<button tool_tip="自然環境のオプションを共有された環境にリセットします。" name="ResetToRegionDefault"/>
 				<!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->
-				<button name="button_edit" tool_tip="ここをクリックして簡易設定のコントロールを調整します。" />
+				<button tool_tip="ここをクリックして簡易設定のコントロールを調整します。" name="button_edit" />
 				<!-- </FS:Zi> -->
 			</layout_panel>
 		</layout_stack>
 	</panel>
 	<!-- <FS:Zi> Dynamic quick prefs: edit overlay -->
 	<panel name="edit_overlay_panel">
-		<button name="move_up_button" tool_tip="選択したコントロールを一つ上に移動します。"/>
-		<button name="add_new_button" tool_tip="新しい簡易設定を追加します。"/>
-		<line_editor name="label_edit" tool_tip="コントロールのラベル名をここに入力します。" label="コントロールのラベル名："/>
-		<button name="move_down_button" tool_tip="選択したコントロールを一つ下に移動します。"/>
-		<combo_box name="control_name_combo" tool_tip="デバッグ設定からコントロールを選択します。">
+		<button tool_tip="選択したコントロールを一つ上に移動します。" name="move_up_button"/>
+		<button tool_tip="新しい簡易設定を追加します。" name="add_new_button"/>
+		<line_editor label="コントロールのラベル名：" tool_tip="コントロールのラベル名をここに入力します。" name="label_edit"/>
+		<button tool_tip="選択したコントロールを一つ下に移動します。" name="move_down_button"/>
+		<combo_box tool_tip="デバッグ設定からコントロールを選択します。" name="control_name_combo">
 			<combo_box.item label="＝＝選択して下さい＝＝" name="control_name_list_header"/>
 		</combo_box>
 		<text name="control_type_label">
 			タイプ：
 		</text>
-		<combo_box name="control_type_combo_box" tool_tip="この設定に使用したいユーザーインターフェイスのタイプを選択します。">
+		<combo_box tool_tip="この設定に使用したいユーザーインターフェイスのタイプを選択します。" name="control_type_combo_box">
 			<!-- do not use <combo_item>Foo</combo_item>, it doesn't work -->
 			<combo_box.item label="チェックボックス" name="Checkbox"/>
 			<combo_box.item label="テキスト" name="Text"/>
@@ -57,13 +57,13 @@
 			<combo_box.item label="ＲＧＢＡカラー" name="Color 4"/>
 		</combo_box>
 		<!-- enable/disable done in code depending on the type of control chosen -->
-		<check_box name="control_integer_checkbox" tool_tip="設定に整数を使用する場合このチェックボックスにチェックを入れて下さい。" label="整数"/>
+		<check_box label="整数" tool_tip="設定に整数を使用する場合このチェックボックスにチェックを入れて下さい。" name="control_integer_checkbox"/>
 		<!-- enable/disable done in code depending on the type of control chosen -->
-		<spinner name="control_min_edit" tool_tip="設定する値の最小値" label="最小："/>
-		<spinner name="control_max_edit" tool_tip="設定する値の最大値" label="最大："/>
-		<spinner name="control_increment_edit" tool_tip="回転型やスライダー型で値を設定する際の増減幅" label="間隔："/>
-		<button name="Restore_Btn" tool_tip="デフォルト設定に戻します。" label="リセット"/>
+		<spinner label="最小：" tool_tip="設定する値の最小値" name="control_min_edit"/>
+		<spinner label="最大：" tool_tip="設定する値の最大値" name="control_max_edit"/>
+		<spinner label="間隔：" tool_tip="回転型やスライダー型で値を設定する際の増減幅" name="control_increment_edit"/>
+		<button label="リセット" tool_tip="デフォルト設定に戻します。" name="Restore_Btn"/>
 		<!-- reverse the image names here beause we have a toggle ON button -->
-		<button name="button_close" tool_tip="編集パネルを閉じます。"/>
+		<button tool_tip="編集パネルを閉じます。" name="button_close"/>
 	</panel>
 </floater>

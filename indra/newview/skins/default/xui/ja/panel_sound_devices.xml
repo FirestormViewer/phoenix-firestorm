@@ -6,6 +6,7 @@
 	<string name="name_no_device">
 		デバイスが設定されていません。
 	</string>
+	<string name="name_no_device">デバイスが設定されていません。</string>
 	<string name="device_not_loaded">
 		デバイスが読み込まれていません。
 	</string>
@@ -21,12 +22,12 @@
 	<text name="My volume label">
 		マイク音量：
 	</text>
-	<slider_bar name="mic_volume_slider" tool_tip="スライダーを使ってマイクレベルを調節します。"/>
+	<slider_bar tool_tip="スライダーを使ってマイクレベルを調節します。" name="mic_volume_slider"/>
 	<text name="wait_text">
 		しばらくお待ちください。
 	</text>
 	<text name="disabled_text">
 		無効
 	</text>
-	<button name="unmute_btn" label="ミュート解除"/>
+	<button label="ミュート解除" name="unmute_btn"/>
 </panel>

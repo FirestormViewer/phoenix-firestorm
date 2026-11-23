@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="avatar_texture_debug" title="アバターのテクスチャ">
+<floater title="アバターのテクスチャ" name="avatar_texture_debug">
 	<floater.string name="InvalidAvatar">
 		無効なアバター
 	</floater.string>
@@ -62,21 +62,5 @@
 				<texture_picker label="予備３タトゥ" name="aux3_tattoo"/>
 			</panel>
 		</panel>
-		<texture_picker name="upper_universal_tattoo" label="上半身全般のタトゥ"/>
-		<texture_picker name="aux1_tattoo" label="予備１のタトゥ"/>
-		<texture_picker name="leftarm-baked" label="左腕"/>
-		<texture_picker name="aux1-baked" label="予備１"/>
-		<texture_picker name="skirt_tattoo" label="スカートのタトゥ"/>
-		<texture_picker name="aux2_tattoo" label="予備２のタトゥ"/>
-		<texture_picker name="eyes_tattoo" label="目のタトゥ"/>
-		<texture_picker name="head_universal_tattoo" label="頭部全般のタトゥ"/>
-		<texture_picker name="leftleg_tattoo" label="左脚のタトゥ"/>
-		<texture_picker name="aux3-baked" label="予備３"/>
-		<texture_picker name="hair_tattoo" label="髪のタトゥ"/>
-		<texture_picker name="leftleg-baked" label="左脚"/>
-		<texture_picker name="aux2-baked" label="予備２"/>
-		<texture_picker name="aux3_tattoo" label="予備３のタトゥ"/>
-		<texture_picker name="leftarm_tattoo" label="左腕のタトゥ"/>
-		<texture_picker name="lower_universal_tattoo" label="下半身全般のタトゥ"/>
 	</scroll_container>
 </floater>
