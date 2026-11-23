@@ -440,6 +440,7 @@ private:
     LLPointer<LLViewerObject> mPrimaryObject;
     std::map<LLPointer<LLViewerObject>, LLSelectNode*> mSelectNodeMap;
     ESelectType mSelectType;
+    list_t mRemovedNodes;
 
     // <FS:Zi> Fix for crash while selecting objects with derendered child prims
     list_t mFailedNodesList;
