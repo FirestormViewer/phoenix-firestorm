@@ -312,7 +312,7 @@ LLButton::LLButton(const LLButton::Params& p)
     {
         setIsToggledCallback(initEnableCallback(p.is_toggled_callback));
     }
-    if (p.enabled_callback.isValid())
+    if (p.enabled_callback.isProvided())
     {
         setEnabledCallback(initEnableCallback(p.enabled_callback));
     }
