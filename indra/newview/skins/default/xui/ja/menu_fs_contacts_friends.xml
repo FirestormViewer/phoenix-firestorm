@@ -16,7 +16,7 @@
 	<!-- <FS:Zi> Add menu items to copy and/or insert mention URIs into chat -->
 	<menu_item_call label="メンション先のＵＲＩをクリップボードにコピー" name="mention_copy_label"/>
 	<!-- </FS:Zi> -->
-	<menu name="options" label="オプション…">
+	<menu label="オプション…" name="options">
 		<menu_item_check label="ユーザ名列を表示" name="show_username"/>
 		<menu_item_check label="表示名列を表示" name="show_displayname"/>
 		<menu_item_chec label="フルネーム列を表示" name="show_fullname"/>

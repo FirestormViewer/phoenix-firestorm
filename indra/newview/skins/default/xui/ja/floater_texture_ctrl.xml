@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="texture picker" title="テクスチャの選択">
+<floater title="テクスチャの選択" name="texture picker">
 	<floater.string name="choose_picture">
 		クリックして画像を選択
 	</floater.string>
@@ -26,7 +26,7 @@
 	</text>
 	<!--  middle: inventory mode -->
 	<button label="デフォルト" label_selected="デフォルト" name="Default"/>
-	<button label="透明" label_selected="透明" name="Transparent" tool_tip="注意：透明なテクスチャ、または部分的に透明な別のテクスチャを選択した場合、光は投影されません。"/>
+	<button label="透明" label_selected="透明" tool_tip="注意：透明なテクスチャ、または部分的に透明な別のテクスチャを選択した場合、光は投影されません。" name="Transparent"/>
 	<button label="ブランク" label_selected="ブランク" name="Blank"/>
 	<button label="なし" label_selected="なし" name="None"/>
 	<text name="preview_disabled" value="プレビュー無効"/>
@@ -39,15 +39,15 @@
 	<button label="削除" label_selected="削除" name="l_rem_btn"/>
 	<button label="アップロード" label_selected="アップロード" name="l_upl_btn"/>
 	<scroll_list name="l_name_list">
-		<column name="unit_name" label="名前"/>
+		<column label="名前" name="unit_name"/>
 	</scroll_list>
 	<!-- middle: bake mode -->
-	<combo_box name="l_bake_use_texture_combo_box" tool_tip="ベイクするテクスチャを選択">
+	<combo_box tool_tip="ベイクするテクスチャを選択" name="l_bake_use_texture_combo_box">
 		<combo_box.item label="なし" name="None"/>
 	</combo_box>
 	<!-- bottom static -->
-	<line_editor name="TextureKey" tool_tip="テクスチャのキー"/>
-	<button name="TextureKeyApply" label="このＵＵＩＤを適用" tool_tip="このＵＵＩＤを適用"/>
+	<line_editor tool_tip="テクスチャのキー" name="TextureKey"/>
+	<button label="このＵＵＩＤを適用" tool_tip="このＵＵＩＤを適用" name="TextureKeyApply"/>
 	<check_box label="すぐ反映" name="apply_immediate_check"/>
 	<button label="ＯＫ" label_selected="ＯＫ" name="Select"/>
 	<button label="キャンセル" label_selected="キャンセル" name="Cancel"/>

@@ -64,7 +64,6 @@
 			<check_box label="Buchstabeneingabe beeinflusst Bewegung (z.B. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Drücken-drücken-halten, um zu rennen" name="tap_tap_hold_to_run"/>
 			<check_box label="Fliegen/Landen beim Drücken von auf (springen) / ab (kriechen)" name="automatic_fly" />
-			<check_box label="Kriech-Umschaltmodus aktivieren" name="crouch_toggle_mode"/>
 			<check_box label="Warten auf Vor-Sprung- und Lande-Animationen deaktivieren" name="FSIgnoreFinishAnimation"/>
 			<check_box label="Avataren des Rückwärtsgehen in der lokalen Ansicht erlauben (SL-Standard)" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Falls aktiviert, gehen Avatare auf dem eigenen Bildschirm beim Rückwärtsgehen rückwärts, anstatt sich umzudrehen und anschließend vorwärts zu gehen. Diese Option hat nur lokalen Effekt und hat keinen Einfluss auf was andere sehen. Dies ist die Standardeinstellung im Second Life Viewer und kann u.U. durch den AO des Avatars übersteuert werden."/>
 			<check_box label="Avatar zum ausgewählten Objekt drehen" name="FSTurnAvatarToSelectedObject" tool_tip="Dreht den Avatar mit dem Gesicht zum aktuell ausgewählten Objekt."/>
@@ -98,7 +97,7 @@
 				<combo_box.item label="Zur Position teleportieren" name="2"/>
 			</combo_box>
 			<check_box label="Doppelklick-Aktion auf geskripteten Objekten zulassen" name="FSAllowDoubleClickOnScriptedObjects"/>
-			<button label="Joystick-Konfiguration" name="joystick_setup_button"/>
+			<button label="3Dconnexion-Geräte" name="joystick_setup_button"/>
 		</panel>
 
 		<!-- Teleports -->

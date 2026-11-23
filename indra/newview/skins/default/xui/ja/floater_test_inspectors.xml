@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_test_inspectors" title="インスペクタのテスト">
+<floater title="インスペクタのテスト" name="floater_test_inspectors">
 	<text name="test_inspectors">
 		クリックしてインスペクターを生成します：
 	</text>
-	<button name="avatar_2d_btn1" label="2Dアバター"/>
-	<button name="avatar_2d_btn5" label="2Dアバター"/>
-	<button name="avatar_2d_btn2" label="2Dアバター"/>
-	<button name="avatar_2d_btn3" label=" 2Dアバター"/>
-	<button name="avatar_2d_btn4" label="2Dアバター"/>
-	<button name="avatar_3d_btn" label="3Dアバター"/>
-	<button name="object_2d_btn" label="2Dオブジェクト"/>
-	<button name="object_3d_btn" label="3Dオブジェクト"/>
-	<button name="group_btn" label="グループ"/>
-	<button name="place_btn" label="場所"/>
-	<button name="event_btn" label="イベント"/>
+	<button label="2Dアバター" name="avatar_2d_btn1"/>
+	<button label="2Dアバター" name="avatar_2d_btn5"/>
+	<button label="2Dアバター" name="avatar_2d_btn2"/>
+	<button label=" 2Dアバター" name="avatar_2d_btn3"/>
+	<button label="2Dアバター" name="avatar_2d_btn4"/>
+	<button label="3Dアバター" name="avatar_3d_btn"/>
+	<button label="2Dオブジェクト" name="object_2d_btn"/>
+	<button label="3Dオブジェクト" name="object_3d_btn"/>
+	<button label="グループ" name="group_btn"/>
+	<button label="場所" name="place_btn"/>
+	<button label="イベント" name="event_btn"/>
 </floater>

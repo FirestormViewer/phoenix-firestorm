@@ -50,10 +50,10 @@
 					<text name="maximum_altitude_label">
 						最大高度：
 					</text>
-					<text name="probe_ambiance_label" tool_tip="放射照度を制御します。０以外の場合、ＨＤＲライティングモデルが有効になります。">
+					<text tool_tip="放射照度を制御します。０以外の場合、ＨＤＲライティングモデルが有効になります。" name="probe_ambiance_label">
 						周辺環境の反射プローブ（ＨＤＲ）：
 					</text>
-					<slider name="probe_ambiance" tool_tip="環境ベースの間接照明の強度を制御します。０の場合、ＨＤＲスケールは明るさになります。"/>
+					<slider tool_tip="環境ベースの間接照明の強度を制御します。０の場合、ＨＤＲスケールは明るさになります。" name="probe_ambiance"/>
 					<text name="scene_gamma_label">
 						輝度：
 					</text>

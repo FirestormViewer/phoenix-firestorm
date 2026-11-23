@@ -50,7 +50,6 @@
 			<check_box label="Буквенные клавиши влияют на движение не запуская локальный чат (т.e. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Двойное нажатие для бега" name="tap_tap_hold_to_run"/>
 			<check_box label="Летать / Приземлиться (верх (прыжок) / вниз (присесть))" name="automatic_fly"/>
-			<check_box label="Включить режим переключения приседания" name="crouch_toggle_mode"/>
 			<check_box label="Отключить анимацию подготовки прыжка" name="FSIgnoreFinishAnimation"/>
 			<check_box label="Отключить поворот аватара лицом к камере при движении назад" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Отключить поворот аватара лицом к камере при движении назад"/>
 			<check_box label="Повернуть аватара лицом к объекту, который выбран" name="FSTurnAvatarToSelectedObject" tool_tip="Поворачивает ваш аватар лицом к объекту, который вы в данный момент выбираете."/>

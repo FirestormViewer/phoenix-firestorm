@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floaterland" title="土地情報">
+<floater title="土地情報" name="floaterland">
 	<floater.string name="Hours">
 		[HOURS]時間
 	</floater.string>
@@ -99,9 +99,9 @@
 				グループ：
 			</text>
 			<button label="設定" name="Set..."/>
-			<check_box label="グループへの寄贈を許可" name="check deed" tool_tip="グループのオフィサーはこの土地をグループに寄贈できます。グループの土地割り当てによってサポートされます。"/>
-			<button label="寄贈…" name="Deed..." tool_tip="選択したグループのオフィサーのみ、土地を寄贈できます。"/>
-			<check_box label="所有者が譲渡と共に寄贈" name="check contrib" tool_tip="土地がグループに寄贈されるとき、前の所有者は譲渡が成立するよう、十分な面積の土地を寄付します。"/>
+			<check_box label="グループへの寄贈を許可" tool_tip="グループのオフィサーはこの土地をグループに寄贈できます。グループの土地割り当てによってサポートされます。" name="check deed"/>
+			<button label="寄贈…" tool_tip="選択したグループのオフィサーのみ、土地を寄贈できます。" name="Deed..."/>
+			<check_box label="所有者が譲渡と共に寄贈" tool_tip="土地がグループに寄贈されるとき、前の所有者は譲渡が成立するよう、十分な面積の土地を寄付します。" name="check contrib"/>
 			<text name="For Sale:">
 				販売の有無：
 			</text>
@@ -141,10 +141,10 @@
 				読み込んでいます…
 			</text>
 			<button label="土地の購入" name="Buy Land..."/>
-			<button label="Lindenセール…" name="Linden Sale..." tool_tip="土地が所有されており、コンテンツが設定されている必要があります。オークションの対象になっていないことも必要条件です。"/>
+			<button label="Lindenセール…" tool_tip="土地が所有されており、コンテンツが設定されている必要があります。オークションの対象になっていないことも必要条件です。" name="Linden Sale..."/>
 			<button label="スクリプト情報…" name="Scripts..."/>
 			<button label="グループに購入" name="Buy For Group..."/>
-			<button label="入場許可を購入" name="Buy Pass..." tool_tip="この土地への一時的なアクセスを許可します。"/>
+			<button label="入場許可を購入" tool_tip="この土地への一時的なアクセスを許可します。" name="Buy Pass..."/>
 			<button label="土地の放棄" name="Abandon Land..."/>
 			<button label="土地を取り戻す" name="Reclaim Land..."/>
 		</panel>
@@ -245,7 +245,7 @@
 				[COUNT]個
 			</text>
 			<button label="表示" label_selected="表示" name="ShowOwner"/>
-			<button label="返却" name="ReturnOwner..." tool_tip="オブジェクトを所有者に返却します。"/>
+			<button label="返却" tool_tip="オブジェクトを所有者に返却します。" name="ReturnOwner..."/>
 			<text name="Set to group:">
 				グループに設定：
 			</text>
@@ -253,7 +253,7 @@
 				[COUNT]個
 			</text>
 			<button label="表示" label_selected="表示" name="ShowGroup"/>
-			<button label="返却" name="ReturnGroup..." tool_tip="オブジェクトを所有者に返却します。"/>
+			<button label="返却" tool_tip="オブジェクトを所有者に返却します。" name="ReturnGroup..."/>
 			<text name="Owned by others:">
 				他人の所有物：
 			</text>
@@ -261,7 +261,7 @@
 				[COUNT]個
 			</text>
 			<button label="表示" label_selected="表示" name="ShowOther"/>
-			<button label="返却" name="ReturnOther..." tool_tip="オブジェクトを所有者に返却します。"/>
+			<button label="返却" tool_tip="オブジェクトを所有者に返却します。" name="ReturnOther..."/>
 			<text name="Selected / sat upon:">
 				選択済み／座っている：
 			</text>
@@ -274,7 +274,7 @@
 			<text name="Object Owners:">
 				オブジェクトの所有者：
 			</text>
-			<button name="Refresh List" tool_tip="オブジェクトのリストを更新します。"/>
+			<button tool_tip="オブジェクトのリストを更新します。" name="Refresh List"/>
 			<button label="オブジェクトを返却する" name="Return objects..."/>
 			<name_list name="owner list">
 				<name_list.columns label="タイプ" name="type"/>
@@ -329,7 +329,7 @@
 			<text name="allow_label1">
 				地形の編集：
 			</text>
-			<check_box label="全員" name="edit land check" tool_tip="ここにチェックを入れると、誰でもあなたの土地をテラフォーミングすることができるようになります。自分の土地はいつでも編集できるため、ここはオフのままにしておくことを推奨します。"/>
+			<check_box label="全員" tool_tip="ここにチェックを入れると、誰でもあなたの土地をテラフォーミングすることができるようになります。自分の土地はいつでも編集できるため、ここはオフのままにしておくことを推奨します。" name="edit land check"/>
 			<text name="caution_text">
 				（使用には注意してください！）
 			</text>
@@ -337,25 +337,25 @@
 			<text name="allow_label0">
 				飛行：
 			</text>
-			<check_box label="全員" name="check fly" tool_tip="ここにチェックを入れると、この土地での飛行が可能となります。このチェックを外すと、土地に入る時や通過する時のみ飛行可能となります。"/>
+			<check_box label="全員" tool_tip="ここにチェックを入れると、この土地での飛行が可能となります。このチェックを外すと、土地に入る時や通過する時のみ飛行可能となります。" name="check fly"/>
 			<text name="allow_label2">
 				ビルド許可：
 			</text>
-			<check_box label="全員" name="edit objects check" tool_tip="このオプションを選択すると、住人があなたの土地でオブジェクトのビルドや、rezすることができるようになります。"/>
-			<check_box label="グループ" name="edit group objects check" tool_tip="このオプションを選択すると、区画のグループメンバーが、あなたの土地でオブジェクトのビルドやrezができるようになります。"/>
+			<check_box label="全員" tool_tip="このオプションを選択すると、住人があなたの土地でオブジェクトのビルドや、rezすることができるようになります。" name="edit objects check"/>
+			<check_box label="グループ" tool_tip="このオプションを選択すると、区画のグループメンバーが、あなたの土地でオブジェクトのビルドやrezができるようになります。" name="edit group objects check"/>
 			<text name="allow_label3">
 				オブジェクトの進入：
 			</text>
-			<check_box label="全員" name="all object entry check" tool_tip="このオプションを選択すると、住人が他の区画にあるオブジェクトをこの区画へ移動することができるようになります。"/>
-			<check_box label="グループ" name="group object entry check" tool_tip="このオプションを選択すると、区画のグループメンバーが、他の区画にあるオブジェクトからこの区画へ移動することができるようになります。"/>
+			<check_box label="全員" tool_tip="このオプションを選択すると、住人が他の区画にあるオブジェクトをこの区画へ移動することができるようになります。" name="all object entry check"/>
+			<check_box label="グループ" tool_tip="このオプションを選択すると、区画のグループメンバーが、他の区画にあるオブジェクトからこの区画へ移動することができるようになります。" name="group object entry check"/>
 			<text name="allow_label4">
 				スクリプトの実行：
 			</text>
-			<check_box label="全員" name="check other scripts" tool_tip="このオプションを選択すると、住人が装着物などのスクリプトの実行をあなたの区画でえるようになります。"/>
-			<check_box label="グループ" name="check group scripts" tool_tip="このオプションを選択すると、区画のグループメンバーは、装着物などのスクリプトの実行をあなたの区画で行えるようになります。"/>
-			<check_box label="安全（ダメージなし）" name="check safe" tool_tip="このチェックを入れると、この土地での戦闘行為が無効になり、「安全」に設定されます。チェックを外すと戦闘行為が有効になります。"/>
-			<check_box label="プッシュ禁止" name="PushRestrictCheck" tool_tip="スクリプトによるプッシュを禁止します。このオプションを選択することにより、あなたの土地での破壊的行動を防ぐことができます。"/>
-			<check_box label="検索に区画を表示（週L$ 30）" name="ShowDirectoryCheck" tool_tip="この区画を検索結果に表示します。"/>
+			<check_box label="全員" tool_tip="このオプションを選択すると、住人が装着物などのスクリプトの実行をあなたの区画でえるようになります。" name="check other scripts"/>
+			<check_box label="グループ" tool_tip="このオプションを選択すると、区画のグループメンバーは、装着物などのスクリプトの実行をあなたの区画で行えるようになります。" name="check group scripts"/>
+			<check_box label="安全（ダメージなし）" tool_tip="このチェックを入れると、この土地での戦闘行為が無効になり、「安全」に設定されます。チェックを外すと戦闘行為が有効になります。" name="check safe"/>
+			<check_box label="プッシュ禁止" tool_tip="スクリプトによるプッシュを禁止します。このオプションを選択することにより、あなたの土地での破壊的行動を防ぐことができます。" name="PushRestrictCheck"/>
+			<check_box label="検索に区画を表示（週L$ 30）" tool_tip="この区画を検索結果に表示します。" name="ShowDirectoryCheck"/>
 			<combo_box name="land category">
 				<combo_box.item label="全カテゴリ" name="item0"/>
 				<combo_box.item label="Linden所在地" name="item1"/>
@@ -375,21 +375,21 @@
 			<text name="Snapshot:">
 				スナップショット：
 			</text>
-			<texture_picker name="snapshot_ctrl" tool_tip="クリックで画像を選択します。"/>
+			<texture_picker tool_tip="クリックで画像を選択します。" name="snapshot_ctrl"/>
 			<text name="allow_see_label">
 				別の区画にいるアバターが、この区画にいるアバターとチャットできるようにする
 			</text>
-			<check_box name="SeeAvatarsCheck" tool_tip="別の区画のアバターが、この区画にいるアバターとチャットすることを許可し、あなたもそれらアバターに会ってチャットできるようにします。"/>
+			<check_box tool_tip="別の区画のアバターが、この区画にいるアバターとチャットすることを許可し、あなたもそれらアバターに会ってチャットできるようにします。" name="SeeAvatarsCheck"/>
 			<text name="landing_point">
 				ランディング地点：[LANDING]
 			</text>
-			<button label="設定" label_selected="設定" name="Set" tool_tip="訪問者が最初に訪れる場所の設定を行います。この区画内に立って行ってください。"/>
-			<button label="クリア" label_selected="クリア" name="Clear" tool_tip="ランディング地点をクリアする。"/>
-			<button label="テレポート" label_selected="テレポート" name="teleport_to_landing_point" tool_tip="ランディング地点にテレポートします。"/>
+			<button label="設定" label_selected="設定" tool_tip="訪問者が最初に訪れる場所の設定を行います。この区画内に立って行ってください。" name="Set"/>
+			<button label="クリア" label_selected="クリア" tool_tip="ランディング地点をクリアする。" name="Clear"/>
+			<button label="テレポート" label_selected="テレポート" tool_tip="ランディング地点にテレポートします。" name="teleport_to_landing_point"/>
 			<text name="Teleport Routing: ">
 				テレポート経路：
 			</text>
-			<combo_box name="landing type" tool_tip="テレポート経路－あなたの土地へのテレポート経路を選択してください。">
+			<combo_box tool_tip="テレポート経路－あなたの土地へのテレポート経路を選択してください。" name="landing type">
 				<combo_box.item label="不可" name="Blocked"/>
 				<combo_box.item label="ランディング地点のみ" name="LandingPoint"/>
 				<combo_box.item label="どこでも可能" name="Anywhere"/>
@@ -399,7 +399,7 @@
 			<text name="with media:">
 				種類：
 			</text>
-			<combo_box name="media type" tool_tip="動画や、Webページ、その他のメディアのＵＲＬを指定します。"/>
+			<combo_box tool_tip="動画や、Webページ、その他のメディアのＵＲＬを指定します。" name="media type"/>
 			<text name="at URL:">
 				ホームページ：
 			</text>
@@ -407,35 +407,35 @@
 			<text name="Description:">
 				説明：
 			</text>
-			<line_editor name="url_description" tool_tip="「再生」「読み込み」ボタンの隣に表示されるテキストです。"/>
+			<line_editor tool_tip="「再生」「読み込み」ボタンの隣に表示されるテキストです。" name="url_description"/>
 			<text name="Media texture:">
 				差し替えるテクスチャ：
 			</text>
-			<texture_picker name="media texture" tool_tip="クリックして画像を選択します。"/>
+			<texture_picker tool_tip="クリックして画像を選択します。" name="media texture"/>
 			<text name="replace_texture_help">
 				このテクスチャを使用するオブジェクトの「再生」をクリックすると、動画やWebページを表示します。テクスチャを変更するにはサムネイルを選択してください。
 			</text>
-			<check_box label="スケールを自動設定" name="media_auto_scale" tool_tip="このオプションをチェックすると、この区画のコンテンツのスケールが自動的に設定されます。動作速度と画質が少し低下することがありますが、他のテクスチャのスケーリングや整列が必要になることはありません。"/>
-			<text name="media_size" tool_tip="描画するWebメディアのサイズです。デフォルトの０のままにします。">
+			<check_box label="スケールを自動設定" tool_tip="このオプションをチェックすると、この区画のコンテンツのスケールが自動的に設定されます。動作速度と画質が少し低下することがありますが、他のテクスチャのスケーリングや整列が必要になることはありません。" name="media_auto_scale"/>
+			<text tool_tip="描画するWebメディアのサイズです。デフォルトの０のままにします。" name="media_size">
 				サイズ：
 			</text>
-			<spinner name="media_size_width" tool_tip="描画するWebメディアのサイズです。デフォルトの０のままにします。"/>
-			<spinner name="media_size_height" tool_tip="描画するWebメディアのサイズです。デフォルトの０のままにします。"/>
+			<spinner tool_tip="描画するWebメディアのサイズです。デフォルトの０のままにします。" name="media_size_width"/>
+			<spinner tool_tip="描画するWebメディアのサイズです。デフォルトの０のままにします。" name="media_size_height"/>
 			<text name="pixels">
 				ピクセル
 			</text>
 			<text name="Options:">
 				オプション：
 			</text>
-			<check_box label="ループ" name="media_loop" tool_tip="メディアをループ再生します。メディアの再生が終わったら、最初から再生し直します。"/>
+			<check_box label="ループ" tool_tip="メディアをループ再生します。メディアの再生が終わったら、最初から再生し直します。" name="media_loop"/>
 		</panel>
 		<panel label="サウンド" name="land_audio_panel">
 			<text name="MusicURL:">
 				音楽ＵＲＬ：
 			</text>
-			<button name="stream_add_btn" tool_tip="音楽ストリームＵＲＬをストリームリストに追加します。"/>
-			<button name="stream_delete_btn" tool_tip="音楽ストリームＵＲＬをストリームリストから削除します。"/>
-			<button name="stream_copy_btn" tool_tip="音楽ストリームＵＲＬをクリップボードにコピーします。"/>
+			<button tool_tip="音楽ストリームＵＲＬをストリームリストに追加します。" name="stream_add_btn"/>
+			<button tool_tip="音楽ストリームＵＲＬをストリームリストから削除します。" name="stream_delete_btn"/>
+			<button tool_tip="音楽ストリームＵＲＬをクリップボードにコピーします。" name="stream_copy_btn"/>
 			<text name="Sound:">
 				サウンド：
 			</text>
@@ -454,7 +454,7 @@
 			<text name="media">
 				メディア：
 			</text>
-			<check_box label="ＭＯＡＰを区画に制限する" name="obscure_moap" tool_tip="プリムに付けられたメディア（ＭＯＡＰ）を、区画外にいるエージェントに対して自動再生されないようにします。"/>
+			<check_box label="ＭＯＡＰを区画に制限する" tool_tip="プリムに付けられたメディア（ＭＯＡＰ）を、区画外にいるエージェントに対して自動再生されないようにします。" name="obscure_moap"/>
 		</panel>
 		<panel label="アクセス" name="land_access_panel">
 			<panel.string name="access_estate_defined">
@@ -464,10 +464,10 @@
 				１つ以上のオプションが、不動産レベルで設定されています。
 			</panel.string>
 			<check_box label="誰でも訪問可（このオプションをオフにすると立入禁止ラインが作成されます）" name="public_access"/>
-			<check_box label="１８歳以上である必要があります。[ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="この区画にアクセスするには、１８歳以上でなければなりません。詳細につきましては、[SUPPORT_SITE]をご覧になってください。"/>
-			<check_box label="支払情報が登録されている必要があります。[ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="アカウントに支払情報が登録されていない場合、この区画にアクセスすることはできません。詳細につきましては、[SUPPORT_SITE]をご覧になってください。"/>
-			<check_box label="グループ「[GROUP]」のみアクセスを許可する。" name="GroupCheck" tool_tip="対象とするグループは「一般」タブで選択してください。"/>
-			<check_box label="入場許可を販売：" name="PassCheck" tool_tip="この区画への一時的なアクセスを許可します。"/>
+			<check_box label="１８歳以上である必要があります。[ESTATE_AGE_LIMIT]" tool_tip="この区画にアクセスするには、１８歳以上でなければなりません。詳細につきましては、[SUPPORT_SITE]をご覧になってください。" name="limit_age_verified"/>
+			<check_box label="支払情報が登録されている必要があります。[ESTATE_PAYMENT_LIMIT]" tool_tip="アカウントに支払情報が登録されていない場合、この区画にアクセスすることはできません。詳細につきましては、[SUPPORT_SITE]をご覧になってください。" name="limit_payment"/>
+			<check_box label="グループ「[GROUP]」のみアクセスを許可する。" tool_tip="対象とするグループは「一般」タブで選択してください。" name="GroupCheck"/>
+			<check_box label="入場許可を販売：" tool_tip="この区画への一時的なアクセスを許可します。" name="PassCheck"/>
 			<combo_box name="pass_combo">
 				<combo_box.item label="誰でも" name="Anyone"/>
 				<combo_box.item label="グループ" name="Group"/>
@@ -481,24 +481,24 @@
 				<text label="常に許可" name="AllowedText">
 					常に許可（全[MAX]人中[COUNT]人）
 				</text>
-				<name_list name="AccessList" tool_tip="（最大[MAX]人中[LISTED]人が登録されています。）"/>
+				<name_list tool_tip="（最大[MAX]人中[LISTED]人が登録されています。）" name="AccessList"/>
 				<button label="追加" name="add_allowed"/>
 				<button label="削除" label_selected="削除" name="remove_allowed"/>
 				<button label="エクスポート" label_selected="エクスポート" name="export_allowed"/>
-				<button tool_tip="有効なＵＵＩＤのみ（１行に１つ、余分な文字やフォーマットなし）を含むＣＳＶ形式のファイルをインポートします。" label="インポート" label_selected="インポート" name="import_allowed"/>
+				<button label="インポート" label_selected="インポート" tool_tip="有効なＵＵＩＤのみ（１行に１つ、余分な文字やフォーマットなし）を含むＣＳＶ形式のファイルをインポートします。" name="import_allowed"/>
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="バン" name="BanCheck">
 					バンされた人（全[MAX]人中[COUNT]人）
 				</text>
-				<name_list name="BannedList" tool_tip="（最大[MAX]人中[LISTED]人が登録されています。）">
+				<name_list tool_tip="（最大[MAX]人中[LISTED]人が登録されています。）" name="BannedList">
 					<columns label="名前" name="name"/>
 					<columns label="期間" name="duration"/>
 				</name_list>
 				<button label="追加" name="add_banned"/>
 				<button label="削除" label_selected="削除" name="remove_banned"/>
 				<button label="エクスポート" label_selected="エクスポート" name="export_banned"/>
-				<button tool_tip="有効なＵＵＩＤのみ（１行に１つ、余分な文字やフォーマットなし）を含むＣＳＶ形式のファイルをインポートします。" label="インポート" label_selected="インポート" name="import_banned"/>
+				<button label="インポート" label_selected="インポート" tool_tip="有効なＵＵＩＤのみ（１行に１つ、余分な文字やフォーマットなし）を含むＣＳＶ形式のファイルをインポートします。" name="import_banned"/>
 			</panel>
 		</panel>
 		<panel label="体験" name="land_experiences_panel"/>

@@ -1078,10 +1078,10 @@ void FSFloaterPerformance::onExtendedAction(const LLSD& userdata, const LLUUID& 
     else if ("zoom" == command_name)
     {
         // Disable flycam if active.  Without this, the requested look-at doesn't happen because the flycam code overrides all other camera motion.
-        bool fly_cam_status(LLViewerJoystick::getInstance()->getOverrideCamera());
+        bool fly_cam_status(gAgentCamera.isUsingFlycam());
         if (fly_cam_status)
         {
-            LLViewerJoystick::getInstance()->setOverrideCamera(false);
+            gAgentCamera.toggleFlycam();
             LLPanelStandStopFlying::clearStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
             // *NOTE: Above may not be the proper way to disable flycam.  What I really want to do is just be able to move the camera and then leave the flycam in the the same state it was in, just moved to the new location. ~Cron
         }
@@ -1181,7 +1181,7 @@ void FSFloaterPerformance::onExtendedAction(const LLSD& userdata, const LLUUID& 
         // *TODO: Re-enable joystick flycam if we disabled it earlier...  Have to find some form of callback as re-enabling at this point causes the camera motion to not happen. ~Cron
         //if (fly_cam_status)
         //{
-        //  LLViewerJoystick::getInstance()->toggleFlycam();
+        //  gAgentCamera.toggleFlycam();
         //}
     }
 }

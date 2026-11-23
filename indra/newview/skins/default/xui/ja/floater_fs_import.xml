@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="fs_import" title="オブジェクトのインポート">
+<floater title="オブジェクトのインポート" name="fs_import">
 	<floater.string name="floater_title">
 		[FILENAME]のインポート
 	</floater.string>
@@ -43,15 +43,16 @@
 	<text name="creation_date_text">
 		[DATE_STRING]に作成
 	</text>
+	<text name="author_text">作成者：[AUTHOR] [GRID]</text>
 	<text name="client_text">
 		クライアント：[CLIENT] v.[VERSION]
 	</text>
 	<text name="file_status_text">
 		ファイルを選択
 	</text>
-	<check_box name="do_not_attach" label="オブジェクトを装着しない"/>
-	<check_box name="region_position" label="リージョン座標を復元する"/>
-	<check_box name="upload_asset" label="コンテンツのアップロード"/>
-	<check_box name="temp_asset" label="一時的"/>
-	<button name="import_btn" label="インポート"/>
+	<check_box label="オブジェクトを装着しない" name="do_not_attach"/>
+	<check_box label="リージョン座標を復元する" name="region_position"/>
+	<check_box label="コンテンツのアップロード" name="upload_asset"/>
+	<check_box label="一時的" name="temp_asset"/>
+	<button label="インポート" name="import_btn"/>
 </floater>

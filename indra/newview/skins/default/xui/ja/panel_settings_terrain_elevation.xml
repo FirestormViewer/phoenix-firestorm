@@ -50,7 +50,7 @@
 	<!--  southeast high-->
 	<spinner label="最高" name="height_range_spin_2"/>
 	<!-- Terrain Download/Upload/Bake buttons -->
-	<button label="ＲＡＷの地形をダウンロード…" name="download_raw_btn" tool_tip="不動産所有者のみが利用可能であり、マネージャーは利用できません。"/>
-	<button label="ＲＡＷの地形をアップロード…" name="upload_raw_btn" tool_tip="不動産所有者のみが利用可能であり、マネージャーは利用できません。"/>
-	<button label="地形のベイク" name="bake_terrain_btn" tool_tip="現在の地形を上限／下限の中間点として設定します。"/>
+	<button label="ＲＡＷの地形をダウンロード…" tool_tip="不動産所有者のみが利用可能であり、マネージャーは利用できません。" name="download_raw_btn"/>
+	<button label="ＲＡＷの地形をアップロード…" tool_tip="不動産所有者のみが利用可能であり、マネージャーは利用できません。" name="upload_raw_btn"/>
+	<button label="地形のベイク" tool_tip="現在の地形を上限／下限の中間点として設定します。" name="bake_terrain_btn"/>
 </panel>

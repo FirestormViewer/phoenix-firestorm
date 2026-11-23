@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<panel label="Управление" name="controls">
+<panel label="Управление" name="controls_panel">
 	<combo_box name="key_mode">
 		<combo_box.item label="Когда вид со стороны" name="third_person"/>
 		<combo_box.item label="Когда вид от перого лица (Mouselook)" name="first_person"/>

@@ -94,6 +94,11 @@
     <file>TwemojiSVG.ttf</file>
   </font>
 
+  <font name="SecondLife-game-control"
+	comment="Game-controller button/axis glyphs (based on Promptfont by Shinmera, OFL). Used only on specific game-control UI cells; NOT a global fallback (its glyphs occupy real Unicode arrow codepoints).">
+    <file>SecondLife-game-control.ttf</file>
+  </font>
+
   <font
       name="EmojiBW"
       comment="Name of emoji font">

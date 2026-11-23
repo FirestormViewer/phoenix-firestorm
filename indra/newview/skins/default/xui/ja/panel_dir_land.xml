@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="不動産販売" name="panel_dir_land">
+	<string name="searching_text">検索しています…</string>
+	<string name="not_found_text">見つかりませんでした。</string>
+	<string name="found_text">[COUNT]件見つかりました。</string>
+	<text name="find">検索語句を入力：</text>
+	<combo_box name="type">
+		<combo_item label="すべての種類" name="AllTypes"/>
+		<combo_item label="オークション" name="Auction"/>
+		<combo_item label="販売中－メインランド" name="MainlandSales"/>
+		<combo_item label="販売中－エステート" name="EstateSales"/>
+	</combo_box>
+	<check_box label="価格 ≦ " name="pricecheck"/>
+	<check_box label="面積 ≧ " name="areacheck"/>
+	<button label="検索" name="Search"/>
+	<scroll_list name="results">
+		<column label="名前" name="name"/>
+		<column label="種類" name="landtype"/>
+		<column label="価格（L$）" name="price"/>
+		<column label="面積" name="area"/>
+		<column label="L$／㎡" name="per_meter"/>
+	</scroll_list>
+	<button tool_tip="前のページに戻ります。" name="prev_btn"/>
+	<button tool_tip="次のページに進みます。" name="next_btn"/>
+</panel>

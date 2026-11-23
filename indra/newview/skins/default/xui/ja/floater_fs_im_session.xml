@@ -4,16 +4,16 @@
 	<floater.string name="multiple_participants_added" value="[NAME]がこの会話に招待されました。"/>
 	<layout_stack name="ls_control_panel">
 		<layout_panel name="gprofile_panel">
-			<button name="group_info_btn" tool_tip="このグループのプロフィールを表示します。"/>
+			<button tool_tip="このグループのプロフィールを表示します。" name="group_info_btn"/>
 		</layout_panel>
 		<layout_panel name="profile_panel">
-			<button name="view_profile_btn" tool_tip="この住人のプロフィールを表示します。"/>
+			<button tool_tip="この住人のプロフィールを表示します。" name="view_profile_btn"/>
 		</layout_panel>
 		<layout_panel name="friend_panel">
 			<button tool_tip="この住人にフレンド登録を申し込みます。" name="add_friend_btn"/>
 		</layout_panel>
 		<layout_panel name="tp_panel">
-			<menu_button name="teleport_btn" tool_tip="この住人にテレポートのオファーやリクエストを送ります。"/>
+			<menu_button tool_tip="この住人にテレポートのオファーやリクエストを送ります。" name="teleport_btn"/>
 		</layout_panel>
 		<layout_panel name="share_panel">
 			<button tool_tip="この住人にアイテムを送ります。" name="share_btn"/>
@@ -43,18 +43,23 @@
 			<menu_button tool_tip="チャットのオプション" name="chat_options_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_chat_search_btn">
-			<button name="chat_search_btn" tool_tip="チャットを検索します。"/>
+			<button tool_tip="チャットを検索します。" name="chat_search_btn"/>
 		</layout_panel>
 		<layout_panel name="support_panel">
-			<check_box label="ビューアタイプを特定" name="FSSupportGroupChatPrefix_toggle" tool_tip="このグループに送信するメッセージの先頭に、現在のビューアのバージョン、ビューアのスキン、オペレーティングシステム、ＲＬＶａステータスを追加します。これにより、サポートスタッフが問題を正しく診断し、質問に正確に回答できるようになります。"/>
+			<check_box label="ビューアタイプを特定" tool_tip="このグループに送信するメッセージの先頭に、現在のビューアのバージョン、ビューアのスキン、オペレーティングシステム、ＲＬＶａステータスを追加します。これにより、サポートスタッフが問題を正しく診断し、質問に正確に回答できるようになります。" name="FSSupportGroupChatPrefix_toggle"/>
 		</layout_panel>
 		<layout_panel name="testing_panel">
-			<check_box label="ビルドを指定" name="FSSupportGroupChatPrefixTesting_toggle" tool_tip="このグループに送信するメッセージの先頭に、現在のビューアのバージョン、ビューアのスキン、オペレーティングシステム、ＲＬＶａステータスを追加します。これにより、サポートスタッフが問題を正しく診断し、質問に正確に回答できるようになります。（これはサポート グループとは別です）"/>
+			<check_box label="ビルドを指定" tool_tip="このグループに送信するメッセージの先頭に、現在のビューアのバージョン、ビューアのスキン、オペレーティングシステム、ＲＬＶａステータスを追加します。これにより、サポートスタッフが問題を正しく診断し、質問に正確に回答できるようになります。（これはサポート グループとは別です）" name="FSSupportGroupChatPrefixTesting_toggle"/>
 		</layout_panel>
 	</layout_stack>
 	<layout_stack name="chat_stack">
 		<layout_panel name="panel_im_control_lp">
 			<layout_stack name="im_panels">
+				<layout_panel name="chat_holder">
+					<panel name="chat_service_loading">
+						<text name="chat_service_loading_text" value="読み込み中…"/>
+					</panel>
+				</layout_panel>
 				<layout_panel name="unread_messages_holder">
 					<text name="unread_messages_text">
 						未読のメッセージ：[NUM]件
@@ -63,11 +68,11 @@
 				<layout_panel name="chat_layout_panel">
 					<layout_stack name="input_panels">
 						<layout_panel name="emoji_button_layout_panel">
-							<button name="emoji_picker_toggle_btn" tool_tip="絵文字パネルを開きます。"/>
-							<button name="emoji_recent_panel_toggle_btn" tool_tip="最近表示した絵文字を表示／非表示します。"/>
+							<button tool_tip="絵文字パネルを開きます。" name="emoji_picker_toggle_btn"/>
+							<button tool_tip="最近表示した絵文字を表示／非表示します。" name="emoji_recent_panel_toggle_btn"/>
 						</layout_panel>
 						<layout_panel name="input_button_layout_panel">
-							<button name="send_chat" label="送信" tool_tip="ＩＭを送信します。"/>
+							<button label="送信" tool_tip="ＩＭを送信します。" name="send_chat"/>
 						</layout_panel>
 					</layout_stack>
 				</layout_panel>

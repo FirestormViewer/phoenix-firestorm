@@ -13,8 +13,8 @@
 				<fs_scroll_list.columns name="name" label="Nazwa"/>
 				<fs_scroll_list.columns name="description" label="Opis"/>
 				<fs_scroll_list.columns name="price" label="Cena" tool_tip="Ile zapłacisz za kupno, jeśli obiekt jest wystawiony na sprzedaż."/>
-				<fs_scroll_list.columns name="land_impact" label="Wpływ" tool_tip="Ilość prim, jaka jest odliczana od maksymalnie dostępnych na działce." width="45"/>
-				<fs_scroll_list.columns name="prim_count" label="Primy" tool_tip="Ilość prim, z jakich zrobiony jest obiekt."/>
+				<fs_scroll_list.columns name="land_impact" label="Wpływ" tool_tip="Liczba prim, jaka jest odliczana od maksymalnie dostępnych na działce." width="45"/>
+				<fs_scroll_list.columns name="prim_count" label="Primy" tool_tip="Liczba prim, z jakich zrobiony jest obiekt."/>
 				<fs_scroll_list.columns name="owner" label="Właściciel"/>
 				<fs_scroll_list.columns name="group" label="Grupa" tool_tip="Na jaką grupę ustawiony jest obiekt."/>
 				<fs_scroll_list.columns name="creator" label="Twórca"/>
@@ -63,7 +63,7 @@
 			<check_box name="filter_perm_copy" label="Kopiowalne"/>
 			<check_box name="filter_perm_modify" label="Modyfikowalne"/>
 			<check_box name="filter_perm_transfer" label="Transferowalne"/>
-			<check_box name="filter_reflection_probe" label="Sondami refleks." tool_tip="Obejmuje tylko sondy ręczne, nie sondy automatyczne. Obejmuje tylko sondy lustrzane, jeśli lustra są włączone w preferencjach graficznych. Jeśli zasięg odbić jest ustawiony na 'brak' lub sonda nie jest załadowana, to obiekty mogą nie zostać zidentyfikowane." />
+			<check_box name="filter_reflection_probe" label="Sondami refleks." tool_tip="Obejmuje tylko sondy ręczne, nie sondy automatyczne. Obejmuje tylko sondy lustrzane, jeśli lustra są włączone w ustawieniach grafiki. Jeśli zasięg odbić jest ustawiony na 'brak' lub sonda nie jest załadowana, to obiekty mogą nie zostać zidentyfikowane." />
 			<check_box name="filter_for_sale" label="Do kupienia między" width="135"/>
 			<text name="and" width="30">
 				oraz
@@ -108,7 +108,7 @@
 			<check_box name="show_description" label="Opis"/>
 			<check_box name="show_price" label="Cena"/>
 			<check_box name="show_land_impact" label="Wpływ na ziemię"/>
-			<check_box name="show_prim_count" label="Ilość prim"/>
+			<check_box name="show_prim_count" label="Liczba prim"/>
 			<check_box name="show_owner" label="Właściciel"/>
 			<check_box name="show_group" label="Grupa"/>
 			<check_box name="show_creator" label="Twórca"/>

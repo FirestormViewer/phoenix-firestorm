@@ -8,6 +8,7 @@
 	<menu_item_call label="コーリングカードを渡す" name="Give Calling Card"/>
 	<menu_item_call label="コール" name="Call"/>
 	<menu_item_call label="グループに招待" name="Invite..."/>
+	<menu_item_call label="アバターに顔を向ける" name="Face towards avatar"/>
 	<menu_item_call label="スケルトンのリセット" name="Reset Skeleton"/>
 	<menu_item_call label="スケルトンとアニメーションのリセット" name="Reset Skeleton And Animations"/>
 	<menu_item_call label="メッシュのＬＯＤをリセット" name="Reset Mesh LOD"/>
@@ -23,9 +24,9 @@
 	<menu_item_call label="ＸＭＬとしてダンプ" name="Dump XML"/>
 	<menu_item_call label="ズームイン" name="Zoom In"/>
 	<menu_item_call label="支払う" name="Pay..."/>
-	<menu_item_check name="AlwaysRenderFully" label="常に詳細まで表示"/>
-	<menu_item_check name="DoNotRender" label="詳細まで表示しない"/>
-	<menu_item_check name="RenderNormally" label="表示の例外から削除する"/>
+	<menu_item_check label="常に詳細まで表示" name="AlwaysRenderFully"/>
+	<menu_item_check label="詳細まで表示しない" name="DoNotRender"/>
+	<menu_item_check label="表示の例外から削除する" name="RenderNormally"/>
 	<menu_item_call label="パーティクル所有者をブロック" name="Mute Particle"/>
 	<menu_item_call label="スクリプト情報" name="ScriptInfo"/>
 	<menu_item_call label="描画解除" name="Derender"/>

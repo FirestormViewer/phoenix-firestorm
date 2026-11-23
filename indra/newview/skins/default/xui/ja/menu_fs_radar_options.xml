@@ -35,5 +35,5 @@
 	<menu_item_check label="入ってきた通知をスクリプトに表示" name="RadarEnterChannelAlert"/>
 	<menu_item_check label="去っていった通知をスクリプトに表示" name="RadarLeaveChannelAlert"/>
 	<menu_item_check label="ＬＳＬクライアントブリッジでレーダーを強化" name="FSRadarEnhanceByBridge"/>
-	<menu_item_call name="show_blocked_list" label="ブロックした人物とオブジェクトを表示"/>
+	<menu_item_call label="ブロックした人物とオブジェクトを表示" name="show_blocked_list"/>
 </toggleable_menu>

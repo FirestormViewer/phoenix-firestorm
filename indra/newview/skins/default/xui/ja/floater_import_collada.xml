@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Import Collada" title="Colladaファイルのインポート">
+<floater title="Colladaファイルのインポート" name="Import Collada">
 	<text name="mesh count">
 		メッシュ：[COUNT]個
 	</text>

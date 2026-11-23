@@ -387,10 +387,7 @@ void LLKeywords::processTokensGroup(const LLSD& tokens, std::string_view group)
                         break;
                     case LLKeywordToken::TT_FUNCTION:
                         tooltip = getAttribute("return") + " " + outer_itr->first + "(" + getArguments(arguments) + ");";
-                        // <FS:TJ> Fix crash in OpenSim when editing scripts
-                        //if (std::stod(getAttribute("energy")) >= 0)
                         if (getAttribute("energy").empty() || std::stod(getAttribute("energy")) >= 0)
-                        // </FS:TJ>
                         {
                             tooltip.append("\nEnergy: ");
                             tooltip.append(getAttribute("energy").empty() ? "0.0" : getAttribute("energy"));
@@ -399,6 +396,7 @@ void LLKeywords::processTokensGroup(const LLSD& tokens, std::string_view group)
                         {
                             tooltip += ", Sleep: " + getAttribute("sleep");
                         }
+                        break;
                     default:
                         break;
                 }

@@ -2881,8 +2881,6 @@ void LLPanelLandAccess::refresh_ui()
     mTemporaryPassCombo->setEnabled(false);
     mTemporaryPassPriceSpin->setEnabled(false);
     mTemporaryPassHourSpin->setEnabled(false);
-    mListAccess->setEnabled(false);
-    mListBanned->setEnabled(false);
     mBtnAddAllowed->setEnabled(false);
     mBtnRemoveAllowed->setEnabled(false);
     mBtnAddBanned->setEnabled(false);
@@ -2931,7 +2929,6 @@ void LLPanelLandAccess::refresh_ui()
             }
             mTemporaryPassCheck->setEnabled(false);
             mTemporaryPassCombo->setEnabled(false);
-            mListAccess->setEnabled(false);
         }
         else
         {
@@ -2972,6 +2969,11 @@ void LLPanelLandAccess::refresh_ui()
         mBtnImportBanned->setEnabled(can_manage_banned && banned_list_count < PARCEL_MAX_ACCESS_LIST);
         // </FS:PP> Ban and access lists export/import
 
+    }
+    else
+    {
+        mListAccess->setEnabled(false);
+        mListBanned->setEnabled(false);
     }
 }
 

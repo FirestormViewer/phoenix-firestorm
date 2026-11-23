@@ -156,6 +156,13 @@ https://accounts.secondlife.com/change_email/
          help_topic="preferences_controls_tab"
          name="controls" />
         <panel
+         class="panel_preference_game_control"
+         filename="panel_preferences_game_control.xml"
+         label="Game Controls"
+         layout="topleft"
+         help_topic="preferences_game_control_tab"
+         name="game_control" />
+        <panel
          class="panel_preference"
          filename="panel_preferences_alerts.xml"
          label="Notifications"

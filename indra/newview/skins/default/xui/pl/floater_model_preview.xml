@@ -6,7 +6,7 @@
 <string name="status_lod_model_mismatch">Błąd: Model LOD nie ma rodzica.</string>
 <string name="status_reading_file">Wczytywanie...</string>
 <string name="status_generating_meshes">Generowanie meszy...</string>
-<string name="status_vertex_number_overflow">Błąd: Ilość wierzchołków większa niż 65535, przerwano!</string>
+<string name="status_vertex_number_overflow">Błąd: Liczba wierzchołków większa niż 65535, przerwano!</string>
 <string name="bad_element">Błąd: element nieprawidłowy</string>
 <string name="high">Wysokie</string>
 <string name="medium">Średnie</string>
@@ -183,7 +183,7 @@
                     <text name="resolution_label">
                       Rozdzielczość:
                     </text>
-                    <text name="hulls_per_mesh_label">
+                    <text name="hulls_label">
                       Powłok / mesz:
                     </text>
                     <text name="vertices_per_hull_label">

@@ -31,6 +31,7 @@
 #include "llwindowwin32.h"
 
 // LLWindow library includes
+#include "llgamecontrol.h"
 #include "llkeyboardwin32.h"
 #include "lldragdropwin32.h"
 #include "llpreeditor.h"
@@ -1134,17 +1135,17 @@ void LLWindowWin32::setThreadPriorityNormal()
     }
 }
 
-bool LLWindowWin32::getVisible()
+bool LLWindowWin32::getVisible() const
 {
     return (mWindowHandle && IsWindowVisible(mWindowHandle));
 }
 
-bool LLWindowWin32::getMinimized()
+bool LLWindowWin32::getMinimized() const
 {
     return (mWindowHandle && IsIconic(mWindowHandle));
 }
 
-bool LLWindowWin32::getMaximized()
+bool LLWindowWin32::getMaximized() const
 {
     return (mWindowHandle && IsZoomed(mWindowHandle));
 }
@@ -1169,26 +1170,21 @@ bool LLWindowWin32::maximize()
     return true;
 }
 
-bool LLWindowWin32::getFullscreen()
-{
-    return mFullscreen;
-}
-
-bool LLWindowWin32::getPosition(LLCoordScreen *position)
+bool LLWindowWin32::getPosition(LLCoordScreen *position) const
 {
     position->mX = mRect.left;
     position->mY = mRect.top;
     return true;
 }
 
-bool LLWindowWin32::getSize(LLCoordScreen *size)
+bool LLWindowWin32::getSize(LLCoordScreen *size) const
 {
     size->mX = mRect.right - mRect.left;
     size->mY = mRect.bottom - mRect.top;
     return true;
 }
 
-bool LLWindowWin32::getSize(LLCoordWindow *size)
+bool LLWindowWin32::getSize(LLCoordWindow *size) const
 {
     size->mX = mClientRect.right - mClientRect.left;
     size->mY = mClientRect.bottom - mClientRect.top;
@@ -2142,7 +2138,7 @@ bool LLWindowWin32::getCursorPosition(LLCoordWindow *position)
     return true;
 }
 
-bool LLWindowWin32::getCursorDelta(LLCoordCommon* delta)
+bool LLWindowWin32::getCursorDelta(LLCoordCommon* delta) const
 {
     if (delta == nullptr)
     {
@@ -2346,7 +2342,7 @@ void LLWindowWin32::delayInputProcessing()
 }
 
 
-void LLWindowWin32::gatherInput()
+void LLWindowWin32::gatherInput(bool app_has_focus)
 {
     ASSERT_MAIN_THREAD();
     LL_PROFILE_ZONE_SCOPED_CATEGORY_WIN32;
@@ -2426,6 +2422,8 @@ void LLWindowWin32::gatherInput()
     mInputProcessingPaused = false;
 
     updateCursor();
+
+    LLGameControl::processEvents(app_has_focus);
 }
 
 // Define device classID for filtering
@@ -3178,8 +3176,6 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_LBUTTONDBLCLK");
             window_imp->postMouseButtonEvent([=]()
                 {
-                    //RN: ignore right button double clicks for now
-                    //case WM_RBUTTONDBLCLK:
                     if (!sHandleDoubleClick)
                     {
                         sHandleDoubleClick = true;
@@ -3189,7 +3185,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 
                     // generate move event to update mouse coordinates
                     window_imp->mCursorPosition = window_coord;
-                    window_imp->mCallbacks->handleDoubleClick(window_imp, window_imp->mCursorPosition.convert(), mask);
+                    window_imp->mCallbacks->handleLeftMouseDoubleClick(window_imp, window_imp->mCursorPosition.convert(), mask);
                 });
 
             return 0;
@@ -3218,6 +3214,24 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             return 0;
         }
         case WM_RBUTTONDBLCLK:
+        {
+            LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_RBUTTONDBLCLK");
+            window_imp->postMouseButtonEvent([=]()
+            {
+                if (!sHandleDoubleClick)
+                {
+                    sHandleDoubleClick = true;
+                    return;
+                }
+                MASK mask = gKeyboard->currentMask(true);
+
+                // generate move event to update mouse coordinates
+                window_imp->mCursorPosition = window_coord;
+                window_imp->mCallbacks->handleRightMouseDoubleClick(window_imp, window_imp->mCursorPosition.convert(), mask);
+            });
+
+            return 0;
+        }
         case WM_RBUTTONDOWN:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_RBUTTONDOWN");
@@ -3255,6 +3269,25 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         }
         break;
 
+        case WM_MBUTTONDBLCLK:
+        {
+            LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_MBUTTONDBLCLK");
+            window_imp->postMouseButtonEvent([=]()
+            {
+                if (!sHandleDoubleClick)
+                {
+                    sHandleDoubleClick = true;
+                    return;
+                }
+                MASK mask = gKeyboard->currentMask(true);
+
+                // generate move event to update mouse coordinates
+                window_imp->mCursorPosition = window_coord;
+                window_imp->mCallbacks->handleMiddleMouseDoubleClick(window_imp, window_imp->mCursorPosition.convert(), mask);
+            });
+            return 0;
+        }
+
         case WM_MBUTTONDOWN:
             //      case WM_MBUTTONDBLCLK:
         {
@@ -3272,6 +3305,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                         window_imp->mCallbacks->handleMiddleMouseDown(window_imp, window_imp->mCursorPosition.convert(), mask);
                     });
             }
+            return 0;
         }
         break;
 
@@ -3288,6 +3322,9 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             }
         }
         break;
+        case WM_XBUTTONDBLCLK:
+            // TODO: not supported yet.
+            // Fall through to WM_XBUTTONDOWN for now.
         case WM_XBUTTONDOWN:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_XBUTTONDOWN");
@@ -3727,7 +3764,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
     return ret;
 }
 
-bool LLWindowWin32::convertCoords(LLCoordGL from, LLCoordWindow *to)
+bool LLWindowWin32::convertCoords(LLCoordGL from, LLCoordWindow *to) const
 {
     S32     client_height;
     RECT    client_rect;
@@ -3747,7 +3784,7 @@ bool LLWindowWin32::convertCoords(LLCoordGL from, LLCoordWindow *to)
     return true;
 }
 
-bool LLWindowWin32::convertCoords(LLCoordWindow from, LLCoordGL* to)
+bool LLWindowWin32::convertCoords(LLCoordWindow from, LLCoordGL* to) const
 {
     S32     client_height;
     RECT    client_rect;
@@ -3766,7 +3803,7 @@ bool LLWindowWin32::convertCoords(LLCoordWindow from, LLCoordGL* to)
     return true;
 }
 
-bool LLWindowWin32::convertCoords(LLCoordScreen from, LLCoordWindow* to)
+bool LLWindowWin32::convertCoords(LLCoordScreen from, LLCoordWindow* to) const
 {
     POINT mouse_point;
 
@@ -3783,7 +3820,7 @@ bool LLWindowWin32::convertCoords(LLCoordScreen from, LLCoordWindow* to)
     return result;
 }
 
-bool LLWindowWin32::convertCoords(LLCoordWindow from, LLCoordScreen *to)
+bool LLWindowWin32::convertCoords(LLCoordWindow from, LLCoordScreen *to) const
 {
     POINT mouse_point;
 
@@ -3800,7 +3837,7 @@ bool LLWindowWin32::convertCoords(LLCoordWindow from, LLCoordScreen *to)
     return result;
 }
 
-bool LLWindowWin32::convertCoords(LLCoordScreen from, LLCoordGL *to)
+bool LLWindowWin32::convertCoords(LLCoordScreen from, LLCoordGL *to) const
 {
     LLCoordWindow window_coord;
 
@@ -3814,7 +3851,7 @@ bool LLWindowWin32::convertCoords(LLCoordScreen from, LLCoordGL *to)
     return true;
 }
 
-bool LLWindowWin32::convertCoords(LLCoordGL from, LLCoordScreen *to)
+bool LLWindowWin32::convertCoords(LLCoordGL from, LLCoordScreen *to) const
 {
     LLCoordWindow window_coord;
 
@@ -3933,7 +3970,7 @@ void LLWindowWin32::setMouseClipping( bool b )
     }
 }
 
-bool LLWindowWin32::getClientRectInScreenSpace( RECT* rectp )
+bool LLWindowWin32::getClientRectInScreenSpace( RECT* rectp ) const
 {
     bool success = false;
 
@@ -4005,7 +4042,7 @@ void LLWindowWin32::flashIcon(F32 seconds)
     // </FS:Ansariel>
 }
 
-F32 LLWindowWin32::getGamma()
+F32 LLWindowWin32::getGamma() const
 {
     return mCurrentGamma;
 }
@@ -4067,7 +4104,7 @@ void LLWindowWin32::setFSAASamples(const U32 fsaa_samples)
     mFSAASamples = fsaa_samples;
 }
 
-U32 LLWindowWin32::getFSAASamples()
+U32 LLWindowWin32::getFSAASamples() const
 {
     return mFSAASamples;
 }
@@ -4430,7 +4467,7 @@ void LLWindowWin32::spawnWebBrowser(const std::string& escaped_url, bool async)
     Make the raw keyboard data available - used to poke through to LLQtWebKit so
     that Qt/Webkit has access to the virtual keycodes etc. that it needs
 */
-LLSD LLWindowWin32::getNativeKeyData()
+LLSD LLWindowWin32::getNativeKeyData() const
 {
     LLSD result = LLSD::emptyMap();
 
@@ -4476,7 +4513,7 @@ bool LLWindowWin32::dialogColorPicker( F32 *r, F32 *g, F32 *b )
     return (retval);
 }
 
-void *LLWindowWin32::getPlatformWindow()
+void* LLWindowWin32::getPlatformWindow() const
 {
     return (void*)mWindowHandle;
 }
@@ -5399,7 +5436,7 @@ void LLWindowWin32::initWatchdog()
     clearHighPerformanceGPURequest();
 }
 
-F32 LLWindowWin32::getSystemUISize()
+F32 LLWindowWin32::getSystemUISize() const
 {
     F32 scale_value = 1.f;
     HWND hWnd = (HWND)getPlatformWindow();

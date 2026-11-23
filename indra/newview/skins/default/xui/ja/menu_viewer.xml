@@ -10,7 +10,6 @@
 		<menu_item_check label="お気に入りの着用物やＨＵＤ" name="WearableFavorites"/>
 		<menu_item_call label="ピック…" name="Picks"/>
 		<menu_item_call label="体験…" name="Experiences"/>
-		<menu_item_call label="スクリプト…" name="MyScripts"/>
 		<menu_item_call label="プロフィール" name="Profile"/>
 		<menu_item_call label="着用中…" name="NowWearing"/>
 		<menu_item_check label="アウトフィット" name="ChangeOutfit"/>
@@ -158,13 +157,14 @@
 			<menu_item_call label="自分の環境…" name="my_environs"/>
 			<menu_item_call label="環境の個人設定…" name="adjustment_tool"/>
 			<menu_item_check label="雲の動きを一時停止" name="pause_clouds"/>
+			<menu_item_check label="サウンドのミュート／ミュート解除" name="toggle_sound"/>
 			<menu label="一括インポート" name="WL Bulk Import">
 				<menu_item_call label="デイサイクル…" name="WL Bulk Import Days"/>
 				<menu_item_call label="空の設定…" name="WL Bulk Import Skies"/>
 				<menu_item_call label="水面の設定…" name="WL Bulk Import Water"/>
 			</menu>
 		</menu>
-		<menu name="photo_and_video" label="フォトとビデオ">
+		<menu label="フォトとビデオ" name="photo_and_video">
 			<menu_item_call label="フォトツール" name="phototools_item_call"/>
 			<menu_item_call label="カメラツール" name="cameratools_item_call"/>
 			<menu_item_check label="ＤｏＦ焦点をロック" name="lock_focus_point"/>
@@ -205,7 +205,7 @@
 		<menu label="オブジェクト" name="Object">
 			<menu_item_call label="購入" name="Menu Object Buy"/>
 			<menu_item_call label="取得" name="Menu Object Take"/>
-			<menu_item_call label="コピーを取得" name="Take Copy"/>
+			<menu_item_call label="複製を取る" name="Take Copy"/>
 			<menu_item_call label="複製" name="Duplicate"/>
 			<menu_item_call label="パーティクルの編集" name="Menu Object Edit Particles"/>
 			<menu_item_call label="オブジェクトの中身に保存" name="Save Object Back to Object Contents"/>
@@ -220,10 +220,13 @@
 			<menu_item_call label="スクリプト情報（カウンター）" name="Script Info"/>
 			<menu_item_call label="スクリプトの再コンパイル（Ｍｏｎｏ）" name="Mono"/>
 			<menu_item_call label="スクリプトの再コンパイル（ＬＳＬ）" name="LSL"/>
+			<menu_item_call label="LSLスクリプトを再コンパイル（LSL on Lua）" name="LSL on Luau"/>
+			<menu_item_call label="Luaスクリプトを再コンパイル" name="Lua"/>
 			<menu_item_call label="スクリプトのリセット" name="Reset Scripts"/>
 			<menu_item_call label="スクリプトを実行中にする" name="Set Scripts to Running"/>
 			<menu_item_call label="スクリプトを実行停止にする" name="Set Scripts to Not Running"/>
 			<menu_item_call label="選択からスクリプトを削除する" name="Remove Scripts From Selection"/>
+			<menu_item_check label="スクリプトエディターサーバー" name="Script Editor Server"/>
 		</menu>
 		<menu label="経路探索" name="Pathfinding">
 			<menu_item_call label="リージョンのオブジェクト" name="pathfinding_linksets_menu_item"/>
@@ -234,12 +237,11 @@
 		<menu label="オプション" name="Options">
 			<menu_item_check label="権限の詳細を表示する" name="DebugPermissions"/>
 			<menu_item_check label="自分のオブジェクトだけを選択する" name="Select Only My Objects"/>
-			<menu_item_check label="コピー可能なオブジェクトだけを選択する" name="Select Only Copyable Objects"/>
+			<menu_item_check label="複製可能なオブジェクトだけを選択する" name="Select Only Copyable Objects"/>
 			<menu_item_check label="動的オブジェクトだけを選択する" name="Select Only Movable Objects"/>
 			<menu_item_check label="ロックされたオブジェクトのみ選択する" name="Select Only Locked Objects"/>
 			<menu_item_check label="非表示のオブジェクトを選択する" name="Select Invisible Objects"/>
 			<menu_item_check label="反射プローブを選択する" name="Select Reflection Probes"/>
-			<menu_item_check label="プローブの更新" name="Probe Updates"/>
 			<menu_item_check label="範囲内を選択する" name="Select By Surrounding"/>
 			<menu_item_check label="グループ所有のオブジェクトを含む" name="Include Group-Owned Objects"/>
 			<menu_item_check label="編集時に物理的形状を表示する" name="Show Physics Shape"/>
@@ -282,7 +284,6 @@
 	<menu label="コンテンツ" name="Content">
 		<menu_item_check label="検索" name="Search"/>
 		<!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
-		<menu_item_check label="ダブルクリックでテレポート" name="DoubleClick Teleport"/>
 		<!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
 		<menu_item_call label="ＳＬマーケットプレイス" name="SL Marketplace"/>
 		<menu_item_call label="L$マーケットデータ" name="LindenXchange"/>
@@ -306,7 +307,7 @@
 		<menu_item_call label="Firestormイベントカレンダー" name="Firestorm Events Calendar"/>
 		<menu_item_call label="[CURRENT_GRID]ヘルプ" name="current_grid_help"/>
 		<menu_item_call label="[CURRENT_GRID]について" name="current_grid_about"/>
-		<menu_item_call name="whitelist_folders" label="ホワイトリストアドバイザー"/>
+		<menu_item_call label="ホワイトリストアドバイザー" name="whitelist_folders"/>
 		<menu_item_call label="グリッド状況の確認" name="Grid Status"/>
 		<menu_item_call label="嫌がらせの報告" name="Report Abuse"/>
 		<menu_item_call label="バグの報告" name="Report Bug"/>
@@ -359,7 +360,6 @@
 			<menu_item_check label="ビーコンを簡素化" name="Cheesy Beacon"/>
 			<menu_item_check label="パーティクルを非表示" name="Hide Particles"/>
 			<menu_item_check label="選択を非表示" name="Hide Selected"/>
-			<menu_item_check label="透明部分をハイライト" name="Highlight Transparent"/>
 			<menu_item_check label="マウスルックのときにクロスヘアーを表示" name="ShowCrosshairs"/>
 			<menu label="マウスホバー時のツールチップ" name="Hover Tips">
 				<menu_item_check label="ツールチップを表示" name="Show Tips"/>
@@ -473,6 +473,7 @@
 			<menu_item_call label="LLErrorとメッセージとクラッシュを実行する" name="Force LLError Message And Crash"/>
 			<menu_item_call label="不正なメモリアクセスを実行する" name="Force Bad Memory Access"/>
 			<menu_item_call label="コルーチン内で不正なメモリアクセスを発生させる" name="Force Bad Memory Access in Coroutine"/>
+			<menu_item_call label="画像割り当ての失敗を強制" name="Force Image Allocation Failure"/>
 			<menu_item_call label="無限ループを発生させる" name="Force Infinite Loop"/>
 			<menu_item_call label="ドライバのクラッシュを発生させる" name="Force Driver Carsh"/>
 			<menu_item_call label="ソフトウェア例外エラーの発生させる" name="Force Software Exception"/>
@@ -559,11 +560,12 @@
 			<menu_item_check label="フル解像度のテクスチャ（危険）" name="Full Res Textures"/>
 			<menu_item_check label="装着された光源を描画する" name="Render Attached Lights"/>
 			<menu_item_check label="取り付けられたパーティクルを描画する" name="Render Attached Particles"/>
+			<menu_item_check label="アバターのシステム衣服をアニメーション表示" name="Render Avatar Cloth"/>
 			<menu_item_check label="ＶＲＡＭに余裕がないときに描画距離を抑制する" name="Reduce Draw Distance when VRAM is full"/>
 			<menu_item_check label="フォント頂点バッファを収集する" name="Collect Font Vertex Buffers"/>
+			<menu_item_check label="UI画像の頂点バッファを収集" name="Collect UI Image Vertex Buffers"/>
 			<menu_item_check label="シェーダーキャッシュを有効化" name="Enable Shader Cache"/>
 			<menu_item_call label="シェーダーキャッシュをクリア" name="Shader Cache Clear"/>
-			<menu_item_call label="地形を再構築" name="Rebuild Terrain"/>
 		</menu>
 		<menu label="ネットワーク" name="Network">
 			<menu_item_check label="エージェントを一時停止する" name="AgentPause"/>
@@ -705,7 +707,7 @@
 	</menu>
 	<menu label="管理" name="Admin">
 		<menu label="オブジェクト" name="AdminObject">
-			<menu_item_call label="コピーを取る" name="Admin Take Copy"/>
+			<menu_item_call label="複製を取る" name="Admin Take Copy"/>
 			<menu_item_call label="自分を所有者にする" name="Force Owner To Me"/>
 			<menu_item_call label="所有者権限の実行" name="Force Owner Permissive"/>
 			<menu_item_call label="削除" name="Delete"/>

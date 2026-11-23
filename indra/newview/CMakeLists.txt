@@ -262,6 +262,8 @@ set(viewer_SOURCE_FILES
     llchathistory.cpp
     llchatitemscontainerctrl.cpp
     llchatmsgbox.cpp
+    llchatservicehistory.cpp
+    llchatservicehistorycore.cpp
     llchiclet.cpp
     llchicletbar.cpp
     llclassifiedinfo.cpp
@@ -386,6 +388,7 @@ set(viewer_SOURCE_FILES
     llfloaterinspect.cpp
     llfloaterinventorysettings.cpp
     llfloaterinventorythumbnailshelper.cpp
+    llfloaterjoin.cpp
     llfloaterjoystick.cpp
     llfloaterlagmeter.cpp
     llfloaterland.cpp
@@ -457,6 +460,7 @@ set(viewer_SOURCE_FILES
     llfloaterurlentry.cpp
     llfloatervoicevolume.cpp
     llfloaterwebcontent.cpp
+    llfloaterwebmodal.cpp
     llfloaterwhitelistentry.cpp
     llfloaterwindowsize.cpp
     llfloaterworldmap.cpp
@@ -464,6 +468,7 @@ set(viewer_SOURCE_FILES
     llfollowcam.cpp
     llfriendcard.cpp
     llflyoutcombobtn.cpp
+    llflycam.cpp
     llgesturelistener.cpp
     llgesturemgr.cpp
     llgiveinventory.cpp
@@ -637,6 +642,7 @@ set(viewer_SOURCE_FILES
     llpanelplaceprofile.cpp
     llpanelplaces.cpp
     llpanelplacestab.cpp
+    llpanelpreferencegamecontrol.cpp
     llpanelpresetscamerapulldown.cpp
     llpanelpresetspulldown.cpp
     llpanelprimmediacontrols.cpp
@@ -1139,6 +1145,8 @@ set(viewer_HEADER_FILES
     llchathistory.h
     llchatitemscontainerctrl.h
     llchatmsgbox.h
+    llchatservicehistory.h
+    llchatservicehistorycore.h
     llchiclet.h
     llchicletbar.h
     llclassifiedinfo.h
@@ -1266,6 +1274,7 @@ set(viewer_HEADER_FILES
     llfloaterinspect.h
     llfloaterinventorysettings.h
     llfloaterinventorythumbnailshelper.h
+    llfloaterjoin.h
     llfloaterjoystick.h
     llfloaterlagmeter.h
     llfloaterland.h
@@ -1338,6 +1347,7 @@ set(viewer_HEADER_FILES
     llfloaterurlentry.h
     llfloatervoicevolume.h
     llfloaterwebcontent.h
+    llfloaterwebmodal.h
     llfloaterwhitelistentry.h
     llfloaterwindowsize.h
     llfloaterworldmap.h
@@ -1345,6 +1355,7 @@ set(viewer_HEADER_FILES
     llfollowcam.h
     llfriendcard.h
     llflyoutcombobtn.h
+    llflycam.h
     llgesturelistener.h
     llgesturemgr.h
     llgiveinventory.h
@@ -1507,6 +1518,7 @@ set(viewer_HEADER_FILES
     llpanelplaceprofile.h
     llpanelplaces.h
     llpanelplacestab.h
+    llpanelpreferencegamecontrol.h
     llpanelpresetscamerapulldown.h
     llpanelpresetspulldown.h
     llpanelprimmediacontrols.h
@@ -2260,6 +2272,7 @@ set(viewer_APPSETTINGS_FILES
     #app_settings/toolbars.xml  FS:AO moved to skins
     app_settings/trees.xml
     app_settings/viewerart.xml
+    app_settings/gamecontrollerdb.txt
     app_settings/message.xml
     ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg
     packages-info.txt
@@ -3088,6 +3101,8 @@ if (LL_TESTS)
   include(LLAddBuildTest)
   SET(viewer_TEST_SOURCE_FILES
     llagentaccess.cpp
+    llchatservicehistorycore.cpp
+    llconversationlog.cpp
     lldateutil.cpp
 #    llmediadataclient.cpp
     lllogininstance.cpp
@@ -3139,7 +3154,7 @@ if (LL_TESTS)
   set_property(SOURCE
     ${viewer_TEST_SOURCE_FILES}
     PROPERTY
-    LL_TEST_ADDITIONAL_LIBRARIES 
+    LL_TEST_ADDITIONAL_LIBRARIES
     ${test_libs}
   )
 
@@ -3177,6 +3192,21 @@ if (LL_TESTS)
   )
 
   LL_ADD_PROJECT_UNIT_TESTS(${VIEWER_BINARY_NAME} "${viewer_TEST_SOURCE_FILES}")
+
+  # The conversation formatter caches the clock setting, so exercise each mode
+  # in its own process. Serialize them because the runner uses one log filename.
+  set(conversation_test PROJECT_${VIEWER_BINARY_NAME}_TEST_llconversationlog)
+  set_tests_properties(${conversation_test} PROPERTIES
+    ENVIRONMENT "LL_CONVERSATIONLOG_TEST_CLOCK=24"
+    RESOURCE_LOCK conversation_log_test)
+  SET_TEST_PATH(conversation_test_libpath)
+  LL_TEST_COMMAND(conversation_test_command "${conversation_test_libpath}"
+    $<TARGET_FILE:${conversation_test}> --sourcedir=${CMAKE_CURRENT_SOURCE_DIR})
+  add_test(NAME ${conversation_test}_12h COMMAND ${conversation_test_command})
+  set_tests_properties(${conversation_test}_12h PROPERTIES
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    ENVIRONMENT "LL_CONVERSATIONLOG_TEST_CLOCK=12"
+    RESOURCE_LOCK conversation_log_test)
 
   #set(TEST_DEBUG on)
   LL_ADD_INTEGRATION_TEST(cppfeatures

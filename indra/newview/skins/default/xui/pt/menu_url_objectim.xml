@@ -3,6 +3,7 @@
 	<menu_item_call label="Perfil do objeto..." name="show_object"/>
 	<menu_item_call label="Bloquear..." name="block_object"/>
 	<menu_item_call label="Desbloquear" name="unblock_object"/>
+	<menu_item_call label="Denunciar abuso..." name="Report Abuse"/>
 	<menu_item_call label="Aproximar" name="zoom_in"/>
 	<menu_item_call label="Mostrar no mapa" name="show_on_map"/>
 	<menu_item_call label="Teleportar para localização do objeto" name="teleport_to_object"/>

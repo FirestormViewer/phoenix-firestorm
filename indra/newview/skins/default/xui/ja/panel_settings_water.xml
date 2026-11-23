@@ -36,9 +36,9 @@
 					<text name="reflection_wavelet_scale_label">
 						さざ波の反射係数
 					</text>
-					<slider name="water_normal_scale_x" label="Ｘ："/>
-					<slider name="water_normal_scale_y" label="Ｙ："/>
-					<slider name="water_normal_scale_z" label="Ｚ："/>
+					<slider label="Ｘ：" name="water_normal_scale_x"/>
+					<slider label="Ｙ：" name="water_normal_scale_y"/>
+					<slider label="Ｚ：" name="water_normal_scale_z"/>
 				</layout_panel>
 				<layout_panel name="lp_right">
 					<text name="refraction_and_blur_label">

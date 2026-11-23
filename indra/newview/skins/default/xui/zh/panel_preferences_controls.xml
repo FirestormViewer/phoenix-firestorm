@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="控制" name="controls">
+<panel label="控制" name="controls_panel">
 	<combo_box name="key_mode">
 		<combo_box.item label="第三人稱視角" name="third_person" />
 		<combo_box.item label="第一人稱視角" name="first_person" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="save_pref_preset" title="グラフィックプリセットの保存">
+<floater title="グラフィックプリセットの保存" name="save_pref_preset">
 	<text name="Preset">
 		プリセットの名前を入力するか、既存のプリセットを選択します。
 	</text>

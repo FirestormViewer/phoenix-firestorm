@@ -106,7 +106,10 @@ LLButton::Params::Params()
     mouse_down_callback("mouse_down_callback"),
     mouse_up_callback("mouse_up_callback"),
     mouse_held_callback("mouse_held_callback"),
-    is_toggled_callback("is_toggled_callback"), // <FS:Ansariel> Toggle callback check
+    // <FS:Ansariel> Additional callbacks
+    is_toggled_callback("is_toggled_callback"),
+    enabled_callback("enabled_callback"),
+    // </FS:Ansariel>
     is_toggle("is_toggle", false),
     scale_image("scale_image", true),
     hover_glow_amount("hover_glow_amount"),
@@ -202,7 +205,9 @@ LLButton::LLButton(const LLButton::Params& p)
     mCheckboxControl(p.checkbox_control),
     mCheckboxControlPanel(NULL),
     // </FS:Zi>
-    mIsToggledSignal(NULL) // <FS:Ansariel> Toggle callback check
+    // <FS:Ansariel> Additional callbacks
+    mIsToggledSignal(NULL),
+    mEnabledSignal(NULL)
 {
     if (p.button_flash_enable)
     {
@@ -302,10 +307,14 @@ LLButton::LLButton(const LLButton::Params& p)
     {
         setHeldDownCallback(initCommitCallback(p.mouse_held_callback));
     }
-    // <FS:Ansariel> Toggle callback check
+    // <FS:Ansariel> Additional callbacks
     if (p.is_toggled_callback.isProvided())
     {
         setIsToggledCallback(initEnableCallback(p.is_toggled_callback));
+    }
+    if (p.enabled_callback.isProvided())
+    {
+        setEnabledCallback(initEnableCallback(p.enabled_callback));
     }
     // <FS:Ansariel>
 
@@ -320,7 +329,9 @@ LLButton::~LLButton()
     delete mMouseDownSignal;
     delete mMouseUpSignal;
     delete mHeldDownSignal;
-    delete mIsToggledSignal; // <FS:Ansariel> Toggle callback check
+    // <FS:Ansariel> Additional callbacks
+    delete mIsToggledSignal;
+    delete mEnabledSignal;
 
     if (mFlashingTimer)
     {
@@ -422,7 +433,7 @@ boost::signals2::connection LLButton::setHeldDownCallback( const commit_signal_t
     return mHeldDownSignal->connect(cb);
 }
 
-// <FS:Ansariel> Toggle callback check
+// <FS:Ansariel> Additional callbacks
 boost::signals2::connection LLButton::setIsToggledCallback(const EnableCallbackParam& cb)
 {
     return setIsToggledCallback(initEnableCallback(cb));
@@ -432,6 +443,17 @@ boost::signals2::connection LLButton::setIsToggledCallback(const enable_signal_t
 {
     if (!mIsToggledSignal) mIsToggledSignal = new enable_signal_t();
     return mIsToggledSignal->connect(cb);
+}
+
+boost::signals2::connection LLButton::setEnabledCallback(const EnableCallbackParam& cb)
+{
+    return setEnabledCallback(initEnableCallback(cb));
+}
+
+boost::signals2::connection LLButton::setEnabledCallback(const enable_signal_t::slot_type& cb)
+{
+    if (!mEnabledSignal) mEnabledSignal = new enable_signal_t();
+    return mEnabledSignal->connect(cb);
 }
 // <FS:Ansariel>
 
@@ -758,6 +780,17 @@ void LLButton::draw()
     }
 
     bool enabled = isInEnabledChain();
+
+    // <FS:Ansariel> Additional callbacks
+    if (mEnabledSignal)
+    {
+        enabled = (*mEnabledSignal)(this, LLSD());
+        if (getEnabled() != enabled)
+        {
+            setEnabled(enabled);
+        }
+    }
+    // </FS:Ansariel>
 
     bool pressed = pressed_by_keyboard
                     || mouse_pressed_and_over

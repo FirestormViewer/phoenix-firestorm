@@ -1686,8 +1686,10 @@
     <key>AFKTimeout</key>
     <map>
       <key>Comment</key>
-      <string>Time before automatically setting AFK (away from keyboard) mode (seconds, 0=never). 
-        Valid values are: 0, 120, 300, 600, 1800, 3600, 5400, 7200</string>
+      <string>
+        Time before automatically setting AFK (away from keyboard) mode (seconds, 0=never).
+        Valid values are: 0, 120, 300, 600, 1800, 3600, 5400, 7200
+      </string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -1941,7 +1943,7 @@
     <key>AudioLevelMedia</key>
     <map>
       <key>Comment</key>
-      <string>Audio level of QuickTime movies</string>
+      <string>Audio level of parcel Media</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -2048,7 +2050,7 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-  <key>AutoAcceptNewInventory</key>
+    <key>AutoAcceptNewInventory</key>
     <map>
       <key>Comment</key>
       <string>Automatically accept new notecards/textures/landmarks</string>
@@ -5028,7 +5030,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>https://lecs-viewer-web-components.s3.amazonaws.com/v3.0/[GRID_LOWERCASE]/guide.html</string>
+      <string>https://secondlife.com/destinations/whats-hot-now?ctx=viewer</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -5172,7 +5174,7 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>DoubleClickTeleport</key> 
+    <key>DoubleClickTeleport</key>
     <map>
       <key>Comment</key>
       <string>Enable double-click to teleport where allowed (afects minimap and people panel)</string>
@@ -5314,6 +5316,28 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>DebugShowControllerState</key>
+    <map>
+      <key>Comment</key>
+      <string>Display internal controller state values</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>GameControl</key>
+    <map>
+        <key>Comment</key>
+        <string>Game controller settings: global per-mode action mappings plus per-device hardware config. Empty means use built-in defaults.</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>LLSD</string>
+        <key>Value</key>
+        <map/>
     </map>
     <key>EnableGestureSounds</key>
     <map>
@@ -6535,6 +6559,61 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>JoinFloaterOverlayOpacity</key>
+    <map>
+      <key>Comment</key>
+      <string>Opacity of the screen darkening overlay behind the Join floater</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.8</real>
+    </map>
+    <key>TermsAndConditionsURL</key>
+    <map>
+      <key>Comment</key>
+      <string>URL pointing to Terms and Conditions page</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>https://lindenlab.com/legal/second-life-terms-and-conditions</string>
+    </map>
+    <key>TermsOfServiceURL</key>
+    <map>
+      <key>Comment</key>
+      <string>URL pointing to Terms of Service page</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>https://lindenlab.com/tos</string>
+    </map>
+    <key>PrivacyPolicyURL</key>
+    <map>
+      <key>Comment</key>
+      <string>URL pointing to Privacy Policy page</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>https://lindenlab.com/privacy</string>
+    </map>
+    <key>JoinURL</key>
+    <map>
+      <key>Comment</key>
+      <string>URL opened in the Join floater on the login screen</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>https://join.secondlife.com/</string>
     </map>
     <key>JoystickAvatarEnabled</key>
     <map>
@@ -13098,7 +13177,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>1.0</real>
   </map>
-  
+
   <key>RenderReflectionProbeDrawDistance</key>
   <map>
     <key>Comment</key>
@@ -13108,7 +13187,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <integer>64</integer>
+    <real>64.0</real>
   </map>
   <key>RenderReflectionProbeAmbiance</key>
   <map>
@@ -13310,7 +13389,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>1.0</real>
   </map>
-  
+
   <key>RenderReflectionProbeMaxLocalLightAmbiance</key>
   <map>
     <key>Comment</key>
@@ -14945,7 +15024,7 @@ Change of this parameter will affect the layout of buttons in notification toast
             <string>Boolean</string>
         <key>Value</key>
             <integer>0</integer>
-    </map> 
+    </map>
     <key>NearbyListShowIcons</key>
     <map>
       <key>Comment</key>
@@ -24218,6 +24297,17 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>Value</key>
   <integer>0</integer>
 </map>
+<key>ChatServiceEnabled</key>
+<map>
+  <key>Comment</key>
+  <string>Enable accumulated direct-message history from Chat Service for this login.</string>
+  <key>Persist</key>
+  <integer>1</integer>
+  <key>Type</key>
+  <string>Boolean</string>
+  <key>Value</key>
+  <integer>1</integer>
+</map>
 <key>SingleModeDoubleClickOpenWindow</key>
 <map>
   <key>Comment</key>
@@ -24360,6 +24450,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>RealisticMouselook</key>
+    <map>
+        <key>Comment</key>
+        <string>Make the camera follow avatar body movements and animations while in mouselook</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>0</integer>
     </map>
     <key>FSNetMapPhantomOpacity</key>
     <map>

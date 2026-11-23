@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="volumepulldown_floater" width="245">
-	<button left="222" name="prefs_btn"/>
-	<slider label_width="85" width="185" label="全般" name="System Volume"/>
-	<slider label_width="85" width="185" label="インターフェース" name="UI Volume"/>
-	<slider label_width="85" width="185" label="環境音" name="Wind Volume"/>
-	<check_box name="collisions_audio_play_btn" tool_tip="衝突時のデフォルトのサウンドを有効にします。" />
-	<slider label_width="85" width="185" label="サウンド" name="SFX Volume"/>
-	<check_box name="gesture_audio_play_btn" tool_tip="ジェスチャーの音を有効にします。"/>
-	<slider label_width="85" width="185" label="音楽" name="Music Volume"/>
-	<check_box name="enable_music" tool_tip="ストリーミング音楽を有効にします。"/>
-	<slider label_width="85" width="185" label="メディア" name="Media Volume"/>
-	<check_box name="enable_media" tool_tip="ストリーミングメディアを有効にします。"/>
-	<slider label_width="85" width="185" label="ボイス" name="Voice Volume"/>
-	<check_box name="enable_voice_check" tool_tip="ボイスチャットを有効にします。"/>
+	<button name="prefs_btn" left="222"/>
+	<slider label="全般" name="System Volume" label_width="85" width="185"/>
+	<slider label="インターフェース" name="UI Volume" label_width="85" width="185"/>
+	<slider label="環境音" name="Wind Volume" label_width="85" width="185"/>
+	<check_box tool_tip="衝突時のデフォルトのサウンドを有効にします。" name="collisions_audio_play_btn" />
+	<slider label="サウンド" name="SFX Volume" label_width="85" width="185"/>
+	<check_box tool_tip="ジェスチャーの音を有効にします。" name="gesture_audio_play_btn"/>
+	<slider label="音楽" name="Music Volume" label_width="85" width="185"/>
+	<check_box tool_tip="ストリーミング音楽を有効にします。" name="enable_music"/>
+	<slider label="メディア" name="Media Volume" label_width="85" width="185"/>
+	<check_box tool_tip="ストリーミングメディアを有効にします。" name="enable_media"/>
+	<slider label="ボイス" name="Voice Volume" label_width="85" width="185"/>
+	<check_box tool_tip="ボイスチャットを有効にします。" name="enable_voice_check"/>
 </panel>

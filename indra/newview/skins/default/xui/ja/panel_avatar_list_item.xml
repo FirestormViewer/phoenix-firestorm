@@ -32,12 +32,12 @@
 	-->
 	<text name="avatar_name" value="（読み込んでいます）"/>
 	<text name="last_interaction" value="0秒"/>
-	<icon name="permission_edit_theirs_icon" tool_tip="あなたは、このフレンドのオブジェクトを編集できます。"/>
-	<button name="permission_edit_mine_btn" tool_tip="このフレンドはあなたのオブジェクトを編集、削除、取得できます。"/>
+	<icon tool_tip="あなたは、このフレンドのオブジェクトを編集できます。" name="permission_edit_theirs_icon"/>
+	<button tool_tip="このフレンドはあなたのオブジェクトを編集、削除、取得できます。" name="permission_edit_mine_btn"/>
 	<button tool_tip="このフレンドは、マップ上であなたの位置を特定できます。" name="permission_map_btn"/>
-	<button name="permission_online_btn" tool_tip="このフレンドは、あなたがオンラインになっているかどうかを確認できます。"/>
-	<slider name="volume_slider" tool_tip="ボイスボリュームです。"/>
-	<button name="info_btn" tool_tip="詳細を表示します。"/>
-	<button name="profile_btn" tool_tip="プロフィールを閲覧します。"/>
-	<output_monitor name="speaking_indicator" tool_tip="ボイスのボリュームを調整します。"/>
+	<button tool_tip="このフレンドは、あなたがオンラインになっているかどうかを確認できます。" name="permission_online_btn"/>
+	<slider tool_tip="ボイスボリュームです。" name="volume_slider"/>
+	<button tool_tip="詳細を表示します。" name="info_btn"/>
+	<button tool_tip="プロフィールを閲覧します。" name="profile_btn"/>
+	<output_monitor tool_tip="ボイスのボリュームを調整します。" name="speaking_indicator"/>
 </panel>

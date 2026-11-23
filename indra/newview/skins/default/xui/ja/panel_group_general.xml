@@ -15,13 +15,13 @@
 		<text name="group_key_label">
 			グループのキー：
 		</text>
-		<text_editor name="group_key" label="グループＵＵＩＤ：" initial_value="（読み込んでいます…）"/>
-		<button name="copy_uri" label="ＵＲＩをコピー"/>
+		<text_editor label="グループＵＵＩＤ：" initial_value="（読み込んでいます…）" name="group_key"/>
+		<button label="ＵＲＩをコピー" name="copy_uri"/>
 		<text name="prepend_founded_by">
 			創設者：
 		</text>
-		<button name="copy_name" label="名前をコピー"/>
-		<texture_picker name="insignia" tool_tip="画像を拡大するにはクリックしてください。"/>
+		<button label="名前をコピー" name="copy_name"/>
+		<texture_picker tool_tip="画像を拡大するにはクリックしてください。" name="insignia"/>
 		<text_editor name="charter">
 			グループの理念、指針を記入してください
 		</text_editor>
@@ -39,23 +39,23 @@
 				<text name="my_group_settngs_label">
 					個人設定
 				</text>
-				<check_box label="プロフィールに表示" name="list_groups_in_profile" tool_tip="あなたのプロフィールにこのグループを表示するかどうかの設定を行います。"/>
-				<check_box label="グループ通知を受信" name="receive_notices" tool_tip="このグループからの通知を受信するかどうかの設定を行います。グループからスパムが送られてくる場合はこのボックスのチェックを外してください。"/>
-				<check_box label="グループＩＭを受信" name="receive_chat" tool_tip="このグループのグループチャットに参加するかどうかの設定を行います。"/>
+				<check_box label="プロフィールに表示" tool_tip="あなたのプロフィールにこのグループを表示するかどうかの設定を行います。" name="list_groups_in_profile"/>
+				<check_box label="グループ通知を受信" tool_tip="このグループからの通知を受信するかどうかの設定を行います。グループからスパムが送られてくる場合はこのボックスのチェックを外してください。" name="receive_notices"/>
+				<check_box label="グループＩＭを受信" tool_tip="このグループのグループチャットに参加するかどうかの設定を行います。" name="receive_chat"/>
 				<text name="active_title_label">
 					タイトル：
 				</text>
-				<combo_box name="active_title" tool_tip="このグループをアクティブにしたときに、アバター名の上に表示されるタイトルを設定します。"/>
+				<combo_box tool_tip="このグループをアクティブにしたときに、アバター名の上に表示されるタイトルを設定します。" name="active_title"/>
 			</layout_panel>
 			<layout_panel name="group_preferences_container">
 				<text name="group_settngs_label">
 					グループの設定
 				</text>
-				<check_box name="show_in_group_list" tool_tip="このグループを検索結果に表示させます。" label="検索結果に表示"/>
-				<check_box name="open_enrollement" label="誰でも入会できます" tool_tip="招待されなくても新規メンバーが加入できるかどうかを設定します。"/>
-				<check_box name="check_enrollment_fee" tool_tip="グループ加入に入会費が必要かどうかを設定します。" label="入会費がかかります。"/>
-				<spinner name="spin_enrollment_fee" tool_tip="「入会費」にチェックが入っている場合、新規メンバーは指定された入会費を支払わなければグループに入れません。" />
-				<combo_box name="group_mature_check" tool_tip="レーティング区分は、グループ内でどのようなコンテンツや行動が許されるかを指定するものです。">
+				<check_box label="検索結果に表示" tool_tip="このグループを検索結果に表示させます。" name="show_in_group_list"/>
+				<check_box label="誰でも入会できます" tool_tip="招待されなくても新規メンバーが加入できるかどうかを設定します。" name="open_enrollement"/>
+				<check_box label="入会費がかかります。" tool_tip="グループ加入に入会費が必要かどうかを設定します。" name="check_enrollment_fee"/>
+				<spinner tool_tip="「入会費」にチェックが入っている場合、新規メンバーは指定された入会費を支払わなければグループに入れません。" name="spin_enrollment_fee" />
+				<combo_box tool_tip="レーティング区分は、グループ内でどのようなコンテンツや行動が許されるかを指定するものです。" name="group_mature_check">
 					<combo_item name="select_mature">
 						－レーティング区分を指定－
 					</combo_item>

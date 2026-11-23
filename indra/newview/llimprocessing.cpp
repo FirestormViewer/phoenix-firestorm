@@ -161,7 +161,20 @@ static std::string clean_name_from_task_im(const std::string& msg,
 }
 
 // <FS> FS autoresponse feature
-std::string LLIMProcessing::getAutoresponseTextForAvatar(const LLUUID& from_id, bool is_do_not_disturb, bool is_autorespond, bool is_autorespond_nonfriends, bool is_afk, bool send_away_response, bool is_friend)
+void LLIMProcessing::sendAutoresponseTextForAvatar(const LLUUID&       from_id,
+                                                   const LLAvatarName& avatar_name,
+                                                   const LLUUID&       session_id,
+                                                   bool                is_do_not_disturb,
+                                                   bool                is_autorespond,
+                                                   bool                is_autorespond_nonfriends,
+                                                   bool                is_afk,
+                                                   bool                send_away_response,
+                                                   bool                is_friend,
+                                                   bool                is_standard_im,
+                                                   const std::string&  session_name,
+                                                   U32                 parent_estate_id,
+                                                   const LLUUID&       region_id,
+                                                   const LLVector3&    position)
 {
     std::string response;
     if (is_do_not_disturb)
@@ -208,7 +221,104 @@ std::string LLIMProcessing::getAutoresponseTextForAvatar(const LLUUID& from_id, 
     {
         LL_WARNS() << "Unknown auto-response mode" << LL_ENDL;
     }
-    return response;
+
+    if (response.empty())
+    {
+        LL_WARNS() << "Autoresponse text is empty - not sending auto response" << LL_ENDL;
+        return;
+    }
+
+    LLStringUtil::replaceString(response, "#n", avatar_name.getDisplayName());
+
+    LLDate now(static_cast<F64>(std::time(nullptr)));
+    LLSD args;
+    args["datetime"] = now.secondsSinceEpoch();
+    auto timestamp       = LLTrans::getString("LocalTime") + " [timezone,datetime,local]";
+    auto timestamp_local = timestamp;
+    LLStringUtil::format(timestamp_local, args);
+    LLStringUtil::replaceString(response, "#tl", timestamp_local);
+
+    auto timestamp_utc = timestamp;
+    LLStringUtil::replaceString(timestamp_utc, "local", "utc");
+    LLStringUtil::format(timestamp_utc, args);
+    LLStringUtil::replaceString(response, "#tu", timestamp_utc);
+
+    auto timestamp_slt = timestamp;
+    LLStringUtil::replaceString(timestamp_slt, "local", "slt");
+    LLStringUtil::format(timestamp_slt, args);
+    LLStringUtil::replaceString(response, "#ts", timestamp_slt);
+
+    LLSLURL agent_position_slurl;
+    LLAgentUI::buildSLURL(agent_position_slurl);
+    LLStringUtil::replaceString(response, "#p", agent_position_slurl.getSLURLString());
+
+    LLStringUtil::replaceString(response, "#i", llformat("%d", static_cast<S32>(gAgent.getAFKDuration() / 60.f)));
+
+    std::string my_name;
+    LLAgentUI::buildFullname(my_name);
+
+    pack_instant_message(
+        gMessageSystem,
+        gAgentID,
+        false,
+        gAgentSessionID,
+        from_id,
+        my_name,
+        response,
+        IM_ONLINE,
+        IM_DO_NOT_DISTURB_AUTO_RESPONSE,
+        session_id);
+    gAgent.sendReliableMessage();
+
+    if (is_standard_im)
+    {
+        LLStringUtil::format_map_t args;
+        args["MESSAGE"] = response;
+
+        gIMMgr->addMessage(
+            session_id,
+            gAgentID,
+            LLStringUtil::null, // Pass null value so no name gets prepended
+            LLTrans::getString("IM_autoresponse_sent", args),
+            false,
+            session_name,
+            IM_NOTHING_SPECIAL,
+            parent_estate_id,
+            region_id,
+            position,
+            false,
+            0,
+            LLUUID::null,
+            "",
+            LLSD(),
+            true
+        );
+
+        if (LLUUID item_id(gSavedPerAccountSettings.getString("FSAutoresponseItemUUID")); item_id.notNull())
+        {
+            if (LLInventoryItem* item = dynamic_cast<LLInventoryItem*>(gInventory.getItem(item_id)))
+            {
+                gIMMgr->addMessage(
+                    session_id,
+                    gAgentID,
+                    LLStringUtil::null, // Pass null value so no name gets prepended
+                    LLTrans::getString("IM_autoresponse_item_sent", LLSD().with("[ITEM_NAME]", item->getName())),
+                    false,
+                    session_name,
+                    IM_NOTHING_SPECIAL,
+                    parent_estate_id,
+                    region_id,
+                    position,
+                    false,
+                    0,
+                    LLUUID::null,
+                    "",
+                    LLSD(),
+                    true);
+                LLGiveInventory::doGiveInventoryItem(from_id, item, session_id);
+            }
+        }
+    }
 }
 // </FS>
 
@@ -949,6 +1059,10 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
             break;
 
         case IM_NOTHING_SPECIAL:    // p2p IM
+            // Record delivery metadata so live transport can be distinguished from history retrieval.
+            LL_INFOS("ChatServiceHistory") << "Direct IM received: sender_id=" << from_id
+                << ", offline=" << (offline == IM_OFFLINE)
+                << ", timestamp=" << timestamp << ", bytes=" << message.size() << LL_ENDL;
             // Don't show dialog, just do IM
             if (!gAgent.isGodlike()
                 && gAgent.inPrelude()
@@ -984,41 +1098,20 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
     // [/RLVa:KB]
             {
                 // <FS:Ansariel> Log autoresponse notification after initial message
-                bool has_session = true;
+                bool has_session { true };
 
                 // <FS:Ansariel> Old "do not disturb" message behavior: only send once if session not open
                 // Session id will be null if avatar answers from offline IM via email
-                std::string response;
                 if (!gIMMgr->hasSession(session_id) && session_id.notNull())
                 {
-                // </FS:Ansariel>
-                    // <FS:Ansariel> Log autoresponse notification after initial message
                     has_session = false;
-                    // <FS:Ansariel> FS autoresponse feature
-                    std::string my_name;
-                    LLAgentUI::buildFullname(my_name);
-                    response = LLIMProcessing::getAutoresponseTextForAvatar(from_id, is_do_not_disturb, is_autorespond, is_autorespond_nonfriends, is_afk, FSSendAwayAvatarResponse, is_friend);
-                    pack_instant_message(
-                        gMessageSystem,
-                        gAgent.getID(),
-                        false,
-                        gAgent.getSessionID(),
-                        from_id,
-                        my_name,
-                        response,
-                        IM_ONLINE,
-                        IM_DO_NOT_DISTURB_AUTO_RESPONSE,
-                        session_id);
-                    gAgent.sendReliableMessage();
-                    // </FS:Ansariel> FS autoresponse feature
-                // <FS:Ansariel> Old "do not disturb" message behavior: only send once if session not open
                 }
                 // </FS:Ansariel>
 
                 // <FS:Ansariel> checkfor and process reqinfo
                 if (has_session)
                 {
-                    message = FSData::getInstance()->processRequestForInfo(from_id,message,name,session_id);
+                    message = FSData::getInstance()->processRequestForInfo(from_id,message, name, session_id);
                 }
                 // </FS:Ansariel>
 
@@ -1054,6 +1147,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                     timestamp,
                     LLUUID::null,
                     "",
+                    LLSD(),
                     false,
                     keyword_alert_performed);
 
@@ -1067,59 +1161,32 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                 //}
                 // </FS:Ansariel>
 
+                // <FS> FS autoresponse feature
+                // This has to be done after the actual message is added to the IM panel, otherwise we will get
+                // session creation errors if the display name of the sender is already known and the
+                // notification about the sent autoresponse is being added to the IM panel first.
                 if (!has_session)
                 {
-                    // <FS:LO> Fire-5389 - "Autoresponse Sent" message added to Firestorm as was in Phoenix
-                    LLStringUtil::format_map_t args;
-                    args["MESSAGE"] = response;
-
-                    gIMMgr->addMessage(
-                        session_id,
-                        gAgentID,
-                        LLStringUtil::null, // Pass null value so no name gets prepended
-                        LLTrans::getString("IM_autoresponse_sent", args),
-                        false,
-                        name,
-                        IM_NOTHING_SPECIAL,
-                        parent_estate_id,
-                        region_id,
-                        position,
-                        false,
-                        0,
-                        LLUUID::null,
-                        "",
-                        true
-                        );
-                    // </FS:LO>
-
-                    // <FS:Ansariel> Send inventory item on autoresponse
-                    LLUUID item_id(gSavedPerAccountSettings.getString("FSAutoresponseItemUUID"));
-                    if (item_id.notNull())
-                    {
-                        LLInventoryItem* item = dynamic_cast<LLInventoryItem*>(gInventory.getItem(item_id));
-                        if (item)
+                    LLAvatarNameCache::get(from_id, [=](const LLUUID& from_id, const LLAvatarName& avatar_name)
                         {
-                            gIMMgr->addMessage(
-                                    session_id,
-                                    gAgentID,
-                                    LLStringUtil::null, // Pass null value so no name gets prepended
-                                    LLTrans::getString("IM_autoresponse_item_sent", LLSD().with("[ITEM_NAME]", item->getName())),
-                                    false,
-                                    name,
-                                    IM_NOTHING_SPECIAL,
-                                    parent_estate_id,
-                                    region_id,
-                                    position,
-                                    false,
-                                    0,
-                                    LLUUID::null,
-                                    "",
-                                    true);
-                            LLGiveInventory::doGiveInventoryItem(from_id, item, session_id);
+                            LLIMProcessing::sendAutoresponseTextForAvatar(from_id,
+                                avatar_name,
+                                session_id,
+                                is_do_not_disturb,
+                                is_autorespond,
+                                is_autorespond_nonfriends,
+                                is_afk,
+                                FSSendAwayAvatarResponse(),
+                                is_friend,
+                                true,
+                                name,
+                                parent_estate_id,
+                                region_id,
+                                position);
                         }
-                    }
-                    // </FS:Ansariel>
+                    );
                 }
+                // </FS>
             }
             else if (from_id.isNull())
             {
@@ -1208,6 +1275,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                         real_name = SYSTEM_FROM;
                     }
 
+                    // Keep the undecorated body for matching against service history.
                     gIMMgr->addMessage(session_id,
                         from_id,
                         name,
@@ -1222,6 +1290,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                         timestamp,
                         LLUUID::null,
                         real_name,
+                        notice_name.empty() ? LLSD(message) : LLSD(),
                         false,
                         keyword_alert_performed);
                 }
@@ -1933,6 +2002,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                     timestamp,
                     LLUUID::null,
                     "",
+                    LLSD(),
                     false,
                     keyword_alert_performed);
             }
@@ -1999,29 +2069,28 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                 //    send_do_not_disturb_message(gMessageSystem, from_id);
                 //}
 // [RLVa:KB] - Checked: RLVa-1.4.9
+                //if ((is_do_not_disturb) && (!fRlvAutoAccept))
                 if (!fRlvAutoAccept)
 // [/RLVa:KB]
                 {
-                    std::string my_name;
-                    std::string response;
-                    LLAgentUI::buildFullname(my_name);
-                    response = LLIMProcessing::getAutoresponseTextForAvatar(from_id, is_do_not_disturb, is_autorespond, is_autorespond_nonfriends, is_afk, FSSendAwayAvatarResponse, is_friend);
-
-                    if (!response.empty())
-                    {
-                        pack_instant_message(
-                            gMessageSystem,
-                            gAgentID,
-                            false,
-                            gAgentSessionID,
-                            from_id,
-                            my_name,
-                            response,
-                            IM_ONLINE,
-                            IM_DO_NOT_DISTURB_AUTO_RESPONSE,
-                            LLUUID::null);
-                        gAgent.sendReliableMessage();
-                    }
+                    LLAvatarNameCache::get(from_id, [=](const LLUUID& from_id, const LLAvatarName& avatar_name)
+                        {
+                            LLIMProcessing::sendAutoresponseTextForAvatar(from_id,
+                                avatar_name,
+                                session_id,
+                                is_do_not_disturb,
+                                is_autorespond,
+                                is_autorespond_nonfriends,
+                                is_afk,
+                                FSSendAwayAvatarResponse(),
+                                is_friend,
+                                false,
+                                name,
+                                parent_estate_id,
+                                region_id,
+                                position);
+                        }
+                    );
                 }
                 // </FS:Ansariel> FS autoresponse feature
 
@@ -2085,8 +2154,30 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                          ((IM_TELEPORT_REQUEST == dialog) && (!RlvActions::canAcceptTpRequest(from_id))) )
                     {
                         RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RlvStringKeys::Blocked::TpLureRequestRemote));
-                        if (is_do_not_disturb)
-                            send_do_not_disturb_message(gMessageSystem, from_id);
+
+                        // <FS:Ansariel> FS autoresponse feature
+                        //if (is_do_not_disturb)
+                        //    send_do_not_disturb_message(gMessageSystem, from_id);
+                        LLAvatarNameCache::get(from_id, [=](const LLUUID& from_id, const LLAvatarName& avatar_name)
+                            {
+                                LLIMProcessing::sendAutoresponseTextForAvatar(from_id,
+                                    avatar_name,
+                                    session_id,
+                                    is_do_not_disturb,
+                                    is_autorespond,
+                                    is_autorespond_nonfriends,
+                                    is_afk,
+                                    FSSendAwayAvatarResponse(),
+                                    is_friend,
+                                    false,
+                                    name,
+                                    parent_estate_id,
+                                    region_id,
+                                    position);
+                            }
+                        );
+                        // </FS:Ansariel> FS autoresponse feature
+
                         return;
                     }
 
@@ -2163,8 +2254,30 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                     {
                         if (IM_LURE_USER == dialog)
                             gRlvHandler.setCanCancelTp(false);
-                        if (is_do_not_disturb)
-                            send_do_not_disturb_message(gMessageSystem, from_id);
+
+                        // <FS:Ansariel> FS autoresponse feature
+                        //if (is_do_not_disturb)
+                        //    send_do_not_disturb_message(gMessageSystem, from_id);
+                        LLAvatarNameCache::get(from_id, [=](const LLUUID& from_id, const LLAvatarName& avatar_name)
+                            {
+                                LLIMProcessing::sendAutoresponseTextForAvatar(from_id,
+                                    avatar_name,
+                                    session_id,
+                                    is_do_not_disturb,
+                                    is_autorespond,
+                                    is_autorespond_nonfriends,
+                                    is_afk,
+                                    FSSendAwayAvatarResponse(),
+                                    is_friend,
+                                    false,
+                                    name,
+                                    parent_estate_id,
+                                    region_id,
+                                    position);
+                            }
+                        );
+                        // </FS:Ansariel> FS autoresponse feature
+
                         LLNotifications::instance().forceResponse(LLNotification::Params(params.name).payload(payload), 0);
                     }
                     else
@@ -2328,7 +2441,13 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
             for (auto& panel : LLToastNotifyPanel::instance_snapshot())
             {
                 const std::string& notification_name = panel.getNotificationName();
-                if (notification_name == "OfferFriendship" && panel.isControlPanelEnabled())
+                LLNotificationPtr panel_notification = LLNotificationsUtil::find(panel.getID());
+                // Only a live actionable offer from this sender makes the packet a duplicate.
+                if (!panel.isDead()
+                    && notification_name == "OfferFriendship"
+                    && panel_notification
+                    && panel_notification->getPayload()["from_id"].asUUID() == from_id
+                    && panel.isControlPanelEnabled())
                 {
                     add_notification = false;
                     break;

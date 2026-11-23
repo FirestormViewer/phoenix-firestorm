@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_fs_contact_set_configure" title="コンタクトセット設定">
+<floater title="コンタクトセット設定" name="floater_fs_contact_set_configure">
 	<floater.string name="title">
 		[NAME]の設定
 	</floater.string>
@@ -7,8 +7,8 @@
 		<text name="set_label">
 			コンタクトセットの設定
 		</text>
-		<button name="rename_btn" label="名称変更"/>
-		<color_swatch label="色の設定" name="set_swatch" tool_tip="クリックしてカラーピッカーを開きます。"/>
+		<button label="名称変更" name="rename_btn"/>
+		<color_swatch label="色の設定" tool_tip="クリックしてカラーピッカーを開きます。" name="set_swatch"/>
 		<check_box label="オンライン状態を通知する" name="show_set_notifications"/>
 		<check_box label="オンライン状態で並べ替え" name="sort_by_online_status"/>
 	</panel>
@@ -25,8 +25,8 @@
 			<combo_box.item label="隠す" name="hidden"/>
 		</combo_box>
 		<check_box label="コンタクトセットのリストにプロフィールアイコンを表示する" name="FSContactSetsListShowIcons"/>
-		<color_swatch label="デフォルトのセットの色" name="global_swatch" tool_tip="クリックしてカラーピッカーを開きます。"/>
-		<color_swatch name="offline_swatch" tool_tip="コンタクトセットリスト内で、どのコンタクトセットにも属さないオフラインのコンタクトで使用される色を指定します。カスタムコンタクトセットの色が優先されます。"/>
+		<color_swatch label="デフォルトのセットの色" tool_tip="クリックしてカラーピッカーを開きます。" name="global_swatch"/>
+		<color_swatch tool_tip="コンタクトセットリスト内で、どのコンタクトセットにも属さないオフラインのコンタクトで使用される色を指定します。カスタムコンタクトセットの色が優先されます。" name="offline_swatch"/>
 		<check_box label="カスタムのオフラインのコンタクトの色" name="FSContactSetsListColorizeOffline"/>
 		<text name="label_online">
 			オンライン状態の通知：

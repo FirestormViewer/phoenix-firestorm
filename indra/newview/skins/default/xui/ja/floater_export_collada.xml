@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_export_collada" title="Collada形式で保存…">
+<floater title="Collada形式で保存…" name="floater_export_collada">
 	<floater.string name="texture_progress">
 		[OBJECT]Colladaを保存：テクスチャを保存しています（残り[COUNT]枚）
 	</floater.string>

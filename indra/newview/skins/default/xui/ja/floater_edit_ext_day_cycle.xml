@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="env_edit_extdaycycle" title="デイサイクルを編集">
+<floater title="デイサイクルを編集" name="env_edit_extdaycycle">
 	<!-- obsolete?, add as hint for 'save' button? -->
 	<string name="title_new">
 		新しいデイサイクルを作成
@@ -39,7 +39,7 @@
 			<text name="label">
 				デイサイクル名：
 			</text>
-			<button label="インポート" name="btn_import" tool_tip="ディスクからレガシー設定をインポートする。"/>
+			<button label="インポート" tool_tip="ディスクからレガシー設定をインポートする。" name="btn_import"/>
 		</layout_panel>
 		<layout_panel name="content">
 			<layout_stack name="content_stack">
@@ -69,10 +69,10 @@
 							<layout_panel name="track_progress_lp">
 								<layout_stack name="progress_control">
 									<layout_panel name="skip_back">
-										<button name="skip_back_btn" tool_tip="前のステップ"/>
+										<button tool_tip="前のステップ" name="skip_back_btn"/>
 									</layout_panel>
 									<layout_panel name="skip_forward">
-										<button name="skip_forward_btn" tool_tip="次のステップ"/>
+										<button tool_tip="次のステップ" name="skip_forward_btn"/>
 									</layout_panel>
 								</layout_stack>
 							</layout_panel>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="操作設定" name="controls">
+<panel label="操作設定" name="controls_panel">
 	<combo_box name="key_mode">
 		<combo_box.item label="三人称視点のとき" name="third_person"/>
 		<combo_box.item label="一人称視点のとき（マウスルック）" name="first_person"/>

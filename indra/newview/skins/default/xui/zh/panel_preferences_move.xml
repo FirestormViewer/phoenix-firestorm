@@ -53,7 +53,6 @@
 			<check_box label="按字母鍵移動我的化身 (WASD)" name="LetterKeysAffectsMovementNotFocusChatBar" />
 			<check_box label="雙擊方向鍵以跑步" name="tap_tap_hold_to_run" />
 			<check_box label="按住跳躍/下蹲鍵可以起飛/降落" name="automatic_fly" />
-			<check_box label="保持下蹲直到站立起來" name="crouch_toggle_mode" />
 			<check_box label="在跳躍和降落之前禁用動畫延遲" name="FSIgnoreFinishAnimation" />
 			<check_box label="向後走時不會自動轉身" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="阻止您的化身在向後行走時自動轉身以面向相機。 此選項僅影響您的視角，不與AO相容。" />
 			<check_box label="選中物件時自動轉向" name="FSTurnAvatarToSelectedObject" tool_tip="將您的化身朝向當前選擇的物件。" />

@@ -9,7 +9,7 @@
 	<text name="quality_lbl">
 		遠距離のアバター
 	</text>
-	<check_box label="距離ベースの最適化を有効にする" name="FSAutoTuneImpostorByDistEnabled" tool_tip="有効にすると、ビューアはMaxNonImpostors設定を調整して、完全に描画されたアバターを定義された半径内のアバターに制限します。"/>
+	<check_box label="距離ベースの最適化を有効にする" tool_tip="有効にすると、ビューアはMaxNonImpostors設定を調整して、完全に描画されたアバターを定義された半径内のアバターに制限します。" name="FSAutoTuneImpostorByDistEnabled"/>
 	<spinner label="アバターを完全描画する最大距離" name="ffa_autotune"/>
 	<text name="distant_av_advice">
 		遠距離にいるアバターは、描画コストに関係なく自動的に最適化されます。
@@ -27,8 +27,8 @@
 	<text name="sundry_lbl">
 		各種設定
 	</text>
-	<check_box label="自分のアバターを最適化できるようにする" name="alow_self_impostor" tool_tip="有効にすると、ビューアは自分のアバターをインポスターとして描画する可能性があります。"/>
-	<check_box label="最適化された描画時間を表示" name="show_tuned_art" tool_tip="有効にすると、「時間」列には、事前調整描画時間ではなく、現在の描画時間が表示されます。"/>
+	<check_box label="自分のアバターを最適化できるようにする" tool_tip="有効にすると、ビューアは自分のアバターをインポスターとして描画する可能性があります。" name="alow_self_impostor"/>
+	<check_box label="最適化された描画時間を表示" tool_tip="有効にすると、「時間」列には、事前調整描画時間ではなく、現在の描画時間が表示されます。" name="show_tuned_art"/>
 	<text name="sundry_desc1">
 		これらのオプションは、より微妙な設定を制御します。これらのオプションの機能の詳細については、オンラインヘルプページを参照してください。
 	</text>

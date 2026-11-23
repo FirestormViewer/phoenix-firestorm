@@ -14,7 +14,7 @@
 				<text name="WL Water" tool_tip="Wybierz ustawienia dotyczące wody, aby zmodyfikować odbicia i właściwości powierzchni.">
 					Woda
 				</text>
-				<text name="Day Cycle" tool_tip="Zarządzaj ustawieniami cyklu dnia, aby kontrolować zmiany środowiskowe w zależności od czasu.">
+				<text name="Day Cycle" tool_tip="Zarządzaj ustawieniami cyklu dnia, aby kontrolować zmiany otoczenia w zależności od czasu.">
 					Cykl dnia
 				</text>
 			</panel>
@@ -30,15 +30,15 @@
 				<button name="Noon" label="Południe" tool_tip="Dostosuj oświetlenie tak, aby symulowało jasność południa." />
 				<button name="Sunset" label="Zachód" tool_tip="Zastosuj oświetlenie zachodzącego słońca, aby uzyskać ciepłe, złote odcienie." />
 				<button name="Midnight" label="Północ" tool_tip="Przełącz na ustawienia nocne w przypadku miejsc o słabym oświetleniu." />
-				<button name="Revert to Region Default" label="Otocz. współdzielone" tool_tip="Przywróć ustawienia współdzielonego środowiska regionu." />
+				<button name="Revert to Region Default" label="Otocz. współdzielone" tool_tip="Przywróć ustawienia współdzielonego otoczenia regionu." />
 			</panel>
 			<panel name="P_WL_Presets">
 				<text name="T_WL_Presets">
 					Zapisane otoczenia
 				</text>
-				<button name="new_sky_preset" label="Nowe ust. nieba" tool_tip="Utwórz nowy zestaw ustawień środowiska na podstawie aktualnie załadowanych ustawień nieba." />
-				<button name="new_water_preset" label="Nowe ust. wody" tool_tip="Utwórz nowy zestaw ustawień środowiska na podstawie aktualnie załadowanych ustawień wody." />
-				<button name="new_day_preset" label="Nowe ust. dnia" tool_tip="Utwórz nowy zestaw ustawień środowiska na podstawie aktualnie załadowanych ustawień cyklu dnia." />
+				<button name="new_sky_preset" label="Nowe ust. nieba" tool_tip="Utwórz nowy zestaw ustawień otoczenia na podstawie aktualnie załadowanych ustawień nieba." />
+				<button name="new_water_preset" label="Nowe ust. wody" tool_tip="Utwórz nowy zestaw ustawień otoczenia na podstawie aktualnie załadowanych ustawień wody." />
+				<button name="new_day_preset" label="Nowe ust. dnia" tool_tip="Utwórz nowy zestaw ustawień otoczenia na podstawie aktualnie załadowanych ustawień cyklu dnia." />
 			</panel>
 			<panel name="P_W_Reflections">
 				<text name="T_W_Reflections">
@@ -146,7 +146,7 @@
 				</text>
 				<button name="FOV_Cutoff_Reset" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 				<text name="T_Spot_Cutoff" tool_tip="Dostosowuje przesunięcie cieni rzucanych przez reflektory, aby zminimalizować artefakty lub niepożądane linie na powierzchniach.">
-					Przesn. pnkt.
+					Przes. refl.
 				</text>
 				<button name="Spot_Cutoff_Reset" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 				<text name="T_Shd_Bias" tool_tip="Steruje korekcją głębi stosowaną do cieni, aby zapobiec artefaktom związanym z samocieniem (tzw. 'shadow acne'). Niższe wartości tworzą dokładniejsze cienie, podczas gdy nieco wyższe wartości mogą pomóc zmniejszyć migotanie lub problemy z nakładaniem się cieni. Dostosowanie tego ustawienia może również pomóc w korygowaniu cieni, które wydają się unosić nad powierzchniami lub nie dotykają prawidłowo krawędzi obiektów. Reguluj stopniowo, aby zrównoważyć dokładność cieni i zapobieganie artefaktom.">
@@ -160,7 +160,7 @@
 				</text>
 			</panel>
 			<panel name="P_Amb_Occ_Settings">
-				<check_box label="Okluzja otoczenia (percepcja głębi)" name="UseSSAO" tool_tip="Okluzja otoczenia symuluje miękkie cienie pojawiające się w załamaniach, rogach i miejscach, gdzie obiekty są blisko siebie, zwiększając głębię i realizm poprzez naśladowanie naturalnego zasłonięcia światła otoczenia. Chociaż funkcja okluzji działa skutecznie samodzielnie, ustawienia 'efekt' i 'wygadzanie' pomagają precyzyjnie dostroić intensywność i gładkość cieniowania. Okluzja przyczynia się do bardziej realistycznego obrazu w dowolnej rozdzielczości, chociaż jego subtelne szczegóły są bardziej zauważalne w wyższych rozdzielczościach, takich jak 2048 pikseli i więcej." />
+				<check_box label="Okluzja otoczenia (percepcja głębi)" name="UseSSAO" tool_tip="Okluzja otoczenia symuluje miękkie cienie pojawiające się w załamaniach, rogach i miejscach, gdzie obiekty są blisko siebie, zwiększając głębię i realizm poprzez naśladowanie naturalnego zasłonięcia światła otoczenia. Chociaż funkcja okluzji działa skutecznie samodzielnie, ustawienia 'efekt' i 'wygładzanie' pomagają precyzyjnie dostroić intensywność i gładkość cieniowania. Okluzja przyczynia się do bardziej realistycznego obrazu w dowolnej rozdzielczości, chociaż jego subtelne szczegóły są bardziej zauważalne w wyższych rozdzielczościach, takich jak 2048 pikseli i więcej." />
 			</panel>
 			<panel name="P_Scale">
 				<text name="T_Scale" tool_tip="Steruje rozmiarem obszaru próbkowania używanego do okluzji otoczenia. Większe wartości zwiększają dokładność cieni i szczegółowość, ale mogą mieć wpływ na wydajność. Najlepiej stosować z korektami rozmycia cieni, aby uzyskać delikatniejsze efekty cieniowania.">
@@ -291,11 +291,11 @@
 					Pole widz.
 				</text>
 				<button name="Reset_Draw_Distance" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Avi_Count" tool_tip="Określa maksymalną liczbę awatarów renderowanych w scenie. Ograniczenie tej liczby poprawia wydajność, szczególnie w przypadku zatłoczonych wydarzeń lub ruchliwych lokalizacji. Niższe wartości zmniejszają ilość szczegółów i zwiększają liczbę klatek na sekundę, natomiast wyższe wartości pozwalają na wyświetlenie większej liczby awatarów, ale mogą spowolnić działanie podczas większych spotkań.">
-					Ilość awat.
+				<text name="T_Avi_Count" tool_tip="Określa maksymalną liczbę awatarów renderowanych w scenie. Ograniczenie tej liczby poprawia wydajność, szczególnie w przypadku zatłoczonych wydarzeń lub ruchliwych lokalizacji. Niższe wartości zmniejszają liczbę szczegółów i zwiększają liczbę klatek na sekundę, natomiast wyższe wartości pozwalają na wyświetlenie większej liczby awatarów, ale mogą spowolnić działanie podczas większych spotkań.">
+					Liczba awat.
 				</text>
 				<button name="Reset_Avi_Count" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Avi_Detail" tool_tip="Dostosowuje poziom szczegółowości (LOD) awatarów. Wyższe wartości poprawiają jakość obrazu, dzięki czemu starsze awatary wydają się bardziej szczegółowe nawet przy większych odległościach. Niższe wartości zmniejszają szczegółowość - poprawiając wydajność - co jest przydatne na obszarach, gdzie zajduje się wiele awatarów lub podczas używania słabszego komputera. To ustawienie dotyczy przede wszystkim starszych awatarów (systemowych) i ma mniejszy wpływ na awatary meszowe, ponieważ ich poziom szczegółowości jest kontrolowany przez ich własne ustawienia LOD w meszu, a dodatkowo wpływają na to ustawienia złożoności awatarów znajdujące się w panelu Grafika, w Preferencjach.">
+				<text name="T_Avi_Detail" tool_tip="Dostosowuje poziom szczegółowości (LOD) awatarów. Wyższe wartości poprawiają jakość obrazu, dzięki czemu starsze awatary wydają się bardziej szczegółowe nawet przy większych odległościach. Niższe wartości zmniejszają szczegółowość - poprawiając wydajność - co jest przydatne na obszarach, gdzie znajduje się wiele awatarów lub podczas używania słabszego komputera. To ustawienie dotyczy przede wszystkim starszych awatarów (systemowych) i ma mniejszy wpływ na awatary meszowe, ponieważ ich poziom szczegółowości jest kontrolowany przez ich własne ustawienia LOD w meszu, a dodatkowo wpływają na to ustawienia złożoności awatarów znajdujące się w panelu Grafika, w Ustawieniach.">
 					Det. awat.
 				</text>
 				<button name="Reset_Avi_Detail" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
@@ -304,7 +304,7 @@
 				</text>
 				<button name="Reset_Avi_Physics" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 				<text name="T_Particle_Cnt" tool_tip="Ustawia maksymalną liczbę cząsteczek, które przeglądarka wyrenderuje jednocześnie. Dotyczy to efektów takich jak dym, ogień, magiczne zaklęcia, liny, łańcuchy i animacje oparte na cząsteczkach. Wyższe wartości pozwalają uzyskać więcej cząstek w celu uzyskania szczegółowych efektów wizualnych, ale mogą zmniejszyć wydajność w środowiskach o dużej zawartości cząsteczek.">
-					Ilość cząst.
+					Liczba cząst.
 				</text>
 				<button name="Reset_Particle_Cnt" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 				<text name="T_Terrain_Scale" tool_tip="Określa współczynnik skalowania domyślnej tekstury podłoża (terenu), wpływając na to, jak rozciągnięty lub szczegółowy wydaje się teren. Wyższe wartości tworzą delikatniejsze, bardziej szczegółowe tekstury, podczas gdy niższe wartości zmniejszają szczegółowość, ale mogą poprawić wydajność.">
@@ -407,7 +407,7 @@
 				<check_box label="Spowolnij awatara (tylko w tej przeglądarce)" tool_tip="Spowalnia animacje awatara w przeglądarce, pozwalając na szczegółową obserwację ruchu. To ustawienie nie wpływa na to, jak inni widzą Twojego awatara." name="Slow Motion Animations" />
 				<button name="Rebake Texture" tool_tip="Zmusza przeglądarkę do ponownego przetworzenia lub odświeżenia tekstur awatara. Może to rozwiązać problemy takie jak rozmyte skórki, nieprawidłowe ładowanie ubrań lub inne problemy związane z teksturami." label="Wymuś odświeżenie wyglądu (rebake)" />
 				<button name="Set Window Size..." label="Ustaw rozmiar okna..." tool_tip="Otwiera okno dialogowe umożliwiające ustawienie dokładnych wymiarów okna przeglądarki. Przydatne do tworzenia zrzutów ekranu w określonych rozdzielczościach lub dopasowywania rozmiaru okna do machinimy." />
-				<button name="Debug Settings" label="Pokaż ustawienia debugowania" tool_tip="Otwiera menu ustawień debugowania, umożliwiając dostęp do zaawansowanych ustawień przeglądarki niedostępnych w standardowych preferencjach. Używaj ostrożnie, ponieważ zmiany mogą mieć wpływ na wydajność i stabilność." />
+				<button name="Debug Settings" label="Pokaż ustawienia debugowania" tool_tip="Otwiera menu ustawień debugowania, umożliwiając dostęp do zaawansowanych ustawień przeglądarki niedostępnych w standardowych ustawieniach. Używaj ostrożnie, ponieważ zmiany mogą mieć wpływ na wydajność i stabilność." />
 			</panel>
 			<panel name="P_Quick_Stats">
 				<text name="T_Quick_Stats" tool_tip="Tutaj można znaleźć kilka bardzo przydatnych statystyk dla określenia wydajności systemu. Zwijaj/rozwijaj poszczególne pozycje klikając na etykietach.">
@@ -423,7 +423,7 @@
 						<stat_bar name="ktrissec" label="KTris rysowane na sek." unit_label="/sek" tool_tip="Rysowanie KTris: (na sekundę) Wartość tutaj to liczba trójkątów ('tris') rysowanych w każdej sekundzie. Generowane komputerowo obiekty są złożone właśnie z nich (to podstawowy kształt geometryczny)."/>
 						<stat_bar name="objs" label="Wszystkie obiekty" tool_tip="Wszystkie obiekty: Liczba obiektów obecnie widocznych: Primy, awatary, połacie terenu, drzewa, cząsteczki i obszary wody."/>
 						<stat_bar name="newobjs" label="Nowe obiekty" unit_label="/sek" tool_tip="Nowe obiekty: Liczba obiektów pobieranych na sekundę."/>
-						<stat_bar name="numimagesstat" label="Ilość tekstur" tool_tip="Ilość tekstur: Liczba unikalnych tekstur załadowanych przez przeglądarkę."/>
+						<stat_bar name="numimagesstat" label="Liczba tekstur" tool_tip="Liczba tekstur: Liczba unikalnych tekstur załadowanych przez przeglądarkę."/>
 					</stat_view>
 				</container_view>
 			</scroll_container>

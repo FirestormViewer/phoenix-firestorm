@@ -1409,6 +1409,13 @@ extern char const* const _PREHASH_Experience;
 extern char const* const _PREHASH_ExperienceID;
 extern char const* const _PREHASH_LargeGenericMessage;
 extern char const* const _PREHASH_MetaData;
+extern char const* const _PREHASH_GameControlInput;
+extern char const* const _PREHASH_AxisData;
+extern char const* const _PREHASH_GameControlData;
+extern char const* const _PREHASH_ActionMode;
+extern char const* const _PREHASH_Axes;
+extern char const* const _PREHASH_ModeAxes;
+extern char const* const _PREHASH_ModeButtons;
 
 // <FS:CR> Aurora Sim
 extern char const* const _PREHASH_RegionSizeX;

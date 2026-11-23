@@ -67,6 +67,7 @@
 #include "llmediactrl.h"
 #include "llrootview.h"
 
+#include "llfloaterjoin.h"
 #include "llfloatertos.h"
 #include "lltrans.h"
 #include "llglheaders.h"
@@ -525,6 +526,23 @@ void FSPanelLogin::reshapePanel()
         LLRect rect = sInstance->getRect();
         sInstance->reshape(rect.getWidth(), rect.getHeight());
     }
+}
+
+//static
+void FSPanelLogin::setCredentialFields(const std::string& username, const std::string& password)
+{
+    if (!sInstance)
+        return;
+    sInstance->getChild<LLComboBox>("username_combo")->setLabel(username);
+    sInstance->mUsernameLength = static_cast<unsigned int>(username.length());
+    sInstance->getChild<LLUICtrl>("password_edit")->setValue(password);
+    sInstance->mPasswordLength = static_cast<unsigned int>(password.length());
+    sInstance->mPasswordModified = true;
+    sInstance->updateLoginButtons();
+
+    LLUICtrl* remember_password = sInstance->getChild<LLUICtrl>("remember_check");
+    remember_password->setValue(true);
+    remember_password->setEnabled(true);
 }
 
 // static
@@ -1074,21 +1092,24 @@ void FSPanelLogin::onClickConnect(void *)
 // static
 void FSPanelLogin::onClickNewAccount(void*)
 {
-    if (sInstance)
-    {
 #ifdef OPENSIM
-        LLSD grid_info;
-        LLGridManager::getInstance()->getGridData(grid_info);
+    LLSD grid_info;
+    LLGridManager::getInstance()->getGridData(grid_info);
 
-        if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has(GRID_REGISTER_NEW_ACCOUNT))
+    if (LLGridManager::getInstance()->isInOpenSim())
+    {
+        if (grid_info.has(GRID_REGISTER_NEW_ACCOUNT))
+        {
             LLWeb::loadURLInternal(grid_info[GRID_REGISTER_NEW_ACCOUNT]);
-        else
-#endif // OPENSIM
-            // <FS:PP> Load Firestorm's registration page from within the viewer itself
-            // LLWeb::loadURLExternal(LLTrans::getString("create_account_url"));
-            LLWeb::loadURLInternal(LLTrans::getString("create_account_url"));
-            // </FS:PP>
+        }
     }
+    else
+#endif // OPENSIM
+        // <FS:PP> Load Firestorm's registration page from within the viewer itself
+        // LLWeb::loadURLExternal(LLTrans::getString("create_account_url"));
+        LLWeb::loadURLInternal(LLTrans::getString("create_account_url"));
+        // LLFloaterReg::showInstance("join"); // New LL account creation floater, not used by FS for now
+        // </FS:PP>
 }
 
 

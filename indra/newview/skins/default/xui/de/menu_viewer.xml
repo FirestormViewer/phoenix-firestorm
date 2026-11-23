@@ -157,6 +157,7 @@
 			<menu_item_check label="Sonnenuntergang" name="Sunset"/>
 			<menu_item_check label="Mitternacht" name="Midnight"/>
 			<menu_item_check label="Gemeinsame Umgebung verwenden" name="Use Shared Environment"/>
+			<menu_item_check label="Zur gemeinsamen Umgebung nach Teleport wechseln" name="Switch to Shared after teleport"/>
 			<menu_item_call label="Meine Umgebungen..." name="my_environs"/>
 			<menu_item_call label="Persönliche Beleuchtung..." name="adjustment_tool"/>
 			<menu_item_check label="Wolken pausieren" name="pause_clouds"/>
@@ -471,6 +472,7 @@
 			<menu_item_check label="Matrizen anzeigen" name="Show Matrices"/>
 			<menu_item_check label="Farbe unter Cursor anzeigen" name="Show Color Under Cursor"/>
 			<menu_item_check label="Speicher anzeigen" name="Show Memory"/>
+			<menu_item_check label="Status des Spiel-Controllers anzeigen" name="Show Game Controller State"/>
 			<menu_item_check label="Aktualisierungen an Objekten anzeigen" name="Show Updates"/>
 		</menu>
 		<menu label="Profiling/Telemetrie" name="Enable / Disable telemetry capture">

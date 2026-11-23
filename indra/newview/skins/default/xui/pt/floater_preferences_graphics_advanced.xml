@@ -12,6 +12,10 @@
 	<text name="PostProcessText">
 		Baixo
 	</text>
+	<slider label="Qualidade do brilho:" name="GlowResolution"/>
+	<text name="GlowResolutionText">
+		Baixo
+	</text>
 	<text name="AvatarText">
 		Avatar
 	</text>
@@ -44,6 +48,12 @@
 	<check_box initial_value="true" label="Ativar objetos de buffer de vértices OpenGL" name="vbo" tool_tip="Se você tiver hardware gráfico moderno, ativar esta opção pode melhorar o desempenho. Em hardware antigo, VBOs podem ser mal implementados, o que pode causar travamentos quando esta opção estiver ativada."/>
 	<check_box initial_value="true" label="Ativar compressão de texturas (requer reinício)" name="texture compression" tool_tip="Comprime texturas na memória de vídeo para permitir carregar texturas de maior resolução (leve perda de qualidade de cor)."/>
 	<check_box initial_value="true" label="Ativar suporte a telas HiDPI (requer reinício)" name="use HiDPI" tool_tip="Ativa OpenGL para renderização em alta resolução."/>
+	<text name="af strength label">
+		Filtragem anisotrópica:
+	</text>
+	<combo_box label="Filtragem anisotrópica" name="anisotropic_filter">
+		<combo_box.item label="Desativado" name="disabled"/>
+	</combo_box>
 	<text name="antialiasing label">
 		Antisserrilhamento:
 	</text>

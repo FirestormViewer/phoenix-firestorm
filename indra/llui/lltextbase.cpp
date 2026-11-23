@@ -1732,9 +1732,9 @@ void LLTextBase::draw()
         // - LLScrollContainer::getContentWindowRect()
         // - LLScrollContainer::localRectToOtherView()
         // - LLRect::intersectWith()
-        if(text_rect.mTop>2)
+        if (mScroller && !mScroller->isAtTop() && text_rect.mTop > 2)
         {
-            text_rect.mTop-=2;
+            text_rect.mTop -= 2;
         }
         // push the modified text_rect as a GL clipping scissor on the stack
         LLLocalClipRect clip(text_rect, should_clip);

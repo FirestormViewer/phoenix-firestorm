@@ -378,6 +378,11 @@ public:
 
     bool avatarHoverHeightEnabled() const;
 
+    bool groupChatPostLinksEnabled() const;
+
+    // does the simulator accept GameControlData messages?
+    bool gameControlEnabled() const;
+
 // </FS:CR>
 #ifdef OPENSIM
     const std::set<std::string, std::less<>>& getGods() const { return mGodNames; }

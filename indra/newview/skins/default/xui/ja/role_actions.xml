@@ -57,7 +57,7 @@
 	</action_set>
 	<action_set description="これらの「能力」には、グループ所有のオブジェクトを譲渡、修正、販売する権限が含まれます。 変更は「ビルドツール」＞「一般」タブで行います。 オブジェクトを右クリックして「編集」を開くと設定内容を確認できます。" name="Object Management">
 		<action description="グループにオブジェクトを譲渡" longdescription="「ビルドツール」＞「一般」タブで、オブジェクトをグループに譲渡します。" name="object deed"/>
-		<action description="グループ所有オブジェクトの操作（移動、コピー、修正）" longdescription="「ビルドツール」＞「一般」タブで、グループ所有のオブジェクトを操作（移動、コピー、修正）します。" name="object manipulate" />
+		<action description="グループ所有オブジェクトの操作（移動、複製、修正）" longdescription="「ビルドツール」＞「一般」タブで、グループ所有のオブジェクトを操作（移動、複製、修正）します。" name="object manipulate" />
 		<action description="グループ所有オブジェクトを販売可能に設定" longdescription="「ビルドツール」＞「一般」タブで、グループ所有のオブジェクトを販売対象に設定します。" name="object set sale"/>
 	</action_set>
 	<action_set description="これらの能力には、メンバーに、グループの負債の支払いと利子受け取りを要求する権限、グループの口座履歴へのアクセスを制限する権限が含まれます。" name="Accounting">

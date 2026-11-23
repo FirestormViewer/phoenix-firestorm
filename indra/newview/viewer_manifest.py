@@ -108,6 +108,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 self.exclude("logcontrol.xml")
                 self.exclude("logcontrol-dev.xml")
                 self.path("*.ini")
+                self.path("*.txt")
                 self.path("*.xml")
 
                 # include the entire shaders directory recursively
@@ -723,6 +724,9 @@ class Windows_x86_64_Manifest(ViewerManifest):
             self.path("vcruntime140.dll")
             self.path_optional("vcruntime140_1.dll")
             self.path_optional("vcruntime140_threads.dll")
+
+            # SDL3
+            self.path("SDL3.dll")
 
             # <FS:TJ> Keep Vivox only for OpenSim viewers
             if self.fs_is_opensim():
@@ -1512,6 +1516,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
             # Remember where we parked this car.
             with self.prefix(src=relpkgdir, dst="Frameworks"):
                 self.path("libndofdev.dylib")
+                self.path("libSDL3.dylib") # gamecontrol
 
                 if self.args.get('bugsplat'):
                     self.path2basename(relpkgdir, "BugsplatMac.framework")

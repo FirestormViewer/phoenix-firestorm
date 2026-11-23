@@ -381,6 +381,13 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
     // Do base class updates...
     U32 retval = LLViewerObject::processUpdateMessage(mesgsys, user_data, block_num, update_type, dp);
 
+    // <FS:TJ> Base class updates can kill this object, don't continue processing it when it's dead
+    if (isDead())
+    {
+        return retval;
+    }
+    // </FS:TJ>
+
     LLUUID sculpt_id;
     U8 sculpt_type = 0;
     if (isSculpted())
@@ -2708,7 +2715,13 @@ S32 LLVOVolume::setTEMaterialID(const U8 te, const LLMaterialID& pMaterialID)
     LL_DEBUGS("MaterialTEs") << " " << pMaterialID.asString() << LL_ENDL;
     if (res)
     {
-        LLMaterialMgr::instance().getTE(getRegion()->getRegionID(), pMaterialID, te, boost::bind(&LLVOVolume::setTEMaterialParamsCallbackTE, getID(), _1, _2, _3));
+        // <FS:TJ> [FIRE-37146] Fix crash when the region is nullptr after the object is marked dead
+        //LLMaterialMgr::instance().getTE(getRegion()->getRegionID(), pMaterialID, te, boost::bind(&LLVOVolume::setTEMaterialParamsCallbackTE, getID(), _1, _2, _3));
+        if (LLViewerRegion* regionp = getRegion())
+        {
+            LLMaterialMgr::instance().getTE(regionp->getRegionID(), pMaterialID, te, boost::bind(&LLVOVolume::setTEMaterialParamsCallbackTE, getID(), _1, _2, _3));
+        }
+        // </FS:TJ>
 
         setChanged(ALL_CHANGED);
         if (!mDrawable.isNull())

@@ -16,10 +16,10 @@
 		（再生中）
 	</string>
 	<panel name="minimized_controls">
-		<button label="すべて停止" name="all_nearby_media_disable_btn" tool_tip="近くのメディアをすべてオフにします。"/>
-		<button label="すべて開始" name="all_nearby_media_enable_btn" tool_tip="近くのメディアをすべてオンにします。"/>
-		<button name="open_prefs_btn" tool_tip="メディアの設定を開きます"/>
-		<button label="詳細　≫" label_selected="≪　簡易" name="more_btn" tool_tip="高度なコントロールを表示／非表示します。"/>
+		<button label="すべて停止" tool_tip="近くのメディアをすべてオフにします。" name="all_nearby_media_disable_btn"/>
+		<button label="すべて開始" tool_tip="近くのメディアをすべてオンにします。" name="all_nearby_media_enable_btn"/>
+		<button tool_tip="メディアの設定を開きます" name="open_prefs_btn"/>
+		<button label="詳細　≫" label_selected="≪　簡易" tool_tip="高度なコントロールを表示／非表示します。" name="more_btn"/>
 	</panel>
 	<panel name="nearby_media_panel">
 		<text name="nearby_media_title">
@@ -44,25 +44,25 @@
 		<panel name="media_controls_panel">
 			<layout_stack name="media_controls">
 				<layout_panel name="stop">
-					<button name="stop_btn" tool_tip="選択したメディアを停止します。"/>
+					<button tool_tip="選択したメディアを停止します。" name="stop_btn"/>
 				</layout_panel>
 				<layout_panel name="play">
-					<button name="play_btn" tool_tip="選択したメディアを再生します。"/>
+					<button tool_tip="選択したメディアを再生します。" name="play_btn"/>
 				</layout_panel>
 				<layout_panel name="pause">
-					<button name="pause_btn" tool_tip="選択したメディアを一時停止します。"/>
+					<button tool_tip="選択したメディアを一時停止します。" name="pause_btn"/>
 				</layout_panel>
 				<layout_panel name="volume_slider_ctrl">
-					<slider_bar name="volume_slider" tool_tip="選択したメディアの音量を調整します。"/>
+					<slider_bar tool_tip="選択したメディアの音量を調整します。" name="volume_slider"/>
 				</layout_panel>
 				<layout_panel name="mute">
-					<button name="mute_btn" tool_tip="選択したメディアの音をミュートします。"/>
+					<button tool_tip="選択したメディアの音をミュートします。" name="mute_btn"/>
 				</layout_panel>
 				<layout_panel name="zoom">
-					<button name="zoom_btn" tool_tip="選択したメディアにズームします。"/>
+					<button tool_tip="選択したメディアにズームします。" name="zoom_btn"/>
 				</layout_panel>
 				<layout_panel name="unzoom">
-					<button name="unzoom_btn" tool_tip="選択したメディアからズームアウトします。"/>
+					<button tool_tip="選択したメディアからズームアウトします。" name="unzoom_btn"/>
 				</layout_panel>
 			</layout_stack>
 		</panel>

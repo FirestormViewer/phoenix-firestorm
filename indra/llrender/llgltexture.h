@@ -183,6 +183,7 @@ protected:
     void setTexelsPerImage();
 
 public:
+    // May be null before generateGLTexture() is called.
     /*virtual*/ LLImageGL* getGLTexture() const ;
 
 protected:

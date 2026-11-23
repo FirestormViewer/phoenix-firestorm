@@ -14,5 +14,7 @@
 	<menu_item_call label="Congelar" name="freeze"/>
 	<menu_item_call label="Descongelar" name="unfreeze"/>
 	<menu_item_call label="CSR" name="csr"/>
+	<menu_item_call label="Banir de todos os meus grupos" name="ban_from_all_groups"/>
+	<menu_item_call label="Remover banimento de todos os meus grupos" name="unban_from_all_groups"/>
 	<menu_item_call label="Denunciar" name="report"/>
 </toggleable_menu>

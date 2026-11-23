@@ -8222,6 +8222,9 @@ LLObjectSelection::~LLObjectSelection()
 
 void LLObjectSelection::cleanupNodes()
 {
+    std::for_each(mRemovedNodes.begin(), mRemovedNodes.end(), DeletePointer());
+    mRemovedNodes.clear();
+
     for (list_t::iterator iter = mList.begin(); iter != mList.end(); )
     {
         list_t::iterator curiter = iter++;
@@ -8317,6 +8320,7 @@ void LLObjectSelection::removeNode(LLSelectNode *nodep)
     }
     nodep->setObject(NULL); // Will get erased in cleanupNodes()
     mList.remove(nodep);
+    mRemovedNodes.push_back(nodep);
 }
 
 void LLObjectSelection::deleteAllNodes()
@@ -8325,6 +8329,9 @@ void LLObjectSelection::deleteAllNodes()
     mList.clear();
     mSelectNodeMap.clear();
     mPrimaryObject = NULL;
+
+    std::for_each(mRemovedNodes.begin(), mRemovedNodes.end(), DeletePointer());
+    mRemovedNodes.clear();
 
     // <FS:Zi> Fix for crash while selecting objects with derendered child prims
     std::for_each(mFailedNodesList.begin(),mFailedNodesList.end(),DeletePointer());

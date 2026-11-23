@@ -13,7 +13,7 @@
 							<check_box label="Zapamiętaj login" name="remember_username_check" />
 						</layout_panel>
 						<layout_panel name="delete_container">
-							<button tool_tip="Usuń tą nazwę użytkownika" name="remove_user_btn" />
+							<button tool_tip="Usuń tę nazwę użytkownika" name="remove_user_btn" />
 						</layout_panel>
 						<layout_panel name="password_container">
 							<line_editor name="password_edit" label="Hasło" />

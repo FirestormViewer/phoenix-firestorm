@@ -278,7 +278,7 @@ support@secondlife.com
 Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	</string>
 	<string name="LoginFailedAccountDisabled">
-		Nie jesteśmy w stanie na tą chwilę wykonać Twojego żądania.
+		Nie jesteśmy w stanie na tę chwilę wykonać Twojego żądania.
 Aby uzyskać pomoc skontaktuj się ze wsparciem: http://support.secondlife.com
 	</string>
 	<string name="LoginFailedTransformError">
@@ -594,16 +594,16 @@ Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 		Nie możesz umieszczać na Marketplace przedmiotów, które masz na sobie założone
 	</string>
 	<string name="TooltipOutboxFolderLevels">
-		Głębokość zagnieżdżonych folderów przekracza [AMOUNT]. Zmniejsz ilość zagdzieżdżeń; Spakuj przedmioty w pudełka, jeśli to pomoże.
+		Głębokość zagnieżdżonych folderów przekracza [AMOUNT]. Zmniejsz liczbę zagnieżdżeń; Spakuj przedmioty w pudełka, jeśli to pomoże.
 	</string>
 	<string name="TooltipOutboxTooManyFolders">
-		Ilość podfolderów przekracza [AMOUNT]. Zmniejsz ilość folderów; Spakuj przedmioty w pudełka, jeśli to pomoże.
+		Liczba podfolderów przekracza [AMOUNT]. Zmniejsz liczbę folderów; Spakuj przedmioty w pudełka, jeśli to pomoże.
 	</string>
 	<string name="TooltipOutboxTooManyObjects">
-		Ilość rzeczy przekracza [AMOUNT]. Jeśli chcesz sprzedać więcej, niż [AMOUNT] rzeczy jako jedną pozycję, to musisz je spakować w pudełka.
+		Liczba rzeczy przekracza [AMOUNT]. Jeśli chcesz sprzedać więcej, niż [AMOUNT] rzeczy jako jedną pozycję, to musisz je spakować w pudełka.
 	</string>
 	<string name="TooltipOutboxTooManyStockItems">
-		Ilość przedmiotów w folderze Magazynowym przekracza [AMOUNT].
+		Liczba przedmiotów w folderze Magazynowym przekracza [AMOUNT].
 	</string>
 	<string name="TooltipOutboxCannotDropOnRoot">
 		Możesz przenosić foldery lub przedmioty wyłącznie do kart WSZYSTKO lub NIEPRZYPISANE. Wybierz teraz jedną z tych kart i spróbuj ponownie.
@@ -780,7 +780,7 @@ są dozwolone.
 		Wyszukiwanie...
 	</string>
 	<string name="NoneFound">
-		Nie nie znaleziono.
+		Nic nie znaleziono.
 	</string>
 	<string name="ServerUnavailable">
 		Usługa niedostępna.
@@ -1758,9 +1758,6 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="InventoryOutboxNotMerchantTitle">
 		Każdy może sprzedawać przedmioty na Marketplace.
 	</string>
-	<string name="InventoryOutboxNotMerchantTooltip">
-		Zostań sprzedawcą!
-	</string>
 	<string name="InventoryOutboxNotMerchant">
 		Jeśli chcesz zostać kupcem i sprzedawać przedmioty, to musisz najpierw [[MARKETPLACE_CREATE_STORE_URL] założyć sklep na Marketplace].
 	</string>
@@ -1784,15 +1781,15 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="InventoryMarketplaceError">
 		Wystapił błąd podczas otwierania listy rzeczy z Marketplace.
-Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
+Jeśli ciągle otrzymujesz tę wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceConnectionError">
 		Wystapił błąd podczas łączenia z Marketplace.
-Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
+Jeśli ciągle otrzymujesz tę wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceConnectionErrorReason">
 		Wystapił błąd podczas łączenia z Marketplace. Powód: [REASON]
-Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
+Jeśli ciągle otrzymujesz tę wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Twój folder rzeczy na Marketplace jest pusty.
@@ -1912,8 +1909,8 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="Chat Message" value=" Czat: "/>
 	<string name="Sound" value=" Dźwięk: "/>
 	<string name="Wait" value=" --- Czekaj: "/>
-	<string name="AnimFlagStop" value=" Zatrzymaj animację:"/>
-	<string name="AnimFlagStart" value=" Rozpocznij animację:"/>
+	<string name="AnimFlagStop" value=" Zatrzymaj animację: "/>
+	<string name="AnimFlagStart" value=" Rozpocznij animację: "/>
 	<string name="Wave" value=" Wave"/>
 	<string name="GestureActionNone" value="Brak"/>
 	<string name="HelloAvatar" value=" Witaj, Awatarze!"/>
@@ -3124,7 +3121,7 @@ Jeżeli problem nadal występuje, proponujemy całkowite odinstalowanie aplikacj
 		Błąd aplikacji - nie panikuj
 	</string>
 	<string name="MBApplicationErrorDetails">
-		Przepraszamy, ale [APP_NAME] uległ awarii i musi zostać zamknięty. Jeśli ten problem się powtarza skontaktuj się z nami i dodaj tą wiadomość:
+		Przepraszamy, ale [APP_NAME] uległ awarii i musi zostać zamknięty. Jeśli ten problem się powtarza skontaktuj się z nami i dodaj tę wiadomość:
 
 [ERROR_DETAILS]
 	</string>
@@ -4643,7 +4640,7 @@ Zainstaluj ponownie przeglądarkę z [DOWNLOAD_URL] i skontaktuj się z [SUPPORT
 		Historia odwiedzonych miejsc
 	</string>
 	<string name="LocationCtrlForSaleTooltip">
-		Kup tą działkę
+		Kup tę działkę
 	</string>
 	<string name="LocationCtrlVoiceTooltip">
 		Głos niedostępny w tym miejscu
@@ -4748,7 +4745,7 @@ Zainstaluj ponownie przeglądarkę z [DOWNLOAD_URL] i skontaktuj się z [SUPPORT
 		(Zapisano [LONG_TIMESTAMP])
 	</string>
 	<string name="IM_unblock_only_groups_friends">
-		Aby zobaczyć tą wiadomość musisz odznaczyć &apos;Tylko znajomi i grupy mogą wysyłać mi wiad. prywatne (IM) oraz rozmowy głosowe&apos; w Ustawieniach/Prywatności.
+		Aby zobaczyć tę wiadomość musisz odznaczyć &apos;Tylko znajomi i grupy mogą wysyłać mi wiad. prywatne (IM) oraz rozmowy głosowe&apos; w Ustawieniach/Prywatności.
 	</string>
 	<string name="OnlineStatus">
 		dostępny/a
@@ -5331,6 +5328,21 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="TranslationResponseParseError">
 		Wystąpił błąd podczas przetwarzania odpowiedzi translatora.
 	</string>
+	<string name="Space">
+		Spacja
+	</string>
+	<string name="Left">
+		Strzałka w lewo
+	</string>
+	<string name="Right">
+		Strzałka w prawo
+	</string>
+	<string name="Up">
+		Strzałka w górę
+	</string>
+	<string name="Down">
+		Strzałka w dół
+	</string>
 	<string name="Add">
 		Dodaj
 	</string>
@@ -5452,7 +5464,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Landmarki
 	</string>
 	<string name="Command_Preferences_Label">
-		Preferencje
+		Ustawienia
 	</string>
 	<string name="Command_Profile_Label">
 		Profil
@@ -5767,7 +5779,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Otwiera listę ulubionych rzeczy
 	</string>
 	<string name="Command_RFO_Tooltip">
-		Renderuj tylko Twoich znajomych w przeglądarce, wszystkie inne awatary będą niewidoczne. Teleportacja jest wymagana aby przywrócić widzialność innych osób, jeśli włączysz tą opcję.
+		Renderuj tylko Twoich znajomych w przeglądarce, wszystkie inne awatary będą niewidoczne. Teleportacja jest wymagana aby przywrócić widzialność innych osób, jeśli włączysz tę opcję.
 	</string>
 	<string name="Command_DAO_Tooltip">
 		Derenderuj animowane obiekty (znane też jako animesz) - Tymczasowo derenderuj wszystkie aktualnie widoczne animowane mesze (dołączone i wolnostojące). Zderenderowane animesze pojawią się ponownie po teleportacji.
@@ -6085,10 +6097,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		--- Prześlij zbiorczo ---
 	</string>
 	<string name="logging_calls_disabled_log_empty">
-		Rozmowy nie są zapisywane do dziennika. Jeśli chcesz zacząć je logować wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Preferencje > Prywatność.
+		Rozmowy nie są zapisywane do dziennika. Jeśli chcesz zacząć je logować wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Ustawienia > Prywatność.
 	</string>
 	<string name="logging_calls_disabled_log_not_empty">
-		Rozmowy nie będą więcej zapisywane. Jeśli chcesz kontynuować ich logowanie wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Preferencje > Prywatność.
+		Rozmowy nie będą więcej zapisywane. Jeśli chcesz kontynuować ich logowanie wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Ustawienia > Prywatność.
 	</string>
 	<string name="logging_calls_enabled_log_empty">
 		Nie ma zapisanych rozmów. Jeśli skontaktujesz się z kimś, lub ktoś z Tobą, to wpis dziennika pojawi się tutaj.
@@ -6193,7 +6205,7 @@ do sekcji wsparcia witryny SecondLife.com i zgłoś problem.
 		Wynik całkowity dla [DICE]d[FACES][MODIFIER]: [RESULT].
 	</string>
 	<string name="FSCmdLineRollDiceLimits">
-		Musisz podać wartości dodatnie dla ilości kostek (maksymalnie 100) oraz ścianek (maksymalnie 1000).
+		Musisz podać wartości dodatnie dla liczby kostek (maksymalnie 100) oraz ścianek (maksymalnie 1000).
 	</string>
 	<string name="FSCmdLineRollDiceModifiersInvalid">
 		Jeśli chcesz użyć modyfikatora, to musisz podać właściwą jego liczbę oraz typ. Wartość modyfikatora musi być w zakresie od -1000 do 1000. Prawidłowe typy modyfikatorów to "+" (premie), "-" (kary), "&gt;", "&lt;" (sukcesy), "r&gt;", "r&lt;", "r" (ponowne rzuty), "!p&gt;", "!p&lt;", "!p" (penetracje), "!&gt;", "!&lt;" oraz "!" (eksplozje). Możesz jednocześnie użyć tylko jednego typu modyfikatora. Przykłady: "[COMMAND] 1 20 + 5", "[COMMAND] 5 40 &gt; 15", "[COMMAND] 10 25 ! 25", "[COMMAND] 15 25 !&lt; 10".
@@ -6307,7 +6319,7 @@ do sekcji wsparcia witryny SecondLife.com i zgłoś problem.
 		Wewnątrz Mostu LSL znaleziono nieoczekiwane elementy.
 	</string>
 	<string name="fsbridge_warning_not_finished">
-		Proces tworzenia Mostu LSL nie dobiegł do końca. Być może będzie trzeba utworzyć go na nowo w [APP_NAME], aby zadział ('Kondycja awatara' w menu 'Awatar' na górze).
+		Proces tworzenia Mostu LSL nie dobiegł do końca. Być może będzie trzeba utworzyć go na nowo w [APP_NAME], aby zadziałał ('Kondycja awatara' w menu 'Awatar' na górze).
 	</string>
 	<string name="fsbridge_detached">
 		Most LSL został odłączony od awatara.
@@ -6351,7 +6363,7 @@ Twoja aktualna pozycja: [AVATAR_POS]
 		Info o skryptach: Otrzymano uszkodzoną odpowiedź od Mostu LSL. Spróbuj ponownie.
 	</string>
 	<string name="fsbridge_error_injection">
-		UWAGA: Jeden lub więcej skryptów został dodanych do Twojego Mostu LSL w [APP_NAME]! Jeśli ta wiadomość jest niespodziewana, to stwórz teraz Most LSL na nowo ('Kondycja awatara' w menu 'Awatar' na górze).
+		UWAGA: Jeden lub więcej skryptów zostało dodanych do Twojego Mostu LSL w [APP_NAME]! Jeśli ta wiadomość jest niespodziewana, to stwórz teraz Most LSL na nowo ('Kondycja awatara' w menu 'Awatar' na górze).
 	</string>
 	<string name="fsbridge_error_wrongvm">
 		UWAGA: Skrypt Mostu LSL używa starej maszyny wirtualnej LSO (16 KB limitu pamięci) zamiast nowej Mono, co stwarza wysokie prawdopodobieństwo kolizji sterty i stosu oraz awarii Mostu poprzez wyczerpanie się pamięci. Spróbuj stworzyć go na nowo w [APP_NAME] ('Kondycja awatara' w menu 'Awatar' na górze). Jeśli ten komunikat pojawi się ponownie spróbuj jeszcze raz w innym regionie.

@@ -15,6 +15,7 @@
 		<panel label="Netzwerk &amp; Dateien" name="input"/>
 		<panel label="Bewegen/Anzeigen" name="move"/>
 		<panel label="Tastenbelegung" name="controls"/>
+		<panel label="Spiel-Kontrollen" name="game_control"/>
 		<panel label="Meldungen" name="msgs"/>
 		<panel label="Privatsphäre" name="im"/>
 		<panel label="Erweitert" name="advanced1"/>

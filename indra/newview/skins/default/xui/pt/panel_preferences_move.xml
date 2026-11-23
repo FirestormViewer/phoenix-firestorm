@@ -64,7 +64,6 @@
 			<check_box label="Mover com letras (ex: WASD)" name="LetterKeysAffectsMovementNotFocusChatBar" />
 			<check_box label="Duplo toque + segurar para correr" name="tap_tap_hold_to_run" />
 			<check_box label="Voar/pousar com pressionar para pular/rastejar" name="automatic_fly" />
-			<check_box label="Ativar modo de alternância de agachamento." name="crouch_toggle_mode" />
 			<check_box label="Ignorar animações de pular e aterrissar" name="FSIgnoreFinishAnimation" />
 			<check_box label="Avatares retrocedem localmente (padrão SL)" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Se ativado, os avatares em sua própria tela andarão para trás ao andar para trás, em vez de se virarem e depois caminharem para frente. Esta opção tem apenas um efeito local e não afeta o que os outros veem. Esta é a configuração padrão no Visualizador do Second Life e pode ser substituída pelo AO do avatar." />
 			<check_box label="Girar avatar para o objeto selecionado" name="FSTurnAvatarToSelectedObject" tool_tip="Gira o avatar para ficar de frente para o objeto atualmente selecionado." />

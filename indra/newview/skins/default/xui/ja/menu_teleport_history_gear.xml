@@ -3,15 +3,15 @@
 	<menu_item_call label="すべてのフォルダを拡げる" name="Expand all folders"/>
 	<menu_item_call label="すべてのフォルダを折りたたむ" name="Collapse all folders"/>
 	<!-- FS:Beq [timezone support for teleport history] -->
-	<menu name="TPHistoryTimeZone" label="タイムゾーンを選択…">
-		<menu_item_check name="teleport_history_tz_utc" label="ＵＴＣ"/>
-		<menu_item_check name="teleport_history_tz_slt" label="ＳＬＴ"/>
-		<menu_item_check name="teleport_history_tz_local" label="ローカル"/>
+	<menu label="タイムゾーンを選択…" name="TPHistoryTimeZone">
+		<menu_item_check label="ＵＴＣ" name="teleport_history_tz_utc"/>
+		<menu_item_check label="ＳＬＴ" name="teleport_history_tz_slt"/>
+		<menu_item_check label="ローカル" name="teleport_history_tz_local"/>
 	</menu>
 	<!-- /FS:Beq [timezone support for teleport history] -->
-	<menu name="Show Menu" label="表示…">
-		<menu_item_check name="Show Position" label="位置"/>
-		<menu_item_check name="Show Date" label="日付"/>
+	<menu label="表示…" name="Show Menu">
+		<menu_item_check label="位置" name="Show Position"/>
+		<menu_item_check label="日付" name="Show Date"/>
 	</menu>
 	<menu_item_call label="テレポート履歴をクリア" name="Clear Teleport History"/>
 </toggleable_menu>

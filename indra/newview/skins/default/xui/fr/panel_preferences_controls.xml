@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<panel label="Contrôles" name="controls">
+<panel label="Contrôles" name="controls_panel">
 	<combo_box name="key_mode">
 		<combo_box.item label="A la troisième personne" name="third_person"/>
 		<combo_box.item label="En vue subjective" name="first_person"/>

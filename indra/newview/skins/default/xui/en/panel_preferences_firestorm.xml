@@ -227,6 +227,19 @@
          left="10"
          width="500"
          tool_tip="Restores the current environment settings after next login."/>
+        <!-- <FS:Trish> FIRE-31115 -->
+        <check_box
+         top_pad="5"
+         control_name="SwitchToSharedEnvAfterTeleport"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         name="SwitchToSharedEnvAfterTeleport"
+         label="Switch to the shared environment after teleport"
+         left="10"
+         width="500"
+         tool_tip="Discards any personal environment after each teleport and uses the region/parcel environment instead."/>
+        <!-- </FS:Trish> -->
         <check_box
          top_pad="5"
          control_name="FSRepeatedEnvTogglesShared"

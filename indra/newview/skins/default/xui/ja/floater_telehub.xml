@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="telehub" title="テレハブ">
+<floater title="テレハブ" name="telehub">
 	<text name="status_text_connected">
 		物体[OBJECT]に接続されたテレハブ
 	</text>

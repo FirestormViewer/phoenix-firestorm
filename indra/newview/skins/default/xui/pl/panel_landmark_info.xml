@@ -9,7 +9,7 @@
 		Informacje o miejscu nie są dostępne bez aktualizacji serwera.
 	</string>
 	<string name="server_error_text">
-		Informacje o miejscu nie są dostępne w tej chwili. Prosimy sprobować później.
+		Informacje o miejscu nie są dostępne w tej chwili. Prosimy spróbować później.
 	</string>
 	<string name="server_forbidden_text">
 		Informacje o miejscu są niedostępne z powodu braku dostępu. Prosimy sprawdzić swoje prawa z właścicielem działki.

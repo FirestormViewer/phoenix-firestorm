@@ -93,7 +93,7 @@ Voice Server Version: [VOICE_VERSION]
   <string name="LocalTime">[month, datetime, local] [day, datetime, local] [year, datetime, local] [hour, datetime, local]:[min, datetime, local]:[second,datetime, local]</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">Error fetching server release notes URL.</string>
 	<string name="BuildConfiguration">Build Configuration</string>
-	
+
 	<!--  progress -->
 	<string name="ProgressRestoring">Restoring...</string>
 	<string name="ProgressChangingResolution">Changing resolution...</string>
@@ -136,12 +136,12 @@ Voice Server Version: [VOICE_VERSION]
 	<string name="LoginFailedHeader">Login failed.</string>
 	<string name="Quit">Quit</string>
 	<string name="create_account_url">https://www.firestormviewer.org/join-secondlife/</string>
-	
+
 	<string name="AgniGridLabel">Second Life Main Grid (Agni)</string>
 	<string name="AditiGridLabel">Second Life Beta Test Grid (Aditi)</string>
     <string name="AgniGridLabelShort">Agni (production)</string>
     <string name="AditiGridLabelShort">Aditi (beta)</string>
-	
+
 	<string name="ViewerDownloadURL">https://www.firestormviewer.org/choose-your-platform/</string>
 	<string name="LoginFailedViewerNotPermitted">
 The viewer you are using can no longer access Second Life. Please visit the following page to download a new viewer:
@@ -331,10 +331,10 @@ If you feel this is an error, please contact support@secondlife.com</string>
 	<string name="TooltipOutfitNotInInventory">You can only put items or outfits from your personal inventory into "Outfits"</string>
 	<string name="TooltipCantCreateOutfit">One or more items can't be used inside "Outfits"</string>
     <string name="TooltipCantMoveOutfitIntoOutfit">Can not move an outfit into another outfit</string>
-	
+
 	<string name="TooltipDragOntoOwnChild">You can't move a folder into its child</string>
 	<string name="TooltipDragOntoSelf">You can't move a folder into itself</string>
-	
+
 	<!-- tooltips for Urls -->
 	<string name="TooltipHttpUrl">Click to view this web page</string>
 	<string name="TooltipSLURL">Click to view this location's information</string>
@@ -452,7 +452,7 @@ are allowed.
 	<string name="AssetUploadServerDifficulties">The server is experiencing unexpected difficulties.</string>
 	<string name="AssetUploadServerUnavaliable">Service not available or upload timeout was reached.</string>
 	<string name="AssetUploadRequestInvalid">
-Error in upload request.  Please visit 
+Error in upload request.  Please visit
 https://www.firestormviewer.org/support for help fixing this problem.
 </string>
 
@@ -627,6 +627,8 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<string name="ForceSitAvatar">Force your avatar to sit</string>
 	<string name="ChangeEnvSettings">Change your environment settings</string>
 	<string name="PrivilegedLandAccess">Sell land on your behalf.</string>
+	<string name="UseGameControlInputs">Use gamepad inputs.</string>
+
 	<string name="SnapshotSavedToDisk">Snapshot saved: [FILENAME]</string>
 	
 	<string name="NotConnected">Not Connected</string>
@@ -805,7 +807,7 @@ https://www.firestormviewer.org/support for help fixing this problem.
 
 	<!-- inventory -->
 	<string name="InventoryNoMatchingItems">No matching items.</string>
-	<string name="InventoryNoMatchingRecentItems">Didn't find what you're looking for? Try [secondlife:///app/inventory/filters Show filters].</string>	
+	<string name="InventoryNoMatchingRecentItems">Didn't find what you're looking for? Try [secondlife:///app/inventory/filters Show filters].</string>
 	<string name="InventoryNoMatchingFavorites">You haven't marked any items as favorites.</string>
 	<string name="FSInventoryCustomTabDefaultName">Custom</string>
 	<string name="FSInventoryCustomTabShowHidden">Show hidden tabs</string>
@@ -1001,7 +1003,7 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="InvFolder Materials">Materials</string>
 
   <!-- are used for Friends and Friends/All folders in Inventory "Calling cards" folder. See EXT-694-->
-	<string name="InvFolder Friends">Friends</string>	
+	<string name="InvFolder Friends">Friends</string>
 	<string name="InvFolder All">All</string>
 
 	<!-- Virtual Firestorm system folders -->
@@ -1183,7 +1185,7 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="UploadFailed">File upload failed: [REASON]</string>
 	<string name="ObjectOutOfRange">Script (object out of range)</string>
 	<string name="ScriptWasDeleted">Script (deleted from inventory)</string>
-	
+
 	<!-- god tools -->
 	<string name="GodToolsObjectOwnedBy">Object [OBJECT] owned by [OWNER]</string>
 
@@ -2398,7 +2400,7 @@ If the message does not appear in the next few minutes, it may have been dropped
 
   <string name="uploading_costs">Uploading costs L$ [AMOUNT]</string>
   <string name="this_costs">This costs L$ [AMOUNT]</string>
-  
+
   <string name="buying_selected_land">This land costs</string>
   <string name="this_object_costs">This item costs</string>
   <string name="giving">You want to give</string>
@@ -2480,6 +2482,7 @@ Abuse Report</string>
   <string name="New Sky">New Sky</string>
   <string name="New Settings">New Settings</string>
   
+
 
   <string name="/bow">/bow</string>
   <string name="/clap">/clap</string>
@@ -2563,7 +2566,7 @@ If you continue to experience problems, please check your network and firewall s
   <string name="Accounting">Accounting</string>
   <string name="Notices">Notices</string>
   <string name="Chat">Chat</string>
-  
+
   <!-- SL Membership -->
   <string name="BaseMembership">Base</string>
   <string name="PremiumMembership">Premium</string>
@@ -2732,7 +2735,7 @@ Try enclosing path to the editor with double quotes.
 
   <!-- commands -->
 
-  <string 
+  <string
 name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_AboutLand_Label">About land</string>
   <string name="Command_Appearance_Label">Appearance</string>
@@ -2962,7 +2965,7 @@ name="Command_360_Capture_Label">360° Snapshot</string>
 
   <!-- Spell check settings floater -->
   <string name="UserDictionary">[User]</string>
-  
+
   <!-- RLVa -->
   <string name="RLVaPendingRestart">(pending restart)</string>
   <string name="RLVaToggleMessageLogin">RLVa has been [STATE] (no restart required)</string>
@@ -3009,7 +3012,7 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="material_selection_title">Material selection</string>
   <string name="material_selection_text">Select material:</string>
   <string name="material_batch_import_text">--- Bulk Upload All ---</string>
-  
+
   <!-- Conversation log messages -->
   <string name="logging_calls_disabled_log_empty">
     Conversations are not being logged. To begin keeping a log, choose "Save: Log only" or "Save: Log and transcripts" under Preferences > Privacy.
@@ -3032,7 +3035,7 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Default">Default</string>
   <string name="none_paren_cap">(None)</string>
   <string name="no_limit">No limit</string>
-  
+
   <string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">
       The physics shape contains triangles which are too small. Try simplifying the physics model.
   </string>

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Proxy Settings Floater" title="プロキシ設定">
+<floater title="プロキシ設定" name="Proxy Settings Floater">
 	<check_box label="ウェブページにＨＴＴＰプロキシを使う" name="web_proxy_enabled"/>
 	<text name="http_proxy_label">
 		ＨＴＴＰプロキシ：
 	</text>
-	<line_editor name="web_proxy_editor" tool_tip="使用するＨＴＴＰプロキシのＤＮＳ名または IP アドレス。"/>
-	<spinner label="ポート番号：" name="web_proxy_port" tool_tip="使用するＨＴＴＰプロキシポート。"/>
+	<line_editor tool_tip="使用するＨＴＴＰプロキシのＤＮＳ名または IP アドレス。" name="web_proxy_editor"/>
+	<spinner label="ポート番号：" tool_tip="使用するＨＴＴＰプロキシポート。" name="web_proxy_port"/>
 	<check_box label="ＵＤＰトラフィックにＳＯＣＫＳ　５プロキシを使う" name="socks_proxy_enabled"/>
 	<text name="socks5_proxy_label">
 		ＳＯＣＫＳ　５プロキシ：
 	</text>
-	<line_editor name="socks_proxy_editor" tool_tip="使用するＳＯＣＫＳ　５プロキシのＤＮＳ名または IP アドレス。"/>
-	<spinner label="ポート番号：" name="socks_proxy_port" tool_tip="使用するＳＯＣＫＳ　５プロキシポート。"/>
+	<line_editor tool_tip="使用するＳＯＣＫＳ　５プロキシのＤＮＳ名または IP アドレス。" name="socks_proxy_editor"/>
+	<spinner label="ポート番号：" tool_tip="使用するＳＯＣＫＳ　５プロキシポート。" name="socks_proxy_port"/>
 	<text name="socks_auth_label">
 		ＳＯＣＫＳ認証：
 	</text>
 	<radio_group name="socks5_auth_type">
-		<radio_item label="認証なし" name="Socks5NoAuth" tool_tip="Socks 5 プロキシは認証の必要がありません。"/>
-		<radio_item label="ユーザー名/パスワード" name="Socks5UserPass" tool_tip="ＳＯＣＫＳ　５プロキシはユーザー名／パスワードの認証が必要です。" />
+		<radio_item label="認証なし" tool_tip="Socks 5 プロキシは認証の必要がありません。" name="Socks5NoAuth"/>
+		<radio_item label="ユーザー名/パスワード" tool_tip="ＳＯＣＫＳ　５プロキシはユーザー名／パスワードの認証が必要です。" name="Socks5UserPass" />
 	</radio_group>
 	<text name="socks5_username_label">
 		ユーザー名：
@@ -25,15 +25,15 @@
 	<text name="socks5_password_label">
 		パスワード：
 	</text>
-	<line_editor name="socks5_username" tool_tip="ＳＯＣＫＳ　５サーバーの認証に使用されたユーザー名"/>
-	<line_editor name="socks5_password" tool_tip="ＳＯＣＫＳ　５サーバーの認証に使用されたパスワード"/>
+	<line_editor tool_tip="ＳＯＣＫＳ　５サーバーの認証に使用されたユーザー名" name="socks5_username"/>
+	<line_editor tool_tip="ＳＯＣＫＳ　５サーバーの認証に使用されたパスワード" name="socks5_password"/>
 	<text name="other_proxy_label">
 		他のＨＴＴＰトラフィックプロキシ：
 	</text>
 	<radio_group name="other_http_proxy_type">
-		<radio_item label="プロキシを使用しない" name="OtherNoProxy" tool_tip="ウェブ以外のＨＴＴＰトラフィックはいずれのプロキシにもルーティングされません。" />
-		<radio_item label="ＨＴＴＰプロキシを使う" name="OtherHTTPProxy" tool_tip="ウェブ以外のＨＴＴＰは設定済みウェブプロキシを通してルーティングされます。" />
-		<radio_item label="ＳＯＣＫＳ　５プロキシを使う" name="OtherSocksProxy" tool_tip="ウェブ以外のＨＴＴＰトラフィックは設定済みのＳＯＣＫＳ５プロキシを通してルーティングされます。" />
+		<radio_item label="プロキシを使用しない" tool_tip="ウェブ以外のＨＴＴＰトラフィックはいずれのプロキシにもルーティングされません。" name="OtherNoProxy" />
+		<radio_item label="ＨＴＴＰプロキシを使う" tool_tip="ウェブ以外のＨＴＴＰは設定済みウェブプロキシを通してルーティングされます。" name="OtherHTTPProxy" />
+		<radio_item label="ＳＯＣＫＳ　５プロキシを使う" tool_tip="ウェブ以外のＨＴＴＰトラフィックは設定済みのＳＯＣＫＳ５プロキシを通してルーティングされます。" name="OtherSocksProxy" />
 	</radio_group>
 	<button label="ＯＫ" label_selected="ＯＫ" name="OK"/>
 	<button label="キャンセル" label_selected="キャンセル" name="Cancel"/>

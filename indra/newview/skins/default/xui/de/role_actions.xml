@@ -71,6 +71,7 @@
 		<action description="Gruppen-Chat beitreten" longdescription="Mitglieder in einer Rolle mit dieser Fähigkeit können Gruppen-Chat und Gruppen-Voice-Chat beitreten." name="join group chat" value="16"/>
 		<action description="Gruppen-Voice-Chat beitreten" longdescription="Mitglieder in einer Rolle mit dieser Fähigkeit können Gruppen-Voice-Chat beitreten. HINWEIS: Sie benötigen die Fähigkeit „Gruppen-Chat beitreten“, um Zugang zu dieser Voice-Chat-Sitzung zu erhalten." name="join voice chat" value="27"/>
 		<action description="Gruppen-Chat moderieren" longdescription="Mitglieder in einer Rolle mit dieser Fähigkeit können den Zugang zu und die Teilnahme an Gruppen-Chat- und Voice-Chat-Sitzungen steuern." name="moderate group chat" value="37"/>
+		<action description="Links in Chat posten" longdescription="Mitglieder in einer Rolle mit dieser Fähigkeit können klickbare Weblinks (http:// und https://) im Gruppen-Chat posten. Weblinks, die von Mitgliedern ohne diese Fähigkeit gepostet werden, werden durch den Text „(Link removed by group moderators)“ für alle Empfänger ersetzt." name="chat post links" value="52"/>
 	</action_set>
 	<action_set description="Diese Fähigkeiten enthalten die Berechtigung, die Erlebnisse zu ändern, die dieser Gruppe gehören." name="experience_tools_experience">
 		<action description="Erlebnis-Administrator" longdescription="Mitglieder in einer Rolle mit dieser Fähigkeit können die Metadaten für ein Erlebnis ändern." name="experience admin" value="49"/>

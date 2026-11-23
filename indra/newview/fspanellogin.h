@@ -58,6 +58,7 @@ public:
     static void setFields(LLPointer<LLCredential> credential, bool from_startup = false);
 
     static void getFields(LLPointer<LLCredential>& credential, bool& remember);
+    static void setCredentialFields(const std::string& username, const std::string& password);
 
     static bool isCredentialSet() { return sCredentialSet; }
 

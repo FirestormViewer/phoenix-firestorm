@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Joystick" title="Joystick-Konfiguration">
+<floater name="3Dconnexion Device" title="3Dconnexion-Konfiguration">
 	<string name="JoystickDisabled">
 		Keiner
 	</string>
 	<text name="joystick_lbl">
-		Joystick:
+		Gerät:
 	</text>
 	<spinner label="X-Achse" name="JoystickAxis1"/>
 	<spinner label="Y-Achse" name="JoystickAxis2"/>
@@ -21,7 +21,7 @@
 	</text>
 	<check_box label="Avatar" name="JoystickAvatarEnabled"/>
 	<check_box label="Bauen" name="JoystickBuildEnabled"/>
-	<check_box label="Flycam" name="JoystickFlycamEnabled"/>
+	<check_box label="Flycam" name="JoystickFlycamEnabled" tool_tip="Dieses Gerät die Flugkamera steuern lassen."/>
 	<text name="joystick_monitor_label">
 		Joystick-Monitor
 	</text>

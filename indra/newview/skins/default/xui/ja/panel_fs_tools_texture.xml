@@ -15,14 +15,14 @@
 	<tab_container name="tabs_material_type">
 		<panel label="ＰＢＲ" name="panel_material_type_pbr">
 			<panel name="panel_material_maps">
-				<texture_picker name="pbr_control" label="マテリアル" tool_tip="クリックでＰＢＲマテリアルを選択します。"/>
-				<texture_picker name="base_color_picker" label="ベースカラー" tool_tip="クリックでベースカラー（アルベド）マップを洗濯します。"/>
-				<color_swatch name="base_color_tint_picker" label="色彩" tool_tip="クリックでベースカラーの色彩を選択します。"/>
-				<button name="btn_select_same_gltf" tool_tip="この面と同じＧＬＴＦマテリアルを持つすべての面を選択します。"/>
-				<texture_picker name="normal_map_picker" label="法線" tool_tip="クリックで法線（ノーマル）マップを選択します。"/>
-				<texture_picker name="emissive_map_picker" label="放射" tool_tip="クリックで放射（エミッシブ）マップを選択します。"/>
-				<color_swatch name="emissive_color_tint_picker" label="色彩" tool_tip="クリックで放射光の色を選択します。"/>
-				<texture_picker name="metallic_map_picker" label="（Ｏ）ＲＭ" tool_tip="クリックしてメタリック粗さマップを選択します。オプションのオクルージョンチャンネルが含まれる場合があります。"/>
+				<texture_picker label="マテリアル" tool_tip="クリックでＰＢＲマテリアルを選択します。" name="pbr_control"/>
+				<texture_picker label="ベースカラー" tool_tip="クリックでベースカラー（アルベド）マップを洗濯します。" name="base_color_picker"/>
+				<color_swatch label="色彩" tool_tip="クリックでベースカラーの色彩を選択します。" name="base_color_tint_picker"/>
+				<button tool_tip="この面と同じＧＬＴＦマテリアルを持つすべての面を選択します。" name="btn_select_same_gltf"/>
+				<texture_picker label="法線" tool_tip="クリックで法線（ノーマル）マップを選択します。" name="normal_map_picker"/>
+				<texture_picker label="放射" tool_tip="クリックで放射（エミッシブ）マップを選択します。" name="emissive_map_picker"/>
+				<color_swatch label="色彩" tool_tip="クリックで放射光の色を選択します。" name="emissive_color_tint_picker"/>
+				<texture_picker label="（Ｏ）ＲＭ" tool_tip="クリックしてメタリック粗さマップを選択します。オプションのオクルージョンチャンネルが含まれる場合があります。" name="metallic_map_picker"/>
 			</panel>
 			<!-- panel_material_maps -->
 			<panel name="panel_material_parameters">
@@ -39,7 +39,7 @@
 				<spinner label="カットオフ" name="alpha cutoff"/>
 				<spinner label="メタリック" name="metalness factor"/>
 				<spinner label="粗さ" name="roughness factor"/>
-				<button name="save_selected_pbr" label="保存"/>
+				<button label="保存" name="save_selected_pbr"/>
 			</panel>
 			<!-- panel_material_parameters -->
 			<!-- BEGIN PBR Material texture transform parameters -->
@@ -52,11 +52,11 @@
 						<text name="labelGltfTextureScaleU_All">
 							Ｕ
 						</text>
-						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleMU"/>
 						<text name="labelGltfTextureScaleV_All">
 							Ｖ
 						</text>
-						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleMV"/>
 					</panel>
 					<!-- pbr_transforms_all_scale -->
 					<panel name="pbr_transforms_all_offset">
@@ -87,11 +87,11 @@
 						<text name="labelGltfTextureScaleU_Base">
 							Ｕ
 						</text>
-						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleMU"/>
 						<text name="labelGltfTextureScaleV_Base">
 							Ｖ
 						</text>
-						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleMV"/>
 					</panel>
 					<!-- pbr_transforms_base_color_scale -->
 					<panel name="pbr_transforms_base_color_offset">
@@ -123,11 +123,11 @@
 						<text name="labelGltfTextureScaleU_Normal">
 							Ｕ
 						</text>
-						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleMU"/>
 						<text name="labelGltfTextureScaleV_Normal">
 							Ｖ
 						</text>
-						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleMV"/>
 					</panel>
 					<!-- pbr_transforms_normal_scale -->
 					<panel name="pbr_transforms_normal_offset">
@@ -159,11 +159,11 @@
 						<text name="labelGltfTextureScaleU_Metallic">
 							Ｕ
 						</text>
-						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleMU"/>
 						<text name="labelGltfTextureScaleV_Metallic">
 							Ｖ
 						</text>
-						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleMV"/>
 					</panel>
 					<!-- pbr_transforms_orm_scale -->
 					<panel name="pbr_transforms_orm_offset">
@@ -194,11 +194,11 @@
 						<text name="labelGltfTextureScaleU_Emissive">
 							Ｕ
 						</text>
-						<button name="flipTextureScaleMU" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleMU"/>
 						<text name="labelGltfTextureScaleV_Emissive">
 							Ｖ
 						</text>
-						<button name="flipTextureScaleMV" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleMV"/>
 					</panel>
 					<!-- pbr_transforms_emissive_scale -->
 					<panel name="pbr_transforms_emissive_offset">
@@ -228,19 +228,19 @@
 		<panel label="Blinn-Phong反射" name="panel_material_type_blinn_phong">
 			<layout_stack name="panel_material_type_blinn_phong_layout_stack">
 				<layout_panel name="panel_blinn_phong_maps">
-					<texture_picker name="texture control" label="拡散" tool_tip="クリックで画像を選択します。"/>
-					<color_swatch name="colorswatch" label="色彩" tool_tip="クリックでカラーピッカーを開きます。"/>
-					<button name="btn_select_same_diff" tool_tip="この拡散（ディフューズ）マップと同じ拡散テクスチャを持つすべての面を選択します。"/>
-					<texture_picker label="法線" name="bumpytexture control" tool_tip="クリックで画像を選択します。"/>
-					<button name="btn_select_same_norm" tool_tip="この法線（ノーマル）マップと同じ法線マップを持つすべての面を選択します。"/>
-					<texture_picker label="鏡面反射" name="shinytexture control" tool_tip="クリックで画像を選択します。"/>
-					<color_swatch label="発光色" name="shinycolorswatch" tool_tip="クリックでカラーピッカーを開きます。"/>
-					<button name="btn_select_same_spec" tool_tip="この鏡面反射（スペキュラ）マップと同じ鏡面反射マップを持つすべての面を選択します。"/>
+					<texture_picker label="拡散" tool_tip="クリックで画像を選択します。" name="texture control"/>
+					<color_swatch label="色彩" tool_tip="クリックでカラーピッカーを開きます。" name="colorswatch"/>
+					<button tool_tip="この拡散（ディフューズ）マップと同じ拡散テクスチャを持つすべての面を選択します。" name="btn_select_same_diff"/>
+					<texture_picker label="法線" tool_tip="クリックで画像を選択します。" name="bumpytexture control"/>
+					<button tool_tip="この法線（ノーマル）マップと同じ法線マップを持つすべての面を選択します。" name="btn_select_same_norm"/>
+					<texture_picker label="鏡面反射" tool_tip="クリックで画像を選択します。" name="shinytexture control"/>
+					<color_swatch label="発光色" tool_tip="クリックでカラーピッカーを開きます。" name="shinycolorswatch"/>
+					<button tool_tip="この鏡面反射（スペキュラ）マップと同じ鏡面反射マップを持つすべての面を選択します。" name="btn_select_same_spec"/>
 				</layout_panel>
 				<!-- panel_blinn_phong_maps -->
 				<layout_panel name="panel_blinn_phong_options">
 					<check_box label="明るさ全開" name="checkbox fullbright"/>
-					<spinner name="ColorTrans" label="透過度"/>
+					<spinner label="透過度" name="ColorTrans"/>
 					<text name="color trans percent">
 						％
 					</text>
@@ -290,8 +290,8 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 						<combo_box.item label="中" name="Medium"/>
 						<combo_box.item label="高" name="High"/>
 					</combo_box>
-					<spinner name="glossiness" label="光沢度"/>
-					<spinner name="environment" label="周辺環境"/>
+					<spinner label="光沢度" name="glossiness"/>
+					<spinner label="周辺環境" name="environment"/>
 				</layout_panel>
 				<!-- panel_blinn_phong_options -->
 			</layout_stack>
@@ -304,11 +304,11 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 						<text name="labelTexScaleU">
 							Ｈ
 						</text>
-						<button name="flipTextureScaleU" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleU"/>
 						<text name="labelTexScaleV">
 							Ｖ
 						</text>
-						<button name="flipTextureScaleV" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleV"/>
 					</panel>
 					<!-- transforms_diffuse_scale -->
 					<panel name="transforms_diffuse_offset">
@@ -339,11 +339,11 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 						<text name="labelBumpyScaleU">
 							Ｈ
 						</text>
-						<button name="flipTextureScaleNU" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleNU"/>
 						<text name="labelBumpyScaleV">
 							Ｖ
 						</text>
-						<button name="flipTextureScaleNV" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleNV"/>
 					</panel>
 					<!-- transforms_normal_scale -->
 					<panel name="transforms_normal_offset">
@@ -374,11 +374,11 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 						<text name="labelShinyScaleU">
 							Ｈ
 						</text>
-						<button name="flipTextureScaleSU" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleSU"/>
 						<text name="labelShinyScaleV">
 							Ｖ
 						</text>
-						<button name="flipTextureScaleSV" tool_tip="反転します。"/>
+						<button tool_tip="反転します。" name="flipTextureScaleSV"/>
 					</panel>
 					<!-- transforms_specular_scale -->
 					<panel name="transforms_specular_offset">
@@ -409,27 +409,27 @@ NORSPEC-182, ensure item doesn't show up in menu until it should
 			<text name="media_info">
 				選択したメディアのＵＲＬがある場合はここに入力します。
 			</text>
-			<button name="add_media" label="選択…" tool_tip="メディアを追加します。"/>
-			<button name="delete_media" label="削除" tool_tip="このメディアテクスチャを削除します。"/>
-			<button name="button align" label="揃える" label_selected="メディアを揃える" tool_tip="メディアテクスチャを揃えます。（最初に読み込む必要があります。）"/>
+			<button label="選択…" tool_tip="メディアを追加します。" name="add_media"/>
+			<button label="削除" tool_tip="このメディアテクスチャを削除します。" name="delete_media"/>
+			<button label="揃える" label_selected="メディアを揃える" tool_tip="メディアテクスチャを揃えます。（最初に読み込む必要があります。）" name="button align"/>
 		</panel>
 		<!-- panel_material_type_media -->
 	</tab_container>
 	<!-- tabs_material_type -->
 	<panel name="panel_face_params">
-		<spinner name="rptctrl" label="メートルごとの繰り返し"/>
-		<check_box label="マテリアルを同期" name="checkbox_sync_settings" tool_tip="テクスチャマップパラメータを同期します。"/>
-		<check_box label="平面を揃える" name="checkbox planar align" tool_tip="選択したすべての面のテクスチャを最後に選択した面と揃えます。平面テクスチャマッピングが必要です。"/>
+		<spinner label="メートルごとの繰り返し" name="rptctrl"/>
+		<check_box label="マテリアルを同期" tool_tip="テクスチャマップパラメータを同期します。" name="checkbox_sync_settings"/>
+		<check_box label="平面を揃える" tool_tip="選択したすべての面のテクスチャを最後に選択した面と揃えます。平面テクスチャマッピングが必要です。" name="checkbox planar align"/>
 		<check_box label="水面を隠す" name="checkbox_hide_water" />
 		<combo_box name="combobox texgen">
 			<combo_box.item label="デフォルト" name="Default"/>
 			<combo_box.item label="平面" name="Planar"/>
 		</combo_box>
-		<button label="揃える" name="button align textures" tool_tip="現在のテクスチャのレイヤーを揃えます。"/>
+		<button label="揃える" tool_tip="現在のテクスチャのレイヤーを揃えます。" name="button align textures"/>
 	</panel>
 	<!-- panel_face_params -->
-	<button name="copy_face_btn" tool_tip="テクスチャのパラメータをクリップボードにコピーします。"/>
-	<button name="paste_face_btn" tool_tip="テクスチャのパラメータをクリップボードにペーストします。"/>
+	<button tool_tip="テクスチャのパラメータをクリップボードにコピーします。" name="copy_face_btn"/>
+	<button tool_tip="テクスチャのパラメータをクリップボードにペーストします。" name="paste_face_btn"/>
 	<spinner label="グロー" name="glow"/>
 </panel>
 <!-- Texture -->

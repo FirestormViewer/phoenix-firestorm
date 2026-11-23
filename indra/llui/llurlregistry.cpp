@@ -101,6 +101,8 @@ LLUrlRegistry::LLUrlRegistry()
     registerUrl(new LLUrlEntryExperienceProfile());
     mUrlEntryKeybinding = new LLUrlEntryKeybinding();
     registerUrl(mUrlEntryKeybinding);
+    mUrlEntryGameController = new LLUrlEntryGameController();
+    registerUrl(mUrlEntryGameController);
     registerUrl(new FSHelpDebugUrlEntrySL()); // <FS:Ansariel> FS Help SLUrl
     // <FS:Ansariel> Wear folder SLUrl
     mUrlEntryWear = new FSUrlEntryWear();
@@ -529,8 +531,16 @@ bool LLUrlRegistry::isUrl(const LLWString &text)
 
 void LLUrlRegistry::setKeybindingHandler(LLKeyBindingToStringHandler* handler)
 {
-    LLUrlEntryKeybinding *entry = (LLUrlEntryKeybinding*)mUrlEntryKeybinding;
-    entry->setHandler(handler);
+    LLUrlEntryKeybinding *keyEntry = (LLUrlEntryKeybinding*)mUrlEntryKeybinding;
+    keyEntry->setHandler(handler);
+    LLUrlEntryGameController *controllerEntry = (LLUrlEntryGameController*)mUrlEntryGameController;
+    controllerEntry->setKeyHandler(handler);
+}
+
+void LLUrlRegistry::setGameControllerHandler(LLGameControllerBindingToStringHandler* handler)
+{
+    LLUrlEntryGameController *controllerEntry = (LLUrlEntryGameController*)mUrlEntryGameController;
+    controllerEntry->setControllerHandler(handler);
 }
 
 bool LLUrlRegistry::containsAgentMention(const std::string& text)

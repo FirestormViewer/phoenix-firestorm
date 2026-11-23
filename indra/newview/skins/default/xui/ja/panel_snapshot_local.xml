@@ -27,7 +27,7 @@
 	<check_box label="場所とファイル名を保持する" name="local_remember_location_sessions"/>
 	<check_box label="ファイル名に日時を含める" name="local_use_timestamp"/>
 	<button label="▶　選択" name="cancel_btn"/>
-	<flyout_button label="保存" name="save_btn" tool_tip="画像をファイルとして保存">
+	<flyout_button label="保存" tool_tip="画像をファイルとして保存" name="save_btn">
 		<flyout_button.item label="保存" name="save_item"/>
 		<flyout_button.item label="別名で保存…" name="saveas_item"/>
 	</flyout_button>

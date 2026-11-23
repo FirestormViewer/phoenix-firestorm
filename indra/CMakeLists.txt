@@ -151,6 +151,11 @@ else (USE_LTO)
 endif (USE_LTO)
 # </FS:PP> LTO indicator
 
+# Velopack must be included before llfilesystem since filesystem
+# needs LL_VELOPACK compile definition for its portable-install detection.
+if (USE_VELOPACK)
+  include(Velopack)
+endif()
 if (USE_PRECOMPILED_HEADERS)
   add_subdirectory(${LIBS_OPEN_PREFIX}llprecompiled)
 endif ()

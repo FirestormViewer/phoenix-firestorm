@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_report_abuse" title="嫌がらせの報告">
+<floater title="嫌がらせの報告" name="floater_report_abuse">
 	<floater.string name="Screenshot">
 		スクリーンショット
 	</floater.string>
@@ -26,7 +26,7 @@
 	<text name="select_object_label">
 		ボタンをクリックしてから、悪意のあるオブジェクトをクリック：
 	</text>
-	<button name="pick_btn" tool_tip="オブジェクトピッカー－報告対象のオブジェクトを選択してください。"/>
+	<button tool_tip="オブジェクトピッカー－報告対象のオブジェクトを選択してください。" name="pick_btn"/>
 	<text name="object_name_label">
 		オブジェクト：
 	</text>
@@ -39,7 +39,7 @@
 	<text name="owner_name">
 		ヘンドレリット・ヴルプターテ、かまわしの長い名前
 	</text>
-	<combo_box name="category_combo" tool_tip="カテゴリ－この報告に最も適したカテゴリを選択してください">
+	<combo_box tool_tip="カテゴリ－この報告に最も適したカテゴリを選択してください" name="category_combo">
 		<combo_box.item label="カテゴリを選択してください" name="Select_category"/>
 		<combo_box.item label="年齢＞年齢偽証" name="Age__Age_play"/>
 		<combo_box.item label="攻撃＞安全エリアで他の住人を銃撃、プッシュ、または突き飛ばす" name="Assault__Safe_area"/>
@@ -59,7 +59,7 @@
 	<text name="abuser_name_title">
 		迷惑ユーザーの名前：
 	</text>
-	<button label="選択" name="select_abuser" tool_tip="嫌がらせをしてきた人の名前をリストから選択してください。"/>
+	<button label="選択" tool_tip="嫌がらせをしてきた人の名前をリストから選択してください。" name="select_abuser"/>
 	<text name="abuser_name_title2">
 		嫌がらせを受けた場所：
 	</text>

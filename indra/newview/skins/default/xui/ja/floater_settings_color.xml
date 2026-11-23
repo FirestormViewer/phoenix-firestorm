@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="settings_color" title="色設定">
+<floater title="色設定" name="settings_color">
 	<filter_editor label="検索語句" name="filter_input"/>
 	<scroll_list name="setting_list">
 		<scroll_list.columns label="色" name="color"/>

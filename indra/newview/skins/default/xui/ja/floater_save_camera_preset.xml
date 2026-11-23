@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="save_camera_preset" title="カメラプリセットの保存">
+<floater title="カメラプリセットの保存" name="save_camera_preset">
 	<string name="btn_label_save">
 		保存
 	</string>

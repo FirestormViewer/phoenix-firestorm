@@ -236,6 +236,13 @@
 				Dispositivo de saída:
 			</text>
 		</panel>
+		<text name="bluetooth_lbl">
+			Somente Bluetooth
+		</text>
+		<radio_group name="bluetooth_behavior">
+			<radio_item label="Melhor voz" name="better_voice"/>
+			<radio_item label="Melhor áudio do mundo" name="better_audio"/>
+		</radio_group>
 
 	</panel>
 

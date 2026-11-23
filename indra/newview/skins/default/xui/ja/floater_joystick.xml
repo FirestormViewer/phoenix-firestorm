@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Joystick" title="ジョイスティックの設定">
+<floater title="ジョイスティックの設定" name="Joystick">
 	<floater.string name="JoystickDisabled">
 		なし
 	</floater.string>
@@ -26,22 +26,22 @@
 	<text name="joystick_monitor_label">
 		ジョイスティックモニタ
 	</text>
-	<icon name="button_light_0" tool_tip="ジョイスティックボタン０" />
-	<icon name="button_light_1" tool_tip="ジョイスティックボタン１" />
-	<icon name="button_light_2" tool_tip="ジョイスティックボタン２" />
-	<icon name="button_light_3" tool_tip="ジョイスティックボタン３" />
-	<icon name="button_light_4" tool_tip="ジョイスティックボタン４" />
-	<icon name="button_light_5" tool_tip="ジョイスティックボタン５" />
-	<icon name="button_light_6" tool_tip="ジョイスティックボタン６" />
-	<icon name="button_light_7" tool_tip="ジョイスティックボタン７" />
-	<icon name="button_light_8" tool_tip="ジョイスティックボタン８" />
-	<icon name="button_light_9" tool_tip="ジョイスティックボタン９" />
-	<icon name="button_light_10" tool_tip="ジョイスティックボタン１０" />
-	<icon name="button_light_11" tool_tip="ジョイスティックボタン１１" />
-	<icon name="button_light_12" tool_tip="ジョイスティックボタン１２" />
-	<icon name="button_light_13" tool_tip="ジョイスティックボタン１３" />
-	<icon name="button_light_14" tool_tip="ジョイスティックボタン１４" />
-	<icon name="button_light_15" tool_tip="ジョイスティックボタン１５" />
+	<icon tool_tip="ジョイスティックボタン０" name="button_light_0" />
+	<icon tool_tip="ジョイスティックボタン１" name="button_light_1" />
+	<icon tool_tip="ジョイスティックボタン２" name="button_light_2" />
+	<icon tool_tip="ジョイスティックボタン３" name="button_light_3" />
+	<icon tool_tip="ジョイスティックボタン４" name="button_light_4" />
+	<icon tool_tip="ジョイスティックボタン５" name="button_light_5" />
+	<icon tool_tip="ジョイスティックボタン６" name="button_light_6" />
+	<icon tool_tip="ジョイスティックボタン７" name="button_light_7" />
+	<icon tool_tip="ジョイスティックボタン８" name="button_light_8" />
+	<icon tool_tip="ジョイスティックボタン９" name="button_light_9" />
+	<icon tool_tip="ジョイスティックボタン１０" name="button_light_10" />
+	<icon tool_tip="ジョイスティックボタン１１" name="button_light_11" />
+	<icon tool_tip="ジョイスティックボタン１２" name="button_light_12" />
+	<icon tool_tip="ジョイスティックボタン１３" name="button_light_13" />
+	<icon tool_tip="ジョイスティックボタン１４" name="button_light_14" />
+	<icon tool_tip="ジョイスティックボタン１５" name="button_light_15" />
 	<scroll_container name="joystick_monitor_axes_scroller">
 		<container_view name="joystick_monitor_axes_container">
 			<!-- Zi: One stat_view for each axis so we can hide them individually -->

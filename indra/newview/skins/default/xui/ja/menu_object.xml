@@ -16,12 +16,13 @@
 		<menu_item_check label="リンクされたパーツを編集" name="Object Edit Linked Parts"/>
 		<menu_item_call label="コンパイル（Ｍｏｎｏ）" name="Mono"/>
 		<menu_item_call label="コンパイル（ＬＳＬ）" name="LSL"/>
+		<menu_item_call label="コンパイル（Lua）" name="Lua"/>
+		<menu_item_call label="コンパイル（LSL on Lua）" name="LSL on Luau"/>
 		<menu_item_call label="スクリプトのリセット" name="Object Reset Scripts"/>
 		<menu_item_call label="スクリプトの実行" name="Object Set Scripts to Running"/>
 		<menu_item_call label="スクリプトの停止" name="Object Set Scripts to Not Running"/>
 		<menu_item_call label="スクリプトの削除" name="Remove Scripts From Selection"/>
 	</context_menu>
-	<menu_item_call label="オブジェクトの調査" name="Object Inspect"/>
 	<menu_item_call label="ズームイン" name="Zoom In"/>
 	<menu_item_call label="リンクセットで表示" name="show_in_linksets"/>
 	<menu_item_call label="キャラクターで表示" name="show_in_characters"/>
@@ -43,12 +44,12 @@
 	<!-- /Derender -->
 	<menu_item_call label="返却…" name="Return..."/>
 	<menu_item_call label="取る" name="Pie Object Take"/>
-	<menu_item_call label="コピーを取る" name="Take Copy"/>
+	<menu_item_call label="複製を取る" name="Take Copy"/>
 	<context_menu label="複数取る" name="Take Multiple">
 		<menu_item_call label="複合アイテムとして取る" name="Take combined"/>
-		<menu_item_call label="複合アイテムとしてコピー" name="Take Copy combined"/>
+		<menu_item_call label="複合アイテムとして複製を取る" name="Take Copy combined"/>
 		<menu_item_call label="別個のアイテムとして取る" name="Take Separate"/>
-		<menu_item_call label="別個のアイテムとしてコピー" name="Take Copy Separate"/>
+		<menu_item_call label="別個のアイテムとして複製を取る" name="Take Copy Separate"/>
 	</context_menu>
 	<menu_item_call label="支払う…" name="Pay..."/>
 	<menu_item_call label="購入…" name="Buy..."/>

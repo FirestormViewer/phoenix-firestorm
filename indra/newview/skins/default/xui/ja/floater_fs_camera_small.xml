@@ -24,29 +24,29 @@
 	<panel name="zoom">
 		<layout_stack name="camera_view_layout_stack">
 			<layout_panel name="camera_rotate_layout_panel">
-				<joystick_rotate name="cam_rotate_stick" tool_tip="対象にカメラを追尾させます。" />
+				<joystick_rotate tool_tip="対象にカメラを追尾させます。" name="cam_rotate_stick" />
 				<!-- <FS:Chanayane> Camera roll (from Alchemy) -->
-				<button name="roll_left" tool_tip="カメラを左に傾けます。"/>
-				<button name="roll_right" tool_tip="カメラを右に傾けます。"/>
+				<button tool_tip="カメラを左に傾けます。" name="roll_left"/>
+				<button tool_tip="カメラを右に傾けます。" name="roll_right"/>
 				<!-- </FS:Chanayane> -->
 			</layout_panel>
 			<layout_panel name="camera_zoom_layout_panel">
-				<slider_bar name="zoom_slider" tool_tip="対象にカメラをズームします。"/>
+				<slider_bar tool_tip="対象にカメラをズームします。" name="zoom_slider"/>
 			</layout_panel>
 			<layout_panel name="panel_track">
-				<joystick_track name="cam_track_stick" tool_tip="カメラを上下左右に動かします。"/>
+				<joystick_track tool_tip="カメラを上下左右に動かします。" name="cam_track_stick"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>
 	<panel name="buttons_view">
-		<panel_camera_item name="front_view" tool_tip="前方ビューにします。"/>
-		<panel_camera_item name="group_view" tool_tip="サイドビューにします。"/>
-		<panel_camera_item name="rear_view" tool_tip="後方ビューにします。"/>
-		<panel_camera_item name="tpp_view" tool_tip="三人称ビューにします。"/>
+		<panel_camera_item tool_tip="前方ビューにします。" name="front_view"/>
+		<panel_camera_item tool_tip="サイドビューにします。" name="group_view"/>
+		<panel_camera_item tool_tip="後方ビューにします。" name="rear_view"/>
+		<panel_camera_item tool_tip="三人称ビューにします。" name="tpp_view"/>
 	</panel>
 	<panel name="buttons">
-		<panel_camera_item name="object_view" tool_tip="オブジェクトビューにします。"/>
-		<panel_camera_item name="mouselook_view" tool_tip="マウスルックビューにします。"/>
-		<panel_camera_item name="reset_view" tool_tip="ビューをリセットします。"/>
+		<panel_camera_item tool_tip="オブジェクトビューにします。" name="object_view"/>
+		<panel_camera_item tool_tip="マウスルックビューにします。" name="mouselook_view"/>
+		<panel_camera_item tool_tip="ビューをリセットします。" name="reset_view"/>
 	</panel>
 </floater>

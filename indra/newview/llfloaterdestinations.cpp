@@ -56,7 +56,6 @@ LLFloaterDestinations::~LLFloaterDestinations()
 
 bool LLFloaterDestinations::postBuild()
 {
-    enableResizeCtrls(true, true, false);
     LLMediaCtrl* destinations = getChild<LLMediaCtrl>("destination_guide_contents");
     destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
     // <FS:AW> optional opensim support
@@ -71,6 +70,7 @@ bool LLFloaterDestinations::postBuild()
         if (LLLoginInstance::getInstance()->hasResponse("destination_guide_url"))
         {
             destination_guide_url = LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString();
+            destination_guide_url = LLWeb::expandURLSubstitutions(destination_guide_url, LLSD());
         }
     }
     else
@@ -81,7 +81,6 @@ bool LLFloaterDestinations::postBuild()
 
     if (!destination_guide_url.empty())
     {
-        destination_guide_url = LLWeb::expandURLSubstitutions(destination_guide_url, LLSD());
         LL_DEBUGS("WebApi") << "3 DestinationGuideURL \"" << destination_guide_url << "\"" << LL_ENDL;
         destinations->navigateTo(destination_guide_url, HTTP_CONTENT_TEXT_HTML);
     }

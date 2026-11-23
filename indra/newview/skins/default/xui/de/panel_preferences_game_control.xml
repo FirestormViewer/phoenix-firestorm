@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Spiel-Kontrollen" name="game_control_panel">
+    <tab_container name="game_control_tabs">
+        <panel name="tab_action_mappings" label="Aktionszuordnungen">
+            <combo_box name="action_mode" tool_tip="Modus zum Editieren der Zuordnungen auswählen.">
+                <combo_box.item label="Beim Bewegen des Avatars" name="avatar"/>
+                <combo_box.item label="Wenn in 1. Person (Mouselook)" name="mouselook"/>
+                <combo_box.item label="Beim Bewegen der Flugkamera" name="flycam"/>
+                <combo_box.item label="Beim Sitzen" name="captive"/>
+                <combo_box.item label="Beim Bewegen des Mauszeigers" name="cursor"/>
+            </combo_box>
+            <check_box name="action_mode_enabled" label="Modus aktiviert" tool_tip="Deaktivieren um diese Zuordnungen zu sperren und die Konvertierung von Eingaben der Spielkontrollen auf die Aktionen dieses Modus zu stoppen."/>
+            <check_box name="flycam_allow_roll" label="Rollen erlauben" tool_tip="Erlaubt der Eingabe von Rollbewegungen die Flugkamera um die Vorwärtsachse zu drehen. Wird nur angezeigt während Zuordnungen der Flugkamera bearbeitet werden."/>
+            <text name="speed_slow_label" width="40">
+                Langs.
+            </text>
+            <slider name="speed_factor" width="69" tool_tip="Flugkamera: Geschwindigkeit der Kamerabewegung. Mouselook: Geschwindigkeit drehen/schauen. Avatar: Geschwindigkeit drehen. Wird nur angezeigt während Zuordnungen der Flugkamera oder des Avatars bearbeitet werden."/>
+            <text name="speed_fast_label" width="45">
+                Schnell
+            </text>
+            <check_box name="flycam_hide_cursor" label="Mauszeiger verst." tool_tip="Versteckt den Mauszeiger während des Fliegens mit der Flugkamera. Er wird wieder angezeigt, wenn die Maus bewegt wird und wird 5 Sekunden später wieder versteckt oder nach einer Sekunde, wenn die Flugkamera bewegt wird. Only shown while editing FlyCam mappings. Wird nur angezeigt während Zuordnungen der Flugkamera bearbeitet werden."/>
+            <check_box name="flycam_crosshair" label="Fadenkreuz anzeigen" tool_tip="Zeichnet ein Fadenkreuz in der Mitte des Bildschirms während des Fliegens mit der Flugkamera. Wird nur angezeigt während Zuordnungen der Flugkamera bearbeitet werden."/>
+            <button name="restore_actions_defaults" label="Standard wiederherst." tool_tip="Stellt die Standzuordnungen fpr den aktuellen Modus wieder her."/>
+            <text name="current_mode_indicator">
+                Aktiver Modus:
+            </text>
+            <panel name="action_mappings_panel">
+                <panel name="action_mappings_axes_panel">
+                    <scroll_list name="action_mappings_axes">
+                        <scroll_list.columns name="action" label="Aktion"/>
+                        <scroll_list.columns name="input" label="Eingabe"/>
+                        <scroll_list.columns name="input_description" label="Achse"/>
+                        <scroll_list.columns name="invert" label="Invertiert"/>
+                    </scroll_list>
+                </panel>
+                <panel name="action_mappings_buttons_panel">
+                    <scroll_list name="action_mappings_buttons">
+                        <scroll_list.columns name="action" label="Aktion"/>
+                        <scroll_list.columns name="input" label="Eingabe"/>
+                        <scroll_list.columns name="input_description" label="Knopf"/>
+                    </scroll_list>
+                </panel>
+            </panel>
+        </panel>
+        <panel name="tab_device_mappings" label="Geräte-Zuordnungen">
+            <text name="nodevice_message">
+                Kein Gerät
+            </text>
+            <check_box name="show_all_known_devices" label="Alle bekannten Geräte anzeigen"/>
+            <text name="device_prompt">
+                Gerät:
+            </text>
+            <button name="restore_device_defaults" label="Standard wiederherst." tool_tip="Stellt die Standardeinstellungen des ausgewählten Geräts wieder her."/>
+            <panel name="device_settings">
+                <panel name="axis_channels_panel">
+                    <scroll_list name="axis_channels">
+                        <scroll_list.columns name="input_description" label="Was Sie drücken"/>
+                        <scroll_list.columns name="output_description" label="Was Sie bekommen"/>
+                    </scroll_list>
+                </panel>
+                <panel name="button_channels_panel">
+                    <scroll_list name="button_channels">
+                        <scroll_list.columns name="input_description" label="Was Sie drücken"/>
+                        <scroll_list.columns name="output_description" label="Was Sie bekommen"/>
+                    </scroll_list>
+                </panel>
+            </panel>
+        </panel>
+        <panel name="tab_device_options" label="Geräte-Optionen">
+            <text name="state_nodevice_message">
+                Kein Gerät
+            </text>
+            <text name="state_device_prompt">
+                Gerät:
+            </text>
+            <button name="restore_device_options_defaults" label="Standard wiederherst." tool_tip="Stellt den Standard für Versatz, Invertierung und Todeszone für jede Achse des ausgewählten Geräts wieder her."/>
+            <button name="auto_calibrate" label="Auto-Kalibrierung" tool_tip="Tastet die Roh-Achsen des Gerät über 5 Frames ab; Jede Achse, die nicht bewegt wird, wird als in der Ruhestellung angenommen und dessen Versatz und Todeszone wird anhand der ausgelesenen Werte ermittelt."/>
+            <panel name="device_state_settings">
+                <panel name="axis_state_panel">
+                    <scroll_list name="axis_state">
+                        <scroll_list.columns name="input_glyph" label="Eingabe"/>
+                        <scroll_list.columns name="input"       label="Achse"/>
+                        <scroll_list.columns name="raw_value"   label="Roh-Wert"/>
+                        <scroll_list.columns name="offset"      label="Versatz"/>
+                        <scroll_list.columns name="invert"      label="Invertiert"/>
+                        <scroll_list.columns name="dead_zone"   label="Todeszone"/>
+                        <scroll_list.columns name="fixed_value" label="Angepasster Wert"/>
+                    </scroll_list>
+                </panel>
+                <panel name="button_state_panel">
+                    <scroll_list name="button_state">
+                        <scroll_list.columns name="input_glyph" label="Eingabe"/>
+                        <scroll_list.columns name="input"       label="Knopf"/>
+                        <scroll_list.columns name="value"       label="Wert"/>
+                    </scroll_list>
+                </panel>
+            </panel>
+        </panel>
+        <panel name="tab_server_data" label="Server-Daten">
+            <check_box name="game_control_to_server" label="Spiel-Kontroll-Daten an Server senden"/>
+            <text name="data_note">
+                Daten, die an den Server gesendet werden: kanonische Achsen/Knöpfe, dann die semantischen Achsen/Knöpfe des aktuellen Modus.
+            </text>
+            <panel name="data_panel">
+                <scroll_list name="data_output">
+                    <scroll_list.columns name="output" label="Name"/>
+                    <scroll_list.columns name="value"  label="Wert"/>
+                </scroll_list>
+            </panel>
+        </panel>
+    </tab_container>
+    <combo_box name="axis_input_selector">
+        <combo_box.item label="L Stick ↔" name="axis_leftx"/>
+        <combo_box.item label="L Stick ↕" name="axis_lefty"/>
+        <combo_box.item label="R Stick ↔" name="axis_rightx"/>
+        <combo_box.item label="R Stick ↕" name="axis_righty"/>
+        <combo_box.item label="Trigger ↘↙" name="axis_triggers"/>
+        <combo_box.item label="Keine" name="axis_none"/>
+    </combo_box>
+    <combo_box name="axis_output_selector">
+        <combo_box.item label="L Stick ↔" name="axis_0"/>
+        <combo_box.item label="L Stick ↕" name="axis_1"/>
+        <combo_box.item label="R Stick ↔" name="axis_2"/>
+        <combo_box.item label="R Stick ↕" name="axis_3"/>
+        <combo_box.item label="L Trigger ↘" name="axis_4"/>
+        <combo_box.item label="R Trigger ↙" name="axis_5"/>
+        <combo_box.item label="Trigger ↘↙" name="axis_output_triggers"/>
+        <combo_box.item label="Keine" name="axis_none"/>
+    </combo_box>
+    <combo_box name="analog_action_selector">
+        <combo_box.item label="Seitlich ↔" name="Strafe"/>
+        <combo_box.item label="Fortschritt ↕" name="Advance"/>
+        <combo_box.item label="Drehen ↔" name="Turn"/>
+        <combo_box.item label="Schauen ↕" name="Look"/>
+        <combo_box.item label="Fliegen ↕" name="Fly"/>
+        <combo_box.item label="Zoomen -/+" name="Zoom"/>
+        <combo_box.item label="Scrollen -/+" name="Scroll"/>
+        <combo_box.item label="Keine" name="None"/>
+    </combo_box>
+    <combo_box name="button_input_selector">
+        <combo_box.item label="Süd" name="BUTTON_0"/>
+        <combo_box.item label="Ost" name="BUTTON_1"/>
+        <combo_box.item label="West" name="BUTTON_2"/>
+        <combo_box.item label="Nors" name="BUTTON_3"/>
+        <combo_box.item label="Auswählen" name="BUTTON_4"/>
+        <combo_box.item label="Pos1" name="BUTTON_5"/>
+        <combo_box.item label="Start" name="BUTTON_6"/>
+        <combo_box.item label="L Stick" name="BUTTON_7"/>
+        <combo_box.item label="R Stick" name="BUTTON_8"/>
+        <combo_box.item label="L Schulter" name="BUTTON_9"/>
+        <combo_box.item label="R Schulter" name="BUTTON_10"/>
+        <combo_box.item label="DPad Hoch" name="BUTTON_11"/>
+        <combo_box.item label="DPad Runter" name="BUTTON_12"/>
+        <combo_box.item label="DPad Links" name="BUTTON_13"/>
+        <combo_box.item label="DPad Rechts" name="BUTTON_14"/>
+        <combo_box.item label="Misc1" name="BUTTON_15"/>
+        <combo_box.item label="Paddel 1" name="BUTTON_16"/>
+        <combo_box.item label="Paddel 2" name="BUTTON_17"/>
+        <combo_box.item label="Paddel 3" name="BUTTON_18"/>
+        <combo_box.item label="Paddel 4" name="BUTTON_19"/>
+        <combo_box.item label="Touchpad" name="BUTTON_20"/>
+        <combo_box.item label="KNOPF_21" name="BUTTON_21"/>
+        <combo_box.item label="KNOPF_22" name="BUTTON_22"/>
+        <combo_box.item label="KNOPF_23" name="BUTTON_23"/>
+        <combo_box.item label="KNOPF_24" name="BUTTON_24"/>
+        <combo_box.item label="KNOPF_25" name="BUTTON_25"/>
+        <combo_box.item label="KNOPF_26" name="BUTTON_26"/>
+        <combo_box.item label="KNOPF_27" name="BUTTON_27"/>
+        <combo_box.item label="KNOPF_28" name="BUTTON_28"/>
+        <combo_box.item label="KNOPF_29" name="BUTTON_29"/>
+        <combo_box.item label="KNOPF_30" name="BUTTON_30"/>
+        <combo_box.item label="KNOPF_31" name="BUTTON_31"/>
+        <combo_box.item label="Keine" name="BUTTON_NONE"/>
+    </combo_box>
+    <combo_box name="button_input_glyph_selector"/>
+    <combo_box
+        name="binary_action_selector">
+        <combo_box.item label="Springen" name="Jump"/>
+        <combo_box.item label="Knien" name="Crouch"/>
+        <combo_box.item label="Sitzen" name="Toggle sit"/>
+        <!-- TODO: implement Interact feature
+        <combo_box.item label="Interagieren" name="Interact"/>
+        -->
+        <combo_box.item label="Sprechen umschalten" name="Toggle speak"/>
+        <combo_box.item label="Mouselook umschalten" name="Toggle mouselook"/>
+        <combo_box.item label="Flugkamera" name="FlyCam"/>
+        <combo_box.item label="Mauszeigen" name="Mouse cursor"/>
+        <combo_box.item label="Fortschritt ↑" name="Avdance"/>
+        <combo_box.item label="Rückschritt ↓" name="Retreat"/>
+        <combo_box.item label="Seitlich ←" name="Strafe left"/>
+        <combo_box.item label="Seitlich →" name="Strafe right"/>
+        <combo_box.item label="Fliegen ↑" name="Fly up"/>
+        <combo_box.item label="Fliegen ↓" name="Fly down"/>
+        <combo_box.item label="Drehen ←" name="Turn left"/>
+        <combo_box.item label="Drehen →" name="Turn right"/>
+        <combo_box.item label="Zoomen +" name="Zoom +"/>
+        <combo_box.item label="Zoomen -" name="Zoom -"/>
+        <combo_box.item label="Scrollen +" name="Scroll +"/>
+        <combo_box.item label="Scrollen -" name="Scroll -"/>
+        <combo_box.item label="Keine" name="None"/>
+    </combo_box>
+    <combo_box name="mouselook_analog_action_selector">
+        <combo_box.item label="Seitlich ↔" name="Strafe left/right"/>
+        <combo_box.item label="Fortschritt ↕" name="Avdance forward/back"/>
+        <combo_box.item label="Drehen ↔" name="Turn left/right"/>
+        <combo_box.item label="Schauen ↕" name="Look up/down"/>
+        <combo_box.item label="Fiegen ↕" name="Fly up/down"/>
+        <combo_box.item label="Zoomen -/+" name="Zoom +/-"/>
+        <combo_box.item label="Keine" name="None"/>
+    </combo_box>
+    <combo_box name="mouselook_binary_action_selector">
+        <combo_box.item label="Springen" name="Jump"/>
+        <combo_box.item label="Knien" name="Crouch"/>
+        <combo_box.item label="Sitzen" name="Toggle sit"/>
+        <combo_box.item label="Sprechen umschalten" name="Toggle speak"/>
+        <combo_box.item label="Mouselook umschalten" name="Toggle mouselook"/>
+        <combo_box.item label="Flugkamera" name="Toggle Flycam"/>
+        <combo_box.item label="Mauszeigen" name="Toggle mouse cursor"/>
+        <combo_box.item label="Maus links" name="Mouse click left"/>
+        <combo_box.item label="Maus rechts" name="Mouse click right"/>
+        <combo_box.item label="Fortschritt ↑" name="Avdance forward"/>
+        <combo_box.item label="Rückschritt ↓" name="Avdance back"/>
+        <combo_box.item label="Seitlich ←" name="Strafe left"/>
+        <combo_box.item label="Seitlich →" name="Strafe right"/>
+        <combo_box.item label="Fliegen ↑" name="Fly up"/>
+        <combo_box.item label="Fliegen ↓" name="Fly down"/>
+        <combo_box.item label="Drehen ←" name="Turn left"/>
+        <combo_box.item label="Drehen →" name="Turn right"/>
+        <combo_box.item label="Zoomen +" name="Zoom +"/>
+        <combo_box.item label="Zoomen -" name="Zoom -"/>
+        <combo_box.item label="ESC" name="ESC"/>
+        <combo_box.item label="Keine" name="None"/>
+    </combo_box>
+    <combo_box name="sit_binary_action_selector">
+        <combo_box.item label="Stehen" name="Toggle Sit"/>
+        <!-- TODO: implement Interact feature
+        <combo_box.item label="Interagieren" name="Interact"/>
+        -->
+        <combo_box.item label="Sprechen umschalten" name="Toggle speak"/>
+        <combo_box.item label="Mouselook umschalten" name="Toggle mouselook"/>
+        <combo_box.item label="Flugkamera" name="Toggle flycam"/>
+        <combo_box.item label="Mauszeigen" name="Toggle mouse cursor"/>
+        <combo_box.item label="Zoomen +" name="Zoom +"/>
+        <combo_box.item label="Zoomen -" name="Zoom -"/>
+        <combo_box.item label="Keine" name="None"/>
+    </combo_box>
+    <combo_box name="cursor_analog_action_selector">
+        <combo_box.item label="Maus ↔" name="Mouse left/right"/>
+        <combo_box.item label="Maus ↕" name="Mouse up/down"/>
+        <combo_box.item label="Drehen ↔" name="Turn left/right"/>
+        <combo_box.item label="Schauen ↕" name="Look up/down"/>
+        <combo_box.item label="Fliegen ↕" name="Fly up/down"/>
+        <combo_box.item label="Seitlich ↔" name="Strafe left/right"/>
+        <combo_box.item label="Fortschritt ↕" name="Avdance forward/back"/>
+        <combo_box.item label="Keine" name="None"/>
+    </combo_box>
+    <combo_box name="cursor_binary_action_selector">
+        <combo_box.item label="Springen" name="Jump"/>
+        <combo_box.item label="Knien" name="Crouch"/>
+        <combo_box.item label="Sitzen" name="Toggle sit"/>
+        <combo_box.item label="Sprechen umschalten" name="Toggle speak"/>
+        <combo_box.item label="Mouselook umschalten" name="Toggle mouselook"/>
+        <combo_box.item label="Flugkamera" name="Toggle flycam"/>
+        <combo_box.item label="Mauszeiger umschalten" name="Toggle mouse cursor"/>
+        <combo_box.item label="Maus links" name="Mouse click left"/>
+        <combo_box.item label="Maus rechts" name="Mouse click right"/>
+        <combo_box.item label="Fortshcritt ↑" name="Avdance forward"/>
+        <combo_box.item label="Rückschritt ↓" name="Avdance back"/>
+        <combo_box.item label="Seitlich ←" name="Strafe left"/>
+        <combo_box.item label="Seitlich →" name="Strafe right"/>
+        <combo_box.item label="Fliegen ↑" name="Fly up"/>
+        <combo_box.item label="Fliegen ↓" name="Fly down"/>
+        <combo_box.item label="Drehen ←" name="Turn left"/>
+        <combo_box.item label="Drehen →" />
+        <combo_box.item label="Cursor ↑" name="Cursor up"/>
+        <combo_box.item label="Cursor ↓" name="Cursor down"/>
+        <combo_box.item label="Cursor ←" name="Cursor left"/>
+        <combo_box.item label="Cursor →" name="Cursor right"/>
+        <combo_box.item label="ESC" name="ESC"/>
+        <combo_box.item label="Keine" name="None"/>
+    </combo_box>
+    <combo_box name="flycam_analog_action_selector">
+        <combo_box.item label="Fahrt ↔" name="Truck left/right"/>
+        <combo_box.item label="Fahrt ↕" name="Dolly forward/back"/>
+        <combo_box.item label="Schwenken ↔" name="Pan left/right"/>
+        <combo_box.item label="Neigen ↕" name="Tilt up/down"/>
+        <combo_box.item label="Vertikal ↕" name="Boom up/down"/>
+        <combo_box.item label="Rollen ↻↺" name="Roll CCW/CW"/>
+        <combo_box.item label="Zoomen -/+" name="Zoom in/out"/>
+        <combo_box.item label="Keine" name="None"/>
+    </combo_box>
+    <combo_box name="flycam_binary_action_selector">
+        <combo_box.item label="Zoomen -" name="Zoom out"/>
+        <combo_box.item label="Scwhenken →" name="Pan right"/>
+        <combo_box.item label="Schwenken ←" name="Pan left"/>
+        <combo_box.item label="Zoomen +" name="Zoom in"/>
+        <combo_box.item label="Mauszeigen" name="Toggle mouse cursor"/>
+        <combo_box.item label="Flugkamera verlassen" name="Toggle flycam"/>
+        <combo_box.item label="Entrollen" name="Unroll"/>
+        <combo_box.item label="Rollen ↺" name="Roll CCW"/>
+        <combo_box.item label="Rollen ↻" name="Roll CW"/>
+        <combo_box.item label="Orbit" name="Orbit"/>
+        <combo_box.item label="Fahrt ↑" name="Dolly forward"/>
+        <combo_box.item label="Fahrt ↓" name="Dolly back"/>
+        <combo_box.item label="Fahrt ←" name="Truck left"/>
+        <combo_box.item label="Fahrt →" name="Truck right"/>
+        <combo_box.item label="Vertikal ↑" name="Boom up"/>
+        <combo_box.item label="Vertikal ↓" name="Boom down"/>
+        <combo_box.item label="ESC" name="ESC"/>
+        <combo_box.item label="Keine" name="None"/>
+    </combo_box>
+</panel>

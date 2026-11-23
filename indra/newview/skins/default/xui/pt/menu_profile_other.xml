@@ -13,6 +13,8 @@
 	<menu_item_call name="share" label="Compartilhar" />
 	<menu_item_call name="pay" label="Pagar" />
 	<menu_item_check name="block_unblock" label="Bloquear/Desbloquear" />
+	<menu_item_call name="ban_from_all_groups" label="Banir de todos os meus grupos" />
+	<menu_item_call name="unban_from_all_groups" label="Remover banimento de todos os meus grupos" />
 	<menu_item_call name="copy_display_name" label="Copiar nome de exibição" />
 	<menu_item_call name="copy_name" label="Copiar nome do avatar" />
 	<menu_item_call name="copy_id" label="Copiar ID do agente" />

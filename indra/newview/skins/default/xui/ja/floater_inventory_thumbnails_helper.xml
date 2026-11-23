@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="contents" title="インベントリのサムネイルヘルパー">
-	<scroll_list name="inventory_thumbnails_list" tool_tip="インベントリにアイテムをペーストします。">
+<floater title="インベントリのサムネイルヘルパー" name="contents">
+	<scroll_list tool_tip="インベントリにアイテムをペーストします。" name="inventory_thumbnails_list">
 		<scroll_list.columns label="インベントリのアイテム" name="item_name"/>
 		<scroll_list.columns label="存在するテクスチャ" name="existing_texture"/>
 		<scroll_list.columns label="新しいテクスチャ" name="new_texture"/>

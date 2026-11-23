@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_fs_add_contact" title="コンタクトセットに追加…">
+<floater title="コンタクトセットに追加…" name="floater_fs_add_contact">
 	<floater.string name="no_sets">
 		追加できるセットがありません。
 	</floater.string>

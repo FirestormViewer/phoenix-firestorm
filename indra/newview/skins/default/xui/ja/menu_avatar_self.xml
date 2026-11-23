@@ -38,7 +38,6 @@
 		<menu_item_call label="プロフィール" name="Profile..."/>
 	</context_menu>
 	<menu_item_call label="スクリプト情報" name="ScriptInfo"/>
-	<menu_item_call label="スケルトンをリセット" name="Reset Skeleton"/>
 	<menu_item_call label="テクスチャのデバッグ…" name="Debug..."/>
 	<menu_item_call label="テクスチャのリフレッシュ" name="Texture Refresh"/>
 	<menu_item_call label="ＸＭＬとしてダンプ" name="Dump XML"/>

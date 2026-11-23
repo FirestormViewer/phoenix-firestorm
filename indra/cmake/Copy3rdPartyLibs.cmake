@@ -62,6 +62,7 @@ if(WINDOWS)
     set(release_files
         #openjp2.dll # <FS:Ansariel> Only copy OpenJPEG dll if needed
         glod.dll # <FS:Beq> restore GLOD
+        SDL3.dll
         )
 
     # <FS:Ansariel> Only copy OpenJPEG dll if needed
@@ -199,6 +200,7 @@ elseif(DARWIN)
     set(release_files
         libGLOD.dylib # <FS:Beq> restore GLOD
         libndofdev.dylib
+        libSDL3.dylib
         libgrowl.dylib
         libgrowl++.dylib
        )

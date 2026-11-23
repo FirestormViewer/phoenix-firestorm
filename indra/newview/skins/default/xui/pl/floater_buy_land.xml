@@ -114,7 +114,7 @@ wspiera [AMOUNT2] obiektów
 		Po zakupie zostanie Ci [AMOUNT]L$.
 	</floater.string>
 	<floater.string name="balance_needed">
-		Musisz dokupić [AMOUNT]L$ żeby kupić tą działkę.
+		Musisz dokupić [AMOUNT]L$ żeby kupić tę działkę.
 	</floater.string>
 	<floater.string name="no_parcel_selected">
 		(niczego nie wybrano)

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_skin_panel">
 	<panel name="avatar_skin_color_panel">
-		<texture_picker label="頭" name="Head" tool_tip="クリックで画像を選択します。"/>
-		<texture_picker label="上半身" name="Upper Body" tool_tip="クリックで画像を選択します。"/>
-		<texture_picker label="下半身" name="Lower Body" tool_tip="クリックで画像を選択します。"/>
+		<texture_picker label="頭" tool_tip="クリックで画像を選択します。" name="Head"/>
+		<texture_picker label="上半身" tool_tip="クリックで画像を選択します。" name="Upper Body"/>
+		<texture_picker label="下半身" tool_tip="クリックで画像を選択します。" name="Lower Body"/>
 	</panel>
 	<panel name="accordion_panel">
 		<accordion name="wearable_accordion">
-			<accordion_tab name="skin_color_tab" title="肌の色"/>
-			<accordion_tab name="skin_face_tab" title="顔の詳細"/>
-			<accordion_tab name="skin_makeup_tab" title="メイクアップ"/>
-			<accordion_tab name="skin_body_tab" title="身体の詳細"/>
+			<accordion_tab title="肌の色" name="skin_color_tab"/>
+			<accordion_tab title="顔の詳細" name="skin_face_tab"/>
+			<accordion_tab title="メイクアップ" name="skin_makeup_tab"/>
+			<accordion_tab title="身体の詳細" name="skin_body_tab"/>
 		</accordion>
 	</panel>
 </panel>

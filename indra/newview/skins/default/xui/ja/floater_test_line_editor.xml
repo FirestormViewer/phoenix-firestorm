@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_test_line_editor">
-	<line_editor name="enabled_line_editor" tool_tip="有効なラインエディタ">
+	<line_editor tool_tip="有効なラインエディタ" name="enabled_line_editor">
 		ラインエディタを有効化
 	</line_editor>
-	<line_editor name="ascii_line_editor" tool_tip="asciiラインエディタ">
+	<line_editor tool_tip="asciiラインエディタ" name="ascii_line_editor">
 		ASCIIのみのラインエディタ
 	</line_editor>
-	<line_editor name="disabled_line_editor" tool_tip="無効なラインエディタ">
+	<line_editor tool_tip="無効なラインエディタ" name="disabled_line_editor">
 		ラインエディタを無効化
 	</line_editor>
-	<line_editor name="enabled_colored_line_editor" tool_tip="有効な色付けされたラインエディタ">
+	<line_editor tool_tip="有効な色付けされたラインエディタ" name="enabled_colored_line_editor">
 		赤文字ラインエディタを有効化
 	</line_editor>
-	<line_editor name="disabled_colored_line_editor" tool_tip="無効な色付けされたラインエディタ">
+	<line_editor tool_tip="無効な色付けされたラインエディタ" name="disabled_colored_line_editor">
 		赤文字ラインエディタを無効化
 	</line_editor>
 	<line_editor name="left_pad_editor">
 		左に25pxの余白
 	</line_editor>
-	<line_editor name="left_pad_editor">
-		右に75pxの余白
-	</line_editor>
+	<line_editor name="left_pad_editor1">右側テキスト余白75px</line_editor>
+	<line_editor name="left_pad_editor2">左側テキスト余白25px、右側75px</line_editor>
 	<line_editor name="left_pad_editor">
 		左に25px、右に75pxの余白
 	</line_editor>
-	<search_editor label="検索語句を入力" name="search editor" tool_tip="エディタを検索"/>
+	<search_editor label="検索語句を入力" tool_tip="エディタを検索" name="search editor"/>
 </floater>

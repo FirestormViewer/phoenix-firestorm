@@ -11,11 +11,11 @@
 						受け取ったアイテム
 					</string>
 					<button label="受け取ったアイテム" name="inbox_btn"/>
-					<button name="reload_received_items_btn" tool_tip="受け取ったアイテムリストをリロードします。" />
+					<button tool_tip="受け取ったアイテムリストをリロードします。" name="reload_received_items_btn" />
 					<text name="inbox_fresh_new_count">
 						[NUM]個の新着アイテム
 					</text>
-					<panel name="inbox_inventory_placeholder_panel" tool_tip="アイテムを使用するには、そのアイテムをインベントリにドラッグアンドドロップしてください。">
+					<panel tool_tip="アイテムを使用するには、そのアイテムをインベントリにドラッグアンドドロップしてください。" name="inbox_inventory_placeholder_panel">
 						<text name="inbox_inventory_placeholder">
 							マーケットプレイスから購入した商品はここに配達されます。
 						</text>

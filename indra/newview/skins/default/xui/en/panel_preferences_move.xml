@@ -576,16 +576,6 @@
          width="237"
          top_pad="0"/>
         <check_box
-         control_name="FSCrouchToggle"
-         follows="left|top"
-         height="20"
-         label="Enable crouch toggle mode"
-         layout="topleft"
-         left_delta="0"
-         name="crouch_toggle_mode"
-         width="237"
-         top_pad="0"/>
-        <check_box
          control_name="FSIgnoreFinishAnimation"
          follows="left|top"
          height="20"
@@ -790,7 +780,7 @@
         <button
          follows="top|left"
          height="23"
-         label="Joystick Configuration"
+         label="3Dconnexion devices"
          left="100"
          name="joystick_setup_button"
          top_pad="10"

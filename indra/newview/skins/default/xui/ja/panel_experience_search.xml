@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_experience_search" label="検索">
+<panel label="検索" name="panel_experience_search">
 	<string name="not_found">
 		「[TEXT]」は見つかりませんでした。
 	</string>
@@ -21,8 +21,8 @@
 			コンテンツの最大レーティング：
 		</text>
 		<scroll_list name="search_results">
-			<columns name="experience_name" label="名前"/>
-			<columns name="owner" label="所有者"/>
+			<columns label="名前" name="experience_name"/>
+			<columns label="所有者" name="owner"/>
 		</scroll_list>
 		<button label="ＯＫ" label_selected="ＯＫ" name="ok_btn"/>
 		<button label="キャンセル" name="cancel_btn"/>

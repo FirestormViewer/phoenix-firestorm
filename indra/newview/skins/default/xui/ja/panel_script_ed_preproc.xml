@@ -4,7 +4,7 @@
 		読み込んでいます…
 	</panel.string>
 	<panel.string name="can_not_view">
-		このスクリプトは「コピーなし」に設定されているため、表示または編集できません。
+		このスクリプトは権限が制限されているため、表示または編集できません。
 オブジェクト内のスクリプトを表示または編集するには、完全な権限が必要です。
 	</panel.string>
 	<panel.string name="public_objects_can_not_run">
@@ -57,12 +57,12 @@
 		</layout_panel>
 	</layout_stack>
 	<tab_container name="Tabset">
-		<panel name="Script" label="スクリプト">
+		<panel label="スクリプト" name="Script">
 			<script_editor name="Script Editor">
 				読み込んでいます…
 			</script_editor>
 		</panel>
-		<panel name="Preprocessed" label="プリプロセス済み">
+		<panel label="プリプロセス済み" name="Preprocessed">
 			<lsl_preproc_viewer name="Post Editor">
 				読み込んでいます…
 			</lsl_preproc_viewer>

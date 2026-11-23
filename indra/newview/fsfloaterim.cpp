@@ -47,6 +47,7 @@
 #include "llbutton.h"
 #include "llchannelmanager.h"
 #include "llchatentry.h"
+#include "llchatservicehistory.h"
 #include "llcheckboxctrl.h"
 #include "llchiclet.h"
 #include "llchicletbar.h"
@@ -135,7 +136,9 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
     mUnreadMessagesNotificationPanel(NULL),
     mUnreadMessagesNotificationTextBox(NULL),
     mApplyRect(true),
-    mIMFloaterTimer(NULL)
+    mIMFloaterTimer(NULL),
+    mChatServiceLoadingPanel(nullptr),
+    mChatLoadingVisible(false)
 {
     initIMSession(session_id);
 
@@ -719,13 +722,16 @@ void FSFloaterIM::doToSelected(const LLSD& userdata)
     }
     else if (command == "history")
     {
-        if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
+        if (!LLChatServiceHistory::historySuppressed())
         {
-            LLFloaterReg::showInstance("preview_conversation", mSessionID, true);
-        }
-        else
-        {
-            gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(LLIMModel::instance().getHistoryFileName(mSessionID)));
+            if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
+            {
+                LLFloaterReg::showInstance("preview_conversation", mSessionID, true);
+            }
+            else
+            {
+                gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(LLIMModel::instance().getHistoryFileName(mSessionID)));
+            }
         }
     }
     else
@@ -741,6 +747,10 @@ bool FSFloaterIM::checkEnabled(const LLSD& userdata)
     if (command == "enable_offer_tp")
     {
         return LLAvatarActions::canOfferTeleport(mOtherParticipantUUID);
+    }
+    else if (command == "history")
+    {
+        return !LLChatServiceHistory::historySuppressed();
     }
     return false;
 }
@@ -1048,6 +1058,8 @@ bool FSFloaterIM::postBuild()
     mEmojiCloseConn = LLEmojiHelper::instance().setCloseCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerClosed(); });
 
     mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { initEmojiRecentPanel(); });
+
+    mChatServiceLoadingPanel = getChild<LLPanel>("chat_service_loading");
 
     getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
     getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterIM::onChatSearchButtonClicked, this));
@@ -1437,6 +1449,8 @@ void FSFloaterIM::setVisible(bool visible)
 
     if (visible && isInVisibleChain())
     {
+        // Visibility updates presentation state; session creation and live delivery
+        // own service refresh priority.
         sIMFloaterShowedSignal(mSessionID);
         gConsole->addSession(mSessionID);
     }
@@ -1580,12 +1594,22 @@ void FSFloaterIM::updateMessages()
         for (; iter != iter_end; ++iter)
         {
             LLSD msg = *iter;
+            // Consume hidden fallbacks and expired offer markers as well as visible rows.
+            mLastMessageIndex = msg["index"].asInteger();
+
+            // An active inline offer replaces only its explicitly linked text log.
+            // The fallback can be absent or arrive after unrelated chat messages.
+            const LLUUID notification_log_id = msg["notification_log_id"].asUUID();
+            if (notification_log_id.notNull() && LLNotificationsUtil::find(notification_log_id) != NULL)
+            {
+                continue;
+            }
 
             std::string time = msg["time"].asString();
             LLUUID from_id = msg["from_id"].asUUID();
             std::string from = msg["from"].asString();
             std::string message = msg["message"].asString();
-            S32 is_history = msg["is_history"].asInteger();
+            bool is_history = msg["is_history"].asBoolean();
             bool is_region_msg = msg["is_region_msg"].asBoolean();
 
             // LL removed updates to the participants list on bigger groups, so at least keep track of
@@ -1610,10 +1634,7 @@ void FSFloaterIM::updateMessages()
             chat.mSessionID = mSessionID;
             chat.mFromName = from;
             chat.mTimeStr = time;
-            if (is_history)
-            {
-                chat.mChatStyle = (EChatStyle) is_history;
-            }
+            chat.mChatStyle = is_history ? CHAT_STYLE_HISTORY : chat.mChatStyle;
             if (is_region_msg)
             {
                 chat.mSourceType = CHAT_SOURCE_REGION;
@@ -1647,7 +1668,7 @@ void FSFloaterIM::updateMessages()
                         channel->hideToast(chat.mNotifId);
                     }
                 }
-                // if notification doesn't exist - try to use next message which should be log entry
+                // Expired offers leave their text fallback to render independently.
                 else
                 {
                     continue;
@@ -1659,22 +1680,13 @@ void FSFloaterIM::updateMessages()
                 chat.mText = message;
             }
 
+            if (msg.has("is_group_history") && msg["is_group_history"].asBoolean())
+            {
+                chat_args["is_group_history"] = true;
+            }
+
             static const LLStyle::Params input_append_params = LLStyle::Params();
             mChatHistory->appendMessage(chat, chat_args, input_append_params);
-            mLastMessageIndex = msg["index"].asInteger();
-
-            // if it is a notification - next message is a notification history log, so skip it
-            if (chat.mNotifId.notNull() && LLNotificationsUtil::find(chat.mNotifId) != NULL)
-            {
-                if (++iter == iter_end)
-                {
-                    break;
-                }
-                else
-                {
-                    mLastMessageIndex++;
-                }
-            }
         }
     }
 
@@ -1693,6 +1705,8 @@ void FSFloaterIM::reloadMessages(bool clean_messages/* = false*/)
         }
     }
 
+    // Clear and replay in one turn so the transcript never presents an empty frame.
+    // FSChatHistory detaches old inline widgets before replacements are registered.
     mChatHistory->clear();
     mLastMessageIndex = -1;
     updateMessages();
@@ -1866,6 +1880,28 @@ void FSFloaterIM::sendParticipantsAddedNotification(const uuid_vec_t& uuids)
     args["[NAME]"] = names_string;
 
     sendMsg(getString(uuids.size() > 1 ? "multiple_participants_added" : "participant_added", args));
+}
+
+void FSFloaterIM::draw()
+{
+    // The floater presents both model-owned local reads and account-scoped service
+    // work without scheduling either source from draw().
+    static LLCachedControl<bool> showLogHistory(gSavedPerAccountSettings, "LogShowHistory");
+    const bool loading =
+        mSession &&
+        mIsP2PChat &&
+        showLogHistory &&
+        (mSession->isChatHistoryLoading() ||
+            LLChatServiceHistory::getSnapshot(mSession->mOtherParticipantID).service_work_active);
+
+    if (loading != mChatLoadingVisible)
+    {
+        mChatLoadingVisible = loading;
+        // The widget animates in draw(); hiding its panel suspends that work.
+        mChatServiceLoadingPanel->setVisible(loading);
+    }
+
+    LLFloater::draw();
 }
 
 void FSFloaterIM::updateChatHistoryStyle()
@@ -2348,6 +2384,14 @@ bool FSFloaterIM::enableViewerVersionCallback(const LLSD& notification,const LLS
 //static
 void FSFloaterIM::processChatHistoryStyleUpdate(bool clean_messages /*= false*/)
 {
+    if (clean_messages)
+    {
+        // Model-owned direct history is reloaded once, including sessions without a floater.
+        LLIMModel::instance().reloadDirectHistories();
+    }
+
+    // P2P floaters render the model reload above; other floaters retain their
+    // existing clean-and-reload behavior.
     LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("fs_impanel");
     for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin();
          iter != inst_list.end(); ++iter)
@@ -2355,7 +2399,11 @@ void FSFloaterIM::processChatHistoryStyleUpdate(bool clean_messages /*= false*/)
         FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(*iter);
         if (floater)
         {
-            floater->reloadMessages(clean_messages);
+            LLIMModel::LLIMSession* session =
+                LLIMModel::instance().findIMSession(floater->mSessionID);
+            const bool reload_model = clean_messages &&
+                (!session || !session->isP2P());
+            floater->reloadMessages(reload_model);
         }
     }
 
@@ -2372,13 +2420,13 @@ void FSFloaterIM::initIMSession(const LLUUID& session_id)
     setKey(session_id);
 
     mSessionID = session_id;
-    LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
+    mSession = LLIMModel::instance().findIMSession(mSessionID);
 
-    if (session)
+    if (mSession)
     {
-        mIsP2PChat = session->isP2PSessionType();
-        mSessionInitialized = session->mSessionInitialized;
-        mDialog = session->mType;
+        mIsP2PChat = mSession->isP2PSessionType();
+        mSessionInitialized = mSession->mSessionInitialized;
+        mDialog = mSession->mType;
     }
 }
 

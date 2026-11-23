@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <sun_moon_trackball name="virtualtrackball">
-	<sun_moon_trackball.labelN name="labelN" label="北"/>
-	<sun_moon_trackball.labelS name="labelS" label="南"/>
-	<sun_moon_trackball.labelW name="labelW" label="西"/>
-	<sun_moon_trackball.labelE name="labelE" label="東"/>
+	<sun_moon_trackball.labelN label="北" name="labelN"/>
+	<sun_moon_trackball.labelS label="南" name="labelS"/>
+	<sun_moon_trackball.labelW label="西" name="labelW"/>
+	<sun_moon_trackball.labelE label="東" name="labelE"/>
 </sun_moon_trackball>

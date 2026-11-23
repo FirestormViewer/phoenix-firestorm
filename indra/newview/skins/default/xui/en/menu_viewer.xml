@@ -1478,6 +1478,17 @@
                  parameter="setenv" />
             </menu_item_check>
             <menu_item_separator/>
+            <menu_item_check
+             label="Switch to Shared after teleport"
+             name="Switch to Shared after teleport">
+                <menu_item_check.on_click
+                 function="ToggleControl"
+                 parameter="SwitchToSharedEnvAfterTeleport" />
+                <menu_item_check.on_check
+                 function="CheckControl"
+                 parameter="SwitchToSharedEnvAfterTeleport" />
+            </menu_item_check>
+            <menu_item_separator/>
             <menu_item_call
              label="My Environments..."
              name="my_environs">
@@ -4213,6 +4224,16 @@
                function="ToggleControl"
                parameter="DebugShowMemory" />
             </menu_item_check>
+            <menu_item_check
+               label="Show Game Controller State"
+               name="Show Game Controller State">
+              <menu_item_check.on_check
+               function="CheckControl"
+               parameter="DebugShowControllerState" />
+              <menu_item_check.on_click
+               function="ToggleControl"
+               parameter="DebugShowControllerState" />
+            </menu_item_check>
 
             <menu_item_separator/>
 
@@ -5911,13 +5932,6 @@
         <menu_item_call.on_click
          function="Advanced.PrimfeedAuthReset" />
       </menu_item_call>
-
-      <menu_item_call
-         label="Enable Visual Leak Detector"
-         name="Enable Visual Leak Detector">
-        <menu_item_call.on_click
-           function="Advanced.ToggleVisualLeakDetector" />
-        </menu_item_call>
       
         <menu_item_check
          label="Output Debug Minidump"

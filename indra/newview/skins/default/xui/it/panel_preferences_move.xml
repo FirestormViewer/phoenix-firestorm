@@ -50,7 +50,6 @@
 			<check_box label="Premere i tasti delle lettere permette il movimento (es. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar" />
 			<check_box label="Doppio clic e tenere premuto per correre" name="tap_tap_hold_to_run"/>
 			<check_box label="Volare/atterrare tenendo premuto salta (PagSu)/chinati (PagGiù)" name="automatic_fly"/>
-			<check_box label="Blocca azione chinarsi (PagGiù)" name="crouch_toggle_mode"/>
 			<check_box label="Disabilita pausa per animazioni pre-salto e atterraggio" name="FSIgnoreFinishAnimation"/>
 			<check_box label="Quando si cammina all'indietro, l'avatar non si gira verso la camera nella vista locale" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Questa opzione ha effetto solo sulla tua vista locale e non funziona con gli AO."/>
 			<check_box label="Gira avatar verso un oggetto selezionato" name="FSTurnAvatarToSelectedObject" tool_tip="Ruota il tuo avatar verso l'oggetto che stai attualmente selezionando."/>

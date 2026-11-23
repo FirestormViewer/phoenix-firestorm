@@ -294,6 +294,10 @@ bool FSPosingMotion::loadOtherMotionToBaseOfThisMotion(LLKeyframeMotion* motionT
     if (!motionToLoadAsFsPosingMotion)
         return false;
 
+    // the motion's keyframe data may still be downloading, report failure so the load is retried
+    if (!motionToLoadAsFsPosingMotion->mJointMotionList)
+        return false;
+
     LLJoint::JointPriority priority = motionToLoad->getPriority();
     bool                   motionIsForAllJoints = selectedJointNumbers.empty();
 

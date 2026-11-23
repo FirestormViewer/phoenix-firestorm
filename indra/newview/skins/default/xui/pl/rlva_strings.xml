@@ -172,7 +172,7 @@
 			<key>blocked_recvim_remote</key>
 			<map>
 				<key>value</key>
-				<string>Rezydent, do którego napisałeś/aś ma uniemożliwione czytanie wiadomości na tą chwilę, spróbuj później.</string>
+				<string>Rezydent, do którego napisałeś/aś ma uniemożliwione czytanie wiadomości na tę chwilę, spróbuj później.</string>
 				<key>description</key>
 				<string>Wysyłane do nadawcy wiadomości, gdy jego/jej przychodząca IM jest zablokowana</string>
 				<key>label</key>
@@ -183,7 +183,7 @@
 			<key>blocked_tplurerequest_remote</key>
 			<map>
 				<key>value</key>
-				<string>Rezydent, któremu zaproponowałeś/aś teleport ma uniemożliwione odbieranie ich na tą chwilę, spróbuj później.</string>
+				<string>Rezydent, któremu zaproponowałeś/aś teleport ma uniemożliwione odbieranie ich na tę chwilę, spróbuj później.</string>
 				<key>description</key>
 				<string>Wysyłane do nadawcy teleportu, gdy jego/jej propozycja jest zablokowana</string>
 				<key>label</key>
@@ -195,10 +195,31 @@
 		<key>anonyms</key>
 		<array>
 			<string>Rezydent</string>
+			<string>Ten Rezydent</string>
+			<string>Tamten Rezydent</string>
+			<string>Postać</string>
+			<string>Ta postać</string>
+			<string>Tamta postać</string>
 			<string>Osoba</string>
+			<string>Ta osoba</string>
+			<string>Tamta osoba</string>
 			<string>Nieznajomy</string>
+			<string>Ten nieznajomy</string>
+			<string>Tamten nieznajomy</string>
+			<string>Istota</string>
+			<string>Ta istota</string>
+			<string>Tamta istota</string>
+			<string>Agent</string>
+			<string>Ten agent</string>
+			<string>Tamten agent</string>
+			<string>Dusza</string>
+			<string>Ta dusza</string>
+			<string>Tamta dusza</string>
+			<string>Pewna osoba</string>
+			<string>Pewni ludzie</string>
 			<string>Ktoś</string>
 			<string>Tajemniczy ktoś</string>
+			<string>Nieznana istota</string>
 			<string>Ktoś niezidentyfikowany</string>
 			<string>Nieznana osoba</string>
 		</array>

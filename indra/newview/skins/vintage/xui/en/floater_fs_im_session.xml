@@ -332,6 +332,9 @@
         <button.commit_callback
          function="IMSession.Menu.Action"
          parameter="history"/>
+        <button.enabled_callback
+         function="IMSession.Menu.Enable"
+         parameter="history"/>
       </button>
     </layout_panel>
     
@@ -525,15 +528,39 @@
         <layout_panel
           name="chat_holder">
           <fs_chat_history
-          font="SansSerifSmall"
-          follows="all"
-          name="chat_history"
-          parse_highlights="true"
-          parse_urls="true"
-          right="-4"
-          left="0"
-          top="0"
-          bottom="-1" />
+           font="SansSerifSmall"
+           follows="all"
+           name="chat_history"
+           parse_highlights="true"
+           parse_urls="true"
+           right="-4"
+           left="0"
+           top="0"
+           bottom="-1" />
+          <panel
+           background_visible="true"
+           bg_alpha_color="DkGray2"
+           name="chat_service_loading"
+           follows="top|right"
+           height="24"
+           right="-20"
+           top="8"
+           visible="false"
+           width="105">
+             <loading_indicator
+              height="20"
+              left="0"
+              name="chat_service_loading_wheel"
+              top="2"
+              width="20" />
+             <text
+              height="20"
+              left_pad="4"
+              name="chat_service_loading_text"
+              top="2"
+              value="Loading..."
+              width="80" />
+          </panel>
         </layout_panel>
         <layout_panel
           height="20"

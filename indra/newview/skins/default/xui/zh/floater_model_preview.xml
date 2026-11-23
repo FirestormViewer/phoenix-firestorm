@@ -343,7 +343,7 @@
 					<text name="resolution_label">
 						解析度：
 					</text>
-					<text name="hulls_per_mesh_label">
+					<text name="hulls_label">
 						凸包數/網格：
 					</text>
 					<text name="vertices_per_hull_label">

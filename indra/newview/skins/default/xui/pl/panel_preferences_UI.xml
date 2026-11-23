@@ -70,7 +70,7 @@
             <combo_box.item label="Prawy dolny róg ekranu" name="ScriptDialogPositionOption_5" />
         </combo_box>
         <check_box label="Animuj komunikaty" name="FSAnimatedScriptDialogs" tool_tip="Zaznacz, aby komunikaty skryptów animowały się przy otwieraniu (klasyczne zachowanie V1.x). Działa tylko wtedy, gdy komunikaty skryptów otwierają się z góry na dół." />
-        <slider label_width="220" width="460" label="Wiersze tekstu widoczne w komunikacie:" name="FSRowsPerScriptDialog" tool_tip="Maksymalna ilość wierszy widoczna jednocześnie w pojedynczym komunikacie skryptów." />
+        <slider label_width="220" width="460" label="Wiersze tekstu widoczne w komunikacie:" name="FSRowsPerScriptDialog" tool_tip="Maksymalna liczba wierszy widoczna jednocześnie w pojedynczym komunikacie skryptów." />
         <check_box label="Użyj menu kołowego (pie menu)" name="UsePieMenu" tool_tip="Używaj klasycznego, okrągłego menu znanego z 1.x po kliknięciu na awatary, obiekty, teren lub dodatki - zamiast prostokątnych menu kontekstowych." />
         <check_box label="Animuj również tekst" name="PieMenuPopupFontEffect" tool_tip="Sprawia, że tekst w menu kołowym staje się częścią animacji, gdy jest ono otwierane." />
         <check_box label="Włącz zewnętrzny pierścień menu kołowego" name="PieMenuOuterRingShade" tool_tip="Włącza dodatkowy zewnętrzny pierścień dla menu kołowego, jaki pomaga lokalizować gdzie znajdują się submenu." />
@@ -85,13 +85,13 @@
             (wymaga restartu)
         </text>
         <check_box label="Ukryj ikony czatów IM oraz grup" name="FSDisableIMChiclets" tool_tip="Zaznacz, aby Firestorm ukrył ikony czatów IM oraz grup (koperta z powiadomieniami i suma wszystkich IM pozostaną na ekranie)" />
-        <check_box label="Stary sposób wyświetlania listy powiadomień" name="FSLegacyNotificationWell" tool_tip="Gdy zaznaczysz tą opcję, to Firestorm będzie używać starego sposobu wyświetlania listy powiadomień po prawej." />
+        <check_box label="Stary sposób wyświetlania listy powiadomień" name="FSLegacyNotificationWell" tool_tip="Gdy zaznaczysz tę opcję, to Firestorm będzie używać starego sposobu wyświetlania listy powiadomień po prawej." />
         <text name="FSLegacyNotificationWellRequiresRestart">
             (wymaga restartu)
         </text>
-        <check_box label="Automatyczna zmiana rozmiaru list Rozmów i Powiadomień" name="FSLegacyNotificationWellAutoResize" tool_tip="Gdy zaznaczysz tą opcję, to Firestorm zawsze automatycznie zmieni rozmiar list Konwersacji i starszych Powiadomień, gdy elementy zostaną dodane lub usunięte." />
-        <check_box label="Przemapuj skróty klawiszowe na nieużywane przez Linuksa (tylko Linux; wymaga restartu)" name="FSRemapLinuxShortcuts" tool_tip="Gdy zaznaczysz tą opcję, to skróty klawiszowe używane już przez system operacyjny Linux (takie jak CTRL-ALT-Fx) zostaną przemapowane w przeglądarce." />
-        <check_box label="Zapobiegaj wysuwaniu okna statystyk na pierwszy plan" name="FSStatisticsNoFocus" tool_tip="Gdy zaznaczysz tą opcję, to okno statystyk nigdy nie wysunie się na pierwszy plan, gdy inne zostanie zamknięte. Akcje takie jak zmienianie ułożenia wykresów ciągle będą możliwe." />
+        <check_box label="Automatyczna zmiana rozmiaru list Rozmów i Powiadomień" name="FSLegacyNotificationWellAutoResize" tool_tip="Gdy zaznaczysz tę opcję, to Firestorm zawsze automatycznie zmieni rozmiar list Konwersacji i starszych Powiadomień, gdy elementy zostaną dodane lub usunięte." />
+        <check_box label="Przemapuj skróty klawiszowe na nieużywane przez Linuksa (tylko Linux; wymaga restartu)" name="FSRemapLinuxShortcuts" tool_tip="Gdy zaznaczysz tę opcję, to skróty klawiszowe używane już przez system operacyjny Linux (takie jak CTRL-ALT-Fx) zostaną przemapowane w przeglądarce." />
+        <check_box label="Zapobiegaj wysuwaniu okna statystyk na pierwszy plan" name="FSStatisticsNoFocus" tool_tip="Gdy zaznaczysz tę opcję, to okno statystyk nigdy nie wysunie się na pierwszy plan, gdy inne zostanie zamknięte. Akcje takie jak zmienianie ułożenia wykresów ciągle będą możliwe." />
 		<check_box label="Pokaż miniatury w dymkach podpowiedzi Szafy" name="FSShowInventoryThumbnailTooltips" tool_tip="Jeśli ta opcja jest włączona, to wskazanie kursorem elementu Szafy zawierającego miniaturę (zdjęcie) spowoduje jej wyświetlenie w dymku podpowiedzi - chmurce pomocy." />
 		<slider label="Opóźnienie dymków miniatur:" tool_tip="Opóźnienie dymków podpowiedzi - chmurek pomocy - pokazujących miniatury elementów w Szafie." name="FSInventoryThumbnailTooltipsDelay" />
 		<text name="FSInventoryThumbnailTooltipsDelayText">
@@ -141,22 +141,22 @@
     <panel label="Okna interfejsu" name="UI-interface-windows-tab">
         <check_box label="Otwieraj profil od razu po kliknięciu na imię awatara" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Gdy ta opcja jest włączona, to kliknięcie na linku z imieniem awatara otworzy od razu jego profil." />
         <check_box label="Wyłącz automatyczne otwieranie listy zablokowanych" name="FSDisableBlockListAutoOpen" tool_tip="Wyłącza automatyczne otwieranie listy zablokowanych podczas blokowania awatarów lub obiektów." />
-        <check_box label="'Znajomi' oraz 'Grupy' w menu 'Komunikacja' otwierają okna w stylu [SHORT_VIEWER_GENERATION]" name="FSUseV2Friends" tool_tip="Gdy włączysz tą opcję, to Znajomi / Grupy będą się otwierać poprzez okno Ludzie - w przeciwnym wypadku będzie się to odbywać w oknie Kontaktów." />
-        <check_box label="Stary sposób wyświetlania właściwości obiektu" name="FSUseLegacyObjectProperties" tool_tip="Gdy włączysz tą opcję, to stare okno właściwości obiektu będzie używane zamiast nowego."/>
+        <check_box label="'Znajomi' oraz 'Grupy' w menu 'Komunikacja' otwierają okna w stylu [SHORT_VIEWER_GENERATION]" name="FSUseV2Friends" tool_tip="Gdy włączysz tę opcję, to Znajomi / Grupy będą się otwierać poprzez okno Ludzie - w przeciwnym wypadku będzie się to odbywać w oknie Kontaktów." />
+        <check_box label="Stary sposób wyświetlania właściwości obiektu" name="FSUseLegacyObjectProperties" tool_tip="Gdy włączysz tę opcję, to stare okno właściwości obiektu będzie używane zamiast nowego."/>
         <check_box label="Użyj małego okna kamery" name="FSUseSmallCameraFloater" tool_tip="Jeśli ta opcja jest włączona, to zostanie użyte mniejsze, starsze okno kamery bez elementów sterujących wstępnymi ustawieniami." />
         <check_box label="Wyłącz przyciski resetowania kamery" name="DisableCameraJoystickCenterReset" tool_tip="Zapobiega resetowaniu kamery po kliknięciu w środkowy celownik (bullseye) w kontrolkach obrotu i ruchu kamery." />
         <text name="standalone_textbox">
             Używaj osobnych okien dla:
         </text>
-        <check_box name="FSUseStandaloneGroupFloater" label="Profili grup" tool_tip="Gdy włączysz tą opcję, to profile grup będą otwierane w osobnych oknach." />
-        <check_box name="FSUseStandaloneTeleportHistoryFloater" label="Historii teleportacji" tool_tip="Gdy włączysz tą opcję, to użycie skrótu klawiszowego odpowiedzialnego za otwarcie historii teleportacji pokaże ją w osobnym oknie." />
-        <check_box name="FSUseStandaloneBlocklistFloater" label="Listy wyciszonych" tool_tip="Gdy włączysz tą opcję, to lista wyciszonych / zablokowanych rezydentów i obiektów będzie otwierana w osobnym oknie." />
-        <check_box name="FSUseStandalonePlaceDetailsFloater" label="Landmarków, informacji o miejscach i historii teleportacji" tool_tip="Gdy włączysz tą opcję, to landmarki, informacje o miejscach i historia teleportacji będą otwierane w osobnych oknach." />
+        <check_box name="FSUseStandaloneGroupFloater" label="Profili grup" tool_tip="Gdy włączysz tę opcję, to profile grup będą otwierane w osobnych oknach." />
+        <check_box name="FSUseStandaloneTeleportHistoryFloater" label="Historii teleportacji" tool_tip="Gdy włączysz tę opcję, to użycie skrótu klawiszowego odpowiedzialnego za otwarcie historii teleportacji pokaże ją w osobnym oknie." />
+        <check_box name="FSUseStandaloneBlocklistFloater" label="Listy wyciszonych" tool_tip="Gdy włączysz tę opcję, to lista wyciszonych / zablokowanych rezydentów i obiektów będzie otwierana w osobnym oknie." />
+        <check_box name="FSUseStandalonePlaceDetailsFloater" label="Landmarków, informacji o miejscach i historii teleportacji" tool_tip="Gdy włączysz tę opcję, to landmarki, informacje o miejscach i historia teleportacji będą otwierane w osobnych oknach." />
         <text name="ExtendedTeleportHistoryLabel">
             Dodaj do historii teleportacji:
         </text>
-        <check_box name="FSTeleportHistoryShowPosition" label="Pozycję" tool_tip="Gdy włączysz tą opcję, to lokalne koordynaty wewnętrzne regionu będą pokazywane w historii teleportacji."/>
-        <check_box name="FSTeleportHistoryShowDate" label="Datę" tool_tip="Gdy włączysz tą opcję, to daty i czasy teleportacji będą pokazywane w historii teleportacji."/>
+        <check_box name="FSTeleportHistoryShowPosition" label="Pozycję" tool_tip="Gdy włączysz tę opcję, to lokalne koordynaty wewnętrzne regionu będą pokazywane w historii teleportacji."/>
+        <check_box name="FSTeleportHistoryShowDate" label="Datę" tool_tip="Gdy włączysz tę opcję, to daty i czasy teleportacji będą pokazywane w historii teleportacji."/>
         <text name="textFriendlistOptions">
             Opcje listy kontaktów:
         </text>
@@ -186,9 +186,9 @@
             Opcje Szafy:
         </text>
         <check_box label="Ukryj puste foldery systemowe w Szafie" name="DebugHideEmptySystemFolders" tool_tip="Gdy ta opcja jest włączona, to wszystkie puste foldery systemowe - takie jak Ulubione czy Landmarki - są ukrywane" />
-        <check_box label="Pokaż folder &quot;Odebrane przedmioty&quot; normalnie w Szafie" name="FSShowInboxFolder" tool_tip="Gdy włączysz tą opcję, to w Szafie będzie można znaleźć folder &quot;Odebrane przedmioty&quot;." />
-        <check_box label="Zawsze pokazuj &quot;Odebrane przedmioty&quot; na dole okna Szafy" name="FSAlwaysShowInboxButton" tool_tip="Gdy włączysz tą opcję, to w folder &quot;Odebrane przedmioty&quot; będzie zawsze pokazywany na dole okna Szafy nawet, jeśli jest widoczny na liście folderów." />
-        <check_box label="Oddzielne frazy wyszukiwania dla każdej z zakładek Szafy" name="FSSplitInventorySearchOverTabs" tool_tip="Gdy włączysz tą opcję, to będzie możliwe wprowadzanie oddzielnych fraz wyszukiwania dla każdej z zakładek Szafy." />
+        <check_box label="Pokaż folder &quot;Odebrane przedmioty&quot; normalnie w Szafie" name="FSShowInboxFolder" tool_tip="Gdy włączysz tę opcję, to w Szafie będzie można znaleźć folder &quot;Odebrane przedmioty&quot;." />
+        <check_box label="Zawsze pokazuj &quot;Odebrane przedmioty&quot; na dole okna Szafy" name="FSAlwaysShowInboxButton" tool_tip="Gdy włączysz tę opcję, to w folder &quot;Odebrane przedmioty&quot; będzie zawsze pokazywany na dole okna Szafy nawet, jeśli jest widoczny na liście folderów." />
+        <check_box label="Oddzielne frazy wyszukiwania dla każdej z zakładek Szafy" name="FSSplitInventorySearchOverTabs" tool_tip="Gdy włączysz tę opcję, to będzie możliwe wprowadzanie oddzielnych fraz wyszukiwania dla każdej z zakładek Szafy." />
     </panel>
     <panel label="Tosty" name="UI-toasts-tab">
         <text name="ToastSettings">

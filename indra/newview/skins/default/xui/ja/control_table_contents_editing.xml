@@ -4,16 +4,16 @@
 		<columns label="編集中" name="lst_action"/>
 	</rows>
 	<rows name="edit_avatar_spin_ccw">
-		<columns name="lst_action" tool_tip="アバターを中心にカメラを反時計回りに回します。" value="反時計回り"/>
+		<columns tool_tip="アバターを中心にカメラを反時計回りに回します。" name="lst_action" value="反時計回り"/>
 	</rows>
 	<rows name="edit_avatar_spin_cw">
-		<columns name="lst_action" tool_tip="アバターを中心にカメラを時計回りに回します。" value="時計回り"/>
+		<columns tool_tip="アバターを中心にカメラを時計回りに回します。" name="lst_action" value="時計回り"/>
 	</rows>
 	<rows name="edit_avatar_spin_over">
-		<columns name="lst_action" tool_tip="アバターに対するカメラの仰角を上げます。" value="カメラの仰角を上げる"/>
+		<columns tool_tip="アバターに対するカメラの仰角を上げます。" name="lst_action" value="カメラの仰角を上げる"/>
 	</rows>
 	<rows name="edit_avatar_spin_under">
-		<columns name="lst_action" tool_tip="アバターに対するカメラの仰角を下げます。" value="カメラの仰角を下げる"/>
+		<columns tool_tip="アバターに対するカメラの仰角を下げます。" name="lst_action" value="カメラの仰角を下げる"/>
 	</rows>
 	<rows name="edit_avatar_move_forward">
 		<columns name="lst_action" value="カメラを近づける"/>

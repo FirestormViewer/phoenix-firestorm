@@ -33,6 +33,9 @@
 	<rows name="push_down">
 		<columns name="lst_action" value="Ab" />
 	</rows>
+	<rows name="toggle_down">
+		<columns name="lst_action" value="Ab umschalten" />
+	</rows>
 	<rows name="run_forward">
 		<columns name="lst_action" value="Vorwärts rennen" />
 	</rows>
@@ -50,6 +53,9 @@
 	</rows>
 	<rows name="toggle_fly">
 		<columns name="lst_action" value="Fliegen starten/stoppen" />
+	</rows>
+	<rows name="toggle_flycam">
+		<columns name="lst_action" value="Flugkamera ein-/ausschalten" />
 	</rows>
 	<rows name="toggle_sit">
 		<columns name="lst_action" value="Sitzen/Aufstehen" />

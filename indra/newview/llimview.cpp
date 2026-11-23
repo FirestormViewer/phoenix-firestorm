@@ -29,6 +29,7 @@
 #include "llimview.h"
 
 #include "llavatarnamecache.h"  // IDEVO
+#include "llchatservicehistory.h"
 #include "llavataractions.h"
 #include "llfloaterconversationlog.h"
 #include "llfloaterreg.h"
@@ -37,6 +38,7 @@
 #include "llrect.h"
 #include "llerror.h"
 #include "llbutton.h"
+#include "llsdutil.h"
 #include "llsdutil_math.h"
 #include "llstring.h"
 #include "lltextutil.h"
@@ -745,39 +747,37 @@ void chatterBoxInvitationCoro(std::string url, LLUUID sessionId, LLIMMgr::EInvit
 }
 
 void translateSuccess(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text,
-                        U64 time_n_flags, std::string originalMsg, std::string expectLang, std::string translation, const std::string detected_language)
+                        U64 time_n_flags, LLSD history_context, std::string expectLang, std::string translation, const std::string detected_language)
 {
     std::string message_txt(utf8_text);
     // filter out non-interesting responses
     if (!translation.empty()
         && ((detected_language.empty()) || (expectLang != detected_language))
-        && (LLStringUtil::compareInsensitive(translation, originalMsg) != 0))
+        && (LLStringUtil::compareInsensitive(translation, utf8_text) != 0))
     {   // Note - if this format changes, also fix code in addMessagesFromServerHistory()
         message_txt += XL8_START_TAG + LLTranslate::removeNoTranslateTags(translation) + XL8_END_TAG;
     }
 
-    // Extract info packed in time_n_flags
     bool log2file =      (bool)(time_n_flags & (1LL << 32));
     bool is_region_msg = (bool)(time_n_flags & (1LL << 33));
     U32 time_stamp = (U32)(time_n_flags & 0x00000000ffffffff);
 
-    LLIMModel::getInstance()->processAddingMessage(session_id, from, from_id, message_txt, log2file, is_region_msg, time_stamp, false);
+    LLIMModel::getInstance()->processAddingMessage(session_id, from, from_id, message_txt, log2file, is_region_msg, time_stamp, history_context, false);
 }
 
 void translateFailure(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text,
-                        U64 time_n_flags, int status, const std::string err_msg)
+                        U64 time_n_flags, LLSD history_context, int status, const std::string err_msg)
 {
     std::string message_txt(utf8_text);
     std::string msg = LLTrans::getString("TranslationFailed", LLSD().with("[REASON]", err_msg));
     LLStringUtil::replaceString(msg, "\n", " "); // we want one-line error messages
     message_txt += XL8_START_TAG + msg + XL8_END_TAG;
 
-    // Extract info packed in time_n_flags
     bool log2file = (bool)(time_n_flags & (1LL << 32));
     bool is_region_msg = (bool)(time_n_flags & (1LL << 33));
     U32 time_stamp = (U32)(time_n_flags & 0x00000000ffffffff);
 
-    LLIMModel::getInstance()->processAddingMessage(session_id, from, from_id, message_txt, log2file, is_region_msg, time_stamp, false);
+    LLIMModel::getInstance()->processAddingMessage(session_id, from, from_id, message_txt, log2file, is_region_msg, time_stamp, history_context, false);
 }
 
 void chatterBoxHistoryCoro(std::string url, LLUUID sessionId, std::string from, std::string message, U32 timestamp)
@@ -952,7 +952,6 @@ LLIMModel::LLIMSession::LLIMSession(const LLUUID& session_id,
     }
 
     buildHistoryFileName();
-    loadHistory();
 
     // Localizing name of ad-hoc session. STORM-153
     // Changing name should happen here- after the history file was created, so that
@@ -1153,6 +1152,7 @@ LLIMModel::LLIMSession::~LLIMSession()
     mSpeakers = NULL;
 
     mVoiceChannelStateChangeConnection.disconnect();
+    mChatServiceHistory.stop();
 
     // HAVE to do this here -- if it happens in the LLVoiceChannel destructor it will call the wrong version (since the object's partially deconstructed at that point).
     mVoiceChannel->deactivate();
@@ -1179,9 +1179,7 @@ void LLIMModel::LLIMSession::addMessage(const std::string& from,
                                         const LLUUID& from_id,
                                         const std::string& utf8_text,
                                         const std::string& time,
-                                        // <FS:Zi> Add a distinct color for server side group chat replay
-                                        // const bool is_history,  // comes from a history file or chat server
-                                        const S32 is_history,  // comes from a history file or chat server
+                                        const bool is_history,  // comes from a history file or chat server
                                         const bool is_region_msg,
                                         const U32 timestamp)   // may be zero
 {
@@ -1250,9 +1248,7 @@ void LLIMModel::LLIMSession::addMessagesFromHistoryCache(const chat_message_list
         LL_DEBUGS("ChatHistory") << mSessionID << ": Adding history cache message: " << msg << LL_ENDL;
 
         // Add message from history cache to the display
-        // <FS:Zi> Add a distinct color for server side group chat replay
-        // addMessage(from, from_id, msg[LL_IM_TEXT], msg[LL_IM_TIME], true, false, 0);   // from history data, not region message, no timestamp
-        addMessage(from, from_id, msg[LL_IM_TEXT], msg[LL_IM_TIME], CHAT_STYLE_HISTORY, false, 0);   // from history data, not region message, no timestamp
+        addMessage(from, from_id, msg[LL_IM_TEXT], msg[LL_IM_TIME], true, false, 0);   // from history data, not region message, no timestamp
     }
 }
 
@@ -1460,9 +1456,9 @@ void LLIMModel::LLIMSession::addMessagesFromServerHistory(const LLSD& history,  
                 message["time"] = chat_time_str;
                 message["timestamp"] = (S32)history_msg_timestamp;
                 message["index"] = (LLSD::Integer)mMsgs.size();
+                message["is_history"] = true;
                 // <FS:Zi> Add a distinct color for server side group chat replay
-                // message["is_history"] = true;
-                message["is_history"] = CHAT_STYLE_SERVER_HISTORY;
+                message["is_group_history"] = true;
                 mMsgs.push_front(message);
 
                 LL_DEBUGS("ChatHistory") << mSessionID << ": push_front() adding group chat history message " << message << LL_ENDL;
@@ -1509,37 +1505,98 @@ void LLIMModel::LLIMSession::chatFromLogFile(LLLogChat::ELogLineType type, const
     if (type == LLLogChat::LOG_LINE)
     {
         LL_DEBUGS("ChatHistory") << "chatFromLogFile() adding LOG_LINE message from " << msg << LL_ENDL;
-        // <FS:Zi> Add a distinct color for server side group chat replay
-        // self->addMessage("", LLSD(), msg["message"].asString(), "", true, false, 0);        // from history data, not region message, no timestamp
-        self->addMessage("", LLSD(), msg["message"].asString(), "", CHAT_STYLE_HISTORY, false, 0);        // from history data, not region message, no timestamp
+        self->addMessage("", LLSD(), msg["message"].asString(), "", true, false, 0);        // from history data, not region message, no timestamp
     }
     else if (type == LLLogChat::LOG_LLSD)
     {
         LL_DEBUGS("ChatHistory") << "chatFromLogFile() adding LOG_LLSD message from " << msg << LL_ENDL;
-        // <FS:Zi> Add a distinct color for server side group chat replay
-        // self->addMessage(msg["from"].asString(), msg["from_id"].asUUID(), msg["message"].asString(), msg["time"].asString(), true, false, 0);  // from history data, not region message, no timestamp
-        self->addMessage(msg["from"].asString(), msg["from_id"].asUUID(), msg["message"].asString(), msg["time"].asString(), CHAT_STYLE_HISTORY, false, 0);  // from history data, not region message, no timestamp
+        self->addMessage(msg["from"].asString(), msg["from_id"].asUUID(), msg["message"].asString(), msg["time"].asString(), true, false, 0);  // from history data, not region message, no timestamp
     }
 }
 
 void LLIMModel::LLIMSession::loadHistory()
 {
-    mMsgs.clear();
     mLastHistoryCacheMsgs.clear();
     mLastHistoryCacheDateTime.clear();
 
-    if ( gSavedPerAccountSettings.getBOOL("LogShowHistory") )
+    if (!gSavedPerAccountSettings.getBOOL("LogShowHistory"))
     {
-        // read and parse chat history from local file
-        chat_message_list_t chat_history;
-        LLLogChat::loadChatHistory(mHistoryFileName, chat_history, LLSD(), isGroupChat());
-        addMessagesFromHistoryCache(chat_history);
+        mChatServiceHistory.stop();
+        replaceHistoricalMessages({});
+        return;
+    }
+
+    // Direct sessions subscribe to stitched history; the owner fences reloads and
+    // lifetime changes before replacing this overlay. Live rows stay in the model.
+    if (isP2P())
+    {
+        mChatServiceHistory.load(
+            mOtherParticipantID, mHistoryFileName, 200,
+            [this](const chat_message_list_t& history)
+            {
+                // The settings callback may still be queued when a read completes.
+                if (gSavedPerAccountSettings.getBOOL("LogShowHistory"))
+                {
+                    replaceHistoricalMessages(history);
+                }
+            },
+            mSessionID);
+        return;
+    }
+
+    // Group and ad-hoc history retain the synchronous legacy loader.
+    chat_message_list_t history;
+    LLLogChat::loadChatHistory(mHistoryFileName, history, LLSD(), isGroupChat());
+    replaceHistoricalMessages(history);
+}
+
+void LLIMModel::LLIMSession::replaceHistoricalMessages(const chat_message_list_t& history)
+{
+    if (LLChatServiceHistory::replaceHistory(mMsgs, history, isP2P()))
+    {
+        // <FS:Ansariel> [FS communication UI]
+        //if (LLFloaterIMSession* floater = LLFloaterIMSession::findInstance(mSessionID))
+        if (FSFloaterIM* floater = FSFloaterIM::findInstance(mSessionID))
+        {
+            floater->reloadMessages(false);
+        }
+    }
+}
+
+void LLIMModel::LLIMSession::clearForHistoryDeletion()
+{
+    // Delete is the only operation that removes live and historical model rows together.
+    mChatServiceHistory.clear();
+    mLastHistoryCacheDateTime.clear();
+    mLastHistoryCacheMsgs.clear();
+    mMsgs.clear();
+    mNumUnread = 0;
+    mParticipantUnreadMessageCount = 0;
+    mHasOfflineMessage = false;
+
+    // <FS:Ansariel> [FS communication UI]
+    //if (LLFloaterIMSession* floater = LLFloaterIMSession::findInstance(mSessionID))
+    if (FSFloaterIM* floater = FSFloaterIM::findInstance(mSessionID))
+    {
+        floater->reloadMessages(false);
     }
 }
 
 LLIMModel::LLIMSession* LLIMModel::findIMSession(const LLUUID& session_id) const
 {
     return get_if_there(mId2SessionMap, session_id, (LLIMModel::LLIMSession*) NULL);
+}
+
+void LLIMModel::reloadDirectHistories()
+{
+    // Model-owned P2P sessions reload even when no floater currently exists.
+    for (auto& pair : mId2SessionMap)
+    {
+        if (pair.second->isP2P())
+        {
+            pair.second->loadHistory();
+        }
+    }
 }
 
 //*TODO consider switching to using std::set instead of std::list for holding LLUUIDs across the whole code
@@ -1780,6 +1837,14 @@ bool LLIMModel::newSession(const LLUUID& session_id, const std::string& name, co
     LLIMSession *session       = new LLIMSession(session_id, name, type, other_participant_id, voiceChannelInfo, ids, has_offline_msg);
     mId2SessionMap[session_id] = session;
 
+    // Insert first so snapshot callbacks and asynchronous completions can resolve the
+    // newly-created session through the model.
+    session->loadHistory();
+    if (session->isP2P())
+    {
+        LLChatServiceHistory::prioritizeResident(other_participant_id);
+    }
+
     // When notifying observer, name of session is used instead of "name", because they may not be the
     // same if it is an adhoc session (in this case name is localized in LLIMSession constructor).
     std::string session_name = LLIMModel::getInstance()->getName(session_id);
@@ -1872,11 +1937,24 @@ bool LLIMModel::addToHistory(const LLUUID& session_id,
         return false;
     }
 
+    // Fill missing direct timestamps for display and plaintext reconciliation.
+    U32 model_timestamp = timestamp;
+    if (!model_timestamp && session->isP2PSessionType())
+    {
+        model_timestamp = static_cast<U32>(time_corrected());
+    }
+
     // <FS:Ansariel>  Forward IM to nearby chat if wanted
-    std::string timestr = LLLogChat::timestamp2LogString(timestamp, false);
-    // <FS:Zi> Add a distinct color for server side group chat replay
-    // session->addMessage(from, from_id, utf8_text, timestr, false, is_region_msg, timestamp); //might want to add date separately
-    session->addMessage(from, from_id, utf8_text, timestr, CHAT_STYLE_NORMAL, is_region_msg, timestamp); //might want to add date separately
+    std::string timestr = LLLogChat::timestamp2LogString(model_timestamp, false);
+
+    // This is where a normal arriving message is added to the session. The time
+    // string created here omits the full date.
+    //session->addMessage(from, from_id, utf8_text,
+    //                    LLLogChat::timestamp2LogString(model_timestamp, false),
+    //                    false, is_region_msg, model_timestamp);
+    session->addMessage(from, from_id, utf8_text,
+                        timestr,
+                        false, is_region_msg, model_timestamp);
 
     static LLCachedControl<bool> show_im_in_chat(gSavedSettings, "FSShowIMInChatHistory");
     if (show_im_in_chat && !is_announcement)
@@ -1948,12 +2026,17 @@ void LLIMModel::proccessOnlineOfflineNotification(
     addMessage(session_id, SYSTEM_FROM, LLUUID::null, utf8_text);
 }
 
-// <FS:Ansariel> Added is_announcement parameter
-//void LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& from_id,
-//                         const std::string& utf8_text, bool log2file /* = true */, bool is_region_msg, /* = false */ U32 time_stamp /* = 0 */)
 void LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& from_id,
-                           const std::string& utf8_text, bool log2file /* = true */, bool is_region_msg /* = false */, U32 time_stamp /* = 0 */, bool is_announcement /* = false */, bool keyword_alert_performed /* = false */)
+                           const std::string& utf8_text, bool log2file /* = true */, bool is_region_msg, /* = false */ U32 time_stamp /* = 0 */,
+                           LLSD history_context,
+                           bool is_announcement /* = false */, bool keyword_alert_performed /* = false */) // <FS:Ansariel> Added is_announcement parameter
 {
+    // Capture direct-message timing before an asynchronous translation can delay it.
+    LLIMSession* session = findIMSession(session_id);
+    if (session && session->isP2P())
+    {
+        history_context = LLChatServiceHistory::prepareLiveMessage(utf8_text, time_stamp, history_context);
+    }
     //if (gSavedSettings.getBOOL("TranslateChat") && (from != SYSTEM_FROM))
     if (gSavedSettings.getBOOL("TranslateChat") && (from != SYSTEM_FROM) && !is_announcement && !keyword_alert_performed)
     {
@@ -1961,22 +2044,22 @@ void LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, co
         const std::string to_lang = LLTranslate::getTranslateLanguage();
         U64 time_n_flags = ((U64) time_stamp) | (log2file ? (1LL << 32) : 0) | (is_region_msg ? (1LL << 33) : 0);   // boost::bind has limited parameters
         LLTranslate::translateMessage(from_lang, to_lang, utf8_text,
-            boost::bind(&translateSuccess, session_id, from, from_id, utf8_text, time_n_flags, utf8_text, from_lang, _1, _2),
-            boost::bind(&translateFailure, session_id, from, from_id, utf8_text, time_n_flags, _1, _2));
+            boost::bind(&translateSuccess, session_id, from, from_id, utf8_text, time_n_flags, history_context, from_lang, _1, _2),
+            boost::bind(&translateFailure, session_id, from, from_id, utf8_text, time_n_flags, history_context, _1, _2));
     }
     else
     {
-        processAddingMessage(session_id, from, from_id, utf8_text, log2file, is_region_msg, time_stamp, is_announcement, keyword_alert_performed);
+        processAddingMessage(session_id, from, from_id, utf8_text, log2file, is_region_msg, time_stamp, history_context, is_announcement, keyword_alert_performed);
     }
 }
 
 // <FS:Ansariel> Added is_announcement parameter
 //void LLIMModel::processAddingMessage(const LLUUID& session_id, const std::string& from, const LLUUID& from_id,
-//    const std::string& utf8_text, bool log2file, bool is_region_msg, U32 time_stamp)
+//    const std::string& utf8_text, bool log2file, bool is_region_msg, U32 time_stamp, LLSD history_context)
 void LLIMModel::processAddingMessage(const LLUUID& session_id, const std::string& from, const LLUUID& from_id,
-    const std::string& utf8_text, bool log2file, bool is_region_msg, U32 time_stamp, bool is_announcement, bool keyword_alert_performed)
+    const std::string& utf8_text, bool log2file, bool is_region_msg, U32 time_stamp, LLSD history_context, bool is_announcement, bool keyword_alert_performed)
 {
-    LLIMSession* session = addMessageSilently(session_id, from, from_id, utf8_text, log2file, is_region_msg, time_stamp, is_announcement);
+    LLIMSession* session = addMessageSilently(session_id, from, from_id, utf8_text, log2file, is_region_msg, time_stamp, history_context, is_announcement);
     if (!session)
        return;
 
@@ -2006,10 +2089,10 @@ void LLIMModel::processAddingMessage(const LLUUID& session_id, const std::string
 // <FS:Ansariel> Added is_announcement parameter
 //LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id,
 //                                                    const std::string& utf8_text, bool log2file /* = true */, bool is_region_msg, /* false */
-//                                                      U32 timestamp /* = 0 */)
+//                                                      U32 timestamp /* = 0 */, LLSD history_context)
 LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id,
-                                                      const std::string& utf8_text, bool log2file /* = true */, bool is_region_msg /* = false */,
-                                                      U32 timestamp /* = 0 */, bool is_announcement /* = false */)
+                                                      const std::string& utf8_text, bool log2file /* = true */, bool is_region_msg, /* false */
+                                                      U32 timestamp /* = 0 */, LLSD history_context, bool is_announcement /* = false */)
 {
     LLIMSession* session = findIMSession(session_id);
 
@@ -2025,8 +2108,35 @@ LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, 
         from_name = SYSTEM_FROM;
     }
 
+    // <FS:Ansariel> Added is_announcement parameter
+    // Direct silent callers also capture provenance; live delivery always appends.
+    //if (session->isP2P())
+    //{
+    //    history_context = LLChatServiceHistory::prepareLiveMessage(utf8_text, timestamp, history_context);
+    //}
+    //// Append without recomposing stale history. History loads and snapshot
+    //// updates reconcile copies when their source data is published.
+    //addToHistory(session_id, from_name, from_id, utf8_text, is_region_msg, timestamp);
+    //if (session->isP2P())
+    //{
+    //    LLChatServiceHistory::recordLiveMessage(session->mMsgs.front(), history_context);
+    //}
+    //if (log2file)
+
+    // Do announcements have to get recorded server side? Go with no for now...
+    if (session->isP2P() && !is_announcement)
+    {
+        history_context = LLChatServiceHistory::prepareLiveMessage(utf8_text, timestamp, history_context);
+    }
+    // Append without recomposing stale history. History loads and snapshot
+    // updates reconcile copies when their source data is published.
     addToHistory(session_id, from_name, from_id, utf8_text, is_region_msg, timestamp, is_announcement);
+    if (session->isP2P() && !is_announcement)
+    {
+        LLChatServiceHistory::recordLiveMessage(session->mMsgs.front(), history_context);
+    }
     if (log2file && !is_announcement)
+    // </FS:Ansariel>
     {
         logToFile(getHistoryFileName(session_id), from_name, from_id, utf8_text);
     }
@@ -2181,7 +2291,7 @@ void LLIMModel::sendLeaveSession(const LLUUID& session_id, const LLUUID& other_p
 // *TODO this method is better be moved to the LLIMMgr
 //<FS:TS> FIRE-787: break up too long chat lines into multiple messages
 // This code is broken out for proper handling of multiple IMs after splitting.
-void deliverMessage(const std::string& utf8_text,
+LLSD deliverMessage(const std::string& utf8_text,
                      const LLUUID& im_session_id,
                      const LLUUID& other_participant_id,
                      EInstantMessage dialog)
@@ -2195,6 +2305,10 @@ void deliverMessage(const std::string& utf8_text,
 
     U8 offline = (!info || info->isOnline()) ? IM_ONLINE : IM_OFFLINE;
 
+    // Resolve the session before dispatch so its history boundary predates this send.
+    LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(im_session_id);
+    LLSD history_context;
+
     if(!sent)
     {
         // Send message normally.
@@ -2207,6 +2321,14 @@ void deliverMessage(const std::string& utf8_text,
         {
             new_dialog = IM_SESSION_SEND;
         }
+
+        // Capture once before transport; translation may finish after service publication.
+        if (dialog == IM_NOTHING_SPECIAL && other_participant_id.notNull() &&
+            session && session->isP2P())
+        {
+            history_context = session->mChatServiceHistory.outgoingContext(other_participant_id);
+        }
+
         pack_instant_message(
             gMessageSystem,
             gAgent.getID(),
@@ -2222,7 +2344,6 @@ void deliverMessage(const std::string& utf8_text,
     }
 
     bool is_group_chat = false;
-    LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(im_session_id);
     if(session)
     {
         is_group_chat = session->isGroupSessionType();
@@ -2250,6 +2371,8 @@ void deliverMessage(const std::string& utf8_text,
         default: ; // do nothing
         }
     }
+
+    return history_context;
 }
 //</FS:TS> FIRE-787
 
@@ -2262,6 +2385,7 @@ void LLIMModel::sendMessage(const std::string& utf8_text,
     size_t split = MAX_MSG_BUF_SIZE - 1;
     size_t pos = 0;
     size_t total = utf8_text.length();
+    LLSD history_context;
 
     while (pos < total)
     {
@@ -2302,18 +2426,32 @@ void LLIMModel::sendMessage(const std::string& utf8_text,
         std::string send = utf8_text.substr(pos, next_split);
         pos += next_split;
 
-        // *FIXME: Queue messages and wait for server
-        deliverMessage(send, im_session_id, other_participant_id, dialog);
+        // The context contains the information which was the last message ID sent to the chat service.
+        // Because we might be splitting up a message into multiple messages, but internally
+        // adding the entire message as one to the session history, we only need keep track
+        // of the context of the last actually sent message for the chat history service
+        // to pick up from later.
+        history_context = deliverMessage(send, im_session_id, other_participant_id, dialog);
     }
+
+    LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(im_session_id);
     //</FS:TS> FIRE-787
 
     if((dialog == IM_NOTHING_SPECIAL) &&
        (other_participant_id.notNull()))
     {
-        // Do we have to replace the /me's here?
+        // The packet has been sent; incoming and outgoing IMs share one quiet
+        // service refresh while first contact starts bounded discovery immediately.
+        if (session && session->isP2PSessionType())
+        {
+            LLChatServiceHistory::noteDirectMessageActivity(other_participant_id);
+        }
+
+        // Keep the pre-send boundary on the local echo through asynchronous translation.
         std::string from;
         LLAgentUI::buildFullname(from);
-        LLIMModel::getInstance()->addMessage(im_session_id, from, gAgentID, utf8_text);
+        LLIMModel::getInstance()->addMessage(im_session_id, from, gAgentID, utf8_text,
+                                           true, false, 0, history_context);
 
         //local echo for the legacy communicate panel
         std::string history_echo;
@@ -3475,6 +3613,7 @@ void LLIMMgr::addMessage(
     U32 timestamp,  // May be zero
     LLUUID display_id,
     std::string_view display_name,
+    const LLSD& original_text,
     bool is_announcement, // <FS:Ansariel> Special parameter indicating announcements
     bool keyword_alert_performed) // <FS:Ansariel> Pass info if keyword alert has been performed
 {
@@ -3512,7 +3651,14 @@ void LLIMMgr::addMessage(
 
     LLUUID other_participant_id = target_id;
     std::string message_display_name = (display_name.empty()) ? from : std::string(display_name);
-    if (display_id.isNull() && (display_name.empty()))
+
+    // System notices use the participant UUID for session routing only; their model
+    // identity stays null so they render and reconcile as system rows.
+    if (message_display_name == SYSTEM_FROM)
+    {
+        display_id = LLUUID::null;
+    }
+    else if (display_id.isNull() && display_name.empty())
     {
         display_id = other_participant_id;
     }
@@ -3792,9 +3938,21 @@ void LLIMMgr::addMessage(
 
     if (!LLMuteList::getInstance()->isMuted(other_participant_id, LLMute::flagTextChat) && !skip_message)
     {
-        // <FS:Ansariel> Added is_announcement parameter
-        //LLIMModel::instance().addMessage(new_session_id, message_display_name, display_id, msg, true, is_region_msg, timestamp);
-        LLIMModel::instance().addMessage(new_session_id, message_display_name, display_id, msg, true, is_region_msg, timestamp, is_announcement, keyword_alert_performed);
+        // Online direct timestamps describe receipt; offline timestamps describe
+        // the saved send. Preserve that distinction through translation.
+        const bool incoming_direct = LLChatServiceHistory::isPersistedDirectDialog(dialog) &&
+            !is_region_msg && message_display_name != SYSTEM_FROM &&
+            other_participant_id.notNull() && other_participant_id != gAgentID;
+        if (incoming_direct)
+        {
+            // Incoming activity shares the outgoing quiet deadline before reconciliation.
+            LLChatServiceHistory::noteDirectMessageActivity(other_participant_id);
+        }
+        LLIMModel::instance().addMessage(new_session_id, message_display_name, display_id, msg, true, is_region_msg, timestamp,
+                                       incoming_direct
+                                           ? LLChatServiceHistoryCore::incomingContext(original_text, !is_offline_msg)
+                                           : LLSD(),
+                                       is_announcement, keyword_alert_performed); // <FS:Ansariel> Added is_announcement parameter
     }
 
     // Open conversation floater if offline messages are present
@@ -4704,7 +4862,7 @@ void LLIMMgr::processIMTypingStop(const LLUUID& from_id, const EInstantMessage i
 }
 
 // <FS:Ansariel> Announce incoming IMs
-void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& session_id)
+static void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& session_id)
 {
     LLStringUtil::format_map_t args;
     args["[NAME]"] = av_name.getCompleteName();
@@ -4730,6 +4888,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
             0,
             LLUUID::null,
             "",
+            LLSD(),
             true
             );
     }
@@ -4738,7 +4897,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
     // later because a session has already been created by showing the
     // incoming IM announcement.
     // The logic was originally copied from process_improved_im() in llviewermessage.cpp
-    bool is_busy = gAgent.isDoNotDisturb();
+    bool is_do_not_disturb = gAgent.isDoNotDisturb();
     bool is_autorespond = gAgent.getAutorespond();
     bool is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
     bool is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
@@ -4748,73 +4907,23 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
 
     if (RlvActions::canReceiveIM(av_id) && !is_linden &&
         (!VoiceCallsFriendsOnly || is_friend) &&
-        ((is_busy && (!is_muted || (is_muted && !is_autorespond_muted))) ||
+        ((is_do_not_disturb && (!is_muted || (is_muted && !is_autorespond_muted))) ||
         (is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted) || (FSSendAwayAvatarResponse && is_afk && !is_muted)) )
     {
-        std::string my_name;
-        std::string response;
-        LLAgentUI::buildFullname(my_name);
-        response = LLIMProcessing::getAutoresponseTextForAvatar(av_id, is_busy, is_autorespond, is_autorespond_nonfriends, is_afk, FSSendAwayAvatarResponse, is_friend);
-        pack_instant_message(
-            gMessageSystem,
-            gAgent.getID(),
-            false,
-            gAgent.getSessionID(),
-            av_id,
-            my_name,
-            response,
-            IM_ONLINE,
-            IM_DO_NOT_DISTURB_AUTO_RESPONSE,
-            session_id);
-        gAgent.sendReliableMessage();
-
-        LLStringUtil::format_map_t args;
-        args["MESSAGE"] = response;
-
-        gIMMgr->addMessage(
-            session_id,
-            gAgentID,
-            LLStringUtil::null, // Pass null value so no name gets prepended
-            LLTrans::getString("IM_autoresponse_sent", args),
-            false,
-            LLStringUtil::null,
-            IM_NOTHING_SPECIAL,
-            0,
-            LLUUID::null,
-            LLVector3::zero,
-            false,
-            0,
-            LLUUID::null,
-            "",
-            true
-            );
-
-        // Send inventory item on autoresponse
-        LLUUID item_id(gSavedPerAccountSettings.getString("FSAutoresponseItemUUID"));
-        if (item_id.notNull())
-        {
-            LLInventoryItem* item = dynamic_cast<LLInventoryItem*>(gInventory.getItem(item_id));
-            if (item)
+        LLAvatarNameCache::get(av_id, [=](const LLUUID& av_id, const LLAvatarName& avatar_name)
             {
-                gIMMgr->addMessage(
-                        session_id,
-                        gAgentID,
-                        LLStringUtil::null, // Pass null value so no name gets prepended
-                        LLTrans::getString("IM_autoresponse_item_sent", LLSD().with("[ITEM_NAME]", item->getName())),
-                        false,
-                        LLStringUtil::null,
-                        IM_NOTHING_SPECIAL,
-                        0,
-                        LLUUID::null,
-                        LLVector3::zero,
-                        false,
-                        0,
-                        LLUUID::null,
-                        "",
-                        true);
-                LLGiveInventory::doGiveInventoryItem(av_id, item, session_id);
+                LLIMProcessing::sendAutoresponseTextForAvatar(av_id,
+                    avatar_name,
+                    session_id,
+                    is_do_not_disturb,
+                    is_autorespond,
+                    is_autorespond_nonfriends,
+                    is_afk,
+                    FSSendAwayAvatarResponse(),
+                    is_friend,
+                    true);
             }
-        }
+        );
     }
 }
 // </FS:Ansariel>
@@ -5242,4 +5351,3 @@ LLHTTPRegistration<LLViewerChatterBoxSessionUpdate>
 LLHTTPRegistration<LLViewerChatterBoxInvitation>
     gHTTPRegistrationMessageChatterBoxInvitation(
         "/message/ChatterBoxInvitation");
-

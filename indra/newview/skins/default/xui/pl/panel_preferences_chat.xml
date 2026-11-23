@@ -167,9 +167,9 @@
 			<text name="textUseKeyboardShortcuts">
 				Używaj skrótów klawiszowych:
 			</text>
-			<check_box name="FSUseCtrlShout" label="Ctrl+Enter (krzyk)" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Ctrl+Enter, aby krzyczeć poprzez czat w pobliżu." />
-			<check_box name="FSUseShiftWhisper" label="Shift+Enter (szept)" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Shift+Enter, aby szeptać poprzez czat w pobliżu" />
-			<check_box name="FSUseAltOOC" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Alt+Enter, aby wysyłać wiadomości ((OOC)) poprzez czat w pobliżu." />
+			<check_box name="FSUseCtrlShout" label="Ctrl+Enter (krzyk)" tool_tip="Zaznacz tę opcję, jeśli chcesz używać skrótu klawiszowego Ctrl+Enter, aby krzyczeć poprzez czat w pobliżu." />
+			<check_box name="FSUseShiftWhisper" label="Shift+Enter (szept)" tool_tip="Zaznacz tę opcję, jeśli chcesz używać skrótu klawiszowego Shift+Enter, aby szeptać poprzez czat w pobliżu" />
+			<check_box name="FSUseAltOOC" tool_tip="Zaznacz tę opcję, jeśli chcesz używać skrótu klawiszowego Alt+Enter, aby wysyłać wiadomości ((OOC)) poprzez czat w pobliżu." />
 		</panel>
 		<panel label="Komunikaty" name="ChatNotices">
 			<text name="disable_toast_label">
@@ -199,7 +199,7 @@
 				Wyszarzanie tekstu wiadomości IM w tle okna logów czatu
 			</text>
 			<spinner tool_tip="0.25-1.0, 0.25 dla silnego wygaszania, 1 dla braku wygaszania" name="FSIMChatHistoryFade"/>
-			<check_box name="FSShowMessageCountInWindowTitle" label="Pokaż ilość nieprzeczytanych IM na belce tytułu okna Firestorma"/>
+			<check_box name="FSShowMessageCountInWindowTitle" label="Pokaż liczbę nieprzeczytanych IM na belce tytułu okna Firestorma"/>
 			<check_box name="FSAnnounceIncomingIM" label="Powiadamiaj o nowej IM, gdy tylko nadawca zacznie pisać"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Mrugaj kartami IM, gdy znajomi się logują/wylogowywują"/>
 			<check_box name="FSNotifyNearbyChatFlash" label="Mrugaj przyciskiem 'czat' na dolnym pasku, gdy nadchodzi wiadomość czatu w pobliżu" tool_tip="Mruga przyciskiem 'czat' na dolnym pasku, gdy nadchodzi nowa wiadomość czatu w pobliżu. Okno czatu w pobliżu musi być zadokowane w oknie rozmów, a okno rozmów musi być zamknięte, aby przycisk mrugał."/>
@@ -315,7 +315,7 @@
 			<text name="FSCmdLineRollDice_txt">
 				Rzuć kostką (użycie: cmd kostki ścianki tm wm)
 			</text>
-			<line_editor tool_tip="Rzut kostką - cmd [ilość kostek] [ilość ścianek] [typ modyfikatora (opcjonalne)] [wartość modyfikatora (opcjonalne)]. Przykład: cmd 1 20, cmd 2 40 + 5. Brak parametrów jest równy cmd 1 6 (zwykła kostka)." name="FSCmdLineRollDice" />
+			<line_editor tool_tip="Rzut kostką - cmd [liczba kostek] [liczba ścianek] [typ modyfikatora (opcjonalne)] [wartość modyfikatora (opcjonalne)]. Przykład: cmd 1 20, cmd 2 40 + 5. Brak parametrów jest równy cmd 1 6 (zwykła kostka)." name="FSCmdLineRollDice" />
 			<text name="FSCmdLineTrackPos_txt">
 				Śledź pozycję lub awatara (cmd pos lub imię)
 			</text>

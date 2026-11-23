@@ -2,13 +2,13 @@
 <panel name="edit_jacket_panel">
 	<panel name="avatar_jacket_color_panel">
 		<!-- 字数制限のためUpperを上部と翻訳 -->
-		<texture_picker label="上部の生地" name="Upper Fabric" tool_tip="クリックで画像を選択します。"/>
-		<texture_picker label="下部の生地" name="Lower Fabric" tool_tip="クリックで画像を選択します。"/>
-		<color_swatch label="色／色彩" name="Color/Tint" tool_tip="クリックでカラーピッカーを開きます。"/>
+		<texture_picker label="上部の生地" tool_tip="クリックで画像を選択します。" name="Upper Fabric"/>
+		<texture_picker label="下部の生地" tool_tip="クリックで画像を選択します。" name="Lower Fabric"/>
+		<color_swatch label="色／色彩" tool_tip="クリックでカラーピッカーを開きます。" name="Color/Tint"/>
 	</panel>
 	<panel name="accordion_panel">
 		<accordion name="wearable_accordion">
-			<accordion_tab name="jacket_main_tab" title="ジャケット"/>
+			<accordion_tab title="ジャケット" name="jacket_main_tab"/>
 		</accordion>
 	</panel>
 </panel>

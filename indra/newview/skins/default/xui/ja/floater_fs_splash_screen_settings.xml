@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="splash_screen_settings" title="ログイン画面の設定">
+<floater title="ログイン画面の設定" name="splash_screen_settings">
 	<text name="description">
 		ログイン画面の表示オプションをここで設定してください。これらの設定は、ビューアを次回再起動したときから有効になります。
 	</text>

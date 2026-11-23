@@ -592,6 +592,7 @@ private:
     bool mDecoded;
     bool mWritten;
     bool mNeedsAux;
+    bool mBlacklisted; // <FS/> Asset Blacklist
     bool mHaveAllData;
     bool mInLocalCache;
     bool mInCache;
@@ -938,6 +939,7 @@ LLTextureFetchWorker::LLTextureFetchWorker(LLTextureFetch* fetcher,
       mDecoded(false),
       mWritten(false),
       mNeedsAux(false),
+      mBlacklisted(false), // <FS/> Asset Blacklist
       mHaveAllData(false),
       mInLocalCache(false),
       mInCache(false),
@@ -971,6 +973,7 @@ LLTextureFetchWorker::LLTextureFetchWorker(LLTextureFetch* fetcher,
 
     mType = host.isOk() ? LLImageBase::TYPE_AVATAR_BAKE : LLImageBase::TYPE_NORMAL;
 //  LL_INFOS(LOG_TXT) << "Create: " << mID << " mHost:" << host << " Discard=" << discard << LL_ENDL;
+    mBlacklisted = FSAssetBlacklist::getInstance()->isBlacklisted(mID, LLAssetType::AT_TEXTURE); // <FS/> Asset Blacklist
     if (!mFetcher->mDebugPause)
     {
         addWork(0);
@@ -1208,7 +1211,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
         LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("tfwdw - INIT"); //<FS:Beq/> fix incorrect category
 
         // <FS> Asset Blacklist
-        if (FSAssetBlacklist::getInstance()->isBlacklisted(mID, LLAssetType::AT_TEXTURE))
+        if (mBlacklisted)
         {
             LL_INFOS() << "Blacklisted texture asset blocked." << LL_ENDL;
             mState = DONE;
@@ -2701,7 +2704,7 @@ void LLTextureFetchWorker::recordTextureDone(bool is_http, F64 byte_count)
 
 std::string LLTextureFetch::getStateString(S32 state)
 {
-    if (state < 0 || state > sizeof(e_state_name) / sizeof(char*))
+    if (state < 0 || (size_t)state >= sizeof(e_state_name) / sizeof(char*))
     {
         return llformat("%d", state);
     }
@@ -2878,6 +2881,7 @@ S32 LLTextureFetch::createRequest(FTType f_type, const std::string& url, const L
         }
         worker->mActiveCount++;
         worker->mNeedsAux = needs_aux;
+        worker->mBlacklisted = FSAssetBlacklist::getInstance()->isBlacklisted(id, LLAssetType::AT_TEXTURE); // <FS/> Asset Blacklist
         worker->setImagePriority(priority);
         worker->setDesiredDiscard(desired_discard, desired_size);
         worker->setCanUseHTTP(can_use_http);

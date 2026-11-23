@@ -3,14 +3,14 @@
 	<accordion name="history_accordion">
 		<no_matched_tabs_text name="no_matched_teleports_msg" value="お探しのものは見つかりましたか？[secondlife:///app/search/places/[SEARCH_TERM] 検索]をお試しください。"/>
 		<no_visible_tabs_text name="no_teleports_msg" value="テレポートの履歴には何も情報がありません。[secondlife:///app/search/places/ 検索]をお試しください。"/>
-		<accordion_tab name="today" title="今日"/>
-		<accordion_tab name="yesterday" title="昨日"/>
-		<accordion_tab name="2_days_ago" title="一昨日"/>
-		<accordion_tab name="3_days_ago" title="３日前"/>
-		<accordion_tab name="4_days_ago" title="４日前"/>
-		<accordion_tab name="5_days_ago" title="５日前"/>
-		<accordion_tab name="6_days_and_older" title="６日以上前"/>
-		<accordion_tab name="1_month_and_older" title="１ヶ月以上前"/>
-		<accordion_tab name="6_months_and_older" title="半年以上前"/>
+		<accordion_tab title="今日" name="today"/>
+		<accordion_tab title="昨日" name="yesterday"/>
+		<accordion_tab title="一昨日" name="2_days_ago"/>
+		<accordion_tab title="３日前" name="3_days_ago"/>
+		<accordion_tab title="４日前" name="4_days_ago"/>
+		<accordion_tab title="５日前" name="5_days_ago"/>
+		<accordion_tab title="６日以上前" name="6_days_and_older"/>
+		<accordion_tab title="１ヶ月以上前" name="1_month_and_older"/>
+		<accordion_tab title="半年以上前" name="6_months_and_older"/>
 	</accordion>
 </panel>

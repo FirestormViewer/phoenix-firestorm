@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater title="レーティング" name="floater_maturity_dialog">
+	<text name="location_rated_lbl">選択した場所のレーティングはAdultです。</text>
+	<text name="current_maturity_lbl">現在のレーティング設定にはAdultコンテンツが含まれていません。許可すると設定が更新されます。</text>
+	<button label="コンテンツを許可" name="continue_btn"/>
+	<button label="キャンセル" name="cancel_btn"/>
+	<text name="learn_more_lbl">レーティングについて[https://lindenlab.freshdesk.com/support/solutions/articles/31000135220-i-can-t-access-adult-land-and-content- 詳しく見る]</text>
+</floater>
