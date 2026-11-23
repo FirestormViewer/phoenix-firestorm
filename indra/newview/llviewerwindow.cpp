@@ -4907,6 +4907,10 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
     }
 
     LLVOVolume* vovolume = drawable->getVOVolume();
+    if (!vovolume)
+    {
+        return;
+    }
 
     // phsyics_type is the user selected prim property (None, Prim, Convex)
     U8 physics_type = vovolume->getPhysicsShapeType();
