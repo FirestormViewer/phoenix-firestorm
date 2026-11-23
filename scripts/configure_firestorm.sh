@@ -644,10 +644,10 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
             echo $JOBS
         fi
         if [ $WANTS_NINJA -eq $TRUE ] ; then
-            ninja -j $JOBS | tee -a "$LOG"
+            ninja -j $JOBS 2>&1 | tee -a "$LOG"
             build_status=${PIPESTATUS[0]}
         else
-            make -j $JOBS | tee -a "$LOG"
+            make -j $JOBS 2>&1 | tee -a "$LOG"
             build_status=${PIPESTATUS[0]}
         fi
     elif [ $TARGET_PLATFORM == "windows" ] ; then
