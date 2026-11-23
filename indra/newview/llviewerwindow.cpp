@@ -5285,7 +5285,9 @@ void LLViewerWindow::renderSelections( bool for_gl_pick, bool pick_parcel_walls,
                 {
                     virtual bool apply(LLViewerObject* object)
                     {
+                        gGL.pushMatrix();
                         renderOnePhysicsShape(object);
+                        gGL.popMatrix();
                         return true;
                     }
                 } func;
