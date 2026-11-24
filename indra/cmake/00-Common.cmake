@@ -34,8 +34,10 @@ if (DARWIN)
   # linker. Strip the verbatim flag here so it can't conflict with the
   # clamped deployment target.
   string(REGEX REPLACE "-mmacosx-version-min=[0-9.]+" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  // <FS:Melodey> Fix macOS deployment target flag conflict in configuration-specific compiler flags
   string(REGEX REPLACE "-mmacosx-version-min=[0-9.]+" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
   string(REGEX REPLACE "-mmacosx-version-min=[0-9.]+" "" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+  // </FS:Melodey>
 endif (DARWIN)
 
 # Given that, all the flags you see added below are flags NOT present in
