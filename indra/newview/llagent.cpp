@@ -1088,13 +1088,6 @@ void LLAgent::toggleFlying()
         LLToolPie::instance().stopClickToWalk();
     }
 
-    // <FS:Ansariel> Chalice Yao's crouch toggle
-    if (gSavedPerAccountSettings.getBOOL("FSCrouchToggleStatus"))
-    {
-        gSavedPerAccountSettings.setBOOL("FSCrouchToggleStatus", false);
-    }
-    // </FS:Ansariel>
-
     bool fly = !gAgent.getFlying();
 
     gAgent.mMoveTimer.reset();
