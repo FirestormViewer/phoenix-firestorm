@@ -3097,6 +3097,7 @@ and report the problem.
   <string name="FSCmdLineCamBookmarkAdded">Camera bookmark &apos;[NAME]&apos; added: [LINK]</string>
   <string name="FSCmdLineCamBookmarkGo">Going to the camera bookmark &apos;[NAME]&apos;.</string>
   <string name="FSCmdLineCamBookmarkNotFound">No camera bookmark matches &apos;[NAME]&apos;.</string>
+  <string name="FSCmdLineCamBookmarkRlvLocation">Cannot print camera link: regions are hidden by RLVa.</string>
   <string name="FSCmdLineCamTourNotFound">No camera tour matches &apos;[NAME]&apos;.</string>
   <string name="FSCmdLineCamTourPlaying">Playing the camera tour &apos;[NAME]&apos;. Press ESC to end it.</string>
   <string name="FSCmdLineCamTourStopped">Camera tour stopped.</string>

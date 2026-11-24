@@ -53,6 +53,7 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
+#include "llworldmap.h"
 #include "llworldmapmessage.h"
 #include "rlvactions.h"
 #include "rlvcommon.h"
@@ -100,23 +101,6 @@ namespace
     F32 sFovBefore = 0.f;
     F32 sFovSet = 0.f;
 
-    bool parse_number(std::string text, F32& value)
-    {
-        LLStringUtil::trim(text);
-        if (text.empty())
-        {
-            return false;
-        }
-        char* end = nullptr;
-        const double parsed = strtod(text.c_str(), &end);
-        if (!end || *end != '\0' || !std::isfinite(parsed))
-        {
-            return false;
-        }
-        value = (F32)parsed;
-        return std::isfinite(value);
-    }
-
     // "x,y,z"
     bool parse_vector(const std::string& text, LLVector3& value)
     {
@@ -128,7 +112,7 @@ namespace
         }
         for (S32 i = 0; i < 3; ++i)
         {
-            if (!parse_number(parts[i], value.mV[i]))
+            if (!FSCameraLinks::parseNumber(parts[i], value.mV[i]))
             {
                 return false;
             }
@@ -673,7 +657,15 @@ namespace
         // Teleport to where the avatar stood when the link was made, or else to the camera's x and y at ground level
         const LLVector3& spot = sPendingView.mHasAvatarPos ? sPendingView.mAvatarPos : sPendingView.mPos;
         const F32 landing_z = sPendingView.mHasAvatarPos ? llmax(sPendingView.mAvatarPos.mV[VZ], 0.f) : 0.f;
-        LLVector3 landing(llclamp(spot.mV[VX], 1.f, 255.f), llclamp(spot.mV[VY], 1.f, 255.f), landing_z);
+        // The map reply that brought the handle also recorded the region's size (OpenSim var regions are larger than 256m)
+        F32 width_x = REGION_WIDTH_METERS;
+        F32 width_y = REGION_WIDTH_METERS;
+        if (const LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromHandle(region_handle))
+        {
+            width_x = llmax((F32)info->getSizeX(), REGION_WIDTH_METERS);
+            width_y = llmax((F32)info->getSizeY(), REGION_WIDTH_METERS);
+        }
+        LLVector3 landing(llclamp(spot.mV[VX], 1.f, width_x - 1.f), llclamp(spot.mV[VY], 1.f, width_y - 1.f), landing_z);
         const LLVector3d pos_global = from_region_handle(region_handle) + LLVector3d(landing);
 
         sPendingTimer.reset();
@@ -787,7 +779,7 @@ namespace FSCameraLinks
         LLVector3 pos;
         for (S32 i = 0; i < 3; ++i)
         {
-            if (!parse_number(tokens[i + 1].asString(), pos.mV[i]))
+            if (!FSCameraLinks::parseNumber(tokens[i + 1].asString(), pos.mV[i]))
             {
                 return false;
             }
@@ -813,7 +805,7 @@ namespace FSCameraLinks
         F32 fov = 0.f;
         if (query_map.has("fov"))
         {
-            if (!parse_number(query_map["fov"].asString(), fov) || !in_range(fov, MIN_FOV_DEG, MAX_FOV_DEG))
+            if (!FSCameraLinks::parseNumber(query_map["fov"].asString(), fov) || !in_range(fov, MIN_FOV_DEG, MAX_FOV_DEG))
             {
                 return false;
             }
@@ -822,7 +814,7 @@ namespace FSCameraLinks
         F32 roll = 0.f;
         if (query_map.has("roll"))
         {
-            if (!parse_number(query_map["roll"].asString(), roll) || !in_range(roll, -MAX_ROLL_INPUT_DEG, MAX_ROLL_INPUT_DEG))
+            if (!FSCameraLinks::parseNumber(query_map["roll"].asString(), roll) || !in_range(roll, -MAX_ROLL_INPUT_DEG, MAX_ROLL_INPUT_DEG))
             {
                 return false;
             }
@@ -1059,6 +1051,23 @@ namespace FSCameraLinks
         LLNotificationsUtil::add("FSCameraLinkCopied", args);
     }
 
+    bool parseNumber(std::string text, F32& value)
+    {
+        LLStringUtil::trim(text);
+        if (text.empty())
+        {
+            return false;
+        }
+        char* end = nullptr;
+        const double parsed = strtod(text.c_str(), &end);
+        if (!end || *end != '\0' || !std::isfinite(parsed))
+        {
+            return false;
+        }
+        value = (F32)parsed;
+        return std::isfinite(value);
+    }
+
     bool parseCamPos(const std::string& text, CamPos& out)
     {
         const size_t first_pipe = text.find('|');
@@ -1136,11 +1145,6 @@ namespace FSCameraTour
     LLTimer sTourTimer;
     boost::signals2::signal<void()> sTourChanged;
 
-    constexpr F32 MAX_TOUR_TRAVEL = 60.f;
-    constexpr F32 MAX_TOUR_HOLD = 600.f;
-    constexpr F32 MIN_TOUR_SPEED = 0.1f;
-    constexpr F32 MAX_TOUR_SPEED = 10.f;
-
     F32 smoothstep(F32 u)
     {
         u = llclamp(u, 0.f, 1.f);
@@ -1217,7 +1221,7 @@ namespace FSCameraTour
                 pose.mPos = base.mFocus + (base.mPos - base.mFocus) * (1.0 - llclamp(amount, 0.0, 95.0) / 100.0 * s);
                 break;
             case TourMove::PULL_OUT:
-                pose.mPos = base.mFocus + (base.mPos - base.mFocus) * (1.0 + llclamp(amount, 0.0, 1000.0) / 100.0 * s);
+                pose.mPos = base.mFocus + (base.mPos - base.mFocus) * (1.0 + llclamp(amount, 0.0, (F64)FSCameraLinks::TOUR_MAX_AMOUNT) / 100.0 * s);
                 break;
             case TourMove::RISE:
             case TourMove::SINK:
@@ -1573,13 +1577,13 @@ namespace FSCameraLinks
         }
 
         sTourOptions = options;
-        sTourOptions.mSpeed = llclamp(options.mSpeed, MIN_TOUR_SPEED, MAX_TOUR_SPEED);
+        sTourOptions.mSpeed = llclamp(options.mSpeed, FSCameraLinks::TOUR_MIN_SPEED, FSCameraLinks::TOUR_MAX_SPEED);
         sTourStops = stops;
         for (TourStop& stop : sTourStops)
         {
-            stop.mTravel = llclamp(stop.mTravel, 0.f, MAX_TOUR_TRAVEL) / sTourOptions.mSpeed;
-            stop.mHold = llclamp(stop.mHold, 0.f, MAX_TOUR_HOLD) / sTourOptions.mSpeed;
-            stop.mAmount = llmax(stop.mAmount, 0.f);
+            stop.mTravel = llclamp(stop.mTravel, 0.f, FSCameraLinks::TOUR_MAX_TRAVEL) / sTourOptions.mSpeed;
+            stop.mHold = llclamp(stop.mHold, 0.f, FSCameraLinks::TOUR_MAX_HOLD) / sTourOptions.mSpeed;
+            stop.mAmount = llclamp(stop.mAmount, 0.f, FSCameraLinks::TOUR_MAX_AMOUNT);
         }
         sTourSkipped = 0;
         for (const TourStop& stop : stops)

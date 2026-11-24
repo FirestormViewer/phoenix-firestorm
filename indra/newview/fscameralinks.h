@@ -108,6 +108,9 @@ namespace FSCameraLinks
         F32         roll = 0.f;
         bool        has_roll = false;
     };
+    // A whole string as a finite number, surrounding spaces allowed
+    bool parseNumber(std::string text, F32& value);
+
     bool parseCamPos(const std::string& text, CamPos& out);
     std::string formatCamPos(const LLVector3& pos, const LLVector3& focus, F32 roll);
 
@@ -158,6 +161,13 @@ namespace FSCameraLinks
     };
     std::string tourRepeatName(TourRepeat repeat);
     bool parseTourRepeat(const std::string& name, TourRepeat& repeat);
+
+    // Limits of tour stops and options, shared by playback and the bookmarks floater
+    constexpr F32 TOUR_MAX_TRAVEL = 60.f;       // seconds
+    constexpr F32 TOUR_MAX_HOLD = 600.f;        // seconds
+    constexpr F32 TOUR_MAX_AMOUNT = 1000.f;     // degrees, percent or metres
+    constexpr F32 TOUR_MIN_SPEED = 0.1f;
+    constexpr F32 TOUR_MAX_SPEED = 10.f;
 
     struct TourOptions
     {

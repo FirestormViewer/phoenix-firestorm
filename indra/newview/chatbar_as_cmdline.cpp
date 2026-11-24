@@ -763,6 +763,12 @@ static void cmdline_camera_bookmark(std::string params)
     }
     else if (action == "print")
     {
+        // A link names its region, which RLVa may be hiding
+        if (RlvActions::isRlvEnabled() && !RlvActions::canShowLocation())
+        {
+            FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineCamBookmarkRlvLocation"));
+            return;
+        }
         std::string link;
         if (name.empty())
         {
@@ -813,7 +819,7 @@ static void cmdline_camera_bookmark(std::string params)
             bookmarks += (bookmarks.empty() ? "" : ", ") + store.mBookmarks[i]["name"].asString();
         }
         std::string tours;
-        for (const FSCameraTour& tour : store.mTours)
+        for (const FSCameraBookmarkTour& tour : store.mTours)
         {
             tours += (tours.empty() ? "" : ", ") + tour.mName;
         }
