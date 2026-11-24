@@ -3569,63 +3569,67 @@ void LLAgentCamera::applyRlvFlycamLimits()
         return;
     }
 
-    // @setcam_avdistmin/max and @setcam_origindistmin/max
+    // @setcam_avdistmin/max and @setcam_origindistmin/max, with the same rules as calcCameraPositionTargetGlobal():
+    // origin dist: measured from the default 3rd person camera position
+    // avatar dist: measured from the head and only applies when it is locked (min == max) or with no limit.
     if (RlvActions::isCameraDistanceClamped())
     {
-        F32 min_dist = 0.f;
-        F32 max_dist = F32_MAX;
-        F32 limit_min = 0.f;
-        F32 limit_max = F32_MAX;
-        bool clamped = false;
-        if (RlvActions::getCameraAvatarDistanceLimits(limit_min, limit_max))
-        {
-            min_dist = llmax(min_dist, limit_min);
-            max_dist = llmin(max_dist, limit_max);
-            clamped = true;
-        }
-        if (RlvActions::getCameraOriginDistanceLimits(limit_min, limit_max))
-        {
-            min_dist = llmax(min_dist, limit_min);
-            max_dist = llmin(max_dist, limit_max);
-            clamped = true;
-        }
-        min_dist = llmin(min_dist, max_dist);
+        F32 av_min = 0.f;
+        F32 av_max = F32_MAX;
+        const bool av_clamped = RlvActions::getCameraAvatarDistanceLimits(av_min, av_max);
+        const bool av_locked = av_clamped && av_min == av_max;
+        F32 origin_min = 0.f;
+        F32 origin_max = F32_MAX;
+        const bool origin_clamped = RlvActions::getCameraOriginDistanceLimits(origin_min, origin_max);
 
-        if (clamped)
+        LLVector3d flycam_position;
+        LLQuaternion flycam_rotation;
+        mFlycam.getTransform(flycam_position, flycam_rotation);
+        bool moved = false;
+
+        // Keeps the camera between min_dist and max_dist of ref_pos
+        auto clamp_to = [&](const LLVector3d& ref_pos, F32 min_dist, F32 max_dist)
         {
-            const LLVector3d avatar_cam_pos = gAgent.getPosGlobalFromAgent(
-                (isAgentAvatarValid() && gAgentAvatarp->mHeadp) ? gAgentAvatarp->mHeadp->getWorldPosition() : gAgent.getPositionAgent());
-
-            LLVector3d flycam_position;
-            LLQuaternion flycam_rotation;
-            mFlycam.getTransform(flycam_position, flycam_rotation);
-
-            const LLVector3d camera_offset = flycam_position - avatar_cam_pos;
+            const LLVector3d camera_offset = flycam_position - ref_pos;
             const F32 camera_distance = (F32)camera_offset.magVec();
-            bool moved = false;
-
             if (camera_distance > max_dist)
             {
-                flycam_position = avatar_cam_pos + (max_dist / camera_distance) * camera_offset;
+                flycam_position = ref_pos + (max_dist / camera_distance) * camera_offset;
                 moved = true;
             }
             else if (camera_distance < min_dist)
             {
                 if (camera_distance > F_APPROXIMATELY_ZERO)
                 {
-                    flycam_position = avatar_cam_pos + (min_dist / camera_distance) * camera_offset;
+                    flycam_position = ref_pos + (min_dist / camera_distance) * camera_offset;
                 }
                 else
                 {
-                    flycam_position = avatar_cam_pos + LLVector3d(LLViewerCamera::getInstance()->getAtAxis()) * min_dist;
+                    flycam_position = ref_pos - LLVector3d(LLViewerCamera::getInstance()->getAtAxis()) * min_dist;
                 }
                 moved = true;
             }
+        };
 
-            if (moved)
-            {
-                mFlycam.setTransform(flycam_position, flycam_rotation);
-            }
+        if (origin_clamped && !av_locked)
+        {
+            const LLVector3d frame_center_global = !isAgentAvatarValid() ? gAgent.getPositionGlobal()
+                                                                         : gAgent.getPosGlobalFromAgent(getAvatarRootPosition());
+            const LLVector3 offset_camera_local = mCameraZoomFraction * getCameraOffsetInitial() * getCameraOffsetScale();
+            const LLVector3d offset_camera(gAgent.getFrameAgent().rotateToAbsolute(offset_camera_local));
+            clamp_to(frame_center_global + LLVector3d(mThirdPersonHeadOffset) + offset_camera, origin_min, origin_max);
+        }
+
+        if (av_clamped && (av_locked || !origin_clamped))
+        {
+            const LLVector3d avatar_cam_pos = gAgent.getPosGlobalFromAgent(
+                (isAgentAvatarValid() && gAgentAvatarp->mHeadp) ? gAgentAvatarp->mHeadp->getWorldPosition() : gAgent.getPositionAgent());
+            clamp_to(avatar_cam_pos, av_min, av_max);
+        }
+
+        if (moved)
+        {
+            mFlycam.setTransform(flycam_position, flycam_rotation);
         }
     }
 
