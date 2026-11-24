@@ -35,4 +35,8 @@
 		<combo_box.item label="Ajoute l'élément (recommandé)" name="1"/>
 		<combo_box.item label="Porte (Supprime l'élément attaché à cet endroit)" name="0"/>
 	</combo_box>
+	<text name="paste_txt">
+		Copier et coller
+	</text>
+	<check_box label="Activer le collage des objets non copiables en tant que liens" name="paste_no_copy_as_link"/>
 </floater>
