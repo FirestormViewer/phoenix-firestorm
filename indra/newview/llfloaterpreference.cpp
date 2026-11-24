@@ -1720,13 +1720,13 @@ void LLFloaterPreference::onClickWebBrowserClearCache()
 // </FS:Ansariel>
 
 // <FS:Trish> FIRE-33025 Email notification settings button: opens the email_settings_url string of the chat
-// notices panel, which translations can localise
+// notices panel, which translations can localise, in the browser the user chose
 void LLFloaterPreference::onClickOpenEmailSettings()
 {
     LLPanel* panel = findChild<LLPanel>("ChatNotices");
     const std::string url = (panel && panel->hasString("email_settings_url")) ? panel->getString("email_settings_url")
                                                                               : std::string("https://accounts.secondlife.com/change_email");
-    LLWeb::loadURLExternal(url);
+    LLWeb::loadURL(url);
 }
 // </FS:Trish>
 

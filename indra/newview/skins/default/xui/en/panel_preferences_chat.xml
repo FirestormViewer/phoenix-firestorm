@@ -1275,6 +1275,7 @@
 		</text>
 		-->
 		<button
+		 auto_resize="true"
 		 follows="left|top"
 		 height="20"
 		 label="Open email notification settings for offline IMs..."
