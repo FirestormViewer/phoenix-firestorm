@@ -110,7 +110,17 @@ install_to_prefix() {
 
     # Copy all files from the tarball to the installation directory
     cp -a "${tarball_path}/." "$install_prefix/" || die "Failed to complete the installation!"
-    echo " - Installation completed successfully."
+    # echo " - Installation completed successfully."
+    echo " - Viewer files copied to $install_prefix." # </FS:Beq> Report completion after menu registration.
+
+    # <FS:Beq> [FIRE-37144] Both install modes use the same launcher overwrite policy.
+    local desktop_args=()
+    if [[ "$NON_INTERACTIVE" == "true" ]]; then
+        desktop_args+=(--yes)
+    fi
+    "${install_prefix}/etc/refresh_desktop_app_entry.sh" "${desktop_args[@]}" ||
+        die "Viewer files installed in $install_prefix, but desktop menu registration failed." >&2
+    # </FS:Beq>
 }
 
 # Function for user-specific installation (non-root)
@@ -139,7 +149,7 @@ homedir_install() {
     fi
 
     install_to_prefix "${install_prefix}"
-    "${install_prefix}/etc/refresh_desktop_app_entry.sh"
+    # "${install_prefix}/etc/refresh_desktop_app_entry.sh" # </FS:Beq> Handled by install_to_prefix.
 }
 
 # Function for system-wide installation (root)
@@ -150,7 +160,10 @@ root_install() {
     if [[ -n "$CUSTOM_INSTALL_DIR" ]]; then
         local install_prefix="$CUSTOM_INSTALL_DIR"
     elif [[ -n "$SUFFIX" ]]; then
-        local install_prefix="$default_prefix_$SUFFIX"
+        # <FS:Beq> Use the requested system prefix for both the viewer and its launcher.
+        # local install_prefix="$default_prefix_$SUFFIX"
+        local install_prefix="${default_prefix}_${SUFFIX}"
+        # </FS:Beq>
     else
         local install_prefix="$default_prefix"
     fi
@@ -165,10 +178,11 @@ root_install() {
 
     install_to_prefix "$install_prefix"
 
+    # <FS:Beq> [FIRE-37144] The shared desktop helper creates its destination directory.
     # Ensure the applications directory exists
-    mkdir -p /usr/local/share/applications || die "Failed to create /usr/local/share/applications"
-
-    "${install_prefix}/etc/refresh_desktop_app_entry.sh"
+    # mkdir -p /usr/local/share/applications || die "Failed to create /usr/local/share/applications"
+    # "${install_prefix}/etc/refresh_desktop_app_entry.sh"
+    # </FS:Beq>
 }
 
 # Function to parse command-line arguments

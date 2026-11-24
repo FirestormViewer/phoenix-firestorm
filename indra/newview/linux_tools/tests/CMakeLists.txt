@@ -35,3 +35,8 @@ add_test(NAME linux_wrapper_graphics_policy
         --bash "${LINUX_WRAPPER_BASH}" --wrapper "${CMAKE_CURRENT_SOURCE_DIR}/../wrapper.sh")
 set_tests_properties(linux_wrapper_syntax linux_wrapper_graphics_policy
     PROPERTIES TIMEOUT 60 LABELS "unit;linux;wrapper")
+
+add_test(NAME linux_desktop_installer
+    COMMAND "${PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/test_installer.py")
+set_tests_properties(linux_desktop_installer PROPERTIES
+    TIMEOUT 60 SKIP_RETURN_CODE 77 LABELS "unit;linux;wrapper")

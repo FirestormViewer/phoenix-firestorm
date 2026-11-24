@@ -86,8 +86,10 @@ cd "${RUN_PATH}"
 # Re-register the secondlife:// protocol handler every launch, for now.
 ./etc/register_secondlifeprotocol.sh
 
+# <FS:Beq> [FIRE-37144] Install the menu entry from install.sh or on explicit request.
 # Re-register the application with the desktop system every launch, for now.
-./etc/refresh_desktop_app_entry.sh
+# ./etc/refresh_desktop_app_entry.sh
+# </FS:Beq>
 
 ## Before we mess with LD_LIBRARY_PATH, save the old one to restore for
 ##  subprocesses that care.
