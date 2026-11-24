@@ -934,6 +934,7 @@ bool LLToolPie::handleHover(S32 x, S32 y, MASK mask)
         LLViewerObject* click_action_object = click_action_pick.getObject();
 
         // <FS:Trish> Ctrl over a HUD that Ctrl+drag can move
+        //if (click_action_object && useClickAction(mask, click_action_object, click_action_object->getRootEdit()))
         if (FSToolHudMove::movable(object, mask))
         {
             gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
@@ -1872,7 +1873,7 @@ LLTool* LLToolPie::getOverrideTool(MASK mask)
     static LLCachedControl<bool> enable_grab(gSavedSettings, "EnableGrab");
     if (enable_grab)
     {
-        // <FS:Trish> Ctrl over a HUD Ctrl+drag takes priority over an inworld rezzed objects.
+        // <FS:Trish> Ctrl over a movable HUD: the HUD Ctrl+drag takes priority over grabbing in-world objects
         if (FSToolHudMove::overMovableHUD(mask))
         {
             return LLTool::getOverrideTool(mask);

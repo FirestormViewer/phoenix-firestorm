@@ -34,7 +34,7 @@
 
 class LLPickInfo;
 
-// Ctrl+left drag moves a HUD you can modify across the screen without opening the build tools (FSCtrlDragHUDs). 
+// Ctrl+left drag moves a HUD you can modify across the screen without opening the build tools (FSCtrlDragHUDs).
 // The HUD is moved locally while dragging and sends its new position once the user lets go, for efficiency.
 class FSToolHudMove : public LLTool, public LLSingleton<FSToolHudMove>
 {

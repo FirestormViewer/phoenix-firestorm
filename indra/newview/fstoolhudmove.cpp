@@ -66,7 +66,7 @@ FSToolHudMove::FSToolHudMove()
 // static
 LLViewerObject* FSToolHudMove::movable(LLViewerObject* object, MASK mask)
 {
-    static LLCachedControl<bool> drag_huds(gSavedSettings, "FSCtrlDragHUDs", true);
+    static LLCachedControl<bool> drag_huds(gSavedSettings, "FSCtrlDragHUDs", false);
     if (!drag_huds || mask != MASK_CONTROL || !object || object->isDead() || !object->isHUDAttachment())
     {
         return nullptr;
@@ -87,7 +87,7 @@ LLViewerObject* FSToolHudMove::movable(LLViewerObject* object, MASK mask)
 // static
 bool FSToolHudMove::overMovableHUD(MASK mask)
 {
-    static LLCachedControl<bool> drag_huds(gSavedSettings, "FSCtrlDragHUDs", true);
+    static LLCachedControl<bool> drag_huds(gSavedSettings, "FSCtrlDragHUDs", false);
     if (!drag_huds || mask != MASK_CONTROL || !isAgentAvatarValid() || !gAgentAvatarp->hasHUDAttachment())
     {
         return false;
