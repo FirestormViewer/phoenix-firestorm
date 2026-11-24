@@ -15730,7 +15730,7 @@ Tracked target is gone, camera moved to initial tracking point.
    icon="notifytip.tga"
    name="FSCameraLinkTargetLost"
    type="notifytip">
-Tracked target was lost, camera left in place. Press ESC. to return. 
+Tracked target was lost, camera left in place. Press ESC. to return.
   </notification>
   <notification
    icon="notifytip.tga"

@@ -42,7 +42,7 @@ class LLSD;
 // Camera links. A link of the form
 //   secondlife:///app/camera/<Region>/<x>/<y>/<z>?focus=<fx>,<fy>,<fz>&fov=<degrees>&roll=<degrees>
 // holds a camera position and focus point in region coordinates. Clicking it moves the clicker's
-// camera there like an alt-click focus would (Esc or walking brings the camera back). 
+// camera there like an alt-click focus would (Esc or walking brings the camera back).
 // The fov and roll parts are optional. Including tp in the querystrings also marks where the avatar
 // stood when taking the link. This position is used in case a user must be teleported to view the link.
 //
@@ -164,7 +164,7 @@ namespace FSCameraLinks
         TourRepeat  mRepeat = TourRepeat::ONCE;
         bool        mCurved = false;    // a smooth curve through the stops instead of straight lines
         F32         mSpeed = 1.f;       // playback speed (multiplies all stops and motions)
-        bool        mHideUI = false;    
+        bool        mHideUI = false;
     };
 
     // Camera tour helpers

@@ -46,7 +46,7 @@ struct FSCameraBookmarkStop
 {
     std::string             mName;
     std::string             mLink;
-    F32                     mTravel = 4.f;          
+    F32                     mTravel = 4.f;
     F32                     mHold = 5.f;
     FSCameraLinks::TourMove mMove = FSCameraLinks::TourMove::NONE;
     F32                     mAmount = 0.f;

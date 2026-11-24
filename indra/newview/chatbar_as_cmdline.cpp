@@ -701,7 +701,7 @@ void cmdline_track(std::string_view params)
 // Camera bookmarks from the chat bar:
 //   cmd add [name]          the current view
 //   cmd follow [name]       the current view, following a target
-//   cmd followturn [name]   
+//   cmd followturn [name]
 //   cmd go <name>           go to a bookmark (an exact name, else the first containing it)
 //   cmd print [name]        say the link to the current view (or to a bookmark) in nearby chat
 //   cmd tour <name>         play a tour
