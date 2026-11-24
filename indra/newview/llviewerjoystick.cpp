@@ -48,6 +48,11 @@
 #include "llfocusmgr.h"
 #include "llgamecontrol.h"
 #include "llmoveview.h"
+// [RLVa:Trish]
+#include "rlvactions.h"
+#include "rlvcommon.h"
+#include "rlvhandler.h"
+// [/RLVa:Trish]
 
 #if LL_WINDOWS && !LL_MESA_HEADLESS
 // Require DirectInput version 8
@@ -358,11 +363,22 @@ LLViewerJoystick::LLViewerJoystick()
     mPerfScale = 4000.f / (F32)gSysCPU.getMHz(); // hmm.  why?
 
     mLastDeviceUUID = LLSD::Integer(1);
+
+// [RLVa:Trish]
+    mRlvBehaviourConnection = gRlvHandler.setBehaviourToggleCallback(boost::bind(&LLViewerJoystick::onRlvBehaviourToggle, this, _1, _2));
+// [/RLVa:Trish]
 }
 
 // -----------------------------------------------------------------------------
 LLViewerJoystick::~LLViewerJoystick()
 {
+// [RLVa:Trish]
+    if (mRlvBehaviourConnection.connected())
+    {
+        mRlvBehaviourConnection.disconnect();
+    }
+// [/RLVa:Trish]
+
     if (mDriverState == JDS_INITIALIZED)
     {
         terminate();
@@ -1406,6 +1422,26 @@ void LLViewerJoystick::moveFlycam(bool reset)
 }
 
 // -----------------------------------------------------------------------------
+// [RLVa:Trish] RLVa camera restrictions
+bool LLViewerJoystick::isFlycamAllowedByRlv()
+{
+    return !RlvActions::isRlvEnabled() ||
+        (!RlvActions::hasBehaviour(RLV_BHVR_SETCAM) && !RlvActions::hasBehaviour(RLV_BHVR_SETCAM_UNLOCK));
+}
+
+// Leave flycam as soon as a restriction that forbids it is applied
+void LLViewerJoystick::onRlvBehaviourToggle(ERlvBehaviour behaviour, ERlvParamType type)
+{
+    if ((RLV_BHVR_SETCAM == behaviour || RLV_BHVR_SETCAM_UNLOCK == behaviour) &&
+        gAgentCamera.isUsingFlycam() && !isFlycamAllowedByRlv())
+    {
+        toggleFlycam();
+        setCameraNeedsUpdate(true);
+    }
+}
+// [/RLVa:Trish]
+
+// -----------------------------------------------------------------------------
 bool LLViewerJoystick::toggleFlycam()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_INPUT;
@@ -1418,6 +1454,14 @@ bool LLViewerJoystick::toggleFlycam()
         LLPanelStandStopFlying::clearStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
         return false;
     }
+
+// [RLVa:Trish] Check RLVa restrictions before engaging the camera (to avoid wonkiness)
+    if (!gAgentCamera.isUsingFlycam() && !isFlycamAllowedByRlv())
+    {
+        RlvUtil::notifyBlockedGeneric();
+        return false;
+    }
+// [/RLVa:Trish]
 
     if (!gAgentCamera.isUsingFlycam())
     {

@@ -7828,6 +7828,9 @@ class LLViewEnableJoystickFlycam : public view_listener_t
     bool handleEvent(const LLSD& userdata)
     {
         bool new_value = (gSavedSettings.getBOOL("JoystickEnabled") && gSavedSettings.getBOOL("JoystickFlycamEnabled"));
+// [RLVa:Trish]
+        new_value = new_value && (LLViewerJoystick::getInstance()->getOverrideCamera() || LLViewerJoystick::isFlycamAllowedByRlv());
+// [/RLVa:Trish]
         return new_value;
     }
 };
