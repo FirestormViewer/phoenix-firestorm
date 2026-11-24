@@ -7823,15 +7823,6 @@ void handle_force_delete()
     LLSelectMgr::getInstance()->selectForceDelete();
 }
 
-class LLViewEnableJoystickFlycam : public view_listener_t
-{
-    bool handleEvent(const LLSD& userdata)
-    {
-        bool new_value = (gSavedSettings.getBOOL("JoystickEnabled") && gSavedSettings.getBOOL("JoystickFlycamEnabled"));
-        return new_value;
-    }
-};
-
 class LLViewEnableLastChatter : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -13134,7 +13125,6 @@ void initialize_menus()
     view_listener_t::addMenu(new LLViewCheckToggleUI(), "View.CheckToggleUI"); // <FS:Ansariel> Notification not showing if hiding the UI
 
     view_listener_t::addMenu(new LLViewEnableMouselook(), "View.EnableMouselook");
-    view_listener_t::addMenu(new LLViewEnableJoystickFlycam(), "View.EnableJoystickFlycam");
     view_listener_t::addMenu(new LLViewEnableLastChatter(), "View.EnableLastChatter");
 
     view_listener_t::addMenu(new LLViewCheckJoystickFlycam(), "View.CheckJoystickFlycam");
