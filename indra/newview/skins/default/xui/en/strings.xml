@@ -3093,11 +3093,11 @@ and report the problem.
   <string name="FSCmdLineTrackPosNotFound">Could not find avatar matching &apos;[NAME]&apos; on radar.</string>
   <string name="FSCmdLineTrackPosMapError">Could not open the world map.</string>
 
-  <string name="FSCmdLineCamBookmarkUsage">Camera bookmarks (usage: cmd add [name], cmd follow [name], cmd followturn [name], cmd go name, cmd print [name], cmd tour name, cmd stop, cmd list). Print says the link to the current view, or to a bookmark, in nearby chat. Follow keeps the camera relative to what it is on: an alt-click focus, the selected object or your avatar; followturn also turns with it. The command word is the FSCmdLineCamBookmark setting.</string>
+  <string name="FSCmdLineCamBookmarkUsage">Camera bookmarks (usage: cmd add [name], cmd follow [name], cmd followturn [name], cmd go [name], cmd print [name], cmd tour [name], cmd stop, cmd list). Print says the link to the current view, or to a bookmark, in nearby chat. Follow keeps the camera relative to what it is on: an alt-click focus, the selected object or your avatar; followturn also turns with it. The command word is the FSCmdLineCamBookmark setting.</string>
   <string name="FSCmdLineCamBookmarkAdded">Camera bookmark &apos;[NAME]&apos; added: [LINK]</string>
   <string name="FSCmdLineCamBookmarkGo">Going to the camera bookmark &apos;[NAME]&apos;.</string>
   <string name="FSCmdLineCamBookmarkNotFound">No camera bookmark matches &apos;[NAME]&apos;.</string>
-  <string name="FSCmdLineCamBookmarkRlvLocation">Cannot print camera link: regions are hidden by RLVa.</string>
+  <string name="FSCmdLineCamBookmarkRlvLocation">Cannot print camera link: Region names are hidden by RLVa.</string>
   <string name="FSCmdLineCamTourNotFound">No camera tour matches &apos;[NAME]&apos;.</string>
   <string name="FSCmdLineCamTourPlaying">Playing the camera tour &apos;[NAME]&apos;. Press ESC to end it.</string>
   <string name="FSCmdLineCamTourStopped">Camera tour stopped.</string>

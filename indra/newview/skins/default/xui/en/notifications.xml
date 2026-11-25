@@ -15711,7 +15711,7 @@ Camera link cannot be followed: teleports are restricted by RLVa.
    icon="notifytip.tga"
    name="FSCameraLinkRlvLocation"
    type="notifytip">
-Cannot create camera link: regions are hidden by RLVa.
+Cannot create camera link: region names are hidden by RLVa.
     <tag>fail</tag>
   </notification>
   <notification

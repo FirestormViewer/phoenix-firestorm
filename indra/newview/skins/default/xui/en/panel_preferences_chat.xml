@@ -2,7 +2,7 @@
 <panel
  border="true"
  follows="all"
- height="480"
+ height="514"
  layout="topleft"
  left="1"
  top="1"
@@ -2260,7 +2260,7 @@
 	  height="16"
 	  name="FSCmdLineCamBookmark_txt"
 	  width="235">
-	  Camera bookmarks (usage: cmd add | go)
+	  Camera bookmarks (cmd add | go)
 	</text>
 	<line_editor
 	  enabled_control="FSCmdLine"
@@ -2269,7 +2269,7 @@
 	  height="18"
 	  max_length_chars="256"
 	  name="FSCmdLineCamBookmark"
-	  tool_tip="cmd add [name], cmd follow [name], cmd followturn [name]: bookmark the current view. cmd go name: go to a bookmark. cmd print [name]: say a camera link in nearby chat. cmd tour name: play a tour. cmd stop: end the tour. cmd list: list the bookmarks."
+	  tool_tip="cmd add [name], cmd follow [name], cmd followturn [name]: bookmark the current view. cmd go [name]: go to a bookmark. cmd print [name]: say a camera link in nearby chat. cmd tour [name]: play a tour. cmd stop: end the tour. cmd list: list the bookmarks."
 	  control_name="FSCmdLineCamBookmark"
 	  width="200"/>
 	<!--cao-->
