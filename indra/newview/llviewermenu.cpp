@@ -7823,17 +7823,15 @@ void handle_force_delete()
     LLSelectMgr::getInstance()->selectForceDelete();
 }
 
+// [RLVa:Trish] Flycam no longer needs a joystick to be toggled, but RLVa camera restrictions can still block turning it on
 class LLViewEnableJoystickFlycam : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        bool new_value = (gSavedSettings.getBOOL("JoystickEnabled") && gSavedSettings.getBOOL("JoystickFlycamEnabled"));
-// [RLVa:Trish]
-        new_value = new_value && (LLViewerJoystick::getInstance()->getOverrideCamera() || LLViewerJoystick::isFlycamAllowedByRlv());
-// [/RLVa:Trish]
-        return new_value;
+        return LLViewerJoystick::getInstance()->getOverrideCamera() || LLViewerJoystick::isFlycamAllowedByRlv();
     }
 };
+// [/RLVa:Trish]
 
 class LLViewEnableLastChatter : public view_listener_t
 {
@@ -13137,7 +13135,9 @@ void initialize_menus()
     view_listener_t::addMenu(new LLViewCheckToggleUI(), "View.CheckToggleUI"); // <FS:Ansariel> Notification not showing if hiding the UI
 
     view_listener_t::addMenu(new LLViewEnableMouselook(), "View.EnableMouselook");
+// [RLVa:Trish]
     view_listener_t::addMenu(new LLViewEnableJoystickFlycam(), "View.EnableJoystickFlycam");
+// [/RLVa:Trish]
     view_listener_t::addMenu(new LLViewEnableLastChatter(), "View.EnableLastChatter");
 
     view_listener_t::addMenu(new LLViewCheckJoystickFlycam(), "View.CheckJoystickFlycam");

@@ -255,6 +255,8 @@ public:
     void onClickInventoryClearCache();
     // <FS:Ansariel> Clear web browser cache button
     void onClickWebBrowserClearCache();
+    // <FS:Trish> FIRE-33025 Email notification settings button
+    void onClickOpenEmailSettings();
 
     // <FS:Ansariel> Improved graphics preferences
     void updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box);

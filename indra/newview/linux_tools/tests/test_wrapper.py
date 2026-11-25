@@ -104,6 +104,20 @@ class WrapperTests(unittest.TestCase):
         for name in ("WAYLAND_DISPLAY", "XDG_SESSION_TYPE", "DISPLAY"):
             self.assertEqual(actual.get(name), settings.get(name), name)
 
+    def test_launch_preserves_desktop_menu(self):
+        refresh = self.root / "etc" / "refresh_desktop_app_entry.sh"
+        refresh.write_text('#!/bin/sh\ntouch "$HOME/refresh-called"\n')
+        entry = self.root / ".local/share/applications/firestorm-viewer.desktop"
+        self.launch({})
+        self.assertFalse(entry.exists())
+        entry.parent.mkdir(parents=True, exist_ok=True)
+        entry.write_text("[Desktop Entry]\nExec=my-nvidia-launcher\n")
+        entry.chmod(0o755)
+        self.launch({})
+        self.assertEqual(entry.read_text(), "[Desktop Entry]\nExec=my-nvidia-launcher\n")
+        self.assertEqual(entry.stat().st_mode & 0o777, 0o755)
+        self.assertFalse((self.root / "refresh-called").exists())
+
     def test_hardware_detection(self):
         cases = [
             ("no devices", [], False),
