@@ -303,6 +303,10 @@
 			<text  name="FSCmdLinePasteCam_txt">
 				Kam.-param. setzen (cmd pos|focus|roll)
 			</text>
+			<text  name="FSCmdLineCamBookmark_txt">
+				Kamera-Lesezeichen (cmd add | go)
+			</text>
+			<line_editor tool_tip="cmd add [Name], cmd follow [Name], cmd followturn [Name]: Aktuelle Ansicht als Lesezeichen setzen. cmd go name: Zu Lesezeichen gehen. cmd print [Name]: Kamera-Link in Chat ausgeben. cmd tour [Name]: Eine Tour aspielen. cmd stop: Tour beenden. cmd list: Lesezeichen auflisten." name="FSCmdLineCamBookmark"/>
 			<text name="FSCmdLineAO_txt">
 				AO ein-/ausschalten (Befehl: cmd on/off)
 			</text>

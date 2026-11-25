@@ -55,6 +55,8 @@
 		</menu>
 		<menu_item_check label="Steuerung" name="Movement Controls"/>
 		<menu_item_check label="Kamerasteuerung" name="Camera Controls"/>
+		<menu_item_call label="Kamera-Link kopieren" name="Copy Camera Link"/>
+		<menu_item_call label="Kamera-Lesezeichen" name="Camera Bookmarks"/>
 		<menu label="Avatar-Befinden" name="avhealth">
 			<menu_item_call label="Avatar-Animationen stoppen" name="Stop Animating My Avatar"/>
 			<menu_item_call label="Avatar-Animationen stoppen &amp; Skripten Rechte entziehen" name="Stop Animating My Avatar With Revoke"/>

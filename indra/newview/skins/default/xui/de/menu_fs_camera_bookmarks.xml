@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Camera Bookmarks popup">
+	<menu_item_call label="Gehen" name="go"/>
+	<menu_item_call label="Link kopieren" name="copy"/>
+	<menu_item_call label="Zur Tour hinzufügen" name="add_to_tour"/>
+	<menu_item_call label="Umbenennen..." name="rename"/>
+	<menu_item_call label="Setze aktuelle Ansicht" name="update"/>
+	<menu_item_call label="Löschen" name="delete"/>
+</context_menu>

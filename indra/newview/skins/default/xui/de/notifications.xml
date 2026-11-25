@@ -6193,5 +6193,114 @@ Hierdurch wird der Ordner und die Favoriten-Verknüpfungen geslöscht. Die Origi
 Ordner-Namen dürfen kein  / oder \ enthalten.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-
+	<notification name="FSCameraLinkTeleport">
+		Die Kamerasicht ist in &lt;nolink&gt;[REGION]&lt;/nolink&gt;. Teleportieren und die Ansicht nach Ankunft setzen?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Teleportieren"/>
+	</notification>
+	<notification name="FSCameraLinkCopied">
+		Kamera-Link für &lt;nolink&gt;[REGION]&lt;/nolink&gt; wurde in die Zwischenablage kopiert.
+	</notification>
+	<notification name="FSCameraLinkInvalid">
+		Die Kamera-Link ist ungültig: Region, Position, Fokuspunkt oder Blickfeld fehlt oder ist außerhalb das gültigen Bereichs.
+	</notification>
+	<notification name="FSCameraLinkNoRegion">
+		Kamera-Link kann nicht erstellt werden: Die Kamera befindet sich nicht in einer Region.
+	</notification>
+	<notification name="FSCameraLinkRlvCamera">
+		Kamera-Link kann nicht gefolgt werden: Ihre Kamera ist durch RLVa beschränkt.
+	</notification>
+	<notification name="FSCameraLinkRlvDistance">
+		Kamera-Link kann nicht gefolgt werden: Die Kamerasicht ist außerhalb der RLVa-Beschränkung.
+	</notification>
+	<notification name="FSCameraLinkRlvTeleport">
+		Kamera-Link kann nicht gefolgt werden: Teleports sind durch RLVa beschränkt.
+	</notification>
+	<notification name="FSCameraLinkRlvLocation">
+		Kamera-Link kann nicht erstellt werden: Regionsnamen sind durch RLVa versteckt.
+	</notification>
+	<notification name="FSCameraLinkGaveUp">
+		Die Kamerasicht in &lt;nolink&gt;[REGION]&lt;/nolink&gt; wurde abgebrochen: Sie haben die Region nicht innerhalb von einer Minute erreicht.
+	</notification>
+	<notification name="FSCameraLinkTargetGone">
+		Das verfolgte Ziel existiert nicht mehr; Kamera wurde auf den initialen Verfolgungspunkt zurückgesetzt.
+	</notification>
+	<notification name="FSCameraLinkTargetLost">
+		Das verfolgte Ziel wurde verloren; Kamera wurde auf dem letzten Punkt zurückgelassen. ESC zum Beenden.
+	</notification>
+	<notification name="FSCameraLinkNoTarget">
+		Nichts zum Verfolgen: Zunächst Alt-Klick auf Objekt oder Avatar durchführen (oder Objekt auswählen), dann Kamerasicht speichern.
+	</notification>
+	<notification name="FSCameraLinkTargetTooFar">
+		Ziel ist zu weit von der Kamera entfernt. Zunächst Kamera näher an das Ziel bewegen.
+	</notification>
+	<notification name="FSCameraTourInterfaceHidden">
+		Die Benutzeroberläche ist während der Tour ausgeblendet. ESC beendet die Tour und bringt die Oberfläche zurück.
+	</notification>
+	<notification name="FSCameraTourNoneInReach">
+		Die Tour kann von hier aus nicht abgespeitl werden: Die Stops benötigen einen Teleport oder außerhalb der RLVa-Kamerabeschränkungen. Bewegen Sie sich näher an den Startpunkt.
+	</notification>
+	<notification name="FSCameraTourCopied">
+		Die Kamera-Tour „[NAME]“ wurde in die Zwischenablage kopiert (Stops: [COUNT]).
+	</notification>
+	<notification name="FSCameraTourPasted">
+		Die Kamera-Tour „[NAME]“ wurde aus der Zwischenablage hinzugefügt (Stops: [COUNT]).
+	</notification>
+	<notification name="FSCameraLinksCopied">
+		Kamera-Verknüpfungen wurden in die Zwischenablage kopiert.
+	</notification>
+	<notification label="Kamera-Tour" name="FSCameraTourName">
+		Name der Kamera-Tour:
+		<form name="form">
+			<input name="message">
+				[NAME]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification label="Kamera-Tour" name="FSCameraTourStopName">
+		Name des Tour-Stops:
+		<form name="form">
+			<input name="message">
+				[NAME]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="FSCameraTourDelete">
+		Kamera-Tour „[NAME]“ löschen? Die Lesezeichen bleiben weiterhin in der Lesezeichenliste erhalten.
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Löschen"/>
+	</notification>
+	<notification name="FSCameraBookmarkPasteNone">
+		Es befinden sich keine gültigen Kamera-Verknüpfungen zum Einfügen in der Zwischenablage.
+	</notification>
+	<notification name="FSCameraBookmarkAlreadySaved">
+		Die Kamera-Sicht wurde bereits als Lesezeichen gespeichert.
+	</notification>
+	<notification name="FSCameraBookmarksPasted">
+		Kamera-Lesezeichen aus Zwischenablage hinzugefügt: [ADDED]. Bereits gespeichert: [SKIPPED]. Ungültig: [INVALID].
+	</notification>
+	<notification label="Kamera-Lesezeichen" name="FSCameraBookmarkName">
+		Name des Kamera-Lesezeichens:
+		<form name="form">
+			<input name="message">
+				[NAME]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="FSCameraBookmarkDelete">
+		Kamera-Lesezeichen „[NAME]“ löschen?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Löschen"/>
+	</notification>
+	<notification name="FSCameraBookmarksDelete">
+		Ausgewählte [COUNT] Kamera-Lesezeichen löschen?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Löschen"/>
+	</notification>
+	<notification name="FSCameraBookmarkUpdate">
+		Kamera-Lesezeichen „[NAME]“ auf die aktuelle Kamera-Sicht setzen? Die alte Sicht wird ersetzt.
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Ersetzen"/>
+	</notification>
 </notifications>

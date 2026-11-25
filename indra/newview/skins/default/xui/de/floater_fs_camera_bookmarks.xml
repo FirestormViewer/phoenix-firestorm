@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_camera_bookmarks">
+    <string name="invalid_link">(ungültiger Link)</string>
+    <string name="following">Folge [NAME]</string>
+    <string name="following_unnamed">Folge einem Objekt</string>
+    <string name="show_tours">Touren &gt;&gt;</string>
+    <string name="hide_tours">&lt;&lt; Touren</string>
+    <string name="compact_view">Kompakt</string>
+    <string name="full_view">Vollständig</string>
+    <string name="no_tours">(noch keine Touren)</string>
+    <string name="new_tour_name">Meine Tour</string>
+    <string name="pasted_tour_name">Eingefügte Tour</string>
+    <string name="tour_play">Abspielen</string>
+    <string name="tour_stop">Stoppen</string>
+    <string name="tour_status">[TOUR]: Stop [NUMBER] von [COUNT], [NAME]</string>
+    <string name="tour_status_skipped">[TOUR]: Stop [NUMBER] von [COUNT], [NAME] ([SKIPPED] außer Reichweite, übersprungen)</string>
+    <string name="tour_duration">Stops: [COUNT]. Sobald abgeschlossen: [TIME]</string>
+    <string name="duration_seconds">[SECONDS] s</string>
+    <string name="duration_minutes">[MINUTES]:[SECONDS]</string>
+    <string name="invalid_stop">[NAME] (ungültiger Link)</string>
+    <string name="unit_degrees">Grad</string>
+    <string name="unit_percent">%</string>
+    <string name="unit_metres">m</string>
+    <string name="move_none">-</string>
+    <string name="move_orbit_left">Orbit links [AMOUNT]°</string>
+    <string name="move_orbit_right">Orbit rechts [AMOUNT]°</string>
+    <string name="move_pan_left">Schwenken links [AMOUNT]°</string>
+    <string name="move_pan_right">Schwenken rechts [AMOUNT]°</string>
+    <string name="move_push_in">Heranfahren [AMOUNT]%</string>
+    <string name="move_pull_out">Herausfahren [AMOUNT]%</string>
+    <string name="move_rise">Steigen [AMOUNT] m</string>
+    <string name="move_sink">Sinken [AMOUNT] m</string>
+    <panel name="bookmarks_panel">
+        <filter_editor name="filter" label="Filtern nach Name oder Region" right="-176"/>
+        <button name="compact_toggle" label="Kompakt" tool_tip="Kompakt-Modus zeigt nur die Lesezeichen-Liste." width="78"/>
+        <button name="tours_toggle" label="&lt;&lt; Touren" tool_tip="Touren-Panel anzeigen oder verstecken."/>
+        <scroll_list name="bookmarks" tool_tip="Doppelklicken um zur Ansicht zu gehen: Eine Ansicht in einer anderen Region bietet zuerst einen Teleport an, eine Ansicht, die etwas folgt, folgt diesem. Rechts-Klick für weitere Optionen. Mehrere mit Strg oder Umschalten auswählen, um diese zu kopieren, löschen oder zu einer Tour zusammenzufügen.">
+            <scroll_list.columns name="name" label="Name"/>
+            <scroll_list.columns name="region" label="Region"/>
+        </scroll_list>
+        <button name="add_following" label="Ziel-folgende Ansicht hinzufügen" tool_tip="Speichert die aktuelle Ansicht relativ zum Fokus der Kamera: Einem Objekt oder Avatar, das/der mit Alt+Klick fokussiert wurde, einem ausgewähltem Objekt oder dem eigenen Avatar." width="216" />
+        <check_box name="follow_turns" label="Mitdrehen" tool_tip="Die Kamera dreht ebenfalls relativ zum verfolgten Ziel. Andernfalls verbleibt die Kamera in der eigenen Richtung und folgt nur."/>
+        <button name="add" label="Akt. Ansicht hinzuf." tool_tip="Speichert die aktuelle Kamerasicht unter einem Namen mitsame Blickfeld und Rollwinkel" width="120" />
+        <button name="paste" label="Link einf." tool_tip="Kamera-Link aus der Zwischenablage einfügen." width="80" />
+        <button name="go" label="Los" tool_tip="Bewegt die Kamera zur ausgewählten Ansicht. Falls einer anderen Region, erfolgt zunächst ein Teleport." width="40" />
+        <button name="copy" label="Link kopieren" tool_tip="Kopiert die ausgewählte Ansicht als Link zum Einfügen in den Chat oder einer Notizkarte. Mehrere ausgewählte werden als 'Name: Link'-Zeilen kopiert." width="105" />
+        <button name="rename" label="Umbenennen" width="88" />
+        <button name="update_view" label="Setze akt. Ansicht" tool_tip="Ersetzt die Ansicht des ausgewählten Lesenzeichens mit der aktuellen Kamerasicht." width="112" />
+        <button name="delete" label="Löschen"/>
+        <button name="move_up" label="Hoch" tool_tip="Verschiebt das ausgewählte Lesenzeichen nach oben" width="42" />
+        <button name="move_down" label="Runter" tool_tip="Verschiebt das ausgewählte Lesenzeichen nach unten"/>
+    </panel>
+    <panel name="tours_panel">
+        <text name="tour_label">Tour:</text>
+        <combo_box name="tour_combo" tool_tip="Die Tour zum Bearbeiten und Abspielen"/>
+        <button name="new_tour" label="Neu" tool_tip="Startet eine neue, leere Tour"/>
+        <button name="rename_tour" label="Umben."/>
+        <button name="delete_tour" label="Löschen"/>
+        <scroll_list name="stops" tool_tip="Die Lesezeichen der Tour. Eines oder mehrere auswählen, um das Timing und Kamerabewegung zu ändern. Doppelklicken, um zum Lesezeichen zu gehen.">
+            <scroll_list.columns name="number" label="#"/>
+            <scroll_list.columns name="name" label="Stop"/>
+            <scroll_list.columns name="fly" label="Fliegen s" tool_tip="Sekunden, um vom vorherigen Stop hierher zu fliegen" />
+            <scroll_list.columns name="hold" label="Halten s" tool_tip="Seconden hier" />
+            <scroll_list.columns name="move" label="Kamerabewegung" tool_tip="Kamerabewegung, während sie an diesem Ort ist" />
+        </scroll_list>
+        <button name="add_stops" label="Lesez. hinzuf." tool_tip="Lesezeichen aus der Liste auf der linken Seite am Ende dieser Tour in entsprechender Reihenfolge hinzufügen (falls keine Tour besteht, wird eine neue angelegt)."/>
+        <button name="add_current_stop" label="Akt. Ansicht hinzuf." tool_tip="Aktuelle Kamerasicht ans Ende der Tour hinzufügen ohne sie als Lesezeichen zu speichern" width="124"/>
+        <button name="remove_stops" label="Entfernen" tool_tip="Entfernt die ausgewählten Stops von dieser Tour." width="68" />
+        <button name="stop_up" label="Hoch" tool_tip="Verschiebt den ausgewählte Stop nach oben" width="42" />
+        <button name="stop_down" label="Runter" tool_tip="Verschiebt den ausgewählte Stop nach unten"/>
+        <text name="stop_editor_label">Ausgewählte Stops:</text>
+        <spinner name="stop_travel" label="Fiegen s" label_width="52" tool_tip="Sekunden, die die Kamera vom vorherigen Stop zu diesem benötigt" width="100" />
+        <spinner name="stop_hold" label="Halten s" label_width="48" tool_tip="Seconds the camera stays at this stop, moving as set below" width="98" />
+        <combo_box name="stop_ease" tool_tip="Beschleunigug der Kamera beim Flug zu dieser Position. Sanft startet und bremst langsam; Linear hält eine konstante Geschwindigkeit; Sanfter Start startet langsam; Sanftes Ende ended langsam.">
+            <combo_box.item label="Sanft" name="smooth"/>
+            <combo_box.item label="Linear" name="linear"/>
+            <combo_box.item label="Sanfter Start" name="ease_in"/>
+            <combo_box.item label="Sanftes Ende" name="ease_out"/>
+        </combo_box>
+        <combo_box name="stop_move" tool_tip="Bewegungsart der Kamera während die Position gehalten wird. Orbit zirkuliert um einen Punkt; Schwenken dreht die Kamera am aktuellen Punkt; Heran-/Herausfahren bewegt die Kamera auf einen Punkt zu bzw. von diesem weg; Steigen/sinken bewegt die Kamera nach oben/unten.">
+            <combo_box.item label="Still" name="none"/>
+            <combo_box.item label="Orbit links" name="orbit_left"/>
+            <combo_box.item label="Orbit rechts" name="orbit_right"/>
+            <combo_box.item label="Schwenken links" name="pan_left"/>
+            <combo_box.item label="Schwenken rechts" name="pan_right"/>
+            <combo_box.item label="Heranfahren" name="push_in"/>
+            <combo_box.item label="Herausfahren" name="pull_out"/>
+            <combo_box.item label="Steigen" name="rise"/>
+            <combo_box.item label="Sinken" name="sink"/>
+        </combo_box>
+        <spinner name="stop_amount" tool_tip="Wie weit die Kamera sich über den Haltepunkt bewegt: Grad für Orbit und Schwenken, Prozent der Distanz für Heran-/Herausfahren, Meter für Steigen und Sinken"/>
+        <combo_box name="tour_repeat" tool_tip="Nach letztem Stop: Dort verbleiben, beim ersten erneut starten, oder die Stops rückwärts besuchen und erneut starten">
+            <combo_box.item label="Einmal abspielen" name="once"/>
+            <combo_box.item label="Schleife" name="loop"/>
+            <combo_box.item label="Vor und zurück" name="bounce"/>
+        </combo_box>
+        <combo_box name="tour_path" tool_tip="Kurviger Weg fliegt in einer Linie von Stop zu Stop; Kurviger Weg fliegt durch die Stops in einer sanfteren Linie">
+            <combo_box.item label="Kurviger Weg" name="straight"/>
+            <combo_box.item label="Kurviger Weg" name="curved"/>
+        </combo_box>
+        <spinner name="tour_speed" label="Geschw." label_width="48" tool_tip="Wiedergabe-Geschwindigkeit" width="102" />
+        <check_box name="tour_hide_ui" label="UI verst." tool_tip="Verteckt die Benutzeroberfläche während die Tour abgespielt wird. ESC beendet die Tour und bringt die Oberfläche zurück."/>
+        <button name="play_tour" label="Abspielen" tool_tip="Fliegt die Kamera durch die Stops in Reihe, ausgehend vom ausgewählten (oder ersten in der Liste). Stops, die einen Teleport benötigen oder sich außerhalb der Kamerabesch befinden, werden übersprungen. ESC oder Gehen beendet die Tour." width="70" />
+        <button name="go_stop" label="Gehe zu Stop" tool_tip="Bewegt die Kamera zum ausgewählten Stop" width="94" />
+        <button name="copy_tour" label="Tour kopieren" tool_tip="Kopiert diese Tour mit ihrem Namen, Optionen sowie den Timings und Bewegungen zu jedem Stop in die Zwischenablage. Tour einfügen fügt diese Daten als Tour ein." width="96" />
+        <button name="paste_tour" label="Tour einfügen" tool_tip="Fügt die Tour aus der Zwischenablage als neue Tour ein." width="96" />
+    </panel>
+</floater>

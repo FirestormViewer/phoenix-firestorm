@@ -6154,6 +6154,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_FaceNearest_Label">
 		Zu nächstem Avatar drehen
 	</string>
+	<string name="Command_CameraBookmarks_Label">
+		Kamera-Lesezeichen
+	</string>
 	<string name="Command_Appearance_Tooltip">
 		Avatar ändern
 	</string>
@@ -6363,6 +6366,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_FaceNearest_Tooltip">
 		Zum Avatar in der geringsten Entfernung innerhalb von 20m drehen
+	</string>
+	<string name="Command_CameraBookmarks_Tooltip">
+		Kamera-Sichten speichern und laden oder sie als Tour abspielen
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
@@ -6783,6 +6789,36 @@ Support-Bereich der Website Secondlife.com und melden Sie das Problem.
 	</string>
 	<string name="FSCmdLineTrackPosMapError">
 		Weltkarte konnte nicht geöffnet werden.
+	</string>
+	<string name="FSCmdLineCamBookmarkUsage">
+		Kamera-Lesenzeichen (Befehl: cmd add [Name], cmd follow [Name], cmd followturn [Name], cmd go [Name], cmd print [Name], cmd tour [Name], cmd stop, cmd list). Print schreibt den Link der aktuellen Ansicht oder eines Lesezeichens in den Chat in der Nähe. follow behält die Kamera relativ auf dem Ziel: Ein Alt-Klick-Fokuspunkt, das ausgewählte Objekt oder den eigenen Avatar; followturn dreht sich mit dem Ziel. Der Befehl ist die FSCmdLineCamBookmark Einstellung.
+	</string>
+	<string name="FSCmdLineCamBookmarkAdded">
+		Kamera-Lesezeichen „[NAME]“ hinzugefügt: [LINK]
+	</string>
+	<string name="FSCmdLineCamBookmarkGo">
+		Gehe zu Kamera-Lesezeichen „[NAME]“.
+	</string>
+	<string name="FSCmdLineCamBookmarkNotFound">
+		Kein Kamera-Lesezeichen „[NAME]“ gefunden.
+	</string>
+	<string name="FSCmdLineCamBookmarkRlvLocation">
+		Kamera-Link kann nicht erstellt werden: Regionsnamen werden durch RLVa versteckt.
+	</string>
+	<string name="FSCmdLineCamTourNotFound">
+		Keine Kamera-Tour „[NAME]“ gefunden.
+	</string>
+	<string name="FSCmdLineCamTourPlaying">
+		Kamera-Tour „[NAME]“ wird abgespielt. ESC zum Beenden.
+	</string>
+	<string name="FSCmdLineCamTourStopped">
+		Kamera-Tour gestoppt.
+	</string>
+	<string name="FSCmdLineCamBookmarkList">
+		Kamera-Lesezeichen: [BOOKMARKS]. Kamera-Touren: [TOURS].
+	</string>
+	<string name="FSCameraTourUnnamed">
+		Tour
 	</string>
 	<string name="FSCmdLineRollDiceTotal">
 		Ergenis für [DICE]d[FACES][MODIFIER]: [RESULT].
@@ -7342,6 +7378,12 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="FSUrlEntryWearLabel">
 		Inventar-Ordner anziehen
+	</string>
+	<string name="FSUrlEntryCameraLabel">
+		Kamera-Sicht in
+	</string>
+	<string name="TooltipFSUrlEntryCamera">
+		Klicken um Kamera zu dieser Ansicht zu bewegen
 	</string>
 	<string name="TexturePickerOutfitHeader">
 		Foto für Gegenstand
