@@ -1655,6 +1655,14 @@
          top_pad="8"
          follows="left|top"
          height="16"
+         label="Use Ctrl+mouse to move HUDs on screen"
+         tool_tip="When checked, you can hold Ctrl and drag a HUD you can modify to move it across the screen, without opening the build tools."
+         name="FSCtrlDragHUDs"
+         control_name="FSCtrlDragHUDs"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
          initial_value="false"
          label="Allow click-drag or click-scale (together with caps lock) of a texture face in build mode"
          tool_tip="If enabled, allows to click-drag or click-scale (together with caps lock) a texture face in build mode. This feature is still experimental and should be used with caution."
