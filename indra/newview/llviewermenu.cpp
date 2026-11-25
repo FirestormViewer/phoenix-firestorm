@@ -59,6 +59,7 @@
 #include "llattachmentsmgr.h"
 // [/SL:KB]
 #include "llcompilequeue.h"
+#include "fscameralinks.h" // <FS:Trish/>
 #include "llconsole.h"
 #include "lldebugview.h"
 #include "lldiskcache.h"
@@ -13232,6 +13233,7 @@ void initialize_menus()
     view_listener_t::addMenu(new LLToolsEnableReleaseKeys(), "Tools.EnableReleaseKeys");
     commit.add("Tools.LookAtSelection", boost::bind(&handle_look_at_selection, _2));
     commit.add("Tools.ScriptInfo",boost::bind(&handle_script_info));
+    commit.add("View.CopyCameraLink", boost::bind(&FSCameraLinks::copyCurrentViewLink)); // <FS:Trish/>
     commit.add("Tools.BuyOrTake", boost::bind(&handle_buy_or_take));
     commit.add("Tools.TakeCopy", boost::bind(&handle_take_copy));
     view_listener_t::addMenu(new LLToolsSaveToObjectInventory(), "Tools.SaveToObjectInventory");

@@ -1533,6 +1533,33 @@ std::string LLUrlEntryTeleport::getLocation(const std::string &url) const
     return ::getStringAfterToken(url, "app/teleport/");
 }
 
+// <FS:Trish> Camera links
+///
+/// FSUrlEntryCamera Describes a camera link, e.g.
+/// secondlife:///app/camera/Clawed/93.08/215.72/34.50?focus=102.30,215.55,31.44&fov=60.0
+///
+FSUrlEntryCamera::FSUrlEntryCamera()
+{
+    mPattern = boost::regex(APP_HEADER_REGEX "/camera/\\S+",
+                            boost::regex::perl|boost::regex::icase);
+    mMenuName = "menu_url_slapp.xml";
+    mTooltip = LLTrans::getString("TooltipFSUrlEntryCamera");
+}
+
+std::string FSUrlEntryCamera::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+{
+    // The label names the region only; The rest means nothing to the viewer
+    LLURI uri(url);
+    LLSD path_array = uri.pathArray();
+    std::string label = LLTrans::getString("FSUrlEntryCameraLabel");
+    if (path_array.size() >= 3)
+    {
+        label += " " + unescapeUrl(path_array[2].asString());
+    }
+    return label;
+}
+// </FS:Trish>
+
 // <FS:Ansariel> Wear folder SLUrl
 ///
 /// FSUrlEntryWear Describes wear folder SLURL, e.g.

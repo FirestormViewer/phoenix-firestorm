@@ -15654,4 +15654,259 @@ Folder names cannot contain / or \.
   </notification>
   <!-- </FS:Amy> Favorite Wearables folders -->
 
+  <!-- <FS:Trish> Camera links -->
+  <notification
+   icon="alertmodal.tga"
+   name="FSCameraLinkTeleport"
+   type="alertmodal">
+This camera view is in &lt;nolink&gt;[REGION]&lt;/nolink&gt;. Teleport there and show the view when you arrive?
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Teleport"/>
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraLinkCopied"
+   type="notifytip">
+Camera link for &lt;nolink&gt;[REGION]&lt;/nolink&gt; copied to the clipboard.
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraLinkInvalid"
+   type="notifytip">
+This camera link isn't valid: its region, position, focus point or field of view is missing or out of range.
+    <tag>fail</tag>
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraLinkNoRegion"
+   type="notifytip">
+Can't make a camera link: the camera isn't in a region.
+    <tag>fail</tag>
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraLinkRlvCamera"
+   type="notifytip">
+Camera link cannot be followed: your camera is restricted by RLVa.
+    <tag>fail</tag>
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraLinkRlvDistance"
+   type="notifytip">
+Camera link cannot be followed: the view is farther than RLVa allows.
+    <tag>fail</tag>
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraLinkRlvTeleport"
+   type="notifytip">
+Camera link cannot be followed: teleports are restricted by RLVa.
+    <tag>fail</tag>
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraLinkRlvLocation"
+   type="notifytip">
+Cannot create camera link: regions are hidden by RLVa.
+    <tag>fail</tag>
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraLinkGaveUp"
+   type="notifytip">
+The camera view in &lt;nolink&gt;[REGION]&lt;/nolink&gt; was dropped: you didn't arrive in that region within a minute.
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraLinkTargetGone"
+   type="notifytip">
+Tracked target is gone, camera moved to initial tracking point.
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraLinkTargetLost"
+   type="notifytip">
+Tracked target was lost, camera left in place. Press ESC. to return.
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraLinkNoTarget"
+   type="notifytip">
+Nothing to track: Alt-click the object or avatar first (or select an object), then save the camera view.
+    <tag>fail</tag>
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraLinkTargetTooFar"
+   type="notifytip">
+Target is too far from the camera. Move the camera closer to it first.
+    <tag>fail</tag>
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraTourInterfaceHidden"
+   type="notifytip">
+The interface is hidden while the camera tour plays. ESC stops the tour and brings the UI back.
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraTourNoneInReach"
+   type="notifytip">
+This tour cannot be played from here: its stops need a teleport or are farther than RLVa allows your camera to go. Move closer to its starting point.
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraTourCopied"
+   type="notifytip">
+The camera tour "[NAME]" was copied to the clipboard (stops: [COUNT]).
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraTourPasted"
+   type="notifytip">
+The camera tour "[NAME]" was added from the clipboard (stops: [COUNT]).
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraLinksCopied"
+   type="notifytip">
+Camera links copied to the clipboard.
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   label="Camera Tour"
+   name="FSCameraTourName"
+   type="alertmodal">
+    <unique/>
+Name of the camera tour:
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="message" type="text" default="true">
+[NAME]
+      </input>
+      <button
+       default="true"
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   label="Camera Tour"
+   name="FSCameraTourStopName"
+   type="alertmodal">
+    <unique/>
+Name of the tour stop:
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="message" type="text" default="true">
+[NAME]
+      </input>
+      <button
+       default="true"
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="FSCameraTourDelete"
+   type="alertmodal">
+Delete the camera tour "[NAME]"? Its bookmarks will be kept in your bookmarks list.
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Delete"/>
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraBookmarkPasteNone"
+   type="notifytip">
+The clipboard holds no valid camera link to add.
+    <tag>fail</tag>
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraBookmarkAlreadySaved"
+   type="notifytip">
+That camera view is already saved as a bookmark.
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSCameraBookmarksPasted"
+   type="notifytip">
+Camera bookmarks added from the clipboard: [ADDED]. Already saved: [SKIPPED]. Invalid: [INVALID].
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   label="Camera Bookmark"
+   name="FSCameraBookmarkName"
+   type="alertmodal">
+    <unique/>
+Name of the camera bookmark:
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="message" type="text" default="true">
+[NAME]
+      </input>
+      <button
+       default="true"
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="FSCameraBookmarkDelete"
+   type="alertmodal">
+Delete the camera bookmark "[NAME]"?
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Delete"/>
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="FSCameraBookmarksDelete"
+   type="alertmodal">
+Delete the [COUNT] selected camera bookmarks?
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Delete"/>
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="FSCameraBookmarkUpdate"
+   type="alertmodal">
+Set the camera bookmark "[NAME]" to the current camera view? Its old view is replaced.
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Replace"/>
+  </notification>
+  <!-- </FS:Trish> -->
 </notifications>

@@ -45,7 +45,7 @@ LLUrlRegistry::LLUrlRegistry()
 {
 //  mUrlEntry.reserve(20);
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-    mUrlEntry.reserve(33);
+    mUrlEntry.reserve(38);
 // [/RLVa:KB]
 
     // Urls are matched in the order that they were registered
@@ -93,6 +93,9 @@ LLUrlRegistry::LLUrlRegistry()
     registerUrl(new LLUrlEntryRegion());
     registerUrl(new LLUrlEntryWorldMap());
     registerUrl(new LLUrlEntryObjectIM());
+    // <FS:Trish> Camera links: must be before LLUrlEntryPlace
+    registerUrl(new FSUrlEntryCamera());
+    // </FS:Trish>
     registerUrl(new LLUrlEntryPlace());
     registerUrl(new LLUrlEntryInventory());
     registerUrl(new LLUrlEntryExperienceProfile());

@@ -34,7 +34,10 @@
 #include "chatbar_as_cmdline.h"
 
 #include "aoengine.h"
+#include "fscameralinks.h"
+#include "fsnearbychathub.h"
 #include "fscommon.h"
+#include "fsfloatercamerabookmarks.h"
 #include "fsradar.h"
 #include "llagent.h"
 #include "llagentcamera.h"
@@ -581,76 +584,7 @@ static bool parseTerrainOffsetF32(const std::string& token, F32& offset_out)
     return sscanf(token.c_str(), "%f", &offset_out) == 1;
 }
 
-static bool parseBracketVector3(const std::string& segment, LLVector3& out)
-{
-    std::string trimmed = segment;
-    LLStringUtil::trim(trimmed);
-    if (trimmed.size() < 5 || trimmed.front() != '<' || trimmed.back() != '>')
-    {
-        return false;
-    }
-
-    trimmed = trimmed.substr(1, trimmed.size() - 2);
-    LLStringUtil::replaceString(trimmed, ",", " ");
-    return LLVector3::parseVector3(trimmed, &out);
-}
-
-struct CmdlineCameraSpec
-{
-    LLVector3 pos;
-    LLVector3 focus;
-    bool has_focus = false;
-    F32 roll = 0.f;
-    bool has_roll = false;
-};
-
-static bool parseCameraPositionString(const std::string& params, CmdlineCameraSpec& out)
-{
-    size_t first_pipe = params.find('|');
-    std::string pos_segment = (first_pipe == std::string::npos) ? params : params.substr(0, first_pipe);
-    if (!parseBracketVector3(pos_segment, out.pos))
-    {
-        return false;
-    }
-
-    if (first_pipe == std::string::npos)
-    {
-        return true;
-    }
-
-    size_t second_pipe = params.find('|', first_pipe + 1);
-    std::string focus_segment = (second_pipe == std::string::npos)
-        ? params.substr(first_pipe + 1)
-        : params.substr(first_pipe + 1, second_pipe - first_pipe - 1);
-    if (!parseBracketVector3(focus_segment, out.focus))
-    {
-        return false;
-    }
-    out.has_focus = true;
-
-    if (second_pipe != std::string::npos)
-    {
-        std::string roll_segment = params.substr(second_pipe + 1);
-        LLStringUtil::trim(roll_segment);
-        if (sscanf(roll_segment.c_str(), "%f", &out.roll) != 1)
-        {
-            return false;
-        }
-        out.has_roll = true;
-    }
-
-    return true;
-}
-
-static std::string formatCameraPositionString(const LLVector3& pos, const LLVector3& focus, F32 roll)
-{
-    std::string result = llformat("<%.3f, %.3f, %.3f>", pos.mV[VX], pos.mV[VY], pos.mV[VZ]);
-    result += llformat("|<%.3f, %.3f, %.3f>", focus.mV[VX], focus.mV[VY], focus.mV[VZ]);
-    result += llformat("|%.3f", roll);
-    return result;
-}
-
-static void cmdline_apply_camera(const CmdlineCameraSpec& spec)
+static void cmdline_apply_camera(const FSCameraLinks::CamPos& spec)
 {
     LLVector3d camera_pos_global = gAgent.getPosGlobalFromAgent(spec.pos);
     LLVector3d focus_global;
@@ -687,7 +621,7 @@ static void cmdline_apply_camera(const CmdlineCameraSpec& spec)
     }
 
     LLStringUtil::format_map_t args;
-    args["[POS]"] = formatCameraPositionString(spec.pos, gAgent.getPosAgentFromGlobal(focus_global), spec.has_roll ? spec.roll : gAgentCamera.getRollAngle());
+    args["[POS]"] = FSCameraLinks::formatCamPos(spec.pos, gAgent.getPosAgentFromGlobal(focus_global), spec.has_roll ? spec.roll : gAgentCamera.getRollAngle());
     FSCommon::report_cmdline_result(LLTrans::getString("FSCameraPositionPasted", args));
 }
 
@@ -703,8 +637,8 @@ void cmdline_track(std::string_view params)
 
     if (arg.front() == '<')
     {
-        CmdlineCameraSpec spec;
-        if (!parseCameraPositionString(arg, spec))
+        FSCameraLinks::CamPos spec;
+        if (!FSCameraLinks::parseCamPos(arg, spec))
         {
             FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineTrackPosParseError"));
             return;
@@ -764,6 +698,141 @@ void cmdline_track(std::string_view params)
     }
 }
 
+// Camera bookmarks from the chat bar:
+//   cmd add [name]          the current view
+//   cmd follow [name]       the current view, following a target
+//   cmd followturn [name]
+//   cmd go <name>           go to a bookmark (an exact name, else the first containing it)
+//   cmd print [name]        say the link to the current view (or to a bookmark) in nearby chat
+//   cmd tour <name>         play a tour
+//   cmd stop                stop the tour playing
+//   cmd list                the bookmarks and tours
+static void cmdline_camera_bookmark(std::string params)
+{
+    LLStringUtil::trim(params);
+    std::string action = params;
+    std::string name;
+    const size_t space = params.find(' ');
+    if (space != std::string::npos)
+    {
+        action = params.substr(0, space);
+        name = params.substr(space + 1);
+        LLStringUtil::trim(name);
+    }
+    LLStringUtil::toLower(action);
+    FSCameraBookmarkStore& store = FSCameraBookmarkStore::instance();
+    LLStringUtil::format_map_t args;
+
+    if (action == "add" || action == "follow" || action == "followturn")
+    {
+        FSCameraLinks::View view;
+        std::string target_name;
+        const bool follow = action != "add";
+        if (follow ? !FSCameraLinks::getCurrentFollowView(view, action == "followturn", &target_name)
+                   : !FSCameraLinks::getCurrentView(view))
+        {
+            return;
+        }
+        std::string link;
+        if (!FSCameraLinks::buildCheckedLink(view, link))
+        {
+            return;
+        }
+        if (name.empty())
+        {
+            name = target_name.empty() ? view.mRegion : target_name;
+        }
+        const S32 index = store.addBookmark(name, link, target_name);
+        args["[NAME]"] = store.mBookmarks[index]["name"].asString();
+        args["[LINK]"] = link;
+        FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineCamBookmarkAdded", args));
+    }
+    else if (action == "go")
+    {
+        const S32 index = store.findBookmark(name);
+        FSCameraLinks::View view;
+        if (index < 0 || !FSCameraLinks::parseLink(store.mBookmarks[index]["link"].asString(), view))
+        {
+            args["[NAME]"] = name;
+            FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineCamBookmarkNotFound", args));
+            return;
+        }
+        FSCameraLinks::activate(view);
+        args["[NAME]"] = store.mBookmarks[index]["name"].asString();
+        FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineCamBookmarkGo", args));
+    }
+    else if (action == "print")
+    {
+        // A link names its region, which RLVa may be hiding
+        if (RlvActions::isRlvEnabled() && !RlvActions::canShowLocation())
+        {
+            FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineCamBookmarkRlvLocation"));
+            return;
+        }
+        std::string link;
+        if (name.empty())
+        {
+            FSCameraLinks::View view;
+            if (!FSCameraLinks::getCurrentView(view) || !FSCameraLinks::buildCheckedLink(view, link))
+            {
+                return;
+            }
+        }
+        else
+        {
+            const S32 index = store.findBookmark(name);
+            if (index < 0)
+            {
+                args["[NAME]"] = name;
+                FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineCamBookmarkNotFound", args));
+                return;
+            }
+            link = store.mBookmarks[index]["link"].asString();
+        }
+        FSNearbyChat::instance().sendChatFromViewer(link, CHAT_TYPE_NORMAL, false);
+    }
+    else if (action == "stop")
+    {
+        FSCameraLinks::stopTour();
+        FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineCamTourStopped"));
+    }
+    else if (action == "tour")
+    {
+        const S32 index = store.findTour(name);
+        if (index < 0)
+        {
+            args["[NAME]"] = name;
+            FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineCamTourNotFound", args));
+            return;
+        }
+        if (store.playTour(index, 0))
+        {
+            args["[NAME]"] = store.mTours[index].mName;
+            FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineCamTourPlaying", args));
+        }
+    }
+    else if (action == "list")
+    {
+        std::string bookmarks;
+        for (size_t i = 0; i < store.mBookmarks.size(); ++i)
+        {
+            bookmarks += (bookmarks.empty() ? "" : ", ") + store.mBookmarks[i]["name"].asString();
+        }
+        std::string tours;
+        for (const FSCameraBookmarkTour& tour : store.mTours)
+        {
+            tours += (tours.empty() ? "" : ", ") + tour.mName;
+        }
+        args["[BOOKMARKS]"] = bookmarks.empty() ? "-" : bookmarks;
+        args["[TOURS]"] = tours.empty() ? "-" : tours;
+        FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineCamBookmarkList", args));
+    }
+    else
+    {
+        FSCommon::report_cmdline_result(LLTrans::getString("FSCmdLineCamBookmarkUsage"));
+    }
+}
+
 bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gesture)
 {
     static LLCachedControl<bool> sFSCmdLine(gSavedSettings, "FSCmdLine");
@@ -787,6 +856,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
     static LLCachedControl<std::string> sFSCmdLineTrackPos(gSavedSettings, "FSCmdLineTrackPos");
     static LLCachedControl<std::string> sFSCmdLineCopyCam(gSavedSettings, "FSCmdLineCopyCam");
     static LLCachedControl<std::string> sFSCmdLinePasteCam(gSavedSettings, "FSCmdLinePasteCam");
+    static LLCachedControl<std::string> sFSCmdLineCamBookmark(gSavedSettings, "FSCmdLineCamBookmark");
     static LLCachedControl<std::string> sFSCmdLineRollDice(gSavedSettings, "FSCmdLineRollDice");
     static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings, "FSCmdLineBandWidth");
 
@@ -1823,7 +1893,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                     const LLVector3d forward_global = LLVector3d(1.0, 0.0, 0.0) * LLViewerCamera::getInstance()->getQuaternion() + gAgentCamera.getCameraPositionGlobal();
                     const LLVector3 focusPosition = gAgent.getPosAgentFromGlobal(forward_global);
                     const F32 roll = gAgentCamera.getRollAngle();
-                    const std::string cameraPositionString = formatCameraPositionString(cameraPosition, focusPosition, roll);
+                    const std::string cameraPositionString = FSCameraLinks::formatCamPos(cameraPosition, focusPosition, roll);
                     LLUI::getInstance()->getWindow()->copyTextToClipboard(utf8str_to_wstring(cameraPositionString));
 
                     LLStringUtil::format_map_t args;
@@ -1842,8 +1912,8 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 {
                     std::string params = static_cast<std::string>(revised_text.substr(command.length() + 1));
                     LLStringUtil::trim(params);
-                    CmdlineCameraSpec spec;
-                    if (parseCameraPositionString(params, spec))
+                    FSCameraLinks::CamPos spec;
+                    if (FSCameraLinks::parseCamPos(params, spec))
                     {
                         cmdline_apply_camera(spec);
                     }
@@ -1856,6 +1926,12 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
                 {
                     FSCommon::report_cmdline_result(LLTrans::getString("FSCameraPositionParseError"));
                 }
+                return false;
+            }
+            // Camera bookmarks
+            else if (command == sFSCmdLineCamBookmark())
+            {
+                cmdline_camera_bookmark(revised_text.length() > command.length() ? std::string(revised_text.substr(command.length())) : std::string());
                 return false;
             }
             else if (command == sFSCmdLineRollDice())

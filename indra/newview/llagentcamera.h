@@ -351,6 +351,7 @@ public:
     void            setObjectTracking(bool track)   { mTrackFocusObject = track; }
     const LLVector3d &getFocusGlobal() const        { return mFocusGlobal; }
     const LLVector3d &getFocusTargetGlobal() const  { return mFocusTargetGlobal; }
+    const LLVector3d &getCameraFocusOffsetTarget() const { return mCameraFocusOffsetTarget; } // <FS:Trish/> Camera links: for followed views
 private:
     LLVector3d      mCameraFocusOffset;             // Offset from focus point in build mode
     LLVector3d      mCameraFocusOffsetTarget;       // Target towards which we are lerping the camera's focus offset
