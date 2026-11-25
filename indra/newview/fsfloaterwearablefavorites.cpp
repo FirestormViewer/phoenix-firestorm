@@ -29,11 +29,13 @@
 
 #include "fsfloaterwearablefavorites.h"
 #include "fscommon.h"
+#include "llaisapi.h"
 #include "llappearancemgr.h"
 #include "llbutton.h"
 #include "llcombobox.h"
 #include "llfiltereditor.h"
 #include "llinventoryfunctions.h"
+#include "llinventorymodelbackgroundfetch.h"
 #include "llinventoryobserver.h"
 #include "llmenugl.h"
 #include "llmenubutton.h"
@@ -87,6 +89,44 @@ bool FSWearableFavoritesItemsList::handleDragAndDrop(S32 x, S32 y, MASK mask,
     return true;
 }
 
+// Favorites are links whose targets may still be loading after login, so the list refreshes as they arrive
+static constexpr F32 FAVORITES_REFRESH_THROTTLE = 2.0f; // seconds
+
+class FSWearableFavoritesInventoryObserver : public LLInventoryObserver
+{
+public:
+    FSWearableFavoritesInventoryObserver(FSFloaterWearableFavorites* floater) : mFloater(floater) {}
+    void changed(U32 /*mask*/) override
+    {
+        mFloater->onInventoryChanged();
+    }
+
+private:
+    FSFloaterWearableFavorites* mFloater;
+};
+
+class FSWearableFavoritesFetchItemsObserver : public LLInventoryFetchItemsObserver
+{
+public:
+    FSWearableFavoritesFetchItemsObserver(const uuid_vec_t& item_ids, const LLHandle<LLFloater>& floater_handle)
+        : LLInventoryFetchItemsObserver(item_ids),
+        mFloaterHandle(floater_handle)
+    {}
+
+    void done() override
+    {
+        gInventory.removeObserver(this);
+        if (FSFloaterWearableFavorites* floater = dynamic_cast<FSFloaterWearableFavorites*>(mFloaterHandle.get()); floater)
+        {
+            floater->onPendingFetchDone();
+        }
+        delete this;
+    }
+
+private:
+    LLHandle<LLFloater> mFloaterHandle;
+};
+
 LLUUID FSFloaterWearableFavorites::sFolderID = LLUUID();
 
 FSFloaterWearableFavorites::FSFloaterWearableFavorites(const LLSD& key)
@@ -98,9 +138,13 @@ FSFloaterWearableFavorites::FSFloaterWearableFavorites(const LLSD& key)
     mFolderCombo(nullptr),
     mSelectedFolderID(),
     mInitialized(false),
-    mDADCallbackConnection()
+    mDADCallbackConnection(),
+    mWaitingForItems(false),
+    mRefreshPending(false),
+    mPendingFetches(0)
 {
     mCategoriesObserver = new LLInventoryCategoriesObserver();
+    mInventoryObserver = new FSWearableFavoritesInventoryObserver(this);
 }
 
 FSFloaterWearableFavorites::~FSFloaterWearableFavorites()
@@ -110,6 +154,12 @@ FSFloaterWearableFavorites::~FSFloaterWearableFavorites()
         gInventory.removeObserver(mCategoriesObserver);
     }
     delete mCategoriesObserver;
+
+    if (gInventory.containsObserver(mInventoryObserver))
+    {
+        gInventory.removeObserver(mInventoryObserver);
+    }
+    delete mInventoryObserver;
 
     if (mDADCallbackConnection.connected())
     {
@@ -197,6 +247,7 @@ void FSFloaterWearableFavorites::initialize()
     }
 
     gInventory.addObserver(mCategoriesObserver);
+    // mInventoryObserver is only registered while favorites are still loading, see setWaitingForItems()
     mCategoriesObserver->addCategory(sFolderID, boost::bind(&FSFloaterWearableFavorites::refreshFolderCombo, this));
     mCategoriesObserver->addCategory(
         cof,
@@ -218,6 +269,23 @@ void FSFloaterWearableFavorites::initialize()
 void FSFloaterWearableFavorites::draw()
 {
     LLFloater::draw();
+
+    // Favorites that arrived while the inventory was still loading may cause the floater to need a refresh.
+    // Throttled so the login fetch doesn't rebuild the list every frame.
+    if (mRefreshPending && mRefreshThrottleTimer.getElapsedTimeF32() >= FAVORITES_REFRESH_THROTTLE)
+    {
+        mRefreshPending = false;
+        mRefreshThrottleTimer.reset();
+
+        const LLUUID folder_id = mSelectedFolderID.notNull() ? mSelectedFolderID : sFolderID;
+        uuid_set_t resolved_ids;
+        uuid_set_t incomplete_ids;
+        checkPendingItems(folder_id, resolved_ids, incomplete_ids);
+        if (resolved_ids != mLastResolvedIDs || incomplete_ids != mLastIncompleteIDs)
+        {
+            updateList(folder_id);
+        }
+    }
 
     mRemoveItemBtn->setEnabled(mItemsList->numSelected() > 0);
     const bool folder_action_enabled = mSelectedFolderID.notNull() && mSelectedFolderID != sFolderID;
@@ -319,12 +387,167 @@ LLUUID FSFloaterWearableFavorites::getFavoritesFolder()
     return sFolderID;
 }
 
+void FSFloaterWearableFavorites::onInventoryChanged()
+{
+    if (mWaitingForItems)
+    {
+        mRefreshPending = true;
+    }
+}
+
+void FSFloaterWearableFavorites::onPendingFetchDone()
+{
+    if (mPendingFetches > 0)
+    {
+        --mPendingFetches;
+    }
+    mRefreshPending = true;
+}
+
+void FSFloaterWearableFavorites::setWaitingForItems(bool waiting)
+{
+    mWaitingForItems = waiting;
+
+    // Only listen to inventory changes while something is still loading
+    const bool registered = gInventory.containsObserver(mInventoryObserver);
+    if (waiting && !registered)
+    {
+        gInventory.addObserver(mInventoryObserver);
+    }
+    else if (!waiting && registered)
+    {
+        gInventory.removeObserver(mInventoryObserver);
+    }
+}
+
+void FSFloaterWearableFavorites::checkPendingItems(const LLUUID& folder_id, uuid_set_t& resolved_ids, uuid_set_t& incomplete_ids)
+{
+    resolved_ids.clear();
+    incomplete_ids.clear();
+
+    if (folder_id.isNull())
+    {
+        setWaitingForItems(false);
+        return;
+    }
+
+    LLInventoryModel::cat_array_t cat_array;
+    LLInventoryModel::item_array_t item_array;
+    gInventory.collectDescendents(folder_id, cat_array, item_array, LLInventoryModel::EXCLUDE_TRASH);
+
+    uuid_vec_t folders_to_fetch;
+    uuid_vec_t items_to_fetch;
+
+    auto check_folder = [&](const LLUUID& cat_id)
+    {
+        if (!gInventory.isCategoryComplete(cat_id))
+        {
+            incomplete_ids.insert(cat_id);
+            folders_to_fetch.push_back(cat_id);
+        }
+    };
+
+    check_folder(folder_id);
+    for (const auto& cat : cat_array)
+    {
+        if (cat)
+        {
+            check_folder(cat->getUUID());
+        }
+    }
+
+    bool missing_targets = false;
+    for (const auto& item : item_array)
+    {
+        if (!item)
+        {
+            continue;
+        }
+
+        if (item->getIsLinkType() && !item->getLinkedItem() && !item->getLinkedCategory())
+        {
+            // Link target not loaded yet (or deleted)
+            missing_targets = true;
+            folders_to_fetch.push_back(item->getParentUUID());
+            items_to_fetch.push_back(item->getLinkedUUID());
+        }
+        else
+        {
+            resolved_ids.insert(item->getUUID());
+        }
+    }
+
+    if (AISAPI::isAvailable())
+    {
+        for (const auto& cat_id : folders_to_fetch)
+        {
+            if (mRequestedFolderIDs.insert(cat_id).second)
+            {
+                ++mPendingFetches;
+                LLHandle<LLFloater> floater_handle = getHandle();
+                LLInventoryModelBackgroundFetch::instance().fetchFolderAndLinks(cat_id, [floater_handle]()
+                {
+                    if (FSFloaterWearableFavorites* floater = dynamic_cast<FSFloaterWearableFavorites*>(floater_handle.get()); floater)
+                    {
+                        floater->onPendingFetchDone();
+                    }
+                });
+            }
+        }
+    }
+    else
+    {
+        for (const auto& cat_id : folders_to_fetch)
+        {
+            if (mRequestedFolderIDs.insert(cat_id).second)
+            {
+                if (LLViewerInventoryCategory* cat = gInventory.getCategory(cat_id); cat)
+                {
+                    cat->fetch();
+                }
+            }
+        }
+
+        uuid_vec_t new_items_to_fetch;
+        for (const auto& item_id : items_to_fetch)
+        {
+            if (item_id.notNull() && mRequestedItemIDs.insert(item_id).second)
+            {
+                new_items_to_fetch.push_back(item_id);
+            }
+        }
+
+        if (!new_items_to_fetch.empty())
+        {
+            ++mPendingFetches;
+            FSWearableFavoritesFetchItemsObserver* fetcher = new FSWearableFavoritesFetchItemsObserver(new_items_to_fetch, getHandle());
+            fetcher->startFetch();
+            if (fetcher->isFinished())
+            {
+                fetcher->done();
+            }
+            else
+            {
+                gInventory.addObserver(fetcher);
+            }
+        }
+    }
+
+    // If the inventory is fully fetched and the item wasn't loaded
+    // ... the link is probably dead.
+    setWaitingForItems((!incomplete_ids.empty() || missing_targets)
+        && (mPendingFetches > 0 || !LLInventoryModelBackgroundFetch::instance().isEverythingFetched()));
+}
+
 void FSFloaterWearableFavorites::updateList(const LLUUID& folder_id)
 {
     if (folder_id.isNull())
     {
         return;
     }
+
+    // Fetch whatever is still missing and keep watching until it arrives
+    checkPendingItems(folder_id, mLastResolvedIDs, mLastIncompleteIDs);
 
     // Favorite Wearables folders are implemented as inventory links.
     // The root view collects descendants recursively, which means the same
