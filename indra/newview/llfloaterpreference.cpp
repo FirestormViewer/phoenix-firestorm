@@ -516,6 +516,9 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
     // <FS:Ansariel> Clear inventory cache button
     mCommitCallbackRegistrar.add("Pref.InvClearCache",          boost::bind(&LLFloaterPreference::onClickInventoryClearCache, this));
     // </FS:Ansariel>
+    // <FS:Trish> FIRE-33025 Email notification settings button
+    mCommitCallbackRegistrar.add("Pref.OpenEmailSettings",        boost::bind(&LLFloaterPreference::onClickOpenEmailSettings, this));
+    // </FS:Trish>
     // <FS:Ansariel> Clear web browser cache button
     mCommitCallbackRegistrar.add("Pref.WebBrowserClearCache",       boost::bind(&LLFloaterPreference::onClickWebBrowserClearCache, this));
     // </FS:Ansariel>
@@ -1756,6 +1759,17 @@ void LLFloaterPreference::onClickWebBrowserClearCache()
     LLNotificationsUtil::add("ConfirmClearWebBrowserCache", LLSD(), LLSD(), callback_clear_web_browser_cache);
 }
 // </FS:Ansariel>
+
+// <FS:Trish> FIRE-33025 Email notification settings button: opens the email_settings_url string of the chat
+// notices panel, which translations can localise, in the browser the user chose
+void LLFloaterPreference::onClickOpenEmailSettings()
+{
+    LLPanel* panel = findChild<LLPanel>("ChatNotices");
+    const std::string url = (panel && panel->hasString("email_settings_url")) ? panel->getString("email_settings_url")
+                                                                              : std::string("https://accounts.secondlife.com/change_email");
+    LLWeb::loadURL(url);
+}
+// </FS:Trish>
 
 // Called when user changes language via the combobox.
 void LLFloaterPreference::onLanguageChange()

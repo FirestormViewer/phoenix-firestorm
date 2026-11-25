@@ -193,9 +193,7 @@
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Abrir janela de conv. ao receber msg offline" />
 			<check_box name="FSRestoreOpenIMs" label="Restaurar IMs abertas ao iniciar" />
 			<check_box label="Enviar IMs por e-mail quando estou off-line ([EMAIL])" name="send_im_to_email" />
-			<text name="email_settings">
-				[https://accounts.secondlife.com/change_email Abrir configurações de notificação por e-mail para IMs offline]
-			</text>
+			<button name="email_settings" label="Abrir configurações de notificação por e-mail para IMs offline..."/>
 			<text name="email_settings_login_to_change">
 				Faça login para personalizar a notificação de IMs off-line por e-mail
 			</text>

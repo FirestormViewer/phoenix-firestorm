@@ -171,7 +171,7 @@
 			<spinner tool_tip="-1 Tam qrup adı üçün, 0 = qrup adını göstərməyin" name="FSShowGroupNameLength"/>
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Siz bağlanmadan öncə mesajınız varsa açılan pəncərəni göstərin"/>
 			<check_box label="Mənim olmadığım zamanı özəl mesajlarımı e-poçtuma göndərin ([EMAIL])" name="send_im_to_email"/>
-			<text name="email_settings">[https://accounts.secondlife.com/change_email Çıxış zamanı özəl mesajların gəlməsi seçimlərini açın]</text>
+			<button name="email_settings" label="Çıxış zamanı özəl mesajların gəlməsi seçimlərini açın..."/>
 			<text name="email_settings_login_to_change">E-poçt uyarı ayarlarını dəyişmək üçün giriş edin</text>
 			<check_box name="FSShowIMInChatHistory" label="Şəxsi mesajları əsas söhbət pəncərəsində göstərin"/>
 			<check_box name="FSLogIMInChatHistory" label="Şəxsi mesajları əsas söhbət pəncərəsində saxlayın"/>
