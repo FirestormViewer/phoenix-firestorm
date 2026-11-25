@@ -28,6 +28,10 @@
 #define LL_LLVIEWERJOYSTICK_H
 
 #include "stdtypes.h"
+// [RLVa:Trish]
+#include "rlvdefines.h"
+#include <boost/signals2.hpp>
+// [/RLVa:Trish]
 
 #include <map>
 
@@ -85,6 +89,9 @@ public:
     // flycam); this just forwards.
     bool getOverrideCamera();
     bool toggleFlycam();
+// [RLVa:Trish] - False while @setcam or @setcam_unlock forbids entering (or staying in) flycam
+    static bool isFlycamAllowedByRlv();
+// [/RLVa:Trish]
     void setSNDefaults();
     bool isDeviceUUIDSet();
     LLSD getDeviceUUID(); //unconverted, OS dependent value wrapped into LLSD, for comparison/search
@@ -110,6 +117,9 @@ protected:
     void agentJump();
     void resetDeltas(S32 axis[]);
     void loadDeviceIdFromSettings();
+// [RLVa:Trish]
+    void onRlvBehaviourToggle(ERlvBehaviour behaviour, ERlvParamType type);
+// [/RLVa:Trish]
     // Call after a successful ndof_init_first(): marks the driver initialized
     // only if the device is a 3Dconnexion one.  Returns true if accepted.
     bool acceptInitializedDevice();
@@ -141,6 +151,7 @@ private:
     bool                    mResetFlag { false };
     bool                    mCameraUpdated { true };
     bool                    mDeviceIs3DConnexion { false };
+    boost::signals2::connection mRlvBehaviourConnection; // [RLVa:Trish]
 
     static F32              sLastDelta[7];
     static F32              sDelta[7];
