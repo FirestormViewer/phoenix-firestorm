@@ -29,6 +29,7 @@
 #define FS_FLOATERWEARABLEFAVORITES_H
 
 #include "llfloater.h"
+#include "llframetimer.h"
 #include "llviewerinventory.h"
 #include "llwearableitemslist.h"
 #include <optional>
@@ -38,6 +39,7 @@ class LLComboBox;
 class LLFilterEditor;
 class LLMenuButton;
 class LLInventoryCategoriesObserver;
+class LLInventoryObserver;
 
 class FSWearableFavoritesItemsList : public LLWearableItemsList
 {
@@ -88,10 +90,15 @@ public:
 
     static LLUUID sFolderID;
 
+    void onInventoryChanged();
+    void onPendingFetchDone();
+
 private:
     void initialize();
 
     void updateList(const LLUUID& folder_id);
+    void checkPendingItems(const LLUUID& folder_id, uuid_set_t& resolved_ids, uuid_set_t& incomplete_ids);
+    void setWaitingForItems(bool waiting);
     void refreshFolderCombo();
 
     void onItemDAD(const LLUUID& item_id);
@@ -116,6 +123,16 @@ private:
     boost::signals2::connection mDADCallbackConnection;
 
     LLInventoryCategoriesObserver*  mCategoriesObserver;
+
+    LLInventoryObserver*            mInventoryObserver;
+    bool                            mWaitingForItems;
+    bool                            mRefreshPending;
+    S32                             mPendingFetches;
+    uuid_set_t                      mLastResolvedIDs;   // links whose target is loaded
+    uuid_set_t                      mLastIncompleteIDs; // folders not fully fetched
+    LLFrameTimer                    mRefreshThrottleTimer;
+    uuid_set_t                      mRequestedFolderIDs;
+    uuid_set_t                      mRequestedItemIDs;
 
     FSWearableFavoritesItemsList*   mItemsList;
     LLButton*                       mRemoveItemBtn;

@@ -1,3 +1,9 @@
-If you wish to install Firestorm on your desktop menus, we no longer do this by default. Instead, run:
+install.sh creates an applications-menu entry for Firestorm. If you run
+Firestorm directly from the unpacked viewer, you can create the entry with
 
 ./etc/refresh_desktop_app_entry.sh
+
+If the existing entry differs, press Enter to keep it or answer y to replace
+it. Replacing a regular file preserves its read, write and execute permissions.
+An install with --yes keeps the existing entry. Starting Firestorm leaves your
+menu entry alone.

@@ -267,6 +267,9 @@ private:
     // flycam's view, so it doesn't pop into existence on screen. Called after
     // each flycam transform update.
     void            updateFlycamAvatarVisibility();
+// [RLVa:Trish]
+    void            applyRlvFlycamLimits();
+// [/RLVa:Trish]
 
     LLFlycam        mFlycam;
     bool            mUsingFlycam { false };

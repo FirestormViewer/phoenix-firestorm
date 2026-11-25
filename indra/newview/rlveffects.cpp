@@ -116,27 +116,56 @@ void RlvOverlayEffect::run(const LLVisualEffectParams*)
     {
         gUIProgram.bind();
 
-        int nWidth = gViewerWindow->getWorldViewWidthScaled();
-        int nHeight = gViewerWindow->getWorldViewHeightScaled();
+        // FIRE-29451 / FIRE-35026: A snapshot can be larger than the window, overlay must cover the snapshot
+        const LLRect& rctWorldView = gViewerWindow->getWorldViewRectRaw();
 
-        m_pImage->addTextureStats((F32)(nWidth * nHeight));
+        // A tiled high-res snapshot renders each tile with a zoomed and offset projection (see LLViewerCamera::setPerspective)
+        const LLViewerCamera& camera = LLViewerCamera::instance();
+        const F32 nZoom = llmax(1.f, camera.getZoomFactor());
+
+        const S32 nWidth = ll_round((F32)rctWorldView.getWidth() * nZoom);
+        const S32 nHeight = ll_round((F32)rctWorldView.getHeight() * nZoom);
+        m_pImage->addTextureStats((F32)nWidth * (F32)nHeight);
         m_pImage->setKnownDrawSize(nWidth, nHeight);
 
-        gGL.pushMatrix();
         LLGLSUIDefault glsUI;
-        gViewerWindow->setup2DRender();
 
-        const LLVector2& displayScale = gViewerWindow->getDisplayScale();
-        gGL.scalef(displayScale.mV[VX], displayScale.mV[VY], 1.f);
+        gGL.matrixMode(LLRender::MM_PROJECTION);
+        gGL.pushMatrix();
+        gGL.loadIdentity();
+        if (nZoom > 1.f)
+        {
+            // Apply the same transform as the scene so every tile shows its own part of the full frame overlay
+            const S32 nTilesX = llceil(nZoom);
+            const S32 nTileY = camera.getZoomSubRegion() / nTilesX;
+            const S32 nTileX = camera.getZoomSubRegion() - (nTileY * nTilesX);
+            gGL.translatef(nZoom - 1.f - (F32)nTileX * 2.f, nZoom - 1.f - (F32)nTileY * 2.f, 0.f);
+            gGL.scalef(nZoom, nZoom, 1.f);
+        }
+        gGL.matrixMode(LLRender::MM_MODELVIEW);
+        gGL.pushMatrix();
+        gGL.loadIdentity();
+        // Map the unit onto the full frame
+        gGL.translatef(-1.f, -1.f, 0.f);
+        gGL.scalef(2.f, 2.f, 1.f);
+
+        gGLViewport[0] = rctWorldView.mLeft;
+        gGLViewport[1] = rctWorldView.mBottom;
+        gGLViewport[2] = rctWorldView.getWidth();
+        gGLViewport[3] = rctWorldView.getHeight();
+        glViewport(gGLViewport[0], gGLViewport[1], gGLViewport[2], gGLViewport[3]);
 
         gGL.getTexUnit(0)->bind(m_pImage);
         const LLColor3 col = m_Color.get();
         gGL.color4f(col.mV[0], col.mV[1], col.mV[2], llclamp(m_nAlpha.get(), 0.0f, 1.0f));
 
-        gl_rect_2d_simple_tex(nWidth, nHeight);
+        gl_rect_2d_simple_tex(1, 1);
 
         gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
+        gGL.matrixMode(LLRender::MM_PROJECTION);
+        gGL.popMatrix();
+        gGL.matrixMode(LLRender::MM_MODELVIEW);
         gGL.popMatrix();
         gGL.flush();
         gViewerWindow->setup3DRender();

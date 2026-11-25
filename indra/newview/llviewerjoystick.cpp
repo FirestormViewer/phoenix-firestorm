@@ -48,6 +48,11 @@
 #include "llfocusmgr.h"
 #include "llgamecontrol.h"
 #include "llmoveview.h"
+// [RLVa:Trish]
+#include "rlvactions.h"
+#include "rlvcommon.h"
+#include "rlvhandler.h"
+// [/RLVa:Trish]
 
 #if LL_WINDOWS && !LL_MESA_HEADLESS
 // Require DirectInput version 8
@@ -272,13 +277,8 @@ void LLViewerJoystick::updateEnabled(bool autoenable)
             gSavedSettings.setBOOL("JoystickEnabled", true );
         }
     }
-    if (!gSavedSettings.getBOOL("JoystickEnabled"))
-    {
-        if (gAgentCamera.isUsingFlycam())
-        {
-            gAgentCamera.toggleFlycam();
-        }
-    }
+    // No flycam exit here when the joystick ends up disabled: the flycam may be
+    // driven by keyboard or game controller instead (see toggleFlycam()).
 }
 
 bool LLViewerJoystick::getOverrideCamera()
@@ -358,11 +358,22 @@ LLViewerJoystick::LLViewerJoystick()
     mPerfScale = 4000.f / (F32)gSysCPU.getMHz(); // hmm.  why?
 
     mLastDeviceUUID = LLSD::Integer(1);
+
+// [RLVa:Trish]
+    mRlvBehaviourConnection = gRlvHandler.setBehaviourToggleCallback(boost::bind(&LLViewerJoystick::onRlvBehaviourToggle, this, _1, _2));
+// [/RLVa:Trish]
 }
 
 // -----------------------------------------------------------------------------
 LLViewerJoystick::~LLViewerJoystick()
 {
+// [RLVa:Trish]
+    if (mRlvBehaviourConnection.connected())
+    {
+        mRlvBehaviourConnection.disconnect();
+    }
+// [/RLVa:Trish]
+
     if (mDriverState == JDS_INITIALIZED)
     {
         terminate();
@@ -1406,18 +1417,39 @@ void LLViewerJoystick::moveFlycam(bool reset)
 }
 
 // -----------------------------------------------------------------------------
+// [RLVa:Trish] RLVa camera restrictions
+bool LLViewerJoystick::isFlycamAllowedByRlv()
+{
+    return !RlvActions::isRlvEnabled() ||
+        (!RlvActions::hasBehaviour(RLV_BHVR_SETCAM) && !RlvActions::hasBehaviour(RLV_BHVR_SETCAM_UNLOCK));
+}
+
+// Leave flycam as soon as a restriction that forbids it is applied
+void LLViewerJoystick::onRlvBehaviourToggle(ERlvBehaviour behaviour, ERlvParamType type)
+{
+    if ((RLV_BHVR_SETCAM == behaviour || RLV_BHVR_SETCAM_UNLOCK == behaviour) &&
+        gAgentCamera.isUsingFlycam() && !isFlycamAllowedByRlv())
+    {
+        toggleFlycam();
+        setCameraNeedsUpdate(true);
+    }
+}
+// [/RLVa:Trish]
+
+// -----------------------------------------------------------------------------
 bool LLViewerJoystick::toggleFlycam()
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_INPUT;
-    if (!gSavedSettings.getBOOL("JoystickEnabled") || !gSavedSettings.getBOOL("JoystickFlycamEnabled"))
+    // The flycam is shared state (LLAgentCamera) that keyboard and game controller
+    // input drive too, so toggling it must not require a 3D mouse / joystick:
+    // moveFlycam() already skips the joystick's own input when it's disabled.
+
+// [RLVa:Trish] Check RLVa restrictions before engaging the camera (to avoid wonkiness)
+    if (!gAgentCamera.isUsingFlycam() && !isFlycamAllowedByRlv())
     {
-        if (gAgentCamera.isUsingFlycam())
-        {
-            gAgentCamera.toggleFlycam();
-        }
-        LLPanelStandStopFlying::clearStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
+        RlvUtil::notifyBlockedGeneric();
         return false;
     }
+// [/RLVa:Trish]
 
     if (!gAgentCamera.isUsingFlycam())
     {
@@ -1485,7 +1517,9 @@ void LLViewerJoystick::scanJoystick()
 
     if (mBtn[0] == 1)
     {
-        if (mBtn[0] != toggle_flycam)
+        // toggleFlycam() itself is ungated (keyboard/menu use it too), so the
+        // device's own flycam option is honoured here for its button.
+        if (mBtn[0] != toggle_flycam && gSavedSettings.getBOOL("JoystickFlycamEnabled"))
         {
             toggle_flycam = toggleFlycam() ? 1 : 0;
         }

@@ -3867,8 +3867,10 @@
                  function="View.CheckJoystickFlycam" />
                 <menu_item_check.on_click
                  function="View.JoystickFlycam" />
+                <!-- [RLVa:Trish] Greyed out while RLVa camera restrictions block the flycam -->
                 <menu_item_check.on_enable
                  function="View.EnableJoystickFlycam" />
+                <!-- [/RLVa:Trish] -->
             </menu_item_check>
             <menu_item_call
              label="Reset View"
