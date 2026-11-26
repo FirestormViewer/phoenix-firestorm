@@ -288,6 +288,10 @@
 			<text name="FSCmdLinePasteCam_txt">
 				Ustaw pozycję kamery (cmd pos|focus|roll)
 			</text>
+			<text name="FSCmdLineCamBookmark_txt">
+				Zakładki kamery (cmd add | go)
+			</text>
+			<line_editor tool_tip="cmd add [nazwa], cmd follow [nazwa], cmd followturn [nazwa]: zapisz bieżący widok jako zakładkę. cmd go [nazwa]: przejdź do zakładki. cmd print [nazwa]: wypisz link kamery na czacie w pobliżu. cmd tour [nazwa]: odtwórz trasę. cmd stop: zakończ trasę. cmd list: wypisz listę zakładek." name="FSCmdLineCamBookmark" />
 			<text name="FSCmdLineAO_txt">
 				Włącz/wyłącz AO (użycie: cmd on/off)
 			</text>

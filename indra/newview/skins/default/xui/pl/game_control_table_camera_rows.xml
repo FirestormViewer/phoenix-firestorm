@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="camera_actions">
+		<columns label="Ruch kamery" name="action" />
+	</rows>
+	<rows name="advance">
+		<columns name="action" tool_tip="Ruch kamery w przód / w tył" value="Przód / Tył" />
+	</rows>
+	<rows name="pan">
+		<columns name="action" tool_tip="Przesuń kamerę w lewo / w prawo" value="Przesuń w lewo / w prawo" />
+	</rows>
+	<rows name="rise">
+		<columns name="action" tool_tip="Wznoszenie / opadanie kamery" value="W górę / W dół" />
+	</rows>
+	<rows name="pitch">
+		<columns name="action" tool_tip="Zmiana pochylenia kamery" value="Pochyl w górę / w dół" />
+	</rows>
+	<rows name="yaw">
+		<columns name="action" tool_tip="Obrót kamery w lewo / w prawo" value="Obróć w lewo / w prawo" />
+	</rows>
+	<rows name="zoom">
+		<columns name="action" tool_tip="Przybliżanie / oddalanie kamery" value="Przybliż / Oddal" />
+	</rows>
+</contents>

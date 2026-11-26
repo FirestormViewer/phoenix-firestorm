@@ -91,7 +91,7 @@
 				<combo_box.item label="Teleportuj do klikniętego punktu" name="2"/>
 			</combo_box>
 			<check_box label="Zezwól na dwukrotne kliknięcia na obiektach skryptowanych" name="FSAllowDoubleClickOnScriptedObjects" />
-			<button label="Konfiguruj joystick" name="joystick_setup_button"/>
+			<button label="3Dconnexion" name="joystick_setup_button"/>
 		</panel>
 		<panel label="Teleportacja" name="tab-teleports">
 			<check_box label="Odtwórz dźwięk podczas teleportacji" name="PlayTeleportSound"/>

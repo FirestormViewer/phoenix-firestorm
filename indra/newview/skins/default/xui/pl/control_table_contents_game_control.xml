@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="game_control_buttons">
+		<columns label="Przyciski kontrolera gier" name="lst_action" />
+	</rows>
+	<rows name="game_control_button_0">
+		<columns name="lst_action" value="Przycisk 0" />
+	</rows>
+	<rows name="game_control_button_1">
+		<columns name="lst_action" value="Przycisk 1" />
+	</rows>
+	<rows name="game_control_button_2">
+		<columns name="lst_action" value="Przycisk 2" />
+	</rows>
+	<rows name="game_control_button_3">
+		<columns name="lst_action" value="Przycisk 3" />
+	</rows>
+	<rows name="game_control_button_4">
+		<columns name="lst_action" value="Przycisk 4" />
+	</rows>
+	<rows name="game_control_button_5">
+		<columns name="lst_action" value="Przycisk 5" />
+	</rows>
+	<rows name="game_control_button_6">
+		<columns name="lst_action" value="Przycisk 6" />
+	</rows>
+	<rows name="game_control_button_7">
+		<columns name="lst_action" value="Przycisk 7" />
+	</rows>
+	<rows name="game_control_button_8">
+		<columns name="lst_action" value="Przycisk 8" />
+	</rows>
+	<rows name="game_control_button_9">
+		<columns name="lst_action" value="Przycisk 9" />
+	</rows>
+	<rows name="game_control_button_10">
+		<columns name="lst_action" value="Przycisk 10" />
+	</rows>
+	<rows name="game_control_button_11">
+		<columns name="lst_action" value="Przycisk 11" />
+	</rows>
+	<rows name="game_control_button_12">
+		<columns name="lst_action" value="Przycisk 12" />
+	</rows>
+	<rows name="game_control_button_13">
+		<columns name="lst_action" value="Przycisk 13" />
+	</rows>
+	<rows name="game_control_button_14">
+		<columns name="lst_action" value="Przycisk 14" />
+	</rows>
+	<rows name="game_control_button_15">
+		<columns name="lst_action" value="Przycisk 15" />
+	</rows>
+	<rows name="game_control_button_16">
+		<columns name="lst_action" value="Przycisk 16" />
+	</rows>
+	<rows name="game_control_button_17">
+		<columns name="lst_action" value="Przycisk 17" />
+	</rows>
+	<rows name="game_control_button_18">
+		<columns name="lst_action" value="Przycisk 18" />
+	</rows>
+	<rows name="game_control_button_19">
+		<columns name="lst_action" value="Przycisk 19" />
+	</rows>
+	<rows name="game_control_button_20">
+		<columns name="lst_action" value="Przycisk 20" />
+	</rows>
+	<rows name="game_control_button_21">
+		<columns name="lst_action" value="Przycisk 21" />
+	</rows>
+	<rows name="game_control_button_22">
+		<columns name="lst_action" value="Przycisk 22" />
+	</rows>
+	<rows name="game_control_button_23">
+		<columns name="lst_action" value="Przycisk 23" />
+	</rows>
+	<rows name="game_control_button_24">
+		<columns name="lst_action" value="Przycisk 24" />
+	</rows>
+	<rows name="game_control_button_25">
+		<columns name="lst_action" value="Przycisk 25" />
+	</rows>
+	<rows name="game_control_button_26">
+		<columns name="lst_action" value="Przycisk 26" />
+	</rows>
+	<rows name="game_control_button_27">
+		<columns name="lst_action" value="Przycisk 27" />
+	</rows>
+	<rows name="game_control_button_28">
+		<columns name="lst_action" value="Przycisk 28" />
+	</rows>
+	<rows name="game_control_button_29">
+		<columns name="lst_action" value="Przycisk 29" />
+	</rows>
+	<rows name="game_control_button_30">
+		<columns name="lst_action" value="Przycisk 30" />
+	</rows>
+	<rows name="game_control_button_31">
+		<columns name="lst_action" value="Przycisk 31" />
+	</rows>
+</contents>

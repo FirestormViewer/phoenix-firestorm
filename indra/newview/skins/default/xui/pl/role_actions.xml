@@ -71,6 +71,7 @@
 		<action description="Dostęp do czatu grupowego" longdescription="Osoby w Funkcji z tym Przywilejem mogą uczestniczyć w czacie i głosowych rozmowach grupowych." name="join group chat"/>
 		<action description="Dostęp do głosowych rozmów grupowych" longdescription="Osoby w Funkcji z tym Przywilejem mogą uczestniczyć w głosowych rozmowach grupowych. UWAGA: Dostęp do Czatu Grupowego (opcja powyżej) jest wymagany dla rozmów grupowych." name="join voice chat"/>
 		<action description="Moderator czatu grupowego" longdescription="Osoby w Funkcji z tym Przywilejem mogą kontrolować dostęp do czatu i głosowych rozmów grupowych." name="moderate group chat"/>
+		<action description="Wysyłanie linków na czacie" longdescription="Osoby w Funkcji z tym Przywilejem mogą wysyłać klikalne linki internetowe (http:// i https://) na czacie grupowym. Linki wysłane przez osoby bez tego Przywileju zostaną u wszystkich odbiorców zastąpione tekstem &apos;(Link removed by group moderators)&apos;." name="chat post links"/>
 	</action_set>
 	<action_set description="Przywileje umożliwiające modyfikowanie Przygód należących do tej grupy." name="experience_tools_experience">
 		<action description="Administrator Przygód" longdescription="Osoby w Funkcji z tym Przywilejem mogą modyfikować meta-dane Przygód." name="experience admin" />

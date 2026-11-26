@@ -6,4 +6,7 @@
 	<text name="page_label" value="Str." />
 	<button tool_tip="Otwórz logi czatu w zewnętrznym oknie" name="open_external_btn" />
 	<button tool_tip="Przeszukaj ten log czatu" name="search_btn" />
+	<panel name="chat_service_loading" width="115">
+		<text name="chat_service_loading_text" width="90" value="Wczytywanie..."/>
+	</panel>
 </floater>

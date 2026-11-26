@@ -5159,8 +5159,11 @@ Będzie można użyć http://opensimulator.org/wiki/inventory aby rozwiązać pr
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Obecny tryb" yestext="Wszystkie tryby" />
 	</notification>
 	<notification name="PreferenceChatDeleteTranscripts">
-		Ta opcja usunie logi wszystkich poprzednich rozmów. Nie będzie to miało wpływu na listę rozmów odbytych w przeszłości. Wszystkie pliki z przyrostkami .txt oraz txt.backup w folderze [FOLDER] zostaną usunięte.
+		Ta opcja usunie lokalne pliki z logami rozmów oraz pobraną historię z usługi czatu. Zapisy na serwerze zostaną zachowane, ale wpisy z usługi, które leżą na zapisanej granicy usunięcia lub przed nią, pozostaną lokalnie ukryte. Nie będzie to miało wpływu na listę rozmów odbytych w przeszłości.
 		<usetemplate ignoretext="Potwierdź, zanim usunę logi rozmów." name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="ChatServiceHistoryDeleteFailed">
+		Części lokalnej historii nie udało się bezpiecznie usunąć. Historia pozostanie ukryta, dopóki usuwanie logów rozmów nie zakończy się powodzeniem.
 	</notification>
 	<notification name="PreferenceChatPathChanged">
 		Nie można przenieść plików. Przywrócono poprzednią ścieżkę.
@@ -5847,5 +5850,103 @@ Spowoduje to usunięcie folderu oraz znajdujących się w nim linków. Oryginaln
 	<notification name="FSWearableFavoritesFolderInvalidName">
 		Nie udało się utworzyć folderu ulubionych rzeczy "[FOLDER_NAME]".
 Nazwy folderów nie mogą zawierać znaków / ani \. 
+	</notification>
+	<notification name="FSCameraLinkTeleport">
+		Ten widok kamery znajduje się w regionie &lt;nolink&gt;[REGION]&lt;/nolink&gt;. Teleportować Cię tam i pokazać ten widok po przybyciu?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Teleportuj" />
+	</notification>
+	<notification name="FSCameraLinkCopied">
+		Link kamery do regionu &lt;nolink&gt;[REGION]&lt;/nolink&gt; został skopiowany do schowka.
+	</notification>
+	<notification name="FSCameraLinkInvalid">
+		Ten link kamery jest nieprawidłowy: brakuje w nim regionu, pozycji, punktu skupienia lub pola widzenia albo ich wartości są poza zakresem.
+	</notification>
+	<notification name="FSCameraLinkNoRegion">
+		Nie można utworzyć linku kamery: kamera nie znajduje się w żadnym regionie.
+	</notification>
+	<notification name="FSCameraLinkRlvCamera">
+		Nie można użyć linku kamery: Twoja kamera jest ograniczona przez RLVa.
+	</notification>
+	<notification name="FSCameraLinkRlvDistance">
+		Nie można użyć linku kamery: widok jest dalej, niż pozwala na to RLVa.
+	</notification>
+	<notification name="FSCameraLinkRlvTeleport">
+		Nie można użyć linku kamery: teleportacje są ograniczone przez RLVa.
+	</notification>
+	<notification name="FSCameraLinkRlvLocation">
+		Nie można utworzyć linku kamery: nazwy regionów są ukryte przez RLVa.
+	</notification>
+	<notification name="FSCameraLinkGaveUp">
+		Widok kamery w regionie &lt;nolink&gt;[REGION]&lt;/nolink&gt; został porzucony: nie udało się dotrzeć do tego regionu w ciągu minuty.
+	</notification>
+	<notification name="FSCameraLinkTargetGone">
+		Śledzony cel zniknął, kamera została przeniesiona do początkowego punktu śledzenia.
+	</notification>
+	<notification name="FSCameraLinkTargetLost">
+		Śledzony cel został utracony, kamera pozostała na miejscu. Naciśnij ESC, aby wrócić.
+	</notification>
+	<notification name="FSCameraLinkNoTarget">
+		Nie ma czego śledzić: najpierw kliknij z Alt obiekt lub awatara (albo zaznacz obiekt), a potem zapisz widok kamery.
+	</notification>
+	<notification name="FSCameraLinkTargetTooFar">
+		Cel jest zbyt daleko od kamery. Najpierw przybliż do niego kamerę.
+	</notification>
+	<notification name="FSCameraTourInterfaceHidden">
+		Interfejs jest ukryty podczas odtwarzania trasy kamery. ESC zatrzymuje trasę i przywraca interfejs.
+	</notification>
+	<notification name="FSCameraTourNoneInReach">
+		Tej trasy nie można odtworzyć z tego miejsca: jej przystanki wymagają teleportacji albo są dalej, niż RLVa pozwala przesunąć Twoją kamerę. Podejdź bliżej do jej punktu początkowego.
+	</notification>
+	<notification name="FSCameraTourCopied">
+		Trasa kamery "[NAME]" została skopiowana do schowka (przystanki: [COUNT]).
+	</notification>
+	<notification name="FSCameraTourPasted">
+		Trasa kamery "[NAME]" została dodana ze schowka (przystanki: [COUNT]).
+	</notification>
+	<notification name="FSCameraLinksCopied">
+		Linki kamery zostały skopiowane do schowka.
+	</notification>
+	<notification label="Trasa kamery" name="FSCameraTourName">
+		Nazwa trasy kamery:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification label="Trasa kamery" name="FSCameraTourStopName">
+		Nazwa przystanku trasy:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="FSCameraTourDelete">
+		Usunąć trasę kamery "[NAME]"? Jej zakładki pozostaną na Twojej liście zakładek.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Usuń" />
+	</notification>
+	<notification name="FSCameraBookmarkPasteNone">
+		Schowek nie zawiera prawidłowego linku kamery, który można by dodać.
+	</notification>
+	<notification name="FSCameraBookmarkAlreadySaved">
+		Ten widok kamery jest już zapisany jako zakładka.
+	</notification>
+	<notification name="FSCameraBookmarksPasted">
+		Zakładki kamery dodane ze schowka: [ADDED]. Już zapisane: [SKIPPED]. Nieprawidłowe: [INVALID].
+	</notification>
+	<notification label="Zakładka kamery" name="FSCameraBookmarkName">
+		Nazwa zakładki kamery:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="FSCameraBookmarkDelete">
+		Usunąć zakładkę kamery "[NAME]"?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Usuń" />
+	</notification>
+	<notification name="FSCameraBookmarksDelete">
+		Usunąć zaznaczone zakładki kamery ([COUNT])?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Usuń" />
+	</notification>
+	<notification name="FSCameraBookmarkUpdate">
+		Ustawić zakładkę kamery "[NAME]" na bieżący widok kamery? Jej poprzedni widok zostanie zastąpiony.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Zastąp" />
 	</notification>
 </notifications>

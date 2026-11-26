@@ -759,6 +759,9 @@ Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	<string name="BUTTON_HELP">
 		Pokaż Pomoc
 	</string>
+	<string name="BUTTON_PIN">
+		Przypnij pozycję i rozmiar
+	</string>
 	<string name="BUTTON_SNOOZE">
 		Tymczasowo wycisz
 	</string>
@@ -1310,6 +1313,9 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="PrivilegedLandAccess">
 		Sprzedawać ziemię w Twoim imieniu.
+	</string>
+	<string name="UseGameControlInputs">
+		Używać sygnałów z gamepada.
 	</string>
 	<string name="SnapshotSavedToDisk">
 		Zdjęcie zapisane: [FILENAME]
@@ -5598,6 +5604,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_FaceNearest_Label">
 		Zwróć się w stronę najbliższego awatara
 	</string>
+	<string name="Command_CameraBookmarks_Label">
+		Zakładki kamery
+	</string>
 	<string name="Command_360_Capture_Tooltip">
 		Uchwyć równoprostokątny obraz 360°
 	</string>
@@ -5771,6 +5780,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_FaceNearest_Tooltip">
 		Obróć się w stronę najbliższego awatara w promieniu 20m
+	</string>
+	<string name="Command_CameraBookmarks_Tooltip">
+		Zapisuj widoki kamery i wracaj do nich albo odtwarzaj je jako trasę
 	</string>
 	<string name="Command_Group_Titles_Tooltip">
 		Zmień aktywny tag grupy
@@ -6197,6 +6209,36 @@ do sekcji wsparcia witryny SecondLife.com i zgłoś problem.
 	</string>
 	<string name="FSCmdLineTrackPosMapError">
 		Nie można otworzyć mapy świata.
+	</string>
+	<string name="FSCmdLineCamBookmarkUsage">
+		Zakładki kamery (użycie: cmd add [nazwa], cmd follow [nazwa], cmd followturn [nazwa], cmd go [nazwa], cmd print [nazwa], cmd tour [nazwa], cmd stop, cmd list). Print wypisuje na czacie w pobliżu link do bieżącego widoku lub do zakładki. Follow utrzymuje kamerę względem tego, na czym się skupia: celu kliknięcia z Alt, zaznaczonego obiektu lub Twojego awatara; followturn dodatkowo obraca ją razem z nim. Słowo polecenia ustawia się w opcji FSCmdLineCamBookmark.
+	</string>
+	<string name="FSCmdLineCamBookmarkAdded">
+		Dodano zakładkę kamery &apos;[NAME]&apos;: [LINK]
+	</string>
+	<string name="FSCmdLineCamBookmarkGo">
+		Przejście do zakładki kamery &apos;[NAME]&apos;.
+	</string>
+	<string name="FSCmdLineCamBookmarkNotFound">
+		Nie znaleziono zakładki kamery pasującej do &apos;[NAME]&apos;.
+	</string>
+	<string name="FSCmdLineCamBookmarkRlvLocation">
+		Nie można wypisać linku kamery: nazwy regionów są ukryte przez RLVa.
+	</string>
+	<string name="FSCmdLineCamTourNotFound">
+		Nie znaleziono trasy kamery pasującej do &apos;[NAME]&apos;.
+	</string>
+	<string name="FSCmdLineCamTourPlaying">
+		Odtwarzanie trasy kamery &apos;[NAME]&apos;. Naciśnij ESC, aby ją zakończyć.
+	</string>
+	<string name="FSCmdLineCamTourStopped">
+		Trasa kamery została zatrzymana.
+	</string>
+	<string name="FSCmdLineCamBookmarkList">
+		Zakładki kamery: [BOOKMARKS]. Trasy kamery: [TOURS].
+	</string>
+	<string name="FSCameraTourUnnamed">
+		Trasa
 	</string>
 	<string name="FSCmdLineDrawDistanceSet">
 		Pole widzenia zostało ustawione na [DISTANCE]m.
@@ -6740,6 +6782,12 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="FSUrlEntryWearLabel">
 		Załóż folder z Szafy
+	</string>
+	<string name="FSUrlEntryCameraLabel">
+		Widok kamery w regionie
+	</string>
+	<string name="TooltipFSUrlEntryCamera">
+		Kliknij, aby przenieść kamerę do tego widoku
 	</string>
 	<string name="TexturePickerOutfitHeader">
 		Zdjęcie elementu

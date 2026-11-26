@@ -209,6 +209,7 @@
     </panel>
     <panel label="Buduj 2" name="BuildTab2">
         <check_box label="Używaj CTRL+myszki, aby chwytać obiekty i manipulować nimi" tool_tip="Gdy zaznaczysz tę opcję, to będziesz w stanie chwytać i przesuwać obiekty za pomocą myszki oraz klawisza CTRL." name="FSEnableGrab" />
+        <check_box label="Używaj CTRL+myszki, aby przesuwać HUD-y po ekranie" tool_tip="Gdy zaznaczysz tę opcję, to będziesz w stanie przytrzymać CTRL i przeciągnąć HUD, który możesz modyfikować, aby przesunąć go po ekranie - bez otwierania narzędzi budowania." name="FSCtrlDragHUDs" />
         <check_box label="Przesuwaj / skaluj tekstury budując, gdy trzymany jest przycisk myszy oraz caps-lock" tool_tip="Gdy zaznaczysz tę opcję, to będziesz mógł/mogła przesuwać lub skalować strony tekstur trzymając przycisk myszy (wraz z klawiszem caps-lock) w trybie budowania. Ta funkcja jest eksperymentalna i powinna być używana ostrożnie." name="FSExperimentalDragTexture" />
         <check_box label="Podgląd animacji na własnym awatarze podczas przesyłania ich na serwer" tool_tip="Gdy zaznaczysz tę opcję, to będziesz w stanie oglądać animacje na swoim własnym awatarze podczas przesyłania ich na serwer" name="FSUploadAnimationOnOwnAvatar" />
         <check_box label="Zawsze rozwijaj zaawansowane informacje o podglądzie animacji" tool_tip="Domyślnie rozwiń zaawansowane informacje o animacji w oknie podglądu animacji" name="FSAnimationPreviewExpanded" />

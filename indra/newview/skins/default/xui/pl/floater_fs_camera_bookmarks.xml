@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_camera_bookmarks" title="Zakładki kamery">
+	<string name="invalid_link">(nieprawidłowy link)</string>
+	<string name="following">Śledzenie: [NAME]</string>
+	<string name="following_unnamed">Śledzenie obiektu</string>
+	<string name="show_tours">Trasy &gt;&gt;</string>
+	<string name="hide_tours">&lt;&lt; Trasy</string>
+	<string name="compact_view">Kompaktowy</string>
+	<string name="full_view">Pełny</string>
+	<string name="no_tours">(brak tras)</string>
+	<string name="new_tour_name">Moja trasa</string>
+	<string name="pasted_tour_name">Wklejona trasa</string>
+	<string name="tour_play">Odtwórz</string>
+	<string name="tour_stop">Zatrzymaj</string>
+	<string name="tour_status">[TOUR]: przystanek [NUMBER] z [COUNT], [NAME]</string>
+	<string name="tour_status_skipped">[TOUR]: przystanek [NUMBER] z [COUNT], [NAME] ([SKIPPED] poza zasięgiem, pominięto)</string>
+	<string name="tour_duration">Przystanki: [COUNT]. Jedno przejście: [TIME]</string>
+	<string name="invalid_stop">[NAME] (nieprawidłowy link)</string>
+	<string name="unit_degrees">stopni</string>
+	<string name="move_orbit_left">Okrążanie w lewo [AMOUNT]°</string>
+	<string name="move_orbit_right">Okrążanie w prawo [AMOUNT]°</string>
+	<string name="move_pan_left">Panorama w lewo [AMOUNT]°</string>
+	<string name="move_pan_right">Panorama w prawo [AMOUNT]°</string>
+	<string name="move_push_in">Najazd [AMOUNT]%</string>
+	<string name="move_pull_out">Odjazd [AMOUNT]%</string>
+	<string name="move_rise">Wznoszenie [AMOUNT] m</string>
+	<string name="move_sink">Opadanie [AMOUNT] m</string>
+	<panel name="bookmarks_panel">
+		<filter_editor name="filter" label="Filtruj wg nazwy lub regionu" right="-182" />
+		<button name="compact_toggle" label="Kompaktowy" tool_tip="Tryb kompaktowy pokazuje tylko listę zakładek." width="84" />
+		<button name="tours_toggle" label="&lt;&lt; Trasy" tool_tip="Pokaż lub ukryj panel tras." />
+		<scroll_list name="bookmarks" tool_tip="Kliknij dwukrotnie, aby przejść do widoku. Widok w innym regionie najpierw zaproponuje teleport, a widok śledzący jakiś cel będzie za nim podążać. Kliknij prawym przyciskiem, aby zobaczyć więcej opcji. Zaznacz kilka zakładek z Ctrl lub Shift, aby razem je skopiować, usunąć lub dodać do trasy.">
+			<scroll_list.columns name="name" label="Nazwa" />
+		</scroll_list>
+		<button name="add_following" label="Dodaj widok śledzący cel" tool_tip="Zapisz bieżący widok utrzymywany względem tego, na czym skupia się kamera: obiektu lub awatara klikniętego z Alt, w innym razie zaznaczonego obiektu, a w ostateczności Twojego awatara." />
+		<check_box name="follow_turns" label="Obracaj razem z nim" tool_tip="Kamera obraca się także razem z poruszającym się celem. Gdy ta opcja jest odznaczona, kamera zachowuje własny kierunek i tylko przemieszcza się wraz z celem." width="150" />
+		<button name="add" label="Dodaj bieżący widok" tool_tip="Zapisz bieżący widok kamery pod wybraną nazwą, razem z jego polem widzenia i przechyłem" width="132" />
+		<button name="paste" label="Wklej linki" tool_tip="Dodaj linki kamery ze schowka." width="72" />
+		<button name="go" label="Idź" tool_tip="Przenieś kamerę do zaznaczonego widoku, najpierw teleportując, jeśli znajduje się on w innym regionie" />
+		<button name="copy" label="Kopiuj link" tool_tip="Kopiuj link kamery zaznaczonego widoku, aby wkleić go na czacie lub w notce. Kilka zaznaczonych widoków zostanie skopiowanych jako wiersze 'nazwa: link'." width="72" />
+		<button name="rename" label="Zmień nazwę" width="88" />
+		<button name="update_view" label="Zaktualizuj widok" tool_tip="Zastąp widok zaznaczonej zakładki bieżącym widokiem kamery." width="112" />
+		<button name="delete" label="Usuń" width="48" />
+		<button name="move_up" label="W górę" tool_tip="Przesuń zaznaczoną zakładkę w górę" width="50" />
+		<button name="move_down" label="W dół" tool_tip="Przesuń zaznaczoną zakładkę w dół" />
+	</panel>
+	<panel name="tours_panel">
+		<text name="tour_label" width="40">Trasa:</text>
+		<combo_box name="tour_combo" tool_tip="Trasa do edycji i odtwarzania" right="-210" />
+		<button name="new_tour" label="Nowa" tool_tip="Rozpocznij nową, pustą trasę" right="-156" />
+		<button name="rename_tour" label="Zmień nazwę" width="88" />
+		<button name="delete_tour" label="Usuń" />
+		<scroll_list name="stops" tool_tip="Zakładki tej trasy. Zaznacz jedną lub kilka, aby poniżej zmienić ich czas i ruch kamery. Kliknij dwukrotnie, aby przejść do zakładki.">
+			<scroll_list.columns name="name" label="Przystanek" />
+			<scroll_list.columns name="fly" label="Lot s" tool_tip="Sekundy lotu do tego przystanku z poprzedniego" />
+			<scroll_list.columns name="hold" label="Postój s" tool_tip="Sekundy postoju na tym przystanku" width="60" />
+			<scroll_list.columns name="move" label="Ruch kamery" tool_tip="Co robi kamera podczas postoju na tym przystanku" width="150" />
+		</scroll_list>
+		<button name="add_stops" label="Dodaj zakładki" tool_tip="Dodaj zakładki zaznaczone po lewej stronie na koniec tej trasy, w tej samej kolejności (jeśli nie ma żadnej trasy, zostanie utworzona nowa)." />
+		<button name="add_current_stop" label="Dodaj bieżący widok" tool_tip="Dodaj bieżący widok kamery na koniec tej trasy, bez zapisywania go jako zakładki" width="132" />
+		<button name="remove_stops" label="Usuń" tool_tip="Usuń zaznaczony przystanek z tej trasy." />
+		<button name="stop_up" label="W górę" tool_tip="Przesuń zaznaczony przystanek w górę" width="50" />
+		<button name="stop_down" label="W dół" tool_tip="Przesuń zaznaczony przystanek w dół" />
+		<text name="stop_editor_label">Zaznaczone przystanki:</text>
+		<spinner name="stop_travel" label="Lot s" tool_tip="Ile sekund kamera leci do tego przystanku z poprzedniego" />
+		<spinner name="stop_hold" label="Postój s" label_width="50" tool_tip="Ile sekund kamera pozostaje na tym przystanku, poruszając się tak, jak ustawiono poniżej" width="100" />
+		<combo_box name="stop_ease" tool_tip="Jak kamera przyspiesza i zwalnia podczas lotu do tego przystanku. Płynnie: rusza i dolatuje powoli. Liniowo: utrzymuje stałą prędkość, co daje jedno ciągłe ujęcie przez przystanki bez postoju. Łagodny start: rusza powoli. Łagodny koniec: dolatuje powoli." width="118">
+			<combo_box.item label="Płynnie" name="smooth" />
+			<combo_box.item label="Liniowo" name="linear" />
+			<combo_box.item label="Łagodny start" name="ease_in" />
+			<combo_box.item label="Łagodny koniec" name="ease_out" />
+		</combo_box>
+		<combo_box name="stop_move" tool_tip="Sposób poruszania się kamery podczas postoju. Okrążanie krąży wokół punktu, na który patrzy kamera. Panorama obraca kamerę w miejscu. Najazd i odjazd przybliżają kamerę do tego punktu lub oddalają ją od niego. Wznoszenie i opadanie przesuwają ją prosto w górę lub w dół." width="140">
+			<combo_box.item label="Bez ruchu" name="none" />
+			<combo_box.item label="Okrążanie w lewo" name="orbit_left" />
+			<combo_box.item label="Okrążanie w prawo" name="orbit_right" />
+			<combo_box.item label="Panorama w lewo" name="pan_left" />
+			<combo_box.item label="Panorama w prawo" name="pan_right" />
+			<combo_box.item label="Najazd" name="push_in" />
+			<combo_box.item label="Odjazd" name="pull_out" />
+			<combo_box.item label="Wznoszenie" name="rise" />
+			<combo_box.item label="Opadanie" name="sink" />
+		</combo_box>
+		<spinner name="stop_amount" tool_tip="Jak daleko kamera przesuwa się w czasie postoju: w stopniach dla okrążania i panoramy, w procentach odległości dla najazdu i odjazdu, w metrach dla wznoszenia i opadania" />
+		<combo_box name="tour_repeat" tool_tip="Po ostatnim przystanku: zostań tam, zacznij od nowa od pierwszego albo wróć przez kolejne przystanki i powtarzaj trasę w obie strony">
+			<combo_box.item label="Odtwórz raz" name="once" />
+			<combo_box.item label="W pętli" name="loop" />
+			<combo_box.item label="W obie strony" name="bounce" />
+		</combo_box>
+		<combo_box name="tour_path" tool_tip="Ścieżka prosta prowadzi lot po linii prostej od przystanku do przystanku. Ścieżka krzywa przeprowadza kamerę przez przystanki po gładkim łuku, co daje jedno płynne ujęcie (z liniowymi przystankami bez postoju)." width="114">
+			<combo_box.item label="Ścieżka prosta" name="straight" />
+			<combo_box.item label="Ścieżka krzywa" name="curved" />
+		</combo_box>
+		<spinner name="tour_speed" label="Szybkość" label_width="58" tool_tip="Szybkość odtwarzania." width="112" />
+		<check_box name="tour_hide_ui" label="Ukryj UI" tool_tip="Ukryj interfejs podczas odtwarzania trasy. ESC kończy trasę i przywraca interfejs." />
+		<button name="play_tour" label="Odtwórz" tool_tip="Przeprowadź kamerę przez przystanki po kolei, od zaznaczonego (lub od pierwszego). Przystanki, które wymagałyby teleportacji lub znajdują się poza ograniczeniami Twojej kamery, zostaną pominięte. ESC lub ruch awatarem kończy trasę." width="72" />
+		<button name="go_stop" label="Idź do przystanku" tool_tip="Przenieś kamerę do zaznaczonego przystanku" width="112" />
+		<button name="copy_tour" label="Kopiuj trasę" tool_tip="Kopiuj tę trasę jako tekst, razem z jej nazwą, opcjami oraz czasem i ruchem każdego przystanku, aby przekazać ją innym. Przycisk 'Wklej trasę' zamienia taki tekst z powrotem w trasę." width="80" />
+		<button name="paste_tour" label="Wklej trasę" tool_tip="Dodaj trasę ze schowka jako nową trasę." width="78" />
+	</panel>
+</floater>

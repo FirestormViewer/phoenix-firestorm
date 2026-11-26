@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Kontrolery gier" name="game_control_panel">
+	<tab_container name="game_control_tabs">
+		<panel label="Przypisania akcji" name="tab_action_mappings">
+			<combo_box name="action_mode" tool_tip="Wybierz tryb, aby edytować jego przypisania.">
+				<combo_box.item label="Podczas poruszania awatarem" name="avatar" />
+				<combo_box.item label="W trybie pierwszoosobowym" name="mouselook" />
+				<combo_box.item label="W trybie wolnej kamery" name="flycam" />
+				<combo_box.item label="Siedząc" name="captive" />
+				<combo_box.item label="W trybie kursora myszy" name="cursor" />
+			</combo_box>
+			<check_box label="Tryb włączony" name="action_mode_enabled" tool_tip="Odznacz, aby zablokować przypisania tego trybu i przestać zamieniać sygnały z kontrolera gier na akcje tego trybu." width="105" />
+			<check_box label="Zezwól na przechył" name="flycam_allow_roll" tool_tip="Pozwala, by przechył obracał wolną kamerę wokół jej osi przód-tył. Widoczne tylko podczas edycji przypisań wolnej kamery." width="130" />
+			<text name="speed_slow_label" width="38">
+				Wolno
+			</text>
+			<slider name="speed_factor" tool_tip="Wolna kamera: prędkość ruchu kamery. Tryb pierwszoosobowy: prędkość obracania i rozglądania się. Awatar: prędkość obracania. Widoczne tylko podczas edycji przypisań wolnej kamery, trybu pierwszoosobowego lub awatara." width="62" />
+			<text name="speed_fast_label" width="44">
+				Szybko
+			</text>
+			<check_box label="Ukryj kursor myszy" name="flycam_hide_cursor" tool_tip="Ukrywa kursor myszy podczas latania wolną kamerą. Kursor pojawia się znowu po poruszeniu myszą i znika ponownie po 5 sekundach albo w ciągu 1 sekundy od chwili, gdy wolna kamera ruszy. Widoczne tylko podczas edycji przypisań wolnej kamery." width="135" />
+			<check_box label="Pokaż celownik" name="flycam_crosshair" tool_tip="Rysuje celownik na środku ekranu podczas latania wolną kamerą. Widoczne tylko podczas edycji przypisań wolnej kamery." />
+			<button label="Przywróć domyślne" name="restore_actions_defaults" tool_tip="Przywraca domyślne przypisania akcji dla bieżącego trybu." />
+			<text name="current_mode_indicator">
+				Aktywny tryb:
+			</text>
+			<panel name="action_mappings_panel">
+				<panel name="action_mappings_axes_panel">
+					<scroll_list name="action_mappings_axes">
+						<scroll_list.columns label="Akcja" name="action" />
+						<scroll_list.columns label="Wejście" name="input" />
+						<scroll_list.columns label="Oś" name="input_description" />
+						<scroll_list.columns label="Odwróć" name="invert" />
+					</scroll_list>
+				</panel>
+				<panel name="action_mappings_buttons_panel">
+					<scroll_list name="action_mappings_buttons">
+						<scroll_list.columns label="Akcja" name="action" />
+						<scroll_list.columns label="Wejście" name="input" />
+						<scroll_list.columns label="Przycisk" name="input_description" />
+					</scroll_list>
+				</panel>
+			</panel>
+		</panel>
+		<panel label="Przypisania urządzeń" name="tab_device_mappings">
+			<text name="nodevice_message">
+				Brak urządzenia
+			</text>
+			<check_box label="Pokaż wszystkie znane urządzenia" name="show_all_known_devices" left="85" width="230" />
+			<text name="device_prompt" width="72">
+				Urządzenie:
+			</text>
+			<combo_box name="device_list" left="85" />
+			<button label="Przywróć domyślne" name="restore_device_defaults" tool_tip="Przywraca domyślne ustawienia wybranego urządzenia." />
+			<panel name="device_settings">
+				<panel name="axis_channels_panel">
+					<scroll_list name="axis_channels">
+						<scroll_list.columns label="Co naciskasz" name="input_description" />
+						<scroll_list.columns label="Co otrzymujesz" name="output_description" />
+					</scroll_list>
+				</panel>
+				<panel name="button_channels_panel">
+					<scroll_list name="button_channels">
+						<scroll_list.columns label="Co naciskasz" name="input_description" />
+						<scroll_list.columns label="Co otrzymujesz" name="output_description" />
+					</scroll_list>
+				</panel>
+			</panel>
+		</panel>
+		<panel label="Opcje urządzeń" name="tab_device_options">
+			<text name="state_nodevice_message">
+				Brak urządzenia
+			</text>
+			<text name="state_device_prompt" width="72">
+				Urządzenie:
+			</text>
+			<combo_box name="options_device_list" left="85" />
+			<button label="Przywróć domyślne" name="restore_device_options_defaults" tool_tip="Przywraca domyślne przesunięcie, odwrócenie i tolerancję (martwą strefę) dla każdej osi wybranego urządzenia." />
+			<button label="Autokalibracja" name="auto_calibrate" tool_tip="Próbkuje surowe osie wybranego urządzenia przez 5 klatek. Każda oś, która się nie porusza, jest uznawana za będącą w spoczynku, a jej przesunięcie i tolerancja są ustawiane na podstawie tego odczytu." />
+			<panel name="device_state_settings">
+				<panel name="axis_state_panel">
+					<scroll_list name="axis_state">
+						<scroll_list.columns label="Wejście" name="input_glyph" />
+						<scroll_list.columns label="Oś" name="input" relative_width="0.20" />
+						<scroll_list.columns label="Surowa" name="raw_value" relative_width="0.12" />
+						<scroll_list.columns label="Przesun." name="offset" relative_width="0.12" />
+						<scroll_list.columns label="Odwróć" name="invert" relative_width="0.11" />
+						<scroll_list.columns label="Tolerancja" name="dead_zone" relative_width="0.14" />
+						<scroll_list.columns label="Skorygowana" name="fixed_value" relative_width="0.19" />
+					</scroll_list>
+				</panel>
+				<panel name="button_state_panel">
+					<scroll_list name="button_state">
+						<scroll_list.columns label="Wejście" name="input_glyph" />
+						<scroll_list.columns label="Przycisk" name="input" />
+						<scroll_list.columns label="Wartość" name="value" />
+					</scroll_list>
+				</panel>
+			</panel>
+		</panel>
+		<panel label="Dane dla serwera" name="tab_server_data">
+			<check_box label="Wysyłaj dane GameControl na serwer" name="game_control_to_server" width="250" />
+			<text name="data_note">
+				Dane wysyłane na serwer: osie i przyciski kanoniczne, a po nich osie i przyciski semantyczne bieżącego trybu.
+			</text>
+			<panel name="data_panel">
+				<scroll_list name="data_output">
+					<scroll_list.columns label="Nazwa" name="output" />
+					<scroll_list.columns label="Wartość" name="value" />
+				</scroll_list>
+			</panel>
+		</panel>
+	</tab_container>
+	<combo_box name="axis_input_selector">
+		<combo_box.item label="Lewa gałka ↔" name="axis_leftx" />
+		<combo_box.item label="Lewa gałka ↕" name="axis_lefty" />
+		<combo_box.item label="Prawa gałka ↔" name="axis_rightx" />
+		<combo_box.item label="Prawa gałka ↕" name="axis_righty" />
+		<combo_box.item label="Spusty ↘↙" name="axis_triggers" />
+	</combo_box>
+	<combo_box name="axis_output_selector">
+		<combo_box.item label="Lewa gałka ↔" name="axis_0" />
+		<combo_box.item label="Lewa gałka ↕" name="axis_1" />
+		<combo_box.item label="Prawa gałka ↔" name="axis_2" />
+		<combo_box.item label="Prawa gałka ↕" name="axis_3" />
+		<combo_box.item label="Lewy spust ↘" name="axis_4" />
+		<combo_box.item label="Prawy spust ↙" name="axis_5" />
+		<combo_box.item label="Spusty ↘↙" name="axis_output_triggers" />
+		<combo_box.item label="Brak" name="axis_none" />
+	</combo_box>
+	<combo_box name="analog_action_selector">
+		<combo_box.item label="Ruch w bok ↔" name="Strafe" />
+		<combo_box.item label="Naprzód ↕" name="Advance" />
+		<combo_box.item label="Obrót ↔" name="Turn" />
+		<combo_box.item label="Patrz ↕" name="Look" />
+		<combo_box.item label="Lot ↕" name="Fly" />
+		<combo_box.item label="Przybliżenie -/+" name="Zoom" />
+		<combo_box.item label="Przewijanie -/+" name="Scroll" />
+		<combo_box.item label="Brak" name="None" />
+	</combo_box>
+	<combo_box name="button_input_selector">
+		<combo_box.item label="Przycisk dolny" name="BUTTON_0" />
+		<combo_box.item label="Przycisk prawy" name="BUTTON_1" />
+		<combo_box.item label="Przycisk lewy" name="BUTTON_2" />
+		<combo_box.item label="Przycisk górny" name="BUTTON_3" />
+		<combo_box.item label="Lewa gałka" name="BUTTON_7" />
+		<combo_box.item label="Prawa gałka" name="BUTTON_8" />
+		<combo_box.item label="Lewy bumper" name="BUTTON_9" />
+		<combo_box.item label="Prawy bumper" name="BUTTON_10" />
+		<combo_box.item label="Krzyżak w górę" name="BUTTON_11" />
+		<combo_box.item label="Krzyżak w dół" name="BUTTON_12" />
+		<combo_box.item label="Krzyżak w lewo" name="BUTTON_13" />
+		<combo_box.item label="Krzyżak w prawo" name="BUTTON_14" />
+		<combo_box.item label="Łopatka 1" name="BUTTON_16" />
+		<combo_box.item label="Łopatka 2" name="BUTTON_17" />
+		<combo_box.item label="Łopatka 3" name="BUTTON_18" />
+		<combo_box.item label="Łopatka 4" name="BUTTON_19" />
+		<combo_box.item label="Przycisk 21" name="BUTTON_21" />
+		<combo_box.item label="Przycisk 22" name="BUTTON_22" />
+		<combo_box.item label="Przycisk 23" name="BUTTON_23" />
+		<combo_box.item label="Przycisk 24" name="BUTTON_24" />
+		<combo_box.item label="Przycisk 25" name="BUTTON_25" />
+		<combo_box.item label="Przycisk 26" name="BUTTON_26" />
+		<combo_box.item label="Przycisk 27" name="BUTTON_27" />
+		<combo_box.item label="Przycisk 28" name="BUTTON_28" />
+		<combo_box.item label="Przycisk 29" name="BUTTON_29" />
+		<combo_box.item label="Przycisk 30" name="BUTTON_30" />
+		<combo_box.item label="Przycisk 31" name="BUTTON_31" />
+	</combo_box>
+	<combo_box name="binary_action_selector">
+		<combo_box.item label="Skok" name="Jump" />
+		<combo_box.item label="Kucanie" name="Crouch" />
+		<combo_box.item label="Usiądź" name="Toggle sit" />
+		<combo_box.item label="Przełącz mikrofon" name="Toggle speak" />
+		<combo_box.item label="Przełącz tryb pierwszoosobowy" name="Toggle mouselook" />
+		<combo_box.item label="Wolna kamera" name="FlyCam" />
+		<combo_box.item label="Kursor myszy" name="Mouse cursor" />
+		<combo_box.item label="Naprzód ↑" name="Avdance" />
+		<combo_box.item label="Wstecz ↓" name="Retreat" />
+		<combo_box.item label="Ruch w bok ←" name="Strafe left" />
+		<combo_box.item label="Ruch w bok →" name="Strafe right" />
+		<combo_box.item label="Lot ↑" name="Fly up" />
+		<combo_box.item label="Lot ↓" name="Fly down" />
+		<combo_box.item label="Obrót ←" name="Turn left" />
+		<combo_box.item label="Obrót →" name="Turn right" />
+		<combo_box.item label="Przybliżenie +" name="Zoom +" />
+		<combo_box.item label="Przybliżenie -" name="Zoom -" />
+		<combo_box.item label="Przewijanie +" name="Scroll +" />
+		<combo_box.item label="Przewijanie -" name="Scroll -" />
+		<combo_box.item label="Brak" name="None" />
+	</combo_box>
+	<combo_box name="mouselook_analog_action_selector">
+		<combo_box.item label="Ruch w bok ↔" name="Strafe left/right" />
+		<combo_box.item label="Naprzód ↕" name="Avdance forward/back" />
+		<combo_box.item label="Obrót ↔" name="Turn left/right" />
+		<combo_box.item label="Patrz ↕" name="Look up/down" />
+		<combo_box.item label="Lot ↕" name="Fly up/down" />
+		<combo_box.item label="Przybliżenie -/+" name="Zoom +/-" />
+		<combo_box.item label="Brak" name="None" />
+	</combo_box>
+	<combo_box name="mouselook_binary_action_selector">
+		<combo_box.item label="Skok" name="Jump" />
+		<combo_box.item label="Kucanie" name="Crouch" />
+		<combo_box.item label="Usiądź" name="Toggle sit" />
+		<combo_box.item label="Przełącz mikrofon" name="Toggle speak" />
+		<combo_box.item label="Przełącz tryb pierwszoosobowy" name="Toggle mouselook" />
+		<combo_box.item label="Wolna kamera" name="Toggle Flycam" />
+		<combo_box.item label="Kursor myszy" name="Toggle mouse cursor" />
+		<combo_box.item label="Lewy przycisk myszy" name="Mouse click left" />
+		<combo_box.item label="Prawy przycisk myszy" name="Mouse click right" />
+		<combo_box.item label="Naprzód ↑" name="Avdance forward" />
+		<combo_box.item label="Wstecz ↓" name="Avdance back" />
+		<combo_box.item label="Ruch w bok ←" name="Strafe left" />
+		<combo_box.item label="Ruch w bok →" name="Strafe right" />
+		<combo_box.item label="Lot ↑" name="Fly up" />
+		<combo_box.item label="Lot ↓" name="Fly down" />
+		<combo_box.item label="Obrót ←" name="Turn left" />
+		<combo_box.item label="Obrót →" name="Turn right" />
+		<combo_box.item label="Przybliżenie +" name="Zoom +" />
+		<combo_box.item label="Przybliżenie -" name="Zoom -" />
+		<combo_box.item label="Brak" name="None" />
+	</combo_box>
+	<combo_box name="sit_binary_action_selector">
+		<combo_box.item label="Wstań" name="Toggle Sit" />
+		<combo_box.item label="Przełącz mikrofon" name="Toggle speak" />
+		<combo_box.item label="Przełącz tryb pierwszoosobowy" name="Toggle mouselook" />
+		<combo_box.item label="Wolna kamera" name="Toggle flycam" />
+		<combo_box.item label="Kursor myszy" name="Toggle mouse cursor" />
+		<combo_box.item label="Przybliżenie +" name="Zoom +" />
+		<combo_box.item label="Przybliżenie -" name="Zoom -" />
+		<combo_box.item label="Brak" name="None" />
+	</combo_box>
+	<combo_box name="cursor_analog_action_selector">
+		<combo_box.item label="Mysz ↔" name="Mouse left/right" />
+		<combo_box.item label="Mysz ↕" name="Mouse up/down" />
+		<combo_box.item label="Obrót ↔" name="Turn left/right" />
+		<combo_box.item label="Patrz ↕" name="Look up/down" />
+		<combo_box.item label="Lot ↕" name="Fly up/down" />
+		<combo_box.item label="Ruch w bok ↔" name="Strafe left/right" />
+		<combo_box.item label="Naprzód ↕" name="Avdance forward/back" />
+		<combo_box.item label="Brak" name="None" />
+	</combo_box>
+	<combo_box name="cursor_binary_action_selector">
+		<combo_box.item label="Skok" name="Jump" />
+		<combo_box.item label="Kucanie" name="Crouch" />
+		<combo_box.item label="Usiądź" name="Toggle sit" />
+		<combo_box.item label="Przełącz mikrofon" name="Toggle speak" />
+		<combo_box.item label="Przełącz tryb pierwszoosobowy" name="Toggle mouselook" />
+		<combo_box.item label="Wolna kamera" name="Toggle flycam" />
+		<combo_box.item label="Przełącz kursor myszy" name="Toggle mouse cursor" />
+		<combo_box.item label="Lewy przycisk myszy" name="Mouse click left" />
+		<combo_box.item label="Prawy przycisk myszy" name="Mouse click right" />
+		<combo_box.item label="Naprzód ↑" name="Avdance forward" />
+		<combo_box.item label="Wstecz ↓" name="Avdance back" />
+		<combo_box.item label="Ruch w bok ←" name="Strafe left" />
+		<combo_box.item label="Ruch w bok →" name="Strafe right" />
+		<combo_box.item label="Lot ↑" name="Fly up" />
+		<combo_box.item label="Lot ↓" name="Fly down" />
+		<combo_box.item label="Obrót ←" name="Turn left" />
+		<combo_box.item label="Obrót →" name="Right right" />
+		<combo_box.item label="Kursor ↑" name="Cursor up" />
+		<combo_box.item label="Kursor ↓" name="Cursor down" />
+		<combo_box.item label="Kursor ←" name="Cursor left" />
+		<combo_box.item label="Kursor →" name="Cursor right" />
+		<combo_box.item label="Brak" name="None" />
+	</combo_box>
+	<combo_box name="flycam_analog_action_selector">
+		<combo_box.item label="Jazda boczna ↔" name="Truck left/right" />
+		<combo_box.item label="Najazd / odjazd ↕" name="Dolly forward/back" />
+		<combo_box.item label="Panorama ↔" name="Pan left/right" />
+		<combo_box.item label="Pochylenie ↕" name="Tilt up/down" />
+		<combo_box.item label="Wznoszenie / opadanie ↕" name="Boom up/down" />
+		<combo_box.item label="Przechył ↻↺" name="Roll CCW/CW" />
+		<combo_box.item label="Przybliżenie -/+" name="Zoom in/out" />
+		<combo_box.item label="Brak" name="None" />
+	</combo_box>
+	<combo_box name="flycam_binary_action_selector">
+		<combo_box.item label="Przybliżenie -" name="Zoom out" />
+		<combo_box.item label="Panorama →" name="Pan right" />
+		<combo_box.item label="Panorama ←" name="Pan left" />
+		<combo_box.item label="Przybliżenie +" name="Zoom in" />
+		<combo_box.item label="Kursor myszy" name="Toggle mouse cursor" />
+		<combo_box.item label="Opuść wolną kamerę" name="Toggle flycam" />
+		<combo_box.item label="Wypoziomuj" name="Unroll" />
+		<combo_box.item label="Przechył ↺" name="Roll CCW" />
+		<combo_box.item label="Przechył ↻" name="Roll CW" />
+		<combo_box.item label="Okrążanie" name="Orbit" />
+		<combo_box.item label="Najazd ↑" name="Dolly forward" />
+		<combo_box.item label="Odjazd ↓" name="Dolly back" />
+		<combo_box.item label="Jazda boczna ←" name="Truck left" />
+		<combo_box.item label="Jazda boczna →" name="Truck right" />
+		<combo_box.item label="Wznoszenie ↑" name="Boom up" />
+		<combo_box.item label="Opadanie ↓" name="Boom down" />
+		<combo_box.item label="Brak" name="None" />
+	</combo_box>
+</panel>

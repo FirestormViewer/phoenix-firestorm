@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="flycam_move_forward">
+		<columns name="lst_action" value="Wolna kamera w przód" />
+	</rows>
+	<rows name="flycam_move_backward">
+		<columns name="lst_action" value="Wolna kamera w tył" />
+	</rows>
+	<rows name="flycam_truck_left">
+		<columns name="lst_action" value="Wolna kamera w lewo" />
+	</rows>
+	<rows name="flycam_truck_right">
+		<columns name="lst_action" value="Wolna kamera w prawo" />
+	</rows>
+	<rows name="flycam_move_up">
+		<columns name="lst_action" value="Wolna kamera w górę" />
+	</rows>
+	<rows name="flycam_move_down">
+		<columns name="lst_action" value="Wolna kamera w dół" />
+	</rows>
+	<rows name="flycam_yaw_left">
+		<columns name="lst_action" value="Obróć wolną kamerę w lewo" />
+	</rows>
+	<rows name="flycam_yaw_right">
+		<columns name="lst_action" value="Obróć wolną kamerę w prawo" />
+	</rows>
+	<rows name="flycam_pitch_up">
+		<columns name="lst_action" value="Pochyl wolną kamerę w górę" />
+	</rows>
+	<rows name="flycam_pitch_down">
+		<columns name="lst_action" value="Pochyl wolną kamerę w dół" />
+	</rows>
+	<rows name="flycam_unroll">
+		<columns name="lst_action" tool_tip="Zresetuj przechył wolnej kamery do poziomu" value="Wypoziomuj wolną kamerę" />
+	</rows>
+	<rows name="toggle_flycam">
+		<columns name="lst_action" tool_tip="Włącz lub wyłącz wolną kamerę" value="Przełącz wolną kamerę" />
+	</rows>
+</contents>

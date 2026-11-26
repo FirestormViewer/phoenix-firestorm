@@ -102,6 +102,13 @@
 			</text>
 			<fs_copytrans_inventory_drop_target name="autoresponse_item" tool_tip="Przeciągnij i upuść przedmiot z Szafy w tym miejscu." right="-70" />
 			<button label="Czyść" name="clear_autoresponse_item" width="60" />
+			<text name="autoresponse_variables_label">
+				Dostępne zmienne do użycia we wszystkich autoodpowiedziach:
+ • #n - imię odbiorcy
+ • #tl, #tu, #ts - czas lokalny, UTC lub SLT
+ • #p - Twoja bieżąca lokalizacja
+ • #i - czas nieobecności w minutach
+			</text>
 		</panel>
 	</tab_container>
 </panel>

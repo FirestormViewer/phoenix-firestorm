@@ -49,6 +49,8 @@
 		</menu>
 		<menu_item_check label="Ustawienia ruchu" name="Movement Controls"/>
 		<menu_item_check label="Ustawienia kamery" name="Camera Controls"/>
+		<menu_item_call label="Kopiuj link kamery" name="Copy Camera Link"/>
+		<menu_item_check label="Zakładki kamery" name="Camera Bookmarks"/>
 		<menu label="Kondycja awatara" name="avhealth">
 			<menu_item_call label="Zatrzymaj animacje" name="Stop Animating My Avatar"/>
 			<menu_item_call label="Zatrzymaj animacje i cofnij zezwolenia do animowania" name="Stop Animating My Avatar With Revoke"/>
@@ -464,6 +466,7 @@
 			<menu_item_check label="Pokaż macierze" name="Show Matrices"/>
 			<menu_item_check label="Pokaż kolor pod kursorem" name="Show Color Under Cursor"/>
 			<menu_item_check label="Pokaż pamięć" name="Show Memory"/>
+			<menu_item_check label="Pokaż stan kontrolera gier" name="Show Game Controller State"/>
 			<menu_item_check label="Pokaż aktualizacje obiektów" name="Show Updates"/>
 		</menu>
 		<menu label="Profilowanie / telemetria" name="Enable / Disable telemetry capture">
@@ -683,7 +686,6 @@
 		<menu_item_call label="Test kompresji pliku" name="Compress File Test" />
 		<menu_item_call label="Test uwierzytelniania Primfeed" name="primfeed_auth_test" />
 		<menu_item_call label="Reset uwierzytelniania Primfeed" name="primfeed_auth_clear" />
-		<menu_item_call label="Włącz wizualny detektor wycieków pamięci" name="Enable Visual Leak Detector"/>
 		<menu_item_check label="Mały zrzut wyjścia debugowania" name="Output Debug Minidump"/>
 		<menu_item_check label="Aktywacja okna konsoli podczas następnego uruchomienia" name="Console Window"/>
 		<menu label="Ustaw poziom logowania" name="Set Logging Level">

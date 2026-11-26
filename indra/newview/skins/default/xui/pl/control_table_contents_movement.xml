@@ -33,6 +33,9 @@
 	<rows name="push_down">
 		<columns name="lst_action" value="W dół" />
 	</rows>
+	<rows name="toggle_down">
+		<columns name="lst_action" value="Przełącz kucanie" />
+	</rows>
 	<rows name="run_forward">
 		<columns name="lst_action" value="Bieg w przód" />
 	</rows>
@@ -50,6 +53,9 @@
 	</rows>
 	<rows name="toggle_fly">
 		<columns name="lst_action" value="Lataj / Przestań" />
+	</rows>
+	<rows name="toggle_flycam">
+		<columns name="lst_action" tool_tip="Włącz lub wyłącz wolną kamerę" value="Przełącz wolną kamerę" />
 	</rows>
 	<rows name="toggle_sit">
 		<columns name="lst_action" value="Usiądź / Wstań" />

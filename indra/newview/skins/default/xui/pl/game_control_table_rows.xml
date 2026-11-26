@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="avatar_actions">
+		<columns label="Ruch awatara" name="action" />
+	</rows>
+	<rows name="push">
+		<columns name="action" value="Przód / Tył" />
+	</rows>
+	<rows name="slide">
+		<columns name="action" value="Ruch w bok" />
+	</rows>
+	<rows name="jump">
+		<columns name="action" value="Skok / W górę" />
+	</rows>
+	<rows name="crouch">
+		<columns name="action" value="Kucanie / W dół" />
+	</rows>
+	<rows name="turn">
+		<columns name="action" value="Obrót" />
+	</rows>
+	<rows name="look">
+		<columns name="action" value="Patrz w górę / w dół" />
+	</rows>
+	<rows name="stop">
+		<columns name="action" value="Zatrzymaj" />
+	</rows>
+	<rows name="toggle_run">
+		<columns name="action" value="Bieg" />
+	</rows>
+	<rows name="toggle_fly">
+		<columns name="action" value="Latanie" />
+	</rows>
+	<rows name="toggle_flycam">
+		<columns name="action" value="Wolna kamera" />
+	</rows>
+</contents>

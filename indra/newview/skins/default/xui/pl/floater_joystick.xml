@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Joystick" title="Konfiguracja joysticka">
+<floater name="3Dconnexion Device" title="Konfiguracja 3Dconnexion">
 	<floater.string name="JoystickDisabled">
 		Brak
 	</floater.string>
+	<text name="joystick_lbl" width="72">
+		Urządzenie:
+	</text>
 	<spinner label="Oś X" name="JoystickAxis1"/>
 	<spinner label="Oś Y" name="JoystickAxis2"/>
 	<spinner label="Oś Z" name="JoystickAxis0"/>
@@ -18,7 +21,7 @@
 	</text>
 	<check_box label="Awatara" name="JoystickAvatarEnabled"/>
 	<check_box label="Budow." name="JoystickBuildEnabled"/>
-	<check_box label="Kamerę latając" name="JoystickFlycamEnabled"/>
+	<check_box label="Kamerę latając" name="JoystickFlycamEnabled" tool_tip="Pozwala temu urządzeniu sterować wolną kamerą."/>
 	<text name="joystick_monitor_label">
 		Monitor joysticka
 	</text>
