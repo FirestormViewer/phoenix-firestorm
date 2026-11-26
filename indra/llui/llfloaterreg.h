@@ -165,6 +165,11 @@ public:
     static std::string declareDockStateControl(const std::string& name);
     static std::string getDockStateControlName(const std::string& name);
 
+    // <FS:Zi> Add pin geometry to floater
+    static std::string declarePinStateControl(const std::string& name);
+    static std::string getPinStateControlName(const std::string& name);
+    // </FS:Zi>
+
     static void registerControlVariables();
 
     // Callback wrappers

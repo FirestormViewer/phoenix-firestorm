@@ -89,6 +89,7 @@ std::string LLFloater::sButtonNames[BUTTON_COUNT] =
     "llfloater_minimize_btn",   //BUTTON_MINIMIZE
     "llfloater_tear_off_btn",   //BUTTON_TEAR_OFF
     "llfloater_dock_btn",       //BUTTON_DOCK
+    "llfloater_pin_btn",        //BUTTON_PIN                    // <FS:Zi> Add pin geometry to floater
     "llfloater_help_btn"        //BUTTON_HELP
 };
 
@@ -108,6 +109,7 @@ std::string LLFloater::sButtonToolTipsIndex[BUTTON_COUNT]=
     "BUTTON_MINIMIZE",      //"Minimize",   //BUTTON_MINIMIZE
     "BUTTON_TEAR_OFF",      //"Tear Off",   //BUTTON_TEAR_OFF
     "BUTTON_DOCK",
+    "BUTTON_PIN",           //"Pin",        //BUTTON_PIN        // <FS:Zi> Add pin geometry to floater
     "BUTTON_HELP"
 };
 
@@ -121,6 +123,7 @@ LLFloater::click_callback LLFloater::sButtonCallbacks[BUTTON_COUNT] =
     LLFloater::onClickMinimize, //BUTTON_MINIMIZE
     LLFloater::onClickTearOff,  //BUTTON_TEAR_OFF
     LLFloater::onClickDock,     //BUTTON_DOCK
+    LLFloater::onClickPin,      //BUTTON_PIN        // <FS:Zi> Add pin geometry to floater
     LLFloater::onClickHelp      //BUTTON_HELP
 };
 
@@ -218,6 +221,14 @@ LLFloater::Params::Params()
     follows("follows"),
     rel_x("rel_x", 0),
     rel_y("rel_y", 0),
+    // <FS:Zi> Add pin geometry to floater
+    can_pin("can_pin", true),
+    pin_image("pin_image"),
+    unpin_image("unpin_image"),
+    pin_pressed_image("pin_pressed_image"),
+    unpin_pressed_image("unpin_pressed_image"),
+    pin_callback("pin_callback"),
+    // </FS:Zi>
     hosted_floater_show_titlebar("hosted_floater_show_titlebar", true) // <FS:Ansariel> MultiFloater without titlebar for hosted floater
 {
     changeDefault(visible, false);
@@ -294,9 +305,19 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
     mDefaultRelativeX(p.rel_x),
     mDefaultRelativeY(p.rel_y),
     mMinimizeSignal(NULL),
+    // <FS:Zi> Add pin geometry to floater
+    mCanPin(p.can_pin),
+    mPinned(false),
+    mPinImage(p.pin_image),
+    mPinPressedImage(p.pin_pressed_image),
+    mUnpinImage(p.unpin_image),
+    mUnpinPressedImage(p.unpin_pressed_image),
+    // </FS:Zi>
     mHostedFloaterShowtitlebar(p.hosted_floater_show_titlebar) // <FS:Ansariel> MultiFloater without titlebar for hosted floater
 //  mNotificationContext(NULL)
 {
+    mResizeBar[0] = nullptr;    // <FS:Zi> Add pin geometry to floater
+
     mPosition.setFloater(*this);
 //  mNotificationContext = new LLFloaterNotificationContext(getHandle());
 
@@ -354,6 +375,13 @@ void LLFloater::initFloater(const Params& p)
         mButtonsEnabled[BUTTON_SNOOZE] = true;
     }
     // </FS:Ansariel>
+
+    // <FS:Zi> Add pin geometry to floater
+    if (mCanPin)
+    {
+        mButtonsEnabled[BUTTON_PIN] = true;
+    }
+    // </FS:Zi>
 
     buildButtons(p);
 
@@ -995,6 +1023,7 @@ void LLFloater::applyControlsAndPosition(LLFloater* other)
     //     to have it in the right position.
     //  if (!applyDockState())
     applyDockState();
+    applyPinState();        // <FS:Zi> Add pin geometry to floater
     // </FS:Zi>
     {
         if (!applyRectControl())
@@ -1839,6 +1868,7 @@ bool LLFloater::handleMouseDown(S32 x, S32 y, MASK mask)
         if(offerClickToButton(x, y, mask, BUTTON_DOCK)) return true;
         // <FS:Ansariel> FIRE-11724: Snooze group chat
         if(offerClickToButton(x, y, mask, BUTTON_SNOOZE)) return true;
+        if(offerClickToButton(x, y, mask, BUTTON_PIN)) return true;        // <FS:Zi> Add pin geometry to floater
 
         setFrontmost(true, false);
         // Otherwise pass to drag handle for movement
@@ -2458,6 +2488,52 @@ void LLFloater::updateTitleButtons()
         }
     }
     // </FS:Ansariel>
+
+    // <FS:Zi> Add pin geometry to floater
+    if (mButtons[BUTTON_PIN])
+    {
+        bool show_pin = false;
+
+        if (mPinned)
+        {
+            mButtons[BUTTON_PIN]->setImageUnselected(mUnpinImage);
+            mButtons[BUTTON_PIN]->setImagePressed(mUnpinPressedImage);
+        }
+        else
+        {
+            mButtons[BUTTON_PIN]->setImageUnselected(mPinImage);
+            mButtons[BUTTON_PIN]->setImagePressed(mPinPressedImage);
+        }
+
+        if (!getHost() && !isMinimized() && !isDocked())
+        {
+            if (mButtons[BUTTON_MINIMIZE])
+            {
+                show_pin = mCanMinimize;
+                mButtons[BUTTON_MINIMIZE]->setEnabled(mCanMinimize && !mPinned);
+            }
+
+            if (mButtons[BUTTON_DOCK])
+            {
+                show_pin |= mCanDock;
+                mButtons[BUTTON_DOCK]->setEnabled(mCanDock && !mPinned);
+            }
+
+            if (mButtons[BUTTON_TEAR_OFF])
+            {
+                show_pin |= mCanTearOff;
+                mButtons[BUTTON_TEAR_OFF]->setEnabled(mCanTearOff && !mPinned);
+            }
+
+            if (mResizeBar[0])
+            {
+                show_pin |= mResizable;
+                enableResizeCtrls(mResizable && !mPinned);
+            }
+        }
+        mButtons[BUTTON_PIN]->setVisible(show_pin);
+    }
+    // </FS:Zi>
 }
 
 void LLFloater::drawConeToOwner(F32 &context_cone_opacity,
@@ -2595,6 +2671,11 @@ LLUIImage* LLFloater::getButtonImage(const Params& p, EFloaterButton e)
         case BUTTON_SNOOZE:
             return p.snooze_image;
         // </FS:Ansariel>
+        // <FS:Zi> Add pin geometry to floater
+        case BUTTON_PIN:
+
+            return p.pin_image;
+        // </FS:Zi>
     }
 }
 
@@ -2620,6 +2701,10 @@ LLUIImage* LLFloater::getButtonPressedImage(const Params& p, EFloaterButton e)
         case BUTTON_SNOOZE:
             return p.snooze_pressed_image;
         // </FS:Ansariel>
+        // <FS:Zi> Add pin geometry to floater
+        case BUTTON_PIN:
+            return p.pin_pressed_image;
+        // </FS:Zi>
     }
 }
 
@@ -3617,6 +3702,12 @@ void LLFloater::setInstanceName(const std::string& name)
         {
             mDocStateControl = LLFloaterReg::declareDockStateControl(ctrl_name);
         }
+        // <FS:Zi> Add pin geometry to floater
+        if(!mPinStateControl.empty())
+        {
+            mPinStateControl = LLFloaterReg::declarePinStateControl(ctrl_name);
+        }
+        // </FS:Zi>
     }
 }
 }
@@ -3726,6 +3817,18 @@ void LLFloater::initFromParams(const LLFloater::Params& p)
     {
         mDragHandle->setTitleVisible(p.show_title);
     }
+
+    // <FS:Zi> Add pin geometry to floater
+    if (p.pin_callback.isProvided())
+    {
+        setPinCallback(initCommitCallback(p.pin_callback));
+    }
+
+    if (mCanPin)
+    {
+        mPinStateControl = "t"; // <FS:Zi> Add pin geometry to floater
+    }
+    // </FS:Zi>
 }
 
 boost::signals2::connection LLFloater::setMinimizeCallback( const commit_signal_t::slot_type& cb )
@@ -4104,3 +4207,54 @@ void LL_COORD_FLOATER::convertFromCommon(const LLCoordCommon& from)
         self.mY = rescale((F32)from_y, (F32)snap_rect.mBottom, (F32)(snap_rect.mTop - floater_height), -0.5f, 0.5f);
     }
 }
+
+// <FS:Zi> Add pin geometry to floater
+bool LLFloater::applyPinState()
+{
+    if (mPinStateControl.size() > 1)
+    {
+        if (getControlGroup()->getBOOL(mPinStateControl))
+        {
+            mPinned = false;
+            onClickPin(this);
+        }
+    }
+
+    return mPinned;
+}
+
+boost::signals2::connection LLFloater::setPinCallback( const commit_signal_t::slot_type& cb )
+{
+    return mPinSignal.connect(cb);
+}
+
+void LLFloater::storePinStateContol()
+{
+    if (!sQuitting && mPinStateControl.size() > 1)
+    {
+        getControlGroup()->setBOOL(mPinStateControl, mPinned);
+    }
+}
+
+void LLFloater::setCanPin(bool can_pin)
+{
+    mCanPin = can_pin;
+    updateTitleButtons();
+}
+
+// static
+void LLFloater::onClickPin(LLFloater* self)
+{
+    if (self && self->mCanPin)
+    {
+        self->mPinned = !self->mPinned;
+        self->updateTitleButtons();
+        self->storePinStateContol();
+
+        if (!self->getHost())
+        {
+            self->setCanDrag(!self->mPinned);
+        }
+    }
+}
+// </FS:Zi>

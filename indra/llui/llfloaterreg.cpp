@@ -521,6 +521,13 @@ void LLFloaterReg::registerControlVariables()
         {
             declareVisibilityControl(name);
         }
+
+        // <FS:Zi> Add pin geometry to floater
+        if (!LLFloater::getControlGroup()->controlExists(getPinStateControlName(name)))
+        {
+            declarePinStateControl(name);
+        }
+        // </FS:Zi>
     }
 
     const LLSD& exclude_list = LLUI::getInstance()->mSettingGroups["config"]->getLLSD("always_showable_floaters");
@@ -676,3 +683,23 @@ U32 LLFloaterReg::getVisibleFloaterInstanceCount()
 
     return count;
 }
+
+// <FS:Zi> Add pin geometry to floater
+//static
+std::string LLFloaterReg::declarePinStateControl(const std::string& name)
+{
+    std::string controlname = getPinStateControlName(name);
+    LLFloater::getControlGroup()->declareBOOL(controlname, false,
+                                                 llformat("Window Pinning state for %s", name.c_str()),
+                                                 LLControlVariable::PERSIST_NONDFT);
+    return controlname;
+}
+
+//static
+std::string LLFloaterReg::getPinStateControlName(const std::string& name)
+{
+    std::string res = std::string("floater_pin_") + name;
+    LLStringUtil::replaceChar(res, ' ', '_');
+    return res;
+}
+// </FS:Zi>

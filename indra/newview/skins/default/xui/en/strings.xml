@@ -384,6 +384,7 @@ If you feel this is an error, please contact support@secondlife.com</string>
 	<string name="BUTTON_TEAR_OFF">Tear Off</string>
 	<string name="BUTTON_DOCK">Dock</string>
 	<string name="BUTTON_HELP">Show Help</string>
+	<string name="BUTTON_PIN">Pin Position and Size</string>
 	<string name="BUTTON_SNOOZE">Snooze</string>
 
 	<!-- ToolTips for notecards -->

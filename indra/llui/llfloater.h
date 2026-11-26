@@ -58,6 +58,9 @@ constexpr bool MINIMIZE_NO = false;
 constexpr bool CLOSE_YES = true;
 constexpr bool CLOSE_NO = false;
 
+constexpr bool PIN_YES = true;  // <FS:Zi> Add pin geometry to floater
+constexpr bool PIN_NO = false;  // <FS:Zi> Add pin geometry to floater
+
 constexpr bool ADJUST_VERTICAL_YES = true;
 constexpr bool ADJUST_VERTICAL_NO = false;
 
@@ -149,6 +152,7 @@ public:
         BUTTON_MINIMIZE,
         BUTTON_TEAR_OFF,
         BUTTON_DOCK,
+        BUTTON_PIN,         // <FS:Zi> Add pin geometry to floater
         BUTTON_HELP,
         BUTTON_COUNT
     };
@@ -167,6 +171,7 @@ public:
                                 can_snooze,         // <FS:Ansariel> FIRE-11724: Snooze group chat
                                 can_drag_on_left,
                                 can_tear_off,
+                                can_pin,            // <FS:Zi> Add pin geometry to floater
                                 drop_shadow,        // ## Zi: Optional Drop Shadows
                                 save_rect,
                                 save_visibility,
@@ -193,6 +198,8 @@ public:
                                 minimize_image,
                                 tear_off_image,
                                 dock_image,
+                                pin_image,          // <FS:Zi> Add pin geometry to floater
+                                unpin_image,        // <FS:Zi> Add pin geometry to floater
                                 help_image;
         Optional<LLUIImage*>    close_pressed_image,
                                 snooze_pressed_image,       // <FS:Ansariel> FIRE-11724: Snooze group chat
@@ -200,9 +207,12 @@ public:
                                 minimize_pressed_image,
                                 tear_off_pressed_image,
                                 dock_pressed_image,
+                                pin_pressed_image,          // <FS:Zi> Add pin geometry to floater
+                                unpin_pressed_image,        // <FS:Zi> Add pin geometry to floater
                                 help_pressed_image;
 
         Optional<CommitCallbackParam> open_callback,
+                                      pin_callback,     // <FS:Zi> Add pin geometry to floater
                                       close_callback;
 
         Ignored                 follows;
@@ -229,6 +239,7 @@ public:
     boost::signals2::connection setMinimizeCallback( const commit_signal_t::slot_type& cb );
     boost::signals2::connection setOpenCallback( const commit_signal_t::slot_type& cb );
     boost::signals2::connection setCloseCallback( const commit_signal_t::slot_type& cb );
+    boost::signals2::connection setPinCallback( const commit_signal_t::slot_type& cb );     // <FS:Zi> Add pin geometry to floater
 
     void initFromParams(const LLFloater::Params& p);
     bool initFloaterXML(LLXMLNodePtr node, LLView *parent, const std::string& filename, LLXMLNodePtr output_node = NULL);
@@ -299,6 +310,7 @@ public:
     void            setCanDrag(bool can_drag);
     bool            getCanDrag() const;
     void            setCanSnooze(bool can_snooze);      // <FS:Ansariel> FIRE-11724: Snooze group chat
+    void            setCanPin(bool can_pin);            // <FS:Zi> Add pin geometry to floater
     void            setHost(LLMultiFloater* host);
     bool            isResizable() const { return mResizable; }
     void            setResizeLimits( S32 min_width, S32 min_height );
@@ -387,6 +399,9 @@ public:
     static void     onClickHelp(LLFloater* floater);
     static void     onClickSnooze(LLFloater* floater);      // <FS:Ansariel> FIRE-11724: Snooze group chat
 
+    static void     onClickPin(LLFloater* floater);         // <FS:Zi> Add pin geometry to floater
+    bool            isPinned() const{ return mPinned; }     // <FS:Zi> Add pin geometry to floater
+
     static void     setFloaterHost(LLMultiFloater* hostp) {sHostp = hostp; }
     static LLMultiFloater* getFloaterHost() {return sHostp; }
 
@@ -411,12 +426,14 @@ protected:
     virtual void    initRectControl();
     virtual bool    applyRectControl();
     bool            applyDockState();
+    bool            applyPinState();            // <FS:Zi> Add pin geometry to floater
     void            applyPositioning(LLFloater* other, bool on_open);
     void            applyRelativePosition();
 
     void            storeRectControl();
     void            storeVisibilityControl();
     void            storeDockStateControl();
+    void            storePinStateContol();      // <FS:Zi> Add pin geometry to floater
 
     void            setKey(const LLSD& key);
     void            setInstanceName(const std::string& name);
@@ -484,6 +501,8 @@ public:
     // Public so external views or floaters can watch for this floater closing
     commit_signal_t mCloseSignal;
 
+    commit_signal_t mPinSignal;         // <FS:Zi> Add pin geometry to floater
+
     commit_signal_t* mMinimizeSignal;
 
 protected:
@@ -494,6 +513,7 @@ protected:
     std::string     mPosYControl;
     std::string     mVisibilityControl;
     std::string     mDocStateControl;
+    std::string     mPinStateControl;   // <FS:Zi> Add pin geometry to floater
     LLSD            mKey;               // Key used for retrieving instances; set (for now) by LLFLoaterReg
 
     LLDragHandle*   mDragHandle;
@@ -535,6 +555,7 @@ private:
     S32             mLegacyHeaderHeight;// HACK see initFloaterXML()
 
     bool            mMinimized;
+    bool            mPinned;            // <FS:Zi> Add pin geometry to floater
     bool            mForeground;
     LLHandle<LLFloater> mDependeeHandle;
 
@@ -573,6 +594,14 @@ private:
 
     F32             mDefaultRelativeX;
     F32             mDefaultRelativeY;
+
+    // <FS:Zi> Add pin geometry to floater
+    bool            mCanPin;
+    LLUIImage*      mPinImage;
+    LLUIImage*      mPinPressedImage;
+    LLUIImage*      mUnpinPressedImage;
+    LLUIImage*      mUnpinImage;
+    // </FS:Zi>
 
     // <FS:Ansariel> MultiFloater without titlebar for hosted floater
     bool            mHostedFloaterShowtitlebar;

@@ -322,7 +322,12 @@ with the same filename but different name
 
   <texture name="Icon_Minimize_Foreground" file_name="windows/Icon_Minimize_Foreground.png" preload="true" />
   <texture name="Icon_Minimize_Press" file_name="windows/Icon_Minimize_Press.png" preload="true" />
-  
+
+  <texture name="Icon_Pin_Foreground" file_name="windows/Icon_Pin_Foreground.png" preload="true" />
+  <texture name="Icon_Pin_Press" file_name="windows/Icon_Pin_Press.png" preload="true" />
+  <texture name="Icon_Unpin_Foreground" file_name="windows/Icon_Unpin_Foreground.png" preload="true" />
+  <texture name="Icon_Unpin_Press" file_name="windows/Icon_Unpin_Press.png" preload="true" />
+
   <texture name="Icon_Paste" file_name="icons/paste_clipboard.png" preload="true" />
 
   <texture name="Icon_Restore_Foreground" file_name="windows/Icon_Restore_Foreground.png" preload="false" />
