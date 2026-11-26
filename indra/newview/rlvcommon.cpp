@@ -93,6 +93,7 @@ U8 RlvSettings::s_nExperienceMinMaturity = 0;
 bool RlvSettings::s_fLegacyNaming = true;
 bool RlvSettings::s_fNoSetEnv = false;
 bool RlvSettings::s_fTempAttach = true;
+bool RlvSettings::s_fTouchThisIgnoreClicks = false;
 std::list<std::string> RlvSettings::s_BlockedExperiences;
 std::list<LLUUID> RlvSettings::s_CompatItemCreators;
 std::list<std::string> RlvSettings::s_CompatItemNames;
@@ -114,6 +115,10 @@ void RlvSettings::initClass()
         if (gSavedSettings.controlExists(RLV_SETTING_ENABLECOMPOSITES))
             gSavedSettings.getControl(RLV_SETTING_ENABLECOMPOSITES)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fCompositeFolders));
         #endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
+
+        s_fTouchThisIgnoreClicks = rlvGetSetting<bool>(RlvSettingNames::TouchThisIgnoreClicks, false);
+        if (gSavedSettings.controlExists(RlvSettingNames::TouchThisIgnoreClicks))
+            gSavedSettings.getControl(RlvSettingNames::TouchThisIgnoreClicks)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fTouchThisIgnoreClicks));
 
         s_fLegacyNaming = rlvGetSetting<bool>(RlvSettingNames::EnableLegacyNaming, true);
         if (gSavedSettings.controlExists(RlvSettingNames::EnableLegacyNaming))

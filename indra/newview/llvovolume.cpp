@@ -4986,7 +4986,10 @@ bool LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
         }
     }
 
-    if (getClickAction() == CLICK_ACTION_IGNORE && !LLFloater::isVisible(gFloaterTools))
+    // <FS:Zi> Optionally treat @touchthis exceptions as ignore touch
+    // if (getClickAction() == CLICK_ACTION_IGNORE && !LLFloater::isVisible(gFloaterTools))
+    if ((getClickAction() == CLICK_ACTION_IGNORE || RlvActions::isTouchThisIgnored(this)) && !LLFloater::isVisible(gFloaterTools))
+    // </FS:Zi>
     {
         return false;
     }

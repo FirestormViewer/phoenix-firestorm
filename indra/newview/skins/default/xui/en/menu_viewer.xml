@@ -3101,6 +3101,16 @@
       	 parameter="RLVaEnableTemporaryAttachments" />
       </menu_item_check>
       <menu_item_check
+       label="Click Through @touchthis Objects"
+       name="Click Through TouchThis Objects">
+        <menu_item_check.on_check
+         function="CheckControl"
+         parameter="RLVaTouchThisIgnoreClicks" />
+        <menu_item_check.on_click
+         function="ToggleControl"
+         parameter="RLVaTouchThisIgnoreClicks" />
+      </menu_item_check>
+      <menu_item_check
        label="Forbid Give to #RLV"
        name="Forbid Give to #RLV">
       	<menu_item_check.on_check

@@ -673,6 +673,24 @@ bool RlvActions::canShowLocation()
     return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC);
 }
 
+// Handles @touchthis:<uuid>=add only
+bool RlvActions::isTouchThisIgnored(const LLViewerObject* pObj)
+{
+    // Bail out as early as possible
+    if ( (!pObj) || (!RlvSettings::getTouchThisIgnoreClicks()) || (pObj->isAvatar()) || (!isRlvEnabled()) || (!hasBehaviour(RLV_BHVR_TOUCHTHIS)) )
+        return false;
+
+    // Like canTouch() the restriction applies linkset-wide and only the root object is tested
+    const LLViewerObject* pRootObj = pObj->getRootEdit();
+    const LLUUID& idRoot = (pRootObj) ? pRootObj->getID() : pObj->getID();
+
+    RlvHandler& rlvHandler = RlvHandler::instance();
+    return
+        (rlvHandler.isException(RLV_BHVR_TOUCHTHIS, idRoot, ERlvExceptionCheck::Permissive)) &&
+        // @touchme in any object of the linkset overrides the restriction (matches the post-check in canTouch())
+        ( (!hasBehaviour(RLV_BHVR_TOUCHME)) || (!rlvHandler.hasBehaviourRoot(idRoot, RLV_BHVR_TOUCHME)) );
+}
+
 // ============================================================================
 // World (General)
 //

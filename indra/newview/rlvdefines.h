@@ -429,6 +429,7 @@ namespace RlvSettingNames
     /*inline*/ constexpr std::string_view SplitRedirectChat = make_string_view("RLVaSplitRedirectChat");
     /*inline*/ constexpr std::string_view TopLevelMenu = make_string_view("RLVaTopLevelMenu");
     /*inline*/ constexpr std::string_view WearReplaceUnlocked = make_string_view("RLVaWearReplaceUnlocked");
+    /*inline*/ constexpr std::string_view TouchThisIgnoreClicks = make_string_view("RLVaTouchThisIgnoreClicks");
 #else
     constexpr const char Main[] = "RestrainedLove";
     constexpr const char Debug[] = "RestrainedLoveDebug";
@@ -454,6 +455,7 @@ namespace RlvSettingNames
     constexpr const char SplitRedirectChat[] = "RLVaSplitRedirectChat";
     constexpr const char TopLevelMenu[] = "RLVaTopLevelMenu";
     constexpr const char WearReplaceUnlocked[] = "RLVaWearReplaceUnlocked";
+    constexpr const char TouchThisIgnoreClicks[] = "RLVaTouchThisIgnoreClicks";
 #endif // CATZNIP_STRINGVIEW
 }
 

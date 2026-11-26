@@ -108,6 +108,7 @@ public:
     static bool getHideLockedInventory()        { return rlvGetSetting<bool>(RlvSettingNames::HideLockedInventory, false); }
     static bool getSharedInvAutoRename()        { return rlvGetSetting<bool>(RlvSettingNames::SharedInvAutoRename, true); }
     static bool getSplitRedirectChat()          { return rlvGetSetting<bool>(RlvSettingNames::SplitRedirectChat, false); }
+    static bool getTouchThisIgnoreClicks()      { return s_fTouchThisIgnoreClicks; }
 
     static bool getLoginLastLocation()          { return rlvGetPerUserSetting<bool>(RlvSettingNames::LoginLastLocation, true); }
     static void updateLoginLastLocation();
@@ -136,6 +137,7 @@ protected:
     static bool s_fLegacyNaming;
     static bool s_fNoSetEnv;
     static bool s_fTempAttach;
+    static bool s_fTouchThisIgnoreClicks;
     static std::list<std::string> s_BlockedExperiences;
     static std::list<LLUUID>      s_CompatItemCreators;
     static std::list<std::string> s_CompatItemNames;

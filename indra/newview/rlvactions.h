@@ -325,6 +325,11 @@ public:
      */
     static bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 
+    /*
+     * Returns true if the specified @touchthis:<uuid>=add object should be treated as if it had CLICK_ACTION_IGNORE set
+     */
+    static bool isTouchThisIgnored(const LLViewerObject* pObj);
+
     // ===============
     // World (General)
     // ===============
