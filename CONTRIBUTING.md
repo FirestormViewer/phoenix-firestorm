@@ -12,6 +12,8 @@ We have written this guide to help you contribute code that meets our needs. It 
 1. **Description**:
    Provide a detailed description of the changes. Explain why the changes are necessary and what problem they solve. If a JIRA is associated with the change, there is no need to duplicate that, but we would appreciate a summary and explanation of the fix.
 
+   If you used an AI assistant, review its changes yourself. For a bug fix, explain in your own words how the affected code caused the reported behaviour and why your change addresses it. Identify the observation, log, or test that supports your diagnosis.
+
 1. **Comment tags (important)**:
    We use comments to preserve the original upstream (LL) code when making modifications; this allows the person merging future code updates to see both the original code from LL and any new updates and then use those to determine whether the FS-specific changes need to be updated and reviewed.
  If you are modifying LL code, we need the LL code preserved in a comment.
@@ -55,7 +57,11 @@ Could be fixed as follows:
  If the code you are changing is already inside an `//<FS>` comment block, then there is no need to add a new block, but do try to make sure that any comments align with the updates you make.
 
 5. **Testing**:
-   Include details on how the changes should be tested. Describe the testing environment and any steps needed to verify the changes.
+   **Complete testing before opening the PR, including a draft PR.** Build the proposed revision yourself or arrange a build with another tester. Firestorm does not produce a viewer build when you open a PR.
+
+   You or your tester must exercise the affected behaviour and use the changed build in a live session on Second Life or a supported OpenSim grid, as appropriate. For an in-world fix, perform the steps that exposed the problem and record what happens. For a change outside the running viewer, test it where it takes effect. For example, test an installer fix by running the installer over an existing installation and checking the result. Then log in and check that the region loads and the avatar can move.
+
+   In the PR, give the build or commit tested, platform, grid type, steps and observed results. Include enough detail for a reviewer to repeat the check. If a later commit changes the behaviour you tested, repeat the affected steps and update the report.
 
 1. **Documentation**:
    If the change includes a new feature, it would be beneficial to suggest how we should update the FS Wiki pages to help users understand the feature
