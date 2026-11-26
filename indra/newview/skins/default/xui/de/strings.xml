@@ -783,6 +783,9 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 	<string name="BUTTON_HELP">
 		Hilfe anzeigen
 	</string>
+	<string name="BUTTON_PIN">
+		Position und Größe verankern
+	</string>
 	<string name="BUTTON_SNOOZE">
 		Temporär unterdrücken
 	</string>
