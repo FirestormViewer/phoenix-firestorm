@@ -1260,6 +1260,8 @@ void FSFloaterCameraBookmarks::setToursVisible(bool visible, bool remember)
     if (width != rect.getWidth())
     {
         reshape(width, rect.getHeight());
+        // Only a resize or move by mouse stores the rect, keep the saved width in step or the floater reopens at the old width
+        storeRectControl();
     }
     layoutPanels();
     getChild<LLButton>("tours_toggle")->setLabel(getString(visible ? "hide_tours" : "show_tours"));
@@ -1300,6 +1302,7 @@ void FSFloaterCameraBookmarks::setCompact(bool compact)
     const S32 height = llmax(rect.getHeight() + delta, min_height);
     reshape(rect.getWidth(), height);
     setOrigin(rect.mLeft, rect.mTop - height);
+    storeRectControl();
 
     list_rect.mTop = mList->getRect().mTop;
     mList->setShape(list_rect);

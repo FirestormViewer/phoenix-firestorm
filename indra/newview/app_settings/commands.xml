@@ -698,7 +698,7 @@
 
   <command name="camera_bookmarks"
         available_in_toybox="true"
-        icon="Command_View_Icon"
+        icon="Command_CameraBookmarks_Icon"
         label_ref="Command_CameraBookmarks_Label"
         tooltip_ref="Command_CameraBookmarks_Tooltip"
         execute_function="Floater.ToggleOrBringToFront"

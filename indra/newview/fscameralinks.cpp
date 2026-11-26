@@ -87,6 +87,9 @@ namespace
     // Smoothing of the camera to a moving target to attempt to reduce motion sickness
     constexpr F32 FOLLOW_SMOOTHING = 0.06f;
     constexpr F32 FOLLOW_USER_MOVE_SQUARED = 0.0001f;  // a camera move by the user over a centimetre while following
+    // A target jumping further than this in one frame is ignored for a moment, region crossings can show it in the wrong place for a few frames
+    constexpr F64 FOLLOW_MAX_STEP = 32.0;
+    constexpr F32 FOLLOW_JUMP_SETTLE = 1.f;
 
     FSCameraLinks::View sPendingView;
     bool sPendingActive = false;
@@ -361,10 +364,15 @@ namespace
         return (object && !object->isDead() && object->getRegion()) ? object : nullptr;
     }
 
-    // Where the camera should be relative to the target
-    void target_pose(const LLViewerObject* target, const FSCameraLinks::View& view, LLVector3d& pos, LLVector3d& focus)
+    // Where the target is drawn. Unlike getPositionGlobal() this stays continuous when the target crosses into another region.
+    LLVector3d target_base(const LLViewerObject* target)
     {
-        const LLVector3d base = target->getPositionGlobal();
+        return gAgent.getPosGlobalFromAgent(target->getRenderPosition());
+    }
+
+    // Where the camera should be relative to the target
+    void target_pose(const LLViewerObject* target, const FSCameraLinks::View& view, const LLVector3d& base, LLVector3d& pos, LLVector3d& focus)
+    {
         LLVector3 offset = view.mTargetOffset;
         LLVector3 focus_offset = view.mTargetFocusOffset;
         if (view.mTargetTurns)
@@ -433,6 +441,9 @@ namespace
     U32 sFollowGeneration = 0;
     LLVector3d sFollowPos;
     LLVector3d sFollowFocus;
+    LLVector3d sFollowBase;
+    bool sFollowJumping = false;
+    LLTimer sFollowJumpTimer;
 
     void stop_follow()
     {
@@ -497,9 +508,29 @@ namespace
             }
         }
 
+        const LLVector3d base = target_base(target);
+        bool snap = false;
+        if (sFollowStarted && (base - sFollowBase).magVecSquared() > FOLLOW_MAX_STEP * FOLLOW_MAX_STEP)
+        {
+            // Region crossings can briefly place the target far off (seated avatars losing their seat for a few frames, etc.)
+            // Hold the camera until it either comes back or stays there and then jump with it.
+            if (!sFollowJumping)
+            {
+                sFollowJumping = true;
+                sFollowJumpTimer.reset();
+            }
+            if (sFollowJumpTimer.getElapsedTimeF32() < FOLLOW_JUMP_SETTLE)
+            {
+                return false;
+            }
+            snap = true;
+        }
+        sFollowJumping = false;
+        sFollowBase = base;
+
         LLVector3d pos;
         LLVector3d focus;
-        target_pose(target, sFollowView, pos, focus);
+        target_pose(target, sFollowView, base, pos, focus);
         if (!rlv_allows_camera_at(pos))
         {
             // the target took the camera past the RLVa distance limits: stop tracking
@@ -507,7 +538,7 @@ namespace
             stop_follow();
             return true;
         }
-        if (sFollowStarted)
+        if (sFollowStarted && !snap)
         {
             const F64 u = LLSmoothInterpolation::getInterpolant(FOLLOW_SMOOTHING);
             pos = sFollowPos + (pos - sFollowPos) * u;
@@ -523,9 +554,10 @@ namespace
 
     void start_follow(const FSCameraLinks::View& view, LLViewerObject* target)
     {
+        const LLVector3d base = target_base(target);
         LLVector3d pos;
         LLVector3d focus;
-        target_pose(target, view, pos, focus);
+        target_pose(target, view, base, pos, focus);
         if (!rlv_allows_camera_at(pos))
         {
             LLNotificationsUtil::add("FSCameraLinkRlvDistance");
@@ -541,6 +573,8 @@ namespace
         sFollowStarted = false;
         sFollowPos = pos;
         sFollowFocus = focus;
+        sFollowBase = base;
+        sFollowJumping = false;
         const U32 generation = ++sFollowGeneration;
         doOnIdleRepeating([generation]() { return follow_idle(generation); });
     }
@@ -948,7 +982,7 @@ namespace FSCameraLinks
         {
             return false;
         }
-        const LLVector3d base = target->getPositionGlobal();
+        const LLVector3d base = target_base(target);
         LLVector3 offset(region->getPosGlobalFromRegion(view.mPos) - base);
         LLVector3 focus_offset(region->getPosGlobalFromRegion(view.mFocus) - base);
         if (offset.magVec() > MAX_TARGET_OFFSET || focus_offset.magVec() > MAX_TARGET_OFFSET)
@@ -1244,7 +1278,7 @@ namespace FSCameraTour
         pose.mRollRad = view.mRollDeg * DEG_TO_RAD;
         if (const LLViewerObject* target = find_target(view.mTarget))
         {
-            target_pose(target, view, pose.mPos, pose.mFocus);
+            target_pose(target, view, target_base(target), pose.mPos, pose.mFocus);
             return rlv_allows_camera_at(pose.mPos);
         }
         LLViewerRegion* region = find_known_region(view.mRegion);
@@ -1405,7 +1439,7 @@ namespace FSCameraTour
         {
             if (const LLViewerObject* target = find_target(stop.mView.mTarget))
             {
-                target_pose(target, stop.mView, sTourTo.mPos, sTourTo.mFocus);
+                target_pose(target, stop.mView, target_base(target), sTourTo.mPos, sTourTo.mFocus);
             }
         }
         const TourPose to = sTourTo;
