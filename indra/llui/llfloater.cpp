@@ -2505,7 +2505,7 @@ void LLFloater::updateTitleButtons()
             mButtons[BUTTON_PIN]->setImagePressed(mPinPressedImage);
         }
 
-        if (!getHost() && !isMinimized() && !isDocked())
+        if (!getHost() && !isMinimized() && !isDocked() && mCanPin)
         {
             if (mButtons[BUTTON_MINIMIZE])
             {
@@ -3771,6 +3771,7 @@ void LLFloater::initFromParams(const LLFloater::Params& p)
     setCanDock(p.can_dock);
     setCanResize(p.can_resize);
     setResizeLimits(p.min_width, p.min_height);
+    setCanPin(p.can_pin);   // <FS:Zi> Add pin geometry to floater
 
     mDragOnLeft = p.can_drag_on_left;
     mHeaderHeight = p.header_height;
