@@ -9,6 +9,7 @@
  can_dock="false"
  can_minimize="false"
  can_close="false"
+ can_pin="false"
  can_resize="true"
  height="78"
  layout="topleft"
