@@ -345,6 +345,7 @@
 		<menu_item_check label="Pokaż, że ktoś pisze, gdy czat jest przekierowywany" name="Show Redirected Chat Typing" />
 		<menu_item_check label="Dziel długi przekierowany czat" name="Split Long Redirected Chat" />
 		<menu_item_check label="Zezwól na tymczasowe dodatki" name="Allow Temporary Attachments"/>
+		<menu_item_check label="Klikaj przez obiekty objęte @touchthis" name="Click Through TouchThis Objects"/>
 		<menu_item_check label="Odmów innym osobom/obiektom dodawania rzeczy do mojego #RLV" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Zastępowanie odblokowane" name="Wear Replaces Unlocked"/>
 		<menu_item_check label="Konsola..." name="Console"/>
