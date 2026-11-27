@@ -2756,7 +2756,13 @@ void LLFloaterView::reshape(S32 width, S32 height, bool called_from_parent)
             continue;
         }
 
-        if (!floaterp->isMinimized() && floaterp->getCanDrag())
+        // <FS:Zi> Add pin geometry to floater
+        //         There seems to be no can_drag=false floaters at all, so we should be
+        //         good to ignore the draggable status here. This fixes pinned floaters
+        //         behaving weird when the viewer's main window changes size.
+        // if (!floaterp->isMinimized() && floaterp->getCanDrag())
+        if (!floaterp->isMinimized())
+        // </FS:Zi>
         {
             LLRect old_rect = floaterp->getRect();
             floaterp->applyPositioning(NULL, false);
