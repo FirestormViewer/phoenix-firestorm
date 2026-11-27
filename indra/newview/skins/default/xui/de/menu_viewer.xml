@@ -330,8 +330,8 @@
 		<menu_item_check label="Gefilterten Chat anzeigen" name="Show Filtered Chat"/>
 		<menu_item_check label="Tippen bei umgeleiteten Chat anzeigen" name="Show Redirected Chat Typing"/>
 		<menu_item_check label="Langen, umgeleiteten Chat aufteilen" name="Split Long Redirected Chat"/>
-		<menu_item_check label="Durch @touchthis Objekte klicken" name="Allow Temporary Attachments"/>
-		<menu_item_check label="Temporäre Anhänge erlauben" name="Click Through TouchThis Objects"/>
+		<menu_item_check label="Temporäre Anhänge erlauben" name="Allow Temporary Attachments"/>
+		<menu_item_check label="Durch @touchthis Objekte klicken" name="Click Through TouchThis Objects"/>
 		<menu_item_check label="Übergabe an #RLV-Ordner verbieten" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Anziehen ersetzt nicht-gesperrte Kleidung" name="Wear Replaces Unlocked"/>
 		<menu_item_check label="Konsole" name="Console"/>
