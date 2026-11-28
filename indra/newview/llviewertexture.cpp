@@ -53,6 +53,7 @@
 #include "llviewercontrol.h"
 #include "pipeline.h"
 #include "llappviewer.h"
+#include "llviewermenu.h"
 #include "llface.h"
 #include "llviewercamera.h"
 #include "lltextureentry.h"
@@ -1226,8 +1227,13 @@ LLViewerFetchedTexture::LLViewerFetchedTexture(const LLUUID& id, FTType f_type, 
     {
         // <FS:Ansariel> [Legacy Bake]
         //LL_WARNS() << "Unsupported fetch type " << mFTType << LL_ENDL;
-        mCanUseHTTP = false;
+        //mCanUseHTTP = false;
         // </FS:Ansariel> [Legacy Bake]
+
+        // <FS:Kitely> Try to get bakes using HTTP, from the texture cap of their region.
+        // If this fails then we'll fall back to UDP.
+        mCanUseHTTP = use_http_textures();
+        // </FS:Kitely>
     }
     generateGLTexture();
 }
@@ -2413,6 +2419,39 @@ void LLViewerFetchedTexture::forceToDeleteRequest()
 
     mDesiredDiscardLevel = getMaxDiscardLevel() + 1;
 }
+
+// <FS:Kitely> Transfer a bake request from the previous region to the current region
+void LLViewerFetchedTexture::changeTargetHost(const LLHost& host)
+{
+    if (host == mTargetHost)
+    {
+        return;
+    }
+
+    LL_INFOS("Texture") << mID << ": changing the target host from " << mTargetHost << " to " << host << LL_ENDL;
+    mTargetHost = host;
+
+    // If the old region couldn't send this bake over HTTP then we switched to UDP. But the new
+    // region might support HTTP, so it's worth trying again. We'll fall back to UDP if the HTTP
+    // request fails.
+    if (mFTType == FTT_HOST_BAKE)
+    {
+        mCanUseHTTP = use_http_textures();
+    }
+
+    // Cancel the old fetcher, which asks the old host.
+    // The next updateFetch() will ask the new host.
+    if (mHasFetcher)
+    {
+        LLAppViewer::getTextureFetch()->deleteRequest(getID(), true);
+        mHasFetcher = false;
+        mIsFetching = false;
+        mLastPacketTimer.reset();
+        mFetchState = 0;
+        mFetchPriority = 0;
+    }
+}
+// </FS:Kitely>
 
 void LLViewerFetchedTexture::setIsMissingAsset(bool is_missing)
 {
