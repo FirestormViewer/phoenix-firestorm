@@ -46,6 +46,7 @@ const U32 LEGACY_RIG_OK = 0;
 const U32 LEGACY_RIG_FLAG_TOO_MANY_JOINTS = 1;
 const U32 LEGACY_RIG_FLAG_UNKNOWN_JOINT = 2;
 
+using LODSuffixArray = std::array<std::string,LLModel::NUM_LODS>; // <FS/> configurable lod suffixes
 class LLModelLoader : public LLThread
 {
 public:
@@ -147,7 +148,11 @@ public:
         JointMap&                           legalJointNamesMap,
         U32                                 maxJointsPerMesh,
         U32                                 modelLimit,
-        U32                                 debugMode);
+        // <FS> configrable lod suffix support
+        // U32                              debugMode);
+        U32                                 debugMode,
+        const LODSuffixArray&               lod_suffix);
+        // </FS>
     virtual ~LLModelLoader();
 
     virtual void setNoNormalize() { mNoNormalize = true; }
@@ -203,6 +208,10 @@ public:
     void clearLog() { mWarningsArray.clear(); }
     void dumpDebugData();
 
+    // <FS> Multi-LOD file
+    U32 getAvailableLodMask() const { return mAvailableLodMask; }
+    // </FS>
+
 protected:
     LLModelLoader::load_callback_t      mLoadCallback;
     LLModelLoader::joint_lookup_func_t  mJointLookupFunc;
@@ -223,6 +232,14 @@ protected:
 
     static std::list<LLModelLoader*> sActiveLoaderList;
     static bool isAlive(LLModelLoader* loader);
+
+    static LODSuffixArray sLODSuffix; // <FS/> mesh loader suffix configuration
+
+    // <FS> Multi-LOD file
+    // bit per LLModel LOD index that has mesh nodes in the file
+    static S32 getLodFromName(const std::string& name);
+    U32  mAvailableLodMask = 0;
+    // </FS>
 };
 
 #endif  // LL_LLMODELLOADER_H
