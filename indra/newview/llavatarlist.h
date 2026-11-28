@@ -91,6 +91,13 @@ public:
     void showVoiceVolume(bool visible);
     void setUseContactSetColors(bool use_colors); // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
     void setUseContactSetListStyle(bool use_style); // <FS:PP> FIRE-31733: Make contact sets lists more readable
+    // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - opt-in only (Friends tabs), everything else
+    // using LLAvatarList is unaffected: addNewItem() only looks up
+    // FSPinnedFriends when this is true, so isPinned() stays false
+    // everywhere else and the pinned-first comparator logic below is a no-op.
+    void setShowPinnedFriends(bool show);
+    bool getShowPinnedFriends() const { return mShowPinnedFriends; }
+    // </FS:TP>
     // <FS:Ansariel> [FS Communication UI]
     //void sortByName();
     void sortByName(bool agent_on_top = false);
@@ -174,6 +181,7 @@ private:
     bool mShowUsername;
     bool mUseContactSetColors; // <FS:PP> FIRE-32748 Colorize Friends List with Contact Sets
     bool mUseContactSetListStyle; // <FS:PP> FIRE-31733: Make contact sets lists more readable
+    bool mShowPinnedFriends{ false }; // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
 
     LLTimer*                mLITUpdateTimer; // last interaction time update timer
     std::string             mIconParamName;
@@ -192,7 +200,33 @@ private:
     boost::signals2::connection mRlvBehaviorCallbackConnection;
     void updateRlvRestrictions(ERlvBehaviour behavior);
     // </FS:Ansariel>
+
+    // <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends
+    boost::signals2::connection mPinnedChangedConnection;
+    void onPinnedChanged();
+    void updatePinnedSeparator();
+    // </FS:TP>
 };
+
+// <FS:TP> FIRE-21281 / FIRE-37037 Pinned friends - mirrors llgrouplist.h's LLGroupListSeparator
+// exactly: a thin divider panel, not an LLAvatarListItem, so it's never
+// mistaken for a real friend. The comparator (below) and every call site in
+// llavatarlist.cpp that walks every item now guard with a dynamic_cast
+// before touching an LLAvatarListItem-only member, the same way
+// llgrouplist.cpp already does for this separator's group-list counterpart.
+class LLAvatarListSeparator : public LLPanel
+{
+public:
+    LLAvatarListSeparator();
+    /*virtual*/ bool postBuild();
+    // Ignore all mouse interactions on the separator
+    /*virtual*/ bool handleMouseDown(S32 x, S32 y, MASK mask) { return true; }
+    /*virtual*/ bool handleMouseUp(S32 x, S32 y, MASK mask) { return true; }
+    /*virtual*/ bool handleRightMouseDown(S32 x, S32 y, MASK mask) { return true; }
+    /*virtual*/ bool handleRightMouseUp(S32 x, S32 y, MASK mask) { return true; }
+    /*virtual*/ bool handleDoubleClick(S32 x, S32 y, MASK mask) { return true; }
+};
+// </FS:TP>
 
 /** Abstract comparator for avatar items */
 class LLAvatarItemComparator : public LLFlatListView::ItemComparator
