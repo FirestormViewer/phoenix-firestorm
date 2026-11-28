@@ -28,7 +28,7 @@
 
 			<panel name="P_Q_Windlights">
 				<text name="T_Q_Windlights">
-					Standard-Umgebungen
+					Standard-Umgebung.
 				</text>
 				<view_border name="horiz_separator1"/>
 				<button name="Sunrise" label="Sonnenaufgang" tool_tip="Setzt die Beleuchtungsverhältnisse der Umgebung auf Sonnenaufgang."/>
